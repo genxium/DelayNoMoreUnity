@@ -1,7 +1,7 @@
 # Why not just transpile Golang to C#
 There was previous effort into a direct transpiling from Golang to C# for the [shared dynamics part of DelayNoMore v1.0.12](https://github.com/genxium/DelayNoMore/tree/v1.0.12-dd/jsexport). 
 
-It was experimented using [go2cs](https://github.com/GridProtectionAlliance/go2cs), and is halted due to `go2cs` is too buggy during use on the following issues.
+It was experimented using [go2cs](https://github.com/GridProtectionAlliance/go2cs), and is halted due to the untolerable buggy handling of the following issues by `go2cs`.
 - When a `Go struct` has a pointer field, e.g. https://github.com/genxium/DelayNoMore/blob/v1.0.12-dd/resolv_tailored/collision.go#L13
 - By the time of testing, its own [go-src-converted](https://github.com/GridProtectionAlliance/go2cs/tree/master/src/go-src-converted) is not fully compilable by `.NET 6.0/7.0 SDK`.
 - By the time of testing, its own [golib of gocore](https://github.com/GridProtectionAlliance/go2cs/tree/master/src/gocore/golib) is compilable into a `golib.lib/dll` file, but when referenced by a transpiled `resolv` C# project (transpiled by the compiled `go2cs` binary in same codebase as the `golib`), many types are not found or not correctly formatted.
