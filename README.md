@@ -47,4 +47,4 @@ I'm aware of the existence of some "claimed to be rollback friendly collision de
 
 As described previously, heap RAM allocation is to be avoided as much as possible, and my [resolv_tailored](https://github.com/genxium/DelayNoMore/tree/v1.0.12-dd/resolv_tailored) has already been written carefully to yield 0 heap RAM allocation during active battle. This is non-trivial and many tricks are only available in 2D scenario where the whole battle field is dividable to only hundreds of [cells](https://github.com/genxium/DelayNoMore/blob/v1.0.12-dd/resolv_tailored/cell.go) such that a full traversal of cells is more efficient than the generic broadphase approach.
 
-For why heap RAM allocation is a performance concern to me, please refer to [this note for what's actual going on upon heap RAM allocation/deallocation](https://app.yinxiang.com/fx/b5affa04-b7d0-412f-9c74-6cf5f2bc6def).
+For why heap RAM allocation is a performance concern to me, please refer to [this note for what's actually going on upon heap RAM allocation/deallocation](https://app.yinxiang.com/fx/b5affa04-b7d0-412f-9c74-6cf5f2bc6def).
