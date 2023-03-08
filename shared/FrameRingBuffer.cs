@@ -1,5 +1,5 @@
 ﻿namespace shared {
-    public class RingBuffer<T> {
+    public class FrameRingBuffer<T> {
         public const int RING_BUFF_CONSECUTIVE_SET = 0;
         public const int RING_BUFF_NON_CONSECUTIVE_SET = 1;
         public const int RING_BUFF_FAILED_TO_SET = 2;
@@ -10,11 +10,10 @@
         int N;
         int Cnt;       // the count of valid elements in the buffer, used mainly to distinguish what "st == ed" means for "Pop" and "Get" methods
         T[] Eles;
-
-        public RingBuffer(int n) {
+        public FrameRingBuffer(int n) {
             Cnt = St = Ed = StFrameId = EdFrameId = 0;
             N = n;
-
+            Eles = new T[n];
         }
 
         public bool Put(T pItem) {

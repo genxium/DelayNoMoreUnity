@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.shared.delaynomore": {
+      "version": "file:C:/Users/yflu/DelayNoMoreUnity/shared/UnityPackageOutput",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "7.0.9",
       "depth": 1,

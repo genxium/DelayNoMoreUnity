@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.shared.delaynomore": "file:C:/Users/yflu/DelayNoMoreUnity/shared/UnityPackageOutput",
     "com.unity.collab-proxy": "2.0.0",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.feature.mobile": "1.0.0",

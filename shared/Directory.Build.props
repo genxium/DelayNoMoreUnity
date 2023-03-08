@@ -1,0 +1,8 @@
+<Project>
+ <PropertyGroup>
+   <Deterministic>true</Deterministic>
+    <BaseIntermediateOutputPath>obj~</BaseIntermediateOutputPath> <!-- This value is just changed for fun. -->
+    <BaseOutputPath>bin</BaseOutputPath>
+    <UnityPackageOutputPath>UnityPackageOutput</UnityPackageOutputPath>
+ </PropertyGroup>
+</Project>

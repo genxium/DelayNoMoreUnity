@@ -1,0 +1,15 @@
+{
+  "name": "com.shared.delaynomore",
+  "version": "1.0.13",
+  "displayName": "DnmShared",
+  "description": "Shared package between frontend and backend",
+  "unity": "2021.3",
+  "unityRelease": "18f1",
+  "documentationUrl": "https://github.com/genxium/DelayNoMoreUnity",
+  "changelogUrl": "https://github.com/genxium/DelayNoMoreUnity",
+  "licensesUrl": "https://github.com/genxium/DelayNoMoreUnity",
+  "author": {
+    "name": "genxium",
+    "url": "https://github.com/genxium"
+  }
+}
