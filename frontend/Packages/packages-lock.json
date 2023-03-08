@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.google.external-dependency-manager": {
+      "version": "file:C:/Users/yflu/Downloads/com.google.external-dependency-manager-1.2.175.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
     "com.shared.delaynomore": {
       "version": "file:C:/Users/yflu/DelayNoMoreUnity/shared/UnityPackageOutput",
       "depth": 0,

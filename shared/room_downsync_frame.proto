@@ -1,0 +1,229 @@
+syntax = "proto3";
+
+package shared;
+
+// Providing "csharp_namespace" to force generating lowercase namespace, reference https://protobuf.dev/programming-guides/proto3/#packages 
+option csharp_namespace = "shared";
+
+message PlayerDownsync {
+  int32 id = 1;
+  int32 virtualGridX = 2;
+  int32 virtualGridY = 3;
+  int32 dirX = 4;
+  int32 dirY = 5;   
+  int32 velX = 6;
+  int32 velY = 7; // "velX" and "velY" is used to record the accumulated effect by inertia and accelerations (including gravity)
+  int32 speed = 8; // this is the instantaneous scalar attribute of a character, different from but will be accounted in "velX" and "velY" 
+  int32 battleState = 9;
+  int32 joinIndex = 10;
+  int32 colliderRadius = 11;
+  bool removed = 12;
+  int32 score = 13;
+  int32 lastMoveGmtMillis = 14;
+  int32 framesToRecover = 15;
+  int32 hp = 16;
+  int32 maxHp = 17;
+  int32 characterState = 18;
+  bool inAir = 19; // by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "inAir (prev -> curr)"  
+  int32 framesInChState = 20; // number of frames elapsed in the current character state   
+  int32 activeSkillId = 21;
+  int32 activeSkillHit = 22;
+  int32 framesInvinsible = 23;
+
+  int32 bulletTeamId = 24;
+  int32 chCollisionTeamId = 25;
+
+  bool onWall = 26; // like "inAir", it’s by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+  int32 onWallNormX = 27;
+  int32 onWallNormY = 28;
+
+  bool capturedByInertia = 29; // like "inAir", it’s by design a standalone field only inferred by the calc result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState"
+  int32 revivalVirtualGridX = 30;
+  int32 revivalVirtualGridY = 31;
+
+  string name = 997;
+  string displayName = 998;
+  string avatar = 999;
+}
+
+message InputFrameDecoded {
+  int32 dx = 1;
+  int32 dy = 2;
+  int32 btnALevel = 3;
+  int32 btnBLevel = 4;
+}
+
+message InputFrameUpsync {
+  int32 inputFrameId = 1;
+  uint64 encoded = 2;
+  int32 joinIndex = 3;
+}
+
+message InputFrameDownsync {
+  int32 inputFrameId = 1;
+  repeated uint64 inputList = 2; // Indexed by "joinIndex", we try to compress the "single player input" into 1 word (64-bit for 64-bit Golang runtime) because atomic compare-and-swap only works on 1 word. Although CAS on custom struct is possible in Golang 1.19 https://pkg.go.dev/sync/atomic@go1.19.1#Value.CompareAndSwap, using a single word is still faster whenever possible. 
+  uint64 confirmedList = 3; // Indexed by "joinIndex", same compression concern as above
+}
+
+message HeartbeatUpsync {
+  int64 clientTimestamp = 1;
+}
+
+message WsReq {
+  int32 msgId = 1;
+  int32 playerId = 2;
+  int32 act = 3;
+  int32 joinIndex = 4;
+  int32 ackingFrameId = 5;
+  int32 ackingInputFrameId = 6;
+  int32 authKey = 7;
+  repeated InputFrameUpsync inputFrameUpsyncBatch = 8;
+  HeartbeatUpsync hb = 9;
+}
+
+message InputsBufferSnapshot {
+  int32 refRenderFrameId = 1;
+  uint64 unconfirmedMask = 2;
+  repeated InputFrameDownsync toSendInputFrameDownsyncs = 3;
+  bool shouldForceResync = 4;
+  int32 peerJoinIndex = 5;
+}
+
+message MeleeBullet {
+  // Jargon reference https://www.thegamer.com/fighting-games-frame-data-explained/
+  // ALL lengths are in world coordinate
+
+  // for offender  
+  int32 originatedRenderFrameId = 1;
+  int32 offenderJoinIndex = 2;
+
+  int32 startupFrames = 3;
+  int32 cancellableStFrame = 4;
+  int32 cancellableEdFrame = 5;
+  int32 activeFrames = 6;
+
+  int32 hitStunFrames = 7;
+  int32 blockStunFrames = 8;
+  int32 pushbackVelX = 9;
+  int32 pushbackVelY = 10;
+  int32 damage = 11;
+
+  int32 selfLockVelX = 12;
+  int32 selfLockVelY = 13;
+
+  int32 hitboxOffsetX = 14;
+  int32 hitboxOffsetY = 15;
+  int32 hitboxSizeX = 16;
+  int32 hitboxSizeY = 17;
+
+  bool blowUp = 18;
+  int32 teamId = 19;
+
+  int32 bulletLocalId = 20;
+  int32 speciesId = 21;
+  int32 explosionFrames = 22;
+
+  int32 blState = 23;
+  int32 framesInBlState = 24;
+}
+
+message FireballBullet {
+  int32 originatedRenderFrameId = 1;
+  int32 offenderJoinIndex = 2;
+
+  int32 startupFrames = 3;
+  int32 cancellableStFrame = 4;
+  int32 cancellableEdFrame = 5;
+  int32 activeFrames = 6;
+
+  int32 hitStunFrames = 7;
+  int32 blockStunFrames = 8;
+  int32 pushbackVelX = 9;
+  int32 pushbackVelY = 10;
+  int32 damage = 11;
+
+  int32 selfLockVelX = 12;
+  int32 selfLockVelY = 13;
+
+  int32 hitboxOffsetX = 14;
+  int32 hitboxOffsetY = 15;
+  int32 hitboxSizeX = 16;
+  int32 hitboxSizeY = 17;
+
+  bool blowUp = 18;
+  int32 teamId = 19;
+
+  int32 bulletLocalId = 20;
+  int32 speciesId = 21;
+  int32 explosionFrames = 22;
+
+  int32 blState = 23;
+  int32 framesInBlState = 24;
+
+  int32 virtualGridX = 999;
+  int32 virtualGridY = 1000;
+  int32 dirX = 1001;
+  int32 dirY = 1002;
+  int32 velX = 1003;
+  int32 velY = 1004;
+  int32 speed = 1005;
+}
+
+message HolePunchUpsync {
+ string intAuthToken = 1;
+ int32 boundRoomId = 2;
+ int32 authKey = 3;
+}
+
+message PeerUdpAddr {
+ string ip = 1;
+ int32 port = 2;
+ int32 authKey = 3;
+}
+
+message BattleColliderInfo {
+  string stageName = 1;
+
+  int32 intervalToPing = 2;
+  int32 willKickIfInactiveFor = 3;
+  int32 boundRoomId = 4;
+  int64 battleDurationNanos = 5;
+  int32 inputFrameUpsyncDelayTolerance = 6;
+  int32 maxChasingRenderFramesPerUpdate = 7;
+  double rollbackEstimatedDtMillis = 8;
+  int64 rollbackEstimatedDtNanos = 9;
+
+  int32 renderCacheSize = 10;
+  double spaceOffsetX = 11;
+  double spaceOffsetY = 12;
+  int32 collisionMinStep = 13;
+  int32 boundRoomCapacity = 14;
+  PeerUdpAddr battleUdpTunnel = 15;
+
+  bool frameDataLoggingEnabled = 1024;
+}
+
+message RoomDownsyncFrame {
+  int32 id = 1;
+  repeated PlayerDownsync playersArr = 2;
+  int64 countdownNanos = 3;
+  repeated MeleeBullet meleeBullets = 4; // I don't know how to mimic inheritance/composition in protobuf by far, thus using an array for each type of bullet as a compromise 
+  repeated FireballBullet fireballBullets = 5;
+
+  uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
+  bool shouldForceResync = 1025;
+  repeated int32 speciesIdList = 1026;
+
+  int32 bulletLocalIdCounter = 1027;
+  repeated PeerUdpAddr peerUdpAddrList = 1028;
+}
+
+message WsResp {
+  int32 ret = 1;
+  int32 echoedMsgId = 2;
+  int32 act = 3;
+  RoomDownsyncFrame rdf = 4;
+  repeated InputFrameDownsync inputFrameDownsyncBatch = 5;
+  BattleColliderInfo bciFrame = 6;
+  int32 peerJoinIndex = 7;
+}
