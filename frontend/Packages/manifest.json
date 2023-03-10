@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.google.external-dependency-manager": "file:C:/Users/yflu/Downloads/com.google.external-dependency-manager-1.2.175.tgz",
     "com.shared.delaynomore": "file:C:/Users/yflu/DelayNoMoreUnity/shared/UnityPackageOutput",
     "com.unity.collab-proxy": "2.0.0",
     "com.unity.feature.2d": "1.0.0",
