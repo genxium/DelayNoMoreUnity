@@ -1,5 +1,5 @@
 ﻿namespace shared {
-    public class FrameRingBuffer<T> {
+    public class FrameRingBuffer<T> where T : class {
         public const int RING_BUFF_CONSECUTIVE_SET = 0;
         public const int RING_BUFF_NON_CONSECUTIVE_SET = 1;
         public const int RING_BUFF_FAILED_TO_SET = 2;
@@ -10,7 +10,6 @@
         int N;
         int Cnt;       // the count of valid elements in the buffer, used mainly to distinguish what "st == ed" means for "Pop" and "Get" methods
         T[] Eles;
-        T foo; // for convenient clearance popping
         public FrameRingBuffer(int n) {
             Cnt = St = Ed = StFrameId = EdFrameId = 0;
             N = n;
@@ -20,7 +19,7 @@
         public bool Put(T item) {
             while (0 < Cnt && Cnt >= N) {
                 // Make room for the new element
-                Pop(out foo);
+                Pop();
             }
             Eles[Ed] = item;
             EdFrameId++;
@@ -34,26 +33,25 @@
             return true;
         }
 
-        public bool Pop(out T holder) {
+        public (bool, T?) Pop() {
             // C# doesn't allow generic type to be pointer, i.e. List<int*> is not allowed, thus would use this "output holder pattern" to avoid "Pop" copying large instance of T when sizeof(T) is much larger than 1 word.
             if (0 == Cnt) {
-                holder = default(T);
-                return false;
+                return (false, default(T));
             }
-            holder = Eles[St];
+            T holder = Eles[St];
             StFrameId++;
             Cnt--; St++;
 
             if (St >= N) {
                 St -= N;
             }
-            return true;
+            return (true, holder);
         }
 
         public void DryPut() {
             while (0 < Cnt && Cnt >= N) {
                 // Make room for the new element
-                Pop(out foo);
+                Pop();
             }
             EdFrameId++;
             Cnt++;
@@ -92,23 +90,20 @@
             return -1;
         }
 
-        public bool GetByOffset(int offsetFromSt, out T holder) {
+        public (bool, T?) GetByOffset(int offsetFromSt) {
             int arrIdx = GetArrIdxByOffset(offsetFromSt);
 
             if (-1 == arrIdx) {
-                holder = default(T);
-                return true;
+                return (false, default(T));
             }
-            holder = Eles[arrIdx];
-            return true; 
+            return (true, Eles[arrIdx]); 
         }
 
-        public bool GetByFrameId(int frameId, out T holder) {
+        public (bool, T?) GetByFrameId(int frameId) {
             if (frameId >= EdFrameId || frameId < StFrameId) {
-                holder = default(T);
-                return false;
+                return (false, default(T));
             }
-            return GetByOffset(frameId - StFrameId, out holder);
+            return GetByOffset(frameId - StFrameId);
         }
 
         // [WARNING] During a battle, frontend could receive non-consecutive frames (either renderFrame or inputFrame) due to resync, the buffer should handle these frames properly.
@@ -147,7 +142,7 @@
         }
         public void Clear() {
             while (0 < Cnt) {
-                Pop(out foo);
+                Pop();
             }
             St = Ed = StFrameId = EdFrameId = 0;
         }

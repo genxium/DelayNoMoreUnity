@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.shared.delaynomore": {
-      "version": "file:C:/Users/yflu/DelayNoMoreUnity/shared/UnityPackageOutput",
+      "version": "file:../../shared/UnityPackageOutput",
       "depth": 0,
       "source": "local",
       "dependencies": {}
