@@ -2,8 +2,8 @@
 
 namespace shared {
     public class FrameRingBuffer<T> : RingBuffer<T> where T : class {
-        int EdFrameId;
-        int StFrameId;
+        public int EdFrameId;
+        public int StFrameId;
         public FrameRingBuffer(int n) : base(n) {
             StFrameId = EdFrameId = 0;
         }
