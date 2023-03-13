@@ -6,7 +6,7 @@
         public int Ed;        // write index, open index
         public int St;        // read index, closed index
         protected int N;
-        protected int Cnt;       // the count of valid elements in the buffer, used mainly to distinguish what "st == ed" means for "Pop" and "Get" methods
+        public int Cnt;       // the count of valid elements in the buffer, used mainly to distinguish what "st == ed" means for "Pop" and "Get" methods
         protected T[] Eles;
         public RingBuffer(int n) {
             Cnt = St = Ed = 0;
@@ -54,8 +54,7 @@
                 if (St <= arrIdx && arrIdx < Ed) {
                     return arrIdx;
                 }
-            }
-            else {
+            } else {
                 // if St >= Ed
                 // case#2: 0...ed...st...N-1
                 if (arrIdx >= N) {
@@ -77,7 +76,7 @@
             if (-1 == arrIdx) {
                 return (false, default(T));
             }
-            return (true, Eles[arrIdx]); 
+            return (true, Eles[arrIdx]);
         }
 
         public void Clear() {
