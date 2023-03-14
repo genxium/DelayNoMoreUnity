@@ -42,3 +42,7 @@ public class Program
 	}
 }
 ```
+
+It's also worth noticing that C# by default allocates all arrays in heap, if not otherwise specified by [stackalloc](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/stackalloc). 
+
+Moreover, [an official guide says that it's recommended to use `struct` instead of `class` whenever possible because the former can be allocated on stack](https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/performance/#improve-performance-with-ref-safety). 

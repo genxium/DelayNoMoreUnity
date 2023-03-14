@@ -50,5 +50,9 @@ namespace shared {
 
 			collider.Space = null;
 		}
+
+		public static ConvexPolygon NewRectangle(double x, double y, double w, double h) {
+			return new ConvexPolygon(new double[]{x, y, x+w, y, x+w, y+h, x, y+h});
+		}
     }
 }

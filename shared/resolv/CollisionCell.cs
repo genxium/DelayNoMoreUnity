@@ -25,7 +25,6 @@ namespace shared {
                 Colliders.Put(collider);
             }
         }
-
         public void unregister(Collider collider) {
             for (int i = Colliders.StFrameId; i < Colliders.EdFrameId; i++) {
                 var (_, o) = Colliders.GetByFrameId(i);
