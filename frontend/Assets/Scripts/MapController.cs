@@ -33,6 +33,11 @@ public class MapController : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         _resetCurrentMatch();
+        var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
+        var grid = this.GetComponentInChildren<Grid>();
+        foreach(Transform child in grid.transform) {
+            Debug.Log(child.gameObject.name);
+        }
         spawnPlayerNode(0, 1024, -512);
     }
 

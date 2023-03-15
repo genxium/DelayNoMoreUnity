@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 326b0f960601f463cb367532f87a8ad6
+guid: fd0913a6fbde19c4ebc2fa826c92b0d6
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -7,17 +7,19 @@ ScriptedImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-  script: {fileID: 11500000, guid: cc34d0f3dc257a442819830b408c5322, type: 3}
+  script: {fileID: 11500000, guid: 1fa25d03934ea624a82bf2fcee6f0873, type: 3}
   missingFiles: []
   errors: []
   warnings: []
   missingSortingLayers: []
   missingLayers: []
   missingTags: []
-  importerVersion: 13
+  importerVersion: 26
   pixelsPerUnit: 1
   edgesPerEllipse: 32
-  numberOfObjectsImported: 131
-  useSpriteAtlas: 1
-  atlasWidth: 2048
-  atlasHeight: 2048
+  numberOfObjectsImported: 2
+  tilesAsObjects: 0
+  sortingMode: 0
+  isIsometric: 0
+  customImporterClassName: 
+  internalTilesets: []

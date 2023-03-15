@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="138">
+ <tileset firstgid="1" source="tiles0.tsx"/>
+ <tileset firstgid="65" source="tiles1.tsx"/>
+ <tileset firstgid="129" source="tiles2.tsx"/>
+ <layer id="8" name="Ground" width="128" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt2j1uwkAQgFEESkNHlKRHyk2iNHRcIPc/RlCEJWSxtrHHmRX7itfw651v1zTsNpvNDgAAAAAAAOAffPMnu0Nm/+xryNbyDFpeuxm0vXYzaHvtZtD22s1g3trfJlpyXa9Br9G/vv6f+lej5v5Dfcee1z9+7V23qP4vF4c7+o1LMmbwbOb0Xyrqc/R//v737g+Hhd+v//z+Ucbu56Xua+wD/esytX3UPqhxBjX3Pwa9Rv98t2vfX2X3n7sH5u6P1vt/9XTP9R/vHCcqvb823QyyW2T131515//n4lSwDVA6oxGfPee7Wz///f63vwG3j0X1z6R/uf+p1/ue6B4fK3jknqP/cJ/9yOymGOsfvZ/0f6z/+9XQ3Jac/6E9sPb5n7I/9S/3j/zN1b8+2f+7rkV2h8z+58bp37Y1+x8qlz37WmR30F9//fXXX38AAAAAAAAAAAAg1y8jXMSV
+  </data>
+ </layer>
+ <objectgroup id="1" name="PlayerStartingPos">
+  <object id="135" x="1400" y="580">
+   <point/>
+  </object>
+  <object id="137" x="1500" y="580">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="NpcStartingPos">
+  <object id="108" x="927.333" y="535">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="4196"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="NpcPatrolCue">
+  <object id="109" x="774.67" y="556.67">
+   <properties>
+    <property name="flAct" value="36"/>
+    <property name="frAct" value="35"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="110" x="729.333" y="588">
+   <properties>
+    <property name="flAct" value="4"/>
+    <property name="frAct" value="35"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="111" x="669.333" y="588">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="frAct" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="112" x="985.333" y="535">
+   <properties>
+    <property name="flAct" value="4"/>
+    <property name="frAct" value="4"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="2" name="Barrier">
+  <properties>
+   <property name="type" value="barrier_and_shelter"/>
+  </properties>
+  <object id="57" x="768" y="560" width="32" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="60" x="1232" y="448" width="208" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="65" x="1040" y="576" width="32" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="66" x="1040" y="560" width="16" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="67" x="784" y="544" width="256" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="84" x="640" y="224" width="16" height="416">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="85" x="1680" y="224" width="16" height="416">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="86" x="1104" y="496" width="96" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="90" x="1248" y="464" width="320" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="97" x="1248" y="416" width="158" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="98" x="1280" y="400" width="96" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="100" x="1538" y="560" width="144" height="32">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="101" x="1568" y="528" width="112" height="32">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="102" x="1136" y="368" width="96" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="103" x="1600" y="496" width="80" height="32">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="104" x="816" y="414" width="304" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="105" x="816" y="366" width="16" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="106" x="1104" y="334" width="16" height="96">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="114" x="640" y="224" width="1056" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="119" x="656" y="592" width="512" height="48">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="136" x="1232" y="432" width="208" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="138" x="1168" y="592" width="512" height="48">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
