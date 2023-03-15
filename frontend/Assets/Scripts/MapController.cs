@@ -127,7 +127,7 @@ public class MapController : MonoBehaviour {
             inputBuffer.DryPut();
             var (ok, ifdHolder) = inputBuffer.GetByFrameId(gapInputFrameId);
             if (!ok || null == ifdHolder) {
-                throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}!", gapInputFrameId));
+                throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", gapInputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
             }
 
             ifdHolder.InputFrameId = gapInputFrameId;
@@ -152,7 +152,7 @@ public class MapController : MonoBehaviour {
         renderFrameId = 0;
         chaserRenderFrameId = -1;
         maxChasingRenderFramesPerUpdate = 5;
-        renderBufferSize = 512;
+        renderBufferSize = 256;
         playersArr = new GameObject[roomCapacity];
         lastIndividuallyConfirmedInputFrameId = new int[roomCapacity];
         Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
@@ -161,14 +161,14 @@ public class MapController : MonoBehaviour {
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
             renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, 64, 64));
-            renderBuffer.Clear(); // Then use it by "DryPut"
         }
+        renderBuffer.Clear(); // Then use it by "DryPut"
         int inputBufferSize = (renderBufferSize >> 1) + 1;
         inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
         for (int i = 0; i < inputBufferSize; i++) {
             inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
-            inputBuffer.Clear(); // Then use it by "DryPut"
         }
+        inputBuffer.Clear(); // Then use it by "DryPut"
         selfPlayerInfo = new PlayerDownsync();
         selfPlayerInfo.JoinIndex = 1;
         int mapWidth = 128, tileWidth = 16, mapHeight = 64, tileHeight = 16;

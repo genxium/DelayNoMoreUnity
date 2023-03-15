@@ -5,7 +5,7 @@
         public const int RING_BUFF_FAILED_TO_SET = 2;
         public int Ed;        // write index, open index
         public int St;        // read index, closed index
-        protected int N;
+        public int N;
         public int Cnt;       // the count of valid elements in the buffer, used mainly to distinguish what "st == ed" means for "Pop" and "Get" methods
         protected T[] Eles;
         public RingBuffer(int n) {
