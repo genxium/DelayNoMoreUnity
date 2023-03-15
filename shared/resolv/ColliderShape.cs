@@ -16,7 +16,7 @@ namespace shared {
         public bool Closed;
 
         public ConvexPolygon(double[] points) {
-            X = Y = 0; // [WARNING] AFAIK these anchor position coordinates are ALWAYS 0 during the original version of DelayNoMore -- the changes are only made on "Points" even for indicating movements
+            X = Y = 0;
             Points = new FrameRingBuffer<Vector>(6); // I don't expected more points to be coped with in this particular game
             for (int i = 0; i < points.GetLength(0); i += 2) {
                 Vector v = new Vector(points[i], points[i + 1]);
@@ -32,12 +32,50 @@ namespace shared {
             var (_, v) = Points.GetByFrameId(Points.StFrameId + offset);
             return v;
         }
+
+        public void SetPosition(double x, double y) {
+            X = x;
+            Y = y;
+        }
+
+        public bool UpdateAsRectangle(double x, double y, double w, double h) {
+            // This function might look ugly but it's a fast in-place update!
+            if (4 != Points.Cnt) {
+                throw new ArgumentException("ConvexPolygon not having exactly 4 vertices to form a rectangle#1!");
+            }
+            for (int i = 0; i < Points.Cnt; i++) {
+                Vector? thatVec = GetPointByOffset(i);
+                if (null == thatVec) {
+                    throw new ArgumentException("ConvexPolygon not having exactly 4 vertices to form a rectangle#2!");
+                }
+                switch (i) {
+                    case 0:
+                        thatVec.X = x;
+                        thatVec.Y = y;
+                        break;
+                    case 1:
+                        thatVec.X = x + w;
+                        thatVec.Y = y;
+                        break;
+                    case 2:
+                        thatVec.X = x + w;
+                        thatVec.Y = y + h;
+                        break;
+                    case 3:
+                        thatVec.X = x;
+                        thatVec.Y = y + h;
+                        break;
+                }
+            }
+            return true;
+        }
+
     }
 
     public struct SatResult {
         public double OverlapMag, OverlapX, OverlapY;
         public bool AContainedInB, BContainedInA;
-        
+
         // [WARNING] Deliberately unboxed "Vector" to make the following fields primitive such that the whole "SatResult" will be easily allocated on stack.
         public double AxisX, AxisY;
     }

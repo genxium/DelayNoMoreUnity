@@ -13,7 +13,7 @@
             N = n;
             Eles = new T[n];
         }
-
+        
         public bool Put(T item) {
             while (0 < Cnt && Cnt >= N) {
                 // Make room for the new element

@@ -40,7 +40,14 @@ namespace shared {
 			}
 			return null;
 		}
-		public void RemoveSingle(Collider collider) {
+        public void AddSingle(Collider collider) {
+			collider.Space = this;
+
+            // We call Update() once to make sure the object gets its cells added.
+            collider.Update();
+		}
+
+        public void RemoveSingle(Collider collider) {
 			while (0 < collider.TouchingCells.Cnt) {
 				var (_, cell) = collider.TouchingCells.Pop();
 				if (null != cell) {
@@ -49,10 +56,6 @@ namespace shared {
 			}
 
 			collider.Space = null;
-		}
-
-		public static ConvexPolygon NewRectangle(double x, double y, double w, double h) {
-			return new ConvexPolygon(new double[]{x, y, x+w, y, x+w, y+h, x, y+h});
 		}
     }
 }
