@@ -979,7 +979,7 @@ namespace shared {
         }
 
         public static Collider GenerateRectCollider(double wx, double wy, double w, double h, double topPadding, double bottomPadding, double leftPadding, double rightPadding, double spaceOffsetX, double spaceOffsetY, object data) {
-            // [WARNING] (spaceoffsetX, spaceOffsetY) are taken into consideration while calling "GenerateConvexPolygonCollider" -- because "GenerateConvexPolygonCollider" might also be called for "polylines extracted from Tiled", it's more convenient to organized the codes this way.
+            // [WARNING] (spaceOffsetX, spaceOffsetY) are taken into consideration while calling "GenerateConvexPolygonCollider" -- because "GenerateConvexPolygonCollider" might also be called for "polylines extracted from Tiled", it's more convenient to organized the codes this way.
             var (blX, blY) = WorldToPolygonColliderBLPos(wx, wy, w * 0.5, h * 0.5, topPadding, bottomPadding, leftPadding, rightPadding, 0, 0); 
             double effW = leftPadding + w + rightPadding, effH = bottomPadding + h + topPadding;
             var srcPolygon = new ConvexPolygon(blX, blY, new double[] { 
@@ -1070,5 +1070,9 @@ namespace shared {
 
             return ret;
         }
+		
+		public static (double, double) tiledLayerOffsetToCollisionSpaceOffset(double tiledLayerX, double tiledLayerY, double spaceOffsetX, double spaceOffsetY) {
+			return (-spaceOffsetX + tiledLayerX, +spaceOffsetY - tiledLayerY); 	
+		}
     }
 }

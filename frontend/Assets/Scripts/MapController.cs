@@ -33,7 +33,9 @@ public class MapController : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         _resetCurrentMatch();
-        spawnPlayerNode(0, 1024, -512);
+        spawnPlayerNode(0, spaceOffsetX, -spaceOffsetY);
+		var camOldPos = Camera.main.transform.position; 
+		Camera.main.transform.position = new Vector3(spaceOffsetX, -spaceOffsetY, camOldPos.z); 
     }
 
     // Update is called once per frame
@@ -176,14 +178,16 @@ public class MapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-		collisionSys = new CollisionSpace(spaceOffsetX*2, spaceOffsetY*2, 16, 16);
+		collisionSys = new CollisionSpace(spaceOffsetX*2, spaceOffsetY*2, 64, 64);
         var grid = this.GetComponentInChildren<Grid>();
         foreach(Transform child in grid.transform) {
 			if ("Barrier" == child.gameObject.name) {
 				foreach(Transform barrierChild in child) {
 					var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();  
-					var (wx, wy) = (barrierTileObj.m_X, spaceOffsetY*2 - barrierTileObj.m_Y);
-					var barrierCollider = GenerateRectCollider(wx, wy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, spaceOffsetX, spaceOffsetY, null);	
+					var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width*0.5, barrierTileObj.m_Y + barrierTileObj.m_Height*0.5);
+					var (rectCx, rectCy) = tiledLayerOffsetToCollisionSpaceOffset(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+					// [WARNING] The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)", to make it easy for me on debugging in collision space, I'm still using a "Collision Space (0, 0)" aligned with the center of the rendered "TiledMap (via SuperMap)" as the CocosCreator version. 
+					var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);	
 					Debug.Log(String.Format("new barrierCollider=[X:{0}, Y:{1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
 					collisionSys.AddSingle(barrierCollider);
 				}
@@ -204,5 +208,68 @@ public class MapController : MonoBehaviour {
         dynamicRectangleColliders = new shared.Collider[64];
         Array.Fill(dynamicRectangleColliders, GenerateRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null));
         prefabbedInputListHolder = new ulong[roomCapacity];
+    }
+
+	void OnRenderObject() {
+		CreateLineMaterial();
+        lineMaterial.SetPass(0);
+
+        GL.PushMatrix();
+        // Set transformation matrix for drawing to
+        // match our transform
+        GL.MultMatrix(transform.localToWorldMatrix);
+        var grid = this.GetComponentInChildren<Grid>();
+        foreach(Transform child in grid.transform) {
+			if ("Barrier" == child.gameObject.name) {
+				foreach(Transform barrierChild in child) {
+					var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();  
+					var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width*0.5, barrierTileObj.m_Y + barrierTileObj.m_Height*0.5);
+					var (rectCx, rectCy) = tiledLayerOffsetToCollisionSpaceOffset(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+					var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);	
+					
+					GL.Begin(GL.LINES);
+					for (int i = 0; i < 4; i++) {
+						switch (i) {
+							case 0:
+								GL.Vertex3((float)(barrierCollider.X+spaceOffsetX), (float)(barrierCollider.Y-spaceOffsetY), 0);
+								GL.Vertex3((float)(barrierCollider.X+barrierCollider.W+spaceOffsetX), (float)(barrierCollider.Y-spaceOffsetY), 0);
+								break;
+							case 1:
+								GL.Vertex3((float)(barrierCollider.X+barrierCollider.W+spaceOffsetX), (float)(barrierCollider.Y-spaceOffsetY), 0);
+								GL.Vertex3((float)(barrierCollider.X+barrierCollider.W+spaceOffsetX), (float)(barrierCollider.Y+barrierCollider.H-spaceOffsetY), 0);
+								break;
+							case 2:
+								GL.Vertex3((float)(barrierCollider.X+barrierCollider.W+spaceOffsetX), (float)(barrierCollider.Y+barrierCollider.H-spaceOffsetY), 0);
+								GL.Vertex3((float)(barrierCollider.X+spaceOffsetX), (float)(barrierCollider.Y+barrierCollider.H-spaceOffsetY), 0);
+								break;
+							case 3:
+								GL.Vertex3((float)(barrierCollider.X+spaceOffsetX), (float)(barrierCollider.Y+barrierCollider.H-spaceOffsetY), 0);
+								GL.Vertex3((float)(barrierCollider.X+spaceOffsetX), (float)(barrierCollider.Y-spaceOffsetY), 0);
+								break;
+						}
+					}
+					GL.End();
+				}
+			}
+        }
+        GL.PopMatrix();
+    }
+
+	static Material lineMaterial;
+    static void CreateLineMaterial() {
+        if (!lineMaterial) {
+            // Unity has a built-in shader that is useful for drawing
+            // simple colored things.
+            Shader shader = Shader.Find("Hidden/Internal-Colored");
+            lineMaterial = new Material(shader);
+            lineMaterial.hideFlags = HideFlags.HideAndDontSave;
+            // Turn on alpha blending
+            lineMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            lineMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            // Turn backface culling off
+            lineMaterial.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+            // Turn off depth writes
+            lineMaterial.SetInt("_ZWrite", 0);
+        }
     }
 }
