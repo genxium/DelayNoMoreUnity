@@ -33,11 +33,6 @@ public class MapController : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         _resetCurrentMatch();
-        var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
-        var grid = this.GetComponentInChildren<Grid>();
-        foreach(Transform child in grid.transform) {
-            Debug.Log(child.gameObject.name);
-        }
         spawnPlayerNode(0, 1024, -512);
     }
 
@@ -176,9 +171,24 @@ public class MapController : MonoBehaviour {
         inputBuffer.Clear(); // Then use it by "DryPut"
         selfPlayerInfo = new PlayerDownsync();
         selfPlayerInfo.JoinIndex = 1;
-        int mapWidth = 128, tileWidth = 16, mapHeight = 64, tileHeight = 16;
+		var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
+        int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
+
+		collisionSys = new CollisionSpace(spaceOffsetX*2, spaceOffsetY*2, 16, 16);
+        var grid = this.GetComponentInChildren<Grid>();
+        foreach(Transform child in grid.transform) {
+			if ("Barrier" == child.gameObject.name) {
+				foreach(Transform barrierChild in child) {
+					var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();  
+					var (wx, wy) = (barrierTileObj.m_X, spaceOffsetY*2 - barrierTileObj.m_Y);
+					var barrierCollider = GenerateRectCollider(wx, wy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, spaceOffsetX, spaceOffsetY, null);	
+					Debug.Log(String.Format("new barrierCollider=[X:{0}, Y:{1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
+					collisionSys.AddSingle(barrierCollider);
+				}
+			}
+        }
 
         collisionHolder = new shared.Collision();
         // [WARNING] For "effPushbacks", "hardPushbackNormsArr" and "jumpedOrNotList", use array literal instead of "new Array" for compliance when passing into "gopkgs.ApplyInputFrameDownsyncDynamicsOnSingleRenderFrameJs"!

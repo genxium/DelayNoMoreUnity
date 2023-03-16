@@ -15,8 +15,9 @@ namespace shared {
         public double X, Y; // The anchor position coordinates
         public bool Closed;
 
-        public ConvexPolygon(double[] points) {
-            X = Y = 0;
+        public ConvexPolygon(double x, double y, double[] points) {
+            X = x;
+			Y = y;
             Points = new FrameRingBuffer<Vector>(6); // I don't expected more points to be coped with in this particular game
             for (int i = 0; i < points.GetLength(0); i += 2) {
                 Vector v = new Vector(points[i], points[i + 1]);
