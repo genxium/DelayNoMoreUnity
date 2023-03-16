@@ -3,6 +3,7 @@
     <PropertyGroup>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <DebugType>portable</DebugType>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
@@ -10,6 +11,7 @@
 	<!-- Currently only copying the DLLs lacked in Unity 2021.3 -->
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <Copy SourceFiles="$(OutDir)$(AssemblyName).dll" DestinationFolder="$(UnityPackageOutputPath)" />
+        <Copy SourceFiles="$(OutDir)$(AssemblyName).pdb" DestinationFolder="$(UnityPackageOutputPath)" />
         <Copy SourceFiles="$(OutDir)Google.Protobuf.dll" DestinationFolder="$(UnityPackageOutputPath)" />
         <Copy SourceFiles="$(OutDir)System.Runtime.CompilerServices.Unsafe.dll" DestinationFolder="$(UnityPackageOutputPath)" />
     </Target>

@@ -3,8 +3,8 @@ using System;
 namespace shared {
     // [WARNING] It's non-trivial to declare "Vector" as a "struct" due to the generic type constraint imposed on "RingBuffer<T>"; moreover it's also unnecessary to save heap RAM allocation this way, as shown below the "ConvexPolygon" should hold retained "Points" in heap RAM anyway, and the "ConvexPolygon instances" themselves are reused by the "Collider instances" which are also reused in battle.
     public class Vector {
-        public double X, Y;
-        public Vector(double x, double y) {
+        public float X, Y;
+        public Vector(float x, float y) {
             X = x;
             Y = y;
         }
@@ -12,10 +12,10 @@ namespace shared {
 
     public class ConvexPolygon {
         public FrameRingBuffer<Vector> Points;
-        public double X, Y; // The anchor position coordinates
+        public float X, Y; // The anchor position coordinates
         public bool Closed;
 
-        public ConvexPolygon(double x, double y, double[] points) {
+        public ConvexPolygon(float x, float y, float[] points) {
             X = x;
 			Y = y;
             Points = new FrameRingBuffer<Vector>(6); // I don't expected more points to be coped with in this particular game
@@ -34,12 +34,12 @@ namespace shared {
             return v;
         }
 
-        public void SetPosition(double x, double y) {
+        public void SetPosition(float x, float y) {
             X = x;
             Y = y;
         }
 
-        public bool UpdateAsRectangle(double x, double y, double w, double h) {
+        public bool UpdateAsRectangle(float x, float y, float w, float h) {
             // This function might look ugly but it's a fast in-place update!
             if (4 != Points.Cnt) {
                 throw new ArgumentException("ConvexPolygon not having exactly 4 vertices to form a rectangle#1!");
@@ -74,10 +74,10 @@ namespace shared {
     }
 
     public struct SatResult {
-        public double OverlapMag, OverlapX, OverlapY;
+        public float OverlapMag, OverlapX, OverlapY;
         public bool AContainedInB, BContainedInA;
 
         // [WARNING] Deliberately unboxed "Vector" to make the following fields primitive such that the whole "SatResult" will be easily allocated on stack.
-        public double AxisX, AxisY;
+        public float AxisX, AxisY;
     }
 }

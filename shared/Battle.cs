@@ -7,7 +7,7 @@ using pbc = global::Google.Protobuf.Collections;
 
 namespace shared {
     public class Battle {
-        public static double MAX_FLOAT64 = Double.MaxValue;
+        public static float MAX_FLOAT32 = float.MaxValue;
         public static int MAX_INT = 999999999;
         public static int COLLISION_PLAYER_INDEX_PREFIX = (1 << 17);
         public static int COLLISION_BARRIER_INDEX_PREFIX = (1 << 16);
@@ -15,8 +15,8 @@ namespace shared {
         public static int PATTERN_ID_UNABLE_TO_OP = -2;
         public static int PATTERN_ID_NO_OP = -1;
 
-        public static double WORLD_TO_VIRTUAL_GRID_RATIO = 10.0;
-        public static double VIRTUAL_GRID_TO_WORLD_RATIO = 1.0 / WORLD_TO_VIRTUAL_GRID_RATIO;
+        public static float WORLD_TO_VIRTUAL_GRID_RATIO = 10.0f;
+        public static float VIRTUAL_GRID_TO_WORLD_RATIO = 1.0f / WORLD_TO_VIRTUAL_GRID_RATIO;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * WORLD_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
@@ -29,9 +29,9 @@ namespace shared {
         public static int INPUT_SCALE_FRAMES = 2; // inputDelayedAndScaledFrameId = ((originalFrameId - InputDelayFrames) >> InputScaleFrames)
 
         public static int SP_ATK_LOOKUP_FRAMES = 5;
-        public static double SNAP_INTO_PLATFORM_OVERLAP = 0.1;
-        public static double SNAP_INTO_PLATFORM_THRESHOLD = 0.5;
-        public static double VERTICAL_PLATFORM_THRESHOLD = 0.9;
+        public static float SNAP_INTO_PLATFORM_OVERLAP = 0.1f;
+        public static float SNAP_INTO_PLATFORM_THRESHOLD = 0.5f;
+        public static float VERTICAL_PLATFORM_THRESHOLD = 0.9f;
         public static int MAGIC_FRAMES_TO_BE_ONWALL = 12;
 
 
@@ -179,8 +179,8 @@ namespace shared {
             return true;
         }
 
-        public static (bool, double, double) calcPushbacks(double oldDx, double oldDy, ConvexPolygon a, ConvexPolygon b, ref SatResult overlapResult) {
-            double origX = a.X, origY = a.Y;
+        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, ref SatResult overlapResult) {
+            float origX = a.X, origY = a.Y;
             try {
                 a.SetPosition(origX + oldDx, origY + oldDy);
                 overlapResult.OverlapMag = 0;
@@ -193,8 +193,8 @@ namespace shared {
 
                 bool overlapped = isPolygonPairOverlapped(a, b, ref overlapResult);
                 if (true == overlapped) {
-                    double pushbackX = overlapResult.OverlapMag * overlapResult.OverlapX;
-                    double pushbackY = overlapResult.OverlapMag * overlapResult.OverlapY;
+                    float pushbackX = overlapResult.OverlapMag * overlapResult.OverlapX;
+                    float pushbackY = overlapResult.OverlapMag * overlapResult.OverlapY;
                     return (true, pushbackX, pushbackY);
                 }
                 else {
@@ -206,14 +206,14 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNorms(int joinIndex, PlayerDownsync currPlayerDownsync, PlayerDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, double snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbackNorms, Collision collision, ref SatResult overlapResult) {
-            double virtualGripToWall = 0.0;
+        public static int calcHardPushbacksNorms(int joinIndex, PlayerDownsync currPlayerDownsync, PlayerDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbackNorms, Collision collision, ref SatResult overlapResult) {
+            float virtualGripToWall = 0.0f;
             if (ATK_CHARACTER_STATE_ONWALL == currPlayerDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currPlayerDownsync.DirX == thatPlayerInNextFrame.DirX) {
-                double xfac = 1.0;
+                float xfac = 1.0f;
                 if (0 > thatPlayerInNextFrame.DirX) {
                     xfac = -xfac;
                 }
-                virtualGripToWall = xfac * (double)(currPlayerDownsync.Speed) * VIRTUAL_GRID_TO_WORLD_RATIO;
+                virtualGripToWall = xfac * (float)(currPlayerDownsync.Speed) * VIRTUAL_GRID_TO_WORLD_RATIO;
             }
             int retCnt = 0;
             bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
@@ -307,9 +307,9 @@ namespace shared {
                     if (null == v) {
                         throw new ArgumentNullException("Getting a null point v from polygon a!");
                     }
-                    double dx = v.X - u.X;
-                    double dy = v.Y - u.Y;
-                    double invSqrtForAxis = InvSqrt64(dx * dx + dy * dy);
+                    float dx = v.X - u.X;
+                    float dy = v.Y - u.Y;
+                    float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
                     if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
@@ -331,9 +331,9 @@ namespace shared {
                     if (null == v) {
                         throw new ArgumentNullException("Getting a null point v from polygon b!");
                     }
-                    double dx = v.X - u.X;
-                    double dy = v.Y - u.Y;
-                    double invSqrtForAxis = InvSqrt64(dx * dx + dy * dy);
+                    float dx = v.X - u.X;
+                    float dy = v.Y - u.Y;
+                    float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
                     if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
@@ -345,7 +345,7 @@ namespace shared {
             return true;
         }
 
-        public static bool isPolygonPairSeparatedByDir(ConvexPolygon a, ConvexPolygon b, double axisX, double axisY, ref SatResult result) {
+        public static bool isPolygonPairSeparatedByDir(ConvexPolygon a, ConvexPolygon b, float axisX, float axisY, ref SatResult result) {
             /*
 				[WARNING] This function is deliberately made private, it shouldn't be used alone (i.e. not along the norms of a polygon), otherwise the pushbacks calculated would be meaningless.
 
@@ -362,16 +362,16 @@ namespace shared {
 				e = (-2.98, 1.49).Unit()
 			*/
 
-            double aStart = MAX_FLOAT64;
-            double aEnd = -MAX_FLOAT64;
-            double bStart = MAX_FLOAT64;
-            double bEnd = -MAX_FLOAT64;
+            float aStart = MAX_FLOAT32;
+            float aEnd = -MAX_FLOAT32;
+            float bStart = MAX_FLOAT32;
+            float bEnd = -MAX_FLOAT32;
             for (int i = 0; i < a.Points.Cnt; i++) {
                 Vector? p = a.GetPointByOffset(i);
                 if (null == p) {
                     throw new ArgumentNullException("Getting a null point from polygon a!");
                 }
-                double dot = (p.X + a.X) * axisX + (p.Y + a.Y) * axisY;
+                float dot = (p.X + a.X) * axisX + (p.Y + a.Y) * axisY;
 
                 if (aStart > dot) {
                     aStart = dot;
@@ -387,7 +387,7 @@ namespace shared {
                 if (null == p) {
                     throw new ArgumentNullException("Getting a null point from polygon b!");
                 }
-                double dot = (p.X + b.X) * axisX + (p.Y + b.Y) * axisY;
+                float dot = (p.X + b.X) * axisX + (p.Y + b.Y) * axisY;
 
                 if (bStart > dot) {
                     bStart = dot;
@@ -403,7 +403,7 @@ namespace shared {
                 return true;
             }
 
-            double overlapProjected = 0;
+            float overlapProjected = 0;
 
             if (aStart < bStart) {
                 result.AContainedInB = false;
@@ -413,8 +413,8 @@ namespace shared {
                     result.BContainedInA = false;
                 }
                 else {
-                    double option1 = aEnd - bStart;
-                    double option2 = bEnd - aStart;
+                    float option1 = aEnd - bStart;
+                    float option2 = bEnd - aStart;
                     if (option1 < option2) {
                         overlapProjected = option1;
                     }
@@ -431,8 +431,8 @@ namespace shared {
                     result.AContainedInB = false;
                 }
                 else {
-                    double option1 = aEnd - bStart;
-                    double option2 = bEnd - aStart;
+                    float option1 = aEnd - bStart;
+                    float option2 = bEnd - aStart;
                     if (option1 < option2) {
                         overlapProjected = option1;
                     }
@@ -442,14 +442,14 @@ namespace shared {
                 }
             }
 
-            double currentOverlap = result.OverlapMag;
-            double absoluteOverlap = overlapProjected;
+            float currentOverlap = result.OverlapMag;
+            float absoluteOverlap = overlapProjected;
             if (overlapProjected < 0) {
                 absoluteOverlap = -overlapProjected;
             }
 
             if ((0 == result.AxisX && 0 == result.AxisY) || (currentOverlap > absoluteOverlap)) {
-                double sign = 1;
+                float sign = 1;
                 if (overlapProjected < 0) {
                     sign = -1;
                 }
@@ -466,7 +466,7 @@ namespace shared {
             return false;
         }
 
-        public static (int, int) WorldToVirtualGridPos(double wx, double wy) {
+        public static (int, int) WorldToVirtualGridPos(float wx, float wy) {
             // [WARNING] Introduces loss of precision!
             // In JavaScript floating numbers suffer from seemingly non-deterministic arithmetics, and even if certain libs solved this issue by approaches such as fixed-point-number, they might not be used in other libs -- e.g. the "collision libs" we're interested in -- thus couldn't kill all pains.
             int vx = (int)(Math.Round(wx * WORLD_TO_VIRTUAL_GRID_RATIO));
@@ -474,27 +474,27 @@ namespace shared {
             return (vx, vy);
         }
 
-        public static (double, double) VirtualGridToWorldPos(int vx, int vy) {
+        public static (float, float) VirtualGridToWorldPos(int vx, int vy) {
             // No loss of precision
-            double wx = (double)(vx) * VIRTUAL_GRID_TO_WORLD_RATIO;
-            double wy = (double)(vy) * VIRTUAL_GRID_TO_WORLD_RATIO;
+            float wx = (float)(vx) * VIRTUAL_GRID_TO_WORLD_RATIO;
+            float wy = (float)(vy) * VIRTUAL_GRID_TO_WORLD_RATIO;
             return (wx, wy);
         }
 
-        public static (double, double) WorldToPolygonColliderBLPos(double wx, double wy, double halfBoundingW, double halfBoundingH, double topPadding, double bottomPadding, double leftPadding, double rightPadding, double collisionSpaceOffsetX, double collisionSpaceOffsetY) {
+        public static (float, float) WorldToPolygonColliderBLPos(float wx, float wy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
             return (wx - halfBoundingW - leftPadding + collisionSpaceOffsetX, wy - halfBoundingH - bottomPadding + collisionSpaceOffsetY);
         }
 
-        public static (double, double) PolygonColliderBLToWorldPos(double cx, double cy, double halfBoundingW, double halfBoundingH, double topPadding, double bottomPadding, double leftPadding, double rightPadding, double collisionSpaceOffsetX, double collisionSpaceOffsetY) {
+        public static (float, float) PolygonColliderBLToWorldPos(float cx, float cy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
             return (cx + halfBoundingW + leftPadding - collisionSpaceOffsetX, cy + halfBoundingH + bottomPadding - collisionSpaceOffsetY);
         }
 
-        public static (int, int) PolygonColliderBLToVirtualGridPos(double cx, double cy, double halfBoundingW, double halfBoundingH, double topPadding, double bottomPadding, double leftPadding, double rightPadding, double collisionSpaceOffsetX, double collisionSpaceOffsetY) {
+        public static (int, int) PolygonColliderBLToVirtualGridPos(float cx, float cy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
             var (wx, wy) = PolygonColliderBLToWorldPos(cx, cy, halfBoundingW, halfBoundingH, topPadding, bottomPadding, leftPadding, rightPadding, collisionSpaceOffsetX, collisionSpaceOffsetY);
             return WorldToVirtualGridPos(wx, wy);
         }
 
-        public static (double, double) VirtualGridToPolygonColliderBLPos(int vx, int vy, double halfBoundingW, double halfBoundingH, double topPadding, double bottomPadding, double leftPadding, double rightPadding, double collisionSpaceOffsetX, double collisionSpaceOffsetY) {
+        public static (float, float) VirtualGridToPolygonColliderBLPos(int vx, int vy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
             var (wx, wy) = VirtualGridToWorldPos(vx, vy);
             return WorldToPolygonColliderBLPos(wx, wy, halfBoundingW, halfBoundingH, topPadding, bottomPadding, leftPadding, rightPadding, collisionSpaceOffsetX, collisionSpaceOffsetY);
         }
@@ -572,22 +572,22 @@ namespace shared {
         }
 
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, double collisionSpaceOffsetX, double collisionSpaceOffsetY, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, float collisionSpaceOffsetX, float collisionSpaceOffsetY, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
             }
             int nextRenderFrameId = currRenderFrameId + 1;
             var (ok2, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
-			if (!ok2 || null == candidate) {
-				if (nextRenderFrameId == renderBuffer.EdFrameId) {
-					renderBuffer.DryPut();
-					(_, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
-				} 
-			}
-			if (null == candidate) {
-				throw new ArgumentNullException(String.Format("renderBuffer was not fully pre-allocated for nextRenderFrameId={0}!", nextRenderFrameId));
-			}
+            if (!ok2 || null == candidate) {
+                if (nextRenderFrameId == renderBuffer.EdFrameId) {
+                    renderBuffer.DryPut();
+                    (_, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
+                }
+            }
+            if (null == candidate) {
+                throw new ArgumentNullException(String.Format("renderBuffer was not fully pre-allocated for nextRenderFrameId={0}!", nextRenderFrameId));
+            }
 
             // [WARNING] On backend this function MUST BE called while "InputsBufferLock" is locked!
             var nextRenderFramePlayers = candidate.PlayersArr;
@@ -795,7 +795,7 @@ namespace shared {
                         }
                         for (int k = 0; k < hardPushbackCnt; k++) {
                             Vector hardPushbackNorm = hardPushbackNormsArr[joinIndex - 1][k];
-                            double projectedMagnitude = pushbackX * hardPushbackNorm.X + pushbackY * hardPushbackNorm.Y;
+                            float projectedMagnitude = pushbackX * hardPushbackNorm.X + pushbackY * hardPushbackNorm.Y;
                             if (isBarrier || (isAnotherPlayer && 0 > projectedMagnitude)) {
                                 pushbackX -= projectedMagnitude * hardPushbackNorm.X;
                                 pushbackY -= projectedMagnitude * hardPushbackNorm.Y;
@@ -872,7 +872,7 @@ namespace shared {
                 ConvexPolygon aShape = aCollider.Shape;
                 // Update "virtual grid position"
                 var thatPlayerInNextFrame = nextRenderFramePlayers[i];
-                (thatPlayerInNextFrame.VirtualGridX, thatPlayerInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[joinIndex - 1].X, aCollider.Y - effPushbacks[joinIndex - 1].Y, aCollider.W * 0.5, aCollider.H * 0.5, 0, 0, 0, 0, collisionSpaceOffsetX, collisionSpaceOffsetY);
+                (thatPlayerInNextFrame.VirtualGridX, thatPlayerInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[joinIndex - 1].X, aCollider.Y - effPushbacks[joinIndex - 1].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, collisionSpaceOffsetX, collisionSpaceOffsetY);
 
                 // Update "CharacterState"
                 if (thatPlayerInNextFrame.InAir) {
@@ -934,10 +934,10 @@ namespace shared {
 
             candidate.Id = nextRenderFrameId;
         }
-        
+
         public static void AlignPolygon2DToBoundingBox(ConvexPolygon input) {
             // Transform again to put "anchor" at the "bottom-left point (w.r.t. world space)" of the bounding box for "resolv"
-            double boundingBoxBLX = MAX_FLOAT64, boundingBoxBLY = MAX_FLOAT64;
+            float boundingBoxBLX = MAX_FLOAT32, boundingBoxBLY = MAX_FLOAT32;
             for (int i = 0; i < input.Points.Cnt; i++) {
                 var (exists, p) = input.Points.GetByOffset(i);
                 if (!exists || null == p) throw new ArgumentNullException("Unexpected null point in ConvexPolygon when calling `AlignPolygon2DToBoundingBox`#1!");
@@ -959,10 +959,10 @@ namespace shared {
             }
         }
 
-        public static Collider GenerateConvexPolygonCollider(ConvexPolygon srcPolygon, double spaceOffsetX, double spaceOffsetY, object data) {
+        public static Collider GenerateConvexPolygonCollider(ConvexPolygon srcPolygon, float spaceOffsetX, float spaceOffsetY, object data) {
             if (null == srcPolygon) throw new ArgumentNullException("Null srcPolygon is not allowed in `GenerateConvexPolygonCollider`");
             AlignPolygon2DToBoundingBox(srcPolygon);
-            double w = 0, h = 0;
+            float w = 0, h = 0;
 
             for (int i = 0; i < srcPolygon.Points.Cnt; i++) {
                 for (int j = 0; j < srcPolygon.Points.Cnt; j++) {
@@ -985,25 +985,25 @@ namespace shared {
             return new Collider(srcPolygon.X + spaceOffsetX, srcPolygon.Y + spaceOffsetY, w, h, srcPolygon, data);
         }
 
-        public static Collider GenerateRectCollider(double wx, double wy, double w, double h, double topPadding, double bottomPadding, double leftPadding, double rightPadding, double spaceOffsetX, double spaceOffsetY, object data) {
+        public static Collider GenerateRectCollider(float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data) {
             // [WARNING] (spaceOffsetX, spaceOffsetY) are taken into consideration while calling "GenerateConvexPolygonCollider" -- because "GenerateConvexPolygonCollider" might also be called for "polylines extracted from Tiled", it's more convenient to organized the codes this way.
-            var (blX, blY) = WorldToPolygonColliderBLPos(wx, wy, w * 0.5, h * 0.5, topPadding, bottomPadding, leftPadding, rightPadding, 0, 0); 
-            double effW = leftPadding + w + rightPadding, effH = bottomPadding + h + topPadding;
-            var srcPolygon = new ConvexPolygon(blX, blY, new double[] { 
+            var (blX, blY) = WorldToPolygonColliderBLPos(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, 0, 0);
+            float effW = leftPadding + w + rightPadding, effH = bottomPadding + h + topPadding;
+            var srcPolygon = new ConvexPolygon(blX, blY, new float[] {
                 0, 0,
-                0 + effW, 0, 
-                0 + effW, 0 + effH, 
-                0, 0 + effH 
+                0 + effW, 0,
+                0 + effW, 0 + effH,
+                0, 0 + effH
             });
 
             return GenerateConvexPolygonCollider(srcPolygon, spaceOffsetX, spaceOffsetY, data);
         }
 
-    public static void UpdateRectCollider(Collider collider, double wx, double wy, double w, double h, double topPadding, double bottomPadding, double leftPadding, double rightPadding, double spaceOffsetX, double spaceOffsetY, object data) {
-            var (blX, blY) = WorldToPolygonColliderBLPos(wx, wy, w * 0.5, h * 0.5, topPadding, bottomPadding, leftPadding, rightPadding, spaceOffsetX, spaceOffsetY);
+        public static void UpdateRectCollider(Collider collider, float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data) {
+            var (blX, blY) = WorldToPolygonColliderBLPos(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, spaceOffsetX, spaceOffsetY);
 
-            double effW = leftPadding + w + rightPadding;
-            double effH = bottomPadding + h + topPadding;
+            float effW = leftPadding + w + rightPadding;
+            float effH = bottomPadding + h + topPadding;
             (collider.X, collider.Y, collider.W, collider.H) = (blX, blY, effW, effH);
             collider.Shape.UpdateAsRectangle(0, 0, effW, effH);
 
@@ -1052,7 +1052,7 @@ namespace shared {
                 ret.PlayersArr.Add(single);
             }
 
-	        for (int i = 0; i < preallocMeleeBulletCount; i++) {
+            for (int i = 0; i < preallocMeleeBulletCount; i++) {
                 var single = new MeleeBullet();
                 single.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
                 ret.MeleeBullets.Add(single);
@@ -1077,15 +1077,15 @@ namespace shared {
 
             return ret;
         }
-		
-		public static (double, double) tiledLayerPositionToCollisionSpacePosition(double tiledLayerX, double tiledLayerY, double spaceOffsetX, double spaceOffsetY) {
-			return (-spaceOffsetX + tiledLayerX, +spaceOffsetY - tiledLayerY); 	
-		}
-		
-		public static (double, double) CollisionSpacePositionToWorldPosition(double collisionSpaceX, double collisionSpaceY, double spaceOffsetX, double spaceOffsetY) {
-			// [WARNING] This conversion is specifically added for Unity+SuperTiled2Unity
-			return (collisionSpaceX+spaceOffsetX, collisionSpaceY-spaceOffsetY); 	
-		}
-		
+
+        public static (float, float) TiledLayerPositionToCollisionSpacePosition(float tiledLayerX, float tiledLayerY, float spaceOffsetX, float spaceOffsetY) {
+            return (-spaceOffsetX + tiledLayerX, +spaceOffsetY - tiledLayerY);
+        }
+
+        public static (float, float) CollisionSpacePositionToWorldPosition(float collisionSpaceX, float collisionSpaceY, float spaceOffsetX, float spaceOffsetY) {
+            // [WARNING] This conversion is specifically added for Unity+SuperTiled2Unity
+            return ((collisionSpaceX + spaceOffsetX), (collisionSpaceY - spaceOffsetY));
+        }
+
     }
 }

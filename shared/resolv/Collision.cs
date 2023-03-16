@@ -2,7 +2,7 @@
 
 namespace shared {
     public class Collision {
-        public double dx, dy;
+        public float dx, dy;
         public Collider? checkingCollider;
         public FrameRingBuffer<Collider> ContactedColliders;
         public Collision() {

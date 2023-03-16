@@ -2,14 +2,14 @@ using System;
 
 namespace shared {
     public class Collider {
-        public double X, Y, W, H;      // Position and size of the Collider in the Space
+        public float X, Y, W, H;      // Position and size of the Collider in the Space
         public FrameRingBuffer<CollisionCell> TouchingCells; // An array of Cells the Collider is touching
         public ConvexPolygon Shape;
         public object? Data;                     // A pointer to a user-definable object
 
         public CollisionSpace? Space;           // Reference to the Space the Collider exists within
 
-        public Collider(double x, double y, double w, double h, ConvexPolygon shape, object? data) {
+        public Collider(float x, float y, float w, float h, ConvexPolygon shape, object? data) {
             X = x;
             Y = y;
             W = w;
@@ -20,7 +20,7 @@ namespace shared {
             Space = null;
         }
 
-        public (int, int, int, int) BoundsToSpace(double dx, double dy) {
+        public (int, int, int, int) BoundsToSpace(float dx, float dy) {
 			if (null == Space) {
 				throw new ArgumentException("Collider Space is null when calling `BoundsToSpace`!");
 			}
@@ -53,7 +53,7 @@ namespace shared {
             }
         }
 
-        public bool CheckAllWithHolder(double dx, double dy, Collision cc) {
+        public bool CheckAllWithHolder(float dx, float dy, Collision cc) {
             if (null == Space) {
                 return false;
             }
