@@ -499,7 +499,7 @@ namespace shared {
             return WorldToPolygonColliderBLPos(wx, wy, halfBoundingW, halfBoundingH, topPadding, bottomPadding, leftPadding, rightPadding, collisionSpaceOffsetX, collisionSpaceOffsetY);
         }
 
-        public static bool UpdateInputFrameInPlaceUponDynamics(int inputFrameId, int roomCapacity, ulong confirmedList, ulong[] inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
+        public static bool UpdateInputFrameInPlaceUponDynamics(int inputFrameId, int roomCapacity, ulong confirmedList, Google.Protobuf.Collections.RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
             bool hasInputFrameUpdatedOnDynamics = false;
             for (int i = 0; i < roomCapacity; i++) {
                 if ((i + 1) == toExcludeJoinIndex) {
@@ -522,6 +522,7 @@ namespace shared {
             }
             return hasInputFrameUpdatedOnDynamics;
         }
+
         private static (int, bool, int, int) deriveOpPattern(PlayerDownsync currPlayerDownsync, PlayerDownsync thatPlayerInNextFrame, RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);

@@ -7,17 +7,8 @@ public class InputManager : MonoBehaviour {
     private const double magicLeanLowerBound = 0.1;
     private const double magicLeanUpperBound = 0.9;
     private const double joyStickEps = 0.1;
-    public static InputManager Instance { get; private set; }
-    private void Awake() {
-        if (null != Instance && Instance != this) {
-            Destroy(this);
-        }
-        else {
-            Instance = this;
-        }
-    }
 
-    private (int, int, int) DiscretizeDirection(double continuousDx, double continuousDy, double eps) {
+    public static (int, int, int) DiscretizeDirection(double continuousDx, double continuousDy, double eps) {
         int dx = 0, dy = 0, encodedIdx = 0;
         if (Math.Abs(continuousDx) < eps && Math.Abs(continuousDy) < eps) {
             return (dx, dy, encodedIdx);
@@ -77,7 +68,7 @@ public class InputManager : MonoBehaviour {
         return (dx, dy, encodedIdx);
     }
 
-    public ulong GetImmediateEncodedInput() {
+    public static ulong GetImmediateEncodedInput() {
         float continuousDx = Input.GetAxis("Horizontal");
         float continuousDy = Input.GetAxis("Vertical");
         var (_, _, discretizedDir) = DiscretizeDirection(continuousDx, continuousDy, joyStickEps);
