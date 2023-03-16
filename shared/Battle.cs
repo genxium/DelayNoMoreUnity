@@ -579,9 +579,15 @@ namespace shared {
             }
             int nextRenderFrameId = currRenderFrameId + 1;
             var (ok2, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
-            if (!ok2 || null == candidate) {
-                throw new ArgumentNullException(String.Format("renderBuffer was not fully pre-allocated for nextRenderFrameId={0}!", nextRenderFrameId));
-            }
+			if (!ok2 || null == candidate) {
+				if (nextRenderFrameId == renderBuffer.EdFrameId) {
+					renderBuffer.DryPut();
+					(_, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
+				} 
+			}
+			if (null == candidate) {
+				throw new ArgumentNullException(String.Format("renderBuffer was not fully pre-allocated for nextRenderFrameId={0}!", nextRenderFrameId));
+			}
 
             // [WARNING] On backend this function MUST BE called while "InputsBufferLock" is locked!
             var nextRenderFramePlayers = candidate.PlayersArr;
@@ -1072,8 +1078,14 @@ namespace shared {
             return ret;
         }
 		
-		public static (double, double) tiledLayerOffsetToCollisionSpaceOffset(double tiledLayerX, double tiledLayerY, double spaceOffsetX, double spaceOffsetY) {
+		public static (double, double) tiledLayerPositionToCollisionSpacePosition(double tiledLayerX, double tiledLayerY, double spaceOffsetX, double spaceOffsetY) {
 			return (-spaceOffsetX + tiledLayerX, +spaceOffsetY - tiledLayerY); 	
 		}
+		
+		public static (double, double) CollisionSpacePositionToWorldPosition(double collisionSpaceX, double collisionSpaceY, double spaceOffsetX, double spaceOffsetY) {
+			// [WARNING] This conversion is specifically added for Unity+SuperTiled2Unity
+			return (collisionSpaceX+spaceOffsetX, collisionSpaceY-spaceOffsetY); 	
+		}
+		
     }
 }

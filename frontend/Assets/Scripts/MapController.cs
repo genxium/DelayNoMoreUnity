@@ -44,12 +44,70 @@ public class MapController : MonoBehaviour {
     CollisionSpace collisionSys;
 
     // Start is called before the first frame update
-    void Start() {
-        _resetCurrentMatch();
-        spawnPlayerNode(0, spaceOffsetX, -spaceOffsetY);
+	void Start() {
+		_resetCurrentMatch();
+		var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
+		double defaultColliderRadius = 12.0;
+
+        var grid = this.GetComponentInChildren<Grid>();
+        foreach(Transform child in grid.transform) {
+			switch (child.gameObject.name) {
+			case "Barrier":
+				foreach(Transform barrierChild in child) {
+					var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();  
+					var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width*0.5, barrierTileObj.m_Y + barrierTileObj.m_Height*0.5);
+					var (rectCx, rectCy) = tiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+					// [WARNING] The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)", to make it easy for me on debugging in collision space, I'm still using a "Collision Space (0, 0)" aligned with the center of the rendered "TiledMap (via SuperMap)" as the CocosCreator version.
+					var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);	
+					Debug.Log(String.Format("new barrierCollider=[X:{0}, Y:{1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
+					collisionSys.AddSingle(barrierCollider);
+				}
+			break;
+			case "PlayerStartingPos":
+				int i = 0;
+				foreach(Transform playerPosChild in child) {
+					var playerPosTileObj = playerPosChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();  
+					var (playerCx, playerCy) = tiledLayerPositionToCollisionSpacePosition(playerPosTileObj.m_X, playerPosTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+					playerStartingCollisionSpacePositions[i] = new Vector(playerCx, playerCy);	
+					Debug.Log(String.Format("new playerStartingCollisionSpacePositions[i:{0}]=[X:{1}, Y:{2}]", i, playerCx, playerCy));
+					i++;
+				}
+			break;
+			default:
+			break;
+			}
+        }
+
+		spawnPlayerNode(0, spaceOffsetX, -spaceOffsetY);
 		var camOldPos = Camera.main.transform.position; 
 		Camera.main.transform.position = new Vector3(spaceOffsetX, -spaceOffsetY, camOldPos.z); 
-    }
+
+		var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 64, 64); 
+		startRdf.Id = MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_START; 
+		startRdf.ShouldForceResync = false;
+		var selfPlayerInRdf = startRdf.PlayersArr[selfPlayerInfo.JoinIndex-1]; 
+		var (selfPlayerVposX, selfPlayerVposY) = WorldToVirtualGridPos(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex-1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex-1].Y); 
+		selfPlayerInRdf.Id = 10; 
+		selfPlayerInRdf.JoinIndex = selfPlayerInfo.JoinIndex; 
+		selfPlayerInRdf.VirtualGridX = selfPlayerVposX; 
+		selfPlayerInRdf.VirtualGridY = selfPlayerVposY; 
+		selfPlayerInRdf.RevivalVirtualGridX = selfPlayerVposX; 
+		selfPlayerInRdf.RevivalVirtualGridY = selfPlayerVposY; 
+		selfPlayerInRdf.Speed = 10;
+		selfPlayerInRdf.ColliderRadius = (int)defaultColliderRadius;
+		selfPlayerInRdf.CharacterState = Battle.ATK_CHARACTER_STATE_INAIR_IDLE1_NO_JUMP;
+		selfPlayerInRdf.FramesToRecover = 0;
+		selfPlayerInRdf.DirX = 2;
+		selfPlayerInRdf.DirY = 0;
+		selfPlayerInRdf.VelX = 0;
+		selfPlayerInRdf.VelY = 0;
+		selfPlayerInRdf.InAir = true;
+		selfPlayerInRdf.OnWall = false;
+		selfPlayerInRdf.Hp = 100;
+		selfPlayerInRdf.MaxHp = 100;
+		
+		onRoomDownsyncFrame(startRdf, null);
+	}
 
     // Update is called once per frame
     void Update() {
@@ -259,20 +317,6 @@ public class MapController : MonoBehaviour {
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
 		collisionSys = new CollisionSpace(spaceOffsetX*2, spaceOffsetY*2, 64, 64);
-        var grid = this.GetComponentInChildren<Grid>();
-        foreach(Transform child in grid.transform) {
-			if ("Barrier" == child.gameObject.name) {
-				foreach(Transform barrierChild in child) {
-					var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();  
-					var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width*0.5, barrierTileObj.m_Y + barrierTileObj.m_Height*0.5);
-					var (rectCx, rectCy) = tiledLayerOffsetToCollisionSpaceOffset(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
-					// [WARNING] The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)", to make it easy for me on debugging in collision space, I'm still using a "Collision Space (0, 0)" aligned with the center of the rendered "TiledMap (via SuperMap)" as the CocosCreator version. 
-					var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);	
-					Debug.Log(String.Format("new barrierCollider=[X:{0}, Y:{1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
-					collisionSys.AddSingle(barrierCollider);
-				}
-			}
-        }
 
         collisionHolder = new shared.Collision();
         // [WARNING] For "effPushbacks", "hardPushbackNormsArr" and "jumpedOrNotList", use array literal instead of "new Array" for compliance when passing into "gopkgs.ApplyInputFrameDownsyncDynamicsOnSingleRenderFrameJs"!
@@ -368,7 +412,7 @@ public class MapController : MonoBehaviour {
 				foreach(Transform barrierChild in child) {
 					var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();  
 					var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width*0.5, barrierTileObj.m_Y + barrierTileObj.m_Height*0.5);
-					var (rectCx, rectCy) = tiledLayerOffsetToCollisionSpaceOffset(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+					var (rectCx, rectCy) = tiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
 					var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);	
 					
 					GL.Begin(GL.LINES);
