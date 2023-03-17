@@ -466,7 +466,7 @@ namespace shared {
             return false;
         }
 
-        public static (int, int) WorldToVirtualGridPos(float wx, float wy) {
+        public static (int, int) PolygonColliderCtrToVirtualGridPos(float wx, float wy) {
             // [WARNING] Introduces loss of precision!
             // In JavaScript floating numbers suffer from seemingly non-deterministic arithmetics, and even if certain libs solved this issue by approaches such as fixed-point-number, they might not be used in other libs -- e.g. the "collision libs" we're interested in -- thus couldn't kill all pains.
             int vx = (int)(Math.Round(wx * WORLD_TO_VIRTUAL_GRID_RATIO));
@@ -474,29 +474,29 @@ namespace shared {
             return (vx, vy);
         }
 
-        public static (float, float) VirtualGridToWorldPos(int vx, int vy) {
+        public static (float, float) VirtualGridToPolygonColliderCtr(int vx, int vy) {
             // No loss of precision
             float wx = (float)(vx) * VIRTUAL_GRID_TO_WORLD_RATIO;
             float wy = (float)(vy) * VIRTUAL_GRID_TO_WORLD_RATIO;
             return (wx, wy);
         }
 
-        public static (float, float) WorldToPolygonColliderBLPos(float wx, float wy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
+        public static (float, float) PolygonColliderCtrToBL(float wx, float wy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
             return (wx - halfBoundingW - leftPadding + collisionSpaceOffsetX, wy - halfBoundingH - bottomPadding + collisionSpaceOffsetY);
         }
 
-        public static (float, float) PolygonColliderBLToWorldPos(float cx, float cy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
+        public static (float, float) PolygonColliderBLToCtr(float cx, float cy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
             return (cx + halfBoundingW + leftPadding - collisionSpaceOffsetX, cy + halfBoundingH + bottomPadding - collisionSpaceOffsetY);
         }
 
         public static (int, int) PolygonColliderBLToVirtualGridPos(float cx, float cy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
-            var (wx, wy) = PolygonColliderBLToWorldPos(cx, cy, halfBoundingW, halfBoundingH, topPadding, bottomPadding, leftPadding, rightPadding, collisionSpaceOffsetX, collisionSpaceOffsetY);
-            return WorldToVirtualGridPos(wx, wy);
+            var (wx, wy) = PolygonColliderBLToCtr(cx, cy, halfBoundingW, halfBoundingH, topPadding, bottomPadding, leftPadding, rightPadding, collisionSpaceOffsetX, collisionSpaceOffsetY);
+            return PolygonColliderCtrToVirtualGridPos(wx, wy);
         }
 
         public static (float, float) VirtualGridToPolygonColliderBLPos(int vx, int vy, float halfBoundingW, float halfBoundingH, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float collisionSpaceOffsetX, float collisionSpaceOffsetY) {
-            var (wx, wy) = VirtualGridToWorldPos(vx, vy);
-            return WorldToPolygonColliderBLPos(wx, wy, halfBoundingW, halfBoundingH, topPadding, bottomPadding, leftPadding, rightPadding, collisionSpaceOffsetX, collisionSpaceOffsetY);
+            var (wx, wy) = VirtualGridToPolygonColliderCtr(vx, vy);
+            return PolygonColliderCtrToBL(wx, wy, halfBoundingW, halfBoundingH, topPadding, bottomPadding, leftPadding, rightPadding, collisionSpaceOffsetX, collisionSpaceOffsetY);
         }
 
         public static bool UpdateInputFrameInPlaceUponDynamics(int inputFrameId, int roomCapacity, ulong confirmedList, Google.Protobuf.Collections.RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
@@ -653,7 +653,7 @@ namespace shared {
                         else {
                             // Updates CharacterState and thus the animation to make user see graphical feedback asap.
                             thatPlayerInNextFrame.CharacterState = ATK_CHARACTER_STATE_WALKING;
-                            thatPlayerInNextFrame.FramesToRecover = 2;
+                            thatPlayerInNextFrame.FramesToRecover = 2; // TODO
                         }
                     }
                     else {
@@ -701,7 +701,7 @@ namespace shared {
                 // Reset playerCollider position from the "virtual grid position"
                 int newVx = currPlayerDownsync.VirtualGridX + currPlayerDownsync.VelX, newVy = currPlayerDownsync.VirtualGridY + currPlayerDownsync.VelY;
 
-                var (wx, wy) = VirtualGridToWorldPos(newVx, newVy);
+                var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(newVx, newVy);
                 int colliderWidth = currPlayerDownsync.ColliderRadius * 2, colliderHeight = currPlayerDownsync.ColliderRadius * 4;
 
                 switch (currPlayerDownsync.CharacterState) {
@@ -718,10 +718,10 @@ namespace shared {
                         break;
                 }
 
-                var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToWorldPos(colliderWidth, colliderHeight);
+                var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
 
                 Collider playerCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(playerCollider, wx, wy, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, collisionSpaceOffsetX, collisionSpaceOffsetY, currPlayerDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
+                UpdateRectCollider(playerCollider, collisionSpaceX, collisionSpaceY, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, collisionSpaceOffsetX, collisionSpaceOffsetY, currPlayerDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
                 colliderCnt++;
 
                 // Add to collision system
@@ -832,7 +832,7 @@ namespace shared {
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currPlayerDownsync" instead of "thatPlayerInNextFrame" here!
                                     var halfColliderWidthDiff = 0;
                                     var halfColliderHeightDiff = currPlayerDownsync.ColliderRadius;
-                                    var (_, halfColliderWorldHeightDiff) = VirtualGridToWorldPos(halfColliderWidthDiff, halfColliderHeightDiff);
+                                    var (_, halfColliderWorldHeightDiff) = VirtualGridToPolygonColliderCtr(halfColliderWidthDiff, halfColliderHeightDiff);
                                     effPushbacks[joinIndex - 1].Y -= halfColliderWorldHeightDiff;
                                     break;
                             }
@@ -987,7 +987,7 @@ namespace shared {
 
         public static Collider GenerateRectCollider(float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data) {
             // [WARNING] (spaceOffsetX, spaceOffsetY) are taken into consideration while calling "GenerateConvexPolygonCollider" -- because "GenerateConvexPolygonCollider" might also be called for "polylines extracted from Tiled", it's more convenient to organized the codes this way.
-            var (blX, blY) = WorldToPolygonColliderBLPos(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, 0, 0);
+            var (blX, blY) = PolygonColliderCtrToBL(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, 0, 0);
             float effW = leftPadding + w + rightPadding, effH = bottomPadding + h + topPadding;
             var srcPolygon = new ConvexPolygon(blX, blY, new float[] {
                 0, 0,
@@ -1000,7 +1000,7 @@ namespace shared {
         }
 
         public static void UpdateRectCollider(Collider collider, float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data) {
-            var (blX, blY) = WorldToPolygonColliderBLPos(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, spaceOffsetX, spaceOffsetY);
+            var (blX, blY) = PolygonColliderCtrToBL(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, spaceOffsetX, spaceOffsetY);
 
             float effW = leftPadding + w + rightPadding;
             float effH = bottomPadding + h + topPadding;
@@ -1079,12 +1079,12 @@ namespace shared {
         }
 
         public static (float, float) TiledLayerPositionToCollisionSpacePosition(float tiledLayerX, float tiledLayerY, float spaceOffsetX, float spaceOffsetY) {
-            return (-spaceOffsetX + tiledLayerX, +spaceOffsetY - tiledLayerY);
+            return (tiledLayerX, spaceOffsetY + spaceOffsetY - tiledLayerY);
         }
 
         public static (float, float) CollisionSpacePositionToWorldPosition(float collisionSpaceX, float collisionSpaceY, float spaceOffsetX, float spaceOffsetY) {
             // [WARNING] This conversion is specifically added for Unity+SuperTiled2Unity
-            return ((collisionSpaceX + spaceOffsetX), (collisionSpaceY - spaceOffsetY));
+            return (collisionSpaceX, - spaceOffsetY - spaceOffsetY + collisionSpaceY);
         }
 
     }

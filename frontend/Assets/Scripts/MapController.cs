@@ -59,9 +59,15 @@ public class MapController : MonoBehaviour {
                         var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
                         var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
                         var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
-                        // [WARNING] The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)", to make it easy for me on debugging in collision space, I'm still using a "Collision Space (0, 0)" aligned with the center of the rendered "TiledMap (via SuperMap)" as the CocosCreator version.
+                        /*
+                         [WARNING] 
+                        
+                        The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)".
+
+                        It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
+                        */
                         var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
-                        Debug.Log(String.Format("new barrierCollider=[X:{0}, Y:{1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
+                        Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
                         collisionSys.AddSingle(barrierCollider);
                         staticRectangleColliders[i++] = barrierCollider;
                     }
@@ -91,7 +97,7 @@ public class MapController : MonoBehaviour {
         spawnPlayerNode(0, selfPlayerWx, selfPlayerWy);
         Camera.main.transform.position = new Vector3(selfPlayerWx, selfPlayerWy, camOldPos.z);
         var selfPlayerInRdf = startRdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
-        var (selfPlayerVposX, selfPlayerVposY) = WorldToVirtualGridPos(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
+        var (selfPlayerVposX, selfPlayerVposY) = PolygonColliderCtrToVirtualGridPos(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
         selfPlayerInRdf.Id = 10;
         selfPlayerInRdf.JoinIndex = selfPlayerInfo.JoinIndex;
         selfPlayerInRdf.VirtualGridX = selfPlayerVposX;
@@ -291,7 +297,7 @@ public class MapController : MonoBehaviour {
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame prevRdf, RoomDownsyncFrame rdf) {
         for (int k = 0; k < roomCapacity; k++) {
             var currPlayerDownsync = rdf.PlayersArr[k];
-            var (collisionSpaceX, collisionSpaceY) = VirtualGridToWorldPos(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
+            var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
             var playerGameObj = playerGameObjs[k];
             playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
@@ -328,7 +334,7 @@ public class MapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 16, 16);
+        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 64, 64);
 
         collisionHolder = new shared.Collision();
         // [WARNING] For "effPushbacks", "hardPushbackNormsArr" and "jumpedOrNotList", use array literal instead of "new Array" for compliance when passing into "gopkgs.ApplyInputFrameDownsyncDynamicsOnSingleRenderFrameJs"!
@@ -424,13 +430,14 @@ public class MapController : MonoBehaviour {
         GL.MultMatrix(transform.localToWorldMatrix);
 
         // The anchoring quad for testing
+        /*
         GL.Begin(GL.QUADS);
         GL.Vertex3(1024, -512, 0);
         GL.Vertex3(1040, -512, 0);
         GL.Vertex3(1040, -496, 0);
         GL.Vertex3(1024, -496, 0);
         GL.End();
-
+        */
         // Draw static colliders
         foreach (var barrierCollider in staticRectangleColliders) {
             if (null == barrierCollider) {
@@ -461,7 +468,7 @@ public class MapController : MonoBehaviour {
         if (null != rdf) {
             for (int k = 0; k < roomCapacity; k++) {
                 var currPlayerDownsync = rdf.PlayersArr[k];
-                var (collisionSpaceX, collisionSpaceY) = VirtualGridToWorldPos(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
+                var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
                 var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
                 GL.Begin(GL.QUADS);
                 GL.Vertex3((wx - 0.5f * currPlayerDownsync.ColliderRadius), (wy - 0.5f * currPlayerDownsync.ColliderRadius), 0);
