@@ -40,6 +40,7 @@ public class MapController : MonoBehaviour {
     Vector[][] hardPushbackNormsArr;
     bool[] jumpedOrNotList;
     shared.Collider[] dynamicRectangleColliders;
+    shared.Collider[] staticRectangleColliders;
     InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     CollisionSpace collisionSys;
 
@@ -53,6 +54,7 @@ public class MapController : MonoBehaviour {
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
                 case "Barrier":
+                    int i = 0;
                     foreach (Transform barrierChild in child) {
                         var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
                         var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
@@ -61,17 +63,18 @@ public class MapController : MonoBehaviour {
                         var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
                         Debug.Log(String.Format("new barrierCollider=[X:{0}, Y:{1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
                         collisionSys.AddSingle(barrierCollider);
+                        staticRectangleColliders[i++] = barrierCollider;
                     }
                     break;
                 case "PlayerStartingPos":
-                    int i = 0;
+                    int j = 0;
                     foreach (Transform playerPosChild in child) {
                         var playerPosTileObj = playerPosChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
                         var (playerCx, playerCy) = TiledLayerPositionToCollisionSpacePosition(playerPosTileObj.m_X, playerPosTileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        playerStartingCollisionSpacePositions[i] = new Vector(playerCx, playerCy);
-                        Debug.Log(String.Format("new playerStartingCollisionSpacePositions[i:{0}]=[X:{1}, Y:{2}]", i, playerCx, playerCy));
-                        i++;
-                        if (i >= roomCapacity) break;
+                        playerStartingCollisionSpacePositions[j] = new Vector(playerCx, playerCy);
+                        Debug.Log(String.Format("new playerStartingCollisionSpacePositions[i:{0}]=[X:{1}, Y:{2}]", j, playerCx, playerCy));
+                        j++;
+                        if (j >= roomCapacity) break;
                     }
                     break;
                 default:
@@ -143,7 +146,6 @@ public class MapController : MonoBehaviour {
         // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
-        showDebugBoundaries(rdf);
         ++renderFrameId;
     }
 
@@ -326,7 +328,7 @@ public class MapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 64, 64);
+        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 16, 16);
 
         collisionHolder = new shared.Collision();
         // [WARNING] For "effPushbacks", "hardPushbackNormsArr" and "jumpedOrNotList", use array literal instead of "new Array" for compliance when passing into "gopkgs.ApplyInputFrameDownsyncDynamicsOnSingleRenderFrameJs"!
@@ -341,6 +343,8 @@ public class MapController : MonoBehaviour {
         Array.Fill(jumpedOrNotList, false);
         dynamicRectangleColliders = new shared.Collider[64];
         Array.Fill(dynamicRectangleColliders, GenerateRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null));
+        staticRectangleColliders = new shared.Collider[128];
+
         prefabbedInputListHolder = new ulong[roomCapacity];
 
         decodedInputHolder = new InputFrameDecoded();
@@ -409,7 +413,8 @@ public class MapController : MonoBehaviour {
         return;
     }
 
-    void showDebugBoundaries(RoomDownsyncFrame rdf) {
+    void OnRenderObject() {
+        // The magic name "OnRenderObject" is the only callback I found working to draw the debug boundaries.
         CreateLineMaterial();
         lineMaterial.SetPass(0);
 
@@ -417,39 +422,53 @@ public class MapController : MonoBehaviour {
         // Set transformation matrix for drawing to
         // match our transform
         GL.MultMatrix(transform.localToWorldMatrix);
-        
-        var grid = this.GetComponentInChildren<Grid>();
-        foreach (Transform child in grid.transform) {
-            if ("Barrier" == child.gameObject.name) {
-                foreach (Transform barrierChild in child) {
-                    var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
-                    var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
-                    var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
-                    var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
 
-                    GL.Begin(GL.LINES);
-                    for (int i = 0; i < 4; i++) {
-                        switch (i) {
-                            case 0:
-                                GL.Vertex3((float)(barrierCollider.X + spaceOffsetX), (float)(barrierCollider.Y - spaceOffsetY), 0);
-                                GL.Vertex3((float)(barrierCollider.X + barrierCollider.W + spaceOffsetX), (float)(barrierCollider.Y - spaceOffsetY), 0);
-                                break;
-                            case 1:
-                                GL.Vertex3((float)(barrierCollider.X + barrierCollider.W + spaceOffsetX), (float)(barrierCollider.Y - spaceOffsetY), 0);
-                                GL.Vertex3((float)(barrierCollider.X + barrierCollider.W + spaceOffsetX), (float)(barrierCollider.Y + barrierCollider.H - spaceOffsetY), 0);
-                                break;
-                            case 2:
-                                GL.Vertex3((float)(barrierCollider.X + barrierCollider.W + spaceOffsetX), (float)(barrierCollider.Y + barrierCollider.H - spaceOffsetY), 0);
-                                GL.Vertex3((float)(barrierCollider.X + spaceOffsetX), (float)(barrierCollider.Y + barrierCollider.H - spaceOffsetY), 0);
-                                break;
-                            case 3:
-                                GL.Vertex3((float)(barrierCollider.X + spaceOffsetX), (float)(barrierCollider.Y + barrierCollider.H - spaceOffsetY), 0);
-                                GL.Vertex3((float)(barrierCollider.X + spaceOffsetX), (float)(barrierCollider.Y - spaceOffsetY), 0);
-                                break;
-                        }
-                    }
-                    GL.End();
-                }
+        // The anchoring quad for testing
+        GL.Begin(GL.QUADS);
+        GL.Vertex3(1024, -512, 0);
+        GL.Vertex3(1040, -512, 0);
+        GL.Vertex3(1040, -496, 0);
+        GL.Vertex3(1024, -496, 0);
+        GL.End();
+
+        // Draw static colliders
+        foreach (var barrierCollider in staticRectangleColliders) {
+            if (null == barrierCollider) {
+                break;
+            }
+            if (null == barrierCollider.Shape) {
+                throw new ArgumentNullException("barrierCollider.Shape is null when drawing staticRectangleColliders");
+            }
+            if (null == barrierCollider.Shape.Points) {
+                throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
+            }
+            GL.Begin(GL.LINES);
+            for (int i = 0; i < 4; i++) {
+                int j = i + 1;
+                if (j >= 4) j -= 4;
+                var (_, pi) = barrierCollider.Shape.Points.GetByOffset(i);
+                var (_, pj) = barrierCollider.Shape.Points.GetByOffset(j);
+                var (ix, iy) = CollisionSpacePositionToWorldPosition(barrierCollider.X + pi.X, barrierCollider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
+                var (jx, jy) = CollisionSpacePositionToWorldPosition(barrierCollider.X + pj.X, barrierCollider.Y + pj.Y, spaceOffsetX, spaceOffsetY);
+                GL.Vertex3(ix, iy, 0);
+                GL.Vertex3(jx, jy, 0);
+            }
+            GL.End();
+        }
+
+        // Draw dynamic colliders
+        var (_, rdf) = renderBuffer.GetByFrameId(renderFrameId);
+        if (null != rdf) {
+            for (int k = 0; k < roomCapacity; k++) {
+                var currPlayerDownsync = rdf.PlayersArr[k];
+                var (collisionSpaceX, collisionSpaceY) = VirtualGridToWorldPos(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
+                GL.Begin(GL.QUADS);
+                GL.Vertex3((wx - 0.5f * currPlayerDownsync.ColliderRadius), (wy - 0.5f * currPlayerDownsync.ColliderRadius), 0);
+                GL.Vertex3((wx + 0.5f * currPlayerDownsync.ColliderRadius), (wy - 0.5f * currPlayerDownsync.ColliderRadius), 0);
+                GL.Vertex3((wx + 0.5f * currPlayerDownsync.ColliderRadius), (wy + 0.5f * currPlayerDownsync.ColliderRadius), 0);
+                GL.Vertex3((wx - 0.5f * currPlayerDownsync.ColliderRadius), (wy + 0.5f * currPlayerDownsync.ColliderRadius), 0);
+                GL.End();
             }
         }
         GL.PopMatrix();
