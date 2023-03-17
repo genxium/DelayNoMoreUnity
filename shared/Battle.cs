@@ -15,11 +15,11 @@ namespace shared {
         public static int PATTERN_ID_UNABLE_TO_OP = -2;
         public static int PATTERN_ID_NO_OP = -1;
 
-        public static float WORLD_TO_VIRTUAL_GRID_RATIO = 10.0f;
-        public static float VIRTUAL_GRID_TO_WORLD_RATIO = 1.0f / WORLD_TO_VIRTUAL_GRID_RATIO;
+        public static float COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO = 10.0f;
+        public static float VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO = 1.0f / COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO;
 
         public static int GRAVITY_X = 0;
-        public static int GRAVITY_Y = -(int)(0.5 * WORLD_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
+        public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
         public static int INPUT_DELAY_FRAMES = 4; // in the count of render frames
 
         /*
@@ -213,7 +213,7 @@ namespace shared {
                 if (0 > thatPlayerInNextFrame.DirX) {
                     xfac = -xfac;
                 }
-                virtualGripToWall = xfac * (float)(currPlayerDownsync.Speed) * VIRTUAL_GRID_TO_WORLD_RATIO;
+                virtualGripToWall = xfac * (float)(currPlayerDownsync.Speed) * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
             }
             int retCnt = 0;
             bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
@@ -469,15 +469,15 @@ namespace shared {
         public static (int, int) PolygonColliderCtrToVirtualGridPos(float wx, float wy) {
             // [WARNING] Introduces loss of precision!
             // In JavaScript floating numbers suffer from seemingly non-deterministic arithmetics, and even if certain libs solved this issue by approaches such as fixed-point-number, they might not be used in other libs -- e.g. the "collision libs" we're interested in -- thus couldn't kill all pains.
-            int vx = (int)(Math.Round(wx * WORLD_TO_VIRTUAL_GRID_RATIO));
-            int vy = (int)(Math.Round(wy * WORLD_TO_VIRTUAL_GRID_RATIO));
+            int vx = (int)(Math.Round(wx * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
+            int vy = (int)(Math.Round(wy * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
             return (vx, vy);
         }
 
         public static (float, float) VirtualGridToPolygonColliderCtr(int vx, int vy) {
             // No loss of precision
-            float wx = (float)(vx) * VIRTUAL_GRID_TO_WORLD_RATIO;
-            float wy = (float)(vy) * VIRTUAL_GRID_TO_WORLD_RATIO;
+            float wx = (float)(vx) * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
+            float wy = (float)(vy) * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
             return (wx, wy);
         }
 
@@ -572,7 +572,7 @@ namespace shared {
         }
 
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, float collisionSpaceOffsetX, float collisionSpaceOffsetY, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -721,7 +721,7 @@ namespace shared {
                 var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
 
                 Collider playerCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(playerCollider, collisionSpaceX, collisionSpaceY, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, collisionSpaceOffsetX, collisionSpaceOffsetY, currPlayerDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
+                UpdateRectCollider(playerCollider, collisionSpaceX, collisionSpaceY, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currPlayerDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
                 colliderCnt++;
 
                 // Add to collision system
@@ -872,7 +872,7 @@ namespace shared {
                 ConvexPolygon aShape = aCollider.Shape;
                 // Update "virtual grid position"
                 var thatPlayerInNextFrame = nextRenderFramePlayers[i];
-                (thatPlayerInNextFrame.VirtualGridX, thatPlayerInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[joinIndex - 1].X, aCollider.Y - effPushbacks[joinIndex - 1].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, collisionSpaceOffsetX, collisionSpaceOffsetY);
+                (thatPlayerInNextFrame.VirtualGridX, thatPlayerInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[joinIndex - 1].X, aCollider.Y - effPushbacks[joinIndex - 1].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
 
                 // Update "CharacterState"
                 if (thatPlayerInNextFrame.InAir) {

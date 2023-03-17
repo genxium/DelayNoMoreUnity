@@ -46,9 +46,10 @@ public class MapController : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+        Application.targetFrameRate = 60;
         _resetCurrentMatch();
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
-        double defaultColliderRadius = 12.0;
+        var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
 
         var grid = this.GetComponentInChildren<Grid>();
         foreach (Transform child in grid.transform) {
@@ -88,14 +89,13 @@ public class MapController : MonoBehaviour {
             }
         }
 
-        var camOldPos = Camera.main.transform.position;
 
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 64, 64);
         startRdf.Id = MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_START;
         startRdf.ShouldForceResync = false;
         var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
         spawnPlayerNode(0, selfPlayerWx, selfPlayerWy);
-        Camera.main.transform.position = new Vector3(selfPlayerWx, selfPlayerWy, camOldPos.z);
+        
         var selfPlayerInRdf = startRdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
         var (selfPlayerVposX, selfPlayerVposY) = PolygonColliderCtrToVirtualGridPos(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
         selfPlayerInRdf.Id = 10;
@@ -254,7 +254,7 @@ public class MapController : MonoBehaviour {
                     }
                 }
             }
-            Step(inputBuffer, i, roomCapacity, collisionSys, spaceOffsetX, spaceOffsetY, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder);
             var (ok3, nextRdf) = renderBuffer.GetByFrameId(i + 1);
             if (false == ok3 || null == nextRdf) {
                 throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, renderFrameId={1}", i + 1, renderFrameId));
@@ -301,6 +301,11 @@ public class MapController : MonoBehaviour {
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
             var playerGameObj = playerGameObjs[k];
             playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
+
+            if (k == selfPlayerInfo.JoinIndex-1) {
+                var camOldPos = Camera.main.transform.position;
+                Camera.main.transform.position = new Vector3(wx, wy, camOldPos.z);
+            }
         }
     }
 
@@ -468,13 +473,47 @@ public class MapController : MonoBehaviour {
         if (null != rdf) {
             for (int k = 0; k < roomCapacity; k++) {
                 var currPlayerDownsync = rdf.PlayersArr[k];
+                int colliderWidth = currPlayerDownsync.ColliderRadius * 2, colliderHeight = currPlayerDownsync.ColliderRadius * 4;
+
+                switch (currPlayerDownsync.CharacterState) {
+                    case ATK_CHARACTER_STATE_LAY_DOWN1:
+                        colliderWidth = currPlayerDownsync.ColliderRadius * 4;
+                        colliderHeight = currPlayerDownsync.ColliderRadius * 2;
+                        break;
+                    case ATK_CHARACTER_STATE_BLOWN_UP1:
+                    case ATK_CHARACTER_STATE_INAIR_IDLE1_NO_JUMP:
+                    case ATK_CHARACTER_STATE_INAIR_IDLE1_BY_JUMP:
+                    case ATK_CHARACTER_STATE_ONWALL:
+                        colliderWidth = currPlayerDownsync.ColliderRadius * 2;
+                        colliderHeight = currPlayerDownsync.ColliderRadius * 2;
+                        break;
+                }
                 var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
                 var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
+                var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
+
+                /*
+                GL.Begin(GL.LINES);
+
+                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+
+                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+
+                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+
+                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+
+                GL.End();
+                */
                 GL.Begin(GL.QUADS);
-                GL.Vertex3((wx - 0.5f * currPlayerDownsync.ColliderRadius), (wy - 0.5f * currPlayerDownsync.ColliderRadius), 0);
-                GL.Vertex3((wx + 0.5f * currPlayerDownsync.ColliderRadius), (wy - 0.5f * currPlayerDownsync.ColliderRadius), 0);
-                GL.Vertex3((wx + 0.5f * currPlayerDownsync.ColliderRadius), (wy + 0.5f * currPlayerDownsync.ColliderRadius), 0);
-                GL.Vertex3((wx - 0.5f * currPlayerDownsync.ColliderRadius), (wy + 0.5f * currPlayerDownsync.ColliderRadius), 0);
+                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
                 GL.End();
             }
         }
