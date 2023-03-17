@@ -344,16 +344,25 @@ public class MapController : MonoBehaviour {
         collisionHolder = new shared.Collision();
         // [WARNING] For "effPushbacks", "hardPushbackNormsArr" and "jumpedOrNotList", use array literal instead of "new Array" for compliance when passing into "gopkgs.ApplyInputFrameDownsyncDynamicsOnSingleRenderFrameJs"!
         effPushbacks = new Vector[roomCapacity];
-        Array.Fill<Vector>(effPushbacks, new Vector(0, 0));
+        for (int i = 0; i < roomCapacity; i++) {
+            effPushbacks[i] = new Vector(0, 0);
+        }
         hardPushbackNormsArr = new Vector[roomCapacity][];
         for (int i = 0; i < roomCapacity; i++) {
-            hardPushbackNormsArr[i] = new Vector[5];
-            Array.Fill<Vector>(hardPushbackNormsArr[i], new Vector(0, 0));
+            int cap = 5;
+            hardPushbackNormsArr[i] = new Vector[cap];
+            for (int j = 0; j < cap; j++) {
+                hardPushbackNormsArr[i][j] = new Vector(0, 0);
+            }
         }
         jumpedOrNotList = new bool[roomCapacity];
         Array.Fill(jumpedOrNotList, false);
-        dynamicRectangleColliders = new shared.Collider[64];
-        Array.Fill(dynamicRectangleColliders, GenerateRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null));
+
+        int dynamicRectangleCollidersCap = 64;
+        dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
+        for (int i = 0; i < dynamicRectangleCollidersCap; i++) {
+            dynamicRectangleColliders[i] = GenerateRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
+        }
         staticRectangleColliders = new shared.Collider[128];
 
         prefabbedInputListHolder = new ulong[roomCapacity];
