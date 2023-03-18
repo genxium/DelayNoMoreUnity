@@ -89,7 +89,17 @@ message InputsBufferSnapshot {
   int32 peerJoinIndex = 5;
 }
 
-message MeleeBullet {
+enum BulletType {
+    MELEE = 0;
+    FIREBALL = 1;
+}
+
+enum SkillTriggerType {
+    RISING_EDGE = 0;
+    FALLING_EDGE = 1;
+}
+
+message Bullet {
   // Jargon reference https://www.thegamer.com/fighting-games-frame-data-explained/
   // ALL lengths are in world coordinate
 
@@ -125,40 +135,8 @@ message MeleeBullet {
 
   int32 blState = 23;
   int32 framesInBlState = 24;
-}
 
-message FireballBullet {
-  int32 originatedRenderFrameId = 1;
-  int32 offenderJoinIndex = 2;
-
-  int32 startupFrames = 3;
-  int32 cancellableStFrame = 4;
-  int32 cancellableEdFrame = 5;
-  int32 activeFrames = 6;
-
-  int32 hitStunFrames = 7;
-  int32 blockStunFrames = 8;
-  int32 pushbackVelX = 9;
-  int32 pushbackVelY = 10;
-  int32 damage = 11;
-
-  int32 selfLockVelX = 12;
-  int32 selfLockVelY = 13;
-
-  int32 hitboxOffsetX = 14;
-  int32 hitboxOffsetY = 15;
-  int32 hitboxSizeX = 16;
-  int32 hitboxSizeY = 17;
-
-  bool blowUp = 18;
-  int32 teamId = 19;
-
-  int32 bulletLocalId = 20;
-  int32 speciesId = 21;
-  int32 explosionFrames = 22;
-
-  int32 blState = 23;
-  int32 framesInBlState = 24;
+  BulletType bType = 25;
 
   int32 virtualGridX = 999;
   int32 virtualGridY = 1000;
@@ -207,8 +185,7 @@ message RoomDownsyncFrame {
   int32 id = 1;
   repeated PlayerDownsync playersArr = 2;
   int64 countdownNanos = 3;
-  repeated MeleeBullet meleeBullets = 4; // I don't know how to mimic inheritance/composition in protobuf by far, thus using an array for each type of bullet as a compromise 
-  repeated FireballBullet fireballBullets = 5;
+  repeated Bullet bullets = 4;  
 
   uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
   bool shouldForceResync = 1025;
@@ -226,4 +203,15 @@ message WsResp {
   repeated InputFrameDownsync inputFrameDownsyncBatch = 5;
   BattleColliderInfo bciFrame = 6;
   int32 peerJoinIndex = 7;
+}
+
+message Skill {
+	int32 battleLocalId = 1;
+	int32 recoveryFrames = 2;
+	int32 recoveryFramesOnBlock = 3; 
+	int32 recoveryFramesOnHit = 4; 
+	SkillTriggerType triggerType = 5;
+	int32 BoundChState = 6;          
+	repeated Bullet Hits = 7; // Hits within a "Skill" are automatically triggered
+	// [WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
 }

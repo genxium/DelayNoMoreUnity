@@ -90,7 +90,7 @@ public class MapController : MonoBehaviour {
         }
 
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 64, 64);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
         startRdf.Id = MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_START;
         startRdf.ShouldForceResync = false;
         var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
@@ -323,7 +323,7 @@ public class MapController : MonoBehaviour {
         Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, 64, 64));
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, 128));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
         int inputBufferSize = (renderBufferSize >> 1) + 1;
