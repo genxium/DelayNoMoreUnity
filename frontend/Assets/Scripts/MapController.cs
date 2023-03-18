@@ -501,7 +501,6 @@ public class MapController : MonoBehaviour {
                 var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
                 var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
 
-                /*
                 GL.Begin(GL.LINES);
 
                 GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
@@ -516,13 +515,6 @@ public class MapController : MonoBehaviour {
                 GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
                 GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
 
-                GL.End();
-                */
-                GL.Begin(GL.QUADS);
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
                 GL.End();
             }
         }
