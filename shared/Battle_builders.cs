@@ -111,6 +111,7 @@ namespace shared {
             cf.ExplosionFrames = explosionFrames;
             cf.SpeciesId = speciesId;
             cf.CancelTransit.MergeFrom(cancelTransit);
+            cf.Speed = speed;
 
             var attr = new BulletBattleAttr();
             attr.BulletLocalId = bulletLocalId;
@@ -123,7 +124,6 @@ namespace shared {
             b.FramesInBlState = framesInBlState;
             b.Config = cf;
             b.BattleAttr = attr;
-            b.Speed = speed; // For speed varying bullets, this is the initial speed
 
             b.VirtualGridX = 0;
             b.VirtualGridY = 0;
@@ -165,12 +165,15 @@ namespace shared {
             return ret;
         }
 
-        public static Skill NewSkill(int recoveryFrames, int recoveryFramesOnBlock, int recoveryFramesOnHit, SkillTriggerType triggerType, int boundChState, pbc::RepeatedField<Bullet> hits) {
-            var s = new Skill();
-            s.RecoveryFrames = recoveryFrames;
-            s.RecoveryFramesOnBlock = recoveryFramesOnBlock;
-            s.RecoveryFramesOnHit = recoveryFramesOnHit;
-            s.TriggerType = triggerType;
+        public static Skill NewSkill(int recoveryFrames, int recoveryFramesOnBlock, int recoveryFramesOnHit, SkillTriggerType triggerType, int boundChState, pbc::RepeatedField<BulletConfig> hits) {
+            // This helper function doesn't reduce a large amount of typing, but still it saves some typing of the field names for each newly declared skill 
+            var s = new Skill {
+                RecoveryFrames = recoveryFrames,
+                RecoveryFramesOnBlock = recoveryFramesOnBlock,
+                RecoveryFramesOnHit = recoveryFramesOnHit,
+                TriggerType = triggerType
+            };
+            // "s.Hits" is readonly, thus not assignable by the initialization call above
             s.Hits.AddRange(hits);
             return s;
         }
