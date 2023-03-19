@@ -166,9 +166,9 @@ message BulletConfig {
 
 	BulletType bType = 19;
 
-	map<int32, int32> CancelTransit = 20; // patternId -> skillId
+	int32 speed = 20; // For speed varying bullets, this is the initial speed
 
-	int32 speed = 21; // For speed varying bullets, this is the initial speed
+	map<int32, int32> cancelTransit = 21; // patternId -> skillId
 }
 
 message BulletBattleAttr {
@@ -258,8 +258,8 @@ message Skill {
 	int32 recoveryFramesOnBlock = 3; 
 	int32 recoveryFramesOnHit = 4; 
 	SkillTriggerType triggerType = 5;
-	int32 BoundChState = 6;        
+	CharacterState boundChState = 6;        
 	
 	// [WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
-	repeated BulletConfig Hits = 7; // Hits within a "Skill" are automatically triggered
+	repeated BulletConfig hits = 7; // Hits within a "Skill" are automatically triggered
 }

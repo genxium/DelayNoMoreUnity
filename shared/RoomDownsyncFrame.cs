@@ -66,9 +66,9 @@ namespace shared {
             "aXRib3hPZmZzZXRYGAwgASgFEhUKDWhpdGJveE9mZnNldFkYDSABKAUSEwoL",
             "aGl0Ym94U2l6ZVgYDiABKAUSEwoLaGl0Ym94U2l6ZVkYDyABKAUSDgoGYmxv",
             "d1VwGBAgASgIEhEKCXNwZWNpZXNJZBgRIAEoBRIXCg9leHBsb3Npb25GcmFt",
-            "ZXMYEiABKAUSIQoFYlR5cGUYEyABKA4yEi5zaGFyZWQuQnVsbGV0VHlwZRI+",
-            "Cg1DYW5jZWxUcmFuc2l0GBQgAygLMicuc2hhcmVkLkJ1bGxldENvbmZpZy5D",
-            "YW5jZWxUcmFuc2l0RW50cnkSDQoFc3BlZWQYFSABKAUaNAoSQ2FuY2VsVHJh",
+            "ZXMYEiABKAUSIQoFYlR5cGUYEyABKA4yEi5zaGFyZWQuQnVsbGV0VHlwZRIN",
+            "CgVzcGVlZBgUIAEoBRI+Cg1jYW5jZWxUcmFuc2l0GBUgAygLMicuc2hhcmVk",
+            "LkJ1bGxldENvbmZpZy5DYW5jZWxUcmFuc2l0RW50cnkaNAoSQ2FuY2VsVHJh",
             "bnNpdEVudHJ5EgsKA2tleRgBIAEoBRINCgV2YWx1ZRgCIAEoBToCOAEidQoQ",
             "QnVsbGV0QmF0dGxlQXR0chIVCg1idWxsZXRMb2NhbElkGAEgASgFEh8KF29y",
             "aWdpbmF0ZWRSZW5kZXJGcmFtZUlkGAIgASgFEhkKEW9mZmVuZGVySm9pbklu",
@@ -104,22 +104,23 @@ namespace shared {
             "b29tRG93bnN5bmNGcmFtZRI7ChdpbnB1dEZyYW1lRG93bnN5bmNCYXRjaBgF",
             "IAMoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMSLAoIYmNpRnJhbWUY",
             "BiABKAsyGi5zaGFyZWQuQmF0dGxlQ29sbGlkZXJJbmZvEhUKDXBlZXJKb2lu",
-            "SW5kZXgYByABKAUi2wEKBVNraWxsEhUKDWJhdHRsZUxvY2FsSWQYASABKAUS",
+            "SW5kZXgYByABKAUi8wEKBVNraWxsEhUKDWJhdHRsZUxvY2FsSWQYASABKAUS",
             "FgoOcmVjb3ZlcnlGcmFtZXMYAiABKAUSHQoVcmVjb3ZlcnlGcmFtZXNPbkJs",
             "b2NrGAMgASgFEhsKE3JlY292ZXJ5RnJhbWVzT25IaXQYBCABKAUSLQoLdHJp",
-            "Z2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tpbGxUcmlnZ2VyVHlwZRIUCgxC",
-            "b3VuZENoU3RhdGUYBiABKAUSIgoESGl0cxgHIAMoCzIULnNoYXJlZC5CdWxs",
-            "ZXRDb25maWcqNQoLQnVsbGV0U3RhdGUSCwoHU1RBUlRVUBAAEgoKBkFDVElW",
-            "RRABEg0KCUVYUExPRElORxACKpkCCg5DaGFyYWN0ZXJTdGF0ZRIJCgVJRExF",
-            "MRAAEgsKB1dBTEtJTkcQARIICgRBVEsxEAISCgoGQVRLRUQxEAMSFwoTSU5B",
-            "SVJfSURMRTFfTk9fSlVNUBAEEhcKE0lOQUlSX0lETEUxX0JZX0pVTVAQBRIO",
-            "CgpJTkFJUl9BVEsxEAYSEAoMSU5BSVJfQVRLRUQxEAcSDQoJQkxPV05fVVAx",
-            "EAgSDQoJTEFZX0RPV04xEAkSCwoHR0VUX1VQMRAKEggKBEFUSzIQCxIICgRB",
-            "VEszEAwSCAoEQVRLNBANEggKBEFUSzUQDhILCgdEQVNISU5HEA8SCgoGT05X",
-            "QUxMEBASDgoKVFVSTkFST1VORBAREgkKBURZSU5HEBIqNwoKQnVsbGV0VHlw",
-            "ZRIQCgxVTkRFVEVSTUlORUQQABIJCgVNRUxFRRABEgwKCEZJUkVCQUxMEAIq",
-            "NQoQU2tpbGxUcmlnZ2VyVHlwZRIPCgtSSVNJTkdfRURHRRAAEhAKDEZBTExJ",
-            "TkdfRURHRRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
+            "Z2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tpbGxUcmlnZ2VyVHlwZRIsCgxi",
+            "b3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQuQ2hhcmFjdGVyU3RhdGUSIgoE",
+            "aGl0cxgHIAMoCzIULnNoYXJlZC5CdWxsZXRDb25maWcqNQoLQnVsbGV0U3Rh",
+            "dGUSCwoHU1RBUlRVUBAAEgoKBkFDVElWRRABEg0KCUVYUExPRElORxACKpkC",
+            "Cg5DaGFyYWN0ZXJTdGF0ZRIJCgVJRExFMRAAEgsKB1dBTEtJTkcQARIICgRB",
+            "VEsxEAISCgoGQVRLRUQxEAMSFwoTSU5BSVJfSURMRTFfTk9fSlVNUBAEEhcK",
+            "E0lOQUlSX0lETEUxX0JZX0pVTVAQBRIOCgpJTkFJUl9BVEsxEAYSEAoMSU5B",
+            "SVJfQVRLRUQxEAcSDQoJQkxPV05fVVAxEAgSDQoJTEFZX0RPV04xEAkSCwoH",
+            "R0VUX1VQMRAKEggKBEFUSzIQCxIICgRBVEszEAwSCAoEQVRLNBANEggKBEFU",
+            "SzUQDhILCgdEQVNISU5HEA8SCgoGT05XQUxMEBASDgoKVFVSTkFST1VORBAR",
+            "EgkKBURZSU5HEBIqNwoKQnVsbGV0VHlwZRIQCgxVTkRFVEVSTUlORUQQABIJ",
+            "CgVNRUxFRRABEgwKCEZJUkVCQUxMEAIqNQoQU2tpbGxUcmlnZ2VyVHlwZRIP",
+            "CgtSSVNJTkdfRURHRRAAEhAKDEZBTExJTkdfRURHRRABQgmqAgZzaGFyZWRi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -130,7 +131,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.HeartbeatUpsync), global::shared.HeartbeatUpsync.Parser, new[]{ "ClientTimestamp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsReq), global::shared.WsReq.Parser, new[]{ "MsgId", "PlayerId", "Act", "JoinIndex", "AckingFrameId", "AckingInputFrameId", "AuthKey", "InputFrameUpsyncBatch", "Hb" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputsBufferSnapshot), global::shared.InputsBufferSnapshot.Parser, new[]{ "RefRenderFrameId", "UnconfirmedMask", "ToSendInputFrameDownsyncs", "ShouldForceResync", "PeerJoinIndex" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "CancelTransit", "Speed" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "Speed", "CancelTransit" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.HolePunchUpsync), global::shared.HolePunchUpsync.Parser, new[]{ "IntAuthToken", "BoundRoomId", "AuthKey" }, null, null, null, null),
@@ -3489,8 +3490,8 @@ namespace shared {
       speciesId_ = other.speciesId_;
       explosionFrames_ = other.explosionFrames_;
       bType_ = other.bType_;
-      cancelTransit_ = other.cancelTransit_.Clone();
       speed_ = other.speed_;
+      cancelTransit_ = other.cancelTransit_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3731,22 +3732,8 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "CancelTransit" field.</summary>
-    public const int CancelTransitFieldNumber = 20;
-    private static readonly pbc::MapField<int, int>.Codec _map_cancelTransit_codec
-        = new pbc::MapField<int, int>.Codec(pb::FieldCodec.ForInt32(8, 0), pb::FieldCodec.ForInt32(16, 0), 162);
-    private readonly pbc::MapField<int, int> cancelTransit_ = new pbc::MapField<int, int>();
-    /// <summary>
-    /// patternId -> skillId
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::MapField<int, int> CancelTransit {
-      get { return cancelTransit_; }
-    }
-
     /// <summary>Field number for the "speed" field.</summary>
-    public const int SpeedFieldNumber = 21;
+    public const int SpeedFieldNumber = 20;
     private int speed_;
     /// <summary>
     /// For speed varying bullets, this is the initial speed
@@ -3758,6 +3745,20 @@ namespace shared {
       set {
         speed_ = value;
       }
+    }
+
+    /// <summary>Field number for the "cancelTransit" field.</summary>
+    public const int CancelTransitFieldNumber = 21;
+    private static readonly pbc::MapField<int, int>.Codec _map_cancelTransit_codec
+        = new pbc::MapField<int, int>.Codec(pb::FieldCodec.ForInt32(8, 0), pb::FieldCodec.ForInt32(16, 0), 170);
+    private readonly pbc::MapField<int, int> cancelTransit_ = new pbc::MapField<int, int>();
+    /// <summary>
+    /// patternId -> skillId
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::MapField<int, int> CancelTransit {
+      get { return cancelTransit_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3794,8 +3795,8 @@ namespace shared {
       if (SpeciesId != other.SpeciesId) return false;
       if (ExplosionFrames != other.ExplosionFrames) return false;
       if (BType != other.BType) return false;
-      if (!CancelTransit.Equals(other.CancelTransit)) return false;
       if (Speed != other.Speed) return false;
+      if (!CancelTransit.Equals(other.CancelTransit)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3822,8 +3823,8 @@ namespace shared {
       if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
       if (ExplosionFrames != 0) hash ^= ExplosionFrames.GetHashCode();
       if (BType != global::shared.BulletType.Undetermined) hash ^= BType.GetHashCode();
-      hash ^= CancelTransit.GetHashCode();
       if (Speed != 0) hash ^= Speed.GetHashCode();
+      hash ^= CancelTransit.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3918,11 +3919,11 @@ namespace shared {
         output.WriteRawTag(152, 1);
         output.WriteEnum((int) BType);
       }
-      cancelTransit_.WriteTo(output, _map_cancelTransit_codec);
       if (Speed != 0) {
-        output.WriteRawTag(168, 1);
+        output.WriteRawTag(160, 1);
         output.WriteInt32(Speed);
       }
+      cancelTransit_.WriteTo(output, _map_cancelTransit_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -4009,11 +4010,11 @@ namespace shared {
         output.WriteRawTag(152, 1);
         output.WriteEnum((int) BType);
       }
-      cancelTransit_.WriteTo(ref output, _map_cancelTransit_codec);
       if (Speed != 0) {
-        output.WriteRawTag(168, 1);
+        output.WriteRawTag(160, 1);
         output.WriteInt32(Speed);
       }
+      cancelTransit_.WriteTo(ref output, _map_cancelTransit_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -4081,10 +4082,10 @@ namespace shared {
       if (BType != global::shared.BulletType.Undetermined) {
         size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) BType);
       }
-      size += cancelTransit_.CalculateSize(_map_cancelTransit_codec);
       if (Speed != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(Speed);
       }
+      size += cancelTransit_.CalculateSize(_map_cancelTransit_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -4154,10 +4155,10 @@ namespace shared {
       if (other.BType != global::shared.BulletType.Undetermined) {
         BType = other.BType;
       }
-      cancelTransit_.Add(other.cancelTransit_);
       if (other.Speed != 0) {
         Speed = other.Speed;
       }
+      cancelTransit_.Add(other.cancelTransit_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -4249,12 +4250,12 @@ namespace shared {
             BType = (global::shared.BulletType) input.ReadEnum();
             break;
           }
-          case 162: {
-            cancelTransit_.AddEntriesFrom(input, _map_cancelTransit_codec);
+          case 160: {
+            Speed = input.ReadInt32();
             break;
           }
-          case 168: {
-            Speed = input.ReadInt32();
+          case 170: {
+            cancelTransit_.AddEntriesFrom(input, _map_cancelTransit_codec);
             break;
           }
         }
@@ -4348,12 +4349,12 @@ namespace shared {
             BType = (global::shared.BulletType) input.ReadEnum();
             break;
           }
-          case 162: {
-            cancelTransit_.AddEntriesFrom(ref input, _map_cancelTransit_codec);
+          case 160: {
+            Speed = input.ReadInt32();
             break;
           }
-          case 168: {
-            Speed = input.ReadInt32();
+          case 170: {
+            cancelTransit_.AddEntriesFrom(ref input, _map_cancelTransit_codec);
             break;
           }
         }
@@ -7466,19 +7467,19 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "BoundChState" field.</summary>
+    /// <summary>Field number for the "boundChState" field.</summary>
     public const int BoundChStateFieldNumber = 6;
-    private int boundChState_;
+    private global::shared.CharacterState boundChState_ = global::shared.CharacterState.Idle1;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int BoundChState {
+    public global::shared.CharacterState BoundChState {
       get { return boundChState_; }
       set {
         boundChState_ = value;
       }
     }
 
-    /// <summary>Field number for the "Hits" field.</summary>
+    /// <summary>Field number for the "hits" field.</summary>
     public const int HitsFieldNumber = 7;
     private static readonly pb::FieldCodec<global::shared.BulletConfig> _repeated_hits_codec
         = pb::FieldCodec.ForMessage(58, global::shared.BulletConfig.Parser);
@@ -7526,7 +7527,7 @@ namespace shared {
       if (RecoveryFramesOnBlock != 0) hash ^= RecoveryFramesOnBlock.GetHashCode();
       if (RecoveryFramesOnHit != 0) hash ^= RecoveryFramesOnHit.GetHashCode();
       if (TriggerType != global::shared.SkillTriggerType.RisingEdge) hash ^= TriggerType.GetHashCode();
-      if (BoundChState != 0) hash ^= BoundChState.GetHashCode();
+      if (BoundChState != global::shared.CharacterState.Idle1) hash ^= BoundChState.GetHashCode();
       hash ^= hits_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -7566,9 +7567,9 @@ namespace shared {
         output.WriteRawTag(40);
         output.WriteEnum((int) TriggerType);
       }
-      if (BoundChState != 0) {
+      if (BoundChState != global::shared.CharacterState.Idle1) {
         output.WriteRawTag(48);
-        output.WriteInt32(BoundChState);
+        output.WriteEnum((int) BoundChState);
       }
       hits_.WriteTo(output, _repeated_hits_codec);
       if (_unknownFields != null) {
@@ -7601,9 +7602,9 @@ namespace shared {
         output.WriteRawTag(40);
         output.WriteEnum((int) TriggerType);
       }
-      if (BoundChState != 0) {
+      if (BoundChState != global::shared.CharacterState.Idle1) {
         output.WriteRawTag(48);
-        output.WriteInt32(BoundChState);
+        output.WriteEnum((int) BoundChState);
       }
       hits_.WriteTo(ref output, _repeated_hits_codec);
       if (_unknownFields != null) {
@@ -7631,8 +7632,8 @@ namespace shared {
       if (TriggerType != global::shared.SkillTriggerType.RisingEdge) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TriggerType);
       }
-      if (BoundChState != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(BoundChState);
+      if (BoundChState != global::shared.CharacterState.Idle1) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) BoundChState);
       }
       size += hits_.CalculateSize(_repeated_hits_codec);
       if (_unknownFields != null) {
@@ -7662,7 +7663,7 @@ namespace shared {
       if (other.TriggerType != global::shared.SkillTriggerType.RisingEdge) {
         TriggerType = other.TriggerType;
       }
-      if (other.BoundChState != 0) {
+      if (other.BoundChState != global::shared.CharacterState.Idle1) {
         BoundChState = other.BoundChState;
       }
       hits_.Add(other.hits_);
@@ -7702,7 +7703,7 @@ namespace shared {
             break;
           }
           case 48: {
-            BoundChState = input.ReadInt32();
+            BoundChState = (global::shared.CharacterState) input.ReadEnum();
             break;
           }
           case 58: {
@@ -7745,7 +7746,7 @@ namespace shared {
             break;
           }
           case 48: {
-            BoundChState = input.ReadInt32();
+            BoundChState = (global::shared.CharacterState) input.ReadEnum();
             break;
           }
           case 58: {

@@ -100,7 +100,14 @@ namespace shared {
             Dying
         };
 
-        public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>();
+        public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>().AddRange(
+                new[]
+                {
+                    new KeyValuePair<int, Skill>(0, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.Atk1)
+                                                    .AddHit(new BulletConfigBuilder(7, 13, 30, 22, 13, 9, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 5, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), false, 1, 9, BulletType.Melee, 0).build())
+                                                    .build())
+                }        
+        );
 
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
                 new[]
