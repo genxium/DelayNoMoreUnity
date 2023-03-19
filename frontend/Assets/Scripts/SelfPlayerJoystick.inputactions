@@ -1,0 +1,34 @@
+{
+    "name": "SelfPlayerJoystick",
+    "maps": [
+        {
+            "name": "SelfPlayer",
+            "id": "f3a89a09-a352-4adb-8774-25271d0c8f31",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "c8865ae1-8284-4aff-a9fa-67c26989c39c",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ed986249-e8ba-4581-a24a-aebcfc5a4ce4",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
