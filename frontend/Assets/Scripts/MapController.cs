@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using shared;
 using static shared.Battle;
+using static shared.CharacterState;
+using pbc = Google.Protobuf.Collections;
 
 public class MapController : MonoBehaviour {
     public const int BATTLE_STATE_NONE = -1;
@@ -67,7 +69,7 @@ public class MapController : MonoBehaviour {
 
                         It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
                         */
-                        var barrierCollider = GenerateRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
+                        var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
                         Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
                         collisionSys.AddSingle(barrierCollider);
                         staticRectangleColliders[i++] = barrierCollider;
@@ -106,7 +108,7 @@ public class MapController : MonoBehaviour {
         selfPlayerInRdf.RevivalVirtualGridY = selfPlayerVposY;
         selfPlayerInRdf.Speed = 10;
         selfPlayerInRdf.ColliderRadius = (int)defaultColliderRadius;
-        selfPlayerInRdf.CharacterState = Battle.ATK_CHARACTER_STATE_INAIR_IDLE1_NO_JUMP;
+        selfPlayerInRdf.CharacterState = InairIdle1NoJump;
         selfPlayerInRdf.FramesToRecover = 0;
         selfPlayerInRdf.DirX = 2;
         selfPlayerInRdf.DirY = 0;
@@ -361,7 +363,7 @@ public class MapController : MonoBehaviour {
         int dynamicRectangleCollidersCap = 64;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
         for (int i = 0; i < dynamicRectangleCollidersCap; i++) {
-            dynamicRectangleColliders[i] = GenerateRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
+            dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
         }
         staticRectangleColliders = new shared.Collider[128];
 
@@ -375,7 +377,7 @@ public class MapController : MonoBehaviour {
         // TODO
     }
 
-    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, Google.Protobuf.Collections.RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
+    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, pbc::RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
         // This function is also applicable to "re-joining".
         onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch); // Important to do this step before setting IN_BATTLE
         if (null == renderBuffer) {
@@ -485,14 +487,14 @@ public class MapController : MonoBehaviour {
                 int colliderWidth = currPlayerDownsync.ColliderRadius * 2, colliderHeight = currPlayerDownsync.ColliderRadius * 4;
 
                 switch (currPlayerDownsync.CharacterState) {
-                    case ATK_CHARACTER_STATE_LAY_DOWN1:
+                    case LayDown1:
                         colliderWidth = currPlayerDownsync.ColliderRadius * 4;
                         colliderHeight = currPlayerDownsync.ColliderRadius * 2;
                         break;
-                    case ATK_CHARACTER_STATE_BLOWN_UP1:
-                    case ATK_CHARACTER_STATE_INAIR_IDLE1_NO_JUMP:
-                    case ATK_CHARACTER_STATE_INAIR_IDLE1_BY_JUMP:
-                    case ATK_CHARACTER_STATE_ONWALL:
+                    case BlownUp1:
+                    case InairIdle1NoJump:
+                    case InairIdle1ByJump:
+                    case Onwall:
                         colliderWidth = currPlayerDownsync.ColliderRadius * 2;
                         colliderHeight = currPlayerDownsync.ColliderRadius * 2;
                         break;

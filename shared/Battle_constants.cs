@@ -2,6 +2,8 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using static shared.BulletState;
+using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
@@ -59,80 +61,62 @@ namespace shared {
             {-1, +1},
         };
 
-        public static int BULLET_STARTUP = 0;
-        public static int BULLET_ACTIVE = 1;
-        public static int BULLET_EXPLODING = 2;
-
-        public const int ATK_CHARACTER_STATE_IDLE1 = (0);
-
-        public const int ATK_CHARACTER_STATE_WALKING = (1);
-
-        public const int ATK_CHARACTER_STATE_ATK1 = (2);
-        public const int ATK_CHARACTER_STATE_ATKED1 = (3);
-
-        public const int ATK_CHARACTER_STATE_INAIR_IDLE1_NO_JUMP = (4);
-
-        public const int ATK_CHARACTER_STATE_INAIR_IDLE1_BY_JUMP = (5);
-
-        public const int ATK_CHARACTER_STATE_INAIR_ATK1 = (6);
-        public const int ATK_CHARACTER_STATE_INAIR_ATKED1 = (7);
-        public const int ATK_CHARACTER_STATE_BLOWN_UP1 = (8);
-        public const int ATK_CHARACTER_STATE_LAY_DOWN1 = (9);
-        public const int ATK_CHARACTER_STATE_GET_UP1 = (10);
-        public const int ATK_CHARACTER_STATE_ATK2 = (11);
-
-        public const int ATK_CHARACTER_STATE_ATK3 = (12);
-
-        public const int ATK_CHARACTER_STATE_ATK4 = (13);
-
-        public const int ATK_CHARACTER_STATE_ATK5 = (14);
-
-        public const int ATK_CHARACTER_STATE_DASHING = (15);
-
-        public const int ATK_CHARACTER_STATE_ONWALL = (16);
-
-        public const int ATK_CHARACTER_STATE_TURNAROUND = (17);
-
-        public const int ATK_CHARACTER_STATE_DYING = (18);
-
-        public static HashSet<int> inAirSet = new HashSet<int>() {
-            ATK_CHARACTER_STATE_INAIR_IDLE1_NO_JUMP,
-            ATK_CHARACTER_STATE_INAIR_IDLE1_BY_JUMP,
-            ATK_CHARACTER_STATE_INAIR_ATK1,
-            ATK_CHARACTER_STATE_INAIR_ATKED1,
-            ATK_CHARACTER_STATE_BLOWN_UP1,
-            ATK_CHARACTER_STATE_ONWALL,
-            ATK_CHARACTER_STATE_DASHING // Yes dashing is an inair state even if you dashed on the ground :)
+        public static HashSet<CharacterState> inAirSet = new HashSet<CharacterState>() {
+            InairIdle1NoJump,
+            InairIdle1ByJump,
+            InairAtk1,
+            InairAtked1,
+            BlownUp1,
+            Onwall,
+            Dashing // Yes dashing is an inair state even if you dashed on the ground :)
         };
 
-        public static HashSet<int> noOpSet = new HashSet<int>() {
-            ATK_CHARACTER_STATE_ATKED1,
-            ATK_CHARACTER_STATE_INAIR_ATKED1,
-            ATK_CHARACTER_STATE_BLOWN_UP1,
-            ATK_CHARACTER_STATE_LAY_DOWN1,
+        public static HashSet<CharacterState> noOpSet = new HashSet<CharacterState>() {
+            Atked1,
+            InairAtked1,
+            BlownUp1,
+            LayDown1,
 			// [WARNING] During the invinsible frames of GET_UP1, the player is allowed to take any action
-			ATK_CHARACTER_STATE_DYING
+			Dying
         };
 
-        public static HashSet<int> invinsibleSet = new HashSet<int>() {
-            ATK_CHARACTER_STATE_BLOWN_UP1,
-            ATK_CHARACTER_STATE_LAY_DOWN1,
-            ATK_CHARACTER_STATE_GET_UP1,
-            ATK_CHARACTER_STATE_DYING
+        public static HashSet<CharacterState> invinsibleSet = new HashSet<CharacterState>() {
+            BlownUp1,
+            LayDown1,
+            GetUp1,
+            Dying
         };
 
-        public static HashSet<int> nonAttackingSet = new HashSet<int>() {
-            ATK_CHARACTER_STATE_IDLE1,
-            ATK_CHARACTER_STATE_WALKING,
-            ATK_CHARACTER_STATE_INAIR_IDLE1_NO_JUMP,
-            ATK_CHARACTER_STATE_INAIR_IDLE1_BY_JUMP,
-            ATK_CHARACTER_STATE_ATKED1,
-            ATK_CHARACTER_STATE_INAIR_ATKED1,
-            ATK_CHARACTER_STATE_BLOWN_UP1,
-            ATK_CHARACTER_STATE_LAY_DOWN1,
-            ATK_CHARACTER_STATE_GET_UP1,
-            ATK_CHARACTER_STATE_DYING
+        public static HashSet<CharacterState> nonAttackingSet = new HashSet<CharacterState>() {
+            Idle1,
+            Walking,
+            InairIdle1NoJump,
+            InairIdle1ByJump,
+            Atked1,
+            InairAtked1,
+            BlownUp1,
+            LayDown1,
+            GetUp1,
+            Dying
         };
+
+        public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>();
+
+        public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
+                new[]
+                {
+                    new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig(
+                    0, "MonkGirl",
+                    11, 1,
+                    16, 16, 10, 27,
+                    (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    9,
+                    true, true,
+                    8, (int)(2.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    (int)(7 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)))
+                }
+            );
 
         public static int FindSkillId(int patternId, PlayerDownsync currPlayerDownsync, int speciesId) {
             switch (speciesId) {
@@ -142,8 +126,7 @@ namespace shared {
                             if (0 == currPlayerDownsync.FramesToRecover) {
                                 if (currPlayerDownsync.InAir) {
                                     return 255;
-                                }
-                                else {
+                                } else {
                                     return 1;
 
                                 }
@@ -167,20 +150,5 @@ namespace shared {
             return NO_SKILL;
         }
 
-        public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
-                new[]
-                {
-                    new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig(
-                    0, "MonkGirl",
-                    11, 1,
-                    16, 16, 10, 27,
-                    (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    9,
-                    true, true,
-                    8, (int)(2.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(7 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)))
-                }
-            );
     }
 }
