@@ -9,7 +9,6 @@ public class InputManager : MonoBehaviour {
     private const float magicLeanUpperBound = 0.9f;
     private const float joyStickEps = 0.1f;
     private float joystickX, joystickY;
-    private float keyboardX, keyboardY;
     private int btnALevel;
 
     public static (int, int, int) DiscretizeDirection(float continuousDx, float continuousDy, float eps) {
@@ -71,9 +70,6 @@ public class InputManager : MonoBehaviour {
     public void ReadMoveInput(InputAction.CallbackContext context) {
         joystickX = context.ReadValue<Vector2>().normalized.x;
         joystickY = context.ReadValue<Vector2>().normalized.y;
-
-        keyboardX = Input.GetAxis("Horizontal");
-        keyboardY = Input.GetAxis("Vertical");
     }
 
     public ulong GetImmediateEncodedInput() {
