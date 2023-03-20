@@ -1,8 +1,5 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using static shared.BulletState;
 using static shared.CharacterState;
 
 namespace shared {
@@ -32,7 +29,7 @@ namespace shared {
         public static float SNAP_INTO_PLATFORM_OVERLAP = 0.1f;
         public static float SNAP_INTO_PLATFORM_THRESHOLD = 0.5f;
         public static float VERTICAL_PLATFORM_THRESHOLD = 0.9f;
-        public static int MAGIC_FRAMES_TO_BE_ONWALL = 12;
+        public static int MAGIC_FRAMES_TO_BE_ON_WALL = 12;
 
 
         public static int DYING_FRAMES_TO_RECOVER = 60; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
@@ -61,19 +58,19 @@ namespace shared {
             {-1, +1},
         };
 
-        public static HashSet<CharacterState> inAirSet = new HashSet<CharacterState>() {
-            InairIdle1NoJump,
-            InairIdle1ByJump,
-            InairAtk1,
-            InairAtked1,
+        public static HashSet<CharacterState> InAirSet = new HashSet<CharacterState>() {
+            InAirIdle1NoJump,
+            InAirIdle1ByJump,
+            InAirAtk1,
+            InAirAtked1,
             BlownUp1,
-            Onwall,
-            Dashing // Yes dashing is an inair state even if you dashed on the ground :)
+            OnWall,
+            Dashing // Yes dashing is an InAir state even if you dashed on the ground :)
         };
 
         public static HashSet<CharacterState> noOpSet = new HashSet<CharacterState>() {
             Atked1,
-            InairAtked1,
+            InAirAtked1,
             BlownUp1,
             LayDown1,
 			// [WARNING] During the invinsible frames of GET_UP1, the player is allowed to take any action
@@ -90,10 +87,10 @@ namespace shared {
         public static HashSet<CharacterState> nonAttackingSet = new HashSet<CharacterState>() {
             Idle1,
             Walking,
-            InairIdle1NoJump,
-            InairIdle1ByJump,
+            InAirIdle1NoJump,
+            InAirIdle1ByJump,
             Atked1,
-            InairAtked1,
+            InAirAtked1,
             BlownUp1,
             LayDown1,
             GetUp1,

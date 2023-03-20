@@ -6,42 +6,40 @@ package shared;
 option csharp_namespace = "shared";
 
 enum BulletState {
-	STARTUP = 0;
-	ACTIVE = 1;
-	EXPLODING = 2;
+	StartUp = 0;
+	Active = 1;
+	Exploding = 2;
 }
 
 enum CharacterState {
-	IDLE1 = 0;
-	WALKING = 1;
+	Idle1 = 0;
+	Walking = 1;
 
-	ATK1 = 2;
-	ATKED1 = 3;
+	Atk1 = 2;
+	Atked1 = 3;
 
-	INAIR_IDLE1_NO_JUMP = 4;
+	InAirIdle1NoJump = 4;
 
-	INAIR_IDLE1_BY_JUMP = 5;
+	InAirIdle1ByJump = 5;
 
-	INAIR_ATK1 = 6;
-	INAIR_ATKED1 = 7;
-	BLOWN_UP1 = 8;
-	LAY_DOWN1 = 9;
-	GET_UP1 = 10;
-	ATK2 = 11;
+	InAirAtk1 = 6;
+	InAirAtked1 = 7;
+	BlownUp1 = 8;
+	LayDown1 = 9;
+	GetUp1 = 10;
 
-	ATK3 = 12;
+	Atk2 = 11;
+	Atk3 = 12;
+	Atk4 = 13;
+	Atk5 = 14;
 
-	ATK4 = 13;
+	Dashing = 15;
 
-	ATK5 = 14;
+	OnWall = 16;
 
-	DASHING = 15;
+	TurnAround = 17;
 
-	ONWALL = 16;
-
-	TURNAROUND = 17;
-
-	DYING = 18;
+	Dying = 18;
 }
         
 message PlayerDownsync {
@@ -129,14 +127,14 @@ message InputsBufferSnapshot {
 }
 
 enum BulletType {
-	UNDETERMINED = 0;
-	MELEE = 1;
-	FIREBALL = 2;
+	Undetermined = 0;
+	Melee = 1;
+	Fireball = 2;
 }
 
 enum SkillTriggerType {
-	RISING_EDGE = 0;
-	FALLING_EDGE = 1;
+	RisingEdge = 0;
+	FallingEdge = 1;
 }
 
 message BulletConfig {

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1750589025216623400}
   - component: {fileID: 1750589025216623401}
   - component: {fileID: 212057208}
+  - component: {fileID: 3697715381422054265}
   m_Layer: 0
   m_Name: KnifeGirl
   m_TagString: Untagged
@@ -105,3 +106,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &3697715381422054265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750589025216623398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2366cd4abb5fd41b6e5ef3b317092f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

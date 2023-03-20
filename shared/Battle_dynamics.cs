@@ -1,10 +1,5 @@
-using shared;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using pbc = global::Google.Protobuf.Collections;
-using static shared.BulletState;
+using pbc = Google.Protobuf.Collections;
 using static shared.CharacterState;
 
 namespace shared {
@@ -197,7 +192,7 @@ namespace shared {
 
                         thatPlayerInNextFrame.CapturedByInertia = true;
                         if (exactTurningAround) {
-                            thatPlayerInNextFrame.CharacterState = Turnaround;
+                            thatPlayerInNextFrame.CharacterState = TurnAround;
                             thatPlayerInNextFrame.FramesToRecover = 4; // TODO
                         } else if (stoppingFromWalking) {
                             thatPlayerInNextFrame.FramesToRecover = 4;
@@ -258,9 +253,9 @@ namespace shared {
                         colliderHeight = currPlayerDownsync.ColliderRadius * 2;
                         break;
                     case BlownUp1:
-                    case InairIdle1NoJump:
-                    case InairIdle1ByJump:
-                    case Onwall:
+                    case InAirIdle1NoJump:
+                    case InAirIdle1ByJump:
+                    case OnWall:
                         colliderWidth = currPlayerDownsync.ColliderRadius * 2;
                         colliderHeight = currPlayerDownsync.ColliderRadius * 2;
                         break;
@@ -276,7 +271,7 @@ namespace shared {
                 collisionSys.AddSingle(playerCollider);
 
                 if (currPlayerDownsync.InAir) {
-                    if (Onwall == currPlayerDownsync.CharacterState && !jumpedOrNotList[i]) {
+                    if (OnWall == currPlayerDownsync.CharacterState && !jumpedOrNotList[i]) {
                         thatPlayerInNextFrame.VelX += GRAVITY_X;
                         thatPlayerInNextFrame.VelY = 5; // TODO
                     } else if (Dashing == currPlayerDownsync.CharacterState) {
@@ -369,9 +364,9 @@ namespace shared {
                         } else {
                             switch (currPlayerDownsync.CharacterState) {
                                 case BlownUp1:
-                                case InairIdle1NoJump:
-                                case InairIdle1ByJump:
-                                case Onwall:
+                                case InAirIdle1NoJump:
+                                case InAirIdle1ByJump:
+                                case OnWall:
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currPlayerDownsync" instead of "thatPlayerInNextFrame" here!
                                     var halfColliderWidthDiff = 0;
                                     var halfColliderHeightDiff = currPlayerDownsync.ColliderRadius;
@@ -420,19 +415,19 @@ namespace shared {
                     switch (oldNextCharacterState) {
                         case Idle1:
                         case Walking:
-                        case Turnaround:
-                            if (jumpedOrNotList[i] || InairIdle1ByJump == currPlayerDownsync.CharacterState) {
-                                thatPlayerInNextFrame.CharacterState = InairIdle1ByJump;
+                        case TurnAround:
+                            if (jumpedOrNotList[i] || InAirIdle1ByJump == currPlayerDownsync.CharacterState) {
+                                thatPlayerInNextFrame.CharacterState = InAirIdle1ByJump;
                             } else {
-                                thatPlayerInNextFrame.CharacterState = InairIdle1NoJump;
+                                thatPlayerInNextFrame.CharacterState = InAirIdle1NoJump;
                             }
                             break;
                         case Atk1:
-                            thatPlayerInNextFrame.CharacterState = InairAtk1;
+                            thatPlayerInNextFrame.CharacterState = InAirAtk1;
                             // No inAir transition for ATK2/ATK3 for now
                             break;
                         case Atked1:
-                            thatPlayerInNextFrame.CharacterState = InairAtked1;
+                            thatPlayerInNextFrame.CharacterState = InAirAtked1;
                             break;
                     }
                 }
@@ -440,12 +435,12 @@ namespace shared {
                 if (thatPlayerInNextFrame.OnWall) {
                     switch (thatPlayerInNextFrame.CharacterState) {
                         case Walking:
-                        case InairIdle1ByJump:
-                        case InairIdle1NoJump:
-                            bool hasBeenOnWallChState = (Onwall == currPlayerDownsync.CharacterState);
-                            bool hasBeenOnWallCollisionResultForSameChState = (currPlayerDownsync.OnWall && MAGIC_FRAMES_TO_BE_ONWALL <= thatPlayerInNextFrame.FramesInChState);
+                        case InAirIdle1ByJump:
+                        case InAirIdle1NoJump:
+                            bool hasBeenOnWallChState = (OnWall == currPlayerDownsync.CharacterState);
+                            bool hasBeenOnWallCollisionResultForSameChState = (currPlayerDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatPlayerInNextFrame.FramesInChState);
                             if (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState) {
-                                thatPlayerInNextFrame.CharacterState = Onwall;
+                                thatPlayerInNextFrame.CharacterState = OnWall;
                             }
                             break;
                     }

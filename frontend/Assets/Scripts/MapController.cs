@@ -108,7 +108,7 @@ public class MapController : MonoBehaviour {
         selfPlayerInRdf.RevivalVirtualGridY = selfPlayerVposY;
         selfPlayerInRdf.Speed = 10;
         selfPlayerInRdf.ColliderRadius = (int)defaultColliderRadius;
-        selfPlayerInRdf.CharacterState = InairIdle1NoJump;
+        selfPlayerInRdf.CharacterState = InAirIdle1NoJump;
         selfPlayerInRdf.FramesToRecover = 0;
         selfPlayerInRdf.DirX = 2;
         selfPlayerInRdf.DirY = 0;
@@ -297,13 +297,17 @@ public class MapController : MonoBehaviour {
         chaserRenderFrameId = renderFrameId1;
     }
 
-    public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame prevRdf, RoomDownsyncFrame rdf) {
+    public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
         for (int k = 0; k < roomCapacity; k++) {
             var currPlayerDownsync = rdf.PlayersArr[k];
             var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
             var playerGameObj = playerGameObjs[k];
             playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
+
+            var chConfig = characters[0]; // todo: remove hardcoded speciesId
+            var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
+            chAnimCtrl.updateCharacterAnim(currPlayerDownsync, null, false, chConfig);
 
             if (k == selfPlayerInfo.JoinIndex-1) {
                 var camOldPos = Camera.main.transform.position;
@@ -493,9 +497,9 @@ public class MapController : MonoBehaviour {
                         colliderHeight = currPlayerDownsync.ColliderRadius * 2;
                         break;
                     case BlownUp1:
-                    case InairIdle1NoJump:
-                    case InairIdle1ByJump:
-                    case Onwall:
+                    case InAirIdle1NoJump:
+                    case InAirIdle1ByJump:
+                    case OnWall:
                         colliderWidth = currPlayerDownsync.ColliderRadius * 2;
                         colliderHeight = currPlayerDownsync.ColliderRadius * 2;
                         break;

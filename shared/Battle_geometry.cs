@@ -30,7 +30,7 @@ namespace shared {
 
         public static int calcHardPushbacksNorms(int joinIndex, PlayerDownsync currPlayerDownsync, PlayerDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbackNorms, Collision collision, ref SatResult overlapResult) {
             float virtualGripToWall = 0.0f;
-            if (Onwall == currPlayerDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currPlayerDownsync.DirX == thatPlayerInNextFrame.DirX) {
+            if (OnWall == currPlayerDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currPlayerDownsync.DirX == thatPlayerInNextFrame.DirX) {
                 float xfac = 1.0f;
                 if (0 > thatPlayerInNextFrame.DirX) {
                     xfac = -xfac;

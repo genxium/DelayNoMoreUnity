@@ -116,7 +116,7 @@ namespace shared {
             }
 
             for (int i = 0; i < preallocBulletCount; i++) {
-                var single = NewBullet(TERMINATING_BULLET_LOCAL_ID, 0, 0, 0, BulletState.Startup, 0);
+                var single = NewBullet(TERMINATING_BULLET_LOCAL_ID, 0, 0, 0, BulletState.StartUp, 0);
                 ret.Bullets.Add(single);
             }
 

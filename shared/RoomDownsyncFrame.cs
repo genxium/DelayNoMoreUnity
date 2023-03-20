@@ -110,17 +110,16 @@ namespace shared {
             "Z2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tpbGxUcmlnZ2VyVHlwZRIsCgxi",
             "b3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQuQ2hhcmFjdGVyU3RhdGUSIgoE",
             "aGl0cxgHIAMoCzIULnNoYXJlZC5CdWxsZXRDb25maWcqNQoLQnVsbGV0U3Rh",
-            "dGUSCwoHU1RBUlRVUBAAEgoKBkFDVElWRRABEg0KCUVYUExPRElORxACKpkC",
-            "Cg5DaGFyYWN0ZXJTdGF0ZRIJCgVJRExFMRAAEgsKB1dBTEtJTkcQARIICgRB",
-            "VEsxEAISCgoGQVRLRUQxEAMSFwoTSU5BSVJfSURMRTFfTk9fSlVNUBAEEhcK",
-            "E0lOQUlSX0lETEUxX0JZX0pVTVAQBRIOCgpJTkFJUl9BVEsxEAYSEAoMSU5B",
-            "SVJfQVRLRUQxEAcSDQoJQkxPV05fVVAxEAgSDQoJTEFZX0RPV04xEAkSCwoH",
-            "R0VUX1VQMRAKEggKBEFUSzIQCxIICgRBVEszEAwSCAoEQVRLNBANEggKBEFU",
-            "SzUQDhILCgdEQVNISU5HEA8SCgoGT05XQUxMEBASDgoKVFVSTkFST1VORBAR",
-            "EgkKBURZSU5HEBIqNwoKQnVsbGV0VHlwZRIQCgxVTkRFVEVSTUlORUQQABIJ",
-            "CgVNRUxFRRABEgwKCEZJUkVCQUxMEAIqNQoQU2tpbGxUcmlnZ2VyVHlwZRIP",
-            "CgtSSVNJTkdfRURHRRAAEhAKDEZBTExJTkdfRURHRRABQgmqAgZzaGFyZWRi",
-            "BnByb3RvMw=="));
+            "dGUSCwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0KCUV4cGxvZGluZxACKo4C",
+            "Cg5DaGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsKB1dhbGtpbmcQARIICgRB",
+            "dGsxEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxlMU5vSnVtcBAEEhQKEElu",
+            "QWlySWRsZTFCeUp1bXAQBRINCglJbkFpckF0azEQBhIPCgtJbkFpckF0a2Vk",
+            "MRAHEgwKCEJsb3duVXAxEAgSDAoITGF5RG93bjEQCRIKCgZHZXRVcDEQChII",
+            "CgRBdGsyEAsSCAoEQXRrMxAMEggKBEF0azQQDRIICgRBdGs1EA4SCwoHRGFz",
+            "aGluZxAPEgoKBk9uV2FsbBAQEg4KClR1cm5Bcm91bmQQERIJCgVEeWluZxAS",
+            "KjcKCkJ1bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAASCQoFTWVsZWUQARIM",
+            "CghGaXJlYmFsbBACKjMKEFNraWxsVHJpZ2dlclR5cGUSDgoKUmlzaW5nRWRn",
+            "ZRAAEg8KC0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -147,42 +146,42 @@ namespace shared {
   }
   #region Enums
   public enum BulletState {
-    [pbr::OriginalName("STARTUP")] Startup = 0,
-    [pbr::OriginalName("ACTIVE")] Active = 1,
-    [pbr::OriginalName("EXPLODING")] Exploding = 2,
+    [pbr::OriginalName("StartUp")] StartUp = 0,
+    [pbr::OriginalName("Active")] Active = 1,
+    [pbr::OriginalName("Exploding")] Exploding = 2,
   }
 
   public enum CharacterState {
-    [pbr::OriginalName("IDLE1")] Idle1 = 0,
-    [pbr::OriginalName("WALKING")] Walking = 1,
-    [pbr::OriginalName("ATK1")] Atk1 = 2,
-    [pbr::OriginalName("ATKED1")] Atked1 = 3,
-    [pbr::OriginalName("INAIR_IDLE1_NO_JUMP")] InairIdle1NoJump = 4,
-    [pbr::OriginalName("INAIR_IDLE1_BY_JUMP")] InairIdle1ByJump = 5,
-    [pbr::OriginalName("INAIR_ATK1")] InairAtk1 = 6,
-    [pbr::OriginalName("INAIR_ATKED1")] InairAtked1 = 7,
-    [pbr::OriginalName("BLOWN_UP1")] BlownUp1 = 8,
-    [pbr::OriginalName("LAY_DOWN1")] LayDown1 = 9,
-    [pbr::OriginalName("GET_UP1")] GetUp1 = 10,
-    [pbr::OriginalName("ATK2")] Atk2 = 11,
-    [pbr::OriginalName("ATK3")] Atk3 = 12,
-    [pbr::OriginalName("ATK4")] Atk4 = 13,
-    [pbr::OriginalName("ATK5")] Atk5 = 14,
-    [pbr::OriginalName("DASHING")] Dashing = 15,
-    [pbr::OriginalName("ONWALL")] Onwall = 16,
-    [pbr::OriginalName("TURNAROUND")] Turnaround = 17,
-    [pbr::OriginalName("DYING")] Dying = 18,
+    [pbr::OriginalName("Idle1")] Idle1 = 0,
+    [pbr::OriginalName("Walking")] Walking = 1,
+    [pbr::OriginalName("Atk1")] Atk1 = 2,
+    [pbr::OriginalName("Atked1")] Atked1 = 3,
+    [pbr::OriginalName("InAirIdle1NoJump")] InAirIdle1NoJump = 4,
+    [pbr::OriginalName("InAirIdle1ByJump")] InAirIdle1ByJump = 5,
+    [pbr::OriginalName("InAirAtk1")] InAirAtk1 = 6,
+    [pbr::OriginalName("InAirAtked1")] InAirAtked1 = 7,
+    [pbr::OriginalName("BlownUp1")] BlownUp1 = 8,
+    [pbr::OriginalName("LayDown1")] LayDown1 = 9,
+    [pbr::OriginalName("GetUp1")] GetUp1 = 10,
+    [pbr::OriginalName("Atk2")] Atk2 = 11,
+    [pbr::OriginalName("Atk3")] Atk3 = 12,
+    [pbr::OriginalName("Atk4")] Atk4 = 13,
+    [pbr::OriginalName("Atk5")] Atk5 = 14,
+    [pbr::OriginalName("Dashing")] Dashing = 15,
+    [pbr::OriginalName("OnWall")] OnWall = 16,
+    [pbr::OriginalName("TurnAround")] TurnAround = 17,
+    [pbr::OriginalName("Dying")] Dying = 18,
   }
 
   public enum BulletType {
-    [pbr::OriginalName("UNDETERMINED")] Undetermined = 0,
-    [pbr::OriginalName("MELEE")] Melee = 1,
-    [pbr::OriginalName("FIREBALL")] Fireball = 2,
+    [pbr::OriginalName("Undetermined")] Undetermined = 0,
+    [pbr::OriginalName("Melee")] Melee = 1,
+    [pbr::OriginalName("Fireball")] Fireball = 2,
   }
 
   public enum SkillTriggerType {
-    [pbr::OriginalName("RISING_EDGE")] RisingEdge = 0,
-    [pbr::OriginalName("FALLING_EDGE")] FallingEdge = 1,
+    [pbr::OriginalName("RisingEdge")] RisingEdge = 0,
+    [pbr::OriginalName("FallingEdge")] FallingEdge = 1,
   }
 
   #endregion
@@ -4725,7 +4724,7 @@ namespace shared {
 
     /// <summary>Field number for the "blState" field.</summary>
     public const int BlStateFieldNumber = 1;
-    private global::shared.BulletState blState_ = global::shared.BulletState.Startup;
+    private global::shared.BulletState blState_ = global::shared.BulletState.StartUp;
     /// <summary>
     /// Jargon reference https://www.thegamer.com/fighting-games-frame-data-explained/
     /// ALL lengths are in world coordinate
@@ -4879,7 +4878,7 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (BlState != global::shared.BulletState.Startup) hash ^= BlState.GetHashCode();
+      if (BlState != global::shared.BulletState.StartUp) hash ^= BlState.GetHashCode();
       if (FramesInBlState != 0) hash ^= FramesInBlState.GetHashCode();
       if (battleAttr_ != null) hash ^= BattleAttr.GetHashCode();
       if (config_ != null) hash ^= Config.GetHashCode();
@@ -4907,7 +4906,7 @@ namespace shared {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (BlState != global::shared.BulletState.Startup) {
+      if (BlState != global::shared.BulletState.StartUp) {
         output.WriteRawTag(8);
         output.WriteEnum((int) BlState);
       }
@@ -4957,7 +4956,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (BlState != global::shared.BulletState.Startup) {
+      if (BlState != global::shared.BulletState.StartUp) {
         output.WriteRawTag(8);
         output.WriteEnum((int) BlState);
       }
@@ -5007,7 +5006,7 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (BlState != global::shared.BulletState.Startup) {
+      if (BlState != global::shared.BulletState.StartUp) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) BlState);
       }
       if (FramesInBlState != 0) {
@@ -5049,7 +5048,7 @@ namespace shared {
       if (other == null) {
         return;
       }
-      if (other.BlState != global::shared.BulletState.Startup) {
+      if (other.BlState != global::shared.BulletState.StartUp) {
         BlState = other.BlState;
       }
       if (other.FramesInBlState != 0) {

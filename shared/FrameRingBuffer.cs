@@ -1,6 +1,4 @@
-﻿using System.Transactions;
-
-namespace shared {
+﻿namespace shared {
     public class FrameRingBuffer<T> : RingBuffer<T> where T : class {
         public int EdFrameId;
         public int StFrameId;
