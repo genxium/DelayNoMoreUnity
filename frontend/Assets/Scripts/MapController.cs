@@ -118,6 +118,7 @@ public class MapController : MonoBehaviour {
         selfPlayerInRdf.OnWall = false;
         selfPlayerInRdf.Hp = 100;
         selfPlayerInRdf.MaxHp = 100;
+        selfPlayerInRdf.SpeciesId = 0;
 
         onRoomDownsyncFrame(startRdf, null);
     }

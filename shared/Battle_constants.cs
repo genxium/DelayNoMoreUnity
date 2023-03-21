@@ -58,7 +58,7 @@ namespace shared {
             {-1, +1},
         };
 
-        public static HashSet<CharacterState> InAirSet = new HashSet<CharacterState>() {
+        public static HashSet<CharacterState> inAirSet = new HashSet<CharacterState>() {
             InAirIdle1NoJump,
             InAirIdle1ByJump,
             InAirAtk1,

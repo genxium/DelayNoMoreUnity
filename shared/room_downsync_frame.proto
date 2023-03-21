@@ -78,6 +78,8 @@ message PlayerDownsync {
 	int32 revivalVirtualGridX = 30;
 	int32 revivalVirtualGridY = 31;
 
+	int32 speciesId = 32; // For evolution during battle
+
 	string name = 997;
 	string displayName = 998;
 	string avatar = 999;

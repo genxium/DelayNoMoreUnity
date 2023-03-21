@@ -73,7 +73,7 @@ namespace shared {
             return hasInputFrameUpdatedOnDynamics;
         }
 
-        private static (int, bool, int, int) deriveOpPattern(PlayerDownsync currPlayerDownsync, PlayerDownsync thatPlayerInNextFrame, RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
+        private static (int, bool, int, int) deriveOpPattern(PlayerDownsync currPlayerDownsync, PlayerDownsync thatPlayerInNextFrame, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
             int delayedInputFrameIdForPrevRdf = ConvertToDelayedInputFrameId(currRenderFrame.Id - 1);
@@ -118,6 +118,36 @@ namespace shared {
             }
 
             int patternId = PATTERN_ID_NO_OP;
+            var canJumpWithinInertia = (currPlayerDownsync.CapturedByInertia && ((chConfig.InertiaFramesToRecover >> 1) > currPlayerDownsync.FramesToRecover));
+            if (0 == currPlayerDownsync.FramesToRecover || canJumpWithinInertia) {
+                if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
+                    if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currPlayerDownsync.CharacterState) {
+                        // Checking "DashingEnabled" here to allow jumping when dashing-disabled players pressed "DOWN + BtnB"
+                        patternId = 5;
+                    } else if (!inAirSet.Contains(currPlayerDownsync.CharacterState)) {
+                        jumpedOrNot = true;
+                    } else if (OnWall == currPlayerDownsync.CharacterState) {
+                        jumpedOrNot = true;
+                    }
+                }
+            }
+
+            if (PATTERN_ID_NO_OP == patternId) {
+                if (0 < decodedInputHolder.BtnALevel) {
+                    if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
+                        if (0 > decodedInputHolder.Dy) {
+                            patternId = 3;
+                        } else if (0 < decodedInputHolder.Dy) {
+                            patternId = 2;
+                        } else {
+                            patternId = 1;
+                        }
+                    } else {
+                        patternId = 4; // Holding
+                    }
+                }
+            }
+
             return (patternId, jumpedOrNot, effDx, effDy);
         }
 
@@ -157,14 +187,13 @@ namespace shared {
             }
 
             // 1. Process player inputs
-            var delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
-
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var currPlayerDownsync = currRenderFrame.PlayersArr[i];
                 var thatPlayerInNextFrame = nextRenderFramePlayers[i];
-                var (patternId, jumpedOrNot, effDx, effDy) = deriveOpPattern(currPlayerDownsync, thatPlayerInNextFrame, currRenderFrame, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+                var chConfig = characters[currPlayerDownsync.SpeciesId];
+                var (patternId, jumpedOrNot, effDx, effDy) = deriveOpPattern(currPlayerDownsync, thatPlayerInNextFrame, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
-                bool isWallJumping = false; // TODO
+                bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currPlayerDownsync.VelX));
                 jumpedOrNotList[i] = jumpedOrNot;
                 int joinIndex = currPlayerDownsync.JoinIndex;
 
@@ -193,13 +222,13 @@ namespace shared {
                         thatPlayerInNextFrame.CapturedByInertia = true;
                         if (exactTurningAround) {
                             thatPlayerInNextFrame.CharacterState = TurnAround;
-                            thatPlayerInNextFrame.FramesToRecover = 4; // TODO
+                            thatPlayerInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
                         } else if (stoppingFromWalking) {
-                            thatPlayerInNextFrame.FramesToRecover = 4;
+                            thatPlayerInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
                         } else {
                             // Updates CharacterState and thus the animation to make user see graphical feedback asap.
                             thatPlayerInNextFrame.CharacterState = Walking;
-                            thatPlayerInNextFrame.FramesToRecover = 2; // TODO
+                            thatPlayerInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
                         }
                     } else {
                         thatPlayerInNextFrame.CapturedByInertia = false;
@@ -237,12 +266,55 @@ namespace shared {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var currPlayerDownsync = currRenderFrame.PlayersArr[i];
                 int joinIndex = currPlayerDownsync.JoinIndex;
+                var chConfig = characters[currPlayerDownsync.SpeciesId];
                 effPushbacks[joinIndex - 1].X = 0;
                 effPushbacks[joinIndex - 1].Y = 0;
                 var thatPlayerInNextFrame = nextRenderFramePlayers[i];
 
                 // Reset playerCollider position from the "virtual grid position"
                 int newVx = currPlayerDownsync.VirtualGridX + currPlayerDownsync.VelX, newVy = currPlayerDownsync.VirtualGridY + currPlayerDownsync.VelY;
+
+                if (0 >= thatPlayerInNextFrame.Hp && 0 == thatPlayerInNextFrame.FramesToRecover) {
+                    // Revive from Dying
+                    (newVx, newVy) = (currPlayerDownsync.RevivalVirtualGridX, currPlayerDownsync.RevivalVirtualGridY);
+
+                    thatPlayerInNextFrame.CharacterState = GetUp1;
+                    thatPlayerInNextFrame.FramesInChState = 0;
+                    thatPlayerInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
+                    thatPlayerInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
+
+                    thatPlayerInNextFrame.Hp = currPlayerDownsync.MaxHp;
+                    // Hardcoded initial character orientation/facing
+                    if (0 == (thatPlayerInNextFrame.JoinIndex % 2)) {
+                        thatPlayerInNextFrame.DirX = -2;
+                        thatPlayerInNextFrame.DirY = 0;
+                    } else {
+                        thatPlayerInNextFrame.DirX = +2;
+                        thatPlayerInNextFrame.DirY = 0;
+                    }
+                }
+
+                if (jumpedOrNotList[i]) {
+                    // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currPlayerDownsync.OnWall" for checking
+                    if (OnWall == currPlayerDownsync.CharacterState) {
+                        if (0 < currPlayerDownsync.VelX * currPlayerDownsync.OnWallNormX) {
+                            newVx -= currPlayerDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
+                        }
+                        int xfac = -1;
+                        if (0 > currPlayerDownsync.OnWallNormX) {
+                            // Always jump to the opposite direction of wall inward norm
+                            xfac = -xfac;
+                        }
+                        newVx += xfac * chConfig.WallJumpingInitVelX;
+                        newVy += chConfig.WallJumpingInitVelY;
+                        thatPlayerInNextFrame.VelX = (xfac * chConfig.WallJumpingInitVelX);
+                        thatPlayerInNextFrame.VelY = (chConfig.WallJumpingInitVelY);
+                        thatPlayerInNextFrame.FramesToRecover = chConfig.WallJumpingFramesToRecover;
+                    } else {
+                        thatPlayerInNextFrame.VelY = chConfig.JumpingInitVelY;
+                        newVy += chConfig.JumpingInitVelY; // Immediately gets out of any snapping
+                    }
+                }
 
                 var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(newVx, newVy);
                 int colliderWidth = currPlayerDownsync.ColliderRadius * 2, colliderHeight = currPlayerDownsync.ColliderRadius * 4;
@@ -273,7 +345,7 @@ namespace shared {
                 if (currPlayerDownsync.InAir) {
                     if (OnWall == currPlayerDownsync.CharacterState && !jumpedOrNotList[i]) {
                         thatPlayerInNextFrame.VelX += GRAVITY_X;
-                        thatPlayerInNextFrame.VelY = 5; // TODO
+                        thatPlayerInNextFrame.VelY = chConfig.WallSlidingVelY;
                     } else if (Dashing == currPlayerDownsync.CharacterState) {
                         thatPlayerInNextFrame.VelX += GRAVITY_X;
                     } else {
@@ -286,6 +358,7 @@ namespace shared {
             // 4. Calc pushbacks for each player (after its movement) w/o bullets
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var currPlayerDownsync = currRenderFrame.PlayersArr[i];
+                var chConfig = characters[currPlayerDownsync.SpeciesId];
                 int joinIndex = currPlayerDownsync.JoinIndex;
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
@@ -360,7 +433,7 @@ namespace shared {
                             // No update needed for Dying
                         } else if (BlownUp1 == thatPlayerInNextFrame.CharacterState) {
                             thatPlayerInNextFrame.CharacterState = LayDown1;
-                            thatPlayerInNextFrame.FramesToRecover = 18; // TODO
+                            thatPlayerInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                         } else {
                             switch (currPlayerDownsync.CharacterState) {
                                 case BlownUp1:
@@ -386,16 +459,48 @@ namespace shared {
                             } else if (LayDown1 == thatPlayerInNextFrame.CharacterState) {
                                 if (0 == thatPlayerInNextFrame.FramesToRecover) {
                                     thatPlayerInNextFrame.CharacterState = GetUp1;
-                                    thatPlayerInNextFrame.FramesToRecover = 10; // TODO
+                                    thatPlayerInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
                                 }
                             } else if (GetUp1 == thatPlayerInNextFrame.CharacterState) {
                                 if (0 == thatPlayerInNextFrame.FramesToRecover) {
                                     thatPlayerInNextFrame.CharacterState = Idle1;
-                                    thatPlayerInNextFrame.FramesInvinsible = 4; // TODO
+                                    thatPlayerInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
                                 }
                             }
                         }
                     }
+                }
+
+                if (chConfig.OnWallEnabled) {
+                    if (thatPlayerInNextFrame.InAir) {
+                        // [WARNING] Sticking to wall MUST BE based on "InAir", otherwise we would get gravity reduction from ground up incorrectly!
+                        if (!noOpSet.Contains(currPlayerDownsync.CharacterState)) {
+                            for (int k = 0; k < hardPushbackCnt; k++) {
+                                var hardPushbackNorm = hardPushbackNormsArr[joinIndex - 1][k];
+                                float normAlignmentWithHorizon1 = (hardPushbackNorm.X * +1f);
+                                float normAlignmentWithHorizon2 = (hardPushbackNorm.X * -1f);
+
+                                if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1) {
+                                    thatPlayerInNextFrame.OnWall = true;
+                                    thatPlayerInNextFrame.OnWallNormX = +1;
+                                    thatPlayerInNextFrame.OnWallNormY = 0;
+                                    break;
+                                }
+                                if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2) {
+                                    thatPlayerInNextFrame.OnWall = true;
+                                    thatPlayerInNextFrame.OnWallNormX = -1;
+                                    thatPlayerInNextFrame.OnWallNormY = 0;
+                                    break;
+
+                                }
+                            }
+                        }
+                    }
+                    if (!thatPlayerInNextFrame.OnWall) {
+                        thatPlayerInNextFrame.OnWallNormX = 0;
+                        thatPlayerInNextFrame.OnWallNormY = 0;
+                    }
+
                 }
             }
 

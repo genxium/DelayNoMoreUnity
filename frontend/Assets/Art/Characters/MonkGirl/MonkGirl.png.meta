@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1
+  spritePixelsToUnits: 2
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
@@ -2858,7 +2858,6 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Idle1_2: -1272900522
-      InAirIdle1_0: 1802103570
       Dying_4: 1819438568
       Walking_3: 1751279875
       Walking_13: -1351759915
@@ -2983,6 +2982,7 @@ TextureImporter:
       Idle1_10: 588124083
       Atk2_2: -348730832
       GetUp1_4: 1691967054
+      InAirIdle1_0: 1802103570
       Idle1_3: 1394121989
       Atk2_9: 1185662264
       LayDown1_4: 1736268040
