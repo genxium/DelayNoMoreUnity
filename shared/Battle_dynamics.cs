@@ -120,7 +120,7 @@ namespace shared {
             int patternId = PATTERN_ID_NO_OP;
             var canJumpWithinInertia = (currPlayerDownsync.CapturedByInertia && ((chConfig.InertiaFramesToRecover >> 1) > currPlayerDownsync.FramesToRecover));
             if (0 == currPlayerDownsync.FramesToRecover || canJumpWithinInertia) {
-                if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
+                if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
                     if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currPlayerDownsync.CharacterState) {
                         // Checking "DashingEnabled" here to allow jumping when dashing-disabled players pressed "DOWN + BtnB"
                         patternId = 5;
@@ -133,8 +133,8 @@ namespace shared {
             }
 
             if (PATTERN_ID_NO_OP == patternId) {
-                if (0 < decodedInputHolder.BtnALevel) {
-                    if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
+                if (0 < decodedInputHolder.BtnBLevel) {
+                    if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
                         if (0 > decodedInputHolder.Dy) {
                             patternId = 3;
                         } else if (0 < decodedInputHolder.Dy) {

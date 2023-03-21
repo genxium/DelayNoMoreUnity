@@ -97,7 +97,10 @@ public class MapController : MonoBehaviour {
         startRdf.ShouldForceResync = false;
         var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
         spawnPlayerNode(0, selfPlayerWx, selfPlayerWy);
-        
+
+        var selfPlayerCharacterSpeciesId = 0;
+        var selfPlayerCharacter = Battle.characters[selfPlayerCharacterSpeciesId];
+
         var selfPlayerInRdf = startRdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
         var (selfPlayerVposX, selfPlayerVposY) = PolygonColliderCtrToVirtualGridPos(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
         selfPlayerInRdf.Id = 10;
@@ -106,7 +109,7 @@ public class MapController : MonoBehaviour {
         selfPlayerInRdf.VirtualGridY = selfPlayerVposY;
         selfPlayerInRdf.RevivalVirtualGridX = selfPlayerVposX;
         selfPlayerInRdf.RevivalVirtualGridY = selfPlayerVposY;
-        selfPlayerInRdf.Speed = 10;
+        selfPlayerInRdf.Speed = selfPlayerCharacter.Speed;
         selfPlayerInRdf.ColliderRadius = (int)defaultColliderRadius;
         selfPlayerInRdf.CharacterState = InAirIdle1NoJump;
         selfPlayerInRdf.FramesToRecover = 0;
