@@ -180,17 +180,17 @@ namespace shared {
 
         Dictionary<int, int> CancelTransit;
 
-        public BulletConfigBuilder(int startupFrames, int cancellableStFrame, int cancellableEdFrame, int activeFrames, int hitStunFrames, int blockStunFrames, int pushbackVelX, int pushbackVelY, int damage, int selfLockVelX, int selfLockVelY, int hitboxOffsetX, int hitboxOffsetY, int hitboxSizeX, int hitboxSizeY, bool blowUp, int speciesId, int explosionFrames, BulletType bType, int speed) {
+        public BulletConfigBuilder(int startupFrames, int activeFrames, int hitStunFrames, int blockStunFrames, int damage, int pushbackVelX, int pushbackVelY, int selfLockVelX, int selfLockVelY, int hitboxOffsetX, int hitboxOffsetY, int hitboxSizeX, int hitboxSizeY, int cancellableStFrame, int cancellableEdFrame, bool blowUp, int speciesId, int explosionFrames, BulletType bType, int speed) {
             StartupFrames = startupFrames;
-            CancellableStFrame = cancellableStFrame;
-            CancellableEdFrame = cancellableEdFrame;
             ActiveFrames = activeFrames;
 
             HitStunFrames = hitStunFrames;
             BlockStunFrames = blockStunFrames;
+            Damage = damage;
+
             PushbackVelX = pushbackVelX;
             PushbackVelY = pushbackVelY;
-            Damage = damage;
+            
 
             SelfLockVelX = selfLockVelX;
             SelfLockVelY = selfLockVelY;
@@ -199,6 +199,10 @@ namespace shared {
             HitboxOffsetY = hitboxOffsetY;
             HitboxSizeX = hitboxSizeX;
             HitboxSizeY = hitboxSizeY;
+
+
+            CancellableStFrame = cancellableStFrame;
+            CancellableEdFrame = cancellableEdFrame;
 
             BlowUp = blowUp;
 

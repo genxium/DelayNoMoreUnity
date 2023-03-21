@@ -193,6 +193,51 @@ namespace shared {
                 var chConfig = characters[currPlayerDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, effDx, effDy) = deriveOpPattern(currPlayerDownsync, thatPlayerInNextFrame, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
+                var skillId = FindSkillId(patternId, currPlayerDownsync, chConfig.SpeciesId);
+                bool skillUsed = false;
+
+                if (skills.ContainsKey(skillId)) {
+
+                    var skillConfig = skills[skillId];
+                    if (Dashing == skillConfig.BoundChState) {
+                        // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
+                        thatPlayerInNextFrame.ActiveSkillId = skillId;
+                        thatPlayerInNextFrame.ActiveSkillHit = 0;
+                        thatPlayerInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
+
+                        int xfac = 1;
+
+                        if (0 > thatPlayerInNextFrame.DirX) {
+                            xfac = -xfac;
+                        }
+                        bool hasLockVel = false;
+
+                        // Hardcoded to use only the first hit for now
+                        var bulletConfig = skillConfig.Hits[thatPlayerInNextFrame.ActiveSkillHit];
+
+                        if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
+                            hasLockVel = true;
+                            thatPlayerInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+                        }
+                        if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
+                            hasLockVel = true;
+                            thatPlayerInNextFrame.VelY = bulletConfig.SelfLockVelY;
+                        }
+
+                        if (false == hasLockVel && false == currPlayerDownsync.InAir) {
+                            thatPlayerInNextFrame.VelX = 0;
+                        }
+                        thatPlayerInNextFrame.CharacterState = skillConfig.BoundChState;
+
+                        skillUsed = true;
+                    }
+                    
+                }
+
+                if (skillUsed) {
+                    continue; // Don't allow movement if skill is used
+                }
+
                 bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currPlayerDownsync.VelX));
                 jumpedOrNotList[i] = jumpedOrNot;
                 int joinIndex = currPlayerDownsync.JoinIndex;
