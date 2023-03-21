@@ -159,9 +159,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -80, y: 80}
+  m_AnchoredPosition: {x: -176.00006, y: 175.99997}
   m_SizeDelta: {x: 128, y: 128}
-  m_Pivot: {x: 1, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &324869641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,6 +564,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8424a36e930936244bdf59ec0a459d81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  joystick: {fileID: 1978785421}
+  btnA: {fileID: 324869639}
 --- !u!114 &1901904082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,7 +595,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901904081}
         m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
-        m_MethodName: ReadMoveInput
+        m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -606,9 +608,37 @@ MonoBehaviour:
     m_ActionId: c8865ae1-8284-4aff-a9fa-67c26989c39c
     m_ActionName: SelfPlayer/Move
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1901904081}
+        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
+        m_MethodName: OnBtnAInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 8126b761-b4d3-4f8f-a3e9-b6aa7f611878
     m_ActionName: SelfPlayer/BtnA[/Keyboard/j]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1901904081}
+        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
+        m_MethodName: OnMoveByKeyboard
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7afd0457-9a01-4199-afa4-48ee9afb6610
+    m_ActionName: SelfPlayer/MoveByKeyboard[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: SelfPlayer

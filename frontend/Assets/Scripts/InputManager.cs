@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
-using shared;
-using static shared.Battle;
+using UnityEngine.InputSystem.OnScreen;
+using DG.Tweening;
 
 public class InputManager : MonoBehaviour {
     private const float magicLeanLowerBound = 0.1f;
@@ -10,6 +10,17 @@ public class InputManager : MonoBehaviour {
     private const float joyStickEps = 0.1f;
     private float joystickX, joystickY;
     private int btnALevel;
+
+    private Vector2 joystickInitPos;
+    private float joystickKeyboardMoveRadius;
+    public GameObject joystick;
+
+    public GameObject btnA;
+
+    void Start() {
+        joystickInitPos = joystick.transform.position;
+        joystickKeyboardMoveRadius = 0.5f*joystick.GetComponent<OnScreenStick>().movementRange;
+    }
 
     public static (int, int, int) DiscretizeDirection(float continuousDx, float continuousDy, float eps) {
         int dx = 0, dy = 0, encodedIdx = 0;
@@ -64,18 +75,40 @@ public class InputManager : MonoBehaviour {
         return (dx, dy, encodedIdx);
     }
 
-    public void onBtnA() {
+    public void OnBtnAInput(InputAction.CallbackContext context) {
+        btnALevel = context.ReadValueAsButton() ? 1 : 0;
+        Debug.Log(String.Format("btnALevel is changed to {0}", btnALevel));
+
+        if (1 == btnALevel) {
+            btnA.transform.DOScale(0.3f * Vector3.one, 0.5f);
+        } else {
+            btnA.transform.DOScale(1.5f * Vector3.one, 0.8f);
+        }
     }
 
-    public void ReadMoveInput(InputAction.CallbackContext context) {
+    public void OnMove(InputAction.CallbackContext context) {
         joystickX = context.ReadValue<Vector2>().normalized.x;
         joystickY = context.ReadValue<Vector2>().normalized.y;
+        Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by touch", joystickX, joystickY));
+    }
+
+    public void OnMoveByKeyboard(InputAction.CallbackContext context) {
+        joystickX = context.ReadValue<Vector2>().normalized.x;
+        joystickY = context.ReadValue<Vector2>().normalized.y;
+        Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by keyboard", joystickX, joystickY));
+
+        joystick.transform.position = new Vector3(
+            joystickInitPos.x + joystickKeyboardMoveRadius * joystickX,
+            joystickInitPos.y + joystickKeyboardMoveRadius * joystickY,
+            joystick.transform.position.z
+        );
     }
 
     public ulong GetImmediateEncodedInput() {
         float continuousDx = joystickX;
         float continuousDy = joystickY;
         var (_, _, discretizedDir) = DiscretizeDirection(continuousDx, continuousDy, joyStickEps);
-        return (ulong)discretizedDir;
+        ulong ret = (ulong)(discretizedDir + (btnALevel << 4));
+        return ret;
     }
 }
