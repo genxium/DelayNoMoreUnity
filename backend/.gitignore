@@ -1,0 +1,7 @@
+bin.meta
+obj*.meta
+bin/
+obj*/
+bin/**
+obj*/**
+*.sln
