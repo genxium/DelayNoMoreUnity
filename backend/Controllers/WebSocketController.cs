@@ -1,7 +1,7 @@
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebSocketsSample.Controllers;
+namespace backend.Controllers;
 
 public class WebSocketController : ControllerBase {
     private readonly ILogger _logger; // Dependency injection reference https://learn.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-7.0#create-logs
@@ -9,6 +9,7 @@ public class WebSocketController : ControllerBase {
         _logger = logger;
     }
 
+    [HttpGet] // Adding this Attribute just for Swagger recognition :)
     [Route("/Ws")]
     public async Task Get() {
         if (HttpContext.WebSockets.IsWebSocketRequest) {
