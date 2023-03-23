@@ -3,32 +3,29 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebSocketsSample.Controllers;
 
-#region snippet_Controller_Connect
-public class WebSocketController : ControllerBase
-{
-    [Route("/ws")]
-    public async Task Get()
-    {
-        if (HttpContext.WebSockets.IsWebSocketRequest)
-        {
+public class WebSocketController : ControllerBase {
+    private readonly ILogger _logger; // Dependency injection reference https://learn.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-7.0#create-logs
+    public WebSocketController(ILogger<WebSocketController> logger) {
+        _logger = logger;
+    }
+
+    [Route("/Ws")]
+    public async Task Get() {
+        if (HttpContext.WebSockets.IsWebSocketRequest) {
+            _logger.LogInformation("Got a websocket connection request");
             using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
             await Echo(webSocket);
-        }
-        else
-        {
+        } else {
             HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
         }
     }
-    #endregion
 
-    private static async Task Echo(WebSocket webSocket)
-    {
+    private static async Task Echo(WebSocket webSocket) {
         var buffer = new byte[1024 * 4];
         var receiveResult = await webSocket.ReceiveAsync(
             new ArraySegment<byte>(buffer), CancellationToken.None);
 
-        while (!receiveResult.CloseStatus.HasValue)
-        {
+        while (!receiveResult.CloseStatus.HasValue) {
             await webSocket.SendAsync(
                 new ArraySegment<byte>(buffer, 0, receiveResult.Count),
                 receiveResult.MessageType,

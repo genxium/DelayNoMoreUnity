@@ -1,8 +1,12 @@
+using Microsoft.Data.Sqlite;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 
@@ -15,6 +19,31 @@ app.UseWebSockets(webSocketOptions);
 // The following 2 lines make "app" use "wwwroot" as the default web root for serving static file, e.g. "index.html". 
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+if (app.Environment.IsDevelopment()) {
+    var DevEnvResourcesDbPath = builder.Configuration.GetValue<string>("DevEnvResourcesDbPath"); // This sqlite file will be copied into executable directory upon "dotnet build" too, configured in "backend.csproj"
+    app.Logger.LogInformation("DevEnvResourcesDbPath={0}", DevEnvResourcesDbPath);
+    using (var connection = new SqliteConnection(String.Format("Data Source={0}", DevEnvResourcesDbPath))) {
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.CommandText =
+        @"
+        SELECT *
+        FROM test_player
+        ";
+
+        using (var reader = command.ExecuteReader()) {
+            if (reader.HasRows) {
+                app.Logger.LogInformation("Loaded Development env specific test players:");
+            }
+            while (reader.Read()) {
+                var name = reader.GetString(0);
+                app.Logger.LogInformation("{0}", name);
+            }
+        }
+    }
+}
 
 app.MapControllers();
 

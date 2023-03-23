@@ -7,7 +7,6 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <!-- TODO: Move *.so, *.dylib, *.lib files depending on detected operating system. -->
 	<!-- Currently only copying the DLLs lacked in Unity 2021.3 -->
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <Copy SourceFiles="$(OutDir)$(AssemblyName).dll" DestinationFolder="$(UnityPackageOutputPath)" />
@@ -16,6 +15,7 @@
         <Copy SourceFiles="$(OutDir)System.Runtime.CompilerServices.Unsafe.dll" DestinationFolder="$(UnityPackageOutputPath)" />
         <Copy SourceFiles="$(OutDir)System.Collections.Immutable.dll" DestinationFolder="$(UnityPackageOutputPath)" />
     </Target>
+
     <ItemGroup>
       <Compile Update="Properties\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
