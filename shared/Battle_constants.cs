@@ -4,6 +4,8 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public const int INVALID_DEFAULT_PLAYER_ID = 0;
+
         public static float MAX_FLOAT32 = float.MaxValue;
         public static int MAX_INT = 999999999;
         public static int COLLISION_PLAYER_INDEX_PREFIX = (1 << 17);
