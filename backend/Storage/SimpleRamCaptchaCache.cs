@@ -2,6 +2,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Caching.Memory;
 using backend.Storage.Dao;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Storage;
 
@@ -10,7 +11,7 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
     private readonly ILogger<SimpleRamCaptchaCache> _logger;
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _environment;
-    private readonly DevEnvResourcesSqliteContext _devEnvResourcesSqliteContext;
+    private readonly IServiceScopeFactory _scopeFactory;
 
     private readonly Random _randNumGenerator = new Random();
 
@@ -19,23 +20,28 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
             SizeLimit = 2048
         });
 
-    public SimpleRamCaptchaCache(ILogger<SimpleRamCaptchaCache> logger, IConfiguration configuration, IWebHostEnvironment environment, DevEnvResourcesSqliteContext devEnvResourcesSqliteContext) {
+    public SimpleRamCaptchaCache(ILogger<SimpleRamCaptchaCache> logger, IConfiguration configuration, IWebHostEnvironment environment, IServiceScopeFactory scopeFactory) {
         _logger = logger;
         _configuration = configuration;
         _environment = environment;
-        _devEnvResourcesSqliteContext = devEnvResourcesSqliteContext;
+        _scopeFactory = scopeFactory;
     }
 
     public bool GenerateNewCaptchaForUname(string uname, out string? newCaptcha) {
         newCaptcha = null;
         // [WARNING] This is NOT the simplest way to use SQLite, I'm just trying out the DbContext approach. For a simpler & more primitive way please refer to https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli!
         if (_environment.IsDevelopment()) {
-            SqlitePlayer testPlayer = _devEnvResourcesSqliteContext.players.First<SqlitePlayer>(p => p.name == uname);
-            if (null != testPlayer) {
-                newCaptcha = _randNumGenerator.Next(100000, 99999).ToString();
-                inRamCache.Set<string>(uname, newCaptcha, TimeSpan.FromMinutes(2));
-                _logger.LogInformation("Generated newCaptcha for uname={0}: newCaptcha={1}", uname, newCaptcha);
+            // DbContext is a scoped service, see https://stackoverflow.com/questions/36332239/use-dbcontext-in-asp-net-singleton-injected-class for more information.
+            using (var scope = _scopeFactory.CreateScope()) {
+                var db = scope.ServiceProvider.GetRequiredService<DevEnvResourcesSqliteContext>();
+                SqlitePlayer testPlayer = db.players.First<SqlitePlayer>(p => p.name == uname);
+                if (null != testPlayer) {
+                    newCaptcha = _randNumGenerator.Next(100000, 99999).ToString();
+                    inRamCache.Set<string>(uname, newCaptcha, TimeSpan.FromMinutes(2));
+                    _logger.LogInformation("Generated newCaptcha for uname={0}: newCaptcha={1}", uname, newCaptcha);
+                }
             }
+            
         }
         return (null != newCaptcha);
     }
