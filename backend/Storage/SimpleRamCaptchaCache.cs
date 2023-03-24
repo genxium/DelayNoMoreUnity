@@ -12,6 +12,9 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _environment;
     private readonly IServiceScopeFactory _scopeFactory;
+    private readonly MemoryCacheEntryOptions _cacheEntryOptions = new MemoryCacheEntryOptions()
+        .SetSlidingExpiration(TimeSpan.FromMinutes(2))
+        .SetSize(1); // Always use size=1 for Captcha
 
     private readonly Random _randNumGenerator = new Random();
 
@@ -34,10 +37,10 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
             // DbContext is a scoped service, see https://stackoverflow.com/questions/36332239/use-dbcontext-in-asp-net-singleton-injected-class for more information.
             using (var scope = _scopeFactory.CreateScope()) {
                 var db = scope.ServiceProvider.GetRequiredService<DevEnvResourcesSqliteContext>();
-                SqlitePlayer testPlayer = db.players.First<SqlitePlayer>(p => p.name == uname);
+                SqlitePlayer? testPlayer = db.Players.Where(p => p.name == uname).First<SqlitePlayer?>();
                 if (null != testPlayer) {
-                    newCaptcha = _randNumGenerator.Next(100000, 99999).ToString();
-                    inRamCache.Set<string>(uname, newCaptcha, TimeSpan.FromMinutes(2));
+                    newCaptcha = _randNumGenerator.Next(10000, 99999).ToString();
+                    inRamCache.Set<string>(uname, newCaptcha, _cacheEntryOptions);
                     _logger.LogInformation("Generated newCaptcha for uname={0}: newCaptcha={1}", uname, newCaptcha);
                 }
             }

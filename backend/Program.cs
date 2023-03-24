@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 if (builder.Environment.IsDevelopment()) {
     builder.Services.AddDbContext<DevEnvResourcesSqliteContext>(options => {
         // This sqlite file will be copied into executable directory upon "dotnet build" too, configured in "backend.csproj"
-        options.UseSqlite(builder.Configuration.GetValue<string>("DevEnvResourcesDbPath")); // [WARNING] NuGet package "Microsoft.EntityFrameworkCore.Sqlite" is required to provide "DbContextOptionsBuilder.UseSqlite" method here.
+        var DevEnvResourcesDbPath = builder.Configuration.GetValue<string>("DevEnvResourcesDbPath");
+        options.UseSqlite($"Data Source={DevEnvResourcesDbPath}"); // [WARNING] NuGet package "Microsoft.EntityFrameworkCore.Sqlite" is required to provide "DbContextOptionsBuilder.UseSqlite" method here.
     });
 }
 builder.Services.AddSingleton<IAuthTokenCache, SimpleRamAuthTokenCache>();

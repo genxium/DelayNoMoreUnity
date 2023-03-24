@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
 using backend.Storage.Dao;
 
 namespace backend.Storage;
@@ -12,7 +10,7 @@ public class DevEnvResourcesSqliteContext : DbContext {
     }
 
 
-    public DbSet<SqlitePlayer> players { get; } = null!;
+    public DbSet<SqlitePlayer> Players { get; set; } = null!;
 }
 
  

@@ -9,6 +9,9 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
         new MemoryCacheOptions {
             SizeLimit = 2048
         });
+    private readonly MemoryCacheEntryOptions _cacheEntryOptions = new MemoryCacheEntryOptions()
+        .SetSlidingExpiration(TimeSpan.FromMinutes(2))
+        .SetSize(1); // Always use size=1 for AuthToken
 
     public SimpleRamAuthTokenCache(ILogger<SimpleRamAuthTokenCache> logger) {
         _logger = logger;
@@ -21,7 +24,7 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
     }
 
     public bool setPlayerLoginRecord(string token, int playerId) {
-        inRamCache.Set<int>(token, playerId, TimeSpan.FromMinutes(2));
+        inRamCache.Set(token, playerId, _cacheEntryOptions);
         return true;
     }
 
