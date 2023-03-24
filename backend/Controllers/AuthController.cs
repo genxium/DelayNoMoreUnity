@@ -7,17 +7,26 @@ namespace backend.Controllers;
 [Route("/Auth")]
 public class AuthController : ControllerBase {
     private readonly ILogger<AuthController> _logger;
-    private readonly ISimpleCache _tokenCache;
+    private readonly IAuthTokenCache _tokenCache;
+    private readonly ICaptchaCache _captchaCache;
 
-    
-    public AuthController(ILogger<AuthController> logger, ISimpleCache tokenCache) {
+    public AuthController(ILogger<AuthController> logger, IAuthTokenCache tokenCache, ICaptchaCache captchaCache) {
         _logger = logger;
         _tokenCache = tokenCache;
+        _captchaCache = captchaCache;
+    }
+
+    [HttpGet]
+    [Route("/SmsCaptcha/Get")]
+    public ActionResult GetCaptcha([FromQuery] string uname) {
+        string? newCaptcha = null;
+        bool res = _captchaCache.GenerateNewCaptchaForUname(uname, out newCaptcha);
+        return Ok(newCaptcha);
     }
 
     [HttpPost]
-    [Route("/SmsCaptcha/Get")]
-    public async Task<ActionResult<string>> GetCaptcha([FromForm] string uname) {
-        return Ok();
+    [Route("/SmsCaptcha/Login")]
+    public ActionResult<string> Login([FromForm] string uname, [FromForm] string captcha) {
+        throw new NotImplementedException();
     }
 }

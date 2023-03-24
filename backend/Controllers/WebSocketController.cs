@@ -11,7 +11,7 @@ public class WebSocketController : ControllerBase {
 
     [HttpGet] // Adding this Attribute just for Swagger recognition :)
     [Route("/Ws")]
-    public async Task Get() {
+    public async Task Get([FromQuery] string authToken) {
         if (HttpContext.WebSockets.IsWebSocketRequest) {
             _logger.LogInformation("Got a websocket connection request");
             using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();

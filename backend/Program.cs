@@ -1,11 +1,21 @@
 using backend.Storage;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+if (builder.Environment.IsDevelopment()) {
+    builder.Services.AddDbContext<DevEnvResourcesSqliteContext>(options => {
+        // This sqlite file will be copied into executable directory upon "dotnet build" too, configured in "backend.csproj"
+        options.UseSqlite(builder.Configuration.GetValue<string>("DevEnvResourcesDbPath")); // [WARNING] NuGet package "Microsoft.EntityFrameworkCore.Sqlite" is required to provide "DbContextOptionsBuilder.UseSqlite" method here.
+    });
+}
+builder.Services.AddSingleton<IAuthTokenCache, SimpleRamAuthTokenCache>();
+builder.Services.AddSingleton<ICaptchaCache, SimpleRamCaptchaCache>();
 builder.Services.AddControllers();
-builder.Services.AddSingleton<ISimpleCache, TokenCache>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -29,29 +39,6 @@ if (app.Environment.IsDevelopment()) {
     // Enable swagger in Development
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    var DevEnvResourcesDbPath = builder.Configuration.GetValue<string>("DevEnvResourcesDbPath"); // This sqlite file will be copied into executable directory upon "dotnet build" too, configured in "backend.csproj"
-    app.Logger.LogInformation("DevEnvResourcesDbPath={0}", DevEnvResourcesDbPath);
-    using (var connection = new SqliteConnection(String.Format("Data Source={0}", DevEnvResourcesDbPath))) {
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText =
-        @"
-        SELECT *
-        FROM test_player
-        ";
-
-        using (var reader = command.ExecuteReader()) {
-            if (reader.HasRows) {
-                app.Logger.LogInformation("Loaded Development env specific test players:");
-            }
-            while (reader.Read()) {
-                var name = reader.GetString(0);
-                app.Logger.LogInformation("{0}", name);
-            }
-        }
-    }
 }
 
 app.MapControllers();

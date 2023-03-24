@@ -1,15 +1,16 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace backend.Storage;
-public class TokenCache : ISimpleCache {
+public class SimpleRamAuthTokenCache : IAuthTokenCache {
 
-    private readonly ILogger<TokenCache> _logger;
+    private readonly ILogger<SimpleRamAuthTokenCache> _logger;
 
     private MemoryCache inRamCache { get; } = new MemoryCache(
         new MemoryCacheOptions {
             SizeLimit = 2048
         });
-    public TokenCache(ILogger<TokenCache> logger) {
+
+    public SimpleRamAuthTokenCache(ILogger<SimpleRamAuthTokenCache> logger) {
         _logger = logger;
     }
 
