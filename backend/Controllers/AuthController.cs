@@ -50,7 +50,7 @@ public class AuthController : Controller {
             _logger.LogInformation("/SmsCaptcha/Login#2 [ uname={0}, captcha={1} ]: Generated newToken [ playerId={2}, newToken={3} ]", uname, captcha, playerId, newAuthToken);
             return Json(new { RetCode = ErrCode.Ok, PlayerId=playerId, NewAuthToken = newAuthToken, ExpiresAt = absoluteExpiryTime });
         } else {
-            _logger.LogInformation("/SmsCaptcha/Login#2 [ uname={0}, captcha={1} ]: Failed captcha validation ]", uname, captcha);
+            _logger.LogWarning("/SmsCaptcha/Login#2 [ uname={0}, captcha={1} ]: Failed captcha validation ]", uname, captcha);
             return Json(new { RetCode = ErrCode.UnknownError });
         }
     }
@@ -65,7 +65,7 @@ public class AuthController : Controller {
             _logger.LogInformation("/AuthToken/Login#2 [ token={0}, proposedPlayerId={1} ]: Validated successfully ]", token, playerId);
             return Json(new { RetCode = ErrCode.Ok });
         } else {
-            _logger.LogInformation("/AuthToken/Login#2 [ token={0}, proposedPlayerId={1} ]: Failed auth token validation ]", token, playerId);
+            _logger.LogWarning("/AuthToken/Login#2 [ token={0}, proposedPlayerId={1} ]: Failed auth token validation ]", token, playerId);
             return Json(new { RetCode = ErrCode.UnknownError });
         }
     }

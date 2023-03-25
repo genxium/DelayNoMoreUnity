@@ -49,8 +49,8 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
     public bool ValidateUnameCaptchaPair(string uname, string captcha, out int playerId) {
         CaptchaCacheEntry? entry = null;
         playerId = shared.Battle.INVALID_DEFAULT_PLAYER_ID;
-        bool res1 = inRamCache.TryGetValue<CaptchaCacheEntry?>(uname, out entry);
-        if (res1 && captcha.Equals(entry.Captcha)) {
+        bool res1 = inRamCache.TryGetValue(uname, out entry);
+        if (res1 && null != entry && captcha.Equals(entry.Captcha)) {
             playerId = entry.PlayerId;
             return true;
         } else {
