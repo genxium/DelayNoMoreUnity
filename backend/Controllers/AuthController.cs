@@ -40,7 +40,7 @@ public class AuthController : Controller {
         _logger.LogInformation("/SmsCaptcha/Login#1 [ uname={0}, captcha={1} ]", uname, captcha);
         string? newAuthToken = null;
         DateTimeOffset? absoluteExpiryTime = null;
-        int playerId = Battle.INVALID_DEFAULT_PLAYER_ID;
+        int playerId = shared.Battle.INVALID_DEFAULT_PLAYER_ID;
         bool res1 = _captchaCache.ValidateUnameCaptchaPair(uname, captcha, out playerId);
         bool res2 = false;
         if (res1) {

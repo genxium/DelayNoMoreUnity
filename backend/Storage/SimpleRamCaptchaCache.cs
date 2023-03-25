@@ -39,7 +39,7 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
                 if (null != testPlayer) {
                     newCaptcha = _randGenerator.Next(10000, 99999).ToString();
                     absoluteExpiryTime = (DateTimeOffset.Now + _cacheEntryOptions.SlidingExpiration);
-                    inRamCache.Set(uname, new CaptchaCacheEntry { Captcha = newCaptcha, PlayerId = testPlayer.id }, _cacheEntryOptions);
+                    inRamCache.Set(uname, new CaptchaCacheEntry(newCaptcha, testPlayer.id), _cacheEntryOptions);
                 }
             }
         }
