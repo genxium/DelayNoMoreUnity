@@ -254,9 +254,11 @@ public class MapController : MonoBehaviour {
                     int ii = ConvertToFirstUsedRenderFrameId(j);
                     if (ii < i) {
                         /*
-						   [WARNING] 
-						   If we don't rollback at this spot, when the mutated "delayedInputFrame.inputList" a.k.a. "inputFrame#j" matches the later downsynced version, rollback WOULDN'T be triggered for the incorrectly rendered "renderFrame#(ii+1)", and it would STAY IN HISTORY FOREVER -- as the history becomes incorrect, EVERY LATEST renderFrame since "inputFrame#j" was mutated would be ALWAYS incorrectly rendering too!
-						 */
+                           [WARNING] 
+                           If we don't rollback at this spot, when the mutated "delayedInputFrame.inputList" a.k.a. "inputFrame#j" matches the later downsynced version, rollback WOULDN'T be triggered for the incorrectly rendered "renderFrame#(ii+1)", and it would STAY IN HISTORY FOREVER -- as the history becomes incorrect, EVERY LATEST renderFrame since "inputFrame#j" was mutated would be ALWAYS incorrectly rendering too!
+
+                           The update to chaserRenderFrameId here would NOT impact the current cycle of rollbackAndChase !
+                         */
                         _handleIncorrectlyRenderedPrediction(j, false);
                     }
                 }

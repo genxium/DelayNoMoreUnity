@@ -1,8 +1,6 @@
+using backend.Battle;
 using backend.Storage;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +14,7 @@ if (builder.Environment.IsDevelopment()) {
 }
 builder.Services.AddSingleton<IAuthTokenCache, SimpleRamAuthTokenCache>();
 builder.Services.AddSingleton<ICaptchaCache, SimpleRamCaptchaCache>();
+builder.Services.AddSingleton<IRoomManager, PriorityBasedRoomManager>();
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

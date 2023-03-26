@@ -1,6 +1,7 @@
 using backend.Storage;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Mvc;
+using backend.Battle;
 
 namespace backend.Controllers;
 
@@ -8,10 +9,12 @@ public class WebSocketController : ControllerBase {
     private readonly ILogger _logger; // Dependency injection reference https://learn.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-7.0#create-logs
 
     private readonly IAuthTokenCache _tokenCache;
+    private readonly IRoomManager _roomManager;
 
-    public WebSocketController(ILogger<WebSocketController> logger, IAuthTokenCache tokenCache) {
+    public WebSocketController(ILogger<WebSocketController> logger, IAuthTokenCache tokenCache, IRoomManager roomManager) {
         _logger = logger;
         _tokenCache = tokenCache;
+        _roomManager = roomManager;
     }
 
     [HttpGet] // Adding this Attribute just for Swagger recognition :)

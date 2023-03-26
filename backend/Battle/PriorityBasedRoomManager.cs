@@ -1,8 +1,30 @@
 ﻿namespace backend.Battle;
-public class PriorityBasedRoomManager {
-    private Mutex mux = new Mutex();
-    public PriorityQueue<Room, int> pq = new PriorityQueue<Room, int>();
-    public Dictionary<int, Room> dict = new Dictionary<int, Room>();
+public class PriorityBasedRoomManager : IRoomManager {
+    private Mutex mux;
+    public PriorityQueue<Room, int> pq;
+    public Dictionary<int, Room> dict;
+
+    private ILogger<PriorityBasedRoomManager> _logger;
+    private ILoggerFactory _loggerFactory;
+    public PriorityBasedRoomManager(ILogger<PriorityBasedRoomManager> logger, ILoggerFactory loggerFactory) {
+        _logger = logger;
+        _loggerFactory = loggerFactory;
+
+        mux = new Mutex();
+
+        int initialCountOfRooms = 32;
+        pq = new PriorityQueue<Room, int>(initialCountOfRooms);
+        dict = new Dictionary<int, Room>();
+
+        for (int i = 0; i < initialCountOfRooms; i++) {
+            int roomCapacity = 2;
+            Room r = new Room(_loggerFactory);
+            r.Id = i + 1;
+            r.Capacity = roomCapacity;            
+            r.OnDismissed();
+            this.Push(0, r);
+        }
+    }
 
     public Room? GetRoom(int roomId) {
         Room? r = null;
@@ -30,10 +52,11 @@ public class PriorityBasedRoomManager {
             pq.Enqueue(r, newScore);
             dict.Add(r.Id, r);
         } finally {
-            mux.WaitOne();
+            mux.ReleaseMutex();
         }
         return true;
     }
+
     ~PriorityBasedRoomManager() {
         mux.Dispose();
     }
