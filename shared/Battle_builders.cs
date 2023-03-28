@@ -54,7 +54,7 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToPlayerDownsync(int id, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, int battleState, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, PlayerDownsync dst) {
+        public static void AssignToPlayerDownsync(int id, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, PlayerDownsync dst) {
             dst.Id = id;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
@@ -68,7 +68,6 @@ namespace shared {
             dst.ActiveSkillHit = activeSkillHit;
             dst.FramesInvinsible = framesInvinsible;
             dst.Speed = speed;
-            dst.BattleState = battleState;
             dst.CharacterState = characterState;
             dst.JoinIndex = joinIndex;
             dst.Hp = hp;

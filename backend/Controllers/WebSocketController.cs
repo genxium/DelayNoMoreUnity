@@ -2,6 +2,8 @@ using backend.Storage;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Mvc;
 using backend.Battle;
+using shared;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace backend.Controllers;
 
@@ -19,7 +21,7 @@ public class WebSocketController : ControllerBase {
 
     [HttpGet] // Adding this Attribute just for Swagger recognition :)
     [Route("/Ws")]
-    public async Task Get([FromQuery] string authToken, [FromQuery] int playerId) {
+    public async Task Get([FromQuery] string authToken, [FromQuery] int playerId, [FromQuery] int speciesId) {
         if (HttpContext.WebSockets.IsWebSocketRequest) {
             _logger.LogInformation("Got a websocket connection request#1 [ authToken={0}, playerId={1} ]", authToken, playerId);
             if (_tokenCache.ValidateToken(authToken, playerId)) {
@@ -35,7 +37,7 @@ public class WebSocketController : ControllerBase {
         }
     }
 
-    private static async Task Echo(WebSocket webSocket, int playerId) {
+    private async Task Echo(WebSocket webSocket, int playerId) {
         var buffer = new byte[1024 * 4];
         var receiveResult = await webSocket.ReceiveAsync(
             new ArraySegment<byte>(buffer), CancellationToken.None);
@@ -55,5 +57,33 @@ public class WebSocketController : ControllerBase {
             receiveResult.CloseStatus.Value,
             receiveResult.CloseStatusDescription,
             CancellationToken.None);
+    }
+
+    private async Task HandleNewWsSession(WebSocket webSocket, int playerId, int speciesId) {
+        using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource()) {
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            WebSocketCloseStatus closeCode = WebSocketCloseStatus.Empty;
+            string? closeReason = null;
+
+            var buffer = new byte[1024];
+
+            while (!cancellationToken.IsCancellationRequested) {
+
+                var receiveResult = await webSocket.ReceiveAsync(
+                    new ArraySegment<byte>(buffer), cancellationToken);
+
+                if (receiveResult.CloseStatus.HasValue) {
+                    closeCode = receiveResult.CloseStatus.Value;
+                    closeReason = receiveResult.CloseStatusDescription;
+                    break;
+                }
+            }
+            
+            await webSocket.CloseAsync(
+                closeCode,
+                closeReason,
+                CancellationToken.None); // We won't cancel the closing of a websocket session
+        }
     }
 }

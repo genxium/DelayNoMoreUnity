@@ -50,8 +50,8 @@ message PlayerDownsync {
 	int32 dirY = 5;   
 	int32 velX = 6;
 	int32 velY = 7; // "velX" and "velY" is used to record the accumulated effect by inertia and accelerations (including gravity)
-	int32 speed = 8; // this is the instantaneous scalar attribute of a character, different from but will be accounted in "velX" and "velY" 
-	int32 battleState = 9;
+	int32 speed = 8; // this is the instantaneous scalar attribute of a character, different from but will be accounted in "velX" and "velY"
+	int32 speciesId = 9; // For evolution during battle
 	int32 joinIndex = 10;
 	int32 colliderRadius = 11;
 	bool removed = 12;
@@ -77,8 +77,6 @@ message PlayerDownsync {
 	bool capturedByInertia = 29; // like "inAir", it’s by design a standalone field only inferred by the calc result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState"
 	int32 revivalVirtualGridX = 30;
 	int32 revivalVirtualGridY = 31;
-
-	int32 speciesId = 32; // For evolution during battle
 
 	string name = 997;
 	string displayName = 998;
