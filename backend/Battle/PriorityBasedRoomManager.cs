@@ -18,10 +18,7 @@ public class PriorityBasedRoomManager : IRoomManager {
 
         for (int i = 0; i < initialCountOfRooms; i++) {
             int roomCapacity = 2;
-            Room r = new Room(_loggerFactory);
-            r.Id = i + 1;
-            r.Capacity = roomCapacity;            
-            r.OnDismissed();
+            Room r = new Room(_loggerFactory, i+1, roomCapacity);
             this.Push(0, r);
         }
     }
@@ -38,7 +35,7 @@ public class PriorityBasedRoomManager : IRoomManager {
         try {
             if (0 < pq.Count) {
                 r = pq.Dequeue();
-                dict.Remove(r.Id);
+                dict.Remove(r.id);
             }
         } finally {
             mux.WaitOne();
@@ -50,7 +47,7 @@ public class PriorityBasedRoomManager : IRoomManager {
         mux.WaitOne();
         try {
             pq.Enqueue(r, newScore);
-            dict.Add(r.Id, r);
+            dict.Add(r.id, r);
         } finally {
             mux.ReleaseMutex();
         }

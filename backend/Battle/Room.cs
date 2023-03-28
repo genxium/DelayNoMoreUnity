@@ -7,34 +7,32 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using System.Diagnostics.Metrics;
 using static backend.Battle.Room;
+using Google.Protobuf.WellKnownTypes;
+using System;
+using System.Runtime.Intrinsics.X86;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace backend.Battle;
 public class Room {
     public enum RoomBattleState {
         IDLE = 0,
-
         WAITING = -1,
-
         PREPARE = 10000000,
-
         IN_BATTLE = 10000001,
-
-
         STOPPING_BATTLE_FOR_SETTLEMENT = 10000002,
-
         IN_SETTLEMENT = 10000003,
-
         IN_DISMISSAL = 10000004
     }
 
-    public int Id;
-    public int Capacity;
+    public int id;
+    public int capacity;
 
-    int BattleDurationFrames;
-    int NstDelayFrames;
+    int renderFrameId;
+    int battleDurationFrames;
+    int nstDelayFrames;
 
-    Dictionary<int, Player> Players;
-    Player[] PlayersArr; // ordered by joinIndex
+    Dictionary<int, Player> players;
+    Player[] playersArr; // ordered by joinIndex
 
     /**
 		 * The following `PlayerDownsyncSessionDict` is NOT individually put
@@ -54,44 +52,44 @@ public class Room {
 	     *
 	     * Moreover, during the invocation of `PlayerSignalToCloseDict`, the `Player` instance is supposed to be deallocated (though not synchronously).
 	*/
-    Dictionary<int, WebSocket> PlayerDownsyncSessionDict;
-    Dictionary<int, CancellationTokenSource> PlayerSignalToCloseDict;
-    Dictionary<int, Watchdog> PlayerActiveWatchdogDict;
-    RoomBattleState State;
-    int EffectivePlayerCount;
+    Dictionary<int, WebSocket?> playerDownsyncSessionDict;
+    Dictionary<int, CancellationTokenSource?> playerSignalToCloseDict;
+    Dictionary<int, Watchdog?> playerActiveWatchdogDict;
+    RoomBattleState state;
+    int effectivePlayerCount;
 
-    FrameRingBuffer<InputFrameDownsync> InputBuffer; // Indices are STRICTLY consecutive
+    FrameRingBuffer<InputFrameDownsync> inputBuffer; // Indices are STRICTLY consecutive
 
     Mutex inputBufferLock;         // Guards [InputsBuffer, LatestPlayerUpsyncedInputFrameId, LastAllConfirmedInputFrameId, LastAllConfirmedInputList, LastAllConfirmedInputFrameIdWithChange, LastIndividuallyConfirmedInputFrameId, LastIndividuallyConfirmedInputList, player.LastConsecutiveRecvInputFrameId]
     int LatestPlayerUpsyncedInputFrameId;
     ulong[] LastAllConfirmedInputList;
-    bool[] JoinIndexBooleanArr;
+    bool[] joinIndexBooleanArr;
 
-    bool BackendDynamicsEnabled;
+    bool backendDynamicsEnabled;
 
     long dilutedRollbackEstimatedDtNanos;
 
-    BattleColliderInfo colliderInfo; // Compositing to send centralized ma
-    int[] LastIndividuallyConfirmedInputFrameId;
-    ulong[] LastIndividuallyConfirmedInputList;
+    int[] lastIndividuallyConfirmedInputFrameId;
+    ulong[] lastIndividuallyConfirmedInputList;
 
     Mutex battleUdpTunnelLock;
     PeerUdpAddr? battleUdpTunnelAddr;
     UdpClient? battleUdpTunnel;
 
     ILogger<Room> _logger;
-    public Room(ILoggerFactory loggerFactory) {
+    public Room(ILoggerFactory loggerFactory, int roomId, int roomCapacity) {
         _logger = loggerFactory.CreateLogger<Room>();
-        inputBufferLock = new Mutex();
-        battleUdpTunnelLock = new Mutex();
+        id = roomId;
+        capacity = roomCapacity;
+        onDismissed();
     }
 
     public int AddPlayerIfPossible(Player pPlayerFromDbInit, int playerId, int speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer) {
-        if (RoomBattleState.IDLE != State && RoomBattleState.WAITING != State) {
+        if (RoomBattleState.IDLE != state && RoomBattleState.WAITING != state) {
             return ErrCode.PlayerNotAddableToRoom;
         }
 
-        if (Players.ContainsKey(playerId)) {
+        if (players.ContainsKey(playerId)) {
             return ErrCode.SamePlayerAlreadyInSameRoom;
         }
 
@@ -102,35 +100,93 @@ public class Room {
         pPlayerFromDbInit.BattleState = Player.PlayerBattleState.ADDED_PENDING_BATTLE_COLLIDER_ACK;
 
         pPlayerFromDbInit.PlayerDownsync = new PlayerDownsync();
+        pPlayerFromDbInit.PlayerDownsync.SpeciesId = speciesId;
         pPlayerFromDbInit.PlayerDownsync.ColliderRadius = DEFAULT_PLAYER_RADIUS; // Hardcoded
         pPlayerFromDbInit.PlayerDownsync.InAir = true;                           // Hardcoded
 
-        Players[playerId] = pPlayerFromDbInit;
+        players[playerId] = pPlayerFromDbInit;
 
-        PlayerDownsyncSessionDict[playerId] = session;
-        PlayerSignalToCloseDict[playerId] = signalToCloseConnOfThisPlayer;
+        playerDownsyncSessionDict[playerId] = session;
+        playerSignalToCloseDict[playerId] = signalToCloseConnOfThisPlayer;
 
         var signalToCloseConnOfThisPlayerCapture = signalToCloseConnOfThisPlayer;
         var newWatchdog = new Watchdog(5000, new TimerCallback((timerState) => {
             signalToCloseConnOfThisPlayerCapture.Cancel();
         }));
         newWatchdog.Kick();
-        PlayerActiveWatchdogDict[playerId] = newWatchdog;
+        playerActiveWatchdogDict[playerId] = newWatchdog;
 
         return ErrCode.Ok;
     }
 
+    public void OnDisconnected() {
 
-    public void OnDismissed() {
-        inputBufferLock.Dispose();
+    }
+
+    public void onDismissed() {
+        renderFrameId = 0;
+        battleDurationFrames = 10*60;
+        nstDelayFrames = 24;
+
+        players = new Dictionary<int, Player>();
+        playersArr = new Player[capacity];
+        foreach (var item in playerActiveWatchdogDict) {
+            if (null == item.Value) continue;
+            item.Value.Stop();
+        }
+        playerActiveWatchdogDict = new Dictionary<int, Watchdog?>(); // Would allow the destructor of each "Watchdog" value to dispose its timer  
+        playerDownsyncSessionDict = new Dictionary<int, WebSocket?>();
+        playerSignalToCloseDict = new Dictionary<int, CancellationTokenSource?>();
+        state = RoomBattleState.IDLE;
+        effectivePlayerCount = 0;
+
+        int renderBufferSize = 1024;
+        inputBuffer = new FrameRingBuffer<InputFrameDownsync>((renderBufferSize >> 1) + 1);
+
+  
+        LatestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
+        LastAllConfirmedInputList = new ulong[capacity];
+        joinIndexBooleanArr = new bool[capacity];
+
+        backendDynamicsEnabled = false;
+
+        lastIndividuallyConfirmedInputFrameId = new int[capacity];
+        lastIndividuallyConfirmedInputList = new ulong[capacity];
+
+        if (null != inputBufferLock) {
+            inputBufferLock.Dispose();
+        }
         inputBufferLock = new Mutex();
 
-        battleUdpTunnelLock.WaitOne();
-        battleUdpTunnelAddr = null;
-        battleUdpTunnel = null;
-        battleUdpTunnelLock.ReleaseMutex();
-        battleUdpTunnelLock.Dispose();
+        if (null != battleUdpTunnelLock) {
+            battleUdpTunnelLock.WaitOne();
+            battleUdpTunnelAddr = null;
+            battleUdpTunnel = null;
+            battleUdpTunnelLock.ReleaseMutex();
+            battleUdpTunnelLock.Dispose();
+        }
         battleUdpTunnelLock = new Mutex();
+    }
+
+    void onPlayerAdded(int playerId) {
+        this.effectivePlayerCount++;
+
+        if (1 == effectivePlayerCount) {
+            this.state = RoomBattleState.WAITING;
+        }
+
+        for (int i = 0; i < capacity; i++) {
+            if (!joinIndexBooleanArr[i]
+                &&
+                null != players[playerId]
+                &&
+                null != players[playerId].PlayerDownsync) {
+                players[playerId].PlayerDownsync.JoinIndex = i + 1;
+                joinIndexBooleanArr[i] = true;
+                var chosenCh = characters[players[playerId].PlayerDownsync.SpeciesId];
+                players[playerId].PlayerDownsync.Speed = chosenCh.Speed;
+            }
+        }
     }
 
     ~Room() {
