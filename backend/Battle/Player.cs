@@ -15,6 +15,7 @@ public class Player {
     public int AckingInputFrameId;
 
     public enum PlayerBattleState {
+        IMPOSSIBLE = -2,
         ADDED_PENDING_BATTLE_COLLIDER_ACK = 0,
         READDED_PENDING_BATTLE_COLLIDER_ACK = 1,
         READDED_BATTLE_COLLIDER_ACKED = 2,
@@ -26,5 +27,10 @@ public class Player {
     }
 
     public PlayerBattleState BattleState;
-    public PlayerDownsync? PlayerDownsync;
+    public PlayerDownsync PlayerDownsync;
+
+    public Player(PlayerDownsync playerDownsync) {
+        BattleState = PlayerBattleState.IMPOSSIBLE;
+        PlayerDownsync = playerDownsync;
+    }
 }

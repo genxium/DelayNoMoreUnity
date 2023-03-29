@@ -48,7 +48,7 @@ public class AuthController : Controller {
         }
         if (res1 && res2) {
             _logger.LogInformation("/SmsCaptcha/Login#2 [ uname={0}, captcha={1} ]: Generated newToken [ playerId={2}, newToken={3} ]", uname, captcha, playerId, newAuthToken);
-            return Json(new { RetCode = ErrCode.Ok, PlayerId=playerId, NewAuthToken = newAuthToken, ExpiresAt = absoluteExpiryTime });
+            return Json(new { RetCode = ErrCode.IsTestAcc, PlayerId=playerId, NewAuthToken = newAuthToken, ExpiresAt = absoluteExpiryTime });
         } else {
             _logger.LogWarning("/SmsCaptcha/Login#2 [ uname={0}, captcha={1} ]: Failed captcha validation ]", uname, captcha);
             return Json(new { RetCode = ErrCode.UnknownError });

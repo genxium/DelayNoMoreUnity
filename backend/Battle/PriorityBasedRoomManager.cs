@@ -1,7 +1,7 @@
 ﻿namespace backend.Battle;
 public class PriorityBasedRoomManager : IRoomManager {
     private Mutex mux;
-    public PriorityQueue<Room, int> pq;
+    public PriorityQueue<Room, float> pq;
     public Dictionary<int, Room> dict;
 
     private ILogger<PriorityBasedRoomManager> _logger;
@@ -13,7 +13,7 @@ public class PriorityBasedRoomManager : IRoomManager {
         mux = new Mutex();
 
         int initialCountOfRooms = 32;
-        pq = new PriorityQueue<Room, int>(initialCountOfRooms);
+        pq = new PriorityQueue<Room, float>(initialCountOfRooms);
         dict = new Dictionary<int, Room>();
 
         for (int i = 0; i < initialCountOfRooms; i++) {
@@ -43,7 +43,7 @@ public class PriorityBasedRoomManager : IRoomManager {
         return r;
     }
 
-    public bool Push(int newScore, Room r) {
+    public bool Push(float newScore, Room r) {
         mux.WaitOne();
         try {
             pq.Enqueue(r, newScore);
