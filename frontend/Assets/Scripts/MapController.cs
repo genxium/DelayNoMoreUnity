@@ -212,7 +212,7 @@ public class MapController : MonoBehaviour {
             // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here
             initConfirmedList = (existingInputFrame.ConfirmedList | selfJoinIndexMask);
         }
-        InputManager iptmgr = this.gameObject.GetComponent<InputManager>();
+        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         currSelfInput = iptmgr.GetImmediateEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
         prefabbedInputList[(joinIndex - 1)] = currSelfInput;
         while (inputBuffer.EdFrameId <= inputFrameId) {

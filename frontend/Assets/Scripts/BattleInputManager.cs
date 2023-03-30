@@ -4,7 +4,7 @@ using System;
 using UnityEngine.InputSystem.OnScreen;
 using DG.Tweening;
 
-public class InputManager : MonoBehaviour {
+public class BattleInputManager : MonoBehaviour {
     private const float magicLeanLowerBound = 0.1f;
     private const float magicLeanUpperBound = 0.9f;
     private const float joyStickEps = 0.1f;

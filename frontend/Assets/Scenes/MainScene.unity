@@ -552,20 +552,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 1750589025216623398, guid: 9c2d7ac674ac8744e871fff6c276a880, type: 3}
---- !u!114 &1901904081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1901904073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8424a36e930936244bdf59ec0a459d81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  joystick: {fileID: 1978785421}
-  btnA: {fileID: 324869639}
 --- !u!114 &1901904082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,8 +579,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1901904081}
-        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
+      - m_Target: {fileID: 1901904083}
+        m_TargetAssemblyTypeName: BattleInputManager, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -609,8 +595,8 @@ MonoBehaviour:
     m_ActionName: SelfPlayer/Move
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1901904081}
-        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
+      - m_Target: {fileID: 1901904083}
+        m_TargetAssemblyTypeName: BattleInputManager, Assembly-CSharp
         m_MethodName: OnBtnAInput
         m_Mode: 0
         m_Arguments:
@@ -625,8 +611,8 @@ MonoBehaviour:
     m_ActionName: SelfPlayer/BtnA[/Keyboard/j]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1901904081}
-        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
+      - m_Target: {fileID: 1901904083}
+        m_TargetAssemblyTypeName: BattleInputManager, Assembly-CSharp
         m_MethodName: OnMoveByKeyboard
         m_Mode: 0
         m_Arguments:
@@ -644,6 +630,20 @@ MonoBehaviour:
   m_DefaultActionMap: SelfPlayer
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1901904083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901904073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8424a36e930936244bdf59ec0a459d81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joystick: {fileID: 1978785421}
+  btnA: {fileID: 324869639}
 --- !u!1 &1978785421
 GameObject:
   m_ObjectHideFlags: 0
