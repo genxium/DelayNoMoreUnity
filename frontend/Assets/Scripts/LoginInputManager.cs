@@ -35,7 +35,8 @@ public class LoginInputManager : MonoBehaviour {
     }
 
     public void OnGetCaptchaButtonClicked() {
-        Debug.Log(String.Format("GetCaptchaButton is clicked"));
+        string httpHost = Env.Instance.getHttpHost();
+        Debug.Log(String.Format("GetCaptchaButton is clicked, httpHost={0}", httpHost));
     }
 
     public void OnLoginActionButtonClicked() {
