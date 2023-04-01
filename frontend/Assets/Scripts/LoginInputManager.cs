@@ -2,6 +2,9 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI; // Required when Using UI elements.
+using UnityEngine.Networking;
+using System.Collections;
+using Newtonsoft.Json;
 
 public class LoginInputManager : MonoBehaviour {
 
@@ -37,6 +40,29 @@ public class LoginInputManager : MonoBehaviour {
     public void OnGetCaptchaButtonClicked() {
         string httpHost = Env.Instance.getHttpHost();
         Debug.Log(String.Format("GetCaptchaButton is clicked, httpHost={0}", httpHost));
+
+        StartCoroutine(doRequestGetCapture(httpHost));
+    }
+
+    IEnumerator doRequestGetCapture(string httpHost) {
+        string uri = httpHost + String.Format("/Auth/SmsCaptcha/Get?uname={0}", unameInputValue);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri)) {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result) {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError("Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError("HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log("Received: " + webRequest.downloadHandler.text);
+                    break;
+            }
+        }
     }
 
     public void OnLoginActionButtonClicked() {

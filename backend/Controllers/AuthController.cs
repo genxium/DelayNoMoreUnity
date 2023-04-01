@@ -19,14 +19,15 @@ public class AuthController : Controller {
 
     [HttpGet]
     [Produces("application/json")]
-    [Route("/SmsCaptcha/Get")]
+    [Route("SmsCaptcha/Get")]
     public JsonResult GetCaptcha([FromQuery] string uname) {
-        _logger.LogInformation("/SmsCaptcha/Get#1 [ uname={0} ]", uname);
+        string apiPath = "/Auth/SmsCaptcha/Get";
+        _logger.LogInformation("{0}#1 [ uname={1} ]", apiPath, uname);
         string? newCaptcha = null;
         DateTimeOffset? absoluteExpiryTime = null;
         bool res = _captchaCache.GenerateNewCaptchaForUname(uname, out newCaptcha, out absoluteExpiryTime);
         if (res) {
-            _logger.LogInformation("/SmsCaptcha/Get#2 [ uname={0} ]: Got [ newCaptcha={1} ]", uname, newCaptcha);
+            _logger.LogInformation("{0}#2 [ uname={1} ]: Got [ newCaptcha={2} ]", apiPath, uname, newCaptcha);
             return Json(new { RetCode = ErrCode.Ok, Captcha = newCaptcha, ExpiresAt = absoluteExpiryTime });
         } else {
             return Json(new { RetCode = ErrCode.UnknownError });
@@ -35,9 +36,10 @@ public class AuthController : Controller {
 
     [HttpPost]
     [Produces("application/json")]
-    [Route("/SmsCaptcha/Login")]
+    [Route("SmsCaptcha/Login")]
     public JsonResult Login([FromForm] string uname, [FromForm] string captcha) {
-        _logger.LogInformation("/SmsCaptcha/Login#1 [ uname={0}, captcha={1} ]", uname, captcha);
+        string apiPath = "/Auth/SmsCaptcha/Login";
+        _logger.LogInformation("{0}#1 [ uname={1}, captcha={2} ]", apiPath, uname, captcha);
         string? newAuthToken = null;
         DateTimeOffset? absoluteExpiryTime = null;
         int playerId = shared.Battle.INVALID_DEFAULT_PLAYER_ID;
@@ -47,25 +49,26 @@ public class AuthController : Controller {
             res2 = _tokenCache.GenerateNewLoginRecord(playerId, out newAuthToken, out absoluteExpiryTime);
         }
         if (res1 && res2) {
-            _logger.LogInformation("/SmsCaptcha/Login#2 [ uname={0}, captcha={1} ]: Generated newToken [ playerId={2}, newToken={3} ]", uname, captcha, playerId, newAuthToken);
+            _logger.LogInformation("{0}#2 [ uname={1}, captcha={2} ]: Generated newToken [ playerId={3}, newToken={4} ]", apiPath, uname, captcha, playerId, newAuthToken);
             return Json(new { RetCode = ErrCode.IsTestAcc, PlayerId=playerId, NewAuthToken = newAuthToken, ExpiresAt = absoluteExpiryTime });
         } else {
-            _logger.LogWarning("/SmsCaptcha/Login#2 [ uname={0}, captcha={1} ]: Failed captcha validation ]", uname, captcha);
+            _logger.LogWarning("{0}#2 [ uname={1}, captcha={2} ]: Failed captcha validation ]", apiPath, uname, captcha);
             return Json(new { RetCode = ErrCode.UnknownError });
         }
     }
 
     [HttpPost]
     [Produces("application/json")]
-    [Route("/AuthToken/Login")]
+    [Route("Token/Login")]
     public JsonResult Login([FromForm] string token, [FromForm] int playerId) {
-        _logger.LogInformation("/AuthToken/Login#1 [ token={0}, playerId={1} ]", token, playerId);
+        string apiPath = "/Auth/Token/Login";
+        _logger.LogInformation("{0}#1 [ token={1}, playerId={2} ]", apiPath, token, playerId);
         bool res = _tokenCache.ValidateToken(token, playerId);
         if (res) {
-            _logger.LogInformation("/AuthToken/Login#2 [ token={0}, proposedPlayerId={1} ]: Validated successfully ]", token, playerId);
+            _logger.LogInformation("{0}#2 [ token={1}, proposedPlayerId={2} ]: Validated successfully ]", apiPath, token, playerId);
             return Json(new { RetCode = ErrCode.Ok });
         } else {
-            _logger.LogWarning("/AuthToken/Login#2 [ token={0}, proposedPlayerId={1} ]: Failed auth token validation ]", token, playerId);
+            _logger.LogWarning("{0}#2 [ token={1}, proposedPlayerId={2} ]: Failed auth token validation ]", apiPath, token, playerId);
             return Json(new { RetCode = ErrCode.UnknownError });
         }
     }
