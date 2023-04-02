@@ -28,7 +28,7 @@ public class AuthController : Controller {
         bool res = _captchaCache.GenerateNewCaptchaForUname(uname, out newCaptcha, out absoluteExpiryTime);
         if (res) {
             _logger.LogInformation("{0}#2 [ uname={1} ]: Got [ newCaptcha={2} ]", apiPath, uname, newCaptcha);
-            return Json(new { RetCode = ErrCode.Ok, Captcha = newCaptcha, ExpiresAt = absoluteExpiryTime });
+            return Json(new { RetCode = ErrCode.IsTestAcc, Captcha = newCaptcha, ExpiresAt = absoluteExpiryTime });
         } else {
             return Json(new { RetCode = ErrCode.UnknownError });
         }
@@ -50,7 +50,7 @@ public class AuthController : Controller {
         }
         if (res1 && res2) {
             _logger.LogInformation("{0}#2 [ uname={1}, captcha={2} ]: Generated newToken [ playerId={3}, newToken={4} ]", apiPath, uname, captcha, playerId, newAuthToken);
-            return Json(new { RetCode = ErrCode.IsTestAcc, PlayerId=playerId, NewAuthToken = newAuthToken, ExpiresAt = absoluteExpiryTime });
+            return Json(new { RetCode = ErrCode.Ok, PlayerId=playerId, NewAuthToken = newAuthToken, ExpiresAt = absoluteExpiryTime });
         } else {
             _logger.LogWarning("{0}#2 [ uname={1}, captcha={2} ]: Failed captcha validation ]", apiPath, uname, captcha);
             return Json(new { RetCode = ErrCode.UnknownError });
