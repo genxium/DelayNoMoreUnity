@@ -2,29 +2,9 @@
 using static shared.Battle;
 using System.Net.WebSockets;
 using System.Net.Sockets;
-using backend.Battle;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
-using System.Diagnostics.Metrics;
-using static backend.Battle.Room;
-using Google.Protobuf.WellKnownTypes;
-using System;
-using System.Runtime.Intrinsics.X86;
-using System.Threading;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace backend.Battle;
 public class Room {
-    public enum RoomBattleState {
-        IMPOSSIBLE = -2,
-        IDLE = 0,
-        WAITING = -1,
-        PREPARE = 10000000,
-        IN_BATTLE = 10000001,
-        STOPPING_BATTLE_FOR_SETTLEMENT = 10000002,
-        IN_SETTLEMENT = 10000003,
-        IN_DISMISSAL = 10000004
-    }
 
     public int id;
     public int capacity;
@@ -90,7 +70,7 @@ public class Room {
         renderFrameId = 0;
         battleDurationFrames = 10 * 60;
         nstDelayFrames = 24;
-        state = RoomBattleState.IDLE;
+        state = RoomBattleState.Idle;
         effectivePlayerCount = 0;
         backendDynamicsEnabled = false;
 
@@ -118,7 +98,7 @@ public class Room {
     public int AddPlayerIfPossible(Player pPlayerFromDbInit, int playerId, int speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer) {
         joinerLock.WaitOne();
         try {
-            if (RoomBattleState.IDLE != state && RoomBattleState.WAITING != state) {
+            if (RoomBattleState.Idle != state && RoomBattleState.Waiting != state) {
                 return ErrCode.PlayerNotAddableToRoom;
             }
 
@@ -148,7 +128,7 @@ public class Room {
             effectivePlayerCount++;
 
             if (1 == effectivePlayerCount) {
-                state = RoomBattleState.WAITING;
+                state = RoomBattleState.Waiting;
             }
 
             for (int i = 0; i < capacity; i++) {
@@ -192,14 +172,14 @@ public class Room {
             }
 
             switch (state) {
-                case RoomBattleState.WAITING:
+                case RoomBattleState.Waiting:
                     clearPlayerNetworkSession(playerId);
                     effectivePlayerCount--;
                     joinIndexBooleanArr[thatPlayer.PlayerDownsync.JoinIndex - 1] = false;
 
                     players.Remove(playerId);
                     if (0 == effectivePlayerCount) {
-                        state = RoomBattleState.IDLE;
+                        state = RoomBattleState.Idle;
                     }
                     _logger.LogWarning("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, nowBattleState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
@@ -243,7 +223,7 @@ public class Room {
             playerActiveWatchdogDict = new Dictionary<int, PlayerSessionAckWatchdog>(); // Would allow the destructor of each "Watchdog" value to dispose its timer  
             playerDownsyncSessionDict = new Dictionary<int, WebSocket>();
             playerSignalToCloseDict = new Dictionary<int, CancellationTokenSource>();
-            state = RoomBattleState.IDLE;
+            state = RoomBattleState.Idle;
             effectivePlayerCount = 0;
 
             int oldInputBufferSize = inputBuffer.N;

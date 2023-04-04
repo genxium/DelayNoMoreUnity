@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class WsSessionManager : MonoBehaviour {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
@@ -30,9 +31,15 @@ public class WsSessionManager : MonoBehaviour {
     }
 
     string authToken { get;set; }
-    int playerId { get;set; }
+    int playerId { get; set; } = shared.Battle.TERMINATING_PLAYER_ID;
 
     public async Task ConnectWs(string wsEndpoint) {
+        if (null == authToken || shared.Battle.TERMINATING_PLAYER_ID == playerId) {
+            Debug.Log(String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}", authToken, playerId));
+            return;
+        }
+        senderBuffer.Clear();
+        recvBuffer.Clear();
         string fullUrl = wsEndpoint + String.Format("?authToken={0}&playerId={1}", authToken, playerId);
         using (ClientWebSocket ws = new ClientWebSocket()) {
             await ws.ConnectAsync(new Uri(fullUrl), CancellationToken.None);

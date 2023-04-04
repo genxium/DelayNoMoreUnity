@@ -41,6 +41,17 @@ enum CharacterState {
 
 	Dying = 18;
 }
+
+ enum RoomBattleState {
+    IMPOSSIBLE = 0;
+    IDLE = 1;
+    WAITING = 2;
+    PREPARE = 3;
+    IN_BATTLE = 4;
+    STOPPING_BATTLE_FOR_SETTLEMENT = 5;
+    IN_SETTLEMENT = 6;
+    IN_DISMISSAL = 7;
+}
         
 message PlayerDownsync {
 	int32 id = 1;

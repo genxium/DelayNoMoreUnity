@@ -6,18 +6,13 @@ using static shared.CharacterState;
 using pbc = Google.Protobuf.Collections;
 
 public class MapController : MonoBehaviour {
-    public const int BATTLE_STATE_NONE = -1;
-    public const int BATTLE_STATE_WAITING = 0;
-    public const int BATTLE_STATE_IN_BATTLE = 1;
-    public const int BATTLE_STATE_IN_SETTLEMENT = 2;
-    public const int BATTLE_STATE_IN_DISMISSAL = 3;
-
-    public const int MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_READY_TO_START = -1;
-    public const int MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_START = 0;
 
     int roomCapacity = 1;
     int renderFrameId; // After battle started
     int renderFrameIdLagTolerance;
+    int lastAllConfirmedInputFrameId;
+    int lastUpsyncInputFrameId;
+
     int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
     int maxChasingRenderFramesPerUpdate;
     int renderBufferSize;
@@ -32,7 +27,7 @@ public class MapController : MonoBehaviour {
     ulong[] prefabbedInputListHolder;
     GameObject[] playerGameObjs;
 
-    int battleState;
+    RoomBattleState battleState;
     int spaceOffsetX;
     int spaceOffsetY;
 
@@ -93,7 +88,7 @@ public class MapController : MonoBehaviour {
 
 
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
-        startRdf.Id = MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_START;
+        startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
         var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
         spawnPlayerNode(0, selfPlayerWx, selfPlayerWy);
@@ -128,7 +123,7 @@ public class MapController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (BATTLE_STATE_IN_BATTLE != battleState) {
+        if (RoomBattleState.InBattle != battleState) {
             return;
         }
         int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
@@ -283,6 +278,29 @@ public class MapController : MonoBehaviour {
         return (prevLatestRdf, latestRdf);
     }
 
+    private bool _allConfirmed(ulong confirmedList) {
+        return (confirmedList + 1) == (ulong)(1 << roomCapacity);
+    }
+
+    private int _markConfirmationIfApplicable() {
+        int newAllConfirmedCnt = 0;
+        int candidateInputFrameId = (lastAllConfirmedInputFrameId + 1);
+        if (candidateInputFrameId < inputBuffer.StFrameId) {
+            candidateInputFrameId = inputBuffer.StFrameId;
+        }
+        while (inputBuffer.StFrameId <= candidateInputFrameId && candidateInputFrameId < inputBuffer.EdFrameId) {
+            var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(candidateInputFrameId);
+            if (false == res1 || null == inputFrameDownsync) break;
+            if (false == _allConfirmed(inputFrameDownsync.ConfirmedList)) break;
+            ++candidateInputFrameId;
+            ++newAllConfirmedCnt;
+        }
+        if (0 < newAllConfirmedCnt) {
+            lastAllConfirmedInputFrameId = candidateInputFrameId - 1;
+        }
+        return newAllConfirmedCnt;
+    }
+
     private void _handleIncorrectlyRenderedPrediction(int firstPredictedYetIncorrectInputFrameId, bool fromUDP) {
         if (TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId) return;
         int renderFrameId1 = ConvertToFirstUsedRenderFrameId(firstPredictedYetIncorrectInputFrameId);
@@ -323,10 +341,12 @@ public class MapController : MonoBehaviour {
     }
 
     public void _resetCurrentMatch() {
-        battleState = BATTLE_STATE_NONE;
-        renderFrameId = -1;
+        battleState = RoomBattleState.Impossible;
+        renderFrameId = Battle.TERMINATING_RENDER_FRAME_ID;
         renderFrameIdLagTolerance = 4;
-        chaserRenderFrameId = -1;
+        chaserRenderFrameId = Battle.TERMINATING_RENDER_FRAME_ID;
+        lastAllConfirmedInputFrameId = Battle.TERMINATING_INPUT_FRAME_ID;
+        lastUpsyncInputFrameId = Battle.TERMINATING_INPUT_FRAME_ID;
         maxChasingRenderFramesPerUpdate = 5;
         renderBufferSize = 256;
         playerGameObjs = new GameObject[roomCapacity];
@@ -355,7 +375,6 @@ public class MapController : MonoBehaviour {
         collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 64, 64);
 
         collisionHolder = new shared.Collision();
-        // [WARNING] For "effPushbacks", "hardPushbackNormsArr" and "jumpedOrNotList", use array literal instead of "new Array" for compliance when passing into "gopkgs.ApplyInputFrameDownsyncDynamicsOnSingleRenderFrameJs"!
         effPushbacks = new Vector[roomCapacity];
         for (int i = 0; i < roomCapacity; i++) {
             effPushbacks[i] = new Vector(0, 0);
@@ -384,8 +403,62 @@ public class MapController : MonoBehaviour {
         prevDecodedInputHolder = new InputFrameDecoded();
     }
 
-    public void onInputFrameDownsyncBatch(Google.Protobuf.Collections.RepeatedField<InputFrameDownsync> batch) {
-        // TODO
+    private bool equalInputLists(pbc.RepeatedField<ulong> lhs, pbc.RepeatedField<ulong> rhs) {
+        if (null == lhs || null == rhs) return false;
+        if (lhs.Count != rhs.Count) return false;
+        for (int i = 0; i < lhs.Count; i++) {
+            if (lhs[i] == rhs[i]) continue;
+            return false;
+        }
+        return true;
+    }
+
+    public void onInputFrameDownsyncBatch(pbc.RepeatedField<InputFrameDownsync> batch) {
+        // This method is guaranteed to run in UIThread only.
+        if (null == batch) {
+            return;
+        }
+        if (null == inputBuffer) {
+            return;
+        }
+        if (RoomBattleState.InSettlement == battleState) {
+            return;
+        }
+
+        int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;
+        foreach (var inputFrameDownsync in batch) {
+            int inputFrameDownsyncId = inputFrameDownsync.InputFrameId;
+            if (inputFrameDownsyncId <= lastAllConfirmedInputFrameId) {
+                continue;
+            }
+            // [WARNING] Now that "inputFrameDownsyncId > self.lastAllConfirmedInputFrameId", we should make an update immediately because unlike its backend counterpart "Room.LastAllConfirmedInputFrameId", the frontend "mapIns.lastAllConfirmedInputFrameId" might inevitably get gaps among discrete values due to "either type#1 or type#2 forceConfirmation" -- and only "onInputFrameDownsyncBatch" can catch this! 
+            lastAllConfirmedInputFrameId = inputFrameDownsyncId;
+            var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
+            if (null != localInputFrame
+              &&
+              TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId
+              &&
+              !equalInputLists(localInputFrame.InputList, inputFrameDownsync.InputList)
+            ) {
+                firstPredictedYetIncorrectInputFrameId = inputFrameDownsyncId;
+            }
+            // [WARNING] Take all "inputFrameDownsync" from backend as all-confirmed, it'll be later checked by "rollbackAndChase". 
+            inputFrameDownsync.ConfirmedList = (ulong)(1 << roomCapacity) - 1;
+           
+            for (int j = 0; j <  roomCapacity; j++) {
+                if (inputFrameDownsync.InputFrameId > lastIndividuallyConfirmedInputFrameId[j]) {
+                    lastIndividuallyConfirmedInputFrameId[j] = inputFrameDownsync.InputFrameId;
+                    lastIndividuallyConfirmedInputList[j] = inputFrameDownsync.InputList[j];
+                }
+            }
+            //console.log(`Confirmed inputFrameId=${inputFrameDownsync.inputFrameId}`);
+            var (res2, oldStFrameId, oldEdFrameId) = inputBuffer.SetByFrameId(inputFrameDownsync, inputFrameDownsync.InputFrameId);
+            if (RingBuffer<InputFrameDownsync>.RING_BUFF_FAILED_TO_SET == res2) {
+                throw new ArgumentException(String.Format("Failed to dump input cache(maybe recentInputCache too small)! inputFrameDownsync.inputFrameId={0}, lastAllConfirmedInputFrameId={1}", inputFrameDownsyncId, lastAllConfirmedInputFrameId));
+            }
+        }
+        _markConfirmationIfApplicable();
+        _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, false);
     }
 
     public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, pbc::RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
@@ -394,11 +467,11 @@ public class MapController : MonoBehaviour {
         if (null == renderBuffer) {
             return;
         }
-        if (BATTLE_STATE_IN_SETTLEMENT == battleState) {
+        if (RoomBattleState.InSettlement == battleState) {
             return;
         }
         int rdfId = pbRdf.Id;
-        bool shouldForceDumping1 = (MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_START == rdfId);
+        bool shouldForceDumping1 = (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == rdfId);
         bool shouldForceDumping2 = (rdfId >= renderFrameId + renderFrameIdLagTolerance);
         bool shouldForceResync = pbRdf.ShouldForceResync;
         ulong selfJoinIndexMask = ((ulong)1 << (selfPlayerInfo.JoinIndex - 1));
@@ -418,7 +491,7 @@ public class MapController : MonoBehaviour {
             throw new ArgumentException(String.Format("Failed to dump render cache#1 (maybe recentRenderCache too small)! rdfId={0}", rdfId));
         }
 
-        if (!shouldForceResync && (MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_START < rdfId && RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet)) {
+        if (!shouldForceResync && (Battle.DOWNSYNC_MSG_ACT_BATTLE_START < rdfId && RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet)) {
             /*
 			   Don't change 
 			   - chaserRenderFrameId, it's updated only in "rollbackAndChase & onInputFrameDownsyncBatch" (except for when RING_BUFF_NON_CONSECUTIVE_SET)
@@ -428,7 +501,7 @@ public class MapController : MonoBehaviour {
 
         if (shouldForceDumping1 || shouldForceDumping2 || shouldForceResync) {
             // In fact, not having "window.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet" should already imply that "renderFrameId <= rdfId", but here we double check and log the anomaly  
-            if (MAGIC_ROOM_DOWNSYNC_FRAME_ID_BATTLE_START == rdfId) {
+            if (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
                 Debug.Log(String.Format("On battle started! renderFrameId={0}", rdfId));
             }
             else {
@@ -439,10 +512,10 @@ public class MapController : MonoBehaviour {
             // In this case it must be true that "rdfId > chaserRenderFrameId".
             chaserRenderFrameId = rdfId;
 
-            battleState = BATTLE_STATE_IN_BATTLE;
+            battleState = RoomBattleState.InBattle;
         }
 
-        // [WARNING] Leave all graphical updates in "update(dt)" by "applyRoomDownsyncFrameDynamics"
+        // [WARNING] Leave all graphical updates in "Update()" by "applyRoomDownsyncFrameDynamics"
         return;
     }
 
