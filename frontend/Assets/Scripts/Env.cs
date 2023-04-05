@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public partial class Env : MonoBehaviour {
+public partial class Env {
     private static Env ins = null;
 
     public static Env Instance {

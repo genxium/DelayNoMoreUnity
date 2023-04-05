@@ -38,7 +38,7 @@ public class PriorityBasedRoomManager : IRoomManager {
                 dict.Remove(r.id);
             }
         } finally {
-            mux.WaitOne();
+            mux.ReleaseMutex();
         }
         return r;
     }

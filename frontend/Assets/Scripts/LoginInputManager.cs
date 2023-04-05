@@ -101,8 +101,7 @@ public class LoginInputManager : MonoBehaviour {
                         var playerId = res["playerId"].Value<int>();
                         Debug.Log(String.Format("newAuthToken: {0}, playerId: {1}", authToken, playerId));
                         // TODO: Jump to OnlineMap with "authToken" and "playerId"
-                        WsSessionManager.Instance.authToken = authToken;
-                        WsSessionManager.Instance.playerId = playerId;
+                        WsSessionManager.Instance.SetCredentials(authToken, playerId);
                         SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
                     } else {
                         toggleUIInteractability(true);

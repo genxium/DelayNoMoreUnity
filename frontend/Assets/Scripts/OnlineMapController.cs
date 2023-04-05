@@ -8,14 +8,13 @@ using System.Threading;
 using UnityEngine.SceneManagement;
 
 public class OnlineMapController : AbstractMapController {
-    void onWsSessionOpen(object? state) {
+    void onWsSessionOpen(int resultCode) {
         Debug.Log("Ws session is opened");
     }
 
-    void onWsSessionClosed(object? state) {
+    void onWsSessionClosed(int resultCode) {
         Debug.Log("Ws session is closed");
-        WsSessionManager.Instance.authToken = null;
-        WsSessionManager.Instance.playerId = TERMINATING_PLAYER_ID;
+        WsSessionManager.Instance.ClearCredentials();
         SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 

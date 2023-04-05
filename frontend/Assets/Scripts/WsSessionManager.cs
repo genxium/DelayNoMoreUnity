@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.Linq;
 
-public class WsSessionManager : MonoBehaviour {
-    public delegate void OnWsSessionEvtCallbackType(object? state);
+public class WsSessionManager {
+    public delegate void OnWsSessionEvtCallbackType(int resultCode);
 
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
     private const int sendChunkSize = 256;
@@ -18,23 +18,35 @@ public class WsSessionManager : MonoBehaviour {
         
     I'm not using "RecvRingBuff" from https://github.com/genxium/DelayNoMore/blob/v1.0.14/frontend/build-templates/jsb-link/frameworks/runtime-src/Classes/ring_buff.cpp because WebSocket is supposed to be preserving send/recv order at all time.
     */
-    public Queue<byte[]> senderBuffer, recvBuffer; 
+    public Queue<byte[]> senderBuffer, recvBuffer;
+    private string authToken;
+    private int playerId = shared.Battle.TERMINATING_PLAYER_ID;
 
-    private static WsSessionManager ins = null;
+    private static WsSessionManager _instance;
 
     public static WsSessionManager Instance {
         get {
-            if (null == ins) {
-                ins = new WsSessionManager();
-            }
-            return ins;
+            if (null == _instance) _instance = new WsSessionManager();
+            return _instance;
         }
     }
 
-    public string authToken;
-    public int playerId = shared.Battle.TERMINATING_PLAYER_ID;
+    private WsSessionManager() {
+        ClearCredentials();
+        senderBuffer = new Queue<byte[]>();
+        recvBuffer = new Queue<byte[]>();
+    }
 
-    public async Task ConnectWs(string wsEndpoint, CancellationToken cancellationToken, OnWsSessionEvtCallbackType onOpen, OnWsSessionEvtCallbackType onClose) {
+    public void SetCredentials(string theAuthToken, int thePlayerId) {
+        authToken = theAuthToken;
+        playerId = thePlayerId;
+    }
+
+    public void ClearCredentials() {
+        SetCredentials(null, shared.Battle.TERMINATING_PLAYER_ID);
+    }
+
+    public async void ConnectWs(string wsEndpoint, CancellationToken cancellationToken, OnWsSessionEvtCallbackType onOpen, OnWsSessionEvtCallbackType onClose) {
         if (null == authToken || shared.Battle.TERMINATING_PLAYER_ID == playerId) {
             Debug.Log(String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}", authToken, playerId));
             return;
@@ -46,7 +58,7 @@ public class WsSessionManager : MonoBehaviour {
             try {
                 await ws.ConnectAsync(new Uri(fullUrl), cancellationToken);
                 UnityEngine.WSA.Application.InvokeOnUIThread(() => {
-                    onOpen(null);
+                    onOpen(shared.ErrCode.Ok);
                 }, true);
                 await Task.WhenAll(Receive(ws, cancellationToken), Send(ws, cancellationToken));
             } catch (OperationCanceledException ocEx) {
@@ -54,7 +66,7 @@ public class WsSessionManager : MonoBehaviour {
             }
         }
         UnityEngine.WSA.Application.InvokeOnUIThread(() => {
-            onClose(null);
+            onClose(shared.ErrCode.Ok);
         }, true);
     }
 
