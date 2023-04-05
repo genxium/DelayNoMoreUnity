@@ -1,167 +1,53 @@
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 using shared;
 using static shared.Battle;
+using System;
 using static shared.CharacterState;
 using pbc = Google.Protobuf.Collections;
 
-public class MapController : MonoBehaviour {
+public abstract class AbstractMapController : MonoBehaviour {
+    protected int roomCapacity = 1;
+    protected int renderFrameId; // After battle started
+    protected int renderFrameIdLagTolerance;
+    protected int lastAllConfirmedInputFrameId;
+    protected int lastUpsyncInputFrameId;
 
-    int roomCapacity = 1;
-    int renderFrameId; // After battle started
-    int renderFrameIdLagTolerance;
-    int lastAllConfirmedInputFrameId;
-    int lastUpsyncInputFrameId;
-
-    int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
-    int maxChasingRenderFramesPerUpdate;
-    int renderBufferSize;
+    protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
+    protected int maxChasingRenderFramesPerUpdate;
+    protected int renderBufferSize;
     public GameObject characterPrefab;
 
-    int[] lastIndividuallyConfirmedInputFrameId;
-    ulong[] lastIndividuallyConfirmedInputList;
-    PlayerDownsync selfPlayerInfo = null;
-    FrameRingBuffer<RoomDownsyncFrame> renderBuffer = null;
-    FrameRingBuffer<InputFrameDownsync> inputBuffer = null;
+    protected int[] lastIndividuallyConfirmedInputFrameId;
+    protected ulong[] lastIndividuallyConfirmedInputList;
+    protected PlayerDownsync selfPlayerInfo = null;
+    protected FrameRingBuffer<RoomDownsyncFrame> renderBuffer = null;
+    protected FrameRingBuffer<InputFrameDownsync> inputBuffer = null;
 
-    ulong[] prefabbedInputListHolder;
-    GameObject[] playerGameObjs;
+    protected ulong[] prefabbedInputListHolder;
+    protected GameObject[] playerGameObjs;
 
-    RoomBattleState battleState;
-    int spaceOffsetX;
-    int spaceOffsetY;
+    protected RoomBattleState battleState;
+    protected int spaceOffsetX;
+    protected int spaceOffsetY;
 
-    shared.Collision collisionHolder;
-    SatResult overlapResult;
-    Vector[] effPushbacks;
-    Vector[][] hardPushbackNormsArr;
-    bool[] jumpedOrNotList;
-    shared.Collider[] dynamicRectangleColliders;
-    shared.Collider[] staticRectangleColliders;
-    InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
-    CollisionSpace collisionSys;
+    protected shared.Collision collisionHolder;
+    protected SatResult overlapResult;
+    protected Vector[] effPushbacks;
+    protected Vector[][] hardPushbackNormsArr;
+    protected bool[] jumpedOrNotList;
+    protected shared.Collider[] dynamicRectangleColliders;
+    protected shared.Collider[] staticRectangleColliders;
+    protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
+    protected CollisionSpace collisionSys;
 
-    // Start is called before the first frame update
-    void Start() {
-        Application.targetFrameRate = 60;
-        _resetCurrentMatch();
-        var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
-        var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
+    protected bool debugDrawingEnabled = true; 
 
-        var grid = this.GetComponentInChildren<Grid>();
-        foreach (Transform child in grid.transform) {
-            switch (child.gameObject.name) {
-                case "Barrier":
-                    int i = 0;
-                    foreach (Transform barrierChild in child) {
-                        var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
-                        var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
-                        var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
-                        /*
-                         [WARNING] 
-                        
-                        The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)".
-
-                        It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
-                        */
-                        var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
-                        Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
-                        collisionSys.AddSingle(barrierCollider);
-                        staticRectangleColliders[i++] = barrierCollider;
-                    }
-                    break;
-                case "PlayerStartingPos":
-                    int j = 0;
-                    foreach (Transform playerPosChild in child) {
-                        var playerPosTileObj = playerPosChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
-                        var (playerCx, playerCy) = TiledLayerPositionToCollisionSpacePosition(playerPosTileObj.m_X, playerPosTileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        playerStartingCollisionSpacePositions[j] = new Vector(playerCx, playerCy);
-                        Debug.Log(String.Format("new playerStartingCollisionSpacePositions[i:{0}]=[X:{1}, Y:{2}]", j, playerCx, playerCy));
-                        j++;
-                        if (j >= roomCapacity) break;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
-        startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
-        startRdf.ShouldForceResync = false;
-        var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
-        spawnPlayerNode(0, selfPlayerWx, selfPlayerWy);
-
-        var selfPlayerCharacterSpeciesId = 0;
-        var selfPlayerCharacter = Battle.characters[selfPlayerCharacterSpeciesId];
-
-        var selfPlayerInRdf = startRdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
-        var (selfPlayerVposX, selfPlayerVposY) = PolygonColliderCtrToVirtualGridPos(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
-        selfPlayerInRdf.Id = 10;
-        selfPlayerInRdf.JoinIndex = selfPlayerInfo.JoinIndex;
-        selfPlayerInRdf.VirtualGridX = selfPlayerVposX;
-        selfPlayerInRdf.VirtualGridY = selfPlayerVposY;
-        selfPlayerInRdf.RevivalVirtualGridX = selfPlayerVposX;
-        selfPlayerInRdf.RevivalVirtualGridY = selfPlayerVposY;
-        selfPlayerInRdf.Speed = selfPlayerCharacter.Speed;
-        selfPlayerInRdf.ColliderRadius = (int)defaultColliderRadius;
-        selfPlayerInRdf.CharacterState = InAirIdle1NoJump;
-        selfPlayerInRdf.FramesToRecover = 0;
-        selfPlayerInRdf.DirX = 2;
-        selfPlayerInRdf.DirY = 0;
-        selfPlayerInRdf.VelX = 0;
-        selfPlayerInRdf.VelY = 0;
-        selfPlayerInRdf.InAir = true;
-        selfPlayerInRdf.OnWall = false;
-        selfPlayerInRdf.Hp = 100;
-        selfPlayerInRdf.MaxHp = 100;
-        selfPlayerInRdf.SpeciesId = 0;
-
-        onRoomDownsyncFrame(startRdf, null);
-    }
-
-    // Update is called once per frame
-    void Update() {
-        if (RoomBattleState.InBattle != battleState) {
-            return;
-        }
-        int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
-        ulong prevSelfInput = 0, currSelfInput = 0;
-        if (ShouldGenerateInputFrameUpsync(renderFrameId)) {
-            (prevSelfInput, currSelfInput) = getOrPrefabInputFrameUpsync(noDelayInputFrameId, true, prefabbedInputListHolder);
-        }
-        int delayedInputFrameId = ConvertToDelayedInputFrameId(renderFrameId);
-        var (delayedInputFrameExists, _) = inputBuffer.GetByFrameId(delayedInputFrameId);
-        if (!delayedInputFrameExists) {
-            // Possible edge case after resync, kindly note that it's OK to prefab a "future inputFrame" here, because "sendInputFrameUpsyncBatch" would be capped by "noDelayInputFrameId from self.renderFrameId". 
-            getOrPrefabInputFrameUpsync(delayedInputFrameId, false, prefabbedInputListHolder);
-        }
-
-        int prevChaserRenderFrameId = chaserRenderFrameId;
-        int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
-        if (nextChaserRenderFrameId > renderFrameId) {
-            nextChaserRenderFrameId = renderFrameId;
-        }
-        if (prevChaserRenderFrameId < nextChaserRenderFrameId) {
-            // Do not execute "rollbackAndChase" when "prevChaserRenderFrameId == nextChaserRenderFrameId", otherwise if "nextChaserRenderFrameId == self.renderFrameId" we'd be wasting computing power once. 
-            rollbackAndChase(prevChaserRenderFrameId, nextChaserRenderFrameId, collisionSys, true);
-        }
-
-        // Inside the following "rollbackAndChase" actually ROLLS FORWARD w.r.t. the corresponding delayedInputFrame, REGARDLESS OF whether or not "chaserRenderFrameId == renderFrameId" now. 
-        var (prevRdf, rdf) = rollbackAndChase(renderFrameId, renderFrameId + 1, collisionSys, false);
-        // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
-
-        applyRoomDownsyncFrameDynamics(rdf, prevRdf);
-        ++renderFrameId;
-    }
-
-    void spawnPlayerNode(int joinIndex, float wx, float wy) {
+    protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity);
         playerGameObjs[joinIndex] = newPlayerNode;
     }
 
-    (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
+    protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
         if (null == selfPlayerInfo) {
             String msg = String.Format("noDelayInputFrameId={0:D} couldn't be generated due to selfPlayerInfo being null", inputFrameId);
             throw new ArgumentException(msg);
@@ -187,13 +73,11 @@ public class MapController : MonoBehaviour {
             if (null != existingInputFrame) {
                 // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here, we just have to assign "prefabbedInputList[(joinIndex-1)]" specifically and copy all others
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
-            }
-            else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
+            } else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
                 prefabbedInputList[k] = lastIndividuallyConfirmedInputList[k];
                 // Don't predict "btnA & btnB"!
                 prefabbedInputList[k] = (prefabbedInputList[k] & 15);
-            }
-            else if (null != previousInputFrameDownsync) {
+            } else if (null != previousInputFrameDownsync) {
                 // When "self.lastIndividuallyConfirmedInputFrameId[k] > inputFrameId", don't use it to predict a historical input!
                 prefabbedInputList[k] = previousInputFrameDownsync.InputList[k];
                 // Don't predict "btnA & btnB"!
@@ -229,7 +113,7 @@ public class MapController : MonoBehaviour {
         return (previousSelfInput, currSelfInput);
     }
 
-    public (RoomDownsyncFrame, RoomDownsyncFrame) rollbackAndChase(int renderFrameIdSt, int renderFrameIdEd, CollisionSpace collisionSys, bool isChasing) {
+    protected (RoomDownsyncFrame, RoomDownsyncFrame) rollbackAndChase(int renderFrameIdSt, int renderFrameIdEd, CollisionSpace collisionSys, bool isChasing) {
         RoomDownsyncFrame prevLatestRdf = null, latestRdf = null;
         for (int i = renderFrameIdSt; i < renderFrameIdEd; i++) {
             var (ok1, currRdf) = renderBuffer.GetByFrameId(i);
@@ -267,8 +151,7 @@ public class MapController : MonoBehaviour {
             if (true == isChasing) {
                 // [WARNING] Move the cursor "chaserRenderFrameId" when "true == isChasing", keep in mind that "chaserRenderFrameId" is not monotonic!
                 chaserRenderFrameId = nextRdf.Id;
-            }
-            else if (nextRdf.Id == chaserRenderFrameId + 1) {
+            } else if (nextRdf.Id == chaserRenderFrameId + 1) {
                 chaserRenderFrameId = nextRdf.Id; // To avoid redundant calculation 
             }
             prevLatestRdf = currRdf;
@@ -333,7 +216,7 @@ public class MapController : MonoBehaviour {
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             chAnimCtrl.updateCharacterAnim(currPlayerDownsync, null, false, chConfig);
 
-            if (k == selfPlayerInfo.JoinIndex-1) {
+            if (k == selfPlayerInfo.JoinIndex - 1) {
                 var camOldPos = Camera.main.transform.position;
                 Camera.main.transform.position = new Vector3(wx, wy, camOldPos.z);
             }
@@ -444,8 +327,8 @@ public class MapController : MonoBehaviour {
             }
             // [WARNING] Take all "inputFrameDownsync" from backend as all-confirmed, it'll be later checked by "rollbackAndChase". 
             inputFrameDownsync.ConfirmedList = (ulong)(1 << roomCapacity) - 1;
-           
-            for (int j = 0; j <  roomCapacity; j++) {
+
+            for (int j = 0; j < roomCapacity; j++) {
                 if (inputFrameDownsync.InputFrameId > lastIndividuallyConfirmedInputFrameId[j]) {
                     lastIndividuallyConfirmedInputFrameId[j] = inputFrameDownsync.InputFrameId;
                     lastIndividuallyConfirmedInputList[j] = inputFrameDownsync.InputList[j];
@@ -503,8 +386,7 @@ public class MapController : MonoBehaviour {
             // In fact, not having "window.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet" should already imply that "renderFrameId <= rdfId", but here we double check and log the anomaly  
             if (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
                 Debug.Log(String.Format("On battle started! renderFrameId={0}", rdfId));
-            }
-            else {
+            } else {
                 Debug.Log(String.Format("On battle resynced! renderFrameId={0}", rdfId));
             }
 
@@ -519,7 +401,47 @@ public class MapController : MonoBehaviour {
         return;
     }
 
+    // Update is called once per frame
+    protected void doUpdate() {
+        if (RoomBattleState.InBattle != battleState) {
+            return;
+        }
+        int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
+        ulong prevSelfInput = 0, currSelfInput = 0;
+        if (ShouldGenerateInputFrameUpsync(renderFrameId)) {
+            (prevSelfInput, currSelfInput) = getOrPrefabInputFrameUpsync(noDelayInputFrameId, true, prefabbedInputListHolder);
+        }
+        int delayedInputFrameId = ConvertToDelayedInputFrameId(renderFrameId);
+        var (delayedInputFrameExists, _) = inputBuffer.GetByFrameId(delayedInputFrameId);
+        if (!delayedInputFrameExists) {
+            // Possible edge case after resync, kindly note that it's OK to prefab a "future inputFrame" here, because "sendInputFrameUpsyncBatch" would be capped by "noDelayInputFrameId from self.renderFrameId". 
+            getOrPrefabInputFrameUpsync(delayedInputFrameId, false, prefabbedInputListHolder);
+        }
+
+        int prevChaserRenderFrameId = chaserRenderFrameId;
+        int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
+        
+        if (nextChaserRenderFrameId > renderFrameId) {
+            nextChaserRenderFrameId = renderFrameId;
+        }
+
+        if (prevChaserRenderFrameId < nextChaserRenderFrameId) {
+            // Do not execute "rollbackAndChase" when "prevChaserRenderFrameId == nextChaserRenderFrameId", otherwise if "nextChaserRenderFrameId == self.renderFrameId" we'd be wasting computing power once. 
+            rollbackAndChase(prevChaserRenderFrameId, nextChaserRenderFrameId, collisionSys, true);
+        }
+
+        // Inside the following "rollbackAndChase" actually ROLLS FORWARD w.r.t. the corresponding delayedInputFrame, REGARDLESS OF whether or not "chaserRenderFrameId == renderFrameId" now. 
+        var (prevRdf, rdf) = rollbackAndChase(renderFrameId, renderFrameId + 1, collisionSys, false);
+        // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
+
+        applyRoomDownsyncFrameDynamics(rdf, prevRdf);
+        ++renderFrameId;
+    }
+
     void OnRenderObject() {
+        if (debugDrawingEnabled) {
+            return;
+        }
         // The magic name "OnRenderObject" is the only callback I found working to draw the debug boundaries.
         CreateLineMaterial();
         lineMaterial.SetPass(0);
