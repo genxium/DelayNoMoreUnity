@@ -3,8 +3,22 @@ using System;
 using shared;
 using static shared.Battle;
 using static shared.CharacterState;
+using static WsSessionManager;
+using System.Threading;
+using UnityEngine.SceneManagement;
 
 public class OnlineMapController : AbstractMapController {
+    void onWsSessionOpen(object? state) {
+        Debug.Log("Ws session is opened");
+    }
+
+    void onWsSessionClosed(object? state) {
+        Debug.Log("Ws session is closed");
+        WsSessionManager.Instance.authToken = null;
+        WsSessionManager.Instance.playerId = TERMINATING_PLAYER_ID;
+        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+    }
+
     void Start() {
         Application.targetFrameRate = 60;
         _resetCurrentMatch();
@@ -49,7 +63,6 @@ public class OnlineMapController : AbstractMapController {
             }
         }
 
-
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
@@ -82,6 +95,11 @@ public class OnlineMapController : AbstractMapController {
         selfPlayerInRdf.SpeciesId = 0;
 
         onRoomDownsyncFrame(startRdf, null);
+
+        using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource()) {
+            string wsEndpoint = Env.Instance.getWsEndpoint();
+            WsSessionManager.Instance.ConnectWs(wsEndpoint, cancellationTokenSource.Token, onWsSessionOpen, onWsSessionClosed);
+        }
     }
 
     // Update is called once per frame

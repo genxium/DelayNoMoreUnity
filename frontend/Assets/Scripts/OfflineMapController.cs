@@ -51,7 +51,6 @@ public class OfflineMapController : AbstractMapController {
             }
         }
 
-
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
