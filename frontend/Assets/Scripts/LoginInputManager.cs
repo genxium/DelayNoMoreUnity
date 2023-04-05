@@ -7,6 +7,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using shared;
+using UnityEngine.SceneManagement;
 
 public class LoginInputManager : MonoBehaviour {
 
@@ -26,10 +27,17 @@ public class LoginInputManager : MonoBehaviour {
 
     }
 
+    void toggleUIInteractability(bool enabled) {
+        UnameInput.interactable = enabled;
+        CaptchaInput.interactable = enabled;
+        GetCaptchaButton.interactable = enabled;
+        LoginActionButton.interactable = enabled;
+    }
+
     public void OnGetCaptchaButtonClicked() {
         string httpHost = Env.Instance.getHttpHost();
         Debug.Log(String.Format("GetCaptchaButton is clicked, httpHost={0}", httpHost));
-
+        toggleUIInteractability(false);
         StartCoroutine(doRequestGetCapture(httpHost));
     }
 
@@ -55,13 +63,14 @@ public class LoginInputManager : MonoBehaviour {
                     }
                     break;
             }
+            toggleUIInteractability(true);
         }
     }
 
     public void OnLoginActionButtonClicked() {
         string httpHost = Env.Instance.getHttpHost();
         Debug.Log(String.Format("LoginActionButton is clicked, httpHost={0}", httpHost));
-
+        toggleUIInteractability(false);
         StartCoroutine(doLoginAction(httpHost));
     }
 
@@ -78,18 +87,25 @@ public class LoginInputManager : MonoBehaviour {
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError("Error: " + webRequest.error);
+                    toggleUIInteractability(true);
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError("HTTP Error: " + webRequest.error);
+                    toggleUIInteractability(true);
                     break;
                 case UnityWebRequest.Result.Success:
                     var res = JsonConvert.DeserializeObject<JObject>(webRequest.downloadHandler.text);
                     Debug.Log(String.Format("Received: {0}", res));
                     if (ErrCode.Ok == res["retCode"].Value<int>()) {
-                        // TODO: Jump to OnlineMap with "authToken" and "playerId"
                         var authToken = res["newAuthToken"].Value<string>();
                         var playerId = res["playerId"].Value<int>();
                         Debug.Log(String.Format("newAuthToken: {0}, playerId: {1}", authToken, playerId));
+                        // TODO: Jump to OnlineMap with "authToken" and "playerId"
+                        WsSessionManager.Instance.authToken = authToken;
+                        WsSessionManager.Instance.playerId = playerId;
+                        SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
+                    } else {
+                        toggleUIInteractability(true);
                     }
                     break;
             }

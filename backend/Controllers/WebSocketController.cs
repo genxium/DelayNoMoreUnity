@@ -72,7 +72,7 @@ public class WebSocketController : ControllerBase {
                         break;
                     }
                 } catch (OperationCanceledException ocEx) {
-                    _logger.LogWarning("Session is cancelled for [ roomId={0}, playerId={1}, ocEx={2} ]", room.id, playerId, ocEx.Message);
+                    _logger.LogWarning("Session is cancelled for [ roomId={0}, playerId={1}, ocEx={2} ]", (null != room ? room.id : null), playerId, ocEx.Message);
                 }
             }
             
