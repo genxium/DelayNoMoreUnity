@@ -269,6 +269,15 @@ message Skill {
 	SkillTriggerType triggerType = 5;
 	CharacterState boundChState = 6;        
 	
-	// [WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
+	/**
+	[WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
+
+	Types of fireball multihit-singlebullet
+	a. References the emission frame
+	b. References the first hit only when actually hit
+	c. References the first hit even if blocked
+	d. References the prev hit only when actually hit
+	e. References the prev hit even if blocked
+	*/
 	repeated BulletConfig hits = 7; // Hits within a "Skill" are automatically triggered
 }
