@@ -87,6 +87,11 @@ public class OfflineMapController : AbstractMapController {
 
     // Update is called once per frame
     void Update() {
-        doUpdate();
+        try {
+            doUpdate();
+        } catch (Exception ex) {
+            Debug.LogError(String.Format("Error during OfflineMap.doUpdate {0}", ex.Message));
+            onBattleStopped();
+        }
     }
 }

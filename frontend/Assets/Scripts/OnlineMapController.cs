@@ -6,8 +6,12 @@ using static shared.CharacterState;
 using static WsSessionManager;
 using System.Threading;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class OnlineMapController : AbstractMapController {
+    CancellationTokenSource wsCancellationTokenSource; 
+    CancellationToken wsCancellationToken; 
+
     void onWsSessionOpen(int resultCode) {
         Debug.Log("Ws session is opened");
     }
@@ -19,6 +23,8 @@ public class OnlineMapController : AbstractMapController {
     }
 
     void Start() {
+        wsCancellationTokenSource = new CancellationTokenSource();
+        wsCancellationToken = wsCancellationTokenSource.Token; 
         Application.targetFrameRate = 60;
         _resetCurrentMatch();
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
@@ -95,14 +101,35 @@ public class OnlineMapController : AbstractMapController {
 
         onRoomDownsyncFrame(startRdf, null);
 
-        using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource()) {
+        startWsThread();
+    }
+
+    void startWsThread() {
+        // [WARNING] Must be a new thread here to avoid blocking UIThread
+        new Thread(async () => {
+            // Declared "async" for the convenience to "await" existing async methods
             string wsEndpoint = Env.Instance.getWsEndpoint();
-            WsSessionManager.Instance.ConnectWs(wsEndpoint, cancellationTokenSource.Token, onWsSessionOpen, onWsSessionClosed);
-        }
+            await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource, onWsSessionOpen, onWsSessionClosed);
+            Debug.Log(String.Format("WebSocket thread is ended"));
+        }).Start();
     }
 
     // Update is called once per frame
     void Update() {
-        doUpdate();
+        try {
+            doUpdate();
+        } catch (Exception ex) {
+            Debug.LogError(String.Format("Error during OfflineMap.doUpdate {0}", ex.Message));
+            onBattleStopped();
+        }
+    }
+
+    private void OnDestroy() {
+        if (null != wsCancellationTokenSource) {
+            if (null != wsCancellationToken && !wsCancellationToken.IsCancellationRequested) {
+                wsCancellationTokenSource.Cancel(); // To stop the "WebSocketThread"
+            }
+            wsCancellationTokenSource.Dispose();
+        }
     }
 }

@@ -4,6 +4,8 @@ using static shared.Battle;
 using System;
 using static shared.CharacterState;
 using pbc = Google.Protobuf.Collections;
+using UnityEditor.PackageManager.UI;
+using UnityEngine.AdaptivePerformance;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity = 1;
@@ -436,6 +438,13 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
         ++renderFrameId;
+    }
+
+    protected void onBattleStopped() {
+        if (RoomBattleState.InBattle != battleState) {
+            return;
+        }
+        battleState = RoomBattleState.InSettlement;
     }
 
     void OnRenderObject() {
