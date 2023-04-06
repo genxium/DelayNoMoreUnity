@@ -218,21 +218,17 @@ message PeerUdpAddr {
 message BattleColliderInfo {
 	string stageName = 1;
 
-	int32 intervalToPing = 2;
-	int32 willKickIfInactiveFor = 3;
-	int32 boundRoomId = 4;
-	int64 battleDurationNanos = 5;
-	int32 inputFrameUpsyncDelayTolerance = 6;
-	int32 maxChasingRenderFramesPerUpdate = 7;
-	double rollbackEstimatedDtMillis = 8;
-	int64 rollbackEstimatedDtNanos = 9;
+	int32 boundRoomId = 2;
+	int64 battleDurationFrames = 3;
+	int32 inputFrameUpsyncDelayTolerance = 4;
+	int32 maxChasingRenderFramesPerUpdate = 5;
+	double rollbackEstimatedDtMillis = 6;
+	int64 rollbackEstimatedDtNanos = 7;
 
-	int32 renderCacheSize = 10;
-	double spaceOffsetX = 11;
-	double spaceOffsetY = 12;
-	int32 collisionMinStep = 13;
-	int32 boundRoomCapacity = 14;
-	PeerUdpAddr battleUdpTunnel = 15;
+	int32 renderBufferSize = 8;
+	int32 collisionMinStep = 9;
+	int32 boundRoomCapacity = 10;
+	PeerUdpAddr battleUdpTunnel = 11;
 
 	bool frameDataLoggingEnabled = 1024;
 }
@@ -253,12 +249,11 @@ message RoomDownsyncFrame {
 
 message WsResp {
 	int32 ret = 1;
-	int32 echoedMsgId = 2;
-	int32 act = 3;
-	RoomDownsyncFrame rdf = 4;
-	repeated InputFrameDownsync inputFrameDownsyncBatch = 5;
-	BattleColliderInfo bciFrame = 6;
-	int32 peerJoinIndex = 7;
+	int32 act = 2;
+	RoomDownsyncFrame rdf = 3;
+	repeated InputFrameDownsync inputFrameDownsyncBatch = 4;
+	BattleColliderInfo bciFrame = 5;
+	int32 peerJoinIndex = 6;
 }
 
 message Skill {

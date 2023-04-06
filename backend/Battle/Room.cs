@@ -8,9 +8,13 @@ public class Room {
 
     public int id;
     public int capacity;
+    public int battleDurationFrames;
+    public string stageName;
+    public int inputFrameUpsyncDelayTolerance;
+    public int maxChasingRenderFramesPerUpdate;
+    public bool frameDataLoggingEnabled;
 
     int renderFrameId;
-    int battleDurationFrames;
     int nstDelayFrames;
 
     Dictionary<int, Player> players;
@@ -51,13 +55,11 @@ public class Room {
 
     bool backendDynamicsEnabled;
 
-    long dilutedRollbackEstimatedDtNanos;
-
     int[] lastIndividuallyConfirmedInputFrameId;
     ulong[] lastIndividuallyConfirmedInputList;
 
     Mutex battleUdpTunnelLock;
-    PeerUdpAddr? battleUdpTunnelAddr;
+    public PeerUdpAddr? battleUdpTunnelAddr;
     UdpClient? battleUdpTunnel;
 
     ILoggerFactory _loggerFactory;
@@ -69,6 +71,10 @@ public class Room {
         capacity = roomCapacity;
         renderFrameId = 0;
         battleDurationFrames = 10 * 60;
+        stageName = "Dungeon";
+        inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
+        maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
+
         nstDelayFrames = 24;
         state = RoomBattleState.Idle;
         effectivePlayerCount = 0;
@@ -93,6 +99,10 @@ public class Room {
         joinerLock = new Mutex();
         inputBufferLock = new Mutex();
         battleUdpTunnelLock = new Mutex();
+    }
+
+    public int GetRenderCacheSize() {
+        return ((inputBuffer.N - 1) << 1);
     }
 
     public int AddPlayerIfPossible(Player pPlayerFromDbInit, int playerId, int speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer) {
@@ -122,7 +132,7 @@ public class Room {
             playerDownsyncSessionDict[playerId] = session;
             playerSignalToCloseDict[playerId] = signalToCloseConnOfThisPlayer;
 
-            var newWatchdog = new PlayerSessionAckWatchdog(5000, signalToCloseConnOfThisPlayer, String.Format("[ RoomId={0}, PlayerId={1} ] session watchdog ticked.", id, playerId), _loggerFactory);
+            var newWatchdog = new PlayerSessionAckWatchdog(10000, signalToCloseConnOfThisPlayer, String.Format("[ RoomId={0}, PlayerId={1} ] session watchdog ticked.", id, playerId), _loggerFactory);
             playerActiveWatchdogDict[playerId] = newWatchdog;
 
             effectivePlayerCount++;

@@ -81,49 +81,46 @@ namespace shared {
             "KAUSDQoEdmVsWRjsByABKAUiTQoPSG9sZVB1bmNoVXBzeW5jEhQKDGludEF1",
             "dGhUb2tlbhgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIPCgdhdXRoS2V5",
             "GAMgASgFIjgKC1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwKBHBvcnQYAiAB",
-            "KAUSDwoHYXV0aEtleRgDIAEoBSLwAwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEK",
-            "CXN0YWdlTmFtZRgBIAEoCRIWCg5pbnRlcnZhbFRvUGluZxgCIAEoBRIdChV3",
-            "aWxsS2lja0lmSW5hY3RpdmVGb3IYAyABKAUSEwoLYm91bmRSb29tSWQYBCAB",
-            "KAUSGwoTYmF0dGxlRHVyYXRpb25OYW5vcxgFIAEoAxImCh5pbnB1dEZyYW1l",
-            "VXBzeW5jRGVsYXlUb2xlcmFuY2UYBiABKAUSJwofbWF4Q2hhc2luZ1JlbmRl",
-            "ckZyYW1lc1BlclVwZGF0ZRgHIAEoBRIhChlyb2xsYmFja0VzdGltYXRlZER0",
-            "TWlsbGlzGAggASgBEiAKGHJvbGxiYWNrRXN0aW1hdGVkRHROYW5vcxgJIAEo",
-            "AxIXCg9yZW5kZXJDYWNoZVNpemUYCiABKAUSFAoMc3BhY2VPZmZzZXRYGAsg",
-            "ASgBEhQKDHNwYWNlT2Zmc2V0WRgMIAEoARIYChBjb2xsaXNpb25NaW5TdGVw",
-            "GA0gASgFEhkKEWJvdW5kUm9vbUNhcGFjaXR5GA4gASgFEiwKD2JhdHRsZVVk",
-            "cFR1bm5lbBgPIAEoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIgChdmcmFtZURh",
-            "dGFMb2dnaW5nRW5hYmxlZBiACCABKAgipwIKEVJvb21Eb3duc3luY0ZyYW1l",
-            "EgoKAmlkGAEgASgFEioKCnBsYXllcnNBcnIYAiADKAsyFi5zaGFyZWQuUGxh",
-            "eWVyRG93bnN5bmMSFgoOY291bnRkb3duTmFub3MYAyABKAMSHwoHYnVsbGV0",
-            "cxgEIAMoCzIOLnNoYXJlZC5CdWxsZXQSHwoWYmFja2VuZFVuY29uZmlybWVk",
-            "TWFzaxiACCABKAQSGgoRc2hvdWxkRm9yY2VSZXN5bmMYgQggASgIEhYKDXNw",
-            "ZWNpZXNJZExpc3QYggggAygFEh0KFGJ1bGxldExvY2FsSWRDb3VudGVyGIMI",
-            "IAEoBRItCg9wZWVyVWRwQWRkckxpc3QYhAggAygLMhMuc2hhcmVkLlBlZXJV",
-            "ZHBBZGRyIuEBCgZXc1Jlc3ASCwoDcmV0GAEgASgFEhMKC2VjaG9lZE1zZ0lk",
-            "GAIgASgFEgsKA2FjdBgDIAEoBRImCgNyZGYYBCABKAsyGS5zaGFyZWQuUm9v",
-            "bURvd25zeW5jRnJhbWUSOwoXaW5wdXRGcmFtZURvd25zeW5jQmF0Y2gYBSAD",
-            "KAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEiwKCGJjaUZyYW1lGAYg",
-            "ASgLMhouc2hhcmVkLkJhdHRsZUNvbGxpZGVySW5mbxIVCg1wZWVySm9pbklu",
-            "ZGV4GAcgASgFIvMBCgVTa2lsbBIVCg1iYXR0bGVMb2NhbElkGAEgASgFEhYK",
-            "DnJlY292ZXJ5RnJhbWVzGAIgASgFEh0KFXJlY292ZXJ5RnJhbWVzT25CbG9j",
-            "axgDIAEoBRIbChNyZWNvdmVyeUZyYW1lc09uSGl0GAQgASgFEi0KC3RyaWdn",
-            "ZXJUeXBlGAUgASgOMhguc2hhcmVkLlNraWxsVHJpZ2dlclR5cGUSLAoMYm91",
-            "bmRDaFN0YXRlGAYgASgOMhYuc2hhcmVkLkNoYXJhY3RlclN0YXRlEiIKBGhp",
-            "dHMYByADKAsyFC5zaGFyZWQuQnVsbGV0Q29uZmlnKjUKC0J1bGxldFN0YXRl",
-            "EgsKB1N0YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBsb2RpbmcQAiqOAgoO",
-            "Q2hhcmFjdGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxraW5nEAESCAoEQXRr",
-            "MRACEgoKBkF0a2VkMRADEhQKEEluQWlySWRsZTFOb0p1bXAQBBIUChBJbkFp",
-            "cklkbGUxQnlKdW1wEAUSDQoJSW5BaXJBdGsxEAYSDwoLSW5BaXJBdGtlZDEQ",
-            "BxIMCghCbG93blVwMRAIEgwKCExheURvd24xEAkSCgoGR2V0VXAxEAoSCAoE",
-            "QXRrMhALEggKBEF0azMQDBIICgRBdGs0EA0SCAoEQXRrNRAOEgsKB0Rhc2hp",
-            "bmcQDxIKCgZPbldhbGwQEBIOCgpUdXJuQXJvdW5kEBESCQoFRHlpbmcQEiqd",
-            "AQoPUm9vbUJhdHRsZVN0YXRlEg4KCklNUE9TU0lCTEUQABIICgRJRExFEAES",
-            "CwoHV0FJVElORxACEgsKB1BSRVBBUkUQAxINCglJTl9CQVRUTEUQBBIiCh5T",
-            "VE9QUElOR19CQVRUTEVfRk9SX1NFVFRMRU1FTlQQBRIRCg1JTl9TRVRUTEVN",
-            "RU5UEAYSEAoMSU5fRElTTUlTU0FMEAcqNwoKQnVsbGV0VHlwZRIQCgxVbmRl",
-            "dGVybWluZWQQABIJCgVNZWxlZRABEgwKCEZpcmViYWxsEAIqMwoQU2tpbGxU",
-            "cmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdlEAASDwoLRmFsbGluZ0VkZ2UQAUIJ",
-            "qgIGc2hhcmVkYgZwcm90bzM="));
+            "KAUSDwoHYXV0aEtleRgDIAEoBSKPAwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEK",
+            "CXN0YWdlTmFtZRgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIcChRiYXR0",
+            "bGVEdXJhdGlvbkZyYW1lcxgDIAEoAxImCh5pbnB1dEZyYW1lVXBzeW5jRGVs",
+            "YXlUb2xlcmFuY2UYBCABKAUSJwofbWF4Q2hhc2luZ1JlbmRlckZyYW1lc1Bl",
+            "clVwZGF0ZRgFIAEoBRIhChlyb2xsYmFja0VzdGltYXRlZER0TWlsbGlzGAYg",
+            "ASgBEiAKGHJvbGxiYWNrRXN0aW1hdGVkRHROYW5vcxgHIAEoAxIYChByZW5k",
+            "ZXJCdWZmZXJTaXplGAggASgFEhgKEGNvbGxpc2lvbk1pblN0ZXAYCSABKAUS",
+            "GQoRYm91bmRSb29tQ2FwYWNpdHkYCiABKAUSLAoPYmF0dGxlVWRwVHVubmVs",
+            "GAsgASgLMhMuc2hhcmVkLlBlZXJVZHBBZGRyEiAKF2ZyYW1lRGF0YUxvZ2dp",
+            "bmdFbmFibGVkGIAIIAEoCCKnAgoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQY",
+            "ASABKAUSKgoKcGxheWVyc0FychgCIAMoCzIWLnNoYXJlZC5QbGF5ZXJEb3du",
+            "c3luYxIWCg5jb3VudGRvd25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQgAygL",
+            "Mg4uc2hhcmVkLkJ1bGxldBIfChZiYWNrZW5kVW5jb25maXJtZWRNYXNrGIAI",
+            "IAEoBBIaChFzaG91bGRGb3JjZVJlc3luYxiBCCABKAgSFgoNc3BlY2llc0lk",
+            "TGlzdBiCCCADKAUSHQoUYnVsbGV0TG9jYWxJZENvdW50ZXIYgwggASgFEi0K",
+            "D3BlZXJVZHBBZGRyTGlzdBiECCADKAsyEy5zaGFyZWQuUGVlclVkcEFkZHIi",
+            "zAEKBldzUmVzcBILCgNyZXQYASABKAUSCwoDYWN0GAIgASgFEiYKA3JkZhgD",
+            "IAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRI7ChdpbnB1dEZyYW1l",
+            "RG93bnN5bmNCYXRjaBgEIAMoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5",
+            "bmMSLAoIYmNpRnJhbWUYBSABKAsyGi5zaGFyZWQuQmF0dGxlQ29sbGlkZXJJ",
+            "bmZvEhUKDXBlZXJKb2luSW5kZXgYBiABKAUi8wEKBVNraWxsEhUKDWJhdHRs",
+            "ZUxvY2FsSWQYASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYAiABKAUSHQoVcmVj",
+            "b3ZlcnlGcmFtZXNPbkJsb2NrGAMgASgFEhsKE3JlY292ZXJ5RnJhbWVzT25I",
+            "aXQYBCABKAUSLQoLdHJpZ2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tpbGxU",
+            "cmlnZ2VyVHlwZRIsCgxib3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQuQ2hh",
+            "cmFjdGVyU3RhdGUSIgoEaGl0cxgHIAMoCzIULnNoYXJlZC5CdWxsZXRDb25m",
+            "aWcqNQoLQnVsbGV0U3RhdGUSCwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0K",
+            "CUV4cGxvZGluZxACKo4CCg5DaGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsK",
+            "B1dhbGtpbmcQARIICgRBdGsxEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxl",
+            "MU5vSnVtcBAEEhQKEEluQWlySWRsZTFCeUp1bXAQBRINCglJbkFpckF0azEQ",
+            "BhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoITGF5RG93bjEQ",
+            "CRIKCgZHZXRVcDEQChIICgRBdGsyEAsSCAoEQXRrMxAMEggKBEF0azQQDRII",
+            "CgRBdGs1EA4SCwoHRGFzaGluZxAPEgoKBk9uV2FsbBAQEg4KClR1cm5Bcm91",
+            "bmQQERIJCgVEeWluZxASKp0BCg9Sb29tQmF0dGxlU3RhdGUSDgoKSU1QT1NT",
+            "SUJMRRAAEggKBElETEUQARILCgdXQUlUSU5HEAISCwoHUFJFUEFSRRADEg0K",
+            "CUlOX0JBVFRMRRAEEiIKHlNUT1BQSU5HX0JBVFRMRV9GT1JfU0VUVExFTUVO",
+            "VBAFEhEKDUlOX1NFVFRMRU1FTlQQBhIQCgxJTl9ESVNNSVNTQUwQByo3CgpC",
+            "dWxsZXRUeXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmly",
+            "ZWJhbGwQAiozChBTa2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIP",
+            "CgtGYWxsaW5nRWRnZRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.RoomBattleState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -139,9 +136,9 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.HolePunchUpsync), global::shared.HolePunchUpsync.Parser, new[]{ "IntAuthToken", "BoundRoomId", "AuthKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "IntervalToPing", "WillKickIfInactiveFor", "BoundRoomId", "BattleDurationNanos", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderCacheSize", "SpaceOffsetX", "SpaceOffsetY", "CollisionMinStep", "BoundRoomCapacity", "BattleUdpTunnel", "FrameDataLoggingEnabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "BattleUdpTunnel", "FrameDataLoggingEnabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "EchoedMsgId", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "Hits" }, null, null, null, null)
           }));
     }
@@ -5792,17 +5789,13 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public BattleColliderInfo(BattleColliderInfo other) : this() {
       stageName_ = other.stageName_;
-      intervalToPing_ = other.intervalToPing_;
-      willKickIfInactiveFor_ = other.willKickIfInactiveFor_;
       boundRoomId_ = other.boundRoomId_;
-      battleDurationNanos_ = other.battleDurationNanos_;
+      battleDurationFrames_ = other.battleDurationFrames_;
       inputFrameUpsyncDelayTolerance_ = other.inputFrameUpsyncDelayTolerance_;
       maxChasingRenderFramesPerUpdate_ = other.maxChasingRenderFramesPerUpdate_;
       rollbackEstimatedDtMillis_ = other.rollbackEstimatedDtMillis_;
       rollbackEstimatedDtNanos_ = other.rollbackEstimatedDtNanos_;
-      renderCacheSize_ = other.renderCacheSize_;
-      spaceOffsetX_ = other.spaceOffsetX_;
-      spaceOffsetY_ = other.spaceOffsetY_;
+      renderBufferSize_ = other.renderBufferSize_;
       collisionMinStep_ = other.collisionMinStep_;
       boundRoomCapacity_ = other.boundRoomCapacity_;
       battleUdpTunnel_ = other.battleUdpTunnel_ != null ? other.battleUdpTunnel_.Clone() : null;
@@ -5828,32 +5821,8 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "intervalToPing" field.</summary>
-    public const int IntervalToPingFieldNumber = 2;
-    private int intervalToPing_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int IntervalToPing {
-      get { return intervalToPing_; }
-      set {
-        intervalToPing_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "willKickIfInactiveFor" field.</summary>
-    public const int WillKickIfInactiveForFieldNumber = 3;
-    private int willKickIfInactiveFor_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int WillKickIfInactiveFor {
-      get { return willKickIfInactiveFor_; }
-      set {
-        willKickIfInactiveFor_ = value;
-      }
-    }
-
     /// <summary>Field number for the "boundRoomId" field.</summary>
-    public const int BoundRoomIdFieldNumber = 4;
+    public const int BoundRoomIdFieldNumber = 2;
     private int boundRoomId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5864,20 +5833,20 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "battleDurationNanos" field.</summary>
-    public const int BattleDurationNanosFieldNumber = 5;
-    private long battleDurationNanos_;
+    /// <summary>Field number for the "battleDurationFrames" field.</summary>
+    public const int BattleDurationFramesFieldNumber = 3;
+    private long battleDurationFrames_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long BattleDurationNanos {
-      get { return battleDurationNanos_; }
+    public long BattleDurationFrames {
+      get { return battleDurationFrames_; }
       set {
-        battleDurationNanos_ = value;
+        battleDurationFrames_ = value;
       }
     }
 
     /// <summary>Field number for the "inputFrameUpsyncDelayTolerance" field.</summary>
-    public const int InputFrameUpsyncDelayToleranceFieldNumber = 6;
+    public const int InputFrameUpsyncDelayToleranceFieldNumber = 4;
     private int inputFrameUpsyncDelayTolerance_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5889,7 +5858,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "maxChasingRenderFramesPerUpdate" field.</summary>
-    public const int MaxChasingRenderFramesPerUpdateFieldNumber = 7;
+    public const int MaxChasingRenderFramesPerUpdateFieldNumber = 5;
     private int maxChasingRenderFramesPerUpdate_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5901,7 +5870,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "rollbackEstimatedDtMillis" field.</summary>
-    public const int RollbackEstimatedDtMillisFieldNumber = 8;
+    public const int RollbackEstimatedDtMillisFieldNumber = 6;
     private double rollbackEstimatedDtMillis_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5913,7 +5882,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "rollbackEstimatedDtNanos" field.</summary>
-    public const int RollbackEstimatedDtNanosFieldNumber = 9;
+    public const int RollbackEstimatedDtNanosFieldNumber = 7;
     private long rollbackEstimatedDtNanos_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5924,44 +5893,20 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "renderCacheSize" field.</summary>
-    public const int RenderCacheSizeFieldNumber = 10;
-    private int renderCacheSize_;
+    /// <summary>Field number for the "renderBufferSize" field.</summary>
+    public const int RenderBufferSizeFieldNumber = 8;
+    private int renderBufferSize_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int RenderCacheSize {
-      get { return renderCacheSize_; }
+    public int RenderBufferSize {
+      get { return renderBufferSize_; }
       set {
-        renderCacheSize_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "spaceOffsetX" field.</summary>
-    public const int SpaceOffsetXFieldNumber = 11;
-    private double spaceOffsetX_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public double SpaceOffsetX {
-      get { return spaceOffsetX_; }
-      set {
-        spaceOffsetX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "spaceOffsetY" field.</summary>
-    public const int SpaceOffsetYFieldNumber = 12;
-    private double spaceOffsetY_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public double SpaceOffsetY {
-      get { return spaceOffsetY_; }
-      set {
-        spaceOffsetY_ = value;
+        renderBufferSize_ = value;
       }
     }
 
     /// <summary>Field number for the "collisionMinStep" field.</summary>
-    public const int CollisionMinStepFieldNumber = 13;
+    public const int CollisionMinStepFieldNumber = 9;
     private int collisionMinStep_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5973,7 +5918,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "boundRoomCapacity" field.</summary>
-    public const int BoundRoomCapacityFieldNumber = 14;
+    public const int BoundRoomCapacityFieldNumber = 10;
     private int boundRoomCapacity_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5985,7 +5930,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "battleUdpTunnel" field.</summary>
-    public const int BattleUdpTunnelFieldNumber = 15;
+    public const int BattleUdpTunnelFieldNumber = 11;
     private global::shared.PeerUdpAddr battleUdpTunnel_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6024,17 +5969,13 @@ namespace shared {
         return true;
       }
       if (StageName != other.StageName) return false;
-      if (IntervalToPing != other.IntervalToPing) return false;
-      if (WillKickIfInactiveFor != other.WillKickIfInactiveFor) return false;
       if (BoundRoomId != other.BoundRoomId) return false;
-      if (BattleDurationNanos != other.BattleDurationNanos) return false;
+      if (BattleDurationFrames != other.BattleDurationFrames) return false;
       if (InputFrameUpsyncDelayTolerance != other.InputFrameUpsyncDelayTolerance) return false;
       if (MaxChasingRenderFramesPerUpdate != other.MaxChasingRenderFramesPerUpdate) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(RollbackEstimatedDtMillis, other.RollbackEstimatedDtMillis)) return false;
       if (RollbackEstimatedDtNanos != other.RollbackEstimatedDtNanos) return false;
-      if (RenderCacheSize != other.RenderCacheSize) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(SpaceOffsetX, other.SpaceOffsetX)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(SpaceOffsetY, other.SpaceOffsetY)) return false;
+      if (RenderBufferSize != other.RenderBufferSize) return false;
       if (CollisionMinStep != other.CollisionMinStep) return false;
       if (BoundRoomCapacity != other.BoundRoomCapacity) return false;
       if (!object.Equals(BattleUdpTunnel, other.BattleUdpTunnel)) return false;
@@ -6047,17 +5988,13 @@ namespace shared {
     public override int GetHashCode() {
       int hash = 1;
       if (StageName.Length != 0) hash ^= StageName.GetHashCode();
-      if (IntervalToPing != 0) hash ^= IntervalToPing.GetHashCode();
-      if (WillKickIfInactiveFor != 0) hash ^= WillKickIfInactiveFor.GetHashCode();
       if (BoundRoomId != 0) hash ^= BoundRoomId.GetHashCode();
-      if (BattleDurationNanos != 0L) hash ^= BattleDurationNanos.GetHashCode();
+      if (BattleDurationFrames != 0L) hash ^= BattleDurationFrames.GetHashCode();
       if (InputFrameUpsyncDelayTolerance != 0) hash ^= InputFrameUpsyncDelayTolerance.GetHashCode();
       if (MaxChasingRenderFramesPerUpdate != 0) hash ^= MaxChasingRenderFramesPerUpdate.GetHashCode();
       if (RollbackEstimatedDtMillis != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(RollbackEstimatedDtMillis);
       if (RollbackEstimatedDtNanos != 0L) hash ^= RollbackEstimatedDtNanos.GetHashCode();
-      if (RenderCacheSize != 0) hash ^= RenderCacheSize.GetHashCode();
-      if (SpaceOffsetX != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(SpaceOffsetX);
-      if (SpaceOffsetY != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(SpaceOffsetY);
+      if (RenderBufferSize != 0) hash ^= RenderBufferSize.GetHashCode();
       if (CollisionMinStep != 0) hash ^= CollisionMinStep.GetHashCode();
       if (BoundRoomCapacity != 0) hash ^= BoundRoomCapacity.GetHashCode();
       if (battleUdpTunnel_ != null) hash ^= BattleUdpTunnel.GetHashCode();
@@ -6084,60 +6021,44 @@ namespace shared {
         output.WriteRawTag(10);
         output.WriteString(StageName);
       }
-      if (IntervalToPing != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(IntervalToPing);
-      }
-      if (WillKickIfInactiveFor != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(WillKickIfInactiveFor);
-      }
       if (BoundRoomId != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(16);
         output.WriteInt32(BoundRoomId);
       }
-      if (BattleDurationNanos != 0L) {
-        output.WriteRawTag(40);
-        output.WriteInt64(BattleDurationNanos);
+      if (BattleDurationFrames != 0L) {
+        output.WriteRawTag(24);
+        output.WriteInt64(BattleDurationFrames);
       }
       if (InputFrameUpsyncDelayTolerance != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(32);
         output.WriteInt32(InputFrameUpsyncDelayTolerance);
       }
       if (MaxChasingRenderFramesPerUpdate != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(40);
         output.WriteInt32(MaxChasingRenderFramesPerUpdate);
       }
       if (RollbackEstimatedDtMillis != 0D) {
-        output.WriteRawTag(65);
+        output.WriteRawTag(49);
         output.WriteDouble(RollbackEstimatedDtMillis);
       }
       if (RollbackEstimatedDtNanos != 0L) {
-        output.WriteRawTag(72);
+        output.WriteRawTag(56);
         output.WriteInt64(RollbackEstimatedDtNanos);
       }
-      if (RenderCacheSize != 0) {
-        output.WriteRawTag(80);
-        output.WriteInt32(RenderCacheSize);
-      }
-      if (SpaceOffsetX != 0D) {
-        output.WriteRawTag(89);
-        output.WriteDouble(SpaceOffsetX);
-      }
-      if (SpaceOffsetY != 0D) {
-        output.WriteRawTag(97);
-        output.WriteDouble(SpaceOffsetY);
+      if (RenderBufferSize != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(RenderBufferSize);
       }
       if (CollisionMinStep != 0) {
-        output.WriteRawTag(104);
+        output.WriteRawTag(72);
         output.WriteInt32(CollisionMinStep);
       }
       if (BoundRoomCapacity != 0) {
-        output.WriteRawTag(112);
+        output.WriteRawTag(80);
         output.WriteInt32(BoundRoomCapacity);
       }
       if (battleUdpTunnel_ != null) {
-        output.WriteRawTag(122);
+        output.WriteRawTag(90);
         output.WriteMessage(BattleUdpTunnel);
       }
       if (FrameDataLoggingEnabled != false) {
@@ -6158,60 +6079,44 @@ namespace shared {
         output.WriteRawTag(10);
         output.WriteString(StageName);
       }
-      if (IntervalToPing != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(IntervalToPing);
-      }
-      if (WillKickIfInactiveFor != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(WillKickIfInactiveFor);
-      }
       if (BoundRoomId != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(16);
         output.WriteInt32(BoundRoomId);
       }
-      if (BattleDurationNanos != 0L) {
-        output.WriteRawTag(40);
-        output.WriteInt64(BattleDurationNanos);
+      if (BattleDurationFrames != 0L) {
+        output.WriteRawTag(24);
+        output.WriteInt64(BattleDurationFrames);
       }
       if (InputFrameUpsyncDelayTolerance != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(32);
         output.WriteInt32(InputFrameUpsyncDelayTolerance);
       }
       if (MaxChasingRenderFramesPerUpdate != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(40);
         output.WriteInt32(MaxChasingRenderFramesPerUpdate);
       }
       if (RollbackEstimatedDtMillis != 0D) {
-        output.WriteRawTag(65);
+        output.WriteRawTag(49);
         output.WriteDouble(RollbackEstimatedDtMillis);
       }
       if (RollbackEstimatedDtNanos != 0L) {
-        output.WriteRawTag(72);
+        output.WriteRawTag(56);
         output.WriteInt64(RollbackEstimatedDtNanos);
       }
-      if (RenderCacheSize != 0) {
-        output.WriteRawTag(80);
-        output.WriteInt32(RenderCacheSize);
-      }
-      if (SpaceOffsetX != 0D) {
-        output.WriteRawTag(89);
-        output.WriteDouble(SpaceOffsetX);
-      }
-      if (SpaceOffsetY != 0D) {
-        output.WriteRawTag(97);
-        output.WriteDouble(SpaceOffsetY);
+      if (RenderBufferSize != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(RenderBufferSize);
       }
       if (CollisionMinStep != 0) {
-        output.WriteRawTag(104);
+        output.WriteRawTag(72);
         output.WriteInt32(CollisionMinStep);
       }
       if (BoundRoomCapacity != 0) {
-        output.WriteRawTag(112);
+        output.WriteRawTag(80);
         output.WriteInt32(BoundRoomCapacity);
       }
       if (battleUdpTunnel_ != null) {
-        output.WriteRawTag(122);
+        output.WriteRawTag(90);
         output.WriteMessage(BattleUdpTunnel);
       }
       if (FrameDataLoggingEnabled != false) {
@@ -6231,17 +6136,11 @@ namespace shared {
       if (StageName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(StageName);
       }
-      if (IntervalToPing != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(IntervalToPing);
-      }
-      if (WillKickIfInactiveFor != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(WillKickIfInactiveFor);
-      }
       if (BoundRoomId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(BoundRoomId);
       }
-      if (BattleDurationNanos != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(BattleDurationNanos);
+      if (BattleDurationFrames != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(BattleDurationFrames);
       }
       if (InputFrameUpsyncDelayTolerance != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(InputFrameUpsyncDelayTolerance);
@@ -6255,14 +6154,8 @@ namespace shared {
       if (RollbackEstimatedDtNanos != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(RollbackEstimatedDtNanos);
       }
-      if (RenderCacheSize != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RenderCacheSize);
-      }
-      if (SpaceOffsetX != 0D) {
-        size += 1 + 8;
-      }
-      if (SpaceOffsetY != 0D) {
-        size += 1 + 8;
+      if (RenderBufferSize != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RenderBufferSize);
       }
       if (CollisionMinStep != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(CollisionMinStep);
@@ -6291,17 +6184,11 @@ namespace shared {
       if (other.StageName.Length != 0) {
         StageName = other.StageName;
       }
-      if (other.IntervalToPing != 0) {
-        IntervalToPing = other.IntervalToPing;
-      }
-      if (other.WillKickIfInactiveFor != 0) {
-        WillKickIfInactiveFor = other.WillKickIfInactiveFor;
-      }
       if (other.BoundRoomId != 0) {
         BoundRoomId = other.BoundRoomId;
       }
-      if (other.BattleDurationNanos != 0L) {
-        BattleDurationNanos = other.BattleDurationNanos;
+      if (other.BattleDurationFrames != 0L) {
+        BattleDurationFrames = other.BattleDurationFrames;
       }
       if (other.InputFrameUpsyncDelayTolerance != 0) {
         InputFrameUpsyncDelayTolerance = other.InputFrameUpsyncDelayTolerance;
@@ -6315,14 +6202,8 @@ namespace shared {
       if (other.RollbackEstimatedDtNanos != 0L) {
         RollbackEstimatedDtNanos = other.RollbackEstimatedDtNanos;
       }
-      if (other.RenderCacheSize != 0) {
-        RenderCacheSize = other.RenderCacheSize;
-      }
-      if (other.SpaceOffsetX != 0D) {
-        SpaceOffsetX = other.SpaceOffsetX;
-      }
-      if (other.SpaceOffsetY != 0D) {
-        SpaceOffsetY = other.SpaceOffsetY;
+      if (other.RenderBufferSize != 0) {
+        RenderBufferSize = other.RenderBufferSize;
       }
       if (other.CollisionMinStep != 0) {
         CollisionMinStep = other.CollisionMinStep;
@@ -6359,58 +6240,42 @@ namespace shared {
             break;
           }
           case 16: {
-            IntervalToPing = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            WillKickIfInactiveFor = input.ReadInt32();
-            break;
-          }
-          case 32: {
             BoundRoomId = input.ReadInt32();
             break;
           }
-          case 40: {
-            BattleDurationNanos = input.ReadInt64();
+          case 24: {
+            BattleDurationFrames = input.ReadInt64();
             break;
           }
-          case 48: {
+          case 32: {
             InputFrameUpsyncDelayTolerance = input.ReadInt32();
             break;
           }
-          case 56: {
+          case 40: {
             MaxChasingRenderFramesPerUpdate = input.ReadInt32();
             break;
           }
-          case 65: {
+          case 49: {
             RollbackEstimatedDtMillis = input.ReadDouble();
             break;
           }
-          case 72: {
+          case 56: {
             RollbackEstimatedDtNanos = input.ReadInt64();
             break;
           }
-          case 80: {
-            RenderCacheSize = input.ReadInt32();
+          case 64: {
+            RenderBufferSize = input.ReadInt32();
             break;
           }
-          case 89: {
-            SpaceOffsetX = input.ReadDouble();
-            break;
-          }
-          case 97: {
-            SpaceOffsetY = input.ReadDouble();
-            break;
-          }
-          case 104: {
+          case 72: {
             CollisionMinStep = input.ReadInt32();
             break;
           }
-          case 112: {
+          case 80: {
             BoundRoomCapacity = input.ReadInt32();
             break;
           }
-          case 122: {
+          case 90: {
             if (battleUdpTunnel_ == null) {
               BattleUdpTunnel = new global::shared.PeerUdpAddr();
             }
@@ -6441,58 +6306,42 @@ namespace shared {
             break;
           }
           case 16: {
-            IntervalToPing = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            WillKickIfInactiveFor = input.ReadInt32();
-            break;
-          }
-          case 32: {
             BoundRoomId = input.ReadInt32();
             break;
           }
-          case 40: {
-            BattleDurationNanos = input.ReadInt64();
+          case 24: {
+            BattleDurationFrames = input.ReadInt64();
             break;
           }
-          case 48: {
+          case 32: {
             InputFrameUpsyncDelayTolerance = input.ReadInt32();
             break;
           }
-          case 56: {
+          case 40: {
             MaxChasingRenderFramesPerUpdate = input.ReadInt32();
             break;
           }
-          case 65: {
+          case 49: {
             RollbackEstimatedDtMillis = input.ReadDouble();
             break;
           }
-          case 72: {
+          case 56: {
             RollbackEstimatedDtNanos = input.ReadInt64();
             break;
           }
-          case 80: {
-            RenderCacheSize = input.ReadInt32();
+          case 64: {
+            RenderBufferSize = input.ReadInt32();
             break;
           }
-          case 89: {
-            SpaceOffsetX = input.ReadDouble();
-            break;
-          }
-          case 97: {
-            SpaceOffsetY = input.ReadDouble();
-            break;
-          }
-          case 104: {
+          case 72: {
             CollisionMinStep = input.ReadInt32();
             break;
           }
-          case 112: {
+          case 80: {
             BoundRoomCapacity = input.ReadInt32();
             break;
           }
-          case 122: {
+          case 90: {
             if (battleUdpTunnel_ == null) {
               BattleUdpTunnel = new global::shared.PeerUdpAddr();
             }
@@ -6991,7 +6840,6 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public WsResp(WsResp other) : this() {
       ret_ = other.ret_;
-      echoedMsgId_ = other.echoedMsgId_;
       act_ = other.act_;
       rdf_ = other.rdf_ != null ? other.rdf_.Clone() : null;
       inputFrameDownsyncBatch_ = other.inputFrameDownsyncBatch_.Clone();
@@ -7018,20 +6866,8 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "echoedMsgId" field.</summary>
-    public const int EchoedMsgIdFieldNumber = 2;
-    private int echoedMsgId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int EchoedMsgId {
-      get { return echoedMsgId_; }
-      set {
-        echoedMsgId_ = value;
-      }
-    }
-
     /// <summary>Field number for the "act" field.</summary>
-    public const int ActFieldNumber = 3;
+    public const int ActFieldNumber = 2;
     private int act_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7043,7 +6879,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "rdf" field.</summary>
-    public const int RdfFieldNumber = 4;
+    public const int RdfFieldNumber = 3;
     private global::shared.RoomDownsyncFrame rdf_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7055,9 +6891,9 @@ namespace shared {
     }
 
     /// <summary>Field number for the "inputFrameDownsyncBatch" field.</summary>
-    public const int InputFrameDownsyncBatchFieldNumber = 5;
+    public const int InputFrameDownsyncBatchFieldNumber = 4;
     private static readonly pb::FieldCodec<global::shared.InputFrameDownsync> _repeated_inputFrameDownsyncBatch_codec
-        = pb::FieldCodec.ForMessage(42, global::shared.InputFrameDownsync.Parser);
+        = pb::FieldCodec.ForMessage(34, global::shared.InputFrameDownsync.Parser);
     private readonly pbc::RepeatedField<global::shared.InputFrameDownsync> inputFrameDownsyncBatch_ = new pbc::RepeatedField<global::shared.InputFrameDownsync>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7066,7 +6902,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "bciFrame" field.</summary>
-    public const int BciFrameFieldNumber = 6;
+    public const int BciFrameFieldNumber = 5;
     private global::shared.BattleColliderInfo bciFrame_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7078,7 +6914,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "peerJoinIndex" field.</summary>
-    public const int PeerJoinIndexFieldNumber = 7;
+    public const int PeerJoinIndexFieldNumber = 6;
     private int peerJoinIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7105,7 +6941,6 @@ namespace shared {
         return true;
       }
       if (Ret != other.Ret) return false;
-      if (EchoedMsgId != other.EchoedMsgId) return false;
       if (Act != other.Act) return false;
       if (!object.Equals(Rdf, other.Rdf)) return false;
       if(!inputFrameDownsyncBatch_.Equals(other.inputFrameDownsyncBatch_)) return false;
@@ -7119,7 +6954,6 @@ namespace shared {
     public override int GetHashCode() {
       int hash = 1;
       if (Ret != 0) hash ^= Ret.GetHashCode();
-      if (EchoedMsgId != 0) hash ^= EchoedMsgId.GetHashCode();
       if (Act != 0) hash ^= Act.GetHashCode();
       if (rdf_ != null) hash ^= Rdf.GetHashCode();
       hash ^= inputFrameDownsyncBatch_.GetHashCode();
@@ -7147,25 +6981,21 @@ namespace shared {
         output.WriteRawTag(8);
         output.WriteInt32(Ret);
       }
-      if (EchoedMsgId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(EchoedMsgId);
-      }
       if (Act != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteInt32(Act);
       }
       if (rdf_ != null) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(26);
         output.WriteMessage(Rdf);
       }
       inputFrameDownsyncBatch_.WriteTo(output, _repeated_inputFrameDownsyncBatch_codec);
       if (bciFrame_ != null) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(42);
         output.WriteMessage(BciFrame);
       }
       if (PeerJoinIndex != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(48);
         output.WriteInt32(PeerJoinIndex);
       }
       if (_unknownFields != null) {
@@ -7182,25 +7012,21 @@ namespace shared {
         output.WriteRawTag(8);
         output.WriteInt32(Ret);
       }
-      if (EchoedMsgId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(EchoedMsgId);
-      }
       if (Act != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteInt32(Act);
       }
       if (rdf_ != null) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(26);
         output.WriteMessage(Rdf);
       }
       inputFrameDownsyncBatch_.WriteTo(ref output, _repeated_inputFrameDownsyncBatch_codec);
       if (bciFrame_ != null) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(42);
         output.WriteMessage(BciFrame);
       }
       if (PeerJoinIndex != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(48);
         output.WriteInt32(PeerJoinIndex);
       }
       if (_unknownFields != null) {
@@ -7215,9 +7041,6 @@ namespace shared {
       int size = 0;
       if (Ret != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Ret);
-      }
-      if (EchoedMsgId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(EchoedMsgId);
       }
       if (Act != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Act);
@@ -7246,9 +7069,6 @@ namespace shared {
       }
       if (other.Ret != 0) {
         Ret = other.Ret;
-      }
-      if (other.EchoedMsgId != 0) {
-        EchoedMsgId = other.EchoedMsgId;
       }
       if (other.Act != 0) {
         Act = other.Act;
@@ -7289,32 +7109,28 @@ namespace shared {
             break;
           }
           case 16: {
-            EchoedMsgId = input.ReadInt32();
-            break;
-          }
-          case 24: {
             Act = input.ReadInt32();
             break;
           }
-          case 34: {
+          case 26: {
             if (rdf_ == null) {
               Rdf = new global::shared.RoomDownsyncFrame();
             }
             input.ReadMessage(Rdf);
             break;
           }
-          case 42: {
+          case 34: {
             inputFrameDownsyncBatch_.AddEntriesFrom(input, _repeated_inputFrameDownsyncBatch_codec);
             break;
           }
-          case 50: {
+          case 42: {
             if (bciFrame_ == null) {
               BciFrame = new global::shared.BattleColliderInfo();
             }
             input.ReadMessage(BciFrame);
             break;
           }
-          case 56: {
+          case 48: {
             PeerJoinIndex = input.ReadInt32();
             break;
           }
@@ -7338,32 +7154,28 @@ namespace shared {
             break;
           }
           case 16: {
-            EchoedMsgId = input.ReadInt32();
-            break;
-          }
-          case 24: {
             Act = input.ReadInt32();
             break;
           }
-          case 34: {
+          case 26: {
             if (rdf_ == null) {
               Rdf = new global::shared.RoomDownsyncFrame();
             }
             input.ReadMessage(Rdf);
             break;
           }
-          case 42: {
+          case 34: {
             inputFrameDownsyncBatch_.AddEntriesFrom(ref input, _repeated_inputFrameDownsyncBatch_codec);
             break;
           }
-          case 50: {
+          case 42: {
             if (bciFrame_ == null) {
               BciFrame = new global::shared.BattleColliderInfo();
             }
             input.ReadMessage(BciFrame);
             break;
           }
-          case 56: {
+          case 48: {
             PeerJoinIndex = input.ReadInt32();
             break;
           }
@@ -7502,7 +7314,15 @@ namespace shared {
         = pb::FieldCodec.ForMessage(58, global::shared.BulletConfig.Parser);
     private readonly pbc::RepeatedField<global::shared.BulletConfig> hits_ = new pbc::RepeatedField<global::shared.BulletConfig>();
     /// <summary>
-    /// [WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
+    ///*
+    ///[WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
+    ///
+    ///Types of fireball multihit-singlebullet
+    ///a. References the emission frame
+    ///b. References the first hit only when actually hit
+    ///c. References the first hit even if blocked
+    ///d. References the prev hit only when actually hit
+    ///e. References the prev hit even if blocked
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]

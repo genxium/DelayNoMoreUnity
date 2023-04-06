@@ -5,12 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.Linq;
+using shared;
+using Google.Protobuf;
 
 public class WsSessionManager {
     public delegate void OnWsSessionEvtCallbackType(int resultCode);
 
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
-    private const int sendChunkSize = 256;
     private const int receiveChunkSize = 64;
 
     /**
@@ -18,7 +19,8 @@ public class WsSessionManager {
         
     I'm not using "RecvRingBuff" from https://github.com/genxium/DelayNoMore/blob/v1.0.14/frontend/build-templates/jsb-link/frameworks/runtime-src/Classes/ring_buff.cpp because WebSocket is supposed to be preserving send/recv order at all time.
     */
-    public Queue<byte[]> senderBuffer, recvBuffer;
+    public Queue<WsReq> senderBuffer;
+    public Queue<WsResp> recvBuffer;
     private string authToken;
     private int playerId = shared.Battle.TERMINATING_PLAYER_ID;
 
@@ -33,8 +35,8 @@ public class WsSessionManager {
 
     private WsSessionManager() {
         ClearCredentials();
-        senderBuffer = new Queue<byte[]>();
-        recvBuffer = new Queue<byte[]>();
+        senderBuffer = new Queue<WsReq>();
+        recvBuffer = new Queue<WsResp>();
     }
 
     public void SetCredentials(string theAuthToken, int thePlayerId) {
@@ -43,7 +45,7 @@ public class WsSessionManager {
     }
 
     public void ClearCredentials() {
-        SetCredentials(null, shared.Battle.TERMINATING_PLAYER_ID);
+        SetCredentials(null, Battle.TERMINATING_PLAYER_ID);
     }
 
     public async void ConnectWs(string wsEndpoint, CancellationToken cancellationToken, OnWsSessionEvtCallbackType onOpen, OnWsSessionEvtCallbackType onClose) {
@@ -71,11 +73,11 @@ public class WsSessionManager {
     }
 
     private async Task Send(ClientWebSocket ws, CancellationToken cancellationToken) {
-        byte[] byteBuff = new byte[sendChunkSize];
+        WsReq toSendObj;
         try {
             while (ws.State == WebSocketState.Open) {
-                while (senderBuffer.TryDequeue(out byteBuff)) {
-                    await ws.SendAsync(new ArraySegment<byte>(byteBuff), WebSocketMessageType.Binary, false, cancellationToken);
+                while (senderBuffer.TryDequeue(out toSendObj)) {
+                    await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
                 }
             }
         } catch (OperationCanceledException ocEx) {
@@ -92,8 +94,9 @@ public class WsSessionManager {
                 if (result.MessageType == WebSocketMessageType.Close) {
                     await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
                 } else {
-                    byte[] clone = byteBuff.ToArray();
-                    recvBuffer.Enqueue(clone);
+                    WsResp resp = WsResp.Parser.ParseFrom(byteBuff);
+                    Debug.Log(String.Format("Received WsResp {0}", resp.ToString()));
+                    recvBuffer.Enqueue(resp);
                 }
             }
         } catch (OperationCanceledException ocEx) {

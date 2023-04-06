@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Battle;
 using shared;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
+using Google.Protobuf;
 
 namespace backend.Controllers;
 
@@ -38,6 +39,7 @@ public class WebSocketController : ControllerBase {
     }
 
     private async Task HandleNewPlayerPrimarySession(WebSocket session, int playerId, int speciesId) {
+
         using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource()) {
             CancellationToken cancellationToken = cancellationTokenSource.Token;
             WebSocketCloseStatus closeCode = WebSocketCloseStatus.Empty;
@@ -45,45 +47,72 @@ public class WebSocketController : ControllerBase {
 
             var room = _roomManager.Pop();
             int addPlayerToRoomResult = ErrCode.UnknownError;
-            if (null == room) {
-                _logger.LogWarning("No available room [ playerId={0} ]", playerId);
-                cancellationTokenSource.Cancel();
-            } else {
-                var player = new Player(new PlayerDownsync());
+            Player player = null;
+
+            try {
+                if (null == room) {
+                    _logger.LogWarning("No available room [ playerId={0} ]", playerId);
+                    return;
+                }
+                player = new Player(new PlayerDownsync());
                 addPlayerToRoomResult = room.AddPlayerIfPossible(player, playerId, speciesId, session, cancellationTokenSource);
                 if (ErrCode.Ok != addPlayerToRoomResult) {
                     _logger.LogWarning("Failed to add player to room [ roomId={0}, playerId={1}, result={2} ]", room.id, playerId, addPlayerToRoomResult);
-                    cancellationTokenSource.Cancel();
-                } else {
-                    _logger.LogInformation("Added player to room [ roomId={0}, playerId={1} ]", room.id, playerId);
-                    _roomManager.Push(room.calRoomScore(), room);
+                    return;
                 }
-            }
 
-            var buffer = new byte[1024];
-            while (!cancellationToken.IsCancellationRequested) {
-                try {
-                    var receiveResult = await session.ReceiveAsync(
-                    new ArraySegment<byte>(buffer), cancellationToken);
+                _logger.LogInformation("Added player to room [ roomId={0}, playerId={1} ]", room.id, playerId);
+                _roomManager.Push(room.calRoomScore(), room);
 
-                    if (receiveResult.CloseStatus.HasValue) {
-                        closeCode = receiveResult.CloseStatus.Value;
-                        closeReason = receiveResult.CloseStatusDescription;
-                        break;
+                var bciFrame = new BattleColliderInfo {
+                    StageName = room.stageName,
+
+                    BoundRoomId = room.id,
+                    BattleDurationFrames = room.battleDurationFrames,
+                    InputFrameUpsyncDelayTolerance = room.inputFrameUpsyncDelayTolerance,
+                    MaxChasingRenderFramesPerUpdate = room.maxChasingRenderFramesPerUpdate,
+
+                    RenderBufferSize = room.GetRenderCacheSize(),
+                    BoundRoomCapacity = room.capacity,
+                    BattleUdpTunnel = room.battleUdpTunnelAddr,
+                    FrameDataLoggingEnabled = room.frameDataLoggingEnabled
+                };
+
+                var initWsResp = new WsResp {
+                    Ret = ErrCode.Ok,
+                    Act = shared.Battle.DOWNSYNC_MSG_ACT_HB_REQ,
+                    BciFrame = bciFrame,
+                    PeerJoinIndex = player.PlayerDownsync.JoinIndex
+                };
+
+                await session.SendAsync(new ArraySegment<byte>(initWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
+
+                var buffer = new byte[1024];
+                while (!cancellationToken.IsCancellationRequested) {
+                    try {
+                        var receiveResult = await session.ReceiveAsync(
+                        new ArraySegment<byte>(buffer), cancellationToken);
+
+                        if (receiveResult.CloseStatus.HasValue) {
+                            closeCode = receiveResult.CloseStatus.Value;
+                            closeReason = receiveResult.CloseStatusDescription;
+                            break;
+                        }
+                    } catch (OperationCanceledException ocEx) {
+                        _logger.LogWarning("Session is cancelled for [ roomId={0}, playerId={1}, ocEx={2} ]", (null != room ? room.id : null), playerId, ocEx.Message);
                     }
-                } catch (OperationCanceledException ocEx) {
-                    _logger.LogWarning("Session is cancelled for [ roomId={0}, playerId={1}, ocEx={2} ]", (null != room ? room.id : null), playerId, ocEx.Message);
                 }
-            }
-            
-            if (null != room && ErrCode.Ok == addPlayerToRoomResult) {
-                room.OnPlayerDisconnected(playerId);
-            }
-            if (!cancellationToken.IsCancellationRequested) {
-                await session.CloseAsync(
-                closeCode,
-                closeReason,
-                CancellationToken.None); // We won't cancel the closing of a websocket session
+
+                if (null != room && ErrCode.Ok == addPlayerToRoomResult) {
+                    room.OnPlayerDisconnected(playerId);
+                }
+            } finally {
+                if (!cancellationToken.IsCancellationRequested) {
+                    await session.CloseAsync(
+                    closeCode,
+                    closeReason,
+                    CancellationToken.None); // We won't cancel the closing of a websocket session
+                }
             }
         }
     }
