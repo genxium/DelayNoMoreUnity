@@ -4,8 +4,6 @@ using static shared.Battle;
 using System;
 using static shared.CharacterState;
 using pbc = Google.Protobuf.Collections;
-using UnityEditor.PackageManager.UI;
-using UnityEngine.AdaptivePerformance;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity = 1;
@@ -225,7 +223,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-    public void _resetCurrentMatch() {
+    public virtual void _resetCurrentMatch() {
         battleState = RoomBattleState.Impossible;
         renderFrameId = Battle.TERMINATING_RENDER_FRAME_ID;
         renderFrameIdLagTolerance = 4;
@@ -420,6 +418,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             getOrPrefabInputFrameUpsync(delayedInputFrameId, false, prefabbedInputListHolder);
         }
 
+        if (shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, lastUpsyncInputFrameId, noDelayInputFrameId)) {
+          // TODO: Is the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
+          sendInputFrameUpsyncBatch(noDelayInputFrameId);
+        }
+
         int prevChaserRenderFrameId = chaserRenderFrameId;
         int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
         
@@ -446,6 +449,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         battleState = RoomBattleState.InSettlement;
     }
+
+    protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int lastUpsyncInputFrameId, int currInputFrameId);
+
+    protected abstract void sendInputFrameUpsyncBatch(int latestLocalInputFrameId);
 
     void OnRenderObject() {
         if (debugDrawingEnabled) {

@@ -113,20 +113,14 @@ message InputFrameDownsync {
 	uint64 confirmedList = 3; // Indexed by "joinIndex", same compression concern as above
 }
 
-message HeartbeatUpsync {
-	int64 clientTimestamp = 1;
-}
-
 message WsReq {
-	int32 msgId = 1;
-	int32 playerId = 2;
-	int32 act = 3;
-	int32 joinIndex = 4;
-	int32 ackingFrameId = 5;
-	int32 ackingInputFrameId = 6;
-	int32 authKey = 7;
-	repeated InputFrameUpsync inputFrameUpsyncBatch = 8;
-	HeartbeatUpsync hb = 9;
+	int32 playerId = 1;
+	int32 act = 2;
+	int32 joinIndex = 3;
+	int32 ackingFrameId = 4;
+	int32 ackingInputFrameId = 5;
+	int32 authKey = 6;
+	repeated InputFrameUpsync inputFrameUpsyncBatch = 7;
 }
 
 message InputsBufferSnapshot {

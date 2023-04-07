@@ -46,81 +46,79 @@ namespace shared {
             "YW1lVXBzeW5jEhQKDGlucHV0RnJhbWVJZBgBIAEoBRIPCgdlbmNvZGVkGAIg",
             "ASgEEhEKCWpvaW5JbmRleBgDIAEoBSJUChJJbnB1dEZyYW1lRG93bnN5bmMS",
             "FAoMaW5wdXRGcmFtZUlkGAEgASgFEhEKCWlucHV0TGlzdBgCIAMoBBIVCg1j",
-            "b25maXJtZWRMaXN0GAMgASgEIioKD0hlYXJ0YmVhdFVwc3luYxIXCg9jbGll",
-            "bnRUaW1lc3RhbXAYASABKAMi6gEKBVdzUmVxEg0KBW1zZ0lkGAEgASgFEhAK",
-            "CHBsYXllcklkGAIgASgFEgsKA2FjdBgDIAEoBRIRCglqb2luSW5kZXgYBCAB",
-            "KAUSFQoNYWNraW5nRnJhbWVJZBgFIAEoBRIaChJhY2tpbmdJbnB1dEZyYW1l",
-            "SWQYBiABKAUSDwoHYXV0aEtleRgHIAEoBRI3ChVpbnB1dEZyYW1lVXBzeW5j",
-            "QmF0Y2gYCCADKAsyGC5zaGFyZWQuSW5wdXRGcmFtZVVwc3luYxIjCgJoYhgJ",
-            "IAEoCzIXLnNoYXJlZC5IZWFydGJlYXRVcHN5bmMiugEKFElucHV0c0J1ZmZl",
-            "clNuYXBzaG90EhgKEHJlZlJlbmRlckZyYW1lSWQYASABKAUSFwoPdW5jb25m",
-            "aXJtZWRNYXNrGAIgASgEEj0KGXRvU2VuZElucHV0RnJhbWVEb3duc3luY3MY",
-            "AyADKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEhkKEXNob3VsZEZv",
-            "cmNlUmVzeW5jGAQgASgIEhUKDXBlZXJKb2luSW5kZXgYBSABKAUixwQKDEJ1",
-            "bGxldENvbmZpZxIVCg1zdGFydHVwRnJhbWVzGAEgASgFEhoKEmNhbmNlbGxh",
-            "YmxlU3RGcmFtZRgCIAEoBRIaChJjYW5jZWxsYWJsZUVkRnJhbWUYAyABKAUS",
-            "FAoMYWN0aXZlRnJhbWVzGAQgASgFEhUKDWhpdFN0dW5GcmFtZXMYBSABKAUS",
-            "FwoPYmxvY2tTdHVuRnJhbWVzGAYgASgFEhQKDHB1c2hiYWNrVmVsWBgHIAEo",
-            "BRIUCgxwdXNoYmFja1ZlbFkYCCABKAUSDgoGZGFtYWdlGAkgASgFEhQKDHNl",
-            "bGZMb2NrVmVsWBgKIAEoBRIUCgxzZWxmTG9ja1ZlbFkYCyABKAUSFQoNaGl0",
-            "Ym94T2Zmc2V0WBgMIAEoBRIVCg1oaXRib3hPZmZzZXRZGA0gASgFEhMKC2hp",
-            "dGJveFNpemVYGA4gASgFEhMKC2hpdGJveFNpemVZGA8gASgFEg4KBmJsb3dV",
-            "cBgQIAEoCBIRCglzcGVjaWVzSWQYESABKAUSFwoPZXhwbG9zaW9uRnJhbWVz",
-            "GBIgASgFEiEKBWJUeXBlGBMgASgOMhIuc2hhcmVkLkJ1bGxldFR5cGUSDQoF",
-            "c3BlZWQYFCABKAUSPgoNY2FuY2VsVHJhbnNpdBgVIAMoCzInLnNoYXJlZC5C",
-            "dWxsZXRDb25maWcuQ2FuY2VsVHJhbnNpdEVudHJ5GjQKEkNhbmNlbFRyYW5z",
-            "aXRFbnRyeRILCgNrZXkYASABKAUSDQoFdmFsdWUYAiABKAU6AjgBInUKEEJ1",
-            "bGxldEJhdHRsZUF0dHISFQoNYnVsbGV0TG9jYWxJZBgBIAEoBRIfChdvcmln",
-            "aW5hdGVkUmVuZGVyRnJhbWVJZBgCIAEoBRIZChFvZmZlbmRlckpvaW5JbmRl",
-            "eBgDIAEoBRIOCgZ0ZWFtSWQYBCABKAUihQIKBkJ1bGxldBIkCgdibFN0YXRl",
-            "GAEgASgOMhMuc2hhcmVkLkJ1bGxldFN0YXRlEhcKD2ZyYW1lc0luQmxTdGF0",
-            "ZRgCIAEoBRIsCgpiYXR0bGVBdHRyGAMgASgLMhguc2hhcmVkLkJ1bGxldEJh",
-            "dHRsZUF0dHISJAoGY29uZmlnGAQgASgLMhQuc2hhcmVkLkJ1bGxldENvbmZp",
-            "ZxIVCgx2aXJ0dWFsR3JpZFgY5wcgASgFEhUKDHZpcnR1YWxHcmlkWRjoByAB",
-            "KAUSDQoEZGlyWBjpByABKAUSDQoEZGlyWRjqByABKAUSDQoEdmVsWBjrByAB",
-            "KAUSDQoEdmVsWRjsByABKAUiTQoPSG9sZVB1bmNoVXBzeW5jEhQKDGludEF1",
-            "dGhUb2tlbhgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIPCgdhdXRoS2V5",
-            "GAMgASgFIjgKC1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwKBHBvcnQYAiAB",
-            "KAUSDwoHYXV0aEtleRgDIAEoBSKPAwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEK",
-            "CXN0YWdlTmFtZRgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIcChRiYXR0",
-            "bGVEdXJhdGlvbkZyYW1lcxgDIAEoAxImCh5pbnB1dEZyYW1lVXBzeW5jRGVs",
-            "YXlUb2xlcmFuY2UYBCABKAUSJwofbWF4Q2hhc2luZ1JlbmRlckZyYW1lc1Bl",
-            "clVwZGF0ZRgFIAEoBRIhChlyb2xsYmFja0VzdGltYXRlZER0TWlsbGlzGAYg",
-            "ASgBEiAKGHJvbGxiYWNrRXN0aW1hdGVkRHROYW5vcxgHIAEoAxIYChByZW5k",
-            "ZXJCdWZmZXJTaXplGAggASgFEhgKEGNvbGxpc2lvbk1pblN0ZXAYCSABKAUS",
-            "GQoRYm91bmRSb29tQ2FwYWNpdHkYCiABKAUSLAoPYmF0dGxlVWRwVHVubmVs",
-            "GAsgASgLMhMuc2hhcmVkLlBlZXJVZHBBZGRyEiAKF2ZyYW1lRGF0YUxvZ2dp",
-            "bmdFbmFibGVkGIAIIAEoCCKnAgoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQY",
-            "ASABKAUSKgoKcGxheWVyc0FychgCIAMoCzIWLnNoYXJlZC5QbGF5ZXJEb3du",
-            "c3luYxIWCg5jb3VudGRvd25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQgAygL",
-            "Mg4uc2hhcmVkLkJ1bGxldBIfChZiYWNrZW5kVW5jb25maXJtZWRNYXNrGIAI",
-            "IAEoBBIaChFzaG91bGRGb3JjZVJlc3luYxiBCCABKAgSFgoNc3BlY2llc0lk",
-            "TGlzdBiCCCADKAUSHQoUYnVsbGV0TG9jYWxJZENvdW50ZXIYgwggASgFEi0K",
-            "D3BlZXJVZHBBZGRyTGlzdBiECCADKAsyEy5zaGFyZWQuUGVlclVkcEFkZHIi",
-            "zAEKBldzUmVzcBILCgNyZXQYASABKAUSCwoDYWN0GAIgASgFEiYKA3JkZhgD",
-            "IAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRI7ChdpbnB1dEZyYW1l",
-            "RG93bnN5bmNCYXRjaBgEIAMoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5",
-            "bmMSLAoIYmNpRnJhbWUYBSABKAsyGi5zaGFyZWQuQmF0dGxlQ29sbGlkZXJJ",
-            "bmZvEhUKDXBlZXJKb2luSW5kZXgYBiABKAUi8wEKBVNraWxsEhUKDWJhdHRs",
-            "ZUxvY2FsSWQYASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYAiABKAUSHQoVcmVj",
-            "b3ZlcnlGcmFtZXNPbkJsb2NrGAMgASgFEhsKE3JlY292ZXJ5RnJhbWVzT25I",
-            "aXQYBCABKAUSLQoLdHJpZ2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tpbGxU",
-            "cmlnZ2VyVHlwZRIsCgxib3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQuQ2hh",
-            "cmFjdGVyU3RhdGUSIgoEaGl0cxgHIAMoCzIULnNoYXJlZC5CdWxsZXRDb25m",
-            "aWcqNQoLQnVsbGV0U3RhdGUSCwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0K",
-            "CUV4cGxvZGluZxACKo4CCg5DaGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsK",
-            "B1dhbGtpbmcQARIICgRBdGsxEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxl",
-            "MU5vSnVtcBAEEhQKEEluQWlySWRsZTFCeUp1bXAQBRINCglJbkFpckF0azEQ",
-            "BhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoITGF5RG93bjEQ",
-            "CRIKCgZHZXRVcDEQChIICgRBdGsyEAsSCAoEQXRrMxAMEggKBEF0azQQDRII",
-            "CgRBdGs1EA4SCwoHRGFzaGluZxAPEgoKBk9uV2FsbBAQEg4KClR1cm5Bcm91",
-            "bmQQERIJCgVEeWluZxASKp0BCg9Sb29tQmF0dGxlU3RhdGUSDgoKSU1QT1NT",
-            "SUJMRRAAEggKBElETEUQARILCgdXQUlUSU5HEAISCwoHUFJFUEFSRRADEg0K",
-            "CUlOX0JBVFRMRRAEEiIKHlNUT1BQSU5HX0JBVFRMRV9GT1JfU0VUVExFTUVO",
-            "VBAFEhEKDUlOX1NFVFRMRU1FTlQQBhIQCgxJTl9ESVNNSVNTQUwQByo3CgpC",
-            "dWxsZXRUeXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmly",
-            "ZWJhbGwQAiozChBTa2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIP",
-            "CgtGYWxsaW5nRWRnZRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
+            "b25maXJtZWRMaXN0GAMgASgEIrYBCgVXc1JlcRIQCghwbGF5ZXJJZBgBIAEo",
+            "BRILCgNhY3QYAiABKAUSEQoJam9pbkluZGV4GAMgASgFEhUKDWFja2luZ0Zy",
+            "YW1lSWQYBCABKAUSGgoSYWNraW5nSW5wdXRGcmFtZUlkGAUgASgFEg8KB2F1",
+            "dGhLZXkYBiABKAUSNwoVaW5wdXRGcmFtZVVwc3luY0JhdGNoGAcgAygLMhgu",
+            "c2hhcmVkLklucHV0RnJhbWVVcHN5bmMiugEKFElucHV0c0J1ZmZlclNuYXBz",
+            "aG90EhgKEHJlZlJlbmRlckZyYW1lSWQYASABKAUSFwoPdW5jb25maXJtZWRN",
+            "YXNrGAIgASgEEj0KGXRvU2VuZElucHV0RnJhbWVEb3duc3luY3MYAyADKAsy",
+            "Gi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEhkKEXNob3VsZEZvcmNlUmVz",
+            "eW5jGAQgASgIEhUKDXBlZXJKb2luSW5kZXgYBSABKAUixwQKDEJ1bGxldENv",
+            "bmZpZxIVCg1zdGFydHVwRnJhbWVzGAEgASgFEhoKEmNhbmNlbGxhYmxlU3RG",
+            "cmFtZRgCIAEoBRIaChJjYW5jZWxsYWJsZUVkRnJhbWUYAyABKAUSFAoMYWN0",
+            "aXZlRnJhbWVzGAQgASgFEhUKDWhpdFN0dW5GcmFtZXMYBSABKAUSFwoPYmxv",
+            "Y2tTdHVuRnJhbWVzGAYgASgFEhQKDHB1c2hiYWNrVmVsWBgHIAEoBRIUCgxw",
+            "dXNoYmFja1ZlbFkYCCABKAUSDgoGZGFtYWdlGAkgASgFEhQKDHNlbGZMb2Nr",
+            "VmVsWBgKIAEoBRIUCgxzZWxmTG9ja1ZlbFkYCyABKAUSFQoNaGl0Ym94T2Zm",
+            "c2V0WBgMIAEoBRIVCg1oaXRib3hPZmZzZXRZGA0gASgFEhMKC2hpdGJveFNp",
+            "emVYGA4gASgFEhMKC2hpdGJveFNpemVZGA8gASgFEg4KBmJsb3dVcBgQIAEo",
+            "CBIRCglzcGVjaWVzSWQYESABKAUSFwoPZXhwbG9zaW9uRnJhbWVzGBIgASgF",
+            "EiEKBWJUeXBlGBMgASgOMhIuc2hhcmVkLkJ1bGxldFR5cGUSDQoFc3BlZWQY",
+            "FCABKAUSPgoNY2FuY2VsVHJhbnNpdBgVIAMoCzInLnNoYXJlZC5CdWxsZXRD",
+            "b25maWcuQ2FuY2VsVHJhbnNpdEVudHJ5GjQKEkNhbmNlbFRyYW5zaXRFbnRy",
+            "eRILCgNrZXkYASABKAUSDQoFdmFsdWUYAiABKAU6AjgBInUKEEJ1bGxldEJh",
+            "dHRsZUF0dHISFQoNYnVsbGV0TG9jYWxJZBgBIAEoBRIfChdvcmlnaW5hdGVk",
+            "UmVuZGVyRnJhbWVJZBgCIAEoBRIZChFvZmZlbmRlckpvaW5JbmRleBgDIAEo",
+            "BRIOCgZ0ZWFtSWQYBCABKAUihQIKBkJ1bGxldBIkCgdibFN0YXRlGAEgASgO",
+            "MhMuc2hhcmVkLkJ1bGxldFN0YXRlEhcKD2ZyYW1lc0luQmxTdGF0ZRgCIAEo",
+            "BRIsCgpiYXR0bGVBdHRyGAMgASgLMhguc2hhcmVkLkJ1bGxldEJhdHRsZUF0",
+            "dHISJAoGY29uZmlnGAQgASgLMhQuc2hhcmVkLkJ1bGxldENvbmZpZxIVCgx2",
+            "aXJ0dWFsR3JpZFgY5wcgASgFEhUKDHZpcnR1YWxHcmlkWRjoByABKAUSDQoE",
+            "ZGlyWBjpByABKAUSDQoEZGlyWRjqByABKAUSDQoEdmVsWBjrByABKAUSDQoE",
+            "dmVsWRjsByABKAUiTQoPSG9sZVB1bmNoVXBzeW5jEhQKDGludEF1dGhUb2tl",
+            "bhgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIPCgdhdXRoS2V5GAMgASgF",
+            "IjgKC1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwKBHBvcnQYAiABKAUSDwoH",
+            "YXV0aEtleRgDIAEoBSKPAwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEKCXN0YWdl",
+            "TmFtZRgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIcChRiYXR0bGVEdXJh",
+            "dGlvbkZyYW1lcxgDIAEoAxImCh5pbnB1dEZyYW1lVXBzeW5jRGVsYXlUb2xl",
+            "cmFuY2UYBCABKAUSJwofbWF4Q2hhc2luZ1JlbmRlckZyYW1lc1BlclVwZGF0",
+            "ZRgFIAEoBRIhChlyb2xsYmFja0VzdGltYXRlZER0TWlsbGlzGAYgASgBEiAK",
+            "GHJvbGxiYWNrRXN0aW1hdGVkRHROYW5vcxgHIAEoAxIYChByZW5kZXJCdWZm",
+            "ZXJTaXplGAggASgFEhgKEGNvbGxpc2lvbk1pblN0ZXAYCSABKAUSGQoRYm91",
+            "bmRSb29tQ2FwYWNpdHkYCiABKAUSLAoPYmF0dGxlVWRwVHVubmVsGAsgASgL",
+            "MhMuc2hhcmVkLlBlZXJVZHBBZGRyEiAKF2ZyYW1lRGF0YUxvZ2dpbmdFbmFi",
+            "bGVkGIAIIAEoCCKnAgoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQYASABKAUS",
+            "KgoKcGxheWVyc0FychgCIAMoCzIWLnNoYXJlZC5QbGF5ZXJEb3duc3luYxIW",
+            "Cg5jb3VudGRvd25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQgAygLMg4uc2hh",
+            "cmVkLkJ1bGxldBIfChZiYWNrZW5kVW5jb25maXJtZWRNYXNrGIAIIAEoBBIa",
+            "ChFzaG91bGRGb3JjZVJlc3luYxiBCCABKAgSFgoNc3BlY2llc0lkTGlzdBiC",
+            "CCADKAUSHQoUYnVsbGV0TG9jYWxJZENvdW50ZXIYgwggASgFEi0KD3BlZXJV",
+            "ZHBBZGRyTGlzdBiECCADKAsyEy5zaGFyZWQuUGVlclVkcEFkZHIizAEKBldz",
+            "UmVzcBILCgNyZXQYASABKAUSCwoDYWN0GAIgASgFEiYKA3JkZhgDIAEoCzIZ",
+            "LnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRI7ChdpbnB1dEZyYW1lRG93bnN5",
+            "bmNCYXRjaBgEIAMoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMSLAoI",
+            "YmNpRnJhbWUYBSABKAsyGi5zaGFyZWQuQmF0dGxlQ29sbGlkZXJJbmZvEhUK",
+            "DXBlZXJKb2luSW5kZXgYBiABKAUi8wEKBVNraWxsEhUKDWJhdHRsZUxvY2Fs",
+            "SWQYASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYAiABKAUSHQoVcmVjb3ZlcnlG",
+            "cmFtZXNPbkJsb2NrGAMgASgFEhsKE3JlY292ZXJ5RnJhbWVzT25IaXQYBCAB",
+            "KAUSLQoLdHJpZ2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tpbGxUcmlnZ2Vy",
+            "VHlwZRIsCgxib3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQuQ2hhcmFjdGVy",
+            "U3RhdGUSIgoEaGl0cxgHIAMoCzIULnNoYXJlZC5CdWxsZXRDb25maWcqNQoL",
+            "QnVsbGV0U3RhdGUSCwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0KCUV4cGxv",
+            "ZGluZxACKo4CCg5DaGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsKB1dhbGtp",
+            "bmcQARIICgRBdGsxEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxlMU5vSnVt",
+            "cBAEEhQKEEluQWlySWRsZTFCeUp1bXAQBRINCglJbkFpckF0azEQBhIPCgtJ",
+            "bkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoITGF5RG93bjEQCRIKCgZH",
+            "ZXRVcDEQChIICgRBdGsyEAsSCAoEQXRrMxAMEggKBEF0azQQDRIICgRBdGs1",
+            "EA4SCwoHRGFzaGluZxAPEgoKBk9uV2FsbBAQEg4KClR1cm5Bcm91bmQQERIJ",
+            "CgVEeWluZxASKp0BCg9Sb29tQmF0dGxlU3RhdGUSDgoKSU1QT1NTSUJMRRAA",
+            "EggKBElETEUQARILCgdXQUlUSU5HEAISCwoHUFJFUEFSRRADEg0KCUlOX0JB",
+            "VFRMRRAEEiIKHlNUT1BQSU5HX0JBVFRMRV9GT1JfU0VUVExFTUVOVBAFEhEK",
+            "DUlOX1NFVFRMRU1FTlQQBhIQCgxJTl9ESVNNSVNTQUwQByo3CgpCdWxsZXRU",
+            "eXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmlyZWJhbGwQ",
+            "AiozChBTa2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIPCgtGYWxs",
+            "aW5nRWRnZRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.RoomBattleState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -128,8 +126,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDownsync), global::shared.InputFrameDownsync.Parser, new[]{ "InputFrameId", "InputList", "ConfirmedList" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.HeartbeatUpsync), global::shared.HeartbeatUpsync.Parser, new[]{ "ClientTimestamp" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsReq), global::shared.WsReq.Parser, new[]{ "MsgId", "PlayerId", "Act", "JoinIndex", "AckingFrameId", "AckingInputFrameId", "AuthKey", "InputFrameUpsyncBatch", "Hb" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsReq), global::shared.WsReq.Parser, new[]{ "PlayerId", "Act", "JoinIndex", "AckingFrameId", "AckingInputFrameId", "AuthKey", "InputFrameUpsyncBatch" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputsBufferSnapshot), global::shared.InputsBufferSnapshot.Parser, new[]{ "RefRenderFrameId", "UnconfirmedMask", "ToSendInputFrameDownsyncs", "ShouldForceResync", "PeerJoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "Speed", "CancelTransit" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId" }, null, null, null, null),
@@ -2453,195 +2450,6 @@ namespace shared {
 
   }
 
-  public sealed partial class HeartbeatUpsync : pb::IMessage<HeartbeatUpsync>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<HeartbeatUpsync> _parser = new pb::MessageParser<HeartbeatUpsync>(() => new HeartbeatUpsync());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<HeartbeatUpsync> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[4]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public HeartbeatUpsync() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public HeartbeatUpsync(HeartbeatUpsync other) : this() {
-      clientTimestamp_ = other.clientTimestamp_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public HeartbeatUpsync Clone() {
-      return new HeartbeatUpsync(this);
-    }
-
-    /// <summary>Field number for the "clientTimestamp" field.</summary>
-    public const int ClientTimestampFieldNumber = 1;
-    private long clientTimestamp_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long ClientTimestamp {
-      get { return clientTimestamp_; }
-      set {
-        clientTimestamp_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as HeartbeatUpsync);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(HeartbeatUpsync other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (ClientTimestamp != other.ClientTimestamp) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (ClientTimestamp != 0L) hash ^= ClientTimestamp.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (ClientTimestamp != 0L) {
-        output.WriteRawTag(8);
-        output.WriteInt64(ClientTimestamp);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (ClientTimestamp != 0L) {
-        output.WriteRawTag(8);
-        output.WriteInt64(ClientTimestamp);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (ClientTimestamp != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(ClientTimestamp);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(HeartbeatUpsync other) {
-      if (other == null) {
-        return;
-      }
-      if (other.ClientTimestamp != 0L) {
-        ClientTimestamp = other.ClientTimestamp;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            ClientTimestamp = input.ReadInt64();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            ClientTimestamp = input.ReadInt64();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
   public sealed partial class WsReq : pb::IMessage<WsReq>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -2656,7 +2464,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[5]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2676,7 +2484,6 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public WsReq(WsReq other) : this() {
-      msgId_ = other.msgId_;
       playerId_ = other.playerId_;
       act_ = other.act_;
       joinIndex_ = other.joinIndex_;
@@ -2684,7 +2491,6 @@ namespace shared {
       ackingInputFrameId_ = other.ackingInputFrameId_;
       authKey_ = other.authKey_;
       inputFrameUpsyncBatch_ = other.inputFrameUpsyncBatch_.Clone();
-      hb_ = other.hb_ != null ? other.hb_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2694,20 +2500,8 @@ namespace shared {
       return new WsReq(this);
     }
 
-    /// <summary>Field number for the "msgId" field.</summary>
-    public const int MsgIdFieldNumber = 1;
-    private int msgId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int MsgId {
-      get { return msgId_; }
-      set {
-        msgId_ = value;
-      }
-    }
-
     /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 2;
+    public const int PlayerIdFieldNumber = 1;
     private int playerId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2719,7 +2513,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "act" field.</summary>
-    public const int ActFieldNumber = 3;
+    public const int ActFieldNumber = 2;
     private int act_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2731,7 +2525,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "joinIndex" field.</summary>
-    public const int JoinIndexFieldNumber = 4;
+    public const int JoinIndexFieldNumber = 3;
     private int joinIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2743,7 +2537,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "ackingFrameId" field.</summary>
-    public const int AckingFrameIdFieldNumber = 5;
+    public const int AckingFrameIdFieldNumber = 4;
     private int ackingFrameId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2755,7 +2549,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "ackingInputFrameId" field.</summary>
-    public const int AckingInputFrameIdFieldNumber = 6;
+    public const int AckingInputFrameIdFieldNumber = 5;
     private int ackingInputFrameId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2767,7 +2561,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "authKey" field.</summary>
-    public const int AuthKeyFieldNumber = 7;
+    public const int AuthKeyFieldNumber = 6;
     private int authKey_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2779,26 +2573,14 @@ namespace shared {
     }
 
     /// <summary>Field number for the "inputFrameUpsyncBatch" field.</summary>
-    public const int InputFrameUpsyncBatchFieldNumber = 8;
+    public const int InputFrameUpsyncBatchFieldNumber = 7;
     private static readonly pb::FieldCodec<global::shared.InputFrameUpsync> _repeated_inputFrameUpsyncBatch_codec
-        = pb::FieldCodec.ForMessage(66, global::shared.InputFrameUpsync.Parser);
+        = pb::FieldCodec.ForMessage(58, global::shared.InputFrameUpsync.Parser);
     private readonly pbc::RepeatedField<global::shared.InputFrameUpsync> inputFrameUpsyncBatch_ = new pbc::RepeatedField<global::shared.InputFrameUpsync>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pbc::RepeatedField<global::shared.InputFrameUpsync> InputFrameUpsyncBatch {
       get { return inputFrameUpsyncBatch_; }
-    }
-
-    /// <summary>Field number for the "hb" field.</summary>
-    public const int HbFieldNumber = 9;
-    private global::shared.HeartbeatUpsync hb_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::shared.HeartbeatUpsync Hb {
-      get { return hb_; }
-      set {
-        hb_ = value;
-      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2816,7 +2598,6 @@ namespace shared {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (MsgId != other.MsgId) return false;
       if (PlayerId != other.PlayerId) return false;
       if (Act != other.Act) return false;
       if (JoinIndex != other.JoinIndex) return false;
@@ -2824,7 +2605,6 @@ namespace shared {
       if (AckingInputFrameId != other.AckingInputFrameId) return false;
       if (AuthKey != other.AuthKey) return false;
       if(!inputFrameUpsyncBatch_.Equals(other.inputFrameUpsyncBatch_)) return false;
-      if (!object.Equals(Hb, other.Hb)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2832,7 +2612,6 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (MsgId != 0) hash ^= MsgId.GetHashCode();
       if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
       if (Act != 0) hash ^= Act.GetHashCode();
       if (JoinIndex != 0) hash ^= JoinIndex.GetHashCode();
@@ -2840,7 +2619,6 @@ namespace shared {
       if (AckingInputFrameId != 0) hash ^= AckingInputFrameId.GetHashCode();
       if (AuthKey != 0) hash ^= AuthKey.GetHashCode();
       hash ^= inputFrameUpsyncBatch_.GetHashCode();
-      if (hb_ != null) hash ^= Hb.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2859,39 +2637,31 @@ namespace shared {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (MsgId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(MsgId);
-      }
       if (PlayerId != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(8);
         output.WriteInt32(PlayerId);
       }
       if (Act != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteInt32(Act);
       }
       if (JoinIndex != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteInt32(JoinIndex);
       }
       if (AckingFrameId != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteInt32(AckingFrameId);
       }
       if (AckingInputFrameId != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(40);
         output.WriteInt32(AckingInputFrameId);
       }
       if (AuthKey != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(48);
         output.WriteInt32(AuthKey);
       }
       inputFrameUpsyncBatch_.WriteTo(output, _repeated_inputFrameUpsyncBatch_codec);
-      if (hb_ != null) {
-        output.WriteRawTag(74);
-        output.WriteMessage(Hb);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2902,39 +2672,31 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (MsgId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(MsgId);
-      }
       if (PlayerId != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(8);
         output.WriteInt32(PlayerId);
       }
       if (Act != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteInt32(Act);
       }
       if (JoinIndex != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteInt32(JoinIndex);
       }
       if (AckingFrameId != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteInt32(AckingFrameId);
       }
       if (AckingInputFrameId != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(40);
         output.WriteInt32(AckingInputFrameId);
       }
       if (AuthKey != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(48);
         output.WriteInt32(AuthKey);
       }
       inputFrameUpsyncBatch_.WriteTo(ref output, _repeated_inputFrameUpsyncBatch_codec);
-      if (hb_ != null) {
-        output.WriteRawTag(74);
-        output.WriteMessage(Hb);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2945,9 +2707,6 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (MsgId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MsgId);
-      }
       if (PlayerId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
       }
@@ -2967,9 +2726,6 @@ namespace shared {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(AuthKey);
       }
       size += inputFrameUpsyncBatch_.CalculateSize(_repeated_inputFrameUpsyncBatch_codec);
-      if (hb_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Hb);
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -2981,9 +2737,6 @@ namespace shared {
     public void MergeFrom(WsReq other) {
       if (other == null) {
         return;
-      }
-      if (other.MsgId != 0) {
-        MsgId = other.MsgId;
       }
       if (other.PlayerId != 0) {
         PlayerId = other.PlayerId;
@@ -3004,12 +2757,6 @@ namespace shared {
         AuthKey = other.AuthKey;
       }
       inputFrameUpsyncBatch_.Add(other.inputFrameUpsyncBatch_);
-      if (other.hb_ != null) {
-        if (hb_ == null) {
-          Hb = new global::shared.HeartbeatUpsync();
-        }
-        Hb.MergeFrom(other.Hb);
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -3026,42 +2773,31 @@ namespace shared {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            MsgId = input.ReadInt32();
-            break;
-          }
-          case 16: {
             PlayerId = input.ReadInt32();
             break;
           }
-          case 24: {
+          case 16: {
             Act = input.ReadInt32();
             break;
           }
-          case 32: {
+          case 24: {
             JoinIndex = input.ReadInt32();
             break;
           }
-          case 40: {
+          case 32: {
             AckingFrameId = input.ReadInt32();
             break;
           }
-          case 48: {
+          case 40: {
             AckingInputFrameId = input.ReadInt32();
             break;
           }
-          case 56: {
+          case 48: {
             AuthKey = input.ReadInt32();
             break;
           }
-          case 66: {
+          case 58: {
             inputFrameUpsyncBatch_.AddEntriesFrom(input, _repeated_inputFrameUpsyncBatch_codec);
-            break;
-          }
-          case 74: {
-            if (hb_ == null) {
-              Hb = new global::shared.HeartbeatUpsync();
-            }
-            input.ReadMessage(Hb);
             break;
           }
         }
@@ -3080,42 +2816,31 @@ namespace shared {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            MsgId = input.ReadInt32();
-            break;
-          }
-          case 16: {
             PlayerId = input.ReadInt32();
             break;
           }
-          case 24: {
+          case 16: {
             Act = input.ReadInt32();
             break;
           }
-          case 32: {
+          case 24: {
             JoinIndex = input.ReadInt32();
             break;
           }
-          case 40: {
+          case 32: {
             AckingFrameId = input.ReadInt32();
             break;
           }
-          case 48: {
+          case 40: {
             AckingInputFrameId = input.ReadInt32();
             break;
           }
-          case 56: {
+          case 48: {
             AuthKey = input.ReadInt32();
             break;
           }
-          case 66: {
+          case 58: {
             inputFrameUpsyncBatch_.AddEntriesFrom(ref input, _repeated_inputFrameUpsyncBatch_codec);
-            break;
-          }
-          case 74: {
-            if (hb_ == null) {
-              Hb = new global::shared.HeartbeatUpsync();
-            }
-            input.ReadMessage(Hb);
             break;
           }
         }
@@ -3139,7 +2864,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[6]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3465,7 +3190,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[7]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4392,7 +4117,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[8]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4698,7 +4423,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[9]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5242,7 +4967,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[10]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5505,7 +5230,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[11]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5768,7 +5493,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[12]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6373,7 +6098,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[13]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6819,7 +6544,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[14]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7200,7 +6925,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[15]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

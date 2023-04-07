@@ -3,7 +3,6 @@ using System.Net.WebSockets;
 using Microsoft.AspNetCore.Mvc;
 using backend.Battle;
 using shared;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 using Google.Protobuf;
 
 namespace backend.Controllers;
@@ -79,7 +78,7 @@ public class WebSocketController : ControllerBase {
 
                 var initWsResp = new WsResp {
                     Ret = ErrCode.Ok,
-                    Act = shared.Battle.DOWNSYNC_MSG_ACT_HB_REQ,
+                    Act = shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO,
                     BciFrame = bciFrame,
                     PeerJoinIndex = player.PlayerDownsync.JoinIndex
                 };

@@ -4,18 +4,15 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
-using System.Linq;
 using shared;
 using Google.Protobuf;
 
 public class WsSessionManager {
-    public delegate void OnWsSessionEvtCallbackType(int resultCode);
-
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
     private const int receiveChunkSize = 64;
 
     /**
-    A "Queue" is in general NOT thread-safe, but when "bool TryDequeue(out T)" is always called in "thread#A" while "void Enqueue(T)" being always called in "thread#B", we're safe, e.g. "thread#A == UIThread && thread#B == WebSocketThread" or viceversa. 
+    A "Queue" is in general NOT thread-safe, but when "bool TryDequeue(out T)" is always called in "thread#A" while "void Enqueue(T)" being always called in "thread#B", we're safe, e.g. "thread#A == MainThread && thread#B == WebSocketThread" or viceversa. 
         
     I'm not using "RecvRingBuff" from https://github.com/genxium/DelayNoMore/blob/v1.0.14/frontend/build-templates/jsb-link/frameworks/runtime-src/Classes/ring_buff.cpp because WebSocket is supposed to be preserving send/recv order at all time.
     */
@@ -48,7 +45,7 @@ public class WsSessionManager {
         SetCredentials(null, Battle.TERMINATING_PLAYER_ID);
     }
 
-    public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource, OnWsSessionEvtCallbackType onOpen, OnWsSessionEvtCallbackType onClose) {
+    public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
         if (null == authToken || shared.Battle.TERMINATING_PLAYER_ID == playerId) {
             Debug.Log(String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}", authToken, playerId));
             return;
@@ -59,18 +56,19 @@ public class WsSessionManager {
         using (ClientWebSocket ws = new ClientWebSocket()) {
             try {
                 await ws.ConnectAsync(new Uri(fullUrl), cancellationTokenSource.Token);
-                UnityEngine.WSA.Application.InvokeOnUIThread(() => {
-                    onOpen(shared.ErrCode.Ok);
-                }, true);
+                Debug.Log("Ws session is opened");
                 await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
                 Debug.Log(String.Format("Both 'Receive' and 'Send' tasks are ended."));
             } catch (OperationCanceledException ocEx) {
                 Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
             }
         }
-        UnityEngine.WSA.Application.InvokeOnUIThread(() => {
-            onClose(shared.ErrCode.Ok);
-        }, true);
+
+        var closeMsg = new WsResp {
+            Ret = ErrCode.Ok,
+            Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
+        };
+        recvBuffer.Enqueue(closeMsg);
     }
 
     private async Task Send(ClientWebSocket ws, CancellationToken cancellationToken) {
@@ -84,6 +82,8 @@ public class WsSessionManager {
             }
         } catch (OperationCanceledException ocEx) {
             Debug.LogWarning(String.Format("WsSession is cancelled for 'Send'; ocEx.Message={0}", ocEx.Message));
+        } catch (Exception ex) {
+            Debug.LogWarning(String.Format("WsSession is stopping for 'Send' upon exception; ex.Message={0}", ex.Message));
         } finally {
             Debug.Log(String.Format("Ends 'Send' loop, ws.State={0}", ws.State));
         }

@@ -3,28 +3,38 @@ using System;
 using shared;
 using static shared.Battle;
 using static shared.CharacterState;
-using static WsSessionManager;
 using System.Threading;
 using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
+using Google.Protobuf.Collections;
 
 public class OnlineMapController : AbstractMapController {
-    CancellationTokenSource wsCancellationTokenSource; 
-    CancellationToken wsCancellationToken; 
+    CancellationTokenSource wsCancellationTokenSource;
+    CancellationToken wsCancellationToken;
+    int inputFrameUpsyncDelayTolerance;
+    WsResp wsRespHolder; 
 
-    void onWsSessionOpen(int resultCode) {
-        Debug.Log("Ws session is opened");
-    }
-
-    void onWsSessionClosed(int resultCode) {
-        Debug.Log("Ws session is closed");
-        WsSessionManager.Instance.ClearCredentials();
-        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+    void pollAndHandleWsRecvBuffer() {
+        while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
+            Debug.Log(String.Format("Handling WsSession downsync in main thread: {0}", wsRespHolder));
+            switch (wsRespHolder.Act) {
+            case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
+                Debug.LogWarning("Handling WsSession closed in main thread.");
+                WsSessionManager.Instance.ClearCredentials();
+                SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+            break; 
+            case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
+                inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
+            break;
+            default:
+            break;
+            }
+        }
     }
 
     void Start() {
         wsCancellationTokenSource = new CancellationTokenSource();
-        wsCancellationToken = wsCancellationTokenSource.Token; 
+        wsCancellationToken = wsCancellationTokenSource.Token;
+        inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = 60;
         _resetCurrentMatch();
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
@@ -104,19 +114,19 @@ public class OnlineMapController : AbstractMapController {
         startWsThread();
     }
 
-    void startWsThread() {
-        // [WARNING] Must be a new thread here to avoid blocking UIThread
-        new Thread(async () => {
-            // Declared "async" for the convenience to "await" existing async methods
-            string wsEndpoint = Env.Instance.getWsEndpoint();
-            await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource, onWsSessionOpen, onWsSessionClosed);
-            Debug.Log(String.Format("WebSocket thread is ended"));
-        }).Start();
+    async void startWsThread() {
+        // [WARNING] Must avoid blocking MainThread
+
+        // Declared "async" for the convenience to "await" existing async methods
+        string wsEndpoint = Env.Instance.getWsEndpoint();
+        await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
+        Debug.Log(String.Format("WebSocket async task is ended"));
     }
 
     // Update is called once per frame
     void Update() {
         try {
+            pollAndHandleWsRecvBuffer();
             doUpdate();
         } catch (Exception ex) {
             Debug.LogError(String.Format("Error during OfflineMap.doUpdate {0}", ex.Message));
@@ -130,6 +140,60 @@ public class OnlineMapController : AbstractMapController {
                 wsCancellationTokenSource.Cancel(); // To stop the "WebSocketThread"
             }
             wsCancellationTokenSource.Dispose();
+        }
+    }
+
+    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int lastUpsyncInputFrameId, int currInputFrameId) {
+        /*
+        For a 2-player-battle, this "shouldUpsyncForEarlyAllConfirmedOnBackend" can be omitted, however for more players in a same battle, to avoid a "long time non-moving player" jamming the downsync of other moving players, we should use this flag.
+
+        When backend implements the "force confirmation" feature, we can have "false == shouldUpsyncForEarlyAllConfirmedOnBackend" all the time as well!
+        */
+
+        var shouldUpsyncForEarlyAllConfirmedOnBackend = (currInputFrameId - lastUpsyncInputFrameId >= inputFrameUpsyncDelayTolerance);
+        return shouldUpsyncForEarlyAllConfirmedOnBackend || (prevSelfInput != currSelfInput);
+    }
+
+    protected override void sendInputFrameUpsyncBatch(int latestLocalInputFrameId) {
+        // [WARNING] Why not just send the latest input? Because different player would have a different "latestLocalInputFrameId" of changing its last input, and that could make the server not recognizing any "all-confirmed inputFrame"!
+        var inputFrameUpsyncBatch = new RepeatedField<InputFrameUpsync>();
+        var batchInputFrameIdSt = lastUpsyncInputFrameId + 1;
+        if (batchInputFrameIdSt < inputBuffer.StFrameId) {
+            // Upon resync, "this.lastUpsyncInputFrameId" might not have been updated properly.
+            batchInputFrameIdSt = inputBuffer.StFrameId;
+        }
+        for (var i = batchInputFrameIdSt; i <= latestLocalInputFrameId; i++) {
+            var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
+            if (false == res1 || null == inputFrameDownsync) {
+                Debug.LogError(String.Format("sendInputFrameUpsyncBatch: recentInputCache is NOT having i={0}, latestLocalInputFrameId={1}", i, latestLocalInputFrameId));
+            } else {
+                var inputFrameUpsync = new InputFrameUpsync {
+                    InputFrameId = i,
+                    Encoded = inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex - 1]
+                };
+                inputFrameUpsyncBatch.Add(inputFrameUpsync);
+            }
+        }
+
+        // console.info(`inputFrameUpsyncBatch: ${JSON.stringify(inputFrameUpsyncBatch)}`);
+        var reqData = new WsReq {
+            PlayerId = selfPlayerInfo.Id,
+            Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_CMD,
+            JoinIndex = selfPlayerInfo.JoinIndex,
+            AckingInputFrameId = lastAllConfirmedInputFrameId,
+        };
+        reqData.InputFrameUpsyncBatch.AddRange(inputFrameUpsyncBatch);
+
+        WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
+        lastUpsyncInputFrameId = latestLocalInputFrameId;
+    }
+
+    public override void _resetCurrentMatch() {
+        base._resetCurrentMatch();
+        if (null != wsCancellationTokenSource) {
+            wsCancellationTokenSource.Dispose();
+            wsCancellationTokenSource = new CancellationTokenSource();
+            wsCancellationToken = wsCancellationTokenSource.Token;
         }
     }
 }

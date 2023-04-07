@@ -4,11 +4,10 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
-		public const int UPSYNC_MSG_ACT_HB_PING             = 1;
+		public const int UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK = 1;
 		public const int UPSYNC_MSG_ACT_PLAYER_CMD          = 2;
-		public const int UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK = 3;
 
-		public const int DOWNSYNC_MSG_ACT_HB_REQ            = 1;
+		public const int DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO = 1;
 		public const int DOWNSYNC_MSG_ACT_INPUT_BATCH       = 2;
 		public const int DOWNSYNC_MSG_ACT_BATTLE_STOPPED    = 3;
 		public const int DOWNSYNC_MSG_ACT_FORCED_RESYNC     = 4;
@@ -17,6 +16,7 @@ namespace shared {
 		public const int DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START = -1;
 		public const int DOWNSYNC_MSG_ACT_BATTLE_START          = 0;
 		public const int DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED = -98;
+		public const int DOWNSYNC_MSG_WS_CLOSED = -99;
 
         public const int MAGIC_JOIN_INDEX_DEFAULT = 0;
         public const int MAGIC_JOIN_INDEX_INVALID = -1;

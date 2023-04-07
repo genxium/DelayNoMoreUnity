@@ -5,6 +5,13 @@ using static shared.Battle;
 using static shared.CharacterState;
 
 public class OfflineMapController : AbstractMapController {
+    protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
+        throw new NotImplementedException();
+    }
+
+    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int lastUpsyncInputFrameId, int currInputFrameId) {
+        return false;
+    }
 
     // Start is called before the first frame update
     void Start() {
