@@ -251,7 +251,7 @@ namespace shared {
 
                         skillUsed = true;
                     }
-                    
+
                 }
 
                 if (skillUsed) {

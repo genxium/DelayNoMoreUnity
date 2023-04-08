@@ -120,6 +120,14 @@ public class OnlineMapController : AbstractMapController {
         // Declared "async" for the convenience to "await" existing async methods
         string wsEndpoint = Env.Instance.getWsEndpoint();
         await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
+
+        var closeMsg = new WsResp {
+            Ret = ErrCode.Ok,
+            Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
+        };
+        WsSessionManager.Instance.recvBuffer.Enqueue(closeMsg);
+
+		Debug.Log(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
         Debug.Log(String.Format("WebSocket async task is ended"));
     }
 

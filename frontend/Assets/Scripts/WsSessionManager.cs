@@ -63,12 +63,6 @@ public class WsSessionManager {
                 Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
             }
         }
-
-        var closeMsg = new WsResp {
-            Ret = ErrCode.Ok,
-            Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
-        };
-        recvBuffer.Enqueue(closeMsg);
     }
 
     private async Task Send(ClientWebSocket ws, CancellationToken cancellationToken) {

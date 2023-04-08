@@ -25,19 +25,19 @@ namespace shared {
         public const long PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME = 6;
         public const long PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL = 7;
 
-		public const int UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK = 1;
-		public const int UPSYNC_MSG_ACT_PLAYER_CMD          = 2;
+        public const int UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK = 1;
+        public const int UPSYNC_MSG_ACT_PLAYER_CMD = 2;
 
-		public const int DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO = 1;
-		public const int DOWNSYNC_MSG_ACT_INPUT_BATCH       = 2;
-		public const int DOWNSYNC_MSG_ACT_BATTLE_STOPPED    = 3;
-		public const int DOWNSYNC_MSG_ACT_FORCED_RESYNC     = 4;
-		public const int DOWNSYNC_MSG_ACT_PEER_INPUT_BATCH  = 5;
-		public const int DOWNSYNC_MSG_ACT_PEER_UDP_ADDR     = 6;
-		public const int DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START = -1;
-		public const int DOWNSYNC_MSG_ACT_BATTLE_START          = 0;
-		public const int DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED = -98;
-		public const int DOWNSYNC_MSG_WS_CLOSED = -99;
+        public const int DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO = 1;
+        public const int DOWNSYNC_MSG_ACT_INPUT_BATCH = 2;
+        public const int DOWNSYNC_MSG_ACT_BATTLE_STOPPED = 3;
+        public const int DOWNSYNC_MSG_ACT_FORCED_RESYNC = 4;
+        public const int DOWNSYNC_MSG_ACT_PEER_INPUT_BATCH = 5;
+        public const int DOWNSYNC_MSG_ACT_PEER_UDP_ADDR = 6;
+        public const int DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START = -1;
+        public const int DOWNSYNC_MSG_ACT_BATTLE_START = 0;
+        public const int DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED = -98;
+        public const int DOWNSYNC_MSG_WS_CLOSED = -99;
 
         public const int MAGIC_JOIN_INDEX_DEFAULT = 0;
         public const int MAGIC_JOIN_INDEX_INVALID = -1;
@@ -58,7 +58,7 @@ namespace shared {
         public static float COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO = 10.0f;
         public static float VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO = 1.0f / COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO;
 
-		public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
@@ -164,8 +164,8 @@ namespace shared {
                     new KeyValuePair<int, Skill>(255, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.InAirAtk1)
                                                     .AddHit(new BulletConfigBuilder(3, 20, 18, 9, 6, NO_LOCK_VEL, NO_LOCK_VEL, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 1, 9, BulletType.Melee, 0).build())
                                                     .build())
-			
-                }        
+
+                }
         );
 
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
