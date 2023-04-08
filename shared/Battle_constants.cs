@@ -4,6 +4,16 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        // Deliberately NOT using enum for room states to make use of "C# CompareAndExchange" 
+        public const int ROOM_STATE_IMPOSSIBLE = 0;
+        public const int ROOM_STATE_IDLE = 1;
+        public const int ROOM_STATE_WAITING = 2;
+        public const int ROOM_STATE_PREPARE = 3;
+        public const int ROOM_STATE_IN_BATTLE = 4;
+        public const int ROOM_STATE_STOPPING_BATTLE_FOR_SETTLEMENT = 5;
+        public const int ROOM_STATE_IN_SETTLEMENT = 6;
+        public const int ROOM_STATE_IN_DISMISSAL = 7;
+
 		public const int UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK = 1;
 		public const int UPSYNC_MSG_ACT_PLAYER_CMD          = 2;
 

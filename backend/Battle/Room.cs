@@ -41,7 +41,7 @@ public class Room {
     Dictionary<int, WebSocket> playerDownsyncSessionDict;
     Dictionary<int, CancellationTokenSource> playerSignalToCloseDict;
     Dictionary<int, PlayerSessionAckWatchdog> playerActiveWatchdogDict;
-    RoomBattleState state;
+    int state;
     int effectivePlayerCount;
 
     FrameRingBuffer<InputFrameDownsync> inputBuffer; // Indices are STRICTLY consecutive
@@ -76,7 +76,7 @@ public class Room {
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
 
         nstDelayFrames = 24;
-        state = RoomBattleState.Idle;
+        state = ROOM_STATE_IDLE;
         effectivePlayerCount = 0;
         backendDynamicsEnabled = false;
 
@@ -108,7 +108,7 @@ public class Room {
     public int AddPlayerIfPossible(Player pPlayerFromDbInit, int playerId, int speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer) {
         joinerLock.WaitOne();
         try {
-            if (RoomBattleState.Idle != state && RoomBattleState.Waiting != state) {
+            if (ROOM_STATE_IDLE != state && ROOM_STATE_WAITING != state) {
                 return ErrCode.PlayerNotAddableToRoom;
             }
 
@@ -138,7 +138,7 @@ public class Room {
             effectivePlayerCount++;
 
             if (1 == effectivePlayerCount) {
-                state = RoomBattleState.Waiting;
+                state = ROOM_STATE_WAITING;
             }
 
             for (int i = 0; i < capacity; i++) {
@@ -171,25 +171,25 @@ public class Room {
                     case Player.PlayerBattleState.LOST:
                     case Player.PlayerBattleState.EXPELLED_DURING_GAME:
                     case Player.PlayerBattleState.EXPELLED_IN_DISMISSAL:
-                        _logger.LogInformation("Room OnPlayerDisconnected[early return #1] [ roomId={0}, playerId={1}, playerBattleState={2}, nowRoomBattleState={3}, nowRoomEffectivePlayerCount={4} ]", id, playerId, thatPlayerBattleState, state, effectivePlayerCount);
+                        _logger.LogInformation("Room OnPlayerDisconnected[early return #1] [ roomId={0}, playerId={1}, playerBattleState={2}, nowRoomState={3}, nowRoomEffectivePlayerCount={4} ]", id, playerId, thatPlayerBattleState, state, effectivePlayerCount);
                         return;
                     default:
                         break;
                 }
             } else {
-                _logger.LogInformation("Room OnPlayerDisconnected[early return #2] [ roomId={0}, playerId={1} doesn't exist! nowRoomBattleState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
+                _logger.LogInformation("Room OnPlayerDisconnected[early return #2] [ roomId={0}, playerId={1} doesn't exist! nowRoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                 return;
             }
 
             switch (state) {
-                case RoomBattleState.Waiting:
+                case ROOM_STATE_WAITING:
                     clearPlayerNetworkSession(playerId);
                     effectivePlayerCount--;
                     joinIndexBooleanArr[thatPlayer.PlayerDownsync.JoinIndex - 1] = false;
 
                     players.Remove(playerId);
                     if (0 == effectivePlayerCount) {
-                        state = RoomBattleState.Idle;
+                        state = ROOM_STATE_IDLE;
                     }
                     _logger.LogWarning("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, nowBattleState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
@@ -233,7 +233,7 @@ public class Room {
             playerActiveWatchdogDict = new Dictionary<int, PlayerSessionAckWatchdog>(); // Would allow the destructor of each "Watchdog" value to dispose its timer  
             playerDownsyncSessionDict = new Dictionary<int, WebSocket>();
             playerSignalToCloseDict = new Dictionary<int, CancellationTokenSource>();
-            state = RoomBattleState.Idle;
+            state = ROOM_STATE_IDLE;
             effectivePlayerCount = 0;
 
             int oldInputBufferSize = inputBuffer.N;

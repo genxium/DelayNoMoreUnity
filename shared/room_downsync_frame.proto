@@ -41,18 +41,7 @@ enum CharacterState {
 
 	Dying = 18;
 }
-
- enum RoomBattleState {
-    IMPOSSIBLE = 0;
-    IDLE = 1;
-    WAITING = 2;
-    PREPARE = 3;
-    IN_BATTLE = 4;
-    STOPPING_BATTLE_FOR_SETTLEMENT = 5;
-    IN_SETTLEMENT = 6;
-    IN_DISMISSAL = 7;
-}
-        
+ 
 message PlayerDownsync {
 	int32 id = 1;
 	int32 virtualGridX = 2;
@@ -109,7 +98,7 @@ message InputFrameUpsync {
 
 message InputFrameDownsync {
 	int32 inputFrameId = 1;
-	repeated uint64 inputList = 2; // Indexed by "joinIndex", we try to compress the "single player input" into 1 word (64-bit for 64-bit Golang runtime) because atomic compare-and-swap only works on 1 word. Although CAS on custom struct is possible in Golang 1.19 https://pkg.go.dev/sync/atomic@go1.19.1#Value.CompareAndSwap, using a single word is still faster whenever possible. 
+	repeated uint64 inputList = 2; // Indexed by "joinIndex", we try to compress the "single player input" into 1 word (64-bit for 64-bit Golang runtime) because atomic compare-and-swap only works on 1 word. Although CAS on custom struct is possible in C# https://learn.microsoft.com/en-us/dotnet/api/system.threading.interlocked?view=netstandard-2.1, using a single word is still faster whenever possible. 
 	uint64 confirmedList = 3; // Indexed by "joinIndex", same compression concern as above
 }
 

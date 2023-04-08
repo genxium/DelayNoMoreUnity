@@ -112,16 +112,13 @@ namespace shared {
             "bkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoITGF5RG93bjEQCRIKCgZH",
             "ZXRVcDEQChIICgRBdGsyEAsSCAoEQXRrMxAMEggKBEF0azQQDRIICgRBdGs1",
             "EA4SCwoHRGFzaGluZxAPEgoKBk9uV2FsbBAQEg4KClR1cm5Bcm91bmQQERIJ",
-            "CgVEeWluZxASKp0BCg9Sb29tQmF0dGxlU3RhdGUSDgoKSU1QT1NTSUJMRRAA",
-            "EggKBElETEUQARILCgdXQUlUSU5HEAISCwoHUFJFUEFSRRADEg0KCUlOX0JB",
-            "VFRMRRAEEiIKHlNUT1BQSU5HX0JBVFRMRV9GT1JfU0VUVExFTUVOVBAFEhEK",
-            "DUlOX1NFVFRMRU1FTlQQBhIQCgxJTl9ESVNNSVNTQUwQByo3CgpCdWxsZXRU",
-            "eXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmlyZWJhbGwQ",
-            "AiozChBTa2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIPCgtGYWxs",
-            "aW5nRWRnZRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
+            "CgVEeWluZxASKjcKCkJ1bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAASCQoF",
+            "TWVsZWUQARIMCghGaXJlYmFsbBACKjMKEFNraWxsVHJpZ2dlclR5cGUSDgoK",
+            "UmlzaW5nRWRnZRAAEg8KC0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.RoomBattleState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PlayerDownsync), global::shared.PlayerDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "ColliderRadius", "Removed", "Score", "LastMoveGmtMillis", "FramesToRecover", "Hp", "MaxHp", "CharacterState", "FramesInChState", "InAir", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "OnWall", "OnWallNormX", "OnWallNormY", "CapturedByInertia", "RevivalVirtualGridX", "RevivalVirtualGridY", "Name", "DisplayName", "Avatar" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
@@ -169,17 +166,6 @@ namespace shared {
     [pbr::OriginalName("OnWall")] OnWall = 16,
     [pbr::OriginalName("TurnAround")] TurnAround = 17,
     [pbr::OriginalName("Dying")] Dying = 18,
-  }
-
-  public enum RoomBattleState {
-    [pbr::OriginalName("IMPOSSIBLE")] Impossible = 0,
-    [pbr::OriginalName("IDLE")] Idle = 1,
-    [pbr::OriginalName("WAITING")] Waiting = 2,
-    [pbr::OriginalName("PREPARE")] Prepare = 3,
-    [pbr::OriginalName("IN_BATTLE")] InBattle = 4,
-    [pbr::OriginalName("STOPPING_BATTLE_FOR_SETTLEMENT")] StoppingBattleForSettlement = 5,
-    [pbr::OriginalName("IN_SETTLEMENT")] InSettlement = 6,
-    [pbr::OriginalName("IN_DISMISSAL")] InDismissal = 7,
   }
 
   public enum BulletType {
@@ -2254,7 +2240,7 @@ namespace shared {
         = pb::FieldCodec.ForUInt64(18);
     private readonly pbc::RepeatedField<ulong> inputList_ = new pbc::RepeatedField<ulong>();
     /// <summary>
-    /// Indexed by "joinIndex", we try to compress the "single player input" into 1 word (64-bit for 64-bit Golang runtime) because atomic compare-and-swap only works on 1 word. Although CAS on custom struct is possible in Golang 1.19 https://pkg.go.dev/sync/atomic@go1.19.1#Value.CompareAndSwap, using a single word is still faster whenever possible. 
+    /// Indexed by "joinIndex", we try to compress the "single player input" into 1 word (64-bit for 64-bit Golang runtime) because atomic compare-and-swap only works on 1 word. Although CAS on custom struct is possible in C# https://learn.microsoft.com/en-us/dotnet/api/system.threading.interlocked?view=netstandard-2.1, using a single word is still faster whenever possible. 
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
