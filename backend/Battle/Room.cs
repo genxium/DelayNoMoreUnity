@@ -2,6 +2,8 @@
 using static shared.Battle;
 using System.Net.WebSockets;
 using System.Net.Sockets;
+using System.Threading;
+using pbc = global::Google.Protobuf.Collections;
 
 namespace backend.Battle;
 public class Room {
@@ -263,6 +265,195 @@ public class Room {
         var d2 = d * d;
         return 7.8125f*d2 - 5.0f + (float)(state);
     }
+
+	public void OnBattleCmdReceived(WsReq pReq, bool fromUDP) {
+        /*
+		   [WARNING] This function "OnBattleCmdReceived" could be called by different ws sessions and thus from different threads!
+
+		   That said, "markConfirmationIfApplicable" will still work as expected. Here's an example of weird call orders.
+		   ---------------------------------------------------
+		   now lastAllConfirmedInputFrameId: 42; each "()" below indicates a "Lock/Unlock cycle of inputBufferLock", and "x" indicates no new all-confirmed snapshot is created
+		   A: ([44,50],x)                                            ([49,54],snapshot=[51,53])
+		   B:           ([54,58],x)
+		   C:                               ([42,53],snapshot=[43,50])
+		   D:                     ([51,55],x)
+		   ---------------------------------------------------
+		*/
+        // TODO: Put a rate limiter on this function!
+        var expectedOldState = RoomBattleState.InBattle;
+        
+		var trueOldState = Interlocked.CompareExchange<RoomBattleState>(ref this.state, expectedOldState, expectedOldState);
+		if (expectedOldState != trueOldState) {
+			return;
+		}
+
+        var playerId = pReq.PlayerId;
+		var inputFrameUpsyncBatch = pReq.InputFrameUpsyncBatch;
+		var ackingFrameId = pReq.AckingFrameId;
+		var ackingInputFrameId = pReq.AckingInputFrameId;
+
+        Player? player;
+        if (!players.TryGetValue(playerId, out player)) {
+            return;
+        }
+
+        PlayerSessionAckWatchdog? watchdog;
+		if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
+			watchdog.Kick();
+		}
+
+		// I've been seeking a totally lock-free approach for this whole operation for a long time, but still it's safer to keep using "mutex inputBufferLock"... 
+		Interlocked.Exchange(ref player.AckingFrameId, ackingFrameId);
+		Interlocked.Exchange(ref player.AckingInputFrameId, ackingInputFrameId);
+
+        /*
+		_logger.LogInformation("OnBattleCmdReceived-inputBufferLock about to lock: roomId={0}, fromPlayerId={1}", id, playerId);
+        inputBufferLock.WaitOne();
+		try {
+			var inputBufferSnapshot = markConfirmationIfApplicable(inputFrameUpsyncBatch, playerId, player, fromUDP);
+			downsyncToAllPlayers(inputBufferSnapshot);
+		} finally {
+            inputBufferLock.ReleaseMutex();
+			_logger.LogInformation("OnBattleCmdReceived-inputBufferLock unlocked: roomId={0}, fromPlayerId={1}", id, playerId);
+		}
+        */
+	}
+
+	private InputBufferSnapshot? markConfirmationIfApplicable(pbc.RepeatedField<InputFrameUpsync> inputFrameUpsyncBatch, int playerId, Player player, bool fromUDP) {
+		// [WARNING] This function MUST BE called while "inputBufferLock" is locked!
+		// Step#1, put the received "inputFrameUpsyncBatch" into "inputBuffer"
+		foreach (var inputFrameUpsync in inputFrameUpsyncBatch) {
+            var clientInputFrameId = inputFrameUpsync.InputFrameId;
+			if (clientInputFrameId < inputBuffer.StFrameId) {
+                // The updates to "inputBuffer.StFrameId" is monotonically increasing, thus if "clientInputFrameId < inputBuffer.StFrameId" at any moment of time, it is obsolete in the future.
+                _logger.LogDebug(String.Format("Omitting obsolete inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}", id, playerId, clientInputFrameId));
+                continue;
+			}
+			if (clientInputFrameId < player.LastConsecutiveRecvInputFrameId) {
+                // [WARNING] It's important for correctness that we use "player.LastConsecutiveRecvInputFrameId" instead of "pR.LastIndividuallyConfirmedInputFrameId[player.JoinIndex-1]" here!
+                //Logger.Debug(fmt.Sprintf("Omitting obsolete inputFrameUpsync#2: roomId=%v, playerId=%v, clientInputFrameId=%v, playerLastConsecutiveRecvInputFrameId=%v, InputsBuffer=%v", pR.Id, playerId, clientInputFrameId, player.LastConsecutiveRecvInputFrameId, inputBufferString(false)))
+                _logger.LogDebug(String.Format("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, playerLastConsecutiveRecvInputFrameId={3}", id, playerId, clientInputFrameId, player.LastConsecutiveRecvInputFrameId));
+                continue;
+			}
+			if (clientInputFrameId > inputBuffer.EdFrameId) {
+                _logger.LogWarning(String.Format("Dropping too advanced inputFrameUpsync: roomId={0}, playerId={1}, clientInputFrameId={2}, ; is this player cheating?", id, playerId, clientInputFrameId));
+                continue;
+			}
+            // by now "clientInputFrameId <= inputBuffer.EdFrameId"
+            /*
+            var targetInputFrameDownsync = getOrPrefabInputFrameDownsync(clientInputFrameId);
+            targetInputFrameDownsync.InputList[player.PlayerDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
+            targetInputFrameDownsync.ConfirmedList |= ((ulong)1 << (player.PlayerDownsync.JoinIndex - 1));
+            */
+			if (false == fromUDP) {
+                /**
+				  [WARNING] We have to distinguish whether or not the incoming batch is from UDP here, otherwise "pR.LatestPlayerUpsyncedInputFrameId - pR.LastAllConfirmedInputFrameId" might become unexpectedly large in case of "UDP packet loss + slow ws session"!
+
+				  Moreover, only ws session upsyncs should advance "player.LastConsecutiveRecvInputFrameId" & "pR.LatestPlayerUpsyncedInputFrameId".
+
+				  Kindly note that the updates of "player.LastConsecutiveRecvInputFrameId" could be discrete before and after reconnection.
+				 */
+                player.LastConsecutiveRecvInputFrameId = clientInputFrameId;
+				if (clientInputFrameId > latestPlayerUpsyncedInputFrameId) {
+                    latestPlayerUpsyncedInputFrameId = clientInputFrameId;
+				}
+			}
+
+			if (clientInputFrameId > lastIndividuallyConfirmedInputFrameId[player.PlayerDownsync.JoinIndex-1]) {
+                // No need to update "lastIndividuallyConfirmedInputFrameId[player.PlayerDownsync.JoinIndex-1]" only when "true == fromUDP", we should keep "lastIndividuallyConfirmedInputFrameId[player.PlayerDownsync.JoinIndex-1] >= player.LastConsecutiveRecvInputFrameId" at any moment.
+                lastIndividuallyConfirmedInputFrameId[player.PlayerDownsync.JoinIndex - 1] = clientInputFrameId;
+                // It's safe (in terms of getting an eventually correct "RenderFrameBuffer") to put the following update of "lastIndividuallyConfirmedInputList" which is ONLY used for prediction in "InputsBuffer" out of "false == fromUDP" block.
+                lastIndividuallyConfirmedInputList[player.PlayerDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
+			}
+		}
+
+        // Step#2, mark confirmation without forcing
+        /*
+        int newAllConfirmedCount = 0;
+        int inputFrameId1 = lastAllConfirmedInputFrameId + 1;
+		ulong allConfirmedMask = ((ulong)1 << capacity) - 1);
+
+		for inputFrameId := inputFrameId1; inputFrameId < inputBuffer.EdFrameId; inputFrameId++ {
+			tmp := inputBuffer.GetByFrameId(inputFrameId)
+			if nil == tmp {
+				panic(fmt.Sprintf("inputFrameId=%v doesn't exist for roomId=%v! InputsBuffer=%v", inputFrameId, pR.Id, inputBufferString(false)))
+			}
+			shouldBreakConfirmation := false
+			inputFrameDownsync := tmp.(*battle.InputFrameDownsync)
+
+			if allConfirmedMask != inputFrameDownsync.ConfirmedList {
+				for _, player := range pR.PlayersArr {
+					thatPlayerBattleState := atomic.LoadInt32(&(player.BattleState))
+					thatPlayerJoinMask := uint64(1 << uint32(player.JoinIndex-1))
+					isSlowTicker := (0 == (inputFrameDownsync.ConfirmedList & thatPlayerJoinMask))
+					isActiveSlowTicker := (isSlowTicker && thatPlayerBattleState == PlayerBattleStateIns.ACTIVE)
+					if isActiveSlowTicker {
+						shouldBreakConfirmation = true // Could be an `ACTIVE SLOW TICKER` here, but no action needed for now
+						break
+					}
+					//Logger.Debug(fmt.Sprintf("markConfirmationIfApplicable for roomId=%v, skipping UNCONFIRMED BUT INACTIVE player(id:%v, joinIndex:%v) while checking inputFrameId=[%v, %v): InputsBuffer=%v", pR.Id, player.Id, player.JoinIndex, inputFrameId1, inputBuffer.EdFrameId, inputBufferString(false)))
+				}
+			}
+
+			if (shouldBreakConfirmation) {
+				break;
+			}
+			newAllConfirmedCount += 1;
+			pR.onInputFrameDownsyncAllConfirmed(inputFrameDownsync, -1);
+		}
+        */
+
+		if (0 < newAllConfirmedCount) {
+			/**
+			[WARNING]
+
+			If "inputBufferLock" was previously held by "doBattleMainLoopPerTickBackendDynamicsWithProperLocking", then "snapshotStFrameId" would be just (LastAllConfirmedInputFrameId - newAllConfirmedCount).
+
+			However if "inputBufferLock" was previously held by another "OnBattleCmdReceived", the proper value for "snapshotStFrameId" might be smaller than (pR.LastAllConfirmedInputFrameId - newAllConfirmedCount) -- but why? Especially when we've already wrapped this whole function in "inputBufferLock", the order of "markConfirmationIfApplicable" generated snapshots is preserved for sending, isn't (LastAllConfirmedInputFrameId - newAllConfirmedCount) good enough here?
+
+			Unfortunately no, for a reconnected player to get recovered asap (of course with BackendDynamicsEnabled), we put a check of READDED_BATTLE_COLLIDER_ACKED in "downsyncToSinglePlayer" -- which could be called right after "markConfirmationIfApplicable" yet without going through "forceConfirmationIfApplicable" -- and if a READDED_BATTLE_COLLIDER_ACKED player is found there we need a proper "(refRenderFrameId, snapshotStFrameId)" pair for that player!
+			*/
+            /*
+			snapshotStFrameId := (pR.LastAllConfirmedInputFrameId - newAllConfirmedCount)
+			refRenderFrameIdIfNeeded := pR.CurDynamicsRenderFrameId - 1
+			refSnapshotStFrameId := battle.ConvertToDelayedInputFrameId(refRenderFrameIdIfNeeded)
+			if pR.BackendDynamicsEnabled && refSnapshotStFrameId < snapshotStFrameId {
+				snapshotStFrameId = refSnapshotStFrameId
+			}
+			Logger.Debug(fmt.Sprintf("markConfirmationIfApplicable for roomId=%v returning newAllConfirmedCount=%d: InputsBuffer=%v", pR.Id, newAllConfirmedCount, inputBufferString(false)))
+			return pR.produceInputsBufferSnapshotWithCurDynamicsRenderFrameAsRef(uint64(0), snapshotStFrameId, pR.LastAllConfirmedInputFrameId+1)
+            */
+		} else {
+            return null;
+		}
+        
+        return null;
+	}
+
+    /*
+	func (pR *Room) onInputFrameDownsyncAllConfirmed(inputFrameDownsync *battle.InputFrameDownsync, playerId int32) {
+		// [WARNING] This function MUST BE called while "inputBufferLock" is locked!
+		inputFrameId := inputFrameDownsync.InputFrameId
+		if -1 == pR.LastAllConfirmedInputFrameIdWithChange || false == pR.equalInputLists(inputFrameDownsync.InputList, pR.LastAllConfirmedInputList) {
+			if -1 == playerId {
+				Logger.Debug(fmt.Sprintf("Key inputFrame change: roomId=%v, newInputFrameId=%v, lastInputFrameId=%v, newInputList=%v, lastInputList=%v, InputsBuffer=%v", pR.Id, inputFrameId, pR.LastAllConfirmedInputFrameId, inputFrameDownsync.InputList, pR.LastAllConfirmedInputList, inputBufferString(false)))
+			} else {
+				Logger.Debug(fmt.Sprintf("Key inputFrame change: roomId=%v, playerId=%v, newInputFrameId=%v, lastInputFrameId=%v, newInputList=%v, lastInputList=%v, InputsBuffer=%v", pR.Id, playerId, inputFrameId, pR.LastAllConfirmedInputFrameId, inputFrameDownsync.InputList, pR.LastAllConfirmedInputList, inputBufferString(false)))
+			}
+			pR.LastAllConfirmedInputFrameIdWithChange = inputFrameId
+		}
+		pR.LastAllConfirmedInputFrameId = inputFrameId
+		for i, v := range inputFrameDownsync.InputList {
+			// To avoid potential misuse of pointers
+			pR.LastAllConfirmedInputList[i] = v
+		}
+		if -1 == playerId {
+			Logger.Debug(fmt.Sprintf("inputFrame lifecycle#2[forced-allconfirmed]: roomId=%v, InputsBuffer=%v", pR.Id, inputBufferString(false)))
+		} else {
+			Logger.Debug(fmt.Sprintf("inputFrame lifecycle#2[allconfirmed]: roomId=%v, playerId=%v, InputsBuffer=%v", pR.Id, playerId, inputBufferString(false)))
+		}
+	}
+    */
 
     ~Room() {
         joinerLock.Dispose();
