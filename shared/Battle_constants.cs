@@ -4,15 +4,26 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
-        // Deliberately NOT using enum for room states to make use of "C# CompareAndExchange" 
-        public const int ROOM_STATE_IMPOSSIBLE = 0;
-        public const int ROOM_STATE_IDLE = 1;
-        public const int ROOM_STATE_WAITING = 2;
-        public const int ROOM_STATE_PREPARE = 3;
-        public const int ROOM_STATE_IN_BATTLE = 4;
-        public const int ROOM_STATE_STOPPING_BATTLE_FOR_SETTLEMENT = 5;
-        public const int ROOM_STATE_IN_SETTLEMENT = 6;
-        public const int ROOM_STATE_IN_DISMISSAL = 7;
+        // Deliberately NOT using enum for "room states" to make use of "C# CompareAndExchange" 
+        public const long ROOM_STATE_IMPOSSIBLE = 0;
+        public const long ROOM_STATE_IDLE = 1;
+        public const long ROOM_STATE_WAITING = 2;
+        public const long ROOM_STATE_PREPARE = 3;
+        public const long ROOM_STATE_IN_BATTLE = 4;
+        public const long ROOM_STATE_STOPPING_BATTLE_FOR_SETTLEMENT = 5;
+        public const long ROOM_STATE_IN_SETTLEMENT = 6;
+        public const long ROOM_STATE_IN_DISMISSAL = 7;
+
+        // Deliberately NOT using enum for "player battle states" to make use of "C# CompareAndExchange" 
+        public const long PLAYER_BATTLE_STATE_IMPOSSIBLE = -2;
+        public const long PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK = 0;
+        public const long PLAYER_BATTLE_STATE_READDED_PENDING_BATTLE_COLLIDER_ACK = 1;
+        public const long PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED = 2;
+        public const long PLAYER_BATTLE_STATE_ACTIVE = 3;
+        public const long PLAYER_BATTLE_STATE_DISCONNECTED = 4;
+        public const long PLAYER_BATTLE_STATE_LOST = 5;
+        public const long PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME = 6;
+        public const long PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL = 7;
 
 		public const int UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK = 1;
 		public const int UPSYNC_MSG_ACT_PLAYER_CMD          = 2;
@@ -74,10 +85,10 @@ namespace shared {
         public static int NO_LOCK_VEL = -1;
 
         // Used in preallocated RoomDownsyncFrame to check termination
-        public static int TERMINATING_BULLET_LOCAL_ID = (-1);
-        public static int TERMINATING_PLAYER_ID = (-1);
-        public static int TERMINATING_RENDER_FRAME_ID = (-1);
-        public static int TERMINATING_INPUT_FRAME_ID = (-1);
+        public static int TERMINATING_BULLET_LOCAL_ID = (-1024);
+        public static int TERMINATING_PLAYER_ID = (-1025);
+        public static int TERMINATING_RENDER_FRAME_ID = (-1026);
+        public static int TERMINATING_INPUT_FRAME_ID = (-1027);
 
         // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.
         public static int[,] DIRECTION_DECODER = new int[,] {

@@ -49,6 +49,26 @@ namespace shared {
             return true;
         }
 
+        public static bool EqualInputLists(pbc.RepeatedField<ulong> lhs, pbc.RepeatedField<ulong> rhs) {
+            if (null == lhs || null == rhs) return false;
+            if (lhs.Count != rhs.Count) return false;
+            for (int i = 0; i < lhs.Count; i++) {
+                if (lhs[i] == rhs[i]) continue;
+                return false;
+            }
+            return true;
+        }
+
+        public static bool EqualInputLists(pbc.RepeatedField<ulong> lhs, ulong[] rhs) {
+            if (null == lhs) return false;
+            if (lhs.Count != rhs.Length) return false;
+            for (int i = 0; i < lhs.Count; i++) {
+                if (lhs[i] == rhs[i]) continue;
+                return false;
+            }
+            return true;
+        }
+
         public static bool UpdateInputFrameInPlaceUponDynamics(int inputFrameId, int roomCapacity, ulong confirmedList, pbc::RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
             bool hasInputFrameUpdatedOnDynamics = false;
             for (int i = 0; i < roomCapacity; i++) {

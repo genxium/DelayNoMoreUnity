@@ -3,7 +3,7 @@ using shared;
 using static shared.Battle;
 using System;
 using static shared.CharacterState;
-using pbc = Google.Protobuf.Collections;
+using Pbc = Google.Protobuf.Collections;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity = 1;
@@ -26,7 +26,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected ulong[] prefabbedInputListHolder;
     protected GameObject[] playerGameObjs;
 
-    protected RoomBattleState battleState;
+    protected long battleState;
     protected int spaceOffsetX;
     protected int spaceOffsetY;
 
@@ -224,7 +224,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public virtual void _resetCurrentMatch() {
-        battleState = RoomBattleState.Impossible;
+        battleState = ROOM_STATE_IMPOSSIBLE;
         renderFrameId = Battle.TERMINATING_RENDER_FRAME_ID;
         renderFrameIdLagTolerance = 4;
         chaserRenderFrameId = Battle.TERMINATING_RENDER_FRAME_ID;
@@ -286,17 +286,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         prevDecodedInputHolder = new InputFrameDecoded();
     }
 
-    private bool equalInputLists(pbc.RepeatedField<ulong> lhs, pbc.RepeatedField<ulong> rhs) {
-        if (null == lhs || null == rhs) return false;
-        if (lhs.Count != rhs.Count) return false;
-        for (int i = 0; i < lhs.Count; i++) {
-            if (lhs[i] == rhs[i]) continue;
-            return false;
-        }
-        return true;
-    }
-
-    public void onInputFrameDownsyncBatch(pbc.RepeatedField<InputFrameDownsync> batch) {
+    public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {
         // This method is guaranteed to run in UIThread only.
         if (null == batch) {
             return;
@@ -304,7 +294,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (null == inputBuffer) {
             return;
         }
-        if (RoomBattleState.InSettlement == battleState) {
+        if (ROOM_STATE_IN_SETTLEMENT == battleState) {
             return;
         }
 
@@ -321,7 +311,7 @@ public abstract class AbstractMapController : MonoBehaviour {
               &&
               TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId
               &&
-              !equalInputLists(localInputFrame.InputList, inputFrameDownsync.InputList)
+              !shared.Battle.EqualInputLists(localInputFrame.InputList, inputFrameDownsync.InputList)
             ) {
                 firstPredictedYetIncorrectInputFrameId = inputFrameDownsyncId;
             }
@@ -344,13 +334,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, false);
     }
 
-    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, pbc::RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
+    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, Pbc::RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
         // This function is also applicable to "re-joining".
         onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch); // Important to do this step before setting IN_BATTLE
         if (null == renderBuffer) {
             return;
         }
-        if (RoomBattleState.InSettlement == battleState) {
+        if (ROOM_STATE_IN_SETTLEMENT == battleState) {
             return;
         }
         int rdfId = pbRdf.Id;
@@ -394,7 +384,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             // In this case it must be true that "rdfId > chaserRenderFrameId".
             chaserRenderFrameId = rdfId;
 
-            battleState = RoomBattleState.InBattle;
+            battleState = ROOM_STATE_IN_BATTLE;
         }
 
         // [WARNING] Leave all graphical updates in "Update()" by "applyRoomDownsyncFrameDynamics"
@@ -403,7 +393,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     // Update is called once per frame
     protected void doUpdate() {
-        if (RoomBattleState.InBattle != battleState) {
+        if (ROOM_STATE_IN_BATTLE != battleState) {
             return;
         }
         int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
@@ -444,10 +434,10 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected void onBattleStopped() {
-        if (RoomBattleState.InBattle != battleState) {
+        if (ROOM_STATE_IN_BATTLE != battleState) {
             return;
         }
-        battleState = RoomBattleState.InSettlement;
+        battleState = ROOM_STATE_IN_SETTLEMENT;
     }
 
     protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int lastUpsyncInputFrameId, int currInputFrameId);

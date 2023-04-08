@@ -112,7 +112,7 @@ message WsReq {
 	repeated InputFrameUpsync inputFrameUpsyncBatch = 7;
 }
 
-message InputsBufferSnapshot {
+message InputBufferSnapshot {
 	int32 refRenderFrameId = 1;
 	uint64 unconfirmedMask = 2;
 	repeated InputFrameDownsync toSendInputFrameDownsyncs = 3;
