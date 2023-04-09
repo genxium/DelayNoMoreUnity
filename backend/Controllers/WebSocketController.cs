@@ -44,11 +44,11 @@ public class WebSocketController : ControllerBase {
             WebSocketCloseStatus closeCode = WebSocketCloseStatus.Empty;
             string? closeReason = null;
 
-            var room = _roomManager.Pop();
             int addPlayerToRoomResult = ErrCode.UnknownError;
             Player player = new Player(new PlayerDownsync());
 
             try {
+                var room = _roomManager.Pop();
                 if (null == room) {
                     _logger.LogWarning("No available room [ playerId={0} ]", playerId);
                     return;
@@ -84,7 +84,7 @@ public class WebSocketController : ControllerBase {
                 };
 
                 var byteArr = initWsResp.ToByteArray();
-                _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1}, messageLength={2} ]", (null != room ? room.id : null), playerId, byteArr.Length);
+                _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1}, messageLength={2} ]", room.id, playerId, byteArr.Length);
                 await session.SendAsync(new ArraySegment<byte>(initWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
 
                 var buffer = new byte[1024];
@@ -98,12 +98,33 @@ public class WebSocketController : ControllerBase {
                             closeReason = receiveResult.CloseStatusDescription;
                             break;
                         }
+
+                        WsReq pReq = WsReq.Parser.ParseFrom(buffer, 0, receiveResult.Count);
+                        switch (pReq.Act) {
+                            case shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK:
+                                var res1 = room.OnPlayerBattleColliderAcked(playerId);
+                                if (!res1) {
+                                    if (!cancellationToken.IsCancellationRequested) {
+                                        cancellationTokenSource.Cancel();
+                                    }
+                                } else {
+                                    // [OPTIONAL]TODO: Popup this specific room from RoomManager, then re-push it with the updated score
+                                }
+                                break;
+                            case shared.Battle.UPSYNC_MSG_ACT_PLAYER_CMD:
+                                room.OnBattleCmdReceived(pReq, false);
+                                break;
+                            default:
+                                break;
+                        }
                     } catch (OperationCanceledException ocEx) {
-                        _logger.LogWarning("Session is cancelled for [ roomId={0}, playerId={1}, ocEx={2} ]", (null != room ? room.id : null), playerId, ocEx.Message);
+                        _logger.LogWarning("Session is cancelled for [ roomId={0}, playerId={1}, ocEx={2} ]", room.id, playerId, ocEx.Message);
+                    } catch (Exception ex) {
+                        _logger.LogWarning("Session got an exception for [ roomId={0}, playerId={1}, ocEx={2} ]", room.id, playerId, ex.Message);
                     }
                 }
 
-                if (null != room && ErrCode.Ok == addPlayerToRoomResult) {
+                if (ErrCode.Ok == addPlayerToRoomResult) {
                     room.OnPlayerDisconnected(playerId);
                 }
             } finally {

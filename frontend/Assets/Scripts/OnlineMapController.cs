@@ -14,6 +14,9 @@ public class OnlineMapController : AbstractMapController {
     WsResp wsRespHolder; 
 
     void pollAndHandleWsRecvBuffer() {
+		if (0 < WsSessionManager.Instance.recvBuffer.Count) {
+            Debug.Log(String.Format("WsSession RecvBuffer is non-empty: {0}", WsSessionManager.Instance.recvBuffer.Count));
+        }
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
             Debug.Log(String.Format("Handling WsSession downsync in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {

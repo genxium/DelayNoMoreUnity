@@ -277,6 +277,11 @@ public class Room {
         return 7.8125f * d2 - 5.0f + (float)(state);
     }
 
+    public bool OnPlayerBattleColliderAcked(int playerId) { 
+        // TODO
+        return true;
+    }
+
     public void OnBattleCmdReceived(WsReq pReq, bool fromUDP) {
         /*
 		   [WARNING] This function "OnBattleCmdReceived" could be called by different ws sessions and thus from different threads!
@@ -316,17 +321,17 @@ public class Room {
         Interlocked.Exchange(ref player.AckingFrameId, ackingFrameId);
         Interlocked.Exchange(ref player.AckingInputFrameId, ackingInputFrameId);
 
-        /*
-		_logger.LogInformation("OnBattleCmdReceived-inputBufferLock about to lock: roomId={0}, fromPlayerId={1}", id, playerId);
+        _logger.LogInformation("OnBattleCmdReceived-inputBufferLock about to lock: roomId={0}, fromPlayerId={1}", id, playerId);
         inputBufferLock.WaitOne();
-		try {
-			var inputBufferSnapshot = markConfirmationIfApplicable(inputFrameUpsyncBatch, playerId, player, fromUDP);
-			downsyncToAllPlayers(inputBufferSnapshot);
-		} finally {
+        try {
+            var inputBufferSnapshot = markConfirmationIfApplicable(inputFrameUpsyncBatch, playerId, player, fromUDP);
+            if (null != inputBufferSnapshot) {
+                downsyncToAllPlayers(inputBufferSnapshot);
+            }
+        } finally {
             inputBufferLock.ReleaseMutex();
-			_logger.LogInformation("OnBattleCmdReceived-inputBufferLock unlocked: roomId={0}, fromPlayerId={1}", id, playerId);
-		}
-        */
+            _logger.LogInformation("OnBattleCmdReceived-inputBufferLock unlocked: roomId={0}, fromPlayerId={1}", id, playerId);
+        }
     }
 
     private InputBufferSnapshot? markConfirmationIfApplicable(Pbc.RepeatedField<InputFrameUpsync> inputFrameUpsyncBatch, int playerId, Player player, bool fromUDP) {
@@ -352,7 +357,7 @@ public class Room {
             var targetInputFrameDownsync = getOrPrefabInputFrameDownsync(clientInputFrameId);
             targetInputFrameDownsync.InputList[player.PlayerDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
             targetInputFrameDownsync.ConfirmedList |= ((ulong)1 << (player.PlayerDownsync.JoinIndex - 1));
-            
+
             if (false == fromUDP) {
                 /**
 				  [WARNING] We have to distinguish whether or not the incoming batch is from UDP here, otherwise "pR.LatestPlayerUpsyncedInputFrameId - pR.LastAllConfirmedInputFrameId" might become unexpectedly large in case of "UDP packet loss + slow ws session"!
@@ -544,12 +549,24 @@ public class Room {
 
     void downsyncToAllPlayers(InputBufferSnapshot inputBufferSnapshot) {
         /*
-                   [WARNING] This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
+        [WARNING] This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
         */
         if (true == backendDynamicsEnabled) {
             foreach (var player in playersArr) {
                 var playerBattleState = Interlocked.Read(ref player.BattleState);
                 if (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState) {
+                    inputBufferSnapshot.ShouldForceResync = true;
+                    break;
+                }
+
+                /*
+                [WARNING] The comment of this part in Golang version is obsolete. The field "ForceAllResyncOnAnyActiveSlowTicker" is always true, and setting "ShouldForceResync = true" here is only going to impact unconfirmed players on frontend, i.e. there's a filter on frontend to ignore "nonSelfForceConfirmation". 
+                */
+                ulong thatPlayerJoinMask = ((ulong)1 << (player.PlayerDownsync.JoinIndex - 1));
+
+                bool isActiveSlowTicker = (0 < (thatPlayerJoinMask & inputBufferSnapshot.UnconfirmedMask)) && (PLAYER_BATTLE_STATE_ACTIVE == playerBattleState);
+
+                if (isActiveSlowTicker) {
                     inputBufferSnapshot.ShouldForceResync = true;
                     break;
                 }
