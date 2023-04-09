@@ -2,13 +2,10 @@
 using static shared.Battle;
 using System.Net.WebSockets;
 using System.Net.Sockets;
-using System.Threading;
 using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Numerics;
-using System.Runtime.Intrinsics.X86;
 
 namespace backend.Battle;
 public class Room {
@@ -16,6 +13,8 @@ public class Room {
     public int id;
     public int capacity;
     public int battleDurationFrames;
+    public int estimatedMillisPerFrame;
+
     public string stageName;
     public int inputFrameUpsyncDelayTolerance;
     public int maxChasingRenderFramesPerUpdate;
@@ -82,6 +81,7 @@ public class Room {
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
         battleDurationFrames = 10 * 60;
+        estimatedMillisPerFrame = 17; // ceiling 16.66667 to dilute the framerate on server 
         stageName = "Dungeon";
         inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
@@ -277,9 +277,241 @@ public class Room {
         return 7.8125f * d2 - 5.0f + (float)(state);
     }
 
-    public bool OnPlayerBattleColliderAcked(int playerId) { 
-        // TODO
-        return true;
+    private Pbc.RepeatedField<PlayerDownsync> clonePlayersArrToPb() {
+        var bridgeArr = new PlayerDownsync[capacity]; // RepeatedField doesn't have a constructor to preallocate by size
+        foreach (var (playerId, player) in players) {
+            bridgeArr[player.PlayerDownsync.JoinIndex - 1] = player.PlayerDownsync.Clone();
+        }
+        var ret = new Pbc.RepeatedField<PlayerDownsync> {
+            bridgeArr
+        };
+        return ret;
+    }
+
+    public bool OnPlayerBattleColliderAcked(int targetPlayerId) {
+        joinerLock.WaitOne();
+        try {
+            Player? targetPlayer;
+            if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
+                return false;
+            }
+            bool shouldTryToStartBattle = true;
+            var targetPlayerBattleState = Interlocked.Read(ref targetPlayer.BattleState);
+            _logger.LogInformation("OnPlayerBattleColliderAcked-before: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+            switch (targetPlayerBattleState) {
+                case PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK:
+                    var playerAckedFrame = new RoomDownsyncFrame {
+                        Id = renderFrameId
+                    };
+                    playerAckedFrame.PlayersArr.AddRange(clonePlayersArrToPb());
+
+                    // Broadcast normally added player info to all players in the same room
+                    foreach (var (thatPlayerId, thatPlayer) in players) {
+                        /*
+                           [WARNING]
+                           This `playerAckedFrame` is the first ever "RoomDownsyncFrame" for every "PersistentSessionClient on the frontend", and it goes right after each "BattleColliderInfo".
+
+                           By making use of the sequential nature of each ws session, all later "RoomDownsyncFrame"s generated after `pRoom.StartBattle()` will be put behind this `playerAckedFrame`.
+
+                           This function is triggered by an upsync message via WebSocket, thus downsync sending is also available by now.
+                        */
+                        var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
+                        _logger.LogInformation("OnPlayerBattleColliderAcked-middle: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={2}, thatPlayerId={3}, thatPlayerBattleState={4}", id, state, targetPlayerId, targetPlayerBattleState, thatPlayerId, thatPlayerBattleState);
+                        if (thatPlayerId == targetPlayerId || (PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK == thatPlayerBattleState || PLAYER_BATTLE_STATE_ACTIVE == thatPlayerBattleState)) {
+                            _logger.LogInformation("OnPlayerBattleColliderAcked-sending DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+                            Task.Run(async () => {
+                                await sendSafelyAsync(playerAckedFrame, null, DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED, thatPlayerId, MAGIC_JOIN_INDEX_DEFAULT);
+                            });
+                        }
+                    }
+                    Interlocked.Exchange(ref targetPlayer.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
+                    break;
+                default:
+                    break;
+            }
+
+            _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+
+            if (shouldTryToStartBattle) {
+                if (capacity == effectivePlayerCount) {
+                    bool allAcked = true;
+                    foreach (var (thatPlayerId, thatPlayer) in players) {
+                        var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
+                        if (PLAYER_BATTLE_STATE_ACTIVE != thatPlayerBattleState) {
+                            _logger.LogInformation("Unexpectedly got an inactive player: roomId={0}, thatPlayerId={1}, thatPlayerBattleState={2}", id, thatPlayerId, thatPlayerBattleState);
+                            allAcked = false;
+                            break;
+                        }
+                    }
+                    if (true == allAcked) {
+                        startBattle(); // WON'T run if the battle state is not in WAITING.
+                    }
+                }
+            }
+            return true;
+        } finally {
+            joinerLock.ReleaseMutex();
+        }
+    }
+
+    private void startBattle() {
+        var nowRoomState = Interlocked.Read(ref state);
+        if (ROOM_STATE_WAITING != nowRoomState) {
+            _logger.LogWarning("[StartBattle] Battle not started due to not being WAITING: roomId={0}, roomState={1}", id, state);
+            return;
+        }
+
+        renderFrameId = 0;
+
+        // Initialize the "collisionSys" as well as "RenderFrameBuffer"
+        curDynamicsRenderFrameId = 0;
+
+        Interlocked.Exchange(ref state, ROOM_STATE_PREPARE);
+
+        _logger.LogWarning("Battle state transitted to ROOM_STATE_PREPARE for roomId={0}", id);
+
+        var battleReadyToStartFrame = new RoomDownsyncFrame {
+            Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START
+	    };
+        battleReadyToStartFrame.PlayersArr.AddRange(clonePlayersArrToPb());
+
+        _logger.LogWarning("Sending out frame for ROOM_STATE_PREPARE: {0}", battleReadyToStartFrame);
+
+        foreach (var (playerId, player) in players) {
+            Task.Run(async () => {
+                await sendSafelyAsync(battleReadyToStartFrame, null, DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START, playerId, MAGIC_JOIN_INDEX_DEFAULT);
+            });
+        }
+
+        using var timer = new System.Threading.Timer(new TimerCallback((s) => {
+            if (null == s) {
+                return;
+            }
+            var roomRef = (Room)s;
+            var nowRoomState2 = Interlocked.Read(ref roomRef.state);
+            if (ROOM_STATE_PREPARE != nowRoomState2) {
+                return;
+            }
+            Interlocked.Exchange(ref roomRef.state, ROOM_STATE_IN_BATTLE);
+            startBattleMainLoopAsync();
+        }), this, 3000, Timeout.Infinite);
+    }
+
+    private async Task stopBattleForSettlement() {
+        var nowRoomState = Interlocked.Read(ref state);
+        if (ROOM_STATE_IN_BATTLE != nowRoomState) {
+            return;
+        }
+        battleUdpTunnelLock.WaitOne();
+        if (null != battleUdpTunnel) {
+            battleUdpTunnel.Close();
+        }
+        battleUdpTunnelLock.ReleaseMutex();
+
+        Interlocked.Exchange(ref state, ROOM_STATE_STOPPING_BATTLE_FOR_SETTLEMENT);
+        
+        _logger.LogInformation("Stopping the `battleMainLoop` for: roomId={0}", id);
+        var assembledFrame = new RoomDownsyncFrame {
+            Id = renderFrameId
+        };
+
+        // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
+        foreach (var (playerId, player) in players) {
+            var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected/OnPlayerLost" from other threads
+                                                                                  // [WARNING] DON'T try to send any message to an inactive player!
+            switch (thatPlayerBattleState) {
+                case PLAYER_BATTLE_STATE_DISCONNECTED:
+                case PLAYER_BATTLE_STATE_LOST:
+                case PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME:
+                case PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL:
+                    continue;
+            }
+
+            await sendSafelyAsync(assembledFrame, null, DOWNSYNC_MSG_ACT_BATTLE_STOPPED, playerId, MAGIC_JOIN_INDEX_DEFAULT);
+        }
+
+        Interlocked.Exchange(ref state, ROOM_STATE_IN_SETTLEMENT);
+        _logger.LogInformation("The room is in settlement: roomId={0}", id);
+    }
+
+    private void dismiss() {
+        var nowRoomState = Interlocked.Read(ref state);
+        if (ROOM_STATE_IN_SETTLEMENT != nowRoomState) {
+            return;
+        }
+
+        Interlocked.Exchange(ref state, ROOM_STATE_IN_DISMISSAL);
+        foreach (var (_, cancellationTokenSource) in playerSignalToCloseDict) {
+            if (!cancellationTokenSource.Token.IsCancellationRequested) {
+                cancellationTokenSource.Cancel();
+            }
+        }
+        onDismissed();
+    }
+
+    private async void startBattleMainLoopAsync() {
+        try {
+            await battleMainLoop();
+        } finally {
+            await stopBattleForSettlement();
+            _logger.LogInformation("The `battleMainLoop` for roomId={0} is stopped@renderFrameId={1}:\n%v", id, renderFrameId);
+            dismiss();
+        }
+    }
+
+    private async Task battleMainLoop() {
+        var nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        var battleStartedAt = nowMillis;
+        _logger.LogInformation("The `battleMainLoop` is started for: roomId={0}", id);
+        foreach (var (_, watchdog) in playerActiveWatchdogDict) {
+            watchdog.Kick();
+        }
+        while (renderFrameId <= battleDurationFrames) {
+            nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            var stCalculation = nowMillis;
+            long nowRoomState = Interlocked.Read(ref state);
+            if (ROOM_STATE_IN_BATTLE != nowRoomState) {
+                break;
+            }
+
+            nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            var totalElapsedMillis = nowMillis - battleStartedAt;
+
+            int nextRenderFrameId = (int)((totalElapsedMillis + estimatedMillisPerFrame - 1) / estimatedMillisPerFrame); // fast ceiling
+
+            int toSleepMillis = (estimatedMillisPerFrame >> 1); // Sleep half-frame time by default
+
+            if (nextRenderFrameId > renderFrameId) {
+                if (0 == renderFrameId) {
+                    var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, 128);
+                    startRdf.Id = shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
+
+                    // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
+                    foreach (var (playerId, player) in players) {
+                        var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected/OnPlayerLost" from other threads
+                                                                                               // [WARNING] DON'T try to send any message to an inactive player!
+                        switch (thatPlayerBattleState) {
+                            case PLAYER_BATTLE_STATE_DISCONNECTED:
+                            case PLAYER_BATTLE_STATE_LOST:
+                            case PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME:
+                            case PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL:
+                                continue;
+                        }
+
+                        await sendSafelyAsync(startRdf, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, MAGIC_JOIN_INDEX_DEFAULT);
+                    }
+
+                    _logger.LogInformation("In `battleMainLoop` for roomId={0} sent out startRdf", id);
+                }
+
+                renderFrameId = nextRenderFrameId;
+
+                var elapsedInCalculation = (nowMillis - stCalculation);
+                toSleepMillis = (int)(estimatedMillisPerFrame - elapsedInCalculation);
+            }
+
+            await Task.Delay(toSleepMillis);
+        }
     }
 
     public void OnBattleCmdReceived(WsReq pReq, bool fromUDP) {
@@ -341,16 +573,16 @@ public class Room {
             var clientInputFrameId = inputFrameUpsync.InputFrameId;
             if (clientInputFrameId < inputBuffer.StFrameId) {
                 // The updates to "inputBuffer.StFrameId" is monotonically increasing, thus if "clientInputFrameId < inputBuffer.StFrameId" at any moment of time, it is obsolete in the future.
-                _logger.LogDebug(String.Format("Omitting obsolete inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}", id, playerId, clientInputFrameId));
+                _logger.LogDebug("Omitting obsolete inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}", id, playerId, clientInputFrameId);
                 continue;
             }
             if (clientInputFrameId < player.LastConsecutiveRecvInputFrameId) {
                 // [WARNING] It's important for correctness that we use "player.LastConsecutiveRecvInputFrameId" instead of "pR.LastIndividuallyConfirmedInputFrameId[player.JoinIndex-1]" here!
-                _logger.LogDebug(String.Format("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, playerLastConsecutiveRecvInputFrameId={3}", id, playerId, clientInputFrameId, player.LastConsecutiveRecvInputFrameId));
+                _logger.LogDebug("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, playerLastConsecutiveRecvInputFrameId={3}", id, playerId, clientInputFrameId, player.LastConsecutiveRecvInputFrameId);
                 continue;
             }
             if (clientInputFrameId > inputBuffer.EdFrameId) {
-                _logger.LogWarning(String.Format("Dropping too advanced inputFrameUpsync: roomId={0}, playerId={1}, clientInputFrameId={2}, ; is this player cheating?", id, playerId, clientInputFrameId));
+                _logger.LogWarning("Dropping too advanced inputFrameUpsync: roomId={0}, playerId={1}, clientInputFrameId={2}, ; is this player cheating?", id, playerId, clientInputFrameId);
                 continue;
             }
             // by now "clientInputFrameId <= inputBuffer.EdFrameId"
@@ -402,7 +634,7 @@ public class Room {
                         shouldBreakConfirmation = true; // Could be an `ACTIVE SLOW TICKER` here, but no action needed for now
                         break;
                     }
-                    _logger.LogDebug(String.Format("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.PlayerDownsync.Id, thatPlayer.PlayerDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId));
+                    _logger.LogDebug("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.PlayerDownsync.Id, thatPlayer.PlayerDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
                 }
             }
 
@@ -431,7 +663,7 @@ public class Room {
                     snapshotStFrameId = refSnapshotStFrameId;
                 }
             }
-            _logger.LogDebug(String.Format("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}", id, newAllConfirmedCount));
+            _logger.LogDebug("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}", id, newAllConfirmedCount);
             return produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(0, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
         } else {
             return null;
@@ -489,9 +721,9 @@ public class Room {
         int inputFrameId = inputFrameDownsync.InputFrameId;
         if (TERMINATING_INPUT_FRAME_ID == lastAllConfirmedInputFrameIdWithChange || false == shared.Battle.EqualInputLists(inputFrameDownsync.InputList, lastAllConfirmedInputList)) {
             if (INVALID_DEFAULT_PLAYER_ID == playerId) {
-                _logger.LogDebug(String.Format("Key inputFrame change: roomId={0}, newInputFrameId={1}, lastInputFrameId={2}, newInputList={2}, lastAllConfirmedInputList={3}", id, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList));
+                _logger.LogDebug("Key inputFrame change: roomId={0}, newInputFrameId={1}, lastInputFrameId={2}, newInputList={2}, lastAllConfirmedInputList={3}", id, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
             } else {
-                _logger.LogDebug(String.Format("Key inputFrame change: roomId={0}, playerId={1}, newInputFrameId={2}, lastInputFrameId={3}, newInputList={4}, lastAllConfirmedInputList={5}", id, playerId, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList));
+                _logger.LogDebug("Key inputFrame change: roomId={0}, playerId={1}, newInputFrameId={2}, lastInputFrameId={3}, newInputList={4}, lastAllConfirmedInputList={5}", id, playerId, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
             }
             lastAllConfirmedInputFrameIdWithChange = inputFrameId;
         }
@@ -500,9 +732,9 @@ public class Room {
             lastAllConfirmedInputList[i] = inputFrameDownsync.InputList[i];
         }
         if (INVALID_DEFAULT_PLAYER_ID == playerId) {
-            _logger.LogDebug(String.Format("inputFrame lifecycle#2[forced-allconfirmed]: roomId={0}", id));
+            _logger.LogDebug("inputFrame lifecycle#2[forced-allconfirmed]: roomId={0}", id);
         } else {
-            _logger.LogDebug(String.Format("inputFrame lifecycle#2[allconfirmed]: roomId={0}, playerId={1}", id, playerId));
+            _logger.LogDebug("inputFrame lifecycle#2[allconfirmed]: roomId={0}, playerId={1}", id, playerId);
         }
     }
 
@@ -596,9 +828,32 @@ public class Room {
         }
     }
 
+    private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, Pbc.RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, int act, int playerId, int peerJoinIndex) {
+        WebSocket? wsSession;
+        CancellationTokenSource? cancellationTokenSource;
+        if (!playerDownsyncSessionDict.TryGetValue(playerId, out wsSession)) {
+            _logger.LogWarning("Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #1", id, playerId);
+            return;
+        }
+
+        if (!playerSignalToCloseDict.TryGetValue(playerId, out cancellationTokenSource)) {
+            _logger.LogWarning("Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #2", id, playerId);
+            return;
+        }
+
+        var resp = new WsResp {
+            Ret = ErrCode.Ok,
+            Act = act,
+            Rdf = roomDownsyncFrame,
+            PeerJoinIndex = peerJoinIndex
+        };
+        resp.InputFrameDownsyncBatch.AddRange(toSendInputFrameDownsyncs);
+        await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+    }
+
     private async void downsyncToSinglePlayer(int playerId, Player player, InputBufferSnapshot inputBufferSnapshot) {
         /*
-           [WARNING] This function MUST BE called while "pR.inputBufferLock" is unlocked -- otherwise the network I/O blocking of "sendSafely" might cause significant lag for "markConfirmationIfApplicable & forceConfirmationIfApplicable"!
+           [WARNING] This function MUST BE called while "pR.inputBufferLock" is unlocked -- otherwise the network I/O blocking of "sendSafelyAsync" might cause significant lag for "markConfirmationIfApplicable & forceConfirmationIfApplicable"!
 
            We hereby assume that Golang runtime allocates & frees small amount of RAM quickly enough compared to either network I/O blocking in worst cases or the high frequency "per inputFrameDownsync*player" locking (though "OnBattleCmdReceived" locks at the same frequency but it's inevitable).
         */
@@ -634,28 +889,10 @@ public class Room {
         var toSendInputFrameIdSt = inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
         var toSendInputFrameIdEd = inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
 
-        WebSocket? wsSession;
-        CancellationTokenSource? cancellationTokenSource;
-        if (!playerDownsyncSessionDict.TryGetValue(player.PlayerDownsync.Id, out wsSession)) {
-            _logger.LogWarning(String.Format("Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #1", id, player.PlayerDownsync.Id));
-            return;
-        }
-
-        if (!playerSignalToCloseDict.TryGetValue(player.PlayerDownsync.Id, out cancellationTokenSource)) {
-            _logger.LogWarning(String.Format("Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #2", id, player.PlayerDownsync.Id));
-            return;
-        }
-
         if (backendDynamicsEnabled && shouldResyncOverall) {
             // TODO
         } else {
-            var resp = new WsResp {
-                Ret = ErrCode.Ok,
-                Act = DOWNSYNC_MSG_ACT_INPUT_BATCH,
-                PeerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
-            };
-            resp.InputFrameDownsyncBatch.AddRange(inputBufferSnapshot.ToSendInputFrameDownsyncs);
-            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+            await sendSafelyAsync(null, inputBufferSnapshot.ToSendInputFrameDownsyncs, DOWNSYNC_MSG_ACT_INPUT_BATCH, playerId, MAGIC_JOIN_INDEX_DEFAULT);
         }
         player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
