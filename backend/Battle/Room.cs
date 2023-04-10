@@ -357,7 +357,7 @@ public class Room {
             /**
              [WARNING] DON'T use "await" here, we actually need run the "battleMainLoop" in another thread to avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! 
 
-             An alternative syntax is to declare "battleMainLoopAsync" as "async void", i.e. "private async void battleMainLoopAsync".
+             An alternative syntax is to declare "battleMainLoopAsync" as "async void", i.e. "private async void battleMainLoopAsync". See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
              */
             battleMainLoopAsync().Start();
             //battleMainLoopAsync();

@@ -4,6 +4,7 @@ using shared;
 using static shared.Battle;
 using static shared.CharacterState;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using Google.Protobuf.Collections;
 
@@ -11,25 +12,25 @@ public class OnlineMapController : AbstractMapController {
     CancellationTokenSource wsCancellationTokenSource;
     CancellationToken wsCancellationToken;
     int inputFrameUpsyncDelayTolerance;
-    WsResp wsRespHolder; 
+    WsResp wsRespHolder;
 
     void pollAndHandleWsRecvBuffer() {
-		if (0 < WsSessionManager.Instance.recvBuffer.Count) {
+        if (0 < WsSessionManager.Instance.recvBuffer.Count) {
             Debug.Log(String.Format("WsSession RecvBuffer is non-empty: {0}", WsSessionManager.Instance.recvBuffer.Count));
         }
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
             Debug.Log(String.Format("Handling WsSession downsync in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {
-            case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
-                Debug.Log("Handling WsSession closed in main thread.");
-                WsSessionManager.Instance.ClearCredentials();
-                SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
-            break; 
-            case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
-                inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
-            break;
-            default:
-            break;
+                case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
+                    Debug.Log("Handling WsSession closed in main thread.");
+                    WsSessionManager.Instance.ClearCredentials();
+                    SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+                    break;
+                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
+                    inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -114,13 +115,11 @@ public class OnlineMapController : AbstractMapController {
 
         onRoomDownsyncFrame(startRdf, null);
 
-        startWsThread();
+        wsSessionTaskAsync().Start();
     }
 
-    async void startWsThread() {
-        // [WARNING] Must avoid blocking MainThread
-
-        // Declared "async" for the convenience to "await" existing async methods
+    async Task wsSessionTaskAsync() {
+        // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         string wsEndpoint = Env.Instance.getWsEndpoint();
         await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
 
@@ -129,8 +128,8 @@ public class OnlineMapController : AbstractMapController {
             Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
         };
         WsSessionManager.Instance.recvBuffer.Enqueue(closeMsg);
+        Debug.Log(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
 
-		Debug.Log(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
         Debug.Log(String.Format("WebSocket async task is ended"));
     }
 
