@@ -13,34 +13,8 @@ public class OnlineMapController : AbstractMapController {
     CancellationToken wsCancellationToken;
     int inputFrameUpsyncDelayTolerance;
     WsResp wsRespHolder;
-
-    void pollAndHandleWsRecvBuffer() {
-        if (0 < WsSessionManager.Instance.recvBuffer.Count) {
-            Debug.Log(String.Format("WsSession RecvBuffer is non-empty: {0}", WsSessionManager.Instance.recvBuffer.Count));
-        }
-        while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
-            Debug.Log(String.Format("Handling WsSession downsync in main thread: {0}", wsRespHolder));
-            switch (wsRespHolder.Act) {
-                case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
-                    Debug.Log("Handling WsSession closed in main thread.");
-                    WsSessionManager.Instance.ClearCredentials();
-                    SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
-                    break;
-                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
-                    inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    void Start() {
-        wsCancellationTokenSource = new CancellationTokenSource();
-        wsCancellationToken = wsCancellationTokenSource.Token;
-        inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
-        Application.targetFrameRate = 60;
-        _resetCurrentMatch();
+	
+	private RoomDownsyncFrame mockStartRdf() {
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
 
@@ -112,13 +86,62 @@ public class OnlineMapController : AbstractMapController {
         selfPlayerInRdf.Hp = 100;
         selfPlayerInRdf.MaxHp = 100;
         selfPlayerInRdf.SpeciesId = 0;
+		
+		return startRdf;
+	}
 
-        onRoomDownsyncFrame(startRdf, null);
-
-        wsSessionTaskAsync().Start();
+    void pollAndHandleWsRecvBuffer() {
+        if (0 < WsSessionManager.Instance.recvBuffer.Count) {
+            Debug.Log(String.Format("WsSession RecvBuffer is non-empty: {0}", WsSessionManager.Instance.recvBuffer.Count));
+        }
+        while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
+            Debug.Log(String.Format("Handling WsSession downsync in main thread: {0}", wsRespHolder));
+            switch (wsRespHolder.Act) {
+                case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
+                    Debug.Log("Handling WsSession closed in main thread.");
+                    WsSessionManager.Instance.ClearCredentials();
+                    SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+                    break;
+                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
+                    inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
+					var reqData = new WsReq {
+						PlayerId = selfPlayerInfo.Id,
+						Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
+						JoinIndex = selfPlayerInfo.JoinIndex
+					};
+					WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
+                    Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
+                    break;
+				case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
+					enableBattleInput(true);
+                    break;
+				case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
+					enableBattleInput(false);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
-    async Task wsSessionTaskAsync() {
+    void Start() {
+        wsCancellationTokenSource = new CancellationTokenSource();
+        wsCancellationToken = wsCancellationTokenSource.Token;
+        inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
+        Application.targetFrameRate = 60;
+        _resetCurrentMatch();
+       
+		enableBattleInput(false);
+
+		var startRdf = mockStartRdf();	
+		onRoomDownsyncFrame(startRdf, null);
+
+		new Thread(() => {
+			_ = wsSessionTaskAsync();
+		}).Start();
+    }
+
+    private async Task wsSessionTaskAsync() {
         // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         string wsEndpoint = Env.Instance.getWsEndpoint();
         await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
@@ -134,7 +157,7 @@ public class OnlineMapController : AbstractMapController {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update() {	
         try {
             pollAndHandleWsRecvBuffer();
             doUpdate();

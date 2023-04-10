@@ -14,8 +14,8 @@ public class BattleInputManager : MonoBehaviour {
     private Vector2 joystickInitPos;
     private float joystickKeyboardMoveRadius;
     public GameObject joystick;
-
     public GameObject btnA;
+	private bool customEnabled = true;
 
     void Start() {
         joystickInitPos = joystick.transform.position;
@@ -76,6 +76,7 @@ public class BattleInputManager : MonoBehaviour {
     }
 
     public void OnBtnAInput(InputAction.CallbackContext context) {
+		if (!customEnabled) return;
         btnALevel = context.ReadValueAsButton() ? 1 : 0;
         Debug.Log(String.Format("btnALevel is changed to {0}", btnALevel));
 
@@ -87,12 +88,14 @@ public class BattleInputManager : MonoBehaviour {
     }
 
     public void OnMove(InputAction.CallbackContext context) {
+		if (!customEnabled) return;
         joystickX = context.ReadValue<Vector2>().normalized.x;
         joystickY = context.ReadValue<Vector2>().normalized.y;
         Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by touch", joystickX, joystickY));
     }
 
     public void OnMoveByKeyboard(InputAction.CallbackContext context) {
+		if (!customEnabled) return;
         joystickX = context.ReadValue<Vector2>().normalized.x;
         joystickY = context.ReadValue<Vector2>().normalized.y;
         Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by keyboard", joystickX, joystickY));
@@ -111,4 +114,8 @@ public class BattleInputManager : MonoBehaviour {
         ulong ret = (ulong)(discretizedDir + (btnALevel << 4));
         return ret;
     }
+
+	public void enable(bool yesOrNo) {
+        customEnabled = yesOrNo;
+	}
 }

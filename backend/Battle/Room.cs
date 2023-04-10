@@ -143,6 +143,7 @@ public class Room {
             playerSignalToCloseDict[playerId] = signalToCloseConnOfThisPlayer;
 
             var newWatchdog = new PlayerSessionAckWatchdog(10000, signalToCloseConnOfThisPlayer, String.Format("[ RoomId={0}, PlayerId={1} ] session watchdog ticked.", id, playerId), _loggerFactory);
+            newWatchdog.Stop();
             playerActiveWatchdogDict[playerId] = newWatchdog;
 
             effectivePlayerCount++;
@@ -189,6 +190,11 @@ public class Room {
             } else {
                 _logger.LogInformation("Room OnPlayerDisconnected[early return #2] [ roomId={0}, playerId={1} doesn't exist! nowRoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                 return;
+            }
+
+            PlayerSessionAckWatchdog? watchdog;
+            if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
+                watchdog.Kick();
             }
 
             switch (state) {
@@ -239,7 +245,7 @@ public class Room {
     }
 
     private Pbc.RepeatedField<PlayerDownsync> clonePlayersArrToPb() {
-        var bridgeArr = new PlayerDownsync[capacity]; // RepeatedField doesn't have a constructor to preallocate by size
+        var bridgeArr = new PlayerDownsync[players.Count]; // RepeatedField doesn't have a constructor to preallocate by size
         foreach (var (playerId, player) in players) {
             bridgeArr[player.PlayerDownsync.JoinIndex - 1] = player.PlayerDownsync.Clone();
         }
@@ -250,69 +256,64 @@ public class Room {
     }
 
     public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId) {
-        joinerLock.WaitOne();
-        try {
-            Player? targetPlayer;
-            if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
-                return false;
-            }
-            bool shouldTryToStartBattle = true;
-            var targetPlayerBattleState = Interlocked.Read(ref targetPlayer.BattleState);
-            _logger.LogInformation("OnPlayerBattleColliderAcked-before: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
-            switch (targetPlayerBattleState) {
-                case PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK:
-                    var playerAckedFrame = new RoomDownsyncFrame {
-                        Id = renderFrameId
-                    };
-                    playerAckedFrame.PlayersArr.AddRange(clonePlayersArrToPb());
-                    var tList = new List<Task>();
-                    // Broadcast normally added player info to all players in the same room
-                    foreach (var (thatPlayerId, thatPlayer) in players) {
-                        /*
-                           [WARNING]
-                           This `playerAckedFrame` is the first ever "RoomDownsyncFrame" for every "PersistentSessionClient on the frontend", and it goes right after each "BattleColliderInfo".
+        Player? targetPlayer;
+        if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
+            return false;
+        }
+        bool shouldTryToStartBattle = true;
+        var targetPlayerBattleState = Interlocked.Read(ref targetPlayer.BattleState);
+        _logger.LogInformation("OnPlayerBattleColliderAcked-before: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+        switch (targetPlayerBattleState) {
+            case PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK:
+                var playerAckedFrame = new RoomDownsyncFrame {
+                    Id = renderFrameId
+                };
+                playerAckedFrame.PlayersArr.AddRange(clonePlayersArrToPb());
+                var tList = new List<Task>();
+                // Broadcast normally added player info to all players in the same room
+                foreach (var (thatPlayerId, thatPlayer) in players) {
+                    /*
+                       [WARNING]
+                       This `playerAckedFrame` is the first ever "RoomDownsyncFrame" for every "PersistentSessionClient on the frontend", and it goes right after each "BattleColliderInfo".
 
-                           By making use of the sequential nature of each ws session, all later "RoomDownsyncFrame"s generated after `pRoom.StartBattle()` will be put behind this `playerAckedFrame`.
+                       By making use of the sequential nature of each ws session, all later "RoomDownsyncFrame"s generated after `pRoom.StartBattle()` will be put behind this `playerAckedFrame`.
 
-                           This function is triggered by an upsync message via WebSocket, thus downsync sending is also available by now.
-                        */
-                        var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
-                        _logger.LogInformation("OnPlayerBattleColliderAcked-middle: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={2}, thatPlayerId={3}, thatPlayerBattleState={4}", id, state, targetPlayerId, targetPlayerBattleState, thatPlayerId, thatPlayerBattleState);
-                        if (thatPlayerId == targetPlayerId || (PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK == thatPlayerBattleState || PLAYER_BATTLE_STATE_ACTIVE == thatPlayerBattleState)) {
-                            _logger.LogInformation("OnPlayerBattleColliderAcked-sending DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+                       This function is triggered by an upsync message via WebSocket, thus downsync sending is also available by now.
+                    */
+                    var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
+                    _logger.LogInformation("OnPlayerBattleColliderAcked-middle: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={2}, thatPlayerId={3}, thatPlayerBattleState={4}", id, state, targetPlayerId, targetPlayerBattleState, thatPlayerId, thatPlayerBattleState);
+                    if (thatPlayerId == targetPlayerId || (PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK == thatPlayerBattleState || PLAYER_BATTLE_STATE_ACTIVE == thatPlayerBattleState)) {
+                        _logger.LogInformation("OnPlayerBattleColliderAcked-sending DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
 
-                            tList.Add(sendSafelyAsync(playerAckedFrame, null, DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED, thatPlayerId, MAGIC_JOIN_INDEX_DEFAULT));
-                        }
-                    }
-                    await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
-                    Interlocked.Exchange(ref targetPlayer.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
-                    break;
-                default:
-                    break;
-            }
-
-            _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
-
-            if (shouldTryToStartBattle) {
-                if (capacity == effectivePlayerCount) {
-                    bool allAcked = true;
-                    foreach (var (thatPlayerId, thatPlayer) in players) {
-                        var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
-                        if (PLAYER_BATTLE_STATE_ACTIVE != thatPlayerBattleState) {
-                            _logger.LogInformation("Unexpectedly got an inactive player: roomId={0}, thatPlayerId={1}, thatPlayerBattleState={2}", id, thatPlayerId, thatPlayerBattleState);
-                            allAcked = false;
-                            break;
-                        }
-                    }
-                    if (true == allAcked) {
-                        await startBattleAsync(); // WON'T run if the battle state is not in WAITING.
+                        tList.Add(sendSafelyAsync(playerAckedFrame, null, DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED, thatPlayerId, MAGIC_JOIN_INDEX_DEFAULT));
                     }
                 }
-            }
-            return true;
-        } finally {
-            joinerLock.ReleaseMutex();
+                await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
+                Interlocked.Exchange(ref targetPlayer.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
+                break;
+            default:
+                break;
         }
+
+        _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+
+        if (shouldTryToStartBattle) {
+            if (capacity == effectivePlayerCount) {
+                bool allAcked = true;
+                foreach (var (thatPlayerId, thatPlayer) in players) {
+                    var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
+                    if (PLAYER_BATTLE_STATE_ACTIVE != thatPlayerBattleState) {
+                        _logger.LogInformation("Unexpectedly got an inactive player: roomId={0}, thatPlayerId={1}, thatPlayerBattleState={2}", id, thatPlayerId, thatPlayerBattleState);
+                        allAcked = false;
+                        break;
+                    }
+                }
+                if (true == allAcked) {
+                    await startBattleAsync(); // WON'T run if the battle state is not in WAITING.
+                }
+            }
+        }
+        return true;
     }
 
     private async Task startBattleAsync() {
@@ -344,24 +345,16 @@ public class Room {
         }
         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
 
-        using var timer = new Timer(new TimerCallback((s) => {
-            if (null == s) {
-                return;
-            }
-            var roomRef = (Room)s;
-            var nowRoomState2 = Interlocked.Read(ref roomRef.state);
-            if (ROOM_STATE_PREPARE != nowRoomState2) {
-                return;
-            }
-            Interlocked.Exchange(ref roomRef.state, ROOM_STATE_IN_BATTLE);
-            /**
-             [WARNING] DON'T use "await" here, we actually need run the "battleMainLoop" in another thread to avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! 
+        await Task.Delay(3000);
 
-             An alternative syntax is to declare "battleMainLoopAsync" as "async void", i.e. "private async void battleMainLoopAsync". See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
-             */
-            battleMainLoopAsync().Start();
-            //battleMainLoopAsync();
-        }), this, 3000, Timeout.Infinite);
+        /**
+		  [WARNING] DON'T use "await" here, we actually need run the "battleMainLoop" in another thread to avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! 
+
+		  See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+		 */
+		new Thread(() => {
+			_ = battleMainLoopAsync();
+		}).Start();
     }
 
     private async Task settleBattleAsync() {
@@ -452,11 +445,18 @@ public class Room {
             joinerLock.ReleaseMutex();
         }
     }
+
     private async Task battleMainLoopAsync() {
-    //private async void battleMainLoopAsync() {
         try {
+            var nowRoomState = Interlocked.Read(ref this.state);
+            if (ROOM_STATE_PREPARE != nowRoomState) {
+                return;
+            }
+
             var nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             var battleStartedAt = nowMillis;
+
+            Interlocked.Exchange(ref this.state, ROOM_STATE_IN_BATTLE);
             _logger.LogInformation("The `battleMainLoop` is started for: roomId={0}", id);
             foreach (var (_, watchdog) in playerActiveWatchdogDict) {
                 watchdog.Kick();
@@ -464,7 +464,7 @@ public class Room {
             while (renderFrameId <= battleDurationFrames) {
                 nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 var stCalculation = nowMillis;
-                long nowRoomState = Interlocked.Read(ref state);
+                nowRoomState = Interlocked.Read(ref state);
                 if (ROOM_STATE_IN_BATTLE != nowRoomState) {
                     break;
                 }
@@ -510,8 +510,9 @@ public class Room {
             }
         } finally {
             await settleBattleAsync();
-            _logger.LogInformation("The `battleMainLoop` for roomId={0} is settled@renderFrameId={1}:\n%v", id, renderFrameId);
+            _logger.LogInformation("The `battleMainLoop` for roomId={0} is settled@renderFrameId={1}", id, renderFrameId);
             dismiss();
+            _logger.LogInformation("The `battleMainLoop` for roomId={0} is dismissed@renderFrameId={1}", id, renderFrameId);
         }
     }
 
@@ -848,7 +849,9 @@ public class Room {
             Rdf = roomDownsyncFrame,
             PeerJoinIndex = peerJoinIndex
         };
-        resp.InputFrameDownsyncBatch.AddRange(toSendInputFrameDownsyncs);
+        if (null != toSendInputFrameDownsyncs) {
+            resp.InputFrameDownsyncBatch.AddRange(toSendInputFrameDownsyncs);
+        }
         await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
     }
 

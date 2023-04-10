@@ -120,7 +120,8 @@ public class WebSocketController : ControllerBase {
                     } catch (OperationCanceledException ocEx) {
                         _logger.LogWarning("Session is cancelled for [ roomId={0}, playerId={1}, ocEx={2} ]", room.id, playerId, ocEx.Message);
                     } catch (Exception ex) {
-                        _logger.LogWarning("Session got an exception for [ roomId={0}, playerId={1}, ocEx={2} ]", room.id, playerId, ex.Message);
+                        _logger.LogError(ex, "Session got an exception for [ roomId={0}, playerId={1}]", room.id, playerId);
+						break;
                     }
                 }
 

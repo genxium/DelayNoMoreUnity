@@ -2,8 +2,9 @@ The async/await pattern employed by C# is very different from Golang's goroutine
 
 Another thing to keep in mind is that ["await" DOESN'T put its task into another thread](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/task-asynchronous-programming-model#BKMK_Threads). An "async task" would only involve another thread (different from current thread) in one of the following scenarios.
 - [a] Specified by [Task.Run(...)](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.run?view=netstandard-2.1);
-- [b] Declared as "async Task doHeavyWork(...){}", then called as "doHeavyWork(...).Start()";
-- [c] Declared as "async void doHeavyWork(...){}", then called as "doHeavyWork(...)";
+- [b] Declared as "async void doHeavyWork(...){}", then called as "doHeavyWork(...)" and **wrapped in a thread scheduling statement**;
+- [c] Declared as "async Task doHeavyWork(...){}", then called as "_ = doHeavyWork(...)" and **wrapped in a thread scheduling statement**;
+	- [WARNING] Declared as "async Task doHeavyWork(...){}", then called as "doHeavyWork(...).Start()" is NOT AN OPTION, it'd throw `InvalidOperationException: Start may not be called on a promise-style task.` in runtime.
 - [d] Configured as [".ConfigureAwait(false)"](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.configureawait?view=net-7.0), which actually DOESN'T put the awaited task into another thread, but just [puts the "CONTINUATION AFTER AWAIT" into another thread](https://devblogs.microsoft.com/dotnet/configureawait-faq/).
 
-Therefore if we really want to mimic the behaviour with "go Xxx()", the closest way would be [b] or [c].
+Therefore if we really want to mimic the behaviour with "go Xxx()", the closest way would be [b] or [c] -- while [c] is my preference in this project -- mind the `**wrapped in a thread scheduling statement**` part, **without which the "async task" would still just run on the current thread** -- but what's the point of using "async task" if I explicitly schedule the threads(e.g. create a new thread)? Well I guess "async task inside a new thread" would help I/O-bound operations to some extent, thus it's useful when that new thread is for networking :) 

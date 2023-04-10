@@ -88,10 +88,10 @@ public class WsSessionManager {
 
     private async Task Receive(ClientWebSocket ws, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
         Debug.Log(String.Format("Starts 'Receive' loop, ws.State={0}, cancellationToken.IsCancellationRequested={1}", ws.State, cancellationToken.IsCancellationRequested));
-        byte[] byteBuff = new byte[receiveChunkSize];
         try {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
                 Debug.Log(String.Format("'Receive' loop calling ReceiveAsync: ws.State={0}", ws.State));
+				byte[] byteBuff = new byte[receiveChunkSize];
                 var result = await ws.ReceiveAsync(new ArraySegment<byte>(byteBuff), cancellationToken);
                 Debug.Log(String.Format("'Receive' loop called ReceiveAsync: ws.State={0}, result.MessageType={1}", ws.State, result.MessageType));
                 if (WebSocketMessageType.Close == result.MessageType) {

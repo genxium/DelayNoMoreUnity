@@ -552,4 +552,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             lineMaterial.SetInt("_ZWrite", 0);
         }
     }
+
+	protected void enableBattleInput(bool yesOrNo) {
+        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
+		iptmgr.enable(yesOrNo);
+	}
 }
