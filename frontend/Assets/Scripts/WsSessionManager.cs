@@ -10,7 +10,7 @@ using System.Collections.Concurrent;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
-    private const int receiveChunkSize = 64;
+    private const int receiveChunkSize = 1024;
 
     /**
     I'm aware of that "C# ConcurrentQueue" is lock-free, thus safe to be accessed from the MainThread during "Update()" without introducing significant graphic lags. Reference https://devblogs.microsoft.com/pfxteam/faq-are-all-of-the-new-concurrent-collections-lock-free/.
@@ -88,10 +88,10 @@ public class WsSessionManager {
 
     private async Task Receive(ClientWebSocket ws, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
         Debug.Log(String.Format("Starts 'Receive' loop, ws.State={0}, cancellationToken.IsCancellationRequested={1}", ws.State, cancellationToken.IsCancellationRequested));
+		byte[] byteBuff = new byte[receiveChunkSize];
         try {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
                 Debug.Log(String.Format("'Receive' loop calling ReceiveAsync: ws.State={0}", ws.State));
-				byte[] byteBuff = new byte[receiveChunkSize];
                 var result = await ws.ReceiveAsync(new ArraySegment<byte>(byteBuff), cancellationToken);
                 Debug.Log(String.Format("'Receive' loop called ReceiveAsync: ws.State={0}, result.MessageType={1}", ws.State, result.MessageType));
                 if (WebSocketMessageType.Close == result.MessageType) {
