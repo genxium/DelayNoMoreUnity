@@ -22,6 +22,11 @@ public class WebSocketController : ControllerBase {
     [HttpGet] // Adding this Attribute just for Swagger recognition :)
     [Route("/Ws")]
     public async Task Get([FromQuery] string authToken, [FromQuery] int playerId, [FromQuery] int speciesId) {
+        /**
+        [WARNING] The async/await pattern employed by C# is very different from Golang's goroutine, yet we still hold the same assumption: different sessions of different players might use different OS threads! 
+
+        Another thing to keep in mind is that "await" DOESN'T put its task into another thread (reference https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/task-asynchronous-programming-model#BKMK_Threads), unless specified by "Task.Run(...)" (reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.run?view=netstandard-2.1). Therefore if we really want to mimic the behaviour with "go Xxx()", the closest way could be "async Task doHeavyWork(...); doHeavyWork(...).Start()".
+        */
         if (HttpContext.WebSockets.IsWebSocketRequest) {
             _logger.LogInformation("Got a websocket connection request#1 [ authToken={0}, playerId={1} ]", authToken, playerId);
             if (_tokenCache.ValidateToken(authToken, playerId)) {
@@ -102,7 +107,7 @@ public class WebSocketController : ControllerBase {
                         WsReq pReq = WsReq.Parser.ParseFrom(buffer, 0, receiveResult.Count);
                         switch (pReq.Act) {
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK:
-                                var res1 = room.OnPlayerBattleColliderAcked(playerId);
+                                var res1 = await room.OnPlayerBattleColliderAcked(playerId);
                                 if (!res1) {
                                     if (!cancellationToken.IsCancellationRequested) {
                                         cancellationTokenSource.Cancel();
@@ -112,7 +117,7 @@ public class WebSocketController : ControllerBase {
                                 }
                                 break;
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_CMD:
-                                room.OnBattleCmdReceived(pReq, false);
+                                await room.OnBattleCmdReceived(pReq, false);
                                 break;
                             default:
                                 break;

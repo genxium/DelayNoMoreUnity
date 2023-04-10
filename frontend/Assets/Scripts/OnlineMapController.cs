@@ -21,7 +21,7 @@ public class OnlineMapController : AbstractMapController {
             Debug.Log(String.Format("Handling WsSession downsync in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {
             case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
-                Debug.LogWarning("Handling WsSession closed in main thread.");
+                Debug.Log("Handling WsSession closed in main thread.");
                 WsSessionManager.Instance.ClearCredentials();
                 SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
             break; 

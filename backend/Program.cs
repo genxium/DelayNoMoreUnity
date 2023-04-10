@@ -1,6 +1,18 @@
 using backend.Battle;
 using backend.Storage;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Events;
+
+var serilogOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] Th#{ThreadId} {Message} {NewLine}{Exception}";
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .Enrich.WithThreadId() // From nuget package "Serilog.Enrichers.Thread"
+    .Enrich.WithThreadName() // From nuget package "Serilog.Enrichers.Thread"
+    .WriteTo.Console(outputTemplate: serilogOutputTemplate)
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +33,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Logging.AddConsole();
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .Enrich.WithThreadId() // From nuget package "Serilog.Enrichers.Thread"
+    .Enrich.WithThreadName() // From nuget package "Serilog.Enrichers.Thread"
+    .WriteTo.Console(outputTemplate: serilogOutputTemplate));
 
 var app = builder.Build();
 
