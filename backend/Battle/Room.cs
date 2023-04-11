@@ -78,8 +78,9 @@ public class Room {
         capacity = roomCapacity;
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
-        battleDurationFrames = 10 * 60;
-        estimatedMillisPerFrame = 17; // ceiling 16.66667 to dilute the framerate on server 
+		int fps = 60;
+        battleDurationFrames = 60 * fps;
+        estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";
         inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
@@ -431,8 +432,8 @@ public class Room {
             int oldInputBufferSize = inputBuffer.N;
             inputBuffer = new FrameRingBuffer<InputFrameDownsync>(oldInputBufferSize);
 
-            lastAllConfirmedInputFrameId = TERMINATING_INPUT_FRAME_ID;
-            latestPlayerUpsyncedInputFrameId = TERMINATING_INPUT_FRAME_ID;
+            lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED; // Such that the initial "lastAllConfirmedInputFrameId + 1" is 0, for use in "markConfirmationIfApplicable" 
+            latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
             lastAllConfirmedInputList = new ulong[capacity];
             joinIndexBooleanArr = new bool[capacity];
 
@@ -584,7 +585,7 @@ public class Room {
             }
             if (clientInputFrameId < player.LastConsecutiveRecvInputFrameId) {
                 // [WARNING] It's important for correctness that we use "player.LastConsecutiveRecvInputFrameId" instead of "pR.LastIndividuallyConfirmedInputFrameId[player.JoinIndex-1]" here!
-                _logger.LogDebug("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, playerLastConsecutiveRecvInputFrameId={3}", id, playerId, clientInputFrameId, player.LastConsecutiveRecvInputFrameId);
+                _logger.LogInformation("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, playerLastConsecutiveRecvInputFrameId={3}", id, playerId, clientInputFrameId, player.LastConsecutiveRecvInputFrameId);
                 continue;
             }
             if (clientInputFrameId > inputBuffer.EdFrameId) {
@@ -600,7 +601,7 @@ public class Room {
                 /**
 				  [WARNING] We have to distinguish whether or not the incoming batch is from UDP here, otherwise "pR.LatestPlayerUpsyncedInputFrameId - pR.LastAllConfirmedInputFrameId" might become unexpectedly large in case of "UDP packet loss + slow ws session"!
 
-				  Moreover, only ws session upsyncs should advance "player.LastConsecutiveRecvInputFrameId" & "pR.LatestPlayerUpsyncedInputFrameId".
+				  Moreover, only ws session upsyncs should advance "player.LastConsecutiveRecvInputFrameId" & "latestPlayerUpsyncedInputFrameId".
 
 				  Kindly note that the updates of "player.LastConsecutiveRecvInputFrameId" could be discrete before and after reconnection.
 				 */
@@ -621,9 +622,6 @@ public class Room {
         // Step#2, mark confirmation without forcing
         int newAllConfirmedCount = 0;
         int inputFrameId1 = lastAllConfirmedInputFrameId + 1;
-        if (inputFrameId1 < inputBuffer.StFrameId) {
-            inputFrameId1 = inputBuffer.StFrameId;
-        }
         ulong allConfirmedMask = ((ulong)1 << capacity) - 1;
 
         for (int inputFrameId = inputFrameId1; inputFrameId < inputBuffer.EdFrameId; inputFrameId++) {
@@ -672,7 +670,7 @@ public class Room {
                     snapshotStFrameId = refSnapshotStFrameId;
                 }
             }
-            _logger.LogDebug("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}", id, newAllConfirmedCount);
+            _logger.LogInformation("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}, snapshotStFrameId={2}, snapshotEdFrameId={3}", id, newAllConfirmedCount, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
             return produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(0, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
         } else {
             return null;
@@ -683,7 +681,9 @@ public class Room {
         /*
 		   [WARNING] This function MUST BE called while "inputBufferLock" is locked.
 		*/
+		//_logger.LogInformation("getOrPrefabInputFrameDownsync#1 for roomId={0}, inputFrameId={1}", id, inputFrameId);
         var (res1, currInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId);
+		//_logger.LogInformation("getOrPrefabInputFrameDownsync#2 for roomId={0}, inputFrameId={1}: res1={2}", id, inputFrameId, res1);
 
         if (false == res1 || null == currInputFrameDownsync) {
             currInputFrameDownsync = new InputFrameDownsync {

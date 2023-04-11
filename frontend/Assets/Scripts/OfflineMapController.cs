@@ -15,6 +15,7 @@ public class OfflineMapController : AbstractMapController {
 
     // Start is called before the first frame update
     void Start() {
+        selfPlayerInfo = new PlayerDownsync();
         Application.targetFrameRate = 60;
         _resetCurrentMatch();
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
@@ -97,7 +98,7 @@ public class OfflineMapController : AbstractMapController {
         try {
             doUpdate();
         } catch (Exception ex) {
-            Debug.LogError(String.Format("Error during OfflineMap.doUpdate {0}", ex.Message));
+            Debug.LogError(String.Format("Error during OfflineMap.Update {0}", ex));
             onBattleStopped();
         }
     }

@@ -44,7 +44,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity);
-        playerGameObjs[joinIndex] = newPlayerNode;
+        playerGameObjs[joinIndex-1] = newPlayerNode;
     }
 
     protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
@@ -200,6 +200,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 		   [this.renderFrameId]                       :              64
 		   --------------------------------------------------------
 		 */
+
+		// Printing of this message might induce a performance impact.
+		Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: ${0}->${1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
     }
@@ -224,6 +227,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public virtual void _resetCurrentMatch() {
+		Debug.Log(String.Format("_resetCurrentMatch with roomCapacity={0}", roomCapacity));
         battleState = ROOM_STATE_IMPOSSIBLE;
         renderFrameId = Battle.TERMINATING_RENDER_FRAME_ID;
         renderFrameIdLagTolerance = 4;
@@ -248,8 +252,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
         }
         inputBuffer.Clear(); // Then use it by "DryPut"
-        selfPlayerInfo = new PlayerDownsync();
-        selfPlayerInfo.JoinIndex = 1;
         var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
@@ -297,6 +299,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (ROOM_STATE_IN_SETTLEMENT == battleState) {
             return;
         }
+		Debug.Log(String.Format("onInputFrameDownsyncBatch called for batchInputFrameIdRange [{0}, {1}]", batch[0].InputFrameId, batch[batch.Count-1].InputFrameId));
 
         int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;
         foreach (var inputFrameDownsync in batch) {
