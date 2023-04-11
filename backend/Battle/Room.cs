@@ -495,7 +495,7 @@ public class Room {
                             tList.Add(sendSafelyAsync(startRdf, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, MAGIC_JOIN_INDEX_DEFAULT));
                         }
                         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
-                        _logger.LogInformation("In `battleMainLoop` for roomId={0} sent out startRdf", id);
+                        _logger.LogInformation("In `battleMainLoop` for roomId={0} sent out startRdf with {1} bytes", id, startRdf.ToByteArray().Length);
                     }
 
                     renderFrameId = nextRenderFrameId;

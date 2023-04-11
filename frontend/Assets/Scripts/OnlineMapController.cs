@@ -91,11 +91,7 @@ public class OnlineMapController : AbstractMapController {
 	}
 
     void pollAndHandleWsRecvBuffer() {
-        if (0 < WsSessionManager.Instance.recvBuffer.Count) {
-            Debug.Log(String.Format("WsSession RecvBuffer is non-empty: {0}", WsSessionManager.Instance.recvBuffer.Count));
-        }
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
-            Debug.Log(String.Format("Handling WsSession downsync in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {
                 case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
                     Debug.Log("Handling WsSession closed in main thread.");
@@ -113,7 +109,8 @@ public class OnlineMapController : AbstractMapController {
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
                     break;
 				case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
-					enableBattleInput(true);
+                    Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
+                    enableBattleInput(true);
                     break;
 				case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
 					enableBattleInput(false);

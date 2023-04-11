@@ -10,7 +10,7 @@ using System.Collections.Concurrent;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
-    private const int receiveChunkSize = 1024;
+    private const int receiveChunkSize = 2048; // The "RoomDownsyncFrame" would be 1900+ bytes.
 
     /**
     I'm aware of that "C# ConcurrentQueue" is lock-free, thus safe to be accessed from the MainThread during "Update()" without introducing significant graphic lags. Reference https://devblogs.microsoft.com/pfxteam/faq-are-all-of-the-new-concurrent-collections-lock-free/.
@@ -91,9 +91,7 @@ public class WsSessionManager {
 		byte[] byteBuff = new byte[receiveChunkSize];
         try {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
-                Debug.Log(String.Format("'Receive' loop calling ReceiveAsync: ws.State={0}", ws.State));
                 var result = await ws.ReceiveAsync(new ArraySegment<byte>(byteBuff), cancellationToken);
-                Debug.Log(String.Format("'Receive' loop called ReceiveAsync: ws.State={0}, result.MessageType={1}", ws.State, result.MessageType));
                 if (WebSocketMessageType.Close == result.MessageType) {
                     await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
                     Debug.Log(String.Format("WsSession is closed in 'Receive'"));
@@ -101,10 +99,8 @@ public class WsSessionManager {
                         cancellationTokenSource.Cancel(); // To cancel the "Send" loop
                     }
                 } else {
-                    Debug.Log(String.Format("Received {0} bytes", result.Count));
                     try {
                         WsResp resp = WsResp.Parser.ParseFrom(byteBuff, 0, result.Count);
-                        Debug.Log(String.Format("Received WsResp {0}", resp.ToString()));
                         recvBuffer.Enqueue(resp);
                     } catch (Exception pbEx) {
                         Debug.LogWarning(String.Format("Protobuf parser exception is caught for 'Receive'; ex.Message={0}", pbEx.Message));
