@@ -40,7 +40,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
 
-    protected bool debugDrawingEnabled = true; 
+    protected bool debugDrawingEnabled = true;
 
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity);
@@ -409,13 +409,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         if (shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, lastUpsyncInputFrameId, noDelayInputFrameId)) {
-          // TODO: Is the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
-          sendInputFrameUpsyncBatch(noDelayInputFrameId);
+            // TODO: Is the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
+            sendInputFrameUpsyncBatch(noDelayInputFrameId);
         }
 
         int prevChaserRenderFrameId = chaserRenderFrameId;
         int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
-        
+
         if (nextChaserRenderFrameId > renderFrameId) {
             nextChaserRenderFrameId = renderFrameId;
         }
@@ -553,8 +553,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-	protected void enableBattleInput(bool yesOrNo) {
+    protected void enableBattleInput(bool yesOrNo) {
         BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
-		iptmgr.enable(yesOrNo);
-	}
+        iptmgr.enable(yesOrNo);
+    }
 }

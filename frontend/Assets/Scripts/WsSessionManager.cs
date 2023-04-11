@@ -7,6 +7,7 @@ using System.Net.WebSockets;
 using shared;
 using Google.Protobuf;
 using System.Collections.Concurrent;
+using System.Linq;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
@@ -23,6 +24,9 @@ public class WsSessionManager {
     public Queue<WsResp> recvBuffer;
     private string authToken;
     private int playerId = shared.Battle.TERMINATING_PLAYER_ID;
+    public int GetPlayerId() {
+        return playerId;
+    }
 
     private static WsSessionManager _instance;
 
@@ -75,6 +79,7 @@ public class WsSessionManager {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
                 while (senderBuffer.TryDequeue(out toSendObj) && !cancellationToken.IsCancellationRequested) {
                     await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
+                    Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
                 }
             }
         } catch (OperationCanceledException ocEx) {
@@ -88,7 +93,7 @@ public class WsSessionManager {
 
     private async Task Receive(ClientWebSocket ws, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
         Debug.Log(String.Format("Starts 'Receive' loop, ws.State={0}, cancellationToken.IsCancellationRequested={1}", ws.State, cancellationToken.IsCancellationRequested));
-		byte[] byteBuff = new byte[receiveChunkSize];
+        byte[] byteBuff = new byte[receiveChunkSize];
         try {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
                 var result = await ws.ReceiveAsync(new ArraySegment<byte>(byteBuff), cancellationToken);

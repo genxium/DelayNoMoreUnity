@@ -13,8 +13,8 @@ public class OnlineMapController : AbstractMapController {
     CancellationToken wsCancellationToken;
     int inputFrameUpsyncDelayTolerance;
     WsResp wsRespHolder;
-	
-	private RoomDownsyncFrame mockStartRdf() {
+
+    private RoomDownsyncFrame mockStartRdf() {
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
 
@@ -86,9 +86,9 @@ public class OnlineMapController : AbstractMapController {
         selfPlayerInRdf.Hp = 100;
         selfPlayerInRdf.MaxHp = 100;
         selfPlayerInRdf.SpeciesId = 0;
-		
-		return startRdf;
-	}
+
+        return startRdf;
+    }
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
@@ -99,21 +99,26 @@ public class OnlineMapController : AbstractMapController {
                     SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
+                    Debug.Log("Handling UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK in main thread.");
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
-					var reqData = new WsReq {
-						PlayerId = selfPlayerInfo.Id,
-						Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
-						JoinIndex = selfPlayerInfo.JoinIndex
-					};
-					WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
+                    selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
+                    selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
+                    var reqData = new WsReq {
+                        PlayerId = selfPlayerInfo.Id,
+                        Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
+                        JoinIndex = selfPlayerInfo.JoinIndex
+                    };
+                    WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
                     break;
-				case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
+                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
+                    var startRdf = mockStartRdf();
+                    onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
                     break;
-				case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
-					enableBattleInput(false);
+                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
+                    enableBattleInput(false);
                     break;
                 default:
                     break;
@@ -127,16 +132,13 @@ public class OnlineMapController : AbstractMapController {
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = 60;
         _resetCurrentMatch();
-       
-		enableBattleInput(false);
 
-		var startRdf = mockStartRdf();	
-		onRoomDownsyncFrame(startRdf, null);
+        enableBattleInput(false);
 
         // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         Debug.LogWarning(String.Format("About to start ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
         Task.Run(wsSessionActionAsync);
-        
+
         // _ = wsSessionTaskAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
         // wsSessionActionAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
     }
@@ -169,7 +171,7 @@ public class OnlineMapController : AbstractMapController {
     }
 
     // Update is called once per frame
-    void Update() {	
+    void Update() {
         try {
             pollAndHandleWsRecvBuffer();
             doUpdate();

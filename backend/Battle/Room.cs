@@ -133,6 +133,7 @@ public class Room {
             pPlayerFromDbInit.BattleState = PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK;
 
             pPlayerFromDbInit.PlayerDownsync = new PlayerDownsync();
+            pPlayerFromDbInit.PlayerDownsync.Id = playerId;
             pPlayerFromDbInit.PlayerDownsync.SpeciesId = speciesId;
             pPlayerFromDbInit.PlayerDownsync.ColliderRadius = DEFAULT_PLAYER_RADIUS; // Hardcoded
             pPlayerFromDbInit.PlayerDownsync.InAir = true;                           // Hardcoded
@@ -330,6 +331,11 @@ public class Room {
 
         Interlocked.Exchange(ref state, ROOM_STATE_PREPARE);
 
+        foreach (var (_, player) in players) {
+            int joinIndex = player.PlayerDownsync.JoinIndex;
+            playersArr[joinIndex - 1] = player;
+        }
+
         _logger.LogWarning("Battle state transitted to ROOM_STATE_PREPARE for roomId={0}", id);
 
         var battleReadyToStartFrame = new RoomDownsyncFrame {
@@ -514,7 +520,7 @@ public class Room {
         }
     }
 
-    public async Task OnBattleCmdReceived(WsReq pReq, bool fromUDP) {
+    public async Task OnBattleCmdReceived(WsReq pReq, int playerId, bool fromUDP) {
         /*
 		   [WARNING] This function "OnBattleCmdReceived" could be called by different ws sessions and thus from different threads!
 
@@ -530,16 +536,17 @@ public class Room {
         // TODO: Put a rate limiter on this function!
         var nowRoomState = Interlocked.Read(ref this.state);
         if (ROOM_STATE_IN_BATTLE != nowRoomState) {
+            _logger.LogWarning("OnBattleCmdReceived early return because room state is not in battle: roomId={0}, fromPlayerId={1}, nowRoomState={2}", id, playerId, nowRoomState);
             return;
         }
 
-        var playerId = pReq.PlayerId;
         var inputFrameUpsyncBatch = pReq.InputFrameUpsyncBatch;
         var ackingFrameId = pReq.AckingFrameId;
         var ackingInputFrameId = pReq.AckingInputFrameId;
 
         Player? player;
         if (!players.TryGetValue(playerId, out player)) {
+            _logger.LogWarning("OnBattleCmdReceived early return because player id is not in this room: roomId={0}, fromPlayerId={1}, nowRoomState={2}", id, playerId, nowRoomState);
             return;
         }
 
@@ -552,7 +559,7 @@ public class Room {
         Interlocked.Exchange(ref player.AckingFrameId, ackingFrameId);
         Interlocked.Exchange(ref player.AckingInputFrameId, ackingInputFrameId);
 
-        _logger.LogInformation("OnBattleCmdReceived-inputBufferLock about to lock: roomId={0}, fromPlayerId={1}", id, playerId);
+        //_logger.LogInformation("OnBattleCmdReceived-inputBufferLock about to lock: roomId={0}, fromPlayerId={1}", id, playerId);
         inputBufferLock.WaitOne();
         try {
             var inputBufferSnapshot = markConfirmationIfApplicable(inputFrameUpsyncBatch, playerId, player, fromUDP);
@@ -561,7 +568,7 @@ public class Room {
             }
         } finally {
             inputBufferLock.ReleaseMutex();
-            _logger.LogInformation("OnBattleCmdReceived-inputBufferLock unlocked: roomId={0}, fromPlayerId={1}", id, playerId);
+            //_logger.LogInformation("OnBattleCmdReceived-inputBufferLock unlocked: roomId={0}, fromPlayerId={1}", id, playerId);
         }
     }
 
@@ -614,12 +621,15 @@ public class Room {
         // Step#2, mark confirmation without forcing
         int newAllConfirmedCount = 0;
         int inputFrameId1 = lastAllConfirmedInputFrameId + 1;
+        if (inputFrameId1 < inputBuffer.StFrameId) {
+            inputFrameId1 = inputBuffer.StFrameId;
+        }
         ulong allConfirmedMask = ((ulong)1 << capacity) - 1;
 
         for (int inputFrameId = inputFrameId1; inputFrameId < inputBuffer.EdFrameId; inputFrameId++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId);
             if (false == res1 || null == inputFrameDownsync) {
-                throw new ArgumentException(String.Format("inputFrameId={0} doesn't exist for roomId={1}", inputFrameId, id));
+                throw new ArgumentException(String.Format("inputFrameId={0} doesn't exist for roomId={1}: lastAllConfirmedInputFrameId={2}, inputFrameId1={3}, inputBuffer.StFrameId={4}, inputBuffer.EdFrameId={5}", inputFrameId, id, lastAllConfirmedInputFrameId, inputFrameId1, inputBuffer.StFrameId, inputBuffer.EdFrameId));
             }
             bool shouldBreakConfirmation = false;
 
@@ -700,7 +710,7 @@ public class Room {
             for (int i = 0; i < capacity; i++) {
                 // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
                 // Don't predict "btnA & btnB"!
-                currInputFrameDownsync.InputList[i] = (lastIndividuallyConfirmedInputList[i] & (ulong)15);
+                currInputFrameDownsync.InputList.Add((lastIndividuallyConfirmedInputList[i] & (ulong)15));
             }
 
             while (inputBuffer.EdFrameId <= inputFrameId) {

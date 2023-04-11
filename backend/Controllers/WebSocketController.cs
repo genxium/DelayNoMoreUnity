@@ -112,7 +112,8 @@ public class WebSocketController : ControllerBase {
                                 }
                                 break;
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_CMD:
-                                await room.OnBattleCmdReceived(pReq, false);
+                                _logger.LogInformation("Received UPSYNC_MSG_ACT_PLAYER_CMD [ roomId={0}, playerId={1}, messageLength={2} ]", room.id, playerId, receiveResult.Count);
+                                await room.OnBattleCmdReceived(pReq, playerId, false);
                                 break;
                             default:
                                 break;
