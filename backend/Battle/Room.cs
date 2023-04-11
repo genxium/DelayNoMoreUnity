@@ -348,18 +348,16 @@ public class Room {
         await Task.Delay(3000);
 
         /**
-		  [WARNING] DON'T use "await" here, we actually need run the "battleMainLoop" in another thread to avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! 
+		  [WARNING] We actually need the "battleMainLoop" immediately switch into another thread for running, such that we can avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
 
-		  See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+          Moreover, I'm deliberately NOT AWAITING here, because the execution of "OnPlayerBattleColliderAcked > startBattleAsync" should continue without the result of "battleMainLoopActionAsync"!
 		 */
-		new Thread(() => {
-			_ = battleMainLoopAsync();
-		}).Start();
+        _ = Task.Run(battleMainLoopActionAsync);
     }
 
-    private async Task settleBattleAsync() {
+    public async Task SettleBattleAsync() {
         var nowRoomState = Interlocked.Read(ref state);
-        if (ROOM_STATE_IN_BATTLE != nowRoomState) {
+        if (ROOM_STATE_IN_BATTLE != nowRoomState && ROOM_STATE_PREPARE != nowRoomState && ROOM_STATE_WAITING != nowRoomState) {
             return;
         }
         battleUdpTunnelLock.WaitOne();
@@ -446,7 +444,7 @@ public class Room {
         }
     }
 
-    private async Task battleMainLoopAsync() {
+    private async void battleMainLoopActionAsync() {
         try {
             var nowRoomState = Interlocked.Read(ref this.state);
             if (ROOM_STATE_PREPARE != nowRoomState) {
@@ -509,7 +507,7 @@ public class Room {
                 await Task.Delay(toSleepMillis);
             }
         } finally {
-            await settleBattleAsync();
+            await SettleBattleAsync();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is settled@renderFrameId={1}", id, renderFrameId);
             dismiss();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is dismissed@renderFrameId={1}", id, renderFrameId);

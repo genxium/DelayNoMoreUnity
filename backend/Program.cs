@@ -33,7 +33,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Host.UseSerilog((context, services, configuration) => configuration
+builder.Host
+    .UseConsoleLifetime()
+    .UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
     .ReadFrom.Services(services)
     .Enrich.FromLogContext()
@@ -59,6 +61,17 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwaggerUI();
 }
 
+app.Lifetime.ApplicationStopping.Register(async () => {
+    Log.Logger.Warning("Running tailored Application stopping cleanup");
+    var roomManager = app.Services.GetService<IRoomManager>();
+    if (null != roomManager) {
+        while (true) {
+            var room = roomManager.Pop();
+            if (null == room) { break; }
+            await room.SettleBattleAsync();
+        }
+    }
+});
 app.MapControllers();
 
 app.Run();

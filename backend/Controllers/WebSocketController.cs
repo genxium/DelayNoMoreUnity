@@ -108,7 +108,7 @@ public class WebSocketController : ControllerBase {
                                         cancellationTokenSource.Cancel();
                                     }
                                 } else {
-                                    // [OPTIONAL]TODO: Popup this specific room from RoomManager, then re-push it with the updated score
+                                    // [OPTIONAL] TODO: Popup this specific room from RoomManager, then re-push it with the updated score
                                 }
                                 break;
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_CMD:
@@ -119,6 +119,7 @@ public class WebSocketController : ControllerBase {
                         }
                     } catch (OperationCanceledException ocEx) {
                         _logger.LogWarning("Session is cancelled for [ roomId={0}, playerId={1}, ocEx={2} ]", room.id, playerId, ocEx.Message);
+                        break;
                     } catch (Exception ex) {
                         _logger.LogError(ex, "Session got an exception for [ roomId={0}, playerId={1}]", room.id, playerId);
 						break;

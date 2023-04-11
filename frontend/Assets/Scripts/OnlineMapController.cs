@@ -35,7 +35,7 @@ public class OnlineMapController : AbstractMapController {
                         It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
                         */
                         var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
-                        Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
+                        // Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
                         collisionSys.AddSingle(barrierCollider);
                         staticRectangleColliders[i++] = barrierCollider;
                     }
@@ -136,24 +136,39 @@ public class OnlineMapController : AbstractMapController {
 		var startRdf = mockStartRdf();	
 		onRoomDownsyncFrame(startRdf, null);
 
-		new Thread(() => {
-			_ = wsSessionTaskAsync();
-		}).Start();
+        // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+        Debug.LogWarning(String.Format("About to start ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
+        Task.Run(wsSessionActionAsync);
+        
+        // _ = wsSessionTaskAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
+        // wsSessionActionAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
     }
 
     private async Task wsSessionTaskAsync() {
-        // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+        /**
+         [WARNING] This method only exists for an experiment mentioned in "GOROUTINE_TO_ASYNC_TASK.md", i.e. to show that neither [c] nor [d] switches to another thread immediately for execution, DON'T use it in practice.
+         */
+        Debug.LogWarning(String.Format("In ws session TASK but before the async action: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
+        wsSessionActionAsync();
+        Debug.LogWarning(String.Format("In ws session TASK and after the async action: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
+        await Task.Delay(1000);
+        Debug.LogWarning(String.Format("In ws session TASK and after first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
+    }
+
+    private async void wsSessionActionAsync() {
+        Debug.LogWarning(String.Format("In ws session action but before first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
         string wsEndpoint = Env.Instance.getWsEndpoint();
         await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
+        Debug.LogWarning(String.Format("In ws session action and after first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
         var closeMsg = new WsResp {
             Ret = ErrCode.Ok,
             Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
         };
         WsSessionManager.Instance.recvBuffer.Enqueue(closeMsg);
-        Debug.Log(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
+        Debug.LogWarning(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
 
-        Debug.Log(String.Format("WebSocket async task is ended"));
+        Debug.LogWarning(String.Format("ws session action is ended"));
     }
 
     // Update is called once per frame
