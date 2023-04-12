@@ -6,13 +6,13 @@
             StFrameId = EdFrameId = 0;
         }
 
-        public new bool Put(T item) {
+        public override bool Put(T item) {
             bool ret = base.Put(item);
             EdFrameId++;
             return ret;
         }
 
-        public new (bool, T?) Pop() {
+        public override (bool, T?) Pop() {
             var (retBool, retHolder) = base.Pop();
             if (retBool) {
                 StFrameId++;

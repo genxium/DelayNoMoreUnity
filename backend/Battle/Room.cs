@@ -78,7 +78,7 @@ public class Room {
         capacity = roomCapacity;
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
-		int fps = 60;
+        int fps = 60;
         battleDurationFrames = 60 * fps;
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";
@@ -684,9 +684,9 @@ public class Room {
         /*
 		   [WARNING] This function MUST BE called while "inputBufferLock" is locked.
 		*/
-		//_logger.LogInformation("getOrPrefabInputFrameDownsync#1 for roomId={0}, inputFrameId={1}", id, inputFrameId);
+        //_logger.LogInformation("getOrPrefabInputFrameDownsync#1 for roomId={0}, inputFrameId={1}", id, inputFrameId);
         var (res1, currInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId);
-		//_logger.LogInformation("getOrPrefabInputFrameDownsync#2 for roomId={0}, inputFrameId={1}: res1={2}", id, inputFrameId, res1);
+        //_logger.LogInformation("getOrPrefabInputFrameDownsync#2 for roomId={0}, inputFrameId={1}: res1={2}", id, inputFrameId, res1);
 
         if (false == res1 || null == currInputFrameDownsync) {
             currInputFrameDownsync = new InputFrameDownsync {

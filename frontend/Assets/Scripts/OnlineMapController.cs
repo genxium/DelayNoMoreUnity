@@ -59,35 +59,35 @@ public class OnlineMapController : AbstractMapController {
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
-		for (int i = 0; i < roomCapacity; i++) {
-			var collisionSpacePosition = playerStartingCollisionSpacePositions[i];
-			var (playerWx, playerWy) = CollisionSpacePositionToWorldPosition(collisionSpacePosition.X, collisionSpacePosition.Y, spaceOffsetX, spaceOffsetY);
-			spawnPlayerNode(i+1, playerWx, playerWy);
+        for (int i = 0; i < roomCapacity; i++) {
+            var collisionSpacePosition = playerStartingCollisionSpacePositions[i];
+            var (playerWx, playerWy) = CollisionSpacePositionToWorldPosition(collisionSpacePosition.X, collisionSpacePosition.Y, spaceOffsetX, spaceOffsetY);
+            spawnPlayerNode(i + 1, playerWx, playerWy);
 
-			var characterSpeciesId = 0;
-			var playerCharacter = Battle.characters[characterSpeciesId];
+            var characterSpeciesId = 0;
+            var playerCharacter = Battle.characters[characterSpeciesId];
 
-			var playerInRdf = startRdf.PlayersArr[i];
-			var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(collisionSpacePosition.X, collisionSpacePosition.Y); // World and CollisionSpace coordinates have the same scale, just translated
-			playerInRdf.JoinIndex = i+1;
-			playerInRdf.VirtualGridX = playerVposX;
-			playerInRdf.VirtualGridY = playerVposY;
-			playerInRdf.RevivalVirtualGridX = playerVposX;
-			playerInRdf.RevivalVirtualGridY = playerVposY;
-			playerInRdf.Speed = playerCharacter.Speed;
-			playerInRdf.ColliderRadius = (int)defaultColliderRadius;
-			playerInRdf.CharacterState = InAirIdle1NoJump;
-			playerInRdf.FramesToRecover = 0;
-			playerInRdf.DirX = (1 == playerInRdf.JoinIndex ? 2 : -2);
-			playerInRdf.DirY = 0;
-			playerInRdf.VelX = 0;
-			playerInRdf.VelY = 0;
-			playerInRdf.InAir = true;
-			playerInRdf.OnWall = false;
-			playerInRdf.Hp = 100;
-			playerInRdf.MaxHp = 100;
-			playerInRdf.SpeciesId = characterSpeciesId;
-		}
+            var playerInRdf = startRdf.PlayersArr[i];
+            var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(collisionSpacePosition.X, collisionSpacePosition.Y); // World and CollisionSpace coordinates have the same scale, just translated
+            playerInRdf.JoinIndex = i + 1;
+            playerInRdf.VirtualGridX = playerVposX;
+            playerInRdf.VirtualGridY = playerVposY;
+            playerInRdf.RevivalVirtualGridX = playerVposX;
+            playerInRdf.RevivalVirtualGridY = playerVposY;
+            playerInRdf.Speed = playerCharacter.Speed;
+            playerInRdf.ColliderRadius = (int)defaultColliderRadius;
+            playerInRdf.CharacterState = InAirIdle1NoJump;
+            playerInRdf.FramesToRecover = 0;
+            playerInRdf.DirX = (1 == playerInRdf.JoinIndex ? 2 : -2);
+            playerInRdf.DirY = 0;
+            playerInRdf.VelX = 0;
+            playerInRdf.VelY = 0;
+            playerInRdf.InAir = true;
+            playerInRdf.OnWall = false;
+            playerInRdf.Hp = 100;
+            playerInRdf.MaxHp = 100;
+            playerInRdf.SpeciesId = characterSpeciesId;
+        }
 
         return startRdf;
     }
@@ -104,9 +104,9 @@ public class OnlineMapController : AbstractMapController {
                     Debug.Log("Handling UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK in main thread.");
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
-					roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
+                    roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
-					_resetCurrentMatch();
+                    _resetCurrentMatch();
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
@@ -116,8 +116,8 @@ public class OnlineMapController : AbstractMapController {
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED:
-					// TODO
-					break;
+                    // TODO
+                    break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
                     var startRdf = mockStartRdf();
@@ -127,10 +127,10 @@ public class OnlineMapController : AbstractMapController {
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     enableBattleInput(false);
                     break;
-				case shared.Battle.DOWNSYNC_MSG_ACT_INPUT_BATCH: 
+                case shared.Battle.DOWNSYNC_MSG_ACT_INPUT_BATCH:
                     // Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");
-					onInputFrameDownsyncBatch(wsRespHolder.InputFrameDownsyncBatch);
-					break;	
+                    onInputFrameDownsyncBatch(wsRespHolder.InputFrameDownsyncBatch);
+                    break;
                 default:
                     break;
             }
@@ -222,6 +222,8 @@ public class OnlineMapController : AbstractMapController {
             // Upon resync, "this.lastUpsyncInputFrameId" might not have been updated properly.
             batchInputFrameIdSt = inputBuffer.StFrameId;
         }
+		NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
+
         for (var i = batchInputFrameIdSt; i <= latestLocalInputFrameId; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
             if (false == res1 || null == inputFrameDownsync) {

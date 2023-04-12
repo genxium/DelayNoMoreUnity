@@ -1,4 +1,6 @@
-﻿namespace shared {
+﻿using System;
+
+namespace shared {
     public class RingBuffer<T> where T : class {
         public const int RING_BUFF_CONSECUTIVE_SET = 0;
         public const int RING_BUFF_NON_CONSECUTIVE_SET = 1;
@@ -13,8 +15,8 @@
             N = n;
             Eles = new T[n];
         }
-        
-        public bool Put(T item) {
+
+        public virtual bool Put(T item) {
             while (0 < Cnt && Cnt >= N) {
                 // Make room for the new element
                 Pop();
@@ -30,7 +32,7 @@
             return true;
         }
 
-        public (bool, T?) Pop() {
+        public virtual (bool, T?) Pop() {
             if (0 == Cnt) {
                 return (false, default(T));
             }
@@ -75,6 +77,10 @@
 
             if (-1 == arrIdx) {
                 return (false, default(T));
+            }
+
+            if (0 > arrIdx || arrIdx >= N) {
+                throw new ArgumentException(String.Format("arrIdx={0} is out of bound! Cnt={1}, N={2}, St={3}, Ed={4}, offsetFromSt={5}", arrIdx, Cnt, N, St, Ed, offsetFromSt));
             }
             return (true, Eles[arrIdx]);
         }

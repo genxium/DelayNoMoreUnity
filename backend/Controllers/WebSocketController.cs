@@ -123,7 +123,7 @@ public class WebSocketController : ControllerBase {
                         break;
                     } catch (Exception ex) {
                         _logger.LogError(ex, "Session got an exception for [ roomId={0}, playerId={1}]", room.id, playerId);
-						break;
+                        break;
                     }
                 }
 

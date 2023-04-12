@@ -39,12 +39,12 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected shared.Collider[] staticRectangleColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
-
+    protected bool shouldLockStep = false;
     protected bool debugDrawingEnabled = true;
 
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity);
-        playerGameObjs[joinIndex-1] = newPlayerNode;
+        playerGameObjs[joinIndex - 1] = newPlayerNode;
     }
 
     protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
@@ -201,10 +201,16 @@ public abstract class AbstractMapController : MonoBehaviour {
 		   --------------------------------------------------------
 		 */
 
-		// Printing of this message might induce a performance impact.
-		Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
+        // Printing of this message might induce a performance impact.
+        Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
+
+        int rollbackFrames = (renderFrameId - chaserRenderFrameId);
+        if (0 > rollbackFrames) {
+            rollbackFrames = 0;
+        }
+        NetworkDoctor.Instance.LogRollbackFrames(rollbackFrames);
     }
 
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
@@ -227,7 +233,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public virtual void _resetCurrentMatch() {
-		Debug.Log(String.Format("_resetCurrentMatch with roomCapacity={0}", roomCapacity));
+        Debug.Log(String.Format("_resetCurrentMatch with roomCapacity={0}", roomCapacity));
         battleState = ROOM_STATE_IMPOSSIBLE;
         renderFrameId = 0;
         renderFrameIdLagTolerance = 4;
@@ -286,6 +292,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         decodedInputHolder = new InputFrameDecoded();
         prevDecodedInputHolder = new InputFrameDecoded();
+
+        shouldLockStep = false;
+        NetworkDoctor.Instance.Reset(128);
     }
 
     public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {
@@ -299,8 +308,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (ROOM_STATE_IN_SETTLEMENT == battleState) {
             return;
         }
-		// Debug.Log(String.Format("onInputFrameDownsyncBatch called for batchInputFrameIdRange [{0}, {1}]", batch[0].InputFrameId, batch[batch.Count-1].InputFrameId));
+        // Debug.Log(String.Format("onInputFrameDownsyncBatch called for batchInputFrameIdRange [{0}, {1}]", batch[0].InputFrameId, batch[batch.Count-1].InputFrameId));
 
+        NetworkDoctor.Instance.LogInputFrameDownsync(batch[0].InputFrameId, batch[batch.Count - 1].InputFrameId);
         int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;
         foreach (var inputFrameDownsync in batch) {
             int inputFrameDownsyncId = inputFrameDownsync.InputFrameId;
@@ -387,6 +397,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             // In this case it must be true that "rdfId > chaserRenderFrameId".
             chaserRenderFrameId = rdfId;
 
+            NetworkDoctor.Instance.LogRollbackFrames(0);
+
             battleState = ROOM_STATE_IN_BATTLE;
         }
 
@@ -397,6 +409,11 @@ public abstract class AbstractMapController : MonoBehaviour {
     // Update is called once per frame
     protected void doUpdate() {
         if (ROOM_STATE_IN_BATTLE != battleState) {
+            return;
+        }
+        if (shouldLockStep) {
+            NetworkDoctor.Instance.LogLockedStepCnt();
+            shouldLockStep = false;
             return;
         }
         int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
@@ -434,6 +451,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
         ++renderFrameId;
+
+        var (tooFastOrNot, _, _, _, _, _, _) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
+        shouldLockStep = tooFastOrNot;
     }
 
     protected void onBattleStopped() {
