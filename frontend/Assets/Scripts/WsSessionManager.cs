@@ -79,7 +79,7 @@ public class WsSessionManager {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
                 while (senderBuffer.TryDequeue(out toSendObj) && !cancellationToken.IsCancellationRequested) {
                     await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
-                    Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
+                    // Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
                 }
             }
         } catch (OperationCanceledException ocEx) {

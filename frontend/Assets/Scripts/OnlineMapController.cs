@@ -128,7 +128,7 @@ public class OnlineMapController : AbstractMapController {
                     enableBattleInput(false);
                     break;
 				case shared.Battle.DOWNSYNC_MSG_ACT_INPUT_BATCH: 
-                    Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");
+                    // Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");
 					onInputFrameDownsyncBatch(wsRespHolder.InputFrameDownsyncBatch);
 					break;	
                 default:
@@ -138,6 +138,8 @@ public class OnlineMapController : AbstractMapController {
     }
 
     void Start() {
+        Physics.autoSimulation = false;
+        Physics2D.simulationMode = SimulationMode2D.Script;
         selfPlayerInfo = new PlayerDownsync();
         wsCancellationTokenSource = new CancellationTokenSource();
         wsCancellationToken = wsCancellationTokenSource.Token;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b592865877cb54284a5d1d88aec9cfbb, type: 3}
   m_Name: Simulator Provider Settings
   m_EditorClassIdentifier: 
-  m_Logging: 1
+  m_Logging: 0
   m_AutomaticPerformanceModeEnabled: 1
   m_EnableBoostOnStartup: 1
   m_StatsLoggingFrequencyInFrames: 50
