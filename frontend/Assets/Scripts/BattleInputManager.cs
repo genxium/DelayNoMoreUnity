@@ -91,14 +91,14 @@ public class BattleInputManager : MonoBehaviour {
 		if (!customEnabled) return;
         joystickX = context.ReadValue<Vector2>().normalized.x;
         joystickY = context.ReadValue<Vector2>().normalized.y;
-        Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by touch", joystickX, joystickY));
+        //Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by touch", joystickX, joystickY));
     }
 
     public void OnMoveByKeyboard(InputAction.CallbackContext context) {
 		if (!customEnabled) return;
         joystickX = context.ReadValue<Vector2>().normalized.x;
         joystickY = context.ReadValue<Vector2>().normalized.y;
-        Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by keyboard", joystickX, joystickY));
+        //Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by keyboard", joystickX, joystickY));
 
         joystick.transform.position = new Vector3(
             joystickInitPos.x + joystickKeyboardMoveRadius * joystickX,

@@ -99,8 +99,8 @@ public class Room {
         playerDownsyncSessionDict = new Dictionary<int, WebSocket>();
         playerSignalToCloseDict = new Dictionary<int, CancellationTokenSource>();
 
-        lastAllConfirmedInputFrameId = TERMINATING_INPUT_FRAME_ID;
-        latestPlayerUpsyncedInputFrameId = TERMINATING_INPUT_FRAME_ID;
+        lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
+        latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
         lastAllConfirmedInputList = new ulong[capacity];
         joinIndexBooleanArr = new bool[capacity];
 
@@ -595,7 +595,7 @@ public class Room {
             // by now "clientInputFrameId <= inputBuffer.EdFrameId"
             var targetInputFrameDownsync = getOrPrefabInputFrameDownsync(clientInputFrameId);
             targetInputFrameDownsync.InputList[player.PlayerDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
-            targetInputFrameDownsync.ConfirmedList |= ((ulong)1 << (player.PlayerDownsync.JoinIndex - 1));
+            targetInputFrameDownsync.ConfirmedList = (targetInputFrameDownsync.ConfirmedList | ((ulong)1 << (player.PlayerDownsync.JoinIndex - 1)));
 
             if (false == fromUDP) {
                 /**
@@ -632,6 +632,7 @@ public class Room {
             bool shouldBreakConfirmation = false;
 
             if (allConfirmedMask != inputFrameDownsync.ConfirmedList) {
+                //_logger.LogInformation("Found a non-all-confirmed inputFrame for roomId={0}, upsync player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4}) inputFrameId={5}, confirmedList={6}", id, playerId, player.PlayerDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId, inputFrameId, inputFrameDownsync.ConfirmedList);
                 foreach (var thatPlayer in playersArr) {
                     var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
                     var thatPlayerJoinMask = ((ulong)1 << (thatPlayer.PlayerDownsync.JoinIndex - 1));
@@ -641,7 +642,9 @@ public class Room {
                         shouldBreakConfirmation = true; // Could be an `ACTIVE SLOW TICKER` here, but no action needed for now
                         break;
                     }
-                    _logger.LogDebug("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.PlayerDownsync.Id, thatPlayer.PlayerDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
+                    if (isSlowTicker) {
+                        _logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.PlayerDownsync.Id, thatPlayer.PlayerDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
+                    }
                 }
             }
 
@@ -718,6 +721,7 @@ public class Room {
                 var cloned = currInputFrameDownsync.Clone();
                 cloned.InputFrameId = j;
                 inputBuffer.Put(cloned);
+                currInputFrameDownsync = cloned; // make sure that we return a pointer inside the inputBuffer for later writing
             }
             return currInputFrameDownsync;
         } else {
@@ -728,11 +732,11 @@ public class Room {
     private void onInputFrameDownsyncAllConfirmed(InputFrameDownsync inputFrameDownsync, int playerId) {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
         int inputFrameId = inputFrameDownsync.InputFrameId;
-        if (TERMINATING_INPUT_FRAME_ID == lastAllConfirmedInputFrameIdWithChange || false == shared.Battle.EqualInputLists(inputFrameDownsync.InputList, lastAllConfirmedInputList)) {
+        if (MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED == lastAllConfirmedInputFrameIdWithChange || false == shared.Battle.EqualInputLists(inputFrameDownsync.InputList, lastAllConfirmedInputList)) {
             if (INVALID_DEFAULT_PLAYER_ID == playerId) {
-                _logger.LogDebug("Key inputFrame change: roomId={0}, newInputFrameId={1}, lastInputFrameId={2}, newInputList={2}, lastAllConfirmedInputList={3}", id, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
+                _logger.LogInformation("Key inputFrame change: roomId={0}, newInputFrameId={1}, lastInputFrameId={2}, newInputList={2}, lastAllConfirmedInputList={3}", id, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
             } else {
-                _logger.LogDebug("Key inputFrame change: roomId={0}, playerId={1}, newInputFrameId={2}, lastInputFrameId={3}, newInputList={4}, lastAllConfirmedInputList={5}", id, playerId, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
+                _logger.LogInformation("Key inputFrame change: roomId={0}, playerId={1}, newInputFrameId={2}, lastInputFrameId={3}, newInputList={4}, lastAllConfirmedInputList={5}", id, playerId, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
             }
             lastAllConfirmedInputFrameIdWithChange = inputFrameId;
         }
@@ -740,11 +744,13 @@ public class Room {
         for (int i = 0; i < capacity; i++) {
             lastAllConfirmedInputList[i] = inputFrameDownsync.InputList[i];
         }
+        /*
         if (INVALID_DEFAULT_PLAYER_ID == playerId) {
-            _logger.LogDebug("inputFrame lifecycle#2[forced-allconfirmed]: roomId={0}", id);
+            _logger.LogInformation("inputFrame lifecycle#2[forced-allconfirmed]: roomId={0}, inputFrameId={1}", id, inputFrameId);
         } else {
-            _logger.LogDebug("inputFrame lifecycle#2[allconfirmed]: roomId={0}, playerId={1}", id, playerId);
+            _logger.LogInformation("inputFrame lifecycle#2[allconfirmed]: roomId={0}, playerId={1}, inputFrameId={2}", id, playerId, inputFrameId);
         }
+        */
     }
 
     private InputBufferSnapshot? produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(ulong unconfirmedMask, int snapshotStFrameId, int snapshotEdFrameId) {

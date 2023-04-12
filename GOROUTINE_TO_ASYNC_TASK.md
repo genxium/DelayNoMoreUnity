@@ -10,7 +10,7 @@ How "go Xxx()" actually works to interact with OS threads is vague in [its offic
 
 Therefore if we really want to mimic the behaviour with "go Xxx()", the closest way would be [a].
 
-# Async task in a guaranteed different thread
+# What doesn't switch to another thread immediately
 The following 2 scenarios of using "async task" are equivalent in terms of thread switching.
 ```csharp
 // [c]

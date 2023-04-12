@@ -202,7 +202,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 		 */
 
 		// Printing of this message might induce a performance impact.
-		Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: ${0}->${1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
+		Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
     }
@@ -229,13 +229,13 @@ public abstract class AbstractMapController : MonoBehaviour {
     public virtual void _resetCurrentMatch() {
 		Debug.Log(String.Format("_resetCurrentMatch with roomCapacity={0}", roomCapacity));
         battleState = ROOM_STATE_IMPOSSIBLE;
-        renderFrameId = Battle.TERMINATING_RENDER_FRAME_ID;
+        renderFrameId = 0;
         renderFrameIdLagTolerance = 4;
-        chaserRenderFrameId = Battle.TERMINATING_RENDER_FRAME_ID;
-        lastAllConfirmedInputFrameId = Battle.TERMINATING_INPUT_FRAME_ID;
-        lastUpsyncInputFrameId = Battle.TERMINATING_INPUT_FRAME_ID;
+        chaserRenderFrameId = -1;
+        lastAllConfirmedInputFrameId = -1;
+        lastUpsyncInputFrameId = -1;
         maxChasingRenderFramesPerUpdate = 5;
-        renderBufferSize = 256;
+        renderBufferSize = 1024;
         playerGameObjs = new GameObject[roomCapacity];
         lastIndividuallyConfirmedInputFrameId = new int[roomCapacity];
         Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
@@ -299,7 +299,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (ROOM_STATE_IN_SETTLEMENT == battleState) {
             return;
         }
-		Debug.Log(String.Format("onInputFrameDownsyncBatch called for batchInputFrameIdRange [{0}, {1}]", batch[0].InputFrameId, batch[batch.Count-1].InputFrameId));
+		// Debug.Log(String.Format("onInputFrameDownsyncBatch called for batchInputFrameIdRange [{0}, {1}]", batch[0].InputFrameId, batch[batch.Count-1].InputFrameId));
 
         int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;
         foreach (var inputFrameDownsync in batch) {
