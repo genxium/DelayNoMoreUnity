@@ -53,14 +53,14 @@ public class NetworkDoctor {
     private FrameRingBuffer<QEle> inputFrameDownsyncQ;
     private FrameRingBuffer<QEle> peerInputFrameUpsyncQ;
     int immediateRollbackFrames;
-    int lockedStepCnt;
+    int lockedStepsCnt;
 
     public void Reset() {
         inputFrameIdFront = 0;
         immediateRollbackFrames = 0;
-        lockedStepCnt = 0;
+        lockedStepsCnt = 0;
 
-        inputRateThreshold = Battle.ConvertToNoDelayInputFrameId(60);
+        inputRateThreshold = Battle.ConvertToNoDelayInputFrameId(59);
     }
 
     public void LogInputFrameIdFront(int val) {
@@ -108,7 +108,7 @@ public class NetworkDoctor {
     }
 
     public void LogLockedStepCnt() {
-        lockedStepCnt += 1;
+        lockedStepsCnt += 1;
     }
 
     public (int, int, int, int, int, int) Stats() {
@@ -138,14 +138,14 @@ public class NetworkDoctor {
             if (null != st && null != ed && 0 < elapsedMillis)
                 peerUpsyncFps = (int)((long)(ed.j - st.i) * 1000 / elapsedMillis);
         }
-        return (inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepCnt);
+        return (inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt);
     }
 
     public (bool, int, int, int, int, int, int) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int inputFrameUpsyncDelayTolerance) {
-        var (inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, skippedRenderFrameCnt) = Stats();
+        var (inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt) = Stats();
         if (sendingFps >= inputRateThreshold + 3) {
             // Don't send too fast
-            return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, skippedRenderFrameCnt);
+            return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
         } else {
             bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
             // An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
@@ -159,11 +159,11 @@ public class NetworkDoctor {
                 }
                 if ((inputFrameIdFront > minInputFrameIdFront) && ((inputFrameIdFront - minInputFrameIdFront) > (inputFrameUpsyncDelayTolerance + 1))) {
                     // first comparison condition is to avoid numeric overflow
-                    return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, skippedRenderFrameCnt);
+                    return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
                 }
             }
         }
 
-        return (false, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, skippedRenderFrameCnt);
+        return (false, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
     }
 }

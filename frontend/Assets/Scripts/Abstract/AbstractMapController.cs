@@ -472,9 +472,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
         ++renderFrameId;
-
-        var (tooFastOrNot, _, _, _, _, _, _) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
-        shouldLockStep = tooFastOrNot;
     }
 
     protected void onBattleStopped() {

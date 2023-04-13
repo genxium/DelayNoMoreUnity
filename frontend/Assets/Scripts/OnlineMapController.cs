@@ -13,7 +13,7 @@ public class OnlineMapController : AbstractMapController {
     CancellationToken wsCancellationToken;
     int inputFrameUpsyncDelayTolerance;
     WsResp wsRespHolder;
-
+    public NetworkDoctorInfo networkInfoPanel;
     private RoomDownsyncFrame mockStartRdf() {
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
@@ -191,6 +191,9 @@ public class OnlineMapController : AbstractMapController {
         try {
             pollAndHandleWsRecvBuffer();
             doUpdate();
+            var (tooFastOrNot, _, sendingFps, srvDownsyncFps, _, rollbackFrames, lockedStepsCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
+            shouldLockStep = tooFastOrNot;
+            networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, lockedStepsCnt, rollbackFrames);
         } catch (Exception ex) {
             Debug.LogError(String.Format("Error during OnlineMap.Update: {0}", ex));
             onBattleStopped();
@@ -243,7 +246,7 @@ public class OnlineMapController : AbstractMapController {
         // console.info(`inputFrameUpsyncBatch: ${JSON.stringify(inputFrameUpsyncBatch)}`);
         var reqData = new WsReq {
             PlayerId = selfPlayerInfo.Id,
-            Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_CMD,
+            Act = Battle.UPSYNC_MSG_ACT_PLAYER_CMD,
             JoinIndex = selfPlayerInfo.JoinIndex,
             AckingInputFrameId = lastAllConfirmedInputFrameId,
         };
