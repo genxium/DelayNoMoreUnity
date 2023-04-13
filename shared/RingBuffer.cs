@@ -85,6 +85,17 @@ namespace shared {
             return (true, Eles[arrIdx]);
         }
 
+        public T? GetFirst() {
+            if (0 == Cnt) return default(T);
+            return Eles[St];
+        }
+
+        public T? GetLast() {
+            if (0 == Cnt) return default(T);
+            if (0 <= Ed-1) return Eles[Ed-1];
+            else return Eles[Ed-1+N];
+        }
+
         public void Clear() {
             while (0 < Cnt) {
                 Pop();

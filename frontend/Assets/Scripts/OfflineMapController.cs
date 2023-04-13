@@ -17,9 +17,14 @@ public class OfflineMapController : AbstractMapController {
     void Start() {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
+
         selfPlayerInfo = new PlayerDownsync();
         Application.targetFrameRate = 60;
-        _resetCurrentMatch();
+
+        roomCapacity = 1;
+        preallocateHolders();
+        resetCurrentMatch();
+        selfPlayerInfo.JoinIndex = 1;
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
 
@@ -65,7 +70,7 @@ public class OfflineMapController : AbstractMapController {
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
         var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
-        spawnPlayerNode(0, selfPlayerWx, selfPlayerWy);
+        spawnPlayerNode(selfPlayerInfo.JoinIndex, selfPlayerWx, selfPlayerWy);
 
         var selfPlayerCharacterSpeciesId = 0;
         var selfPlayerCharacter = Battle.characters[selfPlayerCharacterSpeciesId];

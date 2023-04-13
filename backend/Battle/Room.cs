@@ -91,7 +91,12 @@ public class Room {
         backendDynamicsEnabled = false;
 
         int renderBufferSize = 1024;
-        inputBuffer = new FrameRingBuffer<InputFrameDownsync>((renderBufferSize >> 1) + 1);
+        int inputBufferSize = (renderBufferSize >> 1) + 1;
+        inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
+        for (int i = 0; i < inputBufferSize; i++) {
+            inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
+        }
+        inputBuffer.Clear(); // Then use it by "DryPut"
         players = new Dictionary<int, Player>();
         playersArr = new Player[capacity];
 
@@ -429,18 +434,16 @@ public class Room {
             state = ROOM_STATE_IDLE;
             effectivePlayerCount = 0;
 
-            int oldInputBufferSize = inputBuffer.N;
-            inputBuffer = new FrameRingBuffer<InputFrameDownsync>(oldInputBufferSize);
+            backendDynamicsEnabled = false;
+
+            inputBuffer.Clear();
 
             lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED; // Such that the initial "lastAllConfirmedInputFrameId + 1" is 0, for use in "markConfirmationIfApplicable" 
             latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
-            lastAllConfirmedInputList = new ulong[capacity];
-            joinIndexBooleanArr = new bool[capacity];
-
-            backendDynamicsEnabled = false;
-
-            lastIndividuallyConfirmedInputFrameId = new int[capacity];
-            lastIndividuallyConfirmedInputList = new ulong[capacity];
+            Array.Fill<ulong>(lastAllConfirmedInputList, 0);
+            Array.Fill<bool>(joinIndexBooleanArr, false);
+            Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, 0);
+            Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
 
             battleUdpTunnelLock.WaitOne();
             battleUdpTunnelAddr = null;
@@ -673,7 +676,7 @@ public class Room {
                     snapshotStFrameId = refSnapshotStFrameId;
                 }
             }
-            _logger.LogInformation("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}, snapshotStFrameId={2}, snapshotEdFrameId={3}", id, newAllConfirmedCount, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
+            //_logger.LogInformation("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}, snapshotStFrameId={2}, snapshotEdFrameId={3}", id, newAllConfirmedCount, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
             return produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(0, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
         } else {
             return null;
@@ -689,11 +692,6 @@ public class Room {
         //_logger.LogInformation("getOrPrefabInputFrameDownsync#2 for roomId={0}, inputFrameId={1}: res1={2}", id, inputFrameId, res1);
 
         if (false == res1 || null == currInputFrameDownsync) {
-            currInputFrameDownsync = new InputFrameDownsync {
-                InputFrameId = inputFrameId,
-                ConfirmedList = 0
-            };
-
             /**
 				[WARNING] Don't reference "inputBuffer.GetByFrameId(j-1)" to prefab here!
 
@@ -710,18 +708,21 @@ public class Room {
 				, the backend might've been prefabbing TOO QUICKLY and thus still replicating "inputFrame#42" by now for this ActiveSlowTicker, making its graphics inconsistent upon "[type#1 forceConfirmation] at inputFrame#52-60", i.e. as if always dragged to the left while having been controlled to the right for a few frames -- what's worse, the same graphical inconsistence could even impact later "[type#1 forceConfirmation]s" if this ActiveSlowTicker doesn't catch up with the upsync pace!
 			*/
 
-            for (int i = 0; i < capacity; i++) {
-                // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
-                // Don't predict "btnA & btnB"!
-                currInputFrameDownsync.InputList.Add((lastIndividuallyConfirmedInputList[i] & (ulong)15));
-            }
-
-            while (inputBuffer.EdFrameId <= inputFrameId) {
-                int j = inputBuffer.EdFrameId;
-                var cloned = currInputFrameDownsync.Clone();
-                cloned.InputFrameId = j;
-                inputBuffer.Put(cloned);
-                currInputFrameDownsync = cloned; // make sure that we return a pointer inside the inputBuffer for later writing
+            while (null == currInputFrameDownsync || inputBuffer.EdFrameId <= inputFrameId) {
+                int gapInputFrameId = inputBuffer.EdFrameId;
+                inputBuffer.DryPut();
+                var (ok, ifdHolder) = inputBuffer.GetByFrameId(gapInputFrameId);
+                if (!ok || null == ifdHolder) {
+                    throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", gapInputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
+                }
+                ifdHolder.InputFrameId = gapInputFrameId;
+                for (int i = 0; i < capacity; i++) {
+                    // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
+                    // Don't predict "btnA & btnB"!
+                    ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & (ulong)15));
+                }
+                ifdHolder.ConfirmedList = 0;
+                currInputFrameDownsync = ifdHolder; // make sure that we return a pointer inside the inputBuffer for later writing
             }
             return currInputFrameDownsync;
         } else {

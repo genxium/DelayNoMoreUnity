@@ -6,7 +6,7 @@ using static shared.CharacterState;
 using Pbc = Google.Protobuf.Collections;
 
 public abstract class AbstractMapController : MonoBehaviour {
-    protected int roomCapacity = 1;
+    protected int roomCapacity;
     protected int renderFrameId; // After battle started
     protected int renderFrameIdLagTolerance;
     protected int lastAllConfirmedInputFrameId;
@@ -232,40 +232,34 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-    public virtual void _resetCurrentMatch() {
-        Debug.Log(String.Format("_resetCurrentMatch with roomCapacity={0}", roomCapacity));
-        battleState = ROOM_STATE_IMPOSSIBLE;
-        renderFrameId = 0;
-        renderFrameIdLagTolerance = 4;
-        chaserRenderFrameId = -1;
-        lastAllConfirmedInputFrameId = -1;
-        lastUpsyncInputFrameId = -1;
-        maxChasingRenderFramesPerUpdate = 5;
+    protected void preallocateHolders() {
+        if (0 >= roomCapacity) {
+            throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
+        }
         renderBufferSize = 1024;
-        playerGameObjs = new GameObject[roomCapacity];
-        lastIndividuallyConfirmedInputFrameId = new int[roomCapacity];
-        Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
-        lastIndividuallyConfirmedInputList = new ulong[roomCapacity];
-        Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
+
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
             renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, 128));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
+
         int inputBufferSize = (renderBufferSize >> 1) + 1;
         inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
         for (int i = 0; i < inputBufferSize; i++) {
             inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
         }
         inputBuffer.Clear(); // Then use it by "DryPut"
-        var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
-        int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
-        spaceOffsetX = ((mapWidth * tileWidth) >> 1);
-        spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 64, 64);
+        lastIndividuallyConfirmedInputFrameId = new int[roomCapacity];
+        Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
 
-        collisionHolder = new shared.Collision();
+        lastIndividuallyConfirmedInputList = new ulong[roomCapacity];
+        Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
+
+        prefabbedInputListHolder = new ulong[roomCapacity];
+        Array.Fill<ulong>(prefabbedInputListHolder, 0);
+
         effPushbacks = new Vector[roomCapacity];
         for (int i = 0; i < roomCapacity; i++) {
             effPushbacks[i] = new Vector(0, 0);
@@ -288,13 +282,40 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         staticRectangleColliders = new shared.Collider[128];
 
-        prefabbedInputListHolder = new ulong[roomCapacity];
-
         decodedInputHolder = new InputFrameDecoded();
         prevDecodedInputHolder = new InputFrameDecoded();
+    }
 
+    protected virtual void resetCurrentMatch() {
+        Debug.Log(String.Format("_resetCurrentMatch with roomCapacity={0}", roomCapacity));
+        battleState = ROOM_STATE_IMPOSSIBLE;
+        renderFrameId = 0;
+        renderFrameIdLagTolerance = 4;
+        chaserRenderFrameId = -1;
+        lastAllConfirmedInputFrameId = -1;
+        lastUpsyncInputFrameId = -1;
+        maxChasingRenderFramesPerUpdate = 5;
+        playerGameObjs = new GameObject[roomCapacity];
+
+        var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
+        int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
+        spaceOffsetX = ((mapWidth * tileWidth) >> 1);
+        spaceOffsetY = ((mapHeight * tileHeight) >> 1);
+
+        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 64, 64);
+        collisionHolder = new shared.Collision();
+
+        // Reset the preallocated
+        Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
+        Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
+        renderBuffer.Clear();
+        inputBuffer.Clear();
+        Array.Fill<ulong>(prefabbedInputListHolder, 0);
+        Array.Fill(jumpedOrNotList, false);
+
+        // Reset lockstep
         shouldLockStep = false;
-        NetworkDoctor.Instance.Reset(128);
+        NetworkDoctor.Instance.Reset();
     }
 
     public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {

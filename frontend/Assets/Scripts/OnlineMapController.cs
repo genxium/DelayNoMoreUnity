@@ -104,9 +104,12 @@ public class OnlineMapController : AbstractMapController {
                     Debug.Log("Handling UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK in main thread.");
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
-                    roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
+                    if (wsRespHolder.BciFrame.BoundRoomCapacity != roomCapacity) {
+                        roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
+                        preallocateHolders();
+                    }
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
-                    _resetCurrentMatch();
+                    resetCurrentMatch();
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
@@ -222,7 +225,7 @@ public class OnlineMapController : AbstractMapController {
             // Upon resync, "this.lastUpsyncInputFrameId" might not have been updated properly.
             batchInputFrameIdSt = inputBuffer.StFrameId;
         }
-		NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
+        NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
 
         for (var i = batchInputFrameIdSt; i <= latestLocalInputFrameId; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
@@ -250,8 +253,8 @@ public class OnlineMapController : AbstractMapController {
         lastUpsyncInputFrameId = latestLocalInputFrameId;
     }
 
-    public override void _resetCurrentMatch() {
-        base._resetCurrentMatch();
+    protected override void resetCurrentMatch() {
+        base.resetCurrentMatch();
         if (null != wsCancellationTokenSource) {
             wsCancellationTokenSource.Dispose();
             wsCancellationTokenSource = new CancellationTokenSource();
