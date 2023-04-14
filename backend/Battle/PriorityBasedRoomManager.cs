@@ -19,7 +19,7 @@ public class PriorityBasedRoomManager : IRoomManager {
         for (int i = 0; i < initialCountOfRooms; i++) {
             int roomCapacity = 2;
             Room r = new Room(_loggerFactory, i+1, roomCapacity);
-            this.Push(0, r);
+            Push(0, r);
         }
     }
 

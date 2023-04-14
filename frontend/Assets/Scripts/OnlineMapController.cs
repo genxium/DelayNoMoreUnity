@@ -200,15 +200,6 @@ public class OnlineMapController : AbstractMapController {
         }
     }
 
-    private void OnDestroy() {
-        if (null != wsCancellationTokenSource) {
-            if (null != wsCancellationToken && !wsCancellationToken.IsCancellationRequested) {
-                wsCancellationTokenSource.Cancel(); // To stop the "WebSocketThread"
-            }
-            wsCancellationTokenSource.Dispose();
-        }
-    }
-
     protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int lastUpsyncInputFrameId, int currInputFrameId) {
         /*
         For a 2-player-battle, this "shouldUpsyncForEarlyAllConfirmedOnBackend" can be omitted, however for more players in a same battle, to avoid a "long time non-moving player" jamming the downsync of other moving players, we should use this flag.
@@ -264,4 +255,14 @@ public class OnlineMapController : AbstractMapController {
             wsCancellationToken = wsCancellationTokenSource.Token;
         }
     }
+
+    protected void OnDestroy() {
+        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy"));
+        WsSessionManager.Instance.tryLocalClose();
+    }
+
+    void OnApplicationQuit() {
+        Debug.LogWarning(String.Format("OnlineMapController.OnApplicationQuit"));
+    }
+
 }

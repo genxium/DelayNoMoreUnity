@@ -1,5 +1,6 @@
 ﻿using shared;
 using static shared.Battle;
+using System.Net;
 using System.Net.WebSockets;
 using System.Net.Sockets;
 using Google.Protobuf;
@@ -67,6 +68,7 @@ public class Room {
 
     Mutex battleUdpTunnelLock;
     public PeerUdpAddr? battleUdpTunnelAddr;
+    CancellationTokenSource battleUdpTunnelCancellationTokenSource;
     UdpClient? battleUdpTunnel;
 
     ILoggerFactory _loggerFactory;
@@ -115,6 +117,7 @@ public class Room {
         joinerLock = new Mutex();
         inputBufferLock = new Mutex();
         battleUdpTunnelLock = new Mutex();
+        battleUdpTunnelCancellationTokenSource = new CancellationTokenSource();
     }
 
     public int GetRenderCacheSize() {
@@ -157,6 +160,12 @@ public class Room {
 
             if (1 == effectivePlayerCount) {
                 state = ROOM_STATE_WAITING;
+                battleUdpTunnelLock.WaitOne();
+                if (null == battleUdpTunnel) {
+                    // We should initialize the UdpTunnel before sending ANY BattleColliderInfo. 
+                    Task.Run(startBattleUdpTunnelAsyncAction);
+                }
+                battleUdpTunnelLock.ReleaseMutex();
             }
 
             for (int i = 0; i < capacity; i++) {
@@ -212,7 +221,7 @@ public class Room {
 
                     players.Remove(playerId);
                     if (0 == effectivePlayerCount) {
-                        state = ROOM_STATE_IDLE;
+                        Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
                     }
                     _logger.LogWarning("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
@@ -374,7 +383,7 @@ public class Room {
         }
         battleUdpTunnelLock.WaitOne();
         if (null != battleUdpTunnel) {
-            battleUdpTunnel.Close();
+            battleUdpTunnelCancellationTokenSource.Cancel();
         }
         battleUdpTunnelLock.ReleaseMutex();
 
@@ -417,7 +426,7 @@ public class Room {
 
             Interlocked.Exchange(ref state, ROOM_STATE_IN_DISMISSAL);
             foreach (var (_, cancellationTokenSource) in playerSignalToCloseDict) {
-                if (!cancellationTokenSource.Token.IsCancellationRequested) {
+                if (!cancellationTokenSource.IsCancellationRequested) {
                     cancellationTokenSource.Cancel();
                 }
             }
@@ -431,7 +440,6 @@ public class Room {
             playerActiveWatchdogDict = new Dictionary<int, PlayerSessionAckWatchdog>(); // Would allow the destructor of each "Watchdog" value to dispose its timer  
             playerDownsyncSessionDict = new Dictionary<int, WebSocket>();
             playerSignalToCloseDict = new Dictionary<int, CancellationTokenSource>();
-            state = ROOM_STATE_IDLE;
             effectivePlayerCount = 0;
 
             backendDynamicsEnabled = false;
@@ -445,10 +453,14 @@ public class Room {
             Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, 0);
             Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
 
+            if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
+                battleUdpTunnelCancellationTokenSource.Cancel();
+            }
             battleUdpTunnelLock.WaitOne();
             battleUdpTunnelAddr = null;
             battleUdpTunnel = null;
             battleUdpTunnelLock.ReleaseMutex();
+            Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
         } finally {
             joinerLock.ReleaseMutex();
         }
@@ -922,9 +934,114 @@ public class Room {
         }
     }
 
+    private async void startBattleUdpTunnelAsyncAction() {
+        _logger.LogInformation("`battleUdpTunnel` starting for roomId={0}", id);
+        battleUdpTunnelLock.WaitOne();
+        try {
+            battleUdpTunnel = new UdpClient(port: 0);
+            if (null != battleUdpTunnel && null != battleUdpTunnel.Client.LocalEndPoint) {
+                var assignedPort = ((IPEndPoint)battleUdpTunnel.Client.LocalEndPoint).Port;
+                battleUdpTunnelAddr = new PeerUdpAddr {
+                    Port = assignedPort
+                };
+            } else {
+                battleUdpTunnelAddr = null;
+            }
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Error creating udp client for roomId={0}", id);
+            return;
+        } finally {
+            battleUdpTunnelLock.ReleaseMutex();
+        }
+
+        if (null == battleUdpTunnel) {
+            _logger.LogWarning("`battleUdpTunnel` failed to start#1 for roomId={0}", id);
+            return;
+        }
+
+        CancellationToken battleUdpTunnelCancellationToken = battleUdpTunnelCancellationTokenSource.Token;
+        IPEndPoint peerAddr = new IPEndPoint(IPAddress.Any, 0);
+        try {
+            if (null == battleUdpTunnelAddr) {
+                // The "finally" block would help close "battleUdpTunnel".
+                _logger.LogWarning("`battleUdpTunnel` failed to start#2 for roomId={0}", id);
+                return;
+            }
+            _logger.LogInformation("`battleUdpTunnel` started for roomId={0} @ battleUdpTunnelAddr={1}", id, battleUdpTunnelAddr);
+
+            while (!battleUdpTunnelCancellationToken.IsCancellationRequested) {
+                long nowRoomState = Interlocked.Read(ref state);
+                if (ROOM_STATE_IN_BATTLE != nowRoomState && ROOM_STATE_PREPARE != nowRoomState) {
+                    break;
+                }
+                var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);
+                WsReq pReq = WsReq.Parser.ParseFrom(recvResult.Buffer);
+                int playerId = pReq.PlayerId;
+                Player? player;
+                if (players.TryGetValue(playerId, out player)) {
+                    int reqAuthKey = pReq.AuthKey;
+                    if (reqAuthKey != player.BattleUdpTunnelAuthKey) {
+                        continue;
+                    }
+                }
+
+                if (null == player) {
+                    _logger.LogWarning("In `battleUdpTunnel`, player for (roomId: {0}, playerId: {1}) doesn't exist!", id, playerId);
+                    continue;
+                }
+
+                WebSocket? wsSession;
+                if (!playerDownsyncSessionDict.TryGetValue(playerId, out wsSession)) {
+                    _logger.LogWarning("In `battleUdpTunnel`, ws session for (roomId: {0}, playerId: {1}) doesn't exist! #1", id, playerId);
+                    continue;
+                }
+
+                if (null == player.BattleUdpTunnelAddr) {
+                    player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
+                    _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated battleUdpAddr for playerId={1} to be {2}", id, playerId, player.BattleUdpTunnelAddr);
+                }
+
+                var toRelayBytes = new ReadOnlyMemory<byte>(recvResult.Buffer);
+                var batch = pReq.InputFrameUpsyncBatch;
+                if (null != batch && 0 < batch.Count) {
+                    var peerJoinIndex = pReq.JoinIndex;
+                    // Broadcast to every other player in the same room/battle
+                    foreach (var (otherPlayerId, otherPlayer) in players) {
+                        if (otherPlayerId == playerId) {
+                            continue;
+                        }
+                        if (null == otherPlayer.BattleUdpTunnelAddr) {
+                            continue;
+                        }
+                        // [WARNING] Avoid blocking the next round of "ReceiveAsync". See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+                        _ = Task.Run(async () => {
+                            if (null == battleUdpTunnel) return;
+                            await battleUdpTunnel.SendAsync(toRelayBytes, otherPlayer.BattleUdpTunnelAddr, battleUdpTunnelCancellationToken);
+                        });
+                    }
+
+                    await OnBattleCmdReceived(pReq, playerId, true); // To help advance "lastAllConfirmedInputFrameId" asap, and even if "lastAllConfirmedInputFrameId" is not advanced due to packet loss, these UDP packets would help prefill the "inputBuffer" with correct player "future inputs (compared to ws session)" such that when "forceConfirmation" occurs we have as many correct predictions as possible
+                }
+            }
+        } catch (ObjectDisposedException ex) {
+            _logger.LogWarning("UDP recv is interrupted by ObjectDisposedException for roomId={0}, ex.Message={1}", id, ex.Message);
+        } catch (Exception ex) {
+            _logger.LogError(ex, "UDP recv is interrupted by unexpected exception for roomId={0}", id);
+        } finally {
+            if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
+                battleUdpTunnelCancellationTokenSource.Cancel();
+            }
+            battleUdpTunnel.Close();
+        }
+
+        _logger.LogInformation("`battleUdpTunnel` stopped for (roomId={0})@renderFrameId={1}", id, renderFrameId);
+    }
+
+
     ~Room() {
         joinerLock.Dispose();
         inputBufferLock.Dispose();
         battleUdpTunnelLock.Dispose();
+        battleUdpTunnelCancellationTokenSource.Dispose();
     }
 }

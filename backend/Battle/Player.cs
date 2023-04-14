@@ -1,6 +1,6 @@
 ﻿namespace backend.Battle;
 
-using System;
+using System.Net;
 using shared;
 
 public class Player {
@@ -17,8 +17,12 @@ public class Player {
     public long BattleState;
     public PlayerDownsync PlayerDownsync;
 
+    public IPEndPoint? BattleUdpTunnelAddr;
+    public int BattleUdpTunnelAuthKey;
+
     public Player(PlayerDownsync playerDownsync) {
         BattleState = Battle.PLAYER_BATTLE_STATE_IMPOSSIBLE;
         PlayerDownsync = playerDownsync;
     }
+
 }
