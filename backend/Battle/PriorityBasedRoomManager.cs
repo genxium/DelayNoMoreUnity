@@ -24,8 +24,7 @@ public class PriorityBasedRoomManager : IRoomManager {
     }
 
     public Room? GetRoom(int roomId) {
-        Room? r = null;
-        dict.TryGetValue(roomId, out r);
+        dict.TryGetValue(roomId, out Room? r);
         return r;
     }
 

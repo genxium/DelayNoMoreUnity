@@ -72,8 +72,14 @@ public class WebSocketController : ControllerBase {
 
                     RenderBufferSize = room.GetRenderCacheSize(),
                     BoundRoomCapacity = room.capacity,
-                    BattleUdpTunnel = room.battleUdpTunnelAddr,
-                    FrameDataLoggingEnabled = room.frameDataLoggingEnabled
+                    FrameDataLoggingEnabled = room.frameDataLoggingEnabled,                
+                };
+
+                if (null != room.battleUdpTunnelAddr) {
+                    bciFrame.BattleUdpTunnel = new PeerUdpAddr {
+                        Port = room.battleUdpTunnelAddr.Port,
+                        AuthKey = player.BattleUdpTunnelAuthKey
+                    };
                 };
 
                 var initWsResp = new WsResp {

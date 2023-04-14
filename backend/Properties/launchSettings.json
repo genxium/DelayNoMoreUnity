@@ -10,8 +10,8 @@
   },
   "profiles": {
     "http": {
-     "commandName": "Project",
-     "applicationUrl": "http://+:5051",
+      "commandName": "Project",
+      "applicationUrl": "http://+:5051",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

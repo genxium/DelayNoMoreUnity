@@ -147,7 +147,7 @@ public class NetworkDoctor {
             bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
             // An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
             bool recvFpsNormal = (srvDownsyncFps >= inputRateThreshold || peerUpsyncFps >= inputRateThreshold * (roomCapacity - 1));
-            if (sendingFpsNormal && recvFpsNormal) {
+            if (sendingFpsNormal || recvFpsNormal) {
                 int minInputFrameIdFront = Battle.MAX_INT;
                 for (int k = 0; k < roomCapacity; ++k) {
                     if (k + 1 == selfJoinIndex) continue; // Don't count self in

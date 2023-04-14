@@ -258,7 +258,7 @@ public class OnlineMapController : AbstractMapController {
         }
         if (null != wsTask) {
             wsTask.Wait();
-            wsTask.Dispose();
+            wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
         }
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
     }
