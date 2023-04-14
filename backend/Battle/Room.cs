@@ -163,7 +163,7 @@ public class Room {
                 battleUdpTunnelLock.WaitOne();
                 if (null == battleUdpTunnel) {
                     /*
-                    1. The method "dismiss" would set "battleUdpTunnel = null" for the already closed tunnel after every battle.
+                    1. At the end of "startBattleUdpTunnelAsyncAction" we would set "battleUdpTunnel = null" for the already closed tunnel after every battle.
                     2. We should initialize the UdpTunnel before sending ANY BattleColliderInfo. 
                     */
                     Task.Run(startBattleUdpTunnelAsyncAction);
@@ -452,11 +452,6 @@ public class Room {
             Array.Fill<ulong>(lastAllConfirmedInputList, 0);
             Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, 0);
             Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
-
-            battleUdpTunnelLock.WaitOne();
-            battleUdpTunnelAddr = null;
-            battleUdpTunnel = null;
-            battleUdpTunnelLock.ReleaseMutex();
 
             // Room state would be set in "OnPlayerDisconnected" by the last decrement of "1 == effectivePlayerCount".
         } finally {
@@ -1029,7 +1024,17 @@ public class Room {
             if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
                 battleUdpTunnelCancellationTokenSource.Cancel();
             }
-            battleUdpTunnel.Close();
+            battleUdpTunnelLock.WaitOne();
+            try {
+                _logger.LogInformation("Closing `battleUdpTunnel` for roomId={0}", id);
+                battleUdpTunnel.Close();
+                battleUdpTunnel = null;
+                battleUdpTunnelAddr = null;
+                _logger.LogInformation("Closed `battleUdpTunnel` for roomId={0}", id);
+            } finally {
+                battleUdpTunnelLock.ReleaseMutex();
+            }
+
         }
 
         _logger.LogInformation("`battleUdpTunnel` stopped for (roomId={0})@renderFrameId={1}", id, renderFrameId);
