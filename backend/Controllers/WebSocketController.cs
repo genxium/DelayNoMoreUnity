@@ -94,6 +94,7 @@ public class WebSocketController : ControllerBase {
                         new ArraySegment<byte>(buffer), cancellationToken);
 
                         if (receiveResult.CloseStatus.HasValue) {
+                            _logger.LogWarning("Player proactively requests close of session for [ roomId={0}, playerId={1} ]", room.id, playerId);
                             closeCode = receiveResult.CloseStatus.Value;
                             closeReason = receiveResult.CloseStatusDescription;
                             break;
@@ -131,7 +132,8 @@ public class WebSocketController : ControllerBase {
                     room.OnPlayerDisconnected(playerId);
                 }
             } finally {
-                if (!cancellationToken.IsCancellationRequested) {
+                // [WARNING] Checking session.State here is possibly not thread-safe, but it's not a big concern for now
+                if (!cancellationToken.IsCancellationRequested && WebSocketState.Aborted != session.State) {
                     await session.CloseAsync(
                     closeCode,
                     closeReason,

@@ -22,7 +22,6 @@ public class WsSessionManager {
     public Queue<WsResp> recvBuffer;
     private string authToken;
     private int playerId = Battle.TERMINATING_PLAYER_ID;
-    private int localClosing = 0;
     public int GetPlayerId() {
         return playerId;
     }
@@ -64,7 +63,6 @@ public class WsSessionManager {
                 await ws.ConnectAsync(new Uri(fullUrl), cancellationToken);
                 Debug.Log("Ws session is opened");
                 await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
-                Interlocked.CompareExchange(ref localClosing, 1, 0);
                 Debug.Log(String.Format("Both 'Receive' and 'Send' tasks are ended."));
             } catch (OperationCanceledException ocEx) {
                 Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
@@ -78,11 +76,14 @@ public class WsSessionManager {
         Debug.Log(String.Format("Starts 'Send' loop, ws.State={0}", ws.State));
         WsReq toSendObj;
         try {
-            while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested && 0 == Interlocked.CompareExchange(ref localClosing, 1, 1)) {
-                while (senderBuffer.TryDequeue(out toSendObj) && !cancellationToken.IsCancellationRequested) {
+            while (WebSocketState.Open == ws.State) {
+                while (senderBuffer.TryDequeue(out toSendObj)) {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    //Debug.Log("Ws session send: before");
                     await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
-                    // Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
+                    //Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
                 }
+                cancellationToken.ThrowIfCancellationRequested();
             }
         } catch (OperationCanceledException ocEx) {
             Debug.LogWarning(String.Format("WsSession is cancelled for 'Send'; ocEx.Message={0}", ocEx.Message));
@@ -97,15 +98,18 @@ public class WsSessionManager {
         Debug.Log(String.Format("Starts 'Receive' loop, ws.State={0}, cancellationToken.IsCancellationRequested={1}", ws.State, cancellationToken.IsCancellationRequested));
         byte[] byteBuff = new byte[receiveChunkSize];
         try {
-            while (WebSocketState.Open == ws.State && !cancellationTokenSource.IsCancellationRequested && !cancellationToken.IsCancellationRequested && 0 == Interlocked.CompareExchange(ref localClosing, 1, 1)) {
+            while (WebSocketState.Open == ws.State) {
+                //Debug.Log("Ws session recv: before");
                 var result = await ws.ReceiveAsync(new ArraySegment<byte>(byteBuff), cancellationToken);
+                //Debug.Log("Ws session recv: after");
                 if (WebSocketMessageType.Close == result.MessageType) {
                     Debug.Log(String.Format("WsSession is asked by remote to close in 'Receive'"));
-                    await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-                    Debug.LogWarning(String.Format("WsSession is closed in 'Receive'#1, ws.State={0}", ws.State));
-                    if (!cancellationTokenSource.IsCancellationRequested || !cancellationToken.IsCancellationRequested) {
+                    if (!cancellationToken.IsCancellationRequested) {
                         cancellationTokenSource.Cancel(); // To cancel the "Send" loop
                     }
+                    await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                    Debug.LogWarning(String.Format("WsSession is closed in 'Receive'#1, ws.State={0}", ws.State));
+                    return;
                 } else {
                     try {
                         WsResp resp = WsResp.Parser.ParseFrom(byteBuff, 0, result.Count);
@@ -113,11 +117,8 @@ public class WsSessionManager {
                     } catch (Exception pbEx) {
                         Debug.LogWarning(String.Format("Protobuf parser exception is caught for 'Receive'; ex.Message={0}", pbEx.Message));
                     }
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
-            }
-
-            if (1 == Interlocked.CompareExchange(ref localClosing, 1, 1)) {
-                Debug.LogWarning(String.Format("WsSession is closed in 'Receive'#2, ws.State={0}", ws.State));
             }
         } catch (OperationCanceledException ocEx) {
             Debug.LogWarning(String.Format("WsSession is cancelled for 'Receive'; ocEx.Message={0}", ocEx.Message));
@@ -126,9 +127,6 @@ public class WsSessionManager {
         } finally {
             Debug.LogWarning(String.Format("Ends 'Receive' loop, ws.State={0}", ws.State));
         }
-    }
-    public void tryLocalClose() {
-        Interlocked.CompareExchange(ref localClosing, 0, 1);
     }
 
 }

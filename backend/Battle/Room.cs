@@ -54,7 +54,7 @@ public class Room {
 
     Mutex inputBufferLock;         // Guards [inputBuffer, latestPlayerUpsyncedInputFrameId, lastAllConfirmedInputFrameId, lastAllConfirmedInputList, lastAllConfirmedInputFrameIdWithChange, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, player.LastConsecutiveRecvInputFrameId]
 
-    Mutex joinerLock;         // Guards [AddPlayerIfPossible, ReAddPlayerIfPossible, OnPlayerDisconnected, dismiss, effectivePlayerCount]
+    Mutex joinerLock;         // Guards [AddPlayerIfPossible, ReAddPlayerIfPossible, OnPlayerDisconnected, dismiss]
     int lastAllConfirmedInputFrameId;
     int lastAllConfirmedInputFrameIdWithChange;
     int latestPlayerUpsyncedInputFrameId;
@@ -162,7 +162,10 @@ public class Room {
                 state = ROOM_STATE_WAITING;
                 battleUdpTunnelLock.WaitOne();
                 if (null == battleUdpTunnel) {
-                    // We should initialize the UdpTunnel before sending ANY BattleColliderInfo. 
+                    /*
+                    1. The method "dismiss" would set "battleUdpTunnel = null" for the already closed tunnel after every battle.
+                    2. We should initialize the UdpTunnel before sending ANY BattleColliderInfo. 
+                    */
                     Task.Run(startBattleUdpTunnelAsyncAction);
                 }
                 battleUdpTunnelLock.ReleaseMutex();
@@ -215,6 +218,7 @@ public class Room {
 
             switch (state) {
                 case ROOM_STATE_WAITING:
+                case ROOM_STATE_IN_SETTLEMENT:
                     clearPlayerNetworkSession(playerId);
                     effectivePlayerCount--;
                     joinIndexBooleanArr[thatPlayer.PlayerDownsync.JoinIndex - 1] = false;
@@ -223,12 +227,12 @@ public class Room {
                     if (0 == effectivePlayerCount) {
                         Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
                     }
-                    _logger.LogWarning("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
+                    _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
                 default:
                     Interlocked.Exchange(ref thatPlayer.BattleState, PLAYER_BATTLE_STATE_DISCONNECTED);
                     clearPlayerNetworkSession(playerId);
-                    _logger.LogWarning("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
+                    _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
             }
         } finally {
@@ -245,10 +249,11 @@ public class Room {
                 }
                 playerActiveWatchdogDict.Remove(playerId);
             }
-            playerDownsyncSessionDict.Remove(playerId);
             if (playerSignalToCloseDict.ContainsKey(playerId)) {
                 playerSignalToCloseDict.Remove(playerId);
             }
+
+            playerDownsyncSessionDict.Remove(playerId);
             _logger.LogInformation("clearPlayerNetworkSession finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
         }
     }
@@ -381,13 +386,15 @@ public class Room {
         if (ROOM_STATE_IN_BATTLE != nowRoomState && ROOM_STATE_PREPARE != nowRoomState && ROOM_STATE_WAITING != nowRoomState) {
             return;
         }
+
+        Interlocked.Exchange(ref state, ROOM_STATE_IN_SETTLEMENT); // Must be set BEFORE "playerSignalToClose.Cancel -> OnPlayerDisconnected", such that we can fall into the correct switch-case branch. 
+
         battleUdpTunnelLock.WaitOne();
         if (null != battleUdpTunnel) {
+            _logger.LogInformation("Cancelling `battleUdpTunnel` for: roomId={0} during settlement", id);
             battleUdpTunnelCancellationTokenSource.Cancel();
         }
         battleUdpTunnelLock.ReleaseMutex();
-
-        Interlocked.Exchange(ref state, ROOM_STATE_STOPPING_BATTLE_FOR_SETTLEMENT);
 
         _logger.LogInformation("Stopping the `battleMainLoop` for: roomId={0}", id);
         var assembledFrame = new RoomDownsyncFrame {
@@ -397,7 +404,7 @@ public class Room {
         var tList = new List<Task>();
         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
         foreach (var (playerId, player) in players) {
-            var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected/OnPlayerLost" from other threads
+            var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected" from other threads
 
             // [WARNING] DON'T try to send any message to an inactive player!
             switch (thatPlayerBattleState) {
@@ -412,7 +419,17 @@ public class Room {
         }
         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
 
-        Interlocked.Exchange(ref state, ROOM_STATE_IN_SETTLEMENT);
+        foreach (var item in playerActiveWatchdogDict) {
+            if (null == item.Value) continue;
+            item.Value.Stop();
+        }
+
+        foreach (var (_, cancellationTokenSource) in playerSignalToCloseDict) {
+            if (!cancellationTokenSource.IsCancellationRequested) {
+                cancellationTokenSource.Cancel(); // Would trigger "OnPlayerDisconnected -> clearPlayerNetworkSession" to remove entries in "[playerActiveWatchdogDict, playerDownsyncSessionDict, playerSignalToCloseDict, players]"  
+            }
+        }
+
         _logger.LogInformation("The room is in settlement: roomId={0}", id);
     }
 
@@ -424,23 +441,7 @@ public class Room {
                 return;
             }
 
-            Interlocked.Exchange(ref state, ROOM_STATE_IN_DISMISSAL);
-            foreach (var (_, cancellationTokenSource) in playerSignalToCloseDict) {
-                if (!cancellationTokenSource.IsCancellationRequested) {
-                    cancellationTokenSource.Cancel();
-                }
-            }
-
-            players = new Dictionary<int, Player>();
             playersArr = new Player[capacity];
-            foreach (var item in playerActiveWatchdogDict) {
-                if (null == item.Value) continue;
-                item.Value.Stop();
-            }
-            playerActiveWatchdogDict = new Dictionary<int, PlayerSessionAckWatchdog>(); // Would allow the destructor of each "Watchdog" value to dispose its timer  
-            playerDownsyncSessionDict = new Dictionary<int, WebSocket>();
-            playerSignalToCloseDict = new Dictionary<int, CancellationTokenSource>();
-            effectivePlayerCount = 0;
 
             backendDynamicsEnabled = false;
 
@@ -449,18 +450,15 @@ public class Room {
             lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED; // Such that the initial "lastAllConfirmedInputFrameId + 1" is 0, for use in "markConfirmationIfApplicable" 
             latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
             Array.Fill<ulong>(lastAllConfirmedInputList, 0);
-            Array.Fill<bool>(joinIndexBooleanArr, false);
             Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, 0);
             Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
 
-            if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
-                battleUdpTunnelCancellationTokenSource.Cancel();
-            }
             battleUdpTunnelLock.WaitOne();
             battleUdpTunnelAddr = null;
             battleUdpTunnel = null;
             battleUdpTunnelLock.ReleaseMutex();
-            Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
+
+            // Room state would be set in "OnPlayerDisconnected" by the last decrement of "1 == effectivePlayerCount".
         } finally {
             joinerLock.ReleaseMutex();
         }
@@ -971,7 +969,7 @@ public class Room {
 
             while (!battleUdpTunnelCancellationToken.IsCancellationRequested) {
                 long nowRoomState = Interlocked.Read(ref state);
-                if (ROOM_STATE_IN_BATTLE != nowRoomState && ROOM_STATE_PREPARE != nowRoomState) {
+                if (ROOM_STATE_IN_BATTLE != nowRoomState && ROOM_STATE_PREPARE != nowRoomState && ROOM_STATE_WAITING != nowRoomState) {
                     break;
                 }
                 var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);

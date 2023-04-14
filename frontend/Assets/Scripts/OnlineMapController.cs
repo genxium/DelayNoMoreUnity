@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using Google.Protobuf.Collections;
 
 public class OnlineMapController : AbstractMapController {
+    Task wsTask;
     CancellationTokenSource wsCancellationTokenSource;
     CancellationToken wsCancellationToken;
     int inputFrameUpsyncDelayTolerance;
@@ -144,18 +145,20 @@ public class OnlineMapController : AbstractMapController {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
         selfPlayerInfo = new PlayerDownsync();
-        wsCancellationTokenSource = new CancellationTokenSource();
-        wsCancellationToken = wsCancellationTokenSource.Token;
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = 60;
 
         enableBattleInput(false);
 
+        // [WARNING] We should init "wsCancellationTokenSource", "wsCancellationToken" and "wsTask" only once during the whole lifecycle of this "OnlineMapController", even if the init signal is later given by a "button onClick" instead of "Start()".
+        wsCancellationTokenSource = new CancellationTokenSource();
+        wsCancellationToken = wsCancellationTokenSource.Token;
+
         // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         Debug.LogWarning(String.Format("About to start ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
-        Task.Run(wsSessionActionAsync);
+        wsTask = Task.Run(wsSessionActionAsync);
 
-        // _ = wsSessionTaskAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
+        // wsTask = wsSessionTaskAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
         // wsSessionActionAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
     }
 
@@ -234,7 +237,6 @@ public class OnlineMapController : AbstractMapController {
             }
         }
 
-        // console.info(`inputFrameUpsyncBatch: ${JSON.stringify(inputFrameUpsyncBatch)}`);
         var reqData = new WsReq {
             PlayerId = selfPlayerInfo.Id,
             Act = Battle.UPSYNC_MSG_ACT_PLAYER_CMD,
@@ -247,18 +249,18 @@ public class OnlineMapController : AbstractMapController {
         lastUpsyncInputFrameId = latestLocalInputFrameId;
     }
 
-    protected override void resetCurrentMatch() {
-        base.resetCurrentMatch();
-        if (null != wsCancellationTokenSource) {
-            wsCancellationTokenSource.Dispose();
-            wsCancellationTokenSource = new CancellationTokenSource();
-            wsCancellationToken = wsCancellationTokenSource.Token;
-        }
-    }
-
     protected void OnDestroy() {
-        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy"));
-        WsSessionManager.Instance.tryLocalClose();
+        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
+        if (null != wsCancellationTokenSource) {
+            Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1.5, cancelling ws session"));
+            wsCancellationTokenSource.Cancel();
+            wsCancellationTokenSource.Dispose();
+        }
+        if (null != wsTask) {
+            wsTask.Wait();
+            wsTask.Dispose();
+        }
+        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
     }
 
     void OnApplicationQuit() {
