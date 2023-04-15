@@ -938,9 +938,9 @@ public class Room {
         try {
             battleUdpTunnel = new UdpClient(port: 0);
             if (null != battleUdpTunnel && null != battleUdpTunnel.Client.LocalEndPoint) {
-                var assignedPort = ((IPEndPoint)battleUdpTunnel.Client.LocalEndPoint).Port;
+                var tunnelIpEndpoint = (IPEndPoint)battleUdpTunnel.Client.LocalEndPoint;
                 battleUdpTunnelAddr = new PeerUdpAddr {
-                    Port = assignedPort
+                    Port = tunnelIpEndpoint.Port
                 };
             } else {
                 battleUdpTunnelAddr = null;
@@ -960,14 +960,13 @@ public class Room {
         UdpClient nonNullBattleUdpTunnel = battleUdpTunnel;
 
         CancellationToken battleUdpTunnelCancellationToken = battleUdpTunnelCancellationTokenSource.Token;
-        IPEndPoint peerAddr = new IPEndPoint(IPAddress.Any, 0);
         try {
             if (null == battleUdpTunnelAddr) {
                 // The "finally" block would help close "battleUdpTunnel".
                 _logger.LogWarning("`battleUdpTunnel` failed to start#2 for roomId={0}", id);
                 return;
             }
-            _logger.LogInformation("`battleUdpTunnel` started for roomId={0} @ battleUdpTunnelAddr={1}", id, battleUdpTunnelAddr);
+            _logger.LogInformation("`battleUdpTunnel` started for roomId={0} @ battleUdpTunnel.Client.LocalEndPoint={1}", id, battleUdpTunnel.Client.LocalEndPoint);
 
             Pbc.RepeatedField<PeerUdpAddr> peerUdpAddrList = new Pbc.RepeatedField<PeerUdpAddr> {
                 battleUdpTunnelAddr // i.e. "MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == 0"
@@ -989,6 +988,7 @@ public class Room {
                 }
                 var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);
                 WsReq pReq = WsReq.Parser.ParseFrom(recvResult.Buffer);
+                _logger.LogInformation("`battleUdpTunnel` received for roomId={0}: pReq={1}", id, pReq);
                 int playerId = pReq.PlayerId;
                 Player? player;
                 if (players.TryGetValue(playerId, out player)) {
@@ -1017,6 +1017,11 @@ public class Room {
                     }
                 }
 
+                if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH == pReq.Act) {
+                    // [WARNING] Don't forward "holepunching to server" to other players, otherwise it'd cause other players to record a wrong peer address!
+                    continue;
+                }
+
                 var batch = pReq.InputFrameUpsyncBatch;
                 if (null != batch && 0 < batch.Count) {
                     var peerJoinIndex = pReq.JoinIndex;
@@ -1028,7 +1033,7 @@ public class Room {
                         if (null == otherPlayer.BattleUdpTunnelAddr) {
                             continue;
                         }
-                        _ = nonNullBattleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), player.BattleUdpTunnelAddr); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+                        _ = nonNullBattleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), otherPlayer.BattleUdpTunnelAddr); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
                     }
                 }
             }
@@ -1050,11 +1055,10 @@ public class Room {
                 battleUdpTunnelAddr = null;
                 _logger.LogInformation("Closed `battleUdpTunnel` for roomId={0}", id);
             } catch (Exception ex) {
-                _logger.LogError(ex, "closing of `battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
+                _logger.LogError(ex, "Closing of `battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
             } finally {
                 battleUdpTunnelLock.ReleaseMutex();
             }
-
         }
 
         _logger.LogInformation("`battleUdpTunnel` stopped for (roomId={0})@renderFrameId={1}", id, renderFrameId);

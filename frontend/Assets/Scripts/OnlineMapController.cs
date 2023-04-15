@@ -126,7 +126,13 @@ public class OnlineMapController : AbstractMapController {
                     String udpTunnelIp = Env.Instance.getHostnameOnly();
                     int udpTunnelPort = wsRespHolder.BciFrame.BattleUdpTunnel.Port;
                     udpTask = Task.Run(async () => {
-                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, udpTunnelIp, udpTunnelPort, wsCancellationToken);
+                        var holePunch = new WsReq {
+                            PlayerId = selfPlayerInfo.Id,
+                            Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH,
+                            JoinIndex = selfPlayerInfo.JoinIndex,
+                            AuthKey= clientAuthKey
+                        };
+                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, udpTunnelIp, udpTunnelPort, holePunch, wsCancellationToken);
                     });
 
                     break;

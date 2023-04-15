@@ -29,7 +29,7 @@ public class UdpSessionManager {
         recvBuffer = new Queue<WsReq> ();   
     }
 
-    public async Task openUdpSession(int roomCapacity, string udpTunnelIpStr, int udpTunnelPort, CancellationToken wsSessionCancellationToken) {
+    public async Task openUdpSession(int roomCapacity, string udpTunnelIpStr, int udpTunnelPort, WsReq holePunch, CancellationToken wsSessionCancellationToken) {
         Debug.Log(String.Format("openUdpSession#1: roomCapacity={0}, udpTunnelIpStr={1}, udpTunnelPort={2}, thread id={3}.", roomCapacity, udpTunnelIpStr, udpTunnelPort, Thread.CurrentThread.ManagedThreadId));
         peerUdpAddrList = new IPEndPoint[roomCapacity+1]; 
         IPAddress udpTunnelIp;
@@ -41,6 +41,8 @@ public class UdpSessionManager {
 
         senderBuffer.Clear();
         recvBuffer.Clear();
+
+        senderBuffer.Enqueue(holePunch);
 
         try {
             udpSession = new UdpClient(port: 0);
@@ -65,10 +67,12 @@ public class UdpSessionManager {
                     int successPeerCnt = 0;
                     for (int i = 1; i <= roomCapacity; i++) {
                         if (null == peerUdpAddrList[i]) continue;
+                        Debug.Log(String.Format("udpSession sending {0} to {1}", toSendObj, peerUdpAddrList[i]));
                         await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpAddrList[i]);
                         successPeerCnt++;
                     }
                     if (successPeerCnt + 1 < roomCapacity) {
+                        Debug.Log(String.Format("udpSession sending {0} to {1}", toSendObj, peerUdpAddrList[shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]));
                         await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpAddrList[shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
                     }
                 }

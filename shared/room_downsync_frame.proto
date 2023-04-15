@@ -186,12 +186,6 @@ message Bullet {
 	int32 velY = 1004;
 }
 
-message HolePunchUpsync {
-	string intAuthToken = 1;
-	int32 boundRoomId = 2;
-	int32 authKey = 3;
-}
-
 message PeerUdpAddr {
 	string ip = 1;
 	int32 port = 2;
