@@ -1,4 +1,3 @@
-
 # Just mimicing Goroutine
 The async/await pattern employed by C# is very different from Golang's goroutine, yet we still hold the same assumption: different sessions of different players might use different OS threads! 
 
@@ -15,22 +14,36 @@ The following 2 scenarios of using "async task" are equivalent in terms of threa
 ```csharp
 // [c]
 async void doHeavyWork(...) {
-	...
+    ... // still running on the same thread as "main"
+
+    await firstHeavyBlockingIOReceiveAsync(); // yields CPU immediately and thus allows "doLightWork" to run immediately on the same thread as "main"; however when "firstHeavyBlockingIOReceiveAsync" actually runs on CPU again (it doesn't have to, e.g. when all the blocking I/O operations are done via DirectMemoryAccess), it also runs on the same thread as "main", i.e. no immediate thread switching even within "firstHeavyBlockingIOReceiveAsync"!  
+
+    ... // might run on a different thread from "main", depending on the details of "firstHeavyBlockingIOReceiveAsync"
+}
+
+void doLightWork(...) {
+    ... // still running on the same thread as "main"
 }
 
 void main() {
-	doHeavyWork(...);
+    doHeavyWork(...);
+    doLightWork(...);
 }
 ```
 
 ```csharp
 // [d]
 async Task doHeavyWork(...) {
-	...
+    /* all the same as [c] */
+}
+
+void doLightWork(...) {
+    /* all the same as [c] */
 }
 
 void main() {
-	_ = doHeavyWork(...);
+    _ = doHeavyWork(...);
+    doLightWork(...);
 }
 ```
 
@@ -38,15 +51,90 @@ According to [C# threadpool documentation](https://learn.microsoft.com/en-us/dot
 
 Therefore if the current thread is responsible for graphics, e.g. MainThread in Unity3D, either [c] or [d] would put the heavy work on it and potentially make graphics laggy -- in practice not a Goroutine equivalent. 
 
+# What switches to another thread immediately
+If the current thread is NOT responsible for graphics, using async/await could improve throughput a lot, some useful patterns are listed below assuming that "void main" is running in a graphics thread. 
+
+```csharp
+// [c.1]
+async void doHeavyWork(...) {
+    /* all the same as [c] */
+}
+
+void main() {
+    Task.Run(() => {
+        doHeavyWork(...);
+    });
+}
+```
+
+```csharp
+// [c.2]
+async void doHeavyWork(...) {
+    /* all the same as [c] */
+}
+
+void main() {
+    new Thread(() => {
+        doHeavyWork(...);
+    }).Start();
+}
+```
+
+```csharp
+// [d.1]
+async Task doHeavyWork(...) {
+    /* all the same as [c] */
+}
+
+void main() {
+    Task.Run(async () => {
+        await doHeavyWork(...);
+    });
+}
+```
+
+```csharp
+// [d.2]
+async Task doHeavyWork(...) {
+    /* all the same as [c] */
+}
+
+void main() {
+    Task.Run(() => {
+        _ = doHeavyWork(...);
+    });
+}
+```
+
+```csharp
+// [d.3]
+async Task doHeavyWork(...) {
+    /* all the same as [c] */
+}
+
+void main() {
+    new Thread(() => {
+        _ = doHeavyWork(...);
+    }).Start();
+}
+```
+
+In all cases above, there's `lambda creation overhead` which is inevitable -- and we have thread switching overheads anyway, see [this note](https://app.yinxiang.com/fx/6f48c146-7db8-4a64-bdf0-3c874cd9290d) for more information.
+
 # Invalid syntax notes
 Moreover, the following scenario of using "async task" is invalid, i.e. throws `InvalidOperationException: Start may not be called on a promise-style task.` in runtime.
 ```csharp
 // [e]
 async Task doHeavyWork(...) {
-	...
+    /* all the same as [c] */
+}
+
+void doLightWork(...) {
+    /* all the same as [c] */
 }
 
 void main() {
-	doHeavyWork(...).Start(); // throws `InvalidOperationException` in runtime
+    doHeavyWork(...).Start(); // throws `InvalidOperationException` in runtime
+	doLightWork(...);
 }
 ```

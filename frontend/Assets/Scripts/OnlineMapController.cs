@@ -5,16 +5,18 @@ using static shared.Battle;
 using static shared.CharacterState;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Net.Sockets;
 using UnityEngine.SceneManagement;
 using Google.Protobuf.Collections;
 
 public class OnlineMapController : AbstractMapController {
-    Task wsTask;
+    Task wsTask, udpTask;
     CancellationTokenSource wsCancellationTokenSource;
     CancellationToken wsCancellationToken;
     int inputFrameUpsyncDelayTolerance;
     WsResp wsRespHolder;
     public NetworkDoctorInfo networkInfoPanel;
+    int clientAuthKey;
     private RoomDownsyncFrame mockStartRdf() {
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
@@ -95,6 +97,7 @@ public class OnlineMapController : AbstractMapController {
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
+            //Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {
                 case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
                     Debug.Log("Handling WsSession closed in main thread.");
@@ -102,16 +105,16 @@ public class OnlineMapController : AbstractMapController {
                     SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
-                    Debug.Log("Handling UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK in main thread.");
+                    Debug.Log(String.Format("Handling UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK in main thread: {0}", wsRespHolder));
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
-					Debug.Log(String.Format("inputFrameUpsyncDelayTolerance is {0}.", inputFrameUpsyncDelayTolerance));
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
                     if (wsRespHolder.BciFrame.BoundRoomCapacity != roomCapacity) {
                         roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
                         preallocateHolders();
                     }
-                    selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     resetCurrentMatch();
+                    clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
+                    selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
@@ -119,6 +122,13 @@ public class OnlineMapController : AbstractMapController {
                     };
                     WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
+
+                    String udpTunnelIp = Env.Instance.getHostnameOnly();
+                    int udpTunnelPort = wsRespHolder.BciFrame.BattleUdpTunnel.Port;
+                    udpTask = Task.Run(async () => {
+                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, udpTunnelIp, udpTunnelPort, wsCancellationToken);
+                    });
+
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED:
                     // TODO
@@ -136,9 +146,19 @@ public class OnlineMapController : AbstractMapController {
                     // Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");
                     onInputFrameDownsyncBatch(wsRespHolder.InputFrameDownsyncBatch);
                     break;
+                case shared.Battle.DOWNSYNC_MSG_ACT_PEER_UDP_ADDR:
+                    Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread: {0}", wsRespHolder));
+                    break;
                 default:
                     break;
             }
+        }
+    }
+
+    void pollAndHandleUdpRecvBuffer() {
+        WsReq wsReqHolder;
+        while (UdpSessionManager.Instance.recvBuffer.TryDequeue(out wsReqHolder)) {
+            Debug.Log(String.Format("Handling udpSession wsReq in main thread: {0}", wsReqHolder));
         }
     }
 
@@ -157,17 +177,32 @@ public class OnlineMapController : AbstractMapController {
 
         // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         Debug.LogWarning(String.Format("About to start ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
+
         wsTask = Task.Run(async () => {
             Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
             await wsSessionTaskAsync();
 
             Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
-        });
-        // wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "OnDestroy".
 
-        // wsSessionActionAsync(); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
-        // _ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
+            if (null != udpTask) {
+                if (null != wsCancellationTokenSource && !wsCancellationTokenSource.IsCancellationRequested) {
+                    Debug.LogWarning(String.Format("Calling wsCancellationTokenSource.Cancel() for udpSession.", Thread.CurrentThread.ManagedThreadId));
+                    wsCancellationTokenSource.Cancel();
+                }
+
+                Debug.LogWarning(String.Format("Calling UdpSessionManager.Instance.closeUdpSession()."));
+                UdpSessionManager.Instance.closeUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
+
+            }
+        });
+
+        //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "OnDestroy".
+
+        //wsSessionActionAsync(); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
+        //_ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
+
+        Debug.LogWarning(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
     }
 
     private async Task wsSessionTaskAsync() {
@@ -188,6 +223,7 @@ public class OnlineMapController : AbstractMapController {
     void Update() {
         try {
             pollAndHandleWsRecvBuffer();
+            pollAndHandleUdpRecvBuffer();
             doUpdate();
             var (tooFastOrNot, _, sendingFps, srvDownsyncFps, _, rollbackFrames, lockedStepsCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
             shouldLockStep = tooFastOrNot;
@@ -237,6 +273,7 @@ public class OnlineMapController : AbstractMapController {
             Act = Battle.UPSYNC_MSG_ACT_PLAYER_CMD,
             JoinIndex = selfPlayerInfo.JoinIndex,
             AckingInputFrameId = lastAllConfirmedInputFrameId,
+            AuthKey = clientAuthKey
         };
         reqData.InputFrameUpsyncBatch.AddRange(inputFrameUpsyncBatch);
 
@@ -244,17 +281,30 @@ public class OnlineMapController : AbstractMapController {
         lastUpsyncInputFrameId = latestLocalInputFrameId;
     }
 
+    protected override void resetCurrentMatch() {
+        base.resetCurrentMatch();
+    }
+
     protected void OnDestroy() {
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
         if (null != wsCancellationTokenSource) {
-            Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1.5, cancelling ws session"));
-            wsCancellationTokenSource.Cancel();
+            if (!wsCancellationTokenSource.IsCancellationRequested) {
+                Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1.5, cancelling ws session"));
+                wsCancellationTokenSource.Cancel();
+            }
             wsCancellationTokenSource.Dispose();
         }
+
         if (null != wsTask) {
             wsTask.Wait();
             wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
         }
+
+        if (null != udpTask) {
+            udpTask.Wait();
+            udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+        }
+
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
     }
 

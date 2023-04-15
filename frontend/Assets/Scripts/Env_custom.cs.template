@@ -1,7 +1,3 @@
-using UnityEngine;
-
 public partial class Env {
-    private const string httpHost = "http://127.0.0.1:5051";
-
-    private const string wsEndpoint = "ws://127.0.0.1:5051/Ws";
+    private const string hostnameOnly = "127.0.0.1";
 }

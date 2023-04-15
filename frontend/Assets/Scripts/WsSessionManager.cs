@@ -73,7 +73,7 @@ public class WsSessionManager {
                     Ret = ErrCode.Ok,
                     Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
                 };
-                WsSessionManager.Instance.recvBuffer.Enqueue(closeMsg);
+                recvBuffer.Enqueue(closeMsg);
                 Debug.LogWarning(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
             }
         }

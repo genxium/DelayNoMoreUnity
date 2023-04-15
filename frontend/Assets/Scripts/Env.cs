@@ -11,19 +11,19 @@ public partial class Env {
         }
     }
 
-    public string getHttpHost() {
+    public string getHostnameOnly() {
 #if USE_CUSTOM_ENV
-        return httpHost;
+        return hostnameOnly;
 #else
-        return "http://localhost:5051";
+        return "127.0.0.1"; // Don't use "localhost", it's not parsable as the UdpTunnelIp for C# class "IPAddress"!
 #endif
     }
 
+    public string getHttpHost() {
+        return "http://" + getHostnameOnly() + ":5051";
+    }
+
     public string getWsEndpoint() {
-#if USE_CUSTOM_ENV
-        return wsEndpoint;
-#else
-        return "ws://localhost:5051/Ws";
-#endif
+        return "ws://" + getHostnameOnly() + ":5051/Ws";
     }
 }

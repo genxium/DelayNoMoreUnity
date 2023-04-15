@@ -1,13 +1,10 @@
 ﻿using shared;
 using static shared.Battle;
-using System;
 using System.Net;
 using System.Net.WebSockets;
 using System.Net.Sockets;
 using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
-using Google.Protobuf.WellKnownTypes;
-using System.IO.Pipelines;
 
 namespace backend.Battle;
 public class Room {
@@ -92,8 +89,7 @@ public class Room {
         stageName = "Dungeon";
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
 
-        nstDelayFrames = 24;
-
+        nstDelayFrames = 12;
         inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         state = ROOM_STATE_IDLE;
         effectivePlayerCount = 0;
@@ -125,6 +121,8 @@ public class Room {
         inputBufferLock = new Mutex();
         battleUdpTunnelLock = new Mutex();
         battleUdpTunnelCancellationTokenSource = new CancellationTokenSource();
+
+        lazyInitBattleUdpTunnel();
     }
 
     public int GetRenderCacheSize() {
@@ -167,19 +165,7 @@ public class Room {
             effectivePlayerCount++;
 
             if (1 == effectivePlayerCount) {
-                state = ROOM_STATE_WAITING;
-                battleUdpTunnelLock.WaitOne();
-                if (null == battleUdpTask) {
-                    /*
-                    1. At the end of "startBattleUdpTunnelAsyncAction" we would set "battleUdpTunnel = null" for the already closed tunnel after every battle.
-                    2. We should initialize the "battleUdpTunnel" before sending ANY "BattleColliderInfo".
-                    3. The following weird init of "battleUdpTask" makes it "synchronously awaitable" in "dismiss".
-                    */
-                    battleUdpTask = Task.Run(async () => {
-                        await startBattleUdpTunnelAsyncTask();
-                    });
-                }
-                battleUdpTunnelLock.ReleaseMutex();
+                Interlocked.Exchange(ref state, ROOM_STATE_WAITING);
             }
 
             for (int i = 0; i < capacity; i++) {
@@ -392,7 +378,7 @@ public class Room {
             return;
         }
 
-        Interlocked.Exchange(ref state, ROOM_STATE_IN_SETTLEMENT); 
+        Interlocked.Exchange(ref state, ROOM_STATE_IN_SETTLEMENT);
 
         battleUdpTunnelLock.WaitOne();
         if (null != battleUdpTunnel) {
@@ -435,16 +421,16 @@ public class Room {
                 return;
             }
 
-			/**
+            /**
 			[WARNING] "OnPlayerDisconnected" could be called after "SettleBattleAsync" and during "dismiss", but it's guaranteed that 
 			- when "dismiss" is called, "Room.players" is always full, i.e. any "OnPlayerDisconnected" called in active battle wouldn't remove any entry in "Room.players"
 			- if "OnPlayerDisconnected" is called during settlement or dismissal, it wouldn't remove any entry in "Room.players"	
 			- if "OnPlayerDisconnected" is called during settlement or dismissal, the call to "clearPlayerNetworkSession" is always safe due to use of "joinerLock"	
 			*/
-			foreach (var (playerId, _) in players) {
-				clearPlayerNetworkSession(playerId);
-			}
-			players.Clear();
+            foreach (var (playerId, _) in players) {
+                clearPlayerNetworkSession(playerId);
+            }
+            players.Clear();
             playersArr = new Player[capacity];
 
             backendDynamicsEnabled = false;
@@ -471,6 +457,8 @@ public class Room {
             battleUdpTask = null;
             _logger.LogInformation("Dismissing after battleUdpTask completion: roomId={0}", id);
         }
+
+        lazyInitBattleUdpTunnel();
     }
 
     private async void battleMainLoopActionAsync() {
@@ -506,7 +494,7 @@ public class Room {
                 if (nextRenderFrameId > renderFrameId) {
                     if (0 == renderFrameId) {
                         var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, 128);
-                        startRdf.Id = shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
+                        startRdf.Id = 0;
 
                         var tList = new List<Task>();
                         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
@@ -530,12 +518,12 @@ public class Room {
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is settled@renderFrameId={1}", id, renderFrameId);
             await dismiss();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is dismissed@renderFrameId={1}", id, renderFrameId);
-			Interlocked.Exchange(ref state, ROOM_STATE_IDLE); 
+            Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
             // TODO: Pop the current room from RoomManager, recalc score, then push it back; this might need the functionality of https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/PriorityQueue.js
         }
     }
 
-    public async Task OnBattleCmdReceived(WsReq pReq, int playerId, bool fromUDP) {
+    public void OnBattleCmdReceived(WsReq pReq, int playerId, bool fromUDP) {
         /*
 		   [WARNING] This function "OnBattleCmdReceived" could be called by different ws sessions and thus from different threads!
 
@@ -579,7 +567,7 @@ public class Room {
         try {
             var inputBufferSnapshot = markConfirmationIfApplicable(inputFrameUpsyncBatch, playerId, player, fromUDP);
             if (null != inputBufferSnapshot) {
-                await downsyncToAllPlayersAsync(inputBufferSnapshot);
+                downsyncToAllPlayers(inputBufferSnapshot);
             }
         } finally {
             inputBufferLock.ReleaseMutex();
@@ -808,7 +796,7 @@ public class Room {
         return cloned;
     }
 
-    private async Task downsyncToAllPlayersAsync(InputBufferSnapshot inputBufferSnapshot) {
+    private void downsyncToAllPlayers(InputBufferSnapshot inputBufferSnapshot) {
         /*
         [WARNING] This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
         */
@@ -834,7 +822,6 @@ public class Room {
             }
         }
 
-        var tList = new List<Task>();
         foreach (var player in playersArr) {
             /*
                [WARNING] While the order of generation of "inputBufferSnapshot" is preserved for sending, the underlying network I/O blocking action is dispatched to "downsyncLoop of each player" such that "markConfirmationIfApplicable & forceConfirmationIfApplicable" can re-hold "pR.inputBufferLock" asap and proceed with more inputFrameUpsyncs.
@@ -853,21 +840,22 @@ public class Room {
                     continue;
             }
 
-            tList.Add(downsyncToSinglePlayerAsync(player.PlayerDownsync.Id, player, inputBufferSnapshot));
+            // Method "downsyncToAllPlayers" is called very frequently during active battle, thus deliberately NOT using the "Task.WhenAll(tList)" approach to save garbage collection workload.
+            _ = downsyncToSinglePlayerAsync(player.PlayerDownsync.Id, player, inputBufferSnapshot); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         }
-        await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
     }
 
     private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, Pbc.RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, int act, int playerId, Player player, int peerJoinIndex) {
-		var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected/OnPlayerLost" from other threads
-																			  // [WARNING] DON'T try to send any message to an inactive player!
-		switch (thatPlayerBattleState) {
-			case PLAYER_BATTLE_STATE_DISCONNECTED:
-			case PLAYER_BATTLE_STATE_LOST:
-			case PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME:
-			case PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL:
-				return;
-		}
+        var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected/OnPlayerLost" from other threads
+
+        // [WARNING] DON'T try to send any message to an inactive player!
+        switch (thatPlayerBattleState) {
+            case PLAYER_BATTLE_STATE_DISCONNECTED:
+            case PLAYER_BATTLE_STATE_LOST:
+            case PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME:
+            case PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL:
+                return;
+        }
 
         WebSocket? wsSession;
         CancellationTokenSource? cancellationTokenSource;
@@ -910,7 +898,7 @@ public class Room {
             case PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL:
             case PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK:
             case PLAYER_BATTLE_STATE_READDED_PENDING_BATTLE_COLLIDER_ACK:
-				// There're two additional conditions for early return here compared to "sendSafelyAsync", because "downsyncToSinglePlayer" is dedicated for active players in active battle!
+                // There're two additional conditions for early return here compared to "sendSafelyAsync", because "downsyncToSinglePlayer" is dedicated for active players in active battle!
                 return;
         }
 
@@ -981,9 +969,22 @@ public class Room {
             }
             _logger.LogInformation("`battleUdpTunnel` started for roomId={0} @ battleUdpTunnelAddr={1}", id, battleUdpTunnelAddr);
 
+            Pbc.RepeatedField<PeerUdpAddr> peerUdpAddrList = new Pbc.RepeatedField<PeerUdpAddr> {
+                battleUdpTunnelAddr // i.e. "MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == 0"
+            };
+            for (int i = 0; i < capacity; i++) {
+                // Prefill with invalid addrs
+                peerUdpAddrList.Add(new PeerUdpAddr { });
+            }
+            var peerUdpAddrBroadcastRdf = new RoomDownsyncFrame { };
+            peerUdpAddrBroadcastRdf.PeerUdpAddrList.AddRange(peerUdpAddrList);
+            foreach (var (playerId, player) in players) {
+                await sendSafelyAsync(peerUdpAddrBroadcastRdf, null, DOWNSYNC_MSG_ACT_PEER_UDP_ADDR, playerId, player, MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL); // No need to avoid the "await" like "downsyncToAllPlayers", this initial action of "DOWNSYNC_MSG_ACT_PEER_UDP_ADDR" is once per battle  
+            }
+
             while (!battleUdpTunnelCancellationToken.IsCancellationRequested) {
                 long nowRoomState = Interlocked.Read(ref state);
-                if (ROOM_STATE_IN_BATTLE != nowRoomState && ROOM_STATE_PREPARE != nowRoomState && ROOM_STATE_WAITING != nowRoomState) {
+                if (ROOM_STATE_IN_BATTLE != nowRoomState && ROOM_STATE_PREPARE != nowRoomState && ROOM_STATE_WAITING != nowRoomState && ROOM_STATE_IDLE != nowRoomState) {
                     break;
                 }
                 var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);
@@ -1002,16 +1003,18 @@ public class Room {
                     continue;
                 }
 
-                WebSocket? wsSession;
-                if (!playerDownsyncSessionDict.TryGetValue(playerId, out wsSession)) {
-                    _logger.LogWarning("In `battleUdpTunnel`, ws session for (roomId: {0}, playerId: {1}) doesn't exist! #1", id, playerId);
-                    continue;
-                }
-
                 if (null == player.BattleUdpTunnelAddr) {
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
-                    _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated battleUdpAddr for playerId={1} to be {2}", id, playerId, player.BattleUdpTunnelAddr);
-                    // TODO: Broadcast this new peerAddr to all the other players for holepunching!
+                    peerUdpAddrList[player.PlayerDownsync.JoinIndex] = new PeerUdpAddr {
+                        Ip = recvResult.RemoteEndPoint.Address.ToString(),
+                        Port = recvResult.RemoteEndPoint.Port
+                    };
+                    _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated battleUdpAddr for playerId={1} to be {2}", id, playerId, peerUdpAddrList[player.PlayerDownsync.JoinIndex]);
+                    // Broadcast this new peerAddr to all the other players for holepunching! Just like the initial one, "DOWNSYNC_MSG_ACT_PEER_INPUT_BATCH" for each player is also once per battle, thus not of big threading efficiency concern either.
+                    foreach (var (thatPlayerId, thatPlayer) in players) {
+                        if (playerId == thatPlayerId) continue;
+                        _ = sendSafelyAsync(peerUdpAddrBroadcastRdf, null, DOWNSYNC_MSG_ACT_PEER_UDP_ADDR, thatPlayerId, thatPlayer, player.PlayerDownsync.JoinIndex); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.   
+                    }
                 }
 
                 var batch = pReq.InputFrameUpsyncBatch;
@@ -1025,31 +1028,30 @@ public class Room {
                         if (null == otherPlayer.BattleUdpTunnelAddr) {
                             continue;
                         }
-                        // TODO: Maybe call "Send/SendAsync" by switching immediately to another thread, thus avoid blocking the next "udp recv"? However, sending of udp packets is relatively fast and independent of remote ack, thus not a big concern for now.
-                        await nonNullBattleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), player.BattleUdpTunnelAddr);
+                        _ = nonNullBattleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), player.BattleUdpTunnelAddr); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
                     }
                 }
             }
         } catch (OperationCanceledException ocEx) {
             _logger.LogWarning("`battleUdpTunnel` is interrupted by OperationCanceledException for roomId={0}, ocEx.Message={1}", id, ocEx.Message);
-		} catch (ObjectDisposedException ex) {
+        } catch (ObjectDisposedException ex) {
             _logger.LogWarning("`battleUdpTunnel` is interrupted by ObjectDisposedException for roomId={0}, ex.Message={1}", id, ex.Message);
         } catch (Exception ex) {
             _logger.LogError(ex, "`battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
-        } finally {	
+        } finally {
             battleUdpTunnelLock.WaitOne();
             try {
                 _logger.LogInformation("Closing `battleUdpTunnel` for roomId={0}", id);
-				if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
-					battleUdpTunnelCancellationTokenSource.Cancel();
-				}
+                if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
+                    battleUdpTunnelCancellationTokenSource.Cancel();
+                }
                 battleUdpTunnel.Close();
                 battleUdpTunnel = null;
                 battleUdpTunnelAddr = null;
                 _logger.LogInformation("Closed `battleUdpTunnel` for roomId={0}", id);
             } catch (Exception ex) {
-            	_logger.LogError(ex, "closing of `battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
-			} finally {
+                _logger.LogError(ex, "closing of `battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
+            } finally {
                 battleUdpTunnelLock.ReleaseMutex();
             }
 
@@ -1058,6 +1060,18 @@ public class Room {
         _logger.LogInformation("`battleUdpTunnel` stopped for (roomId={0})@renderFrameId={1}", id, renderFrameId);
     }
 
+    private void lazyInitBattleUdpTunnel() {
+        if (null == battleUdpTask) {
+            /*
+            1. At the end of "startBattleUdpTunnelAsyncTask" we would set "battleUdpTunnel = null" for the already closed tunnel after every battle.
+            2. We should initialize the "battleUdpTunnel" before sending ANY "BattleColliderInfo".
+            3. The following weird init of "battleUdpTask" makes it "synchronously awaitable" in "dismiss()".
+            */
+            battleUdpTask = Task.Run(async () => {
+                await startBattleUdpTunnelAsyncTask();
+            });
+        }
+    }
 
     ~Room() {
         joinerLock.Dispose();

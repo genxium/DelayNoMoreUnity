@@ -2,7 +2,6 @@
 using shared;
 using static shared.Battle;
 using System;
-using static shared.CharacterState;
 using Pbc = Google.Protobuf.Collections;
 
 public abstract class AbstractMapController : MonoBehaviour {

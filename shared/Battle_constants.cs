@@ -37,8 +37,9 @@ namespace shared {
         public const int DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED = -98;
         public const int DOWNSYNC_MSG_WS_CLOSED = -99;
 
-        public const int MAGIC_JOIN_INDEX_DEFAULT = 0;
-        public const int MAGIC_JOIN_INDEX_INVALID = -1;
+        public const int MAGIC_JOIN_INDEX_INVALID = -2;
+        public const int MAGIC_JOIN_INDEX_DEFAULT = -1;
+        public const int MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL = 0;
 
         public const int MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED = -1;
         public const int MAGIC_LAST_SENT_INPUT_FRAME_ID_READDED = -2;
