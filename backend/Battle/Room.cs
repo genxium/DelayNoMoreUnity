@@ -71,8 +71,9 @@ public class Room {
     Mutex battleUdpTunnelLock;
     Task? battleUdpTask;
     public PeerUdpAddr? battleUdpTunnelAddr;
-    CancellationTokenSource battleUdpTunnelCancellationTokenSource;
+    RoomDownsyncFrame? peerUdpAddrBroadcastRdf;
     UdpClient? battleUdpTunnel;
+    CancellationTokenSource battleUdpTunnelCancellationTokenSource;
 
     ILoggerFactory _loggerFactory;
     ILogger<Room> _logger;
@@ -796,6 +797,13 @@ public class Room {
         return cloned;
     }
 
+    public void BroadcastPeerUdpAddrList(int forJoinIndex) {
+        _logger.LogInformation("`BroadcastPeerUdpAddrList` for roomId={0}, forJoinIndex={1}, now peerUdpAddrBroadcastRdf={2}", id, forJoinIndex, peerUdpAddrBroadcastRdf);
+        foreach (var (playerId, player) in players) {
+            _ = sendSafelyAsync(peerUdpAddrBroadcastRdf, null, DOWNSYNC_MSG_ACT_PEER_UDP_ADDR, playerId, player, forJoinIndex); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.   
+        }
+    }
+
     private void downsyncToAllPlayers(InputBufferSnapshot inputBufferSnapshot) {
         /*
         [WARNING] This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
@@ -966,29 +974,23 @@ public class Room {
                 _logger.LogWarning("`battleUdpTunnel` failed to start#2 for roomId={0}", id);
                 return;
             }
-            _logger.LogInformation("`battleUdpTunnel` started for roomId={0} @ battleUdpTunnel.Client.LocalEndPoint={1}", id, battleUdpTunnel.Client.LocalEndPoint);
 
-            Pbc.RepeatedField<PeerUdpAddr> peerUdpAddrList = new Pbc.RepeatedField<PeerUdpAddr> {
+            // initialize "peerUdpAddrBroadcastRdf" 
+            peerUdpAddrBroadcastRdf = new RoomDownsyncFrame();
+            peerUdpAddrBroadcastRdf.PeerUdpAddrList.Add(new Pbc.RepeatedField<PeerUdpAddr> {
                 battleUdpTunnelAddr // i.e. "MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == 0"
-            };
+            });
             for (int i = 0; i < capacity; i++) {
                 // Prefill with invalid addrs
-                peerUdpAddrList.Add(new PeerUdpAddr { });
-            }
-            var peerUdpAddrBroadcastRdf = new RoomDownsyncFrame { };
-            peerUdpAddrBroadcastRdf.PeerUdpAddrList.AddRange(peerUdpAddrList);
-            foreach (var (playerId, player) in players) {
-                await sendSafelyAsync(peerUdpAddrBroadcastRdf, null, DOWNSYNC_MSG_ACT_PEER_UDP_ADDR, playerId, player, MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL); // No need to avoid the "await" like "downsyncToAllPlayers", this initial action of "DOWNSYNC_MSG_ACT_PEER_UDP_ADDR" is once per battle  
+                peerUdpAddrBroadcastRdf.PeerUdpAddrList.Add(new PeerUdpAddr { });
             }
 
+            _logger.LogInformation("`battleUdpTunnel` started for roomId={0} @ now peerUdpAddrBroadcastRdf={1}", id, peerUdpAddrBroadcastRdf);
+
             while (!battleUdpTunnelCancellationToken.IsCancellationRequested) {
-                long nowRoomState = Interlocked.Read(ref state);
-                if (ROOM_STATE_IN_BATTLE != nowRoomState && ROOM_STATE_PREPARE != nowRoomState && ROOM_STATE_WAITING != nowRoomState && ROOM_STATE_IDLE != nowRoomState) {
-                    break;
-                }
                 var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);
                 WsReq pReq = WsReq.Parser.ParseFrom(recvResult.Buffer);
-                _logger.LogInformation("`battleUdpTunnel` received for roomId={0}: pReq={1}", id, pReq);
+                // _logger.LogInformation("`battleUdpTunnel` received for roomId={0}: pReq={1}", id, pReq);
                 int playerId = pReq.PlayerId;
                 Player? player;
                 if (players.TryGetValue(playerId, out player)) {
@@ -1005,16 +1007,13 @@ public class Room {
 
                 if (null == player.BattleUdpTunnelAddr) {
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
-                    peerUdpAddrList[player.PlayerDownsync.JoinIndex] = new PeerUdpAddr {
+                    peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.PlayerDownsync.JoinIndex] = new PeerUdpAddr {
                         Ip = recvResult.RemoteEndPoint.Address.ToString(),
                         Port = recvResult.RemoteEndPoint.Port
                     };
-                    _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated battleUdpAddr for playerId={1} to be {2}", id, playerId, peerUdpAddrList[player.PlayerDownsync.JoinIndex]);
-                    // Broadcast this new peerAddr to all the other players for holepunching! Just like the initial one, "DOWNSYNC_MSG_ACT_PEER_INPUT_BATCH" for each player is also once per battle, thus not of big threading efficiency concern either.
-                    foreach (var (thatPlayerId, thatPlayer) in players) {
-                        if (playerId == thatPlayerId) continue;
-                        _ = sendSafelyAsync(peerUdpAddrBroadcastRdf, null, DOWNSYNC_MSG_ACT_PEER_UDP_ADDR, thatPlayerId, thatPlayer, player.PlayerDownsync.JoinIndex); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.   
-                    }
+                    _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.PlayerDownsync.JoinIndex]);
+                    // Need broadcast to all, including the current "pReq.PlayerId", to favor p2p holepunching
+                    BroadcastPeerUdpAddrList(player.PlayerDownsync.JoinIndex);
                 }
 
                 if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH == pReq.Act) {
@@ -1050,9 +1049,12 @@ public class Room {
                 if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
                     battleUdpTunnelCancellationTokenSource.Cancel();
                 }
+                battleUdpTunnelCancellationTokenSource.Dispose();
+                battleUdpTunnelCancellationTokenSource = new CancellationTokenSource();
                 battleUdpTunnel.Close();
                 battleUdpTunnel = null;
                 battleUdpTunnelAddr = null;
+                peerUdpAddrBroadcastRdf = null;
                 _logger.LogInformation("Closed `battleUdpTunnel` for roomId={0}", id);
             } catch (Exception ex) {
                 _logger.LogError(ex, "Closing of `battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);

@@ -20,10 +20,10 @@ public partial class Env {
     }
 
     public string getHttpHost() {
-        return "http://127.0.0.1:5051";
+        return "http://" + getHostnameOnly() + ":5051";
     }
 
     public string getWsEndpoint() {
-        return "ws://127.0.0.1:5051/Ws";
+        return "ws://" + getHostnameOnly() + ":5051/Ws";
     }
 }

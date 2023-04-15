@@ -97,7 +97,7 @@ public class OnlineMapController : AbstractMapController {
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
-            //Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
+            Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {
                 case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
                     Debug.Log("Handling WsSession closed in main thread.");
@@ -126,13 +126,7 @@ public class OnlineMapController : AbstractMapController {
                     String udpTunnelIp = Env.Instance.getHostnameOnly();
                     int udpTunnelPort = wsRespHolder.BciFrame.BattleUdpTunnel.Port;
                     udpTask = Task.Run(async () => {
-                        var holePunch = new WsReq {
-                            PlayerId = selfPlayerInfo.Id,
-                            Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH,
-                            JoinIndex = selfPlayerInfo.JoinIndex,
-                            AuthKey= clientAuthKey
-                        };
-                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, udpTunnelIp, udpTunnelPort, holePunch, wsCancellationToken);
+                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpTunnelIp, udpTunnelPort, wsCancellationToken);
                     });
 
                     break;
@@ -154,6 +148,14 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_PEER_UDP_ADDR:
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread: {0}", wsRespHolder));
+                    UdpSessionManager.Instance.updatePeerAddr(roomCapacity, wsRespHolder.Rdf.PeerUdpAddrList);
+                    var holePuncher = new WsReq {
+                        PlayerId = selfPlayerInfo.Id,
+                        Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH,
+                        JoinIndex = selfPlayerInfo.JoinIndex,
+                        AuthKey = clientAuthKey
+                    };
+                    UdpSessionManager.Instance.senderBuffer.Enqueue(holePuncher);
                     break;
                 default:
                     break;
@@ -284,6 +286,7 @@ public class OnlineMapController : AbstractMapController {
         reqData.InputFrameUpsyncBatch.AddRange(inputFrameUpsyncBatch);
 
         WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
+        UdpSessionManager.Instance.senderBuffer.Enqueue(reqData);
         lastUpsyncInputFrameId = latestLocalInputFrameId;
     }
 

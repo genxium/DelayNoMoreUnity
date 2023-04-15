@@ -72,7 +72,7 @@ public class WebSocketController : ControllerBase {
 
                     RenderBufferSize = room.GetRenderCacheSize(),
                     BoundRoomCapacity = room.capacity,
-                    FrameDataLoggingEnabled = room.frameDataLoggingEnabled,                
+                    FrameDataLoggingEnabled = room.frameDataLoggingEnabled,
                 };
 
                 if (null != room.battleUdpTunnelAddr) {
@@ -115,6 +115,8 @@ public class WebSocketController : ControllerBase {
                                         cancellationTokenSource.Cancel();
                                     }
                                 } else {
+                                    room.BroadcastPeerUdpAddrList(shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL); // by now, we're sure that the player has got its "AuthKey" for sending udp packets to the server's `battleUdpTunnel`.
+
                                     // [OPTIONAL] TODO: Popup this specific room from RoomManager, then re-push it with the updated score
                                 }
                                 break;
