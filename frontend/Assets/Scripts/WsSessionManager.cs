@@ -68,6 +68,13 @@ public class WsSessionManager {
                 Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
             } catch (Exception ex) {
                 Debug.LogWarning(String.Format("WsSession is stopped by exception; ex={0}", ex));
+            } finally {
+                var closeMsg = new WsResp {
+                    Ret = ErrCode.Ok,
+                    Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
+                };
+                WsSessionManager.Instance.recvBuffer.Enqueue(closeMsg);
+                Debug.LogWarning(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
             }
         }
     }

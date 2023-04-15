@@ -104,6 +104,7 @@ public class OnlineMapController : AbstractMapController {
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
                     Debug.Log("Handling UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK in main thread.");
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
+					Debug.Log(String.Format("inputFrameUpsyncDelayTolerance is {0}.", inputFrameUpsyncDelayTolerance));
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
                     if (wsRespHolder.BciFrame.BoundRoomCapacity != roomCapacity) {
                         roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
@@ -156,37 +157,31 @@ public class OnlineMapController : AbstractMapController {
 
         // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         Debug.LogWarning(String.Format("About to start ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
-        wsTask = Task.Run(wsSessionActionAsync);
+        wsTask = Task.Run(async () => {
+            Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
-        // wsTask = wsSessionTaskAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
-        // wsSessionActionAsync(); // no immediate thread switch till AFTER THE FIRST AWAIT
+            await wsSessionTaskAsync();
+
+            Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
+        });
+        // wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "OnDestroy".
+
+        // wsSessionActionAsync(); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
+        // _ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
     }
 
     private async Task wsSessionTaskAsync() {
-        /**
-         [WARNING] This method only exists for an experiment mentioned in "GOROUTINE_TO_ASYNC_TASK.md", i.e. to show that neither [c] nor [d] switches to another thread immediately for execution, DON'T use it in practice.
-         */
-        Debug.LogWarning(String.Format("In ws session TASK but before the async action: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
-        wsSessionActionAsync();
-        Debug.LogWarning(String.Format("In ws session TASK and after the async action: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
-        await Task.Delay(1000);
+        Debug.LogWarning(String.Format("In ws session TASK but before first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
+        string wsEndpoint = Env.Instance.getWsEndpoint();
+        await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
         Debug.LogWarning(String.Format("In ws session TASK and after first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
     }
 
     private async void wsSessionActionAsync() {
-        Debug.LogWarning(String.Format("In ws session action but before first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
+        Debug.LogWarning(String.Format("In ws session ACTION but before first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
         string wsEndpoint = Env.Instance.getWsEndpoint();
         await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
-        Debug.LogWarning(String.Format("In ws session action and after first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
-
-        var closeMsg = new WsResp {
-            Ret = ErrCode.Ok,
-            Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
-        };
-        WsSessionManager.Instance.recvBuffer.Enqueue(closeMsg);
-        Debug.LogWarning(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
-
-        Debug.LogWarning(String.Format("ws session action is ended"));
+        Debug.LogWarning(String.Format("In ws session ACTION and after first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
     }
 
     // Update is called once per frame

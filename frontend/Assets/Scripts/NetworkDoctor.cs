@@ -1,5 +1,6 @@
 using System;
 using shared;
+using UnityEngine;
 
 public class NetworkDoctor {
 
@@ -140,26 +141,22 @@ public class NetworkDoctor {
 
     public (bool, int, int, int, int, int, int) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int inputFrameUpsyncDelayTolerance) {
         var (inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt) = Stats();
-        if (sendingFps >= inputRateThreshold + 3) {
-            // Don't send too fast
-            return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
-        } else {
-            bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
-            // An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
-            bool recvFpsNormal = (srvDownsyncFps >= inputRateThreshold || peerUpsyncFps >= inputRateThreshold * (roomCapacity - 1));
-            if (sendingFpsNormal || recvFpsNormal) {
-                int minInputFrameIdFront = Battle.MAX_INT;
-                for (int k = 0; k < roomCapacity; ++k) {
-                    if (k + 1 == selfJoinIndex) continue; // Don't count self in
-                    if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
-                    minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
-                }
-                if ((inputFrameIdFront > minInputFrameIdFront) && ((inputFrameIdFront - minInputFrameIdFront) > (inputFrameUpsyncDelayTolerance + 1))) {
-                    // first comparison condition is to avoid numeric overflow
-                    return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
-                }
-            }
-        }
+		bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
+		// An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
+		bool recvFpsNormal = (srvDownsyncFps >= inputRateThreshold || peerUpsyncFps >= inputRateThreshold * (roomCapacity - 1));
+		if (sendingFpsNormal && recvFpsNormal) {
+			int minInputFrameIdFront = Battle.MAX_INT;
+			for (int k = 0; k < roomCapacity; ++k) {
+				if (k + 1 == selfJoinIndex) continue; // Don't count self in
+				if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
+				minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
+			}
+			if ((inputFrameIdFront > minInputFrameIdFront) && ((inputFrameIdFront - minInputFrameIdFront) > (inputFrameUpsyncDelayTolerance+1))) {
+				// first comparison condition is to avoid numeric overflow
+				Debug.Log(String.Format("Should lock step, inputFrameIdFront={0}, minInputFrameIdFront={1}, inputFrameUpsyncDelayTolerance={2}, sendingFps={3}, srvDownsyncFps={4}, inputRateThreshold={5}", inputFrameIdFront, minInputFrameIdFront, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold));
+				return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
+			}
+		}
 
         return (false, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
     }

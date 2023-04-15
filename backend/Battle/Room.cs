@@ -1,5 +1,6 @@
 ﻿using shared;
 using static shared.Battle;
+using System;
 using System.Net;
 using System.Net.WebSockets;
 using System.Net.Sockets;
@@ -89,10 +90,11 @@ public class Room {
         battleDurationFrames = 60 * fps;
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";
-        inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
 
         nstDelayFrames = 24;
+
+        inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         state = ROOM_STATE_IDLE;
         effectivePlayerCount = 0;
         backendDynamicsEnabled = false;
@@ -171,7 +173,7 @@ public class Room {
                     /*
                     1. At the end of "startBattleUdpTunnelAsyncAction" we would set "battleUdpTunnel = null" for the already closed tunnel after every battle.
                     2. We should initialize the "battleUdpTunnel" before sending ANY "BattleColliderInfo".
-                    3. The following weird init of "battleUdpTask" makes it "awaitable" in "dismiss".
+                    3. The following weird init of "battleUdpTask" makes it "synchronously awaitable" in "dismiss".
                     */
                     battleUdpTask = Task.Run(async () => {
                         await startBattleUdpTunnelAsyncTask();
@@ -390,7 +392,7 @@ public class Room {
             return;
         }
 
-        Interlocked.Exchange(ref state, ROOM_STATE_IN_SETTLEMENT); // Must be set BEFORE "playerSignalToClose.Cancel -> OnPlayerDisconnected", such that we can fall into the correct switch-case branch. 
+        Interlocked.Exchange(ref state, ROOM_STATE_IN_SETTLEMENT); 
 
         battleUdpTunnelLock.WaitOne();
         if (null != battleUdpTunnel) {
@@ -441,9 +443,8 @@ public class Room {
 			*/
 			foreach (var (playerId, _) in players) {
 				clearPlayerNetworkSession(playerId);
-				players.Remove(playerId);
 			}
-
+			players.Clear();
             playersArr = new Player[capacity];
 
             backendDynamicsEnabled = false;
@@ -455,6 +456,7 @@ public class Room {
             Array.Fill<ulong>(lastAllConfirmedInputList, 0);
             Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, 0);
             Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
+            Array.Fill<bool>(joinIndexBooleanArr, false);
 
             effectivePlayerCount = 0; // guaranteed to succeed at the end of "dismiss"
         } finally {
@@ -528,6 +530,7 @@ public class Room {
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is settled@renderFrameId={1}", id, renderFrameId);
             await dismiss();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is dismissed@renderFrameId={1}", id, renderFrameId);
+			Interlocked.Exchange(ref state, ROOM_STATE_IDLE); 
             // TODO: Pop the current room from RoomManager, recalc score, then push it back; this might need the functionality of https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/PriorityQueue.js
         }
     }
@@ -1027,22 +1030,26 @@ public class Room {
                     }
                 }
             }
-        } catch (ObjectDisposedException ex) {
-            _logger.LogWarning("UDP recv is interrupted by ObjectDisposedException for roomId={0}, ex.Message={1}", id, ex.Message);
+        } catch (OperationCanceledException ocEx) {
+            _logger.LogWarning("`battleUdpTunnel` is interrupted by OperationCanceledException for roomId={0}, ocEx.Message={1}", id, ocEx.Message);
+		} catch (ObjectDisposedException ex) {
+            _logger.LogWarning("`battleUdpTunnel` is interrupted by ObjectDisposedException for roomId={0}, ex.Message={1}", id, ex.Message);
         } catch (Exception ex) {
-            _logger.LogError(ex, "UDP recv is interrupted by unexpected exception for roomId={0}", id);
-        } finally {
-            if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
-                battleUdpTunnelCancellationTokenSource.Cancel();
-            }
+            _logger.LogError(ex, "`battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
+        } finally {	
             battleUdpTunnelLock.WaitOne();
             try {
                 _logger.LogInformation("Closing `battleUdpTunnel` for roomId={0}", id);
+				if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
+					battleUdpTunnelCancellationTokenSource.Cancel();
+				}
                 battleUdpTunnel.Close();
                 battleUdpTunnel = null;
                 battleUdpTunnelAddr = null;
                 _logger.LogInformation("Closed `battleUdpTunnel` for roomId={0}", id);
-            } finally {
+            } catch (Exception ex) {
+            	_logger.LogError(ex, "closing of `battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
+			} finally {
                 battleUdpTunnelLock.ReleaseMutex();
             }
 
