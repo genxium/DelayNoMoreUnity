@@ -5,7 +5,6 @@ using static shared.Battle;
 using static shared.CharacterState;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Net.Sockets;
 using UnityEngine.SceneManagement;
 using Google.Protobuf.Collections;
 
@@ -17,6 +16,8 @@ public class OnlineMapController : AbstractMapController {
     WsResp wsRespHolder;
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
+    bool shouldLockStep = false;
+
     private RoomDownsyncFrame mockStartRdf() {
         var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
@@ -105,7 +106,7 @@ public class OnlineMapController : AbstractMapController {
                     SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
-                    Debug.Log(String.Format("Handling UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK in main thread: {0}", wsRespHolder));
+                    Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO in main thread: {0}", wsRespHolder));
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
                     if (wsRespHolder.BciFrame.BoundRoomCapacity != roomCapacity) {
@@ -125,8 +126,15 @@ public class OnlineMapController : AbstractMapController {
 
                     String udpTunnelIp = Env.Instance.getHostnameOnly();
                     int udpTunnelPort = wsRespHolder.BciFrame.BattleUdpTunnel.Port;
+                    var initialPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
                     udpTask = Task.Run(async () => {
-                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpTunnelIp, udpTunnelPort, wsCancellationToken);
+                        var holePuncher = new WsReq {
+                            PlayerId = selfPlayerInfo.Id,
+                            Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH,
+                            JoinIndex = selfPlayerInfo.JoinIndex,
+                            AuthKey = clientAuthKey
+                        };
+                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpTunnelIp, udpTunnelPort, initialPeerUdpAddrList, holePuncher, wsCancellationToken);
                     });
 
                     break;
@@ -149,13 +157,6 @@ public class OnlineMapController : AbstractMapController {
                 case shared.Battle.DOWNSYNC_MSG_ACT_PEER_UDP_ADDR:
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread: {0}", wsRespHolder));
                     UdpSessionManager.Instance.updatePeerAddr(roomCapacity, wsRespHolder.Rdf.PeerUdpAddrList);
-                    var holePuncher = new WsReq {
-                        PlayerId = selfPlayerInfo.Id,
-                        Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH,
-                        JoinIndex = selfPlayerInfo.JoinIndex,
-                        AuthKey = clientAuthKey
-                    };
-                    UdpSessionManager.Instance.senderBuffer.Enqueue(holePuncher);
                     break;
                 default:
                     break;
@@ -166,7 +167,8 @@ public class OnlineMapController : AbstractMapController {
     void pollAndHandleUdpRecvBuffer() {
         WsReq wsReqHolder;
         while (UdpSessionManager.Instance.recvBuffer.TryDequeue(out wsReqHolder)) {
-            Debug.Log(String.Format("Handling udpSession wsReq in main thread: {0}", wsReqHolder));
+            // Debug.Log(String.Format("Handling udpSession wsReq in main thread: {0}", wsReqHolder));
+            onPeerInputFrameUpsync(wsReqHolder.JoinIndex, wsReqHolder.InputFrameUpsyncBatch);
         }
     }
 
@@ -232,17 +234,22 @@ public class OnlineMapController : AbstractMapController {
         try {
             pollAndHandleWsRecvBuffer();
             pollAndHandleUdpRecvBuffer();
+            if (shouldLockStep) {
+                NetworkDoctor.Instance.LogLockedStepCnt();
+                shouldLockStep = false;
+                return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
+            }
             doUpdate();
-            var (tooFastOrNot, _, sendingFps, srvDownsyncFps, _, rollbackFrames, lockedStepsCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
+            var (tooFastOrNot, _, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
             shouldLockStep = tooFastOrNot;
-            networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, lockedStepsCnt, rollbackFrames);
+            networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
         } catch (Exception ex) {
             Debug.LogError(String.Format("Error during OnlineMap.Update: {0}", ex));
             onBattleStopped();
         }
     }
 
-    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int lastUpsyncInputFrameId, int currInputFrameId) {
+    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int currInputFrameId) {
         /*
         For a 2-player-battle, this "shouldUpsyncForEarlyAllConfirmedOnBackend" can be omitted, however for more players in a same battle, to avoid a "long time non-moving player" jamming the downsync of other moving players, we should use this flag.
 
@@ -261,6 +268,7 @@ public class OnlineMapController : AbstractMapController {
             // Upon resync, "this.lastUpsyncInputFrameId" might not have been updated properly.
             batchInputFrameIdSt = inputBuffer.StFrameId;
         }
+        NetworkDoctor.Instance.LogInputFrameIdFront(latestLocalInputFrameId);
         NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
 
         for (var i = batchInputFrameIdSt; i <= latestLocalInputFrameId; i++) {
@@ -290,8 +298,69 @@ public class OnlineMapController : AbstractMapController {
         lastUpsyncInputFrameId = latestLocalInputFrameId;
     }
 
+    protected void onPeerInputFrameUpsync(int peerJoinIndex, RepeatedField<InputFrameUpsync> batch) {
+        if (null == batch) {
+            return;
+        }
+        if (null == inputBuffer) {
+            return;
+        }
+        if (ROOM_STATE_IN_BATTLE != battleState) {
+            return;
+        }
+
+        int effCnt = 0, batchCnt = batch.Count;
+        int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;
+        for (int k = 0; k < batchCnt; k++) {
+            var inputFrameUpsync = batch[k];
+            int inputFrameId = inputFrameUpsync.InputFrameId;
+            ulong peerEncodedInput = inputFrameUpsync.Encoded;
+
+            if (inputFrameId <= lastAllConfirmedInputFrameId) {
+                // [WARNING] Don't reject it by "inputFrameId <= lastIndividuallyConfirmedInputFrameId[peerJoinIndex-1]", the arrival of UDP packets might not reserve their sending order!
+                Debug.Log(String.Format("Udp upsync inputFrameId={0} from peerJoinIndex={1} is ignored because it's already confirmed#1! lastAllConfirmedInputFrameId={2}", inputFrameId, peerJoinIndex, lastAllConfirmedInputFrameId));
+                continue;
+            }
+            ulong peerJoinIndexMask = ((ulong)1 << (peerJoinIndex - 1));
+            getOrPrefabInputFrameUpsync(inputFrameId, false, prefabbedInputListHolder); // Make sure that inputFrame exists locally
+            var (res1, existingInputFrame) = inputBuffer.GetByFrameId(inputFrameId);
+            if (!res1 || null == existingInputFrame) {
+                throw new ArgumentNullException(String.Format("inputBuffer doesn't contain inputFrameId={0} after prefabbing! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", inputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
+            }
+            ulong existingConfirmedList = existingInputFrame.ConfirmedList;
+            if (0 < (existingConfirmedList & peerJoinIndexMask)) {
+                Debug.Log(String.Format("Udp upsync inputFrameId={0} from peerJoinIndex={1} is ignored because it's already confirmed#2! lastAllConfirmedInputFrameId={2}, existingInputFrame={3}", inputFrameId, peerJoinIndex, lastAllConfirmedInputFrameId, existingInputFrame));
+                continue;
+            }
+            if (inputFrameId > lastIndividuallyConfirmedInputFrameId[peerJoinIndex - 1]) {
+                lastIndividuallyConfirmedInputFrameId[peerJoinIndex - 1] = inputFrameId;
+                lastIndividuallyConfirmedInputList[peerJoinIndex - 1] = peerEncodedInput;
+            }
+            effCnt += 1;
+
+            bool isPeerEncodedInputUpdated = (existingInputFrame.InputList[peerJoinIndex - 1] != peerEncodedInput);
+            existingInputFrame.InputList[peerJoinIndex - 1] = peerEncodedInput;
+            existingInputFrame.ConfirmedList = (existingConfirmedList | peerJoinIndexMask);
+            if (
+              TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId
+              &&
+              isPeerEncodedInputUpdated
+            ) {
+                firstPredictedYetIncorrectInputFrameId = inputFrameId;
+            }
+        }
+        if (0 < effCnt) {
+            NetworkDoctor.Instance.LogPeerInputFrameUpsync(batch[0].InputFrameId, batch[batchCnt - 1].InputFrameId);
+        }
+        _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, true);
+    }
+
     protected override void resetCurrentMatch() {
         base.resetCurrentMatch();
+
+        // Reset lockstep
+        shouldLockStep = false;
+        NetworkDoctor.Instance.Reset();
     }
 
     protected void OnDestroy() {

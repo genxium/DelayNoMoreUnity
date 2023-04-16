@@ -1,7 +1,7 @@
 using System;
+using System.Threading;
 using shared;
 using UnityEngine;
-
 public class NetworkDoctor {
 
     private class QEle {
@@ -52,12 +52,13 @@ public class NetworkDoctor {
     private FrameRingBuffer<QEle> peerInputFrameUpsyncQ;
     int immediateRollbackFrames;
     int lockedStepsCnt;
+    long udpPunchedCnt;
 
     public void Reset() {
         inputFrameIdFront = 0;
         immediateRollbackFrames = 0;
         lockedStepsCnt = 0;
-
+        udpPunchedCnt = 0;
         inputRateThreshold = Battle.ConvertToNoDelayInputFrameId(59);
     }
 
@@ -66,6 +67,7 @@ public class NetworkDoctor {
     }
 
     public void LogSending(int i, int j) {
+        if (i > j) return; 
         int oldEd = sendingQ.EdFrameId;
         sendingQ.DryPut();
         var (ok, holder) = sendingQ.GetByFrameId(oldEd);
@@ -78,6 +80,7 @@ public class NetworkDoctor {
     }
 
     public void LogInputFrameDownsync(int i, int j) {
+        if (i > j) return; 
         int oldEd = inputFrameDownsyncQ.EdFrameId;
         inputFrameDownsyncQ.DryPut();
         var (ok, holder) = inputFrameDownsyncQ.GetByFrameId(oldEd);
@@ -90,6 +93,7 @@ public class NetworkDoctor {
     }
 
     public void LogPeerInputFrameUpsync(int i, int j) {
+        if (i > j) return; 
         int oldEd = peerInputFrameUpsyncQ.EdFrameId;
         peerInputFrameUpsyncQ.DryPut();
         var (ok, holder) = peerInputFrameUpsyncQ.GetByFrameId(oldEd);
@@ -108,8 +112,13 @@ public class NetworkDoctor {
     public void LogLockedStepCnt() {
         lockedStepsCnt += 1;
     }
+    public void LogUdpPunchedCnt(long val) {
+        long oldCnt = Interlocked.Read(ref udpPunchedCnt);
+        if (oldCnt > val) return;
+        Interlocked.Exchange(ref udpPunchedCnt, val);
+    }
 
-    public (int, int, int, int, int, int) Stats() {
+    public (int, int, int) Stats() {
         int sendingFps = 0,
         srvDownsyncFps = 0,
         peerUpsyncFps = 0;
@@ -136,11 +145,11 @@ public class NetworkDoctor {
             if (null != st && null != ed && 0 < elapsedMillis)
                 peerUpsyncFps = (int)((long)(ed.j - st.i) * 1000 / elapsedMillis);
         }
-        return (inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt);
+        return (sendingFps, srvDownsyncFps, peerUpsyncFps);
     }
 
-    public (bool, int, int, int, int, int, int) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int inputFrameUpsyncDelayTolerance) {
-        var (inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt) = Stats();
+    public (bool, int, int, int, int, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int inputFrameUpsyncDelayTolerance) {
+        var (sendingFps, srvDownsyncFps, peerUpsyncFps) = Stats();
 		bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
 		// An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
 		bool recvFpsNormal = (srvDownsyncFps >= inputRateThreshold || peerUpsyncFps >= inputRateThreshold * (roomCapacity - 1));
@@ -151,13 +160,12 @@ public class NetworkDoctor {
 				if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
 				minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
 			}
-			if ((inputFrameIdFront > minInputFrameIdFront) && ((inputFrameIdFront - minInputFrameIdFront) > (inputFrameUpsyncDelayTolerance+1))) {
-				// first comparison condition is to avoid numeric overflow
+			if ((inputFrameIdFront - minInputFrameIdFront) > (inputFrameUpsyncDelayTolerance+3)) {
 				Debug.Log(String.Format("Should lock step, inputFrameIdFront={0}, minInputFrameIdFront={1}, inputFrameUpsyncDelayTolerance={2}, sendingFps={3}, srvDownsyncFps={4}, inputRateThreshold={5}", inputFrameIdFront, minInputFrameIdFront, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold));
-				return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
+				return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
 			}
 		}
 
-        return (false, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt);
+        return (false, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
     }
 }

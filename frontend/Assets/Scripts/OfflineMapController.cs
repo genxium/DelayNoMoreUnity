@@ -9,7 +9,7 @@ public class OfflineMapController : AbstractMapController {
         throw new NotImplementedException();
     }
 
-    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int lastUpsyncInputFrameId, int currInputFrameId) {
+    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int currInputFrameId) {
         return false;
     }
 
@@ -17,10 +17,10 @@ public class OfflineMapController : AbstractMapController {
     void Start() {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
-
-        selfPlayerInfo = new PlayerDownsync();
         Application.targetFrameRate = 60;
 
+        selfPlayerInfo = new PlayerDownsync();
+        
         roomCapacity = 1;
         preallocateHolders();
         resetCurrentMatch();

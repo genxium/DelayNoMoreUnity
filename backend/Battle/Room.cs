@@ -71,7 +71,7 @@ public class Room {
     Mutex battleUdpTunnelLock;
     Task? battleUdpTask;
     public PeerUdpAddr? battleUdpTunnelAddr;
-    RoomDownsyncFrame? peerUdpAddrBroadcastRdf;
+    public RoomDownsyncFrame? peerUdpAddrBroadcastRdf;
     UdpClient? battleUdpTunnel;
     CancellationTokenSource battleUdpTunnelCancellationTokenSource;
 
@@ -90,7 +90,7 @@ public class Room {
         stageName = "Dungeon";
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
 
-        nstDelayFrames = 12;
+        nstDelayFrames = 24;
         inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         state = ROOM_STATE_IDLE;
         effectivePlayerCount = 0;
@@ -797,8 +797,8 @@ public class Room {
         return cloned;
     }
 
-    public void BroadcastPeerUdpAddrList(int forJoinIndex) {
-        _logger.LogInformation("`BroadcastPeerUdpAddrList` for roomId={0}, forJoinIndex={1}, now peerUdpAddrBroadcastRdf={2}", id, forJoinIndex, peerUdpAddrBroadcastRdf);
+    public void broadcastPeerUdpAddrList(int forJoinIndex) {
+        _logger.LogInformation("`broadcastPeerUdpAddrList` for roomId={0}, forJoinIndex={1}, now peerUdpAddrBroadcastRdf={2}", id, forJoinIndex, peerUdpAddrBroadcastRdf);
         foreach (var (playerId, player) in players) {
             _ = sendSafelyAsync(peerUdpAddrBroadcastRdf, null, DOWNSYNC_MSG_ACT_PEER_UDP_ADDR, playerId, player, forJoinIndex); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.   
         }
@@ -1013,7 +1013,7 @@ public class Room {
                     };
                     _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.PlayerDownsync.JoinIndex]);
                     // Need broadcast to all, including the current "pReq.PlayerId", to favor p2p holepunching
-                    BroadcastPeerUdpAddrList(player.PlayerDownsync.JoinIndex);
+                    broadcastPeerUdpAddrList(player.PlayerDownsync.JoinIndex);
                 }
 
                 if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH == pReq.Act) {

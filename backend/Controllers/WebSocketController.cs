@@ -89,8 +89,13 @@ public class WebSocketController : ControllerBase {
                     PeerJoinIndex = player.PlayerDownsync.JoinIndex
                 };
 
+                if (null != room.peerUdpAddrBroadcastRdf) {
+                    // Make sure that the added player can send a holepuncher to the backend `battleUdpTunnelAddr`, thus trigger "room.broadcastPeerUdpAddrList" for all players in the same battle
+                    initWsResp.Rdf = room.peerUdpAddrBroadcastRdf; 
+                } 
+
                 var byteArr = initWsResp.ToByteArray();
-                _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1}, messageLength={2} ]", room.id, playerId, byteArr.Length);
+                _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1} ]: {2}", room.id, playerId, initWsResp);
                 await session.SendAsync(new ArraySegment<byte>(initWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
 
                 var buffer = new byte[1024];
@@ -115,8 +120,6 @@ public class WebSocketController : ControllerBase {
                                         cancellationTokenSource.Cancel();
                                     }
                                 } else {
-                                    room.BroadcastPeerUdpAddrList(shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL); // by now, we're sure that the player has got its "AuthKey" for sending udp packets to the server's `battleUdpTunnel`.
-
                                     // [OPTIONAL] TODO: Popup this specific room from RoomManager, then re-push it with the updated score
                                 }
                                 break;

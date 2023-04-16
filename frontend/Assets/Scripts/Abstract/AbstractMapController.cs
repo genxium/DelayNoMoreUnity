@@ -38,7 +38,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected shared.Collider[] staticRectangleColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
-    protected bool shouldLockStep = false;
     protected bool debugDrawingEnabled = true;
 
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
@@ -183,7 +182,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         return newAllConfirmedCnt;
     }
 
-    private void _handleIncorrectlyRenderedPrediction(int firstPredictedYetIncorrectInputFrameId, bool fromUDP) {
+    protected void _handleIncorrectlyRenderedPrediction(int firstPredictedYetIncorrectInputFrameId, bool fromUDP) {
         if (TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId) return;
         int renderFrameId1 = ConvertToFirstUsedRenderFrameId(firstPredictedYetIncorrectInputFrameId);
         if (renderFrameId1 >= chaserRenderFrameId) return;
@@ -311,10 +310,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         inputBuffer.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
         Array.Fill(jumpedOrNotList, false);
-
-        // Reset lockstep
-        shouldLockStep = false;
-        NetworkDoctor.Instance.Reset();
     }
 
     public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {
@@ -431,11 +426,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (ROOM_STATE_IN_BATTLE != battleState) {
             return;
         }
-        if (shouldLockStep) {
-            NetworkDoctor.Instance.LogLockedStepCnt();
-            shouldLockStep = false;
-            return;
-        }
         int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
         ulong prevSelfInput = 0, currSelfInput = 0;
         if (ShouldGenerateInputFrameUpsync(renderFrameId)) {
@@ -448,7 +438,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             getOrPrefabInputFrameUpsync(delayedInputFrameId, false, prefabbedInputListHolder);
         }
 
-        if (shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, lastUpsyncInputFrameId, noDelayInputFrameId)) {
+        if (shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, noDelayInputFrameId)) {
             // TODO: Is the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
             sendInputFrameUpsyncBatch(noDelayInputFrameId);
         }
@@ -480,7 +470,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         battleState = ROOM_STATE_IN_SETTLEMENT;
     }
 
-    protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int lastUpsyncInputFrameId, int currInputFrameId);
+    protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int currInputFrameId);
 
     protected abstract void sendInputFrameUpsyncBatch(int latestLocalInputFrameId);
 
