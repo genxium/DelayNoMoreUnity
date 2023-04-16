@@ -40,7 +40,7 @@ public class UdpSessionManager {
 
         peerUdpEndPointList = new IPEndPoint[roomCapacity + 1];
         peerUdpEndPointPunched = new long[roomCapacity + 1];
-        updatePeerAddr(roomCapacity, initialPeerAddrList);
+        updatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
 
         try {
             udpSession = new UdpClient(port: 0);
@@ -67,21 +67,25 @@ public class UdpSessionManager {
                         for (int i = 0; i <= roomCapacity; i++) {
                             if (i == selfJoinIndex) continue;
                             if (null == peerUdpEndPointList[i]) continue;
-                            Debug.Log(String.Format("udpSession sending holePuncher {0}", peerUdpEndPointList[i]));
+                            // [WARNING] Deliberately keep sending even if "1 == Interlocked.Read(ref peerUdpEndPointPunched[i])"
+                            // Debug.Log(String.Format("udpSession sending holePuncher to joinIndex={0}, endPoint={1}", i, peerUdpEndPointList[i]));
                             await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[i]);
                         }
                     } else {
                         int successPeerCnt = 0;
                         for (int i = 1; i <= roomCapacity; i++) {
                             if (i == selfJoinIndex) continue;
-                            if (null == peerUdpEndPointList[i] || 0 == Interlocked.Read(ref peerUdpEndPointPunched[i])) continue;
-                            //Debug.Log(String.Format("udpSession sending {0} to punched peer {1}", toSendObj, peerUdpEndPointList[i]));
+                            if (null == peerUdpEndPointList[i]) continue;
+                            if (0 == Interlocked.Read(ref peerUdpEndPointPunched[i])) continue;
+                            // Debug.Log(String.Format("udpSession sending {0} to punched peer {1}", toSendObj, peerUdpEndPointList[i]));
                             await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[i]);
-                            successPeerCnt++;
+                            if (1 == Interlocked.Read(ref peerUdpEndPointPunched[i])) {
+                                successPeerCnt++;
+                            }
                         }
 
                         if (successPeerCnt + 1 < roomCapacity) {
-                            //Debug.Log(String.Format("udpSession sending {0} to UdpTunnel {1}", toSendObj, peerUdpEndPointList[shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]));
+                            // Debug.Log(String.Format("udpSession sending {0} to UdpTunnel {1}", toSendObj, peerUdpEndPointList[shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]));
                             await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
                         }
                     }
@@ -94,6 +98,16 @@ public class UdpSessionManager {
         }
     }
 
+    private void markPunched(int fromJoinIndex, int roomCapacity) {
+        Interlocked.Exchange(ref peerUdpEndPointPunched[fromJoinIndex], 1);
+        int newUdpPunchedCnt = 0;
+        for (int i = 1; i <= roomCapacity; i++) {
+            if (0 == Interlocked.Read(ref peerUdpEndPointPunched[i])) continue; // Automatically excludes backend udp tunnel and self.
+            newUdpPunchedCnt++;
+        }
+        NetworkDoctor.Instance.LogUdpPunchedCnt(newUdpPunchedCnt);
+    }
+
     private async Task Receive(UdpClient udpSession, int roomCapacity, CancellationToken wsSessionCancellationToken) {
         Debug.Log(String.Format("Starts udpSession 'Receive' loop"));
         try {
@@ -102,15 +116,14 @@ public class UdpSessionManager {
                 var recvResult = await udpSession.ReceiveAsync(); // by experiment, "udpSession.Close()" would unblock it
                 WsReq req = WsReq.Parser.ParseFrom(recvResult.Buffer);
                 if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH == req.Act) {
-                    Interlocked.Exchange(ref peerUdpEndPointPunched[req.JoinIndex], 1);
-                    Debug.Log(String.Format("Received holePuncher: {0}", req));
-                    int newUdpPunchedCnt = 0;
-                    for (int i = 1; i <= roomCapacity; i++) {
-                        if (1 == Interlocked.Read(ref peerUdpEndPointPunched[i])) continue;
-                        newUdpPunchedCnt++;
-                    }
-                    NetworkDoctor.Instance.LogUdpPunchedCnt(newUdpPunchedCnt);
+                    Debug.Log(String.Format("Received direct holePuncher from joinIndex: {0}, from addr={1}", req.JoinIndex, recvResult.RemoteEndPoint));
+                    markPunched(req.JoinIndex, roomCapacity);
                 } else {
+                    if (0 == Interlocked.Read(ref peerUdpEndPointPunched[req.JoinIndex]) && !recvResult.RemoteEndPoint.Address.Equals(peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL].Address)) {
+                        // [WARNING] Any packet not from the backend udp tunnel can be effectively a holepunch!
+                        Debug.Log(String.Format("Received effective holePuncher from joinIndex: {0}, from addr={1}", req.JoinIndex, recvResult.RemoteEndPoint));
+                        markPunched(req.JoinIndex, roomCapacity);
+                    }
                     recvBuffer.Enqueue(req);
                 }
             }
@@ -121,9 +134,11 @@ public class UdpSessionManager {
         }
     }
 
-    public void updatePeerAddr(int roomCapacity, RepeatedField<PeerUdpAddr> newPeerUdpAddrList) {
+    public void updatePeerAddr(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> newPeerUdpAddrList) {
         // TODO: Make this method thread-safe for "this.peerUdpAddrList"
+        int updatedCnt = 0;
         for (int i = 0; i <= roomCapacity; i++) {
+            if (i == selfJoinIndex) continue;
             if (0 < i && String.IsNullOrEmpty(newPeerUdpAddrList[i].Ip)) continue;
             IPAddress newEndpointIp;
             if (!IPAddress.TryParse(Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == i ? Env.Instance.getHostnameOnly() : newPeerUdpAddrList[i].Ip, out newEndpointIp)) {
@@ -131,16 +146,17 @@ public class UdpSessionManager {
                 Debug.LogError(msg);
                 throw new FormatException(msg);
             }
+            if (null != peerUdpEndPointList[i] && null != newEndpointIp && newEndpointIp.Equals(peerUdpEndPointList[i].Address) && newPeerUdpAddrList[i].Port == peerUdpEndPointList[i].Port) continue;
             peerUdpEndPointList[i] = new IPEndPoint(newEndpointIp, newPeerUdpAddrList[i].Port);
-            Debug.Log(String.Format("Updated peerUdpEndPointList[i:{0}]={1}", i, peerUdpEndPointList[i]));
-        }
+            updatedCnt++;
+        } 
 
-        Debug.Log(String.Format("Ends updatePeerAddr with newPeerUdpAddrList={0}", newPeerUdpAddrList));
+        Debug.Log(String.Format("Ends updatePeerAddr with newPeerUdpAddrList={0}, updatedCnt={1}", newPeerUdpAddrList, updatedCnt));
 
         _ = Task.Run(async () => {
-            int c = 5;
+            int c = 10;
             while (0 <= Interlocked.Decrement(ref c)) {
-                await Task.Delay(1500);
+                await Task.Delay(1000+c*50);
                 Debug.Log(String.Format("Enqueues holePuncher c={0}", c));
                 senderBuffer.Enqueue(holePuncher);
             }

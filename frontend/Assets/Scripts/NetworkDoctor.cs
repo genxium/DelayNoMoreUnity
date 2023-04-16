@@ -39,10 +39,7 @@ public class NetworkDoctor {
             });
         }
 
-        // Clear, and then use by "DryPut()"
-        sendingQ.Clear();
-        inputFrameDownsyncQ.Clear();
-        peerInputFrameUpsyncQ.Clear();
+        // Clear by "Reset()", and then use by "DryPut()"
     }
 
     private int inputFrameIdFront;
@@ -60,6 +57,10 @@ public class NetworkDoctor {
         lockedStepsCnt = 0;
         udpPunchedCnt = 0;
         inputRateThreshold = Battle.ConvertToNoDelayInputFrameId(59);
+
+        sendingQ.Clear();
+        inputFrameDownsyncQ.Clear();
+        peerInputFrameUpsyncQ.Clear();
     }
 
     public void LogInputFrameIdFront(int val) {
@@ -142,8 +143,9 @@ public class NetworkDoctor {
             var st = peerInputFrameUpsyncQ.GetFirst();
             var ed = peerInputFrameUpsyncQ.GetLast();
             long elapsedMillis = ed.t - st.t;
-            if (null != st && null != ed && 0 < elapsedMillis)
+            if (null != st && null != ed && 0 < elapsedMillis) {
                 peerUpsyncFps = (int)((long)(ed.j - st.i) * 1000 / elapsedMillis);
+            }
         }
         return (sendingFps, srvDownsyncFps, peerUpsyncFps);
     }

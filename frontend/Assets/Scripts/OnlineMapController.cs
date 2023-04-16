@@ -106,7 +106,7 @@ public class OnlineMapController : AbstractMapController {
                     SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
-                    Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO in main thread: {0}", wsRespHolder));
+                    Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO in main thread"));
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
                     if (wsRespHolder.BciFrame.BoundRoomCapacity != roomCapacity) {
@@ -153,8 +153,9 @@ public class OnlineMapController : AbstractMapController {
                     onInputFrameDownsyncBatch(wsRespHolder.InputFrameDownsyncBatch);
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_PEER_UDP_ADDR:
-                    Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread: {0}", wsRespHolder));
-                    UdpSessionManager.Instance.updatePeerAddr(roomCapacity, wsRespHolder.Rdf.PeerUdpAddrList);
+                    var newPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
+                    Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread, newPeerUdpAddrList: {0}", newPeerUdpAddrList));
+                    UdpSessionManager.Instance.updatePeerAddr(roomCapacity, selfPlayerInfo.JoinIndex, newPeerUdpAddrList);
                     break;
                 default:
                     break;
@@ -316,7 +317,7 @@ public class OnlineMapController : AbstractMapController {
 
             if (inputFrameId <= lastAllConfirmedInputFrameId) {
                 // [WARNING] Don't reject it by "inputFrameId <= lastIndividuallyConfirmedInputFrameId[peerJoinIndex-1]", the arrival of UDP packets might not reserve their sending order!
-                Debug.Log(String.Format("Udp upsync inputFrameId={0} from peerJoinIndex={1} is ignored because it's already confirmed#1! lastAllConfirmedInputFrameId={2}", inputFrameId, peerJoinIndex, lastAllConfirmedInputFrameId));
+                // Debug.Log(String.Format("Udp upsync inputFrameId={0} from peerJoinIndex={1} is ignored because it's already confirmed#1! lastAllConfirmedInputFrameId={2}", inputFrameId, peerJoinIndex, lastAllConfirmedInputFrameId));
                 continue;
             }
             ulong peerJoinIndexMask = ((ulong)1 << (peerJoinIndex - 1));
@@ -327,7 +328,7 @@ public class OnlineMapController : AbstractMapController {
             }
             ulong existingConfirmedList = existingInputFrame.ConfirmedList;
             if (0 < (existingConfirmedList & peerJoinIndexMask)) {
-                Debug.Log(String.Format("Udp upsync inputFrameId={0} from peerJoinIndex={1} is ignored because it's already confirmed#2! lastAllConfirmedInputFrameId={2}, existingInputFrame={3}", inputFrameId, peerJoinIndex, lastAllConfirmedInputFrameId, existingInputFrame));
+                // Debug.Log(String.Format("Udp upsync inputFrameId={0} from peerJoinIndex={1} is ignored because it's already confirmed#2! lastAllConfirmedInputFrameId={2}, existingInputFrame={3}", inputFrameId, peerJoinIndex, lastAllConfirmedInputFrameId, existingInputFrame));
                 continue;
             }
             if (inputFrameId > lastIndividuallyConfirmedInputFrameId[peerJoinIndex - 1]) {
@@ -347,9 +348,7 @@ public class OnlineMapController : AbstractMapController {
                 firstPredictedYetIncorrectInputFrameId = inputFrameId;
             }
         }
-        if (0 < effCnt) {
-            NetworkDoctor.Instance.LogPeerInputFrameUpsync(batch[0].InputFrameId, batch[batchCnt - 1].InputFrameId);
-        }
+        NetworkDoctor.Instance.LogPeerInputFrameUpsync(batch[0].InputFrameId, batch[batchCnt - 1].InputFrameId);
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, true);
     }
 
