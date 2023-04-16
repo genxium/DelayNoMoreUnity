@@ -48,8 +48,6 @@ public class UdpSessionManager {
             // [WARNING] UdpClient class in .NET Standard 2.1 doesn't support CancellationToken yet! See https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient?view=netstandard-2.1 for more information. The cancellationToken here is still used to keep in pace with the WebSocket session, i.e. is WebSocket Session is closed, then UdpSession should be closed too.
             Debug.Log(String.Format("openUdpSession#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
 
-            punchBackendUdpTunnel();
-
             await Task.WhenAll(Receive(udpSession, roomCapacity, wsSessionCancellationToken), Send(udpSession, roomCapacity, selfJoinIndex, wsSessionCancellationToken));
             Debug.Log("Both UdpSession 'Receive' and 'Send' tasks are ended.");
         } catch (Exception ex) {
@@ -174,21 +172,21 @@ public class UdpSessionManager {
         _ = Task.Run(async () => {
             int c = 10;
             while (0 <= Interlocked.Decrement(ref c)) {
-                await Task.Delay(1000 + c * 50);
                 Debug.Log(String.Format("Enqueues peerHolePuncher c={0}", c));
                 senderBuffer.Enqueue(peerHolePuncher);
+                await Task.Delay(1000 + c * 50);
             }
         });
     }
 
-    private void punchBackendUdpTunnel() {
+    public void PunchBackendUdpTunnel() {
         // Will trigger DOWNSYNC_MSG_ACT_PEER_UDP_ADDR for all players, including itself
         _ = Task.Run(async () => {
             int c = 10;
             while (0 <= Interlocked.Decrement(ref c)) {
-                await Task.Delay(1000 + c * 50);
                 Debug.Log(String.Format("Enqueues serverHolePuncher c={0}", c));
                 senderBuffer.Enqueue(serverHolePuncher);
+                await Task.Delay(1000 + c * 50);
             }
         });
     }

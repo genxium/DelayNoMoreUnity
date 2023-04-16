@@ -169,6 +169,8 @@ public class OnlineMapController : AbstractMapController {
                     
                     In practice, I found a weird case where P2 starts holepunching P1 much earlier than the opposite direction (e.g. when P2 joins the room later, but gets the peer udp addr of P1 earlier upon DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO), the punching for both directions would fail if the firewall(of network provider) of P1 rejected & blacklisted the early holepunching packet from P2 for a short period (e.g. 1 minute).
                      */
+
+                    UdpSessionManager.Instance.PunchBackendUdpTunnel();
                     UdpSessionManager.Instance.PunchAllPeers();
                     break;
                 default:
