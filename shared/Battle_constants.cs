@@ -25,7 +25,8 @@ namespace shared {
 
         public const int UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK = 1;
         public const int UPSYNC_MSG_ACT_PLAYER_CMD = 2;
-        public const int UPSYNC_MSG_ACT_HOLEPUNCH = 3;
+        public const int UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL = 3;
+        public const int UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR = 4;
 
         public const int DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO = 1;
         public const int DOWNSYNC_MSG_ACT_INPUT_BATCH = 2;

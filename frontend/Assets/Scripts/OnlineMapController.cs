@@ -126,13 +126,19 @@ public class OnlineMapController : AbstractMapController {
 
                     var initialPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
                     udpTask = Task.Run(async () => {
-                        var holePuncher = new WsReq {
+                        var serverHolePuncher = new WsReq {
                             PlayerId = selfPlayerInfo.Id,
-                            Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH,
+                            Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
                             JoinIndex = selfPlayerInfo.JoinIndex,
                             AuthKey = clientAuthKey
                         };
-                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, holePuncher, wsCancellationToken);
+                        var peerHolePuncher = new WsReq {
+                            PlayerId = selfPlayerInfo.Id,
+                            Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
+                            JoinIndex = selfPlayerInfo.JoinIndex,
+                            AuthKey = clientAuthKey
+                        };
+                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, wsCancellationToken);
                     });
 
                     break;
@@ -155,7 +161,15 @@ public class OnlineMapController : AbstractMapController {
                 case shared.Battle.DOWNSYNC_MSG_ACT_PEER_UDP_ADDR:
                     var newPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread, newPeerUdpAddrList: {0}", newPeerUdpAddrList));
-                    UdpSessionManager.Instance.updatePeerAddr(roomCapacity, selfPlayerInfo.JoinIndex, newPeerUdpAddrList);
+                    UdpSessionManager.Instance.UpdatePeerAddr(roomCapacity, selfPlayerInfo.JoinIndex, newPeerUdpAddrList);
+                    break;
+                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START:
+                    /*
+                     [WARNING] Deliberately trying to START "PunchAllPeers" for every participant at roughly the same time. 
+                    
+                    In practice, I found a weird case where P2 starts holepunching P1 much earlier than the opposite direction (e.g. when P2 joins the room later, but gets the peer udp addr of P1 earlier upon DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO), the punching for both directions would fail if the firewall(of network provider) of P1 rejected & blacklisted the early holepunching packet from P2 for a short period (e.g. 1 minute).
+                     */
+                    UdpSessionManager.Instance.PunchAllPeers();
                     break;
                 default:
                     break;
@@ -201,7 +215,7 @@ public class OnlineMapController : AbstractMapController {
                 }
 
                 Debug.LogWarning(String.Format("Calling UdpSessionManager.Instance.closeUdpSession()."));
-                UdpSessionManager.Instance.closeUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
+                UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
 
             }
         });

@@ -25,27 +25,31 @@ public class UdpSessionManager {
     private IPEndPoint[] peerUdpEndPointList;
     private long[] peerUdpEndPointPunched;
     private UdpClient udpSession;
-    private WsReq holePuncher;
+    private WsReq serverHolePuncher, peerHolePuncher;
 
     private UdpSessionManager() {
         senderBuffer = new ConcurrentQueue<WsReq>();
         recvBuffer = new ConcurrentQueue<WsReq>();
     }
 
-    public async Task openUdpSession(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> initialPeerAddrList, WsReq theholePuncher, CancellationToken wsSessionCancellationToken) {
+    public async Task OpenUdpSession(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> initialPeerAddrList, WsReq theServerHolePuncher, WsReq thePeerHolePuncher, CancellationToken wsSessionCancellationToken) {
         Debug.Log(String.Format("openUdpSession#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
-        holePuncher = theholePuncher;
+        serverHolePuncher = theServerHolePuncher;
+        peerHolePuncher = thePeerHolePuncher;
         senderBuffer.Clear();
         recvBuffer.Clear();
 
         peerUdpEndPointList = new IPEndPoint[roomCapacity + 1];
         peerUdpEndPointPunched = new long[roomCapacity + 1];
-        updatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
+        UpdatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
 
         try {
             udpSession = new UdpClient(port: 0);
             // [WARNING] UdpClient class in .NET Standard 2.1 doesn't support CancellationToken yet! See https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient?view=netstandard-2.1 for more information. The cancellationToken here is still used to keep in pace with the WebSocket session, i.e. is WebSocket Session is closed, then UdpSession should be closed too.
             Debug.Log(String.Format("openUdpSession#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
+
+            punchBackendUdpTunnel();
+
             await Task.WhenAll(Receive(udpSession, roomCapacity, wsSessionCancellationToken), Send(udpSession, roomCapacity, selfJoinIndex, wsSessionCancellationToken));
             Debug.Log("Both UdpSession 'Receive' and 'Send' tasks are ended.");
         } catch (Exception ex) {
@@ -63,8 +67,11 @@ public class UdpSessionManager {
                 while (senderBuffer.TryDequeue(out toSendObj)) {
                     wsSessionCancellationToken.ThrowIfCancellationRequested();
                     var toSendBuffer = toSendObj.ToByteArray();
-                    if (toSendObj.Act == holePuncher.Act) {
-                        for (int i = 0; i <= roomCapacity; i++) {
+                    if (toSendObj.Act == serverHolePuncher.Act) {
+                        if (null == peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]) continue;
+                        await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
+                    } else if (toSendObj.Act == peerHolePuncher.Act) {
+                        for (int i = 1; i <= roomCapacity; i++) {
                             if (i == selfJoinIndex) continue;
                             if (null == peerUdpEndPointList[i]) continue;
                             // [WARNING] Deliberately keep sending even if "1 == Interlocked.Read(ref peerUdpEndPointPunched[i])"
@@ -115,16 +122,19 @@ public class UdpSessionManager {
                 wsSessionCancellationToken.ThrowIfCancellationRequested();
                 var recvResult = await udpSession.ReceiveAsync(); // by experiment, "udpSession.Close()" would unblock it
                 WsReq req = WsReq.Parser.ParseFrom(recvResult.Buffer);
-                if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH == req.Act) {
-                    Debug.Log(String.Format("Received direct holePuncher from joinIndex: {0}, from addr={1}", req.JoinIndex, recvResult.RemoteEndPoint));
-                    markPunched(req.JoinIndex, roomCapacity);
-                } else {
-                    if (0 == Interlocked.Read(ref peerUdpEndPointPunched[req.JoinIndex]) && !recvResult.RemoteEndPoint.Address.Equals(peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL].Address)) {
-                        // [WARNING] Any packet not from the backend udp tunnel can be effectively a holepunch!
-                        Debug.Log(String.Format("Received effective holePuncher from joinIndex: {0}, from addr={1}", req.JoinIndex, recvResult.RemoteEndPoint));
+                switch (req.Act) {
+                    case Battle.UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR:
+                        Debug.Log(String.Format("Received direct holePuncher from joinIndex: {0}, from addr={1}", req.JoinIndex, recvResult.RemoteEndPoint));
                         markPunched(req.JoinIndex, roomCapacity);
-                    }
-                    recvBuffer.Enqueue(req);
+                        break;
+                    case Battle.UPSYNC_MSG_ACT_PLAYER_CMD:
+                        if (0 == Interlocked.Read(ref peerUdpEndPointPunched[req.JoinIndex]) && !recvResult.RemoteEndPoint.Address.Equals(peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL].Address)) {
+                            // [WARNING] Any packet not from the backend udp tunnel can be effectively a holepunch!
+                            Debug.Log(String.Format("Received effective holePuncher from joinIndex: {0}, from addr={1}", req.JoinIndex, recvResult.RemoteEndPoint));
+                            markPunched(req.JoinIndex, roomCapacity);
+                        }
+                        recvBuffer.Enqueue(req);
+                        break;
                 }
             }
         } catch (Exception ex) {
@@ -134,7 +144,7 @@ public class UdpSessionManager {
         }
     }
 
-    public void updatePeerAddr(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> newPeerUdpAddrList) {
+    public void UpdatePeerAddr(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> newPeerUdpAddrList) {
         // TODO: Make this method thread-safe for "this.peerUdpAddrList"
         int updatedCnt = 0;
         for (int i = 0; i <= roomCapacity; i++) {
@@ -152,20 +162,34 @@ public class UdpSessionManager {
         } 
 
         Debug.Log(String.Format("Ends updatePeerAddr with newPeerUdpAddrList={0}, updatedCnt={1}", newPeerUdpAddrList, updatedCnt));
+    }
 
+    public void CloseUdpSession() {
+        if (null != udpSession) {
+            udpSession.Close();
+        }
+    }
+
+    public void PunchAllPeers() {
         _ = Task.Run(async () => {
             int c = 10;
             while (0 <= Interlocked.Decrement(ref c)) {
-                await Task.Delay(1000+c*50);
-                Debug.Log(String.Format("Enqueues holePuncher c={0}", c));
-                senderBuffer.Enqueue(holePuncher);
+                await Task.Delay(1000 + c * 50);
+                Debug.Log(String.Format("Enqueues peerHolePuncher c={0}", c));
+                senderBuffer.Enqueue(peerHolePuncher);
             }
         });
     }
 
-    public void closeUdpSession() {
-        if (null != udpSession) {
-            udpSession.Close();
-        }
+    private void punchBackendUdpTunnel() {
+        // Will trigger DOWNSYNC_MSG_ACT_PEER_UDP_ADDR for all players, including itself
+        _ = Task.Run(async () => {
+            int c = 10;
+            while (0 <= Interlocked.Decrement(ref c)) {
+                await Task.Delay(1000 + c * 50);
+                Debug.Log(String.Format("Enqueues serverHolePuncher c={0}", c));
+                senderBuffer.Enqueue(serverHolePuncher);
+            }
+        });
     }
 }

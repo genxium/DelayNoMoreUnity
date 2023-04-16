@@ -1005,7 +1005,7 @@ public class Room {
                     continue;
                 }
 
-                if (null == player.BattleUdpTunnelAddr) {
+                if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL == pReq.Act && null == player.BattleUdpTunnelAddr) {
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
                     peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.PlayerDownsync.JoinIndex] = new PeerUdpAddr {
                         Ip = recvResult.RemoteEndPoint.Address.ToString(),
@@ -1014,10 +1014,8 @@ public class Room {
                     _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.PlayerDownsync.JoinIndex]);
                     // Need broadcast to all, including the current "pReq.PlayerId", to favor p2p holepunching
                     broadcastPeerUdpAddrList(player.PlayerDownsync.JoinIndex);
-                }
 
-                if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH == pReq.Act) {
-                    // [WARNING] Don't forward "holepunching to server" to other players, otherwise it'd cause other players to record a wrong peer address!
+                    // [WARNING] Don't forward "holepunching to server" to other players
                     continue;
                 }
 
