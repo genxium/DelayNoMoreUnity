@@ -285,7 +285,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected virtual void resetCurrentMatch() {
-        Debug.Log(String.Format("_resetCurrentMatch with roomCapacity={0}", roomCapacity));
+        Debug.Log(String.Format("resetCurrentMatch with roomCapacity={0}", roomCapacity));
         battleState = ROOM_STATE_IMPOSSIBLE;
         renderFrameId = 0;
         renderFrameIdLagTolerance = 4;
