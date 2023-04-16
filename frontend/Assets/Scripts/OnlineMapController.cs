@@ -98,7 +98,7 @@ public class OnlineMapController : AbstractMapController {
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
-            Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
+            //Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {
                 case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
                     Debug.Log("Handling WsSession closed in main thread.");
@@ -124,8 +124,6 @@ public class OnlineMapController : AbstractMapController {
                     WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
 
-                    String udpTunnelIp = Env.Instance.getHostnameOnly();
-                    int udpTunnelPort = wsRespHolder.BciFrame.BattleUdpTunnel.Port;
                     var initialPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
                     udpTask = Task.Run(async () => {
                         var holePuncher = new WsReq {
@@ -134,7 +132,7 @@ public class OnlineMapController : AbstractMapController {
                             JoinIndex = selfPlayerInfo.JoinIndex,
                             AuthKey = clientAuthKey
                         };
-                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpTunnelIp, udpTunnelPort, initialPeerUdpAddrList, holePuncher, wsCancellationToken);
+                        await UdpSessionManager.Instance.openUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, holePuncher, wsCancellationToken);
                     });
 
                     break;
