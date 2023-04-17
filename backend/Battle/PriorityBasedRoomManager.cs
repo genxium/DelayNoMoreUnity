@@ -45,8 +45,8 @@ public class PriorityBasedRoomManager : IRoomManager {
     public bool Push(float newScore, Room r) {
         mux.WaitOne();
         try {
-            pq.Enqueue(r, newScore);
             dict.Add(r.id, r);
+            pq.Enqueue(r, newScore);
         } finally {
             mux.ReleaseMutex();
         }

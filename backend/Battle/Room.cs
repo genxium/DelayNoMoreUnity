@@ -128,6 +128,10 @@ public class Room {
         lazyInitBattleUdpTunnel();
     }
 
+    public bool IsFull() {
+        return capacity <= effectivePlayerCount;
+    }
+
     public int GetRenderCacheSize() {
         return ((inputBuffer.N - 1) << 1);
     }
@@ -135,7 +139,8 @@ public class Room {
     public int AddPlayerIfPossible(Player pPlayerFromDbInit, int playerId, int speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer) {
         joinerLock.WaitOne();
         try {
-            if (ROOM_STATE_IDLE != state && ROOM_STATE_WAITING != state) {
+            long nowRoomState = Interlocked.Read(ref state); 
+            if (ROOM_STATE_IDLE != nowRoomState && ROOM_STATE_WAITING != nowRoomState) {
                 return ErrCode.PlayerNotAddableToRoom;
             }
 

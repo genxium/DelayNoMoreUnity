@@ -61,9 +61,12 @@ public class WebSocketController : ControllerBase {
 
                 _logger.LogInformation("Added player to room [ roomId={0}, playerId={1} ]", room.id, playerId);
                 long nowRoomState = Interlocked.Read(ref room.state);
-                if (shared.Battle.ROOM_STATE_WAITING == nowRoomState) {
+                if (shared.Battle.ROOM_STATE_WAITING == nowRoomState && !room.IsFull()) {
+                    _logger.LogInformation("Putting room back to manager after player added [ roomId={0}, playerId={1}, roomState={2} ]", room.id, playerId, nowRoomState);
                     _roomManager.Push(room.calRoomScore(), room);
                     // Otherwise would put back after becoming ROOM_STATE_IDLE again   
+                } else {
+                    _logger.LogWarning("NOT putting room back to manager after player added [ roomId={0}, playerId={1}, roomState={2} ]", room.id, playerId, nowRoomState);
                 }
 
                 var bciFrame = new BattleColliderInfo {
