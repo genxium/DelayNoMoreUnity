@@ -60,7 +60,11 @@ public class WebSocketController : ControllerBase {
                 }
 
                 _logger.LogInformation("Added player to room [ roomId={0}, playerId={1} ]", room.id, playerId);
-                _roomManager.Push(room.calRoomScore(), room);
+                long nowRoomState = Interlocked.Read(ref room.state);
+                if (shared.Battle.ROOM_STATE_WAITING == nowRoomState) {
+                    _roomManager.Push(room.calRoomScore(), room);
+                    // Otherwise would put back after becoming ROOM_STATE_IDLE again   
+                }
 
                 var bciFrame = new BattleColliderInfo {
                     StageName = room.stageName,

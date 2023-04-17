@@ -18,7 +18,7 @@ public class PriorityBasedRoomManager : IRoomManager {
 
         for (int i = 0; i < initialCountOfRooms; i++) {
             int roomCapacity = 2;
-            Room r = new Room(_loggerFactory, i+1, roomCapacity);
+            Room r = new Room(this, _loggerFactory, i+1, roomCapacity);
             Push(0, r);
         }
     }

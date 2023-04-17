@@ -49,7 +49,7 @@ public class Room {
     Dictionary<int, WebSocket> playerDownsyncSessionDict;
     Dictionary<int, CancellationTokenSource> playerSignalToCloseDict;
     Dictionary<int, PlayerSessionAckWatchdog> playerActiveWatchdogDict;
-    long state;
+    public long state;
     int effectivePlayerCount;
 
     FrameRingBuffer<InputFrameDownsync> inputBuffer; // Indices are STRICTLY consecutive
@@ -75,9 +75,11 @@ public class Room {
     UdpClient? battleUdpTunnel;
     CancellationTokenSource battleUdpTunnelCancellationTokenSource;
 
+    IRoomManager _roomManager;
     ILoggerFactory _loggerFactory;
     ILogger<Room> _logger;
-    public Room(ILoggerFactory loggerFactory, int roomId, int roomCapacity) {
+    public Room(IRoomManager roomManager, ILoggerFactory loggerFactory, int roomId, int roomCapacity) {
+        _roomManager = roomManager;
         _loggerFactory = loggerFactory;
         _logger = loggerFactory.CreateLogger<Room>();
         id = roomId;
@@ -218,6 +220,7 @@ public class Room {
                     players.Remove(playerId);
                     if (0 == effectivePlayerCount) {
                         Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
+                        _roomManager.Push(calRoomScore(), this);
                     }
                     _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
@@ -520,7 +523,7 @@ public class Room {
             await dismiss();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is dismissed@renderFrameId={1}", id, renderFrameId);
             Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
-            // TODO: Pop the current room from RoomManager, recalc score, then push it back; this might need the functionality of https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/PriorityQueue.js
+            _roomManager.Push(calRoomScore(), this);
         }
     }
 
