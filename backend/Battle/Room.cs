@@ -685,29 +685,13 @@ public class Room {
 
     private InputFrameDownsync getOrPrefabInputFrameDownsync(int inputFrameId) {
         /*
-		   [WARNING] This function MUST BE called while "inputBufferLock" is locked.
-		*/
+           [WARNING] This function MUST BE called while "inputBufferLock" is locked.
+         */
         //_logger.LogInformation("getOrPrefabInputFrameDownsync#1 for roomId={0}, inputFrameId={1}", id, inputFrameId);
         var (res1, currInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId);
         //_logger.LogInformation("getOrPrefabInputFrameDownsync#2 for roomId={0}, inputFrameId={1}: res1={2}", id, inputFrameId, res1);
 
         if (false == res1 || null == currInputFrameDownsync) {
-            /**
-				[WARNING] Don't reference "inputBuffer.GetByFrameId(j-1)" to prefab here!
-
-				Otherwise if an ActiveSlowTicker got a forced confirmation sequence like
-				```
-				inputFrame#42    {dx: -2} upsynced;
-				inputFrame#43-50 {dx: +2} ignored by [type#1 forceConfirmation];
-				inputFrame#51    {dx: +2} upsynced;
-				inputFrame#52-60 {dx: +2} ignored by [type#1 forceConfirmation];
-				inputFrame#61    {dx: +2} upsynced;
-
-				...there would be more [type#1 forceConfirmation]s for this ActiveSlowTicker if it doesn't catch up the upsync pace...
-				```
-				, the backend might've been prefabbing TOO QUICKLY and thus still replicating "inputFrame#42" by now for this ActiveSlowTicker, making its graphics inconsistent upon "[type#1 forceConfirmation] at inputFrame#52-60", i.e. as if always dragged to the left while having been controlled to the right for a few frames -- what's worse, the same graphical inconsistence could even impact later "[type#1 forceConfirmation]s" if this ActiveSlowTicker doesn't catch up with the upsync pace!
-			*/
-
             while (null == currInputFrameDownsync || inputBuffer.EdFrameId <= inputFrameId) {
                 int gapInputFrameId = inputBuffer.EdFrameId;
                 inputBuffer.DryPut();
@@ -716,6 +700,21 @@ public class Room {
                     throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", gapInputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
                 }
                 ifdHolder.InputFrameId = gapInputFrameId;
+                /*
+                   [WARNING] Don't reference "inputBuffer.GetByFrameId(gapInputFrameId-1)" to prefab here!
+
+                   Otherwise if an ActiveSlowTicker got a forced confirmation sequence like
+                   ```
+                   inputFrame#42    {dx: -2} upsynced;
+                   inputFrame#43-50 {dx: +2} ignored by [type#1 forceConfirmation];
+                   inputFrame#51    {dx: +2} upsynced;
+                   inputFrame#52-60 {dx: +2} ignored by [type#1 forceConfirmation];
+                   inputFrame#61    {dx: +2} upsynced;
+
+                   ...there would be more [type#1 forceConfirmation]s for this ActiveSlowTicker if it doesn't catch up the upsync pace...
+                   ```
+                   , the backend might've been prefabbing TOO QUICKLY and thus still replicating "inputFrame#42" by now for this ActiveSlowTicker, making its graphics inconsistent upon "[type#1 forceConfirmation] at inputFrame#52-60", i.e. as if always dragged to the left while having been controlled to the right for a few frames -- what's worse, the same graphical inconsistence could even impact later "[type#1 forceConfirmation]s" if this ActiveSlowTicker doesn't catch up with the upsync pace!
+                 */
                 for (int i = 0; i < capacity; i++) {
                     // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
                     // Don't predict "btnA & btnB"!

@@ -355,7 +355,7 @@ public class OnlineMapController : AbstractMapController {
 
             bool isPeerEncodedInputUpdated = (existingInputFrame.InputList[peerJoinIndex - 1] != peerEncodedInput);
             existingInputFrame.InputList[peerJoinIndex - 1] = peerEncodedInput;
-            existingInputFrame.ConfirmedList = (existingConfirmedList | peerJoinIndexMask);
+
             if (
               TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId
               &&
@@ -365,6 +365,15 @@ public class OnlineMapController : AbstractMapController {
             }
         }
         NetworkDoctor.Instance.LogPeerInputFrameUpsync(batch[0].InputFrameId, batch[batchCnt - 1].InputFrameId);
+        /*
+        [WARNING] 
+
+        Deliberately NOT setting "existingInputFrame.ConfirmedList = (existingConfirmedList | peerJoinIndexMask)", thus NOT helping the move of "lastAllConfirmedInputFrameId" in "_markConfirmationIfApplicable()". 
+
+        The edge case of concern here is "type#1 forceConfirmation". Assume that there is a battle among [P_u, P_v, P_x, P_y] where [P_x] is being an "ActiveSlowerTicker", then for [P_u, P_v, P_y] there might've been some "inputFrameUpsync"s received from [P_x] by UDP peer-to-peer transmission EARLIER THAN BUT CONFLICTING WITH the "accompaniedInputFrameDownsyncBatch of type#1 forceConfirmation" -- in such case the latter should be respected -- by "conflicting", the backend actually ignores those "inputFrameUpsync"s from [P_x] by "forceConfirmation".
+    
+        However, we should still call "_handleIncorrectlyRenderedPrediction(...)" here to break rollbacks into smaller chunks, because even if not used for "inputFrameDownsync.ConfirmedList", a "UDP inputFrameUpsync" is still more accurate than the locally predicted inputs.
+        */
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, true);
     }
 
