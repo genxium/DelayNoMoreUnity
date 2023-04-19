@@ -2,6 +2,7 @@
 using shared;
 using static shared.Battle;
 using System;
+using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 
 public abstract class AbstractMapController : MonoBehaviour {
@@ -38,7 +39,11 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected shared.Collider[] staticRectangleColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
-    protected bool debugDrawingEnabled = true;
+
+    protected bool frameDataLoggingEnabled = false;
+    protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
+
+    protected bool debugDrawingEnabled = false;
 
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity);
@@ -141,6 +146,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
             Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder);
+
+            if (frameDataLoggingEnabled) {
+                rdfIdToActuallyUsedInput.Add(i, delayedInputFrame.Clone());
+            }
+
             var (ok3, nextRdf) = renderBuffer.GetByFrameId(i + 1);
             if (false == ok3 || null == nextRdf) {
                 throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, renderFrameId={1}", i + 1, renderFrameId));
@@ -293,6 +303,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;
         maxChasingRenderFramesPerUpdate = 5;
+        rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
+
         playerGameObjs = new GameObject[roomCapacity];
 
         var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
@@ -495,5 +507,31 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void enableBattleInput(bool yesOrNo) {
         BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         iptmgr.enable(yesOrNo);
+    }
+
+    protected void trimRdfInPlace(RoomDownsyncFrame rdf) {
+        // TODO: Removed bullets with TERMINATING_ID
+    }
+
+    protected List<FrameLog> wrapUpFrameLogs() {
+        var s = new List<FrameLog>();
+        for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
+            var (ok1, rdf) = renderBuffer.GetByFrameId(i);
+            if (!ok1 || null == rdf) {
+                throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
+            }
+            trimRdfInPlace(rdf);
+            InputFrameDownsync ifd;
+            if (!rdfIdToActuallyUsedInput.TryGetValue(i, out ifd)) {
+                throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 ifd for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
+            }
+            var frameLog = new FrameLog {
+                Rdf = rdf,
+                ActuallyUsedIdf = ifd
+            };
+            s.Add(frameLog);
+        }
+
+        return s;
     }
 }

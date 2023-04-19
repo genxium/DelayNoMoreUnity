@@ -114,6 +114,7 @@ public class OnlineMapController : AbstractMapController {
                         preallocateHolders();
                     }
                     resetCurrentMatch();
+                    frameDataLoggingEnabled = wsRespHolder.BciFrame.FrameDataLoggingEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     var reqData = new WsReq {
