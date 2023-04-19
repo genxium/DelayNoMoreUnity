@@ -162,7 +162,8 @@ public class NetworkDoctor {
 				if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
 				minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
 			}
-			if ((inputFrameIdFront - minInputFrameIdFront) > (inputFrameUpsyncDelayTolerance+3)) {
+			if ((inputFrameIdFront > minInputFrameIdFront) && inputFrameIdFront > (inputFrameUpsyncDelayTolerance + minInputFrameIdFront)) {
+                // First comparison to avoid integer overflow
 				Debug.Log(String.Format("Should lock step, inputFrameIdFront={0}, minInputFrameIdFront={1}, inputFrameUpsyncDelayTolerance={2}, sendingFps={3}, srvDownsyncFps={4}, inputRateThreshold={5}", inputFrameIdFront, minInputFrameIdFront, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold));
 				return (true, inputFrameIdFront, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
 			}

@@ -253,3 +253,8 @@ message Skill {
 	*/
 	repeated BulletConfig hits = 7; // Hits within a "Skill" are automatically triggered
 }
+
+message FrameLog {
+    RoomDownsyncFrame rdf = 1;
+    InputFrameDownsync actuallyUsedIdf = 2;
+}
