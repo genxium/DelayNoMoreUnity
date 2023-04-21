@@ -79,7 +79,7 @@ public class WebSocketController : ControllerBase {
 
                     RenderBufferSize = room.GetRenderCacheSize(),
                     BoundRoomCapacity = room.capacity,
-                    FrameDataLoggingEnabled = room.frameDataLoggingEnabled,
+                    FrameLogEnabled = room.frameLogEnabled,
                 };
 
                 if (null != room.battleUdpTunnelAddr) {

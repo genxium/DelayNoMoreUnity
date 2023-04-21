@@ -40,7 +40,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
 
-    protected bool frameDataLoggingEnabled = false;
+    protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
 
     protected bool debugDrawingEnabled = false;
@@ -147,8 +147,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder);
 
-            if (frameDataLoggingEnabled) {
-                rdfIdToActuallyUsedInput.Add(i, delayedInputFrame.Clone());
+            if (frameLogEnabled) {
+                rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
             }
 
             var (ok3, nextRdf) = renderBuffer.GetByFrameId(i + 1);
@@ -507,31 +507,5 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void enableBattleInput(bool yesOrNo) {
         BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         iptmgr.enable(yesOrNo);
-    }
-
-    protected void trimRdfInPlace(RoomDownsyncFrame rdf) {
-        // TODO: Removed bullets with TERMINATING_ID
-    }
-
-    protected List<FrameLog> wrapUpFrameLogs() {
-        var s = new List<FrameLog>();
-        for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
-            var (ok1, rdf) = renderBuffer.GetByFrameId(i);
-            if (!ok1 || null == rdf) {
-                throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
-            }
-            trimRdfInPlace(rdf);
-            InputFrameDownsync ifd;
-            if (!rdfIdToActuallyUsedInput.TryGetValue(i, out ifd)) {
-                throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 ifd for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
-            }
-            var frameLog = new FrameLog {
-                Rdf = rdf,
-                ActuallyUsedIdf = ifd
-            };
-            s.Add(frameLog);
-        }
-
-        return s;
     }
 }

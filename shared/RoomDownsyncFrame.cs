@@ -77,7 +77,7 @@ namespace shared {
             "cnR1YWxHcmlkWBjnByABKAUSFQoMdmlydHVhbEdyaWRZGOgHIAEoBRINCgRk",
             "aXJYGOkHIAEoBRINCgRkaXJZGOoHIAEoBRINCgR2ZWxYGOsHIAEoBRINCgR2",
             "ZWxZGOwHIAEoBSI4CgtQZWVyVWRwQWRkchIKCgJpcBgBIAEoCRIMCgRwb3J0",
-            "GAIgASgFEg8KB2F1dGhLZXkYAyABKAUijwMKEkJhdHRsZUNvbGxpZGVySW5m",
+            "GAIgASgFEg8KB2F1dGhLZXkYAyABKAUihwMKEkJhdHRsZUNvbGxpZGVySW5m",
             "bxIRCglzdGFnZU5hbWUYASABKAkSEwoLYm91bmRSb29tSWQYAiABKAUSHAoU",
             "YmF0dGxlRHVyYXRpb25GcmFtZXMYAyABKAMSJgoeaW5wdXRGcmFtZVVwc3lu",
             "Y0RlbGF5VG9sZXJhbmNlGAQgASgFEicKH21heENoYXNpbmdSZW5kZXJGcmFt",
@@ -85,37 +85,37 @@ namespace shared {
             "cxgGIAEoARIgChhyb2xsYmFja0VzdGltYXRlZER0TmFub3MYByABKAMSGAoQ",
             "cmVuZGVyQnVmZmVyU2l6ZRgIIAEoBRIYChBjb2xsaXNpb25NaW5TdGVwGAkg",
             "ASgFEhkKEWJvdW5kUm9vbUNhcGFjaXR5GAogASgFEiwKD2JhdHRsZVVkcFR1",
-            "bm5lbBgLIAEoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIgChdmcmFtZURhdGFM",
-            "b2dnaW5nRW5hYmxlZBiACCABKAgipwIKEVJvb21Eb3duc3luY0ZyYW1lEgoK",
-            "AmlkGAEgASgFEioKCnBsYXllcnNBcnIYAiADKAsyFi5zaGFyZWQuUGxheWVy",
-            "RG93bnN5bmMSFgoOY291bnRkb3duTmFub3MYAyABKAMSHwoHYnVsbGV0cxgE",
-            "IAMoCzIOLnNoYXJlZC5CdWxsZXQSHwoWYmFja2VuZFVuY29uZmlybWVkTWFz",
-            "axiACCABKAQSGgoRc2hvdWxkRm9yY2VSZXN5bmMYgQggASgIEhYKDXNwZWNp",
-            "ZXNJZExpc3QYggggAygFEh0KFGJ1bGxldExvY2FsSWRDb3VudGVyGIMIIAEo",
-            "BRItCg9wZWVyVWRwQWRkckxpc3QYhAggAygLMhMuc2hhcmVkLlBlZXJVZHBB",
-            "ZGRyIswBCgZXc1Jlc3ASCwoDcmV0GAEgASgFEgsKA2FjdBgCIAEoBRImCgNy",
-            "ZGYYAyABKAsyGS5zaGFyZWQuUm9vbURvd25zeW5jRnJhbWUSOwoXaW5wdXRG",
-            "cmFtZURvd25zeW5jQmF0Y2gYBCADKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURv",
-            "d25zeW5jEiwKCGJjaUZyYW1lGAUgASgLMhouc2hhcmVkLkJhdHRsZUNvbGxp",
-            "ZGVySW5mbxIVCg1wZWVySm9pbkluZGV4GAYgASgFIvMBCgVTa2lsbBIVCg1i",
-            "YXR0bGVMb2NhbElkGAEgASgFEhYKDnJlY292ZXJ5RnJhbWVzGAIgASgFEh0K",
-            "FXJlY292ZXJ5RnJhbWVzT25CbG9jaxgDIAEoBRIbChNyZWNvdmVyeUZyYW1l",
-            "c09uSGl0GAQgASgFEi0KC3RyaWdnZXJUeXBlGAUgASgOMhguc2hhcmVkLlNr",
-            "aWxsVHJpZ2dlclR5cGUSLAoMYm91bmRDaFN0YXRlGAYgASgOMhYuc2hhcmVk",
-            "LkNoYXJhY3RlclN0YXRlEiIKBGhpdHMYByADKAsyFC5zaGFyZWQuQnVsbGV0",
-            "Q29uZmlnImcKCEZyYW1lTG9nEiYKA3JkZhgBIAEoCzIZLnNoYXJlZC5Sb29t",
-            "RG93bnN5bmNGcmFtZRIzCg9hY3R1YWxseVVzZWRJZGYYAiABKAsyGi5zaGFy",
-            "ZWQuSW5wdXRGcmFtZURvd25zeW5jKjUKC0J1bGxldFN0YXRlEgsKB1N0YXJ0",
-            "VXAQABIKCgZBY3RpdmUQARINCglFeHBsb2RpbmcQAiqOAgoOQ2hhcmFjdGVy",
-            "U3RhdGUSCQoFSWRsZTEQABILCgdXYWxraW5nEAESCAoEQXRrMRACEgoKBkF0",
-            "a2VkMRADEhQKEEluQWlySWRsZTFOb0p1bXAQBBIUChBJbkFpcklkbGUxQnlK",
-            "dW1wEAUSDQoJSW5BaXJBdGsxEAYSDwoLSW5BaXJBdGtlZDEQBxIMCghCbG93",
-            "blVwMRAIEgwKCExheURvd24xEAkSCgoGR2V0VXAxEAoSCAoEQXRrMhALEggK",
-            "BEF0azMQDBIICgRBdGs0EA0SCAoEQXRrNRAOEgsKB0Rhc2hpbmcQDxIKCgZP",
-            "bldhbGwQEBIOCgpUdXJuQXJvdW5kEBESCQoFRHlpbmcQEio3CgpCdWxsZXRU",
-            "eXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmlyZWJhbGwQ",
-            "AiozChBTa2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIPCgtGYWxs",
-            "aW5nRWRnZRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
+            "bm5lbBgLIAEoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIYCg9mcmFtZUxvZ0Vu",
+            "YWJsZWQYgAggASgIIqcCChFSb29tRG93bnN5bmNGcmFtZRIKCgJpZBgBIAEo",
+            "BRIqCgpwbGF5ZXJzQXJyGAIgAygLMhYuc2hhcmVkLlBsYXllckRvd25zeW5j",
+            "EhYKDmNvdW50ZG93bk5hbm9zGAMgASgDEh8KB2J1bGxldHMYBCADKAsyDi5z",
+            "aGFyZWQuQnVsbGV0Eh8KFmJhY2tlbmRVbmNvbmZpcm1lZE1hc2sYgAggASgE",
+            "EhoKEXNob3VsZEZvcmNlUmVzeW5jGIEIIAEoCBIWCg1zcGVjaWVzSWRMaXN0",
+            "GIIIIAMoBRIdChRidWxsZXRMb2NhbElkQ291bnRlchiDCCABKAUSLQoPcGVl",
+            "clVkcEFkZHJMaXN0GIQIIAMoCzITLnNoYXJlZC5QZWVyVWRwQWRkciLMAQoG",
+            "V3NSZXNwEgsKA3JldBgBIAEoBRILCgNhY3QYAiABKAUSJgoDcmRmGAMgASgL",
+            "Mhkuc2hhcmVkLlJvb21Eb3duc3luY0ZyYW1lEjsKF2lucHV0RnJhbWVEb3du",
+            "c3luY0JhdGNoGAQgAygLMhouc2hhcmVkLklucHV0RnJhbWVEb3duc3luYxIs",
+            "CghiY2lGcmFtZRgFIAEoCzIaLnNoYXJlZC5CYXR0bGVDb2xsaWRlckluZm8S",
+            "FQoNcGVlckpvaW5JbmRleBgGIAEoBSLzAQoFU2tpbGwSFQoNYmF0dGxlTG9j",
+            "YWxJZBgBIAEoBRIWCg5yZWNvdmVyeUZyYW1lcxgCIAEoBRIdChVyZWNvdmVy",
+            "eUZyYW1lc09uQmxvY2sYAyABKAUSGwoTcmVjb3ZlcnlGcmFtZXNPbkhpdBgE",
+            "IAEoBRItCgt0cmlnZ2VyVHlwZRgFIAEoDjIYLnNoYXJlZC5Ta2lsbFRyaWdn",
+            "ZXJUeXBlEiwKDGJvdW5kQ2hTdGF0ZRgGIAEoDjIWLnNoYXJlZC5DaGFyYWN0",
+            "ZXJTdGF0ZRIiCgRoaXRzGAcgAygLMhQuc2hhcmVkLkJ1bGxldENvbmZpZyJn",
+            "CghGcmFtZUxvZxImCgNyZGYYASABKAsyGS5zaGFyZWQuUm9vbURvd25zeW5j",
+            "RnJhbWUSMwoPYWN0dWFsbHlVc2VkSWRmGAIgASgLMhouc2hhcmVkLklucHV0",
+            "RnJhbWVEb3duc3luYyo1CgtCdWxsZXRTdGF0ZRILCgdTdGFydFVwEAASCgoG",
+            "QWN0aXZlEAESDQoJRXhwbG9kaW5nEAIqjgIKDkNoYXJhY3RlclN0YXRlEgkK",
+            "BUlkbGUxEAASCwoHV2Fsa2luZxABEggKBEF0azEQAhIKCgZBdGtlZDEQAxIU",
+            "ChBJbkFpcklkbGUxTm9KdW1wEAQSFAoQSW5BaXJJZGxlMUJ5SnVtcBAFEg0K",
+            "CUluQWlyQXRrMRAGEg8KC0luQWlyQXRrZWQxEAcSDAoIQmxvd25VcDEQCBIM",
+            "CghMYXlEb3duMRAJEgoKBkdldFVwMRAKEggKBEF0azIQCxIICgRBdGszEAwS",
+            "CAoEQXRrNBANEggKBEF0azUQDhILCgdEYXNoaW5nEA8SCgoGT25XYWxsEBAS",
+            "DgoKVHVybkFyb3VuZBAREgkKBUR5aW5nEBIqNwoKQnVsbGV0VHlwZRIQCgxV",
+            "bmRldGVybWluZWQQABIJCgVNZWxlZRABEgwKCEZpcmViYWxsEAIqMwoQU2tp",
+            "bGxUcmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdlEAASDwoLRmFsbGluZ0VkZ2UQ",
+            "AUIJqgIGc2hhcmVkYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -129,7 +129,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "BattleUdpTunnel", "FrameDataLoggingEnabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "Hits" }, null, null, null, null),
@@ -5247,7 +5247,7 @@ namespace shared {
       collisionMinStep_ = other.collisionMinStep_;
       boundRoomCapacity_ = other.boundRoomCapacity_;
       battleUdpTunnel_ = other.battleUdpTunnel_ != null ? other.battleUdpTunnel_.Clone() : null;
-      frameDataLoggingEnabled_ = other.frameDataLoggingEnabled_;
+      frameLogEnabled_ = other.frameLogEnabled_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5389,15 +5389,15 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "frameDataLoggingEnabled" field.</summary>
-    public const int FrameDataLoggingEnabledFieldNumber = 1024;
-    private bool frameDataLoggingEnabled_;
+    /// <summary>Field number for the "frameLogEnabled" field.</summary>
+    public const int FrameLogEnabledFieldNumber = 1024;
+    private bool frameLogEnabled_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool FrameDataLoggingEnabled {
-      get { return frameDataLoggingEnabled_; }
+    public bool FrameLogEnabled {
+      get { return frameLogEnabled_; }
       set {
-        frameDataLoggingEnabled_ = value;
+        frameLogEnabled_ = value;
       }
     }
 
@@ -5427,7 +5427,7 @@ namespace shared {
       if (CollisionMinStep != other.CollisionMinStep) return false;
       if (BoundRoomCapacity != other.BoundRoomCapacity) return false;
       if (!object.Equals(BattleUdpTunnel, other.BattleUdpTunnel)) return false;
-      if (FrameDataLoggingEnabled != other.FrameDataLoggingEnabled) return false;
+      if (FrameLogEnabled != other.FrameLogEnabled) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5446,7 +5446,7 @@ namespace shared {
       if (CollisionMinStep != 0) hash ^= CollisionMinStep.GetHashCode();
       if (BoundRoomCapacity != 0) hash ^= BoundRoomCapacity.GetHashCode();
       if (battleUdpTunnel_ != null) hash ^= BattleUdpTunnel.GetHashCode();
-      if (FrameDataLoggingEnabled != false) hash ^= FrameDataLoggingEnabled.GetHashCode();
+      if (FrameLogEnabled != false) hash ^= FrameLogEnabled.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5509,9 +5509,9 @@ namespace shared {
         output.WriteRawTag(90);
         output.WriteMessage(BattleUdpTunnel);
       }
-      if (FrameDataLoggingEnabled != false) {
+      if (FrameLogEnabled != false) {
         output.WriteRawTag(128, 64);
-        output.WriteBool(FrameDataLoggingEnabled);
+        output.WriteBool(FrameLogEnabled);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -5567,9 +5567,9 @@ namespace shared {
         output.WriteRawTag(90);
         output.WriteMessage(BattleUdpTunnel);
       }
-      if (FrameDataLoggingEnabled != false) {
+      if (FrameLogEnabled != false) {
         output.WriteRawTag(128, 64);
-        output.WriteBool(FrameDataLoggingEnabled);
+        output.WriteBool(FrameLogEnabled);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -5614,7 +5614,7 @@ namespace shared {
       if (battleUdpTunnel_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(BattleUdpTunnel);
       }
-      if (FrameDataLoggingEnabled != false) {
+      if (FrameLogEnabled != false) {
         size += 2 + 1;
       }
       if (_unknownFields != null) {
@@ -5665,8 +5665,8 @@ namespace shared {
         }
         BattleUdpTunnel.MergeFrom(other.BattleUdpTunnel);
       }
-      if (other.FrameDataLoggingEnabled != false) {
-        FrameDataLoggingEnabled = other.FrameDataLoggingEnabled;
+      if (other.FrameLogEnabled != false) {
+        FrameLogEnabled = other.FrameLogEnabled;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -5731,7 +5731,7 @@ namespace shared {
             break;
           }
           case 8192: {
-            FrameDataLoggingEnabled = input.ReadBool();
+            FrameLogEnabled = input.ReadBool();
             break;
           }
         }
@@ -5797,7 +5797,7 @@ namespace shared {
             break;
           }
           case 8192: {
-            FrameDataLoggingEnabled = input.ReadBool();
+            FrameLogEnabled = input.ReadBool();
             break;
           }
         }

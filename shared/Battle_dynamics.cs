@@ -1,6 +1,8 @@
 using System;
 using pbc = Google.Protobuf.Collections;
 using static shared.CharacterState;
+using System.Collections.Generic;
+using System.IO;
 
 namespace shared {
     public partial class Battle {
@@ -672,5 +674,40 @@ namespace shared {
             return (collisionSpaceX, -spaceOffsetY - spaceOffsetY + collisionSpaceY);
         }
 
+        public static void trimRdfInPlace(RoomDownsyncFrame rdf) {
+            // Removed bullets with TERMINATING_ID
+            while (null != rdf.Bullets && 0 < rdf.Bullets.Count && TERMINATING_BULLET_LOCAL_ID == rdf.Bullets[rdf.Bullets.Count - 1].BattleAttr.BulletLocalId) {
+                rdf.Bullets.RemoveAt(rdf.Bullets.Count - 1);
+            }
+        }
+
+        public static void trimIfdInPlace(InputFrameDownsync ifd) {
+            // Removed bullets with TERMINATING_ID
+            ifd.ConfirmedList = 0;
+        }
+
+        public static void wrapUpFrameLogs(FrameRingBuffer<RoomDownsyncFrame> renderBuffer, Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput, bool trimConfirmedList, string dirPath, string filename) {
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(dirPath, filename))) {
+                for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
+                    var (ok1, rdf) = renderBuffer.GetByFrameId(i);
+                    if (!ok1 || null == rdf) {
+                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
+                    }
+                    trimRdfInPlace(rdf);
+                    InputFrameDownsync ifd;
+                    if (!rdfIdToActuallyUsedInput.TryGetValue(i, out ifd)) {
+                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 ifd for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
+                    }
+                    if (trimConfirmedList) {
+                        trimIfdInPlace(ifd);
+                    }
+                    var frameLog = new FrameLog {
+                        Rdf = rdf,
+                        ActuallyUsedIdf = ifd
+                    };
+                    outputFile.WriteLine(frameLog);
+                }
+            }
+        }
     }
 }

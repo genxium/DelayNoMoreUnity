@@ -114,7 +114,7 @@ public class OnlineMapController : AbstractMapController {
                         preallocateHolders();
                     }
                     resetCurrentMatch();
-                    frameDataLoggingEnabled = wsRespHolder.BciFrame.FrameDataLoggingEnabled;
+                    frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     var reqData = new WsReq {
@@ -154,6 +154,8 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     enableBattleInput(false);
+                    // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
+                    wrapUpFrameLogs(renderBuffer, rdfIdToActuallyUsedInput, true, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_INPUT_BATCH:
                     // Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");

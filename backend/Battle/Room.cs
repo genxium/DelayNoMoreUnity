@@ -17,7 +17,7 @@ public class Room {
     public string stageName;
     public int inputFrameUpsyncDelayTolerance;
     public int maxChasingRenderFramesPerUpdate;
-    public bool frameDataLoggingEnabled;
+    public bool frameLogEnabled;
 
     int renderFrameId;
     int curDynamicsRenderFrameId;
@@ -86,8 +86,10 @@ public class Room {
         capacity = roomCapacity;
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
+        frameLogEnabled = true;
         int fps = 60;
-        battleDurationFrames = 60 * fps;
+        int durationSeconds = 20;
+        battleDurationFrames = durationSeconds * fps;
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    

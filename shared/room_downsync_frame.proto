@@ -207,7 +207,7 @@ message BattleColliderInfo {
 	int32 boundRoomCapacity = 10;
 	PeerUdpAddr battleUdpTunnel = 11;
 
-	bool frameDataLoggingEnabled = 1024;
+	bool frameLogEnabled = 1024;
 }
 
 message RoomDownsyncFrame {
