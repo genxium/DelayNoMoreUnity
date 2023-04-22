@@ -8,6 +8,7 @@ It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a
 # Notable Features (by far, would add more in the future)
 - Automatically correction for "slow ticker", especially "active slow ticker" which is well-known to be a headache for input synchronization
 - Peer-to-peer UDP holepunching whenever possible, and will fallback to use the backend as a UDP relay/tunnel if holepunching failed for any participant (kindly note that UDP is always used along side with WebSocket, where the latter is a golden source of frame info)
+- Frame logging toggle for both frontend & backend (i.e. `backend/Battle/Room.frameLogEnabled`), useful for debugging out of sync entities when developing new features
 
 # How does it work to synchronize across multiple players?
 _(how input delay roughly works)_

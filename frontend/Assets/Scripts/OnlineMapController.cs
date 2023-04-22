@@ -155,7 +155,7 @@ public class OnlineMapController : AbstractMapController {
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     enableBattleInput(false);
                     // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
-                    wrapUpFrameLogs(renderBuffer, rdfIdToActuallyUsedInput, true, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
+                    wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_INPUT_BATCH:
                     // Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");
