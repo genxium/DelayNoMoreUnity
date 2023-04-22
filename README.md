@@ -39,5 +39,8 @@ Open `OfflineScene` to try out basic operations.
 
 Open `LoginScene` after launching the backend to try out multiplayer mode. Available test accounts are listed in [DevEnvResources.sqlite](./backend/DevEnvResources.sqlite). The steps are very similar to [that of DelayNoMore CocosCreator version](https://github.com/genxium/DelayNoMore#frontend-2).
 
+### Unit test
+Referencing [this document from Microsoft](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test) by far.
+
 # FAQ
 Please refer to [FAQ.md](FAQ.md).
