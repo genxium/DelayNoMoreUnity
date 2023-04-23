@@ -757,7 +757,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d10a96b5c5d72846b7ab74e47c1c92b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 1750589025216623398, guid: 9c2d7ac674ac8744e871fff6c276a880, type: 3}
+  characterPrefabForPlayer: {fileID: 1750589025216623398, guid: 9c2d7ac674ac8744e871fff6c276a880, type: 3}
+  characterPrefabForAi: {fileID: 7797949246979495123, guid: 0f5335e02beb0aa4a90b803ef675ec10, type: 3}
   networkInfoPanel: {fileID: 1383511120}
 --- !u!1 &1978785421
 GameObject:

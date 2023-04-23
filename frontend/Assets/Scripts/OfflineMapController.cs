@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using shared;
 using static shared.Battle;
 using static shared.CharacterState;
@@ -25,9 +26,10 @@ public class OfflineMapController : AbstractMapController {
         preallocateHolders();
         resetCurrentMatch();
         selfPlayerInfo.JoinIndex = 1;
-        var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
+        var playerStartingCposList = new Vector[roomCapacity]; // "Cpos" means "Collision Space Position"
+        var aiPlayersStartingCposList = new List<Vector>();
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
-
+        var (defaultPatrolCueRadius, _) = PolygonColliderCtrToVirtualGridPos(6, 0);
         var grid = this.GetComponentInChildren<Grid>();
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
@@ -52,13 +54,34 @@ public class OfflineMapController : AbstractMapController {
                     break;
                 case "PlayerStartingPos":
                     int j = 0;
-                    foreach (Transform playerPosChild in child) {
-                        var playerPosTileObj = playerPosChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
-                        var (playerCx, playerCy) = TiledLayerPositionToCollisionSpacePosition(playerPosTileObj.m_X, playerPosTileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        playerStartingCollisionSpacePositions[j] = new Vector(playerCx, playerCy);
-                        Debug.Log(String.Format("new playerStartingCollisionSpacePositions[i:{0}]=[X:{1}, Y:{2}]", j, playerCx, playerCy));
+                    foreach (Transform playerPos in child) {
+                        var posTileObj = playerPos.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        playerStartingCposList[j] = new Vector(cx, cy);
+                        Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
                         j++;
                         if (j >= roomCapacity) break;
+                    }
+                    break;
+                case "AiPlayerStartingPos":
+                    foreach (Transform aiPlayerPos in child) {
+                        var posTileObj = aiPlayerPos.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        aiPlayersStartingCposList.Add(new Vector(cx, cy));
+                    }
+                    break;
+                case "PatrolCue":
+                    foreach (Transform patrolCueChild in child) {
+                        var patrolCueTileObj = patrolCueChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
+                        var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(patrolCueTileObj.m_X, patrolCueTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        var newPatrolCue = new PatrolCue {
+                            FlAct = 1,
+                            FrAct = 2,
+                        };
+
+                        var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2*defaultPatrolCueRadius, 2*defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
+                        collisionSys.AddSingle(patrolCueCollider);
+                        Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
                 default:
@@ -66,17 +89,17 @@ public class OfflineMapController : AbstractMapController {
             }
         }
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity);
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
-        var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
+        var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCposList[selfPlayerInfo.JoinIndex - 1].X, playerStartingCposList[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
         spawnPlayerNode(selfPlayerInfo.JoinIndex, selfPlayerWx, selfPlayerWy);
 
         var selfPlayerCharacterSpeciesId = 0;
         var selfPlayerCharacter = Battle.characters[selfPlayerCharacterSpeciesId];
 
         var selfPlayerInRdf = startRdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
-        var (selfPlayerVposX, selfPlayerVposY) = PolygonColliderCtrToVirtualGridPos(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
+        var (selfPlayerVposX, selfPlayerVposY) = PolygonColliderCtrToVirtualGridPos(playerStartingCposList[selfPlayerInfo.JoinIndex - 1].X, playerStartingCposList[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
         selfPlayerInRdf.Id = 10;
         selfPlayerInRdf.JoinIndex = selfPlayerInfo.JoinIndex;
         selfPlayerInRdf.VirtualGridX = selfPlayerVposX;
@@ -96,6 +119,40 @@ public class OfflineMapController : AbstractMapController {
         selfPlayerInRdf.Hp = 100;
         selfPlayerInRdf.MaxHp = 100;
         selfPlayerInRdf.SpeciesId = 0;
+
+        for (int i = 0; i < aiPlayersStartingCposList.Count; i++) {
+            int joinIndex = roomCapacity + i + 1;
+            var cpos = aiPlayersStartingCposList[i];
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
+            spawnAiPlayerNode(wx, wy);
+
+            var characterSpeciesId = 1;
+            var playerCharacter = Battle.characters[characterSpeciesId];
+
+            var aiPlayerInRdf = new PlayerDownsync();
+            var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
+            aiPlayerInRdf.Id = TERMINATING_PLAYER_ID + 1; // Just for not being excluded 
+            aiPlayerInRdf.JoinIndex = joinIndex;
+            aiPlayerInRdf.VirtualGridX = playerVposX;
+            aiPlayerInRdf.VirtualGridY = playerVposY;
+            aiPlayerInRdf.RevivalVirtualGridX = playerVposX;
+            aiPlayerInRdf.RevivalVirtualGridY = playerVposY;
+            aiPlayerInRdf.Speed = playerCharacter.Speed;
+            aiPlayerInRdf.ColliderRadius = (int)defaultColliderRadius;
+            aiPlayerInRdf.CharacterState = InAirIdle1NoJump;
+            aiPlayerInRdf.FramesToRecover = 0;
+            aiPlayerInRdf.DirX = 2;
+            aiPlayerInRdf.DirY = 0;
+            aiPlayerInRdf.VelX = 0;
+            aiPlayerInRdf.VelY = 0;
+            aiPlayerInRdf.InAir = true;
+            aiPlayerInRdf.OnWall = false;
+            aiPlayerInRdf.Hp = 100;
+            aiPlayerInRdf.MaxHp = 100;
+            aiPlayerInRdf.SpeciesId = characterSpeciesId;
+
+            startRdf.AiPlayersArr[i] = aiPlayerInRdf;
+        }
 
         onRoomDownsyncFrame(startRdf, null);
     }

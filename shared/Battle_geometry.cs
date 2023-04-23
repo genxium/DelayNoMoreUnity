@@ -35,7 +35,7 @@ namespace shared {
                 if (0 > thatPlayerInNextFrame.DirX) {
                     xfac = -xfac;
                 }
-                virtualGripToWall = xfac * (float)(currPlayerDownsync.Speed) * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
+                virtualGripToWall = xfac * currPlayerDownsync.Speed * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
             }
             int retCnt = 0;
             bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
@@ -54,6 +54,7 @@ namespace shared {
                 switch (bCollider.Data) {
                     case PlayerDownsync v1:
                     case Bullet v2:
+                    case PatrolCue v3:
                         break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*PlayerDownsync && !*Bullet".

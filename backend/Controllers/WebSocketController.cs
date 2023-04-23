@@ -79,6 +79,7 @@ public class WebSocketController : ControllerBase {
 
                     RenderBufferSize = room.GetRenderCacheSize(),
                     BoundRoomCapacity = room.capacity,
+                    PreallocAiPlayerCapacity = room.peerUdpAddrBroadcastRdf;
                     FrameLogEnabled = room.frameLogEnabled,
                 };
 

@@ -7,6 +7,8 @@ using Pbc = Google.Protobuf.Collections;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
+    protected int preallocAiPlayerCapacity = DEFAULT_PREALLOC_AI_PLAYER_CAPACITY;
+    protected int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     protected int renderFrameId; // After battle started
     protected int renderFrameIdLagTolerance;
     protected int lastAllConfirmedInputFrameId;
@@ -15,7 +17,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
     protected int maxChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
-    public GameObject characterPrefab;
+    public GameObject characterPrefabForPlayer;
+    public GameObject characterPrefabForAi;
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
@@ -25,6 +28,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected ulong[] prefabbedInputListHolder;
     protected GameObject[] playerGameObjs;
+    protected List<GameObject> aiPlayerGameObjs; // TODO: Use a "Heap with Key access" like https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/PriorityQueue.js to manage aiPlayer rendering, e.g. referencing the treatment of bullets in https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/Map.js
 
     protected long battleState;
     protected int spaceOffsetX;
@@ -46,8 +50,13 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected bool debugDrawingEnabled = false;
 
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
-        GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity);
+        GameObject newPlayerNode = Instantiate(characterPrefabForPlayer, new Vector3(wx, wy, 0), Quaternion.identity);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
+    }
+
+    protected void spawnAiPlayerNode(float wx, float wy) {
+        GameObject newAiPlayerNode = Instantiate(characterPrefabForAi, new Vector3(wx, wy, 0), Quaternion.identity);
+        aiPlayerGameObjs.Add(newAiPlayerNode);
     }
 
     protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
@@ -229,7 +238,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var playerGameObj = playerGameObjs[k];
             playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
 
-            var chConfig = characters[0]; // todo: remove hardcoded speciesId
+            var chConfig = characters[currPlayerDownsync.SpeciesId];
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             chAnimCtrl.updateCharacterAnim(currPlayerDownsync, null, false, chConfig);
 
@@ -237,6 +246,19 @@ public abstract class AbstractMapController : MonoBehaviour {
                 var camOldPos = Camera.main.transform.position;
                 Camera.main.transform.position = new Vector3(wx, wy, camOldPos.z);
             }
+        }
+
+        for (int k = 0; k < rdf.AiPlayersArr.Count; k++) {
+            var currPlayerDownsync = rdf.AiPlayersArr[k];
+            if (TERMINATING_PLAYER_ID == currPlayerDownsync.Id) break;
+            var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
+            var playerGameObj = aiPlayerGameObjs[k];
+            playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
+
+            var chConfig = characters[currPlayerDownsync.SpeciesId];
+            var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
+            chAnimCtrl.updateCharacterAnim(currPlayerDownsync, null, false, chConfig);
         }
     }
 
@@ -248,7 +270,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, 128));
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
 
@@ -268,11 +290,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         prefabbedInputListHolder = new ulong[roomCapacity];
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
-        effPushbacks = new Vector[roomCapacity];
+        effPushbacks = new Vector[roomCapacity+preallocAiPlayerCapacity];
         for (int i = 0; i < roomCapacity; i++) {
             effPushbacks[i] = new Vector(0, 0);
         }
-        hardPushbackNormsArr = new Vector[roomCapacity][];
+        hardPushbackNormsArr = new Vector[roomCapacity + preallocAiPlayerCapacity][];
         for (int i = 0; i < roomCapacity; i++) {
             int cap = 5;
             hardPushbackNormsArr[i] = new Vector[cap];
@@ -280,7 +302,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 hardPushbackNormsArr[i][j] = new Vector(0, 0);
             }
         }
-        jumpedOrNotList = new bool[roomCapacity];
+        jumpedOrNotList = new bool[roomCapacity + preallocAiPlayerCapacity];
         Array.Fill(jumpedOrNotList, false);
 
         int dynamicRectangleCollidersCap = 64;
@@ -306,6 +328,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
 
         playerGameObjs = new GameObject[roomCapacity];
+        aiPlayerGameObjs = new List<GameObject>();
 
         var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;

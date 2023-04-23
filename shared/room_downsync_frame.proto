@@ -120,6 +120,11 @@ message InputBufferSnapshot {
 	int32 peerJoinIndex = 5;
 }
 
+message PatrolCue {
+    int32 flAct = 1; // "input when colliding from the left"
+    int32 frAct = 2; // "input when colliding from the right"
+}
+
 enum BulletType {
 	Undetermined = 0;
 	Melee = 1;
@@ -205,6 +210,9 @@ message BattleColliderInfo {
 	int32 renderBufferSize = 8;
 	int32 collisionMinStep = 9;
 	int32 boundRoomCapacity = 10;
+	int32 preallocAiPlayerCapacity = 11;
+	int32 preallocBulletCapacity = 12;
+
 	PeerUdpAddr battleUdpTunnel = 11;
 
 	bool frameLogEnabled = 1024;
@@ -215,6 +223,8 @@ message RoomDownsyncFrame {
 	repeated PlayerDownsync playersArr = 2;
 	int64 countdownNanos = 3;
 	repeated Bullet bullets = 4;  
+
+	repeated PlayerDownsync aiPlayersArr = 5;
 
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;

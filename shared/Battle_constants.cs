@@ -60,6 +60,8 @@ namespace shared {
         public static float VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO = 1.0f / COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO;
 
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PREALLOC_AI_PLAYER_CAPACITY = 8;
+        public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
@@ -181,7 +183,17 @@ namespace shared {
                     9,
                     true, true,
                     8, (int)(2.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(7 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)))
+                    (int)(7 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))),
+                    new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig(
+                    1, "SwordMan",
+                    11, 1,
+                    16, 16, 10, 27,
+                    (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    9,
+                    false, false,
+                    0, 0,
+                    0, 0))
                 }
             );
 

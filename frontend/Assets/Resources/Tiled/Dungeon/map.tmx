@@ -16,7 +16,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="4" name="NpcStartingPos">
+ <objectgroup id="4" name="AiPlayerStartingPos">
   <object id="108" x="927.333" y="535">
    <properties>
     <property name="dirX" value="-2"/>
@@ -25,18 +25,18 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="5" name="NpcPatrolCue">
+ <objectgroup id="5" name="PatrolCue">
   <object id="109" x="774.67" y="556.67">
    <properties>
-    <property name="flAct" value="36"/>
-    <property name="frAct" value="35"/>
+    <property name="flAct" value="20"/>
+    <property name="frAct" value="19"/>
    </properties>
    <point/>
   </object>
   <object id="110" x="729.333" y="588">
    <properties>
     <property name="flAct" value="4"/>
-    <property name="frAct" value="35"/>
+    <property name="frAct" value="19"/>
    </properties>
    <point/>
   </object>

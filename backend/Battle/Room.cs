@@ -11,6 +11,8 @@ public class Room {
 
     public int id;
     public int capacity;
+    public int preallocAiPlayerCapacity = DEFAULT_PREALLOC_AI_PLAYER_CAPACITY;
+    public int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     public int battleDurationFrames;
     public int estimatedMillisPerFrame;
 
@@ -504,7 +506,7 @@ public class Room {
 
                 if (nextRenderFrameId > renderFrameId) {
                     if (0 == renderFrameId) {
-                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, 128);
+                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocAiPlayerCapacity, preallocBulletCapacity);
                         startRdf.Id = 0;
 
                         var tList = new List<Task>();

@@ -103,7 +103,7 @@ namespace shared {
             };
         }
 
-        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocBulletCount) {
+        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocAiPlayerCount, int preallocBulletCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
             ret.BulletLocalIdCounter = TERMINATING_BULLET_LOCAL_ID;
@@ -112,6 +112,12 @@ namespace shared {
                 var single = new PlayerDownsync();
                 single.Id = TERMINATING_PLAYER_ID;
                 ret.PlayersArr.Add(single);
+            }
+
+            for (int i = 0; i < preallocAiPlayerCount; i++) {
+                var single = new PlayerDownsync();
+                single.Id = TERMINATING_PLAYER_ID;
+                ret.AiPlayersArr.Add(single);
             }
 
             for (int i = 0; i < preallocBulletCount; i++) {
