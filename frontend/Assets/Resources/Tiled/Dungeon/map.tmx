@@ -155,17 +155,12 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="119" x="656" y="592" width="512" height="48">
+  <object id="119" x="656" y="592" width="1040" height="48">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
   <object id="136" x="1232" y="432" width="208" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="138" x="1168" y="592" width="512" height="48">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

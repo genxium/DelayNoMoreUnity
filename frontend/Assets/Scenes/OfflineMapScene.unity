@@ -635,6 +635,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: map
       objectReference: {fileID: 0}
+    - target: {fileID: 3520107858910318866, guid: fd0913a6fbde19c4ebc2fa826c92b0d6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: -2695619058785784247, guid: fd0913a6fbde19c4ebc2fa826c92b0d6, type: 3}
 --- !u!1 &1901904073 stripped
@@ -837,5 +841,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d677f1681015749b15c436eec6d880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovementRange: 110
+  m_MovementRange: 100
   m_ControlPath: <Gamepad>/leftStick

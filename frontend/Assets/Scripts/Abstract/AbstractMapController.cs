@@ -266,6 +266,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (0 >= roomCapacity) {
             throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
         }
+
+        if (0 >= preallocAiPlayerCapacity) {
+            throw new ArgumentException(String.Format("preallocAiPlayerCapacity={0} is non-positive, please initialize it first!", preallocAiPlayerCapacity));
+        }
+        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity));
         renderBufferSize = 1024;
 
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
@@ -290,12 +295,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         prefabbedInputListHolder = new ulong[roomCapacity];
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
-        effPushbacks = new Vector[roomCapacity+preallocAiPlayerCapacity];
-        for (int i = 0; i < roomCapacity; i++) {
+        effPushbacks = new Vector[roomCapacity + preallocAiPlayerCapacity];
+        for (int i = 0; i < effPushbacks.Length; i++) {
             effPushbacks[i] = new Vector(0, 0);
         }
         hardPushbackNormsArr = new Vector[roomCapacity + preallocAiPlayerCapacity][];
-        for (int i = 0; i < roomCapacity; i++) {
+        for (int i = 0; i < hardPushbackNormsArr.Length; i++) {
             int cap = 5;
             hardPushbackNormsArr[i] = new Vector[cap];
             for (int j = 0; j < cap; j++) {

@@ -131,7 +131,7 @@ public class OfflineMapController : AbstractMapController {
 
             var aiPlayerInRdf = new PlayerDownsync();
             var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
-            aiPlayerInRdf.Id = TERMINATING_PLAYER_ID + 1; // Just for not being excluded 
+            aiPlayerInRdf.Id = 0; // Just for not being excluded 
             aiPlayerInRdf.JoinIndex = joinIndex;
             aiPlayerInRdf.VirtualGridX = playerVposX;
             aiPlayerInRdf.VirtualGridY = playerVposY;

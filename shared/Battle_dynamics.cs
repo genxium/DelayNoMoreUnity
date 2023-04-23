@@ -596,7 +596,6 @@ namespace shared {
                 }
             }
 
-            // Calc pushbacks for each player (after its movement) w/o bullets
             for (int i = 0; i < currRenderFrame.AiPlayersArr.Count; i++) {
                 var currPlayerDownsync = currRenderFrame.AiPlayersArr[i];
                 if (TERMINATING_PLAYER_ID == currPlayerDownsync.Id) break;
@@ -760,12 +759,14 @@ namespace shared {
                 }
             }
 
-            for (int i = 0; i < currRenderFrame.AiPlayersArr.Count; i++) {
-                var currPlayerDownsync = currRenderFrame.AiPlayersArr[i];
+            int j = 0;
+            while (j < currRenderFrame.AiPlayersArr.Count) {
+                var currPlayerDownsync = currRenderFrame.AiPlayersArr[j];
+                if (TERMINATING_PLAYER_ID == currPlayerDownsync.Id) break;
                 int joinIndex = roomCapacity + currPlayerDownsync.JoinIndex;
                 Collider aCollider = dynamicRectangleColliders[joinIndex - 1];
                 // Update "virtual grid position"
-                var thatPlayerInNextFrame = nextRenderFrameAiPlayers[i];
+                var thatPlayerInNextFrame = nextRenderFrameAiPlayers[j];
                 (thatPlayerInNextFrame.VirtualGridX, thatPlayerInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[joinIndex - 1].X, aCollider.Y - effPushbacks[joinIndex - 1].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
 
                 // Update "CharacterState"
@@ -774,7 +775,7 @@ namespace shared {
                     switch (oldNextCharacterState) {
                         case Idle1:
                         case Walking:
-                            if (jumpedOrNotList[i] || InAirIdle1ByJump == currPlayerDownsync.CharacterState) {
+                            if (jumpedOrNotList[joinIndex-1] || InAirIdle1ByJump == currPlayerDownsync.CharacterState) {
                                 thatPlayerInNextFrame.CharacterState = InAirIdle1ByJump;
                             } else {
                                 thatPlayerInNextFrame.CharacterState = InAirIdle1NoJump;
@@ -800,6 +801,7 @@ namespace shared {
                     thatPlayerInNextFrame.ActiveSkillId = NO_SKILL;
                     thatPlayerInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
                 }
+                j++;
             }
         }
 
@@ -851,10 +853,7 @@ namespace shared {
                     framesInvinsible = 0;
                 }
                 AssignToPlayerDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, nextRenderFrameAiPlayers[j]);
-            }
-            if (j < currRenderFrame.AiPlayersArr.Count) {
-                // Assure that no contamination would be introduced by reusing the slots
-                nextRenderFrameAiPlayers[j].Id = TERMINATING_PLAYER_ID;
+                j++;
             }
 
             _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, decodedInputHolder, prevDecodedInputHolder, jumpedOrNotList);
@@ -867,7 +866,6 @@ namespace shared {
             int colliderCnt = 0;
 
             _processPlayerMovement(currRenderFrame, nextRenderFramePlayers, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt);
-
             _processAiPlayerMovement(currRenderFrame, roomCapacity, nextRenderFrameAiPlayers, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameAiPlayers, effPushbacks, jumpedOrNotList, dynamicRectangleColliders);
