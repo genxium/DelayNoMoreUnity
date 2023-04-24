@@ -751,7 +751,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefabForPlayer: {fileID: 1750589025216623398, guid: 9c2d7ac674ac8744e871fff6c276a880, type: 3}
-  characterPrefabForAi: {fileID: 7797949246979495123, guid: 0f5335e02beb0aa4a90b803ef675ec10, type: 3}
+  characterPrefabForAi: {fileID: 4217981099835446251, guid: 79947c19703b85d4bbdc6473cbfad300, type: 3}
 --- !u!1 &1978785421
 GameObject:
   m_ObjectHideFlags: 0
