@@ -54,7 +54,7 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToPlayerDownsync(int id, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, PlayerDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, CharacterDownsync dst) {
             dst.Id = id;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
@@ -109,15 +109,15 @@ namespace shared {
             ret.BulletLocalIdCounter = TERMINATING_BULLET_LOCAL_ID;
 
             for (int i = 0; i < roomCapacity; i++) {
-                var single = new PlayerDownsync();
+                var single = new CharacterDownsync();
                 single.Id = TERMINATING_PLAYER_ID;
                 ret.PlayersArr.Add(single);
             }
 
             for (int i = 0; i < preallocAiPlayerCount; i++) {
-                var single = new PlayerDownsync();
+                var single = new CharacterDownsync();
                 single.Id = TERMINATING_PLAYER_ID;
-                ret.AiPlayersArr.Add(single);
+                ret.NpcsArr.Add(single);
             }
 
             for (int i = 0; i < preallocBulletCount; i++) {

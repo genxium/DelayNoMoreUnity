@@ -194,7 +194,7 @@ public class OnlineMapController : AbstractMapController {
     void Start() {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
-        selfPlayerInfo = new PlayerDownsync();
+        selfPlayerInfo = new CharacterDownsync();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = 60;
 

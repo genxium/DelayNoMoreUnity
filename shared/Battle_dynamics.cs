@@ -97,7 +97,7 @@ namespace shared {
             return hasInputFrameUpdatedOnDynamics;
         }
 
-        private static (int, bool, int, int) deriveOpPattern(PlayerDownsync currPlayerDownsync, PlayerDownsync thatPlayerInNextFrame, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
+        private static (int, bool, int, int) deriveOpPattern(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
             int delayedInputFrameIdForPrevRdf = ConvertToDelayedInputFrameId(currRenderFrame.Id - 1);
@@ -106,7 +106,7 @@ namespace shared {
                 return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
             }
 
-            if (noOpSet.Contains(currPlayerDownsync.CharacterState)) {
+            if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
                 return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
             }
 
@@ -125,7 +125,7 @@ namespace shared {
             }
 
             bool jumpedOrNot = false;
-            int joinIndex = currPlayerDownsync.JoinIndex;
+            int joinIndex = currCharacterDownsync.JoinIndex;
 
             DecodeInput(delayedInputList[joinIndex - 1], decodedInputHolder);
 
@@ -136,21 +136,21 @@ namespace shared {
             }
 
             // Jumping is partially allowed within "CapturedByInertia", but moving is only allowed when "0 == FramesToRecover" (constrained later in "ApplyInputFrameDownsyncDynamicsOnSingleRenderFrame")
-            if (0 == currPlayerDownsync.FramesToRecover) {
+            if (0 == currCharacterDownsync.FramesToRecover) {
                 effDx = decodedInputHolder.Dx;
                 effDy = decodedInputHolder.Dy;
             }
 
             int patternId = PATTERN_ID_NO_OP;
-            var canJumpWithinInertia = (currPlayerDownsync.CapturedByInertia && ((chConfig.InertiaFramesToRecover >> 1) > currPlayerDownsync.FramesToRecover));
-            if (0 == currPlayerDownsync.FramesToRecover || canJumpWithinInertia) {
+            var canJumpWithinInertia = (currCharacterDownsync.CapturedByInertia && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesToRecover));
+            if (0 == currCharacterDownsync.FramesToRecover || canJumpWithinInertia) {
                 if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
-                    if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currPlayerDownsync.CharacterState) {
+                    if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
                         // Checking "DashingEnabled" here to allow jumping when dashing-disabled players pressed "DOWN + BtnB"
                         patternId = 5;
-                    } else if (!inAirSet.Contains(currPlayerDownsync.CharacterState)) {
+                    } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState)) {
                         jumpedOrNot = true;
-                    } else if (OnWall == currPlayerDownsync.CharacterState) {
+                    } else if (OnWall == currCharacterDownsync.CharacterState) {
                         jumpedOrNot = true;
                     }
                 }
@@ -175,14 +175,14 @@ namespace shared {
             return (patternId, jumpedOrNot, effDx, effDy);
         }
 
-        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<PlayerDownsync> nextRenderFramePlayers, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, bool[] jumpedOrNotList) {
+        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, bool[] jumpedOrNotList) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
-                var currPlayerDownsync = currRenderFrame.PlayersArr[i];
+                var currCharacterDownsync = currRenderFrame.PlayersArr[i];
                 var thatPlayerInNextFrame = nextRenderFramePlayers[i];
-                var chConfig = characters[currPlayerDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = deriveOpPattern(currPlayerDownsync, thatPlayerInNextFrame, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+                var chConfig = characters[currCharacterDownsync.SpeciesId];
+                var (patternId, jumpedOrNot, effDx, effDy) = deriveOpPattern(currCharacterDownsync, thatPlayerInNextFrame, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
-                var skillId = FindSkillId(patternId, currPlayerDownsync, chConfig.SpeciesId);
+                var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
                 bool skillUsed = false;
 
                 if (skills.ContainsKey(skillId)) {
@@ -213,7 +213,7 @@ namespace shared {
                             thatPlayerInNextFrame.VelY = bulletConfig.SelfLockVelY;
                         }
 
-                        if (false == hasLockVel && false == currPlayerDownsync.InAir) {
+                        if (false == hasLockVel && false == currCharacterDownsync.InAir) {
                             thatPlayerInNextFrame.VelX = 0;
                         }
                         thatPlayerInNextFrame.CharacterState = skillConfig.BoundChState;
@@ -227,12 +227,12 @@ namespace shared {
                     continue; // Don't allow movement if skill is used
                 }
 
-                bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currPlayerDownsync.VelX));
+                bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currCharacterDownsync.VelX));
                 jumpedOrNotList[i] = jumpedOrNot;
-                int joinIndex = currPlayerDownsync.JoinIndex;
+                int joinIndex = currCharacterDownsync.JoinIndex;
 
-                if (0 == currPlayerDownsync.FramesToRecover) {
-                    bool prevCapturedByInertia = currPlayerDownsync.CapturedByInertia;
+                if (0 == currCharacterDownsync.FramesToRecover) {
+                    bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
                     bool alignedWithInertia = true;
                     bool exactTurningAround = false;
                     bool stoppingFromWalking = false;
@@ -275,9 +275,9 @@ namespace shared {
                             thatPlayerInNextFrame.DirY = effDy;
 
                             if (isWallJumping) {
-                                thatPlayerInNextFrame.VelX = xfac * Math.Abs(currPlayerDownsync.VelX);
+                                thatPlayerInNextFrame.VelX = xfac * Math.Abs(currCharacterDownsync.VelX);
                             } else {
-                                thatPlayerInNextFrame.VelX = xfac * currPlayerDownsync.Speed;
+                                thatPlayerInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                             }
                             thatPlayerInNextFrame.CharacterState = Walking;
                         } else {
@@ -290,28 +290,28 @@ namespace shared {
             }
         }
 
-        private static void _processPlayerMovement(RoomDownsyncFrame currRenderFrame, RepeatedField<PlayerDownsync> nextRenderFramePlayers, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt) {
+        private static void _processPlayerMovement(RoomDownsyncFrame currRenderFrame, RepeatedField<CharacterDownsync> nextRenderFramePlayers, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
-                var currPlayerDownsync = currRenderFrame.PlayersArr[i];
-                int joinIndex = currPlayerDownsync.JoinIndex;
-                var chConfig = characters[currPlayerDownsync.SpeciesId];
+                var currCharacterDownsync = currRenderFrame.PlayersArr[i];
+                int joinIndex = currCharacterDownsync.JoinIndex;
+                var chConfig = characters[currCharacterDownsync.SpeciesId];
                 effPushbacks[joinIndex - 1].X = 0;
                 effPushbacks[joinIndex - 1].Y = 0;
                 var thatPlayerInNextFrame = nextRenderFramePlayers[i];
 
                 // Reset playerCollider position from the "virtual grid position"
-                int newVx = currPlayerDownsync.VirtualGridX + currPlayerDownsync.VelX, newVy = currPlayerDownsync.VirtualGridY + currPlayerDownsync.VelY;
+                int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
 
                 if (0 >= thatPlayerInNextFrame.Hp && 0 == thatPlayerInNextFrame.FramesToRecover) {
                     // Revive from Dying
-                    (newVx, newVy) = (currPlayerDownsync.RevivalVirtualGridX, currPlayerDownsync.RevivalVirtualGridY);
+                    (newVx, newVy) = (currCharacterDownsync.RevivalVirtualGridX, currCharacterDownsync.RevivalVirtualGridY);
 
                     thatPlayerInNextFrame.CharacterState = GetUp1;
                     thatPlayerInNextFrame.FramesInChState = 0;
                     thatPlayerInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
                     thatPlayerInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
 
-                    thatPlayerInNextFrame.Hp = currPlayerDownsync.MaxHp;
+                    thatPlayerInNextFrame.Hp = currCharacterDownsync.MaxHp;
                     // Hardcoded initial character orientation/facing
                     if (0 == (thatPlayerInNextFrame.JoinIndex % 2)) {
                         thatPlayerInNextFrame.DirX = -2;
@@ -323,13 +323,13 @@ namespace shared {
                 }
 
                 if (jumpedOrNotList[i]) {
-                    // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currPlayerDownsync.OnWall" for checking
-                    if (OnWall == currPlayerDownsync.CharacterState) {
-                        if (0 < currPlayerDownsync.VelX * currPlayerDownsync.OnWallNormX) {
-                            newVx -= currPlayerDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
+                    // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
+                    if (OnWall == currCharacterDownsync.CharacterState) {
+                        if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
+                            newVx -= currCharacterDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
                         }
                         int xfac = -1;
-                        if (0 > currPlayerDownsync.OnWallNormX) {
+                        if (0 > currCharacterDownsync.OnWallNormX) {
                             // Always jump to the opposite direction of wall inward norm
                             xfac = -xfac;
                         }
@@ -345,36 +345,37 @@ namespace shared {
                 }
 
                 var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(newVx, newVy);
-                int colliderWidth = currPlayerDownsync.ColliderRadius * 2, colliderHeight = currPlayerDownsync.ColliderRadius * 4;
+                int colliderWidth = currCharacterDownsync.ColliderRadius * 2, colliderHeight = currCharacterDownsync.ColliderRadius * 4;
 
-                switch (currPlayerDownsync.CharacterState) {
+                switch (currCharacterDownsync.CharacterState) {
                     case LayDown1:
-                        colliderWidth = currPlayerDownsync.ColliderRadius * 4;
-                        colliderHeight = currPlayerDownsync.ColliderRadius * 2;
+                        colliderWidth = currCharacterDownsync.ColliderRadius * 4;
+                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
                         break;
                     case BlownUp1:
                     case InAirIdle1NoJump:
                     case InAirIdle1ByJump:
                     case OnWall:
-                        colliderWidth = currPlayerDownsync.ColliderRadius * 2;
-                        colliderHeight = currPlayerDownsync.ColliderRadius * 2;
+                        colliderWidth = currCharacterDownsync.ColliderRadius * 2;
+                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
                         break;
                 }
 
                 var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
 
                 Collider playerCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(playerCollider, collisionSpaceX, collisionSpaceY, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currPlayerDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
+                UpdateRectCollider(playerCollider, collisionSpaceX, collisionSpaceY, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
                 colliderCnt++;
 
                 // Add to collision system
                 collisionSys.AddSingle(playerCollider);
 
-                if (currPlayerDownsync.InAir) {
-                    if (OnWall == currPlayerDownsync.CharacterState && !jumpedOrNotList[i]) {
+                if (currCharacterDownsync.InAir) {
+                    // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
+                    if (OnWall == currCharacterDownsync.CharacterState && !jumpedOrNotList[i]) {
                         thatPlayerInNextFrame.VelX += GRAVITY_X;
                         thatPlayerInNextFrame.VelY = chConfig.WallSlidingVelY;
-                    } else if (Dashing == currPlayerDownsync.CharacterState) {
+                    } else if (Dashing == currCharacterDownsync.CharacterState) {
                         thatPlayerInNextFrame.VelX += GRAVITY_X;
                     } else {
                         thatPlayerInNextFrame.VelX += GRAVITY_X;
@@ -385,13 +386,13 @@ namespace shared {
 
             // Calc pushbacks for each player (after its movement) w/o bullets
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
-                var currPlayerDownsync = currRenderFrame.PlayersArr[i];
-                var chConfig = characters[currPlayerDownsync.SpeciesId];
-                int joinIndex = currPlayerDownsync.JoinIndex;
+                var currCharacterDownsync = currRenderFrame.PlayersArr[i];
+                var chConfig = characters[currCharacterDownsync.SpeciesId];
+                int joinIndex = currCharacterDownsync.JoinIndex;
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
                 var thatPlayerInNextFrame = nextRenderFramePlayers[i];
-                int hardPushbackCnt = calcHardPushbacksNorms(joinIndex, currPlayerDownsync, thatPlayerInNextFrame, aCollider, aShape, SNAP_INTO_PLATFORM_OVERLAP, effPushbacks[joinIndex - 1], hardPushbackNormsArr[joinIndex - 1], collision, ref overlapResult);
+                int hardPushbackCnt = calcHardPushbacksNorms(joinIndex, currCharacterDownsync, thatPlayerInNextFrame, aCollider, aShape, SNAP_INTO_PLATFORM_OVERLAP, effPushbacks[joinIndex - 1], hardPushbackNormsArr[joinIndex - 1], collision, ref overlapResult);
 
                 bool landedOnGravityPushback = false;
                 bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
@@ -403,7 +404,7 @@ namespace shared {
                         }
                         bool isBarrier = false, isAnotherPlayer = false, isBullet = false, isPatrolCue = false;
                         switch (bCollider.Data) {
-                            case PlayerDownsync v1:
+                            case CharacterDownsync v1:
                                 if (Dying == v1.CharacterState) {
                                     // ignore collision with dying player
                                     continue;
@@ -456,7 +457,7 @@ namespace shared {
 
                 if (landedOnGravityPushback) {
                     thatPlayerInNextFrame.InAir = false;
-                    bool fallStopping = (currPlayerDownsync.InAir && 0 >= currPlayerDownsync.VelY);
+                    bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
                     if (fallStopping) {
                         thatPlayerInNextFrame.VelY = 0;
                         thatPlayerInNextFrame.VelX = 0;
@@ -466,14 +467,14 @@ namespace shared {
                             thatPlayerInNextFrame.CharacterState = LayDown1;
                             thatPlayerInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                         } else {
-                            switch (currPlayerDownsync.CharacterState) {
+                            switch (currCharacterDownsync.CharacterState) {
                                 case BlownUp1:
                                 case InAirIdle1NoJump:
                                 case InAirIdle1ByJump:
                                 case OnWall:
-                                    // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currPlayerDownsync" instead of "thatPlayerInNextFrame" here!
+                                    // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
                                     var halfColliderWidthDiff = 0;
-                                    var halfColliderHeightDiff = currPlayerDownsync.ColliderRadius;
+                                    var halfColliderHeightDiff = currCharacterDownsync.ColliderRadius;
                                     var (_, halfColliderWorldHeightDiff) = VirtualGridToPolygonColliderCtr(halfColliderWidthDiff, halfColliderHeightDiff);
                                     effPushbacks[joinIndex - 1].Y -= halfColliderWorldHeightDiff;
                                     break;
@@ -505,7 +506,7 @@ namespace shared {
                 if (chConfig.OnWallEnabled) {
                     if (thatPlayerInNextFrame.InAir) {
                         // [WARNING] Sticking to wall MUST BE based on "InAir", otherwise we would get gravity reduction from ground up incorrectly!
-                        if (!noOpSet.Contains(currPlayerDownsync.CharacterState)) {
+                        if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
                             for (int k = 0; k < hardPushbackCnt; k++) {
                                 var hardPushbackNorm = hardPushbackNormsArr[joinIndex - 1][k];
                                 float normAlignmentWithHorizon1 = (hardPushbackNorm.X * +1f);
@@ -535,80 +536,74 @@ namespace shared {
             }
         }
 
-        private static void _processAiPlayerMovement(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<PlayerDownsync> nextRenderFrameAiPlayers, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt) {
-            for (int i = 0; i < currRenderFrame.AiPlayersArr.Count; i++) {
-                var currPlayerDownsync = currRenderFrame.AiPlayersArr[i];
-                if (TERMINATING_PLAYER_ID == currPlayerDownsync.Id) break;
-                int joinIndex = roomCapacity + currPlayerDownsync.JoinIndex;
-                var chConfig = characters[currPlayerDownsync.SpeciesId];
-                effPushbacks[joinIndex - 1].X = 0;
-                effPushbacks[joinIndex - 1].Y = 0;
-                var thatPlayerInNextFrame = nextRenderFrameAiPlayers[i];
+        private static void _processNpcMovement(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt) {
+            for (int i = 0; i < currRenderFrame.NpcsArr.Count; i++) {
+                var currCharacterDownsync = currRenderFrame.NpcsArr[i];
+                if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                int joinIndex = roomCapacity + currCharacterDownsync.JoinIndex;
+                var chConfig = characters[currCharacterDownsync.SpeciesId];
+                int pushbackIdx = roomCapacity + i;
+                effPushbacks[pushbackIdx].X = 0;
+                effPushbacks[pushbackIdx].Y = 0;
+                var thatNpcInNextFrame = nextRenderFrameNpcs[i];
 
                 // Reset playerCollider position from the "virtual grid position"
-                int newVx = currPlayerDownsync.VirtualGridX + currPlayerDownsync.VelX, newVy = currPlayerDownsync.VirtualGridY + currPlayerDownsync.VelY;
+                int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
 
-                if (0 >= thatPlayerInNextFrame.Hp && 0 == thatPlayerInNextFrame.FramesToRecover) {
+                if (0 >= thatNpcInNextFrame.Hp && 0 == thatNpcInNextFrame.FramesToRecover) {
                     // Revive from Dying
-                    (newVx, newVy) = (currPlayerDownsync.RevivalVirtualGridX, currPlayerDownsync.RevivalVirtualGridY);
+                    (newVx, newVy) = (currCharacterDownsync.RevivalVirtualGridX, currCharacterDownsync.RevivalVirtualGridY);
 
-                    thatPlayerInNextFrame.CharacterState = GetUp1;
-                    thatPlayerInNextFrame.FramesInChState = 0;
-                    thatPlayerInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
-                    thatPlayerInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
+                    thatNpcInNextFrame.CharacterState = GetUp1;
+                    thatNpcInNextFrame.FramesInChState = 0;
+                    thatNpcInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
+                    thatNpcInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
 
-                    thatPlayerInNextFrame.Hp = currPlayerDownsync.MaxHp;
+                    thatNpcInNextFrame.Hp = currCharacterDownsync.MaxHp;
                 }
 
-                if (jumpedOrNotList[roomCapacity + i]) {
-                    thatPlayerInNextFrame.VelY = chConfig.JumpingInitVelY;
+                if (jumpedOrNotList[pushbackIdx]) {
+                    thatNpcInNextFrame.VelY = chConfig.JumpingInitVelY;
                     newVy += chConfig.JumpingInitVelY;
                 }
 
                 var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(newVx, newVy);
-                int colliderWidth = currPlayerDownsync.ColliderRadius * 2, colliderHeight = currPlayerDownsync.ColliderRadius * 4;
+                int colliderWidth = currCharacterDownsync.ColliderRadius * 2, colliderHeight = currCharacterDownsync.ColliderRadius * 4;
 
-                switch (currPlayerDownsync.CharacterState) {
+                switch (currCharacterDownsync.CharacterState) {
                     case InAirIdle1NoJump:
                     case InAirIdle1ByJump:
+                        colliderWidth = currCharacterDownsync.ColliderRadius * 2;
+                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
                         break;
                 }
 
                 var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
 
-                Collider playerCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(playerCollider, collisionSpaceX, collisionSpaceY, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currPlayerDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
+                Collider npcCollider = dynamicRectangleColliders[colliderCnt];
+                UpdateRectCollider(npcCollider, collisionSpaceX, collisionSpaceY, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
                 colliderCnt++;
 
                 // Add to collision system
-                collisionSys.AddSingle(playerCollider);
+                collisionSys.AddSingle(npcCollider);
 
-                if (currPlayerDownsync.InAir) {
-                    if (OnWall == currPlayerDownsync.CharacterState && !jumpedOrNotList[i]) {
-                        thatPlayerInNextFrame.VelX += GRAVITY_X;
-                        thatPlayerInNextFrame.VelY = chConfig.WallSlidingVelY;
-                    } else if (Dashing == currPlayerDownsync.CharacterState) {
-                        thatPlayerInNextFrame.VelX += GRAVITY_X;
+                if (currCharacterDownsync.InAir) {
+                    if (OnWall == currCharacterDownsync.CharacterState && !jumpedOrNotList[i]) {
+                        thatNpcInNextFrame.VelX += GRAVITY_X;
+                        thatNpcInNextFrame.VelY = chConfig.WallSlidingVelY;
+                    } else if (Dashing == currCharacterDownsync.CharacterState) {
+                        thatNpcInNextFrame.VelX += GRAVITY_X;
                     } else {
-                        thatPlayerInNextFrame.VelX += GRAVITY_X;
-                        thatPlayerInNextFrame.VelY += GRAVITY_Y;
+                        thatNpcInNextFrame.VelX += GRAVITY_X;
+                        thatNpcInNextFrame.VelY += GRAVITY_Y;
                     }
                 }
-            }
 
-            for (int i = 0; i < currRenderFrame.AiPlayersArr.Count; i++) {
-                var currPlayerDownsync = currRenderFrame.AiPlayersArr[i];
-                if (TERMINATING_PLAYER_ID == currPlayerDownsync.Id) break;
-                int joinIndex = roomCapacity + currPlayerDownsync.JoinIndex;
-
-                var chConfig = characters[currPlayerDownsync.SpeciesId];
-                Collider aCollider = dynamicRectangleColliders[i];
-                ConvexPolygon aShape = aCollider.Shape;
-                var thatPlayerInNextFrame = nextRenderFrameAiPlayers[i];
-                int hardPushbackCnt = calcHardPushbacksNorms(joinIndex, currPlayerDownsync, thatPlayerInNextFrame, aCollider, aShape, SNAP_INTO_PLATFORM_OVERLAP, effPushbacks[joinIndex - 1], hardPushbackNormsArr[joinIndex - 1], collision, ref overlapResult);
+                var aShape = npcCollider.Shape;
+                int hardPushbackCnt = calcHardPushbacksNorms(joinIndex, currCharacterDownsync, thatNpcInNextFrame, npcCollider, aShape, SNAP_INTO_PLATFORM_OVERLAP, effPushbacks[pushbackIdx], hardPushbackNormsArr[pushbackIdx], collision, ref overlapResult);
 
                 bool landedOnGravityPushback = false;
-                bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+                bool collided = npcCollider.CheckAllWithHolder(0, 0, collision);
                 if (collided) {
                     while (true) {
                         var (ok3, bCollider) = collision.PopFirstContactedCollider();
@@ -617,7 +612,7 @@ namespace shared {
                         }
                         bool isBarrier = false, isAnotherPlayer = false, isBullet = false, isPatrolCue = false;
                         switch (bCollider.Data) {
-                            case PlayerDownsync v1:
+                            case CharacterDownsync v1:
                                 if (Dying == v1.CharacterState) {
                                     // ignore collision with dying player
                                     continue;
@@ -641,7 +636,7 @@ namespace shared {
                         }
 
                         ConvexPolygon bShape = bCollider.Shape;
-                        var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, ref overlapResult);
+                        var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, npcCollider.Shape, bShape, ref overlapResult);
                         if (!overlapped) {
                             continue;
                         }
@@ -651,15 +646,15 @@ namespace shared {
                             pushbackY = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapY;
                         }
                         for (int k = 0; k < hardPushbackCnt; k++) {
-                            Vector hardPushbackNorm = hardPushbackNormsArr[joinIndex - 1][k];
+                            Vector hardPushbackNorm = hardPushbackNormsArr[pushbackIdx][k];
                             float projectedMagnitude = pushbackX * hardPushbackNorm.X + pushbackY * hardPushbackNorm.Y;
                             if (isBarrier || (isAnotherPlayer && 0 > projectedMagnitude)) {
                                 pushbackX -= projectedMagnitude * hardPushbackNorm.X;
                                 pushbackY -= projectedMagnitude * hardPushbackNorm.Y;
                             }
                         }
-                        effPushbacks[joinIndex - 1].X += pushbackX;
-                        effPushbacks[joinIndex - 1].Y += pushbackY;
+                        effPushbacks[pushbackIdx].X += pushbackX;
+                        effPushbacks[pushbackIdx].Y += pushbackY;
 
                         if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
                             landedOnGravityPushback = true;
@@ -668,32 +663,32 @@ namespace shared {
                 }
 
                 if (landedOnGravityPushback) {
-                    thatPlayerInNextFrame.InAir = false;
-                    bool fallStopping = (currPlayerDownsync.InAir && 0 >= currPlayerDownsync.VelY);
+                    thatNpcInNextFrame.InAir = false;
+                    bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
                     if (fallStopping) {
-                        thatPlayerInNextFrame.VelY = 0;
-                        thatPlayerInNextFrame.VelX = 0;
-                        if (Dying == thatPlayerInNextFrame.CharacterState) {
+                        thatNpcInNextFrame.VelY = 0;
+                        thatNpcInNextFrame.VelX = 0;
+                        if (Dying == thatNpcInNextFrame.CharacterState) {
                             // No update needed for Dying
                         } else {
-                            switch (currPlayerDownsync.CharacterState) {
+                            switch (currCharacterDownsync.CharacterState) {
                                 case InAirIdle1NoJump:
                                 case InAirIdle1ByJump:
                                     var halfColliderWidthDiff = 0;
-                                    var halfColliderHeightDiff = currPlayerDownsync.ColliderRadius;
+                                    var halfColliderHeightDiff = currCharacterDownsync.ColliderRadius;
                                     var (_, halfColliderWorldHeightDiff) = VirtualGridToPolygonColliderCtr(halfColliderWidthDiff, halfColliderHeightDiff);
-                                    effPushbacks[joinIndex - 1].Y -= halfColliderWorldHeightDiff;
+                                    effPushbacks[pushbackIdx].Y -= halfColliderWorldHeightDiff;
                                     break;
                             }
-                            thatPlayerInNextFrame.CharacterState = Idle1;
-                            thatPlayerInNextFrame.FramesToRecover = 0;
+                            thatNpcInNextFrame.CharacterState = Idle1;
+                            thatNpcInNextFrame.FramesToRecover = 0;
                         }
                     } else {
                         // landedOnGravityPushback not fallStopping, could be in LayDown or GetUp or Dying
-                        if (nonAttackingSet.Contains(thatPlayerInNextFrame.CharacterState)) {
-                            if (Dying == thatPlayerInNextFrame.CharacterState) {
-                                thatPlayerInNextFrame.VelY = 0;
-                                thatPlayerInNextFrame.VelX = 0;
+                        if (nonAttackingSet.Contains(thatNpcInNextFrame.CharacterState)) {
+                            if (Dying == thatNpcInNextFrame.CharacterState) {
+                                thatNpcInNextFrame.VelY = 0;
+                                thatNpcInNextFrame.VelX = 0;
                             }
                         }
                     }
@@ -701,10 +696,10 @@ namespace shared {
             }
         }
 
-        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<PlayerDownsync> nextRenderFramePlayers, RepeatedField<PlayerDownsync> nextRenderFrameAiPlayers, Vector[] effPushbacks, bool[] jumpedOrNotList, Collider[] dynamicRectangleColliders) {
+        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, bool[] jumpedOrNotList, Collider[] dynamicRectangleColliders) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
-                var currPlayerDownsync = currRenderFrame.PlayersArr[i];
-                int joinIndex = currPlayerDownsync.JoinIndex;
+                var currCharacterDownsync = currRenderFrame.PlayersArr[i];
+                int joinIndex = currCharacterDownsync.JoinIndex;
                 Collider aCollider = dynamicRectangleColliders[i];
                 // Update "virtual grid position"
                 var thatPlayerInNextFrame = nextRenderFramePlayers[i];
@@ -717,7 +712,7 @@ namespace shared {
                         case Idle1:
                         case Walking:
                         case TurnAround:
-                            if (jumpedOrNotList[i] || InAirIdle1ByJump == currPlayerDownsync.CharacterState) {
+                            if (jumpedOrNotList[i] || InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
                                 thatPlayerInNextFrame.CharacterState = InAirIdle1ByJump;
                             } else {
                                 thatPlayerInNextFrame.CharacterState = InAirIdle1NoJump;
@@ -738,8 +733,8 @@ namespace shared {
                         case Walking:
                         case InAirIdle1ByJump:
                         case InAirIdle1NoJump:
-                            bool hasBeenOnWallChState = (OnWall == currPlayerDownsync.CharacterState);
-                            bool hasBeenOnWallCollisionResultForSameChState = (currPlayerDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatPlayerInNextFrame.FramesInChState);
+                            bool hasBeenOnWallChState = (OnWall == currCharacterDownsync.CharacterState);
+                            bool hasBeenOnWallCollisionResultForSameChState = (currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatPlayerInNextFrame.FramesInChState);
                             if (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState) {
                                 thatPlayerInNextFrame.CharacterState = OnWall;
                             }
@@ -748,7 +743,7 @@ namespace shared {
                 }
 
                 // Reset "FramesInChState" if "CharacterState" is changed
-                if (thatPlayerInNextFrame.CharacterState != currPlayerDownsync.CharacterState) {
+                if (thatPlayerInNextFrame.CharacterState != currCharacterDownsync.CharacterState) {
                     thatPlayerInNextFrame.FramesInChState = 0;
                 }
 
@@ -760,14 +755,15 @@ namespace shared {
             }
 
             int j = 0;
-            while (j < currRenderFrame.AiPlayersArr.Count) {
-                var currPlayerDownsync = currRenderFrame.AiPlayersArr[j];
-                if (TERMINATING_PLAYER_ID == currPlayerDownsync.Id) break;
-                int joinIndex = roomCapacity + currPlayerDownsync.JoinIndex;
-                Collider aCollider = dynamicRectangleColliders[joinIndex - 1];
+            while (j < currRenderFrame.NpcsArr.Count) {
+                var currCharacterDownsync = currRenderFrame.NpcsArr[j];
+                if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                int joinIndex = roomCapacity + currCharacterDownsync.JoinIndex;
+                int pushbackIdx = roomCapacity + j;
+                Collider aCollider = dynamicRectangleColliders[pushbackIdx];
                 // Update "virtual grid position"
-                var thatPlayerInNextFrame = nextRenderFrameAiPlayers[j];
-                (thatPlayerInNextFrame.VirtualGridX, thatPlayerInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[joinIndex - 1].X, aCollider.Y - effPushbacks[joinIndex - 1].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
+                var thatPlayerInNextFrame = nextRenderFrameNpcs[j];
+                (thatPlayerInNextFrame.VirtualGridX, thatPlayerInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[pushbackIdx].X, aCollider.Y - effPushbacks[pushbackIdx].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
 
                 // Update "CharacterState"
                 if (thatPlayerInNextFrame.InAir) {
@@ -775,7 +771,7 @@ namespace shared {
                     switch (oldNextCharacterState) {
                         case Idle1:
                         case Walking:
-                            if (jumpedOrNotList[joinIndex-1] || InAirIdle1ByJump == currPlayerDownsync.CharacterState) {
+                            if (jumpedOrNotList[pushbackIdx] || InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
                                 thatPlayerInNextFrame.CharacterState = InAirIdle1ByJump;
                             } else {
                                 thatPlayerInNextFrame.CharacterState = InAirIdle1NoJump;
@@ -792,7 +788,7 @@ namespace shared {
                 }
 
                 // Reset "FramesInChState" if "CharacterState" is changed
-                if (thatPlayerInNextFrame.CharacterState != currPlayerDownsync.CharacterState) {
+                if (thatPlayerInNextFrame.CharacterState != currCharacterDownsync.CharacterState) {
                     thatPlayerInNextFrame.FramesInChState = 0;
                 }
 
@@ -824,7 +820,7 @@ namespace shared {
 
             // [WARNING] On backend this function MUST BE called while "InputsBufferLock" is locked!
             var nextRenderFramePlayers = candidate.PlayersArr;
-            var nextRenderFrameAiPlayers = candidate.AiPlayersArr;
+            var nextRenderFrameNpcs = candidate.NpcsArr;
             // Make a copy first
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var src = currRenderFrame.PlayersArr[i];
@@ -837,12 +833,12 @@ namespace shared {
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
-                AssignToPlayerDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, nextRenderFramePlayers[i]);
             }
 
             int j = 0;
-            while (j < currRenderFrame.AiPlayersArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.AiPlayersArr[j].Id) {
-                var src = currRenderFrame.AiPlayersArr[j];
+            while (j < currRenderFrame.NpcsArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.NpcsArr[j].Id) {
+                var src = currRenderFrame.NpcsArr[j];
                 int framesToRecover = src.FramesToRecover - 1;
                 int framesInChState = src.FramesInChState + 1;
                 int framesInvinsible = src.FramesInvinsible - 1;
@@ -852,7 +848,7 @@ namespace shared {
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
-                AssignToPlayerDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, nextRenderFrameAiPlayers[j]);
+                AssignToCharacterDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, nextRenderFrameNpcs[j]);
                 j++;
             }
 
@@ -866,9 +862,9 @@ namespace shared {
             int colliderCnt = 0;
 
             _processPlayerMovement(currRenderFrame, nextRenderFramePlayers, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt);
-            _processAiPlayerMovement(currRenderFrame, roomCapacity, nextRenderFrameAiPlayers, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt);
+            _processNpcMovement(currRenderFrame, roomCapacity, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt);
 
-            _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameAiPlayers, effPushbacks, jumpedOrNotList, dynamicRectangleColliders);
+            _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, jumpedOrNotList, dynamicRectangleColliders);
 
             for (int i = 0; i < colliderCnt; i++) {
                 Collider dynamicCollider = dynamicRectangleColliders[i];
@@ -926,7 +922,7 @@ namespace shared {
             ifd.ConfirmedList = 0;
         }
 
-        public static string stringifyPlayerDownsync(PlayerDownsync pd) {
+        public static string stringifyCharacterDownsync(CharacterDownsync pd) {
             if (null == pd) return "";
             return String.Format("{0},{1},{2},{3},{4},{5},{6}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall);
         }
@@ -939,7 +935,7 @@ namespace shared {
         public static string stringifyRdf(RoomDownsyncFrame rdf) {
             var playerSb = new List<String>();
             for (int k = 0; k < rdf.PlayersArr.Count; k++) {
-                playerSb.Add(stringifyPlayerDownsync(rdf.PlayersArr[k]));
+                playerSb.Add(stringifyCharacterDownsync(rdf.PlayersArr[k]));
             }
 
             var bulletSb = new List<String>();

@@ -45,7 +45,7 @@ public class WebSocketController : ControllerBase {
             string? closeReason = null;
 
             int addPlayerToRoomResult = ErrCode.UnknownError;
-            Player player = new Player(new PlayerDownsync());
+            Player player = new Player(new CharacterDownsync());
 
             try {
                 var room = _roomManager.Pop();
@@ -79,7 +79,8 @@ public class WebSocketController : ControllerBase {
 
                     RenderBufferSize = room.GetRenderCacheSize(),
                     BoundRoomCapacity = room.capacity,
-                    PreallocAiPlayerCapacity = room.peerUdpAddrBroadcastRdf;
+                    PreallocNpcCapacity = room.preallocNpcCapacity,
+                    PreallocBulletCapacity = room.preallocBulletCapacity,
                     FrameLogEnabled = room.frameLogEnabled,
                 };
 
@@ -94,7 +95,7 @@ public class WebSocketController : ControllerBase {
                     Ret = ErrCode.Ok,
                     Act = shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO,
                     BciFrame = bciFrame,
-                    PeerJoinIndex = player.PlayerDownsync.JoinIndex
+                    PeerJoinIndex = player.CharacterDownsync.JoinIndex
                 };
 
                 if (null != room.peerUdpAddrBroadcastRdf) {

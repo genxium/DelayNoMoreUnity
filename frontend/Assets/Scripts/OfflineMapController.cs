@@ -20,14 +20,14 @@ public class OfflineMapController : AbstractMapController {
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
 
-        selfPlayerInfo = new PlayerDownsync();
+        selfPlayerInfo = new CharacterDownsync();
         
         roomCapacity = 1;
         preallocateHolders();
         resetCurrentMatch();
         selfPlayerInfo.JoinIndex = 1;
         var playerStartingCposList = new Vector[roomCapacity]; // "Cpos" means "Collision Space Position"
-        var aiPlayersStartingCposList = new List<Vector>();
+        var npcsStartingCposList = new List<Vector>();
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
         var (defaultPatrolCueRadius, _) = PolygonColliderCtrToVirtualGridPos(6, 0);
         var grid = this.GetComponentInChildren<Grid>();
@@ -64,10 +64,10 @@ public class OfflineMapController : AbstractMapController {
                     }
                     break;
                 case "AiPlayerStartingPos":
-                    foreach (Transform aiPlayerPos in child) {
-                        var posTileObj = aiPlayerPos.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
+                    foreach (Transform npcPos in child) {
+                        var posTileObj = npcPos.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        aiPlayersStartingCposList.Add(new Vector(cx, cy));
+                        npcsStartingCposList.Add(new Vector(cx, cy));
                     }
                     break;
                 case "PatrolCue":
@@ -120,38 +120,38 @@ public class OfflineMapController : AbstractMapController {
         selfPlayerInRdf.MaxHp = 100;
         selfPlayerInRdf.SpeciesId = 0;
 
-        for (int i = 0; i < aiPlayersStartingCposList.Count; i++) {
+        for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var cpos = aiPlayersStartingCposList[i];
+            var cpos = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             spawnAiPlayerNode(wx, wy);
 
             var characterSpeciesId = 1;
             var playerCharacter = Battle.characters[characterSpeciesId];
 
-            var aiPlayerInRdf = new PlayerDownsync();
-            var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
-            aiPlayerInRdf.Id = 0; // Just for not being excluded 
-            aiPlayerInRdf.JoinIndex = joinIndex;
-            aiPlayerInRdf.VirtualGridX = playerVposX;
-            aiPlayerInRdf.VirtualGridY = playerVposY;
-            aiPlayerInRdf.RevivalVirtualGridX = playerVposX;
-            aiPlayerInRdf.RevivalVirtualGridY = playerVposY;
-            aiPlayerInRdf.Speed = playerCharacter.Speed;
-            aiPlayerInRdf.ColliderRadius = (int)defaultColliderRadius;
-            aiPlayerInRdf.CharacterState = InAirIdle1NoJump;
-            aiPlayerInRdf.FramesToRecover = 0;
-            aiPlayerInRdf.DirX = 2;
-            aiPlayerInRdf.DirY = 0;
-            aiPlayerInRdf.VelX = 0;
-            aiPlayerInRdf.VelY = 0;
-            aiPlayerInRdf.InAir = true;
-            aiPlayerInRdf.OnWall = false;
-            aiPlayerInRdf.Hp = 100;
-            aiPlayerInRdf.MaxHp = 100;
-            aiPlayerInRdf.SpeciesId = characterSpeciesId;
+            var npcInRdf = new CharacterDownsync();
+            var (vx, vy) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
+            npcInRdf.Id = 0; // Just for not being excluded 
+            npcInRdf.JoinIndex = joinIndex;
+            npcInRdf.VirtualGridX = vx;
+            npcInRdf.VirtualGridY = vy;
+            npcInRdf.RevivalVirtualGridX = vx;
+            npcInRdf.RevivalVirtualGridY = vy;
+            npcInRdf.Speed = playerCharacter.Speed;
+            npcInRdf.ColliderRadius = (int)defaultColliderRadius;
+            npcInRdf.CharacterState = InAirIdle1NoJump;
+            npcInRdf.FramesToRecover = 0;
+            npcInRdf.DirX = 2;
+            npcInRdf.DirY = 0;
+            npcInRdf.VelX = 0;
+            npcInRdf.VelY = 0;
+            npcInRdf.InAir = true;
+            npcInRdf.OnWall = false;
+            npcInRdf.Hp = 100;
+            npcInRdf.MaxHp = 100;
+            npcInRdf.SpeciesId = characterSpeciesId;
 
-            startRdf.AiPlayersArr[i] = aiPlayerInRdf;
+            startRdf.NpcsArr[i] = npcInRdf;
         }
 
         onRoomDownsyncFrame(startRdf, null);
@@ -218,23 +218,23 @@ public class OfflineMapController : AbstractMapController {
         var (_, rdf) = renderBuffer.GetByFrameId(renderFrameId);
         if (null != rdf) {
             for (int k = 0; k < roomCapacity; k++) {
-                var currPlayerDownsync = rdf.PlayersArr[k];
-                int colliderWidth = currPlayerDownsync.ColliderRadius * 2, colliderHeight = currPlayerDownsync.ColliderRadius * 4;
+                var currCharacterDownsync = rdf.PlayersArr[k];
+                int colliderWidth = currCharacterDownsync.ColliderRadius * 2, colliderHeight = currCharacterDownsync.ColliderRadius * 4;
 
-                switch (currPlayerDownsync.CharacterState) {
+                switch (currCharacterDownsync.CharacterState) {
                     case LayDown1:
-                        colliderWidth = currPlayerDownsync.ColliderRadius * 4;
-                        colliderHeight = currPlayerDownsync.ColliderRadius * 2;
+                        colliderWidth = currCharacterDownsync.ColliderRadius * 4;
+                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
                         break;
                     case BlownUp1:
                     case InAirIdle1NoJump:
                     case InAirIdle1ByJump:
                     case OnWall:
-                        colliderWidth = currPlayerDownsync.ColliderRadius * 2;
-                        colliderHeight = currPlayerDownsync.ColliderRadius * 2;
+                        colliderWidth = currCharacterDownsync.ColliderRadius * 2;
+                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
                         break;
                 }
-                var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
+                var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY);
                 var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
                 var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
 

@@ -28,14 +28,14 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNorms(int joinIndex, PlayerDownsync currPlayerDownsync, PlayerDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbackNorms, Collision collision, ref SatResult overlapResult) {
+        public static int calcHardPushbacksNorms(int joinIndex, CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbackNorms, Collision collision, ref SatResult overlapResult) {
             float virtualGripToWall = 0.0f;
-            if (OnWall == currPlayerDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currPlayerDownsync.DirX == thatPlayerInNextFrame.DirX) {
+            if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
                 float xfac = 1.0f;
                 if (0 > thatPlayerInNextFrame.DirX) {
                     xfac = -xfac;
                 }
-                virtualGripToWall = xfac * currPlayerDownsync.Speed * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
+                virtualGripToWall = xfac * currCharacterDownsync.Speed * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
             }
             int retCnt = 0;
             bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
@@ -52,12 +52,12 @@ namespace shared {
                 bool isBarrier = false;
 
                 switch (bCollider.Data) {
-                    case PlayerDownsync v1:
+                    case CharacterDownsync v1:
                     case Bullet v2:
                     case PatrolCue v3:
                         break;
                     default:
-                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*PlayerDownsync && !*Bullet".
+                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
                         isBarrier = true;
                         break;
                 }

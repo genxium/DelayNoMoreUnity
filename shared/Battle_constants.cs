@@ -197,13 +197,13 @@ namespace shared {
                 }
             );
 
-        public static int FindSkillId(int patternId, PlayerDownsync currPlayerDownsync, int speciesId) {
+        public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
             switch (speciesId) {
                 case 0:
                     switch (patternId) {
                         case 1:
-                            if (0 == currPlayerDownsync.FramesToRecover) {
-                                if (currPlayerDownsync.InAir) {
+                            if (0 == currCharacterDownsync.FramesToRecover) {
+                                if (currCharacterDownsync.InAir) {
                                     return 255;
                                 } else {
                                     return 1;

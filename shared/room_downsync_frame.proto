@@ -42,7 +42,7 @@ enum CharacterState {
 	Dying = 18;
 }
  
-message PlayerDownsync {
+message CharacterDownsync {
 	int32 id = 1;
 	int32 virtualGridX = 2;
 	int32 virtualGridY = 3;
@@ -210,21 +210,20 @@ message BattleColliderInfo {
 	int32 renderBufferSize = 8;
 	int32 collisionMinStep = 9;
 	int32 boundRoomCapacity = 10;
-	int32 preallocAiPlayerCapacity = 11;
+	int32 preallocNpcCapacity = 11;
 	int32 preallocBulletCapacity = 12;
 
-	PeerUdpAddr battleUdpTunnel = 11;
-
-	bool frameLogEnabled = 1024;
+	PeerUdpAddr battleUdpTunnel = 1024;
+	bool frameLogEnabled = 1025;
 }
 
 message RoomDownsyncFrame {
 	int32 id = 1;
-	repeated PlayerDownsync playersArr = 2;
+	repeated CharacterDownsync playersArr = 2;
 	int64 countdownNanos = 3;
 	repeated Bullet bullets = 4;  
 
-	repeated PlayerDownsync aiPlayersArr = 5;
+	repeated CharacterDownsync npcsArr = 5;
 
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;
