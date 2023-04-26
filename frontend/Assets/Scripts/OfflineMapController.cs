@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using shared;
 using static shared.Battle;
 using static shared.CharacterState;
+using SuperTiled2Unity;
 
 public class OfflineMapController : AbstractMapController {
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
@@ -27,7 +28,7 @@ public class OfflineMapController : AbstractMapController {
         resetCurrentMatch();
         selfPlayerInfo.JoinIndex = 1;
         var playerStartingCposList = new Vector[roomCapacity]; // "Cpos" means "Collision Space Position"
-        var npcsStartingCposList = new List<Vector>();
+        var npcsStartingCposList = new List<(Vector, int, int)>();
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
         var (defaultPatrolCueRadius, _) = PolygonColliderCtrToVirtualGridPos(6, 0);
         var grid = this.GetComponentInChildren<Grid>();
@@ -36,7 +37,7 @@ public class OfflineMapController : AbstractMapController {
                 case "Barrier":
                     int i = 0;
                     foreach (Transform barrierChild in child) {
-                        var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
+                        var barrierTileObj = barrierChild.gameObject.GetComponent<SuperObject>();
                         var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
                         var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                         /*
@@ -55,7 +56,7 @@ public class OfflineMapController : AbstractMapController {
                 case "PlayerStartingPos":
                     int j = 0;
                     foreach (Transform playerPos in child) {
-                        var posTileObj = playerPos.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
+                        var posTileObj = playerPos.gameObject.GetComponent<SuperObject>();
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
                         playerStartingCposList[j] = new Vector(cx, cy);
                         Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
@@ -65,18 +66,29 @@ public class OfflineMapController : AbstractMapController {
                     break;
                 case "AiPlayerStartingPos":
                     foreach (Transform npcPos in child) {
-                        var posTileObj = npcPos.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
-                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        npcsStartingCposList.Add(new Vector(cx, cy));
+                        var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
+                        var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        CustomProperty dirX, speciesId;
+                        tileProps.TryGetCustomProperty("dirX", out dirX);
+                        tileProps.TryGetCustomProperty("speciesId", out speciesId);
+                        npcsStartingCposList.Add((new Vector(cx, cy), dirX.IsEmpty ? 2 : dirX.GetValueAsInt(), speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt()));
                     }
                     break;
                 case "PatrolCue":
                     foreach (Transform patrolCueChild in child) {
-                        var patrolCueTileObj = patrolCueChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
-                        var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(patrolCueTileObj.m_X, patrolCueTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        var tileObj = patrolCueChild.gameObject.GetComponent<SuperObject>();
+                        var tileProps = patrolCueChild.gameObject.GetComponent<SuperCustomProperties>();
+
+                        var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+
+                        CustomProperty flAct, frAct;
+                        tileProps.TryGetCustomProperty("flAct", out flAct);
+                        tileProps.TryGetCustomProperty("frAct", out frAct);
+
                         var newPatrolCue = new PatrolCue {
-                            FlAct = 1,
-                            FrAct = 2,
+                            FlAct = flAct.IsEmpty ? 0 : flAct.GetValueAsInt(),
+                            FrAct = frAct.IsEmpty ? 0 : frAct.GetValueAsInt(),
                         };
 
                         var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2*defaultPatrolCueRadius, 2*defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
@@ -122,11 +134,10 @@ public class OfflineMapController : AbstractMapController {
 
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var cpos = npcsStartingCposList[i];
+            var (cpos, dirX, characterSpeciesId) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             spawnAiPlayerNode(wx, wy);
 
-            var characterSpeciesId = 1;
             var playerCharacter = Battle.characters[characterSpeciesId];
 
             var npcInRdf = new CharacterDownsync();
@@ -141,7 +152,7 @@ public class OfflineMapController : AbstractMapController {
             npcInRdf.ColliderRadius = (int)defaultColliderRadius;
             npcInRdf.CharacterState = InAirIdle1NoJump;
             npcInRdf.FramesToRecover = 0;
-            npcInRdf.DirX = 2;
+            npcInRdf.DirX = dirX;
             npcInRdf.DirY = 0;
             npcInRdf.VelX = 0;
             npcInRdf.VelY = 0;

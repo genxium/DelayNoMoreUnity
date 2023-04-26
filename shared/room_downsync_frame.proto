@@ -125,6 +125,14 @@ message PatrolCue {
     int32 frAct = 2; // "input when colliding from the right"
 }
 
+message VisionBox {
+    // all values are relative to (CharacterDownsync.dirX=+2, CharacterDownsync.virtualGridX, CharacterDownsync.virtualGridY) 
+    int32 bottomLeftX = 1; 
+    int32 bottomLeftY = 2; 
+    int32 width = 3; 
+    int32 height = 4; 
+}
+
 enum BulletType {
 	Undetermined = 0;
 	Melee = 1;

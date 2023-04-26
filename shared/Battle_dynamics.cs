@@ -97,7 +97,7 @@ namespace shared {
             return hasInputFrameUpdatedOnDynamics;
         }
 
-        private static (int, bool, int, int) deriveOpPattern(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
+        private static (int, bool, int, int) derivePlayerOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
             int delayedInputFrameIdForPrevRdf = ConvertToDelayedInputFrameId(currRenderFrame.Id - 1);
@@ -174,13 +174,24 @@ namespace shared {
 
             return (patternId, jumpedOrNot, effDx, effDy);
         }
+        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, CollisionSpace collisionSys) {
+            // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
+
+            // TODO: Create Npc visions (and remove before exiting this method), colllide with players and patrolCues to derive proper input
+            if (0 < currCharacterDownsync.FramesToRecover) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+            } else {
+                return (PATTERN_ID_NO_OP, false, currCharacterDownsync.DirX, currCharacterDownsync.DirY);
+            }
+            
+        }
 
         private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, bool[] jumpedOrNotList) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var currCharacterDownsync = currRenderFrame.PlayersArr[i];
-                var thatPlayerInNextFrame = nextRenderFramePlayers[i];
+                var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = deriveOpPattern(currCharacterDownsync, thatPlayerInNextFrame, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+                var (patternId, jumpedOrNot, effDx, effDy) = derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
                 var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
                 bool skillUsed = false;
@@ -190,33 +201,33 @@ namespace shared {
                     var skillConfig = skills[skillId];
                     if (Dashing == skillConfig.BoundChState) {
                         // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
-                        thatPlayerInNextFrame.ActiveSkillId = skillId;
-                        thatPlayerInNextFrame.ActiveSkillHit = 0;
-                        thatPlayerInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
+                        thatCharacterInNextFrame.ActiveSkillId = skillId;
+                        thatCharacterInNextFrame.ActiveSkillHit = 0;
+                        thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
 
                         int xfac = 1;
 
-                        if (0 > thatPlayerInNextFrame.DirX) {
+                        if (0 > thatCharacterInNextFrame.DirX) {
                             xfac = -xfac;
                         }
                         bool hasLockVel = false;
 
                         // Hardcoded to use only the first hit for now
-                        var bulletConfig = skillConfig.Hits[thatPlayerInNextFrame.ActiveSkillHit];
+                        var bulletConfig = skillConfig.Hits[thatCharacterInNextFrame.ActiveSkillHit];
 
                         if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
                             hasLockVel = true;
-                            thatPlayerInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+                            thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
                         }
                         if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
                             hasLockVel = true;
-                            thatPlayerInNextFrame.VelY = bulletConfig.SelfLockVelY;
+                            thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
                         }
 
                         if (false == hasLockVel && false == currCharacterDownsync.InAir) {
-                            thatPlayerInNextFrame.VelX = 0;
+                            thatCharacterInNextFrame.VelX = 0;
                         }
-                        thatPlayerInNextFrame.CharacterState = skillConfig.BoundChState;
+                        thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
 
                         skillUsed = true;
                     }
@@ -229,19 +240,126 @@ namespace shared {
 
                 bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currCharacterDownsync.VelX));
                 jumpedOrNotList[i] = jumpedOrNot;
-                int joinIndex = currCharacterDownsync.JoinIndex;
 
                 if (0 == currCharacterDownsync.FramesToRecover) {
                     bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
                     bool alignedWithInertia = true;
                     bool exactTurningAround = false;
                     bool stoppingFromWalking = false;
-                    if (0 != effDx && 0 == thatPlayerInNextFrame.VelX) {
+                    if (0 != effDx && 0 == thatCharacterInNextFrame.VelX) {
                         alignedWithInertia = false;
-                    } else if (0 == effDx && 0 != thatPlayerInNextFrame.VelX) {
+                    } else if (0 == effDx && 0 != thatCharacterInNextFrame.VelX) {
                         alignedWithInertia = false;
                         stoppingFromWalking = true;
-                    } else if (0 > effDx * thatPlayerInNextFrame.VelX) {
+                    } else if (0 > effDx * thatCharacterInNextFrame.VelX) {
+                        alignedWithInertia = false;
+                        exactTurningAround = true;
+                    }
+
+                    if (!jumpedOrNot && !isWallJumping && !prevCapturedByInertia && !alignedWithInertia) {
+                        thatCharacterInNextFrame.CapturedByInertia = true;
+                        if (exactTurningAround) {
+                            thatCharacterInNextFrame.CharacterState = Walking; // Most NPCs don't have TurnAround animation clip!
+                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
+                        } else if (stoppingFromWalking) {
+                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
+                        } else {
+                            // Updates CharacterState and thus the animation to make user see graphical feedback asap.
+                            thatCharacterInNextFrame.CharacterState = Walking;
+                            thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
+                        }
+                    } else {
+                        thatCharacterInNextFrame.CapturedByInertia = false;
+                        if (0 != effDx) {
+                            int xfac = 1;
+                            if (0 > effDx) {
+                                xfac = -xfac;
+                            }
+                            thatCharacterInNextFrame.DirX = effDx;
+                            thatCharacterInNextFrame.DirY = effDy;
+
+                            if (isWallJumping) {
+                                thatCharacterInNextFrame.VelX = xfac * Math.Abs(currCharacterDownsync.VelX);
+                            } else {
+                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                            }
+                            thatCharacterInNextFrame.CharacterState = Walking;
+                        } else {
+                            thatCharacterInNextFrame.CharacterState = Idle1;
+                            thatCharacterInNextFrame.VelX = 0;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, bool[] jumpedOrNotList, CollisionSpace collisionSys) {
+            for (int i = roomCapacity; i < roomCapacity+currRenderFrame.NpcsArr.Count; i++) {
+                var currCharacterDownsync = currRenderFrame.NpcsArr[i-roomCapacity];
+                var thatCharacterInNextFrame = nextRenderFrameNpcs[i-roomCapacity];
+                var chConfig = characters[currCharacterDownsync.SpeciesId];
+                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, chConfig, collisionSys);
+
+                var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
+                bool skillUsed = false;
+
+                if (skills.ContainsKey(skillId)) {
+
+                    var skillConfig = skills[skillId];
+                    if (Dashing == skillConfig.BoundChState) {
+                        // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
+                        thatCharacterInNextFrame.ActiveSkillId = skillId;
+                        thatCharacterInNextFrame.ActiveSkillHit = 0;
+                        thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
+
+                        int xfac = 1;
+
+                        if (0 > thatCharacterInNextFrame.DirX) {
+                            xfac = -xfac;
+                        }
+                        bool hasLockVel = false;
+
+                        // Hardcoded to use only the first hit for now
+                        var bulletConfig = skillConfig.Hits[thatCharacterInNextFrame.ActiveSkillHit];
+
+                        if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
+                            hasLockVel = true;
+                            thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+                        }
+                        if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
+                            hasLockVel = true;
+                            thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
+                        }
+
+                        if (false == hasLockVel && false == currCharacterDownsync.InAir) {
+                            thatCharacterInNextFrame.VelX = 0;
+                        }
+                        thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
+
+                        skillUsed = true;
+                    }
+
+                }
+
+                if (skillUsed) {
+                    continue; // Don't allow movement if skill is used
+                }
+
+                bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currCharacterDownsync.VelX));
+                jumpedOrNotList[i] = jumpedOrNot;
+
+                if (0 == currCharacterDownsync.FramesToRecover) {
+                    bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
+                    bool alignedWithInertia = true;
+                    bool exactTurningAround = false;
+                    bool stoppingFromWalking = false;
+                    if (0 != effDx && 0 == thatCharacterInNextFrame.VelX) {
+                        alignedWithInertia = false;
+                    } else if (0 == effDx && 0 != thatCharacterInNextFrame.VelX) {
+                        alignedWithInertia = false;
+                        stoppingFromWalking = true;
+                    } else if (0 > effDx * thatCharacterInNextFrame.VelX) {
                         alignedWithInertia = false;
                         exactTurningAround = true;
                     }
@@ -253,36 +371,36 @@ namespace shared {
                            When "false == alignedWithInertia", we're GUARANTEED TO BE WRONG AT INPUT PREDICTION ON THE FRONTEND, but we COULD STILL BE RIGHT AT POSITION PREDICTION WITHIN "InertiaFramesToRecover" -- which together with "INPUT_DELAY_FRAMES" grants the frontend a big chance to be graphically consistent even upon wrong prediction!
                          */
 
-                        thatPlayerInNextFrame.CapturedByInertia = true;
+                        thatCharacterInNextFrame.CapturedByInertia = true;
                         if (exactTurningAround) {
-                            thatPlayerInNextFrame.CharacterState = TurnAround;
-                            thatPlayerInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
+                            thatCharacterInNextFrame.CharacterState = TurnAround;
+                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
                         } else if (stoppingFromWalking) {
-                            thatPlayerInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
+                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
                         } else {
                             // Updates CharacterState and thus the animation to make user see graphical feedback asap.
-                            thatPlayerInNextFrame.CharacterState = Walking;
-                            thatPlayerInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
+                            thatCharacterInNextFrame.CharacterState = Walking;
+                            thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
                         }
                     } else {
-                        thatPlayerInNextFrame.CapturedByInertia = false;
+                        thatCharacterInNextFrame.CapturedByInertia = false;
                         if (0 != effDx) {
                             int xfac = 1;
                             if (0 > effDx) {
                                 xfac = -xfac;
                             }
-                            thatPlayerInNextFrame.DirX = effDx;
-                            thatPlayerInNextFrame.DirY = effDy;
+                            thatCharacterInNextFrame.DirX = effDx;
+                            thatCharacterInNextFrame.DirY = effDy;
 
                             if (isWallJumping) {
-                                thatPlayerInNextFrame.VelX = xfac * Math.Abs(currCharacterDownsync.VelX);
+                                thatCharacterInNextFrame.VelX = xfac * Math.Abs(currCharacterDownsync.VelX);
                             } else {
-                                thatPlayerInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                             }
-                            thatPlayerInNextFrame.CharacterState = Walking;
+                            thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
-                            thatPlayerInNextFrame.CharacterState = Idle1;
-                            thatPlayerInNextFrame.VelX = 0;
+                            thatCharacterInNextFrame.CharacterState = Idle1;
+                            thatCharacterInNextFrame.VelX = 0;
                         }
                     }
 
@@ -290,8 +408,8 @@ namespace shared {
             }
         }
 
-        private static void _processCharacterMovement(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt) {
-            for (int i = 0; i < currRenderFrame.PlayersArr.Count + currRenderFrame.NpcsArr.Count; i++) {
+        private static void _moveAndInsertCharacterColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd) {
+            for (int i = iSt; i < iEd; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i-roomCapacity]);
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i-roomCapacity]);
@@ -300,7 +418,6 @@ namespace shared {
                 effPushbacks[i].X = 0;
                 effPushbacks[i].Y = 0;
 
-                // Reset playerCollider position from the "virtual grid position"
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
 
                 if (0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
@@ -384,9 +501,11 @@ namespace shared {
                     }
                 }
             }
+        }
 
+        private static void _calcPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd) {
             // Calc pushbacks for each player (after its movement) w/o bullets
-            for (int i = 0; i < currRenderFrame.PlayersArr.Count + currRenderFrame.NpcsArr.Count; i++) {
+            for (int i = iSt; i < iEd; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
@@ -649,17 +768,20 @@ namespace shared {
                 j++;
             }
 
-            _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, decodedInputHolder, prevDecodedInputHolder, jumpedOrNotList);
-            // TODO: _processNpcInputs(...) within which the NPC inputs will be generated by evaluating currRdf
-
             /*
                [WARNING]
                1. The dynamic colliders will all be removed from "Space" at the end of this function due to the need for being rollback-compatible.
                2. To achieve "zero gc" in "ApplyInputFrameDownsyncDynamicsOnSingleRenderFrame", I deliberately chose a collision system that doesn't use dynamic tree node alloc.
+               3. Before generating inputs for Npcs, the colliders for "Players" should be inserted such that "Npc Visions" can interact with the players in collision system. 
              */
             int colliderCnt = 0;
+            _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, decodedInputHolder, prevDecodedInputHolder, jumpedOrNotList);
+            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity);
 
-            _processCharacterMovement(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt);
+            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, jumpedOrNotList, collisionSys);
+            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity+j);
+
+            _calcPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity+j);
             
             _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, jumpedOrNotList, dynamicRectangleColliders);
 
