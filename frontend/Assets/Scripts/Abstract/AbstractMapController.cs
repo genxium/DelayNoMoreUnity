@@ -38,7 +38,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected SatResult overlapResult;
     protected Vector[] effPushbacks;
     protected Vector[][] hardPushbackNormsArr;
-    protected bool[] jumpedOrNotList;
     protected shared.Collider[] dynamicRectangleColliders;
     protected shared.Collider[] staticRectangleColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
@@ -154,7 +153,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     }
                 }
             }
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -309,8 +308,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 hardPushbackNormsArr[i][j] = new Vector(0, 0);
             }
         }
-        jumpedOrNotList = new bool[roomCapacity + preallocAiPlayerCapacity];
-        Array.Fill(jumpedOrNotList, false);
 
         int dynamicRectangleCollidersCap = 64;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
@@ -351,7 +348,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         renderBuffer.Clear();
         inputBuffer.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
-        Array.Fill(jumpedOrNotList, false);
     }
 
     public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {

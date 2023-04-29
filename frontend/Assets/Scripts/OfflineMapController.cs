@@ -230,38 +230,25 @@ public class OfflineMapController : AbstractMapController {
         if (null != rdf) {
             for (int k = 0; k < roomCapacity; k++) {
                 var currCharacterDownsync = rdf.PlayersArr[k];
-                int colliderWidth = currCharacterDownsync.ColliderRadius * 2, colliderHeight = currCharacterDownsync.ColliderRadius * 4;
-
-                switch (currCharacterDownsync.CharacterState) {
-                    case LayDown1:
-                        colliderWidth = currCharacterDownsync.ColliderRadius * 4;
-                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
-                        break;
-                    case BlownUp1:
-                    case InAirIdle1NoJump:
-                    case InAirIdle1ByJump:
-                    case OnWall:
-                        colliderWidth = currCharacterDownsync.ColliderRadius * 2;
-                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
-                        break;
-                }
-                var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY);
-                var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
-                var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
+                float boxCx, boxCy, boxCw, boxCh;
+                calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+                
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+                // World space width and height are just the same as that of collision space.
 
                 GL.Begin(GL.LINES);
 
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx - 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+                GL.Vertex3((wx + 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
 
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx + 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+                GL.Vertex3((wx + 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
 
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx + 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
+                GL.Vertex3((wx - 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
 
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx - 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
+                GL.Vertex3((wx - 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
 
                 GL.End();
             }

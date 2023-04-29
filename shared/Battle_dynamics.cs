@@ -3,7 +3,6 @@ using pbc = Google.Protobuf.Collections;
 using static shared.CharacterState;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Google.Protobuf.Collections;
 
 namespace shared {
@@ -97,7 +96,7 @@ namespace shared {
             return hasInputFrameUpdatedOnDynamics;
         }
 
-        private static (int, bool, int, int) derivePlayerOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
+        private static (int, bool, int, int) _derivePlayerOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
             int delayedInputFrameIdForPrevRdf = ConvertToDelayedInputFrameId(currRenderFrame.Id - 1);
@@ -174,8 +173,32 @@ namespace shared {
 
             return (patternId, jumpedOrNot, effDx, effDy);
         }
-        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, CollisionSpace collisionSys) {
+
+        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, ref int colliderCnt, CollisionSpace collisionSys, Collision collision) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
+
+            var aCollider = dynamicRectangleColliders[roomCapacity + currCharacterDownsync.JoinIndex - 1];
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+            if (collided) {
+                while (true) {
+                    var (ok3, bCollider) = collision.PopFirstContactedCollider();
+                    if (false == ok3 || null == bCollider) {
+                        break;
+                    }
+                    bool isPatrolCue = false;
+                    switch (bCollider.Data) {
+                        case PatrolCue v3:
+                            isPatrolCue = true;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!isPatrolCue) {
+                        // ignore bullets for this step
+                        continue;
+                    }
+                }
+            }
 
             // TODO: Create Npc visions (and remove before exiting this method), colllide with players and patrolCues to derive proper input
             if (0 < currCharacterDownsync.FramesToRecover) {
@@ -183,21 +206,38 @@ namespace shared {
             } else {
                 return (PATTERN_ID_NO_OP, false, currCharacterDownsync.DirX, currCharacterDownsync.DirY);
             }
-            
         }
 
-        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, bool[] jumpedOrNotList) {
+        private static void _applyGravity(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+            /*
+             [WARNING] 
+             Deliberately calling this method in "_processXxxInputs" instead of "_moveAndInsertCharacterColliders", because it's important for the assignment "thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY" to be disabled upon jumping!
+             */
+            if (currCharacterDownsync.InAir) {
+                // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
+                if (OnWall == currCharacterDownsync.CharacterState) {
+                    thatCharacterInNextFrame.VelX += GRAVITY_X;
+                    thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
+                } else if (Dashing == currCharacterDownsync.CharacterState) {
+                    thatCharacterInNextFrame.VelX += GRAVITY_X;
+                } else {
+                    thatCharacterInNextFrame.VelX += GRAVITY_X;
+                    thatCharacterInNextFrame.VelY += GRAVITY_Y;
+                }
+            }
+        }
+
+        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var currCharacterDownsync = currRenderFrame.PlayersArr[i];
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+                var (patternId, jumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
                 var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
                 bool skillUsed = false;
 
                 if (skills.ContainsKey(skillId)) {
-
                     var skillConfig = skills[skillId];
                     if (Dashing == skillConfig.BoundChState) {
                         // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
@@ -206,7 +246,6 @@ namespace shared {
                         thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
 
                         int xfac = 1;
-
                         if (0 > thatCharacterInNextFrame.DirX) {
                             xfac = -xfac;
                         }
@@ -238,9 +277,6 @@ namespace shared {
                     continue; // Don't allow movement if skill is used
                 }
 
-                bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currCharacterDownsync.VelX));
-                jumpedOrNotList[i] = jumpedOrNot;
-
                 if (0 == currCharacterDownsync.FramesToRecover) {
                     bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
                     bool alignedWithInertia = true;
@@ -256,7 +292,7 @@ namespace shared {
                         exactTurningAround = true;
                     }
 
-                    if (!jumpedOrNot && !isWallJumping && !prevCapturedByInertia && !alignedWithInertia) {
+                    if (!jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
                         thatCharacterInNextFrame.CapturedByInertia = true;
                         if (exactTurningAround) {
                             thatCharacterInNextFrame.CharacterState = Walking; // Most NPCs don't have TurnAround animation clip!
@@ -277,16 +313,30 @@ namespace shared {
                             }
                             thatCharacterInNextFrame.DirX = effDx;
                             thatCharacterInNextFrame.DirY = effDy;
-
-                            if (isWallJumping) {
-                                thatCharacterInNextFrame.VelX = xfac * Math.Abs(currCharacterDownsync.VelX);
-                            } else {
-                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                            }
+                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                             thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
                             thatCharacterInNextFrame.CharacterState = Idle1;
                             thatCharacterInNextFrame.VelX = 0;
+                        }
+
+                        if (jumpedOrNot) {
+                            // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
+                            if (OnWall == currCharacterDownsync.CharacterState) {
+                                int xfac = -1;
+                                if (0 > currCharacterDownsync.OnWallNormX) {
+                                    // Always jump to the opposite direction of wall inward norm
+                                    xfac = -xfac;
+                                }
+                                thatCharacterInNextFrame.VelX = (xfac * chConfig.WallJumpingInitVelX);
+                                thatCharacterInNextFrame.VelY = (chConfig.WallJumpingInitVelY);
+                                thatCharacterInNextFrame.FramesToRecover = chConfig.WallJumpingFramesToRecover;
+                            } else {
+                                thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY;
+                            }
+                            thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
+                        } else {
+                            _applyGravity(currCharacterDownsync, chConfig, thatCharacterInNextFrame);
                         }
                     }
 
@@ -294,18 +344,18 @@ namespace shared {
             }
         }
 
-        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, bool[] jumpedOrNotList, CollisionSpace collisionSys) {
-            for (int i = roomCapacity; i < roomCapacity+currRenderFrame.NpcsArr.Count; i++) {
-                var currCharacterDownsync = currRenderFrame.NpcsArr[i-roomCapacity];
-                var thatCharacterInNextFrame = nextRenderFrameNpcs[i-roomCapacity];
+        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Collider[] dynamicRectangleColliders, ref int colliderCnt, Collision collision, CollisionSpace collisionSys) {
+            for (int i = roomCapacity; i < roomCapacity + currRenderFrame.NpcsArr.Count; i++) {
+                var currCharacterDownsync = currRenderFrame.NpcsArr[i - roomCapacity];
+                if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, chConfig, collisionSys);
+                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, ref colliderCnt, collisionSys, collision);
 
                 var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
                 bool skillUsed = false;
 
                 if (skills.ContainsKey(skillId)) {
-
                     var skillConfig = skills[skillId];
                     if (Dashing == skillConfig.BoundChState) {
                         // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
@@ -314,7 +364,6 @@ namespace shared {
                         thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
 
                         int xfac = 1;
-
                         if (0 > thatCharacterInNextFrame.DirX) {
                             xfac = -xfac;
                         }
@@ -347,72 +396,43 @@ namespace shared {
                 }
 
                 bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currCharacterDownsync.VelX));
-                jumpedOrNotList[i] = jumpedOrNot;
 
                 if (0 == currCharacterDownsync.FramesToRecover) {
-                    bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
-                    bool alignedWithInertia = true;
-                    bool exactTurningAround = false;
-                    bool stoppingFromWalking = false;
-                    if (0 != effDx && 0 == thatCharacterInNextFrame.VelX) {
-                        alignedWithInertia = false;
-                    } else if (0 == effDx && 0 != thatCharacterInNextFrame.VelX) {
-                        alignedWithInertia = false;
-                        stoppingFromWalking = true;
-                    } else if (0 > effDx * thatCharacterInNextFrame.VelX) {
-                        alignedWithInertia = false;
-                        exactTurningAround = true;
-                    }
-
-                    if (!jumpedOrNot && !isWallJumping && !prevCapturedByInertia && !alignedWithInertia) {
-                        /*
-                           [WARNING] A "turn-around", or in more generic direction schema a "change in direction" is a hurdle for our current "prediction+rollback" approach, yet applying a "FramesToRecover" for "turn-around" can alleviate the graphical inconsistence to a huge extent! For better operational experience, this is intentionally NOT APPLIED TO WALL JUMPING!
-
-                           When "false == alignedWithInertia", we're GUARANTEED TO BE WRONG AT INPUT PREDICTION ON THE FRONTEND, but we COULD STILL BE RIGHT AT POSITION PREDICTION WITHIN "InertiaFramesToRecover" -- which together with "INPUT_DELAY_FRAMES" grants the frontend a big chance to be graphically consistent even upon wrong prediction!
-                         */
-
-                        thatCharacterInNextFrame.CapturedByInertia = true;
-                        if (exactTurningAround) {
-                            thatCharacterInNextFrame.CharacterState = TurnAround;
-                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
-                        } else if (stoppingFromWalking) {
-                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
-                        } else {
-                            // Updates CharacterState and thus the animation to make user see graphical feedback asap.
-                            thatCharacterInNextFrame.CharacterState = Walking;
-                            thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
+                    // No inertia capture for Npcs 
+                    if (0 != effDx) {
+                        int xfac = 1;
+                        if (0 > effDx) {
+                            xfac = -xfac;
                         }
+                        thatCharacterInNextFrame.DirX = effDx;
+                        thatCharacterInNextFrame.DirY = effDy;
+
+                        if (isWallJumping) {
+                            thatCharacterInNextFrame.VelX = xfac * Math.Abs(currCharacterDownsync.VelX);
+                        } else {
+                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                        }
+                        thatCharacterInNextFrame.CharacterState = Walking;
                     } else {
-                        thatCharacterInNextFrame.CapturedByInertia = false;
-                        if (0 != effDx) {
-                            int xfac = 1;
-                            if (0 > effDx) {
-                                xfac = -xfac;
-                            }
-                            thatCharacterInNextFrame.DirX = effDx;
-                            thatCharacterInNextFrame.DirY = effDy;
-
-                            if (isWallJumping) {
-                                thatCharacterInNextFrame.VelX = xfac * Math.Abs(currCharacterDownsync.VelX);
-                            } else {
-                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                            }
-                            thatCharacterInNextFrame.CharacterState = Walking;
-                        } else {
-                            thatCharacterInNextFrame.CharacterState = Idle1;
-                            thatCharacterInNextFrame.VelX = 0;
-                        }
+                        thatCharacterInNextFrame.CharacterState = Idle1;
+                        thatCharacterInNextFrame.VelX = 0;
                     }
 
+                    if (jumpedOrNot) {
+                        thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY;
+                        thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
+                    } else {
+                        _applyGravity(currCharacterDownsync, chConfig, thatCharacterInNextFrame);
+                    }
                 }
             }
         }
 
-        private static void _moveAndInsertCharacterColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd) {
+        private static void _moveAndInsertCharacterColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd) {
             for (int i = iSt; i < iEd; i++) {
-                var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i-roomCapacity]);
+                var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
-                var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i-roomCapacity]);
+                var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
 
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 effPushbacks[i].X = 0;
@@ -440,70 +460,18 @@ namespace shared {
                     }
                 }
 
-                if (jumpedOrNotList[i]) {
-                    // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
-                    if (OnWall == currCharacterDownsync.CharacterState) {
-                        if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
-                            newVx -= currCharacterDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
-                        }
-                        int xfac = -1;
-                        if (0 > currCharacterDownsync.OnWallNormX) {
-                            // Always jump to the opposite direction of wall inward norm
-                            xfac = -xfac;
-                        }
-                        newVx += xfac * chConfig.WallJumpingInitVelX;
-                        newVy += chConfig.WallJumpingInitVelY;
-                        thatCharacterInNextFrame.VelX = (xfac * chConfig.WallJumpingInitVelX);
-                        thatCharacterInNextFrame.VelY = (chConfig.WallJumpingInitVelY);
-                        thatCharacterInNextFrame.FramesToRecover = chConfig.WallJumpingFramesToRecover;
-                    } else {
-                        thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY;
-                        newVy += chConfig.JumpingInitVelY; // Immediately gets out of any snapping
-                    }
-                }
-
-                var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(newVx, newVy);
-                int colliderWidth = currCharacterDownsync.ColliderRadius * 2, colliderHeight = currCharacterDownsync.ColliderRadius * 4;
-
-                switch (currCharacterDownsync.CharacterState) {
-                    case LayDown1:
-                        colliderWidth = currCharacterDownsync.ColliderRadius * 4;
-                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
-                        break;
-                    case BlownUp1:
-                    case InAirIdle1NoJump:
-                    case InAirIdle1ByJump:
-                    case OnWall:
-                        colliderWidth = currCharacterDownsync.ColliderRadius * 2;
-                        colliderHeight = currCharacterDownsync.ColliderRadius * 2;
-                        break;
-                }
-
-                var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
-
-                Collider playerCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(playerCollider, collisionSpaceX, collisionSpaceY, colliderWorldWidth, colliderWorldHeight, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "playerCollider.Y" would be a multiple of 1.0
+                float boxCx, boxCy, boxCw, boxCh;
+                calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
+                Collider characterCollider = dynamicRectangleColliders[colliderCnt];
+                UpdateRectCollider(characterCollider, boxCx, boxCy, boxCw, boxCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "characterCollider.Y" would be a multiple of 1.0
                 colliderCnt++;
 
                 // Add to collision system
-                collisionSys.AddSingle(playerCollider);
-
-                if (currCharacterDownsync.InAir) {
-                    // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
-                    if (OnWall == currCharacterDownsync.CharacterState && !jumpedOrNotList[i]) {
-                        thatCharacterInNextFrame.VelX += GRAVITY_X;
-                        thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
-                    } else if (Dashing == currCharacterDownsync.CharacterState) {
-                        thatCharacterInNextFrame.VelX += GRAVITY_X;
-                    } else {
-                        thatCharacterInNextFrame.VelX += GRAVITY_X;
-                        thatCharacterInNextFrame.VelY += GRAVITY_Y;
-                    }
-                }
+                collisionSys.AddSingle(characterCollider);
             }
         }
 
-        private static void _calcPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd) {
+        private static void _calcPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Collider[] dynamicRectangleColliders, int iSt, int iEd) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             for (int i = iSt; i < iEd; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
@@ -554,7 +522,7 @@ namespace shared {
                         }
                         var normAlignmentWithGravity = (overlapResult.OverlapX * 0 + overlapResult.OverlapY * (-1.0));
                         if (isAnotherPlayer) {
-                            // [WARNING] The "zero overlap collision" might be randomly detected/missed on either frontend or backend, to have deterministic result we added paddings to all sides of a playerCollider. As each velocity component of (velX, velY) being a multiple of 0.5 at any renderFrame, each position component of (x, y) can only be a multiple of 0.5 too, thus whenever a 1-dimensional collision happens between players from [player#1: i*0.5, player#2: j*0.5, not collided yet] to [player#1: (i+k)*0.5, player#2: j*0.5, collided], the overlap becomes (i+k-j)*0.5+2*s, and after snapping subtraction the effPushback magnitude for each player is (i+k-j)*0.5, resulting in 0.5-multiples-position for the next renderFrame.
+                            // [WARNING] The "zero overlap collision" might be randomly detected/missed on either frontend or backend, to have deterministic result we added paddings to all sides of a characterCollider. As each velocity component of (velX, velY) being a multiple of 0.5 at any renderFrame, each position component of (x, y) can only be a multiple of 0.5 too, thus whenever a 1-dimensional collision happens between players from [player#1: i*0.5, player#2: j*0.5, not collided yet] to [player#1: (i+k)*0.5, player#2: j*0.5, collided], the overlap becomes (i+k-j)*0.5+2*s, and after snapping subtraction the effPushback magnitude for each player is (i+k-j)*0.5, resulting in 0.5-multiples-position for the next renderFrame.
                             pushbackX = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapX;
                             pushbackY = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapY;
                         }
@@ -656,7 +624,7 @@ namespace shared {
             }
         }
 
-        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, bool[] jumpedOrNotList, Collider[] dynamicRectangleColliders) {
+        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, Collider[] dynamicRectangleColliders) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count + currRenderFrame.NpcsArr.Count; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
@@ -674,7 +642,7 @@ namespace shared {
                         case Idle1:
                         case Walking:
                         case TurnAround:
-                            if (jumpedOrNotList[i] || InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
+                            if (InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
                                 thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                             } else {
                                 thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
@@ -717,7 +685,7 @@ namespace shared {
             }
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, bool[] jumpedOrNotList, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -771,19 +739,31 @@ namespace shared {
             /*
                [WARNING]
                1. The dynamic colliders will all be removed from "Space" at the end of this function due to the need for being rollback-compatible.
+
                2. To achieve "zero gc" in "ApplyInputFrameDownsyncDynamicsOnSingleRenderFrame", I deliberately chose a collision system that doesn't use dynamic tree node alloc.
+
                3. Before generating inputs for Npcs, the colliders for "Players" should be inserted such that "Npc Visions" can interact with the players in collision system. 
+
+               4. For a true "player", each "Step" moves it by: 
+                  [a] taking "proposed movement" in the "virtual grid" (w/ velocity from previous "Step" or "_processPlayerInputs");    
+                  [b] adding a collider of it w.r.t. the "virtual grid position after proposed movement";
+                  [c] calculating pushbacks for the collider;
+                  [d] confirming "new virtual grid position" by "collider position & pushbacks".
+
+                  Kindly note that we never "move the collider in the collisionSys", because that's a costly operation in terms of time-complexity.
+
+                5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
              */
             int colliderCnt = 0;
-            _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, decodedInputHolder, prevDecodedInputHolder, jumpedOrNotList);
-            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity);
+            _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, decodedInputHolder, prevDecodedInputHolder);
+            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity);
 
-            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, jumpedOrNotList, collisionSys);
-            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity+j);
+            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity + j);
+            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys);
 
-            _calcPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity+j);
-            
-            _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, jumpedOrNotList, dynamicRectangleColliders);
+            _calcPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, 0, roomCapacity + j);
+
+            _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, dynamicRectangleColliders);
 
             for (int i = 0; i < colliderCnt; i++) {
                 Collider dynamicCollider = dynamicRectangleColliders[i];
@@ -915,6 +895,25 @@ namespace shared {
                     };
                     outputFile.WriteLine(String.Format("[{0}]", stringifyFrameLog(frameLog, trimConfirmedList)));
                 }
+            }
+        }
+
+        public static void calcCharacterBoundingBoxInCollisionSpace(CharacterDownsync characterDownsync, int newVx, int newVy, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
+            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(newVx, newVy);
+
+            switch (characterDownsync.CharacterState) {
+                case LayDown1:
+                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(characterDownsync.ColliderRadius * 4, characterDownsync.ColliderRadius * 2);
+                    break;
+                case BlownUp1:
+                case InAirIdle1NoJump:
+                case InAirIdle1ByJump:
+                case OnWall:
+                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(characterDownsync.ColliderRadius * 2, characterDownsync.ColliderRadius * 2);
+                    break;
+                default:
+                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(characterDownsync.ColliderRadius * 2, characterDownsync.ColliderRadius * 4);
+                    break;
             }
         }
     }
