@@ -208,6 +208,48 @@ namespace shared {
             }
         }
 
+        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+            bool skillUsed = false;
+            var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
+
+            if (skills.ContainsKey(skillId)) {
+                var skillConfig = skills[skillId];
+                if (Dashing == skillConfig.BoundChState) {
+                    // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
+                    thatCharacterInNextFrame.ActiveSkillId = skillId;
+                    thatCharacterInNextFrame.ActiveSkillHit = 0;
+                    thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
+
+                    int xfac = 1;
+                    if (0 > thatCharacterInNextFrame.DirX) {
+                        xfac = -xfac;
+                    }
+                    bool hasLockVel = false;
+
+                    // Hardcoded to use only the first hit for now
+                    var bulletConfig = skillConfig.Hits[thatCharacterInNextFrame.ActiveSkillHit];
+
+                    if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
+                        hasLockVel = true;
+                        thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+                    }
+                    if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
+                        hasLockVel = true;
+                        thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
+                    }
+
+                    if (false == hasLockVel && false == currCharacterDownsync.InAir) {
+                        thatCharacterInNextFrame.VelX = 0;
+                    }
+                    thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
+
+                    skillUsed = true;
+                }
+
+            }
+            return skillUsed;
+        }
+
         private static void _applyGravity(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
             if (currCharacterDownsync.InAir) {
                 // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
@@ -231,46 +273,7 @@ namespace shared {
                 var (patternId, jumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
-                var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
-                bool skillUsed = false;
-
-                if (skills.ContainsKey(skillId)) {
-                    var skillConfig = skills[skillId];
-                    if (Dashing == skillConfig.BoundChState) {
-                        // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
-                        thatCharacterInNextFrame.ActiveSkillId = skillId;
-                        thatCharacterInNextFrame.ActiveSkillHit = 0;
-                        thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
-
-                        int xfac = 1;
-                        if (0 > thatCharacterInNextFrame.DirX) {
-                            xfac = -xfac;
-                        }
-                        bool hasLockVel = false;
-
-                        // Hardcoded to use only the first hit for now
-                        var bulletConfig = skillConfig.Hits[thatCharacterInNextFrame.ActiveSkillHit];
-
-                        if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
-                            hasLockVel = true;
-                            thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
-                        }
-                        if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
-                            hasLockVel = true;
-                            thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
-                        }
-
-                        if (false == hasLockVel && false == currCharacterDownsync.InAir) {
-                            thatCharacterInNextFrame.VelX = 0;
-                        }
-                        thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
-
-                        skillUsed = true;
-                    }
-
-                }
-
-                if (skillUsed) {
+                if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame)) {
                     continue; // Don't allow movement if skill is used
                 }
 
@@ -292,7 +295,7 @@ namespace shared {
                     if (!(InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) && !jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
                         thatCharacterInNextFrame.CapturedByInertia = true;
                         if (exactTurningAround) {
-                            thatCharacterInNextFrame.CharacterState = Walking; // Most NPCs don't have TurnAround animation clip!
+                            thatCharacterInNextFrame.CharacterState = TurnAround;
                             thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
                         } else if (stoppingFromWalking) {
                             thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
@@ -334,51 +337,12 @@ namespace shared {
                 var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, ref colliderCnt, collisionSys, collision);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
-                var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
-                bool skillUsed = false;
-
-                if (skills.ContainsKey(skillId)) {
-                    var skillConfig = skills[skillId];
-                    if (Dashing == skillConfig.BoundChState) {
-                        // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
-                        thatCharacterInNextFrame.ActiveSkillId = skillId;
-                        thatCharacterInNextFrame.ActiveSkillHit = 0;
-                        thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
-
-                        int xfac = 1;
-                        if (0 > thatCharacterInNextFrame.DirX) {
-                            xfac = -xfac;
-                        }
-                        bool hasLockVel = false;
-
-                        // Hardcoded to use only the first hit for now
-                        var bulletConfig = skillConfig.Hits[thatCharacterInNextFrame.ActiveSkillHit];
-
-                        if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
-                            hasLockVel = true;
-                            thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
-                        }
-                        if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
-                            hasLockVel = true;
-                            thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
-                        }
-
-                        if (false == hasLockVel && false == currCharacterDownsync.InAir) {
-                            thatCharacterInNextFrame.VelX = 0;
-                        }
-                        thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
-
-                        skillUsed = true;
-                    }
-
-                }
-
-                if (skillUsed) {
+                if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame)) {
                     continue; // Don't allow movement if skill is used
                 }
 
                 if (0 == currCharacterDownsync.FramesToRecover) {
-                    // No inertia capture for Npcs 
+                    // No inertia capture for Npcs, and most NPCs don't even have TurnAround animation clip!
                     if (0 != effDx) {
                         int xfac = 1;
                         if (0 > effDx) {
