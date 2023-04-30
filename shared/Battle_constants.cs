@@ -109,6 +109,7 @@ namespace shared {
         public static HashSet<CharacterState> inAirSet = new HashSet<CharacterState>() {
             InAirIdle1NoJump,
             InAirIdle1ByJump,
+            InAirIdle1ByWallJump,
             InAirAtk1,
             InAirAtked1,
             BlownUp1,

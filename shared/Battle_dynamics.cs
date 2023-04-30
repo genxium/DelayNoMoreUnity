@@ -209,13 +209,9 @@ namespace shared {
         }
 
         private static void _applyGravity(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
-            /*
-             [WARNING] 
-             Deliberately calling this method in "_processXxxInputs" instead of "_moveAndInsertCharacterColliders", because it's important for the assignment "thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY" to be disabled upon jumping!
-             */
             if (currCharacterDownsync.InAir) {
                 // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
-                if (OnWall == currCharacterDownsync.CharacterState) {
+                if (!currCharacterDownsync.JumpTriggered && OnWall == currCharacterDownsync.CharacterState) {
                     thatCharacterInNextFrame.VelX += GRAVITY_X;
                     thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
                 } else if (Dashing == currCharacterDownsync.CharacterState) {
@@ -233,6 +229,7 @@ namespace shared {
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+                thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
                 var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
                 bool skillUsed = false;
@@ -292,7 +289,7 @@ namespace shared {
                         exactTurningAround = true;
                     }
 
-                    if (!jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
+                    if (!(InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) && !jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
                         thatCharacterInNextFrame.CapturedByInertia = true;
                         if (exactTurningAround) {
                             thatCharacterInNextFrame.CharacterState = Walking; // Most NPCs don't have TurnAround animation clip!
@@ -313,33 +310,17 @@ namespace shared {
                             }
                             thatCharacterInNextFrame.DirX = effDx;
                             thatCharacterInNextFrame.DirY = effDy;
-                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
+                            } else {
+                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                            }
                             thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
                             thatCharacterInNextFrame.CharacterState = Idle1;
                             thatCharacterInNextFrame.VelX = 0;
                         }
-
-                        if (jumpedOrNot) {
-                            // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
-                            if (OnWall == currCharacterDownsync.CharacterState) {
-                                int xfac = -1;
-                                if (0 > currCharacterDownsync.OnWallNormX) {
-                                    // Always jump to the opposite direction of wall inward norm
-                                    xfac = -xfac;
-                                }
-                                thatCharacterInNextFrame.VelX = (xfac * chConfig.WallJumpingInitVelX);
-                                thatCharacterInNextFrame.VelY = (chConfig.WallJumpingInitVelY);
-                                thatCharacterInNextFrame.FramesToRecover = chConfig.WallJumpingFramesToRecover;
-                            } else {
-                                thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY;
-                            }
-                            thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
-                        } else {
-                            _applyGravity(currCharacterDownsync, chConfig, thatCharacterInNextFrame);
-                        }
                     }
-
                 }
             }
         }
@@ -351,6 +332,7 @@ namespace shared {
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, ref colliderCnt, collisionSys, collision);
+                thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
                 var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
                 bool skillUsed = false;
@@ -395,8 +377,6 @@ namespace shared {
                     continue; // Don't allow movement if skill is used
                 }
 
-                bool isWallJumping = (chConfig.OnWallEnabled && chConfig.WallJumpingInitVelX == Math.Abs(currCharacterDownsync.VelX));
-
                 if (0 == currCharacterDownsync.FramesToRecover) {
                     // No inertia capture for Npcs 
                     if (0 != effDx) {
@@ -407,22 +387,11 @@ namespace shared {
                         thatCharacterInNextFrame.DirX = effDx;
                         thatCharacterInNextFrame.DirY = effDy;
 
-                        if (isWallJumping) {
-                            thatCharacterInNextFrame.VelX = xfac * Math.Abs(currCharacterDownsync.VelX);
-                        } else {
-                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                        }
+                        thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                         thatCharacterInNextFrame.CharacterState = Walking;
                     } else {
                         thatCharacterInNextFrame.CharacterState = Idle1;
                         thatCharacterInNextFrame.VelX = 0;
-                    }
-
-                    if (jumpedOrNot) {
-                        thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY;
-                        thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
-                    } else {
-                        _applyGravity(currCharacterDownsync, chConfig, thatCharacterInNextFrame);
                     }
                 }
             }
@@ -439,6 +408,28 @@ namespace shared {
                 effPushbacks[i].Y = 0;
 
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
+                if (currCharacterDownsync.JumpTriggered) {
+                    // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
+                    if (OnWall == currCharacterDownsync.CharacterState) {
+                        if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
+                            newVx -= currCharacterDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
+                        }
+                        int xfac = -1;
+                        if (0 > currCharacterDownsync.OnWallNormX) {
+                            // Always jump to the opposite direction of wall inward norm
+                            xfac = -xfac;
+                        }
+                        newVx += xfac * chConfig.WallJumpingInitVelX; // Immediately gets out of the snap
+                        newVy += chConfig.WallJumpingInitVelY;
+                        thatCharacterInNextFrame.VelX = (xfac * chConfig.WallJumpingInitVelX);
+                        thatCharacterInNextFrame.VelY = (chConfig.WallJumpingInitVelY);
+                        thatCharacterInNextFrame.FramesToRecover = chConfig.WallJumpingFramesToRecover;
+                        thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
+                    } else {
+                        thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY;
+                        thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
+                    }
+                }
 
                 if (0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
                     // Revive from Dying
@@ -468,6 +459,8 @@ namespace shared {
 
                 // Add to collision system
                 collisionSys.AddSingle(characterCollider);
+
+                _applyGravity(currCharacterDownsync, chConfig, thatCharacterInNextFrame);
             }
         }
 
@@ -559,6 +552,7 @@ namespace shared {
                                 case BlownUp1:
                                 case InAirIdle1NoJump:
                                 case InAirIdle1ByJump:
+                                case InAirIdle1ByWallJump:
                                 case OnWall:
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
                                     var halfColliderWidthDiff = 0;
@@ -642,7 +636,9 @@ namespace shared {
                         case Idle1:
                         case Walking:
                         case TurnAround:
-                            if (InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
+                            if ((currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
+                            } else if ((!currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
                                 thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                             } else {
                                 thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
@@ -661,8 +657,9 @@ namespace shared {
                 if (thatCharacterInNextFrame.OnWall) {
                     switch (thatCharacterInNextFrame.CharacterState) {
                         case Walking:
-                        case InAirIdle1ByJump:
                         case InAirIdle1NoJump:
+                        case InAirIdle1ByJump:
+                        case InAirIdle1ByWallJump:
                             bool hasBeenOnWallChState = (OnWall == currCharacterDownsync.CharacterState);
                             bool hasBeenOnWallCollisionResultForSameChState = (currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
                             if (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState) {
@@ -717,7 +714,7 @@ namespace shared {
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
-                AssignToCharacterDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, nextRenderFramePlayers[i]);
             }
 
             int j = 0;
@@ -732,7 +729,7 @@ namespace shared {
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
-                AssignToCharacterDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, nextRenderFrameNpcs[j]);
+                AssignToCharacterDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, nextRenderFrameNpcs[j]);
                 j++;
             }
 
@@ -908,6 +905,7 @@ namespace shared {
                 case BlownUp1:
                 case InAirIdle1NoJump:
                 case InAirIdle1ByJump:
+                case InAirIdle1ByWallJump:
                 case OnWall:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(characterDownsync.ColliderRadius * 2, characterDownsync.ColliderRadius * 2);
                     break;

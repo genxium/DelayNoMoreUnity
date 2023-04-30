@@ -10,6 +10,7 @@ public class CharacterAnimController : MonoBehaviour {
         Walking,
         InAirIdle1NoJump,
         InAirIdle1ByJump,
+        InAirIdle1ByWallJump,
         BlownUp1,
         LayDown1,
         GetUp1,
@@ -72,7 +73,7 @@ public class CharacterAnimController : MonoBehaviour {
 
         var targetClip = lookUpTable[newCharacterState];
         var frameIdxInAnim = rdfCharacter.FramesInChState;
-        if (InAirIdle1ByJump == newCharacterState) {
+        if (InAirIdle1ByJump == newCharacterState || InAirIdle1ByWallJump == newCharacterState) {
             frameIdxInAnim = chConfig.InAirIdleFrameIdxTurningPoint + (frameIdxInAnim - chConfig.InAirIdleFrameIdxTurningPoint) % chConfig.InAirIdleFrameIdxTurnedCycle; // TODO: Anyway to avoid using division here?
         }
         var fromTime = (frameIdxInAnim / targetClip.frameRate); // TODO: Anyway to avoid using division here?

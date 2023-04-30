@@ -54,7 +54,7 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToCharacterDownsync(int id, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, bool jumpTriggered, CharacterDownsync dst) {
             dst.Id = id;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
@@ -82,6 +82,7 @@ namespace shared {
             dst.ChCollisionTeamId = chCollisionTeamId;
             dst.RevivalVirtualGridX = revivalVirtualGridX;
             dst.RevivalVirtualGridY = revivalVirtualGridY;
+            dst.JumpTriggered = jumpTriggered;
         }
 
         public static Bullet NewBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState) {
