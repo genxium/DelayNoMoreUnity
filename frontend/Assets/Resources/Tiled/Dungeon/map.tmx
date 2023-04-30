@@ -35,19 +35,19 @@
  <objectgroup id="5" name="PatrolCue">
   <object id="109" x="774.67" y="556.67">
    <properties>
-    <property name="flAct" value="20"/>
-    <property name="frAct" value="19"/>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="4"/>
    </properties>
    <point/>
   </object>
-  <object id="110" x="729.333" y="588">
+  <object id="110" x="750.333" y="587">
    <properties>
-    <property name="flAct" value="4"/>
-    <property name="frAct" value="19"/>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="4"/>
    </properties>
    <point/>
   </object>
-  <object id="111" x="669.333" y="588">
+  <object id="111" x="656.333" y="588">
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="3"/>

@@ -4,6 +4,7 @@ using static shared.CharacterState;
 using System.Collections.Generic;
 using System.IO;
 using Google.Protobuf.Collections;
+using System.Linq;
 
 namespace shared {
     public partial class Battle {
@@ -174,10 +175,16 @@ namespace shared {
             return (patternId, jumpedOrNot, effDx, effDy);
         }
 
-        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, ref int colliderCnt, CollisionSpace collisionSys, Collision collision) {
+        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, ref int colliderCnt, CollisionSpace collisionSys, Collision collision, InputFrameDecoded decodedInputHolder) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
+            int patternId = PATTERN_ID_NO_OP;
+            bool jumpedOrNot = false;
 
-            var aCollider = dynamicRectangleColliders[roomCapacity + currCharacterDownsync.JoinIndex - 1];
+            // By default keeps the movement aligned with current facing
+            int effectiveDx = currCharacterDownsync.DirX;
+            int effectiveDy = currCharacterDownsync.DirY;
+
+            var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1];
             bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
             if (collided) {
                 while (true) {
@@ -185,17 +192,24 @@ namespace shared {
                     if (false == ok3 || null == bCollider) {
                         break;
                     }
-                    bool isPatrolCue = false;
                     switch (bCollider.Data) {
                         case PatrolCue v3:
-                            isPatrolCue = true;
+                            var colliderDx = (aCollider.X - bCollider.X); 
+                            if (0 < colliderDx && (0 > currCharacterDownsync.VelX || 0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX)) {
+                                DecodeInput(v3.FrAct, decodedInputHolder);
+                                effectiveDx = decodedInputHolder.Dx;
+                                effectiveDy = decodedInputHolder.Dy;
+                                jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
+                            } else if (0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX))) {
+                                DecodeInput(v3.FlAct, decodedInputHolder);
+                                effectiveDx = decodedInputHolder.Dx;
+                                effectiveDy = decodedInputHolder.Dy;
+                                jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
+                            }
+                            
                             break;
                         default:
                             break;
-                    }
-                    if (!isPatrolCue) {
-                        // ignore bullets for this step
-                        continue;
                     }
                 }
             }
@@ -204,7 +218,7 @@ namespace shared {
             if (0 < currCharacterDownsync.FramesToRecover) {
                 return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
             } else {
-                return (PATTERN_ID_NO_OP, false, currCharacterDownsync.DirX, currCharacterDownsync.DirY);
+                return (PATTERN_ID_NO_OP, jumpedOrNot, effectiveDx, effectiveDy);
             }
         }
 
@@ -328,13 +342,13 @@ namespace shared {
             }
         }
 
-        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Collider[] dynamicRectangleColliders, ref int colliderCnt, Collision collision, CollisionSpace collisionSys) {
+        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Collider[] dynamicRectangleColliders, ref int colliderCnt, Collision collision, CollisionSpace collisionSys, InputFrameDecoded decodedInputHolder) {
             for (int i = roomCapacity; i < roomCapacity + currRenderFrame.NpcsArr.Count; i++) {
                 var currCharacterDownsync = currRenderFrame.NpcsArr[i - roomCapacity];
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, ref colliderCnt, collisionSys, collision);
+                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, ref colliderCnt, collisionSys, collision, decodedInputHolder);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
                 if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame)) {
@@ -588,7 +602,7 @@ namespace shared {
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
 
-                int joinIndex = currCharacterDownsync.JoinIndex;
+                var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 // Update "virtual grid position"
                 (thatCharacterInNextFrame.VirtualGridX, thatCharacterInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
@@ -625,7 +639,7 @@ namespace shared {
                         case InAirIdle1ByJump:
                         case InAirIdle1ByWallJump:
                             bool hasBeenOnWallChState = (OnWall == currCharacterDownsync.CharacterState);
-                            bool hasBeenOnWallCollisionResultForSameChState = (currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
+                            bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
                             if (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState) {
                                 thatCharacterInNextFrame.CharacterState = OnWall;
                             }
@@ -720,7 +734,7 @@ namespace shared {
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity);
 
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity + j);
-            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys);
+            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys, decodedInputHolder);
 
             _calcPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, 0, roomCapacity + j);
 

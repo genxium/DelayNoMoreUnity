@@ -118,8 +118,8 @@ message InputBufferSnapshot {
 }
 
 message PatrolCue {
-    int32 flAct = 1; // "input when colliding from the left"
-    int32 frAct = 2; // "input when colliding from the right"
+    uint64 flAct = 1; // "input when colliding from the left"
+    uint64 frAct = 2; // "input when colliding from the right"
 }
 
 message VisionBox {

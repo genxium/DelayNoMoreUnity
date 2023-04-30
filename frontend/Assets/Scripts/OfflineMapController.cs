@@ -30,12 +30,12 @@ public class OfflineMapController : AbstractMapController {
         var playerStartingCposList = new Vector[roomCapacity]; // "Cpos" means "Collision Space Position"
         var npcsStartingCposList = new List<(Vector, int, int)>();
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
-        var (defaultPatrolCueRadius, _) = PolygonColliderCtrToVirtualGridPos(6, 0);
+        float defaultPatrolCueRadius = 6;
         var grid = this.GetComponentInChildren<Grid>();
+        int staticColliderIdx = 0;
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
                 case "Barrier":
-                    int i = 0;
                     foreach (Transform barrierChild in child) {
                         var barrierTileObj = barrierChild.gameObject.GetComponent<SuperObject>();
                         var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
@@ -50,7 +50,7 @@ public class OfflineMapController : AbstractMapController {
                         var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
                         Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
                         collisionSys.AddSingle(barrierCollider);
-                        staticRectangleColliders[i++] = barrierCollider;
+                        staticRectangleColliders[staticColliderIdx++] = barrierCollider;
                     }
                     break;
                 case "PlayerStartingPos":
@@ -87,12 +87,13 @@ public class OfflineMapController : AbstractMapController {
                         tileProps.TryGetCustomProperty("frAct", out frAct);
 
                         var newPatrolCue = new PatrolCue {
-                            FlAct = flAct.IsEmpty ? 0 : flAct.GetValueAsInt(),
-                            FrAct = frAct.IsEmpty ? 0 : frAct.GetValueAsInt(),
+                            FlAct = flAct.IsEmpty ? 0 : (ulong)flAct.GetValueAsInt(),
+                            FrAct = frAct.IsEmpty ? 0 : (ulong)frAct.GetValueAsInt(),
                         };
 
                         var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2*defaultPatrolCueRadius, 2*defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
                         collisionSys.AddSingle(patrolCueCollider);
+                        staticRectangleColliders[staticColliderIdx++] = patrolCueCollider;
                         Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
@@ -201,24 +202,24 @@ public class OfflineMapController : AbstractMapController {
         GL.End();
         */
         // Draw static colliders
-        foreach (var barrierCollider in staticRectangleColliders) {
-            if (null == barrierCollider) {
+        foreach (var collider in staticRectangleColliders) {
+            if (null == collider) {
                 break;
             }
-            if (null == barrierCollider.Shape) {
+            if (null == collider.Shape) {
                 throw new ArgumentNullException("barrierCollider.Shape is null when drawing staticRectangleColliders");
             }
-            if (null == barrierCollider.Shape.Points) {
+            if (null == collider.Shape.Points) {
                 throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
             }
             GL.Begin(GL.LINES);
             for (int i = 0; i < 4; i++) {
                 int j = i + 1;
                 if (j >= 4) j -= 4;
-                var (_, pi) = barrierCollider.Shape.Points.GetByOffset(i);
-                var (_, pj) = barrierCollider.Shape.Points.GetByOffset(j);
-                var (ix, iy) = CollisionSpacePositionToWorldPosition(barrierCollider.X + pi.X, barrierCollider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
-                var (jx, jy) = CollisionSpacePositionToWorldPosition(barrierCollider.X + pj.X, barrierCollider.Y + pj.Y, spaceOffsetX, spaceOffsetY);
+                var (_, pi) = collider.Shape.Points.GetByOffset(i);
+                var (_, pj) = collider.Shape.Points.GetByOffset(j);
+                var (ix, iy) = CollisionSpacePositionToWorldPosition(collider.X + pi.X, collider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
+                var (jx, jy) = CollisionSpacePositionToWorldPosition(collider.X + pj.X, collider.Y + pj.Y, spaceOffsetX, spaceOffsetY);
                 GL.Vertex3(ix, iy, 0);
                 GL.Vertex3(jx, jy, 0);
             }

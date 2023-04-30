@@ -55,8 +55,8 @@ namespace shared {
             "ckZyYW1lSWQYASABKAUSFwoPdW5jb25maXJtZWRNYXNrGAIgASgEEj0KGXRv",
             "U2VuZElucHV0RnJhbWVEb3duc3luY3MYAyADKAsyGi5zaGFyZWQuSW5wdXRG",
             "cmFtZURvd25zeW5jEhkKEXNob3VsZEZvcmNlUmVzeW5jGAQgASgIEhUKDXBl",
-            "ZXJKb2luSW5kZXgYBSABKAUiKQoJUGF0cm9sQ3VlEg0KBWZsQWN0GAEgASgF",
-            "Eg0KBWZyQWN0GAIgASgFIlQKCVZpc2lvbkJveBITCgtib3R0b21MZWZ0WBgB",
+            "ZXJKb2luSW5kZXgYBSABKAUiKQoJUGF0cm9sQ3VlEg0KBWZsQWN0GAEgASgE",
+            "Eg0KBWZyQWN0GAIgASgEIlQKCVZpc2lvbkJveBITCgtib3R0b21MZWZ0WBgB",
             "IAEoBRITCgtib3R0b21MZWZ0WRgCIAEoBRINCgV3aWR0aBgDIAEoBRIOCgZo",
             "ZWlnaHQYBCABKAUixwQKDEJ1bGxldENvbmZpZxIVCg1zdGFydHVwRnJhbWVz",
             "GAEgASgFEhoKEmNhbmNlbGxhYmxlU3RGcmFtZRgCIAEoBRIaChJjYW5jZWxs",
@@ -3256,13 +3256,13 @@ namespace shared {
 
     /// <summary>Field number for the "flAct" field.</summary>
     public const int FlActFieldNumber = 1;
-    private int flAct_;
+    private ulong flAct_;
     /// <summary>
     /// "input when colliding from the left"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int FlAct {
+    public ulong FlAct {
       get { return flAct_; }
       set {
         flAct_ = value;
@@ -3271,13 +3271,13 @@ namespace shared {
 
     /// <summary>Field number for the "frAct" field.</summary>
     public const int FrActFieldNumber = 2;
-    private int frAct_;
+    private ulong frAct_;
     /// <summary>
     /// "input when colliding from the right"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int FrAct {
+    public ulong FrAct {
       get { return frAct_; }
       set {
         frAct_ = value;
@@ -3308,8 +3308,8 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (FlAct != 0) hash ^= FlAct.GetHashCode();
-      if (FrAct != 0) hash ^= FrAct.GetHashCode();
+      if (FlAct != 0UL) hash ^= FlAct.GetHashCode();
+      if (FrAct != 0UL) hash ^= FrAct.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3328,13 +3328,13 @@ namespace shared {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (FlAct != 0) {
+      if (FlAct != 0UL) {
         output.WriteRawTag(8);
-        output.WriteInt32(FlAct);
+        output.WriteUInt64(FlAct);
       }
-      if (FrAct != 0) {
+      if (FrAct != 0UL) {
         output.WriteRawTag(16);
-        output.WriteInt32(FrAct);
+        output.WriteUInt64(FrAct);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3346,13 +3346,13 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (FlAct != 0) {
+      if (FlAct != 0UL) {
         output.WriteRawTag(8);
-        output.WriteInt32(FlAct);
+        output.WriteUInt64(FlAct);
       }
-      if (FrAct != 0) {
+      if (FrAct != 0UL) {
         output.WriteRawTag(16);
-        output.WriteInt32(FrAct);
+        output.WriteUInt64(FrAct);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3364,11 +3364,11 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (FlAct != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FlAct);
+      if (FlAct != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FlAct);
       }
-      if (FrAct != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrAct);
+      if (FrAct != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FrAct);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3382,10 +3382,10 @@ namespace shared {
       if (other == null) {
         return;
       }
-      if (other.FlAct != 0) {
+      if (other.FlAct != 0UL) {
         FlAct = other.FlAct;
       }
-      if (other.FrAct != 0) {
+      if (other.FrAct != 0UL) {
         FrAct = other.FrAct;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -3404,11 +3404,11 @@ namespace shared {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            FlAct = input.ReadInt32();
+            FlAct = input.ReadUInt64();
             break;
           }
           case 16: {
-            FrAct = input.ReadInt32();
+            FrAct = input.ReadUInt64();
             break;
           }
         }
@@ -3427,11 +3427,11 @@ namespace shared {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            FlAct = input.ReadInt32();
+            FlAct = input.ReadUInt64();
             break;
           }
           case 16: {
-            FrAct = input.ReadInt32();
+            FrAct = input.ReadUInt64();
             break;
           }
         }
