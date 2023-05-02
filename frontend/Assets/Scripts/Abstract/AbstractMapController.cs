@@ -48,6 +48,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected bool debugDrawingEnabled = false;
 
+    protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
         GameObject newPlayerNode = Instantiate(characterPrefabForPlayer, new Vector3(wx, wy, 0), Quaternion.identity);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
@@ -153,7 +154,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     }
                 }
             }
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
