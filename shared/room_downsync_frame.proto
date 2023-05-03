@@ -14,35 +14,30 @@ enum BulletState {
 enum CharacterState {
 	Idle1 = 0;
 	Walking = 1;
-
-	Atk1 = 2;
+	TurnAround = 2;
 	Atked1 = 3;
-
 	InAirIdle1NoJump = 4;
-
 	InAirIdle1ByJump = 5;
-
-	InAirAtk1 = 6;
+	InAirIdle1ByWallJump = 6;
 	InAirAtked1 = 7;
+
 	BlownUp1 = 8;
 	LayDown1 = 9;
 	GetUp1 = 10;
+	Dying = 11;
 
-	Atk2 = 11;
-	Atk3 = 12;
-	Atk4 = 13;
-	Atk5 = 14;
+	Dashing = 12;
+	OnWall = 13;
 
-	Dashing = 15;
-
-	OnWall = 16;
-
-	TurnAround = 17;
-
-	Dying = 18;
+	InAirAtk1 = 1024;
+	Atk1 = 1025;
+	Atk2 = 1026;
+	Atk3 = 1027;
+	Atk4 = 1028;
+	Atk5 = 1029;
 }
  
-message PlayerDownsync {
+message CharacterDownsync {
 	int32 id = 1;
 	int32 virtualGridX = 2;
 	int32 virtualGridY = 3;
@@ -63,12 +58,14 @@ message PlayerDownsync {
 	CharacterState characterState = 18;
 	int32 framesInChState = 19; // number of frames elapsed in the current character state   
 	bool inAir = 20; // by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "inAir (prev -> curr)"  
-	int32 activeSkillId = 21;
-	int32 activeSkillHit = 22;
-	int32 framesInvinsible = 23;
+    bool jumpTriggered = 21;
+        
+	int32 activeSkillId = 1024;
+	int32 activeSkillHit = 1025;
+	int32 framesInvinsible = 1026;
 
-	int32 bulletTeamId = 24;
-	int32 chCollisionTeamId = 25;
+	int32 bulletTeamId = 1027;
+	int32 chCollisionTeamId = 1028;
 
 	bool onWall = 26; // like "inAir", it’s by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
 	int32 onWallNormX = 27;
@@ -118,6 +115,19 @@ message InputBufferSnapshot {
 	repeated InputFrameDownsync toSendInputFrameDownsyncs = 3;
 	bool shouldForceResync = 4;
 	int32 peerJoinIndex = 5;
+}
+
+message PatrolCue {
+    uint64 flAct = 1; // "input when colliding from the left"
+    uint64 frAct = 2; // "input when colliding from the right"
+}
+
+message VisionBox {
+    // all values are relative to (CharacterDownsync.dirX=+2, CharacterDownsync.virtualGridX, CharacterDownsync.virtualGridY) 
+    int32 bottomLeftX = 1; 
+    int32 bottomLeftY = 2; 
+    int32 width = 3; 
+    int32 height = 4; 
 }
 
 enum BulletType {
@@ -205,16 +215,20 @@ message BattleColliderInfo {
 	int32 renderBufferSize = 8;
 	int32 collisionMinStep = 9;
 	int32 boundRoomCapacity = 10;
-	PeerUdpAddr battleUdpTunnel = 11;
+	int32 preallocNpcCapacity = 11;
+	int32 preallocBulletCapacity = 12;
 
-	bool frameLogEnabled = 1024;
+	PeerUdpAddr battleUdpTunnel = 1024;
+	bool frameLogEnabled = 1025;
 }
 
 message RoomDownsyncFrame {
 	int32 id = 1;
-	repeated PlayerDownsync playersArr = 2;
+	repeated CharacterDownsync playersArr = 2;
 	int64 countdownNanos = 3;
 	repeated Bullet bullets = 4;  
+
+	repeated CharacterDownsync npcsArr = 5;
 
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;

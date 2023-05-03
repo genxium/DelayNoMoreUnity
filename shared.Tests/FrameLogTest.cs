@@ -5,7 +5,7 @@ public class FrameLogTest {
     [Fact]
     public void TestStringify() {
         const int roomCapacity = 1;
-        var startRdf = Battle.NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
+        var startRdf = Battle.NewPreallocatedRoomDownsyncFrame(roomCapacity, 8, 128);
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
         var (selfPlayerWx, selfPlayerWy) = Battle.CollisionSpacePositionToWorldPosition(0, 0, 1024, 512);

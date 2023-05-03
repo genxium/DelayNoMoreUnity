@@ -10,6 +10,7 @@ public class CharacterAnimController : MonoBehaviour {
         Walking,
         InAirIdle1NoJump,
         InAirIdle1ByJump,
+        InAirIdle1ByWallJump,
         BlownUp1,
         LayDown1,
         GetUp1,
@@ -35,23 +36,23 @@ public class CharacterAnimController : MonoBehaviour {
 
     }
 
-    public void updateCharacterAnim(PlayerDownsync rdfPlayer, PlayerDownsync prevRdfPlayer, bool forceAnimSwitch, CharacterConfig chConfig) {
-        // As this function might be called after many frames of a rollback, it's possible that the playing animation was predicted, different from "prevRdfPlayer.CharacterState" but same as "newCharacterState". More granular checks are needed to determine whether we should interrupt the playing animation.  
+    public void updateCharacterAnim(CharacterDownsync rdfCharacter, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig) {
+        // As this function might be called after many frames of a rollback, it's possible that the playing animation was predicted, different from "prevRdfCharacter.CharacterState" but same as "newCharacterState". More granular checks are needed to determine whether we should interrupt the playing animation.  
 
-        var newCharacterState = rdfPlayer.CharacterState;
+        var newCharacterState = rdfCharacter.CharacterState;
 
         var animator = this.gameObject.GetComponent<Animator>();
         // Update directions
-        if (0 > rdfPlayer.DirX) {
-            this.gameObject.transform.localScale = new Vector3(-1.0f, this.gameObject.transform.localScale.y);
-        } else if (0 < rdfPlayer.DirX) {
-            this.gameObject.transform.localScale = new Vector3(+1.0f, this.gameObject.transform.localScale.y);
+        if (0 > rdfCharacter.DirX) {
+            this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
+        } else if (0 < rdfCharacter.DirX) {
+            this.gameObject.transform.localScale = new Vector3(+1.0f, 1.0f);
         }
         if (OnWall == newCharacterState || TurnAround == newCharacterState) {
-            if (0 < rdfPlayer.OnWallNormX) {
-                this.gameObject.transform.localScale = new Vector3(-1.0f, this.gameObject.transform.localScale.y);
+            if (0 < rdfCharacter.OnWallNormX) {
+                this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
             } else {
-                this.gameObject.transform.localScale = new Vector3(+1.0f, this.gameObject.transform.localScale.y);
+                this.gameObject.transform.localScale = new Vector3(+1.0f, 1.0f);
             }
         }
 
@@ -71,8 +72,8 @@ public class CharacterAnimController : MonoBehaviour {
         }
 
         var targetClip = lookUpTable[newCharacterState];
-        var frameIdxInAnim = rdfPlayer.FramesInChState;
-        if (InAirIdle1ByJump == newCharacterState) {
+        var frameIdxInAnim = rdfCharacter.FramesInChState;
+        if (InAirIdle1ByJump == newCharacterState || InAirIdle1ByWallJump == newCharacterState) {
             frameIdxInAnim = chConfig.InAirIdleFrameIdxTurningPoint + (frameIdxInAnim - chConfig.InAirIdleFrameIdxTurningPoint) % chConfig.InAirIdleFrameIdxTurnedCycle; // TODO: Anyway to avoid using division here?
         }
         var fromTime = (frameIdxInAnim / targetClip.frameRate); // TODO: Anyway to avoid using division here?

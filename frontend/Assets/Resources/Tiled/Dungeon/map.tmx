@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="138">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="139">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -16,31 +16,38 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="4" name="NpcStartingPos">
+ <objectgroup id="4" name="AiPlayerStartingPos">
   <object id="108" x="927.333" y="535">
    <properties>
     <property name="dirX" value="-2"/>
-    <property name="speciesId" value="4196"/>
+    <property name="speciesId" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="138" x="1286" y="272">
+   <properties>
+    <property name="dirX" value="2"/>
+    <property name="speciesId" value="1"/>
    </properties>
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="5" name="NpcPatrolCue">
+ <objectgroup id="5" name="PatrolCue">
   <object id="109" x="774.67" y="556.67">
    <properties>
-    <property name="flAct" value="36"/>
-    <property name="frAct" value="35"/>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="4"/>
    </properties>
    <point/>
   </object>
-  <object id="110" x="729.333" y="588">
+  <object id="110" x="750.333" y="587">
    <properties>
-    <property name="flAct" value="4"/>
-    <property name="frAct" value="35"/>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="4"/>
    </properties>
    <point/>
   </object>
-  <object id="111" x="669.333" y="588">
+  <object id="111" x="656.333" y="588">
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="3"/>
@@ -155,17 +162,12 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="119" x="656" y="592" width="512" height="48">
+  <object id="119" x="656" y="592" width="1040" height="48">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
   <object id="136" x="1232" y="432" width="208" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="138" x="1168" y="592" width="512" height="48">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

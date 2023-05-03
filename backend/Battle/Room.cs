@@ -11,6 +11,8 @@ public class Room {
 
     public int id;
     public int capacity;
+    public int preallocNpcCapacity = DEFAULT_PREALLOC_AI_PLAYER_CAPACITY;
+    public int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     public int battleDurationFrames;
     public int estimatedMillisPerFrame;
 
@@ -29,7 +31,7 @@ public class Room {
     private readonly Random _randGenerator = new Random();
 
     /**
-		 * The following `PlayerDownsyncSessionDict` is NOT individually put
+		 * The following `CharacterDownsyncSessionDict` is NOT individually put
 		 * under `type Player struct` for a reason.
 		 *
 		 * Upon each connection establishment, a new instance `player Player` is created for the given `playerId`.
@@ -156,11 +158,11 @@ public class Room {
             pPlayerFromDbInit.LastConsecutiveRecvInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
             pPlayerFromDbInit.BattleState = PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK;
 
-            pPlayerFromDbInit.PlayerDownsync = new PlayerDownsync();
-            pPlayerFromDbInit.PlayerDownsync.Id = playerId;
-            pPlayerFromDbInit.PlayerDownsync.SpeciesId = speciesId;
-            pPlayerFromDbInit.PlayerDownsync.ColliderRadius = DEFAULT_PLAYER_RADIUS; // Hardcoded
-            pPlayerFromDbInit.PlayerDownsync.InAir = true;                           // Hardcoded
+            pPlayerFromDbInit.CharacterDownsync = new CharacterDownsync();
+            pPlayerFromDbInit.CharacterDownsync.Id = playerId;
+            pPlayerFromDbInit.CharacterDownsync.SpeciesId = speciesId;
+            pPlayerFromDbInit.CharacterDownsync.ColliderRadius = DEFAULT_PLAYER_RADIUS; // Hardcoded
+            pPlayerFromDbInit.CharacterDownsync.InAir = true;                           // Hardcoded
 
             pPlayerFromDbInit.BattleUdpTunnelAuthKey = _randGenerator.Next();
             players[playerId] = pPlayerFromDbInit;
@@ -182,11 +184,11 @@ public class Room {
                 if (joinIndexBooleanArr[i]) continue;
                 var targetPlayer = players[playerId];
                 if (null == targetPlayer) continue;
-                if (null == targetPlayer.PlayerDownsync) continue;
+                if (null == targetPlayer.CharacterDownsync) continue;
                 joinIndexBooleanArr[i] = true;
-                targetPlayer.PlayerDownsync.JoinIndex = i + 1;
-                var chosenCh = characters[targetPlayer.PlayerDownsync.SpeciesId];
-                targetPlayer.PlayerDownsync.Speed = chosenCh.Speed;
+                targetPlayer.CharacterDownsync.JoinIndex = i + 1;
+                var chosenCh = characters[targetPlayer.CharacterDownsync.SpeciesId];
+                targetPlayer.CharacterDownsync.Speed = chosenCh.Speed;
                 break;
             }
 
@@ -222,7 +224,7 @@ public class Room {
                 case ROOM_STATE_WAITING:
                     clearPlayerNetworkSession(playerId);
                     effectivePlayerCount--;
-                    joinIndexBooleanArr[thatPlayer.PlayerDownsync.JoinIndex - 1] = false;
+                    joinIndexBooleanArr[thatPlayer.CharacterDownsync.JoinIndex - 1] = false;
 
                     players.Remove(playerId);
                     if (0 == effectivePlayerCount) {
@@ -244,7 +246,7 @@ public class Room {
 
     private void clearPlayerNetworkSession(int playerId) {
         if (playerDownsyncSessionDict.ContainsKey(playerId)) {
-            // [WARNING] No need to close "pR.PlayerDownsyncChanDict[playerId]" immediately!
+            // [WARNING] No need to close "pR.CharacterDownsyncChanDict[playerId]" immediately!
             if (playerActiveWatchdogDict.ContainsKey(playerId)) {
                 if (null != playerActiveWatchdogDict[playerId]) {
                     playerActiveWatchdogDict[playerId].Stop();
@@ -267,12 +269,12 @@ public class Room {
         return 7.8125f * d2 - 5.0f + (float)(state);
     }
 
-    private Pbc.RepeatedField<PlayerDownsync> clonePlayersArrToPb() {
-        var bridgeArr = new PlayerDownsync[players.Count]; // RepeatedField doesn't have a constructor to preallocate by size
+    private Pbc.RepeatedField<CharacterDownsync> clonePlayersArrToPb() {
+        var bridgeArr = new CharacterDownsync[players.Count]; // RepeatedField doesn't have a constructor to preallocate by size
         foreach (var (playerId, player) in players) {
-            bridgeArr[player.PlayerDownsync.JoinIndex - 1] = player.PlayerDownsync.Clone();
+            bridgeArr[player.CharacterDownsync.JoinIndex - 1] = player.CharacterDownsync.Clone();
         }
-        var ret = new Pbc.RepeatedField<PlayerDownsync> {
+        var ret = new Pbc.RepeatedField<CharacterDownsync> {
             bridgeArr
         };
         return ret;
@@ -354,7 +356,7 @@ public class Room {
         Interlocked.Exchange(ref state, ROOM_STATE_PREPARE);
 
         foreach (var (_, player) in players) {
-            int joinIndex = player.PlayerDownsync.JoinIndex;
+            int joinIndex = player.CharacterDownsync.JoinIndex;
             playersArr[joinIndex - 1] = player;
         }
 
@@ -504,7 +506,7 @@ public class Room {
 
                 if (nextRenderFrameId > renderFrameId) {
                     if (0 == renderFrameId) {
-                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, 128);
+                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity);
                         startRdf.Id = 0;
 
                         var tList = new List<Task>();
@@ -607,8 +609,8 @@ public class Room {
             }
             // by now "clientInputFrameId <= inputBuffer.EdFrameId"
             var targetInputFrameDownsync = getOrPrefabInputFrameDownsync(clientInputFrameId);
-            targetInputFrameDownsync.InputList[player.PlayerDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
-            targetInputFrameDownsync.ConfirmedList = (targetInputFrameDownsync.ConfirmedList | ((ulong)1 << (player.PlayerDownsync.JoinIndex - 1)));
+            targetInputFrameDownsync.InputList[player.CharacterDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
+            targetInputFrameDownsync.ConfirmedList = (targetInputFrameDownsync.ConfirmedList | ((ulong)1 << (player.CharacterDownsync.JoinIndex - 1)));
 
             if (false == fromUDP) {
                 /**
@@ -624,11 +626,11 @@ public class Room {
                 }
             }
 
-            if (clientInputFrameId > lastIndividuallyConfirmedInputFrameId[player.PlayerDownsync.JoinIndex - 1]) {
-                // No need to update "lastIndividuallyConfirmedInputFrameId[player.PlayerDownsync.JoinIndex-1]" only when "true == fromUDP", we should keep "lastIndividuallyConfirmedInputFrameId[player.PlayerDownsync.JoinIndex-1] >= player.LastConsecutiveRecvInputFrameId" at any moment.
-                lastIndividuallyConfirmedInputFrameId[player.PlayerDownsync.JoinIndex - 1] = clientInputFrameId;
+            if (clientInputFrameId > lastIndividuallyConfirmedInputFrameId[player.CharacterDownsync.JoinIndex - 1]) {
+                // No need to update "lastIndividuallyConfirmedInputFrameId[player.CharacterDownsync.JoinIndex-1]" only when "true == fromUDP", we should keep "lastIndividuallyConfirmedInputFrameId[player.CharacterDownsync.JoinIndex-1] >= player.LastConsecutiveRecvInputFrameId" at any moment.
+                lastIndividuallyConfirmedInputFrameId[player.CharacterDownsync.JoinIndex - 1] = clientInputFrameId;
                 // It's safe (in terms of getting an eventually correct "RenderFrameBuffer") to put the following update of "lastIndividuallyConfirmedInputList" which is ONLY used for prediction in "inputBuffer" out of "false == fromUDP" block.
-                lastIndividuallyConfirmedInputList[player.PlayerDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
+                lastIndividuallyConfirmedInputList[player.CharacterDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
             }
         }
 
@@ -645,10 +647,10 @@ public class Room {
             bool shouldBreakConfirmation = false;
 
             if (allConfirmedMask != inputFrameDownsync.ConfirmedList) {
-                //_logger.LogInformation("Found a non-all-confirmed inputFrame for roomId={0}, upsync player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4}) inputFrameId={5}, confirmedList={6}", id, playerId, player.PlayerDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId, inputFrameId, inputFrameDownsync.ConfirmedList);
+                //_logger.LogInformation("Found a non-all-confirmed inputFrame for roomId={0}, upsync player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4}) inputFrameId={5}, confirmedList={6}", id, playerId, player.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId, inputFrameId, inputFrameDownsync.ConfirmedList);
                 foreach (var thatPlayer in playersArr) {
                     var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
-                    var thatPlayerJoinMask = ((ulong)1 << (thatPlayer.PlayerDownsync.JoinIndex - 1));
+                    var thatPlayerJoinMask = ((ulong)1 << (thatPlayer.CharacterDownsync.JoinIndex - 1));
                     bool isSlowTicker = (0 == (inputFrameDownsync.ConfirmedList & thatPlayerJoinMask));
                     bool isActiveSlowTicker = (isSlowTicker && thatPlayerBattleState == PLAYER_BATTLE_STATE_ACTIVE);
                     if (isActiveSlowTicker) {
@@ -656,7 +658,7 @@ public class Room {
                         break;
                     }
                     if (isSlowTicker) {
-                        _logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.PlayerDownsync.Id, thatPlayer.PlayerDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
+                        _logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.CharacterDownsync.Id, thatPlayer.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
                     }
                 }
             }
@@ -828,7 +830,7 @@ public class Room {
                 /*
                 [WARNING] The comment of this part in Golang version is obsolete. The field "ForceAllResyncOnAnyActiveSlowTicker" is always true, and setting "ShouldForceResync = true" here is only going to impact unconfirmed players on frontend, i.e. there's a filter on frontend to ignore "nonSelfForceConfirmation". 
                 */
-                ulong thatPlayerJoinMask = ((ulong)1 << (player.PlayerDownsync.JoinIndex - 1));
+                ulong thatPlayerJoinMask = ((ulong)1 << (player.CharacterDownsync.JoinIndex - 1));
 
                 bool isActiveSlowTicker = (0 < (thatPlayerJoinMask & inputBufferSnapshot.UnconfirmedMask)) && (PLAYER_BATTLE_STATE_ACTIVE == playerBattleState);
 
@@ -843,7 +845,7 @@ public class Room {
             /*
                [WARNING] While the order of generation of "inputBufferSnapshot" is preserved for sending, the underlying network I/O blocking action is dispatched to "downsyncLoop of each player" such that "markConfirmationIfApplicable & forceConfirmationIfApplicable" can re-hold "pR.inputBufferLock" asap and proceed with more inputFrameUpsyncs.
 
-               The use of "downsyncLoop of each player" also waives the need of guarding each "pR.PlayerDownsyncSessionDict[playerId]" from multithread-access (e.g. by a "pR.PlayerDownsyncSessionMutexDict[playerId]"), i.e. Gorilla v1.2.0 "conn.WriteMessage" isn't thread-safe https://github.com/gorilla/websocket/blob/v1.2.0/conn.go#L585.
+               The use of "downsyncLoop of each player" also waives the need of guarding each "pR.CharacterDownsyncSessionDict[playerId]" from multithread-access (e.g. by a "pR.CharacterDownsyncSessionMutexDict[playerId]"), i.e. Gorilla v1.2.0 "conn.WriteMessage" isn't thread-safe https://github.com/gorilla/websocket/blob/v1.2.0/conn.go#L585.
             */
             var playerBattleState = Interlocked.Read(ref player.BattleState);
 
@@ -858,7 +860,7 @@ public class Room {
             }
 
             // Method "downsyncToAllPlayers" is called very frequently during active battle, thus deliberately NOT using the "Task.WhenAll(tList)" approach to save garbage collection workload.
-            _ = downsyncToSinglePlayerAsync(player.PlayerDownsync.Id, player, inputBufferSnapshot); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+            _ = downsyncToSinglePlayerAsync(player.CharacterDownsync.Id, player, inputBufferSnapshot); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         }
     }
 
@@ -905,7 +907,7 @@ public class Room {
            We hereby assume that Golang runtime allocates & frees small amount of RAM quickly enough compared to either network I/O blocking in worst cases or the high frequency "per inputFrameDownsync*player" locking (though "OnBattleCmdReceived" locks at the same frequency but it's inevitable).
         */
 
-        int playerJoinIndexInBooleanArr = player.PlayerDownsync.JoinIndex - 1;
+        int playerJoinIndexInBooleanArr = player.CharacterDownsync.JoinIndex - 1;
         var playerBattleState = Interlocked.Read(ref player.BattleState);
 
         switch (playerBattleState) {
@@ -1016,13 +1018,13 @@ public class Room {
 
                 if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL == pReq.Act && null == player.BattleUdpTunnelAddr) {
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
-                    peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.PlayerDownsync.JoinIndex] = new PeerUdpAddr {
+                    peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.CharacterDownsync.JoinIndex] = new PeerUdpAddr {
                         Ip = recvResult.RemoteEndPoint.Address.ToString(),
                         Port = recvResult.RemoteEndPoint.Port
                     };
-                    _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.PlayerDownsync.JoinIndex]);
+                    _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.CharacterDownsync.JoinIndex]);
                     // Need broadcast to all, including the current "pReq.PlayerId", to favor p2p holepunching
-                    broadcastPeerUdpAddrList(player.PlayerDownsync.JoinIndex);
+                    broadcastPeerUdpAddrList(player.CharacterDownsync.JoinIndex);
 
                     // [WARNING] Don't forward "holepunching to server" to other players
                     continue;

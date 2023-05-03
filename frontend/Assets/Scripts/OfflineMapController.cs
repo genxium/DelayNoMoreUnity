@@ -1,8 +1,10 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using shared;
 using static shared.Battle;
 using static shared.CharacterState;
+using SuperTiled2Unity;
 
 public class OfflineMapController : AbstractMapController {
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
@@ -19,22 +21,23 @@ public class OfflineMapController : AbstractMapController {
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
 
-        selfPlayerInfo = new PlayerDownsync();
+        selfPlayerInfo = new CharacterDownsync();
         
         roomCapacity = 1;
         preallocateHolders();
         resetCurrentMatch();
         selfPlayerInfo.JoinIndex = 1;
-        var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
+        var playerStartingCposList = new Vector[roomCapacity]; // "Cpos" means "Collision Space Position"
+        var npcsStartingCposList = new List<(Vector, int, int)>();
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
-
+        float defaultPatrolCueRadius = 6;
         var grid = this.GetComponentInChildren<Grid>();
+        int staticColliderIdx = 0;
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
                 case "Barrier":
-                    int i = 0;
                     foreach (Transform barrierChild in child) {
-                        var barrierTileObj = barrierChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
+                        var barrierTileObj = barrierChild.gameObject.GetComponent<SuperObject>();
                         var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
                         var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                         /*
@@ -47,18 +50,51 @@ public class OfflineMapController : AbstractMapController {
                         var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
                         Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
                         collisionSys.AddSingle(barrierCollider);
-                        staticRectangleColliders[i++] = barrierCollider;
+                        staticRectangleColliders[staticColliderIdx++] = barrierCollider;
                     }
                     break;
                 case "PlayerStartingPos":
                     int j = 0;
-                    foreach (Transform playerPosChild in child) {
-                        var playerPosTileObj = playerPosChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
-                        var (playerCx, playerCy) = TiledLayerPositionToCollisionSpacePosition(playerPosTileObj.m_X, playerPosTileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        playerStartingCollisionSpacePositions[j] = new Vector(playerCx, playerCy);
-                        Debug.Log(String.Format("new playerStartingCollisionSpacePositions[i:{0}]=[X:{1}, Y:{2}]", j, playerCx, playerCy));
+                    foreach (Transform playerPos in child) {
+                        var posTileObj = playerPos.gameObject.GetComponent<SuperObject>();
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        playerStartingCposList[j] = new Vector(cx, cy);
+                        Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
                         j++;
                         if (j >= roomCapacity) break;
+                    }
+                    break;
+                case "AiPlayerStartingPos":
+                    foreach (Transform npcPos in child) {
+                        var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
+                        var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        CustomProperty dirX, speciesId;
+                        tileProps.TryGetCustomProperty("dirX", out dirX);
+                        tileProps.TryGetCustomProperty("speciesId", out speciesId);
+                        npcsStartingCposList.Add((new Vector(cx, cy), dirX.IsEmpty ? 2 : dirX.GetValueAsInt(), speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt()));
+                    }
+                    break;
+                case "PatrolCue":
+                    foreach (Transform patrolCueChild in child) {
+                        var tileObj = patrolCueChild.gameObject.GetComponent<SuperObject>();
+                        var tileProps = patrolCueChild.gameObject.GetComponent<SuperCustomProperties>();
+
+                        var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+
+                        CustomProperty flAct, frAct;
+                        tileProps.TryGetCustomProperty("flAct", out flAct);
+                        tileProps.TryGetCustomProperty("frAct", out frAct);
+
+                        var newPatrolCue = new PatrolCue {
+                            FlAct = flAct.IsEmpty ? 0 : (ulong)flAct.GetValueAsInt(),
+                            FrAct = frAct.IsEmpty ? 0 : (ulong)frAct.GetValueAsInt(),
+                        };
+
+                        var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2*defaultPatrolCueRadius, 2*defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
+                        collisionSys.AddSingle(patrolCueCollider);
+                        staticRectangleColliders[staticColliderIdx++] = patrolCueCollider;
+                        Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
                 default:
@@ -66,17 +102,17 @@ public class OfflineMapController : AbstractMapController {
             }
         }
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity);
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
-        var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
+        var (selfPlayerWx, selfPlayerWy) = CollisionSpacePositionToWorldPosition(playerStartingCposList[selfPlayerInfo.JoinIndex - 1].X, playerStartingCposList[selfPlayerInfo.JoinIndex - 1].Y, spaceOffsetX, spaceOffsetY);
         spawnPlayerNode(selfPlayerInfo.JoinIndex, selfPlayerWx, selfPlayerWy);
 
         var selfPlayerCharacterSpeciesId = 0;
         var selfPlayerCharacter = Battle.characters[selfPlayerCharacterSpeciesId];
 
         var selfPlayerInRdf = startRdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
-        var (selfPlayerVposX, selfPlayerVposY) = PolygonColliderCtrToVirtualGridPos(playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].X, playerStartingCollisionSpacePositions[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
+        var (selfPlayerVposX, selfPlayerVposY) = PolygonColliderCtrToVirtualGridPos(playerStartingCposList[selfPlayerInfo.JoinIndex - 1].X, playerStartingCposList[selfPlayerInfo.JoinIndex - 1].Y); // World and CollisionSpace coordinates have the same scale, just translated
         selfPlayerInRdf.Id = 10;
         selfPlayerInRdf.JoinIndex = selfPlayerInfo.JoinIndex;
         selfPlayerInRdf.VirtualGridX = selfPlayerVposX;
@@ -96,6 +132,39 @@ public class OfflineMapController : AbstractMapController {
         selfPlayerInRdf.Hp = 100;
         selfPlayerInRdf.MaxHp = 100;
         selfPlayerInRdf.SpeciesId = 0;
+
+        for (int i = 0; i < npcsStartingCposList.Count; i++) {
+            int joinIndex = roomCapacity + i + 1;
+            var (cpos, dirX, characterSpeciesId) = npcsStartingCposList[i];
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
+            spawnAiPlayerNode(wx, wy);
+
+            var playerCharacter = Battle.characters[characterSpeciesId];
+
+            var npcInRdf = new CharacterDownsync();
+            var (vx, vy) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
+            npcInRdf.Id = 0; // Just for not being excluded 
+            npcInRdf.JoinIndex = joinIndex;
+            npcInRdf.VirtualGridX = vx;
+            npcInRdf.VirtualGridY = vy;
+            npcInRdf.RevivalVirtualGridX = vx;
+            npcInRdf.RevivalVirtualGridY = vy;
+            npcInRdf.Speed = playerCharacter.Speed;
+            npcInRdf.ColliderRadius = (int)defaultColliderRadius;
+            npcInRdf.CharacterState = InAirIdle1NoJump;
+            npcInRdf.FramesToRecover = 0;
+            npcInRdf.DirX = dirX;
+            npcInRdf.DirY = 0;
+            npcInRdf.VelX = 0;
+            npcInRdf.VelY = 0;
+            npcInRdf.InAir = true;
+            npcInRdf.OnWall = false;
+            npcInRdf.Hp = 100;
+            npcInRdf.MaxHp = 100;
+            npcInRdf.SpeciesId = characterSpeciesId;
+
+            startRdf.NpcsArr[i] = npcInRdf;
+        }
 
         onRoomDownsyncFrame(startRdf, null);
     }
@@ -133,24 +202,24 @@ public class OfflineMapController : AbstractMapController {
         GL.End();
         */
         // Draw static colliders
-        foreach (var barrierCollider in staticRectangleColliders) {
-            if (null == barrierCollider) {
+        foreach (var collider in staticRectangleColliders) {
+            if (null == collider) {
                 break;
             }
-            if (null == barrierCollider.Shape) {
+            if (null == collider.Shape) {
                 throw new ArgumentNullException("barrierCollider.Shape is null when drawing staticRectangleColliders");
             }
-            if (null == barrierCollider.Shape.Points) {
+            if (null == collider.Shape.Points) {
                 throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
             }
             GL.Begin(GL.LINES);
             for (int i = 0; i < 4; i++) {
                 int j = i + 1;
                 if (j >= 4) j -= 4;
-                var (_, pi) = barrierCollider.Shape.Points.GetByOffset(i);
-                var (_, pj) = barrierCollider.Shape.Points.GetByOffset(j);
-                var (ix, iy) = CollisionSpacePositionToWorldPosition(barrierCollider.X + pi.X, barrierCollider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
-                var (jx, jy) = CollisionSpacePositionToWorldPosition(barrierCollider.X + pj.X, barrierCollider.Y + pj.Y, spaceOffsetX, spaceOffsetY);
+                var (_, pi) = collider.Shape.Points.GetByOffset(i);
+                var (_, pj) = collider.Shape.Points.GetByOffset(j);
+                var (ix, iy) = CollisionSpacePositionToWorldPosition(collider.X + pi.X, collider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
+                var (jx, jy) = CollisionSpacePositionToWorldPosition(collider.X + pj.X, collider.Y + pj.Y, spaceOffsetX, spaceOffsetY);
                 GL.Vertex3(ix, iy, 0);
                 GL.Vertex3(jx, jy, 0);
             }
@@ -161,39 +230,26 @@ public class OfflineMapController : AbstractMapController {
         var (_, rdf) = renderBuffer.GetByFrameId(renderFrameId);
         if (null != rdf) {
             for (int k = 0; k < roomCapacity; k++) {
-                var currPlayerDownsync = rdf.PlayersArr[k];
-                int colliderWidth = currPlayerDownsync.ColliderRadius * 2, colliderHeight = currPlayerDownsync.ColliderRadius * 4;
-
-                switch (currPlayerDownsync.CharacterState) {
-                    case LayDown1:
-                        colliderWidth = currPlayerDownsync.ColliderRadius * 4;
-                        colliderHeight = currPlayerDownsync.ColliderRadius * 2;
-                        break;
-                    case BlownUp1:
-                    case InAirIdle1NoJump:
-                    case InAirIdle1ByJump:
-                    case OnWall:
-                        colliderWidth = currPlayerDownsync.ColliderRadius * 2;
-                        colliderHeight = currPlayerDownsync.ColliderRadius * 2;
-                        break;
-                }
-                var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
-                var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
-                var (colliderWorldWidth, colliderWorldHeight) = VirtualGridToPolygonColliderCtr(colliderWidth, colliderHeight);
+                var currCharacterDownsync = rdf.PlayersArr[k];
+                float boxCx, boxCy, boxCw, boxCh;
+                calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+                
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+                // World space width and height are just the same as that of collision space.
 
                 GL.Begin(GL.LINES);
 
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx - 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+                GL.Vertex3((wx + 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
 
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx + 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+                GL.Vertex3((wx + 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
 
-                GL.Vertex3((wx + 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx + 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
+                GL.Vertex3((wx - 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
 
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy + 0.5f * colliderWorldHeight), 0);
-                GL.Vertex3((wx - 0.5f * colliderWorldWidth), (wy - 0.5f * colliderWorldHeight), 0);
+                GL.Vertex3((wx - 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
+                GL.Vertex3((wx - 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
 
                 GL.End();
             }

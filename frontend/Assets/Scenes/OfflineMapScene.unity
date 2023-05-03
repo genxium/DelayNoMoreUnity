@@ -159,8 +159,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -176.00006, y: 175.99997}
-  m_SizeDelta: {x: 128, y: 128}
+  m_AnchoredPosition: {x: -196, y: 196}
+  m_SizeDelta: {x: 180, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &324869641
 MonoBehaviour:
@@ -635,6 +635,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: map
       objectReference: {fileID: 0}
+    - target: {fileID: 3520107858910318866, guid: fd0913a6fbde19c4ebc2fa826c92b0d6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: -2695619058785784247, guid: fd0913a6fbde19c4ebc2fa826c92b0d6, type: 3}
 --- !u!1 &1901904073 stripped
@@ -746,7 +750,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22cfffa4f3a86f14e9cce8c36c7017a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 1750589025216623398, guid: 9c2d7ac674ac8744e871fff6c276a880, type: 3}
+  characterPrefabForPlayer: {fileID: 1750589025216623398, guid: 9c2d7ac674ac8744e871fff6c276a880, type: 3}
+  characterPrefabForAi: {fileID: 4217981099835446251, guid: 79947c19703b85d4bbdc6473cbfad300, type: 3}
 --- !u!1 &1978785421
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +789,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 128, y: 128}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1978785423
 MonoBehaviour:
@@ -836,5 +841,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d677f1681015749b15c436eec6d880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovementRange: 110
+  m_MovementRange: 100
   m_ControlPath: <Gamepad>/leftStick

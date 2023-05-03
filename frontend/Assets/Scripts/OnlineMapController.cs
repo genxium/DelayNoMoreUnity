@@ -19,7 +19,7 @@ public class OnlineMapController : AbstractMapController {
     bool shouldLockStep = false;
 
     private RoomDownsyncFrame mockStartRdf() {
-        var playerStartingCollisionSpacePositions = new Vector[roomCapacity];
+        var playerStartingCposList = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
 
         var grid = this.GetComponentInChildren<Grid>();
@@ -46,11 +46,11 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case "PlayerStartingPos":
                     int j = 0;
-                    foreach (Transform playerPosChild in child) {
-                        var playerPosTileObj = playerPosChild.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
+                    foreach (Transform playerPos in child) {
+                        var playerPosTileObj = playerPos.gameObject.GetComponent<SuperTiled2Unity.SuperObject>();
                         var (playerCx, playerCy) = TiledLayerPositionToCollisionSpacePosition(playerPosTileObj.m_X, playerPosTileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        playerStartingCollisionSpacePositions[j] = new Vector(playerCx, playerCy);
-                        /// Debug.Log(String.Format("new playerStartingCollisionSpacePositions[i:{0}]=[X:{1}, Y:{2}]", j, playerCx, playerCy));
+                        playerStartingCposList[j] = new Vector(playerCx, playerCy);
+                        /// Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, playerCx, playerCy));
                         j++;
                         if (j >= roomCapacity) break;
                     }
@@ -60,20 +60,21 @@ public class OnlineMapController : AbstractMapController {
             }
         }
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, 128);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity);
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
         for (int i = 0; i < roomCapacity; i++) {
-            var collisionSpacePosition = playerStartingCollisionSpacePositions[i];
-            var (playerWx, playerWy) = CollisionSpacePositionToWorldPosition(collisionSpacePosition.X, collisionSpacePosition.Y, spaceOffsetX, spaceOffsetY);
-            spawnPlayerNode(i + 1, playerWx, playerWy);
+            int joinIndex = i + 1;
+            var cpos = playerStartingCposList[i];
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
+            spawnPlayerNode(joinIndex, wx, wy);
 
             var characterSpeciesId = 0;
             var playerCharacter = Battle.characters[characterSpeciesId];
 
             var playerInRdf = startRdf.PlayersArr[i];
-            var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(collisionSpacePosition.X, collisionSpacePosition.Y); // World and CollisionSpace coordinates have the same scale, just translated
-            playerInRdf.JoinIndex = i + 1;
+            var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
+            playerInRdf.JoinIndex = joinIndex;
             playerInRdf.VirtualGridX = playerVposX;
             playerInRdf.VirtualGridY = playerVposY;
             playerInRdf.RevivalVirtualGridX = playerVposX;
@@ -193,7 +194,7 @@ public class OnlineMapController : AbstractMapController {
     void Start() {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
-        selfPlayerInfo = new PlayerDownsync();
+        selfPlayerInfo = new CharacterDownsync();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = 60;
 

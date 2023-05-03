@@ -4,14 +4,17 @@ tpsheetFileNames:
 - Assets/Art/Characters/KnifeGirl/KnifeGirl.tpsheet
 - Assets/Art/Characters/Monk/Monk.tpsheet
 - Assets/Art/Characters/MonkGirl/MonkGirl.tpsheet
+- Assets/Art/Characters/SwordMan/SwordMan.tpsheet
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
 textureFileNames:
 - Assets/Art/Bullets/Bullets.png
 - Assets/Art/Characters/KnifeGirl/KnifeGirl.png
 - Assets/Art/Characters/Monk/Monk.png
 - Assets/Art/Characters/MonkGirl/MonkGirl.png
+- Assets/Art/Characters/SwordMan/SwordMan.png
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 normalmapFileNames:
+- 
 - 
 - 
 - 

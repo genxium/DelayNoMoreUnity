@@ -60,6 +60,8 @@ namespace shared {
         public static float VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO = 1.0f / COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO;
 
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PREALLOC_AI_PLAYER_CAPACITY = 8;
+        public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
@@ -107,6 +109,7 @@ namespace shared {
         public static HashSet<CharacterState> inAirSet = new HashSet<CharacterState>() {
             InAirIdle1NoJump,
             InAirIdle1ByJump,
+            InAirIdle1ByWallJump,
             InAirAtk1,
             InAirAtked1,
             BlownUp1,
@@ -181,17 +184,27 @@ namespace shared {
                     9,
                     true, true,
                     8, (int)(2.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(7 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)))
+                    (int)(7 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))),
+                    new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig(
+                    1, "SwordMan",
+                    11, 1,
+                    16, 16, 10, 27,
+                    (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    (int)(6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    9,
+                    false, false,
+                    0, 0,
+                    0, 0))
                 }
             );
 
-        public static int FindSkillId(int patternId, PlayerDownsync currPlayerDownsync, int speciesId) {
+        public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
             switch (speciesId) {
                 case 0:
                     switch (patternId) {
                         case 1:
-                            if (0 == currPlayerDownsync.FramesToRecover) {
-                                if (currPlayerDownsync.InAir) {
+                            if (0 == currCharacterDownsync.FramesToRecover) {
+                                if (currCharacterDownsync.InAir) {
                                     return 255;
                                 } else {
                                     return 1;

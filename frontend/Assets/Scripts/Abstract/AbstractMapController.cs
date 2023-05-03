@@ -7,6 +7,8 @@ using Pbc = Google.Protobuf.Collections;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
+    protected int preallocAiPlayerCapacity = DEFAULT_PREALLOC_AI_PLAYER_CAPACITY;
+    protected int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     protected int renderFrameId; // After battle started
     protected int renderFrameIdLagTolerance;
     protected int lastAllConfirmedInputFrameId;
@@ -15,16 +17,18 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
     protected int maxChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
-    public GameObject characterPrefab;
+    public GameObject characterPrefabForPlayer;
+    public GameObject characterPrefabForAi;
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
-    protected PlayerDownsync selfPlayerInfo = null;
+    protected CharacterDownsync selfPlayerInfo = null;
     protected FrameRingBuffer<RoomDownsyncFrame> renderBuffer = null;
     protected FrameRingBuffer<InputFrameDownsync> inputBuffer = null;
 
     protected ulong[] prefabbedInputListHolder;
     protected GameObject[] playerGameObjs;
+    protected List<GameObject> npcGameObjs; // TODO: Use a "Heap with Key access" like https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/PriorityQueue.js to manage npc rendering, e.g. referencing the treatment of bullets in https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/Map.js
 
     protected long battleState;
     protected int spaceOffsetX;
@@ -34,7 +38,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected SatResult overlapResult;
     protected Vector[] effPushbacks;
     protected Vector[][] hardPushbackNormsArr;
-    protected bool[] jumpedOrNotList;
     protected shared.Collider[] dynamicRectangleColliders;
     protected shared.Collider[] staticRectangleColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
@@ -45,9 +48,15 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected bool debugDrawingEnabled = false;
 
+    protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
-        GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity);
+        GameObject newPlayerNode = Instantiate(characterPrefabForPlayer, new Vector3(wx, wy, 0), Quaternion.identity);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
+    }
+
+    protected void spawnAiPlayerNode(float wx, float wy) {
+        GameObject newAiPlayerNode = Instantiate(characterPrefabForAi, new Vector3(wx, wy, 0), Quaternion.identity);
+        npcGameObjs.Add(newAiPlayerNode);
     }
 
     protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
@@ -145,7 +154,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     }
                 }
             }
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, jumpedOrNotList, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -223,20 +232,35 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
         for (int k = 0; k < roomCapacity; k++) {
-            var currPlayerDownsync = rdf.PlayersArr[k];
-            var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currPlayerDownsync.VirtualGridX, currPlayerDownsync.VirtualGridY);
+            var currCharacterDownsync = rdf.PlayersArr[k];
+            //Debug.Log(String.Format("At rdf.Id={0}, currCharacterDownsync[k:{1}] at [vGridX: {2}, vGridY: {3}, velX: {4}, velY: {5}, chState: {6}, framesInChState: {7}, dirx: {8}]", rdf.Id, k, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.CharacterState, currCharacterDownsync.FramesInChState, currCharacterDownsync.DirX));
+            var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
             var playerGameObj = playerGameObjs[k];
             playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
 
-            var chConfig = characters[0]; // todo: remove hardcoded speciesId
+            var chConfig = characters[currCharacterDownsync.SpeciesId];
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
-            chAnimCtrl.updateCharacterAnim(currPlayerDownsync, null, false, chConfig);
+            chAnimCtrl.updateCharacterAnim(currCharacterDownsync, null, false, chConfig);
 
             if (k == selfPlayerInfo.JoinIndex - 1) {
                 var camOldPos = Camera.main.transform.position;
                 Camera.main.transform.position = new Vector3(wx, wy, camOldPos.z);
             }
+        }
+
+        for (int k = 0; k < rdf.NpcsArr.Count; k++) {
+            var currNpcDownsync = rdf.NpcsArr[k];
+            if (TERMINATING_PLAYER_ID == currNpcDownsync.Id) break;
+            // Debug.Log(String.Format("At rdf.Id={0}, currNpcDownsync[k:{1}] at [vx: {2}, vy: {3}, chState: {4}, framesInChState: {5}]", rdf.Id, k, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, currNpcDownsync.CharacterState, currNpcDownsync.FramesInChState));
+            var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
+            var playerGameObj = npcGameObjs[k];
+            playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
+
+            var chConfig = characters[currNpcDownsync.SpeciesId];
+            var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
+            chAnimCtrl.updateCharacterAnim(currNpcDownsync, null, false, chConfig);
         }
     }
 
@@ -244,11 +268,16 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (0 >= roomCapacity) {
             throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
         }
+
+        if (0 >= preallocAiPlayerCapacity) {
+            throw new ArgumentException(String.Format("preallocAiPlayerCapacity={0} is non-positive, please initialize it first!", preallocAiPlayerCapacity));
+        }
+        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity));
         renderBufferSize = 1024;
 
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, 128));
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
 
@@ -268,20 +297,18 @@ public abstract class AbstractMapController : MonoBehaviour {
         prefabbedInputListHolder = new ulong[roomCapacity];
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
-        effPushbacks = new Vector[roomCapacity];
-        for (int i = 0; i < roomCapacity; i++) {
+        effPushbacks = new Vector[roomCapacity + preallocAiPlayerCapacity];
+        for (int i = 0; i < effPushbacks.Length; i++) {
             effPushbacks[i] = new Vector(0, 0);
         }
-        hardPushbackNormsArr = new Vector[roomCapacity][];
-        for (int i = 0; i < roomCapacity; i++) {
+        hardPushbackNormsArr = new Vector[roomCapacity + preallocAiPlayerCapacity][];
+        for (int i = 0; i < hardPushbackNormsArr.Length; i++) {
             int cap = 5;
             hardPushbackNormsArr[i] = new Vector[cap];
             for (int j = 0; j < cap; j++) {
                 hardPushbackNormsArr[i][j] = new Vector(0, 0);
             }
         }
-        jumpedOrNotList = new bool[roomCapacity];
-        Array.Fill(jumpedOrNotList, false);
 
         int dynamicRectangleCollidersCap = 64;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
@@ -306,6 +333,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
 
         playerGameObjs = new GameObject[roomCapacity];
+        npcGameObjs = new List<GameObject>();
 
         var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
@@ -321,7 +349,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         renderBuffer.Clear();
         inputBuffer.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
-        Array.Fill(jumpedOrNotList, false);
     }
 
     public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {

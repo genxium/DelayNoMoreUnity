@@ -15,14 +15,14 @@ public class Player {
     public int AckingInputFrameId;
 
     public long BattleState;
-    public PlayerDownsync PlayerDownsync;
+    public CharacterDownsync CharacterDownsync;
 
     public IPEndPoint? BattleUdpTunnelAddr;
     public int BattleUdpTunnelAuthKey;
 
-    public Player(PlayerDownsync playerDownsync) {
+    public Player(CharacterDownsync chrc) {
         BattleState = Battle.PLAYER_BATTLE_STATE_IMPOSSIBLE;
-        PlayerDownsync = playerDownsync;
+        CharacterDownsync = chrc;
     }
 
 }
