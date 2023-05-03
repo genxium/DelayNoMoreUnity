@@ -1,4 +1,5 @@
 ﻿namespace shared {
+    // [WARNING] This class is NOT thread-safe!
     public class FrameRingBuffer<T> : RingBuffer<T> where T : class {
         public int EdFrameId;
         public int StFrameId;
@@ -16,6 +17,14 @@
             var (retBool, retHolder) = base.Pop();
             if (retBool) {
                 StFrameId++;
+            }
+            return (retBool, retHolder);
+        }
+
+        public override (bool, T?) PopTail() {
+            var (retBool, retHolder) = base.Pop();
+            if (retBool) {
+                EdFrameId--;
             }
             return (retBool, retHolder);
         }
