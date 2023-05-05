@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace shared {
 
-    // [WARNING] This class is NOT thread-safe!
-    // Reference https://github.com/genxium/DelayNoMore/blob/v1.0.15/frontend/assets/scripts/PriorityQueue.js
+    // [WARNING] This class is NOT thread-safe! By default it's a min-heap.
+    // Reference https://github.com/genxium/DelayNoMore/blob/v1.0.15/frontend/assets/scripts/PriorityQueue.js, BUT in the C# version, "key" ALWAYS means "lookupKey" to be distinguished from "score".
     public class KvPriorityQueue<TKey, TVal>
             where TKey : class
             where TVal : class {
@@ -26,12 +26,39 @@ namespace shared {
         }
 
         public bool Put(TKey lookupKey, TVal val) {
-            int i = vals.EdFrameId;
-            vals.Put(val);
-            keys.Put(lookupKey);
-            lookupKeyToIndex[lookupKey] = i;
-            heapifyUp(i);
+            if (!lookupKeyToIndex.ContainsKey(lookupKey)) {
+                int i = vals.EdFrameId;
+                vals.Put(val);
+                keys.Put(lookupKey);
+                lookupKeyToIndex[lookupKey] = i;
+                heapifyUp(i);
+            } else {
+                int i = lookupKeyToIndex[lookupKey];
+
+                keys.SetByFrameId(lookupKey, i);
+                vals.SetByFrameId(val, i);
+
+                heapifyUp(i);
+                heapifyDown(i);
+            }
             return true;
+        }
+
+        public int Cnt() {
+            return lookupKeyToIndex.Count;
+        }
+
+        public TVal? Top() {
+            if (0 == vals.Cnt) {
+                return null;
+            }
+
+            var minVal = vals.GetFirst();
+            if (null == minVal) {
+                throw new ArgumentNullException(String.Format("Couldn't find first in vals"));
+            }
+
+            return minVal;
         }
 
         public TVal? Pop() {
@@ -57,8 +84,8 @@ namespace shared {
             if (null == minKey) {
                 throw new ArgumentNullException(String.Format("Couldn't find first in keys"));
             }
-            lookupKeyToIndex.Remove(minKey);
 
+            lookupKeyToIndex.Remove(minKey);
             var (_, tailVal) = vals.PopTail();
             if (null == tailVal) {
                 throw new ArgumentNullException(String.Format("Couldn't find tail in vals"));
@@ -67,13 +94,57 @@ namespace shared {
             if (null == tailKey) {
                 throw new ArgumentNullException(String.Format("Couldn't find tail in keys"));
             }
-            vals.SetByFrameId(tailVal, vals.StFrameId);
-            keys.SetByFrameId(tailKey, keys.StFrameId);
+            int i = vals.StFrameId;
+            vals.SetByFrameId(tailVal, i);
+            keys.SetByFrameId(tailKey, i);
 
-            lookupKeyToIndex[tailKey] = keys.StFrameId;
+            lookupKeyToIndex[tailKey] = i;
 
-            heapifyDown(keys.StFrameId);
+            heapifyDown(i);
             return minVal;
+        }
+
+        public TVal? PopAny(TKey lookupKey) {
+            if (0 == vals.Cnt) {
+                return null;
+            }
+            if (1 == vals.Cnt) {
+                if (lookupKeyToIndex.ContainsKey(lookupKey)) return Pop();
+                else return null;
+            }
+
+            int i = lookupKeyToIndex[lookupKey];
+            var (res1, thatVal) = vals.GetByFrameId(i);
+            if (!res1 || null == thatVal) {
+                throw new ArgumentNullException(String.Format("Couldn't find i={0} in vals", i));
+            }
+            var (res2, thatKey) = keys.GetByFrameId(i);
+            if (!res2 || null == thatKey) {
+                throw new ArgumentNullException(String.Format("Couldn't find i={0} in keys", i));
+            }
+
+            lookupKeyToIndex.Remove(lookupKey);
+            var (_, tailVal) = vals.PopTail();
+            if (null == tailVal) {
+                throw new ArgumentNullException(String.Format("Couldn't find tail in vals"));
+            }
+            var (_, tailKey) = keys.PopTail();
+            if (null == tailKey) {
+                throw new ArgumentNullException(String.Format("Couldn't find tail in keys"));
+            }
+            if (!lookupKeyToIndex.ContainsKey(tailKey)) {
+                // Edge case: the lookupKey points to exactly the tail while heap size was larger than 1
+                return thatVal;
+            }
+
+            lookupKeyToIndex[tailKey] = i;
+            vals.SetByFrameId(tailVal, i);
+            keys.SetByFrameId(tailKey, i);
+
+            heapifyUp(i);
+            heapifyDown(i);
+
+            return thatVal;
         }
 
         public void Clear() {
@@ -90,27 +161,20 @@ namespace shared {
 
         private void heapifyUp(int i) {
             int u = getParent(i);
-            var (res1, iVal) = vals.GetByFrameId(i);
-            var (res2, uVal) = vals.GetByFrameId(u);
-            if (!res1 || null == iVal) {
-                throw new ArgumentNullException(String.Format("Couldn't find i={0} in vals", i));
-            }
-            if (!res2 || null == uVal) {
-                throw new ArgumentNullException(String.Format("Couldn't find u={0} in vals", u));
-            }
-
-            while (TERMINATING_ID != u && 0 > compare(iVal, uVal)) {
-                swap(i, u);
-                i = u;
-                u = getParent(i);
-                (res1, iVal) = vals.GetByFrameId(i);
-                (res2, uVal) = vals.GetByFrameId(u);
+            while (TERMINATING_ID != u) {
+                var (res1, iVal) = vals.GetByFrameId(i);
+                var (res2, uVal) = vals.GetByFrameId(u);
                 if (!res1 || null == iVal) {
                     throw new ArgumentNullException(String.Format("Couldn't find i={0} in vals", i));
                 }
                 if (!res2 || null == uVal) {
                     throw new ArgumentNullException(String.Format("Couldn't find u={0} in vals", u));
                 }
+
+                if (compare(iVal, uVal) >= 0) break;
+                swapInHolders(i, u);
+                i = u;
+                u = getParent(i);
             }
         }
 
@@ -127,7 +191,7 @@ namespace shared {
                     throw new ArgumentNullException(String.Format("Couldn't find smallest={0} in vals#1", smallest));
                 }
                 var (_, lVal) = vals.GetByFrameId(l);
-                if (null != lVal && 0 > compare(lVal, smallestVal)) {
+                if (null != lVal && compare(lVal, smallestVal) < 0) {
                     smallest = l;
                 }
                 (res, smallestVal) = vals.GetByFrameId(smallest);
@@ -135,19 +199,19 @@ namespace shared {
                     throw new ArgumentNullException(String.Format("Couldn't find smallest={0} in vals#2", smallest));
                 }
                 var (_, rVal) = vals.GetByFrameId(r);
-                if (null != rVal && 0 > compare(rVal, smallestVal)) {
+                if (null != rVal && compare(rVal, smallestVal) < 0) {
                     smallest = r;
                 }
 
                 if (smallest != cur) {
-                    swap(cur, smallest);
+                    swapInHolders(cur, smallest);
                     cur = smallest;
                     smallest = TERMINATING_ID;
                 }
             }
         }
 
-        private void swap(int a, int b) {
+        private void swapInHolders(int a, int b) {
             var (res1, aLookupKey) = keys.GetByFrameId(a);
             if (!res1 || null == aLookupKey) {
                 throw new ArgumentNullException(String.Format("Couldn't find a={0} in keys", a));

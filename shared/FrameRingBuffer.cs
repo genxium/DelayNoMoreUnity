@@ -22,7 +22,7 @@
         }
 
         public override (bool, T?) PopTail() {
-            var (retBool, retHolder) = base.Pop();
+            var (retBool, retHolder) = base.PopTail();
             if (retBool) {
                 EdFrameId--;
             }
