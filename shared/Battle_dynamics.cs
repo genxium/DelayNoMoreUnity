@@ -201,7 +201,7 @@ namespace shared {
                     }
                     switch (bCollider.Data) {
                         case PatrolCue v3:
-                            var colliderDx = (aCollider.X - bCollider.X); 
+                            var colliderDx = (aCollider.X - bCollider.X);
                             if (0 < colliderDx && (0 > currCharacterDownsync.VelX || 0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX)) {
                                 DecodeInput(v3.FrAct, decodedInputHolder);
                                 effectiveDx = decodedInputHolder.Dx;
@@ -215,7 +215,7 @@ namespace shared {
                                 jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
                                 //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
                             }
-                            
+
                             break;
                         default:
                             break;
@@ -231,44 +231,55 @@ namespace shared {
             }
         }
 
-        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, RoomDownsyncFrame currRenderFrame, pbc::RepeatedField<Bullet> nextRenderFrameBullets) {
             bool skillUsed = false;
             var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
 
             if (skills.ContainsKey(skillId)) {
                 var skillConfig = skills[skillId];
-                if (Dashing == skillConfig.BoundChState) {
-                    // TODO: Currently only "Dashing" is processed in C# version, add processing of bullets (including collision) later!
-                    thatCharacterInNextFrame.ActiveSkillId = skillId;
-                    thatCharacterInNextFrame.ActiveSkillHit = 0;
-                    thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
 
-                    int xfac = 1;
-                    if (0 > thatCharacterInNextFrame.DirX) {
-                        xfac = -xfac;
-                    }
-                    bool hasLockVel = false;
+                thatCharacterInNextFrame.ActiveSkillId = skillId;
+                thatCharacterInNextFrame.ActiveSkillHit = 0;
+                thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
 
-                    // Hardcoded to use only the first hit for now
-                    var bulletConfig = skillConfig.Hits[thatCharacterInNextFrame.ActiveSkillHit];
+                int xfac = 1;
+                if (0 > thatCharacterInNextFrame.DirX) {
+                    xfac = -xfac;
+                }
+                bool hasLockVel = false;
 
-                    if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
-                        hasLockVel = true;
-                        thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
-                    }
-                    if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
-                        hasLockVel = true;
-                        thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
-                    }
+                // Hardcoded to use only the first hit for now
 
-                    if (false == hasLockVel && false == currCharacterDownsync.InAir) {
-                        thatCharacterInNextFrame.VelX = 0;
-                    }
-                    thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
+                var bulletConfig = skillConfig.Hits[thatCharacterInNextFrame.ActiveSkillHit];
+                AssignToBullet(
+                    bulletLocalIdCounter,
+                    currRenderFrame.Id,
+                    currCharacterDownsync.JoinIndex,
+                    currCharacterDownsync.BulletTeamId,
+                    BulletState.StartUp, 0,
+                    currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX, currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY, // virtual grid position
+                    xfac, 0, // dir
+                    bulletConfig.Speed * xfac, 0, // velocity
+                    bulletConfig,
+                    nextRenderFrameBullets[bulletLocalIdCounter]);
 
-                    skillUsed = true;
+                bulletLocalIdCounter++;
+
+                if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
+                    hasLockVel = true;
+                    thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+                }
+                if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
+                    hasLockVel = true;
+                    thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
                 }
 
+                if (false == hasLockVel && false == currCharacterDownsync.InAir) {
+                    thatCharacterInNextFrame.VelX = 0;
+                }
+                thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
+
+                skillUsed = true;
             }
             return skillUsed;
         }
@@ -288,7 +299,7 @@ namespace shared {
             }
         }
 
-        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ILoggerBridge logger) {
+        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ref int bulletLocalIdCounter, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var currCharacterDownsync = currRenderFrame.PlayersArr[i];
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
@@ -296,7 +307,7 @@ namespace shared {
                 var (patternId, jumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
-                if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame)) {
+                if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, currRenderFrame, nextRenderFrameBullets)) {
                     continue; // Don't allow movement if skill is used
                 }
 
@@ -351,7 +362,7 @@ namespace shared {
             }
         }
 
-        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Collider[] dynamicRectangleColliders, ref int colliderCnt, Collision collision, CollisionSpace collisionSys, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
+        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, ref int colliderCnt, Collision collision, CollisionSpace collisionSys, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ILoggerBridge logger) {
             for (int i = roomCapacity; i < roomCapacity + currRenderFrame.NpcsArr.Count; i++) {
                 var currCharacterDownsync = currRenderFrame.NpcsArr[i - roomCapacity];
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
@@ -360,7 +371,7 @@ namespace shared {
                 var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, ref colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
-                if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame)) {
+                if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, currRenderFrame, nextRenderFrameBullets)) {
                     continue; // Don't allow movement if skill is used
                 }
 
@@ -689,6 +700,8 @@ namespace shared {
             // [WARNING] On backend this function MUST BE called while "InputsBufferLock" is locked!
             var nextRenderFramePlayers = candidate.PlayersArr;
             var nextRenderFrameNpcs = candidate.NpcsArr;
+            var nextRenderFrameBullets = candidate.Bullets;
+            int nextRenderFrameBulletLocalIdCounter = currRenderFrame.BulletLocalIdCounter;
             // Make a copy first
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var src = currRenderFrame.PlayersArr[i];
@@ -739,11 +752,11 @@ namespace shared {
                 5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
              */
             int colliderCnt = 0;
-            _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, decodedInputHolder, prevDecodedInputHolder, logger);
+            _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, prevDecodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, logger);
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity, logger);
 
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity + j, logger);
-            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, logger);
+            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, logger);
 
             _calcPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, 0, roomCapacity + j, logger);
 
@@ -758,6 +771,7 @@ namespace shared {
             }
 
             candidate.Id = nextRenderFrameId;
+            candidate.BulletLocalIdCounter = nextRenderFrameBulletLocalIdCounter;
         }
 
         public static void AlignPolygon2DToBoundingBox(ConvexPolygon input) {
