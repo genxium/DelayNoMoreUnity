@@ -215,7 +215,6 @@ namespace shared {
             PushbackVelX = pushbackVelX;
             PushbackVelY = pushbackVelY;
             
-
             SelfLockVelX = selfLockVelX;
             SelfLockVelY = selfLockVelY;
 
