@@ -15,6 +15,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "MoveByKeyboard",
+                    "type": "Value",
+                    "id": "7afd0457-9a01-4199-afa4-48ee9afb6610",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "BtnA",
                     "type": "Button",
                     "id": "8126b761-b4d3-4f8f-a3e9-b6aa7f611878",
@@ -24,13 +33,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MoveByKeyboard",
-                    "type": "Value",
-                    "id": "7afd0457-9a01-4199-afa4-48ee9afb6610",
-                    "expectedControlType": "Vector2",
+                    "name": "BtnB",
+                    "type": "Button",
+                    "id": "964a175b-56ab-4ef5-a92b-2923730553bb",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -64,6 +73,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "BtnA",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "59566091-0c06-4b61-9d09-aceb6a437290",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BtnB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ded886e-ae0a-4d4d-b715-18cc3f3d40be",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BtnB",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

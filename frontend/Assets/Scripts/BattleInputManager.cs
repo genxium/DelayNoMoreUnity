@@ -10,11 +10,13 @@ public class BattleInputManager : MonoBehaviour {
     private const float joyStickEps = 0.1f;
     private float joystickX, joystickY;
     private int btnALevel;
+    private int btnBLevel;
 
     private Vector2 joystickInitPos;
     private float joystickKeyboardMoveRadius;
     public GameObject joystick;
     public GameObject btnA;
+    public GameObject btnB;
 	private bool customEnabled = true;
 
     void Start() {
@@ -75,6 +77,18 @@ public class BattleInputManager : MonoBehaviour {
         return (dx, dy, encodedIdx);
     }
 
+    public void OnBtnBInput(InputAction.CallbackContext context) {
+		if (!customEnabled) return;
+        btnBLevel = context.ReadValueAsButton() ? 1 : 0;
+        Debug.Log(String.Format("btnBLevel is changed to {0}", btnBLevel));
+
+        if (1 == btnBLevel) {
+            btnB.transform.DOScale(0.3f * Vector3.one, 0.5f);
+        } else {
+            btnB.transform.DOScale(1.5f * Vector3.one, 0.8f);
+        }
+    }
+
     public void OnBtnAInput(InputAction.CallbackContext context) {
 		if (!customEnabled) return;
         btnALevel = context.ReadValueAsButton() ? 1 : 0;
@@ -111,7 +125,7 @@ public class BattleInputManager : MonoBehaviour {
         float continuousDx = joystickX;
         float continuousDy = joystickY;
         var (_, _, discretizedDir) = DiscretizeDirection(continuousDx, continuousDy, joyStickEps);
-        ulong ret = (ulong)(discretizedDir + (btnALevel << 4));
+        ulong ret = (ulong)(discretizedDir + (btnALevel << 4) + (btnBLevel << 5));
         return ret;
     }
 

@@ -390,15 +390,15 @@ namespace shared {
             if (BulletState.Exploding == bullet.BlState) {
                 return false;
             }
-            return (bullet.BattleAttr.OriginatedRenderFrameId+bullet.Config.StartupFrames < currRenderFrameId) && (bullet.BattleAttr.OriginatedRenderFrameId+bullet.Config.StartupFrames+bullet.Config.ActiveFrames > currRenderFrameId);
-        } 
+            return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames < currRenderFrameId) && (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
+        }
 
         private static bool IsBulletAlive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
                 return bullet.FramesInBlState < bullet.Config.ExplosionFrames;
             }
-            return (bullet.BattleAttr.OriginatedRenderFrameId+bullet.Config.StartupFrames+bullet.Config.ActiveFrames > currRenderFrameId);
-        } 
+            return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
+        }
 
         private static void _insertBulletColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Bullet> currRenderFrameBullets, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, ref int colliderCnt, CollisionSpace collisionSys, ref int bulletCnt, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrameBullets.Count; i++) {
@@ -410,7 +410,7 @@ namespace shared {
                     src.BattleAttr.OriginatedRenderFrameId,
                     src.BattleAttr.OffenderJoinIndex,
                     src.BattleAttr.TeamId,
-                    src.BlState, src.FramesInBlState+1,
+                    src.BlState, src.FramesInBlState + 1,
                     src.VirtualGridX, src.VirtualGridY, // virtual grid position
                     src.DirX, 0, // dir
                     src.VelX, src.VelY, // velocity
@@ -420,16 +420,16 @@ namespace shared {
                 if (!IsBulletAlive(dst, currRenderFrame.Id)) {
                     continue;
                 }
-    
-                var offender = currRenderFrame.PlayersArr[dst.BattleAttr.OffenderJoinIndex-1];
+
+                var offender = currRenderFrame.PlayersArr[dst.BattleAttr.OffenderJoinIndex - 1];
                 if (BulletType.Melee == dst.Config.BType) {
                     if (noOpSet.Contains(offender.CharacterState)) {
                         // If a melee is alive but the offender got attacked, remove it even if it's active
                         continue;
                     }
                     if (IsBulletActive(dst, currRenderFrame.Id)) {
-                        int xfac = (0 < offender.DirX ? 1 : -1); 
-                        var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(offender.VirtualGridX+xfac*src.Config.HitboxOffsetX, offender.VirtualGridY);
+                        int xfac = (0 < offender.DirX ? 1 : -1);
+                        var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(offender.VirtualGridX + xfac * src.Config.HitboxOffsetX, offender.VirtualGridY);
                         var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX, src.Config.HitboxSizeY);
                         var newBulletCollider = dynamicRectangleColliders[colliderCnt];
                         UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst);
@@ -455,7 +455,7 @@ namespace shared {
                         if (dst.BlState != src.BlState) {
                             dst.FramesInBlState = 0;
                         }
-                        (dst.VirtualGridX, dst.VirtualGridY) = (dst.VirtualGridX+dst.VelX, dst.VirtualGridY+dst.VelY);
+                        (dst.VirtualGridX, dst.VirtualGridY) = (dst.VirtualGridX + dst.VelX, dst.VirtualGridY + dst.VelY);
                     } else {
                         if (noOpSet.Contains(offender.CharacterState)) {
                             // If a fireball is not yet active but the offender got attacked, remove it
@@ -465,8 +465,8 @@ namespace shared {
                     bulletCnt++;
                 } else {
                     continue;
-                }  
-            } 
+                }
+            }
 
             // Explicitly specify termination of nextRenderFrameBullets
             nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
@@ -536,7 +536,7 @@ namespace shared {
             }
         }
 
-        private static void _calcPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
+        private static void _calcMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             for (int i = iSt; i < iEd; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
@@ -555,14 +555,14 @@ namespace shared {
                         if (false == ok3 || null == bCollider) {
                             break;
                         }
-                        bool isBarrier = false, isAnotherPlayer = false, isBullet = false, isPatrolCue = false;
+                        bool isBarrier = false, isAnotherCharacter = false, isBullet = false, isPatrolCue = false;
                         switch (bCollider.Data) {
                             case CharacterDownsync v1:
                                 if (Dying == v1.CharacterState) {
                                     // ignore collision with dying player
                                     continue;
                                 }
-                                isAnotherPlayer = true;
+                                isAnotherCharacter = true;
                                 break;
                             case Bullet v2:
                                 isBullet = true;
@@ -586,7 +586,7 @@ namespace shared {
                             continue;
                         }
                         var normAlignmentWithGravity = (overlapResult.OverlapX * 0 + overlapResult.OverlapY * (-1.0));
-                        if (isAnotherPlayer) {
+                        if (isAnotherCharacter) {
                             // [WARNING] The "zero overlap collision" might be randomly detected/missed on either frontend or backend, to have deterministic result we added paddings to all sides of a characterCollider. As each velocity component of (velX, velY) being a multiple of 0.5 at any renderFrame, each position component of (x, y) can only be a multiple of 0.5 too, thus whenever a 1-dimensional collision happens between players from [player#1: i*0.5, player#2: j*0.5, not collided yet] to [player#1: (i+k)*0.5, player#2: j*0.5, collided], the overlap becomes (i+k-j)*0.5+2*s, and after snapping subtraction the effPushback magnitude for each player is (i+k-j)*0.5, resulting in 0.5-multiples-position for the next renderFrame.
                             pushbackX = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapX;
                             pushbackY = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapY;
@@ -594,7 +594,7 @@ namespace shared {
                         for (int k = 0; k < hardPushbackCnt; k++) {
                             Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
                             float projectedMagnitude = pushbackX * hardPushbackNorm.X + pushbackY * hardPushbackNorm.Y;
-                            if (isBarrier || (isAnotherPlayer && 0 > projectedMagnitude)) {
+                            if (isBarrier || (isAnotherCharacter && 0 > projectedMagnitude)) {
                                 pushbackX -= projectedMagnitude * hardPushbackNorm.X;
                                 pushbackY -= projectedMagnitude * hardPushbackNorm.Y;
                             }
@@ -685,6 +685,88 @@ namespace shared {
                     if (!thatCharacterInNextFrame.OnWall) {
                         thatCharacterInNextFrame.OnWallNormX = 0;
                         thatCharacterInNextFrame.OnWallNormY = 0;
+                    }
+                }
+            }
+        }
+
+        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
+            // Check bullet-anything collisions
+            for (int i = iSt; i < iEd; i++) {
+                Collider bulletCollider = dynamicRectangleColliders[i];
+                if (null == bulletCollider.Data) continue;
+                Bullet bullet = (Bullet)bulletCollider.Data;
+                if (null == bullet || TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) continue;
+                
+                bool collided = bulletCollider.CheckAllWithHolder(0, 0, collision);
+                if (!collided) continue;
+
+                bool exploded = false;
+                bool explodedOnAnotherCharacter = false;
+
+                var bulletShape = bulletCollider.Shape;
+                var offender = currRenderFrame.PlayersArr[bullet.BattleAttr.OffenderJoinIndex - 1];
+                int effDirX = (BulletType.Melee == bullet.Config.BType ? offender.DirX : bullet.DirX);
+                while (true) {
+                    var (ok, bCollider) = collision.PopFirstContactedCollider();
+                    if (false == ok || null == bCollider) {
+                        break;
+                    }
+                    var defenderShape = bCollider.Shape;
+                    switch (bCollider.Data) {
+                        case CharacterDownsync atkedCharacterInCurrFrame:
+                            if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
+                            var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, ref overlapResult);
+                            if (!overlapped) continue;   
+                            if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;
+                            if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
+                            exploded = true;
+                            explodedOnAnotherCharacter = true;
+                            int xfac = (0 < effDirX ? 1 : -1);
+                            int j = atkedCharacterInCurrFrame.JoinIndex - 1;
+                            var atkedCharacterInNextFrame = (j < roomCapacity ? nextRenderFramePlayers[j] : nextRenderFrameNpcs[j - roomCapacity]);
+                            atkedCharacterInNextFrame.Hp -= bullet.Config.Damage;
+                            // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
+                            var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
+                            atkedCharacterInNextFrame.VelX = pushbackVelX;
+                            atkedCharacterInNextFrame.VelY = pushbackVelY;
+                            if (0 >= atkedCharacterInNextFrame.Hp) {
+                                // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
+                                atkedCharacterInNextFrame.Hp = 0;
+                                atkedCharacterInNextFrame.CharacterState = CharacterState.Dying;
+                                atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
+                            } else {
+                                if (bullet.Config.BlowUp) {
+                                    atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;
+                                } else {
+                                    atkedCharacterInNextFrame.CharacterState = CharacterState.Atked1;
+                                }
+                                int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
+                                if (bullet.Config.HitStunFrames > oldFramesToRecover) {
+                                    atkedCharacterInNextFrame.FramesToRecover = bullet.Config.HitStunFrames;
+                                }
+                            }
+                            break;
+                        default:
+                            exploded = true;
+                            break;
+                    }
+                }
+
+                if (exploded) {
+                    if (BulletType.Melee == bullet.Config.BType) {
+                        bullet.BlState = BulletState.Exploding;
+                        if (explodedOnAnotherCharacter) {
+                            bullet.FramesInBlState = 0;
+                        } else {
+                            // When hitting a barrier, don't play explosion anim
+                            bullet.FramesInBlState = bullet.Config.ExplosionFrames + 1;
+                        }
+                    } else if (BulletType.Fireball == bullet.Config.BType) {
+                        bullet.BlState = BulletState.Exploding;
+                        bullet.FramesInBlState = 0;
+                    } else {
+                        // Nothing to do
                     }
                 }
             }
@@ -832,9 +914,11 @@ namespace shared {
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity + j, logger);
             _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
+            _calcMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, 0, roomCapacity + j, logger);
+
             _insertBulletColliders(currRenderFrame, roomCapacity, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
-            _calcPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, 0, roomCapacity + j, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, roomCapacity + j, roomCapacity + j + colliderCnt, logger);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, dynamicRectangleColliders, logger);
 
