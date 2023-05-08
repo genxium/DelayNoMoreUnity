@@ -19,6 +19,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int renderBufferSize;
     public GameObject characterPrefabForPlayer;
     public GameObject characterPrefabForAi;
+    public GameObject fireballPrefab;
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
@@ -33,6 +34,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected long battleState;
     protected int spaceOffsetX;
     protected int spaceOffsetY;
+    protected float effectivelyInfiniteLyFar;
 
     protected shared.Collision collisionHolder;
     protected SatResult overlapResult;
@@ -42,6 +44,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected shared.Collider[] staticRectangleColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
+    protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
+
+    protected KvPriorityQueue<string, FireballAnimController> cachedFireballs;
 
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
@@ -262,6 +267,56 @@ public abstract class AbstractMapController : MonoBehaviour {
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             chAnimCtrl.updateCharacterAnim(currNpcDownsync, null, false, chConfig);
         }
+
+        // Put all to infinitely far first
+        for (int i = cachedFireballs.vals.StFrameId; i < cachedFireballs.vals.EdFrameId; i++) {
+            var (res, fireballHolder) = cachedFireballs.vals.GetByFrameId(i);
+            if (!res || null == fireballHolder) throw new ArgumentNullException(String.Format("There's no fireballHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedFireballs.vals.StFrameId, cachedFireballs.vals.EdFrameId));
+
+            fireballHolder.gameObject.transform.position = new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, fireballHolder.gameObject.transform.position.z);
+        }
+
+        for (int k = 0; k < rdf.Bullets.Count; k++) {
+            var bullet = rdf.Bullets[k];
+            if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
+            bool isExploding = IsBulletExploding(bullet);
+            string lookupKey = null;
+            var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+            bool spontaneousLooping = false;
+            switch (bullet.Config.BType) {
+                case BulletType.Melee:
+                    if (isExploding) {
+                        lookupKey = String.Format("Melee_Explosion{0}", bullet.Config.SpeciesId);
+                    }
+                    break;
+                case BulletType.Fireball:
+                    if (IsBulletActive(bullet, rdf.Id) || isExploding) {
+                        lookupKey = isExploding ? String.Format("Explosion{0}", bullet.Config.SpeciesId) : String.Format("Fireball{0}", bullet.Config.SpeciesId);
+                        spontaneousLooping = !isExploding;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (null == lookupKey) continue;
+            var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
+            if (null == explosionAnimHolder) {
+                explosionAnimHolder = cachedFireballs.Pop();
+                Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
+            } else {
+                Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
+            }
+
+            if (null == explosionAnimHolder) {
+                throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}", lookupKey));
+            }
+            explosionAnimHolder.updateAnim(lookupKey, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, rdf);
+            explosionAnimHolder.score = rdf.Id;
+            explosionAnimHolder.gameObject.transform.position = new Vector3(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
+
+            cachedFireballs.Put(lookupKey, explosionAnimHolder);
+        }
     }
 
     protected void preallocateHolders() {
@@ -319,6 +374,19 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         decodedInputHolder = new InputFrameDecoded();
         prevDecodedInputHolder = new InputFrameDecoded();
+
+        int fireballHoldersCap = 256;
+        cachedFireballs = new KvPriorityQueue<string, FireballAnimController>(fireballHoldersCap, cachedFireballScore);
+
+        effectivelyInfiniteLyFar = 2f*Math.Max(spaceOffsetX, spaceOffsetY);
+        for (int i = 0; i < fireballHoldersCap; i++) {
+            // Fireballs & explosions should be drawn above any character
+            GameObject newFireballNode = Instantiate(fireballPrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, -5), Quaternion.identity);
+            FireballAnimController holder = newFireballNode.GetComponent<FireballAnimController>();
+            holder.score = -1;
+            string initLookupKey = String.Format("{0}", -(i + 1)); // there's definitely no such "bulletLocalId"
+            cachedFireballs.Put(initLookupKey, holder);
+        }
     }
 
     protected virtual void resetCurrentMatch() {
@@ -349,6 +417,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         renderBuffer.Clear();
         inputBuffer.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
+
+        // Clearing cached fireball rendering nodes [BEGINS]
+        // TODO
+        // Clearing cached fireball rendering nodes [ENDS]
     }
 
     public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {

@@ -36,11 +36,24 @@ namespace shared {
             if (0 == Cnt) {
                 return (false, default(T));
             }
-            T holder = Eles[St];
+            T? holder = GetFirst();
             Cnt--; St++;
 
             if (St >= N) {
                 St -= N;
+            }
+            return (true, holder);
+        }
+
+        public virtual (bool, T?) PopTail() {
+            if (0 == Cnt) {
+                return (false, default(T));
+            }
+            T? holder = GetLast();
+            Cnt--; Ed--;
+
+            if (Ed < 0) {
+                Ed += N;
             }
             return (true, holder);
         }
@@ -92,8 +105,8 @@ namespace shared {
 
         public T? GetLast() {
             if (0 == Cnt) return default(T);
-            if (0 <= Ed-1) return Eles[Ed-1];
-            else return Eles[Ed-1+N];
+            if (0 <= Ed - 1) return Eles[Ed - 1];
+            else return Eles[Ed - 1 + N];
         }
 
         public void Clear() {

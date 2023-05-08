@@ -104,10 +104,28 @@ namespace shared {
             };
         }
 
+        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, BulletConfig staticBulletConfig, Bullet dst) {
+			dst.BlState = blState;
+			dst.FramesInBlState = framesInBlState; 
+			dst.Config = staticBulletConfig;
+
+			dst.BattleAttr.BulletLocalId = bulletLocalId;
+			dst.BattleAttr.OriginatedRenderFrameId = originatedRenderFrameId;
+			dst.BattleAttr.OffenderJoinIndex = offenderJoinIndex;
+			dst.BattleAttr.TeamId = teamId;
+
+			dst.VirtualGridX = vx; 
+			dst.VirtualGridY = vy; 
+			dst.DirX = dirX;
+			dst.DirY = dirY;
+			dst.VelX = velX;
+			dst.VelY = velY;
+        }
+
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocAiPlayerCount, int preallocBulletCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
-            ret.BulletLocalIdCounter = TERMINATING_BULLET_LOCAL_ID;
+            ret.BulletLocalIdCounter = 0;
 
             for (int i = 0; i < roomCapacity; i++) {
                 var single = new CharacterDownsync();
@@ -197,7 +215,6 @@ namespace shared {
             PushbackVelX = pushbackVelX;
             PushbackVelY = pushbackVelY;
             
-
             SelfLockVelX = selfLockVelX;
             SelfLockVelY = selfLockVelY;
 
