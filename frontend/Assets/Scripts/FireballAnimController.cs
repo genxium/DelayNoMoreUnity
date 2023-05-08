@@ -1,10 +1,10 @@
 using UnityEngine;
 using shared;
-using System;
 using System.Collections.Generic;
 
 public class FireballAnimController : MonoBehaviour {
 
+    public int score;
     Dictionary<string, AnimationClip> lookUpTable;
 
     // Start is called before the first frame update

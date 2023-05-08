@@ -12,8 +12,8 @@ namespace shared {
         public delegate int ValScore(TVal s);
 
         private int TERMINATING_ID = -1;
-        protected FrameRingBuffer<TVal> vals; // Using "FrameRingBuffer" because we have to support all operations "access by index", "pop" & "put"!  
-        protected FrameRingBuffer<TKey> keys;
+        public FrameRingBuffer<TVal> vals; // Using "FrameRingBuffer" because we have to support all operations "access by index", "pop" & "put"!  
+        public FrameRingBuffer<TKey> keys;
 
         protected ValScore scoringFunc;
 
@@ -108,9 +108,13 @@ namespace shared {
             if (0 == vals.Cnt) {
                 return null;
             }
+
+            if (!lookupKeyToIndex.ContainsKey(lookupKey)) {
+                return null;
+            }
+
             if (1 == vals.Cnt) {
-                if (lookupKeyToIndex.ContainsKey(lookupKey)) return Pop();
-                else return null;
+                return Pop();
             }
 
             int i = lookupKeyToIndex[lookupKey];

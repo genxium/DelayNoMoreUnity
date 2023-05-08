@@ -386,6 +386,17 @@ namespace shared {
             }
         }
 
+        public static bool IsBulletExploding(Bullet bullet) {
+            switch (bullet.Config.BType) {
+                case BulletType.Melee:
+                    return (BulletState.Exploding == bullet.BlState && bullet.FramesInBlState < bullet.Config.ExplosionFrames);
+                case BulletType.Fireball:
+                    return (BulletState.Exploding == bullet.BlState);
+                default:
+                    return false;
+            }
+        }
+
         private static bool IsBulletActive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
                 return false;
@@ -428,8 +439,7 @@ namespace shared {
                         continue;
                     }
                     if (IsBulletActive(dst, currRenderFrame.Id)) {
-                        int xfac = (0 < offender.DirX ? 1 : -1);
-                        var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(offender.VirtualGridX + xfac * src.Config.HitboxOffsetX, offender.VirtualGridY);
+                        var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(offender.VirtualGridX + dst.DirX * src.Config.HitboxOffsetX, offender.VirtualGridY);
                         var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX, src.Config.HitboxSizeY);
                         var newBulletCollider = dynamicRectangleColliders[colliderCnt];
                         UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst);
