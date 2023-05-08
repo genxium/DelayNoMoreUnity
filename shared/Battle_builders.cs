@@ -125,7 +125,7 @@ namespace shared {
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocAiPlayerCount, int preallocBulletCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
-            ret.BulletLocalIdCounter = TERMINATING_BULLET_LOCAL_ID;
+            ret.BulletLocalIdCounter = 0;
 
             for (int i = 0; i < roomCapacity; i++) {
                 var single = new CharacterDownsync();

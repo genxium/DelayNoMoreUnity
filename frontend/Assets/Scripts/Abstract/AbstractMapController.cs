@@ -280,39 +280,42 @@ public abstract class AbstractMapController : MonoBehaviour {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
             bool isExploding = IsBulletExploding(bullet);
+            string lookupKey = null;
+            var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+            bool spontaneousLooping = false;
             switch (bullet.Config.BType) {
                 case BulletType.Melee:
                     if (isExploding) {
-                        string lookupKey = String.Format("Melee_Explosion{0}", bullet.Config.SpeciesId);
-                        int offenderJoinIndex = bullet.BattleAttr.OffenderJoinIndex;
-                        int i = offenderJoinIndex-1;
-                        var offender = (i < rdf.PlayersArr.Count ? rdf.PlayersArr[i] : rdf.NpcsArr[i - roomCapacity]); ;
-                        var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
-                        var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
-
-                        var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
-                        if (null == explosionAnimHolder) {
-                            explosionAnimHolder = cachedFireballs.Pop();
-                            Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2} at wpos=({3}, {4})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, wx, wy));
-                        } else {
-                            Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2} at wpos=({3}, {4})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, wx, wy));
-                        }
-
-                        if (null == explosionAnimHolder) {
-                            throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}", lookupKey));
-                        }
-                        explosionAnimHolder.updateCharacterAnim(lookupKey, bullet.FramesInBlState, bullet.DirX, false, rdf);
-                        explosionAnimHolder.score = rdf.Id;
-                        explosionAnimHolder.gameObject.transform.position = new Vector3(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
-                        
-                        cachedFireballs.Put(lookupKey, explosionAnimHolder);
+                        lookupKey = String.Format("Melee_Explosion{0}", bullet.Config.SpeciesId);
                     }
                     break;
                 case BulletType.Fireball:
+                    if (IsBulletActive(bullet, rdf.Id) || isExploding) {
+                        lookupKey = isExploding ? String.Format("Explosion{0}", bullet.Config.SpeciesId) : String.Format("Fireball{0}", bullet.Config.SpeciesId);
+                        spontaneousLooping = !isExploding;
+                    }
                     break;
                 default:
                     break;
             }
+            if (null == lookupKey) continue;
+            var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
+            if (null == explosionAnimHolder) {
+                explosionAnimHolder = cachedFireballs.Pop();
+                Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
+            } else {
+                Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
+            }
+
+            if (null == explosionAnimHolder) {
+                throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}", lookupKey));
+            }
+            explosionAnimHolder.updateAnim(lookupKey, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, rdf);
+            explosionAnimHolder.score = rdf.Id;
+            explosionAnimHolder.gameObject.transform.position = new Vector3(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
+
+            cachedFireballs.Put(lookupKey, explosionAnimHolder);
         }
     }
 

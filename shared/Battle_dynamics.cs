@@ -397,14 +397,14 @@ namespace shared {
             }
         }
 
-        private static bool IsBulletActive(Bullet bullet, int currRenderFrameId) {
+        public static bool IsBulletActive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
                 return false;
             }
             return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames < currRenderFrameId) && (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
         }
 
-        private static bool IsBulletAlive(Bullet bullet, int currRenderFrameId) {
+        public static bool IsBulletAlive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
                 return bullet.FramesInBlState < bullet.Config.ExplosionFrames;
             }
@@ -485,7 +485,7 @@ namespace shared {
         private static void _moveAndInsertCharacterColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd, ILoggerBridge logger) {
             for (int i = iSt; i < iEd; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
-                if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
 
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
@@ -550,7 +550,7 @@ namespace shared {
             // Calc pushbacks for each player (after its movement) w/o bullets
             for (int i = iSt; i < iEd; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
-                if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
@@ -723,11 +723,12 @@ namespace shared {
                         break;
                     }
                     var defenderShape = bCollider.Shape;
+                    var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, ref overlapResult);
+                    if (!overlapped) continue;
+
                     switch (bCollider.Data) {
                         case CharacterDownsync atkedCharacterInCurrFrame:
-                            if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
-                            var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, ref overlapResult);
-                            if (!overlapped) continue;   
+                            if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;   
                             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;
                             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
                             exploded = true;
@@ -785,7 +786,7 @@ namespace shared {
         private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count + currRenderFrame.NpcsArr.Count; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
-                if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
 
                 var chConfig = characters[currCharacterDownsync.SpeciesId];

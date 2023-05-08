@@ -16,7 +16,7 @@ public class FireballAnimController : MonoBehaviour {
         }
     }
 
-    public void updateCharacterAnim(string newAnimName, int frameIdxInAnim, int dirX, bool spontaneousLooping, RoomDownsyncFrame rdf) {
+    public void updateAnim(string newAnimName, int frameIdxInAnim, int dirX, bool spontaneousLooping, RoomDownsyncFrame rdf) {
         var animator = this.gameObject.GetComponent<Animator>();
         if (0 > dirX) {
             this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
