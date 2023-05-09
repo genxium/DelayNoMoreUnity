@@ -165,6 +165,14 @@ namespace shared {
                                                     .AddHit(new BulletConfigBuilder(16, MAX_INT, MAX_INT, 9, 0, (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(7f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 3, 30, BulletType.Fireball, (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).build())
                                                     .build()),
 
+                     new KeyValuePair<int, Skill>(5, new SkillBuilder(27, 27, 27, SkillTriggerType.RisingEdge, CharacterState.Atk1)
+                                                    .AddHit(new BulletConfigBuilder(9, 16, 14, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
+                                                    .build()),
+
+                    new KeyValuePair<int, Skill>(6, new SkillBuilder(27, 27, 27, SkillTriggerType.RisingEdge, CharacterState.Atk2)
+                                                    .AddHit(new BulletConfigBuilder(7, MAX_INT, MAX_INT, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 2, 15, BulletType.Melee, 0).build())
+                                                    .build()),
+
                     new KeyValuePair<int, Skill>(12, new SkillBuilder(10, 10, 10, SkillTriggerType.RisingEdge, CharacterState.Dashing)
                                                     .AddHit(new BulletConfigBuilder(3, 0, 0, 0, 0, NO_LOCK_VEL, NO_LOCK_VEL, (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, 0, 0, 0, 0, 0, false, 0, 0, BulletType.Melee, 0).build())
                                                     .build()),
@@ -223,7 +231,7 @@ namespace shared {
                                 if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return NO_SKILL;
                                 return currBulletConfig.CancelTransit[patternId];
                             }
-                        case 3: 
+                        case 3:
                             if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
                                 return 4;
                             } else {
@@ -233,6 +241,23 @@ namespace shared {
                             // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                             // Air-dash is allowed for this speciesId
                             return 12;
+                        default:
+                            return NO_SKILL;
+                    }
+                case 1:
+                    switch (patternId) {
+                        case 1:
+                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                                return 5;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case 2:
+                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                                return 6;
+                            } else {
+                                return NO_SKILL;
+                            }
                         default:
                             return NO_SKILL;
                     }

@@ -4,7 +4,6 @@ using static shared.CharacterState;
 using System.Collections.Generic;
 using System.IO;
 using Google.Protobuf.Collections;
-using System.Linq;
 
 namespace shared {
     public partial class Battle {
@@ -73,7 +72,7 @@ namespace shared {
             return true;
         }
 
-        public static bool UpdateInputFrameInPlaceUponDynamics(int inputFrameId, int roomCapacity, ulong confirmedList, pbc::RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
+        public static bool UpdateInputFrameInPlaceUponDynamics(int inputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
             bool hasInputFrameUpdatedOnDynamics = false;
             for (int i = 0; i < roomCapacity; i++) {
                 if ((i + 1) == toExcludeJoinIndex) {
@@ -116,7 +115,7 @@ namespace shared {
             }
             var delayedInputList = delayedInputFrameDownsync.InputList;
 
-            pbc::RepeatedField<ulong>? delayedInputListForPrevRdf = null;
+            RepeatedField<ulong>? delayedInputListForPrevRdf = null;
             if (0 < delayedInputFrameIdForPrevRdf) {
                 var (_, delayedInputFrameDownsyncForPrevRdf) = inputBuffer.GetByFrameId(delayedInputFrameIdForPrevRdf);
                 if (null != delayedInputFrameDownsyncForPrevRdf) {
@@ -175,8 +174,13 @@ namespace shared {
             return (patternId, jumpedOrNot, effDx, effDy);
         }
 
-        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, ref int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
+        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
+
+            if (0 < currCharacterDownsync.FramesToRecover) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+            }
+
             int patternId = PATTERN_ID_NO_OP;
             bool jumpedOrNot = false;
 
@@ -184,54 +188,103 @@ namespace shared {
             int effectiveDx = currCharacterDownsync.DirX;
             int effectiveDy = currCharacterDownsync.DirY;
 
-            var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1];
-            ConvexPolygon aShape = aCollider.Shape;
-            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
-            if (collided) {
-                while (true) {
-                    var (ok3, bCollider) = collision.PopFirstContactedCollider();
-                    if (false == ok3 || null == bCollider) {
-                        break;
-                    }
-
-                    ConvexPolygon bShape = bCollider.Shape;
-                    var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, ref overlapResult);
-                    if (!overlapped) {
-                        continue;
-                    }
-                    switch (bCollider.Data) {
-                        case PatrolCue v3:
-                            var colliderDx = (aCollider.X - bCollider.X);
-                            if (0 < colliderDx && (0 > currCharacterDownsync.VelX || 0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX)) {
-                                DecodeInput(v3.FrAct, decodedInputHolder);
-                                effectiveDx = decodedInputHolder.Dx;
-                                effectiveDy = decodedInputHolder.Dy;
-                                jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
-                                //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
-                            } else if (0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX))) {
-                                DecodeInput(v3.FlAct, decodedInputHolder);
-                                effectiveDx = decodedInputHolder.Dx;
-                                effectiveDy = decodedInputHolder.Dy;
-                                jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
-                                //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
-                            }
-
+            bool hasVisionReaction = false;
+            var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
+            if (!currCharacterDownsync.InAir) {
+                // TODO: InAir vision reaction yet.
+                var visionCollider = dynamicRectangleColliders[colliderCnt];
+                int xfac = (0 < currCharacterDownsync.DirX ? 1 : -1);
+                var (visionCx, visionCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * currCharacterDownsync.ColliderRadius, currCharacterDownsync.VirtualGridY + currCharacterDownsync.ColliderRadius);
+                var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(3 * currCharacterDownsync.ColliderRadius, 5 * currCharacterDownsync.ColliderRadius);
+                UpdateRectCollider(visionCollider, visionCx, visionCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
+                collisionSys.AddSingle(visionCollider);
+                bool collided = visionCollider.CheckAllWithHolder(0, 0, collision);
+                if (collided) {
+                    ConvexPolygon aShape = visionCollider.Shape;
+                    while (!hasVisionReaction) {
+                        var (ok3, bCollider) = collision.PopFirstContactedCollider();
+                        if (false == ok3 || null == bCollider) {
                             break;
-                        default:
+                        }
+
+                        ConvexPolygon bShape = bCollider.Shape;
+                        var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, ref overlapResult);
+                        if (!overlapped) {
+                            continue;
+                        }
+                        switch (bCollider.Data) {
+                            case CharacterDownsync v3:
+                                if (v3.JoinIndex != currCharacterDownsync.JoinIndex) {
+                                    var colliderDx = (bCollider.X - aCollider.X);
+                                    var colliderDy = (bCollider.Y - aCollider.Y);
+                                    if (!invinsibleSet.Contains(v3.CharacterState) && 0 < colliderDx * xfac) {
+                                        // Opponent is not invisible and in front of me
+                                        if (0 < colliderDy || 0 < (currRenderFrame.Id & 1) ) {
+                                            patternId = 2;
+                                        } else {
+                                            patternId = 1;
+                                        }
+                                        hasVisionReaction = true;
+                                    } else if (0 > colliderDx * xfac) {
+                                        // Behind me
+                                        effectiveDx = -effectiveDx;
+                                        hasVisionReaction = true;
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                visionCollider.Data = null;
+                collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
+            }
+
+            if (!hasVisionReaction) {
+                bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+                if (collided) {
+                    ConvexPolygon aShape = aCollider.Shape;
+                    while (true) {
+                        var (ok3, bCollider) = collision.PopFirstContactedCollider();
+                        if (false == ok3 || null == bCollider) {
                             break;
+                        }
+
+                        ConvexPolygon bShape = bCollider.Shape;
+                        var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, ref overlapResult);
+                        if (!overlapped) {
+                            continue;
+                        }
+                        switch (bCollider.Data) {
+                            case PatrolCue v3:
+                                var colliderDx = (aCollider.X - bCollider.X);
+                                if (0 < colliderDx && (0 > currCharacterDownsync.VelX || 0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX)) {
+                                    DecodeInput(v3.FrAct, decodedInputHolder);
+                                    effectiveDx = decodedInputHolder.Dx;
+                                    effectiveDy = decodedInputHolder.Dy;
+                                    jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
+                                    //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                                } else if (0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX))) {
+                                    DecodeInput(v3.FlAct, decodedInputHolder);
+                                    effectiveDx = decodedInputHolder.Dx;
+                                    effectiveDy = decodedInputHolder.Dy;
+                                    jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
+                                    //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                                }
+
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
 
-            // TODO: Create Npc visions (and remove before exiting this method), colllide with players and patrolCues to derive proper input
-            if (0 < currCharacterDownsync.FramesToRecover) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
-            } else {
-                return (PATTERN_ID_NO_OP, jumpedOrNot, effectiveDx, effectiveDy);
-            }
+            return (patternId, jumpedOrNot, effectiveDx, effectiveDy);
         }
 
-        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, pbc::RepeatedField<Bullet> nextRenderFrameBullets) {
+        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets) {
             bool skillUsed = false;
             var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
 
@@ -362,7 +415,7 @@ namespace shared {
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, ref colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
+                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
                 if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets)) {
@@ -431,8 +484,9 @@ namespace shared {
                 if (!IsBulletAlive(dst, currRenderFrame.Id)) {
                     continue;
                 }
+                int j = dst.BattleAttr.OffenderJoinIndex - 1;
+                var offender = (j < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
 
-                var offender = currRenderFrame.PlayersArr[dst.BattleAttr.OffenderJoinIndex - 1];
                 if (BulletType.Melee == dst.Config.BType) {
                     if (noOpSet.Contains(offender.CharacterState)) {
                         // If a melee is alive but the offender got attacked, remove it even if it's active
@@ -705,9 +759,11 @@ namespace shared {
             for (int i = iSt; i < iEd; i++) {
                 Collider bulletCollider = dynamicRectangleColliders[i];
                 if (null == bulletCollider.Data) continue;
-                Bullet bullet = (Bullet)bulletCollider.Data;
-                if (null == bullet || TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) continue;
-                
+                var bullet = bulletCollider.Data as Bullet;
+                if (null == bullet || TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) {
+                    logger.LogWarn(String.Format("dynamicRectangleColliders[i:{0}] is not havind bullet type! iSt={1}, iEd={2}", i, iSt, iEd));
+                    continue;
+                }
                 bool collided = bulletCollider.CheckAllWithHolder(0, 0, collision);
                 if (!collided) continue;
 
@@ -715,7 +771,8 @@ namespace shared {
                 bool explodedOnAnotherCharacter = false;
 
                 var bulletShape = bulletCollider.Shape;
-                var offender = currRenderFrame.PlayersArr[bullet.BattleAttr.OffenderJoinIndex - 1];
+                int j = bullet.BattleAttr.OffenderJoinIndex - 1;
+                var offender = (j < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
                 int effDirX = (BulletType.Melee == bullet.Config.BType ? offender.DirX : bullet.DirX);
                 while (true) {
                     var (ok, bCollider) = collision.PopFirstContactedCollider();
@@ -728,14 +785,14 @@ namespace shared {
 
                     switch (bCollider.Data) {
                         case CharacterDownsync atkedCharacterInCurrFrame:
-                            if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;   
+                            if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
                             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;
                             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
                             exploded = true;
                             explodedOnAnotherCharacter = true;
                             int xfac = (0 < effDirX ? 1 : -1);
-                            int j = atkedCharacterInCurrFrame.JoinIndex - 1;
-                            var atkedCharacterInNextFrame = (j < roomCapacity ? nextRenderFramePlayers[j] : nextRenderFrameNpcs[j - roomCapacity]);
+                            int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
+                            var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
                             atkedCharacterInNextFrame.Hp -= bullet.Config.Damage;
                             // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
                             var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
@@ -881,7 +938,7 @@ namespace shared {
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
-                AssignToCharacterDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, nextRenderFramePlayers[i]);
             }
 
             int j = 0;
@@ -896,7 +953,7 @@ namespace shared {
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
-                AssignToCharacterDownsync(src.Id, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, nextRenderFrameNpcs[j]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, nextRenderFrameNpcs[j]);
                 j++;
             }
 
@@ -929,7 +986,7 @@ namespace shared {
 
             _insertBulletColliders(currRenderFrame, roomCapacity, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, roomCapacity + j, roomCapacity + j + colliderCnt, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, roomCapacity + j, colliderCnt, logger);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, dynamicRectangleColliders, logger);
 

@@ -4,6 +4,7 @@ using static shared.Battle;
 using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
+using SuperTiled2Unity;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -59,7 +60,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         playerGameObjs[joinIndex - 1] = newPlayerNode;
     }
 
-    protected void spawnAiPlayerNode(float wx, float wy) {
+    protected void spawnNpcNode(float wx, float wy) {
         GameObject newAiPlayerNode = Instantiate(characterPrefabForAi, new Vector3(wx, wy, 0), Quaternion.identity);
         npcGameObjs.Add(newAiPlayerNode);
     }
@@ -378,7 +379,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int fireballHoldersCap = 256;
         cachedFireballs = new KvPriorityQueue<string, FireballAnimController>(fireballHoldersCap, cachedFireballScore);
 
-        effectivelyInfiniteLyFar = 2f*Math.Max(spaceOffsetX, spaceOffsetY);
+        effectivelyInfiniteLyFar = 4f*Math.Max(spaceOffsetX, spaceOffsetY);
         for (int i = 0; i < fireballHoldersCap; i++) {
             // Fireballs & explosions should be drawn above any character
             GameObject newFireballNode = Instantiate(fireballPrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, -5), Quaternion.identity);
@@ -606,5 +607,153 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void enableBattleInput(bool yesOrNo) {
         BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         iptmgr.enable(yesOrNo);
+    }
+
+    protected RoomDownsyncFrame mockStartRdf() {
+        var playerStartingCposList = new Vector[roomCapacity];
+        var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
+
+        var grid = this.GetComponentInChildren<Grid>();
+
+        var npcsStartingCposList = new List<(Vector, int, int)>();
+        float defaultPatrolCueRadius = 6;
+        int staticColliderIdx = 0;
+        foreach (Transform child in grid.transform) {
+            switch (child.gameObject.name) {
+                case "Barrier":
+                    foreach (Transform barrierChild in child) {
+                        var barrierTileObj = barrierChild.gameObject.GetComponent<SuperObject>();
+                        var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
+                        var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                        /*
+                         [WARNING] 
+                        
+                        The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)".
+
+                        It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
+                        */
+                        var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
+                        Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
+                        collisionSys.AddSingle(barrierCollider);
+                        staticRectangleColliders[staticColliderIdx++] = barrierCollider;
+                    }
+                    break;
+                case "PlayerStartingPos":
+                    int j = 0;
+                    foreach (Transform playerPos in child) {
+                        var posTileObj = playerPos.gameObject.GetComponent<SuperObject>();
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        playerStartingCposList[j] = new Vector(cx, cy);
+                        Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
+                        j++;
+                        if (j >= roomCapacity) break;
+                    }
+                    break;
+                case "NpcStartingPos":
+                    foreach (Transform npcPos in child) {
+                        var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
+                        var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        CustomProperty dirX, speciesId;
+                        tileProps.TryGetCustomProperty("dirX", out dirX);
+                        tileProps.TryGetCustomProperty("speciesId", out speciesId);
+                        npcsStartingCposList.Add((new Vector(cx, cy), dirX.IsEmpty ? 2 : dirX.GetValueAsInt(), speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt()));
+                    }
+                    break;
+                case "PatrolCue":
+                    foreach (Transform patrolCueChild in child) {
+                        var tileObj = patrolCueChild.gameObject.GetComponent<SuperObject>();
+                        var tileProps = patrolCueChild.gameObject.GetComponent<SuperCustomProperties>();
+
+                        var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+
+                        CustomProperty flAct, frAct;
+                        tileProps.TryGetCustomProperty("flAct", out flAct);
+                        tileProps.TryGetCustomProperty("frAct", out frAct);
+
+                        var newPatrolCue = new PatrolCue {
+                            FlAct = flAct.IsEmpty ? 0 : (ulong)flAct.GetValueAsInt(),
+                            FrAct = frAct.IsEmpty ? 0 : (ulong)frAct.GetValueAsInt(),
+                        };
+
+                        var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
+                        collisionSys.AddSingle(patrolCueCollider);
+                        staticRectangleColliders[staticColliderIdx++] = patrolCueCollider;
+                        Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity);
+        startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
+        startRdf.ShouldForceResync = false;
+        for (int i = 0; i < roomCapacity; i++) {
+            int joinIndex = i + 1;
+            var cpos = playerStartingCposList[i];
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
+            spawnPlayerNode(joinIndex, wx, wy);
+
+            var characterSpeciesId = 0;
+            var chConfig = Battle.characters[characterSpeciesId];
+
+            var playerInRdf = startRdf.PlayersArr[i];
+            var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
+            playerInRdf.JoinIndex = joinIndex;
+            playerInRdf.VirtualGridX = playerVposX;
+            playerInRdf.VirtualGridY = playerVposY;
+            playerInRdf.RevivalVirtualGridX = playerVposX;
+            playerInRdf.RevivalVirtualGridY = playerVposY;
+            playerInRdf.Speed = chConfig.Speed;
+            playerInRdf.ColliderRadius = defaultColliderRadius;
+            playerInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
+            playerInRdf.FramesToRecover = 0;
+            playerInRdf.DirX = (1 == playerInRdf.JoinIndex ? 2 : -2);
+            playerInRdf.DirY = 0;
+            playerInRdf.VelX = 0;
+            playerInRdf.VelY = 0;
+            playerInRdf.InAir = true;
+            playerInRdf.OnWall = false;
+            playerInRdf.Hp = 100;
+            playerInRdf.MaxHp = 100;
+            playerInRdf.SpeciesId = characterSpeciesId;
+        }
+
+        for (int i = 0; i < npcsStartingCposList.Count; i++) {
+            int joinIndex = roomCapacity + i + 1;
+            var (cpos, dirX, characterSpeciesId) = npcsStartingCposList[i];
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
+            spawnNpcNode(wx, wy);
+
+            var chConfig = Battle.characters[characterSpeciesId];
+
+            var npcInRdf = new CharacterDownsync();
+            var (vx, vy) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
+            npcInRdf.Id = 0; // Just for not being excluded 
+            npcInRdf.JoinIndex = joinIndex;
+            npcInRdf.VirtualGridX = vx;
+            npcInRdf.VirtualGridY = vy;
+            npcInRdf.RevivalVirtualGridX = vx;
+            npcInRdf.RevivalVirtualGridY = vy;
+            npcInRdf.Speed = chConfig.Speed;
+            npcInRdf.ColliderRadius = defaultColliderRadius;
+            npcInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
+            npcInRdf.FramesToRecover = 0;
+            npcInRdf.DirX = dirX;
+            npcInRdf.DirY = 0;
+            npcInRdf.VelX = 0;
+            npcInRdf.VelY = 0;
+            npcInRdf.InAir = true;
+            npcInRdf.OnWall = false;
+            npcInRdf.Hp = 100;
+            npcInRdf.MaxHp = 100;
+            npcInRdf.SpeciesId = characterSpeciesId;
+
+            startRdf.NpcsArr[i] = npcInRdf;
+        }
+
+        return startRdf;
     }
 }

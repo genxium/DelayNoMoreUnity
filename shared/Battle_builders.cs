@@ -54,8 +54,9 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToCharacterDownsync(int id, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, bool jumpTriggered, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, bool jumpTriggered, CharacterDownsync dst) {
             dst.Id = id;
+            dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
             dst.DirX = dirX;
