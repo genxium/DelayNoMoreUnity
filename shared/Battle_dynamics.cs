@@ -174,7 +174,7 @@ namespace shared {
             return (patternId, jumpedOrNot, effDx, effDy);
         }
 
-        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
+        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
 
             if (0 < currCharacterDownsync.FramesToRecover) {
@@ -215,20 +215,28 @@ namespace shared {
                         switch (bCollider.Data) {
                             case CharacterDownsync v3:
                                 if (v3.JoinIndex != currCharacterDownsync.JoinIndex) {
-                                    var colliderDx = (bCollider.X - aCollider.X);
-                                    var colliderDy = (bCollider.Y - aCollider.Y);
-                                    if (!invinsibleSet.Contains(v3.CharacterState) && 0 < colliderDx * xfac) {
-                                        // Opponent is not invisible and in front of me
-                                        if (0 < colliderDy || 0 < (currRenderFrame.Id & 1) ) {
-                                            patternId = 2;
-                                        } else {
-                                            patternId = 1;
+                                    bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
+                                    if (!prevCapturedByInertia) {
+                                        // To emulate input delay, and double it to give the players some advantages
+                                        thatCharacterInNextFrame.CapturedByInertia = true;
+                                        thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 1);
+                                    } else {
+                                        thatCharacterInNextFrame.CapturedByInertia = false;
+                                        var colliderDx = (bCollider.X - aCollider.X);
+                                        var colliderDy = (bCollider.Y - aCollider.Y);
+                                        if (!invinsibleSet.Contains(v3.CharacterState) && 0 < colliderDx * xfac) {
+                                            // Opponent is not invisible and in front of me
+                                            if (0 < colliderDy || 0 < (currRenderFrame.Id & 1)) {
+                                                patternId = 2;
+                                            } else {
+                                                patternId = 1;
+                                            }
+                                            hasVisionReaction = true;
+                                        } else if (0 > colliderDx * xfac) {
+                                            // Behind me
+                                            effectiveDx = -effectiveDx;
+                                            hasVisionReaction = true;
                                         }
-                                        hasVisionReaction = true;
-                                    } else if (0 > colliderDx * xfac) {
-                                        // Behind me
-                                        effectiveDx = -effectiveDx;
-                                        hasVisionReaction = true;
                                     }
                                 }
                                 break;
@@ -415,7 +423,7 @@ namespace shared {
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
+                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
                 if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets)) {
