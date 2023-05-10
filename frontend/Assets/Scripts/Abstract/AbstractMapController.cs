@@ -21,6 +21,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     public GameObject characterPrefabForPlayer;
     public GameObject characterPrefabForAi;
     public GameObject fireballPrefab;
+    public GameObject errStackLogPanelPrefab;
+    public GameObject errStackLogPanelObj;
+    public Canvas canvas;
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
@@ -304,9 +307,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
             if (null == explosionAnimHolder) {
                 explosionAnimHolder = cachedFireballs.Pop();
-                Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
+                //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
             } else {
-                Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
+                //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
             }
 
             if (null == explosionAnimHolder) {

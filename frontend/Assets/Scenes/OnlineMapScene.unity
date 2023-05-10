@@ -868,6 +868,8 @@ MonoBehaviour:
   characterPrefabForPlayer: {fileID: 1750589025216623398, guid: 9c2d7ac674ac8744e871fff6c276a880, type: 3}
   characterPrefabForAi: {fileID: 4217981099835446251, guid: 79947c19703b85d4bbdc6473cbfad300, type: 3}
   fireballPrefab: {fileID: 2186353342994325362, guid: dd46b2abba7393549bb66bcf0b11127f, type: 3}
+  errStackLogPanelPrefab: {fileID: 8411099102924968189, guid: e6ed24770a15248459edcefb9fad6256, type: 3}
+  canvas: {fileID: 1021584740}
   networkInfoPanel: {fileID: 1383511120}
 --- !u!1 &1978785421
 GameObject:

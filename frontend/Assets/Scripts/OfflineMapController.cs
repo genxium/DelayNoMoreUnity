@@ -17,6 +17,8 @@ public class OfflineMapController : AbstractMapController {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
+        
+        errStackLogPanelObj = Instantiate(errStackLogPanelPrefab, new Vector3(canvas.transform.position.x, canvas.transform.position.y, +5), Quaternion.identity, null);
 
         selfPlayerInfo = new CharacterDownsync();
         
@@ -32,8 +34,12 @@ public class OfflineMapController : AbstractMapController {
     void Update() {
         try {
             doUpdate();
+            //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
-            Debug.LogError(String.Format("Error during OfflineMap.Update {0}", ex));
+            var msg = String.Format("Error during OfflineMap.Update {0}", ex);
+            var errStackLogPanel = errStackLogPanelObj.GetComponent<ErrStackLogPanel>();
+            errStackLogPanel.content.text = msg;
+            errStackLogPanelObj.transform.position = new Vector3(errStackLogPanelObj.transform.position.x, errStackLogPanelObj.transform.position.y, -5);
             onBattleStopped();
         }
     }

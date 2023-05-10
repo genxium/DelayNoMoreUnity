@@ -798,6 +798,7 @@ namespace shared {
                             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
                             exploded = true;
                             explodedOnAnotherCharacter = true;
+                            logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], atkedCharacterInCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, atkedCharacterInCurrFrame));
                             int xfac = (0 < effDirX ? 1 : -1);
                             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
