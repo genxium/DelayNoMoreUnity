@@ -22,7 +22,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public GameObject characterPrefabForAi;
     public GameObject fireballPrefab;
     public GameObject errStackLogPanelPrefab;
-    public GameObject errStackLogPanelObj;
+    protected GameObject errStackLogPanelObj;
     public Canvas canvas;
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
@@ -758,5 +758,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         return startRdf;
+    }
+
+    protected void popupErrStackPanel(string msg) {
+        if (null == errStackLogPanelObj) {
+            errStackLogPanelObj = Instantiate(errStackLogPanelPrefab, new Vector3(canvas.transform.position.x, canvas.transform.position.y, +5), Quaternion.identity, canvas.transform);
+        }
+        var errStackLogPanel = errStackLogPanelObj.GetComponent<ErrStackLogPanel>();
+        errStackLogPanel.content.text = msg;
     }
 }
