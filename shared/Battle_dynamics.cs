@@ -219,14 +219,14 @@ namespace shared {
                                     if (!prevCapturedByInertia) {
                                         // To emulate input delay, and double it to give the players some advantages
                                         thatCharacterInNextFrame.CapturedByInertia = true;
-                                        thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 1);
+                                        thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 1) + INPUT_DELAY_FRAMES;
                                     } else {
                                         thatCharacterInNextFrame.CapturedByInertia = false;
                                         var colliderDx = (bCollider.X - aCollider.X);
                                         var colliderDy = (bCollider.Y - aCollider.Y);
                                         if (!invinsibleSet.Contains(v3.CharacterState) && 0 < colliderDx * xfac) {
                                             // Opponent is not invisible and in front of me
-                                            if (0 < colliderDy || 0 < (currRenderFrame.Id & 1)) {
+                                            if (0 < colliderDy) {
                                                 patternId = 2;
                                             } else {
                                                 patternId = 1;
@@ -501,13 +501,16 @@ namespace shared {
                         continue;
                     }
                     if (IsBulletActive(dst, currRenderFrame.Id)) {
-                        var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(offender.VirtualGridX + dst.DirX * src.Config.HitboxOffsetX, offender.VirtualGridY);
+                        var (newVx, newVy) = (offender.VirtualGridX + dst.DirX * src.Config.HitboxOffsetX, offender.VirtualGridY);
+                        var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(newVx, newVy);
                         var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX, src.Config.HitboxSizeY);
                         var newBulletCollider = dynamicRectangleColliders[colliderCnt];
                         UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst);
                         colliderCnt++;
 
                         collisionSys.AddSingle(newBulletCollider);
+                        dst.VirtualGridX = newVx;
+                        dst.VirtualGridY = newVy;
                         dst.BlState = BulletState.Active;
                         if (dst.BlState != src.BlState) {
                             dst.FramesInBlState = 0;
