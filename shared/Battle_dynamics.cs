@@ -224,7 +224,7 @@ namespace shared {
                                         thatCharacterInNextFrame.CapturedByInertia = false;
                                         var colliderDx = (bCollider.X - aCollider.X);
                                         var colliderDy = (bCollider.Y - aCollider.Y);
-                                        if (!invinsibleSet.Contains(v3.CharacterState) && 0 < colliderDx * xfac) {
+                                        if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * xfac) {
                                             // Opponent is not invisible and in front of me
                                             if (0 < colliderDy) {
                                                 patternId = 2;

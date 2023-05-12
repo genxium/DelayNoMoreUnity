@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
+using System.Security.Cryptography;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -251,11 +252,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             var chConfig = characters[currCharacterDownsync.SpeciesId];
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             chAnimCtrl.updateCharacterAnim(currCharacterDownsync, null, false, chConfig);
-
-            if (k == selfPlayerInfo.JoinIndex - 1) {
-                var camOldPos = Camera.main.transform.position;
-                Camera.main.transform.position = new Vector3(wx, wy, camOldPos.z);
-            }
         }
 
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
@@ -369,7 +365,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
 
-        int dynamicRectangleCollidersCap = 64;
+        int dynamicRectangleCollidersCap = 32;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
         for (int i = 0; i < dynamicRectangleCollidersCap; i++) {
             dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
@@ -382,7 +378,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int fireballHoldersCap = 256;
         cachedFireballs = new KvPriorityQueue<string, FireballAnimController>(fireballHoldersCap, cachedFireballScore);
 
-        effectivelyInfiniteLyFar = 4f*Math.Max(spaceOffsetX, spaceOffsetY);
+        effectivelyInfiniteLyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
         for (int i = 0; i < fireballHoldersCap; i++) {
             // Fireballs & explosions should be drawn above any character
             GameObject newFireballNode = Instantiate(fireballPrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, -5), Quaternion.identity);
@@ -575,6 +571,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
+        if (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == renderFrameId) {
+            var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
+        	Debug.Log(String.Format("Battle started, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
+            Camera.main.transform.position = new Vector3(playerGameObj.transform.position.x, playerGameObj.transform.position.y, Camera.main.transform.position.z);
+        } else {
+            cameraTrack(rdf);
+        }
+
         ++renderFrameId;
     }
 
@@ -647,7 +651,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var posTileObj = playerPos.gameObject.GetComponent<SuperObject>();
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
                         playerStartingCposList[j] = new Vector(cx, cy);
-                        Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
+                        //Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
                         j++;
                         if (j >= roomCapacity) break;
                     }
@@ -682,7 +686,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
                         collisionSys.AddSingle(patrolCueCollider);
                         staticRectangleColliders[staticColliderIdx++] = patrolCueCollider;
-                        Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
+                        //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
                 default:
@@ -766,5 +770,25 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         var errStackLogPanel = errStackLogPanelObj.GetComponent<ErrStackLogPanel>();
         errStackLogPanel.content.text = msg;
+    }
+
+    protected void cameraTrack(RoomDownsyncFrame rdf) {
+        if (null == selfPlayerInfo) return;
+        var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
+        var playerCharacterDownsync = rdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
+        var (velCX, velCY) = VirtualGridToPolygonColliderCtr(playerCharacterDownsync.Speed, playerCharacterDownsync.Speed);
+		var cameraSpeedInWorld = new Vector2(velCX, velCY).magnitude * 50;
+        var camOldPos = Camera.main.transform.position;
+        var dst = playerGameObj.transform.position;
+        var dstDiff2 = new Vector2(dst.x - camOldPos.x, dst.y - camOldPos.y);
+
+        //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
+        var stepLength = Time.deltaTime * cameraSpeedInWorld;
+        if (stepLength > dstDiff2.magnitude) {
+            Camera.main.transform.position = new Vector3(dst.x, dst.y, camOldPos.z);
+        } else {
+            var newMapPosDiff2 = dstDiff2.normalized * stepLength;
+            Camera.main.transform.position = new Vector3(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
+        }
     }
 }
