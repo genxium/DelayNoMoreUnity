@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OnlineMapScene.unity
     guid: 7d489a47351e02b4891058c01764e3c3
+  - enabled: 1
+    path: Assets/Scenes/OfflineMapScene.unity
+    guid: 3fc8acdd13e6c734bafef6554d6fdbcd
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: a2d58e9315d0843f2a4bef6ff2035377, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 943f785e824d54314b782734d11dfe33, type: 2}

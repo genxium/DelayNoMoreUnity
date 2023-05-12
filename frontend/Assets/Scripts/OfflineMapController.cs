@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using shared;
 using static shared.Battle;
+using UnityEngine.SceneManagement;
 
 public class OfflineMapController : AbstractMapController {
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
@@ -17,9 +18,9 @@ public class OfflineMapController : AbstractMapController {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
-        
+
         selfPlayerInfo = new CharacterDownsync();
-        
+
         roomCapacity = 1;
         preallocateHolders();
         resetCurrentMatch();
@@ -38,6 +39,10 @@ public class OfflineMapController : AbstractMapController {
             popupErrStackPanel(msg);
             onBattleStopped();
         }
+    }
+
+    public void OnGoToLoginSceneButtonClicked() {
+        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 
     void OnRenderObject() {
@@ -94,7 +99,7 @@ public class OfflineMapController : AbstractMapController {
                 var currCharacterDownsync = rdf.PlayersArr[k];
                 float boxCx, boxCy, boxCw, boxCh;
                 calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-                
+
                 var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
                 // World space width and height are just the same as that of collision space.
 

@@ -110,4 +110,10 @@ public class LoginInputManager : MonoBehaviour {
             }
         }
     }
+
+	public void OnGoToOfflineSceneButtonClicked() {
+        toggleUIInteractability(false);
+		SceneManager.LoadScene("OfflineMapScene", LoadSceneMode.Single);
+        toggleUIInteractability(true);
+	}
 }
