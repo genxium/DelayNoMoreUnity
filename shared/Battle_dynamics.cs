@@ -195,7 +195,7 @@ namespace shared {
                 var visionCollider = dynamicRectangleColliders[colliderCnt];
                 int xfac = (0 < currCharacterDownsync.DirX ? 1 : -1);
                 var (visionCx, visionCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * currCharacterDownsync.ColliderRadius, currCharacterDownsync.VirtualGridY + currCharacterDownsync.ColliderRadius);
-                var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(3 * currCharacterDownsync.ColliderRadius, 5 * currCharacterDownsync.ColliderRadius);
+                var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(2 * currCharacterDownsync.ColliderRadius, 4 * currCharacterDownsync.ColliderRadius);
                 UpdateRectCollider(visionCollider, visionCx, visionCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
                 collisionSys.AddSingle(visionCollider);
                 bool collided = visionCollider.CheckAllWithHolder(0, 0, collision);
@@ -219,7 +219,7 @@ namespace shared {
                                     if (!prevCapturedByInertia) {
                                         // To emulate input delay, and double it to give the players some advantages
                                         thatCharacterInNextFrame.CapturedByInertia = true;
-                                        thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 1) + INPUT_DELAY_FRAMES;
+                                        thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 3);
                                     } else {
                                         thatCharacterInNextFrame.CapturedByInertia = false;
                                         var colliderDx = (bCollider.X - aCollider.X);

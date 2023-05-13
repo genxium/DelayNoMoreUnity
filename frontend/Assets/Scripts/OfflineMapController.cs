@@ -3,6 +3,7 @@ using System;
 using shared;
 using static shared.Battle;
 using UnityEngine.SceneManagement;
+using SuperTiled2Unity;
 
 public class OfflineMapController : AbstractMapController {
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
@@ -18,6 +19,11 @@ public class OfflineMapController : AbstractMapController {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
+
+		string theme = "Dungeon";
+		string path = String.Format("Tiled/{0}/map", theme);
+		var underlyingMapPrefab = Resources.Load(path) as GameObject;
+		underlyingMap = GameObject.Instantiate(underlyingMapPrefab);
 
         selfPlayerInfo = new CharacterDownsync();
 

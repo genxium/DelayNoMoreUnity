@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI; // Required when Using UI elements.
 using shared;
 using static shared.Battle;
 using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
-using System.Security.Cryptography;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -24,7 +24,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     public GameObject fireballPrefab;
     public GameObject errStackLogPanelPrefab;
     protected GameObject errStackLogPanelObj;
+    protected GameObject underlyingMap;
     public Canvas canvas;
+	public Button backButton;
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
@@ -60,12 +62,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
     protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
-        GameObject newPlayerNode = Instantiate(characterPrefabForPlayer, new Vector3(wx, wy, 0), Quaternion.identity);
+        GameObject newPlayerNode = Instantiate(characterPrefabForPlayer, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
     }
 
     protected void spawnNpcNode(float wx, float wy) {
-        GameObject newAiPlayerNode = Instantiate(characterPrefabForAi, new Vector3(wx, wy, 0), Quaternion.identity);
+        GameObject newAiPlayerNode = Instantiate(characterPrefabForAi, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
         npcGameObjs.Add(newAiPlayerNode);
     }
 
@@ -403,7 +405,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         playerGameObjs = new GameObject[roomCapacity];
         npcGameObjs = new List<GameObject>();
 
-        var superMap = this.GetComponent<SuperTiled2Unity.SuperMap>();
+        var superMap = underlyingMap.GetComponent<SuperTiled2Unity.SuperMap>();
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
@@ -620,7 +622,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var playerStartingCposList = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
 
-        var grid = this.GetComponentInChildren<Grid>();
+        var grid = underlyingMap.GetComponentInChildren<Grid>();
 
         var npcsStartingCposList = new List<(Vector, int, int)>();
         float defaultPatrolCueRadius = 6;
