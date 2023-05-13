@@ -27,7 +27,7 @@
   <object id="138" x="1286" y="272">
    <properties>
     <property name="dirX" value="2"/>
-    <property name="speciesId" value="1"/>
+    <property name="speciesId" value="2"/>
    </properties>
    <point/>
   </object>
@@ -89,16 +89,16 @@
    </properties>
    <point/>
   </object>
-  <object id="143" x="1098" y="588">
+  <object id="143" x="1088" y="589">
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="20"/>
    </properties>
    <point/>
   </object>
-  <object id="144" x="1051" y="557">
+  <object id="144" x="1042" y="564">
    <properties>
-    <property name="flAct" value="3"/>
+    <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
    </properties>
    <point/>
@@ -110,9 +110,9 @@
    </properties>
    <point/>
   </object>
-  <object id="147" x="1068" y="572">
+  <object id="147" x="1058" y="585">
    <properties>
-    <property name="flAct" value="3"/>
+    <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
    </properties>
    <point/>

@@ -227,9 +227,23 @@ namespace shared {
                                         if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * xfac) {
                                             // Opponent is not invisible and in front of me
                                             if (0 < colliderDy) {
-                                                patternId = 2;
+												switch (currCharacterDownsync.SpeciesId) {
+												case 1: 
+                                                	patternId = 2;
+												break;
+												case 2: 
+                                                	patternId = 2;
+												break;
+												}
                                             } else {
-                                                patternId = 1;
+												switch (currCharacterDownsync.SpeciesId) {
+												case 1: 
+                                                	patternId = 2;
+												break;
+												case 2: 
+                                                	patternId = 3;
+												break;
+												}
                                             }
                                             hasVisionReaction = true;
                                         } else if (0 > colliderDx * xfac) {

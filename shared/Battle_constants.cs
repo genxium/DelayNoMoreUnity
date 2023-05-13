@@ -169,15 +169,27 @@ namespace shared {
                                                     .AddHit(new BulletConfigBuilder(9, 16, 16, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, NO_LOCK_VEL, NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
                                                     .build()),
 
-                    new KeyValuePair<int, Skill>(6, new SkillBuilder(50, 50, 50, SkillTriggerType.RisingEdge, CharacterState.Atk2)
-                                                    .AddHit(new BulletConfigBuilder(4, 20, MAX_INT, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(0.5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 2, 15, BulletType.Melee, 0).build())
+                    new KeyValuePair<int, Skill>(6, new SkillBuilder(27, 27, 27, SkillTriggerType.RisingEdge, CharacterState.Atk1)
+                                                    .AddHit(new BulletConfigBuilder(6, 22, 22, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 11, 30, false, 1, 15, BulletType.Melee, 0).UpsertCancelTransit(1, 7).build())
                                                     .build()),
 
-                    new KeyValuePair<int, Skill>(7, new SkillBuilder(60, 60, 60, SkillTriggerType.RisingEdge, CharacterState.Atk4)
-                                                    .AddHit(new BulletConfigBuilder(16, 20, 20, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, NO_LOCK_VEL, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 3, 30, BulletType.Fireball, (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).build())
+                    new KeyValuePair<int, Skill>(7, new SkillBuilder(25, 25, 25, SkillTriggerType.RisingEdge, CharacterState.Atk2)
+                                                    .AddHit(new BulletConfigBuilder(6, 20, 20, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 14, 36, false, 1, 15, BulletType.Melee, 0).build())
                                                     .build()),
 
-                    new KeyValuePair<int, Skill>(12, new SkillBuilder(10, 10, 10, SkillTriggerType.RisingEdge, CharacterState.Dashing)
+                    new KeyValuePair<int, Skill>(8, new SkillBuilder(40, 40, 40, SkillTriggerType.RisingEdge, CharacterState.Atk3)
+                                                    .AddHit(new BulletConfigBuilder(8, 30, MAX_INT, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 1, 20, BulletType.Melee, 0).build())
+                                                    .build()),
+
+                    new KeyValuePair<int, Skill>(9, new SkillBuilder(60, 60, 60, SkillTriggerType.RisingEdge, CharacterState.Atk4)
+                                                    .AddHit(new BulletConfigBuilder(16, 20, 20, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, NO_LOCK_VEL, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 30, BulletType.Fireball, (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).build())
+                                                    .build()),
+
+                    new KeyValuePair<int, Skill>(10, new SkillBuilder(10, 10, 10, SkillTriggerType.RisingEdge, CharacterState.Dashing)
+                                                    .AddHit(new BulletConfigBuilder(3, 0, 0, 0, 0, NO_LOCK_VEL, NO_LOCK_VEL, (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, 0, 0, 0, 0, 0, false, 0, 0, BulletType.Melee, 0).build())
+                                                    .build()),
+
+                    new KeyValuePair<int, Skill>(11, new SkillBuilder(10, 10, 10, SkillTriggerType.RisingEdge, CharacterState.Dashing)
                                                     .AddHit(new BulletConfigBuilder(3, 0, 0, 0, 0, NO_LOCK_VEL, NO_LOCK_VEL, (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, 0, 0, 0, 0, 0, false, 0, 0, BulletType.Melee, 0).build())
                                                     .build()),
 
@@ -260,7 +272,7 @@ namespace shared {
                         case 5:
                             // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                             // Air-dash is allowed for this speciesId
-                            return 12;
+                            return 11;
                         default:
                             return NO_SKILL;
                     }
@@ -288,7 +300,7 @@ namespace shared {
                                 if (currCharacterDownsync.InAir) {
                                     return 256;
                                 } else {
-                                    return 1;
+                                    return 6;
                                 }
                             } else {
                                 // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
@@ -300,9 +312,15 @@ namespace shared {
                                 if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return NO_SKILL;
                                 return currBulletConfig.CancelTransit[patternId];
                             }
+                        case 2:
+                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                                return 8;
+                            } else {
+                                return NO_SKILL;
+                            }
                         case 3:
                             if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
-                                return 7;
+                                return 9;
                             } else {
                                 return NO_SKILL;
                             }
@@ -310,7 +328,7 @@ namespace shared {
                             // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                             // Air-dash is prohibited for this speciesId
                             if (!currCharacterDownsync.InAir) {
-                            	return 12;
+                            	return 10;
 							} else {
                                 return NO_SKILL;
 							}

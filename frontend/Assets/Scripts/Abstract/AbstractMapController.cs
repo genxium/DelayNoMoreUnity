@@ -21,7 +21,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int maxChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
     public GameObject characterPrefabForPlayer;
-    public GameObject characterPrefabForAi;
     public GameObject fireballPrefab;
     public GameObject errStackLogPanelPrefab;
     protected GameObject errStackLogPanelObj;
@@ -67,8 +66,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         playerGameObjs[joinIndex - 1] = newPlayerNode;
     }
 
-    protected void spawnNpcNode(float wx, float wy) {
-        GameObject newAiPlayerNode = Instantiate(characterPrefabForAi, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
+	protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
+		string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
+		return Resources.Load(path) as GameObject;
+	}
+
+    protected void spawnNpcNode(int speciesId, float wx, float wy) {
+		var characterPrefab = loadCharacterPrefab(characters[speciesId]);
+        GameObject newAiPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
         npcGameObjs.Add(newAiPlayerNode);
     }
 
@@ -735,7 +740,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             int joinIndex = roomCapacity + i + 1;
             var (cpos, dirX, characterSpeciesId) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
-            spawnNpcNode(wx, wy);
+            spawnNpcNode(characterSpeciesId, wx, wy);
 
             var chConfig = Battle.characters[characterSpeciesId];
 
