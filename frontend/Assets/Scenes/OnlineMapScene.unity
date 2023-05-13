@@ -710,6 +710,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkDoctorInfo
       objectReference: {fileID: 0}
+    - target: {fileID: 8411099102924968189, guid: d1ffe7d06e554ba4f8748adaee11127b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1ffe7d06e554ba4f8748adaee11127b, type: 3}
 --- !u!224 &1383511119 stripped
@@ -1072,11 +1076,11 @@ RectTransform:
   m_Father: {fileID: 1021584741}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -797.9999, y: 303.99994}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 16, y: -64}
+  m_SizeDelta: {x: 64, y: 30}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &2019891362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1121,8 +1125,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: OfflineMapController, Assembly-CSharp
+      - m_Target: {fileID: 1901904084}
+        m_TargetAssemblyTypeName: AbstractMapController, Assembly-CSharp
         m_MethodName: OnGoToLoginSceneButtonClicked
         m_Mode: 1
         m_Arguments:

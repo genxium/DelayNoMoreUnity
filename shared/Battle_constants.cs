@@ -173,11 +173,19 @@ namespace shared {
                                                     .AddHit(new BulletConfigBuilder(4, 20, MAX_INT, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(0.5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 2, 15, BulletType.Melee, 0).build())
                                                     .build()),
 
+                    new KeyValuePair<int, Skill>(7, new SkillBuilder(60, 60, 60, SkillTriggerType.RisingEdge, CharacterState.Atk4)
+                                                    .AddHit(new BulletConfigBuilder(16, 20, 20, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, NO_LOCK_VEL, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 3, 30, BulletType.Fireball, (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).build())
+                                                    .build()),
+
                     new KeyValuePair<int, Skill>(12, new SkillBuilder(10, 10, 10, SkillTriggerType.RisingEdge, CharacterState.Dashing)
                                                     .AddHit(new BulletConfigBuilder(3, 0, 0, 0, 0, NO_LOCK_VEL, NO_LOCK_VEL, (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, 0, 0, 0, 0, 0, false, 0, 0, BulletType.Melee, 0).build())
                                                     .build()),
 
                     new KeyValuePair<int, Skill>(255, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.InAirAtk1)
+                                                    .AddHit(new BulletConfigBuilder(2, 20, 18, 9, 6, NO_LOCK_VEL, NO_LOCK_VEL, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
+                                                    .build()), 
+
+                    new KeyValuePair<int, Skill>(256, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.InAirAtk1)
                                                     .AddHit(new BulletConfigBuilder(2, 20, 18, 9, 6, NO_LOCK_VEL, NO_LOCK_VEL, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
                                                     .build())
 
@@ -188,7 +196,7 @@ namespace shared {
                 new[]
                 {
                     new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig(
-                    0, "MonkGirl",
+                    0, "KnifeGirl",
                     11, 1,
                     16, 16, 10, 27,
                     (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -197,6 +205,7 @@ namespace shared {
                     true, true,
                     8, (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                     (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))),
+
                     new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig(
                     1, "SwordMan",
                     11, 1,
@@ -206,7 +215,18 @@ namespace shared {
                     9,
                     false, false,
                     0, 0,
-                    0, 0))
+                    0, 0)),
+
+                    new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig(
+                    2, "MonkGirl",
+                    11, 1,
+                    16, 16, 10, 27,
+                    (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    9,
+                    true, true,
+                    8, (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)))
                 }
             );
 
@@ -258,6 +278,42 @@ namespace shared {
                             } else {
                                 return NO_SKILL;
                             }
+                        default:
+                            return NO_SKILL;
+                    }
+                case 2:
+                    switch (patternId) {
+                        case 1:
+                            if (0 == currCharacterDownsync.FramesToRecover) {
+                                if (currCharacterDownsync.InAir) {
+                                    return 256;
+                                } else {
+                                    return 1;
+                                }
+                            } else {
+                                // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
+                                if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return NO_SKILL;
+                                var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+                                var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
+                                if (null == currBulletConfig || !currBulletConfig.CancelTransit.ContainsKey(patternId)) return NO_SKILL;
+
+                                if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return NO_SKILL;
+                                return currBulletConfig.CancelTransit[patternId];
+                            }
+                        case 3:
+                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                                return 7;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case 5:
+                            // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
+                            // Air-dash is prohibited for this speciesId
+                            if (!currCharacterDownsync.InAir) {
+                            	return 12;
+							} else {
+                                return NO_SKILL;
+							}
                         default:
                             return NO_SKILL;
                     }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
+using UnityEngine.SceneManagement;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -792,5 +793,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             var newMapPosDiff2 = dstDiff2.normalized * stepLength;
             Camera.main.transform.position = new Vector3(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
         }
+    }
+
+    public void OnGoToLoginSceneButtonClicked() {
+        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 }

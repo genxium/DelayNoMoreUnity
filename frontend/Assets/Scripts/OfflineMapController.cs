@@ -2,8 +2,6 @@ using UnityEngine;
 using System;
 using shared;
 using static shared.Battle;
-using UnityEngine.SceneManagement;
-using SuperTiled2Unity;
 
 public class OfflineMapController : AbstractMapController {
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
@@ -45,10 +43,6 @@ public class OfflineMapController : AbstractMapController {
             popupErrStackPanel(msg);
             onBattleStopped();
         }
-    }
-
-    public void OnGoToLoginSceneButtonClicked() {
-        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 
     void OnRenderObject() {
