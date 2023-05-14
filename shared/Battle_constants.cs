@@ -182,7 +182,7 @@ namespace shared {
                                                     .build()),
 
                     new KeyValuePair<int, Skill>(9, new SkillBuilder(60, 60, 60, SkillTriggerType.RisingEdge, CharacterState.Atk4)
-                                                    .AddHit(new BulletConfigBuilder(16, 20, 20, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, NO_LOCK_VEL, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 30, BulletType.Fireball, (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).build())
+                                                    .AddHit(new BulletConfigBuilder(16, MAX_INT, 20, 9, 0, (int)(0.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, NO_LOCK_VEL, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 30, BulletType.Fireball, (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).build())
                                                     .build()),
 
                     new KeyValuePair<int, Skill>(10, new SkillBuilder(10, 10, 10, SkillTriggerType.RisingEdge, CharacterState.Dashing)

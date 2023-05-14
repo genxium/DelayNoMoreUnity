@@ -629,7 +629,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var grid = underlyingMap.GetComponentInChildren<Grid>();
 
         var npcsStartingCposList = new List<(Vector, int, int)>();
-        float defaultPatrolCueRadius = 6;
+        float defaultPatrolCueRadius = 10;
         int staticColliderIdx = 0;
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
