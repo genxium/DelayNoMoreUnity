@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 4383951244232044327}
   - component: {fileID: 4493220633568263844}
   m_Layer: 5
-  m_Name: GoToLoginScene
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

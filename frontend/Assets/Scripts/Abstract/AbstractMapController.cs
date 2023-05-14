@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
-using UnityEngine.SceneManagement;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -55,6 +54,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
+
+    public CharacterSelectPanel characterSelectPanel;
 
     protected bool debugDrawingEnabled = false;
 

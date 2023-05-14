@@ -921,6 +921,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerWaitingPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 2621611815627849918, guid: fb7c8ffb0dfbecb4b9f2ee0b0486bf46, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2621611815627849919, guid: fb7c8ffb0dfbecb4b9f2ee0b0486bf46, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
