@@ -16,6 +16,8 @@ public class OnlineMapController : AbstractMapController {
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
     bool shouldLockStep = false;
+    
+    public PlayerWaitingPanel playerWaitingPanel;
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
@@ -40,6 +42,7 @@ public class OnlineMapController : AbstractMapController {
                         roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
                         preallocateHolders();
                     }
+                    playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     resetCurrentMatch();
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
@@ -71,7 +74,7 @@ public class OnlineMapController : AbstractMapController {
 
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED:
-                    // TODO
+                    playerWaitingPanel.OnParticipantChange(wsRespHolder.Rdf);
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
@@ -100,7 +103,7 @@ public class OnlineMapController : AbstractMapController {
                     In practice, I found a weird case where P2 starts holepunching P1 much earlier than the opposite direction (e.g. when P2 joins the room later, but gets the peer udp addr of P1 earlier upon DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO), the punching for both directions would fail if the firewall(of network provider) of P1 rejected & blacklisted the early holepunching packet from P2 for a short period (e.g. 1 minute).
                      */
 					networkInfoPanel.gameObject.SetActive(true);
-					backButton.gameObject.SetActive(false);
+					playerWaitingPanel.gameObject.SetActive(false);
                     UdpSessionManager.Instance.PunchBackendUdpTunnel();
                     UdpSessionManager.Instance.PunchAllPeers();
                     break;

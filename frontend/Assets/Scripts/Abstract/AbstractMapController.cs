@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI; // Required when Using UI elements.
 using shared;
 using static shared.Battle;
 using System;
@@ -26,7 +25,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected GameObject errStackLogPanelObj;
     protected GameObject underlyingMap;
     public Canvas canvas;
-	public Button backButton;
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
@@ -798,9 +796,5 @@ public abstract class AbstractMapController : MonoBehaviour {
             var newMapPosDiff2 = dstDiff2.normalized * stepLength;
             Camera.main.transform.position = new Vector3(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
         }
-    }
-
-    public void OnGoToLoginSceneButtonClicked() {
-        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 }

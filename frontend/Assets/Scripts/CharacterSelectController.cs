@@ -4,6 +4,9 @@ using UnityEngine.Networking;
 
 public class CharacterSelectController : MonoBehaviour {
  
+    public delegate void OnCharacterCallback(int speciesId);
+    public delegate void OnGoActionCallback();
+
     public Button GoActionButton;
 
     // Start is called before the first frame update

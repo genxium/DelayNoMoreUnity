@@ -16,6 +16,7 @@ public class LoginInputManager : MonoBehaviour {
 	public TMP_InputField CaptchaInput;
 	public Button GetCaptchaButton;
 	public Button LoginActionButton;
+	public Button OfflineModeButton;
 
     // Start is called before the first frame update
     void Start() {
@@ -32,6 +33,7 @@ public class LoginInputManager : MonoBehaviour {
         CaptchaInput.interactable = enabled;
         GetCaptchaButton.interactable = enabled;
         LoginActionButton.interactable = enabled;
+        OfflineModeButton.interactable = enabled;
     }
 
     public void OnGetCaptchaButtonClicked() {

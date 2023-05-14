@@ -2,8 +2,12 @@ using UnityEngine;
 using System;
 using shared;
 using static shared.Battle;
+using UnityEngine.UI; // Required when Using UI elements.
+using UnityEngine.SceneManagement;
 
 public class OfflineMapController : AbstractMapController {
+	public Button backButton;
+
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
     }
@@ -43,6 +47,10 @@ public class OfflineMapController : AbstractMapController {
             popupErrStackPanel(msg);
             onBattleStopped();
         }
+    }
+
+    public void OnGoToLoginSceneButtonClicked() {
+        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 
     void OnRenderObject() {
@@ -116,6 +124,31 @@ public class OfflineMapController : AbstractMapController {
 
                 GL.Vertex3((wx - 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
                 GL.Vertex3((wx - 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+
+                GL.End();
+            }
+
+            for (int k = 0; k < rdf.NpcsArr.Count; k++) {
+                var currCharacterDownsync = rdf.NpcsArr[k];
+                if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                float visionCx, visionCy, visionCw, visionCh;
+                calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, out visionCx, out visionCy, out visionCw, out visionCh);
+                
+                GL.Begin(GL.LINES);
+                GL.Color(Color.yellow);
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(visionCx, visionCy, spaceOffsetX, spaceOffsetY);
+
+                GL.Vertex3((wx - 0.5f * visionCw), (wy - 0.5f * visionCh), 0);
+                GL.Vertex3((wx + 0.5f * visionCw), (wy - 0.5f * visionCh), 0);
+
+                GL.Vertex3((wx + 0.5f * visionCw), (wy - 0.5f * visionCh), 0);
+                GL.Vertex3((wx + 0.5f * visionCw), (wy + 0.5f * visionCh), 0);
+
+                GL.Vertex3((wx + 0.5f * visionCw), (wy + 0.5f * visionCh), 0);
+                GL.Vertex3((wx - 0.5f * visionCw), (wy + 0.5f * visionCh), 0);
+
+                GL.Vertex3((wx - 0.5f * visionCw), (wy + 0.5f * visionCh), 0);
+                GL.Vertex3((wx - 0.5f * visionCw), (wy - 0.5f * visionCh), 0);
 
                 GL.End();
             }

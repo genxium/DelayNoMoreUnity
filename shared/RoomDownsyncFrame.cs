@@ -91,38 +91,38 @@ namespace shared {
             "Y2l0eRgKIAEoBRIbChNwcmVhbGxvY05wY0NhcGFjaXR5GAsgASgFEh4KFnBy",
             "ZWFsbG9jQnVsbGV0Q2FwYWNpdHkYDCABKAUSLQoPYmF0dGxlVWRwVHVubmVs",
             "GIAIIAEoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIYCg9mcmFtZUxvZ0VuYWJs",
-            "ZWQYgQggASgIItYCChFSb29tRG93bnN5bmNGcmFtZRIKCgJpZBgBIAEoBRIt",
+            "ZWQYgQggASgIIvQCChFSb29tRG93bnN5bmNGcmFtZRIKCgJpZBgBIAEoBRIt",
             "CgpwbGF5ZXJzQXJyGAIgAygLMhkuc2hhcmVkLkNoYXJhY3RlckRvd25zeW5j",
             "EhYKDmNvdW50ZG93bk5hbm9zGAMgASgDEh8KB2J1bGxldHMYBCADKAsyDi5z",
             "aGFyZWQuQnVsbGV0EioKB25wY3NBcnIYBSADKAsyGS5zaGFyZWQuQ2hhcmFj",
             "dGVyRG93bnN5bmMSHwoWYmFja2VuZFVuY29uZmlybWVkTWFzaxiACCABKAQS",
             "GgoRc2hvdWxkRm9yY2VSZXN5bmMYgQggASgIEhYKDXNwZWNpZXNJZExpc3QY",
             "ggggAygFEh0KFGJ1bGxldExvY2FsSWRDb3VudGVyGIMIIAEoBRItCg9wZWVy",
-            "VWRwQWRkckxpc3QYhAggAygLMhMuc2hhcmVkLlBlZXJVZHBBZGRyIswBCgZX",
-            "c1Jlc3ASCwoDcmV0GAEgASgFEgsKA2FjdBgCIAEoBRImCgNyZGYYAyABKAsy",
-            "GS5zaGFyZWQuUm9vbURvd25zeW5jRnJhbWUSOwoXaW5wdXRGcmFtZURvd25z",
-            "eW5jQmF0Y2gYBCADKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEiwK",
-            "CGJjaUZyYW1lGAUgASgLMhouc2hhcmVkLkJhdHRsZUNvbGxpZGVySW5mbxIV",
-            "Cg1wZWVySm9pbkluZGV4GAYgASgFIvMBCgVTa2lsbBIVCg1iYXR0bGVMb2Nh",
-            "bElkGAEgASgFEhYKDnJlY292ZXJ5RnJhbWVzGAIgASgFEh0KFXJlY292ZXJ5",
-            "RnJhbWVzT25CbG9jaxgDIAEoBRIbChNyZWNvdmVyeUZyYW1lc09uSGl0GAQg",
-            "ASgFEi0KC3RyaWdnZXJUeXBlGAUgASgOMhguc2hhcmVkLlNraWxsVHJpZ2dl",
-            "clR5cGUSLAoMYm91bmRDaFN0YXRlGAYgASgOMhYuc2hhcmVkLkNoYXJhY3Rl",
-            "clN0YXRlEiIKBGhpdHMYByADKAsyFC5zaGFyZWQuQnVsbGV0Q29uZmlnImcK",
-            "CEZyYW1lTG9nEiYKA3JkZhgBIAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNG",
-            "cmFtZRIzCg9hY3R1YWxseVVzZWRJZGYYAiABKAsyGi5zaGFyZWQuSW5wdXRG",
-            "cmFtZURvd25zeW5jKjUKC0J1bGxldFN0YXRlEgsKB1N0YXJ0VXAQABIKCgZB",
-            "Y3RpdmUQARINCglFeHBsb2RpbmcQAiquAgoOQ2hhcmFjdGVyU3RhdGUSCQoF",
-            "SWRsZTEQABILCgdXYWxraW5nEAESDgoKVHVybkFyb3VuZBACEgoKBkF0a2Vk",
-            "MRADEhQKEEluQWlySWRsZTFOb0p1bXAQBBIUChBJbkFpcklkbGUxQnlKdW1w",
-            "EAUSGAoUSW5BaXJJZGxlMUJ5V2FsbEp1bXAQBhIPCgtJbkFpckF0a2VkMRAH",
-            "EgwKCEJsb3duVXAxEAgSDAoITGF5RG93bjEQCRIKCgZHZXRVcDEQChIJCgVE",
-            "eWluZxALEgsKB0Rhc2hpbmcQDBIKCgZPbldhbGwQDRIOCglJbkFpckF0azEQ",
-            "gAgSCQoEQXRrMRCBCBIJCgRBdGsyEIIIEgkKBEF0azMQgwgSCQoEQXRrNBCE",
-            "CBIJCgRBdGs1EIUIKjcKCkJ1bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAAS",
-            "CQoFTWVsZWUQARIMCghGaXJlYmFsbBACKjMKEFNraWxsVHJpZ2dlclR5cGUS",
-            "DgoKUmlzaW5nRWRnZRAAEg8KC0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIG",
-            "cHJvdG8z"));
+            "VWRwQWRkckxpc3QYhAggAygLMhMuc2hhcmVkLlBlZXJVZHBBZGRyEhwKE3Bh",
+            "cnRpY2lwYW50Q2hhbmdlSWQYhQggASgFIswBCgZXc1Jlc3ASCwoDcmV0GAEg",
+            "ASgFEgsKA2FjdBgCIAEoBRImCgNyZGYYAyABKAsyGS5zaGFyZWQuUm9vbURv",
+            "d25zeW5jRnJhbWUSOwoXaW5wdXRGcmFtZURvd25zeW5jQmF0Y2gYBCADKAsy",
+            "Gi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEiwKCGJjaUZyYW1lGAUgASgL",
+            "Mhouc2hhcmVkLkJhdHRsZUNvbGxpZGVySW5mbxIVCg1wZWVySm9pbkluZGV4",
+            "GAYgASgFIvMBCgVTa2lsbBIVCg1iYXR0bGVMb2NhbElkGAEgASgFEhYKDnJl",
+            "Y292ZXJ5RnJhbWVzGAIgASgFEh0KFXJlY292ZXJ5RnJhbWVzT25CbG9jaxgD",
+            "IAEoBRIbChNyZWNvdmVyeUZyYW1lc09uSGl0GAQgASgFEi0KC3RyaWdnZXJU",
+            "eXBlGAUgASgOMhguc2hhcmVkLlNraWxsVHJpZ2dlclR5cGUSLAoMYm91bmRD",
+            "aFN0YXRlGAYgASgOMhYuc2hhcmVkLkNoYXJhY3RlclN0YXRlEiIKBGhpdHMY",
+            "ByADKAsyFC5zaGFyZWQuQnVsbGV0Q29uZmlnImcKCEZyYW1lTG9nEiYKA3Jk",
+            "ZhgBIAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRIzCg9hY3R1YWxs",
+            "eVVzZWRJZGYYAiABKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jKjUK",
+            "C0J1bGxldFN0YXRlEgsKB1N0YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBs",
+            "b2RpbmcQAiquAgoOQ2hhcmFjdGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxr",
+            "aW5nEAESDgoKVHVybkFyb3VuZBACEgoKBkF0a2VkMRADEhQKEEluQWlySWRs",
+            "ZTFOb0p1bXAQBBIUChBJbkFpcklkbGUxQnlKdW1wEAUSGAoUSW5BaXJJZGxl",
+            "MUJ5V2FsbEp1bXAQBhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgS",
+            "DAoITGF5RG93bjEQCRIKCgZHZXRVcDEQChIJCgVEeWluZxALEgsKB0Rhc2hp",
+            "bmcQDBIKCgZPbldhbGwQDRIOCglJbkFpckF0azEQgAgSCQoEQXRrMRCBCBIJ",
+            "CgRBdGsyEIIIEgkKBEF0azMQgwgSCQoEQXRrNBCECBIJCgRBdGs1EIUIKjcK",
+            "CkJ1bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAASCQoFTWVsZWUQARIMCghG",
+            "aXJlYmFsbBACKjMKEFNraWxsVHJpZ2dlclR5cGUSDgoKUmlzaW5nRWRnZRAA",
+            "Eg8KC0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -139,7 +139,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "PreallocNpcCapacity", "PreallocBulletCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList", "ParticipantChangeId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "Hits" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null)
@@ -6507,6 +6507,7 @@ namespace shared {
       speciesIdList_ = other.speciesIdList_.Clone();
       bulletLocalIdCounter_ = other.bulletLocalIdCounter_;
       peerUdpAddrList_ = other.peerUdpAddrList_.Clone();
+      participantChangeId_ = other.participantChangeId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -6634,6 +6635,18 @@ namespace shared {
       get { return peerUdpAddrList_; }
     }
 
+    /// <summary>Field number for the "participantChangeId" field.</summary>
+    public const int ParticipantChangeIdFieldNumber = 1029;
+    private int participantChangeId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ParticipantChangeId {
+      get { return participantChangeId_; }
+      set {
+        participantChangeId_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -6659,6 +6672,7 @@ namespace shared {
       if(!speciesIdList_.Equals(other.speciesIdList_)) return false;
       if (BulletLocalIdCounter != other.BulletLocalIdCounter) return false;
       if(!peerUdpAddrList_.Equals(other.peerUdpAddrList_)) return false;
+      if (ParticipantChangeId != other.ParticipantChangeId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -6676,6 +6690,7 @@ namespace shared {
       hash ^= speciesIdList_.GetHashCode();
       if (BulletLocalIdCounter != 0) hash ^= BulletLocalIdCounter.GetHashCode();
       hash ^= peerUdpAddrList_.GetHashCode();
+      if (ParticipantChangeId != 0) hash ^= ParticipantChangeId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -6719,6 +6734,10 @@ namespace shared {
         output.WriteInt32(BulletLocalIdCounter);
       }
       peerUdpAddrList_.WriteTo(output, _repeated_peerUdpAddrList_codec);
+      if (ParticipantChangeId != 0) {
+        output.WriteRawTag(168, 64);
+        output.WriteInt32(ParticipantChangeId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -6754,6 +6773,10 @@ namespace shared {
         output.WriteInt32(BulletLocalIdCounter);
       }
       peerUdpAddrList_.WriteTo(ref output, _repeated_peerUdpAddrList_codec);
+      if (ParticipantChangeId != 0) {
+        output.WriteRawTag(168, 64);
+        output.WriteInt32(ParticipantChangeId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -6784,6 +6807,9 @@ namespace shared {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(BulletLocalIdCounter);
       }
       size += peerUdpAddrList_.CalculateSize(_repeated_peerUdpAddrList_codec);
+      if (ParticipantChangeId != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(ParticipantChangeId);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -6816,6 +6842,9 @@ namespace shared {
         BulletLocalIdCounter = other.BulletLocalIdCounter;
       }
       peerUdpAddrList_.Add(other.peerUdpAddrList_);
+      if (other.ParticipantChangeId != 0) {
+        ParticipantChangeId = other.ParticipantChangeId;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -6872,6 +6901,10 @@ namespace shared {
             peerUdpAddrList_.AddEntriesFrom(input, _repeated_peerUdpAddrList_codec);
             break;
           }
+          case 8232: {
+            ParticipantChangeId = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -6926,6 +6959,10 @@ namespace shared {
           }
           case 8226: {
             peerUdpAddrList_.AddEntriesFrom(ref input, _repeated_peerUdpAddrList_codec);
+            break;
+          }
+          case 8232: {
+            ParticipantChangeId = input.ReadInt32();
             break;
           }
         }

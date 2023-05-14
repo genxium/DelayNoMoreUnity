@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="151">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="151">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -89,14 +89,14 @@
    </properties>
    <point/>
   </object>
-  <object id="143" x="1088" y="589">
+  <object id="143" x="1078.5" y="589.5">
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="20"/>
    </properties>
    <point/>
   </object>
-  <object id="144" x="1042" y="564">
+  <object id="144" x="1046" y="554.5">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -110,7 +110,7 @@
    </properties>
    <point/>
   </object>
-  <object id="147" x="1058" y="585">
+  <object id="147" x="1063" y="570">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>

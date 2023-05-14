@@ -192,11 +192,11 @@ namespace shared {
             var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
             if (!currCharacterDownsync.InAir) {
                 // TODO: InAir vision reaction yet.
+                float visionCx, visionCy, visionCw, visionCh;
+                calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, out visionCx, out visionCy, out visionCw, out visionCh);
+
                 var visionCollider = dynamicRectangleColliders[colliderCnt];
-                int xfac = (0 < currCharacterDownsync.DirX ? 1 : -1);
-                var (visionCx, visionCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * currCharacterDownsync.ColliderRadius, currCharacterDownsync.VirtualGridY + currCharacterDownsync.ColliderRadius);
-                var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(2 * currCharacterDownsync.ColliderRadius, 4 * currCharacterDownsync.ColliderRadius);
-                UpdateRectCollider(visionCollider, visionCx, visionCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
+                UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
                 collisionSys.AddSingle(visionCollider);
                 bool collided = visionCollider.CheckAllWithHolder(0, 0, collision);
                 if (collided) {
@@ -224,8 +224,8 @@ namespace shared {
                                         thatCharacterInNextFrame.CapturedByInertia = false;
                                         var colliderDx = (bCollider.X - aCollider.X);
                                         var colliderDy = (bCollider.Y - aCollider.Y);
-                                        if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * xfac) {
-                                            // Opponent is not invisible and in front of me
+                                        if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * currCharacterDownsync.DirX) {
+                                            // Opponent is attackable and in front of me
                                             if (0 < colliderDy) {
 												switch (currCharacterDownsync.SpeciesId) {
 												case 1: 
@@ -238,7 +238,7 @@ namespace shared {
                                             } else {
 												switch (currCharacterDownsync.SpeciesId) {
 												case 1: 
-                                                	patternId = 2;
+                                                	patternId = 1;
 												break;
 												case 2: 
                                                 	patternId = 3;
@@ -246,7 +246,7 @@ namespace shared {
 												}
                                             }
                                             hasVisionReaction = true;
-                                        } else if (0 > colliderDx * xfac) {
+                                        } else if (0 > colliderDx * currCharacterDownsync.DirX) {
                                             // Behind me
                                             effectiveDx = -effectiveDx;
                                             hasVisionReaction = true;
@@ -1168,6 +1168,11 @@ namespace shared {
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(characterDownsync.ColliderRadius * 2, characterDownsync.ColliderRadius * 4);
                     break;
             }
+        }
+        public static void calcNpcVisionBoxInCollisionSpace(CharacterDownsync characterDownsync, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
+            int xfac = (0 < characterDownsync.DirX ? 1 : -1);
+            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * ((characterDownsync.ColliderRadius >> 3) + (characterDownsync.ColliderRadius >> 4)), characterDownsync.VirtualGridY + 3 * (characterDownsync.ColliderRadius >> 1));
+            (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(7 * (characterDownsync.ColliderRadius >> 1), 4 * characterDownsync.ColliderRadius);
         }
     }
 }

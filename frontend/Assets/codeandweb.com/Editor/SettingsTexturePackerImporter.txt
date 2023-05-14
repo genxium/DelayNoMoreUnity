@@ -1,23 +1,23 @@
 version: 2
 tpsheetFileNames:
-- Assets/Art/Bullets/Bullets.tpsheet
-- Assets/Art/Characters/KnifeGirl/KnifeGirl.tpsheet
-- Assets/Art/Characters/Monk/Monk.tpsheet
-- Assets/Art/Characters/MonkGirl/MonkGirl.tpsheet
-- Assets/Art/Characters/SwordMan/SwordMan.tpsheet
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
+- Assets/Resources/Bullets/Bullets.tpsheet
+- Assets/Resources/Characters/KnifeGirl/KnifeGirl.tpsheet
+- Assets/Resources/Characters/Monk/Monk.tpsheet
+- Assets/Resources/Characters/MonkGirl/MonkGirl.tpsheet
+- Assets/Resources/Characters/SwordMan/SwordMan.tpsheet
 textureFileNames:
-- Assets/Art/Bullets/Bullets.png
-- Assets/Art/Characters/KnifeGirl/KnifeGirl.png
-- Assets/Art/Characters/Monk/Monk.png
-- Assets/Art/Characters/MonkGirl/MonkGirl.png
-- Assets/Art/Characters/SwordMan/SwordMan.png
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
+- Assets/Resources/Bullets/Bullets.png
+- Assets/Resources/Characters/KnifeGirl/KnifeGirl.png
+- Assets/Resources/Characters/Monk/Monk.png
+- Assets/Resources/Characters/MonkGirl/MonkGirl.png
+- Assets/Resources/Characters/SwordMan/SwordMan.png
 normalmapFileNames:
-- 
-- 
-- 
-- 
-- 
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
+- 
+- 
+- 
+- 
 enableDebugOutput: 0

@@ -53,6 +53,7 @@ public class Room {
     Dictionary<int, PlayerSessionAckWatchdog> playerActiveWatchdogDict;
     public long state;
     int effectivePlayerCount;
+    int participantChangeId;
 
     FrameRingBuffer<InputFrameDownsync> inputBuffer; // Indices are STRICTLY consecutive
 
@@ -270,8 +271,12 @@ public class Room {
     }
 
     private Pbc.RepeatedField<CharacterDownsync> clonePlayersArrToPb() {
-        var bridgeArr = new CharacterDownsync[players.Count]; // RepeatedField doesn't have a constructor to preallocate by size
-        foreach (var (playerId, player) in players) {
+        var bridgeArr = new CharacterDownsync[capacity]; // RepeatedField doesn't have a constructor to preallocate by size
+        for (int i = 0; i < capacity; i++) {
+            bridgeArr[i] = new CharacterDownsync();
+            bridgeArr[i].Id = TERMINATING_PLAYER_ID;
+        }
+        foreach (var (_, player) in players) {
             bridgeArr[player.CharacterDownsync.JoinIndex - 1] = player.CharacterDownsync.Clone();
         }
         var ret = new Pbc.RepeatedField<CharacterDownsync> {
@@ -291,7 +296,8 @@ public class Room {
         switch (targetPlayerBattleState) {
             case PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK:
                 var playerAckedFrame = new RoomDownsyncFrame {
-                    Id = renderFrameId
+                    Id = renderFrameId,
+                    ParticipantChangeId = participantChangeId++
                 };
                 playerAckedFrame.PlayersArr.AddRange(clonePlayersArrToPb());
                 var tList = new List<Task>();
@@ -458,6 +464,7 @@ public class Room {
             Array.Fill<bool>(joinIndexBooleanArr, false);
 
             effectivePlayerCount = 0; // guaranteed to succeed at the end of "dismiss"
+            participantChangeId = 0;
         } finally {
             joinerLock.ReleaseMutex();
         }
