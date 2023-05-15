@@ -85,7 +85,9 @@ public class OnlineMapController : AbstractMapController {
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     enableBattleInput(false);
                     // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
-                    wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
+                    if (frameLogEnabled) {
+                        wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
+                    }
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_INPUT_BATCH:
                     // Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");
@@ -133,6 +135,8 @@ public class OnlineMapController : AbstractMapController {
         // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         Debug.LogWarning(String.Format("About to start ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
 
+        wsCancellationTokenSource = new CancellationTokenSource();
+        wsCancellationToken = wsCancellationTokenSource.Token;
         wsTask = Task.Run(async () => {
             Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
@@ -170,10 +174,6 @@ public class OnlineMapController : AbstractMapController {
         Application.targetFrameRate = 60;
 
         enableBattleInput(false);
-
-        // [WARNING] We should init "wsCancellationTokenSource", "wsCancellationToken" and "wsTask" only once during the whole lifecycle of this "OnlineMapController", even if the init signal is later given by a "button onClick" instead of "Start()".
-        wsCancellationTokenSource = new CancellationTokenSource();
-        wsCancellationToken = wsCancellationTokenSource.Token;
     }
 
     public void onWsSessionOpen() {
@@ -183,7 +183,7 @@ public class OnlineMapController : AbstractMapController {
 
     public void onWsSessionClosed() {
         Debug.Log("Handling WsSession closed in main thread.");
-        WsSessionManager.Instance.ClearCredentials();
+        playerWaitingPanel.gameObject.SetActive(false);
         characterSelectPanel.gameObject.SetActive(true);
     }
 
@@ -349,8 +349,11 @@ public class OnlineMapController : AbstractMapController {
             if (!wsCancellationTokenSource.IsCancellationRequested) {
                 Debug.LogWarning(String.Format("OnlineMapController.disconnectNetworkSessions, cancelling ws session"));
                 wsCancellationTokenSource.Cancel();
+            } else {
+                Debug.LogWarning(String.Format("OnlineMapController.disconnectNetworkSessions, wsCancellationTokenSource is already cancelled!"));
             }
             wsCancellationTokenSource.Dispose();
+            wsCancellationTokenSource = new CancellationTokenSource();
         }
 
         if (null != wsTask) {
@@ -367,6 +370,7 @@ public class OnlineMapController : AbstractMapController {
     protected void OnDestroy() {
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
         disconnectNetworkSessions();
+        WsSessionManager.Instance.ClearCredentials();
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
     }
 

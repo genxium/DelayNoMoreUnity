@@ -7,6 +7,7 @@ public class PlayerWaitingPanel : MonoBehaviour {
     private int lastParticipantChangeId = shared.Battle.TERMINATING_RENDER_FRAME_ID; 
     public GameObject playerSlotPrefab;
     public HorizontalLayoutGroup participantSlots;
+    private bool inited = false;
 
     // Start is called before the first frame update
     void Start() {
@@ -19,9 +20,11 @@ public class PlayerWaitingPanel : MonoBehaviour {
     }
 
     public void InitPlayerSlots(int roomCapacity) {
+        if (inited) return;
         for (int i = 0; i < roomCapacity; i++) {
             Instantiate(playerSlotPrefab, new Vector3(0, 0, 0), Quaternion.identity, participantSlots.transform);
         } 
+        inited = true;
     }
 
     public void OnParticipantChange(RoomDownsyncFrame rdf) {
