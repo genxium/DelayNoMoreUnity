@@ -347,13 +347,12 @@ public class OnlineMapController : AbstractMapController {
     protected void disconnectNetworkSessions() {
         if (null != wsCancellationTokenSource) {
             if (!wsCancellationTokenSource.IsCancellationRequested) {
-                Debug.LogWarning(String.Format("OnlineMapController.disconnectNetworkSessions, cancelling ws session"));
+                Debug.LogInfo(String.Format("OnlineMapController.disconnectNetworkSessions, cancelling ws session"));
                 wsCancellationTokenSource.Cancel();
             } else {
                 Debug.LogWarning(String.Format("OnlineMapController.disconnectNetworkSessions, wsCancellationTokenSource is already cancelled!"));
             }
             wsCancellationTokenSource.Dispose();
-            wsCancellationTokenSource = new CancellationTokenSource();
         }
 
         if (null != wsTask) {
