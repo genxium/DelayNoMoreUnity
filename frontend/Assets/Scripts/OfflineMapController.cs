@@ -2,11 +2,9 @@ using UnityEngine;
 using System;
 using shared;
 using static shared.Battle;
-using UnityEngine.UI; // Required when Using UI elements.
 using UnityEngine.SceneManagement;
 
 public class OfflineMapController : AbstractMapController {
-	public Button backButton;
 
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
@@ -26,15 +24,6 @@ public class OfflineMapController : AbstractMapController {
 		string path = String.Format("Tiled/{0}/map", theme);
 		var underlyingMapPrefab = Resources.Load(path) as GameObject;
 		underlyingMap = GameObject.Instantiate(underlyingMapPrefab);
-
-        selfPlayerInfo = new CharacterDownsync();
-
-        roomCapacity = 1;
-        preallocateHolders();
-        resetCurrentMatch();
-        selfPlayerInfo.JoinIndex = 1;
-        var startRdf = mockStartRdf();
-        onRoomDownsyncFrame(startRdf, null);
     }
 
     // Update is called once per frame
@@ -49,12 +38,15 @@ public class OfflineMapController : AbstractMapController {
         }
     }
 
-    public void OnGoToLoginSceneButtonClicked() {
-        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+    public void OnBackButtonClicked() {
+        characterSelectPanel.gameObject.SetActive(true);
     }
 
     void OnRenderObject() {
         if (debugDrawingEnabled) {
+            return;
+        }
+        if (ROOM_STATE_IN_BATTLE != battleState) {
             return;
         }
         // The magic name "OnRenderObject" is the only callback I found working to draw the debug boundaries.

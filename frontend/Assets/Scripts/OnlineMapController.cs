@@ -78,7 +78,7 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
-                    var startRdf = mockStartRdf();
+                    var startRdf = mockStartRdf(new int[roomCapacity]);
                     onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
                     break;

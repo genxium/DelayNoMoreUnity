@@ -1,32 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI; // Required when Using UI elements.
-using TMPro;
+using UnityEngine.SceneManagement;
+using System;
+
 public class CharacterSelectPanel : MonoBehaviour {
-
-    int selectedSequenceId = 0;
-    int selectedSpeciesId = 2;
  
-    public delegate void OnGoActionCallback(int speciesId);
-
-    public Button GoActionButton;
-    public OnGoActionCallback goAction;
-    public GameObject characters;
+    public Button GoActionButton; // to toggle interactability
+    public ToggleGroup characters;
 
     // Start is called before the first frame update
     void Start() {
-        int i = 0;
-        foreach (Transform child in characters.transform) {
-            var btn = child.gameObject.GetComponentInChildren<Button>();
-            switch (i) {    
-            case 0:
-                btn.onClick.AddListener(delegate { onAvatarClicked(i, 2); });
-                break;
-            case 1:
-                btn.onClick.AddListener(delegate { onAvatarClicked(i, 0); });
-               break;
-            }
-            i++;
-        }
     }
 
     // Update is called once per frame
@@ -38,26 +21,34 @@ public class CharacterSelectPanel : MonoBehaviour {
         GoActionButton.interactable = enabled;
     }
 
-    public void OnGoActionClicked() {
+    public void OnGoActionClicked(AbstractMapController map) {
         toggleUIInteractability(false);
-        if (null == goAction) {
-            goAction(selectedSpeciesId);
+        Debug.Log(String.Format("GoAction button clicked with map={0}", map));
+        var toggles = characters.gameObject.GetComponentsInChildren<Toggle>();
+        int selectedSpeciesId = 0;
+        foreach (var toggle in toggles) {
+            if (null != toggle && toggle.isOn) {
+                Debug.Log(String.Format("{0} chosen", toggle.name));
+                switch (toggle.name) {      
+                case "KnifeGirl":
+                    selectedSpeciesId = 0;
+                    break;
+                case "MonkGirl":
+                    selectedSpeciesId = 2;
+                    break;
+                }
+                break;
+            }
+        }
+        if (null != map) {
+            Debug.Log(String.Format("Extra goAction to be executed with selectedSpeciesId={0}", selectedSpeciesId));
+            map.onCharacterSelectGoAction(selectedSpeciesId);
+        } else {
+            Debug.LogWarning(String.Format("There's no extra goAction to be executed with selectedSpeciesId={0}", selectedSpeciesId));
         }
     }
 
-    private void onAvatarClicked(int sequenceId, int speciesId) {
-        selectedSequenceId = sequenceId;
-        selectedSpeciesId = speciesId;
-
-        int i = 0;
-        foreach (Transform child in characters.transform) {
-            var chosen = child.gameObject.GetComponentInChildren<TMP_Text>(); 
-            if (i == selectedSequenceId) {
-                chosen.text = "Y";
-            } else {
-                chosen.text = "";
-            } 
-            i++;
-        }
+    public void OnBackButtonClicked() {
+        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 }

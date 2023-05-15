@@ -18,7 +18,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
     protected int maxChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
-    public GameObject characterPrefabForPlayer;
     public GameObject fireballPrefab;
     public GameObject errStackLogPanelPrefab;
     protected GameObject errStackLogPanelObj;
@@ -57,18 +56,36 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public CharacterSelectPanel characterSelectPanel;
 
+    public void onCharacterSelectGoAction(int speciesId) {
+        Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
+        selfPlayerInfo = new CharacterDownsync();
+
+        roomCapacity = 1;
+        preallocateHolders();
+        resetCurrentMatch();
+        selfPlayerInfo.JoinIndex = 1;
+        int[] speciesIdList = new int[roomCapacity];
+        speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
+        var startRdf = mockStartRdf(speciesIdList);
+
+        characterSelectPanel.gameObject.SetActive(false);
+        onRoomDownsyncFrame(startRdf, null);
+    }
+
     protected bool debugDrawingEnabled = false;
 
     protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
-    protected void spawnPlayerNode(int joinIndex, float wx, float wy) {
-        GameObject newPlayerNode = Instantiate(characterPrefabForPlayer, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
-        playerGameObjs[joinIndex - 1] = newPlayerNode;
-    }
 
 	protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
 		string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
 		return Resources.Load(path) as GameObject;
 	}
+
+    protected void spawnPlayerNode(int joinIndex, int speciesId, float wx, float wy) {
+		var characterPrefab = loadCharacterPrefab(characters[speciesId]);
+        GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
+        playerGameObjs[joinIndex - 1] = newPlayerNode;
+    }
 
     protected void spawnNpcNode(int speciesId, float wx, float wy) {
 		var characterPrefab = loadCharacterPrefab(characters[speciesId]);
@@ -623,7 +640,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         iptmgr.enable(yesOrNo);
     }
 
-    protected RoomDownsyncFrame mockStartRdf() {
+    protected RoomDownsyncFrame mockStartRdf(int[] speciesIdList) {
         var playerStartingCposList = new Vector[roomCapacity];
         var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
 
@@ -708,12 +725,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             int joinIndex = i + 1;
             var cpos = playerStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
-            spawnPlayerNode(joinIndex, wx, wy);
-
-            var characterSpeciesId = 0;
-            var chConfig = Battle.characters[characterSpeciesId];
 
             var playerInRdf = startRdf.PlayersArr[i];
+            playerInRdf.SpeciesId = speciesIdList[i];
+            var chConfig = Battle.characters[playerInRdf.SpeciesId];
+            spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy);
             var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
             playerInRdf.JoinIndex = joinIndex;
             playerInRdf.VirtualGridX = playerVposX;
@@ -732,7 +748,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.OnWall = false;
             playerInRdf.Hp = 100;
             playerInRdf.MaxHp = 100;
-            playerInRdf.SpeciesId = characterSpeciesId;
         }
 
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
