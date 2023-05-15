@@ -347,7 +347,7 @@ public class OnlineMapController : AbstractMapController {
     protected void disconnectNetworkSessions() {
         if (null != wsCancellationTokenSource) {
             if (!wsCancellationTokenSource.IsCancellationRequested) {
-                Debug.LogInfo(String.Format("OnlineMapController.disconnectNetworkSessions, cancelling ws session"));
+                Debug.Log(String.Format("OnlineMapController.disconnectNetworkSessions, cancelling ws session"));
                 wsCancellationTokenSource.Cancel();
             } else {
                 Debug.LogWarning(String.Format("OnlineMapController.disconnectNetworkSessions, wsCancellationTokenSource is already cancelled!"));
