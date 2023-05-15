@@ -38,8 +38,8 @@ public class PlayerWaitingPanel : MonoBehaviour {
         }
     }
 
-    public void OnBackButtonClicked() {
-        // TODO: Actually we should go back to "CharacterSelection"
-        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+    public void OnBackButtonClicked(OnlineMapController map) {
+        Debug.Log("PlayerWaitingPanel.OnBackButtonClicked");
+        map.onWaitingInterrupted();
     }
 }

@@ -46,6 +46,7 @@ public class CharacterSelectPanel : MonoBehaviour {
         } else {
             Debug.LogWarning(String.Format("There's no extra goAction to be executed with selectedSpeciesId={0}", selectedSpeciesId));
         }
+        toggleUIInteractability(true);
     }
 
     public void OnBackButtonClicked() {

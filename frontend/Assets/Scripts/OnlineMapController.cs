@@ -23,18 +23,14 @@ public class OnlineMapController : AbstractMapController {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
             //Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {
+                case shared.Battle.DOWNSYNC_MSG_WS_OPEN:
+                    onWsSessionOpen();
+                    break;
                 case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
-                    Debug.Log("Handling WsSession closed in main thread.");
-                    WsSessionManager.Instance.ClearCredentials();
-                    SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+                    onWsSessionClosed();
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO in main thread"));
-
-					string theme = "Dungeon";
-					string path = String.Format("Tiled/{0}/map", theme);
-					var underlyingMapPrefab = Resources.Load(path) as GameObject;
-					underlyingMap = GameObject.Instantiate(underlyingMapPrefab);
 
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
@@ -43,7 +39,7 @@ public class OnlineMapController : AbstractMapController {
                         preallocateHolders();
                     }
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch();
+                    resetCurrentMatch("Dungeon");
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
@@ -78,7 +74,11 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
-                    var startRdf = mockStartRdf(new int[roomCapacity]);
+                    var speciesIdList = new int[roomCapacity];
+                    for (int i = 0; i < roomCapacity; i++) {
+                        speciesIdList[i] = wsRespHolder.Rdf.PlayersArr[i].SpeciesId;
+                    }
+                    var startRdf = mockStartRdf(speciesIdList);
                     onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
                     break;
@@ -121,19 +121,14 @@ public class OnlineMapController : AbstractMapController {
         }
     }
 
-    void Start() {
-        Physics.autoSimulation = false;
-        Physics2D.simulationMode = SimulationMode2D.Script;
+    public void onWaitingInterrupted() {
+        Debug.Log("OnlineMapController.onWaitingInterrupted");
+        disconnectNetworkSessions();
+    }
 
-        selfPlayerInfo = new CharacterDownsync();
-        inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
-        Application.targetFrameRate = 60;
-
-        enableBattleInput(false);
-
-        // [WARNING] We should init "wsCancellationTokenSource", "wsCancellationToken" and "wsTask" only once during the whole lifecycle of this "OnlineMapController", even if the init signal is later given by a "button onClick" instead of "Start()".
-        wsCancellationTokenSource = new CancellationTokenSource();
-        wsCancellationToken = wsCancellationTokenSource.Token;
+    public override void onCharacterSelectGoAction(int speciesId) {
+        Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
+        WsSessionManager.Instance.SetSpeciesId(speciesId);
 
         // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         Debug.LogWarning(String.Format("About to start ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
@@ -157,12 +152,39 @@ public class OnlineMapController : AbstractMapController {
             }
         });
 
-        //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "OnDestroy".
+        //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "disconnectNetworkSessions".
 
         //wsSessionActionAsync(); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
         //_ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
 
         Debug.LogWarning(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
+        characterSelectPanel.gameObject.SetActive(false);
+    }
+
+    void Start() {
+        Physics.autoSimulation = false;
+        Physics2D.simulationMode = SimulationMode2D.Script;
+
+        selfPlayerInfo = new CharacterDownsync();
+        inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
+        Application.targetFrameRate = 60;
+
+        enableBattleInput(false);
+
+        // [WARNING] We should init "wsCancellationTokenSource", "wsCancellationToken" and "wsTask" only once during the whole lifecycle of this "OnlineMapController", even if the init signal is later given by a "button onClick" instead of "Start()".
+        wsCancellationTokenSource = new CancellationTokenSource();
+        wsCancellationToken = wsCancellationTokenSource.Token;
+    }
+
+    public void onWsSessionOpen() {
+        Debug.Log("Handling WsSession open in main thread.");
+        playerWaitingPanel.gameObject.SetActive(true);
+    }
+
+    public void onWsSessionClosed() {
+        Debug.Log("Handling WsSession closed in main thread.");
+        WsSessionManager.Instance.ClearCredentials();
+        characterSelectPanel.gameObject.SetActive(true);
     }
 
     private async Task wsSessionTaskAsync() {
@@ -314,19 +336,18 @@ public class OnlineMapController : AbstractMapController {
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, true);
     }
 
-    protected override void resetCurrentMatch() {
-        base.resetCurrentMatch();
+    protected override void resetCurrentMatch(string theme) {
+        base.resetCurrentMatch(theme);
 
         // Reset lockstep
         shouldLockStep = false;
         NetworkDoctor.Instance.Reset();
     }
 
-    protected void OnDestroy() {
-        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
+    protected void disconnectNetworkSessions() {
         if (null != wsCancellationTokenSource) {
             if (!wsCancellationTokenSource.IsCancellationRequested) {
-                Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1.5, cancelling ws session"));
+                Debug.LogWarning(String.Format("OnlineMapController.disconnectNetworkSessions, cancelling ws session"));
                 wsCancellationTokenSource.Cancel();
             }
             wsCancellationTokenSource.Dispose();
@@ -341,7 +362,11 @@ public class OnlineMapController : AbstractMapController {
             udpTask.Wait();
             udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
         }
+    }
 
+    protected void OnDestroy() {
+        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
+        disconnectNetworkSessions();
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
     }
 

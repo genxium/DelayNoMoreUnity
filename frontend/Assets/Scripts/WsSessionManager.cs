@@ -22,6 +22,8 @@ public class WsSessionManager {
     public Queue<WsResp> recvBuffer;
     private string authToken;
     private int playerId = Battle.TERMINATING_PLAYER_ID;
+    private int speciesId;
+
     public int GetPlayerId() {
         return playerId;
     }
@@ -46,8 +48,13 @@ public class WsSessionManager {
         playerId = thePlayerId;
     }
 
+    public void SetSpeciesId(int theSpeciesId) {
+        speciesId = theSpeciesId;
+    }
+    
     public void ClearCredentials() {
         SetCredentials(null, Battle.TERMINATING_PLAYER_ID);
+        speciesId = 0;
     }
 
     public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
@@ -57,11 +64,16 @@ public class WsSessionManager {
         }
         senderBuffer.Clear();
         recvBuffer.Clear();
-        string fullUrl = wsEndpoint + String.Format("?authToken={0}&playerId={1}", authToken, playerId);
+        string fullUrl = wsEndpoint + String.Format("?authToken={0}&playerId={1}&speciesId={2}", authToken, playerId, speciesId);
         using (ClientWebSocket ws = new ClientWebSocket()) {
             try {
                 await ws.ConnectAsync(new Uri(fullUrl), cancellationToken);
                 Debug.Log("Ws session is opened");
+                var openMsg = new WsResp {
+                    Ret = ErrCode.Ok,
+                    Act = shared.Battle.DOWNSYNC_MSG_WS_OPEN
+                };
+                recvBuffer.Enqueue(openMsg);
                 await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
                 Debug.Log(String.Format("Both 'Receive' and 'Send' tasks are ended."));
             } catch (OperationCanceledException ocEx) {

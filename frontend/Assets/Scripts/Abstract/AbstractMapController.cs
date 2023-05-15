@@ -56,21 +56,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public CharacterSelectPanel characterSelectPanel;
 
-    public void onCharacterSelectGoAction(int speciesId) {
-        Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
-        selfPlayerInfo = new CharacterDownsync();
-
-        roomCapacity = 1;
-        preallocateHolders();
-        resetCurrentMatch();
-        selfPlayerInfo.JoinIndex = 1;
-        int[] speciesIdList = new int[roomCapacity];
-        speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
-        var startRdf = mockStartRdf(speciesIdList);
-
-        characterSelectPanel.gameObject.SetActive(false);
-        onRoomDownsyncFrame(startRdf, null);
-    }
+    public abstract void onCharacterSelectGoAction(int speciesId);
 
     protected bool debugDrawingEnabled = false;
 
@@ -413,7 +399,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-    protected virtual void resetCurrentMatch() {
+    protected virtual void resetCurrentMatch(string theme) {
         Debug.Log(String.Format("resetCurrentMatch with roomCapacity={0}", roomCapacity));
         battleState = ROOM_STATE_IMPOSSIBLE;
         renderFrameId = 0;
@@ -424,8 +410,15 @@ public abstract class AbstractMapController : MonoBehaviour {
         maxChasingRenderFramesPerUpdate = 5;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
 
+        if (null != underlyingMap) {
+            Destroy(underlyingMap);
+        }
         playerGameObjs = new GameObject[roomCapacity];
         npcGameObjs = new List<GameObject>();
+
+        string path = String.Format("Tiled/{0}/map", theme);
+        var underlyingMapPrefab = Resources.Load(path) as GameObject;
+        underlyingMap = GameObject.Instantiate(underlyingMapPrefab);
 
         var superMap = underlyingMap.GetComponent<SuperTiled2Unity.SuperMap>();
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;

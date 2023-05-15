@@ -809,6 +809,8 @@ namespace shared {
                     if (!overlapped) continue;
 
                     switch (bCollider.Data) {
+                        case PatrolCue v:
+                            break;
                         case CharacterDownsync atkedCharacterInCurrFrame:
                             if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
                             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;

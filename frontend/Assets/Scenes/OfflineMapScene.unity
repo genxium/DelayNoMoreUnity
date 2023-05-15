@@ -838,7 +838,7 @@ GameObject:
   - component: {fileID: 787804748}
   - component: {fileID: 787804747}
   m_Layer: 5
-  m_Name: GoToLoginScene
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -862,8 +862,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 16, y: -32}
-  m_SizeDelta: {x: 64, y: 30}
+  m_AnchoredPosition: {x: 16, y: -16}
+  m_SizeDelta: {x: 64, y: 32}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &787804747
 MonoBehaviour:
@@ -911,7 +911,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901904084}
         m_TargetAssemblyTypeName: OfflineMapController, Assembly-CSharp
-        m_MethodName: OnGoToLoginSceneButtonClicked
+        m_MethodName: OnBackButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1185,7 +1185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22cfffa4f3a86f14e9cce8c36c7017a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefabForPlayer: {fileID: 1750589025216623398, guid: 9c2d7ac674ac8744e871fff6c276a880, type: 3}
   fireballPrefab: {fileID: 2186353342994325362, guid: dd46b2abba7393549bb66bcf0b11127f, type: 3}
   errStackLogPanelPrefab: {fileID: 8411099102924968189, guid: e6ed24770a15248459edcefb9fad6256, type: 3}
   canvas: {fileID: 1021584740}

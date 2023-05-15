@@ -38,6 +38,7 @@ namespace shared {
         public const int DOWNSYNC_MSG_ACT_BATTLE_START = 0;
         public const int DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED = -98;
         public const int DOWNSYNC_MSG_WS_CLOSED = -99;
+        public const int DOWNSYNC_MSG_WS_OPEN = -100;
 
         public const int MAGIC_JOIN_INDEX_INVALID = -2;
         public const int MAGIC_JOIN_INDEX_DEFAULT = -1;
@@ -173,12 +174,12 @@ namespace shared {
                                                     .AddHit(new BulletConfigBuilder(6, 22, 22, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 11, 30, false, 1, 15, BulletType.Melee, 0).UpsertCancelTransit(1, 7).build())
                                                     .build()),
 
-                    new KeyValuePair<int, Skill>(7, new SkillBuilder(25, 25, 25, SkillTriggerType.RisingEdge, CharacterState.Atk2)
-                                                    .AddHit(new BulletConfigBuilder(6, 20, 20, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 14, 36, false, 1, 15, BulletType.Melee, 0).build())
+                    new KeyValuePair<int, Skill>(7, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.Atk2)
+                                                    .AddHit(new BulletConfigBuilder(6, 20, 20, 9, 0, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 1, 15, BulletType.Melee, 0).build())
                                                     .build()),
 
                     new KeyValuePair<int, Skill>(8, new SkillBuilder(40, 40, 40, SkillTriggerType.RisingEdge, CharacterState.Atk3)
-                                                    .AddHit(new BulletConfigBuilder(4, 30, MAX_INT, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 1, 20, BulletType.Melee, 0).build())
+                                                    .AddHit(new BulletConfigBuilder(4, 30, MAX_INT, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 1, 20, BulletType.Melee, 0).build())
                                                     .build()),
 
                     new KeyValuePair<int, Skill>(9, new SkillBuilder(60, 60, 60, SkillTriggerType.RisingEdge, CharacterState.Atk4)
@@ -194,7 +195,7 @@ namespace shared {
                                                     .build()),
 
                     new KeyValuePair<int, Skill>(12, new SkillBuilder(40, 40, 40, SkillTriggerType.RisingEdge, CharacterState.Atk2)
-                                                    .AddHit(new BulletConfigBuilder(8, 20, MAX_INT, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 1, 20, BulletType.Melee, 0).build())
+                                                    .AddHit(new BulletConfigBuilder(4, 20, MAX_INT, 9, 0, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 2, 20, BulletType.Melee, 0).build())
                                                     .build()),
 
                     new KeyValuePair<int, Skill>(255, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.InAirAtk1)
