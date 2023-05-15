@@ -520,6 +520,8 @@ public class Room {
                         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
                         foreach (var (playerId, player) in players) {
                             startRdf.PlayersArr[player.CharacterDownsync.JoinIndex-1].SpeciesId = player.CharacterDownsync.SpeciesId;
+                        }
+                        foreach (var (playerId, player) in players) {
                             tList.Add(sendSafelyAsync(startRdf, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
                         }
                         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
