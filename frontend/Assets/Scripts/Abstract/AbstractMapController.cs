@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
+using UnityEngine.UI;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -18,6 +19,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
     protected int maxChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
+    public InplaceHpBar inplaceHpBarPrefab;
     public GameObject fireballPrefab;
     public GameObject errStackLogPanelPrefab;
     protected GameObject errStackLogPanelObj;
@@ -62,26 +64,37 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
 
-	protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
-		string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
-		return Resources.Load(path) as GameObject;
-	}
+    public SelfBattleHeading selfBattleHeading;
+    protected Vector2 inplaceHpBarOffset = new Vector2(-16f, +24f);
+
+    protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
+        string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
+        return Resources.Load(path) as GameObject;
+    }
+
+    protected Vector3 newPosHolder = new Vector3();
 
     protected void spawnPlayerNode(int joinIndex, int speciesId, float wx, float wy) {
-		var characterPrefab = loadCharacterPrefab(characters[speciesId]);
+        var characterPrefab = loadCharacterPrefab(characters[speciesId]);
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
+        if (joinIndex != selfPlayerInfo.JoinIndex) {
+            InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
+            newPlayerNode.GetComponent<CharacterAnimController>().hpBar = associatedHpBar;
+        }
     }
 
     protected void spawnNpcNode(int speciesId, float wx, float wy) {
-		var characterPrefab = loadCharacterPrefab(characters[speciesId]);
-        GameObject newAiPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
-        npcGameObjs.Add(newAiPlayerNode);
+        var characterPrefab = loadCharacterPrefab(characters[speciesId]);
+        GameObject newNpcNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
+        npcGameObjs.Add(newNpcNode);
+        InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
+        newNpcNode.GetComponent<CharacterAnimController>().hpBar = associatedHpBar;
     }
 
     protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
         if (null == selfPlayerInfo) {
-            String msg = String.Format("noDelayInputFrameId={0:D} couldn't be generated due to selfPlayerInfo being null", inputFrameId);
+            string msg = String.Format("noDelayInputFrameId={0:D} couldn't be generated due to selfPlayerInfo being null", inputFrameId);
             throw new ArgumentException(msg);
         }
 
@@ -253,15 +266,24 @@ public abstract class AbstractMapController : MonoBehaviour {
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
         for (int k = 0; k < roomCapacity; k++) {
             var currCharacterDownsync = rdf.PlayersArr[k];
+
             //Debug.Log(String.Format("At rdf.Id={0}, currCharacterDownsync[k:{1}] at [vGridX: {2}, vGridY: {3}, velX: {4}, velY: {5}, chState: {6}, framesInChState: {7}, dirx: {8}]", rdf.Id, k, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.CharacterState, currCharacterDownsync.FramesInChState, currCharacterDownsync.DirX));
             var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
             var playerGameObj = playerGameObjs[k];
-            playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
+            newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
+            playerGameObj.transform.position = newPosHolder;
 
             var chConfig = characters[currCharacterDownsync.SpeciesId];
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             chAnimCtrl.updateCharacterAnim(currCharacterDownsync, null, false, chConfig);
+            if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
+                selfBattleHeading.SetCharacter(currCharacterDownsync);
+            } else {
+                newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, playerGameObj.transform.position.z);
+                chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp/ currCharacterDownsync.MaxHp);
+                chAnimCtrl.hpBar.transform.position = newPosHolder;
+            }
         }
 
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
@@ -270,12 +292,16 @@ public abstract class AbstractMapController : MonoBehaviour {
             // Debug.Log(String.Format("At rdf.Id={0}, currNpcDownsync[k:{1}] at [vx: {2}, vy: {3}, chState: {4}, framesInChState: {5}]", rdf.Id, k, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, currNpcDownsync.CharacterState, currNpcDownsync.FramesInChState));
             var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
-            var playerGameObj = npcGameObjs[k];
-            playerGameObj.transform.position = new Vector3(wx, wy, playerGameObj.transform.position.z);
+            var npcGameObj = npcGameObjs[k];
+            newPosHolder.Set(wx, wy, npcGameObj.transform.position.z);
+            npcGameObj.transform.position = newPosHolder;
 
             var chConfig = characters[currNpcDownsync.SpeciesId];
-            var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
+            var chAnimCtrl = npcGameObj.GetComponent<CharacterAnimController>();
             chAnimCtrl.updateCharacterAnim(currNpcDownsync, null, false, chConfig);
+            newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, npcGameObj.transform.position.z);
+            chAnimCtrl.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp);
+            chAnimCtrl.hpBar.transform.position = newPosHolder;
         }
 
         // Put all to infinitely far first
@@ -323,7 +349,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             explosionAnimHolder.updateAnim(lookupKey, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, rdf);
             explosionAnimHolder.score = rdf.Id;
-            explosionAnimHolder.gameObject.transform.position = new Vector3(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
+            newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
+            explosionAnimHolder.gameObject.transform.position = newPosHolder;
 
             cachedFireballs.Put(lookupKey, explosionAnimHolder);
         }
@@ -590,7 +617,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
         if (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == renderFrameId) {
             var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
-        	Debug.Log(String.Format("Battle started, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
+            Debug.Log(String.Format("Battle started, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
             Camera.main.transform.position = new Vector3(playerGameObj.transform.position.x, playerGameObj.transform.position.y, Camera.main.transform.position.z);
         } else {
             cameraTrack(rdf);
@@ -787,23 +814,29 @@ public abstract class AbstractMapController : MonoBehaviour {
         errStackLogPanel.content.text = msg;
     }
 
+
+    protected Vector2 camSpeedHolder = new Vector2();
+    protected Vector2 camDiffDstHolder = new Vector2();
     protected void cameraTrack(RoomDownsyncFrame rdf) {
         if (null == selfPlayerInfo) return;
         var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
         var playerCharacterDownsync = rdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
         var (velCX, velCY) = VirtualGridToPolygonColliderCtr(playerCharacterDownsync.Speed, playerCharacterDownsync.Speed);
-		var cameraSpeedInWorld = new Vector2(velCX, velCY).magnitude * 50;
+        camSpeedHolder.Set(velCX, velCY);
+        var cameraSpeedInWorld = camSpeedHolder.magnitude * 50;
         var camOldPos = Camera.main.transform.position;
         var dst = playerGameObj.transform.position;
-        var dstDiff2 = new Vector2(dst.x - camOldPos.x, dst.y - camOldPos.y);
+        camDiffDstHolder.Set(dst.x - camOldPos.x, dst.y - camOldPos.y);
 
         //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
         var stepLength = Time.deltaTime * cameraSpeedInWorld;
-        if (stepLength > dstDiff2.magnitude) {
-            Camera.main.transform.position = new Vector3(dst.x, dst.y, camOldPos.z);
+        if (stepLength > camDiffDstHolder.magnitude) {
+            newPosHolder.Set(dst.x, dst.y, camOldPos.z);
+            Camera.main.transform.position = newPosHolder;
         } else {
-            var newMapPosDiff2 = dstDiff2.normalized * stepLength;
-            Camera.main.transform.position = new Vector3(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
+            var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
+            newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
+            Camera.main.transform.position = newPosHolder;
         }
     }
 }
