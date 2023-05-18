@@ -16,6 +16,11 @@ public class OfflineMapController : AbstractMapController {
         return false;
     }
 
+    protected override void onBattleStopped() {
+        base.onBattleStopped();
+        characterSelectPanel.gameObject.SetActive(true);
+    }
+
     public override void onCharacterSelectGoAction(int speciesId) {
         Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
         selfPlayerInfo = new CharacterDownsync();
@@ -25,23 +30,29 @@ public class OfflineMapController : AbstractMapController {
         resetCurrentMatch("Dungeon");
         selfPlayerInfo.JoinIndex = 1;
 
+        battleDurationFrames = 60 * 60;
+
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
         int[] speciesIdList = new int[roomCapacity];
         speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
         var startRdf = mockStartRdf(speciesIdList);
+        applyRoomDownsyncFrameDynamics(startRdf, null);
+
         var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
         Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
         Camera.main.transform.position = new Vector3(playerGameObj.transform.position.x, playerGameObj.transform.position.y, Camera.main.transform.position.z);
-
         characterSelectPanel.gameObject.SetActive(false);
+        readyGoPanel.playReadyAnim();
 
         StartCoroutine(delayToStartBattle(startRdf));
     }
 
     private IEnumerator delayToStartBattle(RoomDownsyncFrame startRdf) {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
+        readyGoPanel.playGoAnim();
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
         networkInfoPanel.gameObject.SetActive(true);
+        startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
         onRoomDownsyncFrame(startRdf, null);
     }
 
@@ -56,6 +67,11 @@ public class OfflineMapController : AbstractMapController {
     void Update() {
         try {
             doUpdate();
+            if (renderFrameId >= battleDurationFrames) {
+                onBattleStopped();
+            } else {
+                readyGoPanel.setCountdown(renderFrameId, battleDurationFrames);
+            }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
             var msg = String.Format("Error during OfflineMap.Update {0}", ex);

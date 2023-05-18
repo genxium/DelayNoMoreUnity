@@ -230,7 +230,6 @@ public class Room {
                     players.Remove(playerId);
                     if (0 == effectivePlayerCount) {
                         Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
-                        _roomManager.Push(calRoomScore(), this);
                     }
                     _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
@@ -340,6 +339,8 @@ public class Room {
                     }
                 }
                 if (true == allAcked) {
+                    int gracePreReadyPeriodMillis = 1000;
+                    await Task.Delay(gracePreReadyPeriodMillis);
                     await startBattleAsync(); // WON'T run if the battle state is not in WAITING.
                 }
             }
@@ -381,7 +382,7 @@ public class Room {
         }
         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
 
-        await Task.Delay(3000);
+        await Task.Delay(1500);
 
         /**
 		  [WARNING] We actually need the "battleMainLoop" immediately switch into another thread for running, such that we can avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
@@ -515,7 +516,7 @@ public class Room {
                     if (0 == renderFrameId) {
                         var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity);
                         startRdf.PlayersArr.AddRange(clonePlayersArrToPb());
-                        startRdf.Id = 0;
+                        startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
 
                         var tList = new List<Task>();
                         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames

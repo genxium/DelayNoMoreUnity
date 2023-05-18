@@ -132,12 +132,12 @@ TextureImporter:
       name: SwordMan-0
       rect:
         serializedVersion: 2
-        x: 422
-        y: 867
+        x: 482
+        y: 926
         width: 29
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -153,12 +153,12 @@ TextureImporter:
       name: SwordMan-1
       rect:
         serializedVersion: 2
-        x: 379
-        y: 555
+        x: 0
+        y: 86
         width: 29
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -174,12 +174,12 @@ TextureImporter:
       name: SwordMan-10
       rect:
         serializedVersion: 2
-        x: 0
-        y: 519
+        x: 357
+        y: 532
         width: 37
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.55675673, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -195,12 +195,12 @@ TextureImporter:
       name: SwordMan-100
       rect:
         serializedVersion: 2
-        x: 488
-        y: 520
+        x: 29
+        y: 362
         width: 24
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.48333332, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -216,12 +216,12 @@ TextureImporter:
       name: SwordMan-101
       rect:
         serializedVersion: 2
-        x: 490
-        y: 619
+        x: 29
+        y: 47
         width: 22
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.43636364, y: 0.5217391}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -237,12 +237,12 @@ TextureImporter:
       name: SwordMan-102
       rect:
         serializedVersion: 2
-        x: 408
-        y: 514
+        x: 57
+        y: 100
         width: 22
         height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.43636364, y: 0.4883721}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -258,12 +258,12 @@ TextureImporter:
       name: SwordMan-103
       rect:
         serializedVersion: 2
-        x: 491
-        y: 665
+        x: 81
+        y: 400
         width: 21
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.45714286, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -279,12 +279,12 @@ TextureImporter:
       name: SwordMan-104
       rect:
         serializedVersion: 2
-        x: 329
-        y: 650
+        x: 0
+        y: 268
         width: 28
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5928571, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -300,12 +300,12 @@ TextureImporter:
       name: SwordMan-105
       rect:
         serializedVersion: 2
-        x: 448
-        y: 716
+        x: 86
+        y: 860
         width: 52
         height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -321,12 +321,12 @@ TextureImporter:
       name: SwordMan-106
       rect:
         serializedVersion: 2
-        x: 218
-        y: 760
+        x: 88
+        y: 754
         width: 47
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.22553192, y: 0.48076922}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -342,12 +342,12 @@ TextureImporter:
       name: SwordMan-107
       rect:
         serializedVersion: 2
-        x: 265
-        y: 717
+        x: 83
+        y: 641
         width: 46
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.20869565, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -363,12 +363,12 @@ TextureImporter:
       name: SwordMan-108
       rect:
         serializedVersion: 2
-        x: 311
-        y: 699
+        x: 84
+        y: 591
         width: 46
         height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.20869565, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -384,12 +384,12 @@ TextureImporter:
       name: SwordMan-109
       rect:
         serializedVersion: 2
-        x: 400
-        y: 702
+        x: 308
+        y: 857
         width: 46
         height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.3173913, y: 0.625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -405,12 +405,12 @@ TextureImporter:
       name: SwordMan-11
       rect:
         serializedVersion: 2
-        x: 206
-        y: 670
+        x: 404
+        y: 570
         width: 39
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.6051282, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -426,12 +426,12 @@ TextureImporter:
       name: SwordMan-110
       rect:
         serializedVersion: 2
-        x: 126
-        y: 773
+        x: 400
+        y: 885
         width: 44
         height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.26363635, y: 0.64102566}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -447,12 +447,12 @@ TextureImporter:
       name: SwordMan-111
       rect:
         serializedVersion: 2
-        x: 170
-        y: 735
+        x: 277
+        y: 526
         width: 43
         height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.22325581, y: 0.64102566}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -468,12 +468,12 @@ TextureImporter:
       name: SwordMan-112
       rect:
         serializedVersion: 2
-        x: 111
-        y: 496
+        x: 427
+        y: 807
         width: 34
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.28235295, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -489,12 +489,12 @@ TextureImporter:
       name: SwordMan-113
       rect:
         serializedVersion: 2
-        x: 427
-        y: 430
+        x: 0
+        y: 37
         width: 27
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.65185183, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -510,12 +510,12 @@ TextureImporter:
       name: SwordMan-114
       rect:
         serializedVersion: 2
-        x: 455
-        y: 432
+        x: 0
+        y: 365
         width: 27
         height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.65185183, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -531,12 +531,12 @@ TextureImporter:
       name: SwordMan-115
       rect:
         serializedVersion: 2
-        x: 184
-        y: 880
+        x: 0
+        y: 560
         width: 84
         height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.17380953, y: 0.5952381}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -552,12 +552,12 @@ TextureImporter:
       name: SwordMan-116
       rect:
         serializedVersion: 2
-        x: 184
-        y: 922
+        x: 0
+        y: 701
         width: 84
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.13809524, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -573,12 +573,12 @@ TextureImporter:
       name: SwordMan-117
       rect:
         serializedVersion: 2
-        x: 88
-        y: 869
+        x: 0
+        y: 651
         width: 83
         height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.11566265, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -594,12 +594,12 @@ TextureImporter:
       name: SwordMan-118
       rect:
         serializedVersion: 2
-        x: 95
+        x: 274
         y: 973
         width: 91
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.16043957, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -615,12 +615,12 @@ TextureImporter:
       name: SwordMan-119
       rect:
         serializedVersion: 2
-        x: 186
+        x: 95
         y: 971
         width: 90
         height: 53
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.12888889, y: 0.4716981}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -636,12 +636,12 @@ TextureImporter:
       name: SwordMan-12
       rect:
         serializedVersion: 2
-        x: 162
-        y: 645
+        x: 365
+        y: 576
         width: 39
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.63076925, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -658,11 +658,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 866
+        y: 602
         width: 82
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.11707317, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -678,12 +678,12 @@ TextureImporter:
       name: SwordMan-121
       rect:
         serializedVersion: 2
-        x: 364
+        x: 365
         y: 974
         width: 88
         height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.1659091, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -699,12 +699,12 @@ TextureImporter:
       name: SwordMan-122
       rect:
         serializedVersion: 2
-        x: 276
-        y: 973
+        x: 0
+        y: 750
         width: 88
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.13181818, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -721,11 +721,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 915
+        y: 801
         width: 88
         height: 53
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.10909091, y: 0.4716981}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -745,8 +745,8 @@ TextureImporter:
         y: 968
         width: 95
         height: 56
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.15368421, y: 0.44642857}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -762,12 +762,12 @@ TextureImporter:
       name: SwordMan-125
       rect:
         serializedVersion: 2
-        x: 95
-        y: 919
+        x: 185
+        y: 970
         width: 89
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.13033707, y: 0.46296296}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -783,12 +783,12 @@ TextureImporter:
       name: SwordMan-126
       rect:
         serializedVersion: 2
-        x: 276
-        y: 917
+        x: 0
+        y: 854
         width: 86
         height: 56
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.11162791, y: 0.44642857}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -804,12 +804,12 @@ TextureImporter:
       name: SwordMan-127
       rect:
         serializedVersion: 2
-        x: 364
-        y: 916
+        x: 0
+        y: 910
         width: 87
         height: 58
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.11034483, y: 0.43103448}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -825,12 +825,12 @@ TextureImporter:
       name: SwordMan-128
       rect:
         serializedVersion: 2
-        x: 111
-        y: 496
+        x: 427
+        y: 807
         width: 34
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.28235295, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -846,12 +846,12 @@ TextureImporter:
       name: SwordMan-129
       rect:
         serializedVersion: 2
-        x: 126
-        y: 725
+        x: 158
+        y: 533
         width: 40
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.39, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -867,12 +867,12 @@ TextureImporter:
       name: SwordMan-13
       rect:
         serializedVersion: 2
-        x: 80
-        y: 633
+        x: 444
+        y: 874
         width: 39
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.6051282, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -888,12 +888,12 @@ TextureImporter:
       name: SwordMan-130
       rect:
         serializedVersion: 2
-        x: 394
-        y: 603
+        x: 213
+        y: 698
         width: 36
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.54444444, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -909,12 +909,12 @@ TextureImporter:
       name: SwordMan-131
       rect:
         serializedVersion: 2
-        x: 115
-        y: 543
+        x: 249
+        y: 745
         width: 36
         height: 53
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.54444444, y: 0.509434}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -930,12 +930,12 @@ TextureImporter:
       name: SwordMan-132
       rect:
         serializedVersion: 2
-        x: 40
-        y: 606
+        x: 130
+        y: 581
         width: 38
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.56842107, y: 0.5192308}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -951,12 +951,12 @@ TextureImporter:
       name: SwordMan-133
       rect:
         serializedVersion: 2
-        x: 44
-        y: 702
+        x: 135
+        y: 739
         width: 38
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.56842107, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -972,12 +972,12 @@ TextureImporter:
       name: SwordMan-134
       rect:
         serializedVersion: 2
-        x: 239
-        y: 605
+        x: 209
+        y: 752
         width: 36
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.54444444, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -993,12 +993,12 @@ TextureImporter:
       name: SwordMan-135
       rect:
         serializedVersion: 2
-        x: 199
-        y: 570
+        x: 173
+        y: 739
         width: 36
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.54444444, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1014,12 +1014,12 @@ TextureImporter:
       name: SwordMan-136
       rect:
         serializedVersion: 2
-        x: 78
-        y: 580
+        x: 121
+        y: 528
         width: 37
         height: 53
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5297297, y: 0.509434}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1035,12 +1035,12 @@ TextureImporter:
       name: SwordMan-137
       rect:
         serializedVersion: 2
-        x: 37
-        y: 509
+        x: 204
+        y: 610
         width: 36
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.54444444, y: 0.5192308}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1056,12 +1056,12 @@ TextureImporter:
       name: SwordMan-138
       rect:
         serializedVersion: 2
-        x: 45
-        y: 756
+        x: 248
+        y: 798
         width: 37
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5297297, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1077,12 +1077,12 @@ TextureImporter:
       name: SwordMan-139
       rect:
         serializedVersion: 2
-        x: 134
-        y: 812
+        x: 84
+        y: 534
         width: 37
         height: 57
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5297297, y: 0.47368422}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1098,12 +1098,12 @@ TextureImporter:
       name: SwordMan-14
       rect:
         serializedVersion: 2
-        x: 292
-        y: 655
+        x: 394
+        y: 526
         width: 37
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.55675673, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1119,12 +1119,12 @@ TextureImporter:
       name: SwordMan-140
       rect:
         serializedVersion: 2
-        x: 82
-        y: 770
+        x: 401
+        y: 924
         width: 44
         height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.44545454, y: 0.54}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1140,12 +1140,12 @@ TextureImporter:
       name: SwordMan-141
       rect:
         serializedVersion: 2
-        x: 377
-        y: 789
+        x: 38
+        y: 232
         width: 23
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.46086955, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1161,12 +1161,12 @@ TextureImporter:
       name: SwordMan-142
       rect:
         serializedVersion: 2
-        x: 204
-        y: 427
+        x: 233
+        y: 487
         width: 23
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.46086955, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1182,12 +1182,12 @@ TextureImporter:
       name: SwordMan-143
       rect:
         serializedVersion: 2
-        x: 489
-        y: 571
+        x: 30
+        y: 181
         width: 23
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.46086955, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1203,12 +1203,12 @@ TextureImporter:
       name: SwordMan-144
       rect:
         serializedVersion: 2
-        x: 204
-        y: 427
+        x: 233
+        y: 487
         width: 23
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.46086955, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1224,12 +1224,12 @@ TextureImporter:
       name: SwordMan-145
       rect:
         serializedVersion: 2
-        x: 454
-        y: 388
+        x: 30
+        y: 137
         width: 27
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5407407, y: 0.47727272}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1245,12 +1245,12 @@ TextureImporter:
       name: SwordMan-146
       rect:
         serializedVersion: 2
-        x: 185
-        y: 475
+        x: 116
+        y: 484
         width: 32
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.58125, y: 0.47727272}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1266,12 +1266,12 @@ TextureImporter:
       name: SwordMan-147
       rect:
         serializedVersion: 2
-        x: 33
-        y: 381
+        x: 29
+        y: 280
         width: 31
         height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.56774193, y: 0.52380955}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1287,12 +1287,12 @@ TextureImporter:
       name: SwordMan-148
       rect:
         serializedVersion: 2
-        x: 104
-        y: 409
+        x: 148
+        y: 486
         width: 32
         height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.58125, y: 0.52380955}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1308,12 +1308,12 @@ TextureImporter:
       name: SwordMan-149
       rect:
         serializedVersion: 2
-        x: 166
-        y: 398
+        x: 481
+        y: 668
         width: 30
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.52, y: 0.52272725}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1329,12 +1329,12 @@ TextureImporter:
       name: SwordMan-15
       rect:
         serializedVersion: 2
-        x: 213
-        y: 715
+        x: 334
+        y: 670
         width: 40
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.565, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1350,12 +1350,12 @@ TextureImporter:
       name: SwordMan-150
       rect:
         serializedVersion: 2
-        x: 422
-        y: 867
+        x: 482
+        y: 926
         width: 29
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1371,12 +1371,12 @@ TextureImporter:
       name: SwordMan-151
       rect:
         serializedVersion: 2
-        x: 329
-        y: 484
+        x: 180
+        y: 481
         width: 26
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.52307695, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1392,12 +1392,12 @@ TextureImporter:
       name: SwordMan-152
       rect:
         serializedVersion: 2
-        x: 375
-        y: 743
+        x: 487
+        y: 712
         width: 25
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.504, y: 0.54347825}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1413,12 +1413,12 @@ TextureImporter:
       name: SwordMan-153
       rect:
         serializedVersion: 2
-        x: 482
-        y: 420
+        x: 483
+        y: 877
         width: 27
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.65185183, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1434,12 +1434,12 @@ TextureImporter:
       name: SwordMan-154
       rect:
         serializedVersion: 2
-        x: 459
-        y: 482
+        x: 476
+        y: 572
         width: 28
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.62857145, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1455,12 +1455,12 @@ TextureImporter:
       name: SwordMan-155
       rect:
         serializedVersion: 2
-        x: 422
-        y: 867
+        x: 482
+        y: 926
         width: 29
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1476,12 +1476,12 @@ TextureImporter:
       name: SwordMan-156
       rect:
         serializedVersion: 2
-        x: 329
-        y: 484
+        x: 180
+        y: 481
         width: 26
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.52307695, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1497,12 +1497,12 @@ TextureImporter:
       name: SwordMan-157
       rect:
         serializedVersion: 2
-        x: 375
-        y: 743
+        x: 487
+        y: 712
         width: 25
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.504, y: 0.54347825}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1518,12 +1518,12 @@ TextureImporter:
       name: SwordMan-158
       rect:
         serializedVersion: 2
-        x: 482
-        y: 420
+        x: 483
+        y: 877
         width: 27
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.65185183, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1539,12 +1539,12 @@ TextureImporter:
       name: SwordMan-159
       rect:
         serializedVersion: 2
-        x: 343
-        y: 529
+        x: 465
+        y: 524
         width: 28
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.62857145, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1560,12 +1560,12 @@ TextureImporter:
       name: SwordMan-16
       rect:
         serializedVersion: 2
-        x: 73
-        y: 480
+        x: 436
+        y: 760
         width: 34
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.37058824, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1581,12 +1581,12 @@ TextureImporter:
       name: SwordMan-160
       rect:
         serializedVersion: 2
-        x: 99
-        y: 360
+        x: 461
+        y: 807
         width: 30
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1602,12 +1602,12 @@ TextureImporter:
       name: SwordMan-161
       rect:
         serializedVersion: 2
-        x: 70
-        y: 440
+        x: 29
+        y: 322
         width: 34
         height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1623,12 +1623,12 @@ TextureImporter:
       name: SwordMan-162
       rect:
         serializedVersion: 2
-        x: 34
-        y: 423
+        x: 81
+        y: 451
         width: 34
         height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.64102566}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1644,12 +1644,12 @@ TextureImporter:
       name: SwordMan-163
       rect:
         serializedVersion: 2
-        x: 275
-        y: 619
+        x: 136
+        y: 448
         width: 36
         height: 36
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4888889, y: 0.6944444}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1665,12 +1665,12 @@ TextureImporter:
       name: SwordMan-164
       rect:
         serializedVersion: 2
-        x: 451
-        y: 821
+        x: 354
+        y: 862
         width: 56
         height: 15
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.31428573, y: 1.6666666}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1686,12 +1686,12 @@ TextureImporter:
       name: SwordMan-165
       rect:
         serializedVersion: 2
-        x: 451
-        y: 810
+        x: 410
+        y: 856
         width: 56
         height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.31428573, y: 2.2727273}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1707,12 +1707,12 @@ TextureImporter:
       name: SwordMan-166
       rect:
         serializedVersion: 2
-        x: 171
-        y: 870
+        x: 136
+        y: 438
         width: 56
         height: 10
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.31428573, y: 2.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1728,12 +1728,12 @@ TextureImporter:
       name: SwordMan-17
       rect:
         serializedVersion: 2
-        x: 0
-        y: 428
+        x: 431
+        y: 524
         width: 34
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.34117648, y: 0.54347825}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1749,12 +1749,12 @@ TextureImporter:
       name: SwordMan-18
       rect:
         serializedVersion: 2
-        x: 0
-        y: 563
+        x: 334
+        y: 624
         width: 38
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.25263157, y: 0.54347825}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1770,12 +1770,12 @@ TextureImporter:
       name: SwordMan-19
       rect:
         serializedVersion: 2
-        x: 0
-        y: 609
+        x: 294
+        y: 706
         width: 38
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.2263158, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1791,12 +1791,12 @@ TextureImporter:
       name: SwordMan-2
       rect:
         serializedVersion: 2
-        x: 430
-        y: 545
+        x: 0
+        y: 317
         width: 29
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1812,12 +1812,12 @@ TextureImporter:
       name: SwordMan-20
       rect:
         serializedVersion: 2
-        x: 0
-        y: 700
+        x: 285
+        y: 753
         width: 40
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.215, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1833,12 +1833,12 @@ TextureImporter:
       name: SwordMan-21
       rect:
         serializedVersion: 2
-        x: 201
-        y: 624
+        x: 407
+        y: 668
         width: 38
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.2263158, y: 0.54347825}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1854,12 +1854,12 @@ TextureImporter:
       name: SwordMan-22
       rect:
         serializedVersion: 2
-        x: 161
-        y: 599
+        x: 415
+        y: 714
         width: 38
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.25263157, y: 0.54347825}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1875,12 +1875,12 @@ TextureImporter:
       name: SwordMan-23
       rect:
         serializedVersion: 2
-        x: 36
-        y: 462
+        x: 453
+        y: 713
         width: 34
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.34117648, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1896,12 +1896,12 @@ TextureImporter:
       name: SwordMan-24
       rect:
         serializedVersion: 2
-        x: 166
-        y: 690
+        x: 332
+        y: 715
         width: 40
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.59, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1917,12 +1917,12 @@ TextureImporter:
       name: SwordMan-25
       rect:
         serializedVersion: 2
-        x: 38
-        y: 561
+        x: 320
+        y: 535
         width: 37
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.55675673, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1938,12 +1938,12 @@ TextureImporter:
       name: SwordMan-26
       rect:
         serializedVersion: 2
-        x: 107
-        y: 451
+        x: 470
+        y: 760
         width: 34
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1959,12 +1959,12 @@ TextureImporter:
       name: SwordMan-27
       rect:
         serializedVersion: 2
-        x: 122
-        y: 680
+        x: 294
+        y: 661
         width: 40
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.59, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1980,12 +1980,12 @@ TextureImporter:
       name: SwordMan-28
       rect:
         serializedVersion: 2
-        x: 323
-        y: 792
+        x: 145
+        y: 885
         width: 54
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.51111114, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2001,12 +2001,12 @@ TextureImporter:
       name: SwordMan-29
       rect:
         serializedVersion: 2
-        x: 400
-        y: 772
+        x: 189
+        y: 838
         width: 51
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4627451, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2022,12 +2022,12 @@ TextureImporter:
       name: SwordMan-3
       rect:
         serializedVersion: 2
-        x: 33
-        y: 334
+        x: 48
+        y: 480
         width: 30
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2043,12 +2043,12 @@ TextureImporter:
       name: SwordMan-30
       rect:
         serializedVersion: 2
-        x: 400
-        y: 819
+        x: 138
+        y: 837
         width: 51
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4627451, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2064,12 +2064,12 @@ TextureImporter:
       name: SwordMan-31
       rect:
         serializedVersion: 2
-        x: 310
-        y: 551
+        x: 443
+        y: 574
         width: 33
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5939394, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2085,12 +2085,12 @@ TextureImporter:
       name: SwordMan-32
       rect:
         serializedVersion: 2
-        x: 445
-        y: 627
+        x: 249
+        y: 702
         width: 45
         height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.61333334, y: 0.5813953}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2106,12 +2106,12 @@ TextureImporter:
       name: SwordMan-33
       rect:
         serializedVersion: 2
-        x: 451
-        y: 926
+        x: 189
+        y: 806
         width: 59
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5864407, y: 0.78125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2127,12 +2127,12 @@ TextureImporter:
       name: SwordMan-34
       rect:
         serializedVersion: 2
-        x: 451
-        y: 836
+        x: 196
+        y: 662
         width: 57
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5719298, y: 0.78125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2148,12 +2148,12 @@ TextureImporter:
       name: SwordMan-35
       rect:
         serializedVersion: 2
-        x: 268
-        y: 813
+        x: 204
+        y: 578
         width: 55
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.55636364, y: 0.78125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2169,12 +2169,12 @@ TextureImporter:
       name: SwordMan-36
       rect:
         serializedVersion: 2
-        x: 445
-        y: 627
+        x: 249
+        y: 702
         width: 45
         height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.61333334, y: 0.5813953}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2190,12 +2190,12 @@ TextureImporter:
       name: SwordMan-37
       rect:
         serializedVersion: 2
-        x: 269
-        y: 520
+        x: 442
+        y: 621
         width: 33
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5939394, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2211,12 +2211,12 @@ TextureImporter:
       name: SwordMan-38
       rect:
         serializedVersion: 2
-        x: 119
-        y: 596
+        x: 0
+        y: 229
         width: 38
         height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4368421, y: 0.64102566}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2232,12 +2232,12 @@ TextureImporter:
       name: SwordMan-39
       rect:
         serializedVersion: 2
-        x: 400
-        y: 742
+        x: 0
+        y: 497
         width: 48
         height: 30
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.42916667, y: 0.8333333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2254,11 +2254,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 329
+        y: 134
         width: 30
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2274,12 +2274,12 @@ TextureImporter:
       name: SwordMan-40
       rect:
         serializedVersion: 2
-        x: 226
-        y: 812
+        x: 53
+        y: 368
         width: 41
         height: 23
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.35609755, y: 1.0434783}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2295,12 +2295,12 @@ TextureImporter:
       name: SwordMan-41
       rect:
         serializedVersion: 2
-        x: 235
-        y: 576
+        x: 256
+        y: 497
         width: 35
         height: 29
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5314286, y: 0.86206895}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2316,12 +2316,12 @@ TextureImporter:
       name: SwordMan-42
       rect:
         serializedVersion: 2
-        x: 357
-        y: 628
+        x: 172
+        y: 450
         width: 37
         height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5027027, y: 0.8064516}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2337,12 +2337,12 @@ TextureImporter:
       name: SwordMan-43
       rect:
         serializedVersion: 2
-        x: 259
-        y: 487
+        x: 51
+        y: 60
         width: 26
         height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.56153846, y: 0.75757575}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2358,12 +2358,12 @@ TextureImporter:
       name: SwordMan-44
       rect:
         serializedVersion: 2
-        x: 481
-        y: 376
+        x: 206
+        y: 482
         width: 27
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5407407, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2379,12 +2379,12 @@ TextureImporter:
       name: SwordMan-45
       rect:
         serializedVersion: 2
-        x: 82
-        y: 677
+        x: 285
+        y: 609
         width: 40
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.615, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2400,12 +2400,12 @@ TextureImporter:
       name: SwordMan-46
       rect:
         serializedVersion: 2
-        x: 122
-        y: 635
+        x: 372
+        y: 621
         width: 39
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.6051282, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2421,12 +2421,12 @@ TextureImporter:
       name: SwordMan-47
       rect:
         serializedVersion: 2
-        x: 0
-        y: 474
+        x: 445
+        y: 668
         width: 36
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.57222223, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2442,12 +2442,12 @@ TextureImporter:
       name: SwordMan-48
       rect:
         serializedVersion: 2
-        x: 0
-        y: 747
+        x: 233
+        y: 535
         width: 44
         height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.51363635, y: 0.53488374}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2463,12 +2463,12 @@ TextureImporter:
       name: SwordMan-49
       rect:
         serializedVersion: 2
-        x: 357
-        y: 701
+        x: 372
+        y: 718
         width: 43
         height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.3860465, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2484,12 +2484,12 @@ TextureImporter:
       name: SwordMan-5
       rect:
         serializedVersion: 2
-        x: 64
-        y: 339
+        x: 476
+        y: 620
         width: 30
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2505,12 +2505,12 @@ TextureImporter:
       name: SwordMan-50
       rect:
         serializedVersion: 2
-        x: 446
-        y: 670
+        x: 123
+        y: 693
         width: 45
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.61333334, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2526,12 +2526,12 @@ TextureImporter:
       name: SwordMan-51
       rect:
         serializedVersion: 2
-        x: 75
-        y: 527
+        x: 168
+        y: 586
         width: 36
         height: 53
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.7111111, y: 0.4716981}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2547,12 +2547,12 @@ TextureImporter:
       name: SwordMan-52
       rect:
         serializedVersion: 2
-        x: 45
-        y: 810
+        x: 445
+        y: 918
         width: 37
         height: 56
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.7189189, y: 0.44642857}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2568,12 +2568,12 @@ TextureImporter:
       name: SwordMan-53
       rect:
         serializedVersion: 2
-        x: 136
-        y: 390
+        x: 130
+        y: 633
         width: 30
         height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.6533333, y: 0.41666666}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2589,12 +2589,12 @@ TextureImporter:
       name: SwordMan-54
       rect:
         serializedVersion: 2
-        x: 141
-        y: 450
+        x: 84
+        y: 490
         width: 32
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.51875, y: 0.52272725}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2610,12 +2610,12 @@ TextureImporter:
       name: SwordMan-55
       rect:
         serializedVersion: 2
-        x: 321
-        y: 749
+        x: 347
+        y: 930
         width: 54
         height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.38148147, y: 0.4883721}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2631,12 +2631,12 @@ TextureImporter:
       name: SwordMan-56
       rect:
         serializedVersion: 2
-        x: 0
-        y: 823
+        x: 240
+        y: 611
         width: 45
         height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.34666666, y: 0.4883721}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2652,12 +2652,12 @@ TextureImporter:
       name: SwordMan-57
       rect:
         serializedVersion: 2
-        x: 285
-        y: 464
+        x: 57
+        y: 143
         width: 24
         height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4, y: 0.4883721}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2673,12 +2673,12 @@ TextureImporter:
       name: SwordMan-58
       rect:
         serializedVersion: 2
-        x: 357
-        y: 659
+        x: 393
+        y: 760
         width: 43
         height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.3860465, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2694,12 +2694,12 @@ TextureImporter:
       name: SwordMan-59
       rect:
         serializedVersion: 2
-        x: 82
-        y: 820
+        x: 453
+        y: 975
         width: 52
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.7807692, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2715,12 +2715,12 @@ TextureImporter:
       name: SwordMan-6
       rect:
         serializedVersion: 2
-        x: 459
-        y: 530
+        x: 0
+        y: 181
         width: 29
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2736,12 +2736,12 @@ TextureImporter:
       name: SwordMan-60
       rect:
         serializedVersion: 2
-        x: 267
-        y: 768
+        x: 199
+        y: 885
         width: 54
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.3074074, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2757,12 +2757,12 @@ TextureImporter:
       name: SwordMan-61
       rect:
         serializedVersion: 2
-        x: 400
-        y: 657
+        x: 168
+        y: 694
         width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.25777778, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2778,12 +2778,12 @@ TextureImporter:
       name: SwordMan-62
       rect:
         serializedVersion: 2
-        x: 371
-        y: 510
+        x: 53
+        y: 435
         width: 28
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.34285715, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2799,12 +2799,12 @@ TextureImporter:
       name: SwordMan-63
       rect:
         serializedVersion: 2
-        x: 171
-        y: 774
+        x: 88
+        y: 806
         width: 47
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.6085106, y: 0.46296296}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2820,12 +2820,12 @@ TextureImporter:
       name: SwordMan-64
       rect:
         serializedVersion: 2
-        x: 451
-        y: 868
+        x: 87
+        y: 910
         width: 58
         height: 58
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.23448277, y: 0.43103448}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2841,12 +2841,12 @@ TextureImporter:
       name: SwordMan-65
       rect:
         serializedVersion: 2
-        x: 171
-        y: 828
+        x: 253
+        y: 889
         width: 55
         height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.17454545, y: 0.5952381}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2862,12 +2862,12 @@ TextureImporter:
       name: SwordMan-66
       rect:
         serializedVersion: 2
-        x: 451
-        y: 766
+        x: 135
+        y: 793
         width: 53
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.18113208, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2883,12 +2883,12 @@ TextureImporter:
       name: SwordMan-67
       rect:
         serializedVersion: 2
-        x: 40
-        y: 658
+        x: 277
+        y: 565
         width: 40
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.24, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2904,12 +2904,12 @@ TextureImporter:
       name: SwordMan-68
       rect:
         serializedVersion: 2
-        x: 352
-        y: 876
+        x: 145
+        y: 930
         width: 70
         height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.20857143, y: 0.625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2925,12 +2925,12 @@ TextureImporter:
       name: SwordMan-69
       rect:
         serializedVersion: 2
-        x: 268
-        y: 845
+        x: 215
+        y: 931
         width: 67
         height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.17313433, y: 0.64102566}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2946,12 +2946,12 @@ TextureImporter:
       name: SwordMan-7
       rect:
         serializedVersion: 2
-        x: 460
-        y: 578
+        x: 0
+        y: 415
         width: 29
         height: 49
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5102041}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2967,12 +2967,12 @@ TextureImporter:
       name: SwordMan-70
       rect:
         serializedVersion: 2
-        x: 335
-        y: 837
+        x: 282
+        y: 934
         width: 65
         height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.14769231, y: 0.64102566}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2988,12 +2988,12 @@ TextureImporter:
       name: SwordMan-71
       rect:
         serializedVersion: 2
-        x: 111
-        y: 496
+        x: 427
+        y: 807
         width: 34
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.28235295, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3009,12 +3009,12 @@ TextureImporter:
       name: SwordMan-72
       rect:
         serializedVersion: 2
-        x: 126
-        y: 725
+        x: 158
+        y: 533
         width: 40
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.39, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3030,12 +3030,12 @@ TextureImporter:
       name: SwordMan-73
       rect:
         serializedVersion: 2
-        x: 311
-        y: 598
+        x: 285
+        y: 800
         width: 35
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5314286, y: 0.48076922}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3051,12 +3051,12 @@ TextureImporter:
       name: SwordMan-74
       rect:
         serializedVersion: 2
-        x: 235
-        y: 524
+        x: 325
+        y: 760
         width: 34
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.48076922}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3072,12 +3072,12 @@ TextureImporter:
       name: SwordMan-75
       rect:
         serializedVersion: 2
-        x: 193
-        y: 519
+        x: 359
+        y: 760
         width: 34
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3093,12 +3093,12 @@ TextureImporter:
       name: SwordMan-76
       rect:
         serializedVersion: 2
-        x: 346
-        y: 577
+        x: 367
+        y: 879
         width: 33
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5030303, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3114,12 +3114,12 @@ TextureImporter:
       name: SwordMan-77
       rect:
         serializedVersion: 2
-        x: 227
-        y: 472
+        x: 395
+        y: 802
         width: 32
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4875, y: 0.48076922}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3135,12 +3135,12 @@ TextureImporter:
       name: SwordMan-78
       rect:
         serializedVersion: 2
-        x: 0
-        y: 376
+        x: 374
+        y: 666
         width: 33
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5030303, y: 0.48076922}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3156,12 +3156,12 @@ TextureImporter:
       name: SwordMan-79
       rect:
         serializedVersion: 2
-        x: 82
-        y: 722
+        x: 253
+        y: 654
         width: 40
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.39, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3177,12 +3177,12 @@ TextureImporter:
       name: SwordMan-8
       rect:
         serializedVersion: 2
-        x: 227
-        y: 835
+        x: 320
+        y: 812
         width: 41
         height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5512195, y: 0.5555556}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3198,12 +3198,12 @@ TextureImporter:
       name: SwordMan-80
       rect:
         serializedVersion: 2
-        x: 151
-        y: 494
+        x: 361
+        y: 811
         width: 34
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3219,12 +3219,12 @@ TextureImporter:
       name: SwordMan-81
       rect:
         serializedVersion: 2
-        x: 275
-        y: 567
+        x: 198
+        y: 526
         width: 35
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5885714, y: 0.48076922}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3240,12 +3240,12 @@ TextureImporter:
       name: SwordMan-82
       rect:
         serializedVersion: 2
-        x: 157
-        y: 545
+        x: 160
+        y: 639
         width: 36
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.43333334, y: 0.46296296}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3261,12 +3261,12 @@ TextureImporter:
       name: SwordMan-83
       rect:
         serializedVersion: 2
-        x: 253
-        y: 659
+        x: 84
+        y: 692
         width: 39
         height: 58
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4, y: 0.43103448}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3282,12 +3282,12 @@ TextureImporter:
       name: SwordMan-84
       rect:
         serializedVersion: 2
-        x: 68
-        y: 387
+        x: 411
+        y: 615
         width: 31
         height: 53
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5032258, y: 0.4716981}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3303,12 +3303,12 @@ TextureImporter:
       name: SwordMan-85
       rect:
         serializedVersion: 2
-        x: 82
-        y: 722
+        x: 253
+        y: 654
         width: 40
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.39, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3324,12 +3324,12 @@ TextureImporter:
       name: SwordMan-86
       rect:
         serializedVersion: 2
-        x: 399
-        y: 470
+        x: 53
+        y: 391
         width: 28
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.55714285, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3345,12 +3345,12 @@ TextureImporter:
       name: SwordMan-87
       rect:
         serializedVersion: 2
-        x: 427
-        y: 479
+        x: 63
+        y: 302
         width: 28
         height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5928571, y: 0.75757575}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3366,12 +3366,12 @@ TextureImporter:
       name: SwordMan-88
       rect:
         serializedVersion: 2
-        x: 173
-        y: 442
+        x: 0
+        y: 4
         width: 31
         height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.63225806, y: 0.75757575}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3387,12 +3387,12 @@ TextureImporter:
       name: SwordMan-89
       rect:
         serializedVersion: 2
-        x: 430
-        y: 512
+        x: 63
+        y: 335
         width: 29
         height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.6068966, y: 0.75757575}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3408,12 +3408,12 @@ TextureImporter:
       name: SwordMan-9
       rect:
         serializedVersion: 2
-        x: 0
-        y: 656
+        x: 325
+        y: 580
         width: 40
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.565, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3429,12 +3429,12 @@ TextureImporter:
       name: SwordMan-90
       rect:
         serializedVersion: 2
-        x: 302
-        y: 507
+        x: 30
+        y: 93
         width: 27
         height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5407407, y: 0.5681818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3450,12 +3450,12 @@ TextureImporter:
       name: SwordMan-91
       rect:
         serializedVersion: 2
-        x: 430
-        y: 593
+        x: 209
+        y: 448
         width: 30
         height: 34
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.52, y: 0.7352941}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3471,12 +3471,12 @@ TextureImporter:
       name: SwordMan-92
       rect:
         serializedVersion: 2
-        x: 268
-        y: 884
+        x: 0
+        y: 527
         width: 84
         height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.56666666, y: 0.75757575}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3492,12 +3492,12 @@ TextureImporter:
       name: SwordMan-93
       rect:
         serializedVersion: 2
-        x: 452
-        y: 991
+        x: 240
+        y: 852
         width: 59
         height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.8067797, y: 0.75757575}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3513,12 +3513,12 @@ TextureImporter:
       name: SwordMan-94
       rect:
         serializedVersion: 2
-        x: 452
-        y: 958
+        x: 308
+        y: 897
         width: 59
         height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.8067797, y: 0.75757575}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3535,11 +3535,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 790
+        y: 464
         width: 45
         height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.74666667, y: 0.75757575}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3555,12 +3555,12 @@ TextureImporter:
       name: SwordMan-96
       rect:
         serializedVersion: 2
-        x: 487
-        y: 469
+        x: 29
+        y: 413
         width: 24
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.44166666, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3576,12 +3576,12 @@ TextureImporter:
       name: SwordMan-97
       rect:
         serializedVersion: 2
-        x: 408
-        y: 557
+        x: 53
+        y: 186
         width: 22
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.48181817, y: 0.5217391}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3597,12 +3597,12 @@ TextureImporter:
       name: SwordMan-98
       rect:
         serializedVersion: 2
-        x: 259
-        y: 444
+        x: 61
+        y: 232
         width: 22
         height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.48181817, y: 0.4883721}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3618,12 +3618,12 @@ TextureImporter:
       name: SwordMan-99
       rect:
         serializedVersion: 2
-        x: 227
-        y: 421
+        x: 115
+        y: 433
         width: 21
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.45714286, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

@@ -1,4 +1,3 @@
-using shared;
 using UnityEngine;
 
 public class InplaceHpBar : MonoBehaviour {
@@ -8,6 +7,7 @@ public class InplaceHpBar : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+        updateHp(1f);
     }
 
     // Update is called once per frame

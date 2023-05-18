@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
-using UnityEngine.UI;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
+    protected int battleDurationFrames;
+
     protected int preallocAiPlayerCapacity = DEFAULT_PREALLOC_AI_PLAYER_CAPACITY;
     protected int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     protected int renderFrameId; // After battle started
@@ -72,6 +73,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         return Resources.Load(path) as GameObject;
     }
 
+    public ReadyGo readyGoPanel;
     protected Vector3 newPosHolder = new Vector3();
 
     protected void spawnPlayerNode(int joinIndex, int speciesId, float wx, float wy) {
@@ -462,6 +464,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         inputBuffer.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
+        readyGoPanel.resetCountdown();
         // Clearing cached fireball rendering nodes [BEGINS]
         // TODO
         // Clearing cached fireball rendering nodes [ENDS]
@@ -619,7 +622,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         ++renderFrameId;
     }
 
-    protected void onBattleStopped() {
+    protected virtual void onBattleStopped() {
         if (ROOM_STATE_IN_BATTLE != battleState) {
             return;
         }
@@ -732,7 +735,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity);
-        startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
+        startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;
         startRdf.ShouldForceResync = false;
         for (int i = 0; i < roomCapacity; i++) {
             int joinIndex = i + 1;

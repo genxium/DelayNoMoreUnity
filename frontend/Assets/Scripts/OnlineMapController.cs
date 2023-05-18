@@ -24,15 +24,15 @@ public class OnlineMapController : AbstractMapController {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
             //Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
             switch (wsRespHolder.Act) {
-                case shared.Battle.DOWNSYNC_MSG_WS_OPEN:
+                case DOWNSYNC_MSG_WS_OPEN:
                     onWsSessionOpen();
                     break;
-                case shared.Battle.DOWNSYNC_MSG_WS_CLOSED:
+                case DOWNSYNC_MSG_WS_CLOSED:
                     onWsSessionClosed();
                     break;
-                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
+                case DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO in main thread"));
-
+                    battleDurationFrames = (int)wsRespHolder.BciFrame.BattleDurationFrames;
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
                     if (wsRespHolder.BciFrame.BoundRoomCapacity != roomCapacity) {
@@ -46,7 +46,7 @@ public class OnlineMapController : AbstractMapController {
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
-                        Act = shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
+                        Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
                         JoinIndex = selfPlayerInfo.JoinIndex
                     };
                     WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
@@ -56,13 +56,13 @@ public class OnlineMapController : AbstractMapController {
                     udpTask = Task.Run(async () => {
                         var serverHolePuncher = new WsReq {
                             PlayerId = selfPlayerInfo.Id,
-                            Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
+                            Act = UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
                             JoinIndex = selfPlayerInfo.JoinIndex,
                             AuthKey = clientAuthKey
                         };
                         var peerHolePuncher = new WsReq {
                             PlayerId = selfPlayerInfo.Id,
-                            Act = shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
+                            Act = UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
                             JoinIndex = selfPlayerInfo.JoinIndex,
                             AuthKey = clientAuthKey
                         };
@@ -70,31 +70,33 @@ public class OnlineMapController : AbstractMapController {
                     });
 
                     break;
-                case shared.Battle.DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED:
+                case DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED:
                     playerWaitingPanel.OnParticipantChange(wsRespHolder.Rdf);
                     break;
-                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
+                case DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
+                    startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
+                    readyGoPanel.playGoAnim();
                     onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
                     break;
-                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
+                case DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     enableBattleInput(false);
                     // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
                     if (frameLogEnabled) {
                         wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
                     }
                     break;
-                case shared.Battle.DOWNSYNC_MSG_ACT_INPUT_BATCH:
+                case DOWNSYNC_MSG_ACT_INPUT_BATCH:
                     // Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");
                     onInputFrameDownsyncBatch(wsRespHolder.InputFrameDownsyncBatch);
                     break;
-                case shared.Battle.DOWNSYNC_MSG_ACT_PEER_UDP_ADDR:
+                case DOWNSYNC_MSG_ACT_PEER_UDP_ADDR:
                     var newPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread, newPeerUdpAddrList: {0}", newPeerUdpAddrList));
                     UdpSessionManager.Instance.UpdatePeerAddr(roomCapacity, selfPlayerInfo.JoinIndex, newPeerUdpAddrList);
                     break;
-                case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START:
+                case DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START:
                     /*
                      [WARNING] Deliberately trying to START "PunchAllPeers" for every participant at roughly the same time. 
                     
@@ -105,9 +107,11 @@ public class OnlineMapController : AbstractMapController {
                         speciesIdList[i] = wsRespHolder.Rdf.PlayersArr[i].SpeciesId;
                     }
                     startRdf = mockStartRdf(speciesIdList);
+                    applyRoomDownsyncFrameDynamics(startRdf, null);
                     var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
                     Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
                     Camera.main.transform.position = new Vector3(playerGameObj.transform.position.x, playerGameObj.transform.position.y, Camera.main.transform.position.z);
+                    readyGoPanel.playReadyAnim();
 
                     networkInfoPanel.gameObject.SetActive(true);
 					playerWaitingPanel.gameObject.SetActive(false);
@@ -217,6 +221,7 @@ public class OnlineMapController : AbstractMapController {
                 return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
             }
             doUpdate();
+            readyGoPanel.setCountdown(renderFrameId, battleDurationFrames);
             var (tooFastOrNot, _, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
             shouldLockStep = tooFastOrNot;
             networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
