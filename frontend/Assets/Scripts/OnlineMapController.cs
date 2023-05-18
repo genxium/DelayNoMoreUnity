@@ -4,7 +4,6 @@ using shared;
 using static shared.Battle;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine.SceneManagement;
 using Google.Protobuf.Collections;
 
 public class OnlineMapController : AbstractMapController {
@@ -16,6 +15,8 @@ public class OnlineMapController : AbstractMapController {
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
     bool shouldLockStep = false;
+
+    private RoomDownsyncFrame startRdf;
     
     public PlayerWaitingPanel playerWaitingPanel;
 
@@ -74,11 +75,6 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
-                    var speciesIdList = new int[roomCapacity];
-                    for (int i = 0; i < roomCapacity; i++) {
-                        speciesIdList[i] = wsRespHolder.Rdf.PlayersArr[i].SpeciesId;
-                    }
-                    var startRdf = mockStartRdf(speciesIdList);
                     onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
                     break;
@@ -104,7 +100,16 @@ public class OnlineMapController : AbstractMapController {
                     
                     In practice, I found a weird case where P2 starts holepunching P1 much earlier than the opposite direction (e.g. when P2 joins the room later, but gets the peer udp addr of P1 earlier upon DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO), the punching for both directions would fail if the firewall(of network provider) of P1 rejected & blacklisted the early holepunching packet from P2 for a short period (e.g. 1 minute).
                      */
-					networkInfoPanel.gameObject.SetActive(true);
+                    var speciesIdList = new int[roomCapacity];
+                    for (int i = 0; i < roomCapacity; i++) {
+                        speciesIdList[i] = wsRespHolder.Rdf.PlayersArr[i].SpeciesId;
+                    }
+                    startRdf = mockStartRdf(speciesIdList);
+                    var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
+                    Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
+                    Camera.main.transform.position = new Vector3(playerGameObj.transform.position.x, playerGameObj.transform.position.y, Camera.main.transform.position.z);
+
+                    networkInfoPanel.gameObject.SetActive(true);
 					playerWaitingPanel.gameObject.SetActive(false);
                     UdpSessionManager.Instance.PunchBackendUdpTunnel();
                     UdpSessionManager.Instance.PunchAllPeers();

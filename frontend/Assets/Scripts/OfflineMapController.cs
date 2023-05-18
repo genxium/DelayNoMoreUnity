@@ -1,10 +1,12 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using shared;
 using static shared.Battle;
-using UnityEngine.SceneManagement;
 
 public class OfflineMapController : AbstractMapController {
+
+    public NetworkDoctorInfo networkInfoPanel;
 
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
@@ -22,11 +24,24 @@ public class OfflineMapController : AbstractMapController {
         preallocateHolders();
         resetCurrentMatch("Dungeon");
         selfPlayerInfo.JoinIndex = 1;
+
+        // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
         int[] speciesIdList = new int[roomCapacity];
         speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
         var startRdf = mockStartRdf(speciesIdList);
+        var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
+        Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
+        Camera.main.transform.position = new Vector3(playerGameObj.transform.position.x, playerGameObj.transform.position.y, Camera.main.transform.position.z);
 
         characterSelectPanel.gameObject.SetActive(false);
+
+        StartCoroutine(delayToStartBattle(startRdf));
+    }
+
+    private IEnumerator delayToStartBattle(RoomDownsyncFrame startRdf) {
+        yield return new WaitForSeconds(3);
+        // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
+        networkInfoPanel.gameObject.SetActive(true);
         onRoomDownsyncFrame(startRdf, null);
     }
 

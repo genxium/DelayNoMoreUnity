@@ -615,14 +615,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
-        if (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == renderFrameId) {
-            var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
-            Debug.Log(String.Format("Battle started, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
-            Camera.main.transform.position = new Vector3(playerGameObj.transform.position.x, playerGameObj.transform.position.y, Camera.main.transform.position.z);
-        } else {
-            cameraTrack(rdf);
-        }
-
+        cameraTrack(rdf);
         ++renderFrameId;
     }
 

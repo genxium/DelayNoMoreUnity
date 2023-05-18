@@ -514,13 +514,12 @@ public class Room {
                 if (nextRenderFrameId > renderFrameId) {
                     if (0 == renderFrameId) {
                         var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity);
+                        startRdf.PlayersArr.AddRange(clonePlayersArrToPb());
                         startRdf.Id = 0;
 
                         var tList = new List<Task>();
                         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
-                        foreach (var (playerId, player) in players) {
-                            startRdf.PlayersArr[player.CharacterDownsync.JoinIndex-1].SpeciesId = player.CharacterDownsync.SpeciesId;
-                        }
+                        
                         foreach (var (playerId, player) in players) {
                             tList.Add(sendSafelyAsync(startRdf, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
                         }
