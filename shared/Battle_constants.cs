@@ -230,10 +230,10 @@ namespace shared {
                         WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(62.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -241,8 +241,7 @@ namespace shared {
                         LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 2
-                    }
-                    ),
+                    }),
 
                     new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
                         SpeciesId = 1,
@@ -257,9 +256,9 @@ namespace shared {
                         JumpingInitVelY = (int)(5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 9,
                         VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -287,10 +286,10 @@ namespace shared {
                         WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(19.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(130.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(28f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(50f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -299,8 +298,7 @@ namespace shared {
                         LayDownSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 5
                     })
-            }
-            );
+            });
 
         public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
             switch (speciesId) {

@@ -228,9 +228,9 @@ namespace shared {
                                             // Opponent is attackable and in front of me
                                             switch (currCharacterDownsync.SpeciesId) {
                                                 case 1:
-                                                    if (0 < colliderDy) {
+                                                    if (0.2f*aCollider.H < colliderDy) {
                                                         // In air
-                                                        patternId = 3;
+                                                        patternId = 2;
                                                     } else {
                                                         // On ground
                                                         patternId = 1;
@@ -238,18 +238,18 @@ namespace shared {
                                                     hasVisionReaction = true;
                                                     break;
                                                 case 2:
-                                                    if (Math.Abs(colliderDx) < 0.6f * aCollider.W) {
+                                                    if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
                                                         // Melee reachable
-                                                        if (0 < colliderDy) {
+                                                        if (0.2f * aCollider.H < colliderDy) {
                                                             // In air
-                                                            patternId = 3;
+                                                            patternId = 2;
                                                         } else {
                                                             // On ground
                                                             patternId = 1;
                                                         }
                                                     } else {
                                                         // Use fireball
-                                                        patternId = 2;
+                                                        patternId = 3;
                                                     }
                                                     hasVisionReaction = true;
                                                     break;
