@@ -127,8 +127,8 @@ message InputBufferSnapshot {
 message PatrolCue {
     uint64 flAct = 1; // "input when colliding from the left"
     uint64 frAct = 2; // "input when colliding from the right"
-	int32 flCaptureFrames = 3;
-	int32 frCaptureFrames = 4;
+	uint64 flCaptureFrames = 3;
+	uint64 frCaptureFrames = 4;
 }
 
 message VisionBox {
@@ -264,8 +264,8 @@ message Skill {
 	int32 recoveryFramesOnBlock = 3; 
 	int32 recoveryFramesOnHit = 4; 
 	SkillTriggerType triggerType = 5;
-	CharacterState boundChState = 6;        
-	
+	CharacterState boundChState = 6;
+	int32 mpDelta = 7; // Usually used as "mp consumption"
 	/**
 	[WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
 
@@ -276,7 +276,7 @@ message Skill {
 	d. References the prev hit only when actually hit
 	e. References the prev hit even if blocked
 	*/
-	repeated BulletConfig hits = 7; // Hits within a "Skill" are automatically triggered
+	repeated BulletConfig hits = 1024; // Hits within a "Skill" are automatically triggered
 }
 
 message FrameLog {

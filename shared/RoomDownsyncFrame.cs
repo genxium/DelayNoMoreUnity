@@ -57,8 +57,8 @@ namespace shared {
             "dEZyYW1lRG93bnN5bmNzGAMgAygLMhouc2hhcmVkLklucHV0RnJhbWVEb3du",
             "c3luYxIZChFzaG91bGRGb3JjZVJlc3luYxgEIAEoCBIVCg1wZWVySm9pbklu",
             "ZGV4GAUgASgFIlsKCVBhdHJvbEN1ZRINCgVmbEFjdBgBIAEoBBINCgVmckFj",
-            "dBgCIAEoBBIXCg9mbENhcHR1cmVGcmFtZXMYAyABKAUSFwoPZnJDYXB0dXJl",
-            "RnJhbWVzGAQgASgFIlQKCVZpc2lvbkJveBITCgtib3R0b21MZWZ0WBgBIAEo",
+            "dBgCIAEoBBIXCg9mbENhcHR1cmVGcmFtZXMYAyABKAQSFwoPZnJDYXB0dXJl",
+            "RnJhbWVzGAQgASgEIlQKCVZpc2lvbkJveBITCgtib3R0b21MZWZ0WBgBIAEo",
             "BRITCgtib3R0b21MZWZ0WRgCIAEoBRINCgV3aWR0aBgDIAEoBRIOCgZoZWln",
             "aHQYBCABKAUixwQKDEJ1bGxldENvbmZpZxIVCg1zdGFydHVwRnJhbWVzGAEg",
             "ASgFEhoKEmNhbmNlbGxhYmxlU3RGcmFtZRgCIAEoBRIaChJjYW5jZWxsYWJs",
@@ -106,25 +106,26 @@ namespace shared {
             "eW5jRnJhbWUSOwoXaW5wdXRGcmFtZURvd25zeW5jQmF0Y2gYBCADKAsyGi5z",
             "aGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEiwKCGJjaUZyYW1lGAUgASgLMhou",
             "c2hhcmVkLkJhdHRsZUNvbGxpZGVySW5mbxIVCg1wZWVySm9pbkluZGV4GAYg",
-            "ASgFIvMBCgVTa2lsbBIVCg1iYXR0bGVMb2NhbElkGAEgASgFEhYKDnJlY292",
+            "ASgFIoUCCgVTa2lsbBIVCg1iYXR0bGVMb2NhbElkGAEgASgFEhYKDnJlY292",
             "ZXJ5RnJhbWVzGAIgASgFEh0KFXJlY292ZXJ5RnJhbWVzT25CbG9jaxgDIAEo",
             "BRIbChNyZWNvdmVyeUZyYW1lc09uSGl0GAQgASgFEi0KC3RyaWdnZXJUeXBl",
             "GAUgASgOMhguc2hhcmVkLlNraWxsVHJpZ2dlclR5cGUSLAoMYm91bmRDaFN0",
-            "YXRlGAYgASgOMhYuc2hhcmVkLkNoYXJhY3RlclN0YXRlEiIKBGhpdHMYByAD",
-            "KAsyFC5zaGFyZWQuQnVsbGV0Q29uZmlnImcKCEZyYW1lTG9nEiYKA3JkZhgB",
-            "IAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRIzCg9hY3R1YWxseVVz",
-            "ZWRJZGYYAiABKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jKjUKC0J1",
-            "bGxldFN0YXRlEgsKB1N0YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBsb2Rp",
-            "bmcQAiquAgoOQ2hhcmFjdGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxraW5n",
-            "EAESDgoKVHVybkFyb3VuZBACEgoKBkF0a2VkMRADEhQKEEluQWlySWRsZTFO",
-            "b0p1bXAQBBIUChBJbkFpcklkbGUxQnlKdW1wEAUSGAoUSW5BaXJJZGxlMUJ5",
-            "V2FsbEp1bXAQBhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoI",
-            "TGF5RG93bjEQCRIKCgZHZXRVcDEQChIJCgVEeWluZxALEgsKB0Rhc2hpbmcQ",
-            "DBIKCgZPbldhbGwQDRIOCglJbkFpckF0azEQgAgSCQoEQXRrMRCBCBIJCgRB",
-            "dGsyEIIIEgkKBEF0azMQgwgSCQoEQXRrNBCECBIJCgRBdGs1EIUIKjcKCkJ1",
-            "bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAASCQoFTWVsZWUQARIMCghGaXJl",
-            "YmFsbBACKjMKEFNraWxsVHJpZ2dlclR5cGUSDgoKUmlzaW5nRWRnZRAAEg8K",
-            "C0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
+            "YXRlGAYgASgOMhYuc2hhcmVkLkNoYXJhY3RlclN0YXRlEg8KB21wRGVsdGEY",
+            "ByABKAUSIwoEaGl0cxiACCADKAsyFC5zaGFyZWQuQnVsbGV0Q29uZmlnImcK",
+            "CEZyYW1lTG9nEiYKA3JkZhgBIAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNG",
+            "cmFtZRIzCg9hY3R1YWxseVVzZWRJZGYYAiABKAsyGi5zaGFyZWQuSW5wdXRG",
+            "cmFtZURvd25zeW5jKjUKC0J1bGxldFN0YXRlEgsKB1N0YXJ0VXAQABIKCgZB",
+            "Y3RpdmUQARINCglFeHBsb2RpbmcQAiquAgoOQ2hhcmFjdGVyU3RhdGUSCQoF",
+            "SWRsZTEQABILCgdXYWxraW5nEAESDgoKVHVybkFyb3VuZBACEgoKBkF0a2Vk",
+            "MRADEhQKEEluQWlySWRsZTFOb0p1bXAQBBIUChBJbkFpcklkbGUxQnlKdW1w",
+            "EAUSGAoUSW5BaXJJZGxlMUJ5V2FsbEp1bXAQBhIPCgtJbkFpckF0a2VkMRAH",
+            "EgwKCEJsb3duVXAxEAgSDAoITGF5RG93bjEQCRIKCgZHZXRVcDEQChIJCgVE",
+            "eWluZxALEgsKB0Rhc2hpbmcQDBIKCgZPbldhbGwQDRIOCglJbkFpckF0azEQ",
+            "gAgSCQoEQXRrMRCBCBIJCgRBdGsyEIIIEgkKBEF0azMQgwgSCQoEQXRrNBCE",
+            "CBIJCgRBdGs1EIUIKjcKCkJ1bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAAS",
+            "CQoFTWVsZWUQARIMCghGaXJlYmFsbBACKjMKEFNraWxsVHJpZ2dlclR5cGUS",
+            "DgoKUmlzaW5nRWRnZRAAEg8KC0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIG",
+            "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -143,7 +144,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "PreallocNpcCapacity", "PreallocBulletCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList", "ParticipantChangeId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "Hits" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "MpDelta", "Hits" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null)
           }));
     }
@@ -3364,10 +3365,10 @@ namespace shared {
 
     /// <summary>Field number for the "flCaptureFrames" field.</summary>
     public const int FlCaptureFramesFieldNumber = 3;
-    private int flCaptureFrames_;
+    private ulong flCaptureFrames_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int FlCaptureFrames {
+    public ulong FlCaptureFrames {
       get { return flCaptureFrames_; }
       set {
         flCaptureFrames_ = value;
@@ -3376,10 +3377,10 @@ namespace shared {
 
     /// <summary>Field number for the "frCaptureFrames" field.</summary>
     public const int FrCaptureFramesFieldNumber = 4;
-    private int frCaptureFrames_;
+    private ulong frCaptureFrames_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int FrCaptureFrames {
+    public ulong FrCaptureFrames {
       get { return frCaptureFrames_; }
       set {
         frCaptureFrames_ = value;
@@ -3414,8 +3415,8 @@ namespace shared {
       int hash = 1;
       if (FlAct != 0UL) hash ^= FlAct.GetHashCode();
       if (FrAct != 0UL) hash ^= FrAct.GetHashCode();
-      if (FlCaptureFrames != 0) hash ^= FlCaptureFrames.GetHashCode();
-      if (FrCaptureFrames != 0) hash ^= FrCaptureFrames.GetHashCode();
+      if (FlCaptureFrames != 0UL) hash ^= FlCaptureFrames.GetHashCode();
+      if (FrCaptureFrames != 0UL) hash ^= FrCaptureFrames.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3442,13 +3443,13 @@ namespace shared {
         output.WriteRawTag(16);
         output.WriteUInt64(FrAct);
       }
-      if (FlCaptureFrames != 0) {
+      if (FlCaptureFrames != 0UL) {
         output.WriteRawTag(24);
-        output.WriteInt32(FlCaptureFrames);
+        output.WriteUInt64(FlCaptureFrames);
       }
-      if (FrCaptureFrames != 0) {
+      if (FrCaptureFrames != 0UL) {
         output.WriteRawTag(32);
-        output.WriteInt32(FrCaptureFrames);
+        output.WriteUInt64(FrCaptureFrames);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3468,13 +3469,13 @@ namespace shared {
         output.WriteRawTag(16);
         output.WriteUInt64(FrAct);
       }
-      if (FlCaptureFrames != 0) {
+      if (FlCaptureFrames != 0UL) {
         output.WriteRawTag(24);
-        output.WriteInt32(FlCaptureFrames);
+        output.WriteUInt64(FlCaptureFrames);
       }
-      if (FrCaptureFrames != 0) {
+      if (FrCaptureFrames != 0UL) {
         output.WriteRawTag(32);
-        output.WriteInt32(FrCaptureFrames);
+        output.WriteUInt64(FrCaptureFrames);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3492,11 +3493,11 @@ namespace shared {
       if (FrAct != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FrAct);
       }
-      if (FlCaptureFrames != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FlCaptureFrames);
+      if (FlCaptureFrames != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FlCaptureFrames);
       }
-      if (FrCaptureFrames != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrCaptureFrames);
+      if (FrCaptureFrames != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FrCaptureFrames);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3516,10 +3517,10 @@ namespace shared {
       if (other.FrAct != 0UL) {
         FrAct = other.FrAct;
       }
-      if (other.FlCaptureFrames != 0) {
+      if (other.FlCaptureFrames != 0UL) {
         FlCaptureFrames = other.FlCaptureFrames;
       }
-      if (other.FrCaptureFrames != 0) {
+      if (other.FrCaptureFrames != 0UL) {
         FrCaptureFrames = other.FrCaptureFrames;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -3546,11 +3547,11 @@ namespace shared {
             break;
           }
           case 24: {
-            FlCaptureFrames = input.ReadInt32();
+            FlCaptureFrames = input.ReadUInt64();
             break;
           }
           case 32: {
-            FrCaptureFrames = input.ReadInt32();
+            FrCaptureFrames = input.ReadUInt64();
             break;
           }
         }
@@ -3577,11 +3578,11 @@ namespace shared {
             break;
           }
           case 24: {
-            FlCaptureFrames = input.ReadInt32();
+            FlCaptureFrames = input.ReadUInt64();
             break;
           }
           case 32: {
-            FrCaptureFrames = input.ReadInt32();
+            FrCaptureFrames = input.ReadUInt64();
             break;
           }
         }
@@ -7543,6 +7544,7 @@ namespace shared {
       recoveryFramesOnHit_ = other.recoveryFramesOnHit_;
       triggerType_ = other.triggerType_;
       boundChState_ = other.boundChState_;
+      mpDelta_ = other.mpDelta_;
       hits_ = other.hits_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -7625,10 +7627,25 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "mpDelta" field.</summary>
+    public const int MpDeltaFieldNumber = 7;
+    private int mpDelta_;
+    /// <summary>
+    /// Usually used as "mp consumption"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int MpDelta {
+      get { return mpDelta_; }
+      set {
+        mpDelta_ = value;
+      }
+    }
+
     /// <summary>Field number for the "hits" field.</summary>
-    public const int HitsFieldNumber = 7;
+    public const int HitsFieldNumber = 1024;
     private static readonly pb::FieldCodec<global::shared.BulletConfig> _repeated_hits_codec
-        = pb::FieldCodec.ForMessage(58, global::shared.BulletConfig.Parser);
+        = pb::FieldCodec.ForMessage(8194, global::shared.BulletConfig.Parser);
     private readonly pbc::RepeatedField<global::shared.BulletConfig> hits_ = new pbc::RepeatedField<global::shared.BulletConfig>();
     /// <summary>
     ///*
@@ -7668,6 +7685,7 @@ namespace shared {
       if (RecoveryFramesOnHit != other.RecoveryFramesOnHit) return false;
       if (TriggerType != other.TriggerType) return false;
       if (BoundChState != other.BoundChState) return false;
+      if (MpDelta != other.MpDelta) return false;
       if(!hits_.Equals(other.hits_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -7682,6 +7700,7 @@ namespace shared {
       if (RecoveryFramesOnHit != 0) hash ^= RecoveryFramesOnHit.GetHashCode();
       if (TriggerType != global::shared.SkillTriggerType.RisingEdge) hash ^= TriggerType.GetHashCode();
       if (BoundChState != global::shared.CharacterState.Idle1) hash ^= BoundChState.GetHashCode();
+      if (MpDelta != 0) hash ^= MpDelta.GetHashCode();
       hash ^= hits_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -7725,6 +7744,10 @@ namespace shared {
         output.WriteRawTag(48);
         output.WriteEnum((int) BoundChState);
       }
+      if (MpDelta != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(MpDelta);
+      }
       hits_.WriteTo(output, _repeated_hits_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -7760,6 +7783,10 @@ namespace shared {
         output.WriteRawTag(48);
         output.WriteEnum((int) BoundChState);
       }
+      if (MpDelta != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(MpDelta);
+      }
       hits_.WriteTo(ref output, _repeated_hits_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -7788,6 +7815,9 @@ namespace shared {
       }
       if (BoundChState != global::shared.CharacterState.Idle1) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) BoundChState);
+      }
+      if (MpDelta != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MpDelta);
       }
       size += hits_.CalculateSize(_repeated_hits_codec);
       if (_unknownFields != null) {
@@ -7819,6 +7849,9 @@ namespace shared {
       }
       if (other.BoundChState != global::shared.CharacterState.Idle1) {
         BoundChState = other.BoundChState;
+      }
+      if (other.MpDelta != 0) {
+        MpDelta = other.MpDelta;
       }
       hits_.Add(other.hits_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -7860,7 +7893,11 @@ namespace shared {
             BoundChState = (global::shared.CharacterState) input.ReadEnum();
             break;
           }
-          case 58: {
+          case 56: {
+            MpDelta = input.ReadInt32();
+            break;
+          }
+          case 8194: {
             hits_.AddEntriesFrom(input, _repeated_hits_codec);
             break;
           }
@@ -7903,7 +7940,11 @@ namespace shared {
             BoundChState = (global::shared.CharacterState) input.ReadEnum();
             break;
           }
-          case 58: {
+          case 56: {
+            MpDelta = input.ReadInt32();
+            break;
+          }
+          case 8194: {
             hits_.AddEntriesFrom(ref input, _repeated_hits_codec);
             break;
           }

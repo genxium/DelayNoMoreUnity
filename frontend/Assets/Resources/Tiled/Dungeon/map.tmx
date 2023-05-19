@@ -50,21 +50,27 @@
   <object id="111" x="656.333" y="588">
    <properties>
     <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="30"/>
     <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="30"/>
    </properties>
    <point/>
   </object>
   <object id="112" x="965.333" y="538">
    <properties>
     <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="30"/>
     <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="30"/>
    </properties>
    <point/>
   </object>
   <object id="139" x="1665" y="491">
    <properties>
     <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="30"/>
     <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="30"/>
    </properties>
    <point/>
   </object>
@@ -106,7 +112,9 @@
   <object id="145" x="1007" y="537">
    <properties>
     <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="30"/>
     <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="30"/>
    </properties>
    <point/>
   </object>
@@ -169,7 +177,9 @@
   <object id="155" x="1283" y="395.5">
    <properties>
     <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="30"/>
     <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="30"/>
    </properties>
    <point/>
   </object>

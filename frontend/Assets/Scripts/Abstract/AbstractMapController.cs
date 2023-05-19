@@ -658,8 +658,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected RoomDownsyncFrame mockStartRdf(int[] speciesIdList) {
         var playerStartingCposList = new Vector[roomCapacity];
-        var (defaultColliderRadius, _) = PolygonColliderCtrToVirtualGridPos(12, 0);
-
         var grid = underlyingMap.GetComponentInChildren<Grid>();
 
         var npcsStartingCposList = new List<(Vector, int, int)>();
@@ -680,7 +678,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
                         */
                         var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
-                        Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
+                        //Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
                         collisionSys.AddSingle(barrierCollider);
                         staticRectangleColliders[staticColliderIdx++] = barrierCollider;
                     }
@@ -714,13 +712,17 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
 
-                        CustomProperty flAct, frAct;
+                        CustomProperty flAct, frAct, flCaptureFrames, frCaptureFrames;
                         tileProps.TryGetCustomProperty("flAct", out flAct);
                         tileProps.TryGetCustomProperty("frAct", out frAct);
+                        tileProps.TryGetCustomProperty("flCaptureFrames", out flCaptureFrames);
+                        tileProps.TryGetCustomProperty("frCaptureFrames", out frCaptureFrames);
 
                         var newPatrolCue = new PatrolCue {
-                            FlAct = flAct.IsEmpty ? 0 : (ulong)flAct.GetValueAsInt(),
-                            FrAct = frAct.IsEmpty ? 0 : (ulong)frAct.GetValueAsInt(),
+                            FlAct = (null == flAct || flAct.IsEmpty) ? 0 : (ulong)flAct.GetValueAsInt(),
+                            FrAct = (null == frAct || frAct.IsEmpty) ? 0 : (ulong)frAct.GetValueAsInt(),
+                            FlCaptureFrames = (null == flCaptureFrames || flCaptureFrames.IsEmpty) ? 0 : (ulong)flCaptureFrames.GetValueAsInt(),
+                            FrCaptureFrames = (null == frCaptureFrames || frCaptureFrames.IsEmpty) ? 0 : (ulong)frCaptureFrames.GetValueAsInt()
                         };
 
                         var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
@@ -763,6 +765,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.OnWall = false;
             playerInRdf.Hp = 100;
             playerInRdf.MaxHp = 100;
+            playerInRdf.Mp = 1000;
+            playerInRdf.MaxMp = 1000;
         }
 
         for (int i = 0; i < npcsStartingCposList.Count; i++) {

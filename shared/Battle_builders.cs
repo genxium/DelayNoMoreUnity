@@ -166,122 +166,13 @@ namespace shared {
 
             return ret;
         }
-
-        public static Skill NewSkill(int recoveryFrames, int recoveryFramesOnBlock, int recoveryFramesOnHit, SkillTriggerType triggerType, CharacterState boundChState, List<BulletConfig> hits) {
-            // This helper function doesn't reduce a large amount of typing, but still it saves some typing of the field names for each newly declared skill 
-            var s = new Skill {
-                RecoveryFrames = recoveryFrames,
-                RecoveryFramesOnBlock = recoveryFramesOnBlock,
-                RecoveryFramesOnHit = recoveryFramesOnHit,
-                TriggerType = triggerType,
-                BoundChState = boundChState
-            };
-            // "s.Hits" is readonly, thus not assignable by the initialization call above
-            s.Hits.AddRange(hits);
-            return s;
-        }
     }
 
-    public class BulletConfigBuilder {
-        int StartupFrames;
-        int CancellableStFrame;
-        int CancellableEdFrame;
-        int ActiveFrames;
-
-        int HitStunFrames;
-        int BlockStunFrames;
-        int PushbackVelX;
-        int PushbackVelY;
-        int Damage;
-
-        int SelfLockVelX;
-        int SelfLockVelY;
-
-        int HitboxOffsetX;
-        int HitboxOffsetY;
-        int HitboxSizeX;
-        int HitboxSizeY;
-
-        bool BlowUp;
-
-        int SpeciesId;
-        int ExplosionFrames;
-
-        BulletType BType;
-
-        int Speed;
-
-        Dictionary<int, int> CancelTransit;
-
-        public BulletConfigBuilder(int startupFrames, int activeFrames, int hitStunFrames, int blockStunFrames, int damage, int pushbackVelX, int pushbackVelY, int selfLockVelX, int selfLockVelY, int hitboxOffsetX, int hitboxOffsetY, int hitboxSizeX, int hitboxSizeY, int cancellableStFrame, int cancellableEdFrame, bool blowUp, int speciesId, int explosionFrames, BulletType bType, int speed) {
-            StartupFrames = startupFrames;
-            ActiveFrames = activeFrames;
-
-            HitStunFrames = hitStunFrames;
-            BlockStunFrames = blockStunFrames;
-            Damage = damage;
-
-            PushbackVelX = pushbackVelX;
-            PushbackVelY = pushbackVelY;
-
-            SelfLockVelX = selfLockVelX;
-            SelfLockVelY = selfLockVelY;
-
-            HitboxOffsetX = hitboxOffsetX;
-            HitboxOffsetY = hitboxOffsetY;
-            HitboxSizeX = hitboxSizeX;
-            HitboxSizeY = hitboxSizeY;
-
-
-            CancellableStFrame = cancellableStFrame;
-            CancellableEdFrame = cancellableEdFrame;
-
-            BlowUp = blowUp;
-
-            SpeciesId = speciesId;
-            ExplosionFrames = explosionFrames;
-
-            BType = bType;
-            Speed = speed;
-
-            CancelTransit = new Dictionary<int, int>();
-        }
-
-        public BulletConfigBuilder UpsertCancelTransit(int patternId, int skillId) {
-            CancelTransit[patternId] = skillId;
+    public sealed partial class BulletConfig {
+        
+        public BulletConfig UpsertCancelTransit(int patternId, int skillId) {
+            this.CancelTransit.Add(patternId, skillId);
             return this;
-        }
-
-        public BulletConfig build() {
-            var cf = new BulletConfig {
-                BType = BType,
-                StartupFrames = StartupFrames,
-                CancellableStFrame = CancellableStFrame,
-                CancellableEdFrame = CancellableEdFrame,
-                ActiveFrames = ActiveFrames,
-
-                HitStunFrames = HitStunFrames,
-                BlockStunFrames = BlockStunFrames,
-                PushbackVelX = PushbackVelX,
-                PushbackVelY = PushbackVelY,
-                Damage = Damage,
-
-                SelfLockVelX = SelfLockVelX,
-                SelfLockVelY = SelfLockVelY,
-
-                HitboxOffsetX = HitboxOffsetX,
-                HitboxOffsetY = HitboxOffsetY,
-                HitboxSizeX = HitboxSizeX,
-                HitboxSizeY = HitboxSizeY,
-
-                BlowUp = BlowUp,
-                ExplosionFrames = ExplosionFrames,
-                SpeciesId = SpeciesId,
-                Speed = Speed,
-            };
-            cf.CancelTransit.MergeFrom(CancelTransit);
-
-            return cf;
         }
     }
 
@@ -289,14 +180,16 @@ namespace shared {
         int RecoveryFrames;
         int RecoveryFramesOnBlock;
         int RecoveryFramesOnHit;
+        int MpDelta;
         SkillTriggerType TriggerType;
         CharacterState BoundChState;
         List<BulletConfig> Hits;
 
-        public SkillBuilder(int recoveryFrames, int recoveryFramesOnBlock, int recoveryFramesOnHit, SkillTriggerType triggerType, CharacterState boundChState) {
+        public SkillBuilder(int recoveryFrames, int recoveryFramesOnBlock, int recoveryFramesOnHit, int mpDelta, SkillTriggerType triggerType, CharacterState boundChState) {
             RecoveryFrames = recoveryFrames;
             RecoveryFramesOnBlock = recoveryFramesOnBlock;
             RecoveryFramesOnHit = recoveryFramesOnHit;
+            MpDelta = mpDelta;
             TriggerType = triggerType;
             BoundChState = boundChState;
             Hits = new List<BulletConfig>();
@@ -308,7 +201,17 @@ namespace shared {
         }
 
         public Skill build() {
-            return Battle.NewSkill(RecoveryFrames, RecoveryFramesOnBlock, RecoveryFramesOnHit, TriggerType, BoundChState, Hits);
+            var s = new Skill {
+                RecoveryFrames = RecoveryFrames,
+                RecoveryFramesOnBlock = RecoveryFramesOnBlock,
+                RecoveryFramesOnHit = RecoveryFramesOnHit,
+                MpDelta = MpDelta,
+                TriggerType = TriggerType,
+                BoundChState = BoundChState
+            };
+            // "s.Hits" is readonly, thus not assignable by the initialization call above
+            s.Hits.AddRange(Hits);
+            return s;
         }
     }
 }

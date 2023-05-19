@@ -320,7 +320,14 @@ namespace shared {
 
             if (skills.ContainsKey(skillId)) {
                 var skillConfig = skills[skillId];
-
+                if (skillConfig.MpDelta < currCharacterDownsync.Mp) {
+                    return false;
+                } else {
+                    thatCharacterInNextFrame.Mp -= skillConfig.MpDelta;
+                    if (0 >= thatCharacterInNextFrame.Mp) {
+                        thatCharacterInNextFrame.Mp = 0;
+                    }
+                }
                 thatCharacterInNextFrame.ActiveSkillId = skillId;
                 thatCharacterInNextFrame.ActiveSkillHit = 0;
                 thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
@@ -964,6 +971,7 @@ namespace shared {
             // Make a copy first
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var src = currRenderFrame.PlayersArr[i];
+                var chConfig = characters[src.SpeciesId];
                 int framesToRecover = src.FramesToRecover - 1;
                 int framesInChState = src.FramesInChState + 1;
                 int framesInvinsible = src.FramesInvinsible - 1;
@@ -977,12 +985,17 @@ namespace shared {
                 if (framesInPatrolCue < 0) {
                     framesInPatrolCue = 0;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, nextRenderFramePlayers[i]);
+                int mp = src.Mp + chConfig.MpRegenRate;
+                if (mp >= src.MaxMp) {
+                    mp = src.MaxMp;
+                }
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, nextRenderFramePlayers[i]);
             }
 
             int j = 0;
             while (j < currRenderFrame.NpcsArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.NpcsArr[j].Id) {
                 var src = currRenderFrame.NpcsArr[j];
+                var chConfig = characters[src.SpeciesId];
                 int framesToRecover = src.FramesToRecover - 1;
                 int framesInChState = src.FramesInChState + 1;
                 int framesInvinsible = src.FramesInvinsible - 1;
@@ -996,7 +1009,11 @@ namespace shared {
                 if (framesInPatrolCue < 0) {
                     framesInPatrolCue = 0;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, nextRenderFrameNpcs[j]);
+                int mp = src.Mp + chConfig.MpRegenRate;
+                if (mp >= src.MaxMp) {
+                    mp = src.MaxMp;
+                }
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, nextRenderFrameNpcs[j]);
                 j++;
             }
 
