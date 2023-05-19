@@ -6,8 +6,6 @@ using static shared.Battle;
 
 public class OfflineMapController : AbstractMapController {
 
-    public NetworkDoctorInfo networkInfoPanel;
-
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
     }
@@ -51,7 +49,6 @@ public class OfflineMapController : AbstractMapController {
         yield return new WaitForSeconds(1);
         readyGoPanel.playGoAnim();
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
-        networkInfoPanel.gameObject.SetActive(true);
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
         onRoomDownsyncFrame(startRdf, null);
     }
@@ -81,6 +78,7 @@ public class OfflineMapController : AbstractMapController {
     }
 
     public void OnBackButtonClicked() {
+        Debug.Log("OnBackButtonClicked");
         characterSelectPanel.gameObject.SetActive(true);
     }
 
