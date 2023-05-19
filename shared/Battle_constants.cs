@@ -200,7 +200,7 @@ namespace shared {
 
                     new KeyValuePair<int, Skill>(255, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.InAirAtk1)
                                                     .AddHit(new BulletConfigBuilder(2, 20, 18, 9, 13, NO_LOCK_VEL, NO_LOCK_VEL, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
-                                                    .build()), 
+                                                    .build()),
 
                     new KeyValuePair<int, Skill>(256, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.InAirAtk1)
                                                     .AddHit(new BulletConfigBuilder(2, 20, 18, 9, 13, NO_LOCK_VEL, NO_LOCK_VEL, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
@@ -212,39 +212,94 @@ namespace shared {
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
                 new[]
                 {
-                    new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig(
-                    0, "KnifeGirl",
-                    11, 1,
-                    16, 16, 10, 27,
-                    (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    9,
-                    true, true,
-                    8, (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))),
+                    new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig {
+                        SpeciesId = 0,
+                        SpeciesName = "KnifeGirl",
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 27,
+                        Speed = (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 9,
+                        DashingEnabled = true,
+                        OnWallEnabled = true,
+                        WallJumpingFramesToRecover = 8,
+                        WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(62.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 2
+                    }
+                    ),
 
-                    new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig(
-                    1, "SwordMan",
-                    11, 1,
-                    16, 16, 10, 27,
-                    (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    9,
-                    false, false,
-                    0, 0,
-                    0, 0)),
+                    new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
+                        SpeciesId = 1,
+                        SpeciesName = "SwordMan",
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 27,
+                        Speed = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 9,
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1
+                    }),
 
-                    new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig(
-                    2, "MonkGirl",
-                    11, 1,
-                    16, 16, 10, 27,
-                    (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    9,
-                    true, true,
-                    8, (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)))
-                }
+                    new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
+                        SpeciesId = 2,
+                        SpeciesName = "MonkGirl",
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 27,
+                        Speed = (int)(1.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(7 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 9,
+                        DashingEnabled = true,
+                        OnWallEnabled = true,
+                        WallJumpingFramesToRecover = 8,
+                        WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(28f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(50f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 5
+                    })
+            }
             );
 
         public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
@@ -333,10 +388,10 @@ namespace shared {
                             // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                             // Air-dash is prohibited for this speciesId
                             if (!currCharacterDownsync.InAir) {
-                            	return 10;
-							} else {
+                                return 10;
+                            } else {
                                 return NO_SKILL;
-							}
+                            }
                         default:
                             return NO_SKILL;
                     }

@@ -193,7 +193,7 @@ namespace shared {
             if (!currCharacterDownsync.InAir) {
                 // TODO: InAir vision reaction yet.
                 float visionCx, visionCy, visionCw, visionCh;
-                calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, out visionCx, out visionCy, out visionCw, out visionCh);
+                calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
 
                 var visionCollider = dynamicRectangleColliders[colliderCnt];
                 UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
@@ -226,26 +226,34 @@ namespace shared {
                                         var colliderDy = (bCollider.Y - aCollider.Y);
                                         if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * currCharacterDownsync.DirX) {
                                             // Opponent is attackable and in front of me
-                                            if (0 < colliderDy) {
-												switch (currCharacterDownsync.SpeciesId) {
-												case 1: 
-                                                	patternId = 2;
-												break;
-												case 2: 
-                                                	patternId = 2;
-												break;
-												}
-                                            } else {
-												switch (currCharacterDownsync.SpeciesId) {
-												case 1: 
-                                                	patternId = 1;
-												break;
-												case 2: 
-                                                	patternId = 3;
-												break;
-												}
+                                            switch (currCharacterDownsync.SpeciesId) {
+                                                case 1:
+                                                    if (0 < colliderDy) {
+                                                        // In air
+                                                        patternId = 3;
+                                                    } else {
+                                                        // On ground
+                                                        patternId = 1;
+                                                    }
+                                                    hasVisionReaction = true;
+                                                    break;
+                                                case 2:
+                                                    if (Math.Abs(colliderDx) < 0.6f * aCollider.W) {
+                                                        // Melee reachable
+                                                        if (0 < colliderDy) {
+                                                            // In air
+                                                            patternId = 3;
+                                                        } else {
+                                                            // On ground
+                                                            patternId = 1;
+                                                        }
+                                                    } else {
+                                                        // Use fireball
+                                                        patternId = 2;
+                                                    }
+                                                    hasVisionReaction = true;
+                                                    break;
                                             }
-                                            hasVisionReaction = true;
                                         } else if (0 > colliderDx * currCharacterDownsync.DirX) {
                                             // Behind me
                                             effectiveDx = -effectiveDx;
@@ -613,7 +621,7 @@ namespace shared {
                 }
 
                 float boxCx, boxCy, boxCw, boxCh;
-                calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
+                calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
                 Collider characterCollider = dynamicRectangleColliders[colliderCnt];
                 UpdateRectCollider(characterCollider, boxCx, boxCy, boxCw, boxCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "characterCollider.Y" would be a multiple of 1.0
                 colliderCnt++;
@@ -716,10 +724,9 @@ namespace shared {
                                 case InAirIdle1ByWallJump:
                                 case OnWall:
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
-                                    var halfColliderWidthDiff = 0;
-                                    var halfColliderHeightDiff = currCharacterDownsync.ColliderRadius;
-                                    var (_, halfColliderWorldHeightDiff) = VirtualGridToPolygonColliderCtr(halfColliderWidthDiff, halfColliderHeightDiff);
-                                    effPushbacks[i].Y -= halfColliderWorldHeightDiff;
+                                    var halfColliderVhDiff = ((chConfig.DefaultSizeY - chConfig.ShrinkedSizeY) >> 1);
+                                    var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                    effPushbacks[i].Y -= halfColliderChDiff;
                                     break;
                             }
                             thatCharacterInNextFrame.CharacterState = Idle1;
@@ -966,7 +973,11 @@ namespace shared {
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, nextRenderFramePlayers[i]);
+                int framesInPatrolCue = src.FramesInPatrolCue - 1;
+                if (framesInPatrolCue < 0) {
+                    framesInPatrolCue = 0;
+                }
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, nextRenderFramePlayers[i]);
             }
 
             int j = 0;
@@ -981,7 +992,11 @@ namespace shared {
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.ColliderRadius, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, nextRenderFrameNpcs[j]);
+                int framesInPatrolCue = src.FramesInPatrolCue - 1;
+                if (framesInPatrolCue < 0) {
+                    framesInPatrolCue = 0;
+                }
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, nextRenderFrameNpcs[j]);
                 j++;
             }
 
@@ -1152,29 +1167,36 @@ namespace shared {
             }
         }
 
-        public static void calcCharacterBoundingBoxInCollisionSpace(CharacterDownsync characterDownsync, int newVx, int newVy, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
+        public static void calcCharacterBoundingBoxInCollisionSpace(CharacterDownsync characterDownsync, CharacterConfig chConfig, int newVx, int newVy, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
+            
             (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(newVx, newVy);
 
             switch (characterDownsync.CharacterState) {
                 case LayDown1:
-                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(characterDownsync.ColliderRadius * 4, characterDownsync.ColliderRadius * 2);
+                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.LayDownSizeX, chConfig.LayDownSizeY);
                     break;
                 case BlownUp1:
                 case InAirIdle1NoJump:
                 case InAirIdle1ByJump:
                 case InAirIdle1ByWallJump:
                 case OnWall:
-                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(characterDownsync.ColliderRadius * 2, characterDownsync.ColliderRadius * 2);
+                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.ShrinkedSizeX, chConfig.ShrinkedSizeY);
                     break;
                 default:
-                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(characterDownsync.ColliderRadius * 2, characterDownsync.ColliderRadius * 4);
+                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.DefaultSizeX, chConfig.DefaultSizeY);
                     break;
             }
         }
-        public static void calcNpcVisionBoxInCollisionSpace(CharacterDownsync characterDownsync, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
+        public static void calcNpcVisionBoxInCollisionSpace(CharacterDownsync characterDownsync, CharacterConfig chConfig, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
+            if (noOpSet.Contains(characterDownsync.CharacterState)) {
+                (boxCx, boxCy) = (0, 0);
+                (boxCw, boxCh) = (0, 0);
+                return;
+            }
+
             int xfac = (0 < characterDownsync.DirX ? 1 : -1);
-            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * ((characterDownsync.ColliderRadius >> 3) + (characterDownsync.ColliderRadius >> 4)), characterDownsync.VirtualGridY + 3 * (characterDownsync.ColliderRadius >> 1));
-            (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(7 * (characterDownsync.ColliderRadius >> 1), 4 * characterDownsync.ColliderRadius);
+            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * chConfig.VisionOffsetX, characterDownsync.VirtualGridY + chConfig.VisionOffsetY);
+            (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.VisionSizeX, chConfig.VisionSizeY);
         }
     }
 }

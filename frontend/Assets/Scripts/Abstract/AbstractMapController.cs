@@ -753,7 +753,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.RevivalVirtualGridX = playerVposX;
             playerInRdf.RevivalVirtualGridY = playerVposY;
             playerInRdf.Speed = chConfig.Speed;
-            playerInRdf.ColliderRadius = defaultColliderRadius;
             playerInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
             playerInRdf.FramesToRecover = 0;
             playerInRdf.DirX = (1 == playerInRdf.JoinIndex ? 2 : -2);
@@ -783,7 +782,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.RevivalVirtualGridX = vx;
             npcInRdf.RevivalVirtualGridY = vy;
             npcInRdf.Speed = chConfig.Speed;
-            npcInRdf.ColliderRadius = defaultColliderRadius;
             npcInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
             npcInRdf.FramesToRecover = 0;
             npcInRdf.DirX = dirX;

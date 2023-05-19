@@ -54,7 +54,7 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, int colliderRadius, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, bool jumpTriggered, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, bool jumpTriggered, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -73,7 +73,6 @@ namespace shared {
             dst.JoinIndex = joinIndex;
             dst.Hp = hp;
             dst.MaxHp = maxHp;
-            dst.ColliderRadius = colliderRadius;
             dst.InAir = inAir;
             dst.OnWall = onWall;
             dst.OnWallNormX = onWallNormX;
@@ -84,6 +83,15 @@ namespace shared {
             dst.RevivalVirtualGridX = revivalVirtualGridX;
             dst.RevivalVirtualGridY = revivalVirtualGridY;
             dst.JumpTriggered = jumpTriggered;
+
+            dst.CapturedByPatrolCue = capturedByPatrolCue;
+            dst.FramesInPatrolCue = framesInPatrolCue;
+
+            dst.BeatsCnt = beatsCnt;
+            dst.BeatenCnt = beatenCnt;
+
+            dst.Mp = mp;
+            dst.MaxMp = maxMp;
         }
 
         public static Bullet NewBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState) {
@@ -106,21 +114,21 @@ namespace shared {
         }
 
         public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, BulletConfig staticBulletConfig, Bullet dst) {
-			dst.BlState = blState;
-			dst.FramesInBlState = framesInBlState; 
-			dst.Config = staticBulletConfig;
+            dst.BlState = blState;
+            dst.FramesInBlState = framesInBlState;
+            dst.Config = staticBulletConfig;
 
-			dst.BattleAttr.BulletLocalId = bulletLocalId;
-			dst.BattleAttr.OriginatedRenderFrameId = originatedRenderFrameId;
-			dst.BattleAttr.OffenderJoinIndex = offenderJoinIndex;
-			dst.BattleAttr.TeamId = teamId;
+            dst.BattleAttr.BulletLocalId = bulletLocalId;
+            dst.BattleAttr.OriginatedRenderFrameId = originatedRenderFrameId;
+            dst.BattleAttr.OffenderJoinIndex = offenderJoinIndex;
+            dst.BattleAttr.TeamId = teamId;
 
-			dst.VirtualGridX = vx; 
-			dst.VirtualGridY = vy; 
-			dst.DirX = dirX;
-			dst.DirY = dirY;
-			dst.VelX = velX;
-			dst.VelY = velY;
+            dst.VirtualGridX = vx;
+            dst.VirtualGridY = vy;
+            dst.DirX = dirX;
+            dst.DirY = dirY;
+            dst.VelX = velX;
+            dst.VelY = velY;
         }
 
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocAiPlayerCount, int preallocBulletCount) {
@@ -215,7 +223,7 @@ namespace shared {
 
             PushbackVelX = pushbackVelX;
             PushbackVelY = pushbackVelY;
-            
+
             SelfLockVelX = selfLockVelX;
             SelfLockVelY = selfLockVelY;
 
@@ -284,7 +292,7 @@ namespace shared {
         SkillTriggerType TriggerType;
         CharacterState BoundChState;
         List<BulletConfig> Hits;
-    
+
         public SkillBuilder(int recoveryFrames, int recoveryFramesOnBlock, int recoveryFramesOnHit, SkillTriggerType triggerType, CharacterState boundChState) {
             RecoveryFrames = recoveryFrames;
             RecoveryFramesOnBlock = recoveryFramesOnBlock;
@@ -302,5 +310,5 @@ namespace shared {
         public Skill build() {
             return Battle.NewSkill(RecoveryFrames, RecoveryFramesOnBlock, RecoveryFramesOnHit, TriggerType, BoundChState, Hits);
         }
-    } 
+    }
 }

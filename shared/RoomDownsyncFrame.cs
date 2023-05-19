@@ -24,115 +24,117 @@ namespace shared {
     static RoomDownsyncFrameReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chlyb29tX2Rvd25zeW5jX2ZyYW1lLnByb3RvEgZzaGFyZWQi8gUKEUNoYXJh",
+            "Chlyb29tX2Rvd25zeW5jX2ZyYW1lLnByb3RvEgZzaGFyZWQilwYKEUNoYXJh",
             "Y3RlckRvd25zeW5jEgoKAmlkGAEgASgFEhQKDHZpcnR1YWxHcmlkWBgCIAEo",
             "BRIUCgx2aXJ0dWFsR3JpZFkYAyABKAUSDAoEZGlyWBgEIAEoBRIMCgRkaXJZ",
             "GAUgASgFEgwKBHZlbFgYBiABKAUSDAoEdmVsWRgHIAEoBRINCgVzcGVlZBgI",
-            "IAEoBRIRCglzcGVjaWVzSWQYCSABKAUSEQoJam9pbkluZGV4GAogASgFEhYK",
-            "DmNvbGxpZGVyUmFkaXVzGAsgASgFEg8KB3JlbW92ZWQYDCABKAgSDQoFc2Nv",
-            "cmUYDSABKAUSGQoRbGFzdE1vdmVHbXRNaWxsaXMYDiABKAUSFwoPZnJhbWVz",
-            "VG9SZWNvdmVyGA8gASgFEgoKAmhwGBAgASgFEg0KBW1heEhwGBEgASgFEi4K",
-            "DmNoYXJhY3RlclN0YXRlGBIgASgOMhYuc2hhcmVkLkNoYXJhY3RlclN0YXRl",
-            "EhcKD2ZyYW1lc0luQ2hTdGF0ZRgTIAEoBRINCgVpbkFpchgUIAEoCBIVCg1q",
-            "dW1wVHJpZ2dlcmVkGBUgASgIEhYKDWFjdGl2ZVNraWxsSWQYgAggASgFEhcK",
+            "IAEoBRIRCglzcGVjaWVzSWQYCSABKAUSEQoJam9pbkluZGV4GAogASgFEhcK",
+            "D2ZyYW1lc1RvUmVjb3ZlchgLIAEoBRIZChFjYXB0dXJlZEJ5SW5lcnRpYRgM",
+            "IAEoCBIbChNjYXB0dXJlZEJ5UGF0cm9sQ3VlGA0gASgIEhkKEWZyYW1lc0lu",
+            "UGF0cm9sQ3VlGA4gASgFEhAKCGJlYXRzQ250GA8gASgFEhEKCWJlYXRlbkNu",
+            "dBgQIAEoBRIKCgJocBgRIAEoBRINCgVtYXhIcBgSIAEoBRIKCgJtcBgTIAEo",
+            "BRINCgVtYXhNcBgUIAEoBRIuCg5jaGFyYWN0ZXJTdGF0ZRgWIAEoDjIWLnNo",
+            "YXJlZC5DaGFyYWN0ZXJTdGF0ZRIXCg9mcmFtZXNJbkNoU3RhdGUYFyABKAUS",
+            "DQoFaW5BaXIYGCABKAgSFQoNanVtcFRyaWdnZXJlZBgZIAEoCBIOCgZvbldh",
+            "bGwYGiABKAgSEwoLb25XYWxsTm9ybVgYGyABKAUSEwoLb25XYWxsTm9ybVkY",
+            "HCABKAUSGwoTcmV2aXZhbFZpcnR1YWxHcmlkWBgdIAEoBRIbChNyZXZpdmFs",
+            "VmlydHVhbEdyaWRZGB4gASgFEhYKDWFjdGl2ZVNraWxsSWQYgAggASgFEhcK",
             "DmFjdGl2ZVNraWxsSGl0GIEIIAEoBRIZChBmcmFtZXNJbnZpbnNpYmxlGIII",
             "IAEoBRIVCgxidWxsZXRUZWFtSWQYgwggASgFEhoKEWNoQ29sbGlzaW9uVGVh",
-            "bUlkGIQIIAEoBRIOCgZvbldhbGwYGiABKAgSEwoLb25XYWxsTm9ybVgYGyAB",
-            "KAUSEwoLb25XYWxsTm9ybVkYHCABKAUSGQoRY2FwdHVyZWRCeUluZXJ0aWEY",
-            "HSABKAgSGwoTcmV2aXZhbFZpcnR1YWxHcmlkWBgeIAEoBRIbChNyZXZpdmFs",
-            "VmlydHVhbEdyaWRZGB8gASgFEg0KBG5hbWUY5QcgASgJEhQKC2Rpc3BsYXlO",
-            "YW1lGOYHIAEoCRIPCgZhdmF0YXIY5wcgASgJIlEKEUlucHV0RnJhbWVEZWNv",
-            "ZGVkEgoKAmR4GAEgASgFEgoKAmR5GAIgASgFEhEKCWJ0bkFMZXZlbBgDIAEo",
-            "BRIRCglidG5CTGV2ZWwYBCABKAUiTAoQSW5wdXRGcmFtZVVwc3luYxIUCgxp",
-            "bnB1dEZyYW1lSWQYASABKAUSDwoHZW5jb2RlZBgCIAEoBBIRCglqb2luSW5k",
-            "ZXgYAyABKAUiVAoSSW5wdXRGcmFtZURvd25zeW5jEhQKDGlucHV0RnJhbWVJ",
-            "ZBgBIAEoBRIRCglpbnB1dExpc3QYAiADKAQSFQoNY29uZmlybWVkTGlzdBgD",
-            "IAEoBCK2AQoFV3NSZXESEAoIcGxheWVySWQYASABKAUSCwoDYWN0GAIgASgF",
-            "EhEKCWpvaW5JbmRleBgDIAEoBRIVCg1hY2tpbmdGcmFtZUlkGAQgASgFEhoK",
-            "EmFja2luZ0lucHV0RnJhbWVJZBgFIAEoBRIPCgdhdXRoS2V5GAYgASgFEjcK",
-            "FWlucHV0RnJhbWVVcHN5bmNCYXRjaBgHIAMoCzIYLnNoYXJlZC5JbnB1dEZy",
-            "YW1lVXBzeW5jIrkBChNJbnB1dEJ1ZmZlclNuYXBzaG90EhgKEHJlZlJlbmRl",
-            "ckZyYW1lSWQYASABKAUSFwoPdW5jb25maXJtZWRNYXNrGAIgASgEEj0KGXRv",
-            "U2VuZElucHV0RnJhbWVEb3duc3luY3MYAyADKAsyGi5zaGFyZWQuSW5wdXRG",
-            "cmFtZURvd25zeW5jEhkKEXNob3VsZEZvcmNlUmVzeW5jGAQgASgIEhUKDXBl",
-            "ZXJKb2luSW5kZXgYBSABKAUiKQoJUGF0cm9sQ3VlEg0KBWZsQWN0GAEgASgE",
-            "Eg0KBWZyQWN0GAIgASgEIlQKCVZpc2lvbkJveBITCgtib3R0b21MZWZ0WBgB",
-            "IAEoBRITCgtib3R0b21MZWZ0WRgCIAEoBRINCgV3aWR0aBgDIAEoBRIOCgZo",
-            "ZWlnaHQYBCABKAUixwQKDEJ1bGxldENvbmZpZxIVCg1zdGFydHVwRnJhbWVz",
-            "GAEgASgFEhoKEmNhbmNlbGxhYmxlU3RGcmFtZRgCIAEoBRIaChJjYW5jZWxs",
-            "YWJsZUVkRnJhbWUYAyABKAUSFAoMYWN0aXZlRnJhbWVzGAQgASgFEhUKDWhp",
-            "dFN0dW5GcmFtZXMYBSABKAUSFwoPYmxvY2tTdHVuRnJhbWVzGAYgASgFEhQK",
-            "DHB1c2hiYWNrVmVsWBgHIAEoBRIUCgxwdXNoYmFja1ZlbFkYCCABKAUSDgoG",
-            "ZGFtYWdlGAkgASgFEhQKDHNlbGZMb2NrVmVsWBgKIAEoBRIUCgxzZWxmTG9j",
-            "a1ZlbFkYCyABKAUSFQoNaGl0Ym94T2Zmc2V0WBgMIAEoBRIVCg1oaXRib3hP",
-            "ZmZzZXRZGA0gASgFEhMKC2hpdGJveFNpemVYGA4gASgFEhMKC2hpdGJveFNp",
-            "emVZGA8gASgFEg4KBmJsb3dVcBgQIAEoCBIRCglzcGVjaWVzSWQYESABKAUS",
-            "FwoPZXhwbG9zaW9uRnJhbWVzGBIgASgFEiEKBWJUeXBlGBMgASgOMhIuc2hh",
-            "cmVkLkJ1bGxldFR5cGUSDQoFc3BlZWQYFCABKAUSPgoNY2FuY2VsVHJhbnNp",
-            "dBgVIAMoCzInLnNoYXJlZC5CdWxsZXRDb25maWcuQ2FuY2VsVHJhbnNpdEVu",
-            "dHJ5GjQKEkNhbmNlbFRyYW5zaXRFbnRyeRILCgNrZXkYASABKAUSDQoFdmFs",
-            "dWUYAiABKAU6AjgBInUKEEJ1bGxldEJhdHRsZUF0dHISFQoNYnVsbGV0TG9j",
-            "YWxJZBgBIAEoBRIfChdvcmlnaW5hdGVkUmVuZGVyRnJhbWVJZBgCIAEoBRIZ",
-            "ChFvZmZlbmRlckpvaW5JbmRleBgDIAEoBRIOCgZ0ZWFtSWQYBCABKAUihQIK",
-            "BkJ1bGxldBIkCgdibFN0YXRlGAEgASgOMhMuc2hhcmVkLkJ1bGxldFN0YXRl",
-            "EhcKD2ZyYW1lc0luQmxTdGF0ZRgCIAEoBRIsCgpiYXR0bGVBdHRyGAMgASgL",
-            "Mhguc2hhcmVkLkJ1bGxldEJhdHRsZUF0dHISJAoGY29uZmlnGAQgASgLMhQu",
-            "c2hhcmVkLkJ1bGxldENvbmZpZxIVCgx2aXJ0dWFsR3JpZFgY5wcgASgFEhUK",
-            "DHZpcnR1YWxHcmlkWRjoByABKAUSDQoEZGlyWBjpByABKAUSDQoEZGlyWRjq",
-            "ByABKAUSDQoEdmVsWBjrByABKAUSDQoEdmVsWRjsByABKAUiOAoLUGVlclVk",
-            "cEFkZHISCgoCaXAYASABKAkSDAoEcG9ydBgCIAEoBRIPCgdhdXRoS2V5GAMg",
-            "ASgFIsUDChJCYXR0bGVDb2xsaWRlckluZm8SEQoJc3RhZ2VOYW1lGAEgASgJ",
-            "EhMKC2JvdW5kUm9vbUlkGAIgASgFEhwKFGJhdHRsZUR1cmF0aW9uRnJhbWVz",
-            "GAMgASgDEiYKHmlucHV0RnJhbWVVcHN5bmNEZWxheVRvbGVyYW5jZRgEIAEo",
-            "BRInCh9tYXhDaGFzaW5nUmVuZGVyRnJhbWVzUGVyVXBkYXRlGAUgASgFEiEK",
-            "GXJvbGxiYWNrRXN0aW1hdGVkRHRNaWxsaXMYBiABKAESIAoYcm9sbGJhY2tF",
-            "c3RpbWF0ZWREdE5hbm9zGAcgASgDEhgKEHJlbmRlckJ1ZmZlclNpemUYCCAB",
-            "KAUSGAoQY29sbGlzaW9uTWluU3RlcBgJIAEoBRIZChFib3VuZFJvb21DYXBh",
-            "Y2l0eRgKIAEoBRIbChNwcmVhbGxvY05wY0NhcGFjaXR5GAsgASgFEh4KFnBy",
-            "ZWFsbG9jQnVsbGV0Q2FwYWNpdHkYDCABKAUSLQoPYmF0dGxlVWRwVHVubmVs",
-            "GIAIIAEoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIYCg9mcmFtZUxvZ0VuYWJs",
-            "ZWQYgQggASgIIvQCChFSb29tRG93bnN5bmNGcmFtZRIKCgJpZBgBIAEoBRIt",
-            "CgpwbGF5ZXJzQXJyGAIgAygLMhkuc2hhcmVkLkNoYXJhY3RlckRvd25zeW5j",
-            "EhYKDmNvdW50ZG93bk5hbm9zGAMgASgDEh8KB2J1bGxldHMYBCADKAsyDi5z",
-            "aGFyZWQuQnVsbGV0EioKB25wY3NBcnIYBSADKAsyGS5zaGFyZWQuQ2hhcmFj",
-            "dGVyRG93bnN5bmMSHwoWYmFja2VuZFVuY29uZmlybWVkTWFzaxiACCABKAQS",
-            "GgoRc2hvdWxkRm9yY2VSZXN5bmMYgQggASgIEhYKDXNwZWNpZXNJZExpc3QY",
-            "ggggAygFEh0KFGJ1bGxldExvY2FsSWRDb3VudGVyGIMIIAEoBRItCg9wZWVy",
-            "VWRwQWRkckxpc3QYhAggAygLMhMuc2hhcmVkLlBlZXJVZHBBZGRyEhwKE3Bh",
-            "cnRpY2lwYW50Q2hhbmdlSWQYhQggASgFIswBCgZXc1Jlc3ASCwoDcmV0GAEg",
-            "ASgFEgsKA2FjdBgCIAEoBRImCgNyZGYYAyABKAsyGS5zaGFyZWQuUm9vbURv",
-            "d25zeW5jRnJhbWUSOwoXaW5wdXRGcmFtZURvd25zeW5jQmF0Y2gYBCADKAsy",
-            "Gi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEiwKCGJjaUZyYW1lGAUgASgL",
-            "Mhouc2hhcmVkLkJhdHRsZUNvbGxpZGVySW5mbxIVCg1wZWVySm9pbkluZGV4",
-            "GAYgASgFIvMBCgVTa2lsbBIVCg1iYXR0bGVMb2NhbElkGAEgASgFEhYKDnJl",
-            "Y292ZXJ5RnJhbWVzGAIgASgFEh0KFXJlY292ZXJ5RnJhbWVzT25CbG9jaxgD",
-            "IAEoBRIbChNyZWNvdmVyeUZyYW1lc09uSGl0GAQgASgFEi0KC3RyaWdnZXJU",
-            "eXBlGAUgASgOMhguc2hhcmVkLlNraWxsVHJpZ2dlclR5cGUSLAoMYm91bmRD",
-            "aFN0YXRlGAYgASgOMhYuc2hhcmVkLkNoYXJhY3RlclN0YXRlEiIKBGhpdHMY",
-            "ByADKAsyFC5zaGFyZWQuQnVsbGV0Q29uZmlnImcKCEZyYW1lTG9nEiYKA3Jk",
-            "ZhgBIAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRIzCg9hY3R1YWxs",
-            "eVVzZWRJZGYYAiABKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jKjUK",
-            "C0J1bGxldFN0YXRlEgsKB1N0YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBs",
-            "b2RpbmcQAiquAgoOQ2hhcmFjdGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxr",
-            "aW5nEAESDgoKVHVybkFyb3VuZBACEgoKBkF0a2VkMRADEhQKEEluQWlySWRs",
-            "ZTFOb0p1bXAQBBIUChBJbkFpcklkbGUxQnlKdW1wEAUSGAoUSW5BaXJJZGxl",
-            "MUJ5V2FsbEp1bXAQBhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgS",
-            "DAoITGF5RG93bjEQCRIKCgZHZXRVcDEQChIJCgVEeWluZxALEgsKB0Rhc2hp",
-            "bmcQDBIKCgZPbldhbGwQDRIOCglJbkFpckF0azEQgAgSCQoEQXRrMRCBCBIJ",
-            "CgRBdGsyEIIIEgkKBEF0azMQgwgSCQoEQXRrNBCECBIJCgRBdGs1EIUIKjcK",
-            "CkJ1bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAASCQoFTWVsZWUQARIMCghG",
-            "aXJlYmFsbBACKjMKEFNraWxsVHJpZ2dlclR5cGUSDgoKUmlzaW5nRWRnZRAA",
-            "Eg8KC0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
+            "bUlkGIQIIAEoBRINCgRuYW1lGOUHIAEoCRIUCgtkaXNwbGF5TmFtZRjmByAB",
+            "KAkSDwoGYXZhdGFyGOcHIAEoCSJRChFJbnB1dEZyYW1lRGVjb2RlZBIKCgJk",
+            "eBgBIAEoBRIKCgJkeRgCIAEoBRIRCglidG5BTGV2ZWwYAyABKAUSEQoJYnRu",
+            "QkxldmVsGAQgASgFIkwKEElucHV0RnJhbWVVcHN5bmMSFAoMaW5wdXRGcmFt",
+            "ZUlkGAEgASgFEg8KB2VuY29kZWQYAiABKAQSEQoJam9pbkluZGV4GAMgASgF",
+            "IlQKEklucHV0RnJhbWVEb3duc3luYxIUCgxpbnB1dEZyYW1lSWQYASABKAUS",
+            "EQoJaW5wdXRMaXN0GAIgAygEEhUKDWNvbmZpcm1lZExpc3QYAyABKAQitgEK",
+            "BVdzUmVxEhAKCHBsYXllcklkGAEgASgFEgsKA2FjdBgCIAEoBRIRCglqb2lu",
+            "SW5kZXgYAyABKAUSFQoNYWNraW5nRnJhbWVJZBgEIAEoBRIaChJhY2tpbmdJ",
+            "bnB1dEZyYW1lSWQYBSABKAUSDwoHYXV0aEtleRgGIAEoBRI3ChVpbnB1dEZy",
+            "YW1lVXBzeW5jQmF0Y2gYByADKAsyGC5zaGFyZWQuSW5wdXRGcmFtZVVwc3lu",
+            "YyK5AQoTSW5wdXRCdWZmZXJTbmFwc2hvdBIYChByZWZSZW5kZXJGcmFtZUlk",
+            "GAEgASgFEhcKD3VuY29uZmlybWVkTWFzaxgCIAEoBBI9Chl0b1NlbmRJbnB1",
+            "dEZyYW1lRG93bnN5bmNzGAMgAygLMhouc2hhcmVkLklucHV0RnJhbWVEb3du",
+            "c3luYxIZChFzaG91bGRGb3JjZVJlc3luYxgEIAEoCBIVCg1wZWVySm9pbklu",
+            "ZGV4GAUgASgFIlsKCVBhdHJvbEN1ZRINCgVmbEFjdBgBIAEoBBINCgVmckFj",
+            "dBgCIAEoBBIXCg9mbENhcHR1cmVGcmFtZXMYAyABKAUSFwoPZnJDYXB0dXJl",
+            "RnJhbWVzGAQgASgFIlQKCVZpc2lvbkJveBITCgtib3R0b21MZWZ0WBgBIAEo",
+            "BRITCgtib3R0b21MZWZ0WRgCIAEoBRINCgV3aWR0aBgDIAEoBRIOCgZoZWln",
+            "aHQYBCABKAUixwQKDEJ1bGxldENvbmZpZxIVCg1zdGFydHVwRnJhbWVzGAEg",
+            "ASgFEhoKEmNhbmNlbGxhYmxlU3RGcmFtZRgCIAEoBRIaChJjYW5jZWxsYWJs",
+            "ZUVkRnJhbWUYAyABKAUSFAoMYWN0aXZlRnJhbWVzGAQgASgFEhUKDWhpdFN0",
+            "dW5GcmFtZXMYBSABKAUSFwoPYmxvY2tTdHVuRnJhbWVzGAYgASgFEhQKDHB1",
+            "c2hiYWNrVmVsWBgHIAEoBRIUCgxwdXNoYmFja1ZlbFkYCCABKAUSDgoGZGFt",
+            "YWdlGAkgASgFEhQKDHNlbGZMb2NrVmVsWBgKIAEoBRIUCgxzZWxmTG9ja1Zl",
+            "bFkYCyABKAUSFQoNaGl0Ym94T2Zmc2V0WBgMIAEoBRIVCg1oaXRib3hPZmZz",
+            "ZXRZGA0gASgFEhMKC2hpdGJveFNpemVYGA4gASgFEhMKC2hpdGJveFNpemVZ",
+            "GA8gASgFEg4KBmJsb3dVcBgQIAEoCBIRCglzcGVjaWVzSWQYESABKAUSFwoP",
+            "ZXhwbG9zaW9uRnJhbWVzGBIgASgFEiEKBWJUeXBlGBMgASgOMhIuc2hhcmVk",
+            "LkJ1bGxldFR5cGUSDQoFc3BlZWQYFCABKAUSPgoNY2FuY2VsVHJhbnNpdBgV",
+            "IAMoCzInLnNoYXJlZC5CdWxsZXRDb25maWcuQ2FuY2VsVHJhbnNpdEVudHJ5",
+            "GjQKEkNhbmNlbFRyYW5zaXRFbnRyeRILCgNrZXkYASABKAUSDQoFdmFsdWUY",
+            "AiABKAU6AjgBInUKEEJ1bGxldEJhdHRsZUF0dHISFQoNYnVsbGV0TG9jYWxJ",
+            "ZBgBIAEoBRIfChdvcmlnaW5hdGVkUmVuZGVyRnJhbWVJZBgCIAEoBRIZChFv",
+            "ZmZlbmRlckpvaW5JbmRleBgDIAEoBRIOCgZ0ZWFtSWQYBCABKAUihQIKBkJ1",
+            "bGxldBIkCgdibFN0YXRlGAEgASgOMhMuc2hhcmVkLkJ1bGxldFN0YXRlEhcK",
+            "D2ZyYW1lc0luQmxTdGF0ZRgCIAEoBRIsCgpiYXR0bGVBdHRyGAMgASgLMhgu",
+            "c2hhcmVkLkJ1bGxldEJhdHRsZUF0dHISJAoGY29uZmlnGAQgASgLMhQuc2hh",
+            "cmVkLkJ1bGxldENvbmZpZxIVCgx2aXJ0dWFsR3JpZFgY5wcgASgFEhUKDHZp",
+            "cnR1YWxHcmlkWRjoByABKAUSDQoEZGlyWBjpByABKAUSDQoEZGlyWRjqByAB",
+            "KAUSDQoEdmVsWBjrByABKAUSDQoEdmVsWRjsByABKAUiOAoLUGVlclVkcEFk",
+            "ZHISCgoCaXAYASABKAkSDAoEcG9ydBgCIAEoBRIPCgdhdXRoS2V5GAMgASgF",
+            "IsUDChJCYXR0bGVDb2xsaWRlckluZm8SEQoJc3RhZ2VOYW1lGAEgASgJEhMK",
+            "C2JvdW5kUm9vbUlkGAIgASgFEhwKFGJhdHRsZUR1cmF0aW9uRnJhbWVzGAMg",
+            "ASgDEiYKHmlucHV0RnJhbWVVcHN5bmNEZWxheVRvbGVyYW5jZRgEIAEoBRIn",
+            "Ch9tYXhDaGFzaW5nUmVuZGVyRnJhbWVzUGVyVXBkYXRlGAUgASgFEiEKGXJv",
+            "bGxiYWNrRXN0aW1hdGVkRHRNaWxsaXMYBiABKAESIAoYcm9sbGJhY2tFc3Rp",
+            "bWF0ZWREdE5hbm9zGAcgASgDEhgKEHJlbmRlckJ1ZmZlclNpemUYCCABKAUS",
+            "GAoQY29sbGlzaW9uTWluU3RlcBgJIAEoBRIZChFib3VuZFJvb21DYXBhY2l0",
+            "eRgKIAEoBRIbChNwcmVhbGxvY05wY0NhcGFjaXR5GAsgASgFEh4KFnByZWFs",
+            "bG9jQnVsbGV0Q2FwYWNpdHkYDCABKAUSLQoPYmF0dGxlVWRwVHVubmVsGIAI",
+            "IAEoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIYCg9mcmFtZUxvZ0VuYWJsZWQY",
+            "gQggASgIIvQCChFSb29tRG93bnN5bmNGcmFtZRIKCgJpZBgBIAEoBRItCgpw",
+            "bGF5ZXJzQXJyGAIgAygLMhkuc2hhcmVkLkNoYXJhY3RlckRvd25zeW5jEhYK",
+            "DmNvdW50ZG93bk5hbm9zGAMgASgDEh8KB2J1bGxldHMYBCADKAsyDi5zaGFy",
+            "ZWQuQnVsbGV0EioKB25wY3NBcnIYBSADKAsyGS5zaGFyZWQuQ2hhcmFjdGVy",
+            "RG93bnN5bmMSHwoWYmFja2VuZFVuY29uZmlybWVkTWFzaxiACCABKAQSGgoR",
+            "c2hvdWxkRm9yY2VSZXN5bmMYgQggASgIEhYKDXNwZWNpZXNJZExpc3QYgggg",
+            "AygFEh0KFGJ1bGxldExvY2FsSWRDb3VudGVyGIMIIAEoBRItCg9wZWVyVWRw",
+            "QWRkckxpc3QYhAggAygLMhMuc2hhcmVkLlBlZXJVZHBBZGRyEhwKE3BhcnRp",
+            "Y2lwYW50Q2hhbmdlSWQYhQggASgFIswBCgZXc1Jlc3ASCwoDcmV0GAEgASgF",
+            "EgsKA2FjdBgCIAEoBRImCgNyZGYYAyABKAsyGS5zaGFyZWQuUm9vbURvd25z",
+            "eW5jRnJhbWUSOwoXaW5wdXRGcmFtZURvd25zeW5jQmF0Y2gYBCADKAsyGi5z",
+            "aGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEiwKCGJjaUZyYW1lGAUgASgLMhou",
+            "c2hhcmVkLkJhdHRsZUNvbGxpZGVySW5mbxIVCg1wZWVySm9pbkluZGV4GAYg",
+            "ASgFIvMBCgVTa2lsbBIVCg1iYXR0bGVMb2NhbElkGAEgASgFEhYKDnJlY292",
+            "ZXJ5RnJhbWVzGAIgASgFEh0KFXJlY292ZXJ5RnJhbWVzT25CbG9jaxgDIAEo",
+            "BRIbChNyZWNvdmVyeUZyYW1lc09uSGl0GAQgASgFEi0KC3RyaWdnZXJUeXBl",
+            "GAUgASgOMhguc2hhcmVkLlNraWxsVHJpZ2dlclR5cGUSLAoMYm91bmRDaFN0",
+            "YXRlGAYgASgOMhYuc2hhcmVkLkNoYXJhY3RlclN0YXRlEiIKBGhpdHMYByAD",
+            "KAsyFC5zaGFyZWQuQnVsbGV0Q29uZmlnImcKCEZyYW1lTG9nEiYKA3JkZhgB",
+            "IAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRIzCg9hY3R1YWxseVVz",
+            "ZWRJZGYYAiABKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jKjUKC0J1",
+            "bGxldFN0YXRlEgsKB1N0YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBsb2Rp",
+            "bmcQAiquAgoOQ2hhcmFjdGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxraW5n",
+            "EAESDgoKVHVybkFyb3VuZBACEgoKBkF0a2VkMRADEhQKEEluQWlySWRsZTFO",
+            "b0p1bXAQBBIUChBJbkFpcklkbGUxQnlKdW1wEAUSGAoUSW5BaXJJZGxlMUJ5",
+            "V2FsbEp1bXAQBhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoI",
+            "TGF5RG93bjEQCRIKCgZHZXRVcDEQChIJCgVEeWluZxALEgsKB0Rhc2hpbmcQ",
+            "DBIKCgZPbldhbGwQDRIOCglJbkFpckF0azEQgAgSCQoEQXRrMRCBCBIJCgRB",
+            "dGsyEIIIEgkKBEF0azMQgwgSCQoEQXRrNBCECBIJCgRBdGs1EIUIKjcKCkJ1",
+            "bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAASCQoFTWVsZWUQARIMCghGaXJl",
+            "YmFsbBACKjMKEFNraWxsVHJpZ2dlclR5cGUSDgoKUmlzaW5nRWRnZRAAEg8K",
+            "C0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "ColliderRadius", "Removed", "Score", "LastMoveGmtMillis", "FramesToRecover", "Hp", "MaxHp", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "OnWall", "OnWallNormX", "OnWallNormY", "CapturedByInertia", "RevivalVirtualGridX", "RevivalVirtualGridY", "Name", "DisplayName", "Avatar" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "CapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "MaxHp", "Mp", "MaxMp", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "RevivalVirtualGridX", "RevivalVirtualGridY", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "Name", "DisplayName", "Avatar" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDownsync), global::shared.InputFrameDownsync.Parser, new[]{ "InputFrameId", "InputList", "ConfirmedList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsReq), global::shared.WsReq.Parser, new[]{ "PlayerId", "Act", "JoinIndex", "AckingFrameId", "AckingInputFrameId", "AuthKey", "InputFrameUpsyncBatch" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputBufferSnapshot), global::shared.InputBufferSnapshot.Parser, new[]{ "RefRenderFrameId", "UnconfirmedMask", "ToSendInputFrameDownsyncs", "ShouldForceResync", "PeerJoinIndex" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.PatrolCue), global::shared.PatrolCue.Parser, new[]{ "FlAct", "FrAct" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.PatrolCue), global::shared.PatrolCue.Parser, new[]{ "FlAct", "FrAct", "FlCaptureFrames", "FrCaptureFrames" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.VisionBox), global::shared.VisionBox.Parser, new[]{ "BottomLeftX", "BottomLeftY", "Width", "Height" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "Speed", "CancelTransit" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId" }, null, null, null, null),
@@ -236,28 +238,30 @@ namespace shared {
       speed_ = other.speed_;
       speciesId_ = other.speciesId_;
       joinIndex_ = other.joinIndex_;
-      colliderRadius_ = other.colliderRadius_;
-      removed_ = other.removed_;
-      score_ = other.score_;
-      lastMoveGmtMillis_ = other.lastMoveGmtMillis_;
       framesToRecover_ = other.framesToRecover_;
+      capturedByInertia_ = other.capturedByInertia_;
+      capturedByPatrolCue_ = other.capturedByPatrolCue_;
+      framesInPatrolCue_ = other.framesInPatrolCue_;
+      beatsCnt_ = other.beatsCnt_;
+      beatenCnt_ = other.beatenCnt_;
       hp_ = other.hp_;
       maxHp_ = other.maxHp_;
+      mp_ = other.mp_;
+      maxMp_ = other.maxMp_;
       characterState_ = other.characterState_;
       framesInChState_ = other.framesInChState_;
       inAir_ = other.inAir_;
       jumpTriggered_ = other.jumpTriggered_;
+      onWall_ = other.onWall_;
+      onWallNormX_ = other.onWallNormX_;
+      onWallNormY_ = other.onWallNormY_;
+      revivalVirtualGridX_ = other.revivalVirtualGridX_;
+      revivalVirtualGridY_ = other.revivalVirtualGridY_;
       activeSkillId_ = other.activeSkillId_;
       activeSkillHit_ = other.activeSkillHit_;
       framesInvinsible_ = other.framesInvinsible_;
       bulletTeamId_ = other.bulletTeamId_;
       chCollisionTeamId_ = other.chCollisionTeamId_;
-      onWall_ = other.onWall_;
-      onWallNormX_ = other.onWallNormX_;
-      onWallNormY_ = other.onWallNormY_;
-      capturedByInertia_ = other.capturedByInertia_;
-      revivalVirtualGridX_ = other.revivalVirtualGridX_;
-      revivalVirtualGridY_ = other.revivalVirtualGridY_;
       name_ = other.name_;
       displayName_ = other.displayName_;
       avatar_ = other.avatar_;
@@ -399,56 +403,8 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "colliderRadius" field.</summary>
-    public const int ColliderRadiusFieldNumber = 11;
-    private int colliderRadius_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ColliderRadius {
-      get { return colliderRadius_; }
-      set {
-        colliderRadius_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "removed" field.</summary>
-    public const int RemovedFieldNumber = 12;
-    private bool removed_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Removed {
-      get { return removed_; }
-      set {
-        removed_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "score" field.</summary>
-    public const int ScoreFieldNumber = 13;
-    private int score_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Score {
-      get { return score_; }
-      set {
-        score_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastMoveGmtMillis" field.</summary>
-    public const int LastMoveGmtMillisFieldNumber = 14;
-    private int lastMoveGmtMillis_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastMoveGmtMillis {
-      get { return lastMoveGmtMillis_; }
-      set {
-        lastMoveGmtMillis_ = value;
-      }
-    }
-
     /// <summary>Field number for the "framesToRecover" field.</summary>
-    public const int FramesToRecoverFieldNumber = 15;
+    public const int FramesToRecoverFieldNumber = 11;
     private int framesToRecover_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -459,8 +415,71 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "capturedByInertia" field.</summary>
+    public const int CapturedByInertiaFieldNumber = 12;
+    private bool capturedByInertia_;
+    /// <summary>
+    /// like "inAir", it’s by design a standalone field only inferred by the calc result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool CapturedByInertia {
+      get { return capturedByInertia_; }
+      set {
+        capturedByInertia_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "capturedByPatrolCue" field.</summary>
+    public const int CapturedByPatrolCueFieldNumber = 13;
+    private bool capturedByPatrolCue_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool CapturedByPatrolCue {
+      get { return capturedByPatrolCue_; }
+      set {
+        capturedByPatrolCue_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "framesInPatrolCue" field.</summary>
+    public const int FramesInPatrolCueFieldNumber = 14;
+    private int framesInPatrolCue_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FramesInPatrolCue {
+      get { return framesInPatrolCue_; }
+      set {
+        framesInPatrolCue_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "beatsCnt" field.</summary>
+    public const int BeatsCntFieldNumber = 15;
+    private int beatsCnt_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int BeatsCnt {
+      get { return beatsCnt_; }
+      set {
+        beatsCnt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "beatenCnt" field.</summary>
+    public const int BeatenCntFieldNumber = 16;
+    private int beatenCnt_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int BeatenCnt {
+      get { return beatenCnt_; }
+      set {
+        beatenCnt_ = value;
+      }
+    }
+
     /// <summary>Field number for the "hp" field.</summary>
-    public const int HpFieldNumber = 16;
+    public const int HpFieldNumber = 17;
     private int hp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -472,7 +491,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "maxHp" field.</summary>
-    public const int MaxHpFieldNumber = 17;
+    public const int MaxHpFieldNumber = 18;
     private int maxHp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -483,8 +502,32 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "mp" field.</summary>
+    public const int MpFieldNumber = 19;
+    private int mp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Mp {
+      get { return mp_; }
+      set {
+        mp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "maxMp" field.</summary>
+    public const int MaxMpFieldNumber = 20;
+    private int maxMp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int MaxMp {
+      get { return maxMp_; }
+      set {
+        maxMp_ = value;
+      }
+    }
+
     /// <summary>Field number for the "characterState" field.</summary>
-    public const int CharacterStateFieldNumber = 18;
+    public const int CharacterStateFieldNumber = 22;
     private global::shared.CharacterState characterState_ = global::shared.CharacterState.Idle1;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -496,7 +539,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "framesInChState" field.</summary>
-    public const int FramesInChStateFieldNumber = 19;
+    public const int FramesInChStateFieldNumber = 23;
     private int framesInChState_;
     /// <summary>
     /// number of frames elapsed in the current character state   
@@ -511,7 +554,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "inAir" field.</summary>
-    public const int InAirFieldNumber = 20;
+    public const int InAirFieldNumber = 24;
     private bool inAir_;
     /// <summary>
     /// by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "inAir (prev -> curr)"  
@@ -526,7 +569,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "jumpTriggered" field.</summary>
-    public const int JumpTriggeredFieldNumber = 21;
+    public const int JumpTriggeredFieldNumber = 25;
     private bool jumpTriggered_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -534,6 +577,69 @@ namespace shared {
       get { return jumpTriggered_; }
       set {
         jumpTriggered_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "onWall" field.</summary>
+    public const int OnWallFieldNumber = 26;
+    private bool onWall_;
+    /// <summary>
+    /// like "inAir", it’s by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool OnWall {
+      get { return onWall_; }
+      set {
+        onWall_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "onWallNormX" field.</summary>
+    public const int OnWallNormXFieldNumber = 27;
+    private int onWallNormX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int OnWallNormX {
+      get { return onWallNormX_; }
+      set {
+        onWallNormX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "onWallNormY" field.</summary>
+    public const int OnWallNormYFieldNumber = 28;
+    private int onWallNormY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int OnWallNormY {
+      get { return onWallNormY_; }
+      set {
+        onWallNormY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "revivalVirtualGridX" field.</summary>
+    public const int RevivalVirtualGridXFieldNumber = 29;
+    private int revivalVirtualGridX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RevivalVirtualGridX {
+      get { return revivalVirtualGridX_; }
+      set {
+        revivalVirtualGridX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "revivalVirtualGridY" field.</summary>
+    public const int RevivalVirtualGridYFieldNumber = 30;
+    private int revivalVirtualGridY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RevivalVirtualGridY {
+      get { return revivalVirtualGridY_; }
+      set {
+        revivalVirtualGridY_ = value;
       }
     }
 
@@ -594,84 +700,6 @@ namespace shared {
       get { return chCollisionTeamId_; }
       set {
         chCollisionTeamId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "onWall" field.</summary>
-    public const int OnWallFieldNumber = 26;
-    private bool onWall_;
-    /// <summary>
-    /// like "inAir", it’s by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool OnWall {
-      get { return onWall_; }
-      set {
-        onWall_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "onWallNormX" field.</summary>
-    public const int OnWallNormXFieldNumber = 27;
-    private int onWallNormX_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int OnWallNormX {
-      get { return onWallNormX_; }
-      set {
-        onWallNormX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "onWallNormY" field.</summary>
-    public const int OnWallNormYFieldNumber = 28;
-    private int onWallNormY_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int OnWallNormY {
-      get { return onWallNormY_; }
-      set {
-        onWallNormY_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "capturedByInertia" field.</summary>
-    public const int CapturedByInertiaFieldNumber = 29;
-    private bool capturedByInertia_;
-    /// <summary>
-    /// like "inAir", it’s by design a standalone field only inferred by the calc result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState"
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool CapturedByInertia {
-      get { return capturedByInertia_; }
-      set {
-        capturedByInertia_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "revivalVirtualGridX" field.</summary>
-    public const int RevivalVirtualGridXFieldNumber = 30;
-    private int revivalVirtualGridX_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int RevivalVirtualGridX {
-      get { return revivalVirtualGridX_; }
-      set {
-        revivalVirtualGridX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "revivalVirtualGridY" field.</summary>
-    public const int RevivalVirtualGridYFieldNumber = 31;
-    private int revivalVirtualGridY_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int RevivalVirtualGridY {
-      get { return revivalVirtualGridY_; }
-      set {
-        revivalVirtualGridY_ = value;
       }
     }
 
@@ -736,28 +764,30 @@ namespace shared {
       if (Speed != other.Speed) return false;
       if (SpeciesId != other.SpeciesId) return false;
       if (JoinIndex != other.JoinIndex) return false;
-      if (ColliderRadius != other.ColliderRadius) return false;
-      if (Removed != other.Removed) return false;
-      if (Score != other.Score) return false;
-      if (LastMoveGmtMillis != other.LastMoveGmtMillis) return false;
       if (FramesToRecover != other.FramesToRecover) return false;
+      if (CapturedByInertia != other.CapturedByInertia) return false;
+      if (CapturedByPatrolCue != other.CapturedByPatrolCue) return false;
+      if (FramesInPatrolCue != other.FramesInPatrolCue) return false;
+      if (BeatsCnt != other.BeatsCnt) return false;
+      if (BeatenCnt != other.BeatenCnt) return false;
       if (Hp != other.Hp) return false;
       if (MaxHp != other.MaxHp) return false;
+      if (Mp != other.Mp) return false;
+      if (MaxMp != other.MaxMp) return false;
       if (CharacterState != other.CharacterState) return false;
       if (FramesInChState != other.FramesInChState) return false;
       if (InAir != other.InAir) return false;
       if (JumpTriggered != other.JumpTriggered) return false;
+      if (OnWall != other.OnWall) return false;
+      if (OnWallNormX != other.OnWallNormX) return false;
+      if (OnWallNormY != other.OnWallNormY) return false;
+      if (RevivalVirtualGridX != other.RevivalVirtualGridX) return false;
+      if (RevivalVirtualGridY != other.RevivalVirtualGridY) return false;
       if (ActiveSkillId != other.ActiveSkillId) return false;
       if (ActiveSkillHit != other.ActiveSkillHit) return false;
       if (FramesInvinsible != other.FramesInvinsible) return false;
       if (BulletTeamId != other.BulletTeamId) return false;
       if (ChCollisionTeamId != other.ChCollisionTeamId) return false;
-      if (OnWall != other.OnWall) return false;
-      if (OnWallNormX != other.OnWallNormX) return false;
-      if (OnWallNormY != other.OnWallNormY) return false;
-      if (CapturedByInertia != other.CapturedByInertia) return false;
-      if (RevivalVirtualGridX != other.RevivalVirtualGridX) return false;
-      if (RevivalVirtualGridY != other.RevivalVirtualGridY) return false;
       if (Name != other.Name) return false;
       if (DisplayName != other.DisplayName) return false;
       if (Avatar != other.Avatar) return false;
@@ -778,28 +808,30 @@ namespace shared {
       if (Speed != 0) hash ^= Speed.GetHashCode();
       if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
       if (JoinIndex != 0) hash ^= JoinIndex.GetHashCode();
-      if (ColliderRadius != 0) hash ^= ColliderRadius.GetHashCode();
-      if (Removed != false) hash ^= Removed.GetHashCode();
-      if (Score != 0) hash ^= Score.GetHashCode();
-      if (LastMoveGmtMillis != 0) hash ^= LastMoveGmtMillis.GetHashCode();
       if (FramesToRecover != 0) hash ^= FramesToRecover.GetHashCode();
+      if (CapturedByInertia != false) hash ^= CapturedByInertia.GetHashCode();
+      if (CapturedByPatrolCue != false) hash ^= CapturedByPatrolCue.GetHashCode();
+      if (FramesInPatrolCue != 0) hash ^= FramesInPatrolCue.GetHashCode();
+      if (BeatsCnt != 0) hash ^= BeatsCnt.GetHashCode();
+      if (BeatenCnt != 0) hash ^= BeatenCnt.GetHashCode();
       if (Hp != 0) hash ^= Hp.GetHashCode();
       if (MaxHp != 0) hash ^= MaxHp.GetHashCode();
+      if (Mp != 0) hash ^= Mp.GetHashCode();
+      if (MaxMp != 0) hash ^= MaxMp.GetHashCode();
       if (CharacterState != global::shared.CharacterState.Idle1) hash ^= CharacterState.GetHashCode();
       if (FramesInChState != 0) hash ^= FramesInChState.GetHashCode();
       if (InAir != false) hash ^= InAir.GetHashCode();
       if (JumpTriggered != false) hash ^= JumpTriggered.GetHashCode();
+      if (OnWall != false) hash ^= OnWall.GetHashCode();
+      if (OnWallNormX != 0) hash ^= OnWallNormX.GetHashCode();
+      if (OnWallNormY != 0) hash ^= OnWallNormY.GetHashCode();
+      if (RevivalVirtualGridX != 0) hash ^= RevivalVirtualGridX.GetHashCode();
+      if (RevivalVirtualGridY != 0) hash ^= RevivalVirtualGridY.GetHashCode();
       if (ActiveSkillId != 0) hash ^= ActiveSkillId.GetHashCode();
       if (ActiveSkillHit != 0) hash ^= ActiveSkillHit.GetHashCode();
       if (FramesInvinsible != 0) hash ^= FramesInvinsible.GetHashCode();
       if (BulletTeamId != 0) hash ^= BulletTeamId.GetHashCode();
       if (ChCollisionTeamId != 0) hash ^= ChCollisionTeamId.GetHashCode();
-      if (OnWall != false) hash ^= OnWall.GetHashCode();
-      if (OnWallNormX != 0) hash ^= OnWallNormX.GetHashCode();
-      if (OnWallNormY != 0) hash ^= OnWallNormY.GetHashCode();
-      if (CapturedByInertia != false) hash ^= CapturedByInertia.GetHashCode();
-      if (RevivalVirtualGridX != 0) hash ^= RevivalVirtualGridX.GetHashCode();
-      if (RevivalVirtualGridY != 0) hash ^= RevivalVirtualGridY.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (DisplayName.Length != 0) hash ^= DisplayName.GetHashCode();
       if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
@@ -861,48 +893,60 @@ namespace shared {
         output.WriteRawTag(80);
         output.WriteInt32(JoinIndex);
       }
-      if (ColliderRadius != 0) {
-        output.WriteRawTag(88);
-        output.WriteInt32(ColliderRadius);
-      }
-      if (Removed != false) {
-        output.WriteRawTag(96);
-        output.WriteBool(Removed);
-      }
-      if (Score != 0) {
-        output.WriteRawTag(104);
-        output.WriteInt32(Score);
-      }
-      if (LastMoveGmtMillis != 0) {
-        output.WriteRawTag(112);
-        output.WriteInt32(LastMoveGmtMillis);
-      }
       if (FramesToRecover != 0) {
-        output.WriteRawTag(120);
+        output.WriteRawTag(88);
         output.WriteInt32(FramesToRecover);
       }
-      if (Hp != 0) {
+      if (CapturedByInertia != false) {
+        output.WriteRawTag(96);
+        output.WriteBool(CapturedByInertia);
+      }
+      if (CapturedByPatrolCue != false) {
+        output.WriteRawTag(104);
+        output.WriteBool(CapturedByPatrolCue);
+      }
+      if (FramesInPatrolCue != 0) {
+        output.WriteRawTag(112);
+        output.WriteInt32(FramesInPatrolCue);
+      }
+      if (BeatsCnt != 0) {
+        output.WriteRawTag(120);
+        output.WriteInt32(BeatsCnt);
+      }
+      if (BeatenCnt != 0) {
         output.WriteRawTag(128, 1);
+        output.WriteInt32(BeatenCnt);
+      }
+      if (Hp != 0) {
+        output.WriteRawTag(136, 1);
         output.WriteInt32(Hp);
       }
       if (MaxHp != 0) {
-        output.WriteRawTag(136, 1);
+        output.WriteRawTag(144, 1);
         output.WriteInt32(MaxHp);
       }
+      if (Mp != 0) {
+        output.WriteRawTag(152, 1);
+        output.WriteInt32(Mp);
+      }
+      if (MaxMp != 0) {
+        output.WriteRawTag(160, 1);
+        output.WriteInt32(MaxMp);
+      }
       if (CharacterState != global::shared.CharacterState.Idle1) {
-        output.WriteRawTag(144, 1);
+        output.WriteRawTag(176, 1);
         output.WriteEnum((int) CharacterState);
       }
       if (FramesInChState != 0) {
-        output.WriteRawTag(152, 1);
+        output.WriteRawTag(184, 1);
         output.WriteInt32(FramesInChState);
       }
       if (InAir != false) {
-        output.WriteRawTag(160, 1);
+        output.WriteRawTag(192, 1);
         output.WriteBool(InAir);
       }
       if (JumpTriggered != false) {
-        output.WriteRawTag(168, 1);
+        output.WriteRawTag(200, 1);
         output.WriteBool(JumpTriggered);
       }
       if (OnWall != false) {
@@ -917,16 +961,12 @@ namespace shared {
         output.WriteRawTag(224, 1);
         output.WriteInt32(OnWallNormY);
       }
-      if (CapturedByInertia != false) {
-        output.WriteRawTag(232, 1);
-        output.WriteBool(CapturedByInertia);
-      }
       if (RevivalVirtualGridX != 0) {
-        output.WriteRawTag(240, 1);
+        output.WriteRawTag(232, 1);
         output.WriteInt32(RevivalVirtualGridX);
       }
       if (RevivalVirtualGridY != 0) {
-        output.WriteRawTag(248, 1);
+        output.WriteRawTag(240, 1);
         output.WriteInt32(RevivalVirtualGridY);
       }
       if (Name.Length != 0) {
@@ -1011,48 +1051,60 @@ namespace shared {
         output.WriteRawTag(80);
         output.WriteInt32(JoinIndex);
       }
-      if (ColliderRadius != 0) {
-        output.WriteRawTag(88);
-        output.WriteInt32(ColliderRadius);
-      }
-      if (Removed != false) {
-        output.WriteRawTag(96);
-        output.WriteBool(Removed);
-      }
-      if (Score != 0) {
-        output.WriteRawTag(104);
-        output.WriteInt32(Score);
-      }
-      if (LastMoveGmtMillis != 0) {
-        output.WriteRawTag(112);
-        output.WriteInt32(LastMoveGmtMillis);
-      }
       if (FramesToRecover != 0) {
-        output.WriteRawTag(120);
+        output.WriteRawTag(88);
         output.WriteInt32(FramesToRecover);
       }
-      if (Hp != 0) {
+      if (CapturedByInertia != false) {
+        output.WriteRawTag(96);
+        output.WriteBool(CapturedByInertia);
+      }
+      if (CapturedByPatrolCue != false) {
+        output.WriteRawTag(104);
+        output.WriteBool(CapturedByPatrolCue);
+      }
+      if (FramesInPatrolCue != 0) {
+        output.WriteRawTag(112);
+        output.WriteInt32(FramesInPatrolCue);
+      }
+      if (BeatsCnt != 0) {
+        output.WriteRawTag(120);
+        output.WriteInt32(BeatsCnt);
+      }
+      if (BeatenCnt != 0) {
         output.WriteRawTag(128, 1);
+        output.WriteInt32(BeatenCnt);
+      }
+      if (Hp != 0) {
+        output.WriteRawTag(136, 1);
         output.WriteInt32(Hp);
       }
       if (MaxHp != 0) {
-        output.WriteRawTag(136, 1);
+        output.WriteRawTag(144, 1);
         output.WriteInt32(MaxHp);
       }
+      if (Mp != 0) {
+        output.WriteRawTag(152, 1);
+        output.WriteInt32(Mp);
+      }
+      if (MaxMp != 0) {
+        output.WriteRawTag(160, 1);
+        output.WriteInt32(MaxMp);
+      }
       if (CharacterState != global::shared.CharacterState.Idle1) {
-        output.WriteRawTag(144, 1);
+        output.WriteRawTag(176, 1);
         output.WriteEnum((int) CharacterState);
       }
       if (FramesInChState != 0) {
-        output.WriteRawTag(152, 1);
+        output.WriteRawTag(184, 1);
         output.WriteInt32(FramesInChState);
       }
       if (InAir != false) {
-        output.WriteRawTag(160, 1);
+        output.WriteRawTag(192, 1);
         output.WriteBool(InAir);
       }
       if (JumpTriggered != false) {
-        output.WriteRawTag(168, 1);
+        output.WriteRawTag(200, 1);
         output.WriteBool(JumpTriggered);
       }
       if (OnWall != false) {
@@ -1067,16 +1119,12 @@ namespace shared {
         output.WriteRawTag(224, 1);
         output.WriteInt32(OnWallNormY);
       }
-      if (CapturedByInertia != false) {
-        output.WriteRawTag(232, 1);
-        output.WriteBool(CapturedByInertia);
-      }
       if (RevivalVirtualGridX != 0) {
-        output.WriteRawTag(240, 1);
+        output.WriteRawTag(232, 1);
         output.WriteInt32(RevivalVirtualGridX);
       }
       if (RevivalVirtualGridY != 0) {
-        output.WriteRawTag(248, 1);
+        output.WriteRawTag(240, 1);
         output.WriteInt32(RevivalVirtualGridY);
       }
       if (Name.Length != 0) {
@@ -1151,26 +1199,35 @@ namespace shared {
       if (JoinIndex != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(JoinIndex);
       }
-      if (ColliderRadius != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColliderRadius);
-      }
-      if (Removed != false) {
-        size += 1 + 1;
-      }
-      if (Score != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Score);
-      }
-      if (LastMoveGmtMillis != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastMoveGmtMillis);
-      }
       if (FramesToRecover != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(FramesToRecover);
+      }
+      if (CapturedByInertia != false) {
+        size += 1 + 1;
+      }
+      if (CapturedByPatrolCue != false) {
+        size += 1 + 1;
+      }
+      if (FramesInPatrolCue != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FramesInPatrolCue);
+      }
+      if (BeatsCnt != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(BeatsCnt);
+      }
+      if (BeatenCnt != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(BeatenCnt);
       }
       if (Hp != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(Hp);
       }
       if (MaxHp != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(MaxHp);
+      }
+      if (Mp != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(Mp);
+      }
+      if (MaxMp != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(MaxMp);
       }
       if (CharacterState != global::shared.CharacterState.Idle1) {
         size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) CharacterState);
@@ -1183,6 +1240,21 @@ namespace shared {
       }
       if (JumpTriggered != false) {
         size += 2 + 1;
+      }
+      if (OnWall != false) {
+        size += 2 + 1;
+      }
+      if (OnWallNormX != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(OnWallNormX);
+      }
+      if (OnWallNormY != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(OnWallNormY);
+      }
+      if (RevivalVirtualGridX != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(RevivalVirtualGridX);
+      }
+      if (RevivalVirtualGridY != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(RevivalVirtualGridY);
       }
       if (ActiveSkillId != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(ActiveSkillId);
@@ -1198,24 +1270,6 @@ namespace shared {
       }
       if (ChCollisionTeamId != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(ChCollisionTeamId);
-      }
-      if (OnWall != false) {
-        size += 2 + 1;
-      }
-      if (OnWallNormX != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(OnWallNormX);
-      }
-      if (OnWallNormY != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(OnWallNormY);
-      }
-      if (CapturedByInertia != false) {
-        size += 2 + 1;
-      }
-      if (RevivalVirtualGridX != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(RevivalVirtualGridX);
-      }
-      if (RevivalVirtualGridY != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(RevivalVirtualGridY);
       }
       if (Name.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(Name);
@@ -1268,26 +1322,35 @@ namespace shared {
       if (other.JoinIndex != 0) {
         JoinIndex = other.JoinIndex;
       }
-      if (other.ColliderRadius != 0) {
-        ColliderRadius = other.ColliderRadius;
-      }
-      if (other.Removed != false) {
-        Removed = other.Removed;
-      }
-      if (other.Score != 0) {
-        Score = other.Score;
-      }
-      if (other.LastMoveGmtMillis != 0) {
-        LastMoveGmtMillis = other.LastMoveGmtMillis;
-      }
       if (other.FramesToRecover != 0) {
         FramesToRecover = other.FramesToRecover;
+      }
+      if (other.CapturedByInertia != false) {
+        CapturedByInertia = other.CapturedByInertia;
+      }
+      if (other.CapturedByPatrolCue != false) {
+        CapturedByPatrolCue = other.CapturedByPatrolCue;
+      }
+      if (other.FramesInPatrolCue != 0) {
+        FramesInPatrolCue = other.FramesInPatrolCue;
+      }
+      if (other.BeatsCnt != 0) {
+        BeatsCnt = other.BeatsCnt;
+      }
+      if (other.BeatenCnt != 0) {
+        BeatenCnt = other.BeatenCnt;
       }
       if (other.Hp != 0) {
         Hp = other.Hp;
       }
       if (other.MaxHp != 0) {
         MaxHp = other.MaxHp;
+      }
+      if (other.Mp != 0) {
+        Mp = other.Mp;
+      }
+      if (other.MaxMp != 0) {
+        MaxMp = other.MaxMp;
       }
       if (other.CharacterState != global::shared.CharacterState.Idle1) {
         CharacterState = other.CharacterState;
@@ -1300,6 +1363,21 @@ namespace shared {
       }
       if (other.JumpTriggered != false) {
         JumpTriggered = other.JumpTriggered;
+      }
+      if (other.OnWall != false) {
+        OnWall = other.OnWall;
+      }
+      if (other.OnWallNormX != 0) {
+        OnWallNormX = other.OnWallNormX;
+      }
+      if (other.OnWallNormY != 0) {
+        OnWallNormY = other.OnWallNormY;
+      }
+      if (other.RevivalVirtualGridX != 0) {
+        RevivalVirtualGridX = other.RevivalVirtualGridX;
+      }
+      if (other.RevivalVirtualGridY != 0) {
+        RevivalVirtualGridY = other.RevivalVirtualGridY;
       }
       if (other.ActiveSkillId != 0) {
         ActiveSkillId = other.ActiveSkillId;
@@ -1315,24 +1393,6 @@ namespace shared {
       }
       if (other.ChCollisionTeamId != 0) {
         ChCollisionTeamId = other.ChCollisionTeamId;
-      }
-      if (other.OnWall != false) {
-        OnWall = other.OnWall;
-      }
-      if (other.OnWallNormX != 0) {
-        OnWallNormX = other.OnWallNormX;
-      }
-      if (other.OnWallNormY != 0) {
-        OnWallNormY = other.OnWallNormY;
-      }
-      if (other.CapturedByInertia != false) {
-        CapturedByInertia = other.CapturedByInertia;
-      }
-      if (other.RevivalVirtualGridX != 0) {
-        RevivalVirtualGridX = other.RevivalVirtualGridX;
-      }
-      if (other.RevivalVirtualGridY != 0) {
-        RevivalVirtualGridY = other.RevivalVirtualGridY;
       }
       if (other.Name.Length != 0) {
         Name = other.Name;
@@ -1399,46 +1459,58 @@ namespace shared {
             break;
           }
           case 88: {
-            ColliderRadius = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            Removed = input.ReadBool();
-            break;
-          }
-          case 104: {
-            Score = input.ReadInt32();
-            break;
-          }
-          case 112: {
-            LastMoveGmtMillis = input.ReadInt32();
-            break;
-          }
-          case 120: {
             FramesToRecover = input.ReadInt32();
             break;
           }
+          case 96: {
+            CapturedByInertia = input.ReadBool();
+            break;
+          }
+          case 104: {
+            CapturedByPatrolCue = input.ReadBool();
+            break;
+          }
+          case 112: {
+            FramesInPatrolCue = input.ReadInt32();
+            break;
+          }
+          case 120: {
+            BeatsCnt = input.ReadInt32();
+            break;
+          }
           case 128: {
-            Hp = input.ReadInt32();
+            BeatenCnt = input.ReadInt32();
             break;
           }
           case 136: {
-            MaxHp = input.ReadInt32();
+            Hp = input.ReadInt32();
             break;
           }
           case 144: {
-            CharacterState = (global::shared.CharacterState) input.ReadEnum();
+            MaxHp = input.ReadInt32();
             break;
           }
           case 152: {
-            FramesInChState = input.ReadInt32();
+            Mp = input.ReadInt32();
             break;
           }
           case 160: {
+            MaxMp = input.ReadInt32();
+            break;
+          }
+          case 176: {
+            CharacterState = (global::shared.CharacterState) input.ReadEnum();
+            break;
+          }
+          case 184: {
+            FramesInChState = input.ReadInt32();
+            break;
+          }
+          case 192: {
             InAir = input.ReadBool();
             break;
           }
-          case 168: {
+          case 200: {
             JumpTriggered = input.ReadBool();
             break;
           }
@@ -1455,14 +1527,10 @@ namespace shared {
             break;
           }
           case 232: {
-            CapturedByInertia = input.ReadBool();
-            break;
-          }
-          case 240: {
             RevivalVirtualGridX = input.ReadInt32();
             break;
           }
-          case 248: {
+          case 240: {
             RevivalVirtualGridY = input.ReadInt32();
             break;
           }
@@ -1554,46 +1622,58 @@ namespace shared {
             break;
           }
           case 88: {
-            ColliderRadius = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            Removed = input.ReadBool();
-            break;
-          }
-          case 104: {
-            Score = input.ReadInt32();
-            break;
-          }
-          case 112: {
-            LastMoveGmtMillis = input.ReadInt32();
-            break;
-          }
-          case 120: {
             FramesToRecover = input.ReadInt32();
             break;
           }
+          case 96: {
+            CapturedByInertia = input.ReadBool();
+            break;
+          }
+          case 104: {
+            CapturedByPatrolCue = input.ReadBool();
+            break;
+          }
+          case 112: {
+            FramesInPatrolCue = input.ReadInt32();
+            break;
+          }
+          case 120: {
+            BeatsCnt = input.ReadInt32();
+            break;
+          }
           case 128: {
-            Hp = input.ReadInt32();
+            BeatenCnt = input.ReadInt32();
             break;
           }
           case 136: {
-            MaxHp = input.ReadInt32();
+            Hp = input.ReadInt32();
             break;
           }
           case 144: {
-            CharacterState = (global::shared.CharacterState) input.ReadEnum();
+            MaxHp = input.ReadInt32();
             break;
           }
           case 152: {
-            FramesInChState = input.ReadInt32();
+            Mp = input.ReadInt32();
             break;
           }
           case 160: {
+            MaxMp = input.ReadInt32();
+            break;
+          }
+          case 176: {
+            CharacterState = (global::shared.CharacterState) input.ReadEnum();
+            break;
+          }
+          case 184: {
+            FramesInChState = input.ReadInt32();
+            break;
+          }
+          case 192: {
             InAir = input.ReadBool();
             break;
           }
-          case 168: {
+          case 200: {
             JumpTriggered = input.ReadBool();
             break;
           }
@@ -1610,14 +1690,10 @@ namespace shared {
             break;
           }
           case 232: {
-            CapturedByInertia = input.ReadBool();
-            break;
-          }
-          case 240: {
             RevivalVirtualGridX = input.ReadInt32();
             break;
           }
-          case 248: {
+          case 240: {
             RevivalVirtualGridY = input.ReadInt32();
             break;
           }
@@ -3245,6 +3321,8 @@ namespace shared {
     public PatrolCue(PatrolCue other) : this() {
       flAct_ = other.flAct_;
       frAct_ = other.frAct_;
+      flCaptureFrames_ = other.flCaptureFrames_;
+      frCaptureFrames_ = other.frCaptureFrames_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3284,6 +3362,30 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "flCaptureFrames" field.</summary>
+    public const int FlCaptureFramesFieldNumber = 3;
+    private int flCaptureFrames_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FlCaptureFrames {
+      get { return flCaptureFrames_; }
+      set {
+        flCaptureFrames_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "frCaptureFrames" field.</summary>
+    public const int FrCaptureFramesFieldNumber = 4;
+    private int frCaptureFrames_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FrCaptureFrames {
+      get { return frCaptureFrames_; }
+      set {
+        frCaptureFrames_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -3301,6 +3403,8 @@ namespace shared {
       }
       if (FlAct != other.FlAct) return false;
       if (FrAct != other.FrAct) return false;
+      if (FlCaptureFrames != other.FlCaptureFrames) return false;
+      if (FrCaptureFrames != other.FrCaptureFrames) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3310,6 +3414,8 @@ namespace shared {
       int hash = 1;
       if (FlAct != 0UL) hash ^= FlAct.GetHashCode();
       if (FrAct != 0UL) hash ^= FrAct.GetHashCode();
+      if (FlCaptureFrames != 0) hash ^= FlCaptureFrames.GetHashCode();
+      if (FrCaptureFrames != 0) hash ^= FrCaptureFrames.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3336,6 +3442,14 @@ namespace shared {
         output.WriteRawTag(16);
         output.WriteUInt64(FrAct);
       }
+      if (FlCaptureFrames != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(FlCaptureFrames);
+      }
+      if (FrCaptureFrames != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(FrCaptureFrames);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3354,6 +3468,14 @@ namespace shared {
         output.WriteRawTag(16);
         output.WriteUInt64(FrAct);
       }
+      if (FlCaptureFrames != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(FlCaptureFrames);
+      }
+      if (FrCaptureFrames != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(FrCaptureFrames);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3369,6 +3491,12 @@ namespace shared {
       }
       if (FrAct != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FrAct);
+      }
+      if (FlCaptureFrames != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FlCaptureFrames);
+      }
+      if (FrCaptureFrames != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrCaptureFrames);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3387,6 +3515,12 @@ namespace shared {
       }
       if (other.FrAct != 0UL) {
         FrAct = other.FrAct;
+      }
+      if (other.FlCaptureFrames != 0) {
+        FlCaptureFrames = other.FlCaptureFrames;
+      }
+      if (other.FrCaptureFrames != 0) {
+        FrCaptureFrames = other.FrCaptureFrames;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3411,6 +3545,14 @@ namespace shared {
             FrAct = input.ReadUInt64();
             break;
           }
+          case 24: {
+            FlCaptureFrames = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            FrCaptureFrames = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -3432,6 +3574,14 @@ namespace shared {
           }
           case 16: {
             FrAct = input.ReadUInt64();
+            break;
+          }
+          case 24: {
+            FlCaptureFrames = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            FrCaptureFrames = input.ReadInt32();
             break;
           }
         }
