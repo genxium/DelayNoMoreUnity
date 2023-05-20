@@ -283,7 +283,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 selfBattleHeading.SetCharacter(currCharacterDownsync);
             } else {
                 newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, playerGameObj.transform.position.z);
-                chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp/ currCharacterDownsync.MaxHp);
+                chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp/ currCharacterDownsync.MaxHp, (float) currCharacterDownsync.Mp/currCharacterDownsync.MaxMp);
                 chAnimCtrl.hpBar.transform.position = newPosHolder;
             }
         }
@@ -302,7 +302,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var chAnimCtrl = npcGameObj.GetComponent<CharacterAnimController>();
             chAnimCtrl.updateCharacterAnim(currNpcDownsync, null, false, chConfig);
             newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, npcGameObj.transform.position.z);
-            chAnimCtrl.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp);
+            chAnimCtrl.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp, (float)currNpcDownsync.Mp / currNpcDownsync.MaxMp);
             chAnimCtrl.hpBar.transform.position = newPosHolder;
         }
 
@@ -796,6 +796,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.OnWall = false;
             npcInRdf.Hp = 100;
             npcInRdf.MaxHp = 100;
+            npcInRdf.Mp = 1000;
+            npcInRdf.MaxMp = 1000;
             npcInRdf.SpeciesId = characterSpeciesId;
 
             startRdf.NpcsArr[i] = npcInRdf;

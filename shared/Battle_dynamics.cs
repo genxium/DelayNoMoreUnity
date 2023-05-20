@@ -320,7 +320,7 @@ namespace shared {
 
             if (skills.ContainsKey(skillId)) {
                 var skillConfig = skills[skillId];
-                if (skillConfig.MpDelta < currCharacterDownsync.Mp) {
+                if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
                     return false;
                 } else {
                     thatCharacterInNextFrame.Mp -= skillConfig.MpDelta;

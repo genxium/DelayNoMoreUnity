@@ -162,8 +162,7 @@ public class Room {
             pPlayerFromDbInit.CharacterDownsync = new CharacterDownsync();
             pPlayerFromDbInit.CharacterDownsync.Id = playerId;
             pPlayerFromDbInit.CharacterDownsync.SpeciesId = speciesId;
-            pPlayerFromDbInit.CharacterDownsync.ColliderRadius = DEFAULT_PLAYER_RADIUS; // Hardcoded
-            pPlayerFromDbInit.CharacterDownsync.InAir = true;                           // Hardcoded
+            pPlayerFromDbInit.CharacterDownsync.InAir = true;
 
             pPlayerFromDbInit.BattleUdpTunnelAuthKey = _randGenerator.Next();
             players[playerId] = pPlayerFromDbInit;

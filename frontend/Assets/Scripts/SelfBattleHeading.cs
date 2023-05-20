@@ -7,6 +7,7 @@ public class SelfBattleHeading : MonoBehaviour {
     private int speciesId = -1;
     public Image avatar;
     public Slider hpBar;
+    public Slider mpBar;
 
     // Start is called before the first frame update
     void Start() {
@@ -30,8 +31,9 @@ public class SelfBattleHeading : MonoBehaviour {
                     break;
                 }
             }
-        }        
+        }
         
-        hpBar.SetValueWithoutNotify((float)chd.Hp/chd.MaxHp); 
+        hpBar.SetValueWithoutNotify((float)chd.Hp/chd.MaxHp);
+        mpBar.SetValueWithoutNotify((float)chd.Mp / chd.MaxMp);
     }
 }

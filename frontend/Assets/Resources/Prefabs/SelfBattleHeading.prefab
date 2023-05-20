@@ -474,6 +474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 9072635092537866862}
   hpBar: {fileID: 9072635092057459634}
+  mpBar: {fileID: 5992488809325936718}
 --- !u!1 &9072635092537866848
 GameObject:
   m_ObjectHideFlags: 0

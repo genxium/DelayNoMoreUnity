@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace shared {
     public partial class Battle {
@@ -176,42 +175,11 @@ namespace shared {
         }
     }
 
-    public class SkillBuilder {
-        int RecoveryFrames;
-        int RecoveryFramesOnBlock;
-        int RecoveryFramesOnHit;
-        int MpDelta;
-        SkillTriggerType TriggerType;
-        CharacterState BoundChState;
-        List<BulletConfig> Hits;
-
-        public SkillBuilder(int recoveryFrames, int recoveryFramesOnBlock, int recoveryFramesOnHit, int mpDelta, SkillTriggerType triggerType, CharacterState boundChState) {
-            RecoveryFrames = recoveryFrames;
-            RecoveryFramesOnBlock = recoveryFramesOnBlock;
-            RecoveryFramesOnHit = recoveryFramesOnHit;
-            MpDelta = mpDelta;
-            TriggerType = triggerType;
-            BoundChState = boundChState;
-            Hits = new List<BulletConfig>();
-        }
-
-        public SkillBuilder AddHit(BulletConfig val) {
+    public sealed partial class Skill {
+    
+        public Skill AddHit(BulletConfig val) {
             Hits.Add(val);
             return this;
-        }
-
-        public Skill build() {
-            var s = new Skill {
-                RecoveryFrames = RecoveryFrames,
-                RecoveryFramesOnBlock = RecoveryFramesOnBlock,
-                RecoveryFramesOnHit = RecoveryFramesOnHit,
-                MpDelta = MpDelta,
-                TriggerType = TriggerType,
-                BoundChState = BoundChState
-            };
-            // "s.Hits" is readonly, thus not assignable by the initialization call above
-            s.Hits.AddRange(Hits);
-            return s;
         }
     }
 }
