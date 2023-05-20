@@ -27,7 +27,7 @@ public class ReadyGo : MonoBehaviour {
         ready.gameObject.SetActive(false);
         go.gameObject.SetActive(true);
         var sequence = DOTween.Sequence();
-        sequence.Append(go.gameObject.transform.DOScale(1.2f * Vector3.one, 0.3f));
+        sequence.Append(go.gameObject.transform.DOScale(1.5f * Vector3.one, 0.5f));
         sequence.Append(go.gameObject.transform.DOScale(0.01f * Vector3.one, 0.1f));
         sequence.onComplete = () => {
             if (null == go) return;
