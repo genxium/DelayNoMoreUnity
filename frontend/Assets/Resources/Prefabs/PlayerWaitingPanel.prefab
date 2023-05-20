@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c260d9d2635e31d419332ea0bdc41ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backButton: {fileID: 4493220633568263844}
   playerSlotPrefab: {fileID: 8523577246506177901, guid: cb8e316acff94f845a1e7227c86d3161, type: 3}
   participantSlots: {fileID: 178202121221840519}
 --- !u!1 &4248171412763768074
