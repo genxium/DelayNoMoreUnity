@@ -42,5 +42,8 @@ namespace shared {
 
         public int LayDownSizeX;
         public int LayDownSizeY;
+
+        public int DyingSizeX;
+        public int DyingSizeY;
     }
 }

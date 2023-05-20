@@ -40,7 +40,7 @@ public class OnlineMapController : AbstractMapController {
                         preallocateHolders();
                     }
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch("Dungeon");
+                    resetCurrentMatch("Castle");
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
@@ -82,6 +82,7 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     enableBattleInput(false);
+                    onBattleStopped();
                     // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
                     if (frameLogEnabled) {
                         wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
@@ -192,6 +193,7 @@ public class OnlineMapController : AbstractMapController {
 
     public void onWsSessionClosed() {
         Debug.Log("Handling WsSession closed in main thread.");
+        onBattleStopped();
         playerWaitingPanel.gameObject.SetActive(false);
         characterSelectPanel.gameObject.SetActive(true);
     }

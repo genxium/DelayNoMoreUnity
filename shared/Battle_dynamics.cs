@@ -208,13 +208,13 @@ namespace shared {
                         }
 
                         ConvexPolygon bShape = bCollider.Shape;
-                        var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, ref overlapResult);
+                        var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
                         if (!overlapped) {
                             continue;
                         }
                         switch (bCollider.Data) {
                             case CharacterDownsync v3:
-                                if (v3.JoinIndex != currCharacterDownsync.JoinIndex) {
+                                if (v3.JoinIndex != currCharacterDownsync.JoinIndex && v3.BulletTeamId != currCharacterDownsync.BulletTeamId) {
                                     bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
                                     if (!prevCapturedByInertia) {
                                         // To emulate input delay, and double it to give the players some advantages
@@ -238,6 +238,22 @@ namespace shared {
                                                     hasVisionReaction = true;
                                                     break;
                                                 case 2:
+                                                    if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
+                                                        // Melee reachable
+                                                        if (0.2f * aCollider.H < colliderDy) {
+                                                            // In air
+                                                            patternId = 2;
+                                                        } else {
+                                                            // On ground
+                                                            patternId = 1;
+                                                        }
+                                                    } else {
+                                                        // Use fireball
+                                                        patternId = 3;
+                                                    }
+                                                    hasVisionReaction = true;
+                                                    break;
+                                                case 3:
                                                     if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
                                                         // Melee reachable
                                                         if (0.2f * aCollider.H < colliderDy) {
@@ -282,7 +298,7 @@ namespace shared {
                         }
 
                         ConvexPolygon bShape = bCollider.Shape;
-                        var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, ref overlapResult);
+                        var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false,ref overlapResult);
                         if (!overlapped) {
                             continue;
                         }
@@ -649,7 +665,7 @@ namespace shared {
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
-                int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, SNAP_INTO_PLATFORM_OVERLAP, effPushbacks[i], hardPushbackNormsArr[i], collision, ref overlapResult);
+                int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, SNAP_INTO_PLATFORM_OVERLAP, effPushbacks[i], hardPushbackNormsArr[i], collision, ref overlapResult, logger);
 
                 bool landedOnGravityPushback = false;
                 bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
@@ -666,6 +682,12 @@ namespace shared {
                                     // ignore collision with dying player
                                     continue;
                                 }
+                                /*
+                                if (currCharacterDownsync.ChCollisionTeamId == v1.ChCollisionTeamId) {
+                                    // ignore collision within same collisionTeam, rarely used
+                                    continue;
+                                }
+                                */
                                 isAnotherCharacter = true;
                                 break;
                             case Bullet v2:
@@ -685,7 +707,7 @@ namespace shared {
                         }
 
                         ConvexPolygon bShape = bCollider.Shape;
-                        var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, ref overlapResult);
+                        var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
                         if (!overlapped) {
                             continue;
                         }
@@ -819,7 +841,7 @@ namespace shared {
                         break;
                     }
                     var defenderShape = bCollider.Shape;
-                    var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, ref overlapResult);
+                    var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, false, ref overlapResult);
                     if (!overlapped) continue;
 
                     switch (bCollider.Data) {
@@ -827,11 +849,12 @@ namespace shared {
                             break;
                         case CharacterDownsync atkedCharacterInCurrFrame:
                             if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
+                            if (bullet.BattleAttr.TeamId == atkedCharacterInCurrFrame.BulletTeamId) continue;
                             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;
                             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
                             exploded = true;
                             explodedOnAnotherCharacter = true;
-                            logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], atkedCharacterInCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, atkedCharacterInCurrFrame));
+                            //logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], atkedCharacterInCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, atkedCharacterInCurrFrame));
                             int xfac = (0 < effDirX ? 1 : -1);
                             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
@@ -1191,6 +1214,9 @@ namespace shared {
             switch (characterDownsync.CharacterState) {
                 case LayDown1:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.LayDownSizeX, chConfig.LayDownSizeY);
+                    break;
+                case Dying:
+                    (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.DyingSizeX, chConfig.DyingSizeY);
                     break;
                 case BlownUp1:
                 case InAirIdle1NoJump:

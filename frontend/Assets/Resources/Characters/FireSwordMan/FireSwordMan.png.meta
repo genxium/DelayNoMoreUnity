@@ -1,0 +1,3755 @@
+fileFormatVersion: 2
+guid: d98557c8ebd559b48b6ee4a229c212b2
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FireSwordMan-0
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 540
+        width: 30
+        height: 49
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 788c08094cbd6a845ade872135f552d9
+      internalID: -1253256211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 471
+        width: 29
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 306b383dda7365d429f102c915888e09
+      internalID: -1562500223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-10
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 736
+        width: 41
+        height: 44
+      alignment: 9
+      pivot: {x: 0.6, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a827b1201aec21d43b9ce52d14aa6931
+      internalID: 553285797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-100
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 355
+        width: 22
+        height: 46
+      alignment: 9
+      pivot: {x: 0.48181817, y: 0.5217391}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13ace43a558522f438124294d81ab94e
+      internalID: -229092222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-101
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 441
+        width: 22
+        height: 43
+      alignment: 9
+      pivot: {x: 0.48181817, y: 0.4883721}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e528a289de1e3764c92bb4d0adf34b9f
+      internalID: -1256508723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-102
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 780
+        width: 21
+        height: 51
+      alignment: 9
+      pivot: {x: 0.45714286, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 248577d156362e5429da1dd9a0fd31c8
+      internalID: 813121831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-103
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 729
+        width: 24
+        height: 51
+      alignment: 9
+      pivot: {x: 0.48333332, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 327300a54c2514243b7a124990f3cf33
+      internalID: 1307965837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-104
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 351
+        width: 22
+        height: 46
+      alignment: 9
+      pivot: {x: 0.43636364, y: 0.5217391}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a179213caffd9304594937a7f889177a
+      internalID: -979974026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-105
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 427
+        width: 22
+        height: 43
+      alignment: 9
+      pivot: {x: 0.43636364, y: 0.4883721}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70886a27d93c95a4fb6f6732d0c7ae90
+      internalID: 2002494192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-106
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 415
+        width: 21
+        height: 51
+      alignment: 9
+      pivot: {x: 0.45714286, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a007d7c2631ccd45aadcc2bc0439b01
+      internalID: -737196777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-107
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 470
+        width: 28
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5928571, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f6e18c6f0d5dd840b5c87fdb7c40c98
+      internalID: -937672411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-108
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 850
+        width: 52
+        height: 50
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96f53f6fbe29be141910e3a9f772fedd
+      internalID: 231688884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-109
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 735
+        width: 47
+        height: 52
+      alignment: 9
+      pivot: {x: 0.22553192, y: 0.48076922}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38d791eefd2fa0148bef1b9e378d7009
+      internalID: -80737837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-11
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 615
+        width: 40
+        height: 45
+      alignment: 9
+      pivot: {x: 0.615, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c0898cb09c453e46a0b8fb68e6a80c1
+      internalID: 299620878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-110
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 865
+        width: 46
+        height: 51
+      alignment: 9
+      pivot: {x: 0.20869565, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2031b19ff93eac94cb1580757b7a9d00
+      internalID: 375539182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-111
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 759
+        width: 46
+        height: 50
+      alignment: 9
+      pivot: {x: 0.20869565, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82ad33aa1541de24ebb18761e1b46f45
+      internalID: -1712125471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-112
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 738
+        width: 46
+        height: 40
+      alignment: 9
+      pivot: {x: 0.3173913, y: 0.625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf4d7e8fe77175d468a2a05842062cd9
+      internalID: 6288440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-113
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 699
+        width: 44
+        height: 39
+      alignment: 9
+      pivot: {x: 0.26363635, y: 0.64102566}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4435aee9a431034e8594812db14d657
+      internalID: -1457052899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-114
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 660
+        width: 43
+        height: 39
+      alignment: 9
+      pivot: {x: 0.22325581, y: 0.64102566}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7116581470a22940827cdb6d71af99f
+      internalID: 1603170507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-115
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 595
+        width: 34
+        height: 47
+      alignment: 9
+      pivot: {x: 0.28235295, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a97526baf995abc42ba7faf434750da9
+      internalID: 627944412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-116
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 417
+        width: 27
+        height: 49
+      alignment: 9
+      pivot: {x: 0.65185183, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6e840388a9147448993acf86adc3a63
+      internalID: -1879389427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-117
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 422
+        width: 27
+        height: 50
+      alignment: 9
+      pivot: {x: 0.65185183, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 582c34145ec202f46b99d82cf2b04989
+      internalID: -1283193259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-118
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 880
+        width: 84
+        height: 42
+      alignment: 9
+      pivot: {x: 0.17380953, y: 0.5952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65ac1ea87c8050440bde0e55c7087aff
+      internalID: -1731070835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-119
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 922
+        width: 84
+        height: 49
+      alignment: 9
+      pivot: {x: 0.13809524, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bd642795c752ad4dbe11d6069c8b0e5
+      internalID: -504430403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-12
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 644
+        width: 39
+        height: 45
+      alignment: 9
+      pivot: {x: 0.63076925, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94902ccb337864642909422cd8674b8c
+      internalID: -1526073951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-120
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 867
+        width: 83
+        height: 50
+      alignment: 9
+      pivot: {x: 0.11566265, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd83f545db8a9174e94d4fa516c2a7ba
+      internalID: -2139576567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-121
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 973
+        width: 91
+        height: 51
+      alignment: 9
+      pivot: {x: 0.16043957, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f07e3c27435c6bf458cfae3531b0e865
+      internalID: 1754866597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-122
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 971
+        width: 90
+        height: 53
+      alignment: 9
+      pivot: {x: 0.12888889, y: 0.4716981}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da14192a62f305e4292736ca87ba3f2f
+      internalID: 1820897541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-123
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 870
+        width: 82
+        height: 49
+      alignment: 9
+      pivot: {x: 0.11707317, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 953ff2c1b139b8542a2158e7d4a09a30
+      internalID: -1124691047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-124
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 974
+        width: 88
+        height: 50
+      alignment: 9
+      pivot: {x: 0.1659091, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fcf4288ee1dc264fb461dd523c3ab0c
+      internalID: -1665204606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-125
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 973
+        width: 88
+        height: 51
+      alignment: 9
+      pivot: {x: 0.13181818, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e1ec797f74a45a49b460669148ca334
+      internalID: -1276362122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-126
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 915
+        width: 88
+        height: 53
+      alignment: 9
+      pivot: {x: 0.10909091, y: 0.4716981}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf34ce1bc572f76428afdb810565de79
+      internalID: 70756241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-127
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 968
+        width: 95
+        height: 56
+      alignment: 9
+      pivot: {x: 0.15368421, y: 0.44642857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f5d623eac0f20543ae5345d5ecbccc9
+      internalID: 1493057267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-128
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 919
+        width: 89
+        height: 54
+      alignment: 9
+      pivot: {x: 0.13033707, y: 0.46296296}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb78c43e0b3c8c342bef7645513f3654
+      internalID: 1796996531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-129
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 917
+        width: 86
+        height: 56
+      alignment: 9
+      pivot: {x: 0.11162791, y: 0.44642857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b387cc62b238df247884a5b12e75c899
+      internalID: -1125795963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-13
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 598
+        width: 39
+        height: 44
+      alignment: 9
+      pivot: {x: 0.6051282, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0fd68a5c621d4c488e96038bcaf8348
+      internalID: -171249517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-130
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 916
+        width: 87
+        height: 58
+      alignment: 9
+      pivot: {x: 0.11034483, y: 0.43103448}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1002ee1cee815a4428497a3267e5210b
+      internalID: 1535293367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-131
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 595
+        width: 34
+        height: 47
+      alignment: 9
+      pivot: {x: 0.28235295, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91215ca7a567bd2478c3d9e413586e50
+      internalID: -789327307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-132
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 540
+        width: 30
+        height: 49
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39fe94da50d74ac4292ac1b6e4388779
+      internalID: -750857802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-133
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 445
+        width: 29
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6456dd62e6a0274badd0abe90de5c3f
+      internalID: 1952818570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-134
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 420
+        width: 29
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 831073ed7291ff847bd4bb47d9f309be
+      internalID: 507109481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-135
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 493
+        width: 30
+        height: 47
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 147199701c53780429abd120c7cca1ac
+      internalID: 53835722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-136
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 468
+        width: 30
+        height: 47
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 872ab70723a97e740b7ca4cd68df7baa
+      internalID: -795258900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-137
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 533
+        width: 30
+        height: 48
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 142d38bdd1ddc4c4eb94741d6e421cd4
+      internalID: -32140368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-138
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 401
+        width: 29
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 476604b64fb75be4dbd9e6c3c8bde55a
+      internalID: -921768059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-139
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 517
+        width: 29
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d5a85955ccd24c49a8bfea165fcf8e1
+      internalID: 840269646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-14
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 712
+        width: 41
+        height: 44
+      alignment: 9
+      pivot: {x: 0.6, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f390b0f8554c8e04f88ff0b2576f3fc8
+      internalID: -1912535208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-140
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 521
+        width: 24
+        height: 48
+      alignment: 9
+      pivot: {x: 0.48333332, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c2ae76af0f545646bc4be6dd5e1d43d
+      internalID: 1298166630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-141
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 589
+        width: 23
+        height: 48
+      alignment: 9
+      pivot: {x: 0.46086955, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 955f52994e869d04bb5117503b83b991
+      internalID: -622744595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-142
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 397
+        width: 23
+        height: 48
+      alignment: 9
+      pivot: {x: 0.46086955, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eef249e8a620b1348919e23a06c870f8
+      internalID: 2130937764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-143
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 372
+        width: 23
+        height: 48
+      alignment: 9
+      pivot: {x: 0.46086955, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a613a8e6705dc59469d6bb21c9d26116
+      internalID: 1019671511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-144
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 411
+        width: 27
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5407407, y: 0.53061223}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0db908d671526f840a81f5fdc4f6d258
+      internalID: 257069427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-145
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 764
+        width: 32
+        height: 49
+      alignment: 9
+      pivot: {x: 0.58125, y: 0.53061223}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb6d8689aa585b6418035e10fbf268be
+      internalID: -2039209914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-146
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 705
+        width: 32
+        height: 45
+      alignment: 9
+      pivot: {x: 0.58125, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 329d93612ac57ff4589003bee15cae0a
+      internalID: -1706890166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-147
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 492
+        width: 33
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5939394, y: 0.52380955}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b03eed0510749e4e9d15b2b0ea67e54
+      internalID: 1096170008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-148
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 836
+        width: 31
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5354839, y: 0.52272725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bf375fdf69d9a343a0acbc0812323fa
+      internalID: -2022619629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-149
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 551
+        width: 26
+        height: 45
+      alignment: 9
+      pivot: {x: 0.52307695, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d01fa8cadfa8ec4f9e02fdebb43bf23
+      internalID: -652111528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-15
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 626
+        width: 42
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5857143, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e71acd3fa17904c48be98a53e26da58e
+      internalID: 720424266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-150
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 683
+        width: 25
+        height: 46
+      alignment: 9
+      pivot: {x: 0.504, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a2693f0c84e7104bb2c180ee21f6ddd
+      internalID: 1932961200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-151
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 411
+        width: 27
+        height: 49
+      alignment: 9
+      pivot: {x: 0.65185183, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84c66d801bebdd74bb062ad78bd1c7ea
+      internalID: -359402530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-152
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 470
+        width: 28
+        height: 48
+      alignment: 9
+      pivot: {x: 0.62857145, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 830dbef63e6d5ca45912ccff0554b66e
+      internalID: 579668402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-153
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 474
+        width: 26
+        height: 45
+      alignment: 9
+      pivot: {x: 0.52307695, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fab9f49071b4e24084ecb8e2526b9cd
+      internalID: 444246418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-154
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 637
+        width: 25
+        height: 46
+      alignment: 9
+      pivot: {x: 0.504, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cd96ce45e22ded41a8295ab15b02e3e
+      internalID: 918440487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-155
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 375
+        width: 27
+        height: 49
+      alignment: 9
+      pivot: {x: 0.65185183, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18de28d0d2805e74bba14c6e4583ed0b
+      internalID: -716743285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-156
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 466
+        width: 28
+        height: 48
+      alignment: 9
+      pivot: {x: 0.62857145, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 320baeaa9af115e49b4ce2ceaa6d6796
+      internalID: -1304219703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-157
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 566
+        width: 30
+        height: 49
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 559d5e40e9d7de54db20030e2e5e50ac
+      internalID: 25448644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-158
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 534
+        width: 34
+        height: 40
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee4751688507b05459bad717671b35eb
+      internalID: 483906289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-159
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 548
+        width: 34
+        height: 39
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.64102566}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c8d76a00a69bfb41bb7c325e5598499
+      internalID: -1010573178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 574
+        width: 34
+        height: 47
+      alignment: 9
+      pivot: {x: 0.37058824, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 248d9b00b1daddc41a95850f65f742a4
+      internalID: 1293082154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-160
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 567
+        width: 36
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4888889, y: 0.6944444}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa0c5a8f84267cf4c8f614eab5394ee0
+      internalID: -767496755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-161
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 816
+        width: 56
+        height: 15
+      alignment: 9
+      pivot: {x: 0.31428573, y: 1.6666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8854dd4f77621b547971b2d60bd78c99
+      internalID: 1344949124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-162
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 805
+        width: 56
+        height: 11
+      alignment: 9
+      pivot: {x: 0.31428573, y: 2.2727273}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08624c62653888549a85a782b266ed55
+      internalID: -1875818336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-163
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 800
+        width: 56
+        height: 10
+      alignment: 9
+      pivot: {x: 0.31428573, y: 2.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 169185ab3efc7474cbbc9770b657e1bc
+      internalID: -333746071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-17
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 549
+        width: 34
+        height: 46
+      alignment: 9
+      pivot: {x: 0.34117648, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d370dd1ba6d45f843b1ae3ce31abf4ad
+      internalID: 803950087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-18
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 552
+        width: 38
+        height: 46
+      alignment: 9
+      pivot: {x: 0.25263157, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 435e32c941591b64aa7c7c5215cf1937
+      internalID: 1459220163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-19
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 552
+        width: 38
+        height: 47
+      alignment: 9
+      pivot: {x: 0.2263158, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a01d979f34b2e046aaa1046de3b4f7a
+      internalID: -310298169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 397
+        width: 29
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b54052192c675574dbbb4542b06cc762
+      internalID: 1522081343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-20
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 640
+        width: 40
+        height: 47
+      alignment: 9
+      pivot: {x: 0.215, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29e0f5a75e6763a4a855b053ccec9174
+      internalID: 2065502713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-21
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 569
+        width: 38
+        height: 46
+      alignment: 9
+      pivot: {x: 0.2263158, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a8f3fd1e605961469848f579d230842
+      internalID: 1220655436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-22
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 551
+        width: 38
+        height: 46
+      alignment: 9
+      pivot: {x: 0.25263157, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89e0f7477ba12fc44af4418e5e58b159
+      internalID: -1377308962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-23
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 587
+        width: 34
+        height: 47
+      alignment: 9
+      pivot: {x: 0.34117648, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cad6a63d3ac9f44b917042a80fee5a6
+      internalID: -306039043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-24
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 647
+        width: 40
+        height: 45
+      alignment: 9
+      pivot: {x: 0.59, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ec0d82d5fe1b7048b564838b388d193
+      internalID: 1167930646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-25
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 615
+        width: 39
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5794872, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb9b64944a012c44db3a80cc619298cd
+      internalID: -476577400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 621
+        width: 35
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5314286, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72bcdf9550e75f24eb0c54be9f46784d
+      internalID: 53401089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-27
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 642
+        width: 40
+        height: 45
+      alignment: 9
+      pivot: {x: 0.59, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d8cb29824a00e24386e4ecf0ddfad35
+      internalID: -501308941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-28
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 711
+        width: 54
+        height: 45
+      alignment: 9
+      pivot: {x: 0.51111114, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d3b11bdbc2e88d418553515afe78456
+      internalID: -327497047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-29
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 772
+        width: 51
+        height: 47
+      alignment: 9
+      pivot: {x: 0.4627451, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fa79deb49c3861498ff4cfacb74b055
+      internalID: -2102683457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-3
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 449
+        width: 30
+        height: 47
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2e998437bf0f234fa2c745e18fc4249
+      internalID: 405658350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-30
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 819
+        width: 51
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4627451, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7327a150611dd0146abbb32d30ecfdab
+      internalID: -791625328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-31
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 597
+        width: 38
+        height: 47
+      alignment: 9
+      pivot: {x: 0.64736843, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c85b0a2c65a09244a88769f5a43e4293
+      internalID: -420310302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-32
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 787
+        width: 48
+        height: 43
+      alignment: 9
+      pivot: {x: 0.6375, y: 0.5813953}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 522a5bc45b1aabd4eb62114adfee76fa
+      internalID: 652046287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-33
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 809
+        width: 59
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5864407, y: 0.78125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 838687117c755ad4b928dd0301bab2f5
+      internalID: -1523767560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-34
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 810
+        width: 58
+        height: 32
+      alignment: 9
+      pivot: {x: 0.57931036, y: 0.78125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edf19a16ae190684b8fc30efa5d291e0
+      internalID: -1091141359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-35
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 727
+        width: 55
+        height: 32
+      alignment: 9
+      pivot: {x: 0.55636364, y: 0.78125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fb99c3d4d4b7794a96bf50ad44413dc
+      internalID: 1056712758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-36
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 787
+        width: 48
+        height: 43
+      alignment: 9
+      pivot: {x: 0.6375, y: 0.5813953}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e59a1ddbab79014aa3e2be4c9c6d2f5
+      internalID: -637640619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-37
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 555
+        width: 38
+        height: 47
+      alignment: 9
+      pivot: {x: 0.64736843, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6e2bb4069e1258429e2e0cf0fd8c019
+      internalID: -1450209984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-38
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 516
+        width: 38
+        height: 39
+      alignment: 9
+      pivot: {x: 0.4368421, y: 0.64102566}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80de5283ec573e24a995bbbd16bfc36c
+      internalID: -205739771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-39
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 780
+        width: 48
+        height: 30
+      alignment: 9
+      pivot: {x: 0.42916667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb76df93d4624024f87544d368821e39
+      internalID: -2129815460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 445
+        width: 30
+        height: 47
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 349bccc50bcfe2c42851000fc83b9dd8
+      internalID: -36857255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-40
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 689
+        width: 41
+        height: 23
+      alignment: 9
+      pivot: {x: 0.35609755, y: 1.0434783}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9ed82d622c4a12408d494edb5a6387f
+      internalID: 348141483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-41
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 599
+        width: 39
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5794872, y: 0.86206895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa088c8a143f2ad4996014b2e4a67297
+      internalID: -560126648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-42
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 520
+        width: 37
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5027027, y: 0.8064516}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 644c28c68f98d13418f991e1bfd76219
+      internalID: 191116552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-43
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 441
+        width: 26
+        height: 33
+      alignment: 9
+      pivot: {x: 0.56153846, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8187e8bbbcba67409ba55caa54fbd2b
+      internalID: -1891128257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-44
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 440
+        width: 27
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5407407, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8f736711cf0eb34ab7c94229f95d6df
+      internalID: 478659109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-45
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 628
+        width: 40
+        height: 45
+      alignment: 9
+      pivot: {x: 0.615, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23d9441a378101848ac2bdc43e0df58b
+      internalID: 457883210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-46
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 602
+        width: 39
+        height: 45
+      alignment: 9
+      pivot: {x: 0.6051282, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 267eacc85192cf54b9cf2cf9943df956
+      internalID: -935301999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-47
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 581
+        width: 36
+        height: 45
+      alignment: 9
+      pivot: {x: 0.57222223, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 181cba8b38b4526429accfb15453d55e
+      internalID: -947162351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-48
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 729
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.51363635, y: 0.53488374}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24daeceac8984df45a4bbed40c12d9cc
+      internalID: -2021308801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-49
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 671
+        width: 43
+        height: 42
+      alignment: 9
+      pivot: {x: 0.3860465, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ab440e87805e7449b9e14d13990bc80
+      internalID: 1679219384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-5
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 519
+        width: 30
+        height: 48
+      alignment: 9
+      pivot: {x: 0.58666664, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 990e6537f8a9e7f4fa2db6bebc7a768d
+      internalID: 673892930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-50
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 713
+        width: 45
+        height: 46
+      alignment: 9
+      pivot: {x: 0.61333334, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fe112d1e4b087047859efb2757907af
+      internalID: 508910963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-51
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 460
+        width: 36
+        height: 53
+      alignment: 9
+      pivot: {x: 0.7111111, y: 0.4716981}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e864015fc579364986dab68f85a951f
+      internalID: -1796905819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-52
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 513
+        width: 37
+        height: 56
+      alignment: 9
+      pivot: {x: 0.7189189, y: 0.44642857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa7ad897cc370d940a5550c44fb62c5d
+      internalID: -1972604781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-53
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 634
+        width: 30
+        height: 60
+      alignment: 9
+      pivot: {x: 0.6533333, y: 0.41666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 018db7bf295ff964fbcc94287c684ec3
+      internalID: 864957670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-54
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 660
+        width: 32
+        height: 45
+      alignment: 9
+      pivot: {x: 0.51875, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8426388e037add4490a2fb0ce8e62a0
+      internalID: 1637728132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-55
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 756
+        width: 55
+        height: 44
+      alignment: 9
+      pivot: {x: 0.37454545, y: 0.47727272}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c43a46c6ed3a914c817df026226e58d
+      internalID: 911264857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-56
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 721
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.35454544, y: 0.4883721}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acad30971b3f0814d989b430119d475c
+      internalID: 1161544659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-57
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 478
+        width: 24
+        height: 43
+      alignment: 9
+      pivot: {x: 0.4, y: 0.4883721}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 388efd15b40ecf444a56f48a48ed44e6
+      internalID: -1219529860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-58
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 687
+        width: 43
+        height: 42
+      alignment: 9
+      pivot: {x: 0.3860465, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccae4e1711d7f9946a9d82077d658cd9
+      internalID: -1883641132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-59
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 801
+        width: 52
+        height: 49
+      alignment: 9
+      pivot: {x: 0.7807692, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38b350e9346a02d499762f671c1b2831
+      internalID: 1776597864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-6
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 514
+        width: 29
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bc0978422975754c8957243abd2885e
+      internalID: 1041183551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-60
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 759
+        width: 55
+        height: 46
+      alignment: 9
+      pivot: {x: 0.3018182, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e68d884e1c5b6074b82ab079520fc261
+      internalID: -1943372859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-61
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 666
+        width: 44
+        height: 45
+      alignment: 9
+      pivot: {x: 0.26363635, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e233c03ec98a5649823679c0aebdd7b
+      internalID: 120255721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-62
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 474
+        width: 28
+        height: 45
+      alignment: 9
+      pivot: {x: 0.34285715, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 493fbbf864ec7f149a5bc86f69635145
+      internalID: 806727617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-63
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 810
+        width: 47
+        height: 55
+      alignment: 9
+      pivot: {x: 0.6085106, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b32be8d9a2a11634d9c031e1d91576f8
+      internalID: 1830811201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-64
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 966
+        width: 60
+        height: 58
+      alignment: 9
+      pivot: {x: 0.22666667, y: 0.43103448}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a73ec2d3ebe8e548b1f2b8e335af9df
+      internalID: -110714012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-65
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 874
+        width: 54
+        height: 42
+      alignment: 9
+      pivot: {x: 0.17777778, y: 0.5952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eabdaebd5a2f08f498000571360dcb2b
+      internalID: -1098407899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-66
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 830
+        width: 53
+        height: 44
+      alignment: 9
+      pivot: {x: 0.18113208, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5f63cbdc1342bb4b94393e7b8aca553
+      internalID: 1251178041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-67
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 596
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.24, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f8bdd1ba710e6c42bd6c8b907050442
+      internalID: -769734427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-68
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 842
+        width: 70
+        height: 40
+      alignment: 9
+      pivot: {x: 0.20857143, y: 0.625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cbc6ffd45f6a0e4991c2234b2e80a5b
+      internalID: 1369340931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-69
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 841
+        width: 67
+        height: 39
+      alignment: 9
+      pivot: {x: 0.17313433, y: 0.64102566}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64e7c0d1305173d4aa3812e7bbfd76ad
+      internalID: 927882524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-7
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 484
+        width: 29
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5724138, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cfbb03220cec7b4d967bd5adf7ed1a4
+      internalID: -100448625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-70
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 831
+        width: 65
+        height: 39
+      alignment: 9
+      pivot: {x: 0.14769231, y: 0.64102566}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b024217e553a384ea5488585d68c6e3
+      internalID: -744872218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-71
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 595
+        width: 34
+        height: 47
+      alignment: 9
+      pivot: {x: 0.28235295, y: 0.5319149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef1b075eb9001ba43ae8161ec021e1b5
+      internalID: -1895507906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-72
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 687
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.39, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4d1ea40d5002f443842052c93a60171
+      internalID: -1230059284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-73
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 642
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.51666665, y: 0.48076922}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c9767ece3786ad478d3c3661c3033c3
+      internalID: 1417068204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-74
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 815
+        width: 35
+        height: 55
+      alignment: 9
+      pivot: {x: 0.50285715, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9b12c471384e664cbf1b496456ed535
+      internalID: 29513882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-75
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 654
+        width: 35
+        height: 52
+      alignment: 9
+      pivot: {x: 0.50285715, y: 0.48076922}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfc12290fe3501d43a63650217ba4926
+      internalID: 742111846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-76
+      rect:
+        serializedVersion: 2
+        x: 478
+        y: 424
+        width: 34
+        height: 54
+      alignment: 9
+      pivot: {x: 0.4882353, y: 0.46296296}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62dd4eb6d0aa4384aaca723e52d3ef70
+      internalID: 1665727596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-77
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 496
+        width: 33
+        height: 53
+      alignment: 9
+      pivot: {x: 0.47272727, y: 0.4716981}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 343863070487b7948a91fef39ce5b572
+      internalID: -1540121730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-78
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 706
+        width: 35
+        height: 54
+      alignment: 9
+      pivot: {x: 0.47428572, y: 0.46296296}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b007a089e4ef89242a2126e757d67025
+      internalID: 143392854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-79
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 673
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.39, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27ec8ac1fe9849e4db9492e3d54fa431
+      internalID: 1023365745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-8
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 756
+        width: 41
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5512195, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a49f496454d2c8a4e953a6e37fd8ba18
+      internalID: 340173430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-80
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 603
+        width: 35
+        height: 51
+      alignment: 9
+      pivot: {x: 0.50285715, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d3b5b65224fd6545b46dfd53dfaf52b
+      internalID: -806444320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-81
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 760
+        width: 35
+        height: 55
+      alignment: 9
+      pivot: {x: 0.5885714, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8de7c9c839c766a4698999e5249e7ffa
+      internalID: -1042651673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-82
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 466
+        width: 36
+        height: 54
+      alignment: 9
+      pivot: {x: 0.43333334, y: 0.46296296}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53cc2f04b87fc14429aece2968f0d5cf
+      internalID: 1424118246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-83
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 778
+        width: 39
+        height: 58
+      alignment: 9
+      pivot: {x: 0.4, y: 0.43103448}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ef818cf368eb4d45ac6e834dd808874
+      internalID: 499020718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-84
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 813
+        width: 32
+        height: 54
+      alignment: 9
+      pivot: {x: 0.4875, y: 0.46296296}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2727c18eced025341b5130b13cd3b356
+      internalID: -199221616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-85
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 673
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.39, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e004124387131114494cb534c4e97632
+      internalID: -95283402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-86
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 472
+        width: 28
+        height: 44
+      alignment: 9
+      pivot: {x: 0.55714285, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93a494aee167dff438b58072dbef1ef3
+      internalID: 624047281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-87
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 441
+        width: 28
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5928571, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e22248f4c26f08442a2eb9cb8413c886
+      internalID: -322359272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-88
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 515
+        width: 31
+        height: 33
+      alignment: 9
+      pivot: {x: 0.63225806, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2f988c11cec3e54da92175f76ded5ae
+      internalID: 867665833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-89
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 484
+        width: 29
+        height: 33
+      alignment: 9
+      pivot: {x: 0.6068966, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5690ff8edfecd404183cb343f4be7ab8
+      internalID: 677319814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-9
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 692
+        width: 41
+        height: 44
+      alignment: 9
+      pivot: {x: 0.57560974, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45a96be398de0bc438bb87c3a4dce0fe
+      internalID: 1708401704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-90
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 519
+        width: 29
+        height: 33
+      alignment: 9
+      pivot: {x: 0.6068966, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d4bdf8587d7b064ca18e951f8d05a02
+      internalID: 1694386814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-91
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 518
+        width: 29
+        height: 33
+      alignment: 9
+      pivot: {x: 0.6068966, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fc601f1aff5d764a9b7a2bb2d032699
+      internalID: 464019376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-92
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 519
+        width: 29
+        height: 33
+      alignment: 9
+      pivot: {x: 0.6068966, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13970101cbd7a1c44b5c364e66298b43
+      internalID: 1986884035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-93
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 427
+        width: 27
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5407407, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4679c1dbc6e04e74589e2a49fc060ee7
+      internalID: 594305718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-94
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 562
+        width: 30
+        height: 34
+      alignment: 9
+      pivot: {x: 0.52, y: 0.7352941}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ef36c7d269bfef44b498b99263961ac
+      internalID: -1044778976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-95
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 882
+        width: 82
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5804878, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b66f9ca4ed71b8e4299164741f719831
+      internalID: -199410222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-96
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 933
+        width: 59
+        height: 33
+      alignment: 9
+      pivot: {x: 0.8067797, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 217616a957fad2246a1379172abf8700
+      internalID: -1156247661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-97
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 900
+        width: 59
+        height: 33
+      alignment: 9
+      pivot: {x: 0.8067797, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53724685c9dc7624e941dc668adb5474
+      internalID: 192297155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-98
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 694
+        width: 45
+        height: 33
+      alignment: 9
+      pivot: {x: 0.74666667, y: 0.75757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6fc389ca98bacc4bb11061a02db5991
+      internalID: 1167326043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireSwordMan-99
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 750
+        width: 24
+        height: 51
+      alignment: 9
+      pivot: {x: 0.44166666, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 142b5982178a03549a1635f374fa8bc0
+      internalID: 2124604966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 05d907417139cdd46b6d163d7cb53655
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      FireSwordMan-115: 627944412
+      FireSwordMan-136: -795258900
+      FireSwordMan-128: 1796996531
+      FireSwordMan-20: 2065502713
+      FireSwordMan-26: 53401089
+      FireSwordMan-30: -791625328
+      FireSwordMan-71: -1895507906
+      FireSwordMan-33: -1523767560
+      FireSwordMan-113: -1457052899
+      FireSwordMan-72: -1230059284
+      FireSwordMan-79: 1023365745
+      FireSwordMan-83: 499020718
+      FireSwordMan-114: 1603170507
+      FireSwordMan-15: 720424266
+      FireSwordMan-110: 375539182
+      FireSwordMan-147: 1096170008
+      FireSwordMan-108: 231688884
+      FireSwordMan-119: -504430403
+      FireSwordMan-36: -637640619
+      FireSwordMan-84: -199221616
+      FireSwordMan-88: 867665833
+      FireSwordMan-62: 806727617
+      FireSwordMan-106: -737196777
+      FireSwordMan-68: 1369340931
+      FireSwordMan-91: 464019376
+      FireSwordMan-151: -359402530
+      FireSwordMan-134: 507109481
+      FireSwordMan-82: 1424118246
+      FireSwordMan-23: -306039043
+      FireSwordMan-1: -1562500223
+      FireSwordMan-104: -979974026
+      FireSwordMan-78: 143392854
+      FireSwordMan-53: 864957670
+      FireSwordMan-64: -110714012
+      FireSwordMan-89: 677319814
+      FireSwordMan-51: -1796905819
+      FireSwordMan-37: -1450209984
+      FireSwordMan-52: -1972604781
+      FireSwordMan-85: -95283402
+      FireSwordMan-146: -1706890166
+      FireSwordMan-118: -1731070835
+      FireSwordMan-103: 1307965837
+      FireSwordMan-162: -1875818336
+      FireSwordMan-137: -32140368
+      FireSwordMan-67: -769734427
+      FireSwordMan-107: -937672411
+      FireSwordMan-75: 742111846
+      FireSwordMan-43: -1891128257
+      FireSwordMan-3: 405658350
+      FireSwordMan-74: 29513882
+      FireSwordMan-5: 673892930
+      FireSwordMan-16: 1293082154
+      FireSwordMan-35: 1056712758
+      FireSwordMan-70: -744872218
+      FireSwordMan-81: -1042651673
+      FireSwordMan-156: -1304219703
+      FireSwordMan-73: 1417068204
+      FireSwordMan-131: -789327307
+      FireSwordMan-138: -921768059
+      FireSwordMan-13: -171249517
+      FireSwordMan-46: -935301999
+      FireSwordMan-22: -1377308962
+      FireSwordMan-148: -2022619629
+      FireSwordMan-63: 1830811201
+      FireSwordMan-19: -310298169
+      FireSwordMan-54: 1637728132
+      FireSwordMan-32: 652046287
+      FireSwordMan-65: -1098407899
+      FireSwordMan-133: 1952818570
+      FireSwordMan-87: -322359272
+      FireSwordMan-2: 1522081343
+      FireSwordMan-56: 1161544659
+      FireSwordMan-77: -1540121730
+      FireSwordMan-143: 1019671511
+      FireSwordMan-48: -2021308801
+      FireSwordMan-44: 478659109
+      FireSwordMan-105: 2002494192
+      FireSwordMan-150: 1932961200
+      FireSwordMan-4: -36857255
+      FireSwordMan-9: 1708401704
+      FireSwordMan-10: 553285797
+      FireSwordMan-129: -1125795963
+      FireSwordMan-40: 348141483
+      FireSwordMan-120: -2139576567
+      FireSwordMan-132: -750857802
+      FireSwordMan-112: 6288440
+      FireSwordMan-102: 813121831
+      FireSwordMan-145: -2039209914
+      FireSwordMan-100: -229092222
+      FireSwordMan-11: 299620878
+      FireSwordMan-61: 120255721
+      FireSwordMan-158: 483906289
+      FireSwordMan-29: -2102683457
+      FireSwordMan-12: -1526073951
+      FireSwordMan-42: 191116552
+      FireSwordMan-96: -1156247661
+      FireSwordMan-97: 192297155
+      FireSwordMan-7: -100448625
+      FireSwordMan-49: 1679219384
+      FireSwordMan-127: 1493057267
+      FireSwordMan-45: 457883210
+      FireSwordMan-93: 594305718
+      FireSwordMan-69: 927882524
+      FireSwordMan-80: -806444320
+      FireSwordMan-38: -205739771
+      FireSwordMan-140: 1298166630
+      FireSwordMan-41: -560126648
+      FireSwordMan-117: -1283193259
+      FireSwordMan-57: -1219529860
+      FireSwordMan-55: 911264857
+      FireSwordMan-98: 1167326043
+      FireSwordMan-111: -1712125471
+      FireSwordMan-92: 1986884035
+      FireSwordMan-121: 1754866597
+      FireSwordMan-124: -1665204606
+      FireSwordMan-135: 53835722
+      FireSwordMan-27: -501308941
+      FireSwordMan-126: 70756241
+      FireSwordMan-86: 624047281
+      FireSwordMan-90: 1694386814
+      FireSwordMan-31: -420310302
+      FireSwordMan-159: -1010573178
+      FireSwordMan-160: -767496755
+      FireSwordMan-125: -1276362122
+      FireSwordMan-99: 2124604966
+      FireSwordMan-122: 1820897541
+      FireSwordMan-153: 444246418
+      FireSwordMan-163: -333746071
+      FireSwordMan-28: -327497047
+      FireSwordMan-155: -716743285
+      FireSwordMan-139: 840269646
+      FireSwordMan-130: 1535293367
+      FireSwordMan-8: 340173430
+      FireSwordMan-58: -1883641132
+      FireSwordMan-14: -1912535208
+      FireSwordMan-154: 918440487
+      FireSwordMan-60: -1943372859
+      FireSwordMan-94: -1044778976
+      FireSwordMan-50: 508910963
+      FireSwordMan-21: 1220655436
+      FireSwordMan-101: -1256508723
+      FireSwordMan-76: 1665727596
+      FireSwordMan-0: -1253256211
+      FireSwordMan-95: -199410222
+      FireSwordMan-142: 2130937764
+      FireSwordMan-161: 1344949124
+      FireSwordMan-18: 1459220163
+      FireSwordMan-109: -80737837
+      FireSwordMan-6: 1041183551
+      FireSwordMan-157: 25448644
+      FireSwordMan-47: -947162351
+      FireSwordMan-66: 1251178041
+      FireSwordMan-141: -622744595
+      FireSwordMan-25: -476577400
+      FireSwordMan-116: -1879389427
+      FireSwordMan-39: -2129815460
+      FireSwordMan-144: 257069427
+      FireSwordMan-34: -1091141359
+      FireSwordMan-123: -1124691047
+      FireSwordMan-149: -652111528
+      FireSwordMan-59: 1776597864
+      FireSwordMan-152: 579668402
+      FireSwordMan-17: 803950087
+      FireSwordMan-24: 1167930646
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

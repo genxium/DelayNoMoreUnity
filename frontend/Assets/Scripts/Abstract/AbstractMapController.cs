@@ -47,7 +47,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Vector[] effPushbacks;
     protected Vector[][] hardPushbackNormsArr;
     protected shared.Collider[] dynamicRectangleColliders;
-    protected shared.Collider[] staticRectangleColliders;
+    protected shared.Collider[] staticColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
     protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
@@ -409,7 +409,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < dynamicRectangleCollidersCap; i++) {
             dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
         }
-        staticRectangleColliders = new shared.Collider[128];
+        staticColliders = new shared.Collider[128];
 
         decodedInputHolder = new InputFrameDecoded();
         prevDecodedInputHolder = new InputFrameDecoded();
@@ -660,7 +660,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var playerStartingCposList = new Vector[roomCapacity];
         var grid = underlyingMap.GetComponentInChildren<Grid>();
 
-        var npcsStartingCposList = new List<(Vector, int, int)>();
+        var npcsStartingCposList = new List<(Vector, int, int, int)>();
         float defaultPatrolCueRadius = 10;
         int staticColliderIdx = 0;
         foreach (Transform child in grid.transform) {
@@ -668,19 +668,41 @@ public abstract class AbstractMapController : MonoBehaviour {
                 case "Barrier":
                     foreach (Transform barrierChild in child) {
                         var barrierTileObj = barrierChild.gameObject.GetComponent<SuperObject>();
-                        var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
-                        var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
-                        /*
-                         [WARNING] 
-                        
-                        The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)".
+                        var inMapCollider = barrierChild.gameObject.GetComponent<EdgeCollider2D>();
 
-                        It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
-                        */
-                        var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
-                        //Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
-                        collisionSys.AddSingle(barrierCollider);
-                        staticRectangleColliders[staticColliderIdx++] = barrierCollider;
+                        if (null == inMapCollider || 0 >= inMapCollider.pointCount) {
+                            var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
+                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                            /*
+                             [WARNING] 
+
+                            The "Unity World (0, 0)" is aligned with the top-left corner of the rendered "TiledMap (via SuperMap)".
+
+                            It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
+                            */
+                            var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
+                            //Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
+                            collisionSys.AddSingle(barrierCollider);
+                            staticColliders[staticColliderIdx++] = barrierCollider;
+                        } else {
+                            var points = inMapCollider.points;
+                            List<float> points2 = new List<float>();
+                            foreach (var point in points) {
+                                points2.Add(point.x);
+                                points2.Add(point.y);
+                            }
+                            var (anchorCx, anchorCy) = TiledLayerPositionToCollisionSpacePosition(barrierTileObj.m_X, barrierTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                            var srcPolygon = new ConvexPolygon(anchorCx, anchorCy, points2.ToArray());
+                            var barrierCollider = NewConvexPolygonCollider(srcPolygon, 0, 0, null);
+                            
+                            collisionSys.AddSingle(barrierCollider);
+                            staticColliders[staticColliderIdx++] = barrierCollider;
+                        }
+
+                        // TODO: By now I have to enable the import of all colliders to see the "inMapCollider: EdgeCollider2D" component, then remove unused components here :(
+                        Destroy(barrierChild.gameObject.GetComponent<EdgeCollider2D>());
+                        Destroy(barrierChild.gameObject.GetComponent<BoxCollider2D>());
+                        Destroy(barrierChild.gameObject.GetComponent<SuperColliderComponent>());
                     }
                     break;
                 case "PlayerStartingPos":
@@ -699,10 +721,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
                         var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        CustomProperty dirX, speciesId;
+                        CustomProperty dirX, speciesId, teamId;
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
-                        npcsStartingCposList.Add((new Vector(cx, cy), dirX.IsEmpty ? 2 : dirX.GetValueAsInt(), speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt()));
+                        tileProps.TryGetCustomProperty("teamId", out teamId);
+                        npcsStartingCposList.Add((
+                                                    new Vector(cx, cy),     
+                                                    null == dirX || dirX.IsEmpty ? 2 : dirX.GetValueAsInt(),    
+                                                    null == speciesId || speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt(),
+                                                    null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt()  
+                        ));
                     }
                     break;
                 case "PatrolCue":
@@ -727,7 +755,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
                         collisionSys.AddSingle(patrolCueCollider);
-                        staticRectangleColliders[staticColliderIdx++] = patrolCueCollider;
+                        staticColliders[staticColliderIdx++] = patrolCueCollider;
                         //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
@@ -750,6 +778,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy);
             var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
             playerInRdf.JoinIndex = joinIndex;
+            playerInRdf.BulletTeamId = joinIndex;
             playerInRdf.VirtualGridX = playerVposX;
             playerInRdf.VirtualGridY = playerVposY;
             playerInRdf.RevivalVirtualGridX = playerVposX;
@@ -771,7 +800,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var (cpos, dirX, characterSpeciesId) = npcsStartingCposList[i];
+            var (cpos, dirX, characterSpeciesId, teamId) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             spawnNpcNode(characterSpeciesId, wx, wy);
 
@@ -799,6 +828,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.Mp = 1000;
             npcInRdf.MaxMp = 1000;
             npcInRdf.SpeciesId = characterSpeciesId;
+            npcInRdf.BulletTeamId = teamId;
 
             startRdf.NpcsArr[i] = npcInRdf;
         }

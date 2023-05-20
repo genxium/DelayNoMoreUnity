@@ -3,7 +3,7 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
-        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, ref SatResult overlapResult) {
+        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, ref SatResult overlapResult) {
             float origX = a.X, origY = a.Y;
             try {
                 a.SetPosition(origX + oldDx, origY + oldDy);
@@ -15,7 +15,7 @@ namespace shared {
                 overlapResult.AxisX = 0;
                 overlapResult.AxisY = 0;
 
-                bool overlapped = isPolygonPairOverlapped(a, b, ref overlapResult);
+                bool overlapped = isPolygonPairOverlapped(a, b, onlyOnBShapeEdges, ref overlapResult);
                 if (true == overlapped) {
                     float pushbackX = overlapResult.OverlapMag * overlapResult.OverlapX;
                     float pushbackY = overlapResult.OverlapMag * overlapResult.OverlapY;
@@ -28,7 +28,7 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNorms(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbackNorms, Collision collision, ref SatResult overlapResult) {
+        public static int calcHardPushbacksNorms(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbackNorms, Collision collision, ref SatResult overlapResult, ILoggerBridge logger) {
             float virtualGripToWall = 0.0f;
             if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
                 float xfac = 1.0f;
@@ -67,11 +67,12 @@ namespace shared {
                 }
                 ConvexPolygon bShape = bCollider.Shape;
 
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, playerShape, bShape, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, playerShape, bShape, true, ref overlapResult);
 
                 if (!overlapped) {
                     continue;
                 }
+                
                 // ALWAY snap into hardPushbacks!
                 // [OverlapX, OverlapY] is the unit vector that points into the platform
                 pushbackX = (overlapResult.OverlapMag - snapIntoPlatformOverlap) * overlapResult.OverlapX;
@@ -105,7 +106,7 @@ namespace shared {
             return x;
         }
 
-        public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, ref SatResult result) {
+        public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, ref SatResult result) {
             int aCnt = a.Points.Cnt;
             int bCnt = b.Points.Cnt;
             // Single point case
@@ -116,7 +117,7 @@ namespace shared {
                 return null != aPoint && null != bPoint && aPoint.X == bPoint.X && aPoint.Y == bPoint.Y;
             }
 
-            if (1 < aCnt) {
+            if (1 < aCnt && !onlyOnBShapeEdges) {
                 // Deliberately using "Points" instead of "SATAxes" to avoid unnecessary heap memory alloc
                 for (int i = 0; i < aCnt; i++) {
                     Vector? u = a.GetPointByOffset(i);
@@ -294,8 +295,8 @@ namespace shared {
 
         public static (float, float) VirtualGridToPolygonColliderCtr(int vx, int vy) {
             // No loss of precision
-            float wx = (float)(vx) * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
-            float wy = (float)(vy) * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
+            float wx = (vx) * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
+            float wy = (vy) * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
             return (wx, wy);
         }
 

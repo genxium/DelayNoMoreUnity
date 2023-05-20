@@ -25,7 +25,7 @@ public class OfflineMapController : AbstractMapController {
 
         roomCapacity = 1;
         preallocateHolders();
-        resetCurrentMatch("Dungeon");
+        resetCurrentMatch("Castle");
         selfPlayerInfo.JoinIndex = 1;
 
         battleDurationFrames = 60 * 60;
@@ -109,7 +109,7 @@ public class OfflineMapController : AbstractMapController {
                GL.End();
              */
             // Draw static colliders
-            foreach (var collider in staticRectangleColliders) {
+            foreach (var collider in staticColliders) {
                 if (null == collider) {
                     break;
                 }
@@ -119,10 +119,11 @@ public class OfflineMapController : AbstractMapController {
                 if (null == collider.Shape.Points) {
                     throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
                 }
+                int m = collider.Shape.Points.Cnt;
                 GL.Begin(GL.LINES);
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < m; i++) {
                     int j = i + 1;
-                    if (j >= 4) j -= 4;
+                    if (j >= m) j -= m;
                     var (_, pi) = collider.Shape.Points.GetByOffset(i);
                     var (_, pj) = collider.Shape.Points.GetByOffset(j);
                     var (ix, iy) = CollisionSpacePositionToWorldPosition(collider.X + pi.X, collider.Y + pi.Y, spaceOffsetX, spaceOffsetY);

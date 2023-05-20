@@ -2,6 +2,7 @@ version: 2
 tpsheetFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
 - Assets/Resources/Bullets/Bullets.tpsheet
+- Assets/Resources/Characters/FireSwordMan/FireSwordMan.tpsheet
 - Assets/Resources/Characters/KnifeGirl/KnifeGirl.tpsheet
 - Assets/Resources/Characters/Monk/Monk.tpsheet
 - Assets/Resources/Characters/MonkGirl/MonkGirl.tpsheet
@@ -9,12 +10,14 @@ tpsheetFileNames:
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 - Assets/Resources/Bullets/Bullets.png
+- Assets/Resources/Characters/FireSwordMan/FireSwordMan.png
 - Assets/Resources/Characters/KnifeGirl/KnifeGirl.png
 - Assets/Resources/Characters/Monk/Monk.png
 - Assets/Resources/Characters/MonkGirl/MonkGirl.png
 - Assets/Resources/Characters/SwordMan/SwordMan.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 - 

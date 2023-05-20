@@ -93,6 +93,8 @@ namespace shared {
         public static int TERMINATING_PLAYER_ID = (-1025);
         public static int TERMINATING_RENDER_FRAME_ID = (-1026);
         public static int TERMINATING_INPUT_FRAME_ID = (-1027);
+        public static int TERMINATING_BULLET_TEAM_ID = (-1028);
+        public static int DEFAULT_BULLET_TEAM_ID = (1028);
 
         // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.
         public static int[,] DIRECTION_DECODER = new int[,] {
@@ -546,6 +548,39 @@ namespace shared {
                             }
                         )),
 
+                    new KeyValuePair<int, Skill>(13, new Skill{
+                        RecoveryFrames = 30,
+                        RecoveryFramesOnBlock = 30,
+                        RecoveryFramesOnHit = 30,
+                        MpDelta = 270,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk4
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 16,
+                                ActiveFrames = MAX_INT,
+                                HitStunFrames = 30,
+                                BlockStunFrames = 9,
+                                Damage = 12,
+                                PushbackVelX = (int)(0.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(18*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 4,
+                                ExplosionFrames = 20,
+                                BType = BulletType.Fireball,
+                                Speed = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                            }
+                        )),
+
                     new KeyValuePair<int, Skill>(255, new Skill {
                         RecoveryFrames = 30,
                         RecoveryFramesOnBlock = 30,
@@ -645,6 +680,8 @@ namespace shared {
                         ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(62.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1
                     }),
 
@@ -669,7 +706,9 @@ namespace shared {
                         ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1
                     }),
 
@@ -696,13 +735,42 @@ namespace shared {
                         VisionSizeX = (int)(130.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(28f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeY = (int)(50f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(46f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(46.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(28f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(46f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1
-                    })
+                    }),
+
+                    new KeyValuePair<int, CharacterConfig>(3, new CharacterConfig {
+                        SpeciesId = 3,
+                        SpeciesName = "FireSwordMan",
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 27,
+                        Speed = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 9,
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(130.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1
+                    }),
             });
 
         public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
@@ -792,6 +860,29 @@ namespace shared {
                             // Air-dash is prohibited for this speciesId
                             if (!currCharacterDownsync.InAir) {
                                 return 10;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        default:
+                            return NO_SKILL;
+                    }
+                case 3:
+                    switch (patternId) {
+                        case 1:
+                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                                return 5;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case 2:
+                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                                return 12;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case 3:
+                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                                return 13;
                             } else {
                                 return NO_SKILL;
                             }
