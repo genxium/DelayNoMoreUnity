@@ -6,8 +6,6 @@ using static shared.Battle;
 
 public class OfflineMapController : AbstractMapController {
 
-    public NetworkDoctorInfo networkInfoPanel;
-
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
     }
@@ -51,7 +49,6 @@ public class OfflineMapController : AbstractMapController {
         yield return new WaitForSeconds(1);
         readyGoPanel.playGoAnim();
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
-        networkInfoPanel.gameObject.SetActive(true);
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
         onRoomDownsyncFrame(startRdf, null);
     }
@@ -81,6 +78,7 @@ public class OfflineMapController : AbstractMapController {
     }
 
     public void OnBackButtonClicked() {
+        Debug.Log("OnBackButtonClicked");
         characterSelectPanel.gameObject.SetActive(true);
     }
 
@@ -140,8 +138,9 @@ public class OfflineMapController : AbstractMapController {
             if (null != rdf) {
                 for (int k = 0; k < roomCapacity; k++) {
                     var currCharacterDownsync = rdf.PlayersArr[k];
+                    var chConfig = characters[currCharacterDownsync.SpeciesId];
                     float boxCx, boxCy, boxCw, boxCh;
-                    calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+                    calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
 
                     var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
                     // World space width and height are just the same as that of collision space.
@@ -166,13 +165,35 @@ public class OfflineMapController : AbstractMapController {
                 for (int k = 0; k < rdf.NpcsArr.Count; k++) {
                     var currCharacterDownsync = rdf.NpcsArr[k];
                     if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                    var chConfig = characters[currCharacterDownsync.SpeciesId];
+                    float boxCx, boxCy, boxCw, boxCh;
+                    calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+
+                    var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+                    GL.Begin(GL.LINES);
+                    GL.Color(Color.grey);
+
+                    GL.Vertex3((wx - 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+                    GL.Vertex3((wx + 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+
+                    GL.Vertex3((wx + 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+                    GL.Vertex3((wx + 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
+
+                    GL.Vertex3((wx + 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
+                    GL.Vertex3((wx - 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
+
+                    GL.Vertex3((wx - 0.5f * boxCw), (wy + 0.5f * boxCh), 0);
+                    GL.Vertex3((wx - 0.5f * boxCw), (wy - 0.5f * boxCh), 0);
+
+                    GL.End();
+
                     float visionCx, visionCy, visionCw, visionCh;
-                    calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, out visionCx, out visionCy, out visionCw, out visionCh);
+                    calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
+                    (wx, wy) = CollisionSpacePositionToWorldPosition(visionCx, visionCy, spaceOffsetX, spaceOffsetY);
 
                     GL.Begin(GL.LINES);
                     GL.Color(Color.yellow);
-                    var (wx, wy) = CollisionSpacePositionToWorldPosition(visionCx, visionCy, spaceOffsetX, spaceOffsetY);
-
+                    
                     GL.Vertex3((wx - 0.5f * visionCw), (wy - 0.5f * visionCh), 0);
                     GL.Vertex3((wx + 0.5f * visionCw), (wy - 0.5f * visionCh), 0);
 

@@ -17,6 +17,8 @@ namespace shared {
         public int GetUpFramesToRecover;
 
         public int Speed;
+        public int MpRegenRate; // an integer for mp regeneration rate PER FRAME
+
         public int JumpingInitVelY;
         public int InertiaFramesToRecover;
         public bool DashingEnabled;
@@ -26,25 +28,19 @@ namespace shared {
         public int WallJumpingInitVelY;
         public int WallSlidingVelY;
 
+        // Collision boxes
+        public int VisionOffsetX;
+        public int VisionOffsetY;
+        public int VisionSizeX;
+        public int VisionSizeY;
 
-        public CharacterConfig(int speciesId, string speciesName, int inAirIdleFrameIdxTurningPoint, int inAirIdleFrameIdxTurnedCycle, int layDownFrames, int layDownFramesToRecover, int getUpInvinsibleFrames, int getUpFramesToRecover, int speed, int jumpingInitVelY, int inertiaFramesToRecover, bool dashingEnabled, bool onWallEnabled, int wallJumpingFramesToRecover, int wallJumpingInitVelX, int wallJumpingInitVelY, int wallSlidingVelY) {
-            SpeciesId = speciesId;
-            SpeciesName = speciesName;
-            InAirIdleFrameIdxTurningPoint = inAirIdleFrameIdxTurningPoint;
-            InAirIdleFrameIdxTurnedCycle = inAirIdleFrameIdxTurnedCycle;
-            LayDownFrames = layDownFrames;
-            LayDownFramesToRecover = layDownFramesToRecover;
-            GetUpInvinsibleFrames = getUpInvinsibleFrames;
-            GetUpFramesToRecover = getUpFramesToRecover;
-            Speed = speed;
-            JumpingInitVelY = jumpingInitVelY;
-            InertiaFramesToRecover = inertiaFramesToRecover;
-            DashingEnabled = dashingEnabled;
-            OnWallEnabled = onWallEnabled;
-            WallJumpingFramesToRecover = wallJumpingFramesToRecover;
-            WallJumpingInitVelX = wallJumpingInitVelX;
-            WallJumpingInitVelY = wallJumpingInitVelY;
-            WallSlidingVelY = wallSlidingVelY;
-        }
+        public int DefaultSizeX;
+        public int DefaultSizeY;
+
+        public int ShrinkedSizeX;
+        public int ShrinkedSizeY;
+
+        public int LayDownSizeX;
+        public int LayDownSizeY;
     }
 }

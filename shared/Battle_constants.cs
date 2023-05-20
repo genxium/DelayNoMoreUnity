@@ -150,102 +150,560 @@ namespace shared {
         public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>().AddRange(
                 new[]
                 {
-                    new KeyValuePair<int, Skill>(1, new SkillBuilder(27, 27, 27, SkillTriggerType.RisingEdge, CharacterState.Atk1)
-                                                    .AddHit(new BulletConfigBuilder(6, 22, 22, 9, 13, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 11, 30, false, 2, 15, BulletType.Melee, 0).UpsertCancelTransit(1, 2).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(1, new Skill {
+                        RecoveryFrames = 27,
+                        RecoveryFramesOnBlock = 27,
+                        RecoveryFramesOnHit = 27,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk1
+                    }
+                    .AddHit(
+                        new BulletConfig {
+                            StartupFrames = 6,
+                            ActiveFrames = 22,
+                            HitStunFrames = 22,
+                            BlockStunFrames = 9,
+                            Damage = 13,
+                            PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            PushbackVelY = 0,
+                            SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            SelfLockVelY = NO_LOCK_VEL,
+                            HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            CancellableStFrame = 11,
+                            CancellableEdFrame = 30,
+                            BlowUp = false,
+                            SpeciesId = 2,
+                            ExplosionFrames = 15,
+                            BType = BulletType.Melee,
+                            Speed = 0
+                        }.UpsertCancelTransit(1, 2)
+                    )),
 
-                    new KeyValuePair<int, Skill>(2, new SkillBuilder(25, 25, 25, SkillTriggerType.RisingEdge, CharacterState.Atk2)
-                                                    .AddHit(new BulletConfigBuilder(6, 20, 20, 9, 14, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 14, 36, false, 2, 15, BulletType.Melee, 0).UpsertCancelTransit(1, 3).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(2, new Skill{
+                        RecoveryFrames = 25,
+                        RecoveryFramesOnBlock = 25,
+                        RecoveryFramesOnHit = 25,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk2
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 6,
+                                ActiveFrames = 20,
+                                HitStunFrames = 20,
+                                BlockStunFrames = 9,
+                                Damage = 14,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = 0,
+                                SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 14,
+                                CancellableEdFrame = 36,
+                                BlowUp = false,
+                                SpeciesId = 2,
+                                ExplosionFrames = 15,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }.UpsertCancelTransit(1, 3)
+                        )),
 
-                    new KeyValuePair<int, Skill>(3, new SkillBuilder(40, 40, 40, SkillTriggerType.RisingEdge, CharacterState.Atk3)
-                                                    .AddHit(new BulletConfigBuilder(8, 30, MAX_INT, 9, 18, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 2, 15, BulletType.Melee, 0).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(3, new Skill{
+                        RecoveryFrames = 40,
+                        RecoveryFramesOnBlock = 40,
+                        RecoveryFramesOnHit = 40,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk3
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 8,
+                                ActiveFrames = 30,
+                                HitStunFrames = MAX_INT,
+                                BlockStunFrames = 9,
+                                Damage = 18,
+                                PushbackVelX = (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = true,
+                                SpeciesId = 2,
+                                ExplosionFrames = 15,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(4, new SkillBuilder(60, 60, 60, SkillTriggerType.RisingEdge, CharacterState.Atk4)
-                                                    .AddHit(new BulletConfigBuilder(16, MAX_INT, MAX_INT, 9, 18, (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(7f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 3, 30, BulletType.Fireball, (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(4, new Skill{
+                        RecoveryFrames = 60,
+                        RecoveryFramesOnBlock = 60,
+                        RecoveryFramesOnHit = 60,
+                        MpDelta = 240,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk4
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 16,
+                                ActiveFrames = MAX_INT,
+                                HitStunFrames = MAX_INT,
+                                BlockStunFrames = 9,
+                                Damage = 12,
+                                PushbackVelX = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(7f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = true,
+                                SpeciesId = 3,
+                                ExplosionFrames = 30,
+                                BType = BulletType.Fireball,
+                                Speed = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                            }
+                        )),
 
-                     new KeyValuePair<int, Skill>(5, new SkillBuilder(35, 35, 35, SkillTriggerType.RisingEdge, CharacterState.Atk1)
-                                                    .AddHit(new BulletConfigBuilder(9, 16, 16, 9, 13, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, NO_LOCK_VEL, NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
-                                                    .build()),
+                     new KeyValuePair<int, Skill>(5, new Skill{
+                        RecoveryFrames = 35,
+                        RecoveryFramesOnBlock = 35,
+                        RecoveryFramesOnHit = 35,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk1
+                     }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 9,
+                                ActiveFrames = 16,
+                                HitStunFrames = 16,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = 0,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = true,
+                                SpeciesId = 2,
+                                ExplosionFrames = 15,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(6, new SkillBuilder(27, 27, 27, SkillTriggerType.RisingEdge, CharacterState.Atk1)
-                                                    .AddHit(new BulletConfigBuilder(6, 22, 22, 9, 15, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 11, 30, false, 1, 15, BulletType.Melee, 0).UpsertCancelTransit(1, 7).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(6, new Skill{
+                        RecoveryFrames = 27,
+                        RecoveryFramesOnBlock = 27,
+                        RecoveryFramesOnHit = 27,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk1
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 6,
+                                ActiveFrames = 22,
+                                HitStunFrames = 22,
+                                BlockStunFrames = 9,
+                                Damage = 15,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = 0,
+                                SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 14,
+                                CancellableEdFrame = 30,
+                                BlowUp = false,
+                                SpeciesId = 1,
+                                ExplosionFrames = 15,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }.UpsertCancelTransit(1, 7)
+                        )),
 
-                    new KeyValuePair<int, Skill>(7, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.Atk2)
-                                                    .AddHit(new BulletConfigBuilder(6, 20, 20, 9, 19, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 1, 15, BulletType.Melee, 0).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(7, new Skill{
+                        RecoveryFrames = 30,
+                        RecoveryFramesOnBlock = 30,
+                        RecoveryFramesOnHit = 30,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk2
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 6,
+                                ActiveFrames = 20,
+                                HitStunFrames = 20,
+                                BlockStunFrames = 9,
+                                Damage = 19,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = 0,
+                                SelfLockVelX = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 1,
+                                ExplosionFrames = 15,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(8, new SkillBuilder(40, 40, 40, SkillTriggerType.RisingEdge, CharacterState.Atk3)
-                                                    .AddHit(new BulletConfigBuilder(4, 30, MAX_INT, 9, 13, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 1, 20, BulletType.Melee, 0).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(8, new Skill{
+                        RecoveryFrames = 40,
+                        RecoveryFramesOnBlock = 40,
+                        RecoveryFramesOnHit = 40,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk3
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 4,
+                                ActiveFrames = 30,
+                                HitStunFrames = MAX_INT,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 1,
+                                ExplosionFrames = 20,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(9, new SkillBuilder(60, 60, 60, SkillTriggerType.RisingEdge, CharacterState.Atk4)
-                                                    .AddHit(new BulletConfigBuilder(16, MAX_INT, 20, 9, 17, (int)(0.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL, NO_LOCK_VEL, (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 30, BulletType.Fireball, (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(9, new Skill{
+                        RecoveryFrames = 60,
+                        RecoveryFramesOnBlock = 60,
+                        RecoveryFramesOnHit = 60,
+                        MpDelta = 270,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk4
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 16,
+                                ActiveFrames = MAX_INT,
+                                HitStunFrames = MAX_INT,
+                                BlockStunFrames = 9,
+                                Damage = 14,
+                                PushbackVelX = (int)(0.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = true,
+                                SpeciesId = 2,
+                                ExplosionFrames = 30,
+                                BType = BulletType.Fireball,
+                                Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(10, new SkillBuilder(10, 10, 10, SkillTriggerType.RisingEdge, CharacterState.Dashing)
-                                                    .AddHit(new BulletConfigBuilder(3, 0, 0, 0, 0, NO_LOCK_VEL, NO_LOCK_VEL, (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, 0, 0, 0, 0, 0, false, 0, 0, BulletType.Melee, 0).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(10, new Skill{
+                        RecoveryFrames = 10,
+                        RecoveryFramesOnBlock = 10,
+                        RecoveryFramesOnHit = 10,
+                        MpDelta = 60,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Dashing
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 3,
+                                ActiveFrames = 0,
+                                HitStunFrames = 0,
+                                BlockStunFrames = 0,
+                                Damage = 0,
+                                PushbackVelX = NO_LOCK_VEL,
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = 0,
+                                HitboxOffsetX = 0,
+                                HitboxOffsetY = 0,
+                                HitboxSizeX = 0,
+                                HitboxSizeY = 0,
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 0,
+                                ExplosionFrames = 0,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(11, new SkillBuilder(10, 10, 10, SkillTriggerType.RisingEdge, CharacterState.Dashing)
-                                                    .AddHit(new BulletConfigBuilder(3, 0, 0, 0, 0, NO_LOCK_VEL, NO_LOCK_VEL, (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, 0, 0, 0, 0, 0, false, 0, 0, BulletType.Melee, 0).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(11, new Skill{
+                        RecoveryFrames = 10,
+                        RecoveryFramesOnBlock = 10,
+                        RecoveryFramesOnHit = 10,
+                        MpDelta = 60,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Dashing
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 3,
+                                ActiveFrames = 0,
+                                HitStunFrames = 0,
+                                BlockStunFrames = 0,
+                                Damage = 0,
+                                PushbackVelX = NO_LOCK_VEL,
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = 0,
+                                HitboxOffsetX = 0,
+                                HitboxOffsetY = 0,
+                                HitboxSizeX = 0,
+                                HitboxSizeY = 0,
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 0,
+                                ExplosionFrames = 0,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(12, new SkillBuilder(40, 40, 40, SkillTriggerType.RisingEdge, CharacterState.Atk2)
-                                                    .AddHit(new BulletConfigBuilder(4, 20, MAX_INT, 9, 14, (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, true, 2, 20, BulletType.Melee, 0).build())
-                                                    .build()),
+                    new KeyValuePair<int, Skill>(12, new Skill{
+                        RecoveryFrames = 40,
+                        RecoveryFramesOnBlock = 40,
+                        RecoveryFramesOnHit = 40,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk2
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 4,
+                                ActiveFrames = 20,
+                                HitStunFrames = MAX_INT,
+                                BlockStunFrames = 9,
+                                Damage = 11,
+                                PushbackVelX = (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = true,
+                                SpeciesId = 2,
+                                ExplosionFrames = 20,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(255, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.InAirAtk1)
-                                                    .AddHit(new BulletConfigBuilder(2, 20, 18, 9, 13, NO_LOCK_VEL, NO_LOCK_VEL, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
-                                                    .build()), 
+                    new KeyValuePair<int, Skill>(255, new Skill {
+                        RecoveryFrames = 30,
+                        RecoveryFramesOnBlock = 30,
+                        RecoveryFramesOnHit = 30,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = InAirAtk1
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 2,
+                                ActiveFrames = 20,
+                                HitStunFrames = 18,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = NO_LOCK_VEL,
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = 0,
+                                HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 2,
+                                ExplosionFrames = 15,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        )),
 
-                    new KeyValuePair<int, Skill>(256, new SkillBuilder(30, 30, 30, SkillTriggerType.RisingEdge, CharacterState.InAirAtk1)
-                                                    .AddHit(new BulletConfigBuilder(2, 20, 18, 9, 13, NO_LOCK_VEL, NO_LOCK_VEL, (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 0, 0, false, 2, 15, BulletType.Melee, 0).build())
-                                                    .build())
-
+                    new KeyValuePair<int, Skill>(256, new Skill{
+                        RecoveryFrames = 30,
+                        RecoveryFramesOnBlock = 30,
+                        RecoveryFramesOnHit = 30,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = InAirAtk1
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 2,
+                                ActiveFrames = 20,
+                                HitStunFrames = 18,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = NO_LOCK_VEL,
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = 0,
+                                HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 2,
+                                ExplosionFrames = 15,
+                                BType = BulletType.Melee,
+                                Speed = 0
+                            }
+                        ))
                 }
         );
 
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
                 new[]
                 {
-                    new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig(
-                    0, "KnifeGirl",
-                    11, 1,
-                    16, 16, 10, 27,
-                    (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    9,
-                    true, true,
-                    8, (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))),
+                    new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig {
+                        SpeciesId = 0,
+                        SpeciesName = "KnifeGirl",
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 27,
+                        Speed = (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 9,
+                        DashingEnabled = true,
+                        OnWallEnabled = true,
+                        WallJumpingFramesToRecover = 8,
+                        WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(62.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1
+                    }),
 
-                    new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig(
-                    1, "SwordMan",
-                    11, 1,
-                    16, 16, 10, 27,
-                    (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    9,
-                    false, false,
-                    0, 0,
-                    0, 0)),
+                    new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
+                        SpeciesId = 1,
+                        SpeciesName = "SwordMan",
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 27,
+                        Speed = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 9,
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1
+                    }),
 
-                    new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig(
-                    2, "MonkGirl",
-                    11, 1,
-                    16, 16, 10, 27,
-                    (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    9,
-                    true, true,
-                    8, (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)))
-                }
-            );
+                    new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
+                        SpeciesId = 2,
+                        SpeciesName = "MonkGirl",
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 27,
+                        Speed = (int)(1.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(7 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 9,
+                        DashingEnabled = true,
+                        OnWallEnabled = true,
+                        WallJumpingFramesToRecover = 8,
+                        WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(19.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(130.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(28f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(50f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1
+                    })
+            });
 
         public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
             switch (speciesId) {
@@ -333,10 +791,10 @@ namespace shared {
                             // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                             // Air-dash is prohibited for this speciesId
                             if (!currCharacterDownsync.InAir) {
-                            	return 10;
-							} else {
+                                return 10;
+                            } else {
                                 return NO_SKILL;
-							}
+                            }
                         default:
                             return NO_SKILL;
                     }
