@@ -22,8 +22,7 @@ public class FrameLogTest {
         selfPlayerInRdf.RevivalVirtualGridX = selfPlayerVposX;
         selfPlayerInRdf.RevivalVirtualGridY = selfPlayerVposY;
         selfPlayerInRdf.Speed = selfPlayerCharacter.Speed;
-        selfPlayerInRdf.ColliderRadius = 12;
-        selfPlayerInRdf.CharacterState = shared.CharacterState.InAirIdle1NoJump;
+        selfPlayerInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
         selfPlayerInRdf.FramesToRecover = 0;
         selfPlayerInRdf.DirX = 2;
         selfPlayerInRdf.DirY = 0;
