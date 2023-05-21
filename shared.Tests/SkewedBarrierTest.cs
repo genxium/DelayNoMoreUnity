@@ -21,9 +21,9 @@ public class SkewedBarrierTest {
         var overlapResult = new SatResult();
 
         var effPushback = new Vector(0, 0);
-        var hardPushbacks = new Vector[5];
-        for (int i = 0; i < hardPushbacks.Length; i++) {
-            hardPushbacks[i] = new Vector(0, 0);
+        var hardPushbackNorms = new Vector[5];
+        for (int i = 0; i < hardPushbackNorms.Length; i++) {
+            hardPushbackNorms[i] = new Vector(0, 0);
         }
         var (rectCx, rectCy) = (0, 0);
         var (rectVx, rectVy) = Battle.PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
@@ -53,18 +53,28 @@ public class SkewedBarrierTest {
         var (rectCw, rectCh) = VirtualGridToPolygonColliderCtr(characters[currCharacterDownsync.SpeciesId].ShrinkedSizeX, characters[currCharacterDownsync.SpeciesId].ShrinkedSizeY);
 
         var aCollider = NewRectCollider(rectCx, rectCy, rectCw, rectCh, 0, 0, 0, 0, 0, 0, currCharacterDownsync);
+
+        _logger.LogInfo(String.Format("aCollider={0}", aCollider.Shape.ToString(false))); 
         collisionSys.AddSingle(aCollider);
 
         // Add a triangular barrier collider
-        var points = new float[6] { 0,0, 0,16, 16,16 };
-        var (anchorCx, anchorCy) = (rectCx + rectCw - 2f, rectCy);
+        float triangleEdgeLength = 16f;
+        var points = new float[6] { 0,0, triangleEdgeLength,0, triangleEdgeLength,triangleEdgeLength };
+        var (anchorCx, anchorCy) = (rectCx + 0.5f*rectCw - 0.5f*triangleEdgeLength, rectCy-0.61f*rectCh);
         var srcPolygon = new ConvexPolygon(anchorCx, anchorCy, points);
         var bCollider1 = NewConvexPolygonCollider(srcPolygon, 0, 0, null);
+        _logger.LogInfo(String.Format("bCollider1={0}", bCollider1.Shape.ToString(false))); 
         collisionSys.AddSingle(bCollider1);
 
-        int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbacks, collisionHolder, ref overlapResult, _logger);
+        int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, _logger);
 
         _logger.LogInfo(String.Format("#1 hardPushbackCnt={0}", hardPushbackCnt));
-        Assert.True(0 == hardPushbackCnt);
+
+        for (int k = 0; k < hardPushbackCnt; k++) {
+            var hardPushbackNorm = hardPushbackNorms[k];
+            _logger.LogInfo(String.Format("#1 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
+        }
+
+        Assert.True(1 == hardPushbackCnt);
     }
 }
