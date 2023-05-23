@@ -162,14 +162,9 @@ public class OnlineMapController : AbstractMapController {
             Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
             if (null != udpTask) {
-                if (null != wsCancellationTokenSource && !wsCancellationTokenSource.IsCancellationRequested) {
-                    Debug.LogWarning(String.Format("Calling wsCancellationTokenSource.Cancel() for udpSession.", Thread.CurrentThread.ManagedThreadId));
-                    wsCancellationTokenSource.Cancel();
-                }
-
-                Debug.LogWarning(String.Format("Calling UdpSessionManager.Instance.closeUdpSession()."));
                 UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
             }
+            // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed > cleanupNetworkSessions" to clean up other network resources!
         });
 
         //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "cleanupNetworkSessions".
@@ -367,13 +362,17 @@ public class OnlineMapController : AbstractMapController {
     protected void cleanupNetworkSessions() {
         // [WARNING] This method is reentrant-safe!
         if (null != wsCancellationTokenSource) {
-            if (!wsCancellationTokenSource.IsCancellationRequested) {
-                Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, cancelling ws session"));
-                wsCancellationTokenSource.Cancel();
-            } else {
-                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsCancellationTokenSource is already cancelled!"));
+            try {
+                if (!wsCancellationTokenSource.IsCancellationRequested) {
+                    Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, cancelling ws session"));
+                    wsCancellationTokenSource.Cancel();
+                } else {
+                    Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsCancellationTokenSource is already cancelled!"));
+                }
+                wsCancellationTokenSource.Dispose();
+            } catch (ObjectDisposedException ex) {
+                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsCancellationTokenSource is already disposed: {0}", ex));
             }
-            wsCancellationTokenSource.Dispose();
         }
 
         if (null != wsTask) {

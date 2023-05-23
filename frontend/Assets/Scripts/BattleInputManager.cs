@@ -7,7 +7,6 @@ using DG.Tweening;
 public class BattleInputManager : MonoBehaviour {
     private const float magicLeanLowerBound = 0.1f;
     private const float magicLeanUpperBound = 0.9f;
-    private const float joyStickEps = 0.1f;
     private float joystickX, joystickY;
 
     private int realtimeBtnALevel = 0;
@@ -19,6 +18,7 @@ public class BattleInputManager : MonoBehaviour {
 
     private Vector2 joystickInitPos;
     private float joystickKeyboardMoveRadius;
+    private float joystickMoveEps;
     public GameObject joystick;
     public GameObject btnA;
     public GameObject btnB;
@@ -27,16 +27,23 @@ public class BattleInputManager : MonoBehaviour {
     void Start() {
         joystickInitPos = joystick.transform.position;
         joystickKeyboardMoveRadius = 0.5f*joystick.GetComponent<OnScreenStick>().movementRange;
+        joystickMoveEps = 0.1f;
     }
 
+    // [WARNING] "continuousDx", "continuousDy" and "eps" are already scaled into [0, 1]
     public static (int, int, int) DiscretizeDirection(float continuousDx, float continuousDy, float eps) {
         int dx = 0, dy = 0, encodedIdx = 0;
-        if (Math.Abs(continuousDx) < eps && Math.Abs(continuousDy) < eps) {
+        float absContinuousDx = Math.Abs(continuousDx);
+        float absContinuousDy = Math.Abs(continuousDy);
+
+        if (absContinuousDx < eps && absContinuousDy < eps) {
             return (dx, dy, encodedIdx);
         }
-
         float criticalRatio = continuousDy / continuousDx;
-        if (Math.Abs(criticalRatio) < magicLeanLowerBound) {
+        float absCriticalRatio = Math.Abs(criticalRatio);
+        float downEps = 2*eps; // dragging down is often more tentative for a player, thus give it a larger threshold!
+
+        if (absCriticalRatio < magicLeanLowerBound && eps < absContinuousDx) {
             dy = 0;
             if (0 < continuousDx) {
                 dx = +2; // right 
@@ -45,38 +52,50 @@ public class BattleInputManager : MonoBehaviour {
                 dx = -2; // left 
                 encodedIdx = 4;
             }
-        } else if (Math.Abs(criticalRatio) > magicLeanUpperBound) {
+        } else if (absCriticalRatio > magicLeanUpperBound && eps < absContinuousDy) {
             dx = 0;
             if (0 < continuousDy) {
                 dy = +2; // up
                 encodedIdx = 1;
-            } else {
+            } else if (downEps < absContinuousDy) {
                 dy = -2; // down
                 encodedIdx = 2;
+            } else {
+                // else stays at "encodedIdx == 0" 
             }
-        } else {
+        } else if (eps < absContinuousDx && eps < absContinuousDy) {
             if (0 < continuousDx) {
+                dx = +1;
                 if (0 < continuousDy) {
-                    dx = +1;
                     dy = +1;
                     encodedIdx = 5;
                 } else {
-                    dx = +1;
-                    dy = -1;
-                    encodedIdx = 7;
-                }
+                    if (downEps < absContinuousDy) {
+                        dy = -1;
+                        encodedIdx = 7;
+                    } else {
+                        dx = +2; // right 
+                        encodedIdx = 3;
+                    }
+                } 
             } else {
-                // 0 >= continuousDx
+                // 0 > continuousDx
+                dx = -1;
                 if (0 < continuousDy) {
-                    dx = -1;
                     dy = +1;
                     encodedIdx = 8;
                 } else {
-                    dx = -1;
-                    dy = -1;
-                    encodedIdx = 6;
+                    if (downEps < absContinuousDy) {
+                        dy = -1;
+                        encodedIdx = 6;
+                    } else {
+                        dx = -2; // left 
+                        encodedIdx = 4;
+                    }
                 }
             }
+        } else {
+            // just use encodedIdx = 0
         }
 
         return (dx, dy, encodedIdx);
@@ -128,14 +147,26 @@ public class BattleInputManager : MonoBehaviour {
 
         float continuousDx = joystickX;
         float continuousDy = joystickY;
-        var (_, _, discretizedDir) = DiscretizeDirection(continuousDx, continuousDy, joyStickEps);
+        var (_, _, discretizedDir) = DiscretizeDirection(continuousDx, continuousDy, joystickMoveEps);
         ulong ret = (ulong)(discretizedDir + btnALevel + btnBLevel);
         return ret;
     }
 
 	public void enable(bool yesOrNo) {
         customEnabled = yesOrNo;
+        reset(); // reset upon any change of this field!
 	}
+    
+    public void reset() {
+        joystickX = 0;
+        joystickY = 0;
+        realtimeBtnALevel = 0;
+        cachedBtnALevel = 0;
+        btnAEdgeTriggerLock = false;
+        realtimeBtnBLevel = 0;
+        cachedBtnBLevel = 0;
+        btnBEdgeTriggerLock = false;
+    }
 
     private void _triggerEdgeBtnA(bool rising) {
         realtimeBtnALevel = (rising ? 1 : 0);

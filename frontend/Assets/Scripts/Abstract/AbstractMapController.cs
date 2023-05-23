@@ -254,7 +254,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 		 */
 
         // Printing of this message might induce a performance impact.
-        Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
+        // Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
 
@@ -627,6 +627,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
         battleState = ROOM_STATE_IN_SETTLEMENT;
+
+        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
+        iptmgr.reset();
     }
 
     protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int currInputFrameId);
