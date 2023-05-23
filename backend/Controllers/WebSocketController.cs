@@ -56,12 +56,14 @@ public class WebSocketController : ControllerBase {
                 addPlayerToRoomResult = room.AddPlayerIfPossible(player, playerId, speciesId, session, cancellationTokenSource);
                 if (ErrCode.Ok != addPlayerToRoomResult) {
                     _logger.LogWarning("Failed to add player to room [ roomId={0}, playerId={1}, result={2} ]", room.id, playerId, addPlayerToRoomResult);
+                    _roomManager.Push(room.calRoomScore(), room);
 
 					var errWsResp = new WsResp {
 						Ret = addPlayerToRoomResult
 					};
 
 					await session.SendAsync(new ArraySegment<byte>(errWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
+
                     return;
                 }
 
