@@ -56,6 +56,12 @@ public class WebSocketController : ControllerBase {
                 addPlayerToRoomResult = room.AddPlayerIfPossible(player, playerId, speciesId, session, cancellationTokenSource);
                 if (ErrCode.Ok != addPlayerToRoomResult) {
                     _logger.LogWarning("Failed to add player to room [ roomId={0}, playerId={1}, result={2} ]", room.id, playerId, addPlayerToRoomResult);
+
+					var errWsResp = new WsResp {
+						Ret = addPlayerToRoomResult
+					};
+
+					await session.SendAsync(new ArraySegment<byte>(errWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
                     return;
                 }
 
@@ -103,7 +109,6 @@ public class WebSocketController : ControllerBase {
                     initWsResp.Rdf = room.peerUdpAddrBroadcastRdf; 
                 } 
 
-                var byteArr = initWsResp.ToByteArray();
                 _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1} ]: {2}", room.id, playerId, initWsResp);
                 await session.SendAsync(new ArraySegment<byte>(initWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
 

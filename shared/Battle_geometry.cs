@@ -131,8 +131,8 @@ namespace shared {
                     if (null == v) {
                         throw new ArgumentNullException("Getting a null point v from polygon a!");
                     }
-                    float dx = v.X - u.X;
-                    float dy = v.Y - u.Y;
+                    float dx = (v.Y - u.Y);
+                    float dy = -(v.X - u.X);
                     float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
@@ -155,8 +155,8 @@ namespace shared {
                     if (null == v) {
                         throw new ArgumentNullException("Getting a null point v from polygon b!");
                     }
-                    float dx = v.X - u.X;
-                    float dy = v.Y - u.Y;
+                    float dx = (v.Y - u.Y);
+                    float dy = -(v.X - u.X);
                     float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;

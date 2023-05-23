@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ErrStackLogPanel : MonoBehaviour {
     public TMP_Text content;
@@ -12,5 +13,9 @@ public class ErrStackLogPanel : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
+    }
+
+    public void OnBackToLoginButtonClicked() {
+        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 }

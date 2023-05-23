@@ -80,6 +80,10 @@ public class WsSessionManager {
                 Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
             } catch (Exception ex) {
                 Debug.LogWarning(String.Format("WsSession is stopped by exception; ex={0}", ex));
+                var errMsg = new WsResp {
+                    Ret = ErrCode.UnknownError,
+                    ErrMsg = ex.Message
+                };
             } finally {
                 var closeMsg = new WsResp {
                     Ret = ErrCode.Ok,

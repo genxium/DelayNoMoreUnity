@@ -256,6 +256,7 @@ message WsResp {
 	repeated InputFrameDownsync inputFrameDownsyncBatch = 4;
 	BattleColliderInfo bciFrame = 5;
 	int32 peerJoinIndex = 6;
+	string errMsg = 7;
 }
 
 message Skill {

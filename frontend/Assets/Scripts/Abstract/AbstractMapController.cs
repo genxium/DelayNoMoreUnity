@@ -139,7 +139,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             initConfirmedList = (existingInputFrame.ConfirmedList | selfJoinIndexMask);
         }
         BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
-        currSelfInput = iptmgr.GetImmediateEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
+        currSelfInput = iptmgr.GetEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
         prefabbedInputList[(joinIndex - 1)] = currSelfInput;
         while (inputBuffer.EdFrameId <= inputFrameId) {
             // Fill the gap
