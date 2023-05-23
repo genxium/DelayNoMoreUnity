@@ -41,7 +41,7 @@ public class BattleInputManager : MonoBehaviour {
         }
         float criticalRatio = continuousDy / continuousDx;
         float absCriticalRatio = Math.Abs(criticalRatio);
-        float downEps = 2*eps; // dragging down is often more tentative for a player, thus give it a larger threshold!
+        float downEps = 5*eps; // dragging down is often more tentative for a player, thus give it a larger threshold!
 
         if (absCriticalRatio < magicLeanLowerBound && eps < absContinuousDx) {
             dy = 0;
@@ -178,7 +178,7 @@ public class BattleInputManager : MonoBehaviour {
         if (rising) {
             btnA.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
-            btnA.transform.DOScale(1.5f * Vector3.one, 0.8f);
+            btnA.transform.DOScale(0.75f * Vector3.one, 0.8f);
         }
     }
 
@@ -192,7 +192,7 @@ public class BattleInputManager : MonoBehaviour {
         if (rising) {
             btnB.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
-            btnB.transform.DOScale(1.5f * Vector3.one, 0.8f);
+            btnB.transform.DOScale(0.75f * Vector3.one, 0.8f);
         }
     }
 }

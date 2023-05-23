@@ -318,26 +318,26 @@ public abstract class AbstractMapController : MonoBehaviour {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
             bool isExploding = IsBulletExploding(bullet);
-            string lookupKey = null;
+            string lookupKey = bullet.BattleAttr.BulletLocalId.ToString(), animName = null;
             var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
             bool spontaneousLooping = false;
             switch (bullet.Config.BType) {
                 case BulletType.Melee:
                     if (isExploding) {
-                        lookupKey = String.Format("Melee_Explosion{0}", bullet.Config.SpeciesId);
+                        animName = String.Format("Melee_Explosion{0}", bullet.Config.SpeciesId);
                     }
                     break;
                 case BulletType.Fireball:
                     if (IsBulletActive(bullet, rdf.Id) || isExploding) {
-                        lookupKey = isExploding ? String.Format("Explosion{0}", bullet.Config.SpeciesId) : String.Format("Fireball{0}", bullet.Config.SpeciesId);
+                        animName = isExploding ? String.Format("Explosion{0}", bullet.Config.SpeciesId) : String.Format("Fireball{0}", bullet.Config.SpeciesId);
                         spontaneousLooping = !isExploding;
                     }
                     break;
                 default:
                     break;
             }
-            if (null == lookupKey) continue;
+            if (null == animName) continue;
             var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
             if (null == explosionAnimHolder) {
                 explosionAnimHolder = cachedFireballs.Pop();
@@ -347,9 +347,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             if (null == explosionAnimHolder) {
-                throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}", lookupKey));
+                throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}, animName={1}", lookupKey, animName));
             }
-            explosionAnimHolder.updateAnim(lookupKey, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, rdf);
+            explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, rdf);
             explosionAnimHolder.score = rdf.Id;
             newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
             explosionAnimHolder.gameObject.transform.position = newPosHolder;
@@ -856,7 +856,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var playerCharacterDownsync = rdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
         var (velCX, velCY) = VirtualGridToPolygonColliderCtr(playerCharacterDownsync.Speed, playerCharacterDownsync.Speed);
         camSpeedHolder.Set(velCX, velCY);
-        var cameraSpeedInWorld = camSpeedHolder.magnitude * 50;
+        var cameraSpeedInWorld = camSpeedHolder.magnitude * 100;
         var camOldPos = Camera.main.transform.position;
         var dst = playerGameObj.transform.position;
         camDiffDstHolder.Set(dst.x - camOldPos.x, dst.y - camOldPos.y);

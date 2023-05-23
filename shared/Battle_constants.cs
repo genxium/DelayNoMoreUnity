@@ -607,7 +607,7 @@ namespace shared {
                                 CancellableStFrame = 0,
                                 CancellableEdFrame = 0,
                                 BlowUp = false,
-                                SpeciesId = 2,
+                                SpeciesId = 1,
                                 ExplosionFrames = 15,
                                 BType = BulletType.Melee,
                                 Speed = 0
