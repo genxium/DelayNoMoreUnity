@@ -147,7 +147,7 @@ public class BattleInputManager : MonoBehaviour {
         if (rising) {
             btnA.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
-            btnA.transform.DOScale(0.5f * Vector3.one, 0.8f);
+            btnA.transform.DOScale(1.5f * Vector3.one, 0.8f);
         }
     }
 
@@ -161,7 +161,7 @@ public class BattleInputManager : MonoBehaviour {
         if (rising) {
             btnB.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
-            btnB.transform.DOScale(0.5f * Vector3.one, 0.8f);
+            btnB.transform.DOScale(1.5f * Vector3.one, 0.8f);
         }
     }
 }

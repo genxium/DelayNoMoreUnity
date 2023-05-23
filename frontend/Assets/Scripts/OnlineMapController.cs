@@ -377,15 +377,23 @@ public class OnlineMapController : AbstractMapController {
         }
 
         if (null != wsTask) {
-            wsTask.Wait();
-            wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
-            Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask disposed"));
+            try {
+                wsTask.Wait();
+                wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+                Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask disposed"));
+            } catch (ObjectDisposedException ex) {
+                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already disposed: {0}", ex));
+            }
         }
 
         if (null != udpTask) {
-            udpTask.Wait();
-            udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
-            Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask disposed"));
+            try {
+                udpTask.Wait();
+                udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+                Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask disposed"));
+            } catch (ObjectDisposedException ex) {
+                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask is already disposed: {0}", ex));
+            }
         }
     }
 
