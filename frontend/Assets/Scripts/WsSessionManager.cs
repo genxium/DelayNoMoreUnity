@@ -68,10 +68,9 @@ public class WsSessionManager {
         using (ClientWebSocket ws = new ClientWebSocket()) {
             try {
                 await ws.ConnectAsync(new Uri(fullUrl), cancellationToken);
-                Debug.Log("Ws session is opened");
                 var openMsg = new WsResp {
                     Ret = ErrCode.Ok,
-                    Act = shared.Battle.DOWNSYNC_MSG_WS_OPEN
+                    Act = Battle.DOWNSYNC_MSG_WS_OPEN
                 };
                 recvBuffer.Enqueue(openMsg);
                 await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
@@ -80,14 +79,15 @@ public class WsSessionManager {
                 Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
             } catch (Exception ex) {
                 Debug.LogWarning(String.Format("WsSession is stopped by exception; ex={0}", ex));
-                var errMsg = new WsResp {
+                var exMsg = new WsResp { 
                     Ret = ErrCode.UnknownError,
                     ErrMsg = ex.Message
                 };
+                recvBuffer.Enqueue(exMsg);
             } finally {
                 var closeMsg = new WsResp {
                     Ret = ErrCode.Ok,
-                    Act = shared.Battle.DOWNSYNC_MSG_WS_CLOSED
+                    Act = Battle.DOWNSYNC_MSG_WS_CLOSED
                 };
                 recvBuffer.Enqueue(closeMsg);
                 Debug.LogWarning(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));

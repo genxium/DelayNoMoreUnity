@@ -141,10 +141,11 @@ public class OnlineMapController : AbstractMapController {
 
     public void onWaitingInterrupted() {
         Debug.Log("OnlineMapController.onWaitingInterrupted");
-        disconnectNetworkSessions();
+        cleanupNetworkSessions();
     }
 
     public override void onCharacterSelectGoAction(int speciesId) {
+        characterSelectPanel.GoActionButton.gameObject.SetActive(false);
         Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
         WsSessionManager.Instance.SetSpeciesId(speciesId);
 
@@ -168,11 +169,10 @@ public class OnlineMapController : AbstractMapController {
 
                 Debug.LogWarning(String.Format("Calling UdpSessionManager.Instance.closeUdpSession()."));
                 UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
-
             }
         });
 
-        //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "disconnectNetworkSessions".
+        //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "cleanupNetworkSessions".
 
         //wsSessionActionAsync(); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
         //_ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
@@ -202,6 +202,8 @@ public class OnlineMapController : AbstractMapController {
         onBattleStopped();
         playerWaitingPanel.gameObject.SetActive(false);
         characterSelectPanel.gameObject.SetActive(true);
+        characterSelectPanel.GoActionButton.gameObject.SetActive(true);
+        cleanupNetworkSessions(); // Make sure that all resources are properly deallocated
     }
 
     private async Task wsSessionTaskAsync() {
@@ -362,13 +364,14 @@ public class OnlineMapController : AbstractMapController {
         NetworkDoctor.Instance.Reset();
     }
 
-    protected void disconnectNetworkSessions() {
+    protected void cleanupNetworkSessions() {
+        // [WARNING] This method is reentrant-safe!
         if (null != wsCancellationTokenSource) {
             if (!wsCancellationTokenSource.IsCancellationRequested) {
-                Debug.Log(String.Format("OnlineMapController.disconnectNetworkSessions, cancelling ws session"));
+                Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, cancelling ws session"));
                 wsCancellationTokenSource.Cancel();
             } else {
-                Debug.LogWarning(String.Format("OnlineMapController.disconnectNetworkSessions, wsCancellationTokenSource is already cancelled!"));
+                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsCancellationTokenSource is already cancelled!"));
             }
             wsCancellationTokenSource.Dispose();
         }
@@ -376,17 +379,19 @@ public class OnlineMapController : AbstractMapController {
         if (null != wsTask) {
             wsTask.Wait();
             wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+            Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask disposed"));
         }
 
         if (null != udpTask) {
             udpTask.Wait();
             udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+            Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask disposed"));
         }
     }
 
     protected void OnDestroy() {
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
-        disconnectNetworkSessions();
+        cleanupNetworkSessions();
         WsSessionManager.Instance.ClearCredentials();
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
     }
