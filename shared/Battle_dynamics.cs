@@ -682,12 +682,10 @@ namespace shared {
                                     // ignore collision with dying player
                                     continue;
                                 }
-                                /*
                                 if (currCharacterDownsync.ChCollisionTeamId == v1.ChCollisionTeamId) {
                                     // ignore collision within same collisionTeam, rarely used
                                     continue;
                                 }
-                                */
                                 isAnotherCharacter = true;
                                 break;
                             case Bullet v2:
