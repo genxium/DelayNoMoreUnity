@@ -74,13 +74,18 @@ message CharacterDownsync {
 
 	int32 revivalVirtualGridX = 29;
 	int32 revivalVirtualGridY = 30;
+
+	bool omitGravity = 31;
+	bool omitPushback = 32;
         
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
 	int32 framesInvinsible = 1026;
 
+    // Kindly note that "collisionTypeMask" is NOT GRANULAR ENOUGH for inter-character collision configuration, e.g. same team omission, thus we'd still need the fields "bulletTeamId" and "chCollisionTeamId" here
 	int32 bulletTeamId = 1027;
 	int32 chCollisionTeamId = 1028;
+	uint64 collisionTypeMask = 1029;
 
 	string name = 997;
 	string displayName = 998;
@@ -187,6 +192,8 @@ message BulletBattleAttr {
 	int32 originatedRenderFrameId = 2; // Copied from the first bullet for all subsequent bullets
 	int32 offenderJoinIndex = 3; // Copied to favor collision handling of the dispatched bullet
 	int32 teamId = 4;
+
+	uint64 collisionTypeMask = 1029; // Some bullets don't collide with barriers
 }
 
 message Bullet {
@@ -238,6 +245,7 @@ message RoomDownsyncFrame {
 	repeated Bullet bullets = 4;  
 
 	repeated CharacterDownsync npcsArr = 5;
+	repeated CharacterDownsync trapsArr = 6;
 
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;

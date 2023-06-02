@@ -1,0 +1,565 @@
+fileFormatVersion: 2
+guid: 191892760a670c4468b1749e7f5109bf
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: VFX_Melee1_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 175
+        width: 70
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.37654322}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef5d3708af66de9419b726e52009c50a
+      internalID: -1469221797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee1_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 94
+        width: 70
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.37654322}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7838e20ed07e8e24292975bff1ae5e63
+      internalID: -1191226301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee1_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 13
+        width: 70
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.37654322}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2577f07df32f58d46b31e3ce1b1fb26c
+      internalID: -1597793590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee1_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 175
+        width: 70
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.37654322}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 562a26680791b6148b287ed2086c7bef
+      internalID: 1109542497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee1_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 94
+        width: 70
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.37654322}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f50964c3a0d2a348a3c70098f0656e7
+      internalID: -1101905566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee1_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 13
+        width: 70
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.37654322}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5684016e7a9d6f4db15fcae23625e47
+      internalID: -1703461284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_0
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 150
+        width: 50
+        height: 29
+      alignment: 9
+      pivot: {x: 0.54, y: 0.8448276}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d7e6556a6dc86544899dd04c1429f97
+      internalID: 1075925002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_1
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 175
+        width: 53
+        height: 38
+      alignment: 9
+      pivot: {x: 0.509434, y: 0.69736844}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 713cf1e57d1351442bad190211842760
+      internalID: 2010866423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_10
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 217
+        width: 58
+        height: 39
+      alignment: 9
+      pivot: {x: 0.46551725, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03fd0ec2c523ce040aff35b52d68ff5d
+      internalID: -1135841474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_11
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 137
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.25, y: 0.5131579}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07f5bc2751087614e8fd66217a6c093d
+      internalID: -270464380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_12
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 138
+        width: 37
+        height: 37
+      alignment: 9
+      pivot: {x: 0.16216215, y: 0.44594595}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6fffde845b39034281ddd707573c77b
+      internalID: 2063144027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_2
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 175
+        width: 54
+        height: 40
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cb5d3f6155ac624ebb4d55dc3d65fbf
+      internalID: -1167969686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_3
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 179
+        width: 57
+        height: 38
+      alignment: 9
+      pivot: {x: 0.47368422, y: 0.6447368}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d10790906e784b43aa25232c1e2e565
+      internalID: 330539936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_4
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 215
+        width: 59
+        height: 41
+      alignment: 9
+      pivot: {x: 0.45762712, y: 0.6219512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d8e3899a4fb9b9478b70d4dbe3fc6bb
+      internalID: -1871780532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_5
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 175
+        width: 53
+        height: 38
+      alignment: 9
+      pivot: {x: 0.509434, y: 0.69736844}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f01e5466e56ab6646af2115f74439347
+      internalID: 355728404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_6
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 175
+        width: 54
+        height: 40
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4afeb4d739147144bc1517010300a27
+      internalID: -102153027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_7
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 179
+        width: 57
+        height: 38
+      alignment: 9
+      pivot: {x: 0.47368422, y: 0.6447368}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a6b7d076b846dc40865dfffc553deb6
+      internalID: 1745880240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_8
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 215
+        width: 59
+        height: 41
+      alignment: 9
+      pivot: {x: 0.45762712, y: 0.6219512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3339c5a0f8147241a8dc588676ccf23
+      internalID: 619896457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Melee2_9
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 213
+        width: 61
+        height: 43
+      alignment: 9
+      pivot: {x: 0.44262296, y: 0.5697674}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba1aeb06baae40e4fa0ec1374d37c7a1
+      internalID: -702377461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 2db9b2147d0931047a1747a7bf2837f4
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      VFX_Melee2_6: -102153027
+      VFX_Melee1_4: 1109542497
+      VFX_Melee2_1: 2010866423
+      VFX_Melee2_5: 355728404
+      VFX_Melee2_12: 2063144027
+      VFX_Melee2_0: 1075925002
+      VFX_Melee1_2: -1191226301
+      VFX_Melee2_4: -1871780532
+      VFX_Melee2_10: -1135841474
+      VFX_Melee2_2: -1167969686
+      VFX_Melee1_6: -1703461284
+      VFX_Melee2_3: 330539936
+      VFX_Melee2_9: -702377461
+      VFX_Melee2_11: -270464380
+      VFX_Melee1_5: -1101905566
+      VFX_Melee1_3: -1597793590
+      VFX_Melee2_7: 1745880240
+      VFX_Melee2_8: 619896457
+      VFX_Melee1_1: -1469221797
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
