@@ -23,6 +23,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public InplaceHpBar inplaceHpBarPrefab;
     public GameObject fireballPrefab;
     public GameObject errStackLogPanelPrefab;
+    public GameObject teamRibbonPrefab;
     protected GameObject errStackLogPanelObj;
     protected GameObject underlyingMap;
     public Canvas canvas;
@@ -66,6 +67,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
 
     public SelfBattleHeading selfBattleHeading;
+
+    protected Vector2 teamRibbonOffset = new Vector2(-8f, +18f);
+
     protected Vector2 inplaceHpBarOffset = new Vector2(-16f, +24f);
 
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
@@ -76,22 +80,37 @@ public abstract class AbstractMapController : MonoBehaviour {
     public ReadyGo readyGoPanel;
     protected Vector3 newPosHolder = new Vector3();
 
-    protected void spawnPlayerNode(int joinIndex, int speciesId, float wx, float wy) {
+    protected void spawnPlayerNode(int joinIndex, int speciesId, float wx, float wy, int bulletTeamId) {
         var characterPrefab = loadCharacterPrefab(characters[speciesId]);
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
+
+        var animController = newPlayerNode.GetComponent<CharacterAnimController>();
+
+        TeamRibbon associatedTeamRibbon = Instantiate(teamRibbonPrefab, new Vector3(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<TeamRibbon>();
+        animController.teamRibbon = associatedTeamRibbon;
+        associatedTeamRibbon.setBulletTeamId(bulletTeamId);
+
         if (joinIndex != selfPlayerInfo.JoinIndex) {
             InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
-            newPlayerNode.GetComponent<CharacterAnimController>().hpBar = associatedHpBar;
+
+            animController.hpBar = associatedHpBar;
         }
     }
 
-    protected void spawnNpcNode(int speciesId, float wx, float wy) {
+    protected void spawnNpcNode(int speciesId, float wx, float wy, int bulletTeamId) {
         var characterPrefab = loadCharacterPrefab(characters[speciesId]);
         GameObject newNpcNode = Instantiate(characterPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform);
         npcGameObjs.Add(newNpcNode);
         InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
-        newNpcNode.GetComponent<CharacterAnimController>().hpBar = associatedHpBar;
+
+        TeamRibbon associatedTeamRibbon = Instantiate(teamRibbonPrefab, new Vector3(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<TeamRibbon>();
+
+        var animController = newNpcNode.GetComponent<CharacterAnimController>();
+
+        animController.hpBar = associatedHpBar;
+        animController.teamRibbon = associatedTeamRibbon;
+        associatedTeamRibbon.setBulletTeamId(bulletTeamId);
     }
 
     protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
@@ -279,11 +298,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             var chConfig = characters[currCharacterDownsync.SpeciesId];
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             chAnimCtrl.updateCharacterAnim(currCharacterDownsync, null, false, chConfig);
+            newPosHolder.Set(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, playerGameObj.transform.position.z);
+            chAnimCtrl.teamRibbon.transform.position = newPosHolder;
             if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
                 selfBattleHeading.SetCharacter(currCharacterDownsync);
             } else {
                 newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, playerGameObj.transform.position.z);
-                chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp/ currCharacterDownsync.MaxHp, (float) currCharacterDownsync.Mp/currCharacterDownsync.MaxMp);
+                chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);
                 chAnimCtrl.hpBar.transform.position = newPosHolder;
             }
         }
@@ -304,6 +325,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, npcGameObj.transform.position.z);
             chAnimCtrl.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp, (float)currNpcDownsync.Mp / currNpcDownsync.MaxMp);
             chAnimCtrl.hpBar.transform.position = newPosHolder;
+            newPosHolder.Set(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, npcGameObj.transform.position.z);
+            chAnimCtrl.teamRibbon.transform.position = newPosHolder;
         }
 
         // Put all to infinitely far first
@@ -697,7 +720,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             var (anchorCx, anchorCy) = TiledLayerPositionToCollisionSpacePosition(barrierTileObj.m_X, barrierTileObj.m_Y, spaceOffsetX, spaceOffsetY);
                             var srcPolygon = new ConvexPolygon(anchorCx, anchorCy, points2.ToArray());
                             var barrierCollider = NewConvexPolygonCollider(srcPolygon, 0, 0, null);
-                            
+
                             collisionSys.AddSingle(barrierCollider);
                             staticColliders[staticColliderIdx++] = barrierCollider;
                         }
@@ -729,10 +752,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("teamId", out teamId);
                         npcsStartingCposList.Add((
-                                                    new Vector(cx, cy),     
-                                                    null == dirX || dirX.IsEmpty ? 2 : dirX.GetValueAsInt(),    
+                                                    new Vector(cx, cy),
+                                                    null == dirX || dirX.IsEmpty ? 2 : dirX.GetValueAsInt(),
                                                     null == speciesId || speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt(),
-                                                    null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt()  
+                                                    null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt()
                         ));
                     }
                     break;
@@ -777,11 +800,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var playerInRdf = startRdf.PlayersArr[i];
             playerInRdf.SpeciesId = speciesIdList[i];
-            var chConfig = Battle.characters[playerInRdf.SpeciesId];
-            spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy);
-            var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
             playerInRdf.JoinIndex = joinIndex;
             playerInRdf.BulletTeamId = joinIndex;
+            playerInRdf.ChCollisionTeamId = joinIndex;
+            var chConfig = Battle.characters[playerInRdf.SpeciesId];
+            spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
+            var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
             playerInRdf.VirtualGridX = playerVposX;
             playerInRdf.VirtualGridY = playerVposY;
             playerInRdf.RevivalVirtualGridX = playerVposX;
@@ -805,7 +829,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             int joinIndex = roomCapacity + i + 1;
             var (cpos, dirX, characterSpeciesId, teamId) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
-            spawnNpcNode(characterSpeciesId, wx, wy);
+            spawnNpcNode(characterSpeciesId, wx, wy, teamId);
 
             var chConfig = Battle.characters[characterSpeciesId];
 
@@ -832,7 +856,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.MaxMp = 1000;
             npcInRdf.SpeciesId = characterSpeciesId;
             npcInRdf.BulletTeamId = teamId;
-
+            npcInRdf.ChCollisionTeamId = teamId;
             startRdf.NpcsArr[i] = npcInRdf;
         }
 

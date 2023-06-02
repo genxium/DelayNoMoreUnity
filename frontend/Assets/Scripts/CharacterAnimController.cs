@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class CharacterAnimController : MonoBehaviour {
     public InplaceHpBar hpBar; 
+    public TeamRibbon teamRibbon; 
 
     protected static HashSet<CharacterState>  INTERRUPT_WAIVE_SET = new HashSet<CharacterState> { 
         Idle1,
