@@ -1578,6 +1578,7 @@ MonoBehaviour:
   canvas: {fileID: 1021584740}
   characterSelectPanel: {fileID: 1405172217}
   selfBattleHeading: {fileID: 625548113}
+  playerLightsPrefab: {fileID: 5304118936468543971, guid: 004535d351f4d1b4a9826cae8e5d4c47, type: 3}
   readyGoPanel: {fileID: 1439065304}
   networkInfoPanel: {fileID: 1394040124}
   playerWaitingPanel: {fileID: 2621611814027303518}

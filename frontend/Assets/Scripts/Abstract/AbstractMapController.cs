@@ -68,6 +68,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public SelfBattleHeading selfBattleHeading;
 
+    public GameObject playerLightsPrefab;
+    protected PlayerLights selfPlayerLights;
+
     protected Vector2 teamRibbonOffset = new Vector2(-8f, +18f);
 
     protected Vector2 inplaceHpBarOffset = new Vector2(-16f, +24f);
@@ -95,6 +98,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
 
             animController.hpBar = associatedHpBar;
+        } else {
+            selfPlayerLights = Instantiate(playerLightsPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<PlayerLights>();
         }
     }
 
@@ -302,6 +307,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             chAnimCtrl.teamRibbon.transform.position = newPosHolder;
             if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
                 selfBattleHeading.SetCharacter(currCharacterDownsync);
+                newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
+                selfPlayerLights.gameObject.transform.position = newPosHolder;
+                selfPlayerLights.setDirX(currCharacterDownsync.DirX);
             } else {
                 newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, playerGameObj.transform.position.z);
                 chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);

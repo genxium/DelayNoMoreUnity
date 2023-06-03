@@ -4,6 +4,9 @@
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
  <layer id="8" name="Ground" width="128" height="64">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt2jFuwjAUgGEE6sJG1VbqiFT1IlUXtl6g9z9GS5VIUYQTE5w+C3/DtwCB+P02LOw2m80OAAAAAAAA4B988ie6Q2T/6HuI1vIMWl67GbS9djNoe+1m0PbazWDZ2p8y3XJfj4Veo399/d/0r0bN/af6zj2vf/m1n7u9d9buP2ycEjGDe7O0f2/JZ+b2r3EG96b2/ocE/WP6lzL3fZ7qvsY+0L8uue1L7YMaZ1Bz/2Oh15Ts/9A5X/96gf7za993ovsv3QMp+k+v/WOkf278eO+YKXV9bfoZRLeI6r/t9Of/+9cpYVtA6pyWeO8ln936+R/3H/4GDB8r1T+S/un+p1HvS0r3eFnBNd85+k/32c/MLsdc/9L7Sf/r+j93puZ2y/mf2gNrn/+c/al/un/J31z96xP9v+taRHeI7P/VOP3btmb/Q+WiZ1+L6A7666+//vrrDwAAAAAAAAAAAMT6AUSrxhQ=
   </data>
