@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CharacterMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: 334295ed765d54747b0a972c8b9c0f9e, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 6302039d5c9a90c4a9c2a033ed09f3f7, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -20,6 +20,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 0abc45ebae47fae48be0eaf9e10357cc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_df17af1248f74c7bb55ec8472b590ce5_Texture_1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -33,6 +41,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
-    m_Colors: []
+    m_Floats:
+    - _Scale: 1.02
+    - _Thickness: 0
+    m_Colors:
+    - _Color: {r: 0, g: 1, b: 0.5245588, a: 0}
   m_BuildTextureStacks: []

@@ -77,4 +77,20 @@ public class CharacterAnimController : MonoBehaviour {
         var fromTime = (frameIdxInAnim / targetClip.frameRate); // TODO: Anyway to avoid using division here?
         animator.Play(newAnimName, targetLayer, fromTime);
     }
+    
+    /*
+    There're certainly many approaches to outline around a sprite, thus a sprite-sequence-animation, the approach used here is simplest in terms of not being mind tweaking because I'm so new to shaders -- yet not necessarily the best.     
+
+    The "offset in 4-directions" approach satisfies all of my needs below.
+    - No additional node needed 
+    - One-pass 
+    - Works on any type of edge, including sharp corners
+    - Exactly 1 pixel per direction 
+
+    In contrast I've also considered "scaling by a factor then color the bigger image and superpose it onto the original". It turns out not easy because 
+    - scaling each sprite in the sprite-sheet w.r.t. the chosen pivot requries a knowledge of the pivot-locations in the meta data, and 
+    - scaling the vertex positions in "object space" is fine, but it's difficult for me to superpose it before feeding to "vertex shader" -- thus not "one-pass". 
+
+    Seems to me like the only other approaches that satisfy the above criterions are "Blurred Buffer" and "Jump Flood" as described by https://alexanderameye.github.io/notes/rendering-outlines/.
+    */
 }
