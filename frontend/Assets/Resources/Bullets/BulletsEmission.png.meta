@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: ac7e91a44cc221040add7ff8e6111cf8
+guid: 26b87123458a54f4db5753df680225b1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -51,9 +51,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 0
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -4295,9 +4295,7 @@ TextureImporter:
     indices: 
     edges: []
     weights: []
-    secondaryTextures:
-    - texture: {fileID: 2800000, guid: 26b87123458a54f4db5753df680225b1, type: 3}
-      name: _Emission
+    secondaryTextures: []
     nameFileIdTable:
       Fireball5_30: 1133641276
       Fireball6_8: -1205951989
@@ -4324,8 +4322,8 @@ TextureImporter:
       Explosion3_7: -76966933
       Fireball5_25: 1746214805
       Explosion3_4: -2021252134
-      Explosion5_6: -1466753161
       Fireball2_8: 1205988251
+      Explosion5_6: -1466753161
       Explosion1_4: 485683991
       Explosion6_2: 1277317442
       Fireball6_2: -2980423
