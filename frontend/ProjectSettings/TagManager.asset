@@ -47,3 +47,6 @@ TagManager:
   - name: Character
     uniqueID: 2342661519
     locked: 0
+  - name: EmittingBullet
+    uniqueID: 4161071285
+    locked: 0
