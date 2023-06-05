@@ -100,7 +100,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             animController.hpBar = associatedHpBar;
         } else {
-            selfPlayerLights = Instantiate(playerLightsPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, 0), Quaternion.identity, underlyingMap.transform).GetComponent<PlayerLights>();
+            selfPlayerLights = Instantiate(playerLightsPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform).GetComponent<PlayerLights>();
         }
     }
 
