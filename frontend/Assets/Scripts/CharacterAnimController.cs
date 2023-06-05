@@ -3,10 +3,14 @@ using shared;
 using static shared.CharacterState;
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class CharacterAnimController : MonoBehaviour {
     public InplaceHpBar hpBar; 
-    public TeamRibbon teamRibbon; 
+    public TeamRibbon teamRibbon;
+    private string MATERIAL_REF_THICKNESS = "_Thickness";
+    private float DAMAGED_THICKNESS = 1.5f;
+    private float DAMAGED_BLINK_SECONDS_HALF = 0.2f;
 
     protected static HashSet<CharacterState>  INTERRUPT_WAIVE_SET = new HashSet<CharacterState> { 
         Idle1,
@@ -76,6 +80,15 @@ public class CharacterAnimController : MonoBehaviour {
         }
         var fromTime = (frameIdxInAnim / targetClip.frameRate); // TODO: Anyway to avoid using division here?
         animator.Play(newAnimName, targetLayer, fromTime);
+
+        if (null != prevRdfCharacter && prevRdfCharacter.Hp > rdfCharacter.Hp) {
+            // Some characters, and almost all traps wouldn't have an "attacked state", hence showing their damaged animation by shader.
+            var spr = gameObject.GetComponent<SpriteRenderer>();
+            var material = spr.material;
+            DOTween.Sequence().Append(
+                DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))
+                .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
+        }
     }
     
     /*

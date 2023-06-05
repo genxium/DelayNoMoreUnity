@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
+using DG.Tweening;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -292,7 +293,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
         for (int k = 0; k < roomCapacity; k++) {
             var currCharacterDownsync = rdf.PlayersArr[k];
-
+            var prevCharacterDownsync = (null == prevRdf ? null : prevRdf.PlayersArr[k]);
             //Debug.Log(String.Format("At rdf.Id={0}, currCharacterDownsync[k:{1}] at [vGridX: {2}, vGridY: {3}, velX: {4}, velY: {5}, chState: {6}, framesInChState: {7}, dirx: {8}]", rdf.Id, k, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.CharacterState, currCharacterDownsync.FramesInChState, currCharacterDownsync.DirX));
             var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
@@ -302,7 +303,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var chConfig = characters[currCharacterDownsync.SpeciesId];
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
-            chAnimCtrl.updateCharacterAnim(currCharacterDownsync, null, false, chConfig);
+            chAnimCtrl.updateCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig);
             newPosHolder.Set(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, playerGameObj.transform.position.z);
             chAnimCtrl.teamRibbon.transform.position = newPosHolder;
             if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
@@ -319,6 +320,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
             var currNpcDownsync = rdf.NpcsArr[k];
+            var prevNpcDownsync = (null == prevRdf ? null : prevRdf.NpcsArr[k]);
+
             if (TERMINATING_PLAYER_ID == currNpcDownsync.Id) break;
             // Debug.Log(String.Format("At rdf.Id={0}, currNpcDownsync[k:{1}] at [vx: {2}, vy: {3}, chState: {4}, framesInChState: {5}]", rdf.Id, k, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, currNpcDownsync.CharacterState, currNpcDownsync.FramesInChState));
             var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY);
@@ -329,9 +332,10 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var chConfig = characters[currNpcDownsync.SpeciesId];
             var chAnimCtrl = npcGameObj.GetComponent<CharacterAnimController>();
-            chAnimCtrl.updateCharacterAnim(currNpcDownsync, null, false, chConfig);
+            chAnimCtrl.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
             newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, npcGameObj.transform.position.z);
             chAnimCtrl.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp, (float)currNpcDownsync.Mp / currNpcDownsync.MaxMp);
+            
             chAnimCtrl.hpBar.transform.position = newPosHolder;
             newPosHolder.Set(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, npcGameObj.transform.position.z);
             chAnimCtrl.teamRibbon.transform.position = newPosHolder;
