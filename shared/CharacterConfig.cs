@@ -4,6 +4,7 @@ using System.Text;
 
 namespace shared {
     public struct CharacterConfig {
+        // [WARNING] All fields of this class should be deemed as "initial values", and could be changed during a battle by whatever powerup/debuff :)
         public int SpeciesId;
         public string SpeciesName;
 
@@ -45,5 +46,10 @@ namespace shared {
 
         public int DyingSizeX;
         public int DyingSizeY;
+
+        // Collision masks
+        public bool OmitGravity;
+        public bool OmitPushback;
+        public ulong CollisionTypeMask;
     }
 }

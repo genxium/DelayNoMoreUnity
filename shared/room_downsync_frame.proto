@@ -130,10 +130,17 @@ message InputBufferSnapshot {
 }
 
 message PatrolCue {
-    uint64 flAct = 1; // "input when colliding from the left"
-    uint64 frAct = 2; // "input when colliding from the right"
+    uint64 flAct = 1; // "input when colliding from the left side"
+    uint64 frAct = 2; // "input when colliding from the right side"
 	uint64 flCaptureFrames = 3;
 	uint64 frCaptureFrames = 4;
+
+    uint64 fdAct = 5; // "input when colliding from the down side"
+    uint64 fuAct = 6; // "input when colliding from the up side"
+	uint64 fdCaptureFrames = 7;
+	uint64 fuCaptureFrames = 8;
+
+	uint64 collisionTypeMask = 1029;
 }
 
 message VisionBox {
@@ -185,6 +192,8 @@ message BulletConfig {
 	int32 speed = 20; // For speed varying bullets, this is the initial speed
 
 	map<int32, int32> cancelTransit = 21; // patternId -> skillId
+
+	uint64 collisionTypeMask = 1029;
 }
 
 message BulletBattleAttr {

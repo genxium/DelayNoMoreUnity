@@ -57,78 +57,81 @@ namespace shared {
             "YXBzaG90EhgKEHJlZlJlbmRlckZyYW1lSWQYASABKAUSFwoPdW5jb25maXJt",
             "ZWRNYXNrGAIgASgEEj0KGXRvU2VuZElucHV0RnJhbWVEb3duc3luY3MYAyAD",
             "KAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEhkKEXNob3VsZEZvcmNl",
-            "UmVzeW5jGAQgASgIEhUKDXBlZXJKb2luSW5kZXgYBSABKAUiWwoJUGF0cm9s",
-            "Q3VlEg0KBWZsQWN0GAEgASgEEg0KBWZyQWN0GAIgASgEEhcKD2ZsQ2FwdHVy",
-            "ZUZyYW1lcxgDIAEoBBIXCg9mckNhcHR1cmVGcmFtZXMYBCABKAQiVAoJVmlz",
-            "aW9uQm94EhMKC2JvdHRvbUxlZnRYGAEgASgFEhMKC2JvdHRvbUxlZnRZGAIg",
-            "ASgFEg0KBXdpZHRoGAMgASgFEg4KBmhlaWdodBgEIAEoBSLHBAoMQnVsbGV0",
-            "Q29uZmlnEhUKDXN0YXJ0dXBGcmFtZXMYASABKAUSGgoSY2FuY2VsbGFibGVT",
-            "dEZyYW1lGAIgASgFEhoKEmNhbmNlbGxhYmxlRWRGcmFtZRgDIAEoBRIUCgxh",
-            "Y3RpdmVGcmFtZXMYBCABKAUSFQoNaGl0U3R1bkZyYW1lcxgFIAEoBRIXCg9i",
-            "bG9ja1N0dW5GcmFtZXMYBiABKAUSFAoMcHVzaGJhY2tWZWxYGAcgASgFEhQK",
-            "DHB1c2hiYWNrVmVsWRgIIAEoBRIOCgZkYW1hZ2UYCSABKAUSFAoMc2VsZkxv",
-            "Y2tWZWxYGAogASgFEhQKDHNlbGZMb2NrVmVsWRgLIAEoBRIVCg1oaXRib3hP",
-            "ZmZzZXRYGAwgASgFEhUKDWhpdGJveE9mZnNldFkYDSABKAUSEwoLaGl0Ym94",
-            "U2l6ZVgYDiABKAUSEwoLaGl0Ym94U2l6ZVkYDyABKAUSDgoGYmxvd1VwGBAg",
-            "ASgIEhEKCXNwZWNpZXNJZBgRIAEoBRIXCg9leHBsb3Npb25GcmFtZXMYEiAB",
-            "KAUSIQoFYlR5cGUYEyABKA4yEi5zaGFyZWQuQnVsbGV0VHlwZRINCgVzcGVl",
-            "ZBgUIAEoBRI+Cg1jYW5jZWxUcmFuc2l0GBUgAygLMicuc2hhcmVkLkJ1bGxl",
-            "dENvbmZpZy5DYW5jZWxUcmFuc2l0RW50cnkaNAoSQ2FuY2VsVHJhbnNpdEVu",
-            "dHJ5EgsKA2tleRgBIAEoBRINCgV2YWx1ZRgCIAEoBToCOAEikQEKEEJ1bGxl",
-            "dEJhdHRsZUF0dHISFQoNYnVsbGV0TG9jYWxJZBgBIAEoBRIfChdvcmlnaW5h",
-            "dGVkUmVuZGVyRnJhbWVJZBgCIAEoBRIZChFvZmZlbmRlckpvaW5JbmRleBgD",
-            "IAEoBRIOCgZ0ZWFtSWQYBCABKAUSGgoRY29sbGlzaW9uVHlwZU1hc2sYhQgg",
-            "ASgEIoUCCgZCdWxsZXQSJAoHYmxTdGF0ZRgBIAEoDjITLnNoYXJlZC5CdWxs",
-            "ZXRTdGF0ZRIXCg9mcmFtZXNJbkJsU3RhdGUYAiABKAUSLAoKYmF0dGxlQXR0",
-            "chgDIAEoCzIYLnNoYXJlZC5CdWxsZXRCYXR0bGVBdHRyEiQKBmNvbmZpZxgE",
-            "IAEoCzIULnNoYXJlZC5CdWxsZXRDb25maWcSFQoMdmlydHVhbEdyaWRYGOcH",
-            "IAEoBRIVCgx2aXJ0dWFsR3JpZFkY6AcgASgFEg0KBGRpclgY6QcgASgFEg0K",
-            "BGRpclkY6gcgASgFEg0KBHZlbFgY6wcgASgFEg0KBHZlbFkY7AcgASgFIjgK",
-            "C1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwKBHBvcnQYAiABKAUSDwoHYXV0",
-            "aEtleRgDIAEoBSLFAwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEKCXN0YWdlTmFt",
-            "ZRgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIcChRiYXR0bGVEdXJhdGlv",
-            "bkZyYW1lcxgDIAEoAxImCh5pbnB1dEZyYW1lVXBzeW5jRGVsYXlUb2xlcmFu",
-            "Y2UYBCABKAUSJwofbWF4Q2hhc2luZ1JlbmRlckZyYW1lc1BlclVwZGF0ZRgF",
-            "IAEoBRIhChlyb2xsYmFja0VzdGltYXRlZER0TWlsbGlzGAYgASgBEiAKGHJv",
-            "bGxiYWNrRXN0aW1hdGVkRHROYW5vcxgHIAEoAxIYChByZW5kZXJCdWZmZXJT",
-            "aXplGAggASgFEhgKEGNvbGxpc2lvbk1pblN0ZXAYCSABKAUSGQoRYm91bmRS",
-            "b29tQ2FwYWNpdHkYCiABKAUSGwoTcHJlYWxsb2NOcGNDYXBhY2l0eRgLIAEo",
-            "BRIeChZwcmVhbGxvY0J1bGxldENhcGFjaXR5GAwgASgFEi0KD2JhdHRsZVVk",
-            "cFR1bm5lbBiACCABKAsyEy5zaGFyZWQuUGVlclVkcEFkZHISGAoPZnJhbWVM",
-            "b2dFbmFibGVkGIEIIAEoCCKhAwoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQY",
-            "ASABKAUSLQoKcGxheWVyc0FychgCIAMoCzIZLnNoYXJlZC5DaGFyYWN0ZXJE",
-            "b3duc3luYxIWCg5jb3VudGRvd25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQg",
-            "AygLMg4uc2hhcmVkLkJ1bGxldBIqCgducGNzQXJyGAUgAygLMhkuc2hhcmVk",
-            "LkNoYXJhY3RlckRvd25zeW5jEisKCHRyYXBzQXJyGAYgAygLMhkuc2hhcmVk",
-            "LkNoYXJhY3RlckRvd25zeW5jEh8KFmJhY2tlbmRVbmNvbmZpcm1lZE1hc2sY",
-            "gAggASgEEhoKEXNob3VsZEZvcmNlUmVzeW5jGIEIIAEoCBIWCg1zcGVjaWVz",
-            "SWRMaXN0GIIIIAMoBRIdChRidWxsZXRMb2NhbElkQ291bnRlchiDCCABKAUS",
-            "LQoPcGVlclVkcEFkZHJMaXN0GIQIIAMoCzITLnNoYXJlZC5QZWVyVWRwQWRk",
-            "chIcChNwYXJ0aWNpcGFudENoYW5nZUlkGIUIIAEoBSLcAQoGV3NSZXNwEgsK",
-            "A3JldBgBIAEoBRILCgNhY3QYAiABKAUSJgoDcmRmGAMgASgLMhkuc2hhcmVk",
-            "LlJvb21Eb3duc3luY0ZyYW1lEjsKF2lucHV0RnJhbWVEb3duc3luY0JhdGNo",
-            "GAQgAygLMhouc2hhcmVkLklucHV0RnJhbWVEb3duc3luYxIsCghiY2lGcmFt",
-            "ZRgFIAEoCzIaLnNoYXJlZC5CYXR0bGVDb2xsaWRlckluZm8SFQoNcGVlckpv",
-            "aW5JbmRleBgGIAEoBRIOCgZlcnJNc2cYByABKAkihQIKBVNraWxsEhUKDWJh",
-            "dHRsZUxvY2FsSWQYASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYAiABKAUSHQoV",
-            "cmVjb3ZlcnlGcmFtZXNPbkJsb2NrGAMgASgFEhsKE3JlY292ZXJ5RnJhbWVz",
-            "T25IaXQYBCABKAUSLQoLdHJpZ2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tp",
-            "bGxUcmlnZ2VyVHlwZRIsCgxib3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQu",
-            "Q2hhcmFjdGVyU3RhdGUSDwoHbXBEZWx0YRgHIAEoBRIjCgRoaXRzGIAIIAMo",
-            "CzIULnNoYXJlZC5CdWxsZXRDb25maWciZwoIRnJhbWVMb2cSJgoDcmRmGAEg",
-            "ASgLMhkuc2hhcmVkLlJvb21Eb3duc3luY0ZyYW1lEjMKD2FjdHVhbGx5VXNl",
-            "ZElkZhgCIAEoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMqNQoLQnVs",
-            "bGV0U3RhdGUSCwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0KCUV4cGxvZGlu",
-            "ZxACKq4CCg5DaGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsKB1dhbGtpbmcQ",
-            "ARIOCgpUdXJuQXJvdW5kEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxlMU5v",
-            "SnVtcBAEEhQKEEluQWlySWRsZTFCeUp1bXAQBRIYChRJbkFpcklkbGUxQnlX",
-            "YWxsSnVtcBAGEg8KC0luQWlyQXRrZWQxEAcSDAoIQmxvd25VcDEQCBIMCghM",
-            "YXlEb3duMRAJEgoKBkdldFVwMRAKEgkKBUR5aW5nEAsSCwoHRGFzaGluZxAM",
-            "EgoKBk9uV2FsbBANEg4KCUluQWlyQXRrMRCACBIJCgRBdGsxEIEIEgkKBEF0",
-            "azIQgggSCQoEQXRrMxCDCBIJCgRBdGs0EIQIEgkKBEF0azUQhQgqNwoKQnVs",
-            "bGV0VHlwZRIQCgxVbmRldGVybWluZWQQABIJCgVNZWxlZRABEgwKCEZpcmVi",
-            "YWxsEAIqMwoQU2tpbGxUcmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdlEAASDwoL",
-            "RmFsbGluZ0VkZ2UQAUIJqgIGc2hhcmVkYgZwcm90bzM="));
+            "UmVzeW5jGAQgASgIEhUKDXBlZXJKb2luSW5kZXgYBSABKAUixwEKCVBhdHJv",
+            "bEN1ZRINCgVmbEFjdBgBIAEoBBINCgVmckFjdBgCIAEoBBIXCg9mbENhcHR1",
+            "cmVGcmFtZXMYAyABKAQSFwoPZnJDYXB0dXJlRnJhbWVzGAQgASgEEg0KBWZk",
+            "QWN0GAUgASgEEg0KBWZ1QWN0GAYgASgEEhcKD2ZkQ2FwdHVyZUZyYW1lcxgH",
+            "IAEoBBIXCg9mdUNhcHR1cmVGcmFtZXMYCCABKAQSGgoRY29sbGlzaW9uVHlw",
+            "ZU1hc2sYhQggASgEIlQKCVZpc2lvbkJveBITCgtib3R0b21MZWZ0WBgBIAEo",
+            "BRITCgtib3R0b21MZWZ0WRgCIAEoBRINCgV3aWR0aBgDIAEoBRIOCgZoZWln",
+            "aHQYBCABKAUi4wQKDEJ1bGxldENvbmZpZxIVCg1zdGFydHVwRnJhbWVzGAEg",
+            "ASgFEhoKEmNhbmNlbGxhYmxlU3RGcmFtZRgCIAEoBRIaChJjYW5jZWxsYWJs",
+            "ZUVkRnJhbWUYAyABKAUSFAoMYWN0aXZlRnJhbWVzGAQgASgFEhUKDWhpdFN0",
+            "dW5GcmFtZXMYBSABKAUSFwoPYmxvY2tTdHVuRnJhbWVzGAYgASgFEhQKDHB1",
+            "c2hiYWNrVmVsWBgHIAEoBRIUCgxwdXNoYmFja1ZlbFkYCCABKAUSDgoGZGFt",
+            "YWdlGAkgASgFEhQKDHNlbGZMb2NrVmVsWBgKIAEoBRIUCgxzZWxmTG9ja1Zl",
+            "bFkYCyABKAUSFQoNaGl0Ym94T2Zmc2V0WBgMIAEoBRIVCg1oaXRib3hPZmZz",
+            "ZXRZGA0gASgFEhMKC2hpdGJveFNpemVYGA4gASgFEhMKC2hpdGJveFNpemVZ",
+            "GA8gASgFEg4KBmJsb3dVcBgQIAEoCBIRCglzcGVjaWVzSWQYESABKAUSFwoP",
+            "ZXhwbG9zaW9uRnJhbWVzGBIgASgFEiEKBWJUeXBlGBMgASgOMhIuc2hhcmVk",
+            "LkJ1bGxldFR5cGUSDQoFc3BlZWQYFCABKAUSPgoNY2FuY2VsVHJhbnNpdBgV",
+            "IAMoCzInLnNoYXJlZC5CdWxsZXRDb25maWcuQ2FuY2VsVHJhbnNpdEVudHJ5",
+            "EhoKEWNvbGxpc2lvblR5cGVNYXNrGIUIIAEoBBo0ChJDYW5jZWxUcmFuc2l0",
+            "RW50cnkSCwoDa2V5GAEgASgFEg0KBXZhbHVlGAIgASgFOgI4ASKRAQoQQnVs",
+            "bGV0QmF0dGxlQXR0chIVCg1idWxsZXRMb2NhbElkGAEgASgFEh8KF29yaWdp",
+            "bmF0ZWRSZW5kZXJGcmFtZUlkGAIgASgFEhkKEW9mZmVuZGVySm9pbkluZGV4",
+            "GAMgASgFEg4KBnRlYW1JZBgEIAEoBRIaChFjb2xsaXNpb25UeXBlTWFzaxiF",
+            "CCABKAQihQIKBkJ1bGxldBIkCgdibFN0YXRlGAEgASgOMhMuc2hhcmVkLkJ1",
+            "bGxldFN0YXRlEhcKD2ZyYW1lc0luQmxTdGF0ZRgCIAEoBRIsCgpiYXR0bGVB",
+            "dHRyGAMgASgLMhguc2hhcmVkLkJ1bGxldEJhdHRsZUF0dHISJAoGY29uZmln",
+            "GAQgASgLMhQuc2hhcmVkLkJ1bGxldENvbmZpZxIVCgx2aXJ0dWFsR3JpZFgY",
+            "5wcgASgFEhUKDHZpcnR1YWxHcmlkWRjoByABKAUSDQoEZGlyWBjpByABKAUS",
+            "DQoEZGlyWRjqByABKAUSDQoEdmVsWBjrByABKAUSDQoEdmVsWRjsByABKAUi",
+            "OAoLUGVlclVkcEFkZHISCgoCaXAYASABKAkSDAoEcG9ydBgCIAEoBRIPCgdh",
+            "dXRoS2V5GAMgASgFIsUDChJCYXR0bGVDb2xsaWRlckluZm8SEQoJc3RhZ2VO",
+            "YW1lGAEgASgJEhMKC2JvdW5kUm9vbUlkGAIgASgFEhwKFGJhdHRsZUR1cmF0",
+            "aW9uRnJhbWVzGAMgASgDEiYKHmlucHV0RnJhbWVVcHN5bmNEZWxheVRvbGVy",
+            "YW5jZRgEIAEoBRInCh9tYXhDaGFzaW5nUmVuZGVyRnJhbWVzUGVyVXBkYXRl",
+            "GAUgASgFEiEKGXJvbGxiYWNrRXN0aW1hdGVkRHRNaWxsaXMYBiABKAESIAoY",
+            "cm9sbGJhY2tFc3RpbWF0ZWREdE5hbm9zGAcgASgDEhgKEHJlbmRlckJ1ZmZl",
+            "clNpemUYCCABKAUSGAoQY29sbGlzaW9uTWluU3RlcBgJIAEoBRIZChFib3Vu",
+            "ZFJvb21DYXBhY2l0eRgKIAEoBRIbChNwcmVhbGxvY05wY0NhcGFjaXR5GAsg",
+            "ASgFEh4KFnByZWFsbG9jQnVsbGV0Q2FwYWNpdHkYDCABKAUSLQoPYmF0dGxl",
+            "VWRwVHVubmVsGIAIIAEoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIYCg9mcmFt",
+            "ZUxvZ0VuYWJsZWQYgQggASgIIqEDChFSb29tRG93bnN5bmNGcmFtZRIKCgJp",
+            "ZBgBIAEoBRItCgpwbGF5ZXJzQXJyGAIgAygLMhkuc2hhcmVkLkNoYXJhY3Rl",
+            "ckRvd25zeW5jEhYKDmNvdW50ZG93bk5hbm9zGAMgASgDEh8KB2J1bGxldHMY",
+            "BCADKAsyDi5zaGFyZWQuQnVsbGV0EioKB25wY3NBcnIYBSADKAsyGS5zaGFy",
+            "ZWQuQ2hhcmFjdGVyRG93bnN5bmMSKwoIdHJhcHNBcnIYBiADKAsyGS5zaGFy",
+            "ZWQuQ2hhcmFjdGVyRG93bnN5bmMSHwoWYmFja2VuZFVuY29uZmlybWVkTWFz",
+            "axiACCABKAQSGgoRc2hvdWxkRm9yY2VSZXN5bmMYgQggASgIEhYKDXNwZWNp",
+            "ZXNJZExpc3QYggggAygFEh0KFGJ1bGxldExvY2FsSWRDb3VudGVyGIMIIAEo",
+            "BRItCg9wZWVyVWRwQWRkckxpc3QYhAggAygLMhMuc2hhcmVkLlBlZXJVZHBB",
+            "ZGRyEhwKE3BhcnRpY2lwYW50Q2hhbmdlSWQYhQggASgFItwBCgZXc1Jlc3AS",
+            "CwoDcmV0GAEgASgFEgsKA2FjdBgCIAEoBRImCgNyZGYYAyABKAsyGS5zaGFy",
+            "ZWQuUm9vbURvd25zeW5jRnJhbWUSOwoXaW5wdXRGcmFtZURvd25zeW5jQmF0",
+            "Y2gYBCADKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEiwKCGJjaUZy",
+            "YW1lGAUgASgLMhouc2hhcmVkLkJhdHRsZUNvbGxpZGVySW5mbxIVCg1wZWVy",
+            "Sm9pbkluZGV4GAYgASgFEg4KBmVyck1zZxgHIAEoCSKFAgoFU2tpbGwSFQoN",
+            "YmF0dGxlTG9jYWxJZBgBIAEoBRIWCg5yZWNvdmVyeUZyYW1lcxgCIAEoBRId",
+            "ChVyZWNvdmVyeUZyYW1lc09uQmxvY2sYAyABKAUSGwoTcmVjb3ZlcnlGcmFt",
+            "ZXNPbkhpdBgEIAEoBRItCgt0cmlnZ2VyVHlwZRgFIAEoDjIYLnNoYXJlZC5T",
+            "a2lsbFRyaWdnZXJUeXBlEiwKDGJvdW5kQ2hTdGF0ZRgGIAEoDjIWLnNoYXJl",
+            "ZC5DaGFyYWN0ZXJTdGF0ZRIPCgdtcERlbHRhGAcgASgFEiMKBGhpdHMYgAgg",
+            "AygLMhQuc2hhcmVkLkJ1bGxldENvbmZpZyJnCghGcmFtZUxvZxImCgNyZGYY",
+            "ASABKAsyGS5zaGFyZWQuUm9vbURvd25zeW5jRnJhbWUSMwoPYWN0dWFsbHlV",
+            "c2VkSWRmGAIgASgLMhouc2hhcmVkLklucHV0RnJhbWVEb3duc3luYyo1CgtC",
+            "dWxsZXRTdGF0ZRILCgdTdGFydFVwEAASCgoGQWN0aXZlEAESDQoJRXhwbG9k",
+            "aW5nEAIqrgIKDkNoYXJhY3RlclN0YXRlEgkKBUlkbGUxEAASCwoHV2Fsa2lu",
+            "ZxABEg4KClR1cm5Bcm91bmQQAhIKCgZBdGtlZDEQAxIUChBJbkFpcklkbGUx",
+            "Tm9KdW1wEAQSFAoQSW5BaXJJZGxlMUJ5SnVtcBAFEhgKFEluQWlySWRsZTFC",
+            "eVdhbGxKdW1wEAYSDwoLSW5BaXJBdGtlZDEQBxIMCghCbG93blVwMRAIEgwK",
+            "CExheURvd24xEAkSCgoGR2V0VXAxEAoSCQoFRHlpbmcQCxILCgdEYXNoaW5n",
+            "EAwSCgoGT25XYWxsEA0SDgoJSW5BaXJBdGsxEIAIEgkKBEF0azEQgQgSCQoE",
+            "QXRrMhCCCBIJCgRBdGszEIMIEgkKBEF0azQQhAgSCQoEQXRrNRCFCCo3CgpC",
+            "dWxsZXRUeXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmly",
+            "ZWJhbGwQAiozChBTa2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIP",
+            "CgtGYWxsaW5nRWRnZRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -138,9 +141,9 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDownsync), global::shared.InputFrameDownsync.Parser, new[]{ "InputFrameId", "InputList", "ConfirmedList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsReq), global::shared.WsReq.Parser, new[]{ "PlayerId", "Act", "JoinIndex", "AckingFrameId", "AckingInputFrameId", "AuthKey", "InputFrameUpsyncBatch" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputBufferSnapshot), global::shared.InputBufferSnapshot.Parser, new[]{ "RefRenderFrameId", "UnconfirmedMask", "ToSendInputFrameDownsyncs", "ShouldForceResync", "PeerJoinIndex" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.PatrolCue), global::shared.PatrolCue.Parser, new[]{ "FlAct", "FrAct", "FlCaptureFrames", "FrCaptureFrames" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.PatrolCue), global::shared.PatrolCue.Parser, new[]{ "FlAct", "FrAct", "FlCaptureFrames", "FrCaptureFrames", "FdAct", "FuAct", "FdCaptureFrames", "FuCaptureFrames", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.VisionBox), global::shared.VisionBox.Parser, new[]{ "BottomLeftX", "BottomLeftY", "Width", "Height" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "Speed", "CancelTransit" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "Speed", "CancelTransit", "CollisionTypeMask" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
@@ -3441,6 +3444,11 @@ namespace shared {
       frAct_ = other.frAct_;
       flCaptureFrames_ = other.flCaptureFrames_;
       frCaptureFrames_ = other.frCaptureFrames_;
+      fdAct_ = other.fdAct_;
+      fuAct_ = other.fuAct_;
+      fdCaptureFrames_ = other.fdCaptureFrames_;
+      fuCaptureFrames_ = other.fuCaptureFrames_;
+      collisionTypeMask_ = other.collisionTypeMask_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3454,7 +3462,7 @@ namespace shared {
     public const int FlActFieldNumber = 1;
     private ulong flAct_;
     /// <summary>
-    /// "input when colliding from the left"
+    /// "input when colliding from the left side"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3469,7 +3477,7 @@ namespace shared {
     public const int FrActFieldNumber = 2;
     private ulong frAct_;
     /// <summary>
-    /// "input when colliding from the right"
+    /// "input when colliding from the right side"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3504,6 +3512,72 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "fdAct" field.</summary>
+    public const int FdActFieldNumber = 5;
+    private ulong fdAct_;
+    /// <summary>
+    /// "input when colliding from the down side"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong FdAct {
+      get { return fdAct_; }
+      set {
+        fdAct_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "fuAct" field.</summary>
+    public const int FuActFieldNumber = 6;
+    private ulong fuAct_;
+    /// <summary>
+    /// "input when colliding from the up side"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong FuAct {
+      get { return fuAct_; }
+      set {
+        fuAct_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "fdCaptureFrames" field.</summary>
+    public const int FdCaptureFramesFieldNumber = 7;
+    private ulong fdCaptureFrames_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong FdCaptureFrames {
+      get { return fdCaptureFrames_; }
+      set {
+        fdCaptureFrames_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "fuCaptureFrames" field.</summary>
+    public const int FuCaptureFramesFieldNumber = 8;
+    private ulong fuCaptureFrames_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong FuCaptureFrames {
+      get { return fuCaptureFrames_; }
+      set {
+        fuCaptureFrames_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "collisionTypeMask" field.</summary>
+    public const int CollisionTypeMaskFieldNumber = 1029;
+    private ulong collisionTypeMask_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong CollisionTypeMask {
+      get { return collisionTypeMask_; }
+      set {
+        collisionTypeMask_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -3523,6 +3597,11 @@ namespace shared {
       if (FrAct != other.FrAct) return false;
       if (FlCaptureFrames != other.FlCaptureFrames) return false;
       if (FrCaptureFrames != other.FrCaptureFrames) return false;
+      if (FdAct != other.FdAct) return false;
+      if (FuAct != other.FuAct) return false;
+      if (FdCaptureFrames != other.FdCaptureFrames) return false;
+      if (FuCaptureFrames != other.FuCaptureFrames) return false;
+      if (CollisionTypeMask != other.CollisionTypeMask) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3534,6 +3613,11 @@ namespace shared {
       if (FrAct != 0UL) hash ^= FrAct.GetHashCode();
       if (FlCaptureFrames != 0UL) hash ^= FlCaptureFrames.GetHashCode();
       if (FrCaptureFrames != 0UL) hash ^= FrCaptureFrames.GetHashCode();
+      if (FdAct != 0UL) hash ^= FdAct.GetHashCode();
+      if (FuAct != 0UL) hash ^= FuAct.GetHashCode();
+      if (FdCaptureFrames != 0UL) hash ^= FdCaptureFrames.GetHashCode();
+      if (FuCaptureFrames != 0UL) hash ^= FuCaptureFrames.GetHashCode();
+      if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3568,6 +3652,26 @@ namespace shared {
         output.WriteRawTag(32);
         output.WriteUInt64(FrCaptureFrames);
       }
+      if (FdAct != 0UL) {
+        output.WriteRawTag(40);
+        output.WriteUInt64(FdAct);
+      }
+      if (FuAct != 0UL) {
+        output.WriteRawTag(48);
+        output.WriteUInt64(FuAct);
+      }
+      if (FdCaptureFrames != 0UL) {
+        output.WriteRawTag(56);
+        output.WriteUInt64(FdCaptureFrames);
+      }
+      if (FuCaptureFrames != 0UL) {
+        output.WriteRawTag(64);
+        output.WriteUInt64(FuCaptureFrames);
+      }
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3594,6 +3698,26 @@ namespace shared {
         output.WriteRawTag(32);
         output.WriteUInt64(FrCaptureFrames);
       }
+      if (FdAct != 0UL) {
+        output.WriteRawTag(40);
+        output.WriteUInt64(FdAct);
+      }
+      if (FuAct != 0UL) {
+        output.WriteRawTag(48);
+        output.WriteUInt64(FuAct);
+      }
+      if (FdCaptureFrames != 0UL) {
+        output.WriteRawTag(56);
+        output.WriteUInt64(FdCaptureFrames);
+      }
+      if (FuCaptureFrames != 0UL) {
+        output.WriteRawTag(64);
+        output.WriteUInt64(FuCaptureFrames);
+      }
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3615,6 +3739,21 @@ namespace shared {
       }
       if (FrCaptureFrames != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FrCaptureFrames);
+      }
+      if (FdAct != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FdAct);
+      }
+      if (FuAct != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FuAct);
+      }
+      if (FdCaptureFrames != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FdCaptureFrames);
+      }
+      if (FuCaptureFrames != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(FuCaptureFrames);
+      }
+      if (CollisionTypeMask != 0UL) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CollisionTypeMask);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3639,6 +3778,21 @@ namespace shared {
       }
       if (other.FrCaptureFrames != 0UL) {
         FrCaptureFrames = other.FrCaptureFrames;
+      }
+      if (other.FdAct != 0UL) {
+        FdAct = other.FdAct;
+      }
+      if (other.FuAct != 0UL) {
+        FuAct = other.FuAct;
+      }
+      if (other.FdCaptureFrames != 0UL) {
+        FdCaptureFrames = other.FdCaptureFrames;
+      }
+      if (other.FuCaptureFrames != 0UL) {
+        FuCaptureFrames = other.FuCaptureFrames;
+      }
+      if (other.CollisionTypeMask != 0UL) {
+        CollisionTypeMask = other.CollisionTypeMask;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3671,6 +3825,26 @@ namespace shared {
             FrCaptureFrames = input.ReadUInt64();
             break;
           }
+          case 40: {
+            FdAct = input.ReadUInt64();
+            break;
+          }
+          case 48: {
+            FuAct = input.ReadUInt64();
+            break;
+          }
+          case 56: {
+            FdCaptureFrames = input.ReadUInt64();
+            break;
+          }
+          case 64: {
+            FuCaptureFrames = input.ReadUInt64();
+            break;
+          }
+          case 8232: {
+            CollisionTypeMask = input.ReadUInt64();
+            break;
+          }
         }
       }
     #endif
@@ -3700,6 +3874,26 @@ namespace shared {
           }
           case 32: {
             FrCaptureFrames = input.ReadUInt64();
+            break;
+          }
+          case 40: {
+            FdAct = input.ReadUInt64();
+            break;
+          }
+          case 48: {
+            FuAct = input.ReadUInt64();
+            break;
+          }
+          case 56: {
+            FdCaptureFrames = input.ReadUInt64();
+            break;
+          }
+          case 64: {
+            FuCaptureFrames = input.ReadUInt64();
+            break;
+          }
+          case 8232: {
+            CollisionTypeMask = input.ReadUInt64();
             break;
           }
         }
@@ -4067,6 +4261,7 @@ namespace shared {
       bType_ = other.bType_;
       speed_ = other.speed_;
       cancelTransit_ = other.cancelTransit_.Clone();
+      collisionTypeMask_ = other.collisionTypeMask_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -4336,6 +4531,18 @@ namespace shared {
       get { return cancelTransit_; }
     }
 
+    /// <summary>Field number for the "collisionTypeMask" field.</summary>
+    public const int CollisionTypeMaskFieldNumber = 1029;
+    private ulong collisionTypeMask_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong CollisionTypeMask {
+      get { return collisionTypeMask_; }
+      set {
+        collisionTypeMask_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -4372,6 +4579,7 @@ namespace shared {
       if (BType != other.BType) return false;
       if (Speed != other.Speed) return false;
       if (!CancelTransit.Equals(other.CancelTransit)) return false;
+      if (CollisionTypeMask != other.CollisionTypeMask) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -4400,6 +4608,7 @@ namespace shared {
       if (BType != global::shared.BulletType.Undetermined) hash ^= BType.GetHashCode();
       if (Speed != 0) hash ^= Speed.GetHashCode();
       hash ^= CancelTransit.GetHashCode();
+      if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4499,6 +4708,10 @@ namespace shared {
         output.WriteInt32(Speed);
       }
       cancelTransit_.WriteTo(output, _map_cancelTransit_codec);
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -4590,6 +4803,10 @@ namespace shared {
         output.WriteInt32(Speed);
       }
       cancelTransit_.WriteTo(ref output, _map_cancelTransit_codec);
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -4661,6 +4878,9 @@ namespace shared {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(Speed);
       }
       size += cancelTransit_.CalculateSize(_map_cancelTransit_codec);
+      if (CollisionTypeMask != 0UL) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CollisionTypeMask);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -4734,6 +4954,9 @@ namespace shared {
         Speed = other.Speed;
       }
       cancelTransit_.Add(other.cancelTransit_);
+      if (other.CollisionTypeMask != 0UL) {
+        CollisionTypeMask = other.CollisionTypeMask;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -4833,6 +5056,10 @@ namespace shared {
             cancelTransit_.AddEntriesFrom(input, _map_cancelTransit_codec);
             break;
           }
+          case 8232: {
+            CollisionTypeMask = input.ReadUInt64();
+            break;
+          }
         }
       }
     #endif
@@ -4930,6 +5157,10 @@ namespace shared {
           }
           case 170: {
             cancelTransit_.AddEntriesFrom(ref input, _map_cancelTransit_codec);
+            break;
+          }
+          case 8232: {
+            CollisionTypeMask = input.ReadUInt64();
             break;
           }
         }

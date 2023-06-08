@@ -51,18 +51,55 @@ namespace shared {
 
         public static float MAX_FLOAT32 = float.MaxValue;
         public static int MAX_INT = 999999999;
-        public static int COLLISION_PLAYER_INDEX_PREFIX = (1 << 17);
-        public static int COLLISION_BARRIER_INDEX_PREFIX = (1 << 16);
-        public static int COLLISION_BULLET_INDEX_PREFIX = (1 << 15);
         public static int PATTERN_ID_UNABLE_TO_OP = -2;
         public static int PATTERN_ID_NO_OP = -1;
+
+        public static ulong COLLISION_BARRIER_INDEX_PREFIX = (1 << 0);
+        public static ulong COLLISION_CHARACTER_INDEX_PREFIX = (1 << 1);
+        public static ulong COLLISION_TRAP_INDEX_PREFIX = (1 << 2);
+        public static ulong COLLISION_PICKABLE_INDEX_PREFIX = (1 << 3);
+
+        public static ulong COLLISION_MELEE_BULLET_INDEX_PREFIX = (1 << 4);
+        public static ulong COLLISION_B_M_FIREBALL_INDEX_PREFIX = (1 << 5); // type of fireball that collides with both barrier and melee (and of course characters and traps)
+        public static ulong COLLISION_B_FIREBALL_INDEX_PREFIX = (1 << 6); // type of fireball that collides with barrier but not melee
+        public static ulong COLLISION_M_FIREBALL_INDEX_PREFIX = (1 << 7); // type of fireball that collides with melee but not barrier
+        public static ulong COLLISION_FIREBALL_INDEX_PREFIX = (1 << 8); // type of fireball that doesn't collide with barrier or melee
+
+        public static HashSet<ulong> COLLIDABLE_PAIRS = new HashSet<ulong>() {
+            COLLISION_CHARACTER_INDEX_PREFIX, // such that characters collider with each other
+            COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
+            COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
+            COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_PICKABLE_INDEX_PREFIX,
+
+            // Melee bullet, it wouldn't collide with barrier, specifically 
+            COLLISION_MELEE_BULLET_INDEX_PREFIX | COLLISION_CHARACTER_INDEX_PREFIX,
+            COLLISION_MELEE_BULLET_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
+
+            // Fireball bullets
+            COLLISION_FIREBALL_INDEX_PREFIX | COLLISION_CHARACTER_INDEX_PREFIX,
+            COLLISION_FIREBALL_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
+
+            COLLISION_B_FIREBALL_INDEX_PREFIX | COLLISION_CHARACTER_INDEX_PREFIX,
+            COLLISION_B_FIREBALL_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
+            COLLISION_B_FIREBALL_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
+
+            COLLISION_M_FIREBALL_INDEX_PREFIX | COLLISION_CHARACTER_INDEX_PREFIX,
+            COLLISION_M_FIREBALL_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
+            COLLISION_M_FIREBALL_INDEX_PREFIX | COLLISION_MELEE_BULLET_INDEX_PREFIX,
+
+            COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_CHARACTER_INDEX_PREFIX,
+            COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
+            COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_MELEE_BULLET_INDEX_PREFIX,
+            COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX
+        };
 
         public static float COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO = 10.0f;
         public static float VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO = 1.0f / COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO;
 
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
-        public static int DEFAULT_PREALLOC_AI_PLAYER_CAPACITY = 8;
+        public static int DEFAULT_PREALLOC_NPC_CAPACITY = 8;
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
+        public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 8;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
@@ -181,7 +218,8 @@ namespace shared {
                             SpeciesId = 2,
                             ExplosionFrames = 15,
                             BType = BulletType.Melee,
-                            Speed = 0
+                            Speed = 0,
+                            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                         }.UpsertCancelTransit(1, 2)
                     )),
 
@@ -214,7 +252,8 @@ namespace shared {
                                 SpeciesId = 2,
                                 ExplosionFrames = 15,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }.UpsertCancelTransit(1, 3)
                         )),
 
@@ -247,7 +286,8 @@ namespace shared {
                                 SpeciesId = 2,
                                 ExplosionFrames = 15,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
 
@@ -280,7 +320,8 @@ namespace shared {
                                 SpeciesId = 3,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
-                                Speed = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                                Speed = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
                             }
                         )),
 
@@ -313,7 +354,8 @@ namespace shared {
                                 SpeciesId = 2,
                                 ExplosionFrames = 15,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
 
@@ -346,7 +388,8 @@ namespace shared {
                                 SpeciesId = 1,
                                 ExplosionFrames = 15,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }.UpsertCancelTransit(1, 7)
                         )),
 
@@ -379,7 +422,8 @@ namespace shared {
                                 SpeciesId = 1,
                                 ExplosionFrames = 15,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
 
@@ -412,7 +456,8 @@ namespace shared {
                                 SpeciesId = 1,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
 
@@ -445,7 +490,8 @@ namespace shared {
                                 SpeciesId = 2,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
-                                Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                                Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
                             }
                         )),
 
@@ -478,7 +524,8 @@ namespace shared {
                                 SpeciesId = 0,
                                 ExplosionFrames = 0,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0, 
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
 
@@ -511,7 +558,8 @@ namespace shared {
                                 SpeciesId = 0,
                                 ExplosionFrames = 0,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
 
@@ -544,7 +592,8 @@ namespace shared {
                                 SpeciesId = 2,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
 
@@ -577,7 +626,8 @@ namespace shared {
                                 SpeciesId = 4,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Fireball,
-                                Speed = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                                Speed = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX
                             }
                         )),
 
@@ -610,7 +660,8 @@ namespace shared {
                                 SpeciesId = 2,
                                 ExplosionFrames = 15,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
 
@@ -643,7 +694,8 @@ namespace shared {
                                 SpeciesId = 1,
                                 ExplosionFrames = 15,
                                 BType = BulletType.Melee,
-                                Speed = 0
+                                Speed = 0,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         ))
                 }
@@ -682,7 +734,8 @@ namespace shared {
                         LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(62.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 1
+                        MpRegenRate = 1,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
@@ -709,7 +762,8 @@ namespace shared {
                         LayDownSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 1
+                        MpRegenRate = 1,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
@@ -742,7 +796,8 @@ namespace shared {
                         LayDownSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(28f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(46f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 1
+                        MpRegenRate = 1,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(3, new CharacterConfig {
@@ -769,7 +824,48 @@ namespace shared {
                         LayDownSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 1
+                        MpRegenRate = 1,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
+                    }),
+
+                    new KeyValuePair<int, CharacterConfig>(2048, new CharacterConfig {
+                        SpeciesId = 2048,
+                        SpeciesName = "MovablePlatform",
+                        OmitPushback = true,
+                        OmitGravity = true,
+                        Speed = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(88.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        CollisionTypeMask = COLLISION_TRAP_INDEX_PREFIX
+                    }),
+
+                    new KeyValuePair<int, CharacterConfig>(4096, new CharacterConfig {
+                        SpeciesId = 4096,
+                        SpeciesName = "BullWarrior",
+                        OmitPushback = true,
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 27,
+                        Speed = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 9,
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(130.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(88.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(88.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(88.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
                     }),
             });
 

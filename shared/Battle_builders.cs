@@ -53,7 +53,7 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, bool jumpTriggered, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, bool jumpTriggered, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -91,6 +91,8 @@ namespace shared {
 
             dst.Mp = mp;
             dst.MaxMp = maxMp;
+
+            dst.CollisionTypeMask = collisionMask;
         }
 
         public static Bullet NewBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState) {
@@ -130,7 +132,7 @@ namespace shared {
             dst.VelY = velY;
         }
 
-        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocAiPlayerCount, int preallocBulletCount) {
+        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
             ret.BulletLocalIdCounter = 0;
@@ -138,13 +140,23 @@ namespace shared {
             for (int i = 0; i < roomCapacity; i++) {
                 var single = new CharacterDownsync();
                 single.Id = TERMINATING_PLAYER_ID;
+                single.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
                 ret.PlayersArr.Add(single);
             }
 
-            for (int i = 0; i < preallocAiPlayerCount; i++) {
+            for (int i = 0; i < preallocNpcCount; i++) {
                 var single = new CharacterDownsync();
                 single.Id = TERMINATING_PLAYER_ID;
+                single.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
                 ret.NpcsArr.Add(single);
+            }
+
+            for (int i = 0; i < preallocateTrapCount; i++) {
+                var single = new CharacterDownsync();
+                single.Id = TERMINATING_PLAYER_ID;
+                single.CollisionTypeMask = COLLISION_TRAP_INDEX_PREFIX;
+                single.OmitGravity = true;
+                ret.TrapsArr.Add(single);
             }
 
             for (int i = 0; i < preallocBulletCount; i++) {

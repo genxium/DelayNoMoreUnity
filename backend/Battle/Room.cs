@@ -11,7 +11,7 @@ public class Room {
 
     public int id;
     public int capacity;
-    public int preallocNpcCapacity = DEFAULT_PREALLOC_AI_PLAYER_CAPACITY;
+    public int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
     public int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     public int battleDurationFrames;
     public int estimatedMillisPerFrame;

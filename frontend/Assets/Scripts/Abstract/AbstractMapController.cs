@@ -11,8 +11,10 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
     protected int battleDurationFrames;
 
-    protected int preallocAiPlayerCapacity = DEFAULT_PREALLOC_AI_PLAYER_CAPACITY;
+    protected int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
     protected int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
+    protected int preallocTrapCapacity = DEFAULT_PREALLOC_TRAP_CAPACITY;
+
     protected int renderFrameId; // After battle started
     protected int renderFrameIdLagTolerance;
     protected int lastAllConfirmedInputFrameId;
@@ -398,15 +400,15 @@ public abstract class AbstractMapController : MonoBehaviour {
             throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
         }
 
-        if (0 >= preallocAiPlayerCapacity) {
-            throw new ArgumentException(String.Format("preallocAiPlayerCapacity={0} is non-positive, please initialize it first!", preallocAiPlayerCapacity));
+        if (0 >= preallocNpcCapacity) {
+            throw new ArgumentException(String.Format("preallocAiPlayerCapacity={0} is non-positive, please initialize it first!", preallocNpcCapacity));
         }
-        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity));
+        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
         renderBufferSize = 1024;
 
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity));
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
 
@@ -426,11 +428,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         prefabbedInputListHolder = new ulong[roomCapacity];
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
-        effPushbacks = new Vector[roomCapacity + preallocAiPlayerCapacity];
+        effPushbacks = new Vector[roomCapacity + preallocNpcCapacity];
         for (int i = 0; i < effPushbacks.Length; i++) {
             effPushbacks[i] = new Vector(0, 0);
         }
-        hardPushbackNormsArr = new Vector[roomCapacity + preallocAiPlayerCapacity][];
+        hardPushbackNormsArr = new Vector[roomCapacity + preallocNpcCapacity][];
         for (int i = 0; i < hardPushbackNormsArr.Length; i++) {
             int cap = 5;
             hardPushbackNormsArr[i] = new Vector[cap];
@@ -695,10 +697,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected RoomDownsyncFrame mockStartRdf(int[] speciesIdList) {
-        var playerStartingCposList = new Vector[roomCapacity];
         var grid = underlyingMap.GetComponentInChildren<Grid>();
-
-        var npcsStartingCposList = new List<(Vector, int, int, int)>();
+        var playerStartingCposList = new List<(Vector, int)>();
+        var npcsStartingCposList = new List<(Vector, int, int, int, int)>();
         float defaultPatrolCueRadius = 10;
         int staticColliderIdx = 0;
         foreach (Transform child in grid.transform) {
@@ -747,8 +748,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                     int j = 0;
                     foreach (Transform playerPos in child) {
                         var posTileObj = playerPos.gameObject.GetComponent<SuperObject>();
+                        var tileProps = playerPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
+                        CustomProperty teamId;
+                        tileProps.TryGetCustomProperty("teamId", out teamId);
+
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        playerStartingCposList[j] = new Vector(cx, cy);
+                        
+                        playerStartingCposList.Add((
+                            new Vector(cx, cy),
+                            null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt()
+                        ));
                         //Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
                         j++;
                         if (j >= roomCapacity) break;
@@ -759,13 +768,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
                         var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        CustomProperty dirX, speciesId, teamId;
+                        CustomProperty dirX, dirY, speciesId, teamId;
                         tileProps.TryGetCustomProperty("dirX", out dirX);
+                        tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("teamId", out teamId);
                         npcsStartingCposList.Add((
                                                     new Vector(cx, cy),
-                                                    null == dirX || dirX.IsEmpty ? 2 : dirX.GetValueAsInt(),
+                                                    null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt(),
+                                                    null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt(),
                                                     null == speciesId || speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt(),
                                                     null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt()
                         ));
@@ -778,17 +789,26 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
 
-                        CustomProperty flAct, frAct, flCaptureFrames, frCaptureFrames;
+                        CustomProperty flAct, frAct, flCaptureFrames, frCaptureFrames, fdAct, fuAct, fdCaptureFrames, fuCaptureFrames;
                         tileProps.TryGetCustomProperty("flAct", out flAct);
                         tileProps.TryGetCustomProperty("frAct", out frAct);
                         tileProps.TryGetCustomProperty("flCaptureFrames", out flCaptureFrames);
                         tileProps.TryGetCustomProperty("frCaptureFrames", out frCaptureFrames);
+                        tileProps.TryGetCustomProperty("fdAct", out fdAct);
+                        tileProps.TryGetCustomProperty("fuAct", out fuAct);
+                        tileProps.TryGetCustomProperty("fdCaptureFrames", out fdCaptureFrames);
+                        tileProps.TryGetCustomProperty("fuCaptureFrames", out fuCaptureFrames);
 
                         var newPatrolCue = new PatrolCue {
                             FlAct = (null == flAct || flAct.IsEmpty) ? 0 : (ulong)flAct.GetValueAsInt(),
                             FrAct = (null == frAct || frAct.IsEmpty) ? 0 : (ulong)frAct.GetValueAsInt(),
                             FlCaptureFrames = (null == flCaptureFrames || flCaptureFrames.IsEmpty) ? 0 : (ulong)flCaptureFrames.GetValueAsInt(),
-                            FrCaptureFrames = (null == frCaptureFrames || frCaptureFrames.IsEmpty) ? 0 : (ulong)frCaptureFrames.GetValueAsInt()
+                            FrCaptureFrames = (null == frCaptureFrames || frCaptureFrames.IsEmpty) ? 0 : (ulong)frCaptureFrames.GetValueAsInt(), 
+
+                            FdAct = (null == fdAct || fdAct.IsEmpty) ? 0 : (ulong)fdAct.GetValueAsInt(),
+                            FuAct = (null == fuAct || fuAct.IsEmpty) ? 0 : (ulong)fuAct.GetValueAsInt(),
+                            FdCaptureFrames = (null == fdCaptureFrames || fdCaptureFrames.IsEmpty) ? 0 : (ulong)fdCaptureFrames.GetValueAsInt(),
+                            FuCaptureFrames = (null == fuCaptureFrames || fuCaptureFrames.IsEmpty) ? 0 : (ulong)fuCaptureFrames.GetValueAsInt()
                         };
 
                         var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
@@ -802,19 +822,19 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocAiPlayerCapacity, preallocBulletCapacity);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity);
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;
         startRdf.ShouldForceResync = false;
         for (int i = 0; i < roomCapacity; i++) {
             int joinIndex = i + 1;
-            var cpos = playerStartingCposList[i];
+            var (cpos, teamId) = playerStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
-
+            teamId = (DEFAULT_BULLET_TEAM_ID == teamId ? joinIndex : teamId);
             var playerInRdf = startRdf.PlayersArr[i];
             playerInRdf.SpeciesId = speciesIdList[i];
             playerInRdf.JoinIndex = joinIndex;
-            playerInRdf.BulletTeamId = joinIndex;
-            playerInRdf.ChCollisionTeamId = joinIndex;
+            playerInRdf.BulletTeamId = teamId;
+            playerInRdf.ChCollisionTeamId = teamId; // If we want to stand on certain teammates' shoulder, then this value should be tuned accordingly. 
             var chConfig = Battle.characters[playerInRdf.SpeciesId];
             spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
             var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
@@ -835,11 +855,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.MaxHp = 100;
             playerInRdf.Mp = 1000;
             playerInRdf.MaxMp = 1000;
+            playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
         }
 
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var (cpos, dirX, characterSpeciesId, teamId) = npcsStartingCposList[i];
+            var (cpos, dirX, dirY, characterSpeciesId, teamId) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             spawnNpcNode(characterSpeciesId, wx, wy, teamId);
 
@@ -857,7 +878,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
             npcInRdf.FramesToRecover = 0;
             npcInRdf.DirX = dirX;
-            npcInRdf.DirY = 0;
+            npcInRdf.DirY = dirY;
             npcInRdf.VelX = 0;
             npcInRdf.VelY = 0;
             npcInRdf.InAir = true;
@@ -869,6 +890,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.SpeciesId = characterSpeciesId;
             npcInRdf.BulletTeamId = teamId;
             npcInRdf.ChCollisionTeamId = teamId;
+            npcInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
             startRdf.NpcsArr[i] = npcInRdf;
         }
 

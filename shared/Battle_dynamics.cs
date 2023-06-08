@@ -7,7 +7,6 @@ using Google.Protobuf.Collections;
 
 namespace shared {
     public partial class Battle {
-
         public static bool ShouldGenerateInputFrameUpsync(int renderFrameId) {
             return ((renderFrameId & ((1 << INPUT_SCALE_FRAMES) - 1)) == 0);
         }
@@ -191,7 +190,7 @@ namespace shared {
             bool hasVisionReaction = false;
             var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
             if (!currCharacterDownsync.InAir) {
-                // TODO: InAir vision reaction yet.
+                // TODO: There's no InAir vision reaction yet.
                 float visionCx, visionCy, visionCw, visionCh;
                 calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
 
@@ -214,6 +213,9 @@ namespace shared {
                         }
                         switch (bCollider.Data) {
                             case CharacterDownsync v3:
+                                if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
+                                    break;
+                                }
                                 if (v3.JoinIndex != currCharacterDownsync.JoinIndex && v3.BulletTeamId != currCharacterDownsync.BulletTeamId) {
                                     bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
                                     if (!prevCapturedByInertia) {
@@ -228,7 +230,7 @@ namespace shared {
                                             // Opponent is attackable and in front of me
                                             switch (currCharacterDownsync.SpeciesId) {
                                                 case 1:
-                                                    if (0.2f*aCollider.H < colliderDy) {
+                                                    if (0.2f * aCollider.H < colliderDy) {
                                                         // In air
                                                         patternId = 2;
                                                     } else {
@@ -287,7 +289,10 @@ namespace shared {
                 collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
             }
 
-            if (!hasVisionReaction) {
+            if (hasVisionReaction) {
+                thatCharacterInNextFrame.CapturedByPatrolCue = false;
+                thatCharacterInNextFrame.FramesInPatrolCue = 0;
+            } else if (0 >= currCharacterDownsync.FramesInPatrolCue) {
                 bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
                 if (collided) {
                     ConvexPolygon aShape = aCollider.Shape;
@@ -298,33 +303,51 @@ namespace shared {
                         }
 
                         ConvexPolygon bShape = bCollider.Shape;
-                        var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false,ref overlapResult);
+                        var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
                         if (!overlapped) {
                             continue;
                         }
                         switch (bCollider.Data) {
                             case PatrolCue v3:
+                                if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
+                                    break;
+                                }
                                 var colliderDx = (aCollider.X - bCollider.X);
                                 if (0 < colliderDx && (0 > currCharacterDownsync.VelX || 0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX)) {
-                                    DecodeInput(v3.FrAct, decodedInputHolder);
-                                    effectiveDx = decodedInputHolder.Dx;
-                                    effectiveDy = decodedInputHolder.Dy;
-                                    jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
-                                    //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                                    bool prevCapturedByPatrolCue = currCharacterDownsync.CapturedByPatrolCue;
+                                    if (!prevCapturedByPatrolCue) {
+                                        thatCharacterInNextFrame.CapturedByPatrolCue = true;
+                                        thatCharacterInNextFrame.FramesInPatrolCue = (int)v3.FrCaptureFrames;
+                                    } else {
+                                        thatCharacterInNextFrame.CapturedByPatrolCue = false;
+                                        DecodeInput(v3.FrAct, decodedInputHolder);
+                                        effectiveDx = decodedInputHolder.Dx;
+                                        effectiveDy = decodedInputHolder.Dy;
+                                        jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
+                                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                                    }
                                 } else if (0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX))) {
-                                    DecodeInput(v3.FlAct, decodedInputHolder);
-                                    effectiveDx = decodedInputHolder.Dx;
-                                    effectiveDy = decodedInputHolder.Dy;
-                                    jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
-                                    //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                                    bool prevCapturedByPatrolCue = currCharacterDownsync.CapturedByPatrolCue;
+                                    if (!prevCapturedByPatrolCue) {
+                                        thatCharacterInNextFrame.CapturedByPatrolCue = true;
+                                        thatCharacterInNextFrame.FramesInPatrolCue = (int)v3.FlCaptureFrames;
+                                    } else {
+                                        thatCharacterInNextFrame.CapturedByPatrolCue = false;
+                                        DecodeInput(v3.FlAct, decodedInputHolder);
+                                        effectiveDx = decodedInputHolder.Dx;
+                                        effectiveDy = decodedInputHolder.Dy;
+                                        jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
+                                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3));
+                                    }
                                 }
-
                                 break;
                             default:
                                 break;
                         }
                     }
                 }
+            } else {
+                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
             }
 
             return (patternId, jumpedOrNot, effectiveDx, effectiveDy);
@@ -388,7 +411,7 @@ namespace shared {
         }
 
         private static void _applyGravity(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
-            if (currCharacterDownsync.InAir) {
+            if (currCharacterDownsync.InAir && false == currCharacterDownsync.OmitGravity) {
                 // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
                 if (!currCharacterDownsync.JumpTriggered && OnWall == currCharacterDownsync.CharacterState) {
                     thatCharacterInNextFrame.VelX += GRAVITY_X;
@@ -675,9 +698,13 @@ namespace shared {
                         if (false == ok3 || null == bCollider) {
                             break;
                         }
-                        bool isBarrier = false, isAnotherCharacter = false, isBullet = false, isPatrolCue = false;
+                        bool maskMatched = true, isBarrier = false, isAnotherCharacter = false, isBullet = false, isPatrolCue = false;
                         switch (bCollider.Data) {
                             case CharacterDownsync v1:
+                                if (!COLLIDABLE_PAIRS.Contains(v1.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
+                                    maskMatched = false;
+                                    break;
+                                }
                                 if (Dying == v1.CharacterState) {
                                     // ignore collision with dying player
                                     continue;
@@ -689,15 +716,26 @@ namespace shared {
                                 isAnotherCharacter = true;
                                 break;
                             case Bullet v2:
+                                if (!COLLIDABLE_PAIRS.Contains(v2.Config.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
+                                    maskMatched = false;
+                                    break;
+                                }
                                 isBullet = true;
                                 break;
                             case PatrolCue v3:
+                                if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
+                                    maskMatched = false;
+                                    break;
+                                }
                                 isPatrolCue = true;
                                 break;
                             default:
                                 // By default it's a regular barrier, even if data is nil
                                 isBarrier = true;
                                 break;
+                        }
+                        if (false == maskMatched) {
+                            continue;
                         }
                         if (isBullet || isPatrolCue) {
                             // ignore bullets for this step
@@ -878,7 +916,16 @@ namespace shared {
                                 }
                             }
                             break;
+                        case Bullet v4:
+                            if (!COLLIDABLE_PAIRS.Contains(bullet.Config.CollisionTypeMask | v4.Config.CollisionTypeMask)) {
+                                break;
+                            }
+                            exploded = true;
+                            break;
                         default:
+                            if (!COLLIDABLE_PAIRS.Contains(bullet.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
+                                break;
+                            }
                             exploded = true;
                             break;
                     }
@@ -1010,7 +1057,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, nextRenderFramePlayers[i]);
             }
 
             int j = 0;
@@ -1034,7 +1081,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, nextRenderFrameNpcs[j]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, nextRenderFrameNpcs[j]);
                 j++;
             }
 
@@ -1206,7 +1253,7 @@ namespace shared {
         }
 
         public static void calcCharacterBoundingBoxInCollisionSpace(CharacterDownsync characterDownsync, CharacterConfig chConfig, int newVx, int newVy, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
-            
+
             (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(newVx, newVy);
 
             switch (characterDownsync.CharacterState) {
