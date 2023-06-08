@@ -292,7 +292,8 @@ namespace shared {
             if (hasVisionReaction) {
                 thatCharacterInNextFrame.CapturedByPatrolCue = false;
                 thatCharacterInNextFrame.FramesInPatrolCue = 0;
-            } else if (0 >= currCharacterDownsync.FramesInPatrolCue) {
+            } else {
+                // [WARNING] The field "CharacterDownsync.FramesInPatrolCue" would also be re-purposed as "patrol cue collision waiving frames" by the logic here.
                 bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
                 if (collided) {
                     ConvexPolygon aShape = aCollider.Shape;
@@ -312,42 +313,70 @@ namespace shared {
                                 if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
                                     break;
                                 }
-                                var colliderDx = (aCollider.X - bCollider.X);
-                                if (0 < colliderDx && (0 > currCharacterDownsync.VelX || 0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX)) {
-                                    bool prevCapturedByPatrolCue = currCharacterDownsync.CapturedByPatrolCue;
-                                    if (!prevCapturedByPatrolCue) {
-                                        thatCharacterInNextFrame.CapturedByPatrolCue = true;
-                                        thatCharacterInNextFrame.FramesInPatrolCue = (int)v3.FrCaptureFrames;
-                                    } else {
-                                        thatCharacterInNextFrame.CapturedByPatrolCue = false;
-                                        DecodeInput(v3.FrAct, decodedInputHolder);
-                                        effectiveDx = decodedInputHolder.Dx;
-                                        effectiveDy = decodedInputHolder.Dy;
-                                        jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
-                                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
-                                    }
-                                } else if (0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX))) {
-                                    bool prevCapturedByPatrolCue = currCharacterDownsync.CapturedByPatrolCue;
-                                    if (!prevCapturedByPatrolCue) {
-                                        thatCharacterInNextFrame.CapturedByPatrolCue = true;
-                                        thatCharacterInNextFrame.FramesInPatrolCue = (int)v3.FlCaptureFrames;
-                                    } else {
-                                        thatCharacterInNextFrame.CapturedByPatrolCue = false;
-                                        DecodeInput(v3.FlAct, decodedInputHolder);
-                                        effectiveDx = decodedInputHolder.Dx;
-                                        effectiveDy = decodedInputHolder.Dy;
-                                        jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
-                                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3));
-                                    }
+                                bool prevCapturedByPatrolCue = currCharacterDownsync.CapturedByPatrolCue;
+
+                                bool shouldWaivePatrolCueReaction = (false == prevCapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue && v3.Id == currCharacterDownsync.WaivingPatrolCueId);
+
+                                if (shouldWaivePatrolCueReaction) {
+                                    break;
                                 }
+
+                                bool isReallyCaptured = (prevCapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue);
+                                if (isReallyCaptured) {
+                                    effectiveDx = 0;
+                                    effectiveDy = 0;
+                                    jumpedOrNot = false;
+                                    break;
+                                }
+
+                                // By now we're sure that it should react to the PatrolCue
+                                var colliderDx = (aCollider.X - bCollider.X);
+                                var colliderDy = (aCollider.Y - bCollider.Y);
+                                bool fr = 0 < colliderDx && (0 > currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX));
+                                bool fl = 0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX));
+                                bool fu = 0 < colliderDy && (0 > currCharacterDownsync.VelY || (0 == currCharacterDownsync.VelY && 0 > currCharacterDownsync.DirY));
+                                bool fd = 0 > colliderDy && (0 < currCharacterDownsync.VelY || (0 == currCharacterDownsync.VelY && 0 < currCharacterDownsync.DirY));
+
+                                bool shouldEnterCapturedPeriod = (false == prevCapturedByPatrolCue && 0 == currCharacterDownsync.FramesInPatrolCue);
+                                if (shouldEnterCapturedPeriod) {
+                                    thatCharacterInNextFrame.CapturedByPatrolCue = true;
+                                    thatCharacterInNextFrame.FramesInPatrolCue = (int)v3.FrCaptureFrames;
+                                    thatCharacterInNextFrame.WaivingPatrolCueId = NO_PATROL_CUE_ID;
+                                    effectiveDx = 0;
+                                    effectiveDy = 0;
+                                    jumpedOrNot = false;
+                                    break;
+                                }
+
+                                thatCharacterInNextFrame.CapturedByPatrolCue = false;
+                                thatCharacterInNextFrame.FramesInPatrolCue = DEFAULT_PATROL_CUE_WAIVING_FRAMES; // re-purposed
+                                thatCharacterInNextFrame.WaivingPatrolCueId = v3.Id;
+
+                                if (fr) {
+                                    DecodeInput(v3.FrAct, decodedInputHolder);
+                                    //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                                } else if (fl) {
+                                    DecodeInput(v3.FlAct, decodedInputHolder);
+                                    //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3));
+                                } else if (fu) {
+                                    DecodeInput(v3.FuAct, decodedInputHolder);
+                                    //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the top", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                                } else if (fd) {
+                                    DecodeInput(v3.FdAct, decodedInputHolder);
+                                    //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the bottom", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                                } else {
+                                    logger.LogWarn(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3));
+                                }
+
+                                effectiveDx = decodedInputHolder.Dx;
+                                effectiveDy = decodedInputHolder.Dy;
+                                jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
                                 break;
                             default:
                                 break;
                         }
                     }
                 }
-            } else {
-                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
             }
 
             return (patternId, jumpedOrNot, effectiveDx, effectiveDy);

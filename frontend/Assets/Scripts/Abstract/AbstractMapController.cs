@@ -789,7 +789,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
 
-                        CustomProperty flAct, frAct, flCaptureFrames, frCaptureFrames, fdAct, fuAct, fdCaptureFrames, fuCaptureFrames;
+                        CustomProperty id, flAct, frAct, flCaptureFrames, frCaptureFrames, fdAct, fuAct, fdCaptureFrames, fuCaptureFrames;
+                        tileProps.TryGetCustomProperty("id", out id);
                         tileProps.TryGetCustomProperty("flAct", out flAct);
                         tileProps.TryGetCustomProperty("frAct", out frAct);
                         tileProps.TryGetCustomProperty("flCaptureFrames", out flCaptureFrames);
@@ -800,6 +801,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("fuCaptureFrames", out fuCaptureFrames);
 
                         var newPatrolCue = new PatrolCue {
+                            Id = (null == id || id.IsEmpty) ? NO_PATROL_CUE_ID : id.GetValueAsInt(),
                             FlAct = (null == flAct || flAct.IsEmpty) ? 0 : (ulong)flAct.GetValueAsInt(),
                             FrAct = (null == frAct || frAct.IsEmpty) ? 0 : (ulong)frAct.GetValueAsInt(),
                             FlCaptureFrames = (null == flCaptureFrames || flCaptureFrames.IsEmpty) ? 0 : (ulong)flCaptureFrames.GetValueAsInt(),

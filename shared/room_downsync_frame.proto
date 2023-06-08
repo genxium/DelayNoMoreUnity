@@ -77,6 +77,8 @@ message CharacterDownsync {
 
 	bool omitGravity = 31;
 	bool omitPushback = 32;
+
+	int32 waivingPatrolCueId = 33;
         
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
@@ -130,15 +132,16 @@ message InputBufferSnapshot {
 }
 
 message PatrolCue {
-    uint64 flAct = 1; // "input when colliding from the left side"
-    uint64 frAct = 2; // "input when colliding from the right side"
-	uint64 flCaptureFrames = 3;
-	uint64 frCaptureFrames = 4;
+	int32  id = 1;
+    uint64 flAct = 2; // "input when colliding from the left side"
+    uint64 frAct = 3; // "input when colliding from the right side"
+	uint64 flCaptureFrames = 4;
+	uint64 frCaptureFrames = 5;
 
-    uint64 fdAct = 5; // "input when colliding from the down side"
-    uint64 fuAct = 6; // "input when colliding from the up side"
-	uint64 fdCaptureFrames = 7;
-	uint64 fuCaptureFrames = 8;
+    uint64 fdAct = 6; // "input when colliding from the down side"
+    uint64 fuAct = 7; // "input when colliding from the up side"
+	uint64 fdCaptureFrames = 8;
+	uint64 fuCaptureFrames = 9;
 
 	uint64 collisionTypeMask = 1029;
 }

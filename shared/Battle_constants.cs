@@ -104,6 +104,8 @@ namespace shared {
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
         public static int INPUT_DELAY_FRAMES = 2; // in the count of render frames
+        public static int DEFAULT_PATROL_CUE_WAIVING_FRAMES = 180; // in the count of render frames
+        public static int NO_PATROL_CUE_ID = -1;
 
         /*
 		   [WARNING]
