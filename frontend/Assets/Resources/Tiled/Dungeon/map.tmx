@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="177">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="182">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -8,17 +8,17 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2DEOgkAQQNGNJPYWXkijvYfy3kaxMqAosrM6r3jNlvMHAtuVUjoAAAAAAACACg7cRHeI7L9KTv/c9M9N/9z0z03/3rqBFvrX7z8muov+dfrvRkR30b9O/+j5R9M/N/3bdtQ/Xf/zRPr/X/+p7b+1B/q35ZP+c/ZA//bM2YF3d0L/3tLfWa26zmDfQIuo/pnuAIfeD9mf/90T0b30X75/dJOo7vrrr38p27voRrW76//b/Yf+Vx7P9H/dn/gOkf1Pyemf25L9N42Lnn0rojvor7/++uuvPwAAAAAAAAAAABDrAlsM1Og=
+   eJzt2D0OgkAQgNGNJPYWXgijvYfy3kaxMqLI36zOK16z5XwDgW1KKQ0AAAAAAADACo7cRXeI7L9JTv/c9M9N/9z0z03/zraCFvqv33+M6Gb6z9e/7RHdRf91+kfPP5r+uelft5P+6fpfBtL///oPbT/XHuhflzH9p+yB/vWZsgPf7oT+naW/s2p1m8GhghZR/bPc8/W9V7I//+0b0b30X75/dJOo7vrrr38p+4foRmt31/+3+7/6X3k+0/9zf+I7RPY/J6d/bkv231Uueva1iO6gv/7666+//gAAAAAAAAAAAECsK4PI1r0=
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="135" x="695" y="321.333">
+  <object id="135" x="693" y="300.333">
    <properties>
     <property name="teamId" value="1"/>
    </properties>
    <point/>
   </object>
-  <object id="137" x="695.667" y="483.666">
+  <object id="137" x="695.667" y="465.666">
    <properties>
     <property name="teamId" value="1"/>
    </properties>
@@ -39,6 +39,7 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
@@ -200,7 +201,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="98" x="656" y="334" width="96" height="16">
+  <object id="98" x="656" y="336" width="208" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

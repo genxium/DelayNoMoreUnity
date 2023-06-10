@@ -201,7 +201,7 @@ namespace shared {
                     }
                     .AddHit(
                         new BulletConfig {
-                            StartupFrames = 6,
+                            StartupFrames = 3,
                             ActiveFrames = 22,
                             HitStunFrames = 22,
                             BlockStunFrames = 9,
@@ -218,7 +218,7 @@ namespace shared {
                             CancellableEdFrame = 30,
                             BlowUp = false,
                             SpeciesId = 2,
-                            ExplosionFrames = 15,
+                            ExplosionFrames = 25,
                             BType = BulletType.Melee,
                             Speed = 0,
                             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -252,7 +252,7 @@ namespace shared {
                                 CancellableEdFrame = 36,
                                 BlowUp = false,
                                 SpeciesId = 2,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 Speed = 0,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -286,7 +286,7 @@ namespace shared {
                                 CancellableEdFrame = 0,
                                 BlowUp = true,
                                 SpeciesId = 2,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 Speed = 0,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -660,7 +660,7 @@ namespace shared {
                                 CancellableEdFrame = 0,
                                 BlowUp = false,
                                 SpeciesId = 2,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 Speed = 0,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX

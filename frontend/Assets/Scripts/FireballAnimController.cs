@@ -17,11 +17,12 @@ public class FireballAnimController : MonoBehaviour {
     }
 
     public void updateAnim(string newAnimName, int frameIdxInAnim, int dirX, bool spontaneousLooping, RoomDownsyncFrame rdf) {
-        var animator = this.gameObject.GetComponent<Animator>();
+        var animator = gameObject.GetComponent<Animator>();
+        var spr = gameObject.GetComponent<SpriteRenderer>();
         if (0 > dirX) {
-            this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
+            spr.flipX = true;
         } else if (0 < dirX) {
-            this.gameObject.transform.localScale = new Vector3(+1.0f, 1.0f);
+            spr.flipX = false;
         }
 
         int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
