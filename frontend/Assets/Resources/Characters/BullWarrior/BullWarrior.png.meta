@@ -132,8 +132,8 @@ TextureImporter:
       name: Atk1_1
       rect:
         serializedVersion: 2
-        x: 156
-        y: 463
+        x: 664
+        y: 832
         width: 142
         height: 152
       alignment: 9
@@ -153,8 +153,8 @@ TextureImporter:
       name: Atk1_2
       rect:
         serializedVersion: 2
-        x: 298
-        y: 454
+        x: 327
+        y: 856
         width: 145
         height: 158
       alignment: 9
@@ -174,8 +174,8 @@ TextureImporter:
       name: Atk1_3
       rect:
         serializedVersion: 2
-        x: 443
-        y: 446
+        x: 613
+        y: 674
         width: 135
         height: 158
       alignment: 9
@@ -195,8 +195,8 @@ TextureImporter:
       name: Atk1_4
       rect:
         serializedVersion: 2
-        x: 578
-        y: 442
+        x: 180
+        y: 1016
         width: 168
         height: 158
       alignment: 9
@@ -216,8 +216,8 @@ TextureImporter:
       name: Atk1_5
       rect:
         serializedVersion: 2
-        x: 789
-        y: 893
+        x: 430
+        y: 1599
         width: 202
         height: 131
       alignment: 9
@@ -237,8 +237,8 @@ TextureImporter:
       name: Atk1_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 897
+        x: 283
+        y: 1921
         width: 282
         height: 127
       alignment: 9
@@ -258,8 +258,8 @@ TextureImporter:
       name: Atk1_7
       rect:
         serializedVersion: 2
-        x: 282
-        y: 895
+        x: 0
+        y: 1919
         width: 283
         height: 129
       alignment: 9
@@ -279,8 +279,8 @@ TextureImporter:
       name: Atk1_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 622
+        x: 694
+        y: 984
         width: 157
         height: 144
       alignment: 9
@@ -300,8 +300,8 @@ TextureImporter:
       name: Atk3_1
       rect:
         serializedVersion: 2
-        x: 157
-        y: 615
+        x: 758
+        y: 1275
         width: 174
         height: 144
       alignment: 9
@@ -321,8 +321,8 @@ TextureImporter:
       name: Atk3_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 471
+        x: 851
+        y: 931
         width: 156
         height: 151
       alignment: 9
@@ -342,8 +342,8 @@ TextureImporter:
       name: Atk3_3
       rect:
         serializedVersion: 2
-        x: 649
-        y: 600
+        x: 509
+        y: 966
         width: 155
         height: 150
       alignment: 9
@@ -363,8 +363,8 @@ TextureImporter:
       name: Atk3_4
       rect:
         serializedVersion: 2
-        x: 224
-        y: 759
+        x: 540
+        y: 1281
         width: 173
         height: 136
       alignment: 9
@@ -384,8 +384,8 @@ TextureImporter:
       name: Atk3_5
       rect:
         serializedVersion: 2
-        x: 565
-        y: 895
+        x: 0
+        y: 1790
         width: 224
         height: 129
       alignment: 9
@@ -405,8 +405,8 @@ TextureImporter:
       name: Atk3_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 766
+        x: 283
+        y: 1790
         width: 224
         height: 131
       alignment: 9
@@ -426,8 +426,8 @@ TextureImporter:
       name: Atk3_7
       rect:
         serializedVersion: 2
-        x: 397
-        y: 759
+        x: 360
+        y: 1164
         width: 169
         height: 136
       alignment: 9
@@ -447,8 +447,8 @@ TextureImporter:
       name: Atk3_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 622
+        x: 694
+        y: 984
         width: 157
         height: 144
       alignment: 9
@@ -468,8 +468,8 @@ TextureImporter:
       name: Atk4_1
       rect:
         serializedVersion: 2
-        x: 434
-        y: 277
+        x: 529
+        y: 1116
         width: 165
         height: 165
       alignment: 9
@@ -489,8 +489,8 @@ TextureImporter:
       name: Atk4_2
       rect:
         serializedVersion: 2
-        x: 212
-        y: 114
+        x: 301
+        y: 679
         width: 141
         height: 177
       alignment: 9
@@ -510,8 +510,8 @@ TextureImporter:
       name: Atk4_3
       rect:
         serializedVersion: 2
-        x: 817
-        y: 265
+        x: 0
+        y: 566
         width: 142
         height: 173
       alignment: 9
@@ -531,8 +531,8 @@ TextureImporter:
       name: Atk4_4
       rect:
         serializedVersion: 2
-        x: 511
-        y: 75
+        x: 159
+        y: 670
         width: 142
         height: 196
       alignment: 9
@@ -552,8 +552,8 @@ TextureImporter:
       name: Atk4_5
       rect:
         serializedVersion: 2
-        x: 222
-        y: 291
+        x: 218
+        y: 1627
         width: 212
         height: 163
       alignment: 9
@@ -573,8 +573,8 @@ TextureImporter:
       name: Atk4_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 133
+        x: 812
+        y: 1880
         width: 212
         height: 168
       alignment: 9
@@ -594,8 +594,8 @@ TextureImporter:
       name: Atk5_1
       rect:
         serializedVersion: 2
-        x: 434
-        y: 277
+        x: 529
+        y: 1116
         width: 165
         height: 165
       alignment: 9
@@ -615,8 +615,8 @@ TextureImporter:
       name: Atk5_2
       rect:
         serializedVersion: 2
-        x: 653
-        y: 70
+        x: 472
+        y: 765
         width: 141
         height: 201
       alignment: 9
@@ -636,8 +636,8 @@ TextureImporter:
       name: Atk5_3
       rect:
         serializedVersion: 2
-        x: 794
-        y: 64
+        x: 806
+        y: 730
         width: 139
         height: 201
       alignment: 9
@@ -657,8 +657,8 @@ TextureImporter:
       name: Atk5_4
       rect:
         serializedVersion: 2
-        x: 353
-        y: 84
+        x: 853
+        y: 1082
         width: 158
         height: 193
       alignment: 9
@@ -678,8 +678,8 @@ TextureImporter:
       name: Atk5_5
       rect:
         serializedVersion: 2
-        x: 746
-        y: 438
+        x: 507
+        y: 1730
         width: 222
         height: 162
       alignment: 9
@@ -699,8 +699,8 @@ TextureImporter:
       name: Atk5_6
       rect:
         serializedVersion: 2
-        x: 599
-        y: 271
+        x: 0
+        y: 1623
         width: 218
         height: 167
       alignment: 9
@@ -720,8 +720,8 @@ TextureImporter:
       name: Atk5_7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 301
+        x: 729
+        y: 1718
         width: 222
         height: 162
       alignment: 9
@@ -741,8 +741,8 @@ TextureImporter:
       name: Idle1_1
       rect:
         serializedVersion: 2
-        x: 804
-        y: 600
+        x: 348
+        y: 1014
         width: 161
         height: 150
       alignment: 9
@@ -762,8 +762,8 @@ TextureImporter:
       name: Idle1_2
       rect:
         serializedVersion: 2
-        x: 490
-        y: 604
+        x: 0
+        y: 739
         width: 159
         height: 149
       alignment: 9
@@ -783,8 +783,8 @@ TextureImporter:
       name: Idle1_3
       rect:
         serializedVersion: 2
-        x: 331
-        y: 612
+        x: 694
+        y: 1128
         width: 159
         height: 147
       alignment: 9
@@ -804,8 +804,8 @@ TextureImporter:
       name: Idle1_4
       rect:
         serializedVersion: 2
-        x: 566
-        y: 753
+        x: 0
+        y: 1031
         width: 168
         height: 142
       alignment: 9
@@ -825,8 +825,8 @@ TextureImporter:
       name: Idle1_5
       rect:
         serializedVersion: 2
-        x: 734
-        y: 750
+        x: 0
+        y: 888
         width: 167
         height: 143
       alignment: 9
@@ -846,8 +846,8 @@ TextureImporter:
       name: Idle1_6
       rect:
         serializedVersion: 2
-        x: 566
-        y: 753
+        x: 0
+        y: 1031
         width: 168
         height: 142
       alignment: 9
@@ -867,8 +867,8 @@ TextureImporter:
       name: Idle1_7
       rect:
         serializedVersion: 2
-        x: 331
-        y: 612
+        x: 694
+        y: 1128
         width: 159
         height: 147
       alignment: 9
@@ -888,8 +888,8 @@ TextureImporter:
       name: Idle1_8
       rect:
         serializedVersion: 2
-        x: 490
-        y: 604
+        x: 0
+        y: 739
         width: 159
         height: 149
       alignment: 9
@@ -901,6 +901,321 @@ TextureImporter:
       bones: []
       spriteID: 502e6353b6e29474f925c9e3f6ca2279
       internalID: -233661706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying_1
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 1977
+        width: 247
+        height: 71
+      alignment: 9
+      pivot: {x: 0.518219, y: 1.4084502}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ee9973c8818f784790fa9771f6f0b69
+      internalID: 440277355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying_2
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 1892
+        width: 228
+        height: 85
+      alignment: 9
+      pivot: {x: 0.48464912, y: 1.4117644}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92dd2e2bcd5cfee47a72455467e37b29
+      internalID: -1234987748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InAirIdle1_1
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 866
+        width: 160
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa55008b74c5c0f48a964e090af6c74c
+      internalID: 1368544725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_1
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 1472
+        width: 180
+        height: 155
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ffdf3aa71a2def488e48d8d5ee2d4fb
+      internalID: -740300089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_10
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 1300
+        width: 180
+        height: 148
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4966216}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e68cbf4f8fa52b4ca819f6979a7d590
+      internalID: -1162581455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1320
+        width: 180
+        height: 149
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49328858}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a24dbc7d0b539dc40a97aedc1a27be1f
+      internalID: 1843829475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_12
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 1566
+        width: 180
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49671054}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 784fe5acd78cf4c4b9405d9f55d0672c
+      internalID: -1943016156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1469
+        width: 180
+        height: 154
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49675325}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a57da2af3d540f4f9e117f7c8bc1c72
+      internalID: 1680450198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1173
+        width: 180
+        height: 147
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcb76a94cde8f6648a6ebac3d8d6ffb0
+      internalID: 63962674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_4
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 1174
+        width: 180
+        height: 148
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4966216}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c11ffe0d1b963664ea4fe55d3d9dadbb
+      internalID: 319985528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_5
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 1417
+        width: 180
+        height: 149
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49328858}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1e95f55fe43566468898181eef00af2
+      internalID: 1676211600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_6
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 1322
+        width: 180
+        height: 150
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c4288ae10ceec74a89e0929cbcefe0d
+      internalID: -534792898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_7
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 1566
+        width: 180
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4901316}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 308c9857ba2657a46a85e95b88d519f5
+      internalID: 1597518970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_8
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 1448
+        width: 180
+        height: 151
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48675495}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0ed6c38b9ea7164390b9fcd5ad9a9b8
+      internalID: 1553893600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking_9
+      rect:
+        serializedVersion: 2
+        x: 758
+        y: 1419
+        width: 180
+        height: 147
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e22421cb5f5c2340a169ed1f55b6209
+      internalID: 1098595252
       vertices: []
       indices: 
       edges: []
@@ -917,42 +1232,57 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Idle1_2: 1634174515
-      Atk4_5: 1440699282
       Atk1_6: 930252665
       Atk5_5: -366927945
-      Atk4_3: 609126641
-      Idle1_6: 582273873
+      Walking_3: 63962674
       Atk1_7: 525806445
-      Atk1_8: -12935992
-      Atk4_4: -1418949610
-      Atk3_1: -1660701586
-      Idle1_1: 1444267829
-      Idle1_5: 986820602
       Atk4_1: 1217487750
-      Atk1_5: -2099499217
-      Atk5_3: -753262615
+      Atk4_4: -1418949610
+      Idle1_1: 1444267829
+      InAirIdle1_1: 1368544725
+      Idle1_5: 986820602
       Atk5_7: -1173809141
-      Atk1_4: -341033902
+      Atk5_3: -753262615
       Atk3_4: -664425723
       Atk5_6: -178973779
-      Atk3_2: -1913637652
       Idle1_7: -952497747
-      Atk1_1: 917925675
+      Walking_9: 1098595252
       Atk4_6: -1578074031
       Atk3_8: -658054795
-      Atk3_3: 1772931156
       Idle1_8: -233661706
+      Walking_11: 1843829475
+      Walking_2: 1680450198
       Atk3_5: -600119859
-      Atk1_3: -665599985
-      Atk5_1: 1205414356
       Atk5_4: -1205851609
-      Atk3_7: -754369692
+      Dying_2: -1234987748
       Atk5_2: 810632653
       Idle1_4: -1064239836
       Atk1_2: 1291325591
-      Idle1_3: 1602908016
       Atk3_6: -868757784
       Atk4_2: -953954185
+      Atk4_5: 1440699282
+      Atk4_3: 609126641
+      Walking_6: -534792898
+      Idle1_6: 582273873
+      Atk3_1: -1660701586
+      Atk1_8: -12935992
+      Atk1_5: -2099499217
+      Atk1_4: -341033902
+      Atk3_2: -1913637652
+      Walking_7: 1597518970
+      Atk1_1: 917925675
+      Dying_1: 440277355
+      Atk3_3: 1772931156
+      Walking_1: -740300089
+      Walking_12: -1943016156
+      Walking_5: 1676211600
+      Atk1_3: -665599985
+      Atk5_1: 1205414356
+      Walking_8: 1553893600
+      Walking_10: -1162581455
+      Walking_4: 319985528
+      Atk3_7: -754369692
+      Idle1_3: 1602908016
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

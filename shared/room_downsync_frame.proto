@@ -79,6 +79,7 @@ message CharacterDownsync {
 	bool omitPushback = 32;
 
 	int32 waivingPatrolCueId = 33;
+	bool waivingPatrol = 34;
         
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;

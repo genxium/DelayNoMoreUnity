@@ -293,6 +293,9 @@ namespace shared {
                 thatCharacterInNextFrame.CapturedByPatrolCue = false;
                 thatCharacterInNextFrame.FramesInPatrolCue = 0;
             } else {
+                if (currCharacterDownsync.WaivingPatrol) {
+                    return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+                }
                 // [WARNING] The field "CharacterDownsync.FramesInPatrolCue" would also be re-purposed as "patrol cue collision waiving frames" by the logic here.
                 bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
                 if (collided) {
@@ -440,17 +443,21 @@ namespace shared {
         }
 
         private static void _applyGravity(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
-            if (currCharacterDownsync.InAir && false == currCharacterDownsync.OmitGravity) {
-                // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
-                if (!currCharacterDownsync.JumpTriggered && OnWall == currCharacterDownsync.CharacterState) {
-                    thatCharacterInNextFrame.VelX += GRAVITY_X;
-                    thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
-                } else if (Dashing == currCharacterDownsync.CharacterState) {
-                    thatCharacterInNextFrame.VelX += GRAVITY_X;
-                } else {
-                    thatCharacterInNextFrame.VelX += GRAVITY_X;
-                    thatCharacterInNextFrame.VelY += GRAVITY_Y;
-                }
+            if (currCharacterDownsync.OmitGravity) {
+                return;
+            }
+            if (!currCharacterDownsync.InAir) {
+                return;
+            }
+            // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
+            if (!currCharacterDownsync.JumpTriggered && OnWall == currCharacterDownsync.CharacterState) {
+                thatCharacterInNextFrame.VelX += GRAVITY_X;
+                thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
+            } else if (Dashing == currCharacterDownsync.CharacterState) {
+                thatCharacterInNextFrame.VelX += GRAVITY_X;
+            } else {
+                thatCharacterInNextFrame.VelX += GRAVITY_X;
+                thatCharacterInNextFrame.VelY += GRAVITY_Y;
             }
         }
 
@@ -779,8 +786,13 @@ namespace shared {
                         var normAlignmentWithGravity = (overlapResult.OverlapX * 0 + overlapResult.OverlapY * (-1.0));
                         if (isAnotherCharacter) {
                             // [WARNING] The "zero overlap collision" might be randomly detected/missed on either frontend or backend, to have deterministic result we added paddings to all sides of a characterCollider. As each velocity component of (velX, velY) being a multiple of 0.5 at any renderFrame, each position component of (x, y) can only be a multiple of 0.5 too, thus whenever a 1-dimensional collision happens between players from [player#1: i*0.5, player#2: j*0.5, not collided yet] to [player#1: (i+k)*0.5, player#2: j*0.5, collided], the overlap becomes (i+k-j)*0.5+2*s, and after snapping subtraction the effPushback magnitude for each player is (i+k-j)*0.5, resulting in 0.5-multiples-position for the next renderFrame.
-                            pushbackX = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapX;
-                            pushbackY = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapY;
+                            if (false == currCharacterDownsync.OmitPushback) {
+                                pushbackX = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapX;
+                                pushbackY = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapY;
+                            } else {
+                                pushbackX = 0;
+                                pushbackY = 0;
+                            }
                         }
                         for (int k = 0; k < hardPushbackCnt; k++) {
                             Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
@@ -925,23 +937,27 @@ namespace shared {
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
                             atkedCharacterInNextFrame.Hp -= bullet.Config.Damage;
                             // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
-                            var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
-                            atkedCharacterInNextFrame.VelX = pushbackVelX;
-                            atkedCharacterInNextFrame.VelY = pushbackVelY;
+                            if (false == atkedCharacterInCurrFrame.OmitPushback) {
+                                var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
+                                atkedCharacterInNextFrame.VelX = pushbackVelX;
+                                atkedCharacterInNextFrame.VelY = pushbackVelY;
+                            }
                             if (0 >= atkedCharacterInNextFrame.Hp) {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
                                 atkedCharacterInNextFrame.Hp = 0;
                                 atkedCharacterInNextFrame.CharacterState = CharacterState.Dying;
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
                             } else {
-                                if (bullet.Config.BlowUp) {
-                                    atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;
-                                } else {
-                                    atkedCharacterInNextFrame.CharacterState = CharacterState.Atked1;
-                                }
-                                int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
-                                if (bullet.Config.HitStunFrames > oldFramesToRecover) {
-                                    atkedCharacterInNextFrame.FramesToRecover = bullet.Config.HitStunFrames;
+                                if (false == atkedCharacterInCurrFrame.OmitPushback) {
+                                    if (bullet.Config.BlowUp) {
+                                        atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;
+                                    } else {
+                                        atkedCharacterInNextFrame.CharacterState = CharacterState.Atked1;
+                                    }
+                                    int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
+                                    if (bullet.Config.HitStunFrames > oldFramesToRecover) {
+                                        atkedCharacterInNextFrame.FramesToRecover = bullet.Config.HitStunFrames;
+                                    }
                                 }
                             }
                             break;
@@ -949,6 +965,7 @@ namespace shared {
                             if (!COLLIDABLE_PAIRS.Contains(bullet.Config.CollisionTypeMask | v4.Config.CollisionTypeMask)) {
                                 break;
                             }
+                            if (bullet.BattleAttr.TeamId == v4.BattleAttr.TeamId) continue;
                             exploded = true;
                             break;
                         default:
@@ -1086,7 +1103,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingPatrol, src.WaivingPatrolCueId, nextRenderFramePlayers[i]);
             }
 
             int j = 0;
@@ -1110,7 +1127,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, nextRenderFrameNpcs[j]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingPatrol, src.WaivingPatrolCueId, nextRenderFrameNpcs[j]);
                 j++;
             }
 
