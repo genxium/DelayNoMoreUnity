@@ -177,7 +177,12 @@ namespace shared {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
 
             if (0 < currCharacterDownsync.FramesToRecover) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+                if (Walking == currCharacterDownsync.CharacterState) {
+                    // Special case where the NPC is in its inertia state but walking
+                    return (PATTERN_ID_NO_OP, false, currCharacterDownsync.DirX, currCharacterDownsync.DirY); ;
+                } else {
+                    return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+                }
             }
 
             int patternId = PATTERN_ID_NO_OP;
@@ -193,7 +198,7 @@ namespace shared {
                 // TODO: There's no InAir vision reaction yet.
                 float visionCx, visionCy, visionCw, visionCh;
                 calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
-
+                float closeEnoughToAtkRange = (visionCx + visionCy) * 0.05f;
                 var visionCollider = dynamicRectangleColliders[colliderCnt];
                 UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
                 collisionSys.AddSingle(visionCollider);
@@ -216,18 +221,26 @@ namespace shared {
                                 if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
                                     break;
                                 }
-                                if (v3.JoinIndex != currCharacterDownsync.JoinIndex && v3.BulletTeamId != currCharacterDownsync.BulletTeamId) {
-                                    bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
-                                    if (!prevCapturedByInertia) {
-                                        // To emulate input delay, and double it to give the players some advantages
-                                        thatCharacterInNextFrame.CapturedByInertia = true;
-                                        thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 3);
-                                    } else {
-                                        thatCharacterInNextFrame.CapturedByInertia = false;
-                                        var colliderDx = (bCollider.X - aCollider.X);
-                                        var colliderDy = (bCollider.Y - aCollider.Y);
-                                        if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * currCharacterDownsync.DirX) {
-                                            // Opponent is attackable and in front of me
+                                if (v3.JoinIndex == currCharacterDownsync.JoinIndex || v3.BulletTeamId == currCharacterDownsync.BulletTeamId) {
+                                    break;
+                                }
+                                bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
+                                if (!prevCapturedByInertia) {
+                                    // To emulate input delay, and double it to give the players some advantages
+                                    thatCharacterInNextFrame.CapturedByInertia = true;
+                                    thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 3);
+                                    hasVisionReaction = true;
+                                } else {
+                                    thatCharacterInNextFrame.CapturedByInertia = false;
+                                    var colliderDx = (bCollider.X - aCollider.X);
+                                    var colliderDy = (bCollider.Y - aCollider.Y);
+                                    if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * currCharacterDownsync.DirX) {
+                                        // Opponent is in front of me
+                                        if (Math.Abs(colliderDx) > closeEnoughToAtkRange) {
+                                            // Not close enough to attack
+                                            hasVisionReaction = true;
+                                        } else {
+                                            // close enough to attack
                                             switch (currCharacterDownsync.SpeciesId) {
                                                 case 1:
                                                     if (0.2f * aCollider.H < colliderDy) {
@@ -271,14 +284,25 @@ namespace shared {
                                                     }
                                                     hasVisionReaction = true;
                                                     break;
+                                                case 4096:
+                                                    if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
+                                                        // Use melee
+                                                        patternId = 1;
+                                                    } else {
+                                                        // Use fireball
+                                                        patternId = 3;
+                                                    }
+                                                    hasVisionReaction = true;
+                                                    break;
                                             }
-                                        } else if (0 > colliderDx * currCharacterDownsync.DirX) {
-                                            // Behind me
-                                            effectiveDx = -effectiveDx;
-                                            hasVisionReaction = true;
                                         }
+                                    } else if (0 > colliderDx * currCharacterDownsync.DirX) {
+                                        // Behind me
+                                        effectiveDx = -effectiveDx;
+                                        hasVisionReaction = true;
                                     }
                                 }
+
                                 break;
                             default:
                                 break;

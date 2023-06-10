@@ -8,7 +8,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2D0OgkAQgNGNJPYWXgijvYfy3kaxMqLI36zOK16z5XwDgW1KKQ0AAAAAAADACo7cRXeI7L9JTv/c9M9N/9z0z03/zraCFvqv33+M6Gb6z9e/7RHdRf91+kfPP5r+uelft5P+6fpfBtL///oPbT/XHuhflzH9p+yB/vWZsgPf7oT+naW/s2p1m8GhghZR/bPc8/W9V7I//+0b0b30X75/dJOo7vrrr38p+4foRmt31/+3+7/6X3k+0/9zf+I7RPY/J6d/bkv231Uueva1iO6gv/7666+//gAAAAAAAAAAAECsK4PI1r0=
+   eJzt2D0OgkAQgNGNJPYWXkijvYfy3kaxMuIPAjNmXvGaLecbCGzXWusAAAAAAAAAFnDgJrpDZP9VcfrXpn9t+temf23699YJWui/fP8xopvpP13/3YDoLvov0z96/tH0r03/3I76l+t//pD+tftPsQf65/Nt/1/2QP98xvYfsxP69+b+zsrqOoN9ghZR/avc8w29V6o//7sXonvpP3//6CZR3fXXX//WtnfRjZburv9/93/2v/J4pv/7/sR3iOx/Kk7/2ubsv0kuevZZRHfQX3/99ddffwAAAAAAAAAAACDWBQS51bc=
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -171,7 +171,7 @@
   <properties>
    <property name="type" value="barrier_and_shelter"/>
   </properties>
-  <object id="60" x="1232" y="448" width="240" height="16">
+  <object id="60" x="1248" y="448" width="224" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -231,7 +231,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="136" x="1232" y="432" width="208" height="16">
+  <object id="136" x="1248" y="432" width="192" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

@@ -21,13 +21,13 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 1205414356, guid: cbc2f1c6c6461cc42966f9c401ffaa9f, type: 3}
-    - time: 0.1
+    - time: 0.06666667
       value: {fileID: 810632653, guid: cbc2f1c6c6461cc42966f9c401ffaa9f, type: 3}
-    - time: 0.2
+    - time: 0.15
       value: {fileID: -753262615, guid: cbc2f1c6c6461cc42966f9c401ffaa9f, type: 3}
-    - time: 0.3
+    - time: 0.21666667
       value: {fileID: -1205851609, guid: cbc2f1c6c6461cc42966f9c401ffaa9f, type: 3}
-    - time: 0.38333333
+    - time: 0.26666668
       value: {fileID: -366927945, guid: cbc2f1c6c6461cc42966f9c401ffaa9f, type: 3}
     - time: 0.48333332
       value: {fileID: -178973779, guid: cbc2f1c6c6461cc42966f9c401ffaa9f, type: 3}
