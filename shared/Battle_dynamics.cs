@@ -177,12 +177,7 @@ namespace shared {
             // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
 
             if (0 < currCharacterDownsync.FramesToRecover) {
-                if (Walking == currCharacterDownsync.CharacterState) {
-                    // Special case where the NPC is in its inertia state but walking
-                    return (PATTERN_ID_NO_OP, false, currCharacterDownsync.DirX, currCharacterDownsync.DirY); ;
-                } else {
-                    return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
-                }
+                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
             }
 
             int patternId = PATTERN_ID_NO_OP;
@@ -224,16 +219,27 @@ namespace shared {
                                 if (v3.JoinIndex == currCharacterDownsync.JoinIndex || v3.BulletTeamId == currCharacterDownsync.BulletTeamId) {
                                     break;
                                 }
+                                var colliderDx = (bCollider.X - aCollider.X);
+                                var colliderDy = (bCollider.Y - aCollider.Y);
+
                                 bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
                                 if (!prevCapturedByInertia) {
                                     // To emulate input delay, and double it to give the players some advantages
                                     thatCharacterInNextFrame.CapturedByInertia = true;
                                     thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 3);
+                                    if (currCharacterDownsync.WaivingSpontaneousPatrol && 0 > colliderDx * currCharacterDownsync.DirX) {
+                                        // A static NPC should turn immediately to the opponent behind it, otherwise it looks weird
+                                        effectiveDx = -effectiveDx;
+                                    }
                                     hasVisionReaction = true;
                                 } else {
                                     thatCharacterInNextFrame.CapturedByInertia = false;
-                                    var colliderDx = (bCollider.X - aCollider.X);
-                                    var colliderDy = (bCollider.Y - aCollider.Y);
+                                    if (0 > colliderDx * currCharacterDownsync.DirX) {
+                                        // Behind me
+                                        effectiveDx = -effectiveDx;
+                                        hasVisionReaction = true;
+                                        break;
+                                    }
                                     if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * currCharacterDownsync.DirX) {
                                         // Opponent is in front of me
                                         if (Math.Abs(colliderDx) > closeEnoughToAtkRange) {
@@ -285,7 +291,7 @@ namespace shared {
                                                     hasVisionReaction = true;
                                                     break;
                                                 case 4096:
-                                                    if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
+                                                    if (Math.Abs(colliderDx) < 1.2f * aCollider.W) {
                                                         // Use melee
                                                         patternId = 1;
                                                     } else {
@@ -296,13 +302,8 @@ namespace shared {
                                                     break;
                                             }
                                         }
-                                    } else if (0 > colliderDx * currCharacterDownsync.DirX) {
-                                        // Behind me
-                                        effectiveDx = -effectiveDx;
-                                        hasVisionReaction = true;
                                     }
                                 }
-
                                 break;
                             default:
                                 break;
@@ -313,13 +314,12 @@ namespace shared {
                 collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
             }
 
-            if (hasVisionReaction) {
+            if (hasVisionReaction && PATTERN_ID_NO_OP != patternId) {
+                // [WARNING] Even if "hasVisionReaction", if "PATTERN_ID_NO_OP == patternId", we still expect the NPC to make use of patrol cues to jump or turn around!
                 thatCharacterInNextFrame.CapturedByPatrolCue = false;
                 thatCharacterInNextFrame.FramesInPatrolCue = 0;
             } else {
-                if (currCharacterDownsync.WaivingPatrol) {
-                    return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
-                }
+                bool hasPatrolCueReaction = false;
                 // [WARNING] The field "CharacterDownsync.FramesInPatrolCue" would also be re-purposed as "patrol cue collision waiving frames" by the logic here.
                 bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
                 if (collided) {
@@ -403,6 +403,10 @@ namespace shared {
                                 break;
                         }
                     }
+                }
+
+                if (false == hasVisionReaction && false == hasPatrolCueReaction && currCharacterDownsync.WaivingSpontaneousPatrol) {
+                    return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
                 }
             }
 
@@ -972,7 +976,8 @@ namespace shared {
                                 atkedCharacterInNextFrame.CharacterState = CharacterState.Dying;
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
                             } else {
-                                if (false == atkedCharacterInCurrFrame.OmitPushback) {
+                                bool shouldOmitStun = ((0 >= bullet.Config.HitStunFrames) || (atkedCharacterInCurrFrame.OmitPushback));
+                                if (false == shouldOmitStun) {
                                     if (bullet.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;
                                     } else {
@@ -1127,7 +1132,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingPatrol, src.WaivingPatrolCueId, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, nextRenderFramePlayers[i]);
             }
 
             int j = 0;
@@ -1151,7 +1156,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingPatrol, src.WaivingPatrolCueId, nextRenderFrameNpcs[j]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, nextRenderFrameNpcs[j]);
                 j++;
             }
 

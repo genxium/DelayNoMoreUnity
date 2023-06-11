@@ -54,12 +54,12 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
     protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
-    protected KvPriorityQueue<string, LineRenderer>.ValScore cachedLineScore = (x) => 0;
+    protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
 
     public GameObject linePrefab;
     protected KvPriorityQueue<string, FireballAnimController> cachedFireballs;
     protected Vector3[] debugDrawPositionsHolder = new Vector3[4]; // Currently only rectangles are drawn
-    protected KvPriorityQueue<string, LineRenderer> cachedLineRenderers;
+    protected KvPriorityQueue<string, DebugLine> cachedLineRenderers;
 
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
@@ -82,6 +82,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Vector2 inplaceHpBarOffset = new Vector2(-16f, +24f);
     protected float characterZ = 0;
     protected float fireballZ = -5;
+    protected float lineRendererZ = +5;
     protected float inplaceHpBarZ = +10;
 
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
@@ -466,18 +467,20 @@ public abstract class AbstractMapController : MonoBehaviour {
             GameObject newFireballNode = Instantiate(fireballPrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, fireballZ), Quaternion.identity);
             FireballAnimController holder = newFireballNode.GetComponent<FireballAnimController>();
             holder.score = -1;
-            string initLookupKey = String.Format("{0}", -(i + 1)); // there's definitely no such "bulletLocalId"
+            string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
             cachedFireballs.Put(initLookupKey, holder);
         }
 
         int lineHoldersCap = 64;
-        cachedLineRenderers = new KvPriorityQueue<string, LineRenderer>(lineHoldersCap, cachedLineScore);
+        cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
+        
         for (int i = 0; i < lineHoldersCap; i++) {
-            GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, +5), Quaternion.identity);
-            LineRenderer newLine = newLineObj.GetComponent<LineRenderer>();
-            newLine.startWidth = 3.0f;
-            newLine.endWidth = 3.0f;
-            cachedLineRenderers.Put(i.ToString(), newLine);
+            GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, lineRendererZ), Quaternion.identity);
+            DebugLine newLine = newLineObj.GetComponent<DebugLine>();
+            newLine.score = -1;
+            newLine.SetWidth(2.0f);
+            var initLookupKey = i.ToString();
+            cachedLineRenderers.Put(initLookupKey, newLine);
         }
     }
 
@@ -893,7 +896,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.BulletTeamId = teamId;
             npcInRdf.ChCollisionTeamId = teamId;
             npcInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
-            npcInRdf.WaivingPatrol = isStatic;
+            npcInRdf.WaivingSpontaneousPatrol = isStatic;
             npcInRdf.OmitGravity = chConfig.OmitGravity;
             npcInRdf.OmitPushback = chConfig.OmitPushback;
             startRdf.NpcsArr[i] = npcInRdf;
@@ -943,9 +946,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (ROOM_STATE_IN_BATTLE != battleState) {
             return;
         }
+        var (_, rdf) = renderBuffer.GetByFrameId(renderFrameId);
+        if (null == rdf) return;
 
-        int lineIndex = 0;
         // Draw static colliders
+        /*
+        int lineIndex = 0;
         foreach (var collider in staticColliders) {
             if (null == collider) {
                 break;
@@ -956,11 +962,16 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (null == collider.Shape.Points) {
                 throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
             }
-            string key = lineIndex.ToString();
+            string key = "Static-" + lineIndex.ToString();
+            lineIndex++;
             var line = cachedLineRenderers.PopAny(key);
+            if (null == line) {
+                line = cachedLineRenderers.Pop();
+            }
             if (null == line) {
                 throw new ArgumentNullException("Cached line is null for key:" + key);
             }
+            line.SetColor(Color.white);
             int m = collider.Shape.Points.Cnt;
             line.GetPositions(debugDrawPositionsHolder);
             for (int i = 0; i < m; i++) {
@@ -968,8 +979,130 @@ public abstract class AbstractMapController : MonoBehaviour {
                 (debugDrawPositionsHolder[i].x, debugDrawPositionsHolder[i].y) = CollisionSpacePositionToWorldPosition(collider.X + pi.X, collider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
             }
             line.SetPositions(debugDrawPositionsHolder);
+            line.score = rdf.Id;
             cachedLineRenderers.Put(key, line);
-            lineIndex++;
+        }
+        */
+
+        // Draw dynamic colliders
+        for (int k = 0; k < roomCapacity; k++) {
+            var currCharacterDownsync = rdf.PlayersArr[k];
+            string key = "Player-" + currCharacterDownsync.JoinIndex.ToString();
+            var line = cachedLineRenderers.PopAny(key);
+            if (null == line) {
+                line = cachedLineRenderers.Pop();
+            }
+            if (null == line) {
+                throw new ArgumentNullException("Cached line is null for key:" + key);
+            }
+            line.SetColor(Color.white);
+            line.GetPositions(debugDrawPositionsHolder);
+            var chConfig = characters[currCharacterDownsync.SpeciesId];
+            float boxCx, boxCy, boxCw, boxCh;
+            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            // World space width and height are just the same as that of collision space.
+
+            (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
+            (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
+            (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
+            (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = ((wx - 0.5f * boxCw), (wy + 0.5f * boxCh));
+            line.SetPositions(debugDrawPositionsHolder);
+            line.score = rdf.Id;
+            cachedLineRenderers.Put(key, line);
+        }
+
+        for (int k = 0; k < rdf.NpcsArr.Count; k++) {
+            var currCharacterDownsync = rdf.NpcsArr[k];
+            if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+            string key = "Npc-" + currCharacterDownsync.JoinIndex.ToString();
+            var line = cachedLineRenderers.PopAny(key);
+            if (null == line) {
+                line = cachedLineRenderers.Pop();
+            }
+            if (null == line) {
+                throw new ArgumentNullException("Cached line is null for key:" + key);
+            }
+            line.SetColor(Color.gray);
+            line.GetPositions(debugDrawPositionsHolder);
+            var chConfig = characters[currCharacterDownsync.SpeciesId];
+            float boxCx, boxCy, boxCw, boxCh;
+            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
+            (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
+            (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
+            (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = ((wx - 0.5f * boxCw), (wy + 0.5f * boxCh));
+            line.SetPositions(debugDrawPositionsHolder);
+            line.score = rdf.Id;
+            cachedLineRenderers.Put(key, line);
+
+            string keyVision = "NpcVision-" + currCharacterDownsync.JoinIndex.ToString();
+            var lineVision = cachedLineRenderers.PopAny(keyVision);
+            if (null == lineVision) {
+                lineVision = cachedLineRenderers.Pop();
+            }
+            if (null == lineVision) {
+                throw new ArgumentNullException("Cached line is null for keyVision:" + keyVision);
+            }
+            lineVision.SetColor(Color.yellow);
+            lineVision.GetPositions(debugDrawPositionsHolder);
+            float visionCx, visionCy, visionCw, visionCh;
+            calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
+            (wx, wy) = CollisionSpacePositionToWorldPosition(visionCx, visionCy, spaceOffsetX, spaceOffsetY);
+
+            (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * visionCw), (wy - 0.5f * visionCh));
+            (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * visionCw), (wy - 0.5f * visionCh));
+            (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * visionCw), (wy + 0.5f * visionCh));
+            (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = ((wx - 0.5f * visionCw), (wy + 0.5f * visionCh));
+            lineVision.SetPositions(debugDrawPositionsHolder);
+            lineVision.score = rdf.Id;
+            cachedLineRenderers.Put(keyVision, lineVision);
+        }
+
+        for (int k = 0; k < rdf.Bullets.Count; k++) {
+            var bullet = rdf.Bullets[k];
+            if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
+            
+            string key = "Bullet-" + bullet.BattleAttr.BulletLocalId.ToString();
+            var line = cachedLineRenderers.PopAny(key);
+            if (null != line) {
+                if (!IsBulletActive(bullet, rdf.Id)) {
+                    // [WARNING] In this case we should remove the bullet debug lines first!
+                    line.GetPositions(debugDrawPositionsHolder);
+                    (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = (0, 0);
+                    (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = (0, 0);
+                    (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = (0, 0);
+                    (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = (0, 0);
+                    line.SetPositions(debugDrawPositionsHolder);
+                }
+            } else {
+                line = cachedLineRenderers.Pop();
+            }
+            if (null == line) {
+                throw new ArgumentNullException("Cached line is null for key:" + key);
+            }
+            if (!IsBulletActive(bullet, rdf.Id)) {
+                if (null != line) {
+                    cachedLineRenderers.Put(key, line);
+                }
+                continue;
+            }
+            line.SetColor(Color.red);
+            line.GetPositions(debugDrawPositionsHolder);
+            var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+
+            var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX, bullet.Config.HitboxSizeY);
+            (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
+            (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
+            (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
+            (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = ((wx - 0.5f * boxCw), (wy + 0.5f * boxCh));
+            line.SetPositions(debugDrawPositionsHolder);
+            line.score = rdf.Id;
+            cachedLineRenderers.Put(key, line);
         }
     }
 }

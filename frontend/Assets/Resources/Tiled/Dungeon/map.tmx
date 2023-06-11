@@ -48,6 +48,7 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="2"/>
+    <property name="static" value="1"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
