@@ -8,7 +8,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2D1Ow0AQgFGLnICCmrssygEo6TkIDR0l3ICDhoCFUEj8I613HM8rniy5nM+bHWXXdd0OAAAAAAAAoIE936I7RPa/SU7/3PTPTf8cnvVP09/+N7//pfOxddn7z1F60c30r9e/XFBzxu8nnn6eL3/pH9O/xYyPze8HLN1/6G7Tf3v9h+4w/Yf7L7EH+v1fp7F9r9aMP058fvXun7/v9I/pXwbUnPPbCP1j+i8937HuLb4D+1/b/nOb1/4m7H/z+2/p/7/STb/DjjN4WEGLqP4t9r+1KGdkP//nZjL17Fwb/f/3j24STf/csve/60V3WMLrBPpfZ/8y4Z3+4/2J7xDZ/zE5/XNbsv/tykXPfi2iO+ivv/76668/AAAAAAAAAAAAEOsA/K3qYQ==
+   eJzt2DFOwzAUgGGLnoABdWThJEEcgJGdg7B0Y+QKvScUglQKSRwp9gvxN3yqmiWVfz/Z6i6ltAMAAAAAAACo4IFP0R0i+181Tv+26d82/dvwrH8z/d3/5vcfmo+ta73/HF0vupn+y/XvBiy5xm8pvZx7+nr2g/4x/Wus8an57cfnkNL9x842/bfXf+wM03+8f4l7YPT8T+2V6A6R/efMiv7bMnb/6/TfvBrn/z6z//7M0r/B/a9u/8uGl/2P/fdjcv9bS//S//+9TljyXV3KP8NOa3C/ghZR/Uvf/6a6l9wHY/viW+vz/9ea5M7OUs1r7Qn9f/cvOW//gf7bdqf/aP+bXnSnEg4Z9M/vPzVLNXUZz/Sf7k98h8j+j43Tv20l+1+vXPTar0V0B/31119//fUHAAAAAAAAAAAAYr0DovDsFQ==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -37,7 +37,7 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="108" x="1144" y="412.834">
+  <object id="108" x="1144" y="460.834">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="4096"/>
@@ -46,7 +46,7 @@
    </properties>
    <point/>
   </object>
-  <object id="138" x="1629" y="557.334">
+  <object id="138" x="1553.5" y="555.834">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="3"/>
@@ -107,7 +107,7 @@
    </properties>
    <point/>
   </object>
-  <object id="159" x="1066" y="446.833">
+  <object id="159" x="1066" y="494.833">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -115,7 +115,7 @@
    </properties>
    <point/>
   </object>
-  <object id="160" x="1032" y="462.333">
+  <object id="160" x="1032" y="510.333">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -123,7 +123,7 @@
    </properties>
    <point/>
   </object>
-  <object id="166" x="1206.67" y="447.667">
+  <object id="166" x="1206.67" y="495.667">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -131,7 +131,7 @@
    </properties>
    <point/>
   </object>
-  <object id="167" x="1239.67" y="462.667">
+  <object id="167" x="1239.67" y="510.667">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -222,12 +222,12 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="90" x="992" y="464" width="320" height="16">
+  <object id="90" x="992" y="512" width="320" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="97" x="1073" y="432" width="128" height="16">
+  <object id="97" x="1073" y="480" width="128" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -252,7 +252,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="136" x="1041" y="448" width="192" height="16">
+  <object id="136" x="1041" y="496" width="192" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

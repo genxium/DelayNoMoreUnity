@@ -471,7 +471,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             cachedFireballs.Put(initLookupKey, holder);
         }
 
-        int lineHoldersCap = 64;
+        int lineHoldersCap = 128;
         cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
         
         for (int i = 0; i < lineHoldersCap; i++) {
