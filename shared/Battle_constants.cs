@@ -777,6 +777,7 @@ namespace shared {
                     new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig {
                         SpeciesId = 0,
                         SpeciesName = "KnifeGirl",
+                        Hp = 200,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -797,13 +798,13 @@ namespace shared {
                         VisionSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeY = (int)(62.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(56.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeY = (int)(62.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(56.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
                     }),
@@ -811,6 +812,7 @@ namespace shared {
                     new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
                         SpeciesId = 1,
                         SpeciesName = "SwordMan",
+                        Hp = 100,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -839,6 +841,7 @@ namespace shared {
                     new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
                         SpeciesId = 2,
                         SpeciesName = "MonkGirl",
+                        Hp = 230,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -873,6 +876,7 @@ namespace shared {
                     new KeyValuePair<int, CharacterConfig>(3, new CharacterConfig {
                         SpeciesId = 3,
                         SpeciesName = "FireSwordMan",
+                        Hp = 150,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -912,6 +916,7 @@ namespace shared {
                     new KeyValuePair<int, CharacterConfig>(4096, new CharacterConfig {
                         SpeciesId = 4096,
                         SpeciesName = "BullWarrior",
+                        Hp = 500,
                         OmitPushback = true,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,

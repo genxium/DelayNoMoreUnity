@@ -8,6 +8,8 @@ namespace shared {
         public int SpeciesId;
         public string SpeciesName;
 
+        public int Hp;
+
         public int InAirIdleFrameIdxTurningPoint;
         public int InAirIdleFrameIdxTurnedCycle;
 

@@ -699,7 +699,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected RoomDownsyncFrame mockStartRdf(int[] speciesIdList) {
         var grid = underlyingMap.GetComponentInChildren<Grid>();
-        var playerStartingCposList = new List<(Vector, int)>();
+        var playerStartingCposList = new List<(Vector, int, int)>();
         var npcsStartingCposList = new List<(Vector, int, int, int, int, bool)>();
         float defaultPatrolCueRadius = 10;
         int staticColliderIdx = 0;
@@ -750,14 +750,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform playerPos in child) {
                         var posTileObj = playerPos.gameObject.GetComponent<SuperObject>();
                         var tileProps = playerPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
-                        CustomProperty teamId;
+                        CustomProperty teamId, dirX;
                         tileProps.TryGetCustomProperty("teamId", out teamId);
+                        tileProps.TryGetCustomProperty("dirX", out dirX);
 
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
 
                         playerStartingCposList.Add((
                             new Vector(cx, cy),
-                            null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt()
+                            null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt(), 
+                            null == dirX || dirX.IsEmpty ? +2 : dirX.GetValueAsInt() 
                         ));
                         //Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
                         j++;
@@ -832,7 +834,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         startRdf.ShouldForceResync = false;
         for (int i = 0; i < roomCapacity; i++) {
             int joinIndex = i + 1;
-            var (cpos, teamId) = playerStartingCposList[i];
+            var (cpos, teamId, dirX) = playerStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             teamId = (DEFAULT_BULLET_TEAM_ID == teamId ? joinIndex : teamId);
             var playerInRdf = startRdf.PlayersArr[i];
@@ -850,14 +852,14 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.Speed = chConfig.Speed;
             playerInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
             playerInRdf.FramesToRecover = 0;
-            playerInRdf.DirX = (1 == playerInRdf.JoinIndex ? 2 : -2);
+            playerInRdf.DirX = dirX;
             playerInRdf.DirY = 0;
             playerInRdf.VelX = 0;
             playerInRdf.VelY = 0;
             playerInRdf.InAir = true;
             playerInRdf.OnWall = false;
-            playerInRdf.Hp = 100;
-            playerInRdf.MaxHp = 100;
+            playerInRdf.Hp = chConfig.Hp;
+            playerInRdf.MaxHp = chConfig.Hp;
             playerInRdf.Mp = 1000;
             playerInRdf.MaxMp = 1000;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
@@ -939,12 +941,27 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
+    protected void resetLine(DebugLine line) {
+        line.GetPositions(debugDrawPositionsHolder);
+        (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = (0, 0);
+        (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = (0, 0);
+        (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = (0, 0);
+        (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = (0, 0);
+        line.SetPositions(debugDrawPositionsHolder);
+    }
+
     protected void urpDrawDebug() {
         if (!debugDrawingEnabled) {
             return;
         }
         if (ROOM_STATE_IN_BATTLE != battleState) {
             return;
+        }
+        for (int i = cachedLineRenderers.vals.StFrameId; i < cachedLineRenderers.vals.EdFrameId; i++) {
+            var (res, line) = cachedLineRenderers.vals.GetByFrameId(i);
+            if (!res || null == line) throw new ArgumentNullException(String.Format("There's no line for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedLineRenderers.vals.EdFrameId));
+
+            resetLine(line);
         }
         var (_, rdf) = renderBuffer.GetByFrameId(renderFrameId);
         if (null == rdf) return;
@@ -1068,26 +1085,14 @@ public abstract class AbstractMapController : MonoBehaviour {
             
             string key = "Bullet-" + bullet.BattleAttr.BulletLocalId.ToString();
             var line = cachedLineRenderers.PopAny(key);
-            if (null != line) {
-                if (!IsBulletActive(bullet, rdf.Id)) {
-                    // [WARNING] In this case we should remove the bullet debug lines first!
-                    line.GetPositions(debugDrawPositionsHolder);
-                    (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = (0, 0);
-                    (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = (0, 0);
-                    (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = (0, 0);
-                    (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = (0, 0);
-                    line.SetPositions(debugDrawPositionsHolder);
-                }
-            } else {
+            if (null == line) {
                 line = cachedLineRenderers.Pop();
             }
             if (null == line) {
                 throw new ArgumentNullException("Cached line is null for key:" + key);
             }
             if (!IsBulletActive(bullet, rdf.Id)) {
-                if (null != line) {
-                    cachedLineRenderers.Put(key, line);
-                }
+                cachedLineRenderers.Put(key, line);
                 continue;
             }
             line.SetColor(Color.red);
