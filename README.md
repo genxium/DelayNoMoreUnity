@@ -1,7 +1,11 @@
 # What's this project?
 It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a Multiplayer Platformer game demo on websocket with delayed-input Rollback Netcode inspired by GGPO -- but with the backend also rebuilt in C#.
 
-(battle between celluar Wifi Android v.s. Wifi Android via internet (and UDP peer-to-peer holepunch succeeded), input delay = 2 frames i.e. ~32ms, [original video here](https://pan.baidu.com/s/1tJg_9QNYLz4TQTt3C-snRw?pwd=0e16))
+(battle between Wifi PC v.s. Wifi Android via internet (and UDP peer-to-peer holepunch failed), input delay = 2 frames i.e. ~32ms, [original video here](https://pan.baidu.com/s/1WtgnojBaWiiW0zJ6I9yvZg?pwd=rpyc))
+
+![Internet_Dual_Fighting_BullWarrior_1](./charts/Internet_Dual_Fighting_BullWarrior_1.gif)
+
+(battle between Wifi Android v.s. Wifi Android via internet (and UDP peer-to-peer holepunch succeeded), input delay = 2 frames i.e. ~32ms, [original video here](https://pan.baidu.com/s/1tJg_9QNYLz4TQTt3C-snRw?pwd=0e16))
 
 ![Internet_Dual_2_Merged_SpedUp](./charts/Internet_Dual_2_Merged_SpedUp.gif)
 
