@@ -43,7 +43,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected long battleState;
     protected int spaceOffsetX;
     protected int spaceOffsetY;
-    protected float effectivelyInfiniteLyFar;
+    protected float effectivelyInfinitelyFar;
 
     protected shared.Collision collisionHolder;
     protected SatResult overlapResult;
@@ -355,7 +355,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (res, fireballHolder) = cachedFireballs.vals.GetByFrameId(i);
             if (!res || null == fireballHolder) throw new ArgumentNullException(String.Format("There's no fireballHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedFireballs.vals.StFrameId, cachedFireballs.vals.EdFrameId));
 
-            fireballHolder.gameObject.transform.position = new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, fireballHolder.gameObject.transform.position.z);
+            fireballHolder.gameObject.transform.position = new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballHolder.gameObject.transform.position.z);
         }
 
         for (int k = 0; k < rdf.Bullets.Count; k++) {
@@ -410,23 +410,19 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (0 >= preallocNpcCapacity) {
             throw new ArgumentException(String.Format("preallocAiPlayerCapacity={0} is non-positive, please initialize it first!", preallocNpcCapacity));
         }
+
         Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
         renderBufferSize = 1024;
-
-        if (null == renderBuffer) {
-            renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
-            for (int i = 0; i < renderBufferSize; i++) {
-                renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
-            }
+        renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
+        for (int i = 0; i < renderBufferSize; i++) {
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
 
         int inputBufferSize = (renderBufferSize >> 1) + 1;
-        if (null == inputBuffer) {
-            inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
-            for (int i = 0; i < inputBufferSize; i++) {
-                inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
-            }
+        inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
+        for (int i = 0; i < inputBufferSize; i++) {
+            inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
         }
         inputBuffer.Clear(); // Then use it by "DryPut"
 
@@ -463,39 +459,42 @@ public abstract class AbstractMapController : MonoBehaviour {
         prevDecodedInputHolder = new InputFrameDecoded();
 
         int fireballHoldersCap = 64;
-        if (null == cachedFireballs) {
-            cachedFireballs = new KvPriorityQueue<string, FireballAnimController>(fireballHoldersCap, cachedFireballScore);
-
-            effectivelyInfiniteLyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
-            for (int i = 0; i < fireballHoldersCap; i++) {
-                // Fireballs & explosions should be drawn above any character
-                GameObject newFireballNode = Instantiate(fireballPrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, fireballZ), Quaternion.identity);
-                FireballAnimController holder = newFireballNode.GetComponent<FireballAnimController>();
-                holder.score = -1;
-                string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
-                cachedFireballs.Put(initLookupKey, holder);
+        if (null != cachedFireballs) {
+            for (int i = cachedFireballs.vals.StFrameId; i < cachedFireballs.vals.EdFrameId; i++) {
+                var (res, fireball) = cachedFireballs.vals.GetByFrameId(i);
+                if (!res || null == fireball) throw new ArgumentNullException(String.Format("There's no cachedFireball for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedFireballs.vals.EdFrameId));
+                Destroy(fireball.gameObject);
             }
         }
-        
-        int lineHoldersCap = 128;
-        if (null == cachedLineRenderers) {
-            cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
+        cachedFireballs = new KvPriorityQueue<string, FireballAnimController>(fireballHoldersCap, cachedFireballScore);
 
-            for (int i = 0; i < lineHoldersCap; i++) {
-                GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, lineRendererZ), Quaternion.identity);
-                DebugLine newLine = newLineObj.GetComponent<DebugLine>();
-                newLine.score = -1;
-                newLine.SetWidth(2.0f);
-                var initLookupKey = i.ToString();
-                cachedLineRenderers.Put(initLookupKey, newLine);
-            }
-        } else {
+        effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
+        for (int i = 0; i < fireballHoldersCap; i++) {
+            // Fireballs & explosions should be drawn above any character
+            GameObject newFireballNode = Instantiate(fireballPrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
+            FireballAnimController holder = newFireballNode.GetComponent<FireballAnimController>();
+            holder.score = -1;
+            string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
+            cachedFireballs.Put(initLookupKey, holder);
+        }
+
+        int lineHoldersCap = 128;
+        if (null != cachedLineRenderers) {
             for (int i = cachedLineRenderers.vals.StFrameId; i < cachedLineRenderers.vals.EdFrameId; i++) {
                 var (res, line) = cachedLineRenderers.vals.GetByFrameId(i);
                 if (!res || null == line) throw new ArgumentNullException(String.Format("There's no line for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedLineRenderers.vals.EdFrameId));
-
-                resetLine(line);
+                Destroy(line.gameObject);
             }
+        }
+
+        cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
+        for (int i = 0; i < lineHoldersCap; i++) {
+            GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lineRendererZ), Quaternion.identity);
+            DebugLine newLine = newLineObj.GetComponent<DebugLine>();
+            newLine.score = -1;
+            newLine.SetWidth(2.0f);
+            var initLookupKey = i.ToString();
+            cachedLineRenderers.Put(initLookupKey, newLine);
         }
     }
 
@@ -536,9 +535,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
         readyGoPanel.resetCountdown();
-        // Clearing cached fireball rendering nodes [BEGINS]
-        // TODO
-        // Clearing cached fireball rendering nodes [ENDS]
     }
 
     public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {
@@ -773,8 +769,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         playerStartingCposList.Add((
                             new Vector(cx, cy),
-                            null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt(), 
-                            null == dirX || dirX.IsEmpty ? +2 : dirX.GetValueAsInt() 
+                            null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt(),
+                            null == dirX || dirX.IsEmpty ? +2 : dirX.GetValueAsInt()
                         ));
                         //Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
                         j++;
@@ -961,6 +957,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected void resetLine(DebugLine line) {
+        newPosHolder.x = 0;
+        newPosHolder.y = 0;
+        line.transform.position = newPosHolder;
         line.GetPositions(debugDrawPositionsHolder);
         (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = (0, 0);
         (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = (0, 0);
@@ -1099,7 +1098,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int k = 0; k < rdf.Bullets.Count; k++) {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
-            
+
             string key = "Bullet-" + bullet.BattleAttr.BulletLocalId.ToString();
             var line = cachedLineRenderers.PopAny(key);
             if (null == line) {

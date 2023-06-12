@@ -28,7 +28,7 @@ public class OfflineMapController : AbstractMapController {
         resetCurrentMatch("Castle");
         selfPlayerInfo.JoinIndex = 1;
 
-        battleDurationFrames = 120 * 60;
+        battleDurationFrames = 30 * 60;
 
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
         int[] speciesIdList = new int[roomCapacity];

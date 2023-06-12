@@ -41,10 +41,8 @@ public class OnlineMapController : AbstractMapController {
                     battleDurationFrames = (int)wsRespHolder.BciFrame.BattleDurationFrames;
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
-                    if (wsRespHolder.BciFrame.BoundRoomCapacity != roomCapacity) {
-                        roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
-                        preallocateHolders();
-                    }
+                    roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
+                    preallocateHolders();
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     resetCurrentMatch("Castle");
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;

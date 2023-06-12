@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="197">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="211">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -8,20 +8,20 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2M1NwzAYgOGITMABsQCTBDEAOzAIFy6oO3BiT36USpFoUifY/tL6OTyq1ENT+bXrT+27rusBAAAAAAAAKnjiV3SHyP43jdO/bfq3Tf82vOjfTH/z3/r+c+fj2rXef41hFN1M/3z9hxnRXfSv0z96/WtYutv0vz5Ld5j+y/2j58Djd6u5V6I7RPZfc1ZqNewzfIb+af2HBf/pdym/Ba33L7GmW5rdT+TeA+a/ev1z9Mpxps1/6/qXnvs+/nqdyvmsoUu/w37W4HEHLaL6l5j/5vq/z8jdP2VfHLV+/k+tSerZ0f+y1fz/Z9r/87v3+Fq1/yn613FIUOK5D/ov9r8bRXYvtQfeEuif3v/cWdrafMueGBLe0/98f+I7RPZ/bpz+bSvZ/3bnotd+L6I76K+//vrrrz8AAAAAAAAAAAAQ6wvKn+lk
+   eJzt2E1Kw0AYgOFg1i5ciBfwJBEP4B08iBs34h1ceU9/SCFgk07SmflS51k8FAppyrzzNUP7rut6AAAAAAAAgAoe+RXdIbL/VeP0b5v+bdO/Dc/6h/a/XuHc65z/1vefm4+cLfeo9f5rDKPoZvrn6z/MiO6if53+0etfw9KzTf//Z+kZpv9y/zXnwBIO363mXonuENl/zazUathn+Az90/oPC87pdym/Ba33L7GmW5rdTeTeA85/9frn6JVjpp3/1vUvfe77+OtlKue9hi79GfazBg87aBHVv8T5b67/24zc/VP2xUHr839sTVJnR//LVvP/n2n/z+/e42vV/sfoX8d7ghL3vdd/sf/tKLJ7qT3wmkD/9P6nZmlr8y17Ykh4T//T/YnvENn/qXH6t61k/5udi177vYjuoL/++uuvv/4AAAAAAAAAAABArC/jrurP
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
   <object id="135" x="1592.33" y="285">
    <properties>
-    <property name="dirX" value="+2"/>
+    <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
   <object id="137" x="696.67" y="315.666">
    <properties>
-    <property name="dirX" value="-2"/>
+    <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
    </properties>
    <point/>
@@ -45,7 +45,7 @@
    </properties>
    <point/>
   </object>
-  <object id="156" x="1571.83" y="380.667">
+  <object id="156" x="1565.83" y="295.334">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="1"/>
@@ -53,7 +53,7 @@
    </properties>
    <point/>
   </object>
-  <object id="183" x="729.667" y="395.667">
+  <object id="183" x="744.334" y="335.667">
    <properties>
     <property name="dirX" value="2"/>
     <property name="speciesId" value="1"/>
@@ -61,7 +61,7 @@
    </properties>
    <point/>
   </object>
-  <object id="184" x="694.333" y="480.333">
+  <object id="184" x="781.666" y="335">
    <properties>
     <property name="dirX" value="2"/>
     <property name="speciesId" value="1"/>
@@ -69,7 +69,7 @@
    </properties>
    <point/>
   </object>
-  <object id="188" x="1572" y="458.667">
+  <object id="188" x="1535.33" y="294.667">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="1"/>
@@ -225,6 +225,86 @@
    </properties>
    <point/>
   </object>
+  <object id="201" x="822" y="334">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="18"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="202" x="870" y="314">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="19"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="203" x="1036" y="316">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="20"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="204" x="1076" y="299">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="21"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="205" x="1240" y="299">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="22"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="206" x="1303" y="300">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="23"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="207" x="1464" y="301">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="24"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="208" x="1515" y="299">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="25"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="209" x="1672" y="300">
+   <properties>
+    <property name="flAct" value="4"/>
+    <property name="frAct" value="4"/>
+    <property name="id" value="26"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="210" x="665.333" y="335.667">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="frAct" value="3"/>
+    <property name="id" value="27"/>
+   </properties>
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -296,6 +376,21 @@
    </properties>
   </object>
   <object id="187" x="1504" y="384" width="112" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="198" x="864" y="320" width="176" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="199" x="1072" y="304" width="176" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="200" x="1296" y="304" width="176" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
