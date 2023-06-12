@@ -413,16 +413,20 @@ public abstract class AbstractMapController : MonoBehaviour {
         Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
         renderBufferSize = 1024;
 
-        renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
-        for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
+        if (null == renderBuffer) {
+            renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
+            for (int i = 0; i < renderBufferSize; i++) {
+                renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
+            }
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
 
         int inputBufferSize = (renderBufferSize >> 1) + 1;
-        inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
-        for (int i = 0; i < inputBufferSize; i++) {
-            inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
+        if (null == inputBuffer) {
+            inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
+            for (int i = 0; i < inputBufferSize; i++) {
+                inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
+            }
         }
         inputBuffer.Clear(); // Then use it by "DryPut"
 
@@ -459,28 +463,39 @@ public abstract class AbstractMapController : MonoBehaviour {
         prevDecodedInputHolder = new InputFrameDecoded();
 
         int fireballHoldersCap = 64;
-        cachedFireballs = new KvPriorityQueue<string, FireballAnimController>(fireballHoldersCap, cachedFireballScore);
+        if (null == cachedFireballs) {
+            cachedFireballs = new KvPriorityQueue<string, FireballAnimController>(fireballHoldersCap, cachedFireballScore);
 
-        effectivelyInfiniteLyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
-        for (int i = 0; i < fireballHoldersCap; i++) {
-            // Fireballs & explosions should be drawn above any character
-            GameObject newFireballNode = Instantiate(fireballPrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, fireballZ), Quaternion.identity);
-            FireballAnimController holder = newFireballNode.GetComponent<FireballAnimController>();
-            holder.score = -1;
-            string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
-            cachedFireballs.Put(initLookupKey, holder);
+            effectivelyInfiniteLyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
+            for (int i = 0; i < fireballHoldersCap; i++) {
+                // Fireballs & explosions should be drawn above any character
+                GameObject newFireballNode = Instantiate(fireballPrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, fireballZ), Quaternion.identity);
+                FireballAnimController holder = newFireballNode.GetComponent<FireballAnimController>();
+                holder.score = -1;
+                string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
+                cachedFireballs.Put(initLookupKey, holder);
+            }
         }
-
-        int lineHoldersCap = 128;
-        cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
         
-        for (int i = 0; i < lineHoldersCap; i++) {
-            GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, lineRendererZ), Quaternion.identity);
-            DebugLine newLine = newLineObj.GetComponent<DebugLine>();
-            newLine.score = -1;
-            newLine.SetWidth(2.0f);
-            var initLookupKey = i.ToString();
-            cachedLineRenderers.Put(initLookupKey, newLine);
+        int lineHoldersCap = 128;
+        if (null == cachedLineRenderers) {
+            cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
+
+            for (int i = 0; i < lineHoldersCap; i++) {
+                GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfiniteLyFar, effectivelyInfiniteLyFar, lineRendererZ), Quaternion.identity);
+                DebugLine newLine = newLineObj.GetComponent<DebugLine>();
+                newLine.score = -1;
+                newLine.SetWidth(2.0f);
+                var initLookupKey = i.ToString();
+                cachedLineRenderers.Put(initLookupKey, newLine);
+            }
+        } else {
+            for (int i = cachedLineRenderers.vals.StFrameId; i < cachedLineRenderers.vals.EdFrameId; i++) {
+                var (res, line) = cachedLineRenderers.vals.GetByFrameId(i);
+                if (!res || null == line) throw new ArgumentNullException(String.Format("There's no line for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedLineRenderers.vals.EdFrameId));
+
+                resetLine(line);
+            }
         }
     }
 
@@ -849,6 +864,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.VirtualGridY = playerVposY;
             playerInRdf.RevivalVirtualGridX = playerVposX;
             playerInRdf.RevivalVirtualGridY = playerVposY;
+            playerInRdf.RevivalDirX = dirX;
+            playerInRdf.RevivalDirY = 0;
             playerInRdf.Speed = chConfig.Speed;
             playerInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
             playerInRdf.FramesToRecover = 0;
@@ -881,6 +898,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.VirtualGridY = vy;
             npcInRdf.RevivalVirtualGridX = vx;
             npcInRdf.RevivalVirtualGridY = vy;
+            npcInRdf.RevivalDirX = dirX;
+            npcInRdf.RevivalDirY = dirY;
             npcInRdf.Speed = chConfig.Speed;
             npcInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
             npcInRdf.FramesToRecover = 0;
@@ -967,7 +986,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (null == rdf) return;
 
         // Draw static colliders
-        /*
         int lineIndex = 0;
         foreach (var collider in staticColliders) {
             if (null == collider) {
@@ -999,7 +1017,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             line.score = rdf.Id;
             cachedLineRenderers.Put(key, line);
         }
-        */
 
         // Draw dynamic colliders
         for (int k = 0; k < roomCapacity; k++) {

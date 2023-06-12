@@ -104,7 +104,7 @@ namespace shared {
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
         public static int INPUT_DELAY_FRAMES = 2; // in the count of render frames
-        public static int DEFAULT_PATROL_CUE_WAIVING_FRAMES = 180; // in the count of render frames
+        public static int DEFAULT_PATROL_CUE_WAIVING_FRAMES = 150; // in the count of render frames, should be big enough for any NPC to move across the largest patrol cue
         public static int NO_PATROL_CUE_ID = -1;
 
         /*
@@ -795,7 +795,7 @@ namespace shared {
                         WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(56.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -806,7 +806,8 @@ namespace shared {
                         DyingSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(56.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
-                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
@@ -835,7 +836,8 @@ namespace shared {
                         DyingSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
-                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        CloseEnoughVirtualGridDistance = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
@@ -870,7 +872,8 @@ namespace shared {
                         DyingSizeX = (int)(28f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(46f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
-                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(3, new CharacterConfig {
@@ -899,7 +902,8 @@ namespace shared {
                         DyingSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
-                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(2048, new CharacterConfig {
@@ -924,12 +928,12 @@ namespace shared {
                         LayDownFramesToRecover = 16,
                         GetUpInvinsibleFrames = 10,
                         GetUpFramesToRecover = 27,
-                        Speed = (int)(1.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        JumpingInitVelY = (int)(5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        Speed = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 9,
                         VisionOffsetX = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(240 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(300 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(160 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(80 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(140 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -940,7 +944,8 @@ namespace shared {
                         DyingSizeX = (int)(80 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(140 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 2,
-                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        CloseEnoughVirtualGridDistance = (int)(200.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
                     }),
             });
 

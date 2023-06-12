@@ -72,14 +72,16 @@ message CharacterDownsync {
 	int32 onWallNormX = 27;
 	int32 onWallNormY = 28;
 
-	int32 revivalVirtualGridX = 29;
-	int32 revivalVirtualGridY = 30;
+	bool omitGravity = 29;
+	bool omitPushback = 30;
 
-	bool omitGravity = 31;
-	bool omitPushback = 32;
+	int32 waivingPatrolCueId = 31;
+	bool waivingSpontaneousPatrol = 32;
 
-	int32 waivingPatrolCueId = 33;
-	bool waivingSpontaneousPatrol = 34;
+	int32 revivalVirtualGridX = 33;
+	int32 revivalVirtualGridY = 34;
+	int32 revivalDirX = 35;
+	int32 revivalDirY = 36;
         
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
