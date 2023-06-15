@@ -19,13 +19,15 @@ public class SkewedBarrierTest {
         var collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 64, 64);
         var collisionHolder = new Collision();
         var overlapResult = new SatResult();
+        var primaryOverlapResult = new SatResult();
+        int primaryOverlapIndex = -1;
 
         var effPushback = new Vector(0, 0);
         var hardPushbackNorms = new Vector[5];
         for (int i = 0; i < hardPushbackNorms.Length; i++) {
             hardPushbackNorms[i] = new Vector(0, 0);
         }
-        var (rectCx, rectCy) = (0, 0);
+        var (rectCx, rectCy) = (0f, 0f);
         var (rectVx, rectVy) = Battle.PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
 
         var currCharacterDownsync = new CharacterDownsync();
@@ -54,27 +56,52 @@ public class SkewedBarrierTest {
 
         var aCollider = NewRectCollider(rectCx, rectCy, rectCw, rectCh, 0, 0, 0, 0, 0, 0, currCharacterDownsync);
 
+        // Add a triangular barrier collider
+        _logger.LogInfo("-------------------------------------------------------------------");
         _logger.LogInfo(String.Format("aCollider={0}", aCollider.Shape.ToString(false))); 
         collisionSys.AddSingle(aCollider);
-
-        // Add a triangular barrier collider
         float triangleEdgeLength = 16f;
-        var points = new float[6] { 0,0, triangleEdgeLength,0, triangleEdgeLength,triangleEdgeLength };
-        var (anchorCx, anchorCy) = (rectCx + 0.5f*rectCw - 0.5f*triangleEdgeLength, rectCy-0.61f*rectCh);
-        var srcPolygon = new ConvexPolygon(anchorCx, anchorCy, points);
-        var bCollider1 = NewConvexPolygonCollider(srcPolygon, 0, 0, null);
+        var trianglePoints = new float[6] { 0,0, triangleEdgeLength,0, triangleEdgeLength,triangleEdgeLength };
+        var (anchorCx1, anchorCy1) = (rectCx + 0.5f*rectCw - 0.5f*triangleEdgeLength, rectCy-0.61f*rectCh);
+        var srcPolygon1 = new ConvexPolygon(anchorCx1, anchorCy1, trianglePoints);
+        var bCollider1 = NewConvexPolygonCollider(srcPolygon1, 0, 0, null);
         _logger.LogInfo(String.Format("bCollider1={0}", bCollider1.Shape.ToString(false))); 
         collisionSys.AddSingle(bCollider1);
 
-        int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, _logger);
+        int hardPushbackCnt = calcHardPushbacksEx(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
 
-        _logger.LogInfo(String.Format("#1 hardPushbackCnt={0}", hardPushbackCnt));
-
+        _logger.LogInfo(String.Format("T#1 hardPushbackCnt={0}, primaryOverlapIndex={1}, primaryOverlapResult={2}", hardPushbackCnt, primaryOverlapIndex, primaryOverlapResult.ToString()));
         for (int k = 0; k < hardPushbackCnt; k++) {
+            if (k == primaryOverlapIndex) continue;
             var hardPushbackNorm = hardPushbackNorms[k];
-            _logger.LogInfo(String.Format("#1 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
+            _logger.LogInfo(String.Format("T#1 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
         }
 
         Assert.True(1 == hardPushbackCnt);
+
+        // Add a square barrier collider
+        collisionSys.RemoveSingle(aCollider);
+        rectCx += 0.5f*triangleEdgeLength;
+        rectCy += 0.5f*triangleEdgeLength;
+        aCollider.Shape.UpdateAsRectangle(rectCx, rectCy, rectCw, rectCh);
+        collisionSys.AddSingle(aCollider);
+        _logger.LogInfo("-------------------------------------------------------------------");
+        _logger.LogInfo(String.Format("aCollider={0}", aCollider.Shape.ToString(false))); 
+        _logger.LogInfo(String.Format("bCollider1={0}", bCollider1.Shape.ToString(false))); 
+        float squareEdgeLength = 16f;
+        var squarePoints = new float[8] { 0,0, squareEdgeLength,0, squareEdgeLength,squareEdgeLength, 0,squareEdgeLength};
+        var (anchorCx2, anchorCy2) = (anchorCx1 + triangleEdgeLength, anchorCy1);
+        var srcPolygon2 = new ConvexPolygon(anchorCx2, anchorCy2, squarePoints);
+        var bCollider2 = NewConvexPolygonCollider(srcPolygon2, 0, 0, null);
+        _logger.LogInfo(String.Format("bCollider2={0}", bCollider2.Shape.ToString(false))); 
+        collisionSys.AddSingle(bCollider2);
+
+        hardPushbackCnt = calcHardPushbacksEx(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
+        _logger.LogInfo(String.Format("T#2 hardPushbackCnt={0}, primaryOverlapIndex={1}, primaryOverlapResult={2}", hardPushbackCnt, primaryOverlapIndex, primaryOverlapResult.ToString()));
+        for (int k = 0; k < hardPushbackCnt; k++) {
+            if (k == primaryOverlapIndex) continue;
+            var hardPushbackNorm = hardPushbackNorms[k];
+            _logger.LogInfo(String.Format("T#2 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
+        }
     }
 }

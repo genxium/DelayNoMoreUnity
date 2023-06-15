@@ -88,6 +88,100 @@ namespace shared {
             return retCnt;
         }
 
+        public static int calcHardPushbacksEx(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, ILoggerBridge logger) {
+            float virtualGripToWall = 0.0f;
+            if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
+                float xfac = 1.0f;
+                if (0 > thatPlayerInNextFrame.DirX) {
+                    xfac = -xfac;
+                }
+                virtualGripToWall = xfac * currCharacterDownsync.Speed * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
+            }
+            int retCnt = 0;
+            primaryOverlapIndex = -1;
+            bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
+            if (!collided) {
+                return retCnt;
+            }
+            float primaryOverlapMag = float.MinValue, primaryPushbackX = float.MinValue, primaryPushbackY = float.MinValue;
+            while (true) {
+                var (exists, bCollider) = collision.PopFirstContactedCollider();
+
+                if (!exists || null == bCollider) {
+                    break;
+                }
+                bool isBarrier = false;
+
+                switch (bCollider.Data) {
+                    case CharacterDownsync v1:
+                    case Bullet v2:
+                    case PatrolCue v3:
+                        break;
+                    default:
+                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
+                        isBarrier = true;
+                        break;
+                }
+
+                if (!isBarrier) {
+                    continue;
+                }
+                ConvexPolygon bShape = bCollider.Shape;
+
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, playerShape, bShape, true, ref overlapResult);
+
+                if (!overlapped) {
+                    continue;
+                }
+
+                if (overlapResult.OverlapMag > primaryOverlapMag) {
+                    primaryOverlapIndex = retCnt;
+                    primaryOverlapMag = overlapResult.OverlapMag;
+                    primaryPushbackX = pushbackX;
+                    primaryPushbackY = pushbackY;
+                    overlapResult.cloneInto(ref primaryOverlapResult);
+                }
+
+                hardPushbacks[retCnt].X = pushbackX;
+                hardPushbacks[retCnt].Y = pushbackY;
+
+                retCnt++;
+            }
+
+            // Now that we have a "primaryOverlapResult" which we should get off by top priority, i.e. all the other hardPushbacks should clamp their x and y components to be no bigger than that of the "primaryOverlapResult".
+            effPushback.X += primaryPushbackX;
+            effPushback.Y += primaryPushbackY;
+            for (int i = 0; i < retCnt; i++) {
+                if (i == primaryOverlapIndex) continue;
+                var hardPushback = hardPushbacks[i];
+                if (hardPushback.X * primaryPushbackX > 0) {
+                    if (Math.Abs(hardPushback.X) > Math.Abs(primaryPushbackX)) {
+                        hardPushback.X -= primaryPushbackX;
+                    } else {
+                        hardPushback.X = 0;
+                    }
+                }
+
+                if (hardPushback.Y * primaryPushbackY > 0) {
+                    if (Math.Abs(hardPushback.Y) > Math.Abs(primaryPushbackY)) {
+                        hardPushback.Y -= primaryPushbackY;
+                    } else {
+                        hardPushback.Y = 0;
+                    }
+                }
+                effPushback.X += hardPushback.X;
+                effPushback.Y += hardPushback.Y;
+            
+                // Normalize and thus re-purpose "hardPushbacks[i]" to be later used
+                var magSqr = hardPushback.X*hardPushback.X + hardPushback.Y*hardPushback.Y; 
+                var invMag = InvSqrt32(magSqr);
+                hardPushback.X *= invMag; 
+                hardPushback.Y *= invMag; 
+            }
+
+            return retCnt;
+        }
+
         public static float InvSqrt32(float x) {
             float xhalf = 0.5f * x;
             int i = BitConverter.SingleToInt32Bits(x);

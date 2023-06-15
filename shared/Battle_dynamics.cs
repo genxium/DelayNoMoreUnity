@@ -646,7 +646,8 @@ namespace shared {
             }
         }
 
-        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
+        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
+            // [WARNING] Bullet collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
             // Check bullet-anything collisions
             for (int i = iSt; i < iEd; i++) {
                 Collider bulletCollider = dynamicRectangleColliders[i];
@@ -915,7 +916,7 @@ namespace shared {
 
             _insertBulletColliders(currRenderFrame, roomCapacity, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, roomCapacity + j, colliderCnt, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, roomCapacity + j, colliderCnt, logger);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, dynamicRectangleColliders, logger);
 

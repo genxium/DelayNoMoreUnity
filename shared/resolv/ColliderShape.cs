@@ -104,5 +104,19 @@ namespace shared {
 
         // [WARNING] Deliberately unboxed "Vector" to make the following fields primitive such that the whole "SatResult" will be easily allocated on stack.
         public float AxisX, AxisY;
+
+        public void cloneInto(ref SatResult dist) {
+            dist.OverlapMag = this.OverlapMag;
+            dist.OverlapX = this.OverlapX;
+            dist.OverlapY = this.OverlapY;  
+            dist.AContainedInB = this.AContainedInB;
+            dist.BContainedInA = this.BContainedInA;
+            dist.AxisX = this.AxisX;
+            dist.AxisY = this.AxisY;    
+        }
+
+        public string ToString() {
+            return String.Format("(Mag:{0}, OverlapX:{1}, OverlapY:{2}, AContainedInB:{3}, BContainedInA:{4})", OverlapMag, OverlapX, OverlapY, AContainedInB, BContainedInA);
+        }
     }
 }
