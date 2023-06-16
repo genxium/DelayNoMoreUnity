@@ -82,7 +82,7 @@ namespace shared {
                     else s += ", ";
                 }
 
-                return s;
+				return s;
             } else {
                 var s = String.Format("[");
                 for (int i = Points.StFrameId; i < Points.EdFrameId; i++) {
@@ -93,7 +93,7 @@ namespace shared {
                     else s += ", ";
                 }
 
-                return s;
+				return s;
             }
         }
     }
@@ -105,6 +105,16 @@ namespace shared {
         // [WARNING] Deliberately unboxed "Vector" to make the following fields primitive such that the whole "SatResult" will be easily allocated on stack.
         public float AxisX, AxisY;
 
+        public void reset() {
+            this.OverlapMag = 0;
+            this.OverlapX = 0;
+            this.OverlapY = 0;  
+            this.AContainedInB = false;
+            this.BContainedInA = false;
+            this.AxisX = 0;
+            this.AxisY = 0;    
+        }
+
         public void cloneInto(ref SatResult dist) {
             dist.OverlapMag = this.OverlapMag;
             dist.OverlapX = this.OverlapX;
@@ -115,7 +125,7 @@ namespace shared {
             dist.AxisY = this.AxisY;    
         }
 
-        public string ToString() {
+        public new string ToString() {
             return String.Format("(Mag:{0}, OverlapX:{1}, OverlapY:{2}, AContainedInB:{3}, BContainedInA:{4})", OverlapMag, OverlapX, OverlapY, AContainedInB, BContainedInA);
         }
     }

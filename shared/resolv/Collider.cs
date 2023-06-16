@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace shared {
     public class Collider {
@@ -107,5 +108,19 @@ namespace shared {
 
             return true;
         }
-    }
+
+		public String TouchingCellsStr() {
+			var rb = this.TouchingCells;
+			var sb = new StringBuilder();
+			for (int i = rb.StFrameId; i < rb.EdFrameId; i++) {
+				var (ok, cell) = rb.GetByFrameId(i);
+				if (!ok || null == cell) {
+					continue;
+				}
+				sb.AppendFormat("(X:{0}, Y:{1}) ", cell.X, cell.Y);
+			}
+
+			return sb.ToString();
+		}
+    }	
 }

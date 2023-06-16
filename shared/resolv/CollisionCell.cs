@@ -37,8 +37,7 @@ namespace shared {
                         // pop the current st element
                         Colliders.Pop();
                         break;
-                    }
-                    else {
+                    } else {
                         String msg = String.Format("Unexpected null element for FrameRingBuffer `CollisionCell.Colliders` at i={0}", i);
                         throw new ArgumentException(msg);
                     }

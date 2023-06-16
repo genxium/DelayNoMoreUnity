@@ -101,6 +101,7 @@ namespace shared {
             primaryOverlapIndex = -1;
             bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
             if (!collided) {
+				logger.LogInfo(String.Format("No collision object."));
                 return retCnt;
             }
             float primaryOverlapMag = float.MinValue, primaryPushbackX = float.MinValue, primaryPushbackY = float.MinValue;

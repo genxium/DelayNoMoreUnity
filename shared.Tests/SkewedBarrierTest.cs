@@ -27,7 +27,7 @@ public class SkewedBarrierTest {
         for (int i = 0; i < hardPushbackNorms.Length; i++) {
             hardPushbackNorms[i] = new Vector(0, 0);
         }
-        var (rectCx, rectCy) = (0f, 0f);
+        var (rectCx, rectCy) = (36f, 28f);
         var (rectVx, rectVy) = Battle.PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
 
         var currCharacterDownsync = new CharacterDownsync();
@@ -56,17 +56,15 @@ public class SkewedBarrierTest {
 
         var aCollider = NewRectCollider(rectCx, rectCy, rectCw, rectCh, 0, 0, 0, 0, 0, 0, currCharacterDownsync);
 
-        // Add a triangular barrier collider
+        // Add a slope barrier collider
         _logger.LogInfo("-------------------------------------------------------------------");
-        _logger.LogInfo(String.Format("aCollider={0}", aCollider.Shape.ToString(false))); 
         collisionSys.AddSingle(aCollider);
-        float triangleEdgeLength = 16f;
-        var trianglePoints = new float[6] { 0,0, triangleEdgeLength,0, triangleEdgeLength,triangleEdgeLength };
-        var (anchorCx1, anchorCy1) = (rectCx + 0.5f*rectCw - 0.5f*triangleEdgeLength, rectCy-0.61f*rectCh);
-        var srcPolygon1 = new ConvexPolygon(anchorCx1, anchorCy1, trianglePoints);
-        var bCollider1 = NewConvexPolygonCollider(srcPolygon1, 0, 0, null);
-        _logger.LogInfo(String.Format("bCollider1={0}", bCollider1.Shape.ToString(false))); 
+        _logger.LogInfo(String.Format("aCollider={0}", aCollider.Shape.ToString(false) + "; touchingCells: " + aCollider.TouchingCellsStr())); 
+        var points1 = new float[8] { 0,0, 0,-16f, 28f,-16f, 28f,16f};
+        var (anchorCx1, anchorCy1) = (36f, 20f);
+        var bCollider1 = NewConvexPolygonCollider(new ConvexPolygon(anchorCx1, anchorCy1, points1), 0, 0, null);
         collisionSys.AddSingle(bCollider1);
+        _logger.LogInfo(String.Format("bCollider1={0}", bCollider1.Shape.ToString(false) + "; touchingCells: " + bCollider1.TouchingCellsStr())); 
 
         int hardPushbackCnt = calcHardPushbacksEx(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
 
@@ -76,25 +74,19 @@ public class SkewedBarrierTest {
             var hardPushbackNorm = hardPushbackNorms[k];
             _logger.LogInfo(String.Format("T#1 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
         }
-
         Assert.True(1 == hardPushbackCnt);
 
         // Add a square barrier collider
-        collisionSys.RemoveSingle(aCollider);
-        rectCx += 0.5f*triangleEdgeLength;
-        rectCy += 0.5f*triangleEdgeLength;
-        aCollider.Shape.UpdateAsRectangle(rectCx, rectCy, rectCw, rectCh);
-        collisionSys.AddSingle(aCollider);
         _logger.LogInfo("-------------------------------------------------------------------");
-        _logger.LogInfo(String.Format("aCollider={0}", aCollider.Shape.ToString(false))); 
-        _logger.LogInfo(String.Format("bCollider1={0}", bCollider1.Shape.ToString(false))); 
+		primaryOverlapResult.reset();
+		collisionSys.RemoveSingle(bCollider1);
+        _logger.LogInfo(String.Format("aCollider={0}", aCollider.Shape.ToString(false) + "; touchingCells: " + aCollider.TouchingCellsStr())); 
         float squareEdgeLength = 16f;
-        var squarePoints = new float[8] { 0,0, squareEdgeLength,0, squareEdgeLength,squareEdgeLength, 0,squareEdgeLength};
-        var (anchorCx2, anchorCy2) = (anchorCx1 + triangleEdgeLength, anchorCy1);
-        var srcPolygon2 = new ConvexPolygon(anchorCx2, anchorCy2, squarePoints);
-        var bCollider2 = NewConvexPolygonCollider(srcPolygon2, 0, 0, null);
-        _logger.LogInfo(String.Format("bCollider2={0}", bCollider2.Shape.ToString(false))); 
+        var points2 = new float[8] { 0,0, squareEdgeLength,0, squareEdgeLength,squareEdgeLength, 0,squareEdgeLength};
+        var (anchorCx2, anchorCy2) = (20f, 4f);
+        var bCollider2 = NewConvexPolygonCollider(new ConvexPolygon(anchorCx2, anchorCy2, points2), 0, 0, null);
         collisionSys.AddSingle(bCollider2);
+        _logger.LogInfo(String.Format("bCollider2={0}", bCollider2.Shape.ToString(false) + "; touchingCells: " + bCollider2.TouchingCellsStr())); 
 
         hardPushbackCnt = calcHardPushbacksEx(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
         _logger.LogInfo(String.Format("T#2 hardPushbackCnt={0}, primaryOverlapIndex={1}, primaryOverlapResult={2}", hardPushbackCnt, primaryOverlapIndex, primaryOverlapResult.ToString()));
@@ -103,5 +95,19 @@ public class SkewedBarrierTest {
             var hardPushbackNorm = hardPushbackNorms[k];
             _logger.LogInfo(String.Format("T#2 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
         }
+        Assert.True(1 == hardPushbackCnt);
+
+        // Add both colliders
+        _logger.LogInfo("-------------------------------------------------------------------");
+		collisionSys.AddSingle(bCollider1);
+
+        hardPushbackCnt = calcHardPushbacksEx(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
+        _logger.LogInfo(String.Format("T#3 hardPushbackCnt={0}, primaryOverlapIndex={1}, primaryOverlapResult={2}", hardPushbackCnt, primaryOverlapIndex, primaryOverlapResult.ToString()));
+        for (int k = 0; k < hardPushbackCnt; k++) {
+            if (k == primaryOverlapIndex) continue;
+            var hardPushbackNorm = hardPushbackNorms[k];
+            _logger.LogInfo(String.Format("T#3 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
+        }
+        Assert.True(2 == hardPushbackCnt);
     }
 }
