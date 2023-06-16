@@ -115,6 +115,8 @@ namespace shared {
 
         public static int SP_ATK_LOOKUP_FRAMES = 5;
         public static float SNAP_INTO_PLATFORM_OVERLAP = 0.1f;
+        // [WARNING] The "zero overlap collision" might be randomly detected/missed on either frontend or backend, to have deterministic result we added paddings to all sides of a characterCollider. As each velocity component of (velX, velY) being a multiple of 0.5 at any renderFrame, each position component of (x, y) can only be a multiple of 0.5 too, thus whenever a 1-dimensional collision happens between players from [player#1: i*0.5, player#2: j*0.5, not collided yet] to [player#1: (i+k)*0.5, player#2: j*0.5, collided], the overlap becomes (i+k-j)*0.5+2*s, and after snapping subtraction the effPushback magnitude for each player is (i+k-j)*0.5, resulting in 0.5-multiples-position for the next renderFrame.
+        public static float SNAP_INTO_CHARACTER_OVERLAP = 2 * SNAP_INTO_PLATFORM_OVERLAP;
         public static float SNAP_INTO_PLATFORM_THRESHOLD = 0.5f;
         public static float VERTICAL_PLATFORM_THRESHOLD = 0.9f;
         public static int MAGIC_FRAMES_TO_BE_ON_WALL = 12;

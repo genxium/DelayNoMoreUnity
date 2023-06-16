@@ -3,6 +3,7 @@ using static shared.CharacterState;
 using System.Collections.Generic;
 using System.IO;
 using Google.Protobuf.Collections;
+using System.Threading;
 
 namespace shared {
     public partial class Battle {
@@ -469,18 +470,50 @@ namespace shared {
             }
         }
 
-        private static void _calcMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
+        private static void _calcMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
+            int primaryHardOverlapIndex;
             for (int i = iSt; i < iEd; i++) {
+                primaryOverlapResult.reset();
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
-                int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, SNAP_INTO_PLATFORM_OVERLAP, effPushbacks[i], hardPushbackNormsArr[i], collision, ref overlapResult, logger);
-
+                int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, logger);
+                if (0 < hardPushbackCnt) {
+                    /*
+                    if (1 == currCharacterDownsync.JoinIndex) {
+                        logger.LogInfo(String.Format("Before processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                    }
+                    */
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP);
+                    /*
+                    if (1 == currCharacterDownsync.JoinIndex) {
+                        logger.LogInfo(String.Format("After processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                    }
+                    */
+                }
+                
                 bool landedOnGravityPushback = false;
+                float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);
+                // Hold wall alignments of the primaryOverlapResult of hardPushbacks first, it'd be used later 
+                float normAlignmentWithHorizon1 = (primaryOverlapResult.OverlapX * +1f);
+                float normAlignmentWithHorizon2 = (primaryOverlapResult.OverlapX * -1f);
+                if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
+                    landedOnGravityPushback = true;
+                    /*
+                    if (0 == currCharacterDownsync.SpeciesId) {
+                        logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                    }
+                    */
+                }
+                
+                primaryOverlapResult.reset();
+                int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
+                float primarySoftOverlapMag = float.MinValue;
+
                 bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
                 if (collided) {
                     while (true) {
@@ -527,7 +560,7 @@ namespace shared {
                         if (false == maskMatched) {
                             continue;
                         }
-                        if (isBullet || isPatrolCue) {
+                        if (isBullet || isPatrolCue || isBarrier) {
                             // ignore bullets for this step
                             continue;
                         }
@@ -537,16 +570,10 @@ namespace shared {
                         if (!overlapped) {
                             continue;
                         }
-                        var normAlignmentWithGravity = (overlapResult.OverlapX * 0 + overlapResult.OverlapY * (-1.0));
-                        if (isAnotherCharacter) {
-                            // [WARNING] The "zero overlap collision" might be randomly detected/missed on either frontend or backend, to have deterministic result we added paddings to all sides of a characterCollider. As each velocity component of (velX, velY) being a multiple of 0.5 at any renderFrame, each position component of (x, y) can only be a multiple of 0.5 too, thus whenever a 1-dimensional collision happens between players from [player#1: i*0.5, player#2: j*0.5, not collided yet] to [player#1: (i+k)*0.5, player#2: j*0.5, collided], the overlap becomes (i+k-j)*0.5+2*s, and after snapping subtraction the effPushback magnitude for each player is (i+k-j)*0.5, resulting in 0.5-multiples-position for the next renderFrame.
-                            if (false == currCharacterDownsync.OmitPushback) {
-                                pushbackX = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapX;
-                                pushbackY = (overlapResult.OverlapMag - SNAP_INTO_PLATFORM_OVERLAP * 2) * overlapResult.OverlapY;
-                            } else {
-                                pushbackX = 0;
-                                pushbackY = 0;
-                            }
+                        normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
+                        if (isAnotherCharacter && currCharacterDownsync.OmitPushback) {
+                            pushbackX = 0;
+                            pushbackY = 0;
                         }
                         for (int k = 0; k < hardPushbackCnt; k++) {
                             Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
@@ -556,13 +583,41 @@ namespace shared {
                                 pushbackY -= projectedMagnitude * hardPushbackNorm.Y;
                             }
                         }
-                        effPushbacks[i].X += pushbackX;
-                        effPushbacks[i].Y += pushbackY;
+                        var magSqr = pushbackX * pushbackX + pushbackY * pushbackY;
+                        var invMag = InvSqrt32(magSqr);
+                        var mag = magSqr * invMag;
+
+                        if (isAnotherCharacter) {
+                            if (primarySoftOverlapMag < magSqr) {
+                                primarySoftOverlapMag = magSqr;
+                                primarySoftOverlapIndex = softPushbacksCnt;
+                                primaryOverlapResult.OverlapMag = mag;
+                                primaryOverlapResult.OverlapX = pushbackX * invMag;
+                                primaryOverlapResult.OverlapY = pushbackY * invMag;
+                                primaryOverlapResult.AxisX = primaryOverlapResult.OverlapX;
+                                primaryOverlapResult.AxisY = primaryOverlapResult.OverlapY;
+                            }
+
+                            softPushbacks[softPushbacksCnt].X = pushbackX;
+                            softPushbacks[softPushbacksCnt].Y = pushbackY;
+                            softPushbacksCnt++;
+                        }
 
                         if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
                             landedOnGravityPushback = true;
                         }
                     }
+                    /*
+                    if (0 == currCharacterDownsync.SpeciesId && 0 < softPushbacksCnt) {
+                        logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
+                    }
+                    */
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP);
+                    /*
+                    if (0 == currCharacterDownsync.SpeciesId && 0 < softPushbacksCnt) {
+                        logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
+                    }
+                    */
                 }
 
                 if (landedOnGravityPushback) {
@@ -587,6 +642,11 @@ namespace shared {
                                     var halfColliderVhDiff = ((chConfig.DefaultSizeY - chConfig.ShrinkedSizeY) >> 1);
                                     var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
                                     effPushbacks[i].Y -= halfColliderChDiff;
+                                    /*
+                                    if (0 == currCharacterDownsync.SpeciesId) {
+                                        logger.LogInfo(String.Format("Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff));
+                                    }
+                                    */
                                     break;
                             }
                             thatCharacterInNextFrame.CharacterState = Idle1;
@@ -610,6 +670,11 @@ namespace shared {
                                 }
                             }
                         }
+                        /*
+                        if (0 == currCharacterDownsync.SpeciesId) {
+                            logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                        }
+                        */
                     }
                 }
 
@@ -617,24 +682,15 @@ namespace shared {
                     if (thatCharacterInNextFrame.InAir) {
                         // [WARNING] Sticking to wall MUST BE based on "InAir", otherwise we would get gravity reduction from ground up incorrectly!
                         if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
-                            for (int k = 0; k < hardPushbackCnt; k++) {
-                                var hardPushbackNorm = hardPushbackNormsArr[i][k];
-                                float normAlignmentWithHorizon1 = (hardPushbackNorm.X * +1f);
-                                float normAlignmentWithHorizon2 = (hardPushbackNorm.X * -1f);
-
-                                if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1) {
-                                    thatCharacterInNextFrame.OnWall = true;
-                                    thatCharacterInNextFrame.OnWallNormX = +1;
-                                    thatCharacterInNextFrame.OnWallNormY = 0;
-                                    break;
-                                }
-                                if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2) {
-                                    thatCharacterInNextFrame.OnWall = true;
-                                    thatCharacterInNextFrame.OnWallNormX = -1;
-                                    thatCharacterInNextFrame.OnWallNormY = 0;
-                                    break;
-
-                                }
+                            if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1) {
+                                thatCharacterInNextFrame.OnWall = true;
+                                thatCharacterInNextFrame.OnWallNormX = +1;
+                                thatCharacterInNextFrame.OnWallNormY = 0;
+                            }
+                            if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2) {
+                                thatCharacterInNextFrame.OnWall = true;
+                                thatCharacterInNextFrame.OnWallNormX = -1;
+                                thatCharacterInNextFrame.OnWallNormY = 0;
                             }
                         }
                     }
@@ -762,7 +818,11 @@ namespace shared {
                 Collider aCollider = dynamicRectangleColliders[i];
                 // Update "virtual grid position"
                 (thatCharacterInNextFrame.VirtualGridX, thatCharacterInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
-
+                /*
+                if (0 == currCharacterDownsync.SpeciesId) {
+                    logger.LogInfo(String.Format("Will move to nextChState={0}, nextVy={1}: effPushback={2}: from chState={3}, vy={4}", thatCharacterInNextFrame.CharacterState, thatCharacterInNextFrame.VirtualGridY, effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                }
+                */
                 // Update "CharacterState"
                 if (thatCharacterInNextFrame.InAir) {
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
@@ -816,7 +876,7 @@ namespace shared {
             }
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -912,7 +972,7 @@ namespace shared {
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity + j, logger);
             _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
-            _calcMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, 0, roomCapacity + j, logger);
+            _calcMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, 0, roomCapacity + j, logger);
 
             _insertBulletColliders(currRenderFrame, roomCapacity, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
@@ -1077,6 +1137,7 @@ namespace shared {
                     break;
             }
         }
+
         public static void calcNpcVisionBoxInCollisionSpace(CharacterDownsync characterDownsync, CharacterConfig chConfig, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
             if (noOpSet.Contains(characterDownsync.CharacterState)) {
                 (boxCx, boxCy) = (0, 0);

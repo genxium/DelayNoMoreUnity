@@ -46,9 +46,10 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float effectivelyInfinitelyFar;
 
     protected shared.Collision collisionHolder;
-    protected SatResult overlapResult;
+    protected SatResult overlapResult, primaryOverlapResult;
     protected Vector[] effPushbacks;
     protected Vector[][] hardPushbackNormsArr;
+    protected Vector[] softPushbacks;
     protected shared.Collider[] dynamicRectangleColliders;
     protected shared.Collider[] staticColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
@@ -223,7 +224,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                     }
                 }
             }
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, _loggerBridge);
+
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -446,6 +448,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             for (int j = 0; j < cap; j++) {
                 hardPushbackNormsArr[i][j] = new Vector(0, 0);
             }
+        }
+        int softPushbacksCap = 16;
+        softPushbacks = new Vector[softPushbacksCap];
+        for (int i = 0; i < softPushbacks.Length; i++) {
+            softPushbacks[i] = new Vector(0, 0);
         }
 
         int dynamicRectangleCollidersCap = 32;

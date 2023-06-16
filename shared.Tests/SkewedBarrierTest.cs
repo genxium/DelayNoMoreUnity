@@ -20,7 +20,6 @@ public class SkewedBarrierTest {
         var collisionHolder = new Collision();
         var overlapResult = new SatResult();
         var primaryOverlapResult = new SatResult();
-        int primaryOverlapIndex = -1;
 
         var effPushback = new Vector(0, 0);
         var hardPushbackNorms = new Vector[5];
@@ -66,11 +65,11 @@ public class SkewedBarrierTest {
         collisionSys.AddSingle(bCollider1);
         _logger.LogInfo(String.Format("bCollider1={0}", bCollider1.Shape.ToString(false) + "; touchingCells: " + bCollider1.TouchingCellsStr())); 
 
-        int hardPushbackCnt = calcHardPushbacksEx(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
+        int primaryOverlapIndex = -1;
+        int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
 
-        _logger.LogInfo(String.Format("T#1 hardPushbackCnt={0}, primaryOverlapIndex={1}, primaryOverlapResult={2}", hardPushbackCnt, primaryOverlapIndex, primaryOverlapResult.ToString()));
+        _logger.LogInfo(String.Format("T#1 hardPushbackCnt={0}, primaryOverlapResult={1}", hardPushbackCnt, primaryOverlapResult.ToString()));
         for (int k = 0; k < hardPushbackCnt; k++) {
-            if (k == primaryOverlapIndex) continue;
             var hardPushbackNorm = hardPushbackNorms[k];
             _logger.LogInfo(String.Format("T#1 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
         }
@@ -88,10 +87,9 @@ public class SkewedBarrierTest {
         collisionSys.AddSingle(bCollider2);
         _logger.LogInfo(String.Format("bCollider2={0}", bCollider2.Shape.ToString(false) + "; touchingCells: " + bCollider2.TouchingCellsStr())); 
 
-        hardPushbackCnt = calcHardPushbacksEx(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
-        _logger.LogInfo(String.Format("T#2 hardPushbackCnt={0}, primaryOverlapIndex={1}, primaryOverlapResult={2}", hardPushbackCnt, primaryOverlapIndex, primaryOverlapResult.ToString()));
+        hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
+        _logger.LogInfo(String.Format("T#2 hardPushbackCnt={0}, primaryOverlapResult={1}", hardPushbackCnt, primaryOverlapResult.ToString()));
         for (int k = 0; k < hardPushbackCnt; k++) {
-            if (k == primaryOverlapIndex) continue;
             var hardPushbackNorm = hardPushbackNorms[k];
             _logger.LogInfo(String.Format("T#2 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
         }
@@ -101,10 +99,9 @@ public class SkewedBarrierTest {
         _logger.LogInfo("-------------------------------------------------------------------");
 		collisionSys.AddSingle(bCollider1);
 
-        hardPushbackCnt = calcHardPushbacksEx(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, SNAP_INTO_PLATFORM_OVERLAP, effPushback, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
-        _logger.LogInfo(String.Format("T#3 hardPushbackCnt={0}, primaryOverlapIndex={1}, primaryOverlapResult={2}", hardPushbackCnt, primaryOverlapIndex, primaryOverlapResult.ToString()));
+        hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
+        _logger.LogInfo(String.Format("T#3 hardPushbackCnt={0}, primaryOverlapResult={1}", hardPushbackCnt, primaryOverlapResult.ToString()));
         for (int k = 0; k < hardPushbackCnt; k++) {
-            if (k == primaryOverlapIndex) continue;
             var hardPushbackNorm = hardPushbackNorms[k];
             _logger.LogInfo(String.Format("T#3 hardPushbackNorms[{0}]={{ {1}, {2} }}", k, hardPushbackNorm.X, hardPushbackNorm.Y));
         }

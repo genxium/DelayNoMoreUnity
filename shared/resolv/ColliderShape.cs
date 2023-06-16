@@ -8,7 +8,20 @@ namespace shared {
             X = x;
             Y = y;
         }
+
+        public new String ToString() {
+            return String.Format("(X:{0}, Y:{1})", X, Y);
+        }
+
+        public static String VectorArrToString(Vector[] vecs, int cnt) {
+            String s = "";
+            for (int i = 0; i < cnt; i++) {
+                s += vecs[i].ToString() + "; ";
+            }
+            return s;
+        }
     }
+
 
     public class ConvexPolygon {
         public FrameRingBuffer<Vector> Points;

@@ -28,67 +28,7 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNorms(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbackNorms, Collision collision, ref SatResult overlapResult, ILoggerBridge logger) {
-            float virtualGripToWall = 0.0f;
-            if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
-                float xfac = 1.0f;
-                if (0 > thatPlayerInNextFrame.DirX) {
-                    xfac = -xfac;
-                }
-                virtualGripToWall = xfac * currCharacterDownsync.Speed * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
-            }
-            int retCnt = 0;
-            bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
-            if (!collided) {
-                return retCnt;
-            }
-
-            while (true) {
-                var (exists, bCollider) = collision.PopFirstContactedCollider();
-
-                if (!exists || null == bCollider) {
-                    break;
-                }
-                bool isBarrier = false;
-
-                switch (bCollider.Data) {
-                    case CharacterDownsync v1:
-                    case Bullet v2:
-                    case PatrolCue v3:
-                        break;
-                    default:
-                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
-                        isBarrier = true;
-                        break;
-                }
-
-                if (!isBarrier) {
-                    continue;
-                }
-                ConvexPolygon bShape = bCollider.Shape;
-
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, playerShape, bShape, true, ref overlapResult);
-
-                if (!overlapped) {
-                    continue;
-                }
-                
-                // ALWAY snap into hardPushbacks!
-                // [OverlapX, OverlapY] is the unit vector that points into the platform
-                pushbackX = (overlapResult.OverlapMag - snapIntoPlatformOverlap) * overlapResult.OverlapX;
-                pushbackY = (overlapResult.OverlapMag - snapIntoPlatformOverlap) * overlapResult.OverlapY;
-
-                hardPushbackNorms[retCnt].X = overlapResult.OverlapX;
-                hardPushbackNorms[retCnt].Y = overlapResult.OverlapY;
-
-                effPushback.X += pushbackX;
-                effPushback.Y += pushbackY;
-                retCnt++;
-            }
-            return retCnt;
-        }
-
-        public static int calcHardPushbacksEx(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, float snapIntoPlatformOverlap, Vector effPushback, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, ILoggerBridge logger) {
+        public static int calcHardPushbacksNorms(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, ILoggerBridge logger) {
             float virtualGripToWall = 0.0f;
             if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
                 float xfac = 1.0f;
@@ -99,12 +39,15 @@ namespace shared {
             }
             int retCnt = 0;
             primaryOverlapIndex = -1;
+            float primaryOverlapMag = float.MinValue;
+            bool primaryIsWall = true; // Initialized to "true" to be updated even if there's only 1 vertical wall 
+
             bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
             if (!collided) {
-				logger.LogInfo(String.Format("No collision object."));
+				//logger.LogInfo(String.Format("No collision object."));
                 return retCnt;
             }
-            float primaryOverlapMag = float.MinValue, primaryPushbackX = float.MinValue, primaryPushbackY = float.MinValue;
+ 
             while (true) {
                 var (exists, bCollider) = collision.PopFirstContactedCollider();
 
@@ -135,12 +78,25 @@ namespace shared {
                     continue;
                 }
 
-                if (overlapResult.OverlapMag > primaryOverlapMag) {
+                float normAlignmentWithHorizon1 = (overlapResult.OverlapX * +1f);
+                float normAlignmentWithHorizon2 = (overlapResult.OverlapX * -1f);
+                bool isWall = (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1 || VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2);
+                // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the horizontal edge is chosen as primary!
+                if (!isWall && primaryIsWall) {
                     primaryOverlapIndex = retCnt;
                     primaryOverlapMag = overlapResult.OverlapMag;
-                    primaryPushbackX = pushbackX;
-                    primaryPushbackY = pushbackY;
                     overlapResult.cloneInto(ref primaryOverlapResult);
+                    primaryIsWall = isWall;
+                } else if (isWall && !primaryIsWall) {
+                    // Just skip...
+                } else {
+                    // Same polarity
+                    if (overlapResult.OverlapMag > primaryOverlapMag) {
+                        primaryOverlapIndex = retCnt;
+                        primaryOverlapMag = overlapResult.OverlapMag;
+                        overlapResult.cloneInto(ref primaryOverlapResult);
+                        primaryIsWall = isWall;
+                    }
                 }
 
                 hardPushbacks[retCnt].X = pushbackX;
@@ -149,38 +105,49 @@ namespace shared {
                 retCnt++;
             }
 
-            // Now that we have a "primaryOverlapResult" which we should get off by top priority, i.e. all the other hardPushbacks should clamp their x and y components to be no bigger than that of the "primaryOverlapResult".
-            effPushback.X += primaryPushbackX;
-            effPushback.Y += primaryPushbackY;
-            for (int i = 0; i < retCnt; i++) {
-                if (i == primaryOverlapIndex) continue;
-                var hardPushback = hardPushbacks[i];
-                if (hardPushback.X * primaryPushbackX > 0) {
-                    if (Math.Abs(hardPushback.X) > Math.Abs(primaryPushbackX)) {
-                        hardPushback.X -= primaryPushbackX;
-                    } else {
-                        hardPushback.X = 0;
-                    }
-                }
-
-                if (hardPushback.Y * primaryPushbackY > 0) {
-                    if (Math.Abs(hardPushback.Y) > Math.Abs(primaryPushbackY)) {
-                        hardPushback.Y -= primaryPushbackY;
-                    } else {
-                        hardPushback.Y = 0;
-                    }
-                }
-                effPushback.X += hardPushback.X;
-                effPushback.Y += hardPushback.Y;
-            
-                // Normalize and thus re-purpose "hardPushbacks[i]" to be later used
-                var magSqr = hardPushback.X*hardPushback.X + hardPushback.Y*hardPushback.Y; 
-                var invMag = InvSqrt32(magSqr);
-                hardPushback.X *= invMag; 
-                hardPushback.Y *= invMag; 
-            }
-
             return retCnt;
+        }
+
+        public static void processPrimaryAndImpactEffPushback(Vector effPushback, Vector[] pushbacks, int pushbacksCnt, int primaryOverlapIndex, float snapOverlap) {
+            if (0 == pushbacksCnt) {
+                return;
+            }
+            // Now that we have a "primaryOverlap" which we should get off by top priority, i.e. all the other hardPushbacks should clamp their x and y components to be no bigger than that of the "primaryOverlap".
+            float primaryPushbackX = pushbacks[primaryOverlapIndex].X;
+            float primaryPushbackY = pushbacks[primaryOverlapIndex].Y;
+            
+            for (int i = 0; i < pushbacksCnt; i++) {
+                var pushback = pushbacks[i];
+                if (i != primaryOverlapIndex) {
+                    if (pushback.X * primaryPushbackX > 0) {
+                        if (Math.Abs(pushback.X) > Math.Abs(primaryPushbackX)) {
+                            pushback.X -= primaryPushbackX;
+                        } else {
+                            pushback.X = 0;
+                        }
+                    }
+
+                    if (pushback.Y * primaryPushbackY > 0) {
+                        if (Math.Abs(pushback.Y) > Math.Abs(primaryPushbackY)) {
+                            pushback.Y -= primaryPushbackY;
+                        } else {
+                            pushback.Y = 0;
+                        }
+                    }
+                }
+                // Normalize and thus re-purpose "pushbacks[i]" to be later used
+                var magSqr = pushback.X * pushback.X + pushback.Y * pushback.Y;
+                var invMag = InvSqrt32(magSqr);
+                var mag = magSqr * invMag;
+
+                float normX = pushback.X*invMag, normY = pushback.Y*invMag;
+                // [WARNING] The following statement works even when "mag < snapOverlap"!
+                effPushback.X += (mag-snapOverlap)*normX;
+                effPushback.Y += (mag-snapOverlap)*normY;
+
+                pushback.X = normX;
+                pushback.Y = normY;
+            }
         }
 
         public static float InvSqrt32(float x) {
