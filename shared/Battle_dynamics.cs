@@ -501,6 +501,17 @@ namespace shared {
                 // Hold wall alignments of the primaryOverlapResult of hardPushbacks first, it'd be used later 
                 float normAlignmentWithHorizon1 = (primaryOverlapResult.OverlapX * +1f);
                 float normAlignmentWithHorizon2 = (primaryOverlapResult.OverlapX * -1f);
+                bool onSlope = (!currCharacterDownsync.InAir && !thatCharacterInNextFrame.OnWall && 0 != primaryOverlapResult.OverlapY && 0 != primaryOverlapResult.OverlapX);
+                // Kindly remind that (primaryOverlapResult.OverlapX, primaryOverlapResult.OverlapY) points INTO the slope :) 
+                float projectedVel = (thatCharacterInNextFrame.VelX * primaryOverlapResult.OverlapX + thatCharacterInNextFrame.VelY * primaryOverlapResult.OverlapY); // This value is actually in VirtualGrid unit, but converted to float, thus it'd be eventually rounded 
+                bool goingDown = (onSlope && !currCharacterDownsync.JumpTriggered && 0 > projectedVel); // We don't care about going up, it's already working...  
+                if (goingDown) {
+                    float newVelXApprox = thatCharacterInNextFrame.VelX - primaryOverlapResult.OverlapX * projectedVel;
+                    float newVelYApprox = thatCharacterInNextFrame.VelY - primaryOverlapResult.OverlapY * projectedVel;
+                    thatCharacterInNextFrame.VelX = (int)Math.Round(newVelXApprox);
+                    thatCharacterInNextFrame.VelY = (int)Math.Round(newVelYApprox);
+                }
+
                 if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
                     landedOnGravityPushback = true;
                     /*
@@ -622,15 +633,17 @@ namespace shared {
                     }
                     
                     if (0 < softPushbacksCnt) {
+                        /*
                         if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
                             logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
                         }
-
+                        */
                         processPrimaryAndImpactEffPushback(effPushbacks[i], softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP);
-
+                        /*
                         if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
                             logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
                         }
+                        */
                     }
                 }
 
