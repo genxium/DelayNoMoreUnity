@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="214">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="215">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -8,18 +8,18 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2EFKw0AUgOFg1y5ciBfwJBHBjYh38CBu3Ih3cOU9rZJCwSadSTPzUudbfBQCbcr8M82jm67rNgAAAAAAAAAV3PMrukNk/4vG6d82/dumfxte9A/tf5nh1PeZ//L7j52PJVuuUev9c/SD6Gb6L9e/HxHdRf86/aPXv4apZ5v+/8/UM0z/6f45c2AJu+9Wc69Ed4jsn3NWajXcLPAZ+qf17yec0u9cfgta719iTec0u9kzdw88bD0duG7+q9c/p9fSHgfmv/z+pee+z79e9y15r75Lf4b9rMHdClpE9S8x/431fx+xdP+UfbHT+vk/tCapZ0f/81bz/5/9/l/b3sNr1f6H6F/HR4IS973Vf7L/9SCye6k98JZA//T+x87S3OZz9kSfcE3/4/2J7xDZ/7lx+retZP+rlYte+7WI7qC//vrrr7/+AAAAAAAAAAAAQKxvlx3r+A==
+   eJzt2EFKw0AUgOFg1y5ciBfwJBHBjYh38CBu3Ih3cOU9rZJC0SadiZl5qfMtPgqBNmX+mebRTdd1GwAAAAAAAIAKbvkW3SGy/1nj9G+b/m3Tvw1P+of2P88w530/m5r/8vqPnY8lW65R6/1z9IPoZvov178fEd1F/zr9o9e/hqlnm/7/z9QzTP/p/jlzYAm771Zzr0R3iOyfc1ZqNdws8Bn6p/XvJ/yl36n8FrTev8Sazml2tWfuHrjbejhw3fxXr39Or6XdD8x/+f1Lz33vvz3vW/JefZf+DPtag5sVtIjqX2L+G+v/OmLp/in7Yqf1839oTVLPjv6nreb/P/v9P7a9h9eq/Q/Rv463BCXue63/ZP/LQWT3UnvgJYH+6f2PnaW5zefsiT7hmv7H+xPfIbL/Y+P0b1vJ/hcrF732axHdQX/99ddff/0BAAAAAAAAAACAWJ/Ihevt
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="135" x="1592.33" y="285">
+  <object id="135" x="1591" y="281">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="137" x="696.67" y="315.666">
+  <object id="137" x="696.003" y="311">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -85,7 +85,7 @@
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speciesId" value="3"/>
-    <property name="teamId" value="1"/>
+    <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
@@ -194,7 +194,7 @@
    </properties>
    <point/>
   </object>
-  <object id="190" x="1392.33" y="315.333">
+  <object id="190" x="1390.33" y="302.666">
    <properties>
     <property name="fdAct" value="1"/>
     <property name="fdCaptureFrames" value="30"/>
@@ -286,7 +286,7 @@
    </properties>
    <point/>
   </object>
-  <object id="207" x="1464" y="301">
+  <object id="207" x="1456" y="303">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -294,7 +294,7 @@
    </properties>
    <point/>
   </object>
-  <object id="208" x="1515" y="299">
+  <object id="208" x="1505" y="301">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -348,7 +348,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="98" x="656" y="336" width="176" height="16">
+  <object id="98" x="656" y="336" width="88" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -403,7 +403,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="200" x="1296" y="304" width="176" height="16">
+  <object id="200" x="1296" y="304" width="160" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -412,6 +412,11 @@
    <polyline points="0,0 -32,-16 -32,16 0,16"/>
   </object>
   <object id="212" x="1592" y="304" width="88" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="214" x="744" y="336" width="88" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

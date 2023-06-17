@@ -28,7 +28,7 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNorms(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, ILoggerBridge logger) {
+        public static int calcHardPushbacksNorms(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             float virtualGripToWall = 0.0f;
             if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
                 float xfac = 1.0f;
@@ -41,7 +41,7 @@ namespace shared {
             primaryOverlapIndex = -1;
             float primaryOverlapMag = float.MinValue;
             bool primaryIsWall = true; // Initialized to "true" to be updated even if there's only 1 vertical wall 
-
+            residueCollided.Clear();
             bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
             if (!collided) {
 				//logger.LogInfo(String.Format("No collision object."));
@@ -68,6 +68,7 @@ namespace shared {
                 }
 
                 if (!isBarrier) {
+                    residueCollided.Put(bCollider);
                     continue;
                 }
                 ConvexPolygon bShape = bCollider.Shape;

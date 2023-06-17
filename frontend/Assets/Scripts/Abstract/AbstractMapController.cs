@@ -35,6 +35,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected CharacterDownsync selfPlayerInfo = null;
     protected FrameRingBuffer<RoomDownsyncFrame> renderBuffer = null;
     protected FrameRingBuffer<InputFrameDownsync> inputBuffer = null;
+    protected FrameRingBuffer<shared.Collider> residueCollided = null;
 
     protected ulong[] prefabbedInputListHolder;
     protected GameObject[] playerGameObjs;
@@ -225,7 +226,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -414,6 +415,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
+        int residueCollidedCap = 128; 
+        residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap); 
+        
         renderBufferSize = 1024;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
@@ -539,6 +543,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
         renderBuffer.Clear();
         inputBuffer.Clear();
+        residueCollided.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
         readyGoPanel.resetCountdown();
