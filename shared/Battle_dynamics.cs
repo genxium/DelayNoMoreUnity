@@ -703,10 +703,12 @@ namespace shared {
                                     thatCharacterInNextFrame.CharacterState = Idle1;
                                     thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
                                 }
-                            } else if (!thatCharacterInNextFrame.OnSlope && currCharacterDownsync.OnSlope) {
-                                // [WARNING] Walking up to a flat ground, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY".
-                                thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
                             }
+                        }
+
+                        if (!thatCharacterInNextFrame.OnSlope && currCharacterDownsync.OnSlope) {
+                            // [WARNING] Walking up to a flat ground, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY".
+                            thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
                         }
                         /*
                         if (0 == currCharacterDownsync.SpeciesId) {
