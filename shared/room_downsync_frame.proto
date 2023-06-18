@@ -82,6 +82,8 @@ message CharacterDownsync {
 	int32 revivalVirtualGridY = 34;
 	int32 revivalDirX = 35;
 	int32 revivalDirY = 36;
+
+	bool onSlope = 37;
         
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;

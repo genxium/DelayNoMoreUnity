@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="215">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="220">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -8,18 +8,18 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2EFKw0AUgOFg1y5ciBfwJBHBjYh38CBu3Ih3cOU9rZJC0SadiZl5qfMtPgqBNmX+mebRTdd1GwAAAAAAAIAKbvkW3SGy/1nj9G+b/m3Tvw1P+of2P88w530/m5r/8vqPnY8lW65R6/1z9IPoZvov178fEd1F/zr9o9e/hqlnm/7/z9QzTP/p/jlzYAm771Zzr0R3iOyfc1ZqNdws8Bn6p/XvJ/yl36n8FrTev8Sazml2tWfuHrjbejhw3fxXr39Or6XdD8x/+f1Lz33vvz3vW/JefZf+DPtag5sVtIjqX2L+G+v/OmLp/in7Yqf1839oTVLPjv6nreb/P/v9P7a9h9eq/Q/Rv463BCXue63/ZP/LQWT3UnvgJYH+6f2PnaW5zefsiT7hmv7H+xPfIbL/Y+P0b1vJ/hcrF732axHdQX/99ddff/0BAAAAAAAAAACAWJ/Ihevt
+   eJzt2EFOwkAYgNEGQuLGBQvDBTxJjQfwDh6EDRvjHQwL7ykoxAZombYzHXTe4mUSEij5v5nSMK+qag4AAAAAAAAwgWe+5e6Qs/+scPqXTf+y6V82/cum/4/XHjO77yFVt20Pd1W1Xu7WS0rv30d9MKTXqoq7b0K7L3broqW9/r9NT+W+L4/p3+ze1V7//B1j9T9trv//779vvm1pHtJe//O59nkOTOH43WYB7WIovX+XGA3HvH/MZ4QqvX/dYUy/2PcC/dP0TzHTIc1WDVPuAf3jt0/ZS/80/VM/932cWzfFvFZdhf+G7WfwdAMtcvVP8fzX1v+tRez+IfviqPTzf2kmoWdH/79tyv9/mv0/d70P66T9L9F/Gu8BUlz3Uf/O/g8HObun2gObAPqH9792loY2H7In6oDX9L/en/wdcvZ/KZz+ZUvZf3njcs/+VuTuoL/++uuvv/4AAAAAAAAAAABAXl8SIP2C
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="135" x="1591" y="281">
+  <object id="135" x="1626.17" y="284">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="137" x="696.003" y="311">
+  <object id="137" x="695.333" y="325.5">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -27,17 +27,9 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="9" name="TrapStartingPos">
-  <object id="174" x="902.667" y="384.666">
-   <properties>
-    <property name="dirY" value="+2"/>
-    <property name="speciesId" value="2048"/>
-   </properties>
-   <point/>
-  </object>
- </objectgroup>
+ <objectgroup id="9" name="TrapStartingPos"/>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="138" x="1553.5" y="555.834">
+  <object id="138" x="1482.83" y="303.834">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="3"/>
@@ -49,7 +41,6 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
@@ -63,11 +54,10 @@
    </properties>
    <point/>
   </object>
-  <object id="184" x="1378.33" y="588.333">
+  <object id="184" x="728.33" y="396.333">
    <properties>
     <property name="dirX" value="2"/>
     <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="1"/>
    </properties>
    <point/>
@@ -76,12 +66,11 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="192" x="836.5" y="578.5">
+  <object id="192" x="836.5" y="569.167">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speciesId" value="3"/>
@@ -98,11 +87,10 @@
    </properties>
    <point/>
   </object>
-  <object id="213" x="1476" y="589.333">
+  <object id="213" x="694.667" y="479.333">
    <properties>
     <property name="dirX" value="2"/>
     <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="1"/>
    </properties>
    <point/>
@@ -169,49 +157,6 @@
    </properties>
    <point/>
   </object>
-  <object id="175" x="901" y="313">
-   <properties>
-    <property name="fdAct" value="1"/>
-    <property name="fdCaptureFrames" value="30"/>
-    <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="30"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="176" x="902" y="451">
-   <properties>
-    <property name="fdAct" value="1"/>
-    <property name="fdCaptureFrames" value="120"/>
-    <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="120"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="189" x="1394" y="386.999">
-   <properties>
-    <property name="dirY" value="-2"/>
-    <property name="speciesId" value="2048"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="190" x="1390.33" y="302.666">
-   <properties>
-    <property name="fdAct" value="1"/>
-    <property name="fdCaptureFrames" value="30"/>
-    <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="30"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="191" x="1393.33" y="453.333">
-   <properties>
-    <property name="fdAct" value="1"/>
-    <property name="fdCaptureFrames" value="120"/>
-    <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="120"/>
-   </properties>
-   <point/>
-  </object>
   <object id="193" x="975" y="589">
    <properties>
     <property name="flAct" value="19"/>
@@ -262,7 +207,7 @@
    </properties>
    <point/>
   </object>
-  <object id="204" x="1076" y="299">
+  <object id="204" x="1092" y="332.333">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -270,7 +215,7 @@
    </properties>
    <point/>
   </object>
-  <object id="205" x="1240" y="299">
+  <object id="205" x="1258" y="331.667">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -278,27 +223,11 @@
    </properties>
    <point/>
   </object>
-  <object id="206" x="1303" y="300">
+  <object id="206" x="1284.33" y="396.667">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
     <property name="id" value="23"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="207" x="1456" y="303">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-    <property name="id" value="24"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="208" x="1505" y="301">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-    <property name="id" value="25"/>
    </properties>
    <point/>
   </object>
@@ -378,17 +307,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="185" x="1504" y="464" width="112" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="186" x="1504" y="304" width="88" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="187" x="1504" y="384" width="112" height="16">
+  <object id="185" x="1280" y="400" width="112" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -398,20 +317,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="199" x="1072" y="304" width="176" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="200" x="1296" y="304" width="160" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="211" x="1504" y="464">
-   <polyline points="0,0 -32,-16 -32,16 0,16"/>
-  </object>
-  <object id="212" x="1592" y="304" width="88" height="16">
+  <object id="199" x="1088" y="336" width="176" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -421,5 +327,9 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
+  <object id="215" x="1680" y="320">
+   <polyline points="-96,0 -288,80 -288,96 -96,96"/>
+  </object>
+  <object id="219" x="1584" y="320" width="96" height="96"/>
  </objectgroup>
 </map>

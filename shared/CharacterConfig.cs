@@ -16,6 +16,7 @@
         public int GetUpFramesToRecover;
 
         public int Speed;
+        public int DownSlopePrimerVelY; // this value should be big enough such that smooth transition is enabled for the steepest slope, but small enough such that no character would penetrate the thinest barrier
         public int MpRegenRate; // an integer for mp regeneration rate PER FRAME
 
         public int JumpingInitVelY;
