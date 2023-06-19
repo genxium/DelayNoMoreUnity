@@ -65,7 +65,7 @@ public class OfflineMapController : AbstractMapController {
     void Update() {
         try {
             doUpdate();
-            //urpDrawDebug();
+            urpDrawDebug();
             if (renderFrameId >= battleDurationFrames) {
                 onBattleStopped();
             } else {

@@ -482,6 +482,9 @@ namespace shared {
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
                 int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, logger);
+                if (0 == currCharacterDownsync.SpeciesId && GetUp1 == currCharacterDownsync.CharacterState) {
+                    ;
+                }
                 if (0 < hardPushbackCnt) {
                     /* 
                     if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
@@ -673,11 +676,11 @@ namespace shared {
                                     var halfColliderVhDiff = ((chConfig.DefaultSizeY - chConfig.ShrinkedSizeY) >> 1);
                                     var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
                                     effPushbacks[i].Y -= halfColliderChDiff;
-                                    /*
+                                    
                                     if (0 == currCharacterDownsync.SpeciesId) {
-                                        logger.LogInfo(String.Format("Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff));
+                                        logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
                                     }
-                                    */
+                                    
                                     break;
                             }
                             thatCharacterInNextFrame.CharacterState = Idle1;
@@ -690,21 +693,21 @@ namespace shared {
                                 thatCharacterInNextFrame.VelY = 0;
                                 thatCharacterInNextFrame.VelX = 0;
                             } else if (LayDown1 == thatCharacterInNextFrame.CharacterState) {
+                                thatCharacterInNextFrame.VelY = 0;
                                 if (0 == thatCharacterInNextFrame.FramesToRecover) {
                                     thatCharacterInNextFrame.CharacterState = GetUp1;
                                     thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
                                 }
                             } else if (GetUp1 == thatCharacterInNextFrame.CharacterState) {
+                                thatCharacterInNextFrame.VelY = 0;
                                 if (0 == thatCharacterInNextFrame.FramesToRecover) {
                                     thatCharacterInNextFrame.CharacterState = Idle1;
                                     thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
                                 }
+                            } else if (currCharacterDownsync.OnSlope && !thatCharacterInNextFrame.OnSlope) {
+                                // [WARNING] Walking up to a flat ground, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY".
+                                thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
                             }
-                        }
-
-                        if (!thatCharacterInNextFrame.OnSlope && currCharacterDownsync.OnSlope) {
-                            // [WARNING] Walking up to a flat ground, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY".
-                            thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
                         }
                         /*
                         if (0 == currCharacterDownsync.SpeciesId) {
@@ -861,11 +864,11 @@ namespace shared {
                 */
                 // Update "CharacterState"
                 if (thatCharacterInNextFrame.InAir) {
-                    /*
+                    
                     if (0 == currCharacterDownsync.SpeciesId && false == currCharacterDownsync.InAir) {
-                        logger.LogInfo(String.Format("Rdf.id={0}, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: transitted to InAir", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+                        logger.LogInfo(String.Format("Rdf.id={0}, chState={1}, framesInChState={6}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: transitted to InAir", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.FramesInChState));
                     }
-                    */
+                    
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
                     switch (oldNextCharacterState) {
                         case Idle1:
