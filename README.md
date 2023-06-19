@@ -1,19 +1,23 @@
 # What's this project?
 It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a Multiplayer Platformer game demo on websocket with delayed-input Rollback Netcode inspired by GGPO -- but with the backend also rebuilt in C#.
 
-(battle between Wifi PC v.s. Wifi Android via internet (and UDP peer-to-peer holepunch failed), input delay = 2 frames i.e. ~32ms, [original video here](https://pan.baidu.com/s/1WtgnojBaWiiW0zJ6I9yvZg?pwd=rpyc))
+(battle between Wifi Android v.s. Wifi Android via internet (and UDP peer-to-peer holepunch failed), input delay = 2 frames i.e. ~32ms, [slope dynamics video here](https://pan.baidu.com/s/1ANH2nlcT09mHFJcuvDPZlA?pwd=ycuk) & [multi-enemy-head-walk video here](https://pan.baidu.com/s/1A1u3d4G943FLmdOFAblTJw?pwd=gez7))
 
-![Internet_Dual_Fighting_BullWarrior_1](./charts/Internet_Dual_Fighting_BullWarrior_1.gif)
+_slope dynamics_
 
-(battle between Wifi Android v.s. Wifi Android via internet (and UDP peer-to-peer holepunch succeeded), input delay = 2 frames i.e. ~32ms, [original video here](https://pan.baidu.com/s/1tJg_9QNYLz4TQTt3C-snRw?pwd=0e16))
+![Internet_Dual_SlopeDynamics](./charts/Internet_Dual_SlopeDynamics.gif)
 
-![Internet_Dual_2_Merged_SpedUp](./charts/Internet_Dual_2_Merged_SpedUp.gif)
+_multi-enemy-head-walk_
+
+![Internet_Dual_SoftPushbacks](./charts/Internet_Dual_SoftPushbacks.gif)
 
 # Notable Features (by far, would add more in the future)
 - Automatically correction for "slow ticker", especially "active slow ticker" which is well-known to be a headache for input synchronization
 - Peer-to-peer UDP holepunching whenever possible, and will fallback to use the backend as a UDP relay/tunnel if holepunching failed for any participant (kindly note that UDP is always used along side with WebSocket, where the latter is a golden source of frame info)
 - Frame logging toggle for both frontend & backend (i.e. `backend/Battle/Room.frameLogEnabled`), useful for debugging out of sync entities when developing new features
 - Rollback compatible NPC patrolling and vision reaction
+- Simple slope dynamics 
+- Standing and walking on multiple enemy-heads
 
 # How does it work to synchronize across multiple players?
 _(how input delay roughly works)_
