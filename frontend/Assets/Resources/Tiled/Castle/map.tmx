@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="220">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="224">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -33,7 +33,7 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="3"/>
-    <property name="teamId" value="2"/>
+    <property name="teamId" value="1"/>
    </properties>
    <point/>
   </object>
@@ -91,6 +91,14 @@
    <properties>
     <property name="dirX" value="2"/>
     <property name="speciesId" value="1"/>
+    <property name="teamId" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="223" x="1333.33" y="375.333">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="3"/>
     <property name="teamId" value="1"/>
    </properties>
    <point/>

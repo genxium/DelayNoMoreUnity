@@ -589,49 +589,45 @@ namespace shared {
                         }
 
                         ConvexPolygon bShape = bCollider.Shape;
-                        var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                        var (overlapped, softPushbackX, softPushbackY) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
                         if (!overlapped) {
                             continue;
                         }
                         normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
                         if (isAnotherCharacter && currCharacterDownsync.OmitPushback) {
-                            pushbackX = 0;
-                            pushbackY = 0;
+                            softPushbackX = 0;
+                            softPushbackY = 0;
                         }
                         for (int k = 0; k < hardPushbackCnt; k++) {
                             Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
-                            float projectedMagnitude = pushbackX * hardPushbackNorm.X + pushbackY * hardPushbackNorm.Y;
-                            if (isBarrier || (isAnotherCharacter && 0 > projectedMagnitude)) {
-                                pushbackX -= projectedMagnitude * hardPushbackNorm.X;
-                                pushbackY -= projectedMagnitude * hardPushbackNorm.Y;
-                                if (pushbackX < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
-                                    // Clamp to zero if it does not move at least 1 virtual grid step
-                                    pushbackX = 0;
-                                }
-                                if (pushbackY < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
-                                    // Clamp to zero if it does not move at least 1 virtual grid step
-                                    pushbackY = 0;
+                            float projectedMagnitude = softPushbackX * hardPushbackNorm.X + softPushbackY * hardPushbackNorm.Y;
+                            if (isAnotherCharacter) {
+                                if (0 > projectedMagnitude || (thatCharacterInNextFrame.OnSlope && k == primaryHardOverlapIndex)) {
+                                    // [WARNING] We don't want a softPushback to push an on-slope character either "into" or "outof" the slope!
+                                    softPushbackX -= projectedMagnitude * hardPushbackNorm.X;
+                                    softPushbackY -= projectedMagnitude * hardPushbackNorm.Y;
+                                    if (softPushbackX < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
+                                        // Clamp to zero if it does not move at least 1 virtual grid step
+                                        softPushbackX = 0;
+                                    }
+                                    if (softPushbackY < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
+                                        // Clamp to zero if it does not move at least 1 virtual grid step
+                                        softPushbackY = 0;
+                                    }
                                 }
                             }
                         }
 
-                        if (isAnotherCharacter && (0 != pushbackX || 0 != pushbackY)) {
+                        if (isAnotherCharacter && (0 != softPushbackX || 0 != softPushbackY)) {
                             // [WARNING] Only count non-zero softPushbacks. The order of statements here is deliberately put as-is to reduce computations.
-                            var magSqr = pushbackX * pushbackX + pushbackY * pushbackY;
+                            var magSqr = softPushbackX * softPushbackX + softPushbackY * softPushbackY;
                             if (primarySoftOverlapMagSqr < magSqr) {
                                 primarySoftOverlapMagSqr = magSqr;
-                                var invMag = InvSqrt32(magSqr);
-                                var mag = magSqr * invMag;
                                 primarySoftOverlapIndex = softPushbacksCnt;
-                                primaryOverlapResult.OverlapMag = mag;
-                                primaryOverlapResult.OverlapX = pushbackX * invMag;
-                                primaryOverlapResult.OverlapY = pushbackY * invMag;
-                                primaryOverlapResult.AxisX = primaryOverlapResult.OverlapX;
-                                primaryOverlapResult.AxisY = primaryOverlapResult.OverlapY;
                             }
 
-                            softPushbacks[softPushbacksCnt].X = pushbackX;
-                            softPushbacks[softPushbacksCnt].Y = pushbackY;
+                            softPushbacks[softPushbacksCnt].X = softPushbackX;
+                            softPushbacks[softPushbacksCnt].Y = softPushbackY;
                             softPushbacksCnt++;
                         }
 
