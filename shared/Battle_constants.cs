@@ -841,7 +841,7 @@ namespace shared {
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                        CloseEnoughVirtualGridDistance = (int)(40.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
@@ -878,7 +878,7 @@ namespace shared {
                         DyingSizeY = (int)(46f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                        CloseEnoughVirtualGridDistance = (int)(90.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(3, new CharacterConfig {
@@ -909,7 +909,7 @@ namespace shared {
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                        CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(2048, new CharacterConfig {
