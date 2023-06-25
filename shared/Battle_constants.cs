@@ -323,9 +323,11 @@ namespace shared {
                                 CancellableEdFrame = 0,
                                 BlowUp = true,
                                 SpeciesId = 3,
+                                Speed = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 1,
+                                DirY = 0,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
-                                Speed = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
                             }
                         )),
@@ -480,25 +482,84 @@ namespace shared {
                                 ActiveFrames = 600,
                                 HitStunFrames = 30,
                                 BlockStunFrames = 9,
-                                Damage = 14,
+                                Damage = 12,
                                 PushbackVelX = (int)(0.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 PushbackVelY = NO_LOCK_VEL,
                                 SelfLockVelX = NO_LOCK_VEL,
                                 SelfLockVelY = NO_LOCK_VEL,
                                 HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 CancellableStFrame = 0,
                                 CancellableEdFrame = 0,
                                 BlowUp = false,
                                 SpeciesId = 2,
+                                Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 1,
+                                DirY = 0,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
+                                CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX,
+                                SimultaneousMultiHitCnt = 2
+                            }
+                        )
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 16,
+                                ActiveFrames = 600,
+                                HitStunFrames = 30,
+                                BlockStunFrames = 9,
+                                Damage = 12,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(-0.2f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 2,
                                 Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 1,
+                                DirY = -1,
+                                ExplosionFrames = 30,
+                                BType = BulletType.Fireball,
+                                CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX,
+                                SimultaneousMultiHitCnt = 1
+                            }
+                        )
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 16,
+                                ActiveFrames = 600,
+                                HitStunFrames = 30,
+                                BlockStunFrames = 9,
+                                Damage = 12,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(0.2f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(-4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CancellableStFrame = 0,
+                                CancellableEdFrame = 0,
+                                BlowUp = false,
+                                SpeciesId = 2,
+                                Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 1,
+                                DirY = +1,
+                                ExplosionFrames = 30,
+                                BType = BulletType.Fireball,
                                 CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
                             }
-                        )),
+                        )
+                    ),
 
                     new KeyValuePair<int, Skill>(10, new Skill{
                         RecoveryFrames = 10,
@@ -629,9 +690,11 @@ namespace shared {
                                 CancellableEdFrame = 0,
                                 BlowUp = false,
                                 SpeciesId = 4,
+                                Speed = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 1,
+                                DirY = 0,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Fireball,
-                                Speed = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX
                             }
                         )),
@@ -697,9 +760,11 @@ namespace shared {
                                 CancellableEdFrame = 0,
                                 BlowUp = true,
                                 SpeciesId = 4,
+                                Speed = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 1,
+                                DirY = 0,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Fireball,
-                                Speed = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX
                             }
                         )),

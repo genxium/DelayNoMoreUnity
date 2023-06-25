@@ -396,7 +396,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (null == explosionAnimHolder) {
                 throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}, animName={1}", lookupKey, animName));
             }
-            explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, rdf);
+            explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf);
             explosionAnimHolder.score = rdf.Id;
             newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
             explosionAnimHolder.gameObject.transform.position = newPosHolder;

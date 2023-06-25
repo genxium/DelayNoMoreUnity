@@ -67,7 +67,7 @@ namespace shared {
             "KAQSFwoPZnVDYXB0dXJlRnJhbWVzGAkgASgEEhoKEWNvbGxpc2lvblR5cGVN",
             "YXNrGIUIIAEoBCJUCglWaXNpb25Cb3gSEwoLYm90dG9tTGVmdFgYASABKAUS",
             "EwoLYm90dG9tTGVmdFkYAiABKAUSDQoFd2lkdGgYAyABKAUSDgoGaGVpZ2h0",
-            "GAQgASgFIuMECgxCdWxsZXRDb25maWcSFQoNc3RhcnR1cEZyYW1lcxgBIAEo",
+            "GAQgASgFIsYFCgxCdWxsZXRDb25maWcSFQoNc3RhcnR1cEZyYW1lcxgBIAEo",
             "BRIaChJjYW5jZWxsYWJsZVN0RnJhbWUYAiABKAUSGgoSY2FuY2VsbGFibGVF",
             "ZEZyYW1lGAMgASgFEhQKDGFjdGl2ZUZyYW1lcxgEIAEoBRIVCg1oaXRTdHVu",
             "RnJhbWVzGAUgASgFEhcKD2Jsb2NrU3R1bkZyYW1lcxgGIAEoBRIUCgxwdXNo",
@@ -77,67 +77,72 @@ namespace shared {
             "WRgNIAEoBRITCgtoaXRib3hTaXplWBgOIAEoBRITCgtoaXRib3hTaXplWRgP",
             "IAEoBRIOCgZibG93VXAYECABKAgSEQoJc3BlY2llc0lkGBEgASgFEhcKD2V4",
             "cGxvc2lvbkZyYW1lcxgSIAEoBRIhCgViVHlwZRgTIAEoDjISLnNoYXJlZC5C",
-            "dWxsZXRUeXBlEg0KBXNwZWVkGBQgASgFEj4KDWNhbmNlbFRyYW5zaXQYFSAD",
-            "KAsyJy5zaGFyZWQuQnVsbGV0Q29uZmlnLkNhbmNlbFRyYW5zaXRFbnRyeRIa",
-            "ChFjb2xsaXNpb25UeXBlTWFzaxiFCCABKAQaNAoSQ2FuY2VsVHJhbnNpdEVu",
-            "dHJ5EgsKA2tleRgBIAEoBRINCgV2YWx1ZRgCIAEoBToCOAEikQEKEEJ1bGxl",
-            "dEJhdHRsZUF0dHISFQoNYnVsbGV0TG9jYWxJZBgBIAEoBRIfChdvcmlnaW5h",
-            "dGVkUmVuZGVyRnJhbWVJZBgCIAEoBRIZChFvZmZlbmRlckpvaW5JbmRleBgD",
-            "IAEoBRIOCgZ0ZWFtSWQYBCABKAUSGgoRY29sbGlzaW9uVHlwZU1hc2sYhQgg",
-            "ASgEIoUCCgZCdWxsZXQSJAoHYmxTdGF0ZRgBIAEoDjITLnNoYXJlZC5CdWxs",
-            "ZXRTdGF0ZRIXCg9mcmFtZXNJbkJsU3RhdGUYAiABKAUSLAoKYmF0dGxlQXR0",
-            "chgDIAEoCzIYLnNoYXJlZC5CdWxsZXRCYXR0bGVBdHRyEiQKBmNvbmZpZxgE",
-            "IAEoCzIULnNoYXJlZC5CdWxsZXRDb25maWcSFQoMdmlydHVhbEdyaWRYGOcH",
-            "IAEoBRIVCgx2aXJ0dWFsR3JpZFkY6AcgASgFEg0KBGRpclgY6QcgASgFEg0K",
-            "BGRpclkY6gcgASgFEg0KBHZlbFgY6wcgASgFEg0KBHZlbFkY7AcgASgFIjgK",
-            "C1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwKBHBvcnQYAiABKAUSDwoHYXV0",
-            "aEtleRgDIAEoBSLFAwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEKCXN0YWdlTmFt",
-            "ZRgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIcChRiYXR0bGVEdXJhdGlv",
-            "bkZyYW1lcxgDIAEoAxImCh5pbnB1dEZyYW1lVXBzeW5jRGVsYXlUb2xlcmFu",
-            "Y2UYBCABKAUSJwofbWF4Q2hhc2luZ1JlbmRlckZyYW1lc1BlclVwZGF0ZRgF",
-            "IAEoBRIhChlyb2xsYmFja0VzdGltYXRlZER0TWlsbGlzGAYgASgBEiAKGHJv",
-            "bGxiYWNrRXN0aW1hdGVkRHROYW5vcxgHIAEoAxIYChByZW5kZXJCdWZmZXJT",
-            "aXplGAggASgFEhgKEGNvbGxpc2lvbk1pblN0ZXAYCSABKAUSGQoRYm91bmRS",
-            "b29tQ2FwYWNpdHkYCiABKAUSGwoTcHJlYWxsb2NOcGNDYXBhY2l0eRgLIAEo",
-            "BRIeChZwcmVhbGxvY0J1bGxldENhcGFjaXR5GAwgASgFEi0KD2JhdHRsZVVk",
-            "cFR1bm5lbBiACCABKAsyEy5zaGFyZWQuUGVlclVkcEFkZHISGAoPZnJhbWVM",
-            "b2dFbmFibGVkGIEIIAEoCCKhAwoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQY",
-            "ASABKAUSLQoKcGxheWVyc0FychgCIAMoCzIZLnNoYXJlZC5DaGFyYWN0ZXJE",
-            "b3duc3luYxIWCg5jb3VudGRvd25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQg",
-            "AygLMg4uc2hhcmVkLkJ1bGxldBIqCgducGNzQXJyGAUgAygLMhkuc2hhcmVk",
-            "LkNoYXJhY3RlckRvd25zeW5jEisKCHRyYXBzQXJyGAYgAygLMhkuc2hhcmVk",
-            "LkNoYXJhY3RlckRvd25zeW5jEh8KFmJhY2tlbmRVbmNvbmZpcm1lZE1hc2sY",
-            "gAggASgEEhoKEXNob3VsZEZvcmNlUmVzeW5jGIEIIAEoCBIWCg1zcGVjaWVz",
-            "SWRMaXN0GIIIIAMoBRIdChRidWxsZXRMb2NhbElkQ291bnRlchiDCCABKAUS",
-            "LQoPcGVlclVkcEFkZHJMaXN0GIQIIAMoCzITLnNoYXJlZC5QZWVyVWRwQWRk",
-            "chIcChNwYXJ0aWNpcGFudENoYW5nZUlkGIUIIAEoBSLcAQoGV3NSZXNwEgsK",
-            "A3JldBgBIAEoBRILCgNhY3QYAiABKAUSJgoDcmRmGAMgASgLMhkuc2hhcmVk",
-            "LlJvb21Eb3duc3luY0ZyYW1lEjsKF2lucHV0RnJhbWVEb3duc3luY0JhdGNo",
-            "GAQgAygLMhouc2hhcmVkLklucHV0RnJhbWVEb3duc3luYxIsCghiY2lGcmFt",
-            "ZRgFIAEoCzIaLnNoYXJlZC5CYXR0bGVDb2xsaWRlckluZm8SFQoNcGVlckpv",
-            "aW5JbmRleBgGIAEoBRIOCgZlcnJNc2cYByABKAkihQIKBVNraWxsEhUKDWJh",
-            "dHRsZUxvY2FsSWQYASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYAiABKAUSHQoV",
-            "cmVjb3ZlcnlGcmFtZXNPbkJsb2NrGAMgASgFEhsKE3JlY292ZXJ5RnJhbWVz",
-            "T25IaXQYBCABKAUSLQoLdHJpZ2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tp",
-            "bGxUcmlnZ2VyVHlwZRIsCgxib3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQu",
-            "Q2hhcmFjdGVyU3RhdGUSDwoHbXBEZWx0YRgHIAEoBRIjCgRoaXRzGIAIIAMo",
-            "CzIULnNoYXJlZC5CdWxsZXRDb25maWciZwoIRnJhbWVMb2cSJgoDcmRmGAEg",
-            "ASgLMhkuc2hhcmVkLlJvb21Eb3duc3luY0ZyYW1lEjMKD2FjdHVhbGx5VXNl",
-            "ZElkZhgCIAEoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMqNQoLQnVs",
-            "bGV0U3RhdGUSCwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0KCUV4cGxvZGlu",
-            "ZxACKq4CCg5DaGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsKB1dhbGtpbmcQ",
-            "ARIOCgpUdXJuQXJvdW5kEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxlMU5v",
-            "SnVtcBAEEhQKEEluQWlySWRsZTFCeUp1bXAQBRIYChRJbkFpcklkbGUxQnlX",
-            "YWxsSnVtcBAGEg8KC0luQWlyQXRrZWQxEAcSDAoIQmxvd25VcDEQCBIMCghM",
-            "YXlEb3duMRAJEgoKBkdldFVwMRAKEgkKBUR5aW5nEAsSCwoHRGFzaGluZxAM",
-            "EgoKBk9uV2FsbBANEg4KCUluQWlyQXRrMRCACBIJCgRBdGsxEIEIEgkKBEF0",
-            "azIQgggSCQoEQXRrMxCDCBIJCgRBdGs0EIQIEgkKBEF0azUQhQgqNwoKQnVs",
-            "bGV0VHlwZRIQCgxVbmRldGVybWluZWQQABIJCgVNZWxlZRABEgwKCEZpcmVi",
-            "YWxsEAIqMwoQU2tpbGxUcmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdlEAASDwoL",
-            "RmFsbGluZ0VkZ2UQAUIJqgIGc2hhcmVkYgZwcm90bzM="));
+            "dWxsZXRUeXBlEiQKBm1oVHlwZRgUIAEoDjIULnNoYXJlZC5NdWx0aUhpdFR5",
+            "cGUSHwoXc2ltdWx0YW5lb3VzTXVsdGlIaXRDbnQYFSABKA0SDQoFc3BlZWQY",
+            "FiABKAUSDAoEZGlyWBgXIAEoBRIMCgRkaXJZGBggASgFEj4KDWNhbmNlbFRy",
+            "YW5zaXQYGSADKAsyJy5zaGFyZWQuQnVsbGV0Q29uZmlnLkNhbmNlbFRyYW5z",
+            "aXRFbnRyeRIaChFjb2xsaXNpb25UeXBlTWFzaxiFCCABKAQaNAoSQ2FuY2Vs",
+            "VHJhbnNpdEVudHJ5EgsKA2tleRgBIAEoBRINCgV2YWx1ZRgCIAEoBToCOAEi",
+            "kQEKEEJ1bGxldEJhdHRsZUF0dHISFQoNYnVsbGV0TG9jYWxJZBgBIAEoBRIf",
+            "ChdvcmlnaW5hdGVkUmVuZGVyRnJhbWVJZBgCIAEoBRIZChFvZmZlbmRlckpv",
+            "aW5JbmRleBgDIAEoBRIOCgZ0ZWFtSWQYBCABKAUSGgoRY29sbGlzaW9uVHlw",
+            "ZU1hc2sYhQggASgEIoUCCgZCdWxsZXQSJAoHYmxTdGF0ZRgBIAEoDjITLnNo",
+            "YXJlZC5CdWxsZXRTdGF0ZRIXCg9mcmFtZXNJbkJsU3RhdGUYAiABKAUSLAoK",
+            "YmF0dGxlQXR0chgDIAEoCzIYLnNoYXJlZC5CdWxsZXRCYXR0bGVBdHRyEiQK",
+            "BmNvbmZpZxgEIAEoCzIULnNoYXJlZC5CdWxsZXRDb25maWcSFQoMdmlydHVh",
+            "bEdyaWRYGOcHIAEoBRIVCgx2aXJ0dWFsR3JpZFkY6AcgASgFEg0KBGRpclgY",
+            "6QcgASgFEg0KBGRpclkY6gcgASgFEg0KBHZlbFgY6wcgASgFEg0KBHZlbFkY",
+            "7AcgASgFIjgKC1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwKBHBvcnQYAiAB",
+            "KAUSDwoHYXV0aEtleRgDIAEoBSLFAwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEK",
+            "CXN0YWdlTmFtZRgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIcChRiYXR0",
+            "bGVEdXJhdGlvbkZyYW1lcxgDIAEoAxImCh5pbnB1dEZyYW1lVXBzeW5jRGVs",
+            "YXlUb2xlcmFuY2UYBCABKAUSJwofbWF4Q2hhc2luZ1JlbmRlckZyYW1lc1Bl",
+            "clVwZGF0ZRgFIAEoBRIhChlyb2xsYmFja0VzdGltYXRlZER0TWlsbGlzGAYg",
+            "ASgBEiAKGHJvbGxiYWNrRXN0aW1hdGVkRHROYW5vcxgHIAEoAxIYChByZW5k",
+            "ZXJCdWZmZXJTaXplGAggASgFEhgKEGNvbGxpc2lvbk1pblN0ZXAYCSABKAUS",
+            "GQoRYm91bmRSb29tQ2FwYWNpdHkYCiABKAUSGwoTcHJlYWxsb2NOcGNDYXBh",
+            "Y2l0eRgLIAEoBRIeChZwcmVhbGxvY0J1bGxldENhcGFjaXR5GAwgASgFEi0K",
+            "D2JhdHRsZVVkcFR1bm5lbBiACCABKAsyEy5zaGFyZWQuUGVlclVkcEFkZHIS",
+            "GAoPZnJhbWVMb2dFbmFibGVkGIEIIAEoCCKhAwoRUm9vbURvd25zeW5jRnJh",
+            "bWUSCgoCaWQYASABKAUSLQoKcGxheWVyc0FychgCIAMoCzIZLnNoYXJlZC5D",
+            "aGFyYWN0ZXJEb3duc3luYxIWCg5jb3VudGRvd25OYW5vcxgDIAEoAxIfCgdi",
+            "dWxsZXRzGAQgAygLMg4uc2hhcmVkLkJ1bGxldBIqCgducGNzQXJyGAUgAygL",
+            "Mhkuc2hhcmVkLkNoYXJhY3RlckRvd25zeW5jEisKCHRyYXBzQXJyGAYgAygL",
+            "Mhkuc2hhcmVkLkNoYXJhY3RlckRvd25zeW5jEh8KFmJhY2tlbmRVbmNvbmZp",
+            "cm1lZE1hc2sYgAggASgEEhoKEXNob3VsZEZvcmNlUmVzeW5jGIEIIAEoCBIW",
+            "Cg1zcGVjaWVzSWRMaXN0GIIIIAMoBRIdChRidWxsZXRMb2NhbElkQ291bnRl",
+            "chiDCCABKAUSLQoPcGVlclVkcEFkZHJMaXN0GIQIIAMoCzITLnNoYXJlZC5Q",
+            "ZWVyVWRwQWRkchIcChNwYXJ0aWNpcGFudENoYW5nZUlkGIUIIAEoBSLcAQoG",
+            "V3NSZXNwEgsKA3JldBgBIAEoBRILCgNhY3QYAiABKAUSJgoDcmRmGAMgASgL",
+            "Mhkuc2hhcmVkLlJvb21Eb3duc3luY0ZyYW1lEjsKF2lucHV0RnJhbWVEb3du",
+            "c3luY0JhdGNoGAQgAygLMhouc2hhcmVkLklucHV0RnJhbWVEb3duc3luYxIs",
+            "CghiY2lGcmFtZRgFIAEoCzIaLnNoYXJlZC5CYXR0bGVDb2xsaWRlckluZm8S",
+            "FQoNcGVlckpvaW5JbmRleBgGIAEoBRIOCgZlcnJNc2cYByABKAkihQIKBVNr",
+            "aWxsEhUKDWJhdHRsZUxvY2FsSWQYASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMY",
+            "AiABKAUSHQoVcmVjb3ZlcnlGcmFtZXNPbkJsb2NrGAMgASgFEhsKE3JlY292",
+            "ZXJ5RnJhbWVzT25IaXQYBCABKAUSLQoLdHJpZ2dlclR5cGUYBSABKA4yGC5z",
+            "aGFyZWQuU2tpbGxUcmlnZ2VyVHlwZRIsCgxib3VuZENoU3RhdGUYBiABKA4y",
+            "Fi5zaGFyZWQuQ2hhcmFjdGVyU3RhdGUSDwoHbXBEZWx0YRgHIAEoBRIjCgRo",
+            "aXRzGIAIIAMoCzIULnNoYXJlZC5CdWxsZXRDb25maWciZwoIRnJhbWVMb2cS",
+            "JgoDcmRmGAEgASgLMhkuc2hhcmVkLlJvb21Eb3duc3luY0ZyYW1lEjMKD2Fj",
+            "dHVhbGx5VXNlZElkZhgCIAEoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5",
+            "bmMqNQoLQnVsbGV0U3RhdGUSCwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0K",
+            "CUV4cGxvZGluZxACKq4CCg5DaGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsK",
+            "B1dhbGtpbmcQARIOCgpUdXJuQXJvdW5kEAISCgoGQXRrZWQxEAMSFAoQSW5B",
+            "aXJJZGxlMU5vSnVtcBAEEhQKEEluQWlySWRsZTFCeUp1bXAQBRIYChRJbkFp",
+            "cklkbGUxQnlXYWxsSnVtcBAGEg8KC0luQWlyQXRrZWQxEAcSDAoIQmxvd25V",
+            "cDEQCBIMCghMYXlEb3duMRAJEgoKBkdldFVwMRAKEgkKBUR5aW5nEAsSCwoH",
+            "RGFzaGluZxAMEgoKBk9uV2FsbBANEg4KCUluQWlyQXRrMRCACBIJCgRBdGsx",
+            "EIEIEgkKBEF0azIQgggSCQoEQXRrMxCDCBIJCgRBdGs0EIQIEgkKBEF0azUQ",
+            "hQgqNwoKQnVsbGV0VHlwZRIQCgxVbmRldGVybWluZWQQABIJCgVNZWxlZRAB",
+            "EgwKCEZpcmViYWxsEAIqfgoMTXVsdGlIaXRUeXBlEhAKDEZyb21FbWlzc2lv",
+            "bhAAEhYKEkZyb21GaXJzdEhpdEFjdHVhbBABEhYKEkZyb21GaXJzdEhpdEFu",
+            "eXdheRACEhUKEUZyb21QcmV2SGl0QWN0dWFsEAMSFQoRRnJvbVByZXZIaXRB",
+            "bnl3YXkQBCozChBTa2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIP",
+            "CgtGYWxsaW5nRWRnZRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "CapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "MaxHp", "Mp", "MaxMp", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask", "Name", "DisplayName", "Avatar" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
@@ -146,7 +151,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputBufferSnapshot), global::shared.InputBufferSnapshot.Parser, new[]{ "RefRenderFrameId", "UnconfirmedMask", "ToSendInputFrameDownsyncs", "ShouldForceResync", "PeerJoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PatrolCue), global::shared.PatrolCue.Parser, new[]{ "Id", "FlAct", "FrAct", "FlCaptureFrames", "FrCaptureFrames", "FdAct", "FuAct", "FdCaptureFrames", "FuCaptureFrames", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.VisionBox), global::shared.VisionBox.Parser, new[]{ "BottomLeftX", "BottomLeftY", "Width", "Height" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "Speed", "CancelTransit", "CollisionTypeMask" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "MhType", "SimultaneousMultiHitCnt", "Speed", "DirX", "DirY", "CancelTransit", "CollisionTypeMask" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
@@ -194,6 +199,25 @@ namespace shared {
     [pbr::OriginalName("Undetermined")] Undetermined = 0,
     [pbr::OriginalName("Melee")] Melee = 1,
     [pbr::OriginalName("Fireball")] Fireball = 2,
+  }
+
+  public enum MultiHitType {
+    /// <summary>
+    ///*
+    ///[WARN] Multihit of a fireball (determined in turn by the "BulletType bType" field) is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
+    ///
+    ///Types of fireball multihit-singlebullet
+    ///a. References the emission frame
+    ///b. References the first hit only when actually hit
+    ///c. References the first hit even if blocked
+    ///d. References the prev hit only when actually hit
+    ///e. References the prev hit even if blocked
+    /// </summary>
+    [pbr::OriginalName("FromEmission")] FromEmission = 0,
+    [pbr::OriginalName("FromFirstHitActual")] FromFirstHitActual = 1,
+    [pbr::OriginalName("FromFirstHitAnyway")] FromFirstHitAnyway = 2,
+    [pbr::OriginalName("FromPrevHitActual")] FromPrevHitActual = 3,
+    [pbr::OriginalName("FromPrevHitAnyway")] FromPrevHitAnyway = 4,
   }
 
   public enum SkillTriggerType {
@@ -4484,7 +4508,11 @@ namespace shared {
       speciesId_ = other.speciesId_;
       explosionFrames_ = other.explosionFrames_;
       bType_ = other.bType_;
+      mhType_ = other.mhType_;
+      simultaneousMultiHitCnt_ = other.simultaneousMultiHitCnt_;
       speed_ = other.speed_;
+      dirX_ = other.dirX_;
+      dirY_ = other.dirY_;
       cancelTransit_ = other.cancelTransit_.Clone();
       collisionTypeMask_ = other.collisionTypeMask_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -4727,8 +4755,35 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "mhType" field.</summary>
+    public const int MhTypeFieldNumber = 20;
+    private global::shared.MultiHitType mhType_ = global::shared.MultiHitType.FromEmission;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::shared.MultiHitType MhType {
+      get { return mhType_; }
+      set {
+        mhType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "simultaneousMultiHitCnt" field.</summary>
+    public const int SimultaneousMultiHitCntFieldNumber = 21;
+    private uint simultaneousMultiHitCnt_;
+    /// <summary>
+    /// marks how many simultaneous bullets are left, default to 0 indicating that the current bullet is the only one to fire 
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public uint SimultaneousMultiHitCnt {
+      get { return simultaneousMultiHitCnt_; }
+      set {
+        simultaneousMultiHitCnt_ = value;
+      }
+    }
+
     /// <summary>Field number for the "speed" field.</summary>
-    public const int SpeedFieldNumber = 20;
+    public const int SpeedFieldNumber = 22;
     private int speed_;
     /// <summary>
     /// For speed varying bullets, this is the initial speed
@@ -4742,10 +4797,40 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "dirX" field.</summary>
+    public const int DirXFieldNumber = 23;
+    private int dirX_;
+    /// <summary>
+    /// the initial direction indicator for X-axis
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int DirX {
+      get { return dirX_; }
+      set {
+        dirX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dirY" field.</summary>
+    public const int DirYFieldNumber = 24;
+    private int dirY_;
+    /// <summary>
+    /// the initial direction indicator for Y-axis
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int DirY {
+      get { return dirY_; }
+      set {
+        dirY_ = value;
+      }
+    }
+
     /// <summary>Field number for the "cancelTransit" field.</summary>
-    public const int CancelTransitFieldNumber = 21;
+    public const int CancelTransitFieldNumber = 25;
     private static readonly pbc::MapField<int, int>.Codec _map_cancelTransit_codec
-        = new pbc::MapField<int, int>.Codec(pb::FieldCodec.ForInt32(8, 0), pb::FieldCodec.ForInt32(16, 0), 170);
+        = new pbc::MapField<int, int>.Codec(pb::FieldCodec.ForInt32(8, 0), pb::FieldCodec.ForInt32(16, 0), 202);
     private readonly pbc::MapField<int, int> cancelTransit_ = new pbc::MapField<int, int>();
     /// <summary>
     /// patternId -> skillId
@@ -4802,7 +4887,11 @@ namespace shared {
       if (SpeciesId != other.SpeciesId) return false;
       if (ExplosionFrames != other.ExplosionFrames) return false;
       if (BType != other.BType) return false;
+      if (MhType != other.MhType) return false;
+      if (SimultaneousMultiHitCnt != other.SimultaneousMultiHitCnt) return false;
       if (Speed != other.Speed) return false;
+      if (DirX != other.DirX) return false;
+      if (DirY != other.DirY) return false;
       if (!CancelTransit.Equals(other.CancelTransit)) return false;
       if (CollisionTypeMask != other.CollisionTypeMask) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -4831,7 +4920,11 @@ namespace shared {
       if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
       if (ExplosionFrames != 0) hash ^= ExplosionFrames.GetHashCode();
       if (BType != global::shared.BulletType.Undetermined) hash ^= BType.GetHashCode();
+      if (MhType != global::shared.MultiHitType.FromEmission) hash ^= MhType.GetHashCode();
+      if (SimultaneousMultiHitCnt != 0) hash ^= SimultaneousMultiHitCnt.GetHashCode();
       if (Speed != 0) hash ^= Speed.GetHashCode();
+      if (DirX != 0) hash ^= DirX.GetHashCode();
+      if (DirY != 0) hash ^= DirY.GetHashCode();
       hash ^= CancelTransit.GetHashCode();
       if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
       if (_unknownFields != null) {
@@ -4928,9 +5021,25 @@ namespace shared {
         output.WriteRawTag(152, 1);
         output.WriteEnum((int) BType);
       }
-      if (Speed != 0) {
+      if (MhType != global::shared.MultiHitType.FromEmission) {
         output.WriteRawTag(160, 1);
+        output.WriteEnum((int) MhType);
+      }
+      if (SimultaneousMultiHitCnt != 0) {
+        output.WriteRawTag(168, 1);
+        output.WriteUInt32(SimultaneousMultiHitCnt);
+      }
+      if (Speed != 0) {
+        output.WriteRawTag(176, 1);
         output.WriteInt32(Speed);
+      }
+      if (DirX != 0) {
+        output.WriteRawTag(184, 1);
+        output.WriteInt32(DirX);
+      }
+      if (DirY != 0) {
+        output.WriteRawTag(192, 1);
+        output.WriteInt32(DirY);
       }
       cancelTransit_.WriteTo(output, _map_cancelTransit_codec);
       if (CollisionTypeMask != 0UL) {
@@ -5023,9 +5132,25 @@ namespace shared {
         output.WriteRawTag(152, 1);
         output.WriteEnum((int) BType);
       }
-      if (Speed != 0) {
+      if (MhType != global::shared.MultiHitType.FromEmission) {
         output.WriteRawTag(160, 1);
+        output.WriteEnum((int) MhType);
+      }
+      if (SimultaneousMultiHitCnt != 0) {
+        output.WriteRawTag(168, 1);
+        output.WriteUInt32(SimultaneousMultiHitCnt);
+      }
+      if (Speed != 0) {
+        output.WriteRawTag(176, 1);
         output.WriteInt32(Speed);
+      }
+      if (DirX != 0) {
+        output.WriteRawTag(184, 1);
+        output.WriteInt32(DirX);
+      }
+      if (DirY != 0) {
+        output.WriteRawTag(192, 1);
+        output.WriteInt32(DirY);
       }
       cancelTransit_.WriteTo(ref output, _map_cancelTransit_codec);
       if (CollisionTypeMask != 0UL) {
@@ -5099,8 +5224,20 @@ namespace shared {
       if (BType != global::shared.BulletType.Undetermined) {
         size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) BType);
       }
+      if (MhType != global::shared.MultiHitType.FromEmission) {
+        size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) MhType);
+      }
+      if (SimultaneousMultiHitCnt != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt32Size(SimultaneousMultiHitCnt);
+      }
       if (Speed != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(Speed);
+      }
+      if (DirX != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(DirX);
+      }
+      if (DirY != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(DirY);
       }
       size += cancelTransit_.CalculateSize(_map_cancelTransit_codec);
       if (CollisionTypeMask != 0UL) {
@@ -5175,8 +5312,20 @@ namespace shared {
       if (other.BType != global::shared.BulletType.Undetermined) {
         BType = other.BType;
       }
+      if (other.MhType != global::shared.MultiHitType.FromEmission) {
+        MhType = other.MhType;
+      }
+      if (other.SimultaneousMultiHitCnt != 0) {
+        SimultaneousMultiHitCnt = other.SimultaneousMultiHitCnt;
+      }
       if (other.Speed != 0) {
         Speed = other.Speed;
+      }
+      if (other.DirX != 0) {
+        DirX = other.DirX;
+      }
+      if (other.DirY != 0) {
+        DirY = other.DirY;
       }
       cancelTransit_.Add(other.cancelTransit_);
       if (other.CollisionTypeMask != 0UL) {
@@ -5274,10 +5423,26 @@ namespace shared {
             break;
           }
           case 160: {
+            MhType = (global::shared.MultiHitType) input.ReadEnum();
+            break;
+          }
+          case 168: {
+            SimultaneousMultiHitCnt = input.ReadUInt32();
+            break;
+          }
+          case 176: {
             Speed = input.ReadInt32();
             break;
           }
-          case 170: {
+          case 184: {
+            DirX = input.ReadInt32();
+            break;
+          }
+          case 192: {
+            DirY = input.ReadInt32();
+            break;
+          }
+          case 202: {
             cancelTransit_.AddEntriesFrom(input, _map_cancelTransit_codec);
             break;
           }
@@ -5377,10 +5542,26 @@ namespace shared {
             break;
           }
           case 160: {
+            MhType = (global::shared.MultiHitType) input.ReadEnum();
+            break;
+          }
+          case 168: {
+            SimultaneousMultiHitCnt = input.ReadUInt32();
+            break;
+          }
+          case 176: {
             Speed = input.ReadInt32();
             break;
           }
-          case 170: {
+          case 184: {
+            DirX = input.ReadInt32();
+            break;
+          }
+          case 192: {
+            DirY = input.ReadInt32();
+            break;
+          }
+          case 202: {
             cancelTransit_.AddEntriesFrom(ref input, _map_cancelTransit_codec);
             break;
           }
@@ -8324,15 +8505,7 @@ namespace shared {
         = pb::FieldCodec.ForMessage(8194, global::shared.BulletConfig.Parser);
     private readonly pbc::RepeatedField<global::shared.BulletConfig> hits_ = new pbc::RepeatedField<global::shared.BulletConfig>();
     /// <summary>
-    ///*
-    ///[WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
-    ///
-    ///Types of fireball multihit-singlebullet
-    ///a. References the emission frame
-    ///b. References the first hit only when actually hit
-    ///c. References the first hit even if blocked
-    ///d. References the prev hit only when actually hit
-    ///e. References the prev hit even if blocked
+    /// Hits within a "Skill" are automatically triggered
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]

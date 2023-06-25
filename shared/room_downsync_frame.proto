@@ -165,6 +165,24 @@ enum BulletType {
 	Fireball = 2;
 }
 
+enum MultiHitType {
+	/**
+	[WARN] Multihit of a fireball (determined in turn by the "BulletType bType" field) is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
+
+	Types of fireball multihit-singlebullet
+	a. References the emission frame
+	b. References the first hit only when actually hit
+	c. References the first hit even if blocked
+	d. References the prev hit only when actually hit
+	e. References the prev hit even if blocked
+	*/
+    FromEmission = 0;
+    FromFirstHitActual = 1;
+    FromFirstHitAnyway = 2;
+    FromPrevHitActual = 3;
+    FromPrevHitAnyway = 4;
+}
+
 enum SkillTriggerType {
 	RisingEdge = 0;
 	FallingEdge = 1;
@@ -196,10 +214,14 @@ message BulletConfig {
 	int32 explosionFrames = 18;
 
 	BulletType bType = 19;
+	MultiHitType mhType = 20;
+    uint32 simultaneousMultiHitCnt = 21; // marks how many simultaneous bullets are left, default to 0 indicating that the current bullet is the only one to fire 
 
-	int32 speed = 20; // For speed varying bullets, this is the initial speed
+	int32 speed = 22; // For speed varying bullets, this is the initial speed
+	int32 dirX = 23; // the initial direction indicator for X-axis
+	int32 dirY = 24; // the initial direction indicator for Y-axis
 
-	map<int32, int32> cancelTransit = 21; // patternId -> skillId
+	map<int32, int32> cancelTransit = 25; // patternId -> skillId
 
 	uint64 collisionTypeMask = 1029;
 }
@@ -292,16 +314,7 @@ message Skill {
 	SkillTriggerType triggerType = 5;
 	CharacterState boundChState = 6;
 	int32 mpDelta = 7; // Usually used as "mp consumption"
-	/**
-	[WARN] Multihit of a fireball is more difficult to handle than that of melee, because we have to count from the fireball's first hit; the situation becomes even more complicated when a multihit fireball is in a crowd -- remains to be designed
 
-	Types of fireball multihit-singlebullet
-	a. References the emission frame
-	b. References the first hit only when actually hit
-	c. References the first hit even if blocked
-	d. References the prev hit only when actually hit
-	e. References the prev hit even if blocked
-	*/
 	repeated BulletConfig hits = 1024; // Hits within a "Skill" are automatically triggered
 }
 

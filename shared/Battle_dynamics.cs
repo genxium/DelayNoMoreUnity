@@ -176,7 +176,6 @@ namespace shared {
         private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets) {
             bool skillUsed = false;
             var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
-
             if (skills.ContainsKey(skillId)) {
                 var skillConfig = skills[skillId];
                 if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
@@ -192,36 +191,45 @@ namespace shared {
                     }
                 }
                 thatCharacterInNextFrame.ActiveSkillId = skillId;
-                thatCharacterInNextFrame.ActiveSkillHit = 0;
                 thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
 
                 int xfac = (0 < thatCharacterInNextFrame.DirX ? 1 : -1);
                 bool hasLockVel = false;
 
-                // Hardcoded to use only the first hit for now
-                var bulletConfig = skillConfig.Hits[thatCharacterInNextFrame.ActiveSkillHit];
-                AssignToBullet(
-                    bulletLocalIdCounter,
-                    currRenderFrame.Id,
-                    currCharacterDownsync.JoinIndex,
-                    currCharacterDownsync.BulletTeamId,
-                    BulletState.StartUp, 0,
-                    currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX, currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY, // virtual grid position
-                    xfac, 0, // dir
-                    bulletConfig.Speed * xfac, 0, // velocity
-                    bulletConfig,
-                    nextRenderFrameBullets[bulletCnt]);
+                int activeSkillHit = 0;
+                var pivotBulletConfig = skillConfig.Hits[activeSkillHit]; 
+                for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt+1; i++) {
+                    var bulletConfig = skillConfig.Hits[activeSkillHit]; 
+                    thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
+                    var bulletDirMagSq = bulletConfig.DirX*bulletConfig.DirX + bulletConfig.DirY*bulletConfig.DirY;
+                    var invBulletDirMag = InvSqrt32(bulletDirMagSq);
+                    var bulletSpeedXfac = xfac*invBulletDirMag*bulletConfig.DirX;
+                    var bulletSpeedYfac = invBulletDirMag*bulletConfig.DirY;
+                    AssignToBullet(
+                            bulletLocalIdCounter,
+                            currRenderFrame.Id,
+                            currCharacterDownsync.JoinIndex,
+                            currCharacterDownsync.BulletTeamId,
+                            BulletState.StartUp, 0,
+                            currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX, currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY, // virtual grid position
+                            xfac*bulletConfig.DirX, bulletConfig.DirY, // dir
+                            (int)(bulletSpeedXfac*bulletConfig.Speed), (int)(bulletSpeedYfac*bulletConfig.Speed), // velocity
+                            bulletConfig,
+                            nextRenderFrameBullets[bulletCnt]);
 
-                bulletLocalIdCounter++;
-                bulletCnt++;
+                    bulletLocalIdCounter++;
+                    bulletCnt++;
 
-                if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
-                    hasLockVel = true;
-                    thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
-                }
-                if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
-                    hasLockVel = true;
-                    thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
+                    // [WARNING] This part locks velocity by the last bullet in the simultaneous array
+                    if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
+                        hasLockVel = true;
+                        thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+                    }
+                    if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
+                        hasLockVel = true;
+                        thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
+                    }
+                    activeSkillHit++;
                 }
 
                 if (false == hasLockVel && false == currCharacterDownsync.InAir) {
