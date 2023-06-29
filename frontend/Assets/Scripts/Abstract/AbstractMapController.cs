@@ -1134,6 +1134,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
             (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = ((wx - 0.5f * boxCw), (wy + 0.5f * boxCh));
+
+            // Debug.Log("Active Bullet " + bullet.BattleAttr.BulletLocalId.ToString() + ": wx=" + wx.ToString() + ", wy=" + wy.ToString() + ", boxCw=" + boxCw.ToString() + ", boxCh=" + boxCh.ToString());
             line.SetPositions(debugDrawPositionsHolder);
             line.score = rdf.Id;
             cachedLineRenderers.Put(key, line);
