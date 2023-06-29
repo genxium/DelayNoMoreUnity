@@ -39,7 +39,7 @@ public class FireballAnimController : MonoBehaviour {
         if (firstTimeUpdate) {
             // [WARNING] Don't set "flipX" only when "firstTimeUpdate", because the fireball might be mirrored at runtime!
             float skewAngle = Mathf.Atan2(bulletConfig.DirY, bulletConfig.DirX) * Mathf.Rad2Deg;
-            gameObject.transform.rotation = Quaternion.AngleAxis(-skewAngle, Vector3.forward);
+            gameObject.transform.rotation = Quaternion.AngleAxis(spr.flipX ? -skewAngle : skewAngle, Vector3.forward);
         }
 
         var targetClip = lookUpTable[newAnimName];

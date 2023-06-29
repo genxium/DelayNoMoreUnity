@@ -176,11 +176,12 @@ enum MultiHitType {
 	d. References the prev hit only when actually hit
 	e. References the prev hit even if blocked
 	*/
-    FromEmission = 0;
-    FromFirstHitActual = 1;
-    FromFirstHitAnyway = 2;
-    FromPrevHitActual = 3;
-    FromPrevHitAnyway = 4;
+	None=0;
+    FromEmission = 1;
+    FromFirstHitActual = 2;
+    FromFirstHitAnyway = 3;
+    FromPrevHitActual = 4;
+    FromPrevHitAnyway = 5;
 }
 
 enum SkillTriggerType {
@@ -231,6 +232,8 @@ message BulletBattleAttr {
 	int32 originatedRenderFrameId = 2; // Copied from the first bullet for all subsequent bullets
 	int32 offenderJoinIndex = 3; // Copied to favor collision handling of the dispatched bullet
 	int32 teamId = 4;
+	int32 activeSkillHit = 5; // for the convenience of selecting the correct next bullet for multihit fireball (where the offender's "activeSkillHit" might've already been reset)
+	int32 skillId = 6; // for the convenience of selecting the correct next bullet for multihit fireball (where the offender's "activeSkillId" might've already been reset); also for reverse lookup in multihit transition, in the most extreme case, a same "BulletConfig" instance is to be shared across different "Skill"s, thus we put "skillId" in "BulletBattleAttr" instead.
 
 	uint64 collisionTypeMask = 1029; // Some bullets don't collide with barriers
 }

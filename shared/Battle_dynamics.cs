@@ -3,7 +3,6 @@ using static shared.CharacterState;
 using System.Collections.Generic;
 using System.IO;
 using Google.Protobuf.Collections;
-using System.Threading;
 
 namespace shared {
     public partial class Battle {
@@ -176,6 +175,8 @@ namespace shared {
         private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets) {
             bool skillUsed = false;
             var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
+            int xfac = (0 < thatCharacterInNextFrame.DirX ? 1 : -1);
+            bool hasLockVel = false;
             if (skills.ContainsKey(skillId)) {
                 var skillConfig = skills[skillId];
                 if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
@@ -193,50 +194,36 @@ namespace shared {
                 thatCharacterInNextFrame.ActiveSkillId = skillId;
                 thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
 
-                int xfac = (0 < thatCharacterInNextFrame.DirX ? 1 : -1);
-                bool hasLockVel = false;
-
                 int activeSkillHit = 0;
                 var pivotBulletConfig = skillConfig.Hits[activeSkillHit]; 
                 for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt+1; i++) {
-                    var bulletConfig = skillConfig.Hits[activeSkillHit]; 
-                    thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
-                    var bulletDirMagSq = bulletConfig.DirX*bulletConfig.DirX + bulletConfig.DirY*bulletConfig.DirY;
-                    var invBulletDirMag = InvSqrt32(bulletDirMagSq);
-                    var bulletSpeedXfac = xfac*invBulletDirMag*bulletConfig.DirX;
-                    var bulletSpeedYfac = invBulletDirMag*bulletConfig.DirY;
-                    AssignToBullet(
-                            bulletLocalIdCounter,
-                            currRenderFrame.Id,
-                            currCharacterDownsync.JoinIndex,
-                            currCharacterDownsync.BulletTeamId,
-                            BulletState.StartUp, 0,
-                            currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX, currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY, // virtual grid position
-                            xfac*bulletConfig.DirX, bulletConfig.DirY, // dir
-                            (int)(bulletSpeedXfac*bulletConfig.Speed), (int)(bulletSpeedYfac*bulletConfig.Speed), // velocity
-                            bulletConfig,
-                            nextRenderFrameBullets[bulletCnt]);
-
-                    bulletLocalIdCounter++;
-                    bulletCnt++;
-
-                    // [WARNING] This part locks velocity by the last bullet in the simultaneous array
-                    if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
-                        hasLockVel = true;
-                        thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
-                    }
-                    if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
-                        hasLockVel = true;
-                        thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
-                    }
+                    addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel);
                     activeSkillHit++;
                 }
 
                 if (false == hasLockVel && false == currCharacterDownsync.InAir) {
                     thatCharacterInNextFrame.VelX = 0;
                 }
+
                 thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
 
+                skillUsed = true;
+            } else if (0 < currCharacterDownsync.ActiveSkillHit && skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) {
+                var skillConfig = skills[currCharacterDownsync.ActiveSkillId];
+                if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
+                    skillId = FindSkillId(1, currCharacterDownsync, chConfig.SpeciesId); // Fallback to basic atk
+                    skillConfig = skills[skillId];
+                    if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
+                        return false; // The basic atk also uses MP and there's not enough, return false
+                    }
+                } else {
+                    thatCharacterInNextFrame.Mp -= skillConfig.MpDelta;
+                    if (0 >= thatCharacterInNextFrame.Mp) {
+                        thatCharacterInNextFrame.Mp = 0;
+                    }
+                }
+                int originatedRdfId = (currRenderFrame.Id - currCharacterDownsync.FramesInChState);
+                addNewBulletToNextFrame(originatedRdfId, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, currCharacterDownsync.ActiveSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel);
                 skillUsed = true;
             }
             return skillUsed;
@@ -358,8 +345,9 @@ namespace shared {
                     src.BattleAttr.TeamId,
                     src.BlState, src.FramesInBlState + 1,
                     src.VirtualGridX, src.VirtualGridY, // virtual grid position
-                    src.DirX, 0, // dir
+                    src.DirX, src.DirY, // dir
                     src.VelX, src.VelY, // velocity
+                    src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId,
                     src.Config,
                     dst);
 
@@ -490,9 +478,7 @@ namespace shared {
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
                 int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, logger);
-                if (0 == currCharacterDownsync.SpeciesId && GetUp1 == currCharacterDownsync.CharacterState) {
-                    ;
-                }
+                
                 if (0 < hardPushbackCnt) {
                     /* 
                     if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
@@ -770,6 +756,8 @@ namespace shared {
                 int j = bullet.BattleAttr.OffenderJoinIndex - 1;
                 var offender = (j < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
                 int effDirX = (BulletType.Melee == bullet.Config.BType ? offender.DirX : bullet.DirX);
+                int xfac = (0 < effDirX ? 1 : -1);
+                var skillConfig = skills[bullet.BattleAttr.SkillId];
                 while (true) {
                     var (ok, bCollider) = collision.PopFirstContactedCollider();
                     if (false == ok || null == bCollider) {
@@ -790,7 +778,6 @@ namespace shared {
                             exploded = true;
                             explodedOnAnotherCharacter = true;
                             //logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], atkedCharacterInCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, atkedCharacterInCurrFrame));
-                            int xfac = (0 < effDirX ? 1 : -1);
                             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
                             atkedCharacterInNextFrame.Hp -= bullet.Config.Damage;
@@ -836,6 +823,15 @@ namespace shared {
                     }
                 }
 
+                bool isInTheMiddleOfMultihitTransition = false;
+                if (MultiHitType.None != bullet.Config.MhType) {
+                    if (bullet.BattleAttr.ActiveSkillHit + 1 < skillConfig.Hits.Count) {
+                        isInTheMiddleOfMultihitTransition = true;
+                    }
+                }
+
+                bool justEndedCurrentHit = (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames == currRenderFrame.Id);
+
                 if (exploded) {
                     if (BulletType.Melee == bullet.Config.BType) {
                         bullet.BlState = BulletState.Exploding;
@@ -846,11 +842,26 @@ namespace shared {
                             bullet.FramesInBlState = bullet.Config.ExplosionFrames + 1;
                         }
                     } else if (BulletType.Fireball == bullet.Config.BType) {
-                        bullet.BlState = BulletState.Exploding;
-                        bullet.FramesInBlState = 0;
+                        if (isInTheMiddleOfMultihitTransition) {
+                            bullet.BattleAttr.ActiveSkillHit += 1;
+                            if (MultiHitType.FromPrevHitActual == bullet.Config.MhType) {
+                                bullet.FramesInBlState = 0;
+                                bullet.BattleAttr.OriginatedRenderFrameId = currRenderFrame.Id;
+                            }
+                            // TODO: Support "MultiHitType.FromPrevHitAnyway"
+                            bullet.Config = skillConfig.Hits[bullet.BattleAttr.ActiveSkillHit];
+                        } else {
+                            bullet.BlState = BulletState.Exploding;
+                            bullet.FramesInBlState = 0;
+                        }
                     } else {
                         // Nothing to do
                     }
+                }
+
+                if (BulletType.Melee == bullet.Config.BType && MultiHitType.FromEmission == bullet.Config.MhType && isInTheMiddleOfMultihitTransition && justEndedCurrentHit) {
+                    // [WARNING] Different from Fireball, multihit of Melee would add a new "Bullet" to "nextRenderFrameBullets" for convenience of handling explosion!
+                    offender.ActiveSkillHit += 1;
                 }
             }
         }
@@ -923,7 +934,6 @@ namespace shared {
                 // Remove any active skill if not attacking
                 if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
                     thatCharacterInNextFrame.ActiveSkillId = NO_SKILL;
-                    thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
                 }
             }
         }
@@ -1200,6 +1210,38 @@ namespace shared {
             int xfac = (0 < characterDownsync.DirX ? 1 : -1);
             (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * chConfig.VisionOffsetX, characterDownsync.VirtualGridY + chConfig.VisionOffsetY);
             (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.VisionSizeX, chConfig.VisionSizeY);
+        }
+
+        protected static void addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel) {
+            var bulletConfig = skillConfig.Hits[activeSkillHit];
+            var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
+            var invBulletDirMag = InvSqrt32(bulletDirMagSq);
+            var bulletSpeedXfac = xfac * invBulletDirMag * bulletConfig.DirX;
+            var bulletSpeedYfac = invBulletDirMag * bulletConfig.DirY;
+            AssignToBullet(
+                    bulletLocalIdCounter,
+                    originatedRdfId,
+                    currCharacterDownsync.JoinIndex,
+                    currCharacterDownsync.BulletTeamId,
+                    BulletState.StartUp, 0,
+                    currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX, currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY, // virtual grid position
+                    xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
+                    (int)(bulletSpeedXfac * bulletConfig.Speed), (int)(bulletSpeedYfac * bulletConfig.Speed), // velocity
+                    activeSkillHit, activeSkillId, bulletConfig,
+                    nextRenderFrameBullets[bulletCnt]);
+
+            bulletLocalIdCounter++;
+            bulletCnt++;
+
+            // [WARNING] This part locks velocity by the last bullet in the simultaneous array
+            if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
+                hasLockVel = true;
+                thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+            }
+            if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
+                hasLockVel = true;
+                thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
+            }
         }
     }
 }
