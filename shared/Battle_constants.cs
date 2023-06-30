@@ -332,9 +332,9 @@ namespace shared {
                         )),
 
                      new KeyValuePair<int, Skill>(5, new Skill{
-                        RecoveryFrames = 35,
-                        RecoveryFramesOnBlock = 35,
-                        RecoveryFramesOnHit = 35,
+                        RecoveryFrames = 30,
+                        RecoveryFramesOnBlock = 30,
+                        RecoveryFramesOnHit = 30,
                         MpDelta = 0,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk1
@@ -473,7 +473,7 @@ namespace shared {
                     }
                         .AddHit(
                             new BulletConfig {
-                                StartupFrames = 16,
+                                StartupFrames = 7,
                                 ActiveFrames = 600,
                                 HitStunFrames = 10,
                                 BlockStunFrames = 9,
@@ -584,16 +584,16 @@ namespace shared {
                         )),
 
                     new KeyValuePair<int, Skill>(12, new Skill{
-                        RecoveryFrames = 40,
-                        RecoveryFramesOnBlock = 40,
-                        RecoveryFramesOnHit = 40,
+                        RecoveryFrames = 28,
+                        RecoveryFramesOnBlock = 28,
+                        RecoveryFramesOnHit = 28,
                         MpDelta = 0,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk2
                     }
                         .AddHit(
                             new BulletConfig {
-                                StartupFrames = 4,
+                                StartupFrames = 7,
                                 ActiveFrames = 20,
                                 HitStunFrames = MAX_INT,
                                 BlockStunFrames = 9,

@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using DG.Tweening;
 
 public class CharacterAnimController : MonoBehaviour {
-    public InplaceHpBar hpBar; 
+    public InplaceHpBar hpBar;
     public TeamRibbon teamRibbon;
     private string MATERIAL_REF_THICKNESS = "_Thickness";
     private float DAMAGED_THICKNESS = 1.5f;
     private float DAMAGED_BLINK_SECONDS_HALF = 0.2f;
 
-    protected static HashSet<CharacterState>  INTERRUPT_WAIVE_SET = new HashSet<CharacterState> { 
+    protected static HashSet<CharacterState> INTERRUPT_WAIVE_SET = new HashSet<CharacterState> {
         Idle1,
         Walking,
         InAirIdle1NoJump,
@@ -43,7 +43,7 @@ public class CharacterAnimController : MonoBehaviour {
         try {
             var newCharacterState = rdfCharacter.CharacterState;
 
-            var animator = this.gameObject.GetComponent<Animator>();
+            Animator animator = gameObject.GetComponent<Animator>();
             // Update directions
             if (0 > rdfCharacter.DirX) {
                 this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
@@ -78,8 +78,8 @@ public class CharacterAnimController : MonoBehaviour {
             if (InAirIdle1ByJump == newCharacterState || InAirIdle1ByWallJump == newCharacterState) {
                 frameIdxInAnim = chConfig.InAirIdleFrameIdxTurningPoint + (frameIdxInAnim - chConfig.InAirIdleFrameIdxTurningPoint) % chConfig.InAirIdleFrameIdxTurnedCycle; // TODO: Anyway to avoid using division here?
             }
-            var fromTime = (frameIdxInAnim / targetClip.frameRate); // TODO: Anyway to avoid using division here?
-            animator.Play(newAnimName, targetLayer, fromTime);
+            float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
+            animator.Play(newAnimName, targetLayer, normalizedFromTime);
         } finally {
             if (null != prevRdfCharacter && prevRdfCharacter.Hp > rdfCharacter.Hp) {
                 // Some characters, and almost all traps wouldn't have an "attacked state", hence showing their damaged animation by shader.
@@ -91,7 +91,7 @@ public class CharacterAnimController : MonoBehaviour {
             }
         }
     }
-    
+
     /*
     There're certainly many approaches to outline around a sprite, thus a sprite-sequence-animation, the approach used here is simplest in terms of not being mind tweaking because I'm so new to shaders -- yet not necessarily the best.     
 

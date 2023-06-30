@@ -43,7 +43,7 @@ public class FireballAnimController : MonoBehaviour {
         }
 
         var targetClip = lookUpTable[newAnimName];
-        var fromTime = (frameIdxInAnim / targetClip.frameRate); // TODO: Anyway to avoid using division here?
-        animator.Play(newAnimName, targetLayer, fromTime);
+        float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
+        animator.Play(newAnimName, targetLayer, normalizedFromTime);
     }
 }
