@@ -198,8 +198,8 @@ namespace shared {
                 thatCharacterInNextFrame.FramesToRecover = skillConfig.RecoveryFrames;
 
                 int activeSkillHit = 0;
-                var pivotBulletConfig = skillConfig.Hits[activeSkillHit]; 
-                for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt+1; i++) {
+                var pivotBulletConfig = skillConfig.Hits[activeSkillHit];
+                for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt + 1; i++) {
                     thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
                     if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel)) break;
                     activeSkillHit++;
@@ -214,8 +214,8 @@ namespace shared {
                 skillUsed = true;
             } else if (0 < currCharacterDownsync.ActiveSkillHit && skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) {
                 var skillConfig = skills[currCharacterDownsync.ActiveSkillId];
-                if (currCharacterDownsync.ActiveSkillHit >= skillConfig.Hits.Count) {   
-                    return false; 
+                if (currCharacterDownsync.ActiveSkillHit >= skillConfig.Hits.Count) {
+                    return false;
                 }
                 if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
                     skillId = FindSkillId(1, currCharacterDownsync, chConfig.SpeciesId); // Fallback to basic atk
@@ -364,7 +364,7 @@ namespace shared {
 
                 if (!IsBulletAlive(dst, currRenderFrame.Id)) {
                     var skillConfig = skills[dst.BattleAttr.SkillId];
-                    bool inTheMiddleOfMultihitTransition = (BulletType.Melee == dst.Config.BType && MultiHitType.FromEmission == dst.Config.MhType && offender.ActiveSkillHit + 1 < skillConfig.Hits.Count); 
+                    bool inTheMiddleOfMultihitTransition = (BulletType.Melee == dst.Config.BType && MultiHitType.FromEmission == dst.Config.MhType && offender.ActiveSkillHit + 1 < skillConfig.Hits.Count);
                     bool justEndedCurrentHit = (dst.BattleAttr.OriginatedRenderFrameId + dst.Config.StartupFrames + dst.Config.ActiveFrames == currRenderFrame.Id);
 
                     if (inTheMiddleOfMultihitTransition && justEndedCurrentHit) {
@@ -375,7 +375,7 @@ namespace shared {
 
                     continue;
                 }
-                
+
                 if (BulletType.Melee == dst.Config.BType) {
                     if (noOpSet.Contains(offender.CharacterState)) {
                         // If a melee is alive but the offender got attacked, remove it even if it's active
@@ -497,21 +497,21 @@ namespace shared {
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
                 int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, logger);
-                
+
                 if (0 < hardPushbackCnt) {
                     /* 
                     if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
                         logger.LogInfo(String.Format("Before processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
                     }
-                    */ 
+                    */
                     processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP);
                     /* 
                     if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
                         logger.LogInfo(String.Format("After processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
                     }
-                    */ 
+                    */
                 }
-                
+
                 bool landedOnGravityPushback = false;
                 float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);
                 // Hold wall alignments of the primaryOverlapResult of hardPushbacks first, it'd be used later 
@@ -544,7 +544,7 @@ namespace shared {
                     }
                     */
                 }
-                
+
                 primaryOverlapResult.reset();
                 int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
                 float primarySoftOverlapMagSqr = float.MinValue;
@@ -651,7 +651,7 @@ namespace shared {
                             landedOnGravityPushback = true;
                         }
                     }
-                    
+
                     if (0 < softPushbacksCnt) {
                         /*
                         if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
@@ -671,8 +671,8 @@ namespace shared {
                     thatCharacterInNextFrame.InAir = false;
                     bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
                     if (fallStopping) {
-                        thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
                         thatCharacterInNextFrame.VelX = 0;
+                        thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
                         if (Dying == thatCharacterInNextFrame.CharacterState) {
                             // No update needed for Dying
                         } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
@@ -689,11 +689,11 @@ namespace shared {
                                     var halfColliderVhDiff = ((chConfig.DefaultSizeY - chConfig.ShrinkedSizeY) >> 1);
                                     var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
                                     effPushbacks[i].Y -= halfColliderChDiff;
-                                    
+
                                     if (0 == currCharacterDownsync.SpeciesId) {
                                         logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
                                     }
-                                    
+
                                     break;
                             }
                             thatCharacterInNextFrame.CharacterState = Idle1;
@@ -703,16 +703,18 @@ namespace shared {
                         // landedOnGravityPushback not fallStopping, could be in LayDown or GetUp or Dying
                         if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
-                                thatCharacterInNextFrame.VelY = 0;
+                                // No update needed for Dying
+                            } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
                                 thatCharacterInNextFrame.VelX = 0;
+                                thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
+                                thatCharacterInNextFrame.CharacterState = LayDown1;
+                                thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                             } else if (LayDown1 == thatCharacterInNextFrame.CharacterState) {
-                                thatCharacterInNextFrame.VelY = 0;
                                 if (0 == thatCharacterInNextFrame.FramesToRecover) {
                                     thatCharacterInNextFrame.CharacterState = GetUp1;
                                     thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
                                 }
                             } else if (GetUp1 == thatCharacterInNextFrame.CharacterState) {
-                                thatCharacterInNextFrame.VelY = 0;
                                 if (0 == thatCharacterInNextFrame.FramesToRecover) {
                                     thatCharacterInNextFrame.CharacterState = Idle1;
                                     thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
@@ -895,11 +897,11 @@ namespace shared {
                 */
                 // Update "CharacterState"
                 if (thatCharacterInNextFrame.InAir) {
-                    
+
                     if (0 == currCharacterDownsync.SpeciesId && false == currCharacterDownsync.InAir) {
                         logger.LogInfo(String.Format("Rdf.id={0}, chState={1}, framesInChState={6}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: transitted to InAir", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.FramesInChState));
                     }
-                    
+
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
                     switch (oldNextCharacterState) {
                         case Idle1:
@@ -1226,7 +1228,7 @@ namespace shared {
         }
 
         protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel) {
-            if (activeSkillHit >= skillConfig.Hits.Count) return false; 
+            if (activeSkillHit >= skillConfig.Hits.Count) return false;
             var bulletConfig = skillConfig.Hits[activeSkillHit];
             var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
             var invBulletDirMag = InvSqrt32(bulletDirMagSq);
