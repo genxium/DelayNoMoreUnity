@@ -172,6 +172,10 @@ namespace shared {
             return (patternId, jumpedOrNot, effDx, effDy);
         }
 
+        private static bool inNonInertiaFramesToRecover(CharacterDownsync currCharacterDownsync) {
+            return (0 < currCharacterDownsync.FramesToRecover && false == currCharacterDownsync.CapturedByInertia);
+        }
+
         private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets) {
             bool skillUsed = false;
             var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
@@ -235,6 +239,7 @@ namespace shared {
                 int originatedRdfId = (currRenderFrame.Id - currCharacterDownsync.FramesInChState);
                 skillUsed = addNewBulletToNextFrame(originatedRdfId, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, currCharacterDownsync.ActiveSkillHit, currCharacterDownsync.ActiveSkillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel);
             }
+
             return skillUsed;
         }
 
@@ -265,7 +270,14 @@ namespace shared {
                 var (patternId, jumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
-                if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets)) {
+                /*
+                if (1 == currCharacterDownsync.JoinIndex && 2 == patternId) {
+                    logger.LogInfo(String.Format("DragonPunch in air! JoinIndex: {0}, chState: {1}, framesToRecover: {2}, capturedByInertia: {3}", currCharacterDownsync.JoinIndex, currCharacterDownsync.CharacterState, currCharacterDownsync.FramesToRecover, currCharacterDownsync.CapturedByInertia));
+                }
+                */
+                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
+                if (usedSkill) {
+                    thatCharacterInNextFrame.CapturedByInertia = false; // The use of a skill must break "CapturedByInertia"
                     continue; // Don't allow movement if skill is used
                 }
 
@@ -313,6 +325,8 @@ namespace shared {
                             thatCharacterInNextFrame.VelX = 0;
                         }
                     }
+                } else {
+                    // Otherwise "thatCharacterInNextFrame.CapturedByInertia" remains unchanged
                 }
             }
         }
@@ -689,11 +703,11 @@ namespace shared {
                                     var halfColliderVhDiff = ((chConfig.DefaultSizeY - chConfig.ShrinkedSizeY) >> 1);
                                     var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
                                     effPushbacks[i].Y -= halfColliderChDiff;
-
+                                    /*
                                     if (0 == currCharacterDownsync.SpeciesId) {
                                         logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
                                     }
-
+                                    */
                                     break;
                             }
                             thatCharacterInNextFrame.CharacterState = Idle1;
@@ -897,11 +911,11 @@ namespace shared {
                 */
                 // Update "CharacterState"
                 if (thatCharacterInNextFrame.InAir) {
-
+                    /*
                     if (0 == currCharacterDownsync.SpeciesId && false == currCharacterDownsync.InAir) {
                         logger.LogInfo(String.Format("Rdf.id={0}, chState={1}, framesInChState={6}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: transitted to InAir", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.FramesInChState));
                     }
-
+                    */
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
                     switch (oldNextCharacterState) {
                         case Idle1:

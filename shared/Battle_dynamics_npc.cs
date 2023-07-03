@@ -262,6 +262,7 @@ namespace shared {
 
             return (patternId, jumpedOrNot, effectiveDx, effectiveDy);
         }
+
         private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, ref int colliderCnt, Collision collision, CollisionSpace collisionSys, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
             for (int i = roomCapacity; i < roomCapacity + currRenderFrame.NpcsArr.Count; i++) {
                 var currCharacterDownsync = currRenderFrame.NpcsArr[i - roomCapacity];
@@ -271,7 +272,8 @@ namespace shared {
                 var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
-                if (_useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets)) {
+                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets); 
+                if (usedSkill) {
                     continue; // Don't allow movement if skill is used
                 }
 

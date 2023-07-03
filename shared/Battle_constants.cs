@@ -792,7 +792,7 @@ namespace shared {
                                 Damage = 13,
                                 PushbackVelX = NO_LOCK_VEL,
                                 PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = NO_LOCK_VEL,
                                 SelfLockVelY = NO_LOCK_VEL,
                                 HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1122,11 +1122,13 @@ namespace shared {
             });
 
         public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
+            bool notRecovered = inNonInertiaFramesToRecover(currCharacterDownsync);
             switch (speciesId) {
                 case 0:
                     switch (patternId) {
                         case 1:
-                            if (0 == currCharacterDownsync.FramesToRecover) {
+                        case 2: // Including "case 2" here as a "no-skill fallback" if attack button is pressed
+                            if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 255;
                                 } else {
@@ -1143,8 +1145,12 @@ namespace shared {
                                 return currBulletConfig.CancelTransit[patternId];
                             }
                         case 3:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
-                                return 4;
+                            if (!notRecovered) { 
+                                if (currCharacterDownsync.InAir) {
+                                    return 255; // A fallback to "InAirAtk1"
+                                } else {
+                                    return 4;
+                                }
                             } else {
                                 return NO_SKILL;
                             }
@@ -1158,13 +1164,13 @@ namespace shared {
                 case 1:
                     switch (patternId) {
                         case 1:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 5;
                             } else {
                                 return NO_SKILL;
                             }
                         case 2:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 12;
                             } else {
                                 return NO_SKILL;
@@ -1175,7 +1181,7 @@ namespace shared {
                 case 2:
                     switch (patternId) {
                         case 1:
-                            if (0 == currCharacterDownsync.FramesToRecover) {
+                            if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 256;
                                 } else {
@@ -1192,14 +1198,22 @@ namespace shared {
                                 return currBulletConfig.CancelTransit[patternId];
                             }
                         case 2:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
-                                return 8;
+                            if (!notRecovered) {
+                                if (currCharacterDownsync.InAir) {
+                                    return 256; // A fallback to "InAirAtk1" 
+                                } else {
+                                    return 8;
+                                }
                             } else {
                                 return NO_SKILL;
                             }
                         case 3:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
-                                return 9;
+                            if (!notRecovered) {
+                                if (currCharacterDownsync.InAir) {
+                                    return 256; // A fallback to "InAirAtk1" 
+                                } else {        
+                                    return 9;
+                                }
                             } else {
                                 return NO_SKILL;
                             }
@@ -1217,19 +1231,19 @@ namespace shared {
                 case 3:
                     switch (patternId) {
                         case 1:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 5;
                             } else {
                                 return NO_SKILL;
                             }
                         case 2:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 12;
                             } else {
                                 return NO_SKILL;
                             }
                         case 3:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 13;
                             } else {
                                 return NO_SKILL;
@@ -1240,13 +1254,13 @@ namespace shared {
                 case 4096:
                     switch (patternId) {
                         case 1:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 14;
                             } else {
                                 return NO_SKILL;
                             }
                         case 3:
-                            if (0 == currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir) {
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 15;
                             } else {
                                 return NO_SKILL;
