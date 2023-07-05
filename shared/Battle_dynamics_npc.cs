@@ -269,7 +269,7 @@ namespace shared {
                     continue; // Don't allow movement if skill is used
                 }
 
-                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig);
+                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, true);
             }
         }
     }

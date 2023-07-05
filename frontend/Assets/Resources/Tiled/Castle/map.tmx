@@ -54,7 +54,7 @@
    </properties>
    <point/>
   </object>
-  <object id="188" x="1609.33" y="557.334">
+  <object id="188" x="1607.83" y="524.334">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="1"/>
@@ -71,7 +71,7 @@
    </properties>
    <point/>
   </object>
-  <object id="195" x="1138" y="505">
+  <object id="195" x="1138.5" y="506">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="4096"/>
@@ -179,7 +179,7 @@
     <property name="flCaptureFrames" value="30"/>
     <property name="frAct" value="4"/>
     <property name="frCaptureFrames" value="30"/>
-    <property name="id" value="28"/>
+    <property name="id" value="30"/>
    </properties>
    <point/>
   </object>

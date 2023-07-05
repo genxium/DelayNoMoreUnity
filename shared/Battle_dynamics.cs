@@ -286,41 +286,15 @@ namespace shared {
                     continue; // Don't allow movement if skill is used
                 }
 
-                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig);
+                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false);
             }
         }
 
-        public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig) {
+        public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia) {
             if (0 == currCharacterDownsync.FramesToRecover) {
                 thatCharacterInNextFrame.CharacterState = Idle1; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Idle" as a default action
 
-                bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
-                bool alignedWithInertia = true;
-                bool exactTurningAround = false;
-                bool stoppingFromWalking = false;
-                if (0 != effDx && 0 == thatCharacterInNextFrame.VelX) {
-                    alignedWithInertia = false;
-                } else if (0 == effDx && 0 != thatCharacterInNextFrame.VelX) {
-                    alignedWithInertia = false;
-                    stoppingFromWalking = true;
-                } else if (0 > effDx * thatCharacterInNextFrame.VelX) {
-                    alignedWithInertia = false;
-                    exactTurningAround = true;
-                }
-
-                if (!(InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) && !jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
-                    thatCharacterInNextFrame.CapturedByInertia = true;
-                    if (exactTurningAround) {
-                        thatCharacterInNextFrame.CharacterState = chConfig.HasTurnAroundAnim ? TurnAround : Walking;
-                        thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
-                    } else if (stoppingFromWalking) {
-                        thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
-                    } else {
-                        // Updates CharacterState and thus the animation to make user see graphical feedback asap.
-                        thatCharacterInNextFrame.CharacterState = Walking;
-                        thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
-                    }
-                } else {
+                if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.CapturedByInertia = false;
                     if (0 != effDx) {
                         int xfac = (0 < effDx ? 1 : -1);
@@ -334,6 +308,49 @@ namespace shared {
                         thatCharacterInNextFrame.CharacterState = Walking;
                     } else {
                         thatCharacterInNextFrame.VelX = 0;
+                    }
+                } else {
+                    bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
+                    bool alignedWithInertia = true;
+                    bool exactTurningAround = false;
+                    bool stoppingFromWalking = false;
+                    if (0 != effDx && 0 == thatCharacterInNextFrame.VelX) {
+                        alignedWithInertia = false;
+                    } else if (0 == effDx && 0 != thatCharacterInNextFrame.VelX) {
+                        alignedWithInertia = false;
+                        stoppingFromWalking = true;
+                    } else if (0 > effDx * thatCharacterInNextFrame.VelX) {
+                        alignedWithInertia = false;
+                        exactTurningAround = true;
+                    }
+
+                    if (!(InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) && !jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
+                        thatCharacterInNextFrame.CapturedByInertia = true;
+                        if (exactTurningAround) {
+                            thatCharacterInNextFrame.CharacterState = chConfig.HasTurnAroundAnim ? TurnAround : Walking;
+                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
+                        } else if (stoppingFromWalking) {
+                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
+                        } else {
+                            // Updates CharacterState and thus the animation to make user see graphical feedback asap.
+                            thatCharacterInNextFrame.CharacterState = Walking;
+                            thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
+                        }
+                    } else {
+                        thatCharacterInNextFrame.CapturedByInertia = false;
+                        if (0 != effDx) {
+                            int xfac = (0 < effDx ? 1 : -1);
+                            thatCharacterInNextFrame.DirX = effDx;
+                            thatCharacterInNextFrame.DirY = effDy;
+                            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
+                            } else {
+                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                            }
+                            thatCharacterInNextFrame.CharacterState = Walking;
+                        } else {
+                            thatCharacterInNextFrame.VelX = 0;
+                        }
                     }
                 }
             } else {
