@@ -460,7 +460,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             softPushbacks[i] = new Vector(0, 0);
         }
 
-        int dynamicRectangleCollidersCap = 32;
+        int dynamicRectangleCollidersCap = 64;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
         for (int i = 0; i < dynamicRectangleCollidersCap; i++) {
             dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);

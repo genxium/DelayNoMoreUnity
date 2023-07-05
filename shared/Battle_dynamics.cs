@@ -178,6 +178,9 @@ namespace shared {
 
         private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets) {
             bool skillUsed = false;
+            if (PATTERN_ID_NO_OP == patternId || PATTERN_ID_UNABLE_TO_OP == patternId) {
+                return false;
+            }
             var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
             int xfac = (0 < thatCharacterInNextFrame.DirX ? 1 : -1);
             bool hasLockVel = false;
@@ -214,6 +217,7 @@ namespace shared {
                 }
 
                 thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
+                thatCharacterInNextFrame.FramesInChState = 0; // Must reset "FramesInChState" here to handle the extreme case where a same skill, e.g. "Atk1", is used right after the previous one ended
 
                 skillUsed = true;
             } else if (0 < currCharacterDownsync.ActiveSkillHit && skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) {
@@ -254,7 +258,8 @@ namespace shared {
             if (!currCharacterDownsync.JumpTriggered && OnWall == currCharacterDownsync.CharacterState) {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
                 thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
-            } else if (Dashing == currCharacterDownsync.CharacterState) {
+            } else if (Dashing == currCharacterDownsync.CharacterState || Dashing == thatCharacterInNextFrame.CharacterState) {
+                // Don't apply gravity if will enter dashing state in next frame
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
             } else {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
@@ -281,53 +286,58 @@ namespace shared {
                     continue; // Don't allow movement if skill is used
                 }
 
-                if (0 == currCharacterDownsync.FramesToRecover) {
-                    bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
-                    bool alignedWithInertia = true;
-                    bool exactTurningAround = false;
-                    bool stoppingFromWalking = false;
-                    if (0 != effDx && 0 == thatCharacterInNextFrame.VelX) {
-                        alignedWithInertia = false;
-                    } else if (0 == effDx && 0 != thatCharacterInNextFrame.VelX) {
-                        alignedWithInertia = false;
-                        stoppingFromWalking = true;
-                    } else if (0 > effDx * thatCharacterInNextFrame.VelX) {
-                        alignedWithInertia = false;
-                        exactTurningAround = true;
-                    }
+                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig);
+            }
+        }
 
-                    if (!(InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) && !jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
-                        thatCharacterInNextFrame.CapturedByInertia = true;
-                        if (exactTurningAround) {
-                            thatCharacterInNextFrame.CharacterState = TurnAround;
-                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
-                        } else if (stoppingFromWalking) {
-                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
-                        } else {
-                            // Updates CharacterState and thus the animation to make user see graphical feedback asap.
-                            thatCharacterInNextFrame.CharacterState = Walking;
-                            thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
-                        }
+        public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig) {
+            if (0 == currCharacterDownsync.FramesToRecover) {
+                thatCharacterInNextFrame.CharacterState = Idle1; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Idle" as a default action
+
+                bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
+                bool alignedWithInertia = true;
+                bool exactTurningAround = false;
+                bool stoppingFromWalking = false;
+                if (0 != effDx && 0 == thatCharacterInNextFrame.VelX) {
+                    alignedWithInertia = false;
+                } else if (0 == effDx && 0 != thatCharacterInNextFrame.VelX) {
+                    alignedWithInertia = false;
+                    stoppingFromWalking = true;
+                } else if (0 > effDx * thatCharacterInNextFrame.VelX) {
+                    alignedWithInertia = false;
+                    exactTurningAround = true;
+                }
+
+                if (!(InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) && !jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
+                    thatCharacterInNextFrame.CapturedByInertia = true;
+                    if (exactTurningAround) {
+                        thatCharacterInNextFrame.CharacterState = chConfig.HasTurnAroundAnim ? TurnAround : Walking;
+                        thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
+                    } else if (stoppingFromWalking) {
+                        thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
                     } else {
-                        thatCharacterInNextFrame.CapturedByInertia = false;
-                        if (0 != effDx) {
-                            int xfac = (0 < effDx ? 1 : -1);
-                            thatCharacterInNextFrame.DirX = effDx;
-                            thatCharacterInNextFrame.DirY = effDy;
-                            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
-                                thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
-                            } else {
-                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                            }
-                            thatCharacterInNextFrame.CharacterState = Walking;
-                        } else {
-                            thatCharacterInNextFrame.CharacterState = Idle1;
-                            thatCharacterInNextFrame.VelX = 0;
-                        }
+                        // Updates CharacterState and thus the animation to make user see graphical feedback asap.
+                        thatCharacterInNextFrame.CharacterState = Walking;
+                        thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
                     }
                 } else {
-                    // Otherwise "thatCharacterInNextFrame.CapturedByInertia" remains unchanged
+                    thatCharacterInNextFrame.CapturedByInertia = false;
+                    if (0 != effDx) {
+                        int xfac = (0 < effDx ? 1 : -1);
+                        thatCharacterInNextFrame.DirX = effDx;
+                        thatCharacterInNextFrame.DirY = effDy;
+                        if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                            thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
+                        } else {
+                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                        }
+                        thatCharacterInNextFrame.CharacterState = Walking;
+                    } else {
+                        thatCharacterInNextFrame.VelX = 0;
+                    }
                 }
+            } else {
+                // Otherwise "thatCharacterInNextFrame.CapturedByInertia" remains unchanged
             }
         }
 
@@ -534,7 +544,7 @@ namespace shared {
                 thatCharacterInNextFrame.OnSlope = (!thatCharacterInNextFrame.OnWall && 0 != primaryOverlapResult.OverlapY && 0 != primaryOverlapResult.OverlapX);
                 // Kindly remind that (primaryOverlapResult.OverlapX, primaryOverlapResult.OverlapY) points INTO the slope :) 
                 float projectedVel = (thatCharacterInNextFrame.VelX * primaryOverlapResult.OverlapX + thatCharacterInNextFrame.VelY * primaryOverlapResult.OverlapY); // This value is actually in VirtualGrid unit, but converted to float, thus it'd be eventually rounded 
-                bool goingDown = (thatCharacterInNextFrame.OnSlope && !currCharacterDownsync.JumpTriggered && 0 > projectedVel); // We don't care about going up, it's already working...  
+                bool goingDown = (thatCharacterInNextFrame.OnSlope && !currCharacterDownsync.JumpTriggered && thatCharacterInNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
                 if (goingDown) {
                     /*
                     if (0 == currCharacterDownsync.SpeciesId) {
@@ -563,7 +573,7 @@ namespace shared {
                 int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
                 float primarySoftOverlapMagSqr = float.MinValue;
 
-                if (0 < residueCollided.Cnt) {
+                if (0 < residueCollided.Cnt && Dying != currCharacterDownsync.CharacterState) {
                     /*
                     if (0 == currCharacterDownsync.SpeciesId) {
                         logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
@@ -582,7 +592,6 @@ namespace shared {
                                     break;
                                 }
                                 if (Dying == v1.CharacterState) {
-                                    // ignore collision with dying player
                                     continue;
                                 }
                                 if (currCharacterDownsync.ChCollisionTeamId == v1.ChCollisionTeamId) {
@@ -825,6 +834,7 @@ namespace shared {
                             if (0 >= atkedCharacterInNextFrame.Hp) {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
                                 atkedCharacterInNextFrame.Hp = 0;
+                                atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
                                 atkedCharacterInNextFrame.CharacterState = CharacterState.Dying;
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
                             } else {
@@ -1059,7 +1069,7 @@ namespace shared {
             int colliderCnt = 0, bulletCnt = 0;
             _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, prevDecodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity, logger);
-
+            
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity + j, logger);
             _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 

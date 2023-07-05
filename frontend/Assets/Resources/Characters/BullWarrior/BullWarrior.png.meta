@@ -132,8 +132,8 @@ TextureImporter:
       name: Atk1_1
       rect:
         serializedVersion: 2
-        x: 664
-        y: 832
+        x: 305
+        y: 518
         width: 142
         height: 152
       alignment: 9
@@ -153,8 +153,8 @@ TextureImporter:
       name: Atk1_2
       rect:
         serializedVersion: 2
-        x: 327
-        y: 856
+        x: 0
+        y: 578
         width: 145
         height: 158
       alignment: 9
@@ -174,8 +174,8 @@ TextureImporter:
       name: Atk1_3
       rect:
         serializedVersion: 2
-        x: 613
-        y: 674
+        x: 889
+        y: 1256
         width: 135
         height: 158
       alignment: 9
@@ -195,8 +195,8 @@ TextureImporter:
       name: Atk1_4
       rect:
         serializedVersion: 2
-        x: 180
-        y: 1016
+        x: 720
+        y: 1120
         width: 168
         height: 158
       alignment: 9
@@ -279,8 +279,8 @@ TextureImporter:
       name: Atk1_8
       rect:
         serializedVersion: 2
-        x: 694
-        y: 984
+        x: 159
+        y: 745
         width: 157
         height: 144
       alignment: 9
@@ -300,8 +300,8 @@ TextureImporter:
       name: Atk3_1
       rect:
         serializedVersion: 2
-        x: 758
-        y: 1275
+        x: 360
+        y: 1156
         width: 174
         height: 144
       alignment: 9
@@ -321,8 +321,8 @@ TextureImporter:
       name: Atk3_2
       rect:
         serializedVersion: 2
-        x: 851
-        y: 931
+        x: 0
+        y: 736
         width: 156
         height: 151
       alignment: 9
@@ -342,8 +342,8 @@ TextureImporter:
       name: Atk3_3
       rect:
         serializedVersion: 2
-        x: 509
-        y: 966
+        x: 476
+        y: 811
         width: 155
         height: 150
       alignment: 9
@@ -363,8 +363,8 @@ TextureImporter:
       name: Atk3_4
       rect:
         serializedVersion: 2
-        x: 540
-        y: 1281
+        x: 0
+        y: 1036
         width: 173
         height: 136
       alignment: 9
@@ -426,8 +426,8 @@ TextureImporter:
       name: Atk3_7
       rect:
         serializedVersion: 2
-        x: 360
-        y: 1164
+        x: 720
+        y: 1278
         width: 169
         height: 136
       alignment: 9
@@ -447,8 +447,8 @@ TextureImporter:
       name: Atk3_8
       rect:
         serializedVersion: 2
-        x: 694
-        y: 984
+        x: 159
+        y: 745
         width: 157
         height: 144
       alignment: 9
@@ -465,141 +465,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atk4_1
-      rect:
-        serializedVersion: 2
-        x: 529
-        y: 1116
-        width: 165
-        height: 165
-      alignment: 9
-      pivot: {x: 0.27878788, y: 0.5939394}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f5611686a5b73f6468e868961dc934d9
-      internalID: 1217487750
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atk4_2
-      rect:
-        serializedVersion: 2
-        x: 301
-        y: 679
-        width: 141
-        height: 177
-      alignment: 9
-      pivot: {x: 0.4326241, y: 0.5536723}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2515e249f0b82264bad1190c53e02ca7
-      internalID: -953954185
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atk4_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 566
-        width: 142
-        height: 173
-      alignment: 9
-      pivot: {x: 0.44366196, y: 0.56647396}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 947d3f6e9fa9b394ba2b16a1aff16ec9
-      internalID: 609126641
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atk4_4
-      rect:
-        serializedVersion: 2
-        x: 159
-        y: 670
-        width: 142
-        height: 196
-      alignment: 9
-      pivot: {x: 0.32394367, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e94942718d25df24e9a07864eebf1632
-      internalID: -1418949610
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atk4_5
-      rect:
-        serializedVersion: 2
-        x: 218
-        y: 1627
-        width: 212
-        height: 163
-      alignment: 9
-      pivot: {x: 0.5613208, y: 0.601227}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 49e11fd300449c640b095fd66aaeb6af
-      internalID: 1440699282
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atk4_6
-      rect:
-        serializedVersion: 2
-        x: 812
-        y: 1880
-        width: 212
-        height: 168
-      alignment: 9
-      pivot: {x: 0.5613208, y: 0.5833333}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2af65199a74e65948b74f0e69ca271c3
-      internalID: -1578074031
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Atk5_1
       rect:
         serializedVersion: 2
-        x: 529
-        y: 1116
+        x: 520
+        y: 961
         width: 165
         height: 165
       alignment: 9
-      pivot: {x: 0.48484847, y: 0.45454547}
+      pivot: {x: 0.28181818, y: 0.47878808}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -615,12 +489,12 @@ TextureImporter:
       name: Atk5_2
       rect:
         serializedVersion: 2
-        x: 472
-        y: 765
+        x: 145
+        y: 397
         width: 141
         height: 201
       alignment: 9
-      pivot: {x: 0.63829786, y: 0.37313432}
+      pivot: {x: 0.4007092, y: 0.393035}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -636,12 +510,12 @@ TextureImporter:
       name: Atk5_3
       rect:
         serializedVersion: 2
-        x: 806
-        y: 730
+        x: 0
+        y: 27
         width: 139
         height: 201
       alignment: 9
-      pivot: {x: 0.65467626, y: 0.37313432}
+      pivot: {x: 0.41366908, y: 0.393035}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -657,12 +531,12 @@ TextureImporter:
       name: Atk5_4
       rect:
         serializedVersion: 2
-        x: 853
-        y: 1082
+        x: 318
+        y: 820
         width: 158
         height: 193
       alignment: 9
-      pivot: {x: 0.49367088, y: 0.38860103}
+      pivot: {x: 0.28164557, y: 0.4093266}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -683,7 +557,7 @@ TextureImporter:
         width: 222
         height: 162
       alignment: 9
-      pivot: {x: 0.6846847, y: 0.46296296}
+      pivot: {x: 0.5337838, y: 0.48765454}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -704,7 +578,7 @@ TextureImporter:
         width: 218
         height: 167
       alignment: 9
-      pivot: {x: 0.6972477, y: 0.4491018}
+      pivot: {x: 0.54357797, y: 0.4730541}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -725,7 +599,7 @@ TextureImporter:
         width: 222
         height: 162
       alignment: 9
-      pivot: {x: 0.6846847, y: 0.46296296}
+      pivot: {x: 0.5337838, y: 0.48765454}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -741,8 +615,8 @@ TextureImporter:
       name: Idle1_1
       rect:
         serializedVersion: 2
-        x: 348
-        y: 1014
+        x: 849
+        y: 970
         width: 161
         height: 150
       alignment: 9
@@ -763,7 +637,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 739
+        y: 887
         width: 159
         height: 149
       alignment: 9
@@ -783,8 +657,8 @@ TextureImporter:
       name: Idle1_3
       rect:
         serializedVersion: 2
-        x: 694
-        y: 1128
+        x: 159
+        y: 889
         width: 159
         height: 147
       alignment: 9
@@ -804,8 +678,8 @@ TextureImporter:
       name: Idle1_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1031
+        x: 534
+        y: 1126
         width: 168
         height: 142
       alignment: 9
@@ -825,8 +699,8 @@ TextureImporter:
       name: Idle1_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 888
+        x: 353
+        y: 1013
         width: 167
         height: 143
       alignment: 9
@@ -846,8 +720,8 @@ TextureImporter:
       name: Idle1_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1031
+        x: 534
+        y: 1126
         width: 168
         height: 142
       alignment: 9
@@ -867,8 +741,8 @@ TextureImporter:
       name: Idle1_7
       rect:
         serializedVersion: 2
-        x: 694
-        y: 1128
+        x: 159
+        y: 889
         width: 159
         height: 147
       alignment: 9
@@ -889,7 +763,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 739
+        y: 887
         width: 159
         height: 149
       alignment: 9
@@ -909,12 +783,12 @@ TextureImporter:
       name: Dying_1
       rect:
         serializedVersion: 2
-        x: 565
-        y: 1977
-        width: 247
-        height: 71
+        x: 139
+        y: 52
+        width: 140
+        height: 176
       alignment: 9
-      pivot: {x: 0.518219, y: 1.4084502}
+      pivot: {x: 0.49642858, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -930,12 +804,12 @@ TextureImporter:
       name: Dying_2
       rect:
         serializedVersion: 2
-        x: 565
-        y: 1892
-        width: 228
-        height: 85
+        x: 0
+        y: 228
+        width: 141
+        height: 173
       alignment: 9
-      pivot: {x: 0.48464912, y: 1.4117644}
+      pivot: {x: 0.5, y: 0.5086705}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -951,10 +825,10 @@ TextureImporter:
       name: InAirIdle1_1
       rect:
         serializedVersion: 2
-        x: 167
-        y: 866
-        width: 160
-        height: 150
+        x: 685
+        y: 931
+        width: 164
+        height: 189
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -972,8 +846,8 @@ TextureImporter:
       name: Walking_1
       rect:
         serializedVersion: 2
-        x: 218
-        y: 1472
+        x: 0
+        y: 1468
         width: 180
         height: 155
       alignment: 0
@@ -1015,7 +889,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1320
+        y: 1319
         width: 180
         height: 149
       alignment: 9
@@ -1035,7 +909,7 @@ TextureImporter:
       name: Walking_12
       rect:
         serializedVersion: 2
-        x: 632
+        x: 812
         y: 1566
         width: 180
         height: 152
@@ -1056,8 +930,8 @@ TextureImporter:
       name: Walking_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1469
+        x: 632
+        y: 1564
         width: 180
         height: 154
       alignment: 9
@@ -1078,7 +952,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1173
+        y: 1172
         width: 180
         height: 147
       alignment: 0
@@ -1099,7 +973,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 180
-        y: 1174
+        y: 1181
         width: 180
         height: 148
       alignment: 9
@@ -1119,8 +993,8 @@ TextureImporter:
       name: Walking_5
       rect:
         serializedVersion: 2
-        x: 578
-        y: 1417
+        x: 582
+        y: 1415
         width: 180
         height: 149
       alignment: 9
@@ -1141,7 +1015,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 180
-        y: 1322
+        y: 1329
         width: 180
         height: 150
       alignment: 9
@@ -1162,7 +1036,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 812
-        y: 1566
+        y: 1414
         width: 180
         height: 152
       alignment: 9
@@ -1182,7 +1056,7 @@ TextureImporter:
       name: Walking_8
       rect:
         serializedVersion: 2
-        x: 398
+        x: 402
         y: 1448
         width: 180
         height: 151
@@ -1203,8 +1077,8 @@ TextureImporter:
       name: Walking_9
       rect:
         serializedVersion: 2
-        x: 758
-        y: 1419
+        x: 540
+        y: 1268
         width: 180
         height: 147
       alignment: 0
@@ -1216,6 +1090,300 @@ TextureImporter:
       bones: []
       spriteID: 8e22421cb5f5c2340a169ed1f55b6209
       internalID: 1098595252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1_1
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 1479
+        width: 184
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41d4ea6c6d37dc84bbea91439bdda0fb
+      internalID: -1218518556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GetUp1_1
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 961
+        width: 165
+        height: 165
+      alignment: 9
+      pivot: {x: 0.27878788, y: 0.47878787}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe88db2483f7cb5478c583eeb803cc78
+      internalID: -126597261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GetUp1_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 401
+        width: 141
+        height: 177
+      alignment: 9
+      pivot: {x: 0.4326241, y: 0.4463277}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e0c2c47c74850847b12d21b34707665
+      internalID: -579120716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GetUp1_3
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 638
+        width: 142
+        height: 173
+      alignment: 9
+      pivot: {x: 0.44366196, y: 0.4566474}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20edda492ee22d3458ca374d539c701c
+      internalID: 25075404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GetUp1_4
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 735
+        width: 142
+        height: 196
+      alignment: 9
+      pivot: {x: 0.32394367, y: 0.4030612}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43c544062476eb448add593d586000a4
+      internalID: 385255883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GetUp1_5
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 1627
+        width: 212
+        height: 163
+      alignment: 9
+      pivot: {x: 0.5613208, y: 0.48466256}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c39de700c62667c4bbd2199c643eea1c
+      internalID: 14160217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GetUp1_6
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 1880
+        width: 212
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5613208, y: 0.4702381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85ead970428813749b6b8f26f3d37b48
+      internalID: -1683288146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InAirAtked1_1
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 1479
+        width: 184
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d44ca3f08df50754d92a0986f3e8dc03
+      internalID: 1514328415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InAirIdle1_2
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 1036
+        width: 173
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17b4f374e53e902428a76a9481c5f411
+      internalID: -1064856615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InAirIdle1_3
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 820
+        width: 160
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8a5dc8bd783e194ebcc17cfa722cc0c
+      internalID: -2009278009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LayDown1_1
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 1977
+        width: 247
+        height: 71
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35915494}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 776c677d9a1f382438c876fd09d94596
+      internalID: 1996862197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LayDown1_2
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 1892
+        width: 228
+        height: 85
+      alignment: 9
+      pivot: {x: 0.48464912, y: 0.5352941}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bba59773ce584604096ebdd5234ba94a
+      internalID: -1052226807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TurnAround1_1
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 598
+        width: 149
+        height: 147
+      alignment: 9
+      pivot: {x: 0.54362416, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a42521a29e0ed154986055bda24fa4cf
+      internalID: 47896260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TurnAround1_2
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 670
+        width: 149
+        height: 150
+      alignment: 9
+      pivot: {x: 0.45637584, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8afdfb912b61b044798357ec510d0977
+      internalID: 293696180
       vertices: []
       indices: 
       edges: []
@@ -1232,56 +1400,64 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Idle1_2: 1634174515
+      InAirAtked1_1: 1514328415
       Atk1_6: 930252665
       Atk5_5: -366927945
       Walking_3: 63962674
       Atk1_7: 525806445
-      Atk4_1: 1217487750
-      Atk4_4: -1418949610
+      GetUp1_3: 25075404
+      Idle1_5: 986820602
       Idle1_1: 1444267829
       InAirIdle1_1: 1368544725
-      Idle1_5: 986820602
       Atk5_7: -1173809141
       Atk5_3: -753262615
       Atk3_4: -664425723
       Atk5_6: -178973779
+      TurnAround1_2: 293696180
       Idle1_7: -952497747
       Walking_9: 1098595252
-      Atk4_6: -1578074031
+      TurnAround1_1: 47896260
       Atk3_8: -658054795
       Idle1_8: -233661706
+      GetUp1_2: -579120716
       Walking_11: 1843829475
       Walking_2: 1680450198
       Atk3_5: -600119859
+      LayDown1_2: -1052226807
       Atk5_4: -1205851609
+      InAirIdle1_2: -1064856615
       Dying_2: -1234987748
       Atk5_2: 810632653
-      Idle1_4: -1064239836
+      Atked1_1: -1218518556
       Atk1_2: 1291325591
+      Idle1_4: -1064239836
       Atk3_6: -868757784
-      Atk4_2: -953954185
-      Atk4_5: 1440699282
-      Atk4_3: 609126641
+      InAirIdle1_3: -2009278009
       Walking_6: -534792898
       Idle1_6: 582273873
       Atk3_1: -1660701586
       Atk1_8: -12935992
       Atk1_5: -2099499217
+      LayDown1_1: 1996862197
       Atk1_4: -341033902
       Atk3_2: -1913637652
       Walking_7: 1597518970
+      GetUp1_5: 14160217
       Atk1_1: 917925675
       Dying_1: 440277355
       Atk3_3: 1772931156
+      GetUp1_6: -1683288146
       Walking_1: -740300089
       Walking_12: -1943016156
       Walking_5: 1676211600
       Atk1_3: -665599985
       Atk5_1: 1205414356
-      Walking_8: 1553893600
+      GetUp1_1: -126597261
       Walking_10: -1162581455
+      Walking_8: 1553893600
       Walking_4: 319985528
       Atk3_7: -754369692
+      GetUp1_4: 385255883
       Idle1_3: 1602908016
   spritePackingTag: 
   pSDRemoveMatte: 0

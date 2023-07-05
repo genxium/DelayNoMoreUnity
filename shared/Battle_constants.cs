@@ -350,7 +350,7 @@ namespace shared {
                                 PushbackVelY = 0,
                                 SelfLockVelX = NO_LOCK_VEL,
                                 SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -559,6 +559,7 @@ namespace shared {
                                 PushbackVelX = NO_LOCK_VEL,
                                 PushbackVelY = NO_LOCK_VEL,
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = 0,
                                 BType = BulletType.Melee,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -578,6 +579,7 @@ namespace shared {
                                 PushbackVelX = NO_LOCK_VEL,
                                 PushbackVelY = NO_LOCK_VEL,
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = 0,
                                 BType = BulletType.Melee,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -653,49 +655,73 @@ namespace shared {
                         )),
 
                     new KeyValuePair<int, Skill>(14, new Skill{
-                        RecoveryFrames = 33,
-                        RecoveryFramesOnBlock = 33,
-                        RecoveryFramesOnHit = 33,
+                        RecoveryFrames = 36,
+                        RecoveryFramesOnBlock = 36,
+                        RecoveryFramesOnHit = 36,
                         MpDelta = 0,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk1
                     }
                         .AddHit(
                             new BulletConfig {
-                                StartupFrames = 16,
-                                ActiveFrames = 22,
-                                HitStunFrames = MAX_INT,
-                                BlockStunFrames = 9,
-                                Damage = 40,
-                                PushbackVelX = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                StartupFrames = 8,
+                                ActiveFrames = 9,
+                                HitStunFrames = 9,
+                                BlockStunFrames = 3,
+                                Damage = 10,
+                                PushbackVelX = 0, // Freeze the target for visual emphasis
+                                PushbackVelY = 0,
                                 SelfLockVelX = NO_LOCK_VEL,
                                 SelfLockVelY = NO_LOCK_VEL,
                                 HitboxOffsetX = (int)(64*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeX = (int)(100*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(100*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                BlowUp = true,
-                                SpeciesId = 3,
+                                BlowUp = false,
+                                SpeciesId = 1,
+                                MhType = MultiHitType.FromEmission,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Melee,
                                 DirX = 1,
-                                DirY = 0,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
-                        )),
+                        )
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 17,
+                                ActiveFrames = 19,
+                                HitStunFrames = 40,
+                                BlockStunFrames = 9,
+                                Damage = 25,
+                                PushbackVelX = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(-8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(64*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(100*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(100*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                BlowUp = false,
+                                SpeciesId = 3,
+                                ExplosionFrames = 25,
+                                BType = BulletType.Melee,
+                                DirX = 1,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                        )
+                    ),
 
                     new KeyValuePair<int, Skill>(15, new Skill{
-                        RecoveryFrames = 60,
-                        RecoveryFramesOnBlock = 60,
-                        RecoveryFramesOnHit = 60,
+                        RecoveryFrames = 50,
+                        RecoveryFramesOnBlock = 50,
+                        RecoveryFramesOnHit = 50,
                         MpDelta = 270,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk5
                     }
                         .AddHit(
                             new BulletConfig {
-                                StartupFrames = 16,
+                                StartupFrames = 33,
                                 ActiveFrames = 600,
                                 HitStunFrames = 30,
                                 BlockStunFrames = 9,
@@ -720,7 +746,7 @@ namespace shared {
                         )
                         .AddHit(
                             new BulletConfig {
-                                StartupFrames = 16,
+                                StartupFrames = 33,
                                 ActiveFrames = 600,
                                 HitStunFrames = 30,
                                 BlockStunFrames = 9,
@@ -748,7 +774,7 @@ namespace shared {
                         )
                         .AddHit(
                             new BulletConfig {
-                                StartupFrames = 16,
+                                StartupFrames = 33,
                                 ActiveFrames = 600,
                                 HitStunFrames = 30,
                                 BlockStunFrames = 9,
@@ -975,7 +1001,8 @@ namespace shared {
                         DyingSizeY = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                        CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HasTurnAroundAnim = true
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
@@ -996,9 +1023,9 @@ namespace shared {
                         VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeX = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1006,7 +1033,8 @@ namespace shared {
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(40.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                        CloseEnoughVirtualGridDistance = (int)(40.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HasTurnAroundAnim = false
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
@@ -1043,7 +1071,8 @@ namespace shared {
                         DyingSizeY = (int)(46f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(90.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                        CloseEnoughVirtualGridDistance = (int)(90.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HasTurnAroundAnim = true
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(3, new CharacterConfig {
@@ -1074,7 +1103,8 @@ namespace shared {
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                        CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HasTurnAroundAnim = false
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(2048, new CharacterConfig {
@@ -1117,7 +1147,8 @@ namespace shared {
                         DyingSizeY = (int)(140 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 2,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(200.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)
+                        CloseEnoughVirtualGridDistance = (int)(200.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HasTurnAroundAnim = true
                     }),
             });
 

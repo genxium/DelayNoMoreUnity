@@ -5,7 +5,7 @@ using static shared.CharacterState;
 namespace shared {
     public partial class Battle {
         private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
-            // return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+            //return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
             //returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
 
             if (0 < currCharacterDownsync.FramesToRecover) {
@@ -20,6 +20,7 @@ namespace shared {
             int effectiveDy = currCharacterDownsync.DirY;
 
             bool hasVisionReaction = false;
+            bool hasEnemyBehindMe = false;
             var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
             if (!currCharacterDownsync.InAir) {
                 // TODO: There's no InAir vision reaction yet.
@@ -44,6 +45,7 @@ namespace shared {
                         if (!overlapped) {
                             continue;
                         }
+
                         switch (bCollider.Data) {
                             case CharacterDownsync v3:
                                 if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
@@ -55,34 +57,32 @@ namespace shared {
                                 var colliderDx = (bCollider.X - aCollider.X);
                                 var colliderDy = (bCollider.Y - aCollider.Y);
 
-                                bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
-                                if (!prevCapturedByInertia) {
-                                    // To emulate input delay, and double it to give the players some advantages
-                                    thatCharacterInNextFrame.CapturedByInertia = true;
-                                    thatCharacterInNextFrame.FramesToRecover = (INPUT_DELAY_FRAMES << 3);
-                                    if (currCharacterDownsync.WaivingSpontaneousPatrol && 0 > colliderDx * currCharacterDownsync.DirX) {
-                                        // A static NPC should turn immediately to the opponent behind it, otherwise it looks weird
-                                        effectiveDx = -effectiveDx;
-                                    }
-                                    hasVisionReaction = true;
+                                if (invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) break; // Target in front of me is invinsible, nothing can be done
+
+                                if (0 > (colliderDx * currCharacterDownsync.DirX)) {
+                                    hasEnemyBehindMe = true;
                                 } else {
-                                    thatCharacterInNextFrame.CapturedByInertia = false;
-                                    if (0 > (colliderDx * currCharacterDownsync.DirX)) {
-                                        // Behind me
-                                        effectiveDx = -effectiveDx;
-                                        hasVisionReaction = true;
-                                        break;
-                                    }
                                     var atkedChConfig = characters[v3.SpeciesId];
-                                    if (!invinsibleSet.Contains(v3.CharacterState) && 0 >= v3.FramesInvinsible && 0 < colliderDx * currCharacterDownsync.DirX) {
-                                        // Opponent is in front of me
-                                        if (Math.Abs(colliderDx)-atkedChConfig.DefaultSizeX*0.5f*VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO > closeEnoughToAtkRange) {
-                                            // Not close enough to attack
-                                            hasVisionReaction = true;
-                                        } else {
-                                            // close enough to attack
-                                            switch (currCharacterDownsync.SpeciesId) {
-                                                case 1:
+                                    // Opponent is in front of me
+                                    if (Math.Abs(colliderDx) - atkedChConfig.DefaultSizeX * 0.5f * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO > closeEnoughToAtkRange) {
+                                        // Not close enough to attack
+                                        hasVisionReaction = true;
+                                    } else {
+                                        // close enough to attack
+                                        switch (currCharacterDownsync.SpeciesId) {
+                                            case 1:
+                                                if (0.2f * aCollider.H < colliderDy) {
+                                                    // In air
+                                                    patternId = 2;
+                                                } else {
+                                                    // On ground
+                                                    patternId = 1;
+                                                }
+                                                hasVisionReaction = true;
+                                                break;
+                                            case 2:
+                                                if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
+                                                    // Melee reachable
                                                     if (0.2f * aCollider.H < colliderDy) {
                                                         // In air
                                                         patternId = 2;
@@ -90,51 +90,38 @@ namespace shared {
                                                         // On ground
                                                         patternId = 1;
                                                     }
-                                                    hasVisionReaction = true;
-                                                    break;
-                                                case 2:
-                                                    if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
-                                                        // Melee reachable
-                                                        if (0.2f * aCollider.H < colliderDy) {
-                                                            // In air
-                                                            patternId = 2;
-                                                        } else {
-                                                            // On ground
-                                                            patternId = 1;
-                                                        }
+                                                } else {
+                                                    // Use fireball
+                                                    patternId = 3;
+                                                }
+                                                hasVisionReaction = true;
+                                                break;
+                                            case 3:
+                                                if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
+                                                    // Melee reachable
+                                                    if (0.2f * aCollider.H < colliderDy) {
+                                                        // In air
+                                                        patternId = 2;
                                                     } else {
-                                                        // Use fireball
-                                                        patternId = 3;
-                                                    }
-                                                    hasVisionReaction = true;
-                                                    break;
-                                                case 3:
-                                                    if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
-                                                        // Melee reachable
-                                                        if (0.2f * aCollider.H < colliderDy) {
-                                                            // In air
-                                                            patternId = 2;
-                                                        } else {
-                                                            // On ground
-                                                            patternId = 1;
-                                                        }
-                                                    } else {
-                                                        // Use fireball
-                                                        patternId = 3;
-                                                    }
-                                                    hasVisionReaction = true;
-                                                    break;
-                                                case 4096:
-                                                    if (Math.Abs(colliderDx) < 1.2f * aCollider.W) {
-                                                        // Use melee
+                                                        // On ground
                                                         patternId = 1;
-                                                    } else {
-                                                        // Use fireball
-                                                        patternId = 3;
                                                     }
-                                                    hasVisionReaction = true;
-                                                    break;
-                                            }
+                                                } else {
+                                                    // Use fireball
+                                                    patternId = 3;
+                                                }
+                                                hasVisionReaction = true;
+                                                break;
+                                            case 4096:
+                                                if (Math.Abs(colliderDx) < 1.2f * aCollider.W) {
+                                                    // Use melee
+                                                    patternId = 1;
+                                                } else {
+                                                    // Use fireball
+                                                    patternId = 3;
+                                                }
+                                                hasVisionReaction = true;
+                                                break;
                                         }
                                     }
                                 }
@@ -146,6 +133,11 @@ namespace shared {
                 }
                 visionCollider.Data = null;
                 collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
+            }
+
+            if (!hasVisionReaction && hasEnemyBehindMe) {
+                effectiveDx = -effectiveDx;
+                hasVisionReaction = true;
             }
 
             if (hasVisionReaction && PATTERN_ID_NO_OP != patternId) {
@@ -187,7 +179,7 @@ namespace shared {
                                 if (!fr && !fl && !fu && !fd) {
                                     fr = 0 > currCharacterDownsync.DirX;
                                     fl = 0 < currCharacterDownsync.DirX;
-                                }                                
+                                }
 
                                 int targetFramesInPatrolCue = 0;
                                 if (fr) {
@@ -272,25 +264,12 @@ namespace shared {
                 var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
-                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets); 
+                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
                 if (usedSkill) {
                     continue; // Don't allow movement if skill is used
                 }
 
-                if (0 == currCharacterDownsync.FramesToRecover) {
-                    // No inertia capture for Npcs, and most NPCs don't even have TurnAround animation clip!
-                    if (0 != effDx) {
-                        int xfac = (0 < effDx ? 1 : -1);
-                        thatCharacterInNextFrame.DirX = effDx;
-                        thatCharacterInNextFrame.DirY = effDy;
-
-                        thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                        thatCharacterInNextFrame.CharacterState = Walking;
-                    } else {
-                        thatCharacterInNextFrame.CharacterState = Idle1;
-                        thatCharacterInNextFrame.VelX = 0;
-                    }
-                }
+                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig);
             }
         }
     }

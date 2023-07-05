@@ -52,5 +52,7 @@
         public bool OmitGravity;
         public bool OmitPushback;
         public ulong CollisionTypeMask;
+
+        public bool HasTurnAroundAnim;
     }
 }
