@@ -293,7 +293,7 @@ namespace shared {
         public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia) {
             if (0 == currCharacterDownsync.FramesToRecover) {
                 thatCharacterInNextFrame.CharacterState = Idle1; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Idle" as a default action
-
+                
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.CapturedByInertia = false;
                     if (0 != effDx) {
@@ -564,14 +564,19 @@ namespace shared {
                 bool goingDown = (thatCharacterInNextFrame.OnSlope && !currCharacterDownsync.JumpTriggered && thatCharacterInNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
                 if (goingDown) {
                     /*
-                    if (0 == currCharacterDownsync.SpeciesId) {
-                        logger.LogInfo(String.Format("Rdf.id={0}, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+                    if (2 == currCharacterDownsync.SpeciesId) {
+                        logger.LogInfo(String.Format("Rdf.id={0} BEFOER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
                     }
                     */
                     float newVelXApprox = thatCharacterInNextFrame.VelX - primaryOverlapResult.OverlapX * projectedVel;
                     float newVelYApprox = thatCharacterInNextFrame.VelY - primaryOverlapResult.OverlapY * projectedVel;
                     thatCharacterInNextFrame.VelX = (int)Math.Round(newVelXApprox);
-                    thatCharacterInNextFrame.VelY = (int)Math.Round(newVelYApprox);
+                    thatCharacterInNextFrame.VelY = (int)Math.Floor(newVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
+                    /*
+                    if (2 == currCharacterDownsync.SpeciesId) {
+                        logger.LogInfo(String.Format("Rdf.id={0} AFTER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+                    }
+                    */
                 } else if (thatCharacterInNextFrame.OnSlope && Idle1 == thatCharacterInNextFrame.CharacterState && 0 == thatCharacterInNextFrame.VelX) {
                     // [WARNING] Prevent down-slope sliding, might not be preferred for some game designs, disable this if you need sliding on the slope
                     thatCharacterInNextFrame.VelY = 0;
@@ -759,8 +764,10 @@ namespace shared {
                                     thatCharacterInNextFrame.CharacterState = Idle1;
                                     thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
                                 }
-                            } else if (currCharacterDownsync.OnSlope && !thatCharacterInNextFrame.OnSlope) {
-                                // [WARNING] Walking up to a flat ground, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY".
+                            } else if (0 >= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
+                                // [WARNING] Covers 2 situations:
+                                // 1. Walking up to a flat ground then walk back down, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY";
+                                // 2. Dashing down to a flat ground then walk back up. 
                                 thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
                             }
                         }
