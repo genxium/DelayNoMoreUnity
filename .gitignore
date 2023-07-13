@@ -137,3 +137,5 @@ gradle/*
 *~
 jsexport/jsexport.js*
 battle_srv/room_*.txt
+
+**/*.bkp

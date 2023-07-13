@@ -52,5 +52,8 @@ Open `LoginScene` after launching the backend to try out multiplayer mode. Avail
 ### Unit test
 Referencing [this document from Microsoft](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test) by far.
 
+# 2. Thanks
+- To [dravenx](https://opengameart.org/users/dravenx) for providing the [spikey-stuff](https://opengameart.org/content/spikey-stuff).
+
 # FAQ
 Please refer to [FAQ.md](FAQ.md).

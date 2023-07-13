@@ -1,0 +1,29 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:b83efc8d27086fe94026ab68776b16a3:d5b4e7516619227a07430b89d92107e9:b29f65abf55e255f545c274846dab46e$
+#
+:format=40300
+:texture=Spike.png
+:size=512x512
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+Chainlinklong;0;207;42;305; 0.5;0.5; 0;0;0;0
+Chainlinkshort;42;260;39;252; 0.5;0.5; 0;0;0;0
+fourspikesSteel;256;365;57;147; 0.5;0.5; 0;0;0;0
+FourspikesWood;182;60;74;160; 0.5;0.5; 0;0;0;0
+SawBig;0;24;182;183; 0.5;0.5; 0;0;0;0
+SawSmall;313;410;102;102; 0.5;0.5; 0;0;0;0
+SpikeblockSteel;256;153;145;84; 0.5;0.5; 0;0;0;0
+SpikeblockWood;81;260;152;84; 0.5;0.5; 0;0;0;0
+spikedball;81;344;175;168; 0.5;0.5; 0;0;0;0
+SpikeGroundTrap;233;237;191;107; 0.5;0.5; 0;0;0;0
+SteelspikeRight;136;220;91;40; 0.5;0.5; 0;0;0;0
+SteelspikeUp;424;325;40;91; 0.5;0.5; 0;0;0;0
+WoodspikeRight;42;218;94;42; 0.5;0.5; 0;0;0;0
+WoodspikeUp;424;416;50;96; 0.5;0.5; 0;0;0;0
