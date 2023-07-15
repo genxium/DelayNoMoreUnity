@@ -848,6 +848,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
+                case "Trap":
+                    break;
                 default:
                     break;
             }

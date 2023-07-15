@@ -92,69 +92,71 @@ namespace shared {
             "dHIYAyABKAsyGC5zaGFyZWQuQnVsbGV0QmF0dGxlQXR0chIkCgZjb25maWcY",
             "BCABKAsyFC5zaGFyZWQuQnVsbGV0Q29uZmlnEhUKDHZpcnR1YWxHcmlkWBjn",
             "ByABKAUSFQoMdmlydHVhbEdyaWRZGOgHIAEoBRINCgRkaXJYGOkHIAEoBRIN",
-            "CgRkaXJZGOoHIAEoBRINCgR2ZWxYGOsHIAEoBRINCgR2ZWxZGOwHIAEoBSKt",
-            "AgoKVHJhcENvbmZpZxIKCgJpZBgBIAEoBRIaChJleHBsb3Npb25TcGVjaWVz",
-            "SWQYAiABKAUSFwoPZXhwbG9zaW9uRnJhbWVzGAMgASgFEg4KBmJsb3dVcBgE",
-            "IAEoCBIOCgZkYW1hZ2UYBSABKAUSFQoNaGl0U3R1bkZyYW1lcxgGIAEoBRIb",
-            "ChNoaXRJbnZpbnNpYmxlRnJhbWVzGAcgASgFEhYKDmRlc3Ryb3lVcG9uSGl0",
-            "GAggASgIEg0KBXF1b3RhGAkgASgFEg0KBXNwZWVkGAogASgFEgwKBGRpclgY",
-            "CyABKAUSDAoEZGlyWRgMIAEoBRIcChRwcm92aWRlc0hhcmRQdXNoYmFjaxgN",
-            "IAEoCBIaChFjb2xsaXNpb25UeXBlTWFzaxiFCCABKAQifQoOVHJhcEJhdHRs",
-            "ZUF0dHISEwoLdHJhcExvY2FsSWQYASABKAUSFQoNaGl0Ym94T2Zmc2V0WBgC",
-            "IAEoBRIVCg1oaXRib3hPZmZzZXRZGAMgASgFEhMKC2hpdGJveFNpemVYGAQg",
-            "ASgFEhMKC2hpdGJveFNpemVZGAUgASgFIsABCgRUcmFwEioKCmJhdHRsZUF0",
-            "dHIYASABKAsyFi5zaGFyZWQuVHJhcEJhdHRsZUF0dHISIgoGY29uZmlnGAIg",
-            "ASgLMhIuc2hhcmVkLlRyYXBDb25maWcSFQoMdmlydHVhbEdyaWRYGOcHIAEo",
-            "BRIVCgx2aXJ0dWFsR3JpZFkY6AcgASgFEg0KBGRpclgY6QcgASgFEg0KBGRp",
-            "clkY6gcgASgFEg0KBHZlbFgY6wcgASgFEg0KBHZlbFkY7AcgASgFIjgKC1Bl",
-            "ZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwKBHBvcnQYAiABKAUSDwoHYXV0aEtl",
-            "eRgDIAEoBSLFAwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEKCXN0YWdlTmFtZRgB",
-            "IAEoCRITCgtib3VuZFJvb21JZBgCIAEoBRIcChRiYXR0bGVEdXJhdGlvbkZy",
-            "YW1lcxgDIAEoAxImCh5pbnB1dEZyYW1lVXBzeW5jRGVsYXlUb2xlcmFuY2UY",
-            "BCABKAUSJwofbWF4Q2hhc2luZ1JlbmRlckZyYW1lc1BlclVwZGF0ZRgFIAEo",
-            "BRIhChlyb2xsYmFja0VzdGltYXRlZER0TWlsbGlzGAYgASgBEiAKGHJvbGxi",
-            "YWNrRXN0aW1hdGVkRHROYW5vcxgHIAEoAxIYChByZW5kZXJCdWZmZXJTaXpl",
-            "GAggASgFEhgKEGNvbGxpc2lvbk1pblN0ZXAYCSABKAUSGQoRYm91bmRSb29t",
-            "Q2FwYWNpdHkYCiABKAUSGwoTcHJlYWxsb2NOcGNDYXBhY2l0eRgLIAEoBRIe",
-            "ChZwcmVhbGxvY0J1bGxldENhcGFjaXR5GAwgASgFEi0KD2JhdHRsZVVkcFR1",
-            "bm5lbBiACCABKAsyEy5zaGFyZWQuUGVlclVkcEFkZHISGAoPZnJhbWVMb2dF",
-            "bmFibGVkGIEIIAEoCCKhAwoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQYASAB",
-            "KAUSLQoKcGxheWVyc0FychgCIAMoCzIZLnNoYXJlZC5DaGFyYWN0ZXJEb3du",
-            "c3luYxIWCg5jb3VudGRvd25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQgAygL",
-            "Mg4uc2hhcmVkLkJ1bGxldBIqCgducGNzQXJyGAUgAygLMhkuc2hhcmVkLkNo",
-            "YXJhY3RlckRvd25zeW5jEisKCHRyYXBzQXJyGAYgAygLMhkuc2hhcmVkLkNo",
-            "YXJhY3RlckRvd25zeW5jEh8KFmJhY2tlbmRVbmNvbmZpcm1lZE1hc2sYgAgg",
-            "ASgEEhoKEXNob3VsZEZvcmNlUmVzeW5jGIEIIAEoCBIWCg1zcGVjaWVzSWRM",
-            "aXN0GIIIIAMoBRIdChRidWxsZXRMb2NhbElkQ291bnRlchiDCCABKAUSLQoP",
-            "cGVlclVkcEFkZHJMaXN0GIQIIAMoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIc",
-            "ChNwYXJ0aWNpcGFudENoYW5nZUlkGIUIIAEoBSLcAQoGV3NSZXNwEgsKA3Jl",
-            "dBgBIAEoBRILCgNhY3QYAiABKAUSJgoDcmRmGAMgASgLMhkuc2hhcmVkLlJv",
-            "b21Eb3duc3luY0ZyYW1lEjsKF2lucHV0RnJhbWVEb3duc3luY0JhdGNoGAQg",
-            "AygLMhouc2hhcmVkLklucHV0RnJhbWVEb3duc3luYxIsCghiY2lGcmFtZRgF",
-            "IAEoCzIaLnNoYXJlZC5CYXR0bGVDb2xsaWRlckluZm8SFQoNcGVlckpvaW5J",
-            "bmRleBgGIAEoBRIOCgZlcnJNc2cYByABKAkihQIKBVNraWxsEhUKDWJhdHRs",
-            "ZUxvY2FsSWQYASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYAiABKAUSHQoVcmVj",
-            "b3ZlcnlGcmFtZXNPbkJsb2NrGAMgASgFEhsKE3JlY292ZXJ5RnJhbWVzT25I",
-            "aXQYBCABKAUSLQoLdHJpZ2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tpbGxU",
-            "cmlnZ2VyVHlwZRIsCgxib3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQuQ2hh",
-            "cmFjdGVyU3RhdGUSDwoHbXBEZWx0YRgHIAEoBRIjCgRoaXRzGIAIIAMoCzIU",
-            "LnNoYXJlZC5CdWxsZXRDb25maWciZwoIRnJhbWVMb2cSJgoDcmRmGAEgASgL",
-            "Mhkuc2hhcmVkLlJvb21Eb3duc3luY0ZyYW1lEjMKD2FjdHVhbGx5VXNlZElk",
-            "ZhgCIAEoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMqNQoLQnVsbGV0",
-            "U3RhdGUSCwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0KCUV4cGxvZGluZxAC",
-            "Kq4CCg5DaGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsKB1dhbGtpbmcQARIO",
-            "CgpUdXJuQXJvdW5kEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxlMU5vSnVt",
-            "cBAEEhQKEEluQWlySWRsZTFCeUp1bXAQBRIYChRJbkFpcklkbGUxQnlXYWxs",
-            "SnVtcBAGEg8KC0luQWlyQXRrZWQxEAcSDAoIQmxvd25VcDEQCBIMCghMYXlE",
-            "b3duMRAJEgoKBkdldFVwMRAKEgkKBUR5aW5nEAsSCwoHRGFzaGluZxAMEgoK",
-            "Bk9uV2FsbBANEg4KCUluQWlyQXRrMRCACBIJCgRBdGsxEIEIEgkKBEF0azIQ",
-            "gggSCQoEQXRrMxCDCBIJCgRBdGs0EIQIEgkKBEF0azUQhQgqNwoKQnVsbGV0",
-            "VHlwZRIQCgxVbmRldGVybWluZWQQABIJCgVNZWxlZRABEgwKCEZpcmViYWxs",
-            "EAIqiAEKDE11bHRpSGl0VHlwZRIICgROb25lEAASEAoMRnJvbUVtaXNzaW9u",
-            "EAESFgoSRnJvbUZpcnN0SGl0QWN0dWFsEAISFgoSRnJvbUZpcnN0SGl0QW55",
-            "d2F5EAMSFQoRRnJvbVByZXZIaXRBY3R1YWwQBBIVChFGcm9tUHJldkhpdEFu",
-            "eXdheRAFKjMKEFNraWxsVHJpZ2dlclR5cGUSDgoKUmlzaW5nRWRnZRAAEg8K",
-            "C0ZhbGxpbmdFZGdlEAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
+            "CgRkaXJZGOoHIAEoBRINCgR2ZWxYGOsHIAEoBRINCgR2ZWxZGOwHIAEoBSLA",
+            "AQoKVHJhcENvbmZpZxIRCglzcGVjaWVzSWQYASABKAUSGgoSZXhwbG9zaW9u",
+            "U3BlY2llc0lkGAIgASgFEhcKD2V4cGxvc2lvbkZyYW1lcxgDIAEoBRIOCgZi",
+            "bG93VXAYBCABKAgSDgoGZGFtYWdlGAUgASgFEhUKDWhpdFN0dW5GcmFtZXMY",
+            "BiABKAUSGwoTaGl0SW52aW5zaWJsZUZyYW1lcxgHIAEoBRIWCg5kZXN0cm95",
+            "VXBvbkhpdBgIIAEoCCJiChNUcmFwQ29uZmlnRnJvbVRpbGVkEhEKCXNwZWNp",
+            "ZXNJZBgBIAEoBRINCgVxdW90YRgCIAEoBRINCgVzcGVlZBgDIAEoBRIMCgRk",
+            "aXJYGAQgASgFEgwKBGRpclkYBSABKAUivAEKEFRyYXBDb2xsaWRlckF0dHIS",
+            "FQoNaGl0Ym94T2Zmc2V0WBgBIAEoBRIVCg1oaXRib3hPZmZzZXRZGAIgASgF",
+            "EhMKC2hpdGJveFNpemVYGAMgASgFEhMKC2hpdGJveFNpemVZGAQgASgFEhwK",
+            "FHByb3ZpZGVzSGFyZFB1c2hiYWNrGAUgASgIEhYKDnByb3ZpZGVzRGFtYWdl",
+            "GAYgASgIEhoKEWNvbGxpc2lvblR5cGVNYXNrGIUIIAEoBCLaAQoEVHJhcBIT",
+            "Cgt0cmFwTG9jYWxJZBgBIAEoBRIvCg1jb2xsaWRlckF0dHJzGAIgAygLMhgu",
+            "c2hhcmVkLlRyYXBDb2xsaWRlckF0dHISIgoGY29uZmlnGAMgASgLMhIuc2hh",
+            "cmVkLlRyYXBDb25maWcSFQoMdmlydHVhbEdyaWRYGOcHIAEoBRIVCgx2aXJ0",
+            "dWFsR3JpZFkY6AcgASgFEg0KBGRpclgY6QcgASgFEg0KBGRpclkY6gcgASgF",
+            "Eg0KBHZlbFgY6wcgASgFEg0KBHZlbFkY7AcgASgFIjgKC1BlZXJVZHBBZGRy",
+            "EgoKAmlwGAEgASgJEgwKBHBvcnQYAiABKAUSDwoHYXV0aEtleRgDIAEoBSLF",
+            "AwoSQmF0dGxlQ29sbGlkZXJJbmZvEhEKCXN0YWdlTmFtZRgBIAEoCRITCgti",
+            "b3VuZFJvb21JZBgCIAEoBRIcChRiYXR0bGVEdXJhdGlvbkZyYW1lcxgDIAEo",
+            "AxImCh5pbnB1dEZyYW1lVXBzeW5jRGVsYXlUb2xlcmFuY2UYBCABKAUSJwof",
+            "bWF4Q2hhc2luZ1JlbmRlckZyYW1lc1BlclVwZGF0ZRgFIAEoBRIhChlyb2xs",
+            "YmFja0VzdGltYXRlZER0TWlsbGlzGAYgASgBEiAKGHJvbGxiYWNrRXN0aW1h",
+            "dGVkRHROYW5vcxgHIAEoAxIYChByZW5kZXJCdWZmZXJTaXplGAggASgFEhgK",
+            "EGNvbGxpc2lvbk1pblN0ZXAYCSABKAUSGQoRYm91bmRSb29tQ2FwYWNpdHkY",
+            "CiABKAUSGwoTcHJlYWxsb2NOcGNDYXBhY2l0eRgLIAEoBRIeChZwcmVhbGxv",
+            "Y0J1bGxldENhcGFjaXR5GAwgASgFEi0KD2JhdHRsZVVkcFR1bm5lbBiACCAB",
+            "KAsyEy5zaGFyZWQuUGVlclVkcEFkZHISGAoPZnJhbWVMb2dFbmFibGVkGIEI",
+            "IAEoCCKhAwoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQYASABKAUSLQoKcGxh",
+            "eWVyc0FychgCIAMoCzIZLnNoYXJlZC5DaGFyYWN0ZXJEb3duc3luYxIWCg5j",
+            "b3VudGRvd25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQgAygLMg4uc2hhcmVk",
+            "LkJ1bGxldBIqCgducGNzQXJyGAUgAygLMhkuc2hhcmVkLkNoYXJhY3RlckRv",
+            "d25zeW5jEisKCHRyYXBzQXJyGAYgAygLMhkuc2hhcmVkLkNoYXJhY3RlckRv",
+            "d25zeW5jEh8KFmJhY2tlbmRVbmNvbmZpcm1lZE1hc2sYgAggASgEEhoKEXNo",
+            "b3VsZEZvcmNlUmVzeW5jGIEIIAEoCBIWCg1zcGVjaWVzSWRMaXN0GIIIIAMo",
+            "BRIdChRidWxsZXRMb2NhbElkQ291bnRlchiDCCABKAUSLQoPcGVlclVkcEFk",
+            "ZHJMaXN0GIQIIAMoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIcChNwYXJ0aWNp",
+            "cGFudENoYW5nZUlkGIUIIAEoBSLcAQoGV3NSZXNwEgsKA3JldBgBIAEoBRIL",
+            "CgNhY3QYAiABKAUSJgoDcmRmGAMgASgLMhkuc2hhcmVkLlJvb21Eb3duc3lu",
+            "Y0ZyYW1lEjsKF2lucHV0RnJhbWVEb3duc3luY0JhdGNoGAQgAygLMhouc2hh",
+            "cmVkLklucHV0RnJhbWVEb3duc3luYxIsCghiY2lGcmFtZRgFIAEoCzIaLnNo",
+            "YXJlZC5CYXR0bGVDb2xsaWRlckluZm8SFQoNcGVlckpvaW5JbmRleBgGIAEo",
+            "BRIOCgZlcnJNc2cYByABKAkihQIKBVNraWxsEhUKDWJhdHRsZUxvY2FsSWQY",
+            "ASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYAiABKAUSHQoVcmVjb3ZlcnlGcmFt",
+            "ZXNPbkJsb2NrGAMgASgFEhsKE3JlY292ZXJ5RnJhbWVzT25IaXQYBCABKAUS",
+            "LQoLdHJpZ2dlclR5cGUYBSABKA4yGC5zaGFyZWQuU2tpbGxUcmlnZ2VyVHlw",
+            "ZRIsCgxib3VuZENoU3RhdGUYBiABKA4yFi5zaGFyZWQuQ2hhcmFjdGVyU3Rh",
+            "dGUSDwoHbXBEZWx0YRgHIAEoBRIjCgRoaXRzGIAIIAMoCzIULnNoYXJlZC5C",
+            "dWxsZXRDb25maWciZwoIRnJhbWVMb2cSJgoDcmRmGAEgASgLMhkuc2hhcmVk",
+            "LlJvb21Eb3duc3luY0ZyYW1lEjMKD2FjdHVhbGx5VXNlZElkZhgCIAEoCzIa",
+            "LnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMqNQoLQnVsbGV0U3RhdGUSCwoH",
+            "U3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0KCUV4cGxvZGluZxACKq4CCg5DaGFy",
+            "YWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsKB1dhbGtpbmcQARIOCgpUdXJuQXJv",
+            "dW5kEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxlMU5vSnVtcBAEEhQKEElu",
+            "QWlySWRsZTFCeUp1bXAQBRIYChRJbkFpcklkbGUxQnlXYWxsSnVtcBAGEg8K",
+            "C0luQWlyQXRrZWQxEAcSDAoIQmxvd25VcDEQCBIMCghMYXlEb3duMRAJEgoK",
+            "BkdldFVwMRAKEgkKBUR5aW5nEAsSCwoHRGFzaGluZxAMEgoKBk9uV2FsbBAN",
+            "Eg4KCUluQWlyQXRrMRCACBIJCgRBdGsxEIEIEgkKBEF0azIQgggSCQoEQXRr",
+            "MxCDCBIJCgRBdGs0EIQIEgkKBEF0azUQhQgqNwoKQnVsbGV0VHlwZRIQCgxV",
+            "bmRldGVybWluZWQQABIJCgVNZWxlZRABEgwKCEZpcmViYWxsEAIqiAEKDE11",
+            "bHRpSGl0VHlwZRIICgROb25lEAASEAoMRnJvbUVtaXNzaW9uEAESFgoSRnJv",
+            "bUZpcnN0SGl0QWN0dWFsEAISFgoSRnJvbUZpcnN0SGl0QW55d2F5EAMSFQoR",
+            "RnJvbVByZXZIaXRBY3R1YWwQBBIVChFGcm9tUHJldkhpdEFueXdheRAFKjMK",
+            "EFNraWxsVHJpZ2dlclR5cGUSDgoKUmlzaW5nRWRnZRAAEg8KC0ZhbGxpbmdF",
+            "ZGdlEAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -169,9 +171,10 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "MhType", "SimultaneousMultiHitCnt", "Speed", "DirX", "DirY", "CancelTransit", "DestroyUponHit", "CollisionTypeMask" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId", "ActiveSkillHit", "SkillId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfig), global::shared.TrapConfig.Parser, new[]{ "Id", "ExplosionSpeciesId", "ExplosionFrames", "BlowUp", "Damage", "HitStunFrames", "HitInvinsibleFrames", "DestroyUponHit", "Quota", "Speed", "DirX", "DirY", "ProvidesHardPushback", "CollisionTypeMask" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapBattleAttr), global::shared.TrapBattleAttr.Parser, new[]{ "TrapLocalId", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Trap), global::shared.Trap.Parser, new[]{ "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfig), global::shared.TrapConfig.Parser, new[]{ "SpeciesId", "ExplosionSpeciesId", "ExplosionFrames", "BlowUp", "Damage", "HitStunFrames", "HitInvinsibleFrames", "DestroyUponHit" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfigFromTiled), global::shared.TrapConfigFromTiled.Parser, new[]{ "SpeciesId", "Quota", "Speed", "DirX", "DirY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapColliderAttr), global::shared.TrapColliderAttr.Parser, new[]{ "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "ProvidesHardPushback", "ProvidesDamage", "CollisionTypeMask" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Trap), global::shared.Trap.Parser, new[]{ "TrapLocalId", "ColliderAttrs", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "PreallocNpcCapacity", "PreallocBulletCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList", "ParticipantChangeId" }, null, null, null, null),
@@ -6599,7 +6602,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public TrapConfig(TrapConfig other) : this() {
-      id_ = other.id_;
+      speciesId_ = other.speciesId_;
       explosionSpeciesId_ = other.explosionSpeciesId_;
       explosionFrames_ = other.explosionFrames_;
       blowUp_ = other.blowUp_;
@@ -6607,12 +6610,6 @@ namespace shared {
       hitStunFrames_ = other.hitStunFrames_;
       hitInvinsibleFrames_ = other.hitInvinsibleFrames_;
       destroyUponHit_ = other.destroyUponHit_;
-      quota_ = other.quota_;
-      speed_ = other.speed_;
-      dirX_ = other.dirX_;
-      dirY_ = other.dirY_;
-      providesHardPushback_ = other.providesHardPushback_;
-      collisionTypeMask_ = other.collisionTypeMask_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -6622,15 +6619,15 @@ namespace shared {
       return new TrapConfig(this);
     }
 
-    /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 1;
-    private int id_;
+    /// <summary>Field number for the "speciesId" field.</summary>
+    public const int SpeciesIdFieldNumber = 1;
+    private int speciesId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Id {
-      get { return id_; }
+    public int SpeciesId {
+      get { return speciesId_; }
       set {
-        id_ = value;
+        speciesId_ = value;
       }
     }
 
@@ -6721,87 +6718,6 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "quota" field.</summary>
-    public const int QuotaFieldNumber = 9;
-    private int quota_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Quota {
-      get { return quota_; }
-      set {
-        quota_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "speed" field.</summary>
-    public const int SpeedFieldNumber = 10;
-    private int speed_;
-    /// <summary>
-    /// For speed varying bullets, this is the initial speed
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Speed {
-      get { return speed_; }
-      set {
-        speed_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "dirX" field.</summary>
-    public const int DirXFieldNumber = 11;
-    private int dirX_;
-    /// <summary>
-    /// the initial direction indicator for X-axis
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int DirX {
-      get { return dirX_; }
-      set {
-        dirX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "dirY" field.</summary>
-    public const int DirYFieldNumber = 12;
-    private int dirY_;
-    /// <summary>
-    /// the initial direction indicator for Y-axis
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int DirY {
-      get { return dirY_; }
-      set {
-        dirY_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "providesHardPushback" field.</summary>
-    public const int ProvidesHardPushbackFieldNumber = 13;
-    private bool providesHardPushback_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool ProvidesHardPushback {
-      get { return providesHardPushback_; }
-      set {
-        providesHardPushback_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "collisionTypeMask" field.</summary>
-    public const int CollisionTypeMaskFieldNumber = 1029;
-    private ulong collisionTypeMask_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ulong CollisionTypeMask {
-      get { return collisionTypeMask_; }
-      set {
-        collisionTypeMask_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -6817,7 +6733,7 @@ namespace shared {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Id != other.Id) return false;
+      if (SpeciesId != other.SpeciesId) return false;
       if (ExplosionSpeciesId != other.ExplosionSpeciesId) return false;
       if (ExplosionFrames != other.ExplosionFrames) return false;
       if (BlowUp != other.BlowUp) return false;
@@ -6825,12 +6741,6 @@ namespace shared {
       if (HitStunFrames != other.HitStunFrames) return false;
       if (HitInvinsibleFrames != other.HitInvinsibleFrames) return false;
       if (DestroyUponHit != other.DestroyUponHit) return false;
-      if (Quota != other.Quota) return false;
-      if (Speed != other.Speed) return false;
-      if (DirX != other.DirX) return false;
-      if (DirY != other.DirY) return false;
-      if (ProvidesHardPushback != other.ProvidesHardPushback) return false;
-      if (CollisionTypeMask != other.CollisionTypeMask) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -6838,7 +6748,7 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (Id != 0) hash ^= Id.GetHashCode();
+      if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
       if (ExplosionSpeciesId != 0) hash ^= ExplosionSpeciesId.GetHashCode();
       if (ExplosionFrames != 0) hash ^= ExplosionFrames.GetHashCode();
       if (BlowUp != false) hash ^= BlowUp.GetHashCode();
@@ -6846,12 +6756,6 @@ namespace shared {
       if (HitStunFrames != 0) hash ^= HitStunFrames.GetHashCode();
       if (HitInvinsibleFrames != 0) hash ^= HitInvinsibleFrames.GetHashCode();
       if (DestroyUponHit != false) hash ^= DestroyUponHit.GetHashCode();
-      if (Quota != 0) hash ^= Quota.GetHashCode();
-      if (Speed != 0) hash ^= Speed.GetHashCode();
-      if (DirX != 0) hash ^= DirX.GetHashCode();
-      if (DirY != 0) hash ^= DirY.GetHashCode();
-      if (ProvidesHardPushback != false) hash ^= ProvidesHardPushback.GetHashCode();
-      if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -6870,9 +6774,9 @@ namespace shared {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Id != 0) {
+      if (SpeciesId != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(Id);
+        output.WriteInt32(SpeciesId);
       }
       if (ExplosionSpeciesId != 0) {
         output.WriteRawTag(16);
@@ -6901,30 +6805,6 @@ namespace shared {
       if (DestroyUponHit != false) {
         output.WriteRawTag(64);
         output.WriteBool(DestroyUponHit);
-      }
-      if (Quota != 0) {
-        output.WriteRawTag(72);
-        output.WriteInt32(Quota);
-      }
-      if (Speed != 0) {
-        output.WriteRawTag(80);
-        output.WriteInt32(Speed);
-      }
-      if (DirX != 0) {
-        output.WriteRawTag(88);
-        output.WriteInt32(DirX);
-      }
-      if (DirY != 0) {
-        output.WriteRawTag(96);
-        output.WriteInt32(DirY);
-      }
-      if (ProvidesHardPushback != false) {
-        output.WriteRawTag(104);
-        output.WriteBool(ProvidesHardPushback);
-      }
-      if (CollisionTypeMask != 0UL) {
-        output.WriteRawTag(168, 64);
-        output.WriteUInt64(CollisionTypeMask);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -6936,9 +6816,9 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Id != 0) {
+      if (SpeciesId != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(Id);
+        output.WriteInt32(SpeciesId);
       }
       if (ExplosionSpeciesId != 0) {
         output.WriteRawTag(16);
@@ -6968,30 +6848,6 @@ namespace shared {
         output.WriteRawTag(64);
         output.WriteBool(DestroyUponHit);
       }
-      if (Quota != 0) {
-        output.WriteRawTag(72);
-        output.WriteInt32(Quota);
-      }
-      if (Speed != 0) {
-        output.WriteRawTag(80);
-        output.WriteInt32(Speed);
-      }
-      if (DirX != 0) {
-        output.WriteRawTag(88);
-        output.WriteInt32(DirX);
-      }
-      if (DirY != 0) {
-        output.WriteRawTag(96);
-        output.WriteInt32(DirY);
-      }
-      if (ProvidesHardPushback != false) {
-        output.WriteRawTag(104);
-        output.WriteBool(ProvidesHardPushback);
-      }
-      if (CollisionTypeMask != 0UL) {
-        output.WriteRawTag(168, 64);
-        output.WriteUInt64(CollisionTypeMask);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -7002,8 +6858,8 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (Id != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      if (SpeciesId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SpeciesId);
       }
       if (ExplosionSpeciesId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ExplosionSpeciesId);
@@ -7026,24 +6882,6 @@ namespace shared {
       if (DestroyUponHit != false) {
         size += 1 + 1;
       }
-      if (Quota != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Quota);
-      }
-      if (Speed != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Speed);
-      }
-      if (DirX != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DirX);
-      }
-      if (DirY != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DirY);
-      }
-      if (ProvidesHardPushback != false) {
-        size += 1 + 1;
-      }
-      if (CollisionTypeMask != 0UL) {
-        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CollisionTypeMask);
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -7056,8 +6894,8 @@ namespace shared {
       if (other == null) {
         return;
       }
-      if (other.Id != 0) {
-        Id = other.Id;
+      if (other.SpeciesId != 0) {
+        SpeciesId = other.SpeciesId;
       }
       if (other.ExplosionSpeciesId != 0) {
         ExplosionSpeciesId = other.ExplosionSpeciesId;
@@ -7080,6 +6918,373 @@ namespace shared {
       if (other.DestroyUponHit != false) {
         DestroyUponHit = other.DestroyUponHit;
       }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            SpeciesId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            ExplosionSpeciesId = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            ExplosionFrames = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            BlowUp = input.ReadBool();
+            break;
+          }
+          case 40: {
+            Damage = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            HitStunFrames = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            HitInvinsibleFrames = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            DestroyUponHit = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            SpeciesId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            ExplosionSpeciesId = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            ExplosionFrames = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            BlowUp = input.ReadBool();
+            break;
+          }
+          case 40: {
+            Damage = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            HitStunFrames = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            HitInvinsibleFrames = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            DestroyUponHit = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class TrapConfigFromTiled : pb::IMessage<TrapConfigFromTiled>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<TrapConfigFromTiled> _parser = new pb::MessageParser<TrapConfigFromTiled>(() => new TrapConfigFromTiled());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<TrapConfigFromTiled> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[12]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapConfigFromTiled() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapConfigFromTiled(TrapConfigFromTiled other) : this() {
+      speciesId_ = other.speciesId_;
+      quota_ = other.quota_;
+      speed_ = other.speed_;
+      dirX_ = other.dirX_;
+      dirY_ = other.dirY_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapConfigFromTiled Clone() {
+      return new TrapConfigFromTiled(this);
+    }
+
+    /// <summary>Field number for the "speciesId" field.</summary>
+    public const int SpeciesIdFieldNumber = 1;
+    private int speciesId_;
+    /// <summary>
+    ///
+    ///By the time of writing, I am not yet very confident on what should be completely hardcoded constant in C# and what should be flexibly configured from Tiled Editor. 
+    ///
+    ///The simple mindset ruling here 
+    ///- we couldn't make configurable items infinitely granular, at least not at this early stage of development
+    ///- for a completely static trap (not moving &amp; not changing appearance even if destroyed), both its appearance and hitbox can be drawn in Tiled Editor
+    ///- for a dynamic trap (either moving or changing appearance anyway), both its appearance and hitbox can be drawn in Tiled TSX Editor, put onto an Object Layer in Tiled Editor for preview -- however the object on the Object Layer will be removed immediately and replaced by a Trap object in "RoomDownsyncFrame.trapsArr" for dynamic management    
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int SpeciesId {
+      get { return speciesId_; }
+      set {
+        speciesId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "quota" field.</summary>
+    public const int QuotaFieldNumber = 2;
+    private int quota_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Quota {
+      get { return quota_; }
+      set {
+        quota_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "speed" field.</summary>
+    public const int SpeedFieldNumber = 3;
+    private int speed_;
+    /// <summary>
+    /// For speed varying bullets, this is the initial speed
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Speed {
+      get { return speed_; }
+      set {
+        speed_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dirX" field.</summary>
+    public const int DirXFieldNumber = 4;
+    private int dirX_;
+    /// <summary>
+    /// the initial direction indicator for X-axis
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int DirX {
+      get { return dirX_; }
+      set {
+        dirX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dirY" field.</summary>
+    public const int DirYFieldNumber = 5;
+    private int dirY_;
+    /// <summary>
+    /// the initial direction indicator for Y-axis
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int DirY {
+      get { return dirY_; }
+      set {
+        dirY_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as TrapConfigFromTiled);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(TrapConfigFromTiled other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (SpeciesId != other.SpeciesId) return false;
+      if (Quota != other.Quota) return false;
+      if (Speed != other.Speed) return false;
+      if (DirX != other.DirX) return false;
+      if (DirY != other.DirY) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
+      if (Quota != 0) hash ^= Quota.GetHashCode();
+      if (Speed != 0) hash ^= Speed.GetHashCode();
+      if (DirX != 0) hash ^= DirX.GetHashCode();
+      if (DirY != 0) hash ^= DirY.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (SpeciesId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(SpeciesId);
+      }
+      if (Quota != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Quota);
+      }
+      if (Speed != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Speed);
+      }
+      if (DirX != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(DirX);
+      }
+      if (DirY != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(DirY);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (SpeciesId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(SpeciesId);
+      }
+      if (Quota != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Quota);
+      }
+      if (Speed != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Speed);
+      }
+      if (DirX != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(DirX);
+      }
+      if (DirY != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(DirY);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (SpeciesId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SpeciesId);
+      }
+      if (Quota != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Quota);
+      }
+      if (Speed != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Speed);
+      }
+      if (DirX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DirX);
+      }
+      if (DirY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DirY);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(TrapConfigFromTiled other) {
+      if (other == null) {
+        return;
+      }
+      if (other.SpeciesId != 0) {
+        SpeciesId = other.SpeciesId;
+      }
       if (other.Quota != 0) {
         Quota = other.Quota;
       }
@@ -7092,8 +7297,400 @@ namespace shared {
       if (other.DirY != 0) {
         DirY = other.DirY;
       }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            SpeciesId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            Quota = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            Speed = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            DirX = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            DirY = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            SpeciesId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            Quota = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            Speed = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            DirX = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            DirY = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class TrapColliderAttr : pb::IMessage<TrapColliderAttr>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<TrapColliderAttr> _parser = new pb::MessageParser<TrapColliderAttr>(() => new TrapColliderAttr());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<TrapColliderAttr> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[13]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapColliderAttr() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapColliderAttr(TrapColliderAttr other) : this() {
+      hitboxOffsetX_ = other.hitboxOffsetX_;
+      hitboxOffsetY_ = other.hitboxOffsetY_;
+      hitboxSizeX_ = other.hitboxSizeX_;
+      hitboxSizeY_ = other.hitboxSizeY_;
+      providesHardPushback_ = other.providesHardPushback_;
+      providesDamage_ = other.providesDamage_;
+      collisionTypeMask_ = other.collisionTypeMask_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapColliderAttr Clone() {
+      return new TrapColliderAttr(this);
+    }
+
+    /// <summary>Field number for the "hitboxOffsetX" field.</summary>
+    public const int HitboxOffsetXFieldNumber = 1;
+    private int hitboxOffsetX_;
+    /// <summary>
+    /// In the case of a trap, it might own multiple hitboxes and each hitbox is drawn in Tiled and assigned after parsing the tmx file, thus not put in static config.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int HitboxOffsetX {
+      get { return hitboxOffsetX_; }
+      set {
+        hitboxOffsetX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "hitboxOffsetY" field.</summary>
+    public const int HitboxOffsetYFieldNumber = 2;
+    private int hitboxOffsetY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int HitboxOffsetY {
+      get { return hitboxOffsetY_; }
+      set {
+        hitboxOffsetY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "hitboxSizeX" field.</summary>
+    public const int HitboxSizeXFieldNumber = 3;
+    private int hitboxSizeX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int HitboxSizeX {
+      get { return hitboxSizeX_; }
+      set {
+        hitboxSizeX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "hitboxSizeY" field.</summary>
+    public const int HitboxSizeYFieldNumber = 4;
+    private int hitboxSizeY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int HitboxSizeY {
+      get { return hitboxSizeY_; }
+      set {
+        hitboxSizeY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "providesHardPushback" field.</summary>
+    public const int ProvidesHardPushbackFieldNumber = 5;
+    private bool providesHardPushback_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool ProvidesHardPushback {
+      get { return providesHardPushback_; }
+      set {
+        providesHardPushback_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "providesDamage" field.</summary>
+    public const int ProvidesDamageFieldNumber = 6;
+    private bool providesDamage_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool ProvidesDamage {
+      get { return providesDamage_; }
+      set {
+        providesDamage_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "collisionTypeMask" field.</summary>
+    public const int CollisionTypeMaskFieldNumber = 1029;
+    private ulong collisionTypeMask_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong CollisionTypeMask {
+      get { return collisionTypeMask_; }
+      set {
+        collisionTypeMask_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as TrapColliderAttr);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(TrapColliderAttr other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (HitboxOffsetX != other.HitboxOffsetX) return false;
+      if (HitboxOffsetY != other.HitboxOffsetY) return false;
+      if (HitboxSizeX != other.HitboxSizeX) return false;
+      if (HitboxSizeY != other.HitboxSizeY) return false;
+      if (ProvidesHardPushback != other.ProvidesHardPushback) return false;
+      if (ProvidesDamage != other.ProvidesDamage) return false;
+      if (CollisionTypeMask != other.CollisionTypeMask) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (HitboxOffsetX != 0) hash ^= HitboxOffsetX.GetHashCode();
+      if (HitboxOffsetY != 0) hash ^= HitboxOffsetY.GetHashCode();
+      if (HitboxSizeX != 0) hash ^= HitboxSizeX.GetHashCode();
+      if (HitboxSizeY != 0) hash ^= HitboxSizeY.GetHashCode();
+      if (ProvidesHardPushback != false) hash ^= ProvidesHardPushback.GetHashCode();
+      if (ProvidesDamage != false) hash ^= ProvidesDamage.GetHashCode();
+      if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (HitboxOffsetX != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(HitboxOffsetX);
+      }
+      if (HitboxOffsetY != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(HitboxOffsetY);
+      }
+      if (HitboxSizeX != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(HitboxSizeX);
+      }
+      if (HitboxSizeY != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(HitboxSizeY);
+      }
+      if (ProvidesHardPushback != false) {
+        output.WriteRawTag(40);
+        output.WriteBool(ProvidesHardPushback);
+      }
+      if (ProvidesDamage != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(ProvidesDamage);
+      }
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (HitboxOffsetX != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(HitboxOffsetX);
+      }
+      if (HitboxOffsetY != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(HitboxOffsetY);
+      }
+      if (HitboxSizeX != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(HitboxSizeX);
+      }
+      if (HitboxSizeY != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(HitboxSizeY);
+      }
+      if (ProvidesHardPushback != false) {
+        output.WriteRawTag(40);
+        output.WriteBool(ProvidesHardPushback);
+      }
+      if (ProvidesDamage != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(ProvidesDamage);
+      }
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (HitboxOffsetX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitboxOffsetX);
+      }
+      if (HitboxOffsetY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitboxOffsetY);
+      }
+      if (HitboxSizeX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitboxSizeX);
+      }
+      if (HitboxSizeY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitboxSizeY);
+      }
+      if (ProvidesHardPushback != false) {
+        size += 1 + 1;
+      }
+      if (ProvidesDamage != false) {
+        size += 1 + 1;
+      }
+      if (CollisionTypeMask != 0UL) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(TrapColliderAttr other) {
+      if (other == null) {
+        return;
+      }
+      if (other.HitboxOffsetX != 0) {
+        HitboxOffsetX = other.HitboxOffsetX;
+      }
+      if (other.HitboxOffsetY != 0) {
+        HitboxOffsetY = other.HitboxOffsetY;
+      }
+      if (other.HitboxSizeX != 0) {
+        HitboxSizeX = other.HitboxSizeX;
+      }
+      if (other.HitboxSizeY != 0) {
+        HitboxSizeY = other.HitboxSizeY;
+      }
       if (other.ProvidesHardPushback != false) {
         ProvidesHardPushback = other.ProvidesHardPushback;
+      }
+      if (other.ProvidesDamage != false) {
+        ProvidesDamage = other.ProvidesDamage;
       }
       if (other.CollisionTypeMask != 0UL) {
         CollisionTypeMask = other.CollisionTypeMask;
@@ -7114,55 +7711,27 @@ namespace shared {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Id = input.ReadInt32();
+            HitboxOffsetX = input.ReadInt32();
             break;
           }
           case 16: {
-            ExplosionSpeciesId = input.ReadInt32();
+            HitboxOffsetY = input.ReadInt32();
             break;
           }
           case 24: {
-            ExplosionFrames = input.ReadInt32();
+            HitboxSizeX = input.ReadInt32();
             break;
           }
           case 32: {
-            BlowUp = input.ReadBool();
+            HitboxSizeY = input.ReadInt32();
             break;
           }
           case 40: {
-            Damage = input.ReadInt32();
+            ProvidesHardPushback = input.ReadBool();
             break;
           }
           case 48: {
-            HitStunFrames = input.ReadInt32();
-            break;
-          }
-          case 56: {
-            HitInvinsibleFrames = input.ReadInt32();
-            break;
-          }
-          case 64: {
-            DestroyUponHit = input.ReadBool();
-            break;
-          }
-          case 72: {
-            Quota = input.ReadInt32();
-            break;
-          }
-          case 80: {
-            Speed = input.ReadInt32();
-            break;
-          }
-          case 88: {
-            DirX = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            DirY = input.ReadInt32();
-            break;
-          }
-          case 104: {
-            ProvidesHardPushback = input.ReadBool();
+            ProvidesDamage = input.ReadBool();
             break;
           }
           case 8232: {
@@ -7185,55 +7754,27 @@ namespace shared {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            Id = input.ReadInt32();
+            HitboxOffsetX = input.ReadInt32();
             break;
           }
           case 16: {
-            ExplosionSpeciesId = input.ReadInt32();
+            HitboxOffsetY = input.ReadInt32();
             break;
           }
           case 24: {
-            ExplosionFrames = input.ReadInt32();
+            HitboxSizeX = input.ReadInt32();
             break;
           }
           case 32: {
-            BlowUp = input.ReadBool();
+            HitboxSizeY = input.ReadInt32();
             break;
           }
           case 40: {
-            Damage = input.ReadInt32();
+            ProvidesHardPushback = input.ReadBool();
             break;
           }
           case 48: {
-            HitStunFrames = input.ReadInt32();
-            break;
-          }
-          case 56: {
-            HitInvinsibleFrames = input.ReadInt32();
-            break;
-          }
-          case 64: {
-            DestroyUponHit = input.ReadBool();
-            break;
-          }
-          case 72: {
-            Quota = input.ReadInt32();
-            break;
-          }
-          case 80: {
-            Speed = input.ReadInt32();
-            break;
-          }
-          case 88: {
-            DirX = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            DirY = input.ReadInt32();
-            break;
-          }
-          case 104: {
-            ProvidesHardPushback = input.ReadBool();
+            ProvidesDamage = input.ReadBool();
             break;
           }
           case 8232: {
@@ -7247,346 +7788,10 @@ namespace shared {
 
   }
 
-  public sealed partial class TrapBattleAttr : pb::IMessage<TrapBattleAttr>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<TrapBattleAttr> _parser = new pb::MessageParser<TrapBattleAttr>(() => new TrapBattleAttr());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<TrapBattleAttr> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[12]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public TrapBattleAttr() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public TrapBattleAttr(TrapBattleAttr other) : this() {
-      trapLocalId_ = other.trapLocalId_;
-      hitboxOffsetX_ = other.hitboxOffsetX_;
-      hitboxOffsetY_ = other.hitboxOffsetY_;
-      hitboxSizeX_ = other.hitboxSizeX_;
-      hitboxSizeY_ = other.hitboxSizeY_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public TrapBattleAttr Clone() {
-      return new TrapBattleAttr(this);
-    }
-
-    /// <summary>Field number for the "trapLocalId" field.</summary>
-    public const int TrapLocalIdFieldNumber = 1;
-    private int trapLocalId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int TrapLocalId {
-      get { return trapLocalId_; }
-      set {
-        trapLocalId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "hitboxOffsetX" field.</summary>
-    public const int HitboxOffsetXFieldNumber = 2;
-    private int hitboxOffsetX_;
-    /// <summary>
-    /// In the case of a trap, the hitbox is drawn in Tiled and assigned after parsing the tmx file, thus not put in static config
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int HitboxOffsetX {
-      get { return hitboxOffsetX_; }
-      set {
-        hitboxOffsetX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "hitboxOffsetY" field.</summary>
-    public const int HitboxOffsetYFieldNumber = 3;
-    private int hitboxOffsetY_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int HitboxOffsetY {
-      get { return hitboxOffsetY_; }
-      set {
-        hitboxOffsetY_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "hitboxSizeX" field.</summary>
-    public const int HitboxSizeXFieldNumber = 4;
-    private int hitboxSizeX_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int HitboxSizeX {
-      get { return hitboxSizeX_; }
-      set {
-        hitboxSizeX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "hitboxSizeY" field.</summary>
-    public const int HitboxSizeYFieldNumber = 5;
-    private int hitboxSizeY_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int HitboxSizeY {
-      get { return hitboxSizeY_; }
-      set {
-        hitboxSizeY_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as TrapBattleAttr);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(TrapBattleAttr other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (TrapLocalId != other.TrapLocalId) return false;
-      if (HitboxOffsetX != other.HitboxOffsetX) return false;
-      if (HitboxOffsetY != other.HitboxOffsetY) return false;
-      if (HitboxSizeX != other.HitboxSizeX) return false;
-      if (HitboxSizeY != other.HitboxSizeY) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (TrapLocalId != 0) hash ^= TrapLocalId.GetHashCode();
-      if (HitboxOffsetX != 0) hash ^= HitboxOffsetX.GetHashCode();
-      if (HitboxOffsetY != 0) hash ^= HitboxOffsetY.GetHashCode();
-      if (HitboxSizeX != 0) hash ^= HitboxSizeX.GetHashCode();
-      if (HitboxSizeY != 0) hash ^= HitboxSizeY.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (TrapLocalId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(TrapLocalId);
-      }
-      if (HitboxOffsetX != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(HitboxOffsetX);
-      }
-      if (HitboxOffsetY != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(HitboxOffsetY);
-      }
-      if (HitboxSizeX != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(HitboxSizeX);
-      }
-      if (HitboxSizeY != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(HitboxSizeY);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (TrapLocalId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(TrapLocalId);
-      }
-      if (HitboxOffsetX != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(HitboxOffsetX);
-      }
-      if (HitboxOffsetY != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(HitboxOffsetY);
-      }
-      if (HitboxSizeX != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(HitboxSizeX);
-      }
-      if (HitboxSizeY != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(HitboxSizeY);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (TrapLocalId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TrapLocalId);
-      }
-      if (HitboxOffsetX != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitboxOffsetX);
-      }
-      if (HitboxOffsetY != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitboxOffsetY);
-      }
-      if (HitboxSizeX != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitboxSizeX);
-      }
-      if (HitboxSizeY != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitboxSizeY);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(TrapBattleAttr other) {
-      if (other == null) {
-        return;
-      }
-      if (other.TrapLocalId != 0) {
-        TrapLocalId = other.TrapLocalId;
-      }
-      if (other.HitboxOffsetX != 0) {
-        HitboxOffsetX = other.HitboxOffsetX;
-      }
-      if (other.HitboxOffsetY != 0) {
-        HitboxOffsetY = other.HitboxOffsetY;
-      }
-      if (other.HitboxSizeX != 0) {
-        HitboxSizeX = other.HitboxSizeX;
-      }
-      if (other.HitboxSizeY != 0) {
-        HitboxSizeY = other.HitboxSizeY;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            TrapLocalId = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            HitboxOffsetX = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            HitboxOffsetY = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            HitboxSizeX = input.ReadInt32();
-            break;
-          }
-          case 40: {
-            HitboxSizeY = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            TrapLocalId = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            HitboxOffsetX = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            HitboxOffsetY = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            HitboxSizeX = input.ReadInt32();
-            break;
-          }
-          case 40: {
-            HitboxSizeY = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
+  /// <summary>
+  ///
+  ///What distinguished "Trap" and "Npc(typed CharacterDownsync)" is that a "Trap" often has much simpler skillset, vision/patrol reaction -- yet more complicated boundaries and hard/soft pushback config.
+  /// </summary>
   public sealed partial class Trap : pb::IMessage<Trap>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -7601,7 +7806,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[13]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7621,7 +7826,8 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Trap(Trap other) : this() {
-      battleAttr_ = other.battleAttr_ != null ? other.battleAttr_.Clone() : null;
+      trapLocalId_ = other.trapLocalId_;
+      colliderAttrs_ = other.colliderAttrs_.Clone();
       config_ = other.config_ != null ? other.config_.Clone() : null;
       virtualGridX_ = other.virtualGridX_;
       virtualGridY_ = other.virtualGridY_;
@@ -7638,20 +7844,31 @@ namespace shared {
       return new Trap(this);
     }
 
-    /// <summary>Field number for the "battleAttr" field.</summary>
-    public const int BattleAttrFieldNumber = 1;
-    private global::shared.TrapBattleAttr battleAttr_;
+    /// <summary>Field number for the "trapLocalId" field.</summary>
+    public const int TrapLocalIdFieldNumber = 1;
+    private int trapLocalId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::shared.TrapBattleAttr BattleAttr {
-      get { return battleAttr_; }
+    public int TrapLocalId {
+      get { return trapLocalId_; }
       set {
-        battleAttr_ = value;
+        trapLocalId_ = value;
       }
     }
 
+    /// <summary>Field number for the "colliderAttrs" field.</summary>
+    public const int ColliderAttrsFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::shared.TrapColliderAttr> _repeated_colliderAttrs_codec
+        = pb::FieldCodec.ForMessage(18, global::shared.TrapColliderAttr.Parser);
+    private readonly pbc::RepeatedField<global::shared.TrapColliderAttr> colliderAttrs_ = new pbc::RepeatedField<global::shared.TrapColliderAttr>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::shared.TrapColliderAttr> ColliderAttrs {
+      get { return colliderAttrs_; }
+    }
+
     /// <summary>Field number for the "config" field.</summary>
-    public const int ConfigFieldNumber = 2;
+    public const int ConfigFieldNumber = 3;
     private global::shared.TrapConfig config_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7749,7 +7966,8 @@ namespace shared {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (!object.Equals(BattleAttr, other.BattleAttr)) return false;
+      if (TrapLocalId != other.TrapLocalId) return false;
+      if(!colliderAttrs_.Equals(other.colliderAttrs_)) return false;
       if (!object.Equals(Config, other.Config)) return false;
       if (VirtualGridX != other.VirtualGridX) return false;
       if (VirtualGridY != other.VirtualGridY) return false;
@@ -7764,7 +7982,8 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (battleAttr_ != null) hash ^= BattleAttr.GetHashCode();
+      if (TrapLocalId != 0) hash ^= TrapLocalId.GetHashCode();
+      hash ^= colliderAttrs_.GetHashCode();
       if (config_ != null) hash ^= Config.GetHashCode();
       if (VirtualGridX != 0) hash ^= VirtualGridX.GetHashCode();
       if (VirtualGridY != 0) hash ^= VirtualGridY.GetHashCode();
@@ -7790,12 +8009,13 @@ namespace shared {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (battleAttr_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(BattleAttr);
+      if (TrapLocalId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(TrapLocalId);
       }
+      colliderAttrs_.WriteTo(output, _repeated_colliderAttrs_codec);
       if (config_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(Config);
       }
       if (VirtualGridX != 0) {
@@ -7832,12 +8052,13 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (battleAttr_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(BattleAttr);
+      if (TrapLocalId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(TrapLocalId);
       }
+      colliderAttrs_.WriteTo(ref output, _repeated_colliderAttrs_codec);
       if (config_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(Config);
       }
       if (VirtualGridX != 0) {
@@ -7874,9 +8095,10 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (battleAttr_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(BattleAttr);
+      if (TrapLocalId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TrapLocalId);
       }
+      size += colliderAttrs_.CalculateSize(_repeated_colliderAttrs_codec);
       if (config_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Config);
       }
@@ -7910,12 +8132,10 @@ namespace shared {
       if (other == null) {
         return;
       }
-      if (other.battleAttr_ != null) {
-        if (battleAttr_ == null) {
-          BattleAttr = new global::shared.TrapBattleAttr();
-        }
-        BattleAttr.MergeFrom(other.BattleAttr);
+      if (other.TrapLocalId != 0) {
+        TrapLocalId = other.TrapLocalId;
       }
+      colliderAttrs_.Add(other.colliderAttrs_);
       if (other.config_ != null) {
         if (config_ == null) {
           Config = new global::shared.TrapConfig();
@@ -7955,14 +8175,15 @@ namespace shared {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            if (battleAttr_ == null) {
-              BattleAttr = new global::shared.TrapBattleAttr();
-            }
-            input.ReadMessage(BattleAttr);
+          case 8: {
+            TrapLocalId = input.ReadInt32();
             break;
           }
           case 18: {
+            colliderAttrs_.AddEntriesFrom(input, _repeated_colliderAttrs_codec);
+            break;
+          }
+          case 26: {
             if (config_ == null) {
               Config = new global::shared.TrapConfig();
             }
@@ -8008,14 +8229,15 @@ namespace shared {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            if (battleAttr_ == null) {
-              BattleAttr = new global::shared.TrapBattleAttr();
-            }
-            input.ReadMessage(BattleAttr);
+          case 8: {
+            TrapLocalId = input.ReadInt32();
             break;
           }
           case 18: {
+            colliderAttrs_.AddEntriesFrom(ref input, _repeated_colliderAttrs_codec);
+            break;
+          }
+          case 26: {
             if (config_ == null) {
               Config = new global::shared.TrapConfig();
             }
@@ -8067,7 +8289,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[14]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8330,7 +8552,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[15]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9009,7 +9231,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[16]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9544,7 +9766,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[17]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9962,7 +10184,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[18]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10405,7 +10627,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[19]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

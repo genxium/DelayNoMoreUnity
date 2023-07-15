@@ -25,7 +25,7 @@ public class OfflineMapController : AbstractMapController {
 
         roomCapacity = 1;
         preallocateHolders();
-        resetCurrentMatch("Castle");
+        resetCurrentMatch("Dungeon");
         selfPlayerInfo.JoinIndex = 1;
 
         battleDurationFrames = 30 * 60;

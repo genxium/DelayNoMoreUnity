@@ -254,38 +254,54 @@ message Bullet {
 }
 
 message TrapConfig {
-    int32 id = 1;
+    int32 speciesId = 1;
 	int32 explosionSpeciesId = 2; 
 	int32 explosionFrames = 3;
 	bool blowUp = 4;
+
     int32 damage = 5;
 	int32 hitStunFrames = 6;
 	int32 hitInvinsibleFrames = 7;
     bool destroyUponHit = 8; // for most traps and long lasting melee bullet
-    int32 quota = 9;
+}
 
-	int32 speed = 10; // For speed varying bullets, this is the initial speed
-	int32 dirX = 11; // the initial direction indicator for X-axis
-	int32 dirY = 12; // the initial direction indicator for Y-axis
+message TrapConfigFromTiled {
+    /*
+    By the time of writing, I am not yet very confident on what should be completely hardcoded constant in C# and what should be flexibly configured from Tiled Editor. 
 
-    bool providesHardPushback = 13;
+    The simple mindset ruling here 
+    - we couldn't make configurable items infinitely granular, at least not at this early stage of development
+    - for a completely static trap (not moving & not changing appearance even if destroyed), both its appearance and hitbox can be drawn in Tiled Editor
+    - for a dynamic trap (either moving or changing appearance anyway), both its appearance and hitbox can be drawn in Tiled TSX Editor, put onto an Object Layer in Tiled Editor for preview -- however the object on the Object Layer will be removed immediately and replaced by a Trap object in "RoomDownsyncFrame.trapsArr" for dynamic management    
+    */
+    int32 speciesId = 1; // Will be used for the "dynamic trap" to locate its Prefab for animating, and used for all types of traps to locate their explosion animations.
+    int32 quota = 2;
+
+	int32 speed = 3; // For speed varying bullets, this is the initial speed
+	int32 dirX = 4; // the initial direction indicator for X-axis
+	int32 dirY = 5; // the initial direction indicator for Y-axis
+}
+
+message TrapColliderAttr {
+    // In the case of a trap, it might own multiple hitboxes and each hitbox is drawn in Tiled and assigned after parsing the tmx file, thus not put in static config.
+	int32 hitboxOffsetX = 1;
+	int32 hitboxOffsetY = 2;
+	int32 hitboxSizeX = 3;
+	int32 hitboxSizeY = 4;
+    bool providesHardPushback = 5;
+    bool providesDamage = 6;
 
 	uint64 collisionTypeMask = 1029;
 }
 
-message TrapBattleAttr {
+/*
+What distinguished "Trap" and "Npc(typed CharacterDownsync)" is that a "Trap" often has much simpler skillset, vision/patrol reaction -- yet more complicated boundaries and hard/soft pushback config.
+*/
+message Trap {
     int32 trapLocalId = 1;
 
-    // In the case of a trap, the hitbox is drawn in Tiled and assigned after parsing the tmx file, thus not put in static config
-	int32 hitboxOffsetX = 2;
-	int32 hitboxOffsetY = 3;
-	int32 hitboxSizeX = 4;
-	int32 hitboxSizeY = 5;
-}
-
-message Trap {
-    TrapBattleAttr battleAttr = 1;
-	TrapConfig config = 2;
+    repeated TrapColliderAttr colliderAttrs = 2;
+	TrapConfig config = 3;
 
 	int32 virtualGridX = 999;
 	int32 virtualGridY = 1000;
