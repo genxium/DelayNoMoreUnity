@@ -18,5 +18,16 @@ namespace shared {
             HitInvinsibleFrames = 120,
             DestroyUponHit = false 
         };
+
+        public static TrapConfig LinearBallSpike = new TrapConfig {
+            SpeciesId = 3,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 15,
+            BlowUp = false,
+            Damage = 5,
+            HitStunFrames = 10,
+            HitInvinsibleFrames = 60,
+            DestroyUponHit = false 
+        };
     }
 }
