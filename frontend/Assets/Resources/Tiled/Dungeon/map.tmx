@@ -21,7 +21,7 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="135" x="1626.17" y="284">
+  <object id="135" x="1228.17" y="283">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
@@ -45,6 +45,7 @@
     <property name="collisionTypeMask" value="4"/>
     <property name="providesDamage" value="1"/>
     <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
    </properties>
   </object>
   <object id="238" gid="194" x="1120" y="304" width="64" height="32"/>

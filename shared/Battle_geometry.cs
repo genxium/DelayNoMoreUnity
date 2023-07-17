@@ -28,7 +28,7 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNorms(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        public static int calcHardPushbacksNormsForCharacter(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             float virtualGripToWall = 0.0f;
             if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
                 float xfac = 1.0f;
@@ -60,6 +60,9 @@ namespace shared {
                     case CharacterDownsync v1:
                     case Bullet v2:
                     case PatrolCue v3:
+                        break;
+                    case TrapColliderAttr v4:
+                        isBarrier = v4.ProvidesHardPushback;
                         break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
@@ -98,6 +101,73 @@ namespace shared {
                         overlapResult.cloneInto(ref primaryOverlapResult);
                         primaryIsWall = isWall;
                     }
+                }
+
+                hardPushbacks[retCnt].X = pushbackX;
+                hardPushbacks[retCnt].Y = pushbackY;
+
+                retCnt++;
+            }
+
+            return retCnt;
+        }
+
+        public static int calcHardPushbacksNormsForTrap(TrapColliderAttr colliderAttr, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, FrameRingBuffer<Collider> residueCollided, out bool hitsAnActualBarrier, ILoggerBridge logger) {
+            hitsAnActualBarrier = false;
+            int retCnt = 0;
+            primaryOverlapIndex = -1;
+            float primaryOverlapMag = float.MinValue;
+            residueCollided.Clear();
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+            if (!collided) {
+                //logger.LogInfo(String.Format("No collision object."));
+                return retCnt;
+            }
+
+            while (true) {
+                var (exists, bCollider) = collision.PopFirstContactedCollider();
+
+                if (!exists || null == bCollider) {
+                    break;
+                }
+                bool isAnotherHardPushbackTrap = false;
+                bool isAnActualBarrier = false;
+
+                switch (bCollider.Data) {
+                    case CharacterDownsync v1:
+                    case Bullet v2:
+                    case PatrolCue v3:
+                        break;
+                    case TrapColliderAttr v4:
+                        isAnotherHardPushbackTrap = v4.ProvidesHardPushback;
+                        break;
+                    default:
+                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
+                        isAnActualBarrier = true;
+                        break;
+                }
+
+                if (!isAnotherHardPushbackTrap && !isAnActualBarrier) {
+                    residueCollided.Put(bCollider);
+                    continue;
+                }
+                ConvexPolygon bShape = bCollider.Shape;
+
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, ref overlapResult);
+
+                if (!overlapped) {
+                    continue;
+                }
+
+                if (isAnActualBarrier) {
+                    hitsAnActualBarrier = true;
+                }
+
+                // Same polarity
+                if (overlapResult.OverlapMag > primaryOverlapMag) {
+                    primaryOverlapIndex = retCnt;
+                    primaryOverlapMag = overlapResult.OverlapMag;
+                    overlapResult.cloneInto(ref primaryOverlapResult);
                 }
 
                 hardPushbacks[retCnt].X = pushbackX;

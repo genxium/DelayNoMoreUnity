@@ -29,5 +29,14 @@ namespace shared {
             HitInvinsibleFrames = 60,
             DestroyUponHit = false 
         };
+
+        public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
+                new[]
+                {
+                    new KeyValuePair<int, TrapConfig>(TrapBarrier.SpeciesId, TrapBarrier),
+                    new KeyValuePair<int, TrapConfig>(LinearSpike.SpeciesId, LinearSpike),
+                    new KeyValuePair<int, TrapConfig>(LinearBallSpike.SpeciesId, LinearBallSpike),
+                }
+        );
     }
 }

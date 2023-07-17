@@ -65,6 +65,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
+    protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
 
     public CharacterSelectPanel characterSelectPanel;
 
@@ -226,7 +227,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -416,9 +417,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
-        int residueCollidedCap = 128; 
-        residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap); 
-        
+        int residueCollidedCap = 128;
+        residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
+
         renderBufferSize = 1024;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
@@ -442,11 +443,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         prefabbedInputListHolder = new ulong[roomCapacity];
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
-        effPushbacks = new Vector[roomCapacity + preallocNpcCapacity];
+        effPushbacks = new Vector[roomCapacity + preallocNpcCapacity + preallocTrapCapacity];
         for (int i = 0; i < effPushbacks.Length; i++) {
             effPushbacks[i] = new Vector(0, 0);
         }
-        hardPushbackNormsArr = new Vector[roomCapacity + preallocNpcCapacity][];
+        hardPushbackNormsArr = new Vector[roomCapacity + preallocNpcCapacity + preallocTrapCapacity][];
         for (int i = 0; i < hardPushbackNormsArr.Length; i++) {
             int cap = 5;
             hardPushbackNormsArr[i] = new Vector[cap];
@@ -520,6 +521,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         lastUpsyncInputFrameId = -1;
         maxChasingRenderFramesPerUpdate = 5;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
+        trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
 
         if (null != underlyingMap) {
             Destroy(underlyingMap);
@@ -545,6 +547,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         renderBuffer.Clear();
         inputBuffer.Clear();
         residueCollided.Clear();
+        trapLocalIdToColliderAttrs.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
         readyGoPanel.resetCountdown();
@@ -725,8 +728,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         var playerStartingCposList = new List<(Vector, int, int)>();
         var npcsStartingCposList = new List<(Vector, int, int, int, int, bool)>();
+        var trapList = new List<Trap>();
         float defaultPatrolCueRadius = 10;
         int staticColliderIdx = 0;
+        int trapLocalId = 0;
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
                 case "Barrier":
@@ -848,7 +853,107 @@ public abstract class AbstractMapController : MonoBehaviour {
                         //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
-                case "Trap":
+                case "TrapStartingPos":
+                    foreach (Transform trapChild in child) {
+                        var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
+                        var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
+
+                        CustomProperty speciesId, providesHardPushback, providesDamage, isCompletelyStatic, collisionTypeMask;
+                        tileProps.TryGetCustomProperty("speciesId", out speciesId);
+                        tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
+                        tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
+                        tileProps.TryGetCustomProperty("static", out isCompletelyStatic);
+                        tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
+
+                        int speciesIdVal = speciesId.GetValueAsInt(); // Not checking null or empty for this property because it shouldn't be, and in case it comes empty anyway, this automatically throws an error 
+                        bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
+                        bool providesDamageVal = (null != providesDamage && !providesDamage.IsEmpty && 1 == providesDamage.GetValueAsInt()) ? true : false;
+                        bool isCompletelyStaticVal = (null != isCompletelyStatic && !isCompletelyStatic.IsEmpty && 1 == isCompletelyStatic.GetValueAsInt()) ? true : false;
+
+                        ulong collisionTypeMaskVal = (null != collisionTypeMask && !collisionTypeMask.IsEmpty) ? (ulong)collisionTypeMask.GetValueAsInt() : 0;
+
+                        TrapConfig trapConfig = trapConfigs[speciesIdVal];
+                        List<TrapColliderAttr> colliderAttrs = new List<TrapColliderAttr>();
+                        if (isCompletelyStaticVal) {
+                            var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f);
+                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                            var (rectVw, rectVh) = PolygonColliderCtrToVirtualGridPos(tileObj.m_Width, tileObj.m_Height);
+                            var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
+
+                            Trap trap = new Trap {
+                                TrapLocalId = trapLocalId,
+                                Config = trapConfig,
+                                VirtualGridX = rectCenterVx,
+                                VirtualGridY = rectCenterVy,
+                                IsCompletelyStatic = true
+                            };
+
+                            TrapColliderAttr colliderAttr = new TrapColliderAttr {
+                                ProvidesDamage = providesDamageVal,
+                                ProvidesHardPushback = providesHardPushbackVal,
+                                HitboxOffsetX = 0,
+                                HitboxOffsetY = 0,
+                                HitboxSizeX = rectVw,
+                                HitboxSizeY = rectVh,
+                                CollisionTypeMask = collisionTypeMaskVal,
+                                TrapLocalId = trapLocalId
+                            };
+
+                            colliderAttrs.Add(colliderAttr);
+                            trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
+
+                            var trapCollider = NewRectCollider(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0, 0, 0, colliderAttr);
+
+                            collisionSys.AddSingle(trapCollider);
+                            trapList.Add(trap);
+                            staticColliders[staticColliderIdx++] = trapCollider;
+
+                            Debug.Log(String.Format("new completely static trap created {0}", trap));
+                        } else {
+                            var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
+                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                            var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
+                            Trap trap = new Trap {
+                                TrapLocalId = trapLocalId,
+                                Config = trapConfig,
+                                VirtualGridX = rectCenterVx,
+                                VirtualGridY = rectCenterVy,
+                                IsCompletelyStatic = false
+                            };
+                            var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
+                            foreach (var collisionObj in collisionObjs) {
+                                bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false;
+                                foreach (var collisionObjProp in collisionObj.m_CustomProperties) {
+                                    if ("providesHardPushback".Equals(collisionObjProp.m_Name)) {
+                                        childProvidesHardPushbackVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                    }
+                                    if ("providesDamage".Equals(collisionObjProp.m_Name)) {
+                                        childProvidesDamageVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                    }
+                                }
+
+                                // [WARNING] The offset (0, 0) of the tileObj within TSX is the top-left corner, but SuperTiled2Unity converted that to bottom-left corner and reverted y-axis by itself... 
+                                var (hitboxOffsetCx, hitboxOffsetCy) = (-tileObj.m_Width * 0.5f + collisionObj.m_Position.x + collisionObj.m_Size.x * 0.5f,  collisionObj.m_Position.y - collisionObj.m_Size.y * 0.5f - tileObj.m_Height * 0.5f);
+                                var (hitboxOffsetVx, hitboxOffsetVy) = PolygonColliderCtrToVirtualGridPos(hitboxOffsetCx, hitboxOffsetCy);
+                                var (hitboxSizeVx, hitboxSizeVy) = PolygonColliderCtrToVirtualGridPos(collisionObj.m_Size.x, collisionObj.m_Size.y);
+                                TrapColliderAttr colliderAttr = new TrapColliderAttr {
+                                    ProvidesDamage = childProvidesDamageVal,
+                                    ProvidesHardPushback = childProvidesHardPushbackVal,
+                                    HitboxOffsetX = hitboxOffsetVx,
+                                    HitboxOffsetY = hitboxOffsetVy,
+                                    HitboxSizeX = hitboxSizeVx,
+                                    HitboxSizeY = hitboxSizeVy,
+                                    CollisionTypeMask = collisionTypeMaskVal,
+                                    TrapLocalId = trapLocalId
+                                };
+                                colliderAttrs.Add(colliderAttr);
+                            }
+                            trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
+                            trapList.Add(trap);
+                            Destroy(child.gameObject); // [WARNING] It'll be animated by "TrapPrefab" in "applyRoomDownsyncFrame" instead!
+                        }
+                        trapLocalId++;
+                    }
                     break;
                 default:
                     break;
@@ -932,6 +1037,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.OmitGravity = chConfig.OmitGravity;
             npcInRdf.OmitPushback = chConfig.OmitPushback;
             startRdf.NpcsArr[i] = npcInRdf;
+        }
+
+        for (int i = 0; i < trapList.Count; i++) {
+            startRdf.TrapsArr[i] = trapList[i];
         }
 
         return startRdf;
@@ -1141,6 +1250,44 @@ public abstract class AbstractMapController : MonoBehaviour {
             line.SetPositions(debugDrawPositionsHolder);
             line.score = rdf.Id;
             cachedLineRenderers.Put(key, line);
+        }
+
+        for (int i = 0; i < rdf.TrapsArr.Count; i++) {
+            var currTrap = rdf.TrapsArr[i];
+            if (TERMINATING_TRAP_ID == currTrap.TrapLocalId) continue;
+            if (currTrap.IsCompletelyStatic) continue;
+           
+            List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[currTrap.TrapLocalId];
+            foreach (var colliderAttr in colliderAttrs) {
+                float boxCx, boxCy, boxCw, boxCh;
+                calcTrapBoxInCollisionSpace(colliderAttr, currTrap.VirtualGridX, currTrap.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+                
+                string key = "DynamicTrap-" + currTrap.TrapLocalId.ToString() + "-" + colliderAttr.ProvidesDamage; // TODO: Use a collider ID for the last part
+                var line = cachedLineRenderers.PopAny(key);
+                if (null == line) {
+                    line = cachedLineRenderers.Pop();
+                }
+                if (null == line) {
+                    throw new ArgumentNullException("Cached line is null for key:" + key);
+                }
+                if (colliderAttr.ProvidesHardPushback) {
+                    line.SetColor(Color.green);
+                } else if (colliderAttr.ProvidesDamage) {
+                    line.SetColor(Color.red);
+                }
+                
+                line.GetPositions(debugDrawPositionsHolder);
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+
+                (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
+                (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
+                (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
+                (debugDrawPositionsHolder[3].x, debugDrawPositionsHolder[3].y) = ((wx - 0.5f * boxCw), (wy + 0.5f * boxCh));
+
+                line.SetPositions(debugDrawPositionsHolder);
+                line.score = rdf.Id;
+                cachedLineRenderers.Put(key, line);
+            }
         }
     }
 }

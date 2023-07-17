@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf.Collections;
+using System;
 
 namespace shared {
     public partial class Battle {
@@ -143,6 +144,23 @@ namespace shared {
             dst.VelY = velY;
         }
 
+        public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, Trap dst) {
+            dst.TrapLocalId = trapLocalId;
+            dst.Config = config;
+            dst.ConfigFromTiled = configFromTiled;
+
+            // Only the fields below would change w.r.t. time
+            dst.TrapState = trapState;
+            dst.FramesInTrapState = framesInTrapState;
+            dst.VirtualGridX = virtualGridX;
+            dst.VirtualGridY = virtualGridY;
+            dst.DirX = dirX;
+            dst.DirY = dirY;
+            dst.VelX = velX;
+            dst.VelY = velY;
+            dst.IsCompletelyStatic = isCompletelyStatic;
+        }
+
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
@@ -162,17 +180,16 @@ namespace shared {
                 ret.NpcsArr.Add(single);
             }
 
-            for (int i = 0; i < preallocateTrapCount; i++) {
-                var single = new CharacterDownsync();
-                single.Id = TERMINATING_PLAYER_ID;
-                single.CollisionTypeMask = COLLISION_TRAP_INDEX_PREFIX;
-                single.OmitGravity = true;
-                ret.TrapsArr.Add(single);
-            }
-
             for (int i = 0; i < preallocBulletCount; i++) {
                 var single = NewBullet(TERMINATING_BULLET_LOCAL_ID, 0, 0, 0, BulletState.StartUp, 0);
                 ret.Bullets.Add(single);
+            }
+
+            for (int i = 0; i < preallocateTrapCount; i++) {
+                var single = new Trap {
+                    TrapLocalId = TERMINATING_TRAP_ID
+                };
+                ret.TrapsArr.Add(single);
             }
 
             return ret;

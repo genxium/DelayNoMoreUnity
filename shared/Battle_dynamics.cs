@@ -469,6 +469,30 @@ namespace shared {
             nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
         }
 
+        private static void _moveAndInsertDynamicTrapColliders(RoomDownsyncFrame currRenderFrame, RepeatedField<Trap> nextRenderFrameTraps, Vector[] effPushbacks, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int trapColliderCntOffset, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ILoggerBridge logger) {
+            var currRenderFrameTraps = currRenderFrame.TrapsArr;
+            for (int i = 0; i < currRenderFrameTraps.Count; i++) {
+                var currTrap = currRenderFrameTraps[i];
+                if (TERMINATING_TRAP_ID == currTrap.TrapLocalId) continue;
+                if (currTrap.IsCompletelyStatic) continue;
+                int newVx = currTrap.VirtualGridX + currTrap.VelX, newVy = currTrap.VirtualGridY + currTrap.VelY;
+                effPushbacks[i + trapColliderCntOffset].X = 0;
+                effPushbacks[i + trapColliderCntOffset].Y = 0;
+
+                List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[currTrap.TrapLocalId];
+                foreach (var colliderAttr in colliderAttrs) {
+                    Collider trapCollider = dynamicRectangleColliders[colliderCnt];
+                    float boxCx, boxCy, boxCw, boxCh;
+                    calcTrapBoxInCollisionSpace(colliderAttr, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
+                    UpdateRectCollider(trapCollider, boxCx, boxCy, boxCw, boxCh, 0, 0, 0, 0, 0, 0, colliderAttr); 
+                    colliderCnt++;
+
+                    // Add to collision system
+                    collisionSys.AddSingle(trapCollider);
+                }
+            }
+        }
+
         private static void _moveAndInsertCharacterColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd, ILoggerBridge logger) {
             for (int i = iSt; i < iEd; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
@@ -526,7 +550,7 @@ namespace shared {
             }
         }
 
-        private static void _calcMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             int primaryHardOverlapIndex;
             for (int i = iSt; i < iEd; i++) {
@@ -537,7 +561,7 @@ namespace shared {
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
-                int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, logger);
+                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, logger);
 
                 if (0 < hardPushbackCnt) {
                     /* 
@@ -803,6 +827,40 @@ namespace shared {
             }
         }
 
+        private static void _calcTrapMovementPushbacks(RoomDownsyncFrame currRenderFrame, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+            int primaryHardOverlapIndex;
+            for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
+                primaryOverlapResult.reset();
+                Collider aCollider = dynamicRectangleColliders[i];
+                TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;
+
+                if (null == colliderAttr) {
+                    throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where trapColliderCntOffset=" + trapColliderCntOffset + ", bulletColliderCntOffset=" + bulletColliderCntOffset);
+                }
+
+                if (!colliderAttr.ProvidesHardPushback) {
+                    // [WARNING] By now only the parts that provide hardPushback would interact with barriers and other hardPushback traps!
+                    continue;
+                }
+
+                ConvexPolygon aShape = aCollider.Shape;
+
+                bool hitsAnActualBarrier;
+                int hardPushbackCnt = calcHardPushbacksNormsForTrap(colliderAttr, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, out hitsAnActualBarrier, logger);
+
+                if (0 < hardPushbackCnt) {
+                    // We don't have any trap-slope interaction designed yet
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, 0);
+
+                    if (hitsAnActualBarrier) {
+                        var trapInNextRenderFrame = nextRenderFrameTraps[i - trapColliderCntOffset];
+                        trapInNextRenderFrame.VelX = 0;
+                        trapInNextRenderFrame.VelY = 0;
+                    }
+                }
+            }
+        }
+
         private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
             // [WARNING] Bullet collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
             // Check bullet-anything collisions
@@ -883,6 +941,15 @@ namespace shared {
                             if (bullet.BattleAttr.TeamId == v4.BattleAttr.TeamId) continue;
                             exploded = true;
                             break;
+                        case TrapColliderAttr v5:
+                            if (!v5.ProvidesHardPushback) {
+                                break;
+                            }
+                            if (!COLLIDABLE_PAIRS.Contains(bullet.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
+                                break;
+                            }
+                            exploded = true;
+                            break;
                         default:
                             if (!COLLIDABLE_PAIRS.Contains(bullet.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
                                 break;
@@ -928,7 +995,78 @@ namespace shared {
             }
         }
 
-        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, ILoggerBridge logger) {
+        private static void _calcTrapDamageCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, ILoggerBridge logger) {
+            // [WARNING] Like Bullet, Trap damage collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
+            
+            for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
+                Collider aCollider = dynamicRectangleColliders[i];
+                TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;
+
+                if (null == colliderAttr) {
+                    throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where trapColliderCntOffset=" + trapColliderCntOffset + ", bulletColliderCntOffset=" + bulletColliderCntOffset);
+                }
+
+                if (!colliderAttr.ProvidesDamage) {
+                    continue;
+                }
+                
+                bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+                if (!collided) continue;
+
+                var aShape = aCollider.Shape;
+                var currTrap = currRenderFrame.TrapsArr[colliderAttr.TrapLocalId];
+                var trapConfig = currTrap.Config;
+                while (true) {
+                    var (ok, bCollider) = collision.PopFirstContactedCollider();
+                    if (false == ok || null == bCollider) {
+                        break;
+                    }
+                    var defenderShape = bCollider.Shape;
+                    var (overlapped, _, _) = calcPushbacks(0, 0, aShape, defenderShape, false, ref overlapResult);
+                    if (!overlapped) continue;
+
+                    switch (bCollider.Data) {
+                        case CharacterDownsync atkedCharacterInCurrFrame:
+                            if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;
+                            if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
+                            
+                            int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
+                            var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
+                            atkedCharacterInNextFrame.Hp -= trapConfig.Damage;
+                            // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
+                            if (false == atkedCharacterInCurrFrame.OmitPushback) {
+                                atkedCharacterInNextFrame.VelX = 0;
+                                atkedCharacterInNextFrame.VelY = 0;
+                            }
+                            if (0 >= atkedCharacterInNextFrame.Hp) {
+                                // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
+                                atkedCharacterInNextFrame.Hp = 0;
+                                atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
+                                atkedCharacterInNextFrame.CharacterState = CharacterState.Dying;
+                                atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
+                            } else {
+                                bool shouldOmitStun = ((0 >= trapConfig.HitStunFrames) || (atkedCharacterInCurrFrame.OmitPushback));
+                                if (false == shouldOmitStun) {
+                                    if (trapConfig.BlowUp) {
+                                        atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;
+                                    } else {
+                                        atkedCharacterInNextFrame.CharacterState = CharacterState.Atked1;
+                                    }
+                                    int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
+                                    if (trapConfig.HitStunFrames > oldFramesToRecover) {
+                                        atkedCharacterInNextFrame.FramesToRecover = trapConfig.HitStunFrames;
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, int colliderCnt, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrame.PlayersArr.Count + currRenderFrame.NpcsArr.Count; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
@@ -999,9 +1137,24 @@ namespace shared {
                     thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
                 }
             }
+
+            for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
+                var aCollider = dynamicRectangleColliders[i];
+                TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;
+                if (null == colliderAttr) {
+                    throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where trapColliderCntOffset=" + trapColliderCntOffset + ", bulletColliderCntOffset=" + bulletColliderCntOffset);
+                }
+
+                if (!colliderAttr.ProvidesHardPushback) continue;
+                var trapInNextRenderFrame = nextRenderFrameTraps[colliderAttr.TrapLocalId];
+                // Update "virtual grid position"
+                var (nextColliderAttrVx, nextColliderAttrVy) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
+                trapInNextRenderFrame.VirtualGridX = nextColliderAttrVx - colliderAttr.HitboxOffsetX;
+                trapInNextRenderFrame.VirtualGridY = nextColliderAttrVy - colliderAttr.HitboxOffsetY;
+            }
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -1023,6 +1176,7 @@ namespace shared {
             var nextRenderFrameNpcs = candidate.NpcsArr;
             var nextRenderFrameBullets = candidate.Bullets;
             int nextRenderFrameBulletLocalIdCounter = currRenderFrame.BulletLocalIdCounter;
+            var nextRenderFrameTraps = candidate.TrapsArr;
             // Make a copy first
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var src = currRenderFrame.PlayersArr[i];
@@ -1072,6 +1226,14 @@ namespace shared {
                 j++;
             }
 
+            int k = 0;
+            while (k < currRenderFrame.TrapsArr.Count && TERMINATING_TRAP_ID != currRenderFrame.TrapsArr[k].TrapLocalId) {
+                var src = currRenderFrame.TrapsArr[k];
+                int framesInTrapState = src.FramesInTrapState + 1;
+                AssignToTrap(src.TrapLocalId, src.Config, src.ConfigFromTiled, src.TrapState, framesInTrapState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, src.IsCompletelyStatic, nextRenderFrameTraps[k]);
+                k++;
+            }
+
             /*
                [WARNING]
                1. The dynamic colliders will all be removed from "Space" at the end of this function due to the need for being rollback-compatible.
@@ -1091,19 +1253,28 @@ namespace shared {
                 5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
              */
             int colliderCnt = 0, bulletCnt = 0;
+
             _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, prevDecodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity, logger);
             
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity + j, logger);
             _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
-            _calcMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, 0, roomCapacity + j, residueCollided, logger);
+            int trapColliderCntOffset = colliderCnt;
+            _moveAndInsertDynamicTrapColliders(currRenderFrame, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
 
+            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, 0, roomCapacity + j, residueCollided, logger);
+
+            _calcTrapMovementPushbacks(currRenderFrame, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, trapColliderCntOffset, colliderCnt, residueCollided, logger);
+
+            int bulletColliderCntOffset = colliderCnt;
             _insertBulletColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, roomCapacity + j, colliderCnt, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, logger);
 
-            _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, dynamicRectangleColliders, logger);
+            _calcTrapDamageCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, logger);
+
+            _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
 
             for (int i = 0; i < colliderCnt; i++) {
                 Collider dynamicCollider = dynamicRectangleColliders[i];
@@ -1273,6 +1444,11 @@ namespace shared {
             int xfac = (0 < characterDownsync.DirX ? 1 : -1);
             (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * chConfig.VisionOffsetX, characterDownsync.VirtualGridY + chConfig.VisionOffsetY);
             (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.VisionSizeX, chConfig.VisionSizeY);
+        }
+
+        public static void calcTrapBoxInCollisionSpace(TrapColliderAttr colliderAttr, int newVx, int newVy, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
+            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(newVx + colliderAttr.HitboxOffsetX, newVy + colliderAttr.HitboxOffsetY);
+            (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(colliderAttr.HitboxSizeX, colliderAttr.HitboxSizeY);
         }
 
         protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel) {

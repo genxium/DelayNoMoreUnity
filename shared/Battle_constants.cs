@@ -136,6 +136,8 @@ namespace shared {
         public static int TERMINATING_RENDER_FRAME_ID = (-1026);
         public static int TERMINATING_INPUT_FRAME_ID = (-1027);
         public static int TERMINATING_BULLET_TEAM_ID = (-1028);
+        public static int TERMINATING_TRAP_ID = (-1029);
+
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
 
         // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.

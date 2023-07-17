@@ -147,17 +147,6 @@ namespace shared {
                         HasTurnAroundAnim = false
                     }),
 
-                    new KeyValuePair<int, CharacterConfig>(2048, new CharacterConfig {
-                        SpeciesId = 2048,
-                        SpeciesName = "MovablePlatform",
-                        OmitPushback = true,
-                        OmitGravity = true,
-                        Speed = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeY = (int)(88.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        CollisionTypeMask = COLLISION_TRAP_INDEX_PREFIX
-                    }),
-
                     new KeyValuePair<int, CharacterConfig>(4096, new CharacterConfig {
                         SpeciesId = 4096,
                         SpeciesName = "BullWarrior",
