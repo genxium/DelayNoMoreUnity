@@ -5,7 +5,8 @@ using static shared.CharacterState;
 namespace shared {
     public partial class Battle {
         public static TrapConfig TrapBarrier = new TrapConfig {
-            SpeciesId = 1
+            SpeciesId = 1,
+            SpeciesName = "TrapBarrier"
         };
 
         public static TrapConfig LinearSpike = new TrapConfig {
@@ -14,9 +15,10 @@ namespace shared {
             ExplosionFrames = 15,
             BlowUp = false,
             Damage = 15,
-            HitStunFrames = 10,
+            HitStunFrames = 25,
             HitInvinsibleFrames = 120,
-            DestroyUponHit = false 
+            DestroyUponHit = false,
+            SpeciesName = "LinearSpike"
         };
 
         public static TrapConfig LinearBallSpike = new TrapConfig {
@@ -25,9 +27,10 @@ namespace shared {
             ExplosionFrames = 15,
             BlowUp = false,
             Damage = 5,
-            HitStunFrames = 10,
+            HitStunFrames = 30,
             HitInvinsibleFrames = 60,
-            DestroyUponHit = false 
+            DestroyUponHit = false,
+            SpeciesName = "LinearBallSpike"
         };
 
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(

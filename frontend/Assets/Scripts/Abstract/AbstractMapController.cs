@@ -40,6 +40,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected ulong[] prefabbedInputListHolder;
     protected GameObject[] playerGameObjs;
     protected List<GameObject> npcGameObjs; // TODO: Use a "Heap with Key access" like https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/PriorityQueue.js to manage npc rendering, e.g. referencing the treatment of bullets in https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/Map.js
+    protected List<GameObject> dynamicTrapGameObjs;
 
     protected long battleState;
     protected int spaceOffsetX;
@@ -94,6 +95,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         return Resources.Load(path) as GameObject;
     }
 
+    protected GameObject loadTrapPrefab(TrapConfig trapConfig) {
+        string path = String.Format("Prefabs/{0}", trapConfig.SpeciesName);
+        return Resources.Load(path) as GameObject;
+    }
+
     public ReadyGo readyGoPanel;
     protected Vector3 newPosHolder = new Vector3();
 
@@ -130,6 +136,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         animController.hpBar = associatedHpBar;
         animController.teamRibbon = associatedTeamRibbon;
         associatedTeamRibbon.setBulletTeamId(bulletTeamId);
+    }
+
+    protected void spawnDynamicTrapNode(int speciesId, float wx, float wy) {
+        var trapPrefab = loadTrapPrefab(trapConfigs[speciesId]);
+        GameObject newTrapNode = Instantiate(trapPrefab, new Vector3(wx, wy, characterZ), Quaternion.identity, underlyingMap.transform);
+        dynamicTrapGameObjs.Add(newTrapNode);
     }
 
     protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
@@ -355,6 +367,21 @@ public abstract class AbstractMapController : MonoBehaviour {
             chAnimCtrl.teamRibbon.transform.localPosition = newPosHolder;
         }
 
+        int kDynamicTrap = 0;
+        for (int k = 0; k < rdf.TrapsArr.Count; k++) {
+            var currTrap = rdf.TrapsArr[k];
+            if (TERMINATING_TRAP_ID == currTrap.TrapLocalId) break;
+            if (currTrap.IsCompletelyStatic) continue;
+            var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currTrap.VirtualGridX, currTrap.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
+            var dynamicTrapObj = dynamicTrapGameObjs[kDynamicTrap];
+            newPosHolder.Set(wx, wy, dynamicTrapObj.transform.position.z);
+            dynamicTrapObj.transform.position = newPosHolder;
+            var chAnimCtrl = dynamicTrapObj.GetComponent<TrapAnimationController>();
+            chAnimCtrl.updateAnim("Tidle", 0, 0, true); // TODO: remove the hardcoded value
+            kDynamicTrap++;
+        }
+
         // Put all to infinitely far first
         for (int i = cachedFireballs.vals.StFrameId; i < cachedFireballs.vals.EdFrameId; i++) {
             var (res, fireballHolder) = cachedFireballs.vals.GetByFrameId(i);
@@ -530,6 +557,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         playerGameObjs = new GameObject[roomCapacity];
         npcGameObjs = new List<GameObject>();
+        dynamicTrapGameObjs = new List<GameObject>();
 
         string path = String.Format("Tiled/{0}/map", theme);
         var underlyingMapPrefab = Resources.Load(path) as GameObject;
@@ -1043,7 +1071,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         for (int i = 0; i < trapList.Count; i++) {
-            startRdf.TrapsArr[i] = trapList[i];
+            var trap = trapList[i];
+            startRdf.TrapsArr[i] = trap;
+            if (trap.IsCompletelyStatic) continue;
+            spawnDynamicTrapNode(trap.Config.SpeciesId, trap.VirtualGridX, trap.VirtualGridY);
         }
 
         return startRdf;
