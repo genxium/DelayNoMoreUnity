@@ -66,6 +66,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
+    protected List<shared.Collider> completelyStaticTrapColliders;
 
     public CharacterSelectPanel characterSelectPanel;
 
@@ -227,7 +228,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -522,6 +523,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         maxChasingRenderFramesPerUpdate = 5;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
+        completelyStaticTrapColliders = new List<shared.Collider>();
 
         if (null != underlyingMap) {
             Destroy(underlyingMap);
@@ -905,6 +907,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             var trapCollider = NewRectCollider(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0, 0, 0, colliderAttr);
 
                             collisionSys.AddSingle(trapCollider);
+                            completelyStaticTrapColliders.Add(trapCollider);
                             trapList.Add(trap);
                             staticColliders[staticColliderIdx++] = trapCollider;
 
@@ -1130,6 +1133,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                 throw new ArgumentNullException("Cached line is null for key:" + key);
             }
             line.SetColor(Color.white);
+            if (null != collider.Data) {
+                TrapColliderAttr? colliderAttr = collider.Data as TrapColliderAttr;
+                if (null != colliderAttr) {
+                    if (colliderAttr.ProvidesHardPushback) {
+                        line.SetColor(Color.green);
+                    } else if (colliderAttr.ProvidesDamage) {
+                        line.SetColor(Color.red);
+                    }
+                }
+            }
             int m = collider.Shape.Points.Cnt;
             line.GetPositions(debugDrawPositionsHolder);
             for (int i = 0; i < m; i++) {

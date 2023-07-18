@@ -44,11 +44,11 @@
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesDamage" value="1"/>
-    <property name="speciesId" value="1"/>
+    <property name="speciesId" value="2"/>
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="238" gid="194" x="1120" y="304" width="64" height="32"/>
+  <object id="238" gid="194" x="1392" y="544" width="64" height="32"/>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
   <object id="138" x="1482.83" y="303.834">

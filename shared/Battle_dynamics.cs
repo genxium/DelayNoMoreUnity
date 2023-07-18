@@ -995,11 +995,11 @@ namespace shared {
             }
         }
 
-        private static void _calcTrapDamageCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, ILoggerBridge logger) {
+        private static void _calcTrapDamageCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
             // [WARNING] Like Bullet, Trap damage collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
-            
-            for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
-                Collider aCollider = dynamicRectangleColliders[i];
+            int ed = bulletColliderCntOffset + completelyStaticTrapColliders.Count;
+            for (int i = trapColliderCntOffset; i < ed; i++) {
+                Collider aCollider = i < bulletColliderCntOffset ? dynamicRectangleColliders[i] : completelyStaticTrapColliders[i-bulletColliderCntOffset];
                 TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;
 
                 if (null == colliderAttr) {
@@ -1034,10 +1034,7 @@ namespace shared {
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
                             atkedCharacterInNextFrame.Hp -= trapConfig.Damage;
                             // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
-                            if (false == atkedCharacterInCurrFrame.OmitPushback) {
-                                atkedCharacterInNextFrame.VelX = 0;
-                                atkedCharacterInNextFrame.VelY = 0;
-                            }
+                            
                             if (0 >= atkedCharacterInNextFrame.Hp) {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
                                 atkedCharacterInNextFrame.Hp = 0;
@@ -1055,6 +1052,10 @@ namespace shared {
                                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
                                     if (trapConfig.HitStunFrames > oldFramesToRecover) {
                                         atkedCharacterInNextFrame.FramesToRecover = trapConfig.HitStunFrames;
+                                    }
+                                    int oldInvincibleFrames = atkedCharacterInNextFrame.FramesInvinsible;
+                                    if (trapConfig.HitInvinsibleFrames > oldInvincibleFrames) {
+                                        atkedCharacterInNextFrame.FramesInvinsible = trapConfig.HitInvinsibleFrames;
                                     }
                                 }
                             }
@@ -1154,7 +1155,7 @@ namespace shared {
             }
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -1272,7 +1273,7 @@ namespace shared {
 
             _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, logger);
 
-            _calcTrapDamageCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, logger);
+            _calcTrapDamageCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, completelyStaticTrapColliders, logger);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
 
