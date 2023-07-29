@@ -325,6 +325,10 @@ message Trap {
 	such a frustrating default so we'll use a uniformed local (0, 0) -- the center of rectangle.
 	*/
 	bool isCompletelyStatic = 6;
+	bool capturedByPatrolCue = 7;
+	int32 framesInPatrolCue = 8;
+	int32 waivingPatrolCueId = 9;
+	bool waivingSpontaneousPatrol = 10;
 
 	int32 virtualGridX = 999; 
 	int32 virtualGridY = 1000;

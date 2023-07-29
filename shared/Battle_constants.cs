@@ -66,11 +66,15 @@ namespace shared {
         public static ulong COLLISION_M_FIREBALL_INDEX_PREFIX = (1 << 7); // type of fireball that collides with melee but not barrier
         public static ulong COLLISION_FIREBALL_INDEX_PREFIX = (1 << 8); // type of fireball that doesn't collide with barrier or melee
 
+        public static ulong COLLISION_NPC_PATROL_CUE_INDEX_PREFIX = (1 << 9);
+        public static ulong COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX = (1 << 10);
+
         public static HashSet<ulong> COLLIDABLE_PAIRS = new HashSet<ulong>() {
             COLLISION_CHARACTER_INDEX_PREFIX, // such that characters collider with each other
             COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
             COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
             COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_PICKABLE_INDEX_PREFIX,
+            COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_NPC_PATROL_CUE_INDEX_PREFIX,
 
             // Melee bullet, it wouldn't collide with barrier, specifically 
             COLLISION_MELEE_BULLET_INDEX_PREFIX | COLLISION_CHARACTER_INDEX_PREFIX,
@@ -91,7 +95,10 @@ namespace shared {
             COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_CHARACTER_INDEX_PREFIX,
             COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
             COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_MELEE_BULLET_INDEX_PREFIX,
-            COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX
+            COLLISION_B_M_FIREBALL_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
+
+            // Trap
+            COLLISION_TRAP_INDEX_PREFIX | COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX
         };
 
         public static float COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO = 10.0f;

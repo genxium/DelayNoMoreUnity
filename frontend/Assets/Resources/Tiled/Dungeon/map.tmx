@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="239">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="242">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -49,6 +49,7 @@
    </properties>
   </object>
   <object id="238" gid="194" x="1392" y="544" width="64" height="32"/>
+  <object id="239" gid="194" x="848" y="416" width="64" height="32"/>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
   <object id="138" x="1482.83" y="303.834">
@@ -187,7 +188,7 @@
    </properties>
    <point/>
   </object>
-  <object id="210" x="665.333" y="335.667">
+  <object id="210" x="664" y="336">
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="3"/>
@@ -202,6 +203,26 @@
     <property name="frAct" value="4"/>
     <property name="frCaptureFrames" value="30"/>
     <property name="id" value="30"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="240" x="866" y="426">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="128"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="241" x="992" y="426">
+   <properties>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="129"/>
    </properties>
    <point/>
   </object>

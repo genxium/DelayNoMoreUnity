@@ -144,7 +144,7 @@ namespace shared {
             dst.VelY = velY;
         }
 
-        public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, Trap dst) {
+        public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, bool capturedByPatrolCue, int framesInPatrolCue, bool waivingSpontaneousPatrol, int waivingPatrolCueId, Trap dst) {
             dst.TrapLocalId = trapLocalId;
             dst.Config = config;
             dst.ConfigFromTiled = configFromTiled;
@@ -159,6 +159,11 @@ namespace shared {
             dst.VelX = velX;
             dst.VelY = velY;
             dst.IsCompletelyStatic = isCompletelyStatic;
+
+            dst.CapturedByPatrolCue = capturedByPatrolCue;
+            dst.FramesInPatrolCue = framesInPatrolCue;
+            dst.WaivingSpontaneousPatrol = waivingSpontaneousPatrol;
+            dst.WaivingPatrolCueId = waivingPatrolCueId;
         }
 
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount) {

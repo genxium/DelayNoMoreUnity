@@ -853,7 +853,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
 
-                        CustomProperty id, flAct, frAct, flCaptureFrames, frCaptureFrames, fdAct, fuAct, fdCaptureFrames, fuCaptureFrames;
+                        CustomProperty id, flAct, frAct, flCaptureFrames, frCaptureFrames, fdAct, fuAct, fdCaptureFrames, fuCaptureFrames, collisionTypeMask;
                         tileProps.TryGetCustomProperty("id", out id);
                         tileProps.TryGetCustomProperty("flAct", out flAct);
                         tileProps.TryGetCustomProperty("frAct", out frAct);
@@ -863,6 +863,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("fuAct", out fuAct);
                         tileProps.TryGetCustomProperty("fdCaptureFrames", out fdCaptureFrames);
                         tileProps.TryGetCustomProperty("fuCaptureFrames", out fuCaptureFrames);
+                        tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
+
+                        ulong collisionTypeMaskVal = (null != collisionTypeMask && !collisionTypeMask.IsEmpty) ? (ulong)collisionTypeMask.GetValueAsInt() : COLLISION_NPC_PATROL_CUE_INDEX_PREFIX;
 
                         var newPatrolCue = new PatrolCue {
                             Id = (null == id || id.IsEmpty) ? NO_PATROL_CUE_ID : id.GetValueAsInt(),
@@ -874,7 +877,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                             FdAct = (null == fdAct || fdAct.IsEmpty) ? 0 : (ulong)fdAct.GetValueAsInt(),
                             FuAct = (null == fuAct || fuAct.IsEmpty) ? 0 : (ulong)fuAct.GetValueAsInt(),
                             FdCaptureFrames = (null == fdCaptureFrames || fdCaptureFrames.IsEmpty) ? 0 : (ulong)fdCaptureFrames.GetValueAsInt(),
-                            FuCaptureFrames = (null == fuCaptureFrames || fuCaptureFrames.IsEmpty) ? 0 : (ulong)fuCaptureFrames.GetValueAsInt()
+                            FuCaptureFrames = (null == fuCaptureFrames || fuCaptureFrames.IsEmpty) ? 0 : (ulong)fuCaptureFrames.GetValueAsInt(),
+                            CollisionTypeMask = collisionTypeMaskVal
                         };
 
                         var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
@@ -888,12 +892,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, isCompletelyStatic, collisionTypeMask;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
                         tileProps.TryGetCustomProperty("static", out isCompletelyStatic);
                         tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
+                        tileProps.TryGetCustomProperty("dirX", out dirX);
+                        tileProps.TryGetCustomProperty("dirY", out dirY);
+                        tileProps.TryGetCustomProperty("speed", out speed);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // Not checking null or empty for this property because it shouldn't be, and in case it comes empty anyway, this automatically throws an error 
                         bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
@@ -901,6 +908,18 @@ public abstract class AbstractMapController : MonoBehaviour {
                         bool isCompletelyStaticVal = (null != isCompletelyStatic && !isCompletelyStatic.IsEmpty && 1 == isCompletelyStatic.GetValueAsInt()) ? true : false;
 
                         ulong collisionTypeMaskVal = (null != collisionTypeMask && !collisionTypeMask.IsEmpty) ? (ulong)collisionTypeMask.GetValueAsInt() : 0;
+
+                        int dirXVal = (null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt());
+                        int dirYVal = (null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt());
+                        int speedVal = (null == speed || speed.IsEmpty ? 0 : speed.GetValueAsInt());
+
+                        var trapDirMagSq = dirXVal * dirXVal + dirYVal * dirYVal;
+                        var invTrapDirMag = InvSqrt32(trapDirMagSq);
+                        var trapSpeedXfac = invTrapDirMag * dirXVal;
+                        var trapSpeedYfac = invTrapDirMag * dirYVal;
+
+                        int trapVelX = (int)(trapSpeedXfac * speedVal); 
+                        int trapVelY = (int)(trapSpeedYfac * speedVal);
 
                         TrapConfig trapConfig = trapConfigs[speciesIdVal];
                         List<TrapColliderAttr> colliderAttrs = new List<TrapColliderAttr>();
@@ -915,6 +934,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 Config = trapConfig,
                                 VirtualGridX = rectCenterVx,
                                 VirtualGridY = rectCenterVy,
+                                DirX = dirXVal,
+                                DirY = dirYVal,
+                                VelX = trapVelX,
+                                VelY = trapVelY,
                                 IsCompletelyStatic = true
                             };
 
@@ -949,6 +972,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 Config = trapConfig,
                                 VirtualGridX = rectCenterVx,
                                 VirtualGridY = rectCenterVy,
+                                DirX = dirXVal,
+                                DirY = dirYVal,
+                                VelX = trapVelX,
+                                VelY = trapVelY,
                                 IsCompletelyStatic = false
                             };
                             var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
