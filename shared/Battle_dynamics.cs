@@ -276,10 +276,10 @@ namespace shared {
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
                 /*
-                if (1 == currCharacterDownsync.JoinIndex && 2 == patternId) {
-                    logger.LogInfo(String.Format("DragonPunch in air! JoinIndex: {0}, chState: {1}, framesToRecover: {2}, capturedByInertia: {3}", currCharacterDownsync.JoinIndex, currCharacterDownsync.CharacterState, currCharacterDownsync.FramesToRecover, currCharacterDownsync.CapturedByInertia));
-                }
-                */
+                   if (1 == currCharacterDownsync.JoinIndex && 2 == patternId) {
+                   logger.LogInfo(String.Format("DragonPunch in air! JoinIndex: {0}, chState: {1}, framesToRecover: {2}, capturedByInertia: {3}", currCharacterDownsync.JoinIndex, currCharacterDownsync.CharacterState, currCharacterDownsync.FramesToRecover, currCharacterDownsync.CapturedByInertia));
+                   }
+                 */
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
                 if (usedSkill) {
                     thatCharacterInNextFrame.CapturedByInertia = false; // The use of a skill must break "CapturedByInertia"
@@ -293,7 +293,7 @@ namespace shared {
         public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia) {
             if (0 == currCharacterDownsync.FramesToRecover) {
                 thatCharacterInNextFrame.CharacterState = Idle1; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Idle" as a default action
-                
+
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.CapturedByInertia = false;
                     if (0 != effDx) {
@@ -389,16 +389,16 @@ namespace shared {
                 if (TERMINATING_BULLET_LOCAL_ID == src.BattleAttr.BulletLocalId) break;
                 var dst = nextRenderFrameBullets[bulletCnt];
                 AssignToBullet(
-                    src.BattleAttr.BulletLocalId,
-                    src.BattleAttr.OriginatedRenderFrameId,
-                    src.BattleAttr.OffenderJoinIndex,
-                    src.BattleAttr.TeamId,
-                    src.BlState, src.FramesInBlState + 1,
-                    src.VirtualGridX, src.VirtualGridY, // virtual grid position
-                    src.DirX, src.DirY, // dir
-                    src.VelX, src.VelY, // velocity
-                    src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId, src.Config,
-                    dst);
+                        src.BattleAttr.BulletLocalId,
+                        src.BattleAttr.OriginatedRenderFrameId,
+                        src.BattleAttr.OffenderJoinIndex,
+                        src.BattleAttr.TeamId,
+                        src.BlState, src.FramesInBlState + 1,
+                        src.VirtualGridX, src.VirtualGridY, // virtual grid position
+                        src.DirX, src.DirY, // dir
+                        src.VelX, src.VelY, // velocity
+                        src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId, src.Config,
+                        dst);
 
                 int j = dst.BattleAttr.OffenderJoinIndex - 1;
                 var offender = (j < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
@@ -529,7 +529,7 @@ namespace shared {
         private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             int primaryHardOverlapIndex;
-            for (int i = iSt; i < iEd; i++) {
+            for (int i = iSt; i < iEd; i++) { 
                 primaryOverlapResult.reset();
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
@@ -541,16 +541,16 @@ namespace shared {
 
                 if (0 < hardPushbackCnt) {
                     /* 
-                    if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
-                        logger.LogInfo(String.Format("Before processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
-                    }
-                    */
+                       if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
+                       logger.LogInfo(String.Format("Before processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                       }
+                     */
                     processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP);
                     /* 
-                    if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
-                        logger.LogInfo(String.Format("After processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
-                    }
-                    */
+                       if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
+                       logger.LogInfo(String.Format("After processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                       }
+                     */
                 }
 
                 bool landedOnGravityPushback = false;
@@ -564,19 +564,19 @@ namespace shared {
                 bool goingDown = (thatCharacterInNextFrame.OnSlope && !currCharacterDownsync.JumpTriggered && thatCharacterInNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
                 if (goingDown) {
                     /*
-                    if (2 == currCharacterDownsync.SpeciesId) {
-                        logger.LogInfo(String.Format("Rdf.id={0} BEFOER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-                    }
-                    */
+                       if (2 == currCharacterDownsync.SpeciesId) {
+                       logger.LogInfo(String.Format("Rdf.id={0} BEFOER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+                       }
+                     */
                     float newVelXApprox = thatCharacterInNextFrame.VelX - primaryOverlapResult.OverlapX * projectedVel;
                     float newVelYApprox = thatCharacterInNextFrame.VelY - primaryOverlapResult.OverlapY * projectedVel;
                     thatCharacterInNextFrame.VelX = (int)Math.Round(newVelXApprox);
                     thatCharacterInNextFrame.VelY = (int)Math.Floor(newVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
                     /*
-                    if (2 == currCharacterDownsync.SpeciesId) {
-                        logger.LogInfo(String.Format("Rdf.id={0} AFTER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-                    }
-                    */
+                       if (2 == currCharacterDownsync.SpeciesId) {
+                       logger.LogInfo(String.Format("Rdf.id={0} AFTER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+                       }
+                     */
                 } else if (thatCharacterInNextFrame.OnSlope && Idle1 == thatCharacterInNextFrame.CharacterState && 0 == thatCharacterInNextFrame.VelX) {
                     // [WARNING] Prevent down-slope sliding, might not be preferred for some game designs, disable this if you need sliding on the slope
                     thatCharacterInNextFrame.VelY = 0;
@@ -585,10 +585,10 @@ namespace shared {
                 if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
                     landedOnGravityPushback = true;
                     /*
-                    if (0 == currCharacterDownsync.SpeciesId) {
-                        logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
-                    }
-                    */
+                       if (0 == currCharacterDownsync.SpeciesId) {
+                       logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                       }
+                     */
                 }
 
                 primaryOverlapResult.reset();
@@ -597,10 +597,10 @@ namespace shared {
 
                 if (0 < residueCollided.Cnt && Dying != currCharacterDownsync.CharacterState) {
                     /*
-                    if (0 == currCharacterDownsync.SpeciesId) {
-                        logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
-                    }
-                    */
+                       if (0 == currCharacterDownsync.SpeciesId) {
+                       logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
+                       }
+                     */
                     while (true) {
                         var (ok3, bCollider) = residueCollided.Pop();
                         if (false == ok3 || null == bCollider) {
@@ -699,16 +699,16 @@ namespace shared {
 
                     if (0 < softPushbacksCnt) {
                         /*
-                        if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
-                            logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
-                        }
-                        */
+                           if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
+                           logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
+                           }
+                         */
                         processPrimaryAndImpactEffPushback(effPushbacks[i], softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP);
                         /*
-                        if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
-                            logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
-                        }
-                        */
+                           if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
+                           logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
+                           }
+                         */
                     }
                 }
 
@@ -735,10 +735,10 @@ namespace shared {
                                     var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
                                     effPushbacks[i].Y -= halfColliderChDiff;
                                     /*
-                                    if (0 == currCharacterDownsync.SpeciesId) {
-                                        logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
-                                    }
-                                    */
+                                       if (0 == currCharacterDownsync.SpeciesId) {
+                                       logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                       }
+                                     */
                                     break;
                             }
                         }
@@ -770,10 +770,10 @@ namespace shared {
                             }
                         }
                         /*
-                        if (0 == currCharacterDownsync.SpeciesId) {
-                            logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
-                        }
-                        */
+                           if (0 == currCharacterDownsync.SpeciesId) {
+                           logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                           }
+                         */
                     }
                 }
 
@@ -946,17 +946,17 @@ namespace shared {
                 // Update "virtual grid position"
                 (thatCharacterInNextFrame.VirtualGridX, thatCharacterInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
                 /*
-                if (0 == currCharacterDownsync.SpeciesId) {
-                    logger.LogInfo(String.Format("Will move to nextChState={0}, nextVy={1}: effPushback={2}: from chState={3}, vy={4}", thatCharacterInNextFrame.CharacterState, thatCharacterInNextFrame.VirtualGridY, effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
-                }
-                */
+                   if (0 == currCharacterDownsync.SpeciesId) {
+                   logger.LogInfo(String.Format("Will move to nextChState={0}, nextVy={1}: effPushback={2}: from chState={3}, vy={4}", thatCharacterInNextFrame.CharacterState, thatCharacterInNextFrame.VirtualGridY, effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                   }
+                 */
                 // Update "CharacterState"
                 if (thatCharacterInNextFrame.InAir) {
                     /*
-                    if (0 == currCharacterDownsync.SpeciesId && false == currCharacterDownsync.InAir) {
-                        logger.LogInfo(String.Format("Rdf.id={0}, chState={1}, framesInChState={6}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: transitted to InAir", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.FramesInChState));
-                    }
-                    */
+                       if (0 == currCharacterDownsync.SpeciesId && false == currCharacterDownsync.InAir) {
+                       logger.LogInfo(String.Format("Rdf.id={0}, chState={1}, framesInChState={6}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: transitted to InAir", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.FramesInChState));
+                       }
+                     */
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
                     switch (oldNextCharacterState) {
                         case Idle1:
@@ -1070,9 +1070,9 @@ namespace shared {
                 AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFramePlayers[i]);
             }
 
-            int j = 0;
-            while (j < currRenderFrame.NpcsArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.NpcsArr[j].Id) {
-                var src = currRenderFrame.NpcsArr[j];
+            int npcCnt = 0;
+            while (npcCnt < currRenderFrame.NpcsArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.NpcsArr[npcCnt].Id) {
+                var src = currRenderFrame.NpcsArr[npcCnt];
                 var chConfig = characters[src.SpeciesId];
                 int framesToRecover = src.FramesToRecover - 1;
                 int framesInChState = src.FramesInChState + 1;
@@ -1091,8 +1091,8 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFrameNpcs[j]);
-                j++;
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFrameNpcs[npcCnt]);
+                npcCnt++;
             }
 
             int k = 0;
@@ -1113,36 +1113,35 @@ namespace shared {
                3. Before generating inputs for Npcs, the colliders for "Players" should be inserted such that "Npc Visions" can interact with the players in collision system. 
 
                4. For a true "player", each "Step" moves it by: 
-                  [a] taking "proposed movement" in the "virtual grid" (w/ velocity from previous "Step" or "_processPlayerInputs");    
-                  [b] adding a collider of it w.r.t. the "virtual grid position after proposed movement";
-                  [c] calculating pushbacks for the collider;
-                  [d] confirming "new virtual grid position" by "collider position & pushbacks".
+               [a] taking "proposed movement" in the "virtual grid" (w/ velocity from previous "Step" or "_processPlayerInputs");    
+               [b] adding a collider of it w.r.t. the "virtual grid position after proposed movement";
+               [c] calculating pushbacks for the collider;
+               [d] confirming "new virtual grid position" by "collider position & pushbacks".
 
-                  Kindly note that we never "move the collider in the collisionSys", because that's a costly operation in terms of time-complexity.
+               Kindly note that we never "move the collider in the collisionSys", because that's a costly operation in terms of time-complexity.
 
-                5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
+               5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
              */
             int colliderCnt = 0, bulletCnt = 0;
 
             _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, prevDecodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
-            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity, logger);
-            
-            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, roomCapacity, roomCapacity + j, logger);
-            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
+            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity + npcCnt, logger);
+
+            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
             int trapColliderCntOffset = colliderCnt;
             _moveAndInsertDynamicTrapColliders(currRenderFrame, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
 
-            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, 0, roomCapacity + j, residueCollided, logger);
-
-            _calcTrapMovementPushbacks(currRenderFrame, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, trapColliderCntOffset, colliderCnt, residueCollided, logger);
+            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, 0, roomCapacity + npcCnt, residueCollided, logger);
 
             int bulletColliderCntOffset = colliderCnt;
             _insertBulletColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
             _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, logger);
 
-            _calcTrapDamageCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, completelyStaticTrapColliders, logger);
+            _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
+
+            _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, residueCollided, completelyStaticTrapColliders, logger);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
 
@@ -1156,128 +1155,6 @@ namespace shared {
 
             candidate.Id = nextRenderFrameId;
             candidate.BulletLocalIdCounter = nextRenderFrameBulletLocalIdCounter;
-        }
-
-        public static void AlignPolygon2DToBoundingBox(ConvexPolygon input) {
-            // Transform again to put "anchor" at the "bottom-left point (w.r.t. world space)" of the bounding box for "resolv"
-            float boundingBoxBLX = MAX_FLOAT32, boundingBoxBLY = MAX_FLOAT32;
-            for (int i = 0; i < input.Points.Cnt; i++) {
-                var (exists, p) = input.Points.GetByOffset(i);
-                if (!exists || null == p) throw new ArgumentNullException("Unexpected null point in ConvexPolygon when calling `AlignPolygon2DToBoundingBox`#1!");
-
-                boundingBoxBLX = Math.Min(p.X, boundingBoxBLX);
-                boundingBoxBLY = Math.Min(p.Y, boundingBoxBLY);
-            }
-
-            // Now "input.Anchor" should move to "input.Anchor+boundingBoxBL", thus "boundingBoxBL" is also the value of the negative diff for all "input.Points"
-            input.X += boundingBoxBLX;
-            input.Y += boundingBoxBLY;
-            for (int i = 0; i < input.Points.Cnt; i++) {
-                var (exists, p) = input.Points.GetByOffset(i);
-                if (!exists || null == p) throw new ArgumentNullException("Unexpected null point in ConvexPolygon when calling `AlignPolygon2DToBoundingBox`#2!");
-                p.X -= boundingBoxBLX;
-                p.Y -= boundingBoxBLY;
-                boundingBoxBLX = Math.Min(p.X, boundingBoxBLX);
-                boundingBoxBLY = Math.Min(p.Y, boundingBoxBLY);
-            }
-        }
-
-        public static (float, float) TiledLayerPositionToCollisionSpacePosition(float tiledLayerX, float tiledLayerY, float spaceOffsetX, float spaceOffsetY) {
-            return (tiledLayerX, spaceOffsetY + spaceOffsetY - tiledLayerY);
-        }
-
-        public static (float, float) CollisionSpacePositionToWorldPosition(float collisionSpaceX, float collisionSpaceY, float spaceOffsetX, float spaceOffsetY) {
-            // [WARNING] This conversion is specifically added for Unity+SuperTiled2Unity
-            return (collisionSpaceX, -spaceOffsetY - spaceOffsetY + collisionSpaceY);
-        }
-
-        public static void trimRdfInPlace(RoomDownsyncFrame rdf) {
-            // Removed bullets with TERMINATING_ID
-            while (null != rdf.Bullets && 0 < rdf.Bullets.Count && TERMINATING_BULLET_LOCAL_ID == rdf.Bullets[rdf.Bullets.Count - 1].BattleAttr.BulletLocalId) {
-                rdf.Bullets.RemoveAt(rdf.Bullets.Count - 1);
-            }
-        }
-
-        public static void trimIfdInPlace(InputFrameDownsync ifd) {
-            // Removed bullets with TERMINATING_ID
-            ifd.ConfirmedList = 0;
-        }
-
-        public static string stringifyCharacterDownsync(CharacterDownsync pd) {
-            if (null == pd) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall);
-        }
-
-        public static string stringifyBullet(Bullet bt) {
-            if (null == bt) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}", bt.BattleAttr.BulletLocalId, bt.BattleAttr.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bt.Config.HitboxSizeX, bt.Config.HitboxSizeY);
-        }
-
-        public static string stringifyRdf(RoomDownsyncFrame rdf) {
-            var playerSb = new List<String>();
-            for (int k = 0; k < rdf.PlayersArr.Count; k++) {
-                playerSb.Add(stringifyCharacterDownsync(rdf.PlayersArr[k]));
-            }
-
-            var bulletSb = new List<String>();
-            for (int k = 0; k < rdf.Bullets.Count; k++) {
-                var bt = rdf.Bullets[k];
-                if (null == bt || TERMINATING_BULLET_LOCAL_ID == bt.BattleAttr.BulletLocalId) break;
-                bulletSb.Add(stringifyBullet(bt));
-            }
-
-            if (0 >= bulletSb.Count) {
-                return String.Format("{{ id:{0}\nps:{1} }}", rdf.Id, String.Join(',', playerSb));
-            } else {
-                return String.Format("{{ id:{0}\nps:{1}\nbs:{2} }}", rdf.Id, String.Join(',', playerSb), String.Join(',', bulletSb));
-            }
-        }
-
-        public static string stringifyIfd(InputFrameDownsync ifd, bool trimConfirmedList) {
-            var inputListSb = new List<String>();
-            for (int k = 0; k < ifd.InputList.Count; k++) {
-                inputListSb.Add(String.Format("{0}", ifd.InputList[k]));
-            }
-            if (trimConfirmedList) {
-                return String.Format("{{ ifId:{0},ipts:{1} }}", ifd.InputFrameId, String.Join(',', inputListSb));
-            } else {
-                return String.Format("{{ ifId:{0},ipts:{1},cfd:{2} }}", ifd.InputFrameId, String.Join(',', inputListSb), ifd.ConfirmedList);
-            }
-        }
-
-        public static string stringifyFrameLog(FrameLog fl, bool trimConfirmedList) {
-            // Why do we need an extra class definition of "FrameLog" while having methods "stringifyRdf" & "stringifyIfd"? That's because we might need put "FrameLog" on transmission, i.e. sending to backend upon battle stopped, thus a wrapper class would provide some convenience though not 100% necessary.
-            return String.Format("{0}\n{1}", stringifyRdf(fl.Rdf), stringifyIfd(fl.ActuallyUsedIdf, trimConfirmedList));
-        }
-
-        public static void wrapUpFrameLogs(FrameRingBuffer<RoomDownsyncFrame> renderBuffer, FrameRingBuffer<InputFrameDownsync> inputBuffer, Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput, bool trimConfirmedList, string dirPath, string filename) {
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(dirPath, filename))) {
-                for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
-                    var (ok1, rdf) = renderBuffer.GetByFrameId(i);
-                    if (!ok1 || null == rdf) {
-                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
-                    }
-                    trimRdfInPlace(rdf);
-                    InputFrameDownsync ifd;
-                    if (!rdfIdToActuallyUsedInput.TryGetValue(i, out ifd)) {
-                        if (i + 1 == renderBuffer.EdFrameId) {
-                            // It's OK that "InputFrameDownsync for the latest RoomDownsyncFrame" HASN'T BEEN USED YET. 
-                            outputFile.WriteLine(String.Format("[{0}]", stringifyRdf(rdf)));
-                            break;
-                        }
-                        var j = ConvertToDelayedInputFrameId(i);
-                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 ifd for i={0}, j={1} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{2}, {3}), inputBuffer[StFrameId, EdFrameId)=[{4}, {5})", i, j, renderBuffer.StFrameId, renderBuffer.EdFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId));
-                    }
-                    if (trimConfirmedList) {
-                        trimIfdInPlace(ifd);
-                    }
-                    var frameLog = new FrameLog {
-                        Rdf = rdf,
-                        ActuallyUsedIdf = ifd
-                    };
-                    outputFile.WriteLine(String.Format("[{0}]", stringifyFrameLog(frameLog, trimConfirmedList)));
-                }
-            }
         }
 
         public static void calcCharacterBoundingBoxInCollisionSpace(CharacterDownsync characterDownsync, CharacterConfig chConfig, int newVx, int newVy, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
@@ -1302,18 +1179,6 @@ namespace shared {
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.DefaultSizeX, chConfig.DefaultSizeY);
                     break;
             }
-        }
-
-        public static void calcNpcVisionBoxInCollisionSpace(CharacterDownsync characterDownsync, CharacterConfig chConfig, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
-            if (noOpSet.Contains(characterDownsync.CharacterState)) {
-                (boxCx, boxCy) = (0, 0);
-                (boxCw, boxCh) = (0, 0);
-                return;
-            }
-
-            int xfac = (0 < characterDownsync.DirX ? 1 : -1);
-            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * chConfig.VisionOffsetX, characterDownsync.VirtualGridY + chConfig.VisionOffsetY);
-            (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.VisionSizeX, chConfig.VisionSizeY);
         }
 
         protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel) {

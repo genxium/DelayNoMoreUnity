@@ -450,6 +450,39 @@ namespace shared {
             var (wx, wy) = VirtualGridToPolygonColliderCtr(vx, vy);
             return PolygonColliderCtrToBL(wx, wy, halfBoundingW, halfBoundingH, topPadding, bottomPadding, leftPadding, rightPadding, collisionSpaceOffsetX, collisionSpaceOffsetY);
         }
+
+        public static void AlignPolygon2DToBoundingBox(ConvexPolygon input) {
+            // Transform again to put "anchor" at the "bottom-left point (w.r.t. world space)" of the bounding box for "resolv"
+            float boundingBoxBLX = MAX_FLOAT32, boundingBoxBLY = MAX_FLOAT32;
+            for (int i = 0; i < input.Points.Cnt; i++) {
+                var (exists, p) = input.Points.GetByOffset(i);
+                if (!exists || null == p) throw new ArgumentNullException("Unexpected null point in ConvexPolygon when calling `AlignPolygon2DToBoundingBox`#1!");
+
+                boundingBoxBLX = Math.Min(p.X, boundingBoxBLX);
+                boundingBoxBLY = Math.Min(p.Y, boundingBoxBLY);
+            }
+
+            // Now "input.Anchor" should move to "input.Anchor+boundingBoxBL", thus "boundingBoxBL" is also the value of the negative diff for all "input.Points"
+            input.X += boundingBoxBLX;
+            input.Y += boundingBoxBLY;
+            for (int i = 0; i < input.Points.Cnt; i++) {
+                var (exists, p) = input.Points.GetByOffset(i);
+                if (!exists || null == p) throw new ArgumentNullException("Unexpected null point in ConvexPolygon when calling `AlignPolygon2DToBoundingBox`#2!");
+                p.X -= boundingBoxBLX;
+                p.Y -= boundingBoxBLY;
+                boundingBoxBLX = Math.Min(p.X, boundingBoxBLX);
+                boundingBoxBLY = Math.Min(p.Y, boundingBoxBLY);
+            }
+        }
+
+        public static (float, float) TiledLayerPositionToCollisionSpacePosition(float tiledLayerX, float tiledLayerY, float spaceOffsetX, float spaceOffsetY) {
+            return (tiledLayerX, spaceOffsetY + spaceOffsetY - tiledLayerY);
+        }
+
+        public static (float, float) CollisionSpacePositionToWorldPosition(float collisionSpaceX, float collisionSpaceY, float spaceOffsetX, float spaceOffsetY) {
+            // [WARNING] This conversion is specifically added for Unity+SuperTiled2Unity
+            return (collisionSpaceX, -spaceOffsetY - spaceOffsetY + collisionSpaceY);
+        }
     }
 }
 
