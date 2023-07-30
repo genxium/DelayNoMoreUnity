@@ -28,7 +28,7 @@ namespace shared {
             }
         }
 
-        private static void _calcDynamicTrapMovementCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        private static void _calcDynamicTrapMovementCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, InputFrameDecoded decodedInputHolder, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             int primaryHardOverlapIndex;
             for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
                 primaryOverlapResult.reset();
@@ -99,18 +99,21 @@ namespace shared {
                     if (isAnotherCharacter && colliderAttr.ProvidesDamage) {
                         var atkedCharacterInCurrFrame = bCollider.Data as CharacterDownsync;
                         if (null == atkedCharacterInCurrFrame) {
-                            throw new ArgumentNullException("The casting into atkedCharacterInCurrFrame shouldn't be null for bCollider.Data=" + atkedCharacterInCurrFrame);
+                            throw new ArgumentNullException("The casting into atkedCharacterInCurrFrame shouldn't be null for bCollider.Data=" + bCollider.Data);
                         } 
                         _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aShape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
                     }
 
                     if (isPatrolCue) {
-                        // TODO
+                        var patrolCue = bCollider.Data as PatrolCue;
+                        if (null == patrolCue) {
+                            throw new ArgumentNullException("The casting into patrolCue shouldn't be null for bCollider.Data=" + bCollider.Data);
+                        } 
+                        _processSingleTrapOnSinglePatrolCue(currRenderFrame, nextRenderFrameTraps, ref overlapResult, aCollider, bCollider, decodedInputHolder, colliderAttr, patrolCue, logger);
                     }
                 }
             }
         }
-
 
         private static void _calcCompletelyStaticTrapDamage(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, FrameRingBuffer<Collider> residueCollided, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
             for (int i = 0; i < completelyStaticTrapColliders.Count; i++) {
@@ -196,7 +199,90 @@ namespace shared {
             }
         }
 
-        private static void _processTrapInputs(RoomDownsyncFrame currRenderFrame, RepeatedField<Trap> nextRenderFrameTraps, Collider[] dynamicRectangleColliders, Collision collision, CollisionSpace collisionSys, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, int trapColliderCntOffset, int colliderCnt, ILoggerBridge logger) {
+        private static void _processSingleTrapOnSinglePatrolCue(RoomDownsyncFrame currRenderFrame, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, Collider aCollider, Collider bCollider, InputFrameDecoded decodedInputHolder, TrapColliderAttr colliderAttr, PatrolCue patrolCue, ILoggerBridge logger) {
+            var currTrap = currRenderFrame.TrapsArr[colliderAttr.TrapLocalId];
+            var nextTrap = nextRenderFrameTraps[colliderAttr.TrapLocalId];
+            bool prevCapturedByPatrolCue = currTrap.CapturedByPatrolCue;
+            bool shouldWaivePatrolCueReaction = (false == prevCapturedByPatrolCue && 0 < currTrap.FramesInPatrolCue && patrolCue.Id == currTrap.WaivingPatrolCueId);
+
+            if (shouldWaivePatrolCueReaction) {
+                // [WARNING] We can have this "early return" block to be before the "shape overlap check" here, because we don't need data from "decodedInputHolder". 
+                return;
+            }
+            ConvexPolygon aShape = aCollider.Shape;
+            ConvexPolygon bShape = bCollider.Shape;
+
+            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+            if (!overlapped) {
+                return;
+            }
+
+            // By now we're sure that it should react to the PatrolCue
+            var colliderDx = (aCollider.X - bCollider.X);
+            var colliderDy = (aCollider.Y - bCollider.Y);
+            bool fr = 0 < colliderDx && (0 > currTrap.VelX || (0 == currTrap.VelX && 0 > currTrap.DirX));
+            bool fl = 0 > colliderDx && (0 < currTrap.VelX || (0 == currTrap.VelX && 0 < currTrap.DirX));
+            bool fu = 0 < colliderDy && (0 > currTrap.VelY || (0 == currTrap.VelY && 0 > currTrap.DirY));
+            bool fd = 0 > colliderDy && (0 < currTrap.VelY || (0 == currTrap.VelY && 0 < currTrap.DirY));
+            if (!fr && !fl && !fu && !fd) {
+                fr = 0 > currTrap.DirX;
+                fl = 0 < currTrap.DirX;
+            }
+
+            int targetFramesInPatrolCue = 0;
+            if (fr) {
+                targetFramesInPatrolCue = (int)patrolCue.FrCaptureFrames;
+                DecodeInput(patrolCue.FrAct, decodedInputHolder);
+                //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue)); 
+            } else if (fl) {
+                targetFramesInPatrolCue = (int)patrolCue.FlCaptureFrames;
+                DecodeInput(patrolCue.FlAct, decodedInputHolder);
+                //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue));
+            } else if (fu) {
+                targetFramesInPatrolCue = (int)patrolCue.FuCaptureFrames;
+                DecodeInput(patrolCue.FuAct, decodedInputHolder);
+                //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the top", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue)); 
+            } else if (fd) {
+                targetFramesInPatrolCue = (int)patrolCue.FdCaptureFrames;
+                DecodeInput(patrolCue.FdAct, decodedInputHolder);
+                //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the bottom", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue)); 
+            } else {
+                logger.LogWarn(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue, currTrap.DirX));
+            }
+
+            bool shouldBreakPatrolCueCapture = ((true == prevCapturedByPatrolCue) && (currTrap.WaivingPatrolCueId == patrolCue.Id) && (0 == currTrap.FramesInPatrolCue));
+
+            bool shouldEnterCapturedPeriod = ((false == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (0 < targetFramesInPatrolCue));
+
+            if (shouldEnterCapturedPeriod) {
+                nextTrap.CapturedByPatrolCue = true;
+                nextTrap.FramesInPatrolCue = targetFramesInPatrolCue;
+                nextTrap.WaivingPatrolCueId = patrolCue.Id;
+                nextTrap.VelX = 0;
+                nextTrap.VelY = 0;
+                return;
+            }
+
+            bool isReallyCaptured = ((true == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (patrolCue.Id == currTrap.WaivingPatrolCueId) && (0 < currTrap.FramesInPatrolCue));
+            if (isReallyCaptured) {
+                nextTrap.VelX = 0;
+                nextTrap.VelY = 0;
+                return;
+            }
+
+            nextTrap.CapturedByPatrolCue = false;
+            nextTrap.FramesInPatrolCue = DEFAULT_PATROL_CUE_WAIVING_FRAMES; // re-purposed
+            nextTrap.WaivingPatrolCueId = patrolCue.Id;
+            nextTrap.DirX = decodedInputHolder.Dx;
+            nextTrap.DirY = decodedInputHolder.Dy;
+
+            var dirMagSq = nextTrap.DirX * nextTrap.DirX + nextTrap.DirY * nextTrap.DirY;
+            var invDirMag = InvSqrt32(dirMagSq);
+            var speedXfac = invDirMag * nextTrap.DirX;
+            var speedYfac = invDirMag * nextTrap.DirY;
+            var speedVal = currTrap.ConfigFromTiled.Speed;
+            nextTrap.VelX = (int)(speedXfac * speedVal); 
+            nextTrap.VelY = (int)(speedYfac * speedVal);
         }
     }
 }

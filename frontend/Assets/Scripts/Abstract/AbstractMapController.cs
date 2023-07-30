@@ -922,6 +922,14 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int trapVelY = (int)(trapSpeedYfac * speedVal);
 
                         TrapConfig trapConfig = trapConfigs[speciesIdVal];
+                        TrapConfigFromTiled trapConfigFromTiled = new TrapConfigFromTiled {
+                            SpeciesId = speciesIdVal,
+                            Quota = MAGIC_QUOTA_INFINITE,
+                            Speed = speedVal,
+                            DirX = dirXVal,
+                            DirY = dirYVal
+                        }; 
+
                         List<TrapColliderAttr> colliderAttrs = new List<TrapColliderAttr>();
                         if (isCompletelyStaticVal) {
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f);
@@ -932,6 +940,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Trap trap = new Trap {
                                 TrapLocalId = trapLocalId,
                                 Config = trapConfig,
+                                ConfigFromTiled = trapConfigFromTiled,
                                 VirtualGridX = rectCenterVx,
                                 VirtualGridY = rectCenterVy,
                                 DirX = dirXVal,
@@ -970,6 +979,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Trap trap = new Trap {
                                 TrapLocalId = trapLocalId,
                                 Config = trapConfig,
+                                ConfigFromTiled = trapConfigFromTiled,
                                 VirtualGridX = rectCenterVx,
                                 VirtualGridY = rectCenterVy,
                                 DirX = dirXVal,
