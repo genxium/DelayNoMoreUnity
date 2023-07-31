@@ -897,7 +897,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
                         tileProps.TryGetCustomProperty("static", out isCompletelyStatic);
-                        tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speed", out speed);
@@ -906,8 +905,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                         bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
                         bool providesDamageVal = (null != providesDamage && !providesDamage.IsEmpty && 1 == providesDamage.GetValueAsInt()) ? true : false;
                         bool isCompletelyStaticVal = (null != isCompletelyStatic && !isCompletelyStatic.IsEmpty && 1 == isCompletelyStatic.GetValueAsInt()) ? true : false;
-
-                        ulong collisionTypeMaskVal = (null != collisionTypeMask && !collisionTypeMask.IsEmpty) ? (ulong)collisionTypeMask.GetValueAsInt() : 0;
 
                         int dirXVal = (null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt());
                         int dirYVal = (null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt());
@@ -928,7 +925,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Speed = speedVal,
                             DirX = dirXVal,
                             DirY = dirYVal
-                        }; 
+                        };
+
+                        tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
+                        ulong collisionTypeMaskVal = (null != collisionTypeMask && !collisionTypeMask.IsEmpty) ? (ulong)collisionTypeMask.GetValueAsInt() : 0;
 
                         List<TrapColliderAttr> colliderAttrs = new List<TrapColliderAttr>();
                         if (isCompletelyStaticVal) {
@@ -997,6 +997,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                                     }
                                     if ("providesDamage".Equals(collisionObjProp.m_Name)) {
                                         childProvidesDamageVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                    }
+                                    if ("collisionTypeMask".Equals(collisionObjProp.m_Name) && !collisionObjProp.IsEmpty) {
+                                        collisionTypeMaskVal =  (ulong)collisionObjProp.GetValueAsInt();
                                     }
                                 }
 
@@ -1202,6 +1205,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.white);
             if (null != collider.Data) {
+#nullable enable
                 TrapColliderAttr? colliderAttr = collider.Data as TrapColliderAttr;
                 if (null != colliderAttr) {
                     if (colliderAttr.ProvidesHardPushback) {
@@ -1210,6 +1214,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         line.SetColor(Color.red);
                     }
                 }
+#nullable disable
             }
             int m = collider.Shape.Points.Cnt;
             line.GetPositions(debugDrawPositionsHolder);

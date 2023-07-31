@@ -21,7 +21,7 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="135" x="1228.17" y="283">
+  <object id="135" x="776.837" y="277">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
@@ -49,7 +49,7 @@
    </properties>
   </object>
   <object id="238" gid="194" x="1392" y="544" width="64" height="32"/>
-  <object id="239" gid="194" x="848" y="416" width="64" height="32">
+  <object id="239" gid="194" x="880" y="416" width="64" height="32">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speed" value="5"/>

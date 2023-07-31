@@ -1099,7 +1099,10 @@ namespace shared {
             while (k < currRenderFrame.TrapsArr.Count && TERMINATING_TRAP_ID != currRenderFrame.TrapsArr[k].TrapLocalId) {
                 var src = currRenderFrame.TrapsArr[k];
                 int framesInTrapState = src.FramesInTrapState + 1;
-                int framesInPatrolCue = src.FramesInPatrolCue + 1;
+                int framesInPatrolCue = src.FramesInPatrolCue - 1;
+                if (framesInPatrolCue < 0) {
+                    framesInPatrolCue = 0;
+                }
                 AssignToTrap(src.TrapLocalId, src.Config, src.ConfigFromTiled, src.TrapState, framesInTrapState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, src.IsCompletelyStatic, src.CapturedByPatrolCue, framesInPatrolCue, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, nextRenderFrameTraps[k]);
                 k++;
             }

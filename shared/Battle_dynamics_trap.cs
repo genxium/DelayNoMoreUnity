@@ -155,7 +155,7 @@ namespace shared {
             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) return;
             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) return;
 
-            var (overlapped, softPushbackX, softPushbackY) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
             if (!overlapped) {
                 return;
             }
@@ -265,8 +265,6 @@ namespace shared {
 
             bool isReallyCaptured = ((true == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (patrolCue.Id == currTrap.WaivingPatrolCueId) && (0 < currTrap.FramesInPatrolCue));
             if (isReallyCaptured) {
-                nextTrap.VelX = 0;
-                nextTrap.VelY = 0;
                 return;
             }
 
