@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
+using UnityEditor.Experimental.GraphView;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -822,7 +823,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                         ));
                         //Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
                         j++;
-                        if (j >= roomCapacity) break;
                     }
                     break;
                 case "NpcStartingPos":
@@ -1030,6 +1030,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                     break;
             }
         }
+
+        // Sorting to make sure that if "roomCapacity" is smaller than the position counts in Tiled, we take only the smaller teamIds
+        playerStartingCposList.Sort(delegate ((Vector, int, int) lhs, (Vector, int, int) rhs) {
+            return Math.Sign(lhs.Item2 - rhs.Item2);
+        });
 
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity);
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;
