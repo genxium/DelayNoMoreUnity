@@ -96,12 +96,14 @@ namespace shared {
                         continue;
                     }
 
-                    if (isAnotherCharacter && colliderAttr.ProvidesDamage) {
+                    if (isAnotherCharacter) {
                         var atkedCharacterInCurrFrame = bCollider.Data as CharacterDownsync;
                         if (null == atkedCharacterInCurrFrame) {
                             throw new ArgumentNullException("The casting into atkedCharacterInCurrFrame shouldn't be null for bCollider.Data=" + bCollider.Data);
-                        } 
-                        _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aShape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
+                        }
+                        if (colliderAttr.ProvidesDamage) {
+                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aShape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
+                        }
                     }
 
                     if (isPatrolCue) {

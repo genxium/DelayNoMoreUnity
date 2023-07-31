@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="242">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="245">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -9,7 +9,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2DFuwjAAQNGIComlA0PFxNaTpOoBeocehKVL1TtUDL1nkwJqBCQ4YGNav+HJCAGO/J0Q5a6qqjsAAAAAAACAK3jmR+4OOftPCqd/2fQvm/5l079s+m+8jliz+xFSdVuPMKuq1bwZjym9/xj11jm9FlXcfRPafdqM0572+v823Zf7unxJ/273ofb65+8Yq/9+c/3/f/+2+bqneUh7/Q/Xdcx9YAq7Y5sEtIuh9P5DYjS85PuX/Eao0vvXAy7pF/taoH+a/inW9Jxmi45r7gH947dP2Uv/NP1T3/d9Hlp1xZyrrsL/w9o1eLqBFrn6p7j/6+v/3iN2/5B9sVP6+X9sTULPHf3/tms+/+n2/2p6b8er9j9G/7Ta1u1zuo/m9Smzzeejzv+o/2D/h62c3VPtg7cA+of3P3UutZabfmd1P7YPlj3z1AHv6X+6P/k75Oz/Ujj9y5ay//zG5V77W5G7g/7666+//voDAAAAAAAAAAAAeX0DjQwB4w==
+   eJzt2EFOwkAAQNEGQ8KWhXHFzpPUeADv4EHYuDHewbDwnrYCsYG2DLTTqc5bvAwhwJD5U5j0riiKOwAAAAAAAIAJPPMjdYeU/ReZ0z9v+udN/7zpnzf9915n0OIauyusimK7rsY2ufe/RnmQun1o/7r7shqXHe31/216KnXfIf2b3fva65++41j9T5vr///71813Hc1D2ut/vq6pz4HH77YIaDeG3Pv3GaPhkPcP+YxQufcvewzpN/Zvgf5x+sdY01uaPTRMuQf0H799zF76x+kf+9z3eW7bNOZcZRH+H1avwdMMWqTqH+P819X/vcPY/UP2xVHu13/bmoReO/r/bVPe/2n2/6p6H8ZJ+7fRP666dX2f7qN6fMlq//pR53/Uv7f//UHK7rH2wVsA/cP7X7qWapt9v5u6t+2DTcc8ZcBz+l/uT/oOKfu/ZE7/vMXsv5651Gs/F6k76K+//vrrrz8AAAAAAAAAAACQ1jdLcADc
   </data>
  </layer>
  <layer id="12" name="StaticTrapPaint" width="128" height="64">
@@ -48,11 +48,16 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="238" gid="194" x="1392" y="544" width="64" height="32"/>
-  <object id="239" gid="194" x="880" y="416" width="64" height="32">
+  <object id="239" gid="194" x="864" y="352" width="64" height="32">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="speed" value="5"/>
+    <property name="speed" value="6"/>
+   </properties>
+  </object>
+  <object id="242" gid="193" x="864" y="416" width="64" height="16">
+   <properties>
+    <property name="dirY" value="-2"/>
+    <property name="speed" value="8"/>
    </properties>
   </object>
  </objectgroup>
@@ -145,38 +150,6 @@
    </properties>
    <point/>
   </object>
-  <object id="202" x="870" y="314">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-    <property name="id" value="19"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="203" x="1036" y="316">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-    <property name="id" value="20"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="204" x="1092" y="332.333">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-    <property name="id" value="21"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="205" x="1258" y="331.667">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-    <property name="id" value="22"/>
-   </properties>
-   <point/>
-  </object>
   <object id="206" x="1284.33" y="396.667">
    <properties>
     <property name="flAct" value="19"/>
@@ -211,7 +184,7 @@
    </properties>
    <point/>
   </object>
-  <object id="240" x="866" y="410">
+  <object id="240" x="880" y="350">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="flAct" value="3"/>
@@ -222,7 +195,7 @@
    </properties>
    <point/>
   </object>
-  <object id="241" x="992" y="410">
+  <object id="241" x="1230" y="350">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="flAct" value="4"/>
@@ -230,6 +203,28 @@
     <property name="frAct" value="4"/>
     <property name="frCaptureFrames" value="60"/>
     <property name="id" value="129"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="243" x="900" y="410">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="2"/>
+    <property name="fdCaptureFrames" value="30"/>
+    <property name="fuAct" value="2"/>
+    <property name="fuCaptureFrames" value="30"/>
+    <property name="id" value="130"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="244" x="900" y="540">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="1"/>
+    <property name="fdCaptureFrames" value="30"/>
+    <property name="fuAct" value="1"/>
+    <property name="fuCaptureFrames" value="30"/>
+    <property name="id" value="131"/>
    </properties>
    <point/>
   </object>
@@ -283,16 +278,6 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="198" x="864" y="320" width="88" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="199" x="1088" y="336" width="176" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
   <object id="214" x="744" y="336" width="88" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
@@ -302,11 +287,6 @@
    <polyline points="-96,0 -288,80 -288,96 -96,96"/>
   </object>
   <object id="219" x="1584" y="320" width="96" height="96"/>
-  <object id="224" x="952" y="320" width="88" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
   <object id="226" x="1072" y="544">
    <polyline points="0,0 -96,48 240,48 144,0"/>
   </object>

@@ -479,7 +479,7 @@ namespace shared {
                 effPushbacks[i].X = 0;
                 effPushbacks[i].Y = 0;
 
-                int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
+                int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
                 if (currCharacterDownsync.JumpTriggered) {
                     // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
                     if (OnWall == currCharacterDownsync.CharacterState) {
@@ -537,7 +537,12 @@ namespace shared {
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
-                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, logger);
+                Trap? primaryTrap = null;
+                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, residueCollided, logger);
+
+                if (null != primaryTrap) {
+                    thatCharacterInNextFrame.FrictionVelX = primaryTrap.VelX;
+                }
 
                 if (0 < hardPushbackCnt) {
                     /* 
@@ -1067,7 +1072,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFramePlayers[i]);
             }
 
             int npcCnt = 0;
@@ -1091,7 +1096,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFrameNpcs[npcCnt]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFrameNpcs[npcCnt]);
                 npcCnt++;
             }
 

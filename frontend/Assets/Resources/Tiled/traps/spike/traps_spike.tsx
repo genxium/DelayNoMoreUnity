@@ -3,7 +3,7 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
-   <property name="collisionTypeMask" value="1"/>
+   <property name="collisionTypeMask" value="5"/>
    <property name="providesHardPushback" value="1"/>
    <property name="speciesId" value="1"/>
   </properties>

@@ -28,7 +28,8 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNormsForCharacter(CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        public static int calcHardPushbacksNormsForCharacter(RoomDownsyncFrame currRenderFrame, CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+            primaryTrap = null;
             float virtualGripToWall = 0.0f;
             if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
                 float xfac = 1.0f;
@@ -54,14 +55,17 @@ namespace shared {
                 if (!exists || null == bCollider) {
                     break;
                 }
+                int trapLocalId = TERMINATING_TRAP_ID;
                 bool isBarrier = false;
-
+                bool isDynamicTrap = false;
                 switch (bCollider.Data) {
                     case CharacterDownsync v1:
                     case Bullet v2:
                     case PatrolCue v3:
                         break;
                     case TrapColliderAttr v4:
+                        trapLocalId = v4.TrapLocalId;
+                        isDynamicTrap = v4.ProvidesHardPushback;
                         isBarrier = v4.ProvidesHardPushback;
                         break;
                     default:
@@ -91,6 +95,11 @@ namespace shared {
                     primaryOverlapMag = overlapResult.OverlapMag;
                     overlapResult.cloneInto(ref primaryOverlapResult);
                     primaryIsWall = isWall;
+                    if (isDynamicTrap) {
+                        primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
+                    } else {
+                        primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
+                    }
                 } else if (isWall && !primaryIsWall) {
                     // Just skip...
                 } else {
@@ -100,6 +109,11 @@ namespace shared {
                         primaryOverlapMag = overlapResult.OverlapMag;
                         overlapResult.cloneInto(ref primaryOverlapResult);
                         primaryIsWall = isWall;
+                        if (isDynamicTrap) {
+                            primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
+                        } else {
+                            primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
+                        }
                     }
                 }
 

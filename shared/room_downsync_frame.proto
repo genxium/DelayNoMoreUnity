@@ -92,6 +92,8 @@ message CharacterDownsync {
 	int32 revivalDirY = 36;
 
 	bool onSlope = 37;
+
+	int32 frictionVelX = 38; // Mostly from a dynamic trap
         
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
