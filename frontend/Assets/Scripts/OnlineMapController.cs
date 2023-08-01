@@ -44,7 +44,7 @@ public class OnlineMapController : AbstractMapController {
                     roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
                     preallocateHolders();
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch("Castle");
+                    resetCurrentMatch("Dungeon");
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
