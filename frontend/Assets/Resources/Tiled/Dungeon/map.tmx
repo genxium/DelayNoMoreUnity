@@ -28,7 +28,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="898" y="276.667">
+  <object id="135" x="898.663" y="280.667">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>

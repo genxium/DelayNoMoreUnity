@@ -717,9 +717,11 @@ namespace shared {
                     }
                 }
 
+                /*
                 if (0 == currCharacterDownsync.SpeciesId && !landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
                     logger.LogInfo(String.Format("Rdf.Id={0}, character slipped with aShape={1}, touchingCells={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}", currRenderFrame.Id, aShape.ToString(false), aCollider.TouchingCellsStr(), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString()));
                 }
+                */
 
                 if (landedOnGravityPushback) {
                     thatCharacterInNextFrame.InAir = false;

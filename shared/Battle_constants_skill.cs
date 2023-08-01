@@ -145,7 +145,7 @@ namespace shared {
                         )),
 
                      new KeyValuePair<int, Skill>(5, new Skill{
-                        RecoveryFrames = 30,
+                        RecoveryFrames = 50,
                         RecoveryFramesOnBlock = 30,
                         RecoveryFramesOnHit = 30,
                         MpDelta = 0,
@@ -156,7 +156,7 @@ namespace shared {
                             new BulletConfig {
                                 StartupFrames = 9,
                                 ActiveFrames = 16,
-                                HitStunFrames = 15,
+                                HitStunFrames = 10,
                                 BlockStunFrames = 9,
                                 Damage = 13,
                                 PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -399,7 +399,7 @@ namespace shared {
                         )),
 
                     new KeyValuePair<int, Skill>(12, new Skill{
-                        RecoveryFrames = 28,
+                        RecoveryFrames = 55,
                         RecoveryFramesOnBlock = 28,
                         RecoveryFramesOnHit = 28,
                         MpDelta = 0,
@@ -432,7 +432,7 @@ namespace shared {
                         )),
 
                     new KeyValuePair<int, Skill>(13, new Skill{
-                        RecoveryFrames = 30,
+                        RecoveryFrames = 60,
                         RecoveryFramesOnBlock = 30,
                         RecoveryFramesOnHit = 30,
                         MpDelta = 270,
@@ -441,7 +441,7 @@ namespace shared {
                     }
                         .AddHit(
                             new BulletConfig {
-                                StartupFrames = 16,
+                                StartupFrames = 21,
                                 ActiveFrames = 600,
                                 HitStunFrames = 12,
                                 BlockStunFrames = 9,
@@ -468,7 +468,7 @@ namespace shared {
                         )),
 
                     new KeyValuePair<int, Skill>(14, new Skill{
-                        RecoveryFrames = 100,
+                        RecoveryFrames = 90,
                         RecoveryFramesOnBlock = 36,
                         RecoveryFramesOnHit = 36,
                         MpDelta = 0,
@@ -477,7 +477,7 @@ namespace shared {
                     }
                         .AddHit(
                             new BulletConfig {
-                                StartupFrames = 8,
+                                StartupFrames = 18,
                                 ActiveFrames = 9,
                                 HitStunFrames = 9,
                                 BlockStunFrames = 3,
@@ -525,7 +525,7 @@ namespace shared {
                     ),
 
                     new KeyValuePair<int, Skill>(15, new Skill{
-                        RecoveryFrames = 120,
+                        RecoveryFrames = 110,
                         RecoveryFramesOnBlock = 50,
                         RecoveryFramesOnHit = 50,
                         MpDelta = 270,
