@@ -717,6 +717,10 @@ namespace shared {
                     }
                 }
 
+                if (0 == currCharacterDownsync.SpeciesId && !landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
+                    logger.LogInfo(String.Format("Rdf.Id={0}, character slipped with aShape={1}, touchingCells={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}", currRenderFrame.Id, aShape.ToString(false), aCollider.TouchingCellsStr(), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString()));
+                }
+
                 if (landedOnGravityPushback) {
                     thatCharacterInNextFrame.InAir = false;
                     bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
@@ -736,12 +740,13 @@ namespace shared {
                                 case InAirIdle1ByWallJump:
                                 case OnWall:
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
-                                    var halfColliderVhDiff = ((chConfig.DefaultSizeY - chConfig.ShrinkedSizeY) >> 1);
+                                    int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                    var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
                                     var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
                                     effPushbacks[i].Y -= halfColliderChDiff;
                                     /*
                                        if (0 == currCharacterDownsync.SpeciesId) {
-                                       logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                           logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
                                        }
                                      */
                                     break;
@@ -963,25 +968,39 @@ namespace shared {
                        }
                      */
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
-                    switch (oldNextCharacterState) {
-                        case Idle1:
-                        case Walking:
-                        case TurnAround:
-                            if ((currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
-                                thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
-                            } else if ((!currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
-                                thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
-                            } else {
-                                thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
-                            }
-                            break;
-                        case Atk1:
-                            thatCharacterInNextFrame.CharacterState = InAirAtk1;
-                            // No inAir transition for ATK2/ATK3 for now
-                            break;
-                        case Atked1:
-                            thatCharacterInNextFrame.CharacterState = InAirAtked1;
-                            break;
+                    if (!inAirSet.Contains(oldNextCharacterState)) {
+                        switch (oldNextCharacterState) {
+                            case Idle1:
+                            case Walking:
+                            case TurnAround:
+                                if ((currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                                    thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
+                                } else if ((!currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
+                                    thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
+                                } else {
+                                    thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
+                                }
+                                break;
+                            case Atk1:
+                                thatCharacterInNextFrame.CharacterState = InAirAtk1;
+                                // No inAir transition for ATK2/ATK3 for now
+                                break;
+                            case Atked1:
+                                thatCharacterInNextFrame.CharacterState = InAirAtked1;
+                                break;
+                        }
+                    }
+                } else {
+                    CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
+                    if (inAirSet.Contains(oldNextCharacterState) && BlownUp1 != oldNextCharacterState && OnWall != oldNextCharacterState && Dashing != oldNextCharacterState) {
+                        switch (oldNextCharacterState) {
+                            case InAirAtked1:
+                                thatCharacterInNextFrame.CharacterState = Atked1;
+                                break;
+                            default:
+                                thatCharacterInNextFrame.CharacterState = Idle1;
+                                break;
+                        }
                     }
                 }
 

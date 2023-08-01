@@ -3,6 +3,22 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public static void roundToRectilinearDir(ref float normX, ref float normY) {
+            if (0 == normX) {
+                if (0 > normY) {
+                    normY = -1f;
+                } else {
+                    normY = 1f;
+                }
+            } else if (0 == normY) {
+                if (0 > normX) {
+                    normX = -1f;
+                } else {
+                    normX = 1f;
+                }
+            }
+        }
+
         public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, ref SatResult overlapResult) {
             float origX = a.X, origY = a.Y;
             try {
@@ -332,7 +348,7 @@ namespace shared {
 
 				e = (-2.98, 1.49).Unit()
 			*/
-
+            roundToRectilinearDir(ref axisX, ref axisY);
             float aStart = MAX_FLOAT32;
             float aEnd = -MAX_FLOAT32;
             float bStart = MAX_FLOAT32;
@@ -380,11 +396,11 @@ namespace shared {
                 result.AContainedInB = false;
 
                 if (aEnd < bEnd) {
-                    overlapProjected = aEnd - bStart;
+                    overlapProjected = (float)((decimal)aEnd - (decimal)bStart);
                     result.BContainedInA = false;
                 } else {
-                    float option1 = aEnd - bStart;
-                    float option2 = bEnd - aStart;
+                    float option1 = (float)((decimal)aEnd - (decimal)bStart);
+                    float option2 = (float)((decimal)bEnd - (decimal)aStart);
                     if (option1 < option2) {
                         overlapProjected = option1;
                     } else {
@@ -395,11 +411,11 @@ namespace shared {
                 result.BContainedInA = false;
 
                 if (aEnd > bEnd) {
-                    overlapProjected = aStart - bEnd;
+                    overlapProjected = (float)((decimal)aStart - (decimal)bEnd);
                     result.AContainedInB = false;
                 } else {
-                    float option1 = aEnd - bStart;
-                    float option2 = bEnd - aStart;
+                    float option1 = (float)((decimal)aEnd - (decimal)bStart);
+                    float option2 = (float)((decimal)bEnd - (decimal)aStart);
                     if (option1 < option2) {
                         overlapProjected = option1;
                     } else {

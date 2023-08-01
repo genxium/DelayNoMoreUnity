@@ -1,6 +1,7 @@
 using Google.Protobuf.Collections;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace shared {
     public partial class Battle {
@@ -155,6 +156,12 @@ namespace shared {
 
         private static void _processSingleTrapDamageOnSingleCharacter(RoomDownsyncFrame currRenderFrame, ConvexPolygon aShape, ConvexPolygon bShape, ref SatResult overlapResult, TrapColliderAttr colliderAttr, CharacterDownsync atkedCharacterInCurrFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) return;
+            int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
+            var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
+            // [WARNING] As trap damage is calculated after those of bullets, don't overwrite blown-up effect!
+            if (CharacterState.BlownUp1 == atkedCharacterInNextFrame.CharacterState) {
+                return;
+            }
             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) return;
 
             var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
@@ -169,8 +176,6 @@ namespace shared {
                 Like Bullet, Trap damage collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
                 Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
             */
-            int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
-            var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
             atkedCharacterInNextFrame.Hp -= trapConfig.Damage;
 
             if (0 >= atkedCharacterInNextFrame.Hp) {

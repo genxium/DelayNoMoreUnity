@@ -26,7 +26,7 @@ namespace shared {
 				throw new ArgumentException("Collider Space is null when calling `BoundsToSpace`!");
 			}
             var (cx, cy) = Space.WorldToSpace(X + dx, Y + dy);
-            var (ex, ey) = Space.WorldToSpace(X + W + dx - 1, Y + H + dy - 1);
+            var (ex, ey) = Space.WorldToSpace(X + W + dx, Y + H + dy);
             return (cx, cy, ex, ey);
         }
 

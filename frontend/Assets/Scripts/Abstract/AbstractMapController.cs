@@ -569,7 +569,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 64, 64);
+        int cellWidth = 64;
+        int cellHeight = 256; // To avoid dynamic trap as a standing point to slip when moving down along with the character
+        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, cellWidth, cellHeight);
         collisionHolder = new shared.Collision();
 
         // Reset the preallocated
