@@ -994,7 +994,7 @@ namespace shared {
                     }
                 } else {
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
-                    if (inAirSet.Contains(oldNextCharacterState) && BlownUp1 != oldNextCharacterState && OnWall != oldNextCharacterState && Dashing != oldNextCharacterState) {
+                    if (inAirSet.Contains(oldNextCharacterState) && InAirIdle1NoJump != oldNextCharacterState && InAirIdle1ByJump != oldNextCharacterState && InAirIdle1ByWallJump != oldNextCharacterState && BlownUp1 != oldNextCharacterState && OnWall != oldNextCharacterState && Dashing != oldNextCharacterState) {
                         switch (oldNextCharacterState) {
                             case InAirAtked1:
                                 thatCharacterInNextFrame.CharacterState = Atked1;

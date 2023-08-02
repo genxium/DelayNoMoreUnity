@@ -55,5 +55,13 @@ Referencing [this document from Microsoft](https://learn.microsoft.com/en-us/dot
 # 2. Thanks
 - To [dravenx](https://opengameart.org/users/dravenx) for providing the [spikey-stuff](https://opengameart.org/content/spikey-stuff).
 
+# 3. Changing endpoints of UnityHub download and changing its http(s) proxy
+Kindly note that the proxy setting is not very helpful here when download is slow (alternatively, sometimes the download is just timed out due to DNS issue, you might also wanna have a try on changing DNS only), changing the endpoints from `https` to `http` is critical.
+
+![changing_unity_hub_http](./charts/UnityHubNetworkProxying.png)
+
+References
+- https://docs.unity3d.com/2022.1/Documentation/Manual/upm-config-network.html#Hub
+
 # FAQ
 Please refer to [FAQ.md](FAQ.md).
