@@ -733,7 +733,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
-        cameraTrack(rdf);
+        cameraTrack(rdf, prevRdf);
         ++renderFrameId;
     }
 
@@ -1137,13 +1137,20 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected Vector2 camSpeedHolder = new Vector2();
     protected Vector2 camDiffDstHolder = new Vector2();
-    protected void cameraTrack(RoomDownsyncFrame rdf) {
+    protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
         if (null == selfPlayerInfo) return;
         var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
         var playerCharacterDownsync = rdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
+
         var (velCX, velCY) = VirtualGridToPolygonColliderCtr(playerCharacterDownsync.Speed, playerCharacterDownsync.Speed);
         camSpeedHolder.Set(velCX, velCY);
         var cameraSpeedInWorld = camSpeedHolder.magnitude * 100;
+
+        var prevPlayerCharacterDownsync = prevRdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
+        if (CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState) {
+            cameraSpeedInWorld *= 200;
+        }
+
         var camOldPos = Camera.main.transform.position;
         var dst = playerGameObj.transform.position;
         camDiffDstHolder.Set(dst.x - camOldPos.x, dst.y - camOldPos.y);

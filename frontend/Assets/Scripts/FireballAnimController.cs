@@ -30,16 +30,17 @@ public class FireballAnimController : MonoBehaviour {
         int targetClipIdx = 0; // We have only 1 frame anim playing at any time
         var curClip = animator.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
         bool sameClipName = newAnimName.Equals(curClip.name);
-        if (spontaneousLooping && sameClipName) {
-          return;
-        }
 
         // Set skew of the fireball; There're floating point division, thus we'd like to minimize the number of times doing it  
-        bool firstTimeUpdate = !sameClipName || (0 == frameIdxInAnim);
+        bool firstTimeUpdate = (!sameClipName) || (0 == frameIdxInAnim);
         if (firstTimeUpdate) {
             // [WARNING] Don't set "flipX" only when "firstTimeUpdate", because the fireball might be mirrored at runtime!
             float skewAngle = Mathf.Atan2(bulletConfig.DirY, bulletConfig.DirX) * Mathf.Rad2Deg;
             gameObject.transform.rotation = Quaternion.AngleAxis(spr.flipX ? -skewAngle : skewAngle, Vector3.forward);
+        }
+
+        if (spontaneousLooping && sameClipName) {
+          return;
         }
 
         var targetClip = lookUpTable[newAnimName];
