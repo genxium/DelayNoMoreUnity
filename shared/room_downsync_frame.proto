@@ -313,6 +313,7 @@ message TrapColliderAttr {
 	int32 hitboxSizeY = 4;
     bool providesHardPushback = 5;
     bool providesDamage = 6;
+    bool providesEscape = 7;
 
 	int32 trapLocalId = 1024; // ref-back upon collision, for damage handling, hardPushback moving and effPushbacks recording (if the trap provides softPushback)
 	uint64 collisionTypeMask = 1029;
@@ -349,6 +350,22 @@ message Trap {
 	int32 dirY = 1002;
 	int32 velX = 1003;
 	int32 velY = 1004;
+}
+
+message TrapTrigger {
+    int32 id = 1;
+    repeated int32 trapIdList = 2;
+    int32 delayedFrames = 3; 
+    int32 recoveryFrames = 4; // must be > delayedFrames
+    int32 quota = 5; // -1 means infinite 
+    uint64 triggerMask = 6; // e.g. ByMovement, ByAttack
+
+    int32 initVelX = 7; // for the triggered trap
+    int32 initVelY = 8; // for the triggered trap
+
+	int32 bulletTeamId = 1027;
+	int32 chCollisionTeamId = 1028;
+	uint64 collisionTypeMask = 1029;
 }
 
 message PeerUdpAddr {

@@ -100,22 +100,28 @@ namespace shared {
             "BRIbChNoaXRJbnZpbnNpYmxlRnJhbWVzGAcgASgFEhYKDmRlc3Ryb3lVcG9u",
             "SGl0GAggASgIEhMKC3NwZWNpZXNOYW1lGAkgASgJImIKE1RyYXBDb25maWdG",
             "cm9tVGlsZWQSEQoJc3BlY2llc0lkGAEgASgFEg0KBXF1b3RhGAIgASgFEg0K",
-            "BXNwZWVkGAMgASgFEgwKBGRpclgYBCABKAUSDAoEZGlyWRgFIAEoBSLSAQoQ",
+            "BXNwZWVkGAMgASgFEgwKBGRpclgYBCABKAUSDAoEZGlyWRgFIAEoBSLqAQoQ",
             "VHJhcENvbGxpZGVyQXR0chIVCg1oaXRib3hPZmZzZXRYGAEgASgFEhUKDWhp",
             "dGJveE9mZnNldFkYAiABKAUSEwoLaGl0Ym94U2l6ZVgYAyABKAUSEwoLaGl0",
             "Ym94U2l6ZVkYBCABKAUSHAoUcHJvdmlkZXNIYXJkUHVzaGJhY2sYBSABKAgS",
-            "FgoOcHJvdmlkZXNEYW1hZ2UYBiABKAgSFAoLdHJhcExvY2FsSWQYgAggASgF",
-            "EhoKEWNvbGxpc2lvblR5cGVNYXNrGIUIIAEoBCKyAwoEVHJhcBITCgt0cmFw",
-            "TG9jYWxJZBgBIAEoBRIiCgZjb25maWcYAiABKAsyEi5zaGFyZWQuVHJhcENv",
-            "bmZpZxI0Cg9jb25maWdGcm9tVGlsZWQYAyABKAsyGy5zaGFyZWQuVHJhcENv",
-            "bmZpZ0Zyb21UaWxlZBIkCgl0cmFwU3RhdGUYBCABKA4yES5zaGFyZWQuVHJh",
-            "cFN0YXRlEhkKEWZyYW1lc0luVHJhcFN0YXRlGAUgASgFEhoKEmlzQ29tcGxl",
-            "dGVseVN0YXRpYxgGIAEoCBIbChNjYXB0dXJlZEJ5UGF0cm9sQ3VlGAcgASgI",
-            "EhkKEWZyYW1lc0luUGF0cm9sQ3VlGAggASgFEhoKEndhaXZpbmdQYXRyb2xD",
-            "dWVJZBgJIAEoBRIgChh3YWl2aW5nU3BvbnRhbmVvdXNQYXRyb2wYCiABKAgS",
-            "FQoMdmlydHVhbEdyaWRYGOcHIAEoBRIVCgx2aXJ0dWFsR3JpZFkY6AcgASgF",
-            "Eg0KBGRpclgY6QcgASgFEg0KBGRpclkY6gcgASgFEg0KBHZlbFgY6wcgASgF",
-            "Eg0KBHZlbFkY7AcgASgFIjgKC1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwK",
+            "FgoOcHJvdmlkZXNEYW1hZ2UYBiABKAgSFgoOcHJvdmlkZXNFc2NhcGUYByAB",
+            "KAgSFAoLdHJhcExvY2FsSWQYgAggASgFEhoKEWNvbGxpc2lvblR5cGVNYXNr",
+            "GIUIIAEoBCKyAwoEVHJhcBITCgt0cmFwTG9jYWxJZBgBIAEoBRIiCgZjb25m",
+            "aWcYAiABKAsyEi5zaGFyZWQuVHJhcENvbmZpZxI0Cg9jb25maWdGcm9tVGls",
+            "ZWQYAyABKAsyGy5zaGFyZWQuVHJhcENvbmZpZ0Zyb21UaWxlZBIkCgl0cmFw",
+            "U3RhdGUYBCABKA4yES5zaGFyZWQuVHJhcFN0YXRlEhkKEWZyYW1lc0luVHJh",
+            "cFN0YXRlGAUgASgFEhoKEmlzQ29tcGxldGVseVN0YXRpYxgGIAEoCBIbChNj",
+            "YXB0dXJlZEJ5UGF0cm9sQ3VlGAcgASgIEhkKEWZyYW1lc0luUGF0cm9sQ3Vl",
+            "GAggASgFEhoKEndhaXZpbmdQYXRyb2xDdWVJZBgJIAEoBRIgChh3YWl2aW5n",
+            "U3BvbnRhbmVvdXNQYXRyb2wYCiABKAgSFQoMdmlydHVhbEdyaWRYGOcHIAEo",
+            "BRIVCgx2aXJ0dWFsR3JpZFkY6AcgASgFEg0KBGRpclgY6QcgASgFEg0KBGRp",
+            "clkY6gcgASgFEg0KBHZlbFgY6wcgASgFEg0KBHZlbFkY7AcgASgFIvMBCgtU",
+            "cmFwVHJpZ2dlchIKCgJpZBgBIAEoBRISCgp0cmFwSWRMaXN0GAIgAygFEhUK",
+            "DWRlbGF5ZWRGcmFtZXMYAyABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYBCABKAUS",
+            "DQoFcXVvdGEYBSABKAUSEwoLdHJpZ2dlck1hc2sYBiABKAQSEAoIaW5pdFZl",
+            "bFgYByABKAUSEAoIaW5pdFZlbFkYCCABKAUSFQoMYnVsbGV0VGVhbUlkGIMI",
+            "IAEoBRIaChFjaENvbGxpc2lvblRlYW1JZBiECCABKAUSGgoRY29sbGlzaW9u",
+            "VHlwZU1hc2sYhQggASgEIjgKC1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwK",
             "BHBvcnQYAiABKAUSDwoHYXV0aEtleRgDIAEoBSLFAwoSQmF0dGxlQ29sbGlk",
             "ZXJJbmZvEhEKCXN0YWdlTmFtZRgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEo",
             "BRIcChRiYXR0bGVEdXJhdGlvbkZyYW1lcxgDIAEoAxImCh5pbnB1dEZyYW1l",
@@ -183,8 +189,9 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfig), global::shared.TrapConfig.Parser, new[]{ "SpeciesId", "ExplosionSpeciesId", "ExplosionFrames", "BlowUp", "Damage", "HitStunFrames", "HitInvinsibleFrames", "DestroyUponHit", "SpeciesName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfigFromTiled), global::shared.TrapConfigFromTiled.Parser, new[]{ "SpeciesId", "Quota", "Speed", "DirX", "DirY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapColliderAttr), global::shared.TrapColliderAttr.Parser, new[]{ "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "ProvidesHardPushback", "ProvidesDamage", "TrapLocalId", "CollisionTypeMask" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapColliderAttr), global::shared.TrapColliderAttr.Parser, new[]{ "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "ProvidesHardPushback", "ProvidesDamage", "ProvidesEscape", "TrapLocalId", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Trap), global::shared.Trap.Parser, new[]{ "TrapLocalId", "Config", "ConfigFromTiled", "TrapState", "FramesInTrapState", "IsCompletelyStatic", "CapturedByPatrolCue", "FramesInPatrolCue", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapTrigger), global::shared.TrapTrigger.Parser, new[]{ "Id", "TrapIdList", "DelayedFrames", "RecoveryFrames", "Quota", "TriggerMask", "InitVelX", "InitVelY", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "PreallocNpcCapacity", "PreallocBulletCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList", "ParticipantChangeId" }, null, null, null, null),
@@ -7554,6 +7561,7 @@ namespace shared {
       hitboxSizeY_ = other.hitboxSizeY_;
       providesHardPushback_ = other.providesHardPushback_;
       providesDamage_ = other.providesDamage_;
+      providesEscape_ = other.providesEscape_;
       trapLocalId_ = other.trapLocalId_;
       collisionTypeMask_ = other.collisionTypeMask_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -7640,6 +7648,18 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "providesEscape" field.</summary>
+    public const int ProvidesEscapeFieldNumber = 7;
+    private bool providesEscape_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool ProvidesEscape {
+      get { return providesEscape_; }
+      set {
+        providesEscape_ = value;
+      }
+    }
+
     /// <summary>Field number for the "trapLocalId" field.</summary>
     public const int TrapLocalIdFieldNumber = 1024;
     private int trapLocalId_;
@@ -7688,6 +7708,7 @@ namespace shared {
       if (HitboxSizeY != other.HitboxSizeY) return false;
       if (ProvidesHardPushback != other.ProvidesHardPushback) return false;
       if (ProvidesDamage != other.ProvidesDamage) return false;
+      if (ProvidesEscape != other.ProvidesEscape) return false;
       if (TrapLocalId != other.TrapLocalId) return false;
       if (CollisionTypeMask != other.CollisionTypeMask) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -7703,6 +7724,7 @@ namespace shared {
       if (HitboxSizeY != 0) hash ^= HitboxSizeY.GetHashCode();
       if (ProvidesHardPushback != false) hash ^= ProvidesHardPushback.GetHashCode();
       if (ProvidesDamage != false) hash ^= ProvidesDamage.GetHashCode();
+      if (ProvidesEscape != false) hash ^= ProvidesEscape.GetHashCode();
       if (TrapLocalId != 0) hash ^= TrapLocalId.GetHashCode();
       if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
       if (_unknownFields != null) {
@@ -7747,6 +7769,10 @@ namespace shared {
         output.WriteRawTag(48);
         output.WriteBool(ProvidesDamage);
       }
+      if (ProvidesEscape != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(ProvidesEscape);
+      }
       if (TrapLocalId != 0) {
         output.WriteRawTag(128, 64);
         output.WriteInt32(TrapLocalId);
@@ -7789,6 +7815,10 @@ namespace shared {
         output.WriteRawTag(48);
         output.WriteBool(ProvidesDamage);
       }
+      if (ProvidesEscape != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(ProvidesEscape);
+      }
       if (TrapLocalId != 0) {
         output.WriteRawTag(128, 64);
         output.WriteInt32(TrapLocalId);
@@ -7823,6 +7853,9 @@ namespace shared {
         size += 1 + 1;
       }
       if (ProvidesDamage != false) {
+        size += 1 + 1;
+      }
+      if (ProvidesEscape != false) {
         size += 1 + 1;
       }
       if (TrapLocalId != 0) {
@@ -7860,6 +7893,9 @@ namespace shared {
       }
       if (other.ProvidesDamage != false) {
         ProvidesDamage = other.ProvidesDamage;
+      }
+      if (other.ProvidesEscape != false) {
+        ProvidesEscape = other.ProvidesEscape;
       }
       if (other.TrapLocalId != 0) {
         TrapLocalId = other.TrapLocalId;
@@ -7904,6 +7940,10 @@ namespace shared {
           }
           case 48: {
             ProvidesDamage = input.ReadBool();
+            break;
+          }
+          case 56: {
+            ProvidesEscape = input.ReadBool();
             break;
           }
           case 8192: {
@@ -7951,6 +7991,10 @@ namespace shared {
           }
           case 48: {
             ProvidesDamage = input.ReadBool();
+            break;
+          }
+          case 56: {
+            ProvidesEscape = input.ReadBool();
             break;
           }
           case 8192: {
@@ -8747,6 +8791,571 @@ namespace shared {
 
   }
 
+  public sealed partial class TrapTrigger : pb::IMessage<TrapTrigger>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<TrapTrigger> _parser = new pb::MessageParser<TrapTrigger>(() => new TrapTrigger());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<TrapTrigger> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[15]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapTrigger() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapTrigger(TrapTrigger other) : this() {
+      id_ = other.id_;
+      trapIdList_ = other.trapIdList_.Clone();
+      delayedFrames_ = other.delayedFrames_;
+      recoveryFrames_ = other.recoveryFrames_;
+      quota_ = other.quota_;
+      triggerMask_ = other.triggerMask_;
+      initVelX_ = other.initVelX_;
+      initVelY_ = other.initVelY_;
+      bulletTeamId_ = other.bulletTeamId_;
+      chCollisionTeamId_ = other.chCollisionTeamId_;
+      collisionTypeMask_ = other.collisionTypeMask_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapTrigger Clone() {
+      return new TrapTrigger(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private int id_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Id {
+      get { return id_; }
+      set {
+        id_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "trapIdList" field.</summary>
+    public const int TrapIdListFieldNumber = 2;
+    private static readonly pb::FieldCodec<int> _repeated_trapIdList_codec
+        = pb::FieldCodec.ForInt32(18);
+    private readonly pbc::RepeatedField<int> trapIdList_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<int> TrapIdList {
+      get { return trapIdList_; }
+    }
+
+    /// <summary>Field number for the "delayedFrames" field.</summary>
+    public const int DelayedFramesFieldNumber = 3;
+    private int delayedFrames_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int DelayedFrames {
+      get { return delayedFrames_; }
+      set {
+        delayedFrames_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "recoveryFrames" field.</summary>
+    public const int RecoveryFramesFieldNumber = 4;
+    private int recoveryFrames_;
+    /// <summary>
+    /// must be > delayedFrames
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RecoveryFrames {
+      get { return recoveryFrames_; }
+      set {
+        recoveryFrames_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "quota" field.</summary>
+    public const int QuotaFieldNumber = 5;
+    private int quota_;
+    /// <summary>
+    /// -1 means infinite 
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Quota {
+      get { return quota_; }
+      set {
+        quota_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "triggerMask" field.</summary>
+    public const int TriggerMaskFieldNumber = 6;
+    private ulong triggerMask_;
+    /// <summary>
+    /// e.g. ByMovement, ByAttack
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong TriggerMask {
+      get { return triggerMask_; }
+      set {
+        triggerMask_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "initVelX" field.</summary>
+    public const int InitVelXFieldNumber = 7;
+    private int initVelX_;
+    /// <summary>
+    /// for the triggered trap
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int InitVelX {
+      get { return initVelX_; }
+      set {
+        initVelX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "initVelY" field.</summary>
+    public const int InitVelYFieldNumber = 8;
+    private int initVelY_;
+    /// <summary>
+    /// for the triggered trap
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int InitVelY {
+      get { return initVelY_; }
+      set {
+        initVelY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "bulletTeamId" field.</summary>
+    public const int BulletTeamIdFieldNumber = 1027;
+    private int bulletTeamId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int BulletTeamId {
+      get { return bulletTeamId_; }
+      set {
+        bulletTeamId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "chCollisionTeamId" field.</summary>
+    public const int ChCollisionTeamIdFieldNumber = 1028;
+    private int chCollisionTeamId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ChCollisionTeamId {
+      get { return chCollisionTeamId_; }
+      set {
+        chCollisionTeamId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "collisionTypeMask" field.</summary>
+    public const int CollisionTypeMaskFieldNumber = 1029;
+    private ulong collisionTypeMask_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong CollisionTypeMask {
+      get { return collisionTypeMask_; }
+      set {
+        collisionTypeMask_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as TrapTrigger);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(TrapTrigger other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Id != other.Id) return false;
+      if(!trapIdList_.Equals(other.trapIdList_)) return false;
+      if (DelayedFrames != other.DelayedFrames) return false;
+      if (RecoveryFrames != other.RecoveryFrames) return false;
+      if (Quota != other.Quota) return false;
+      if (TriggerMask != other.TriggerMask) return false;
+      if (InitVelX != other.InitVelX) return false;
+      if (InitVelY != other.InitVelY) return false;
+      if (BulletTeamId != other.BulletTeamId) return false;
+      if (ChCollisionTeamId != other.ChCollisionTeamId) return false;
+      if (CollisionTypeMask != other.CollisionTypeMask) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Id != 0) hash ^= Id.GetHashCode();
+      hash ^= trapIdList_.GetHashCode();
+      if (DelayedFrames != 0) hash ^= DelayedFrames.GetHashCode();
+      if (RecoveryFrames != 0) hash ^= RecoveryFrames.GetHashCode();
+      if (Quota != 0) hash ^= Quota.GetHashCode();
+      if (TriggerMask != 0UL) hash ^= TriggerMask.GetHashCode();
+      if (InitVelX != 0) hash ^= InitVelX.GetHashCode();
+      if (InitVelY != 0) hash ^= InitVelY.GetHashCode();
+      if (BulletTeamId != 0) hash ^= BulletTeamId.GetHashCode();
+      if (ChCollisionTeamId != 0) hash ^= ChCollisionTeamId.GetHashCode();
+      if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Id != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Id);
+      }
+      trapIdList_.WriteTo(output, _repeated_trapIdList_codec);
+      if (DelayedFrames != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(DelayedFrames);
+      }
+      if (RecoveryFrames != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RecoveryFrames);
+      }
+      if (Quota != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Quota);
+      }
+      if (TriggerMask != 0UL) {
+        output.WriteRawTag(48);
+        output.WriteUInt64(TriggerMask);
+      }
+      if (InitVelX != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(InitVelX);
+      }
+      if (InitVelY != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(InitVelY);
+      }
+      if (BulletTeamId != 0) {
+        output.WriteRawTag(152, 64);
+        output.WriteInt32(BulletTeamId);
+      }
+      if (ChCollisionTeamId != 0) {
+        output.WriteRawTag(160, 64);
+        output.WriteInt32(ChCollisionTeamId);
+      }
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Id);
+      }
+      trapIdList_.WriteTo(ref output, _repeated_trapIdList_codec);
+      if (DelayedFrames != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(DelayedFrames);
+      }
+      if (RecoveryFrames != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RecoveryFrames);
+      }
+      if (Quota != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Quota);
+      }
+      if (TriggerMask != 0UL) {
+        output.WriteRawTag(48);
+        output.WriteUInt64(TriggerMask);
+      }
+      if (InitVelX != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(InitVelX);
+      }
+      if (InitVelY != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(InitVelY);
+      }
+      if (BulletTeamId != 0) {
+        output.WriteRawTag(152, 64);
+        output.WriteInt32(BulletTeamId);
+      }
+      if (ChCollisionTeamId != 0) {
+        output.WriteRawTag(160, 64);
+        output.WriteInt32(ChCollisionTeamId);
+      }
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Id != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      }
+      size += trapIdList_.CalculateSize(_repeated_trapIdList_codec);
+      if (DelayedFrames != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DelayedFrames);
+      }
+      if (RecoveryFrames != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RecoveryFrames);
+      }
+      if (Quota != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Quota);
+      }
+      if (TriggerMask != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(TriggerMask);
+      }
+      if (InitVelX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InitVelX);
+      }
+      if (InitVelY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InitVelY);
+      }
+      if (BulletTeamId != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(BulletTeamId);
+      }
+      if (ChCollisionTeamId != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(ChCollisionTeamId);
+      }
+      if (CollisionTypeMask != 0UL) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(TrapTrigger other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Id != 0) {
+        Id = other.Id;
+      }
+      trapIdList_.Add(other.trapIdList_);
+      if (other.DelayedFrames != 0) {
+        DelayedFrames = other.DelayedFrames;
+      }
+      if (other.RecoveryFrames != 0) {
+        RecoveryFrames = other.RecoveryFrames;
+      }
+      if (other.Quota != 0) {
+        Quota = other.Quota;
+      }
+      if (other.TriggerMask != 0UL) {
+        TriggerMask = other.TriggerMask;
+      }
+      if (other.InitVelX != 0) {
+        InitVelX = other.InitVelX;
+      }
+      if (other.InitVelY != 0) {
+        InitVelY = other.InitVelY;
+      }
+      if (other.BulletTeamId != 0) {
+        BulletTeamId = other.BulletTeamId;
+      }
+      if (other.ChCollisionTeamId != 0) {
+        ChCollisionTeamId = other.ChCollisionTeamId;
+      }
+      if (other.CollisionTypeMask != 0UL) {
+        CollisionTypeMask = other.CollisionTypeMask;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Id = input.ReadInt32();
+            break;
+          }
+          case 18:
+          case 16: {
+            trapIdList_.AddEntriesFrom(input, _repeated_trapIdList_codec);
+            break;
+          }
+          case 24: {
+            DelayedFrames = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            RecoveryFrames = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Quota = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            TriggerMask = input.ReadUInt64();
+            break;
+          }
+          case 56: {
+            InitVelX = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            InitVelY = input.ReadInt32();
+            break;
+          }
+          case 8216: {
+            BulletTeamId = input.ReadInt32();
+            break;
+          }
+          case 8224: {
+            ChCollisionTeamId = input.ReadInt32();
+            break;
+          }
+          case 8232: {
+            CollisionTypeMask = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Id = input.ReadInt32();
+            break;
+          }
+          case 18:
+          case 16: {
+            trapIdList_.AddEntriesFrom(ref input, _repeated_trapIdList_codec);
+            break;
+          }
+          case 24: {
+            DelayedFrames = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            RecoveryFrames = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Quota = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            TriggerMask = input.ReadUInt64();
+            break;
+          }
+          case 56: {
+            InitVelX = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            InitVelY = input.ReadInt32();
+            break;
+          }
+          case 8216: {
+            BulletTeamId = input.ReadInt32();
+            break;
+          }
+          case 8224: {
+            ChCollisionTeamId = input.ReadInt32();
+            break;
+          }
+          case 8232: {
+            CollisionTypeMask = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   public sealed partial class PeerUdpAddr : pb::IMessage<PeerUdpAddr>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -8761,7 +9370,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[15]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9024,7 +9633,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[16]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9703,7 +10312,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[17]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10238,7 +10847,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[18]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10656,7 +11265,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[19]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11099,7 +11708,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[20]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[21]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
