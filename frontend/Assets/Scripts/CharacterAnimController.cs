@@ -22,7 +22,7 @@ public class CharacterAnimController : MonoBehaviour {
         LayDown1,
         GetUp1,
         Dashing,
-        OnWall
+        OnWallIdle1
     };
 
     Dictionary<CharacterState, AnimationClip> lookUpTable;
@@ -50,7 +50,7 @@ public class CharacterAnimController : MonoBehaviour {
             } else if (0 < rdfCharacter.DirX) {
                 this.gameObject.transform.localScale = new Vector3(+1.0f, 1.0f);
             }
-            if (OnWall == newCharacterState || TurnAround == newCharacterState) {
+            if (OnWallIdle1 == newCharacterState || TurnAround == newCharacterState) {
                 if (0 < rdfCharacter.OnWallNormX) {
                     this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
                 } else {

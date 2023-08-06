@@ -167,7 +167,7 @@ namespace shared {
             InAirAtk1,
             InAirAtked1,
             BlownUp1,
-            OnWall,
+            OnWallIdle1,
             Dashing // Yes dashing is an InAir state even if you dashed on the ground :)
         };
 

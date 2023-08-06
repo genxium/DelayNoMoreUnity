@@ -147,7 +147,7 @@ namespace shared {
                         patternId = 5;
                     } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState)) {
                         jumpedOrNot = true;
-                    } else if (OnWall == currCharacterDownsync.CharacterState) {
+                    } else if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                         jumpedOrNot = true;
                     }
                 }
@@ -255,7 +255,7 @@ namespace shared {
                 return;
             }
             // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
-            if (!currCharacterDownsync.JumpTriggered && OnWall == currCharacterDownsync.CharacterState) {
+            if (!currCharacterDownsync.JumpTriggered && OnWallIdle1 == currCharacterDownsync.CharacterState) {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
                 thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
             } else if (Dashing == currCharacterDownsync.CharacterState || Dashing == thatCharacterInNextFrame.CharacterState) {
@@ -482,7 +482,7 @@ namespace shared {
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
                 if (currCharacterDownsync.JumpTriggered) {
                     // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
-                    if (OnWall == currCharacterDownsync.CharacterState) {
+                    if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                         if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
                             newVx -= currCharacterDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
                         }
@@ -740,7 +740,7 @@ namespace shared {
                                 case InAirIdle1NoJump:
                                 case InAirIdle1ByJump:
                                 case InAirIdle1ByWallJump:
-                                case OnWall:
+                                case OnWallIdle1:
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
                                     int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
                                     var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
@@ -963,6 +963,14 @@ namespace shared {
                    }
                  */
                 // Update "CharacterState"
+                /*
+                TODO: Implement transition into "Crouching CharacterStates"
+                - CharacterState.CrouchIdle1
+                - CharacterState.CrouchWalking
+                - CharacterState.CrouchAtk1 
+                - CharacterState.CrouchAtked1
+                by inspecting field "CharacterDownsync.Crouching", where "CharacterDownsync.Crouching" is set during "calcHardPushbacksNormsForCharacter(......)" by checking collision with a special type of "Trap" where "Trap.IsCompletelyStatic && Trap.PushToCrouchIfOnTop".
+                */
                 if (thatCharacterInNextFrame.InAir) {
                     /*
                        if (0 == currCharacterDownsync.SpeciesId && false == currCharacterDownsync.InAir) {
@@ -994,7 +1002,7 @@ namespace shared {
                     }
                 } else {
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
-                    if (inAirSet.Contains(oldNextCharacterState) && InAirIdle1NoJump != oldNextCharacterState && InAirIdle1ByJump != oldNextCharacterState && InAirIdle1ByWallJump != oldNextCharacterState && BlownUp1 != oldNextCharacterState && OnWall != oldNextCharacterState && Dashing != oldNextCharacterState) {
+                    if (inAirSet.Contains(oldNextCharacterState) && InAirIdle1NoJump != oldNextCharacterState && InAirIdle1ByJump != oldNextCharacterState && InAirIdle1ByWallJump != oldNextCharacterState && BlownUp1 != oldNextCharacterState && OnWallIdle1 != oldNextCharacterState && Dashing != oldNextCharacterState) {
                         switch (oldNextCharacterState) {
                             case InAirAtked1:
                                 thatCharacterInNextFrame.CharacterState = Atked1;
@@ -1012,10 +1020,10 @@ namespace shared {
                         case InAirIdle1NoJump:
                         case InAirIdle1ByJump:
                         case InAirIdle1ByWallJump:
-                            bool hasBeenOnWallChState = (OnWall == currCharacterDownsync.CharacterState);
+                            bool hasBeenOnWallChState = (OnWallIdle1 == currCharacterDownsync.CharacterState);
                             bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
                             if (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState) {
-                                thatCharacterInNextFrame.CharacterState = OnWall;
+                                thatCharacterInNextFrame.CharacterState = OnWallIdle1;
                             }
                             break;
                     }
@@ -1201,7 +1209,7 @@ namespace shared {
                 case InAirIdle1NoJump:
                 case InAirIdle1ByJump:
                 case InAirIdle1ByWallJump:
-                case OnWall:
+                case OnWallIdle1:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.ShrinkedSizeX, chConfig.ShrinkedSizeY);
                     break;
                 default:

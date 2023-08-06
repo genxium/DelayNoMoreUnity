@@ -47,7 +47,7 @@ namespace shared {
         public static int calcHardPushbacksNormsForCharacter(RoomDownsyncFrame currRenderFrame, CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             primaryTrap = null;
             float virtualGripToWall = 0.0f;
-            if (OnWall == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
+            if (OnWallIdle1 == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
                 float xfac = 1.0f;
                 if (0 > thatPlayerInNextFrame.DirX) {
                     xfac = -xfac;
