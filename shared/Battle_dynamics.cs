@@ -716,13 +716,11 @@ namespace shared {
                          */
                     }
                 }
-
                 /*
                 if (0 == currCharacterDownsync.SpeciesId && !landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
                     logger.LogInfo(String.Format("Rdf.Id={0}, character slipped with aShape={1}, touchingCells={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}", currRenderFrame.Id, aShape.ToString(false), aCollider.TouchingCellsStr(), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString()));
                 }
                 */
-
                 if (landedOnGravityPushback) {
                     thatCharacterInNextFrame.InAir = false;
                     bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
@@ -1002,8 +1000,18 @@ namespace shared {
                     }
                 } else {
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
-                    if (inAirSet.Contains(oldNextCharacterState) && InAirIdle1NoJump != oldNextCharacterState && InAirIdle1ByJump != oldNextCharacterState && InAirIdle1ByWallJump != oldNextCharacterState && BlownUp1 != oldNextCharacterState && OnWallIdle1 != oldNextCharacterState && Dashing != oldNextCharacterState) {
+                    if (inAirSet.Contains(oldNextCharacterState) && BlownUp1 != oldNextCharacterState && OnWallIdle1 != oldNextCharacterState && Dashing != oldNextCharacterState) {
                         switch (oldNextCharacterState) {
+                            case InAirIdle1NoJump:
+                                thatCharacterInNextFrame.CharacterState = Idle1;
+                                break;
+                            case InAirIdle1ByJump:
+                            case InAirIdle1ByWallJump:
+                                if (!currCharacterDownsync.InAir && currCharacterDownsync.JumpTriggered) {
+                                    break;
+                                }
+                                thatCharacterInNextFrame.CharacterState = Idle1;
+                                break;
                             case InAirAtked1:
                                 thatCharacterInNextFrame.CharacterState = Atked1;
                                 break;
