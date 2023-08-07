@@ -439,3 +439,7 @@ message FrameLog {
     RoomDownsyncFrame rdf = 1;
     InputFrameDownsync actuallyUsedIdf = 2;
 }
+
+message BattleResult {
+    int32 winnerJoinIndex = 1;
+}

@@ -10,6 +10,7 @@ namespace shared {
         public const long ROOM_STATE_PREPARE = 3;
         public const long ROOM_STATE_IN_BATTLE = 4;
         public const long ROOM_STATE_IN_SETTLEMENT = 5;
+        public const long ROOM_STATE_STOPPED = 6;
 
         // Deliberately NOT using enum for "player battle states" to make use of "C# CompareAndExchange" 
         public const long PLAYER_BATTLE_STATE_IMPOSSIBLE = -2;

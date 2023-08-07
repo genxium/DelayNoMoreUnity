@@ -55,7 +55,10 @@ public class OfflineMapController : AbstractMapController {
 
     // Start is called before the first frame update
     void Start() {
-        debugDrawingEnabled = false;
+        postSettlementCallback = () => {
+            onBattleStopped();
+        };
+        debugDrawingEnabled = true;
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
@@ -64,6 +67,9 @@ public class OfflineMapController : AbstractMapController {
     // Update is called once per frame
     void Update() {
         try {
+            if (ROOM_STATE_IN_BATTLE != battleState) {
+                return;
+            }
             doUpdate();
             urpDrawDebug();
             if (renderFrameId >= battleDurationFrames) {
@@ -82,6 +88,5 @@ public class OfflineMapController : AbstractMapController {
     public void OnBackButtonClicked() {
         Debug.Log("OnBackButtonClicked");
         onBattleStopped();
-        characterSelectPanel.gameObject.SetActive(true);
     }
 }

@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
+using System.Collections;
+using UnityEditorInternal;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
+    protected int maxTouchingCellsCnt;
     protected int battleDurationFrames;
 
     protected int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
@@ -49,6 +52,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected shared.Collision collisionHolder;
     protected SatResult overlapResult, primaryOverlapResult;
+    protected BattleResult battleResult;
     protected Vector[] effPushbacks;
     protected Vector[][] hardPushbackNormsArr;
     protected Vector[] softPushbacks;
@@ -101,7 +105,11 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public ReadyGo readyGoPanel;
+    public SettlementPanel settlementPanel;
     protected Vector3 newPosHolder = new Vector3();
+    protected delegate void PostSettlementCallbackT();
+
+    protected PostSettlementCallbackT postSettlementCallback;
 
     protected void spawnPlayerNode(int joinIndex, int speciesId, float wx, float wy, int bulletTeamId) {
         var characterPrefab = loadCharacterPrefab(characters[speciesId]);
@@ -240,7 +248,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, ref battleResult, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -317,6 +325,10 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
+        if (isBattleResultSet(battleResult)) {
+            StartCoroutine(delayToShowSettlementPanel());
+            return;
+        }
         for (int k = 0; k < roomCapacity; k++) {
             var currCharacterDownsync = rdf.PlayersArr[k];
             var prevCharacterDownsync = (null == prevRdf ? null : prevRdf.PlayersArr[k]);
@@ -491,9 +503,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         int dynamicRectangleCollidersCap = 64;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
-        for (int i = 0; i < dynamicRectangleCollidersCap; i++) {
-            dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
-        }
         staticColliders = new shared.Collider[128];
 
         decodedInputHolder = new InputFrameDecoded();
@@ -537,6 +546,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             var initLookupKey = i.ToString();
             cachedLineRenderers.Put(initLookupKey, newLine);
         }
+
+        battleResult = new BattleResult {
+            WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
+        };
     }
 
     protected virtual void resetCurrentMatch(string theme) {
@@ -570,7 +583,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         int cellWidth = 64;
         int cellHeight = 256; // To avoid dynamic trap as a standing point to slip when moving down along with the character
-        collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, cellWidth, cellHeight);
+        collisionSys = new CollisionSpace(spaceOffsetX << 1, spaceOffsetY << 1, cellWidth, cellHeight);
+        maxTouchingCellsCnt = ((spaceOffsetX << 1)/cellWidth) * ((spaceOffsetY << 1)/cellHeight) + 1;
+        for (int i = 0; i < dynamicRectangleColliders.Length; i++) {
+            dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, null);
+        }
+
         collisionHolder = new shared.Collision();
 
         // Reset the preallocated
@@ -582,7 +600,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         trapLocalIdToColliderAttrs.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
+        resetBattleResult(ref battleResult);
         readyGoPanel.resetCountdown();
+        settlementPanel.gameObject.SetActive(false);
     }
 
     public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {
@@ -696,9 +716,14 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     // Update is called once per frame
     protected void doUpdate() {
-        if (ROOM_STATE_IN_BATTLE != battleState) {
+        if (isBattleResultSet(battleResult)) {
+            var (ok1, currRdf) = renderBuffer.GetByFrameId(renderFrameId-1); 
+            if (ok1 && null != currRdf) {
+                cameraTrack(currRdf, null);
+            }
             return;
         }
+
         int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
         ulong prevSelfInput = 0, currSelfInput = 0;
         if (ShouldGenerateInputFrameUpsync(renderFrameId)) {
@@ -738,13 +763,25 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected virtual void onBattleStopped() {
-        if (ROOM_STATE_IN_BATTLE != battleState) {
+        if (ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState) {
             return;
         }
-        battleState = ROOM_STATE_IN_SETTLEMENT;
+        battleState = ROOM_STATE_STOPPED;
 
         BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         iptmgr.reset();
+    }
+
+    private IEnumerator delayToShowSettlementPanel() {
+        if (ROOM_STATE_IN_BATTLE != battleState) {
+            yield return new WaitForSeconds(0);
+        } else {
+            battleState = ROOM_STATE_IN_SETTLEMENT;
+            settlementPanel.gameObject.SetActive(true);
+            settlementPanel.playFinishedAnim();
+            yield return new WaitForSeconds(2);
+            postSettlementCallback();
+        }
     }
 
     protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int currInputFrameId);
@@ -781,7 +818,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                             It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
                             */
-                            var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, null);
+                            var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, null);
                             //Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
                             collisionSys.AddSingle(barrierCollider);
                             staticColliders[staticColliderIdx++] = barrierCollider;
@@ -794,7 +831,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             }
                             var (anchorCx, anchorCy) = TiledLayerPositionToCollisionSpacePosition(barrierTileObj.m_X, barrierTileObj.m_Y, spaceOffsetX, spaceOffsetY);
                             var srcPolygon = new ConvexPolygon(anchorCx, anchorCy, points2.ToArray());
-                            var barrierCollider = NewConvexPolygonCollider(srcPolygon, 0, 0, null);
+                            var barrierCollider = NewConvexPolygonCollider(srcPolygon, 0, 0, maxTouchingCellsCnt, null);
 
                             collisionSys.AddSingle(barrierCollider);
                             staticColliders[staticColliderIdx++] = barrierCollider;
@@ -882,7 +919,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             CollisionTypeMask = collisionTypeMaskVal
                         };
 
-                        var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, newPatrolCue);
+                        var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, newPatrolCue);
                         collisionSys.AddSingle(patrolCueCollider);
                         staticColliders[staticColliderIdx++] = patrolCueCollider;
                         //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
@@ -968,7 +1005,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             colliderAttrs.Add(colliderAttr);
                             trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
 
-                            var trapCollider = NewRectCollider(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0, 0, 0, colliderAttr);
+                            var trapCollider = NewRectCollider(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, colliderAttr);
 
                             collisionSys.AddSingle(trapCollider);
                             completelyStaticTrapColliders.Add(trapCollider);
@@ -1146,15 +1183,17 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Vector2 camDiffDstHolder = new Vector2();
     protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
         if (null == selfPlayerInfo) return;
-        var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
-        var playerCharacterDownsync = rdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
+        int targetJoinIndex = isBattleResultSet(battleResult) ? battleResult.WinnerJoinIndex : selfPlayerInfo.JoinIndex;
+
+        var playerGameObj = playerGameObjs[targetJoinIndex - 1];
+        var playerCharacterDownsync = rdf.PlayersArr[targetJoinIndex - 1];
 
         var (velCX, velCY) = VirtualGridToPolygonColliderCtr(playerCharacterDownsync.Speed, playerCharacterDownsync.Speed);
         camSpeedHolder.Set(velCX, velCY);
         var cameraSpeedInWorld = camSpeedHolder.magnitude * 100;
 
-        var prevPlayerCharacterDownsync = prevRdf.PlayersArr[selfPlayerInfo.JoinIndex - 1];
-        if (CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState) {
+        var prevPlayerCharacterDownsync = prevRdf.PlayersArr[targetJoinIndex - 1];
+        if (CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState || isBattleResultSet(battleResult)) {
             cameraSpeedInWorld *= 200;
         }
 

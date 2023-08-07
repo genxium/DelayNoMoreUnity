@@ -4,18 +4,19 @@ using System.Text;
 namespace shared {
     public class Collider {
         public float X, Y, W, H;      // Position and size of the Collider in the Space
+        public int maxTouchingCellsCnt;
         public FrameRingBuffer<CollisionCell> TouchingCells; // An array of Cells the Collider is touching
         public ConvexPolygon Shape;
         public object? Data;                     // A pointer to a user-definable object
 
         public CollisionSpace? Space;           // Reference to the Space the Collider exists within
 
-        public Collider(float x, float y, float w, float h, ConvexPolygon shape, object? data) {
+        public Collider(float x, float y, float w, float h, ConvexPolygon shape, int aMaxTouchingCellsCnt, object? data) {
             X = x;
             Y = y;
             W = w;
             H = h;
-            TouchingCells = new FrameRingBuffer<CollisionCell>(512); // [WARNING] Should make N large enough to cover all "TouchingCells", otherwise some cells would fail to unregister a collider, resulting in memory corruption and incorrect detection result!
+            TouchingCells = new FrameRingBuffer<CollisionCell>(aMaxTouchingCellsCnt); // [WARNING] Should make N large enough to cover all "TouchingCells", otherwise some cells would fail to unregister a collider, resulting in memory corruption and incorrect detection result!
             Shape = shape;
             Data = data;
             Space = null;
@@ -104,6 +105,10 @@ namespace shared {
 
             if (0 >= cc.ContactedColliders.Cnt) {
                 return false;
+            }
+
+            if (0 < cc.ContactedColliders.StFrameId) {
+                throw new Exception("FrameRingBuffer collision.ContactedColliders is overloaded!");
             }
 
             return true;

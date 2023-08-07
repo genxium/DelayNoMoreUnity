@@ -175,6 +175,10 @@ public class OnlineMapController : AbstractMapController {
     }
 
     void Start() {
+        if (null == postSettlementCallback) {
+            postSettlementCallback = () => {
+            };
+        }
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
 
@@ -216,6 +220,9 @@ public class OnlineMapController : AbstractMapController {
     // Update is called once per frame
     void Update() {
         try {
+            if (ROOM_STATE_IN_BATTLE != battleState) {
+                return;
+            }
             pollAndHandleWsRecvBuffer();
             pollAndHandleUdpRecvBuffer();
             if (shouldLockStep) {
