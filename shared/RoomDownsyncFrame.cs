@@ -24,7 +24,7 @@ namespace shared {
     static RoomDownsyncFrameReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chlyb29tX2Rvd25zeW5jX2ZyYW1lLnByb3RvEgZzaGFyZWQi7QcKEUNoYXJh",
+            "Chlyb29tX2Rvd25zeW5jX2ZyYW1lLnByb3RvEgZzaGFyZWQigAgKEUNoYXJh",
             "Y3RlckRvd25zeW5jEgoKAmlkGAEgASgFEhQKDHZpcnR1YWxHcmlkWBgCIAEo",
             "BRIUCgx2aXJ0dWFsR3JpZFkYAyABKAUSDAoEZGlyWBgEIAEoBRIMCgRkaXJZ",
             "GAUgASgFEgwKBHZlbFgYBiABKAUSDAoEdmVsWRgHIAEoBRINCgVzcGVlZBgI",
@@ -42,133 +42,142 @@ namespace shared {
             "bnRhbmVvdXNQYXRyb2wYICABKAgSGwoTcmV2aXZhbFZpcnR1YWxHcmlkWBgh",
             "IAEoBRIbChNyZXZpdmFsVmlydHVhbEdyaWRZGCIgASgFEhMKC3Jldml2YWxE",
             "aXJYGCMgASgFEhMKC3Jldml2YWxEaXJZGCQgASgFEg8KB29uU2xvcGUYJSAB",
-            "KAgSFAoMZnJpY3Rpb25WZWxYGCYgASgFEhYKDWFjdGl2ZVNraWxsSWQYgAgg",
-            "ASgFEhcKDmFjdGl2ZVNraWxsSGl0GIEIIAEoBRIZChBmcmFtZXNJbnZpbnNp",
-            "YmxlGIIIIAEoBRIVCgxidWxsZXRUZWFtSWQYgwggASgFEhoKEWNoQ29sbGlz",
-            "aW9uVGVhbUlkGIQIIAEoBRIaChFjb2xsaXNpb25UeXBlTWFzaxiFCCABKAQS",
-            "DQoEbmFtZRjlByABKAkSFAoLZGlzcGxheU5hbWUY5gcgASgJEg8KBmF2YXRh",
-            "chjnByABKAkiUQoRSW5wdXRGcmFtZURlY29kZWQSCgoCZHgYASABKAUSCgoC",
-            "ZHkYAiABKAUSEQoJYnRuQUxldmVsGAMgASgFEhEKCWJ0bkJMZXZlbBgEIAEo",
-            "BSJMChBJbnB1dEZyYW1lVXBzeW5jEhQKDGlucHV0RnJhbWVJZBgBIAEoBRIP",
-            "CgdlbmNvZGVkGAIgASgEEhEKCWpvaW5JbmRleBgDIAEoBSJUChJJbnB1dEZy",
-            "YW1lRG93bnN5bmMSFAoMaW5wdXRGcmFtZUlkGAEgASgFEhEKCWlucHV0TGlz",
-            "dBgCIAMoBBIVCg1jb25maXJtZWRMaXN0GAMgASgEIrYBCgVXc1JlcRIQCghw",
-            "bGF5ZXJJZBgBIAEoBRILCgNhY3QYAiABKAUSEQoJam9pbkluZGV4GAMgASgF",
-            "EhUKDWFja2luZ0ZyYW1lSWQYBCABKAUSGgoSYWNraW5nSW5wdXRGcmFtZUlk",
-            "GAUgASgFEg8KB2F1dGhLZXkYBiABKAUSNwoVaW5wdXRGcmFtZVVwc3luY0Jh",
-            "dGNoGAcgAygLMhguc2hhcmVkLklucHV0RnJhbWVVcHN5bmMiuQEKE0lucHV0",
-            "QnVmZmVyU25hcHNob3QSGAoQcmVmUmVuZGVyRnJhbWVJZBgBIAEoBRIXCg91",
-            "bmNvbmZpcm1lZE1hc2sYAiABKAQSPQoZdG9TZW5kSW5wdXRGcmFtZURvd25z",
-            "eW5jcxgDIAMoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMSGQoRc2hv",
-            "dWxkRm9yY2VSZXN5bmMYBCABKAgSFQoNcGVlckpvaW5JbmRleBgFIAEoBSLT",
-            "AQoJUGF0cm9sQ3VlEgoKAmlkGAEgASgFEg0KBWZsQWN0GAIgASgEEg0KBWZy",
-            "QWN0GAMgASgEEhcKD2ZsQ2FwdHVyZUZyYW1lcxgEIAEoBBIXCg9mckNhcHR1",
-            "cmVGcmFtZXMYBSABKAQSDQoFZmRBY3QYBiABKAQSDQoFZnVBY3QYByABKAQS",
-            "FwoPZmRDYXB0dXJlRnJhbWVzGAggASgEEhcKD2Z1Q2FwdHVyZUZyYW1lcxgJ",
-            "IAEoBBIaChFjb2xsaXNpb25UeXBlTWFzaxiFCCABKAQiVAoJVmlzaW9uQm94",
-            "EhMKC2JvdHRvbUxlZnRYGAEgASgFEhMKC2JvdHRvbUxlZnRZGAIgASgFEg0K",
-            "BXdpZHRoGAMgASgFEg4KBmhlaWdodBgEIAEoBSLeBQoMQnVsbGV0Q29uZmln",
-            "EhUKDXN0YXJ0dXBGcmFtZXMYASABKAUSGgoSY2FuY2VsbGFibGVTdEZyYW1l",
-            "GAIgASgFEhoKEmNhbmNlbGxhYmxlRWRGcmFtZRgDIAEoBRIUCgxhY3RpdmVG",
-            "cmFtZXMYBCABKAUSFQoNaGl0U3R1bkZyYW1lcxgFIAEoBRIXCg9ibG9ja1N0",
-            "dW5GcmFtZXMYBiABKAUSFAoMcHVzaGJhY2tWZWxYGAcgASgFEhQKDHB1c2hi",
-            "YWNrVmVsWRgIIAEoBRIOCgZkYW1hZ2UYCSABKAUSFAoMc2VsZkxvY2tWZWxY",
-            "GAogASgFEhQKDHNlbGZMb2NrVmVsWRgLIAEoBRIVCg1oaXRib3hPZmZzZXRY",
-            "GAwgASgFEhUKDWhpdGJveE9mZnNldFkYDSABKAUSEwoLaGl0Ym94U2l6ZVgY",
-            "DiABKAUSEwoLaGl0Ym94U2l6ZVkYDyABKAUSDgoGYmxvd1VwGBAgASgIEhEK",
-            "CXNwZWNpZXNJZBgRIAEoBRIXCg9leHBsb3Npb25GcmFtZXMYEiABKAUSIQoF",
-            "YlR5cGUYEyABKA4yEi5zaGFyZWQuQnVsbGV0VHlwZRIkCgZtaFR5cGUYFCAB",
-            "KA4yFC5zaGFyZWQuTXVsdGlIaXRUeXBlEh8KF3NpbXVsdGFuZW91c011bHRp",
-            "SGl0Q250GBUgASgNEg0KBXNwZWVkGBYgASgFEgwKBGRpclgYFyABKAUSDAoE",
-            "ZGlyWRgYIAEoBRI+Cg1jYW5jZWxUcmFuc2l0GBkgAygLMicuc2hhcmVkLkJ1",
-            "bGxldENvbmZpZy5DYW5jZWxUcmFuc2l0RW50cnkSFgoOZGVzdHJveVVwb25I",
-            "aXQYGiABKAgSGgoRY29sbGlzaW9uVHlwZU1hc2sYhQggASgEGjQKEkNhbmNl",
-            "bFRyYW5zaXRFbnRyeRILCgNrZXkYASABKAUSDQoFdmFsdWUYAiABKAU6AjgB",
-            "Ip4BChBCdWxsZXRCYXR0bGVBdHRyEhUKDWJ1bGxldExvY2FsSWQYASABKAUS",
-            "HwoXb3JpZ2luYXRlZFJlbmRlckZyYW1lSWQYAiABKAUSGQoRb2ZmZW5kZXJK",
-            "b2luSW5kZXgYAyABKAUSDgoGdGVhbUlkGAQgASgFEhYKDmFjdGl2ZVNraWxs",
-            "SGl0GAUgASgFEg8KB3NraWxsSWQYBiABKAUihQIKBkJ1bGxldBIkCgdibFN0",
-            "YXRlGAEgASgOMhMuc2hhcmVkLkJ1bGxldFN0YXRlEhcKD2ZyYW1lc0luQmxT",
-            "dGF0ZRgCIAEoBRIsCgpiYXR0bGVBdHRyGAMgASgLMhguc2hhcmVkLkJ1bGxl",
-            "dEJhdHRsZUF0dHISJAoGY29uZmlnGAQgASgLMhQuc2hhcmVkLkJ1bGxldENv",
-            "bmZpZxIVCgx2aXJ0dWFsR3JpZFgY5wcgASgFEhUKDHZpcnR1YWxHcmlkWRjo",
-            "ByABKAUSDQoEZGlyWBjpByABKAUSDQoEZGlyWRjqByABKAUSDQoEdmVsWBjr",
-            "ByABKAUSDQoEdmVsWRjsByABKAUi1QEKClRyYXBDb25maWcSEQoJc3BlY2ll",
-            "c0lkGAEgASgFEhoKEmV4cGxvc2lvblNwZWNpZXNJZBgCIAEoBRIXCg9leHBs",
-            "b3Npb25GcmFtZXMYAyABKAUSDgoGYmxvd1VwGAQgASgIEg4KBmRhbWFnZRgF",
-            "IAEoBRIVCg1oaXRTdHVuRnJhbWVzGAYgASgFEhsKE2hpdEludmluc2libGVG",
-            "cmFtZXMYByABKAUSFgoOZGVzdHJveVVwb25IaXQYCCABKAgSEwoLc3BlY2ll",
-            "c05hbWUYCSABKAkiYgoTVHJhcENvbmZpZ0Zyb21UaWxlZBIRCglzcGVjaWVz",
-            "SWQYASABKAUSDQoFcXVvdGEYAiABKAUSDQoFc3BlZWQYAyABKAUSDAoEZGly",
-            "WBgEIAEoBRIMCgRkaXJZGAUgASgFItIBChBUcmFwQ29sbGlkZXJBdHRyEhUK",
-            "DWhpdGJveE9mZnNldFgYASABKAUSFQoNaGl0Ym94T2Zmc2V0WRgCIAEoBRIT",
-            "CgtoaXRib3hTaXplWBgDIAEoBRITCgtoaXRib3hTaXplWRgEIAEoBRIcChRw",
-            "cm92aWRlc0hhcmRQdXNoYmFjaxgFIAEoCBIWCg5wcm92aWRlc0RhbWFnZRgG",
-            "IAEoCBIUCgt0cmFwTG9jYWxJZBiACCABKAUSGgoRY29sbGlzaW9uVHlwZU1h",
-            "c2sYhQggASgEIrIDCgRUcmFwEhMKC3RyYXBMb2NhbElkGAEgASgFEiIKBmNv",
-            "bmZpZxgCIAEoCzISLnNoYXJlZC5UcmFwQ29uZmlnEjQKD2NvbmZpZ0Zyb21U",
-            "aWxlZBgDIAEoCzIbLnNoYXJlZC5UcmFwQ29uZmlnRnJvbVRpbGVkEiQKCXRy",
-            "YXBTdGF0ZRgEIAEoDjIRLnNoYXJlZC5UcmFwU3RhdGUSGQoRZnJhbWVzSW5U",
-            "cmFwU3RhdGUYBSABKAUSGgoSaXNDb21wbGV0ZWx5U3RhdGljGAYgASgIEhsK",
-            "E2NhcHR1cmVkQnlQYXRyb2xDdWUYByABKAgSGQoRZnJhbWVzSW5QYXRyb2xD",
-            "dWUYCCABKAUSGgoSd2FpdmluZ1BhdHJvbEN1ZUlkGAkgASgFEiAKGHdhaXZp",
-            "bmdTcG9udGFuZW91c1BhdHJvbBgKIAEoCBIVCgx2aXJ0dWFsR3JpZFgY5wcg",
-            "ASgFEhUKDHZpcnR1YWxHcmlkWRjoByABKAUSDQoEZGlyWBjpByABKAUSDQoE",
-            "ZGlyWRjqByABKAUSDQoEdmVsWBjrByABKAUSDQoEdmVsWRjsByABKAUiOAoL",
-            "UGVlclVkcEFkZHISCgoCaXAYASABKAkSDAoEcG9ydBgCIAEoBRIPCgdhdXRo",
-            "S2V5GAMgASgFIsUDChJCYXR0bGVDb2xsaWRlckluZm8SEQoJc3RhZ2VOYW1l",
-            "GAEgASgJEhMKC2JvdW5kUm9vbUlkGAIgASgFEhwKFGJhdHRsZUR1cmF0aW9u",
-            "RnJhbWVzGAMgASgDEiYKHmlucHV0RnJhbWVVcHN5bmNEZWxheVRvbGVyYW5j",
-            "ZRgEIAEoBRInCh9tYXhDaGFzaW5nUmVuZGVyRnJhbWVzUGVyVXBkYXRlGAUg",
-            "ASgFEiEKGXJvbGxiYWNrRXN0aW1hdGVkRHRNaWxsaXMYBiABKAESIAoYcm9s",
-            "bGJhY2tFc3RpbWF0ZWREdE5hbm9zGAcgASgDEhgKEHJlbmRlckJ1ZmZlclNp",
-            "emUYCCABKAUSGAoQY29sbGlzaW9uTWluU3RlcBgJIAEoBRIZChFib3VuZFJv",
-            "b21DYXBhY2l0eRgKIAEoBRIbChNwcmVhbGxvY05wY0NhcGFjaXR5GAsgASgF",
-            "Eh4KFnByZWFsbG9jQnVsbGV0Q2FwYWNpdHkYDCABKAUSLQoPYmF0dGxlVWRw",
-            "VHVubmVsGIAIIAEoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIYCg9mcmFtZUxv",
-            "Z0VuYWJsZWQYgQggASgIIpQDChFSb29tRG93bnN5bmNGcmFtZRIKCgJpZBgB",
-            "IAEoBRItCgpwbGF5ZXJzQXJyGAIgAygLMhkuc2hhcmVkLkNoYXJhY3RlckRv",
-            "d25zeW5jEhYKDmNvdW50ZG93bk5hbm9zGAMgASgDEh8KB2J1bGxldHMYBCAD",
-            "KAsyDi5zaGFyZWQuQnVsbGV0EioKB25wY3NBcnIYBSADKAsyGS5zaGFyZWQu",
-            "Q2hhcmFjdGVyRG93bnN5bmMSHgoIdHJhcHNBcnIYBiADKAsyDC5zaGFyZWQu",
-            "VHJhcBIfChZiYWNrZW5kVW5jb25maXJtZWRNYXNrGIAIIAEoBBIaChFzaG91",
-            "bGRGb3JjZVJlc3luYxiBCCABKAgSFgoNc3BlY2llc0lkTGlzdBiCCCADKAUS",
-            "HQoUYnVsbGV0TG9jYWxJZENvdW50ZXIYgwggASgFEi0KD3BlZXJVZHBBZGRy",
-            "TGlzdBiECCADKAsyEy5zaGFyZWQuUGVlclVkcEFkZHISHAoTcGFydGljaXBh",
-            "bnRDaGFuZ2VJZBiFCCABKAUi3AEKBldzUmVzcBILCgNyZXQYASABKAUSCwoD",
-            "YWN0GAIgASgFEiYKA3JkZhgDIAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNG",
-            "cmFtZRI7ChdpbnB1dEZyYW1lRG93bnN5bmNCYXRjaBgEIAMoCzIaLnNoYXJl",
-            "ZC5JbnB1dEZyYW1lRG93bnN5bmMSLAoIYmNpRnJhbWUYBSABKAsyGi5zaGFy",
-            "ZWQuQmF0dGxlQ29sbGlkZXJJbmZvEhUKDXBlZXJKb2luSW5kZXgYBiABKAUS",
-            "DgoGZXJyTXNnGAcgASgJIoUCCgVTa2lsbBIVCg1iYXR0bGVMb2NhbElkGAEg",
-            "ASgFEhYKDnJlY292ZXJ5RnJhbWVzGAIgASgFEh0KFXJlY292ZXJ5RnJhbWVz",
-            "T25CbG9jaxgDIAEoBRIbChNyZWNvdmVyeUZyYW1lc09uSGl0GAQgASgFEi0K",
-            "C3RyaWdnZXJUeXBlGAUgASgOMhguc2hhcmVkLlNraWxsVHJpZ2dlclR5cGUS",
-            "LAoMYm91bmRDaFN0YXRlGAYgASgOMhYuc2hhcmVkLkNoYXJhY3RlclN0YXRl",
-            "Eg8KB21wRGVsdGEYByABKAUSIwoEaGl0cxiACCADKAsyFC5zaGFyZWQuQnVs",
-            "bGV0Q29uZmlnImcKCEZyYW1lTG9nEiYKA3JkZhgBIAEoCzIZLnNoYXJlZC5S",
-            "b29tRG93bnN5bmNGcmFtZRIzCg9hY3R1YWxseVVzZWRJZGYYAiABKAsyGi5z",
-            "aGFyZWQuSW5wdXRGcmFtZURvd25zeW5jKjUKC0J1bGxldFN0YXRlEgsKB1N0",
-            "YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBsb2RpbmcQAiquAgoOQ2hhcmFj",
-            "dGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxraW5nEAESDgoKVHVybkFyb3Vu",
-            "ZBACEgoKBkF0a2VkMRADEhQKEEluQWlySWRsZTFOb0p1bXAQBBIUChBJbkFp",
-            "cklkbGUxQnlKdW1wEAUSGAoUSW5BaXJJZGxlMUJ5V2FsbEp1bXAQBhIPCgtJ",
-            "bkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoITGF5RG93bjEQCRIKCgZH",
-            "ZXRVcDEQChIJCgVEeWluZxALEgsKB0Rhc2hpbmcQDBIKCgZPbldhbGwQDRIO",
-            "CglJbkFpckF0azEQgAgSCQoEQXRrMRCBCBIJCgRBdGsyEIIIEgkKBEF0azMQ",
-            "gwgSCQoEQXRrNBCECBIJCgRBdGs1EIUIKkwKCVRyYXBTdGF0ZRIJCgVUSWRs",
-            "ZRAAEgwKCFRXYWxraW5nEAESCQoFVEF0azEQAhILCgdUQXRrZWQxEAMSDgoK",
-            "VERlc3Ryb3llZBAEKjcKCkJ1bGxldFR5cGUSEAoMVW5kZXRlcm1pbmVkEAAS",
-            "CQoFTWVsZWUQARIMCghGaXJlYmFsbBACKogBCgxNdWx0aUhpdFR5cGUSCAoE",
-            "Tm9uZRAAEhAKDEZyb21FbWlzc2lvbhABEhYKEkZyb21GaXJzdEhpdEFjdHVh",
-            "bBACEhYKEkZyb21GaXJzdEhpdEFueXdheRADEhUKEUZyb21QcmV2SGl0QWN0",
-            "dWFsEAQSFQoRRnJvbVByZXZIaXRBbnl3YXkQBSozChBTa2lsbFRyaWdnZXJU",
-            "eXBlEg4KClJpc2luZ0VkZ2UQABIPCgtGYWxsaW5nRWRnZRABQgmqAgZzaGFy",
-            "ZWRiBnByb3RvMw=="));
+            "KAgSFAoMZnJpY3Rpb25WZWxYGCYgASgFEhEKCWNyb3VjaGluZxgnIAEoCBIW",
+            "Cg1hY3RpdmVTa2lsbElkGIAIIAEoBRIXCg5hY3RpdmVTa2lsbEhpdBiBCCAB",
+            "KAUSGQoQZnJhbWVzSW52aW5zaWJsZRiCCCABKAUSFQoMYnVsbGV0VGVhbUlk",
+            "GIMIIAEoBRIaChFjaENvbGxpc2lvblRlYW1JZBiECCABKAUSGgoRY29sbGlz",
+            "aW9uVHlwZU1hc2sYhQggASgEEg0KBG5hbWUY5QcgASgJEhQKC2Rpc3BsYXlO",
+            "YW1lGOYHIAEoCRIPCgZhdmF0YXIY5wcgASgJIlEKEUlucHV0RnJhbWVEZWNv",
+            "ZGVkEgoKAmR4GAEgASgFEgoKAmR5GAIgASgFEhEKCWJ0bkFMZXZlbBgDIAEo",
+            "BRIRCglidG5CTGV2ZWwYBCABKAUiTAoQSW5wdXRGcmFtZVVwc3luYxIUCgxp",
+            "bnB1dEZyYW1lSWQYASABKAUSDwoHZW5jb2RlZBgCIAEoBBIRCglqb2luSW5k",
+            "ZXgYAyABKAUiVAoSSW5wdXRGcmFtZURvd25zeW5jEhQKDGlucHV0RnJhbWVJ",
+            "ZBgBIAEoBRIRCglpbnB1dExpc3QYAiADKAQSFQoNY29uZmlybWVkTGlzdBgD",
+            "IAEoBCK2AQoFV3NSZXESEAoIcGxheWVySWQYASABKAUSCwoDYWN0GAIgASgF",
+            "EhEKCWpvaW5JbmRleBgDIAEoBRIVCg1hY2tpbmdGcmFtZUlkGAQgASgFEhoK",
+            "EmFja2luZ0lucHV0RnJhbWVJZBgFIAEoBRIPCgdhdXRoS2V5GAYgASgFEjcK",
+            "FWlucHV0RnJhbWVVcHN5bmNCYXRjaBgHIAMoCzIYLnNoYXJlZC5JbnB1dEZy",
+            "YW1lVXBzeW5jIrkBChNJbnB1dEJ1ZmZlclNuYXBzaG90EhgKEHJlZlJlbmRl",
+            "ckZyYW1lSWQYASABKAUSFwoPdW5jb25maXJtZWRNYXNrGAIgASgEEj0KGXRv",
+            "U2VuZElucHV0RnJhbWVEb3duc3luY3MYAyADKAsyGi5zaGFyZWQuSW5wdXRG",
+            "cmFtZURvd25zeW5jEhkKEXNob3VsZEZvcmNlUmVzeW5jGAQgASgIEhUKDXBl",
+            "ZXJKb2luSW5kZXgYBSABKAUi0wEKCVBhdHJvbEN1ZRIKCgJpZBgBIAEoBRIN",
+            "CgVmbEFjdBgCIAEoBBINCgVmckFjdBgDIAEoBBIXCg9mbENhcHR1cmVGcmFt",
+            "ZXMYBCABKAQSFwoPZnJDYXB0dXJlRnJhbWVzGAUgASgEEg0KBWZkQWN0GAYg",
+            "ASgEEg0KBWZ1QWN0GAcgASgEEhcKD2ZkQ2FwdHVyZUZyYW1lcxgIIAEoBBIX",
+            "Cg9mdUNhcHR1cmVGcmFtZXMYCSABKAQSGgoRY29sbGlzaW9uVHlwZU1hc2sY",
+            "hQggASgEIlQKCVZpc2lvbkJveBITCgtib3R0b21MZWZ0WBgBIAEoBRITCgti",
+            "b3R0b21MZWZ0WRgCIAEoBRINCgV3aWR0aBgDIAEoBRIOCgZoZWlnaHQYBCAB",
+            "KAUi3gUKDEJ1bGxldENvbmZpZxIVCg1zdGFydHVwRnJhbWVzGAEgASgFEhoK",
+            "EmNhbmNlbGxhYmxlU3RGcmFtZRgCIAEoBRIaChJjYW5jZWxsYWJsZUVkRnJh",
+            "bWUYAyABKAUSFAoMYWN0aXZlRnJhbWVzGAQgASgFEhUKDWhpdFN0dW5GcmFt",
+            "ZXMYBSABKAUSFwoPYmxvY2tTdHVuRnJhbWVzGAYgASgFEhQKDHB1c2hiYWNr",
+            "VmVsWBgHIAEoBRIUCgxwdXNoYmFja1ZlbFkYCCABKAUSDgoGZGFtYWdlGAkg",
+            "ASgFEhQKDHNlbGZMb2NrVmVsWBgKIAEoBRIUCgxzZWxmTG9ja1ZlbFkYCyAB",
+            "KAUSFQoNaGl0Ym94T2Zmc2V0WBgMIAEoBRIVCg1oaXRib3hPZmZzZXRZGA0g",
+            "ASgFEhMKC2hpdGJveFNpemVYGA4gASgFEhMKC2hpdGJveFNpemVZGA8gASgF",
+            "Eg4KBmJsb3dVcBgQIAEoCBIRCglzcGVjaWVzSWQYESABKAUSFwoPZXhwbG9z",
+            "aW9uRnJhbWVzGBIgASgFEiEKBWJUeXBlGBMgASgOMhIuc2hhcmVkLkJ1bGxl",
+            "dFR5cGUSJAoGbWhUeXBlGBQgASgOMhQuc2hhcmVkLk11bHRpSGl0VHlwZRIf",
+            "ChdzaW11bHRhbmVvdXNNdWx0aUhpdENudBgVIAEoDRINCgVzcGVlZBgWIAEo",
+            "BRIMCgRkaXJYGBcgASgFEgwKBGRpclkYGCABKAUSPgoNY2FuY2VsVHJhbnNp",
+            "dBgZIAMoCzInLnNoYXJlZC5CdWxsZXRDb25maWcuQ2FuY2VsVHJhbnNpdEVu",
+            "dHJ5EhYKDmRlc3Ryb3lVcG9uSGl0GBogASgIEhoKEWNvbGxpc2lvblR5cGVN",
+            "YXNrGIUIIAEoBBo0ChJDYW5jZWxUcmFuc2l0RW50cnkSCwoDa2V5GAEgASgF",
+            "Eg0KBXZhbHVlGAIgASgFOgI4ASKeAQoQQnVsbGV0QmF0dGxlQXR0chIVCg1i",
+            "dWxsZXRMb2NhbElkGAEgASgFEh8KF29yaWdpbmF0ZWRSZW5kZXJGcmFtZUlk",
+            "GAIgASgFEhkKEW9mZmVuZGVySm9pbkluZGV4GAMgASgFEg4KBnRlYW1JZBgE",
+            "IAEoBRIWCg5hY3RpdmVTa2lsbEhpdBgFIAEoBRIPCgdza2lsbElkGAYgASgF",
+            "IoUCCgZCdWxsZXQSJAoHYmxTdGF0ZRgBIAEoDjITLnNoYXJlZC5CdWxsZXRT",
+            "dGF0ZRIXCg9mcmFtZXNJbkJsU3RhdGUYAiABKAUSLAoKYmF0dGxlQXR0chgD",
+            "IAEoCzIYLnNoYXJlZC5CdWxsZXRCYXR0bGVBdHRyEiQKBmNvbmZpZxgEIAEo",
+            "CzIULnNoYXJlZC5CdWxsZXRDb25maWcSFQoMdmlydHVhbEdyaWRYGOcHIAEo",
+            "BRIVCgx2aXJ0dWFsR3JpZFkY6AcgASgFEg0KBGRpclgY6QcgASgFEg0KBGRp",
+            "clkY6gcgASgFEg0KBHZlbFgY6wcgASgFEg0KBHZlbFkY7AcgASgFItUBCgpU",
+            "cmFwQ29uZmlnEhEKCXNwZWNpZXNJZBgBIAEoBRIaChJleHBsb3Npb25TcGVj",
+            "aWVzSWQYAiABKAUSFwoPZXhwbG9zaW9uRnJhbWVzGAMgASgFEg4KBmJsb3dV",
+            "cBgEIAEoCBIOCgZkYW1hZ2UYBSABKAUSFQoNaGl0U3R1bkZyYW1lcxgGIAEo",
+            "BRIbChNoaXRJbnZpbnNpYmxlRnJhbWVzGAcgASgFEhYKDmRlc3Ryb3lVcG9u",
+            "SGl0GAggASgIEhMKC3NwZWNpZXNOYW1lGAkgASgJImIKE1RyYXBDb25maWdG",
+            "cm9tVGlsZWQSEQoJc3BlY2llc0lkGAEgASgFEg0KBXF1b3RhGAIgASgFEg0K",
+            "BXNwZWVkGAMgASgFEgwKBGRpclgYBCABKAUSDAoEZGlyWRgFIAEoBSLqAQoQ",
+            "VHJhcENvbGxpZGVyQXR0chIVCg1oaXRib3hPZmZzZXRYGAEgASgFEhUKDWhp",
+            "dGJveE9mZnNldFkYAiABKAUSEwoLaGl0Ym94U2l6ZVgYAyABKAUSEwoLaGl0",
+            "Ym94U2l6ZVkYBCABKAUSHAoUcHJvdmlkZXNIYXJkUHVzaGJhY2sYBSABKAgS",
+            "FgoOcHJvdmlkZXNEYW1hZ2UYBiABKAgSFgoOcHJvdmlkZXNFc2NhcGUYByAB",
+            "KAgSFAoLdHJhcExvY2FsSWQYgAggASgFEhoKEWNvbGxpc2lvblR5cGVNYXNr",
+            "GIUIIAEoBCKyAwoEVHJhcBITCgt0cmFwTG9jYWxJZBgBIAEoBRIiCgZjb25m",
+            "aWcYAiABKAsyEi5zaGFyZWQuVHJhcENvbmZpZxI0Cg9jb25maWdGcm9tVGls",
+            "ZWQYAyABKAsyGy5zaGFyZWQuVHJhcENvbmZpZ0Zyb21UaWxlZBIkCgl0cmFw",
+            "U3RhdGUYBCABKA4yES5zaGFyZWQuVHJhcFN0YXRlEhkKEWZyYW1lc0luVHJh",
+            "cFN0YXRlGAUgASgFEhoKEmlzQ29tcGxldGVseVN0YXRpYxgGIAEoCBIbChNj",
+            "YXB0dXJlZEJ5UGF0cm9sQ3VlGAcgASgIEhkKEWZyYW1lc0luUGF0cm9sQ3Vl",
+            "GAggASgFEhoKEndhaXZpbmdQYXRyb2xDdWVJZBgJIAEoBRIgChh3YWl2aW5n",
+            "U3BvbnRhbmVvdXNQYXRyb2wYCiABKAgSFQoMdmlydHVhbEdyaWRYGOcHIAEo",
+            "BRIVCgx2aXJ0dWFsR3JpZFkY6AcgASgFEg0KBGRpclgY6QcgASgFEg0KBGRp",
+            "clkY6gcgASgFEg0KBHZlbFgY6wcgASgFEg0KBHZlbFkY7AcgASgFIvMBCgtU",
+            "cmFwVHJpZ2dlchIKCgJpZBgBIAEoBRISCgp0cmFwSWRMaXN0GAIgAygFEhUK",
+            "DWRlbGF5ZWRGcmFtZXMYAyABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYBCABKAUS",
+            "DQoFcXVvdGEYBSABKAUSEwoLdHJpZ2dlck1hc2sYBiABKAQSEAoIaW5pdFZl",
+            "bFgYByABKAUSEAoIaW5pdFZlbFkYCCABKAUSFQoMYnVsbGV0VGVhbUlkGIMI",
+            "IAEoBRIaChFjaENvbGxpc2lvblRlYW1JZBiECCABKAUSGgoRY29sbGlzaW9u",
+            "VHlwZU1hc2sYhQggASgEIjgKC1BlZXJVZHBBZGRyEgoKAmlwGAEgASgJEgwK",
+            "BHBvcnQYAiABKAUSDwoHYXV0aEtleRgDIAEoBSLFAwoSQmF0dGxlQ29sbGlk",
+            "ZXJJbmZvEhEKCXN0YWdlTmFtZRgBIAEoCRITCgtib3VuZFJvb21JZBgCIAEo",
+            "BRIcChRiYXR0bGVEdXJhdGlvbkZyYW1lcxgDIAEoAxImCh5pbnB1dEZyYW1l",
+            "VXBzeW5jRGVsYXlUb2xlcmFuY2UYBCABKAUSJwofbWF4Q2hhc2luZ1JlbmRl",
+            "ckZyYW1lc1BlclVwZGF0ZRgFIAEoBRIhChlyb2xsYmFja0VzdGltYXRlZER0",
+            "TWlsbGlzGAYgASgBEiAKGHJvbGxiYWNrRXN0aW1hdGVkRHROYW5vcxgHIAEo",
+            "AxIYChByZW5kZXJCdWZmZXJTaXplGAggASgFEhgKEGNvbGxpc2lvbk1pblN0",
+            "ZXAYCSABKAUSGQoRYm91bmRSb29tQ2FwYWNpdHkYCiABKAUSGwoTcHJlYWxs",
+            "b2NOcGNDYXBhY2l0eRgLIAEoBRIeChZwcmVhbGxvY0J1bGxldENhcGFjaXR5",
+            "GAwgASgFEi0KD2JhdHRsZVVkcFR1bm5lbBiACCABKAsyEy5zaGFyZWQuUGVl",
+            "clVkcEFkZHISGAoPZnJhbWVMb2dFbmFibGVkGIEIIAEoCCKUAwoRUm9vbURv",
+            "d25zeW5jRnJhbWUSCgoCaWQYASABKAUSLQoKcGxheWVyc0FychgCIAMoCzIZ",
+            "LnNoYXJlZC5DaGFyYWN0ZXJEb3duc3luYxIWCg5jb3VudGRvd25OYW5vcxgD",
+            "IAEoAxIfCgdidWxsZXRzGAQgAygLMg4uc2hhcmVkLkJ1bGxldBIqCgducGNz",
+            "QXJyGAUgAygLMhkuc2hhcmVkLkNoYXJhY3RlckRvd25zeW5jEh4KCHRyYXBz",
+            "QXJyGAYgAygLMgwuc2hhcmVkLlRyYXASHwoWYmFja2VuZFVuY29uZmlybWVk",
+            "TWFzaxiACCABKAQSGgoRc2hvdWxkRm9yY2VSZXN5bmMYgQggASgIEhYKDXNw",
+            "ZWNpZXNJZExpc3QYggggAygFEh0KFGJ1bGxldExvY2FsSWRDb3VudGVyGIMI",
+            "IAEoBRItCg9wZWVyVWRwQWRkckxpc3QYhAggAygLMhMuc2hhcmVkLlBlZXJV",
+            "ZHBBZGRyEhwKE3BhcnRpY2lwYW50Q2hhbmdlSWQYhQggASgFItwBCgZXc1Jl",
+            "c3ASCwoDcmV0GAEgASgFEgsKA2FjdBgCIAEoBRImCgNyZGYYAyABKAsyGS5z",
+            "aGFyZWQuUm9vbURvd25zeW5jRnJhbWUSOwoXaW5wdXRGcmFtZURvd25zeW5j",
+            "QmF0Y2gYBCADKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jEiwKCGJj",
+            "aUZyYW1lGAUgASgLMhouc2hhcmVkLkJhdHRsZUNvbGxpZGVySW5mbxIVCg1w",
+            "ZWVySm9pbkluZGV4GAYgASgFEg4KBmVyck1zZxgHIAEoCSKFAgoFU2tpbGwS",
+            "FQoNYmF0dGxlTG9jYWxJZBgBIAEoBRIWCg5yZWNvdmVyeUZyYW1lcxgCIAEo",
+            "BRIdChVyZWNvdmVyeUZyYW1lc09uQmxvY2sYAyABKAUSGwoTcmVjb3ZlcnlG",
+            "cmFtZXNPbkhpdBgEIAEoBRItCgt0cmlnZ2VyVHlwZRgFIAEoDjIYLnNoYXJl",
+            "ZC5Ta2lsbFRyaWdnZXJUeXBlEiwKDGJvdW5kQ2hTdGF0ZRgGIAEoDjIWLnNo",
+            "YXJlZC5DaGFyYWN0ZXJTdGF0ZRIPCgdtcERlbHRhGAcgASgFEiMKBGhpdHMY",
+            "gAggAygLMhQuc2hhcmVkLkJ1bGxldENvbmZpZyJnCghGcmFtZUxvZxImCgNy",
+            "ZGYYASABKAsyGS5zaGFyZWQuUm9vbURvd25zeW5jRnJhbWUSMwoPYWN0dWFs",
+            "bHlVc2VkSWRmGAIgASgLMhouc2hhcmVkLklucHV0RnJhbWVEb3duc3luYyIn",
+            "CgxCYXR0bGVSZXN1bHQSFwoPd2lubmVySm9pbkluZGV4GAEgASgFKjUKC0J1",
+            "bGxldFN0YXRlEgsKB1N0YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBsb2Rp",
+            "bmcQAiqPAwoOQ2hhcmFjdGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxraW5n",
+            "EAESDgoKVHVybkFyb3VuZBACEgoKBkF0a2VkMRADEhQKEEluQWlySWRsZTFO",
+            "b0p1bXAQBBIUChBJbkFpcklkbGUxQnlKdW1wEAUSGAoUSW5BaXJJZGxlMUJ5",
+            "V2FsbEp1bXAQBhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoI",
+            "TGF5RG93bjEQCRIKCgZHZXRVcDEQChIJCgVEeWluZxALEgsKB0Rhc2hpbmcQ",
+            "DBIQCgtPbldhbGxJZGxlMRCAARIQCgtDcm91Y2hJZGxlMRCAAhISCg1Dcm91",
+            "Y2hXYWxraW5nEIECEhEKDENyb3VjaEF0a2VkMRCCAhIJCgRBdGsxEIAIEgkK",
+            "BEF0azIQgQgSCQoEQXRrMxCCCBIJCgRBdGs0EIMIEgkKBEF0azUQhAgSDgoJ",
+            "SW5BaXJBdGsxEIAQEg8KCk9uV2FsbEF0azEQgBgSDwoKQ3JvdWNoQXRrMRCA",
+            "ICpMCglUcmFwU3RhdGUSCQoFVElkbGUQABIMCghUV2Fsa2luZxABEgkKBVRB",
+            "dGsxEAISCwoHVEF0a2VkMRADEg4KClREZXN0cm95ZWQQBCo3CgpCdWxsZXRU",
+            "eXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmlyZWJhbGwQ",
+            "AiqIAQoMTXVsdGlIaXRUeXBlEggKBE5vbmUQABIQCgxGcm9tRW1pc3Npb24Q",
+            "ARIWChJGcm9tRmlyc3RIaXRBY3R1YWwQAhIWChJGcm9tRmlyc3RIaXRBbnl3",
+            "YXkQAxIVChFGcm9tUHJldkhpdEFjdHVhbBAEEhUKEUZyb21QcmV2SGl0QW55",
+            "d2F5EAUqMwoQU2tpbGxUcmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdlEAASDwoL",
+            "RmFsbGluZ0VkZ2UQAUIJqgIGc2hhcmVkYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "CapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "MaxHp", "Mp", "MaxMp", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "FrictionVelX", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask", "Name", "DisplayName", "Avatar" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "CapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "MaxHp", "Mp", "MaxMp", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "FrictionVelX", "Crouching", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask", "Name", "DisplayName", "Avatar" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDownsync), global::shared.InputFrameDownsync.Parser, new[]{ "InputFrameId", "InputList", "ConfirmedList" }, null, null, null, null),
@@ -181,14 +190,16 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfig), global::shared.TrapConfig.Parser, new[]{ "SpeciesId", "ExplosionSpeciesId", "ExplosionFrames", "BlowUp", "Damage", "HitStunFrames", "HitInvinsibleFrames", "DestroyUponHit", "SpeciesName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfigFromTiled), global::shared.TrapConfigFromTiled.Parser, new[]{ "SpeciesId", "Quota", "Speed", "DirX", "DirY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapColliderAttr), global::shared.TrapColliderAttr.Parser, new[]{ "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "ProvidesHardPushback", "ProvidesDamage", "TrapLocalId", "CollisionTypeMask" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapColliderAttr), global::shared.TrapColliderAttr.Parser, new[]{ "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "ProvidesHardPushback", "ProvidesDamage", "ProvidesEscape", "TrapLocalId", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Trap), global::shared.Trap.Parser, new[]{ "TrapLocalId", "Config", "ConfigFromTiled", "TrapState", "FramesInTrapState", "IsCompletelyStatic", "CapturedByPatrolCue", "FramesInPatrolCue", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapTrigger), global::shared.TrapTrigger.Parser, new[]{ "Id", "TrapIdList", "DelayedFrames", "RecoveryFrames", "Quota", "TriggerMask", "InitVelX", "InitVelY", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "PreallocNpcCapacity", "PreallocBulletCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList", "ParticipantChangeId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex", "ErrMsg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "MpDelta", "Hits" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleResult), global::shared.BattleResult.Parser, new[]{ "WinnerJoinIndex" }, null, null, null, null)
           }));
     }
     #endregion
@@ -215,13 +226,18 @@ namespace shared {
     [pbr::OriginalName("GetUp1")] GetUp1 = 10,
     [pbr::OriginalName("Dying")] Dying = 11,
     [pbr::OriginalName("Dashing")] Dashing = 12,
-    [pbr::OriginalName("OnWall")] OnWall = 13,
-    [pbr::OriginalName("InAirAtk1")] InAirAtk1 = 1024,
-    [pbr::OriginalName("Atk1")] Atk1 = 1025,
-    [pbr::OriginalName("Atk2")] Atk2 = 1026,
-    [pbr::OriginalName("Atk3")] Atk3 = 1027,
-    [pbr::OriginalName("Atk4")] Atk4 = 1028,
-    [pbr::OriginalName("Atk5")] Atk5 = 1029,
+    [pbr::OriginalName("OnWallIdle1")] OnWallIdle1 = 128,
+    [pbr::OriginalName("CrouchIdle1")] CrouchIdle1 = 256,
+    [pbr::OriginalName("CrouchWalking")] CrouchWalking = 257,
+    [pbr::OriginalName("CrouchAtked1")] CrouchAtked1 = 258,
+    [pbr::OriginalName("Atk1")] Atk1 = 1024,
+    [pbr::OriginalName("Atk2")] Atk2 = 1025,
+    [pbr::OriginalName("Atk3")] Atk3 = 1026,
+    [pbr::OriginalName("Atk4")] Atk4 = 1027,
+    [pbr::OriginalName("Atk5")] Atk5 = 1028,
+    [pbr::OriginalName("InAirAtk1")] InAirAtk1 = 2048,
+    [pbr::OriginalName("OnWallAtk1")] OnWallAtk1 = 3072,
+    [pbr::OriginalName("CrouchAtk1")] CrouchAtk1 = 4096,
   }
 
   public enum TrapState {
@@ -337,6 +353,7 @@ namespace shared {
       revivalDirY_ = other.revivalDirY_;
       onSlope_ = other.onSlope_;
       frictionVelX_ = other.frictionVelX_;
+      crouching_ = other.crouching_;
       activeSkillId_ = other.activeSkillId_;
       activeSkillHit_ = other.activeSkillHit_;
       framesInvinsible_ = other.framesInvinsible_;
@@ -638,7 +655,7 @@ namespace shared {
     public const int InAirFieldNumber = 24;
     private bool inAir_;
     /// <summary>
-    /// by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "inAir (prev -> curr)"  
+    /// by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "inAir (prev -> curr)"  
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -665,7 +682,7 @@ namespace shared {
     public const int OnWallFieldNumber = 26;
     private bool onWall_;
     /// <summary>
-    /// like "inAir", it’s by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+    /// like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -820,6 +837,21 @@ namespace shared {
       get { return frictionVelX_; }
       set {
         frictionVelX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "crouching" field.</summary>
+    public const int CrouchingFieldNumber = 39;
+    private bool crouching_;
+    /// <summary>
+    /// like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Crouching {
+      get { return crouching_; }
+      set {
+        crouching_ = value;
       }
     }
 
@@ -986,6 +1018,7 @@ namespace shared {
       if (RevivalDirY != other.RevivalDirY) return false;
       if (OnSlope != other.OnSlope) return false;
       if (FrictionVelX != other.FrictionVelX) return false;
+      if (Crouching != other.Crouching) return false;
       if (ActiveSkillId != other.ActiveSkillId) return false;
       if (ActiveSkillHit != other.ActiveSkillHit) return false;
       if (FramesInvinsible != other.FramesInvinsible) return false;
@@ -1039,6 +1072,7 @@ namespace shared {
       if (RevivalDirY != 0) hash ^= RevivalDirY.GetHashCode();
       if (OnSlope != false) hash ^= OnSlope.GetHashCode();
       if (FrictionVelX != 0) hash ^= FrictionVelX.GetHashCode();
+      if (Crouching != false) hash ^= Crouching.GetHashCode();
       if (ActiveSkillId != 0) hash ^= ActiveSkillId.GetHashCode();
       if (ActiveSkillHit != 0) hash ^= ActiveSkillHit.GetHashCode();
       if (FramesInvinsible != 0) hash ^= FramesInvinsible.GetHashCode();
@@ -1213,6 +1247,10 @@ namespace shared {
       if (FrictionVelX != 0) {
         output.WriteRawTag(176, 2);
         output.WriteInt32(FrictionVelX);
+      }
+      if (Crouching != false) {
+        output.WriteRawTag(184, 2);
+        output.WriteBool(Crouching);
       }
       if (Name.Length != 0) {
         output.WriteRawTag(170, 62);
@@ -1408,6 +1446,10 @@ namespace shared {
         output.WriteRawTag(176, 2);
         output.WriteInt32(FrictionVelX);
       }
+      if (Crouching != false) {
+        output.WriteRawTag(184, 2);
+        output.WriteBool(Crouching);
+      }
       if (Name.Length != 0) {
         output.WriteRawTag(170, 62);
         output.WriteString(Name);
@@ -1565,6 +1607,9 @@ namespace shared {
       if (FrictionVelX != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(FrictionVelX);
       }
+      if (Crouching != false) {
+        size += 2 + 1;
+      }
       if (ActiveSkillId != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(ActiveSkillId);
       }
@@ -1714,6 +1759,9 @@ namespace shared {
       }
       if (other.FrictionVelX != 0) {
         FrictionVelX = other.FrictionVelX;
+      }
+      if (other.Crouching != false) {
+        Crouching = other.Crouching;
       }
       if (other.ActiveSkillId != 0) {
         ActiveSkillId = other.ActiveSkillId;
@@ -1903,6 +1951,10 @@ namespace shared {
           }
           case 304: {
             FrictionVelX = input.ReadInt32();
+            break;
+          }
+          case 312: {
+            Crouching = input.ReadBool();
             break;
           }
           case 7978: {
@@ -2102,6 +2154,10 @@ namespace shared {
           }
           case 304: {
             FrictionVelX = input.ReadInt32();
+            break;
+          }
+          case 312: {
+            Crouching = input.ReadBool();
             break;
           }
           case 7978: {
@@ -7507,6 +7563,7 @@ namespace shared {
       hitboxSizeY_ = other.hitboxSizeY_;
       providesHardPushback_ = other.providesHardPushback_;
       providesDamage_ = other.providesDamage_;
+      providesEscape_ = other.providesEscape_;
       trapLocalId_ = other.trapLocalId_;
       collisionTypeMask_ = other.collisionTypeMask_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -7593,6 +7650,18 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "providesEscape" field.</summary>
+    public const int ProvidesEscapeFieldNumber = 7;
+    private bool providesEscape_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool ProvidesEscape {
+      get { return providesEscape_; }
+      set {
+        providesEscape_ = value;
+      }
+    }
+
     /// <summary>Field number for the "trapLocalId" field.</summary>
     public const int TrapLocalIdFieldNumber = 1024;
     private int trapLocalId_;
@@ -7641,6 +7710,7 @@ namespace shared {
       if (HitboxSizeY != other.HitboxSizeY) return false;
       if (ProvidesHardPushback != other.ProvidesHardPushback) return false;
       if (ProvidesDamage != other.ProvidesDamage) return false;
+      if (ProvidesEscape != other.ProvidesEscape) return false;
       if (TrapLocalId != other.TrapLocalId) return false;
       if (CollisionTypeMask != other.CollisionTypeMask) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -7656,6 +7726,7 @@ namespace shared {
       if (HitboxSizeY != 0) hash ^= HitboxSizeY.GetHashCode();
       if (ProvidesHardPushback != false) hash ^= ProvidesHardPushback.GetHashCode();
       if (ProvidesDamage != false) hash ^= ProvidesDamage.GetHashCode();
+      if (ProvidesEscape != false) hash ^= ProvidesEscape.GetHashCode();
       if (TrapLocalId != 0) hash ^= TrapLocalId.GetHashCode();
       if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
       if (_unknownFields != null) {
@@ -7700,6 +7771,10 @@ namespace shared {
         output.WriteRawTag(48);
         output.WriteBool(ProvidesDamage);
       }
+      if (ProvidesEscape != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(ProvidesEscape);
+      }
       if (TrapLocalId != 0) {
         output.WriteRawTag(128, 64);
         output.WriteInt32(TrapLocalId);
@@ -7742,6 +7817,10 @@ namespace shared {
         output.WriteRawTag(48);
         output.WriteBool(ProvidesDamage);
       }
+      if (ProvidesEscape != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(ProvidesEscape);
+      }
       if (TrapLocalId != 0) {
         output.WriteRawTag(128, 64);
         output.WriteInt32(TrapLocalId);
@@ -7776,6 +7855,9 @@ namespace shared {
         size += 1 + 1;
       }
       if (ProvidesDamage != false) {
+        size += 1 + 1;
+      }
+      if (ProvidesEscape != false) {
         size += 1 + 1;
       }
       if (TrapLocalId != 0) {
@@ -7813,6 +7895,9 @@ namespace shared {
       }
       if (other.ProvidesDamage != false) {
         ProvidesDamage = other.ProvidesDamage;
+      }
+      if (other.ProvidesEscape != false) {
+        ProvidesEscape = other.ProvidesEscape;
       }
       if (other.TrapLocalId != 0) {
         TrapLocalId = other.TrapLocalId;
@@ -7857,6 +7942,10 @@ namespace shared {
           }
           case 48: {
             ProvidesDamage = input.ReadBool();
+            break;
+          }
+          case 56: {
+            ProvidesEscape = input.ReadBool();
             break;
           }
           case 8192: {
@@ -7904,6 +7993,10 @@ namespace shared {
           }
           case 48: {
             ProvidesDamage = input.ReadBool();
+            break;
+          }
+          case 56: {
+            ProvidesEscape = input.ReadBool();
             break;
           }
           case 8192: {
@@ -8700,6 +8793,571 @@ namespace shared {
 
   }
 
+  public sealed partial class TrapTrigger : pb::IMessage<TrapTrigger>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<TrapTrigger> _parser = new pb::MessageParser<TrapTrigger>(() => new TrapTrigger());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<TrapTrigger> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[15]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapTrigger() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapTrigger(TrapTrigger other) : this() {
+      id_ = other.id_;
+      trapIdList_ = other.trapIdList_.Clone();
+      delayedFrames_ = other.delayedFrames_;
+      recoveryFrames_ = other.recoveryFrames_;
+      quota_ = other.quota_;
+      triggerMask_ = other.triggerMask_;
+      initVelX_ = other.initVelX_;
+      initVelY_ = other.initVelY_;
+      bulletTeamId_ = other.bulletTeamId_;
+      chCollisionTeamId_ = other.chCollisionTeamId_;
+      collisionTypeMask_ = other.collisionTypeMask_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TrapTrigger Clone() {
+      return new TrapTrigger(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private int id_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Id {
+      get { return id_; }
+      set {
+        id_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "trapIdList" field.</summary>
+    public const int TrapIdListFieldNumber = 2;
+    private static readonly pb::FieldCodec<int> _repeated_trapIdList_codec
+        = pb::FieldCodec.ForInt32(18);
+    private readonly pbc::RepeatedField<int> trapIdList_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<int> TrapIdList {
+      get { return trapIdList_; }
+    }
+
+    /// <summary>Field number for the "delayedFrames" field.</summary>
+    public const int DelayedFramesFieldNumber = 3;
+    private int delayedFrames_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int DelayedFrames {
+      get { return delayedFrames_; }
+      set {
+        delayedFrames_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "recoveryFrames" field.</summary>
+    public const int RecoveryFramesFieldNumber = 4;
+    private int recoveryFrames_;
+    /// <summary>
+    /// must be > delayedFrames
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RecoveryFrames {
+      get { return recoveryFrames_; }
+      set {
+        recoveryFrames_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "quota" field.</summary>
+    public const int QuotaFieldNumber = 5;
+    private int quota_;
+    /// <summary>
+    /// -1 means infinite 
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Quota {
+      get { return quota_; }
+      set {
+        quota_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "triggerMask" field.</summary>
+    public const int TriggerMaskFieldNumber = 6;
+    private ulong triggerMask_;
+    /// <summary>
+    /// e.g. ByMovement, ByAttack
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong TriggerMask {
+      get { return triggerMask_; }
+      set {
+        triggerMask_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "initVelX" field.</summary>
+    public const int InitVelXFieldNumber = 7;
+    private int initVelX_;
+    /// <summary>
+    /// for the triggered trap
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int InitVelX {
+      get { return initVelX_; }
+      set {
+        initVelX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "initVelY" field.</summary>
+    public const int InitVelYFieldNumber = 8;
+    private int initVelY_;
+    /// <summary>
+    /// for the triggered trap
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int InitVelY {
+      get { return initVelY_; }
+      set {
+        initVelY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "bulletTeamId" field.</summary>
+    public const int BulletTeamIdFieldNumber = 1027;
+    private int bulletTeamId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int BulletTeamId {
+      get { return bulletTeamId_; }
+      set {
+        bulletTeamId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "chCollisionTeamId" field.</summary>
+    public const int ChCollisionTeamIdFieldNumber = 1028;
+    private int chCollisionTeamId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ChCollisionTeamId {
+      get { return chCollisionTeamId_; }
+      set {
+        chCollisionTeamId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "collisionTypeMask" field.</summary>
+    public const int CollisionTypeMaskFieldNumber = 1029;
+    private ulong collisionTypeMask_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong CollisionTypeMask {
+      get { return collisionTypeMask_; }
+      set {
+        collisionTypeMask_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as TrapTrigger);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(TrapTrigger other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Id != other.Id) return false;
+      if(!trapIdList_.Equals(other.trapIdList_)) return false;
+      if (DelayedFrames != other.DelayedFrames) return false;
+      if (RecoveryFrames != other.RecoveryFrames) return false;
+      if (Quota != other.Quota) return false;
+      if (TriggerMask != other.TriggerMask) return false;
+      if (InitVelX != other.InitVelX) return false;
+      if (InitVelY != other.InitVelY) return false;
+      if (BulletTeamId != other.BulletTeamId) return false;
+      if (ChCollisionTeamId != other.ChCollisionTeamId) return false;
+      if (CollisionTypeMask != other.CollisionTypeMask) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Id != 0) hash ^= Id.GetHashCode();
+      hash ^= trapIdList_.GetHashCode();
+      if (DelayedFrames != 0) hash ^= DelayedFrames.GetHashCode();
+      if (RecoveryFrames != 0) hash ^= RecoveryFrames.GetHashCode();
+      if (Quota != 0) hash ^= Quota.GetHashCode();
+      if (TriggerMask != 0UL) hash ^= TriggerMask.GetHashCode();
+      if (InitVelX != 0) hash ^= InitVelX.GetHashCode();
+      if (InitVelY != 0) hash ^= InitVelY.GetHashCode();
+      if (BulletTeamId != 0) hash ^= BulletTeamId.GetHashCode();
+      if (ChCollisionTeamId != 0) hash ^= ChCollisionTeamId.GetHashCode();
+      if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Id != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Id);
+      }
+      trapIdList_.WriteTo(output, _repeated_trapIdList_codec);
+      if (DelayedFrames != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(DelayedFrames);
+      }
+      if (RecoveryFrames != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RecoveryFrames);
+      }
+      if (Quota != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Quota);
+      }
+      if (TriggerMask != 0UL) {
+        output.WriteRawTag(48);
+        output.WriteUInt64(TriggerMask);
+      }
+      if (InitVelX != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(InitVelX);
+      }
+      if (InitVelY != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(InitVelY);
+      }
+      if (BulletTeamId != 0) {
+        output.WriteRawTag(152, 64);
+        output.WriteInt32(BulletTeamId);
+      }
+      if (ChCollisionTeamId != 0) {
+        output.WriteRawTag(160, 64);
+        output.WriteInt32(ChCollisionTeamId);
+      }
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Id);
+      }
+      trapIdList_.WriteTo(ref output, _repeated_trapIdList_codec);
+      if (DelayedFrames != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(DelayedFrames);
+      }
+      if (RecoveryFrames != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RecoveryFrames);
+      }
+      if (Quota != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Quota);
+      }
+      if (TriggerMask != 0UL) {
+        output.WriteRawTag(48);
+        output.WriteUInt64(TriggerMask);
+      }
+      if (InitVelX != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(InitVelX);
+      }
+      if (InitVelY != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(InitVelY);
+      }
+      if (BulletTeamId != 0) {
+        output.WriteRawTag(152, 64);
+        output.WriteInt32(BulletTeamId);
+      }
+      if (ChCollisionTeamId != 0) {
+        output.WriteRawTag(160, 64);
+        output.WriteInt32(ChCollisionTeamId);
+      }
+      if (CollisionTypeMask != 0UL) {
+        output.WriteRawTag(168, 64);
+        output.WriteUInt64(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Id != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      }
+      size += trapIdList_.CalculateSize(_repeated_trapIdList_codec);
+      if (DelayedFrames != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DelayedFrames);
+      }
+      if (RecoveryFrames != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RecoveryFrames);
+      }
+      if (Quota != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Quota);
+      }
+      if (TriggerMask != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(TriggerMask);
+      }
+      if (InitVelX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InitVelX);
+      }
+      if (InitVelY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InitVelY);
+      }
+      if (BulletTeamId != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(BulletTeamId);
+      }
+      if (ChCollisionTeamId != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(ChCollisionTeamId);
+      }
+      if (CollisionTypeMask != 0UL) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CollisionTypeMask);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(TrapTrigger other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Id != 0) {
+        Id = other.Id;
+      }
+      trapIdList_.Add(other.trapIdList_);
+      if (other.DelayedFrames != 0) {
+        DelayedFrames = other.DelayedFrames;
+      }
+      if (other.RecoveryFrames != 0) {
+        RecoveryFrames = other.RecoveryFrames;
+      }
+      if (other.Quota != 0) {
+        Quota = other.Quota;
+      }
+      if (other.TriggerMask != 0UL) {
+        TriggerMask = other.TriggerMask;
+      }
+      if (other.InitVelX != 0) {
+        InitVelX = other.InitVelX;
+      }
+      if (other.InitVelY != 0) {
+        InitVelY = other.InitVelY;
+      }
+      if (other.BulletTeamId != 0) {
+        BulletTeamId = other.BulletTeamId;
+      }
+      if (other.ChCollisionTeamId != 0) {
+        ChCollisionTeamId = other.ChCollisionTeamId;
+      }
+      if (other.CollisionTypeMask != 0UL) {
+        CollisionTypeMask = other.CollisionTypeMask;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Id = input.ReadInt32();
+            break;
+          }
+          case 18:
+          case 16: {
+            trapIdList_.AddEntriesFrom(input, _repeated_trapIdList_codec);
+            break;
+          }
+          case 24: {
+            DelayedFrames = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            RecoveryFrames = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Quota = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            TriggerMask = input.ReadUInt64();
+            break;
+          }
+          case 56: {
+            InitVelX = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            InitVelY = input.ReadInt32();
+            break;
+          }
+          case 8216: {
+            BulletTeamId = input.ReadInt32();
+            break;
+          }
+          case 8224: {
+            ChCollisionTeamId = input.ReadInt32();
+            break;
+          }
+          case 8232: {
+            CollisionTypeMask = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Id = input.ReadInt32();
+            break;
+          }
+          case 18:
+          case 16: {
+            trapIdList_.AddEntriesFrom(ref input, _repeated_trapIdList_codec);
+            break;
+          }
+          case 24: {
+            DelayedFrames = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            RecoveryFrames = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Quota = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            TriggerMask = input.ReadUInt64();
+            break;
+          }
+          case 56: {
+            InitVelX = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            InitVelY = input.ReadInt32();
+            break;
+          }
+          case 8216: {
+            BulletTeamId = input.ReadInt32();
+            break;
+          }
+          case 8224: {
+            ChCollisionTeamId = input.ReadInt32();
+            break;
+          }
+          case 8232: {
+            CollisionTypeMask = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   public sealed partial class PeerUdpAddr : pb::IMessage<PeerUdpAddr>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -8714,7 +9372,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[15]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8977,7 +9635,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[16]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9656,7 +10314,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[17]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10191,7 +10849,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[18]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10609,7 +11267,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[19]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11052,7 +11710,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[20]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[21]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11273,6 +11931,195 @@ namespace shared {
               ActuallyUsedIdf = new global::shared.InputFrameDownsync();
             }
             input.ReadMessage(ActuallyUsedIdf);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class BattleResult : pb::IMessage<BattleResult>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<BattleResult> _parser = new pb::MessageParser<BattleResult>(() => new BattleResult());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<BattleResult> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[22]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BattleResult() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BattleResult(BattleResult other) : this() {
+      winnerJoinIndex_ = other.winnerJoinIndex_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BattleResult Clone() {
+      return new BattleResult(this);
+    }
+
+    /// <summary>Field number for the "winnerJoinIndex" field.</summary>
+    public const int WinnerJoinIndexFieldNumber = 1;
+    private int winnerJoinIndex_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int WinnerJoinIndex {
+      get { return winnerJoinIndex_; }
+      set {
+        winnerJoinIndex_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as BattleResult);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(BattleResult other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (WinnerJoinIndex != other.WinnerJoinIndex) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (WinnerJoinIndex != 0) hash ^= WinnerJoinIndex.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (WinnerJoinIndex != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(WinnerJoinIndex);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (WinnerJoinIndex != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(WinnerJoinIndex);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (WinnerJoinIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(WinnerJoinIndex);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(BattleResult other) {
+      if (other == null) {
+        return;
+      }
+      if (other.WinnerJoinIndex != 0) {
+        WinnerJoinIndex = other.WinnerJoinIndex;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            WinnerJoinIndex = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            WinnerJoinIndex = input.ReadInt32();
             break;
           }
         }

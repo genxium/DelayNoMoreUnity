@@ -147,7 +147,7 @@ namespace shared {
                         patternId = 5;
                     } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState)) {
                         jumpedOrNot = true;
-                    } else if (OnWall == currCharacterDownsync.CharacterState) {
+                    } else if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                         jumpedOrNot = true;
                     }
                 }
@@ -255,7 +255,7 @@ namespace shared {
                 return;
             }
             // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
-            if (!currCharacterDownsync.JumpTriggered && OnWall == currCharacterDownsync.CharacterState) {
+            if (!currCharacterDownsync.JumpTriggered && OnWallIdle1 == currCharacterDownsync.CharacterState) {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
                 thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
             } else if (Dashing == currCharacterDownsync.CharacterState || Dashing == thatCharacterInNextFrame.CharacterState) {
@@ -482,7 +482,7 @@ namespace shared {
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
                 if (currCharacterDownsync.JumpTriggered) {
                     // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
-                    if (OnWall == currCharacterDownsync.CharacterState) {
+                    if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                         if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
                             newVx -= currCharacterDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
                         }
@@ -526,7 +526,7 @@ namespace shared {
             }
         }
 
-        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, ref BattleResult battleResult, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             int primaryHardOverlapIndex;
             for (int i = iSt; i < iEd; i++) { 
@@ -537,7 +537,7 @@ namespace shared {
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
-                Trap? primaryTrap = null;
+                Trap? primaryTrap;
                 int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, residueCollided, logger);
 
                 if (null != primaryTrap) {
@@ -611,7 +611,7 @@ namespace shared {
                         if (false == ok3 || null == bCollider) {
                             break;
                         }
-                        bool maskMatched = true, isBarrier = false, isAnotherCharacter = false, isBullet = false, isPatrolCue = false;
+                        bool maskMatched = true, isBarrier = false, isAnotherCharacter = false, isBullet = false, isPatrolCue = false, isEscape = false;
                         switch (bCollider.Data) {
                             case CharacterDownsync v1:
                                 if (!COLLIDABLE_PAIRS.Contains(v1.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
@@ -641,6 +641,11 @@ namespace shared {
                                 }
                                 isPatrolCue = true;
                                 break;
+                            case TrapColliderAttr v4:
+                                if (v4.ProvidesEscape) {
+                                    isEscape = true;
+                                }
+                                break;
                             default:
                                 // By default it's a regular barrier, even if data is nil
                                 isBarrier = true;
@@ -659,6 +664,13 @@ namespace shared {
                         if (!overlapped) {
                             continue;
                         }
+
+                        if (isEscape && currCharacterDownsync.JoinIndex <= roomCapacity) {
+                            // Currently only allowing "Player" to win.
+                            battleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
+                            return;
+                        }
+
                         normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
                         if (isAnotherCharacter && currCharacterDownsync.OmitPushback) {
                             softPushbackX = 0;
@@ -716,13 +728,11 @@ namespace shared {
                          */
                     }
                 }
-
                 /*
                 if (0 == currCharacterDownsync.SpeciesId && !landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
                     logger.LogInfo(String.Format("Rdf.Id={0}, character slipped with aShape={1}, touchingCells={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}", currRenderFrame.Id, aShape.ToString(false), aCollider.TouchingCellsStr(), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString()));
                 }
                 */
-
                 if (landedOnGravityPushback) {
                     thatCharacterInNextFrame.InAir = false;
                     bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
@@ -740,7 +750,7 @@ namespace shared {
                                 case InAirIdle1NoJump:
                                 case InAirIdle1ByJump:
                                 case InAirIdle1ByWallJump:
-                                case OnWall:
+                                case OnWallIdle1:
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
                                     int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
                                     var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
@@ -963,6 +973,14 @@ namespace shared {
                    }
                  */
                 // Update "CharacterState"
+                /*
+                TODO: Implement transition into "Crouching CharacterStates"
+                - CharacterState.CrouchIdle1
+                - CharacterState.CrouchWalking
+                - CharacterState.CrouchAtk1 
+                - CharacterState.CrouchAtked1
+                by inspecting field "CharacterDownsync.Crouching", where "CharacterDownsync.Crouching" is set during "calcHardPushbacksNormsForCharacter(......)" by checking collision with a special type of "Trap" where "Trap.IsCompletelyStatic && Trap.PushToCrouchIfOnTop".
+                */
                 if (thatCharacterInNextFrame.InAir) {
                     /*
                        if (0 == currCharacterDownsync.SpeciesId && false == currCharacterDownsync.InAir) {
@@ -994,8 +1012,18 @@ namespace shared {
                     }
                 } else {
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
-                    if (inAirSet.Contains(oldNextCharacterState) && InAirIdle1NoJump != oldNextCharacterState && InAirIdle1ByJump != oldNextCharacterState && InAirIdle1ByWallJump != oldNextCharacterState && BlownUp1 != oldNextCharacterState && OnWall != oldNextCharacterState && Dashing != oldNextCharacterState) {
+                    if (inAirSet.Contains(oldNextCharacterState) && BlownUp1 != oldNextCharacterState && OnWallIdle1 != oldNextCharacterState && Dashing != oldNextCharacterState) {
                         switch (oldNextCharacterState) {
+                            case InAirIdle1NoJump:
+                                thatCharacterInNextFrame.CharacterState = Idle1;
+                                break;
+                            case InAirIdle1ByJump:
+                            case InAirIdle1ByWallJump:
+                                if (!currCharacterDownsync.InAir && currCharacterDownsync.JumpTriggered) {
+                                    break;
+                                }
+                                thatCharacterInNextFrame.CharacterState = Idle1;
+                                break;
                             case InAirAtked1:
                                 thatCharacterInNextFrame.CharacterState = Atked1;
                                 break;
@@ -1012,10 +1040,10 @@ namespace shared {
                         case InAirIdle1NoJump:
                         case InAirIdle1ByJump:
                         case InAirIdle1ByWallJump:
-                            bool hasBeenOnWallChState = (OnWall == currCharacterDownsync.CharacterState);
+                            bool hasBeenOnWallChState = (OnWallIdle1 == currCharacterDownsync.CharacterState);
                             bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
                             if (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState) {
-                                thatCharacterInNextFrame.CharacterState = OnWall;
+                                thatCharacterInNextFrame.CharacterState = OnWallIdle1;
                             }
                             break;
                     }
@@ -1049,10 +1077,21 @@ namespace shared {
             }
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
+        public static bool isBattleResultSet(BattleResult battleResult) {
+            return (MAGIC_JOIN_INDEX_DEFAULT != battleResult.WinnerJoinIndex);
+        }
+
+        public static void resetBattleResult(ref BattleResult battleResult) {
+            battleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
+        }
+
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, ref BattleResult battleResult, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
+            }
+            if (isBattleResultSet(battleResult)) {
+                return;
             }
             int nextRenderFrameId = currRenderFrameId + 1;
             var (ok2, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
@@ -1161,7 +1200,7 @@ namespace shared {
             int trapColliderCntOffset = colliderCnt;
             _moveAndInsertDynamicTrapColliders(currRenderFrame, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
 
-            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, 0, roomCapacity + npcCnt, residueCollided, logger);
+            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, 0, roomCapacity + npcCnt, residueCollided, ref battleResult, logger);
 
             int bulletColliderCntOffset = colliderCnt;
             _insertBulletColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
@@ -1201,7 +1240,7 @@ namespace shared {
                 case InAirIdle1NoJump:
                 case InAirIdle1ByJump:
                 case InAirIdle1ByWallJump:
-                case OnWall:
+                case OnWallIdle1:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.ShrinkedSizeX, chConfig.ShrinkedSizeY);
                     break;
                 default:

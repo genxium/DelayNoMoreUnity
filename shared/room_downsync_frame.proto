@@ -27,14 +27,24 @@ enum CharacterState {
 	Dying = 11;
 
 	Dashing = 12;
-	OnWall = 13;
 
-	InAirAtk1 = 1024;
-	Atk1 = 1025;
-	Atk2 = 1026;
-	Atk3 = 1027;
-	Atk4 = 1028;
-	Atk5 = 1029;
+	OnWallIdle1 = 128; 
+    
+	CrouchIdle1 = 256; 
+	CrouchWalking = 257; 
+	CrouchAtked1 = 258;
+
+	Atk1 = 1024;
+	Atk2 = 1025;
+	Atk3 = 1026;
+	Atk4 = 1027;
+	Atk5 = 1028;
+
+	InAirAtk1 = 2048;
+
+	OnWallAtk1 = 3072; 
+
+	CrouchAtk1 = 4096; 
 }
 
 enum TrapState {
@@ -73,10 +83,10 @@ message CharacterDownsync {
 
 	CharacterState characterState = 22;
 	int32 framesInChState = 23; // number of frames elapsed in the current character state   
-	bool inAir = 24; // by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "inAir (prev -> curr)"  
+	bool inAir = 24; // by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "inAir (prev -> curr)"  
     bool jumpTriggered = 25;
 
-	bool onWall = 26; // like "inAir", it’s by design a standalone field only inferred by the collision result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+	bool onWall = 26; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
 	int32 onWallNormX = 27;
 	int32 onWallNormY = 28;
 
@@ -94,6 +104,7 @@ message CharacterDownsync {
 	bool onSlope = 37;
 
 	int32 frictionVelX = 38; // Mostly from a dynamic trap
+    bool crouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
         
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
@@ -302,6 +313,7 @@ message TrapColliderAttr {
 	int32 hitboxSizeY = 4;
     bool providesHardPushback = 5;
     bool providesDamage = 6;
+    bool providesEscape = 7;
 
 	int32 trapLocalId = 1024; // ref-back upon collision, for damage handling, hardPushback moving and effPushbacks recording (if the trap provides softPushback)
 	uint64 collisionTypeMask = 1029;
@@ -338,6 +350,22 @@ message Trap {
 	int32 dirY = 1002;
 	int32 velX = 1003;
 	int32 velY = 1004;
+}
+
+message TrapTrigger {
+    int32 id = 1;
+    repeated int32 trapIdList = 2;
+    int32 delayedFrames = 3; 
+    int32 recoveryFrames = 4; // must be > delayedFrames
+    int32 quota = 5; // -1 means infinite 
+    uint64 triggerMask = 6; // e.g. ByMovement, ByAttack
+
+    int32 initVelX = 7; // for the triggered trap
+    int32 initVelY = 8; // for the triggered trap
+
+	int32 bulletTeamId = 1027;
+	int32 chCollisionTeamId = 1028;
+	uint64 collisionTypeMask = 1029;
 }
 
 message PeerUdpAddr {
@@ -410,4 +438,8 @@ message Skill {
 message FrameLog {
     RoomDownsyncFrame rdf = 1;
     InputFrameDownsync actuallyUsedIdf = 2;
+}
+
+message BattleResult {
+    int32 winnerJoinIndex = 1;
 }

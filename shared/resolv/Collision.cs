@@ -8,7 +8,7 @@ namespace shared {
         public Collision() {
             dx = dy = 0;
             checkingCollider = null; 
-            ContactedColliders = new FrameRingBuffer<Collider>(16); // I don't expect it to exceed 10 actually
+            ContactedColliders = new FrameRingBuffer<Collider>(128); // I don't expect it to exceed 64 actually
         }
 
         public (bool, Collider?) PopFirstContactedCollider() {

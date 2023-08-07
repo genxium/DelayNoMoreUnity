@@ -10,6 +10,7 @@ namespace shared {
         public const long ROOM_STATE_PREPARE = 3;
         public const long ROOM_STATE_IN_BATTLE = 4;
         public const long ROOM_STATE_IN_SETTLEMENT = 5;
+        public const long ROOM_STATE_STOPPED = 6;
 
         // Deliberately NOT using enum for "player battle states" to make use of "C# CompareAndExchange" 
         public const long PLAYER_BATTLE_STATE_IMPOSSIBLE = -2;
@@ -107,7 +108,7 @@ namespace shared {
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PREALLOC_NPC_CAPACITY = 16;
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
-        public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 8;
+        public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 16;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
@@ -167,7 +168,7 @@ namespace shared {
             InAirAtk1,
             InAirAtked1,
             BlownUp1,
-            OnWall,
+            OnWallIdle1,
             Dashing // Yes dashing is an InAir state even if you dashed on the ground :)
         };
 

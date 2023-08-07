@@ -3,7 +3,7 @@ using System;
 
 namespace shared {
     public partial class Battle {
-        public static Collider NewConvexPolygonCollider(ConvexPolygon srcPolygon, float spaceOffsetX, float spaceOffsetY, object data) {
+        public static Collider NewConvexPolygonCollider(ConvexPolygon srcPolygon, float spaceOffsetX, float spaceOffsetY, int aMaxTouchingCellsCnt, object data) {
             if (null == srcPolygon) throw new ArgumentNullException("Null srcPolygon is not allowed in `NewConvexPolygonCollider`");
             AlignPolygon2DToBoundingBox(srcPolygon);
             float w = 0, h = 0;
@@ -26,10 +26,10 @@ namespace shared {
                 }
             }
 
-            return new Collider(srcPolygon.X + spaceOffsetX, srcPolygon.Y + spaceOffsetY, w, h, srcPolygon, data);
+            return new Collider(srcPolygon.X + spaceOffsetX, srcPolygon.Y + spaceOffsetY, w, h, srcPolygon, aMaxTouchingCellsCnt, data);
         }
 
-        public static Collider NewRectCollider(float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data) {
+        public static Collider NewRectCollider(float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, int aMaxTouchingCellsCnt, object data) {
             // [WARNING] (spaceOffsetX, spaceOffsetY) are taken into consideration while calling "NewConvexPolygonCollider" -- because "NewConvexPolygonCollider" might also be called for "polylines extracted from Tiled", it's more convenient to organized the codes this way.
             var (blX, blY) = PolygonColliderCtrToBL(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, 0, 0);
             float effW = leftPadding + w + rightPadding, effH = bottomPadding + h + topPadding;
@@ -40,7 +40,7 @@ namespace shared {
                 0, 0 + effH
             });
 
-            return NewConvexPolygonCollider(srcPolygon, spaceOffsetX, spaceOffsetY, data);
+            return NewConvexPolygonCollider(srcPolygon, spaceOffsetX, spaceOffsetY, aMaxTouchingCellsCnt, data);
         }
 
         public static void UpdateRectCollider(Collider collider, float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data) {

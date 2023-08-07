@@ -25,7 +25,7 @@ public class OfflineMapController : AbstractMapController {
 
         roomCapacity = 1;
         preallocateHolders();
-        resetCurrentMatch("Dungeon");
+        resetCurrentMatch("Castle");
         selfPlayerInfo.JoinIndex = 1;
 
         battleDurationFrames = 30 * 60;
@@ -55,6 +55,9 @@ public class OfflineMapController : AbstractMapController {
 
     // Start is called before the first frame update
     void Start() {
+        postSettlementCallback = () => {
+            onBattleStopped();
+        };
         debugDrawingEnabled = true;
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
@@ -64,6 +67,9 @@ public class OfflineMapController : AbstractMapController {
     // Update is called once per frame
     void Update() {
         try {
+            if (ROOM_STATE_IN_BATTLE != battleState) {
+                return;
+            }
             doUpdate();
             urpDrawDebug();
             if (renderFrameId >= battleDurationFrames) {
@@ -82,6 +88,5 @@ public class OfflineMapController : AbstractMapController {
     public void OnBackButtonClicked() {
         Debug.Log("OnBackButtonClicked");
         onBattleStopped();
-        characterSelectPanel.gameObject.SetActive(true);
     }
 }
