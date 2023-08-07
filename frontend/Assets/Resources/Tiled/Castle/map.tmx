@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="261">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="285">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -9,7 +9,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2TFugzAAQFEUVClLhiqqqg7dsvQEnbqkV+lBeoAeuqSNJYQwIcRgCG94IoQIIX/bQ9gXRbEHAAAAAAAAmMADf3J3yNl/s3L6r5v+66b/uum/bvr/+5pBi7EdKtui+H6sjsHa+7cJ4/Ve+aidH89yd0zRXf/L+39zPixNV3f9421j+0Hb+G0a17vO+7r1PqF7eH790/Qf0m3I/3FD+ze7X2qvf3f/l4Zr+w9RRu4bnrnt2i30T9u/rEk1D1LMqxj94/3LTP3Lxmf9p+1f17d9W/9r5sBzTXMu6J+v/7Vj2af9rqbvvNJ/Gf3Dmh3SOfb7sft/zqDFPfVPzfofr/+xg/73zfrXf0793870n67/09kc+lv/y+//OlH/Y8/v9O/un3otWf/Lob/+U/Y/vZv9qY51W/2zST2uXf1P7+Z3EYeM/cO9c7eY2hjjGut/Wvex9kHXPqD/eP3J30J//XPIPe5zkbsDAAAAAAAAAAAA8/ILy8L4Ow==
+   eJzt2k1OhDAYgOFGQsJmFpOJUWPcuXHvyqVexYN4AA8tREia5msLBfr7Lp4Qhxmm9C2YoDel1A0AAAAAAAAAACBQj2Cp2x3VP/UYSlTLvE3ncYfNaul/DfhM6rnPAf3bRv+20b9t9G8b/f99Z9DibK+jQamf6zxf18r6S7j+5e419l+zPvb077Vtr/1sW3vmczbpPdLxjnqW4ereSn/b/cDWYiG9FvOZrG8sa7q71l3r/X3X/5Y5P+N8QsZidve1b6m/b45t/Z80MX5Xd46x2Mbsa0z/eP07zVHrYOv9fwv6n9v/eWf7jv67+rv4+vcb25v9p2NchHbSWB405vHon67/mjnUO+v9bd9nrgvfuOifb3/pmJ1ln28ctrGd3f8rg36l9nethbXfteb+wvWff/+z0J/+9K+//9uM/vH6389y6M/1H6//cv5H93+J1P9TeJ/0Gv3d/V1zzvVfjpz6T3+D+x23poH+1fef2j+OW5shYDz0L6O/r71rDaTqb3sGXZrY/S+z99GHCvsfn+Wzy7HoX0b/Xmu2MNua+6X3SftS9E/d7qj+CJO6Hf3pDwAAAAAAAAAAAAAAAADIxx8WdfT7
   </data>
  </layer>
  <layer id="12" name="StaticTrapPaint" width="128" height="64">
@@ -17,7 +17,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt07EJwDAQA0DvkWUyaob5wZLCRXDp8H6I70C9QKg1AAAAAAAAAAAAAIBc0QNfxUTg7RzCGs8Xr+oO1LH/3uxPlqO6AAAAAAAAAAAAAAAAAAAAAAAAv3UDhAcQxA==
+   eJzt2sEJwkAURdFgCzb0SrMUi7EwFbIQUXB0wgt4DvxFIPlcmJBVlgUAAAAAAAAAAAAA4HOXdUYc1nm3Lw9zvz69mLyZ5/te7WMfMnjvrGEfstHO0b1ZvB+/un1Xz6PPZH4GJc7/vzl/RmXD3ccNdzNH2gFUpR1AVdoBVKUdQFXaAVSlHUBV2gFUpR1AVdoBVKUdQFXaAVSlHUBV2gHs3jf/F854FgAAAAAAAAAAAABmuwJhHx5s
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -28,7 +28,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="699.996" y="296">
+  <object id="135" x="499.996" y="300">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -40,7 +40,7 @@
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
-  <object id="235" x="736" y="336" width="32" height="32">
+  <object id="235" x="528" y="340" width="32" height="28">
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesDamage" value="1"/>
@@ -48,19 +48,19 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="239" gid="194" x="864" y="338" width="64" height="32">
+  <object id="239" gid="194" x="656" y="320" width="64" height="32">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speed" value="12"/>
    </properties>
   </object>
-  <object id="242" gid="193" x="1344" y="352" width="64" height="16">
+  <object id="242" gid="193" x="1360" y="352" width="64" height="16">
    <properties>
     <property name="dirY" value="-2"/>
     <property name="speed" value="4"/>
    </properties>
   </object>
-  <object id="246" x="768" y="400" width="32" height="48">
+  <object id="246" x="560" y="400" width="32" height="48">
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesDamage" value="1"/>
@@ -68,7 +68,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="258" x="1040" y="352" width="208" height="32">
+  <object id="258" x="848" y="336" width="16" height="32">
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesDamage" value="1"/>
@@ -76,10 +76,50 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="260" x="1136" y="448" width="16" height="16">
+  <object id="260" x="1040" y="432" width="16" height="16">
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesEscape" value="1"/>
+    <property name="speciesId" value="2"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="263" x="912" y="660" width="32" height="28">
+   <properties>
+    <property name="collisionTypeMask" value="4"/>
+    <property name="providesDamage" value="1"/>
+    <property name="speciesId" value="2"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="264" x="1152" y="660" width="32" height="28">
+   <properties>
+    <property name="collisionTypeMask" value="4"/>
+    <property name="providesDamage" value="1"/>
+    <property name="speciesId" value="2"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="279" x="912" y="336" width="16" height="32">
+   <properties>
+    <property name="collisionTypeMask" value="4"/>
+    <property name="providesDamage" value="1"/>
+    <property name="speciesId" value="2"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="280" x="1168" y="336" width="16" height="32">
+   <properties>
+    <property name="collisionTypeMask" value="4"/>
+    <property name="providesDamage" value="1"/>
+    <property name="speciesId" value="2"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="281" x="1232" y="336" width="16" height="32">
+   <properties>
+    <property name="collisionTypeMask" value="4"/>
+    <property name="providesDamage" value="1"/>
     <property name="speciesId" value="2"/>
     <property name="static" value="1"/>
    </properties>
@@ -94,7 +134,7 @@
    </properties>
    <point/>
   </object>
-  <object id="184" x="1033.66" y="629.666">
+  <object id="184" x="839.66" y="632.666">
    <properties>
     <property name="dirX" value="2"/>
     <property name="speciesId" value="1"/>
@@ -111,7 +151,7 @@
    </properties>
    <point/>
   </object>
-  <object id="192" x="1012.5" y="639.167">
+  <object id="192" x="818.5" y="642.167">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speciesId" value="3"/>
@@ -120,7 +160,7 @@
    </properties>
    <point/>
   </object>
-  <object id="195" x="1134.5" y="594">
+  <object id="195" x="1044.83" y="524.333">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="4096"/>
@@ -129,37 +169,55 @@
    </properties>
    <point/>
   </object>
+  <object id="261" x="548" y="665">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="speciesId" value="3"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="262" x="1534" y="656">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="3"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="1"/>
+   </properties>
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
    <property name="type" value="barrier_and_shelter"/>
   </properties>
-  <object id="84" x="640" y="224" width="16" height="496">
+  <object id="84" x="432" y="192" width="16" height="528">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="85" x="1680" y="224" width="16" height="496">
+  <object id="85" x="1680" y="192" width="16" height="528">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="98" x="656" y="336" width="80" height="16">
+  <object id="98" x="448" y="336" width="80" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="114" x="640" y="224" width="1056" height="16">
+  <object id="114" x="432" y="192" width="1264" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="119" x="640" y="672" width="1056" height="48">
+  <object id="119" x="432" y="688" width="1264" height="32">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="185" x="1424" y="400" width="48" height="16">
+  <object id="185" x="1440" y="400" width="32" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -168,67 +226,102 @@
    <polyline points="-80,0 -240,80 -240,96 -80,96"/>
   </object>
   <object id="219" x="1632" y="320" width="48" height="96"/>
-  <object id="226" x="1104" y="624">
-   <polyline points="0,0 -48,48 112,48 64,0"/>
+  <object id="226" x="1008" y="608">
+   <polyline points="0,0 -48,48 128,48 80,0"/>
   </object>
-  <object id="247" x="768" y="352" width="32" height="48">
+  <object id="247" x="560" y="352" width="32" height="48">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="248" x="736" y="368" width="32" height="80">
+  <object id="248" x="528" y="368" width="32" height="80">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="250" x="1312" y="368" width="16" height="304">
+  <object id="250" x="1312" y="368" width="32" height="320">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="251" x="960" y="368" width="16" height="304">
+  <object id="251" x="752" y="368" width="32" height="320">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="252" x="1024" y="368" width="16" height="32">
+  <object id="252" x="832" y="352" width="16" height="32">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="253" x="1248" y="368" width="16" height="32">
+  <object id="253" x="1248" y="352" width="16" height="32">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="254" x="1024" y="384" width="240" height="16">
+  <object id="254" x="848" y="368" width="400" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="255" x="1024" y="480" width="48" height="16">
+  <object id="255" x="928" y="464" width="48" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="256" x="1216" y="480" width="48" height="16">
+  <object id="256" x="1120" y="464" width="48" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="257" x="1120" y="464" width="48" height="16">
+  <object id="257" x="1024" y="448" width="48" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="259" x="832" y="368" width="80" height="16">
+  <object id="259" x="624" y="368" width="80" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="265" x="864" y="672" width="368" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="266" x="880" y="656" width="32" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="267" x="944" y="656" width="208" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="268" x="1184" y="656" width="32" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="282" x="864" y="352" width="48" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="283" x="928" y="352" width="238" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="284" x="1184" y="352" width="48" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
-  <object id="172" x="986" y="666">
+  <object id="172" x="792" y="683">
    <properties>
     <property name="flAct" value="3"/>
     <property name="flCaptureFrames" value="30"/>
@@ -238,41 +331,25 @@
    </properties>
    <point/>
   </object>
-  <object id="206" x="1229.66" y="670">
+  <object id="206" x="1224.33" y="670">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
-    <property name="id" value="23"/>
+    <property name="id" value="33"/>
    </properties>
    <point/>
   </object>
-  <object id="209" x="1672" y="312">
-   <properties>
-    <property name="flAct" value="4"/>
-    <property name="frAct" value="4"/>
-    <property name="id" value="26"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="210" x="664" y="336">
-   <properties>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="3"/>
-    <property name="id" value="27"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="227" x="1305.67" y="669">
+  <object id="227" x="1305" y="685">
    <properties>
     <property name="flAct" value="4"/>
     <property name="flCaptureFrames" value="30"/>
     <property name="frAct" value="4"/>
     <property name="frCaptureFrames" value="30"/>
-    <property name="id" value="30"/>
+    <property name="id" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="240" x="866" y="338">
+  <object id="240" x="658" y="320">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="flAct" value="3"/>
@@ -283,7 +360,7 @@
    </properties>
    <point/>
   </object>
-  <object id="241" x="1300" y="338">
+  <object id="241" x="1332" y="320">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="flAct" value="4"/>
@@ -305,7 +382,7 @@
    </properties>
    <point/>
   </object>
-  <object id="244" x="1380.67" y="566.667">
+  <object id="244" x="1380" y="652">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="1"/>
@@ -316,11 +393,91 @@
    </properties>
    <point/>
   </object>
-  <object id="249" x="1048.33" y="665.667">
+  <object id="249" x="855.5" y="687">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
     <property name="id" value="23"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="269" x="873.5" y="669.5">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="24"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="270" x="908" y="655">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="4"/>
+    <property name="id" value="25"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="271" x="918" y="672">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="26"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="272" x="939" y="672">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="27"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="273" x="948.5" y="655">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="28"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="274" x="1148.83" y="656">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="4"/>
+    <property name="id" value="29"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="275" x="1158.83" y="673">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="30"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="276" x="1179.83" y="673">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="31"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="277" x="1189.33" y="656">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="32"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="278" x="1241.33" y="686.667">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="34"/>
    </properties>
    <point/>
   </object>
