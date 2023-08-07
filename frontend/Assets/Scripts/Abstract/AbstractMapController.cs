@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
-using UnityEditorInternal;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
