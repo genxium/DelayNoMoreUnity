@@ -893,10 +893,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
+                        tileProps.TryGetCustomProperty("providesEscape", out providesEscape);
                         tileProps.TryGetCustomProperty("static", out isCompletelyStatic);
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
@@ -905,6 +906,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int speciesIdVal = speciesId.GetValueAsInt(); // Not checking null or empty for this property because it shouldn't be, and in case it comes empty anyway, this automatically throws an error 
                         bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
                         bool providesDamageVal = (null != providesDamage && !providesDamage.IsEmpty && 1 == providesDamage.GetValueAsInt()) ? true : false;
+                        bool providesEscapeVal = (null != providesEscape && !providesEscape.IsEmpty && 1 == providesEscape.GetValueAsInt()) ? true : false;
                         bool isCompletelyStaticVal = (null != isCompletelyStatic && !isCompletelyStatic.IsEmpty && 1 == isCompletelyStatic.GetValueAsInt()) ? true : false;
 
                         int dirXVal = (null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt());
@@ -954,6 +956,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             TrapColliderAttr colliderAttr = new TrapColliderAttr {
                                 ProvidesDamage = providesDamageVal,
                                 ProvidesHardPushback = providesHardPushbackVal,
+                                ProvidesEscape = providesEscapeVal,
                                 HitboxOffsetX = 0,
                                 HitboxOffsetY = 0,
                                 HitboxSizeX = rectVw,
@@ -991,13 +994,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                             };
                             var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
                             foreach (var collisionObj in collisionObjs) {
-                                bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false;
+                                bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false, childProvidesEscapeVal = false;
                                 foreach (var collisionObjProp in collisionObj.m_CustomProperties) {
                                     if ("providesHardPushback".Equals(collisionObjProp.m_Name)) {
                                         childProvidesHardPushbackVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
                                     }
                                     if ("providesDamage".Equals(collisionObjProp.m_Name)) {
                                         childProvidesDamageVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                    }
+                                    if ("providesEscape".Equals(collisionObjProp.m_Name)) {
+                                        childProvidesEscapeVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
                                     }
                                     if ("collisionTypeMask".Equals(collisionObjProp.m_Name) && !collisionObjProp.IsEmpty) {
                                         collisionTypeMaskVal =  (ulong)collisionObjProp.GetValueAsInt();
@@ -1011,6 +1017,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 TrapColliderAttr colliderAttr = new TrapColliderAttr {
                                     ProvidesDamage = childProvidesDamageVal,
                                     ProvidesHardPushback = childProvidesHardPushbackVal,
+                                    ProvidesEscape = childProvidesEscapeVal,
                                     HitboxOffsetX = hitboxOffsetVx,
                                     HitboxOffsetY = hitboxOffsetVy,
                                     HitboxSizeX = hitboxSizeVx,

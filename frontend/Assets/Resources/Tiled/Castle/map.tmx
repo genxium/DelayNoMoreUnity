@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="285">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="291">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -9,7 +9,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2k1OhDAYgOFGQsJmFpOJUWPcuXHvyqVexYN4AA8tREia5msLBfr7Lp4Qhxmm9C2YoDel1A0AAAAAAAAAACBQj2Cp2x3VP/UYSlTLvE3ncYfNaul/DfhM6rnPAf3bRv+20b9t9G8b/f99Z9DibK+jQamf6zxf18r6S7j+5e419l+zPvb077Vtr/1sW3vmczbpPdLxjnqW4ereSn/b/cDWYiG9FvOZrG8sa7q71l3r/X3X/5Y5P+N8QsZidve1b6m/b45t/Z80MX5Xd46x2Mbsa0z/eP07zVHrYOv9fwv6n9v/eWf7jv67+rv4+vcb25v9p2NchHbSWB405vHon67/mjnUO+v9bd9nrgvfuOifb3/pmJ1ln28ctrGd3f8rg36l9nethbXfteb+wvWff/+z0J/+9K+//9uM/vH6389y6M/1H6//cv5H93+J1P9TeJ/0Gv3d/V1zzvVfjpz6T3+D+x23poH+1fef2j+OW5shYDz0L6O/r71rDaTqb3sGXZrY/S+z99GHCvsfn+Wzy7HoX0b/Xmu2MNua+6X3SftS9E/d7qj+CJO6Hf3pDwAAAAAAAAAAAAAAAADIxx8WdfT7
+   eJzt2k1OhDAYgOFGQsJmFpOJUWPcuXHvyqVexYN4AA8tRJqQ5msLBfr7Lp4QB6ZT+sKYoDel1A0AAAAAAAAAACBQj2Cp2x3VP/UcSlTLuk3ncYfNaul/DXhP6rXPAf3bRv+20b9t9G8b/f99Z9DibK+jQamf67xe18r6S7j/5e419l9zfezp3y+2/eJn27VnPmeTjpHGO+pZhqt7K/1t3we2Fpr0Wsxnsr65rOnuuu5a7++7/7es+RnnEzIXs7uvfUv9fWts6/+0EON3deeYi23Ovsb0j9e/WzjqOtj6/b8F/c/t/7yzfUf/Xf1dfP37je3N/tMYF6GdNJeHBXM8+qfrH7Kmuv/az/MdR/98+0tjdpZ9vnnY5nZ2/68M+pXa33UtrP0sH+7/Mvqfhf70p3/9/d9m9I/X/36WQ3/u/3j99fkf3f8lUv9P4TjpNfq7+7vWnPu/HDn1n/4G9ztuTQP9q+8/tX8ctzZDwHzoX0Z/X3vXNZCqvx43db/S+l9m76MPFfY/Pvq9eiz6l9G/XzTTzLbmfuk4aV+K/qnbHdUfYVK3oz/9AQAAAAAAAAAAAAAAAAD5+AO3WPSo
   </data>
  </layer>
  <layer id="12" name="StaticTrapPaint" width="128" height="64">
@@ -57,7 +57,7 @@
   <object id="242" gid="193" x="1360" y="352" width="64" height="16">
    <properties>
     <property name="dirY" value="-2"/>
-    <property name="speed" value="4"/>
+    <property name="speed" value="6"/>
    </properties>
   </object>
   <object id="246" x="560" y="400" width="32" height="48">
@@ -122,6 +122,20 @@
     <property name="providesDamage" value="1"/>
     <property name="speciesId" value="2"/>
     <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="285" gid="194" x="928" y="480" width="64" height="32">
+   <properties>
+    <property name="dirX" value="0"/>
+    <property name="dirY" value="-2"/>
+    <property name="speed" value="4"/>
+   </properties>
+  </object>
+  <object id="286" gid="194" x="1104" y="480" width="64" height="32">
+   <properties>
+    <property name="dirX" value="0"/>
+    <property name="dirY" value="-2"/>
+    <property name="speed" value="4"/>
    </properties>
   </object>
  </objectgroup>
@@ -260,16 +274,6 @@
    </properties>
   </object>
   <object id="254" x="848" y="368" width="400" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="255" x="928" y="464" width="48" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="256" x="1120" y="464" width="48" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -478,6 +482,50 @@
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
     <property name="id" value="34"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="287" x="944" y="464">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="2"/>
+    <property name="fdCaptureFrames" value="30"/>
+    <property name="fuAct" value="2"/>
+    <property name="fuCaptureFrames" value="30"/>
+    <property name="id" value="132"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="288" x="944" y="592">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="1"/>
+    <property name="fdCaptureFrames" value="15"/>
+    <property name="fuAct" value="1"/>
+    <property name="fuCaptureFrames" value="15"/>
+    <property name="id" value="133"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="289" x="1136" y="464">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="2"/>
+    <property name="fdCaptureFrames" value="30"/>
+    <property name="fuAct" value="2"/>
+    <property name="fuCaptureFrames" value="30"/>
+    <property name="id" value="133"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="290" x="1136" y="592">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="1"/>
+    <property name="fdCaptureFrames" value="15"/>
+    <property name="fuAct" value="1"/>
+    <property name="fuCaptureFrames" value="15"/>
+    <property name="id" value="134"/>
    </properties>
    <point/>
   </object>
