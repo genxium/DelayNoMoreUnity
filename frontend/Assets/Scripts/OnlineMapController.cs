@@ -220,11 +220,11 @@ public class OnlineMapController : AbstractMapController {
     // Update is called once per frame
     void Update() {
         try {
+            pollAndHandleWsRecvBuffer();
+            pollAndHandleUdpRecvBuffer();
             if (ROOM_STATE_IN_BATTLE != battleState) {
                 return;
             }
-            pollAndHandleWsRecvBuffer();
-            pollAndHandleUdpRecvBuffer();
             if (shouldLockStep) {
                 NetworkDoctor.Instance.LogLockedStepCnt();
                 shouldLockStep = false;
