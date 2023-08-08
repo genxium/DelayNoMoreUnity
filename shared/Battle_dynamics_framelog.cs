@@ -17,20 +17,44 @@ namespace shared {
             ifd.ConfirmedList = 0;
         }
 
-        public static string stringifyCharacterDownsync(CharacterDownsync pd) {
+        public static string stringifyPlayer(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall);
+            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible);
+        }
+
+        public static string stringifyNpc(CharacterDownsync pd) {
+            if (null == pd) return "";
+            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue);
+        }
+
+        public static string stringifyTrap(Trap tr) {
+            if (null == tr) return "";
+            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}", tr.TrapLocalId, tr.TrapState, tr.FramesInTrapState, tr.CapturedByPatrolCue, tr.FramesInPatrolCue, tr.WaivingPatrolCueId, tr.WaivingSpontaneousPatrol, tr.VirtualGridX, tr.VirtualGridY, tr.DirX, tr.DirY, tr.VelX, tr.VelY);
         }
 
         public static string stringifyBullet(Bullet bt) {
             if (null == bt) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}", bt.BattleAttr.BulletLocalId, bt.BattleAttr.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bt.Config.HitboxSizeX, bt.Config.HitboxSizeY);
+            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", bt.BattleAttr.BulletLocalId, bt.BattleAttr.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bt.Config.HitboxSizeX, bt.Config.HitboxSizeY);
         }
 
         public static string stringifyRdf(RoomDownsyncFrame rdf) {
             var playerSb = new List<String>();
             for (int k = 0; k < rdf.PlayersArr.Count; k++) {
-                playerSb.Add(stringifyCharacterDownsync(rdf.PlayersArr[k]));
+                playerSb.Add(stringifyPlayer(rdf.PlayersArr[k]));
+            }
+
+            var npcSb = new List<String>();
+            for (int k = 0; k < rdf.NpcsArr.Count; k++) {
+                var npc = rdf.NpcsArr[k];
+                if (null == npc || TERMINATING_PLAYER_ID == npc.Id) break;
+                npcSb.Add(stringifyNpc(npc));
+            }
+
+            var trapSb = new List<String>();
+            for (int k = 0; k < rdf.TrapsArr.Count; k++) {
+                var trap = rdf.TrapsArr[k];
+                if (null == trap || TERMINATING_TRAP_ID == trap.TrapLocalId) break;
+                trapSb.Add(stringifyTrap(trap));
             }
 
             var bulletSb = new List<String>();
@@ -40,11 +64,24 @@ namespace shared {
                 bulletSb.Add(stringifyBullet(bt));
             }
 
-            if (0 >= bulletSb.Count) {
-                return String.Format("{{ id:{0}\nps:{1} }}", rdf.Id, String.Join(',', playerSb));
-            } else {
-                return String.Format("{{ id:{0}\nps:{1}\nbs:{2} }}", rdf.Id, String.Join(',', playerSb), String.Join(',', bulletSb));
+            var rdfSb = new List<String>();
+             
+            var playerS = String.Join(';', playerSb);
+            rdfSb.Add(String.Format("id:{0}", rdf.Id));
+            rdfSb.Add(String.Format("ps:{0}", playerS));
+            if (0 < npcSb.Count) {      
+                rdfSb.Add(String.Format("ns:{0}", String.Join(';', npcSb)));
             }
+
+            if (0 < trapSb.Count) {      
+                rdfSb.Add(String.Format("ts:{0}", String.Join(';', trapSb)));
+            }
+            
+            if (0 < bulletSb.Count) {
+                rdfSb.Add(String.Format("bs:{0}", String.Join(';', bulletSb)));
+            } 
+
+            return String.Format("{{ {0} }}", String.Join('\n', rdfSb));
         }
 
         public static string stringifyIfd(InputFrameDownsync ifd, bool trimConfirmedList) {

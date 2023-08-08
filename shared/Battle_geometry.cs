@@ -348,7 +348,7 @@ namespace shared {
 
 				e = (-2.98, 1.49).Unit()
 			*/
-            roundToRectilinearDir(ref axisX, ref axisY);
+            //roundToRectilinearDir(ref axisX, ref axisY);
             float aStart = MAX_FLOAT32;
             float aEnd = -MAX_FLOAT32;
             float bStart = MAX_FLOAT32;
