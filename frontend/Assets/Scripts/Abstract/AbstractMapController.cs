@@ -778,7 +778,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             battleState = ROOM_STATE_IN_SETTLEMENT;
             settlementPanel.gameObject.SetActive(true);
             settlementPanel.playFinishedAnim();
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             postSettlementCallback();
         }
     }

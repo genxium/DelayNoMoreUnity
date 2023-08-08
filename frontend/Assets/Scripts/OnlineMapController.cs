@@ -177,6 +177,7 @@ public class OnlineMapController : AbstractMapController {
     void Start() {
         if (null == postSettlementCallback) {
             postSettlementCallback = () => {
+                onBattleStopped();
             };
         }
         Physics.autoSimulation = false;
