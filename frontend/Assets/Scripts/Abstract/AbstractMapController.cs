@@ -597,6 +597,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         inputBuffer.Clear();
         residueCollided.Clear();
         trapLocalIdToColliderAttrs.Clear();
+
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
         resetBattleResult(ref battleResult);
@@ -819,7 +820,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                             */
                             var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, null);
                             //Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
-                            collisionSys.AddSingle(barrierCollider);
                             staticColliders[staticColliderIdx++] = barrierCollider;
                         } else {
                             var points = inMapCollider.points;
@@ -832,7 +832,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                             var srcPolygon = new ConvexPolygon(anchorCx, anchorCy, points2.ToArray());
                             var barrierCollider = NewConvexPolygonCollider(srcPolygon, 0, 0, maxTouchingCellsCnt, null);
 
-                            collisionSys.AddSingle(barrierCollider);
                             staticColliders[staticColliderIdx++] = barrierCollider;
                         }
 
@@ -919,7 +918,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                         };
 
                         var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, newPatrolCue);
-                        collisionSys.AddSingle(patrolCueCollider);
                         staticColliders[staticColliderIdx++] = patrolCueCollider;
                         //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
@@ -1006,7 +1004,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                             var trapCollider = NewRectCollider(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, colliderAttr);
 
-                            collisionSys.AddSingle(trapCollider);
                             completelyStaticTrapColliders.Add(trapCollider);
                             trapList.Add(trap);
                             staticColliders[staticColliderIdx++] = trapCollider;
@@ -1063,6 +1060,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 };
                                 colliderAttrs.Add(colliderAttr);
                             }
+                            // Sort to avoid any platform-specific uncertainty
+                            colliderAttrs.Sort(delegate (TrapColliderAttr lhs, TrapColliderAttr rhs) {
+                                return Math.Sign(lhs.TrapLocalId - rhs.TrapLocalId);
+                            });
                             trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
                             trapList.Add(trap);
                             Destroy(child.gameObject); // [WARNING] It'll be animated by "TrapPrefab" in "applyRoomDownsyncFrame" instead!
@@ -1079,6 +1080,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         playerStartingCposList.Sort(delegate ((Vector, int, int) lhs, (Vector, int, int) rhs) {
             return Math.Sign(lhs.Item2 - rhs.Item2);
         });
+
+        for (int i = 0; i < staticColliderIdx; i++) {
+            collisionSys.AddSingle(staticColliders[i]);
+        }
 
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity);
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;

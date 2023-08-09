@@ -16,7 +16,8 @@ namespace shared {
                 effPushbacks[i + trapColliderCntOffset].Y = 0;
 
                 List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[currTrap.TrapLocalId];
-                foreach (var colliderAttr in colliderAttrs) {
+                for (int j = 0; j < colliderAttrs.Count; j++) {
+                    var colliderAttr = colliderAttrs[j];
                     Collider trapCollider = dynamicRectangleColliders[colliderCnt];
                     float boxCx, boxCy, boxCw, boxCh;
                     calcTrapBoxInCollisionSpace(colliderAttr, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);

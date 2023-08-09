@@ -21,14 +21,14 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="137" x="889.337" y="521.5">
+  <object id="137" x="880" y="496">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="135" x="837.33" y="468">
+  <object id="135" x="848" y="480">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -84,7 +84,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="263" x="912" y="660" width="32" height="28">
+  <object id="263" x="912" y="672" width="32" height="16">
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesDamage" value="1"/>
@@ -92,7 +92,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="264" x="1152" y="660" width="32" height="28">
+  <object id="264" x="1152" y="672" width="32" height="16">
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesDamage" value="1"/>
@@ -140,7 +140,7 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="183" x="1258.34" y="623.001">
+  <object id="183" x="1248" y="640">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="1"/>
@@ -148,7 +148,7 @@
    </properties>
    <point/>
   </object>
-  <object id="184" x="839.66" y="632.666">
+  <object id="184" x="840" y="640">
    <properties>
     <property name="dirX" value="2"/>
     <property name="speciesId" value="1"/>
@@ -157,7 +157,7 @@
    </properties>
    <point/>
   </object>
-  <object id="188" x="1281.16" y="637.667">
+  <object id="188" x="1280" y="640">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="3"/>
@@ -165,7 +165,7 @@
    </properties>
    <point/>
   </object>
-  <object id="192" x="818.5" y="642.167">
+  <object id="192" x="808" y="640">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speciesId" value="3"/>
@@ -174,7 +174,7 @@
    </properties>
    <point/>
   </object>
-  <object id="195" x="1044.83" y="524.333">
+  <object id="195" x="1044" y="524">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="4096"/>
@@ -183,7 +183,7 @@
    </properties>
    <point/>
   </object>
-  <object id="261" x="548" y="665">
+  <object id="261" x="548" y="656">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speciesId" value="3"/>
@@ -335,7 +335,7 @@
    </properties>
    <point/>
   </object>
-  <object id="206" x="1224.33" y="670">
+  <object id="206" x="1224" y="670">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -386,7 +386,7 @@
    </properties>
    <point/>
   </object>
-  <object id="244" x="1380" y="652">
+  <object id="244" x="1394" y="656">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="1"/>
@@ -445,7 +445,7 @@
    </properties>
    <point/>
   </object>
-  <object id="274" x="1148.83" y="656">
+  <object id="274" x="1148" y="656">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="4"/>
@@ -453,7 +453,7 @@
    </properties>
    <point/>
   </object>
-  <object id="275" x="1158.83" y="673">
+  <object id="275" x="1156" y="674">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -461,7 +461,7 @@
    </properties>
    <point/>
   </object>
-  <object id="276" x="1179.83" y="673">
+  <object id="276" x="1180" y="674">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -469,7 +469,7 @@
    </properties>
    <point/>
   </object>
-  <object id="277" x="1189.33" y="656">
+  <object id="277" x="1184" y="656">
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="20"/>
@@ -477,7 +477,7 @@
    </properties>
    <point/>
   </object>
-  <object id="278" x="1241.33" y="686.667">
+  <object id="278" x="1240" y="686">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
