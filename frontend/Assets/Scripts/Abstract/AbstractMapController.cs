@@ -225,6 +225,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (false == ok1 || null == currRdf) {
                 throw new ArgumentNullException(String.Format("Couldn't find renderFrame for i={0} to rollback, renderFrameId={1}, might've been interruptted by onRoomDownsyncFrame", i, renderFrameId));
             }
+            if (currRdf.Id != i) {
+                throw new ArgumentException(String.Format("Corrupted historic rdf for i={0} to rollback, currRdf={1}!", i, currRdf));
+            }
             int j = ConvertToDelayedInputFrameId(i);
             var (ok2, delayedInputFrame) = inputBuffer.GetByFrameId(j);
             if (false == ok2 || null == delayedInputFrame) {
@@ -258,7 +261,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (false == ok3 || null == nextRdf) {
                 throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, renderFrameId={1}", i + 1, renderFrameId));
             }
-
+            if (nextRdf.Id != i+1) {
+                throw new ArgumentException(String.Format("Corrupted historic rdf for i+1={0} to rollback, nextRdf={1}!", i, nextRdf));
+            }
             if (true == isChasing) {
                 // [WARNING] Move the cursor "chaserRenderFrameId" when "true == isChasing", keep in mind that "chaserRenderFrameId" is not monotonic!
                 chaserRenderFrameId = nextRdf.Id;
@@ -457,7 +462,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
-        int residueCollidedCap = 128;
+        int residueCollidedCap = 256;
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
         renderBufferSize = 2048;

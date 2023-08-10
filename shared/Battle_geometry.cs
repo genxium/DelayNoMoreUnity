@@ -91,6 +91,9 @@ namespace shared {
                 }
 
                 if (!isBarrier) {
+                    if (residueCollided.Cnt >= residueCollided.N) {
+                        throw new ArgumentException(String.Format("residueCollided is already full! residueCollided.Cnt={0}, residueCollided.N={1}: trying to insert collider.Shape={4}, collider.Data={5}", residueCollided.Cnt, residueCollided.N, bCollider.Shape, bCollider.Data));
+                    }
                     residueCollided.Put(bCollider);
                     continue;
                 }
@@ -178,6 +181,9 @@ namespace shared {
                 }
 
                 if (!isAnotherHardPushbackTrap && !isAnActualBarrier) {
+                    if (residueCollided.Cnt >= residueCollided.N) {
+                        throw new ArgumentException(String.Format("residueCollided is already full! residueCollided.Cnt={0}, residueCollided.N={1}: trying to insert collider.Shape={4}, collider.Data={5}", residueCollided.Cnt, residueCollided.N, bCollider.Shape, bCollider.Data));
+                    }
                     residueCollided.Put(bCollider);
                     continue;
                 }

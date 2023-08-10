@@ -53,6 +53,9 @@ namespace shared {
                 for (int x = cx; x <= ex; x++) {
                     var c = GetCell(x, y);
                     if (null != c) {
+                        if (collider.TouchingCells.Cnt >= collider.TouchingCells.N) {
+                            throw new ArgumentException(String.Format("collider.TouchingCells is already full! Cnt={0}, N={1}: trying to insert cell X={2}, Y={3}", collider.TouchingCells.Cnt, collider.TouchingCells.N, x, y));
+                        }
                         c.register(collider);
                         collider.TouchingCells.Put(c);
                     }

@@ -72,8 +72,10 @@ namespace shared {
                         
                         if (cc.HasSeen(o)) {
                             continue;
-                        } 
-
+                        }
+                        if (cc.ContactedColliders.Cnt >= cc.ContactedColliders.N) {
+                            throw new ArgumentException(String.Format("cc.ContactedColliders is already full! for cell at X={0}, Y={1}, cc.ContactedColliders.Cnt={2}, cc.ContactedColliders.N={3}: trying to insert collider.Shape={4}, collider.Data={5}", X, Y, cc.ContactedColliders.Cnt, cc.ContactedColliders.N, o.Shape, o.Data));
+                        }
                         cc.ContactedColliders.Put(o);
                     }
                 }
