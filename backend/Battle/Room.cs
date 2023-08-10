@@ -90,9 +90,9 @@ public class Room {
         capacity = roomCapacity;
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
-        frameLogEnabled = true;
+        frameLogEnabled = false;
         int fps = 60;
-        int durationSeconds = 20;
+        int durationSeconds = 60;
         battleDurationFrames = durationSeconds * fps;
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";
@@ -536,6 +536,8 @@ public class Room {
 
                 await Task.Delay(toSleepMillis);
             }
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Error running battleMainLoopActionAsync for roomId={0}", id);
         } finally {
             await SettleBattleAsync();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is settled@renderFrameId={1}", id, renderFrameId);

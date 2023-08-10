@@ -30,7 +30,7 @@ namespace shared {
             }
         }
 
-        private static void _calcDynamicTrapMovementCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, InputFrameDecoded decodedInputHolder, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        private static void _calcDynamicTrapMovementCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, InputFrameDecoded decodedInputHolder, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             int primaryHardOverlapIndex;
             for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
                 primaryOverlapResult.reset();
@@ -119,7 +119,7 @@ namespace shared {
             }
         }
 
-        private static void _calcCompletelyStaticTrapDamage(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, FrameRingBuffer<Collider> residueCollided, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
+        private static void _calcCompletelyStaticTrapDamage(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
             for (int i = 0; i < completelyStaticTrapColliders.Count; i++) {
                 Collider aCollider = completelyStaticTrapColliders[i];
                 TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;

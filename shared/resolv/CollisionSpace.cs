@@ -41,11 +41,29 @@ namespace shared {
 			return null;
 		}
         public void AddSingle(Collider collider) {
+            /*
+             [WARNING] 
+            
+            1. For a static collider, this "AddSingle" would only be called once, thus no cleanup for static collider is needed.
+            2. For a dynamic collider, this "AddSingle" would be called multiple times, but at the end of each "Step", we'd call "Space.RemoveSingle" to clean up for the dynamic collider.
+            */
 			collider.Space = this;
+            var (cx, cy, ex, ey) = collider.BoundsToSpace(0, 0);
+            for (int y = cy; y <= ey; y++) {
+                for (int x = cx; x <= ex; x++) {
+                    var c = GetCell(x, y);
+                    if (null != c) {
+                        c.register(collider);
+                        collider.TouchingCells.Put(c);
+                    }
+                }
 
-            // We call Update() once to make sure the object gets its cells added.
-            collider.Update();
-		}
+            }
+
+            if (null != collider.Shape) {
+                collider.Shape.SetPosition(collider.X, collider.Y);
+            }
+        }
 
         public void RemoveSingle(Collider collider) {
 			while (0 < collider.TouchingCells.Cnt) {

@@ -158,6 +158,8 @@ public class WebSocketController : ControllerBase {
                 if (ErrCode.Ok == addPlayerToRoomResult) {
                     room.OnPlayerDisconnected(playerId);
                 }
+            } catch (Exception ex) {
+                _logger.LogError(ex, "Session got an exception");
             } finally {
                 // [WARNING] Checking session.State here is possibly not thread-safe, but it's not a big concern for now
                 if (!cancellationToken.IsCancellationRequested && WebSocketState.Aborted != session.State) {

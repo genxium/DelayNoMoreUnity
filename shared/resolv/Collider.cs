@@ -31,30 +31,6 @@ namespace shared {
             return (cx, cy, ex, ey);
         }
 
-        public void Update() {
-            if (null == Space) {
-                throw new ArgumentException("Collider Space is null when calling `Update`!");
-            }
-            var heldSpace = Space; // Holds the space
-            Space.RemoveSingle(this); // Would set "this.Space = null"
-            Space = heldSpace; // Re-assign the held space
-            var (cx, cy, ex, ey) = BoundsToSpace(0, 0);
-            for (int y = cy; y <= ey; y++) {
-                for (int x = cx; x <= ex; x++) {
-                    var c = Space.GetCell(x, y);
-                    if (null != c) {
-                        c.register(this);
-                        TouchingCells.Put(c);
-                    }
-                }
-
-            }
-
-            if (null != Shape) {
-                Shape.SetPosition(X, Y);
-            }
-        }
-
         public bool CheckAllWithHolder(float dx, float dy, Collision cc) {
             if (null == Space) {
                 return false;
@@ -127,5 +103,19 @@ namespace shared {
 
 			return sb.ToString();
 		}
+
+        public String TouchingCellsStaticColliderStr() {
+            var rb = this.TouchingCells;
+            var sb = new StringBuilder();
+            for (int i = rb.StFrameId; i < rb.EdFrameId; i++) {
+                var (ok, cell) = rb.GetByFrameId(i);
+                if (!ok || null == cell) {
+                    continue;
+                }
+                sb.AppendFormat("{{ {0} }}\n", cell.toStaticColliderShapeStr());
+            }
+
+            return sb.ToString();
+        }
     }	
 }

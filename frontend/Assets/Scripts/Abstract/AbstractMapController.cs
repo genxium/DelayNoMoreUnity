@@ -55,6 +55,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Vector[] effPushbacks;
     protected Vector[][] hardPushbackNormsArr;
     protected Vector[] softPushbacks;
+    protected bool softPushbackEnabled;
     protected shared.Collider[] dynamicRectangleColliders;
     protected shared.Collider[] staticColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
@@ -247,7 +248,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, ref battleResult, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, ref battleResult, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -312,7 +313,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 		 */
 
         // Printing of this message might induce a performance impact.
-        // Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
+        Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
 
@@ -459,7 +460,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int residueCollidedCap = 128;
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
-        renderBufferSize = 1024;
+        renderBufferSize = 2048;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
             renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
@@ -499,8 +500,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < softPushbacks.Length; i++) {
             softPushbacks[i] = new Vector(0, 0);
         }
+        softPushbackEnabled = true;
 
-        int dynamicRectangleCollidersCap = 64;
+        int dynamicRectangleCollidersCap = 128;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
         staticColliders = new shared.Collider[128];
 
@@ -581,7 +583,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
         int cellWidth = 64;
-        int cellHeight = 256; // To avoid dynamic trap as a standing point to slip when moving down along with the character
+        int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
         collisionSys = new CollisionSpace(spaceOffsetX << 1, spaceOffsetY << 1, cellWidth, cellHeight);
         maxTouchingCellsCnt = ((spaceOffsetX << 1)/cellWidth) * ((spaceOffsetY << 1)/cellHeight) + 1;
         for (int i = 0; i < dynamicRectangleColliders.Length; i++) {
@@ -922,6 +924,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
+                
                 case "TrapStartingPos":
                     foreach (Transform trapChild in child) {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
@@ -1007,9 +1010,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                             completelyStaticTrapColliders.Add(trapCollider);
                             trapList.Add(trap);
                             staticColliders[staticColliderIdx++] = trapCollider;
-
+                            trapLocalId++;
                             Debug.Log(String.Format("new completely static trap created {0}", trap));
                         } else {
+                            
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
                             var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                             var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
@@ -1066,11 +1070,13 @@ public abstract class AbstractMapController : MonoBehaviour {
                             });
                             trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
                             trapList.Add(trap);
+                            trapLocalId++;
+                            
                             Destroy(child.gameObject); // [WARNING] It'll be animated by "TrapPrefab" in "applyRoomDownsyncFrame" instead!
                         }
-                        trapLocalId++;
                     }
                     break;
+                
                 default:
                     break;
             }

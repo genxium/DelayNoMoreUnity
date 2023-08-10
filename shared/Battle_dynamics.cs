@@ -526,10 +526,10 @@ namespace shared {
             }
         }
 
-        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, ref BattleResult battleResult, ILoggerBridge logger) {
+        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPusbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, ref BattleResult battleResult, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             int primaryHardOverlapIndex;
-            for (int i = iSt; i < iEd; i++) { 
+            for (int i = iSt; i < iEd; i++) {
                 primaryOverlapResult.reset();
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
@@ -575,7 +575,7 @@ namespace shared {
                      */
                     float newVelXApprox = thatCharacterInNextFrame.VelX - primaryOverlapResult.OverlapX * projectedVel;
                     float newVelYApprox = thatCharacterInNextFrame.VelY - primaryOverlapResult.OverlapY * projectedVel;
-                    thatCharacterInNextFrame.VelX = (int)Math.Round(newVelXApprox);
+                    thatCharacterInNextFrame.VelX = (int)Math.Floor(newVelXApprox);
                     thatCharacterInNextFrame.VelY = (int)Math.Floor(newVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
                     /*
                        if (2 == currCharacterDownsync.SpeciesId) {
@@ -596,11 +596,10 @@ namespace shared {
                      */
                 }
 
-                primaryOverlapResult.reset();
                 int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
                 float primarySoftOverlapMagSqr = float.MinValue;
 
-                if (0 < residueCollided.Cnt && Dying != currCharacterDownsync.CharacterState) {
+                if (softPusbackEnabled && 0 < residueCollided.Cnt && Dying != currCharacterDownsync.CharacterState) {
                     /*
                        if (0 == currCharacterDownsync.SpeciesId) {
                        logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
@@ -676,6 +675,7 @@ namespace shared {
                             softPushbackX = 0;
                             softPushbackY = 0;
                         }
+
                         for (int k = 0; k < hardPushbackCnt; k++) {
                             Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
                             float projectedMagnitude = softPushbackX * hardPushbackNorm.X + softPushbackY * hardPushbackNorm.Y;
@@ -715,24 +715,20 @@ namespace shared {
                     }
 
                     if (0 < softPushbacksCnt) {
-                        /*
-                           if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
-                           logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
-                           }
-                         */
-                        processPrimaryAndImpactEffPushback(effPushbacks[i], softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP);
-                        /*
-                           if (0 == currCharacterDownsync.SpeciesId && landedOnGravityPushback) {
-                           logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
-                           }
-                         */
+                        // logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
                     }
+
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP);
+
+                    //logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));                         
                 }
+
                 /*
-                if (0 == currCharacterDownsync.SpeciesId && !landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
-                    logger.LogInfo(String.Format("Rdf.Id={0}, character slipped with aShape={1}, touchingCells={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}", currRenderFrame.Id, aShape.ToString(false), aCollider.TouchingCellsStr(), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString()));
+                if (!landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
+                    logger.LogInfo(String.Format("Rdf.Id={0}, character {1} slipped with aShape={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, touchCells=\n{6}", currRenderFrame.Id, currCharacterDownsync, aShape.ToString(false), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), aCollider.TouchingCellsStaticColliderStr()));
                 }
                 */
+
                 if (landedOnGravityPushback) {
                     thatCharacterInNextFrame.InAir = false;
                     bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
@@ -1085,7 +1081,7 @@ namespace shared {
             battleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, ref BattleResult battleResult, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, ref BattleResult battleResult, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -1200,16 +1196,16 @@ namespace shared {
             int trapColliderCntOffset = colliderCnt;
             _moveAndInsertDynamicTrapColliders(currRenderFrame, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
 
-            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, dynamicRectangleColliders, 0, roomCapacity + npcCnt, residueCollided, ref battleResult, logger);
+            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + npcCnt, residueCollided, ref battleResult, logger);
 
             int bulletColliderCntOffset = colliderCnt;
             _insertBulletColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
             _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, logger);
 
-            _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, softPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
+            _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
 
-            _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, residueCollided, completelyStaticTrapColliders, logger);
+            _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, completelyStaticTrapColliders, logger);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
 

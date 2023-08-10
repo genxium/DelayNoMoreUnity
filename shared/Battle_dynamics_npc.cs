@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Google.Protobuf.Collections;
 
 namespace shared {
@@ -219,8 +218,8 @@ namespace shared {
                     }
                 }
 
-                visionCollider.Data = null;
                 collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
+                visionCollider.Data = null;
             }
 
             if (!hasVisionReaction && hasEnemyBehindMe) {
