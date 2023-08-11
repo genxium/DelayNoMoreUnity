@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using Google.Protobuf.Collections;
 
 namespace shared {
     public partial class Battle {
@@ -19,12 +18,12 @@ namespace shared {
 
         public static string stringifyPlayer(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},ci:{12},jt:{13},fri:{14},dx:{15},dy:{16}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY);
         }
 
         public static string stringifyNpc(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},ci:{12},jt:{13},fri:{14},frp:{15},wpc:{16},wsp:{17},cp:{18},dx:{19},dy:{20}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY);
         }
 
         public static string stringifyTrap(Trap tr) {
