@@ -90,9 +90,9 @@ public class Room {
         capacity = roomCapacity;
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
-        frameLogEnabled = false;
+        frameLogEnabled = true;
         int fps = 60;
-        int durationSeconds = 60;
+        int durationSeconds = 30;
         battleDurationFrames = durationSeconds * fps;
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";

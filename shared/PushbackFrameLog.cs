@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace shared {
     public class PushbackFrameLog {
@@ -22,6 +23,7 @@ namespace shared {
         }
 
         public void setHardPushback(int primaryHardPushbackIndex, Vector[] hardPushbacks, int hardPushbacksCnt) {
+            HardPushbacks.Clear();
             PrimaryHardPushbackIndex = primaryHardPushbackIndex;
             for (int i = 0; i < hardPushbacksCnt; i++) {
                 var (ok, candidate) = HardPushbacks.GetByFrameId(i);
@@ -41,6 +43,7 @@ namespace shared {
         }
 
         public void setSoftPushback(int primarySoftPushbackIndex, Vector[] softPushbacks, int softPushbacksCnt) {
+            SoftPushbacks.Clear();
             PrimarySoftPushbackIndex = primarySoftPushbackIndex;
             for (int i = 0; i < softPushbacksCnt; i++) {
                 var (ok, candidate) = SoftPushbacks.GetByFrameId(i);
@@ -57,6 +60,18 @@ namespace shared {
                 candidate.X = softPushbacks[i].X;
                 candidate.Y = softPushbacks[i].Y;
             }
+        }
+
+        public string toString() {
+            var sb = new List<string>();
+            if (-1 != PrimaryHardPushbackIndex) {
+                sb.Add("    h:{{ " + Vector.VectorFrameRingBufferToString(HardPushbacks) + ", pi:" + PrimaryHardPushbackIndex + " }}");
+            } 
+            if (-1 != PrimarySoftPushbackIndex) {
+                sb.Add("    s:{{ " + Vector.VectorFrameRingBufferToString(SoftPushbacks) + ", pi:" + PrimarySoftPushbackIndex + " }}");
+            }
+
+            return String.Join('\n', sb);
         }
     }
 
@@ -92,6 +107,17 @@ namespace shared {
             } else {
                 candidate.setSoftPushback(primaryIndex, pushbacks, pushbacksCnt);
             }
+        }
+
+        public string toString() {
+            var chSb = new List<String>();
+            for (int k = CharacterPushbackFrameLogs.StFrameId; k < CharacterPushbackFrameLogs.EdFrameId; k++) {
+                var (ok, single) = CharacterPushbackFrameLogs.GetByFrameId(k);
+                if (!ok || null == single) throw new Exception(String.Format("RdfId={0}, CharacterPushbackFrameLogs doesn't have k={1} properly set! N={2}, Cnt={3}, StFrameId={4}, EdFrameId={5}", RdfId, k, CharacterPushbackFrameLogs.N, CharacterPushbackFrameLogs.Cnt, CharacterPushbackFrameLogs.StFrameId, CharacterPushbackFrameLogs.EdFrameId));
+                int joinIndex = k+1;
+                chSb.Add("j:" + joinIndex + " {{\n" + single.toString() + "\n}}");
+            }
+            return String.Format("{{ \nrdfId:{0}\n{1} \n}}", RdfId, String.Join('\n', chSb));
         }
     }
 }

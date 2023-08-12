@@ -100,19 +100,20 @@ namespace shared {
             return String.Format("{0}\n{1}", stringifyRdf(fl.Rdf), stringifyIfd(fl.ActuallyUsedIdf, trimConfirmedList));
         }
 
-        public static void wrapUpFrameLogs(FrameRingBuffer<RoomDownsyncFrame> renderBuffer, FrameRingBuffer<InputFrameDownsync> inputBuffer, Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput, bool trimConfirmedList, string dirPath, string filename) {
+        public static void wrapUpFrameLogs(FrameRingBuffer<RoomDownsyncFrame> renderBuffer, FrameRingBuffer<InputFrameDownsync> inputBuffer, Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput, bool trimConfirmedList, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, string dirPath, string filename) {
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(dirPath, filename))) {
                 for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
                     var (ok1, rdf) = renderBuffer.GetByFrameId(i);
                     if (!ok1 || null == rdf) {
                         throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
                     }
+
                     trimRdfInPlace(rdf);
                     InputFrameDownsync ifd;
                     if (!rdfIdToActuallyUsedInput.TryGetValue(i, out ifd)) {
                         if (i + 1 == renderBuffer.EdFrameId) {
                             // It's OK that "InputFrameDownsync for the latest RoomDownsyncFrame" HASN'T BEEN USED YET. 
-                            outputFile.WriteLine(String.Format("[{0}]", stringifyRdf(rdf)));
+                            outputFile.WriteLine(String.Format("{0}", stringifyRdf(rdf)));
                             break;
                         }
                         var j = ConvertToDelayedInputFrameId(i);
@@ -123,9 +124,21 @@ namespace shared {
                     }
                     var frameLog = new FrameLog {
                         Rdf = rdf,
-                            ActuallyUsedIdf = ifd
+                        ActuallyUsedIdf = ifd
                     };
-                    outputFile.WriteLine(String.Format("[{0}]", stringifyFrameLog(frameLog, trimConfirmedList)));
+                    
+                    outputFile.WriteLine(stringifyFrameLog(frameLog, trimConfirmedList));
+                }
+
+                for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
+                    var (ok2, rdfPfl) = pushbackFrameLogBuffer.GetByFrameId(i);
+                    if ((!ok2 || null == rdfPfl) && i+1 < renderBuffer.EdFrameId) {
+                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 rdfPfl for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2}), pushbackFrameLogBuffer[StFrameId, EdFrameId)=[{3}, {4})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId, pushbackFrameLogBuffer.StFrameId, pushbackFrameLogBuffer.EdFrameId));
+                    }
+
+                    if (null != rdfPfl) {       
+                        outputFile.WriteLine(rdfPfl.toString());
+                    }
                 }
             }
         }
