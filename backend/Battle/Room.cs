@@ -90,7 +90,7 @@ public class Room {
         capacity = roomCapacity;
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
-        frameLogEnabled = false;
+        frameLogEnabled = true;
         int fps = 60;
         int durationSeconds = 60;
         battleDurationFrames = durationSeconds * fps;

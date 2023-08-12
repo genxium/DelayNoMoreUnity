@@ -9,7 +9,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2k1OhDAYgOFGQsJmFpOJUWPcuXHvyqVexYN4AA8tRJqQ5msLBfr7Lp4QB6ZT+sKYoDel1A0AAAAAAAAAACBQj2Cp2x3VP/UcSlTLuk3ncYfNaul/DXhP6rXPAf3bRv+20b9t9G8b/f99Z9DibK+jQamf67xe18r6S7j/5e419l9zfezp3y+2/eJn27VnPmeTjpHGO+pZhqt7K/1t3we2Fpr0Wsxnsr65rOnuuu5a7++7/7es+RnnEzIXs7uvfUv9fWts6/+0EON3deeYi23Ovsb0j9e/WzjqOtj6/b8F/c/t/7yzfUf/Xf1dfP37je3N/tMYF6GdNJeHBXM8+qfrH7Kmuv/az/MdR/98+0tjdpZ9vnnY5nZ2/68M+pXa33UtrP0sH+7/Mvqfhf70p3/9/d9m9I/X/36WQ3/u/3j99fkf3f8lUv9P4TjpNfq7+7vWnPu/HDn1n/4G9ztuTQP9q+8/tX8ctzZDwHzoX0Z/X3vXNZCqvx43db/S+l9m76MPFfY/Pvq9eiz6l9G/XzTTzLbmfuk4aV+K/qnbHdUfYVK3oz/9AQAAAAAAAAAAAAAAAAD5+AO3WPSo
+   eJzt2stKxDAYQOFgKXQzi2EQFXHnxr0rl/piPoAPbQsNhPAnaTNtrmfxUZx2OpmctEL1ppS6AQAAAAAAAAAARBoRLXe7o/rnHkONWpm35Xs8YLdW+l8j3pN77ktA/77Rv2/07xv9+0b/frzPJqV+r+t8XRvrL6G/3L3F/lvWxz39R2M7Gj+71p79nE06RjrfUc8yfN176e+6H7haaNJrKZ/Jhsaypbtv3fXeP3T975nzM75PzFjs7qH2PfUPzbGr/4shxe/qwTMW15hDjemfrv9gOGod7L3/70H/8/ov9+PXdRvbfqD/Xf19Qv3Hne3t/ss5LkI7aSxPBvt89M/XP2ZOdf+tnxc6jv7l9pfOOTj2hcbhGtvZ/X8K6Fdrf99a2PpZIVz/dfQ/C/3pT//2+3+s6J+u/+OqhP5c/+n66+9/dP+3RP2/heOk1+jv7++bc67/epTUf/kb3N+8tU30b77/0v553rpMEeOhfx39Q+19ayBXf33e3P1q639Zfc6+VNz/+Oj36nPRv47+o9FMs9va+6XjpH05+udud1R/xMndjv70BwAAAAAAAAAAAAAAAACU4x+rTvSK
   </data>
  </layer>
  <layer id="12" name="StaticTrapPaint" width="128" height="64">
@@ -180,24 +180,6 @@
     <property name="speciesId" value="4096"/>
     <property name="static" value="1"/>
     <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="261" x="548" y="656">
-   <properties>
-    <property name="dirX" value="+2"/>
-    <property name="speciesId" value="3"/>
-    <property name="static" value="1"/>
-    <property name="teamId" value="2"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="262" x="1534" y="656">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="speciesId" value="3"/>
-    <property name="static" value="1"/>
-    <property name="teamId" value="1"/>
    </properties>
    <point/>
   </object>

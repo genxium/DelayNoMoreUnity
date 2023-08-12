@@ -89,7 +89,7 @@ public class OnlineMapController : AbstractMapController {
                     onBattleStopped();
                     // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
                     if (frameLogEnabled) {
-                        wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
+                        wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, pushbackFrameLogBuffer, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
                     }
                     break;
                 case DOWNSYNC_MSG_ACT_INPUT_BATCH:

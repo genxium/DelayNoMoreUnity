@@ -2,11 +2,27 @@ using System;
 
 namespace shared {
     // [WARNING] It's non-trivial to declare "Vector" as a "struct" due to the generic type constraint imposed on "RingBuffer<T>"; moreover it's also unnecessary to save heap RAM allocation this way, as shown below the "ConvexPolygon" should hold retained "Points" in heap RAM anyway, and the "ConvexPolygon instances" themselves are reused by the "Collider instances" which are also reused in battle.
-    public class Vector {
+    public class Vector : IComparable<Vector> {
         public float X, Y;
         public Vector(float x, float y) {
             X = x;
             Y = y;
+        }
+
+        public int CompareTo(Vector other) {
+            if (X < other.X) {     
+                return -1;
+            } else if (X > other.X) {
+                return +1;
+            } else {
+                if (Y < other.Y) {  
+                    return -1;
+                } else if (Y > other.Y) {  
+                    return +1;
+                } else {
+                    return 0;
+                }
+            }
         }
 
         public new String ToString() {
@@ -18,6 +34,17 @@ namespace shared {
             for (int i = 0; i < cnt; i++) {
                 s += vecs[i].ToString() + "; ";
             }
+            return s;
+        }
+
+        public static String VectorFrameRingBufferToString(FrameRingBuffer<Vector> vecs) {
+            String s = "[";
+            for (int i = vecs.StFrameId; i < vecs.EdFrameId; i++) {
+                var (ok, vec) = vecs.GetByFrameId(i);
+                if (!ok || null == vec) throw new Exception(String.Format("vecs doesn't have i={0} properly set! N={1}, Cnt={2}, StFrameId={3}, EdFrameId={4}", i, vecs.N, vecs.Cnt, vecs.StFrameId, vecs.EdFrameId));
+                s += vec.ToString() + "; ";
+            }
+            s += "]";
             return s;
         }
     }

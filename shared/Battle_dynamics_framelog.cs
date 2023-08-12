@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using Google.Protobuf.Collections;
 
 namespace shared {
     public partial class Battle {
@@ -19,12 +18,12 @@ namespace shared {
 
         public static string stringifyPlayer(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},ci:{12},jt:{13},fri:{14},dx:{15},dy:{16}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY);
         }
 
         public static string stringifyNpc(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},ci:{12},jt:{13},fri:{14},frp:{15},wpc:{16},wsp:{17},cp:{18},dx:{19},dy:{20}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY);
         }
 
         public static string stringifyTrap(Trap tr) {
@@ -101,19 +100,20 @@ namespace shared {
             return String.Format("{0}\n{1}", stringifyRdf(fl.Rdf), stringifyIfd(fl.ActuallyUsedIdf, trimConfirmedList));
         }
 
-        public static void wrapUpFrameLogs(FrameRingBuffer<RoomDownsyncFrame> renderBuffer, FrameRingBuffer<InputFrameDownsync> inputBuffer, Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput, bool trimConfirmedList, string dirPath, string filename) {
+        public static void wrapUpFrameLogs(FrameRingBuffer<RoomDownsyncFrame> renderBuffer, FrameRingBuffer<InputFrameDownsync> inputBuffer, Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput, bool trimConfirmedList, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, string dirPath, string filename) {
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(dirPath, filename))) {
                 for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
                     var (ok1, rdf) = renderBuffer.GetByFrameId(i);
                     if (!ok1 || null == rdf) {
                         throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
                     }
+
                     trimRdfInPlace(rdf);
                     InputFrameDownsync ifd;
                     if (!rdfIdToActuallyUsedInput.TryGetValue(i, out ifd)) {
                         if (i + 1 == renderBuffer.EdFrameId) {
                             // It's OK that "InputFrameDownsync for the latest RoomDownsyncFrame" HASN'T BEEN USED YET. 
-                            outputFile.WriteLine(String.Format("[{0}]", stringifyRdf(rdf)));
+                            outputFile.WriteLine(String.Format("{0}", stringifyRdf(rdf)));
                             break;
                         }
                         var j = ConvertToDelayedInputFrameId(i);
@@ -124,9 +124,21 @@ namespace shared {
                     }
                     var frameLog = new FrameLog {
                         Rdf = rdf,
-                            ActuallyUsedIdf = ifd
+                        ActuallyUsedIdf = ifd
                     };
-                    outputFile.WriteLine(String.Format("[{0}]", stringifyFrameLog(frameLog, trimConfirmedList)));
+                    
+                    outputFile.WriteLine(stringifyFrameLog(frameLog, trimConfirmedList));
+                }
+
+                for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
+                    var (ok2, rdfPfl) = pushbackFrameLogBuffer.GetByFrameId(i);
+                    if ((!ok2 || null == rdfPfl) && i+1 < renderBuffer.EdFrameId) {
+                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 rdfPfl for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2}), pushbackFrameLogBuffer[StFrameId, EdFrameId)=[{3}, {4})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId, pushbackFrameLogBuffer.StFrameId, pushbackFrameLogBuffer.EdFrameId));
+                    }
+
+                    if (null != rdfPfl) {       
+                        outputFile.WriteLine(rdfPfl.toString());
+                    }
                 }
             }
         }
