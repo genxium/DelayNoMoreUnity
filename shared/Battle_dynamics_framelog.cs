@@ -18,12 +18,12 @@ namespace shared {
 
         public static string stringifyPlayer(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},ci:{12},jt:{13},fri:{14},dx:{15},dy:{16}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},ci:{12},jt:{13},fri:{14},dx:{15},dy:{16},ct:{17}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY, pd.ChCollisionTeamId);
         }
 
         public static string stringifyNpc(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},ci:{12},jt:{13},fri:{14},frp:{15},wpc:{16},wsp:{17},cp:{18},dx:{19},dy:{20}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},ci:{12},jt:{13},fri:{14},frp:{15},wpc:{16},wsp:{17},cp:{18},dx:{19},dy:{20},ct:{21}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.CapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY, pd.ChCollisionTeamId);
         }
 
         public static string stringifyTrap(Trap tr) {
@@ -113,7 +113,7 @@ namespace shared {
                     if (!rdfIdToActuallyUsedInput.TryGetValue(i, out ifd)) {
                         if (i + 1 == renderBuffer.EdFrameId) {
                             // It's OK that "InputFrameDownsync for the latest RoomDownsyncFrame" HASN'T BEEN USED YET. 
-                            outputFile.WriteLine(String.Format("{0}", stringifyRdf(rdf)));
+                            outputFile.Write(String.Format("{0}\n", stringifyRdf(rdf))); // Don't use "WriteLine", here we deliberately need a same "line ending symbol" across all platforms for better comparison!
                             break;
                         }
                         var j = ConvertToDelayedInputFrameId(i);
@@ -127,7 +127,7 @@ namespace shared {
                         ActuallyUsedIdf = ifd
                     };
                     
-                    outputFile.WriteLine(stringifyFrameLog(frameLog, trimConfirmedList));
+                    outputFile.Write(stringifyFrameLog(frameLog, trimConfirmedList) + "\n");
                 }
 
                 for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
@@ -137,7 +137,7 @@ namespace shared {
                     }
 
                     if (null != rdfPfl) {       
-                        outputFile.WriteLine(rdfPfl.toString());
+                        outputFile.Write(rdfPfl.toString() + "\n");
                     }
                 }
             }

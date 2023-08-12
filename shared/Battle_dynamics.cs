@@ -1,7 +1,6 @@
 using System;
 using static shared.CharacterState;
 using System.Collections.Generic;
-using System.IO;
 using Google.Protobuf.Collections;
 
 namespace shared {
@@ -273,6 +272,11 @@ namespace shared {
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+
+                if (PATTERN_ID_UNABLE_TO_OP == patternId) {
+                    continue;
+                }
+
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
                 /*
@@ -541,7 +545,8 @@ namespace shared {
                 int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, residueCollided, logger);
 
                 if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
-                    currPushbackFrameLog.setByJoinIndex(currCharacterDownsync.JoinIndex, primaryHardOverlapIndex, hardPushbackNormsArr[i] /* [WARNING] by now "hardPushbackNormsArr[i]" is not yet normalized */, hardPushbackCnt, true);
+                    currPushbackFrameLog.setTouchingCellsByJoinIndex(currCharacterDownsync.JoinIndex, aCollider);
+                    currPushbackFrameLog.setHardPushbacksByJoinIndex(currCharacterDownsync.JoinIndex, primaryHardOverlapIndex, hardPushbackNormsArr[i] /* [WARNING] by now "hardPushbackNormsArr[i]" is not yet normalized */, hardPushbackCnt);
                 }
 
                 if (null != primaryTrap) {
@@ -600,10 +605,11 @@ namespace shared {
                      */
                 }
 
-                int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
-                float primarySoftOverlapMagSqr = float.MinValue;
-
-                if (softPusbackEnabled && 0 < residueCollided.Cnt && Dying != currCharacterDownsync.CharacterState) {
+                if (softPusbackEnabled && Dying != currCharacterDownsync.CharacterState && false == currCharacterDownsync.OmitPushback) {
+                    int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
+                    int totOtherChCnt = 0, cellOverlappedOtherChCnt = 0, shapeOverlappedOtherChCnt = 0;
+                    int origResidueCollidedSt = residueCollided.StFrameId, origResidueCollidedEd = residueCollided.EdFrameId; 
+                    float primarySoftOverlapMagSqr = float.MinValue;
                     /*
                        if (0 == currCharacterDownsync.SpeciesId) {
                        logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
@@ -614,112 +620,82 @@ namespace shared {
                         if (false == ok3 || null == bCollider) {
                             break;
                         }
-                        bool maskMatched = true, isBarrier = false, isAnotherCharacter = false, isBullet = false, isPatrolCue = false, isEscape = false;
-                        switch (bCollider.Data) {
-                            case CharacterDownsync v1:
-                                if (!COLLIDABLE_PAIRS.Contains(v1.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
-                                    maskMatched = false;
-                                    break;
-                                }
-                                if (Dying == v1.CharacterState) {
-                                    continue;
-                                }
-                                if (currCharacterDownsync.ChCollisionTeamId == v1.ChCollisionTeamId) {
-                                    // ignore collision within same collisionTeam, rarely used
-                                    continue;
-                                }
-                                isAnotherCharacter = true;
-                                break;
-                            case Bullet v2:
-                                if (!COLLIDABLE_PAIRS.Contains(v2.Config.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
-                                    maskMatched = false;
-                                    break;
-                                }
-                                isBullet = true;
-                                break;
-                            case PatrolCue v3:
-                                if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
-                                    maskMatched = false;
-                                    break;
-                                }
-                                isPatrolCue = true;
-                                break;
-                            case TrapColliderAttr v4:
-                                if (v4.ProvidesEscape) {
-                                    isEscape = true;
-                                }
-                                break;
-                            default:
-                                // By default it's a regular barrier, even if data is nil
-                                isBarrier = true;
-                                break;
+                        ConvexPolygon bShape = bCollider.Shape;
+                        var v2 = bCollider.Data as TrapColliderAttr;
+                        if (null != v2 && v2.ProvidesEscape && currCharacterDownsync.JoinIndex <= roomCapacity) {
+                            var (escaped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                            // Currently only allowing "Player" to win.
+                            if (escaped) {
+                                battleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
+                                return;
+                            } else {
+                                continue;
+                            }
                         }
-                        if (false == maskMatched) {
+                        var v1 = bCollider.Data as CharacterDownsync;
+                        if (null == v1) {
+                            continue;
+                        } 
+                        ++totOtherChCnt;
+                        if (!COLLIDABLE_PAIRS.Contains(v1.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
                             continue;
                         }
-                        if (isBullet || isPatrolCue || isBarrier) {
-                            // ignore bullets for this step
+                        if (Dying == v1.CharacterState) {
+                            continue;
+                        }
+                        if (currCharacterDownsync.ChCollisionTeamId == v1.ChCollisionTeamId) {
+                            // ignore collision within same collisionTeam, rarely used
                             continue;
                         }
 
-                        ConvexPolygon bShape = bCollider.Shape;
+                        cellOverlappedOtherChCnt++;
+
                         var (overlapped, softPushbackX, softPushbackY) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
                         if (!overlapped) {
                             continue;
                         }
 
-                        if (isEscape && currCharacterDownsync.JoinIndex <= roomCapacity) {
-                            // Currently only allowing "Player" to win.
-                            battleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
-                            return;
-                        }
+                        shapeOverlappedOtherChCnt++;
 
                         normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
-                        if (isAnotherCharacter && currCharacterDownsync.OmitPushback) {
-                            softPushbackX = 0;
-                            softPushbackY = 0;
-                        }
-
-                        for (int k = 0; k < hardPushbackCnt; k++) {
-                            Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
-                            float projectedMagnitude = softPushbackX * hardPushbackNorm.X + softPushbackY * hardPushbackNorm.Y;
-                            if (isAnotherCharacter) {
-                                if (0 > projectedMagnitude || (thatCharacterInNextFrame.OnSlope && k == primaryHardOverlapIndex)) {
-                                    // [WARNING] We don't want a softPushback to push an on-slope character either "into" or "outof" the slope!
-                                    softPushbackX -= projectedMagnitude * hardPushbackNorm.X;
-                                    softPushbackY -= projectedMagnitude * hardPushbackNorm.Y;
-                                    if (softPushbackX < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
-                                        // Clamp to zero if it does not move at least 1 virtual grid step
-                                        softPushbackX = 0;
-                                    }
-                                    if (softPushbackY < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
-                                        // Clamp to zero if it does not move at least 1 virtual grid step
-                                        softPushbackY = 0;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (isAnotherCharacter && (0 != softPushbackX || 0 != softPushbackY)) {
-                            // [WARNING] Only count non-zero softPushbacks. The order of statements here is deliberately put as-is to reduce computations.
-                            var magSqr = softPushbackX * softPushbackX + softPushbackY * softPushbackY;
-                            if (primarySoftOverlapMagSqr < magSqr) {
-                                primarySoftOverlapMagSqr = magSqr;
-                                primarySoftOverlapIndex = softPushbacksCnt;
-                            }
-
-                            softPushbacks[softPushbacksCnt].X = softPushbackX;
-                            softPushbacks[softPushbacksCnt].Y = softPushbackY;
-                            softPushbacksCnt++;
-                        }
-
                         if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
                             landedOnGravityPushback = true;
                         }
+
+                        // [WARNING] Due to yet unknown reason, the resultant order of "hardPushbackNormsArr[i]" could be random for different characters in the same battle (maybe due to rollback not recovering the existing StaticCollider-TouchingCell information which could've been swapped by "TouchingCell.unregister(...)", please generate FrameLog and see the PushbackFrameLog part for details), the following traversal processing MUST BE ORDER-INSENSITIVE for softPushbackX & softPushbackY!
+                        for (int k = 0; k < hardPushbackCnt; k++) {
+                            Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
+                            float projectedMagnitude = softPushbackX * hardPushbackNorm.X + softPushbackY * hardPushbackNorm.Y;
+                            if (0 > projectedMagnitude || (thatCharacterInNextFrame.OnSlope && k == primaryHardOverlapIndex)) {
+                                // [WARNING] We don't want a softPushback to push an on-slope character either "into" or "outof" the slope!
+                                softPushbackX -= projectedMagnitude * hardPushbackNorm.X;
+                                softPushbackY -= projectedMagnitude * hardPushbackNorm.Y;
+                            }
+                        }
+
+                        if (Math.Abs(softPushbackX) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
+                            // Clamp to zero if it does not move at least 1 virtual grid step
+                            softPushbackX = 0;
+                        }
+                        if (Math.Abs(softPushbackY) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
+                            // Clamp to zero if it does not move at least 1 virtual grid step
+                            softPushbackY = 0;
+                        }
+
+                        var magSqr = softPushbackX * softPushbackX + softPushbackY * softPushbackY;
+                        if (primarySoftOverlapMagSqr < magSqr) {
+                            primarySoftOverlapMagSqr = magSqr;
+                            primarySoftOverlapIndex = softPushbacksCnt;
+                        }
+
+                        // [WARNING] Don't skip here even if both "softPushbackX" and "softPushbackY" are zero, because we'd like to record them in "pushbackFrameLog"
+                        softPushbacks[softPushbacksCnt].X = softPushbackX;
+                        softPushbacks[softPushbacksCnt].Y = softPushbackY;
+                        softPushbacksCnt++;
                     }
 
                     if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
-                        currPushbackFrameLog.setByJoinIndex(currCharacterDownsync.JoinIndex, primarySoftOverlapIndex, softPushbacks /* [WARNING] by now "softPushbacks" is not yet normalized */, softPushbacksCnt, false);
+                        currPushbackFrameLog.setSoftPushbacksByJoinIndex(currCharacterDownsync.JoinIndex, primarySoftOverlapIndex, softPushbacks /* [WARNING] by now "softPushbacks" is not yet normalized */, softPushbacksCnt, totOtherChCnt, cellOverlappedOtherChCnt, shapeOverlappedOtherChCnt, origResidueCollidedSt, origResidueCollidedEd);
                     }
                     // logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
 

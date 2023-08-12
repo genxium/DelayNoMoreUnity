@@ -222,9 +222,10 @@ namespace shared {
             // Now that we have a "primaryOverlap" which we should get off by top priority, i.e. all the other hardPushbacks should clamp their x and y components to be no bigger than that of the "primaryOverlap".
             float primaryPushbackX = pushbacks[primaryOverlapIndex].X;
             float primaryPushbackY = pushbacks[primaryOverlapIndex].Y;
-            
+            if (0 == primaryPushbackX && 0 == primaryPushbackY) return;
             for (int i = 0; i < pushbacksCnt; i++) {
                 var pushback = pushbacks[i];
+                if (0 == pushback.X && 0 == pushback.Y) continue;
                 if (i != primaryOverlapIndex) {
                     if (pushback.X * primaryPushbackX > 0) {
                         if (Math.Abs(pushback.X) > Math.Abs(primaryPushbackX)) {

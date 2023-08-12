@@ -332,6 +332,11 @@ namespace shared {
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
+                
+                if (PATTERN_ID_UNABLE_TO_OP == patternId) {
+                    continue;
+                }
+
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
 
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);

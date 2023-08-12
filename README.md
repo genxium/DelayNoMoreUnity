@@ -18,6 +18,10 @@ _(a typical framelog comparison from 2 peers)_
 
 ![framelog_comp](./charts/TypicalFrameLogComparison.png)
 
+_(where to find framelog files)_
+
+![framelog_location](./charts/FrameLogLocations.png)
+
 # How does it work to synchronize across multiple players?
 _(how input delay roughly works)_
 

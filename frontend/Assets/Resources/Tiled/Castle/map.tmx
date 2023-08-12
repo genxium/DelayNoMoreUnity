@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="291">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="293">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -21,14 +21,14 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="137" x="880" y="496">
+  <object id="137" x="1654" y="278">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="135" x="848" y="480">
+  <object id="135" x="504" y="302">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -180,6 +180,24 @@
     <property name="speciesId" value="4096"/>
     <property name="static" value="1"/>
     <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="291" x="653" y="645">
+   <properties>
+    <property name="dirX" value="2"/>
+    <property name="speciesId" value="3"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="292" x="1480" y="621">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="3"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="1"/>
    </properties>
    <point/>
   </object>
