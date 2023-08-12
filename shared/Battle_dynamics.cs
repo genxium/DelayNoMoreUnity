@@ -273,7 +273,7 @@ namespace shared {
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
-                if (PATTERN_ID_UNABLE_TO_OP == patternId) {
+                if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     continue;
                 }
 
@@ -663,15 +663,19 @@ namespace shared {
                         }
 
                         // [WARNING] Due to yet unknown reason, the resultant order of "hardPushbackNormsArr[i]" could be random for different characters in the same battle (maybe due to rollback not recovering the existing StaticCollider-TouchingCell information which could've been swapped by "TouchingCell.unregister(...)", please generate FrameLog and see the PushbackFrameLog part for details), the following traversal processing MUST BE ORDER-INSENSITIVE for softPushbackX & softPushbackY!
+                        float softPushbackXReduction = 0f, softPushbackYReduction = 0f; 
                         for (int k = 0; k < hardPushbackCnt; k++) {
                             Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
                             float projectedMagnitude = softPushbackX * hardPushbackNorm.X + softPushbackY * hardPushbackNorm.Y;
                             if (0 > projectedMagnitude || (thatCharacterInNextFrame.OnSlope && k == primaryHardOverlapIndex)) {
                                 // [WARNING] We don't want a softPushback to push an on-slope character either "into" or "outof" the slope!
-                                softPushbackX -= projectedMagnitude * hardPushbackNorm.X;
-                                softPushbackY -= projectedMagnitude * hardPushbackNorm.Y;
+                                softPushbackXReduction += projectedMagnitude * hardPushbackNorm.X; 
+                                softPushbackYReduction += projectedMagnitude * hardPushbackNorm.Y; 
                             }
                         }
+
+                        softPushbackX -= softPushbackXReduction;
+                        softPushbackY -= softPushbackYReduction;
 
                         if (Math.Abs(softPushbackX) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
                             // Clamp to zero if it does not move at least 1 virtual grid step
@@ -863,7 +867,7 @@ namespace shared {
                                 if (false == shouldOmitStun) {
                                     if (bullet.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;
-                                    } else {
+                                    } else if (CharacterState.BlownUp1 != atkedCharacterInNextFrame.CharacterState) {
                                         atkedCharacterInNextFrame.CharacterState = CharacterState.Atked1;
                                     }
                                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
@@ -1083,14 +1087,16 @@ namespace shared {
                 throw new ArgumentNullException(String.Format("renderBuffer was not fully pre-allocated for nextRenderFrameId={0}!", nextRenderFrameId));
             }
 
-            var (ok3, currRdfPushbackFrameLog) = pushbackFrameLogBuffer.GetByFrameId(currRenderFrameId);
-            if (!ok3 || null == currRdfPushbackFrameLog) {
-                if (currRenderFrameId == pushbackFrameLogBuffer.EdFrameId) {
-                    pushbackFrameLogBuffer.DryPut();
-                    (_, currRdfPushbackFrameLog) = pushbackFrameLogBuffer.GetByFrameId(currRenderFrameId);
-                }
-            }
+            bool ok3 = false;
+            RdfPushbackFrameLog? currRdfPushbackFrameLog = null;
             if (pushbackFrameLogEnabled) {
+                (ok3, currRdfPushbackFrameLog) = pushbackFrameLogBuffer.GetByFrameId(currRenderFrameId);
+                if (!ok3 || null == currRdfPushbackFrameLog) {
+                    if (currRenderFrameId == pushbackFrameLogBuffer.EdFrameId) {
+                        pushbackFrameLogBuffer.DryPut();
+                        (_, currRdfPushbackFrameLog) = pushbackFrameLogBuffer.GetByFrameId(currRenderFrameId);
+                    }
+                }
                 if (null == currRdfPushbackFrameLog) {
                     // Get the pointer to currRdfPushbackFrameLog anyway, but don't throw error if it's null but not required!
                     throw new ArgumentNullException(String.Format("pushbackFrameLogBuffer was not fully pre-allocated for currRenderFrameId={0}!", currRenderFrameId));

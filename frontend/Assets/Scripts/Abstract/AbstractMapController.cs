@@ -70,7 +70,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, DebugLine> cachedLineRenderers;
 
     protected bool frameLogEnabled = false;
-    protected bool pushbackFrameLogEnabled = true;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
     protected List<shared.Collider> completelyStaticTrapColliders;
@@ -253,7 +252,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, ref battleResult, pushbackFrameLogBuffer, pushbackFrameLogEnabled, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, ref battleResult, pushbackFrameLogBuffer, frameLogEnabled, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -468,7 +467,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
         
-        renderBufferSize = 4096;
+        renderBufferSize = 1024;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
             renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
@@ -476,11 +475,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         renderBuffer.Clear(); // Then use it by "DryPut"
 
         int softPushbacksCap = 16;
-        pushbackFrameLogBuffer = new FrameRingBuffer<RdfPushbackFrameLog>(renderBufferSize);
-        for (int i = 0; i < renderBufferSize; i++) {
-            pushbackFrameLogBuffer.Put(new RdfPushbackFrameLog(TERMINATING_RENDER_FRAME_ID, roomCapacity+preallocNpcCapacity, softPushbacksCap));
+        if (frameLogEnabled) {
+            pushbackFrameLogBuffer = new FrameRingBuffer<RdfPushbackFrameLog>(renderBufferSize);
+            for (int i = 0; i < renderBufferSize; i++) {
+                pushbackFrameLogBuffer.Put(new RdfPushbackFrameLog(TERMINATING_RENDER_FRAME_ID, roomCapacity+preallocNpcCapacity, softPushbacksCap));
+            }
+            pushbackFrameLogBuffer.Clear(); // Then use it by "DryPut"
         }
-        pushbackFrameLogBuffer.Clear(); // Then use it by "DryPut"
 
         int inputBufferSize = (renderBufferSize >> 1) + 1;
         inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
@@ -611,7 +612,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
         Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
         renderBuffer.Clear();
-        pushbackFrameLogBuffer.Clear();
+        if (frameLogEnabled) {
+            pushbackFrameLogBuffer.Clear();
+        }
         inputBuffer.Clear();
         residueCollided.Clear();
         trapLocalIdToColliderAttrs.Clear();

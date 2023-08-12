@@ -42,12 +42,12 @@ public class OnlineMapController : AbstractMapController {
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
                     selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
                     roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
-                    preallocateHolders();
-                    playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch("Castle");
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
+                    preallocateHolders();
+                    playerWaitingPanel.InitPlayerSlots(roomCapacity);
+                    resetCurrentMatch("Castle");
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
