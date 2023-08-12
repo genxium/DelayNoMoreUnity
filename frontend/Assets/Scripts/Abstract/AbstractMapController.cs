@@ -468,7 +468,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
         
-        renderBufferSize = 2048;
+        renderBufferSize = 4096;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
             renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));

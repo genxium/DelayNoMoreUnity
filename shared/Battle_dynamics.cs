@@ -832,7 +832,7 @@ namespace shared {
                 if (null == bulletCollider.Data) continue;
                 var bullet = bulletCollider.Data as Bullet;
                 if (null == bullet || TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) {
-                    logger.LogWarn(String.Format("dynamicRectangleColliders[i:{0}] is not havind bullet type! iSt={1}, iEd={2}", i, iSt, iEd));
+                    logger.LogWarn(String.Format("dynamicRectangleColliders[i:{0}] is not having bullet type! iSt={1}, iEd={2}", i, iSt, iEd));
                     continue;
                 }
                 bool collided = bulletCollider.CheckAllWithHolder(0, 0, collision);
