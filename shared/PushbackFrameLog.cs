@@ -115,7 +115,9 @@ namespace shared {
                 var (ok, single) = CharacterPushbackFrameLogs.GetByFrameId(k);
                 if (!ok || null == single) throw new Exception(String.Format("RdfId={0}, CharacterPushbackFrameLogs doesn't have k={1} properly set! N={2}, Cnt={3}, StFrameId={4}, EdFrameId={5}", RdfId, k, CharacterPushbackFrameLogs.N, CharacterPushbackFrameLogs.Cnt, CharacterPushbackFrameLogs.StFrameId, CharacterPushbackFrameLogs.EdFrameId));
                 int joinIndex = k+1;
-                chSb.Add("j:" + joinIndex + " {{\n" + single.toString() + "\n}}");
+                if (-1 != single.PrimaryHardPushbackIndex || -1 != single.PrimarySoftPushbackIndex) {
+                    chSb.Add("j:" + joinIndex + " {{\n" + single.toString() + "\n}}");
+                }
             }
             return String.Format("{{ \nrdfId:{0}\n{1} \n}}", RdfId, String.Join('\n', chSb));
         }
