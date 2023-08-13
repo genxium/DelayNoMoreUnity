@@ -849,26 +849,30 @@ namespace shared {
                             //logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], atkedCharacterInCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, atkedCharacterInCurrFrame));
                             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
+                            CharacterState oldNextCharacterState = atkedCharacterInNextFrame.CharacterState;
                             atkedCharacterInNextFrame.Hp -= bullet.Config.Damage;
-                            // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
-                            if (false == atkedCharacterInCurrFrame.OmitPushback) {
-                                var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
-                                atkedCharacterInNextFrame.VelX = pushbackVelX;
-                                atkedCharacterInNextFrame.VelY = pushbackVelY;
-                            }
+
                             if (0 >= atkedCharacterInNextFrame.Hp) {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
+                                // If "atkedCharacterInCurrFrame" took multiple bullets in the same renderFrame, where a bullet in the middle of the set made it DYING, then all consecutive bullets would just take it into this small block again!
                                 atkedCharacterInNextFrame.Hp = 0;
                                 atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
-                                atkedCharacterInNextFrame.CharacterState = CharacterState.Dying;
+                                atkedCharacterInNextFrame.CharacterState = Dying;
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
                             } else {
+                                // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
+                                if (false == atkedCharacterInCurrFrame.OmitPushback && BlownUp1 != oldNextCharacterState) {
+                                    var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
+                                    atkedCharacterInNextFrame.VelX = pushbackVelX;
+                                    atkedCharacterInNextFrame.VelY = pushbackVelY;
+                                }
+
                                 bool shouldOmitStun = ((0 >= bullet.Config.HitStunFrames) || (atkedCharacterInCurrFrame.OmitPushback));
                                 if (false == shouldOmitStun) {
                                     if (bullet.Config.BlowUp) {
-                                        atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;
-                                    } else if (CharacterState.BlownUp1 != atkedCharacterInNextFrame.CharacterState) {
-                                        atkedCharacterInNextFrame.CharacterState = CharacterState.Atked1;
+                                        atkedCharacterInNextFrame.CharacterState = BlownUp1;
+                                    } else if (BlownUp1 != oldNextCharacterState) {
+                                        atkedCharacterInNextFrame.CharacterState = Atked1;
                                     }
                                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
                                     if (bullet.Config.HitStunFrames > oldFramesToRecover) {
@@ -1039,6 +1043,11 @@ namespace shared {
                 if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
                     thatCharacterInNextFrame.ActiveSkillId = NO_SKILL;
                     thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
+                }
+
+                if (Atked1 == thatCharacterInNextFrame.CharacterState && (MAX_INT >> 1) < thatCharacterInNextFrame.FramesToRecover) {
+                    logger.LogWarn(String.Format("thatCharacterInNextFrame has invalid frameToRecover={0} and chState={1}! Re-assigning characterState to BlownUp1 for recovery!", thatCharacterInNextFrame.FramesToRecover, thatCharacterInNextFrame.CharacterState));
+                    thatCharacterInNextFrame.CharacterState = BlownUp1;
                 }
             }
 
