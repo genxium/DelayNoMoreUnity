@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
+using System.IO;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -75,6 +76,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected List<shared.Collider> completelyStaticTrapColliders;
 
     public CharacterSelectPanel characterSelectPanel;
+
+    KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
+    protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
     public abstract void onCharacterSelectGoAction(int speciesId);
 
@@ -450,6 +454,28 @@ public abstract class AbstractMapController : MonoBehaviour {
             explosionAnimHolder.gameObject.transform.position = newPosHolder;
 
             cachedFireballs.Put(lookupKey, explosionAnimHolder);
+        }
+    }
+
+    protected void preallocateVfxNodes() {
+        int cacheCapacityPerSpeciesId = 5;
+        DirectoryInfo dir = new DirectoryInfo("Assets/Resources/VfxPrefabs");
+        FileInfo[] info = dir.GetFiles("*.prefab");
+        foreach (FileInfo f in info) {
+            String name = f.Name;
+            string speciesIdStr = name.Split("_")[0];
+            int speciesId = speciesIdStr.ToInt();
+            var cachedVfxNodesOfThisSpecies = new KvPriorityQueue<string, VfxNodeController>(cacheCapacityPerSpeciesId, vfxNodeScore);
+            string prefabPathUnderResources = "VfxPrefabs/" + name.Split(".")[0];
+            for (int i = 0; i < cacheCapacityPerSpeciesId; i++) {
+                var thePrefab = Resources.Load(prefabPathUnderResources) as GameObject;
+                GameObject newVfxNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
+                VfxNodeController newVfxNodeController = newVfxNode.GetComponent<VfxNodeController>();
+                newVfxNodeController.score = -1;
+                var initLookupKey = i.ToString();
+                cachedVfxNodesOfThisSpecies.Put(initLookupKey, newVfxNodeController);
+            }
+            cachedVfxNodes.Add(speciesId, cachedVfxNodesOfThisSpecies);
         }
     }
 

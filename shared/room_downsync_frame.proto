@@ -210,6 +210,23 @@ enum SkillTriggerType {
 	FallingEdge = 1;
 }
 
+enum VfxDuringType {
+    OneOff = 0;
+    Repeating = 1;
+}
+
+enum VfxMotionType {
+    NoMotion = 0;
+    Dropped = 1;
+    Tracing = 2;
+}
+
+message VfxConfig {
+    int32 speciesId = 1;
+    VfxMotionType motionType = 2;
+    VfxDuringType durationType = 3;
+}
+
 message BulletConfig {
 	int32 startupFrames = 1;
 	int32 cancellableStFrame = 2;
@@ -245,6 +262,9 @@ message BulletConfig {
 
 	map<int32, int32> cancelTransit = 25; // patternId -> skillId
     bool destroyUponHit = 26; // for long lasting melee bullet
+
+    VfxConfig activeVfx = 27; // currently only support 1 vfx config when active
+    VfxConfig explosionVfx = 28; // currently only support 1 vfx config when exploding
 
 	uint64 collisionTypeMask = 1029;
 }

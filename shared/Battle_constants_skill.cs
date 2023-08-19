@@ -374,6 +374,7 @@ namespace shared {
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
                                 BType = BulletType.Melee,
+                                ActiveVfx = VfxDashingActive,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -394,6 +395,7 @@ namespace shared {
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
                                 BType = BulletType.Melee,
+                                ActiveVfx = VfxDashingActive,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
