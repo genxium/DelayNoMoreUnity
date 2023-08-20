@@ -255,7 +255,7 @@ namespace shared {
                 DecodeInput(patrolCue.FdAct, decodedInputHolder);
                 //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the bottom", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue)); 
             } else {
-                logger.LogWarn(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue, currTrap.DirX));
+                //logger.LogWarn(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue, currTrap.DirX));
             }
 
             bool shouldBreakPatrolCueCapture = ((true == prevCapturedByPatrolCue) && (currTrap.WaivingPatrolCueId == patrolCue.Id) && (0 == currTrap.FramesInPatrolCue));

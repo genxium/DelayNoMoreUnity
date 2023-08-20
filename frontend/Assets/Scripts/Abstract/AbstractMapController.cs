@@ -458,6 +458,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected void preallocateVfxNodes() {
+        Debug.Log("preallocateVfxNodes begins");
+        cachedVfxNodes = new Dictionary<int, KvPriorityQueue<string, VfxNodeController>>();
         int cacheCapacityPerSpeciesId = 5;
         DirectoryInfo dir = new DirectoryInfo("Assets/Resources/VfxPrefabs");
         FileInfo[] info = dir.GetFiles("*.prefab");
@@ -467,16 +469,17 @@ public abstract class AbstractMapController : MonoBehaviour {
             int speciesId = speciesIdStr.ToInt();
             var cachedVfxNodesOfThisSpecies = new KvPriorityQueue<string, VfxNodeController>(cacheCapacityPerSpeciesId, vfxNodeScore);
             string prefabPathUnderResources = "VfxPrefabs/" + name.Split(".")[0];
+            var thePrefab = Resources.Load(prefabPathUnderResources) as GameObject;
             for (int i = 0; i < cacheCapacityPerSpeciesId; i++) {
-                var thePrefab = Resources.Load(prefabPathUnderResources) as GameObject;
                 GameObject newVfxNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
                 VfxNodeController newVfxNodeController = newVfxNode.GetComponent<VfxNodeController>();
                 newVfxNodeController.score = -1;
                 var initLookupKey = i.ToString();
                 cachedVfxNodesOfThisSpecies.Put(initLookupKey, newVfxNodeController);
             }
-            cachedVfxNodes.Add(speciesId, cachedVfxNodesOfThisSpecies);
+            cachedVfxNodes[speciesId] = cachedVfxNodesOfThisSpecies;
         }
+        Debug.Log("preallocateVfxNodes ends");
     }
 
     protected void preallocateHolders() {
