@@ -78,6 +78,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public CharacterSelectPanel characterSelectPanel;
 
     KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
+    protected Dictionary<int, GameObject> vfxSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
     public abstract void onCharacterSelectGoAction(int speciesId);
@@ -266,7 +267,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (false == ok3 || null == nextRdf) {
                 throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, renderFrameId={1}", i + 1, renderFrameId));
             }
-            if (nextRdf.Id != i+1) {
+            if (nextRdf.Id != i + 1) {
                 throw new ArgumentException(String.Format("Corrupted historic rdf for i+1={0} to rollback, nextRdf={1}!", i, nextRdf));
             }
             if (true == isChasing) {
@@ -364,6 +365,34 @@ public abstract class AbstractMapController : MonoBehaviour {
                 chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);
                 chAnimCtrl.hpBar.transform.localPosition = newPosHolder;
             }
+
+            // Add VfxNode if the current position is within camera FOV
+            if (CharacterState.Dashing == currCharacterDownsync.CharacterState && 1 == currCharacterDownsync.FramesInChState) {
+                // The outer "if" is less costly than calculating viewport point.
+                var posInMainCamViewport = Camera.main.WorldToViewportPoint(playerGameObj.transform.position);
+                if (0f <= posInMainCamViewport.x && posInMainCamViewport.x <= 1f && 0f <= posInMainCamViewport.y && posInMainCamViewport.y <= 1f && 0f < posInMainCamViewport.z) {
+                    var speciesKvPq = cachedVfxNodes[1];
+                    string lookupKey = "ch-" + currCharacterDownsync.JoinIndex.ToString();
+                    var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
+                    if (null == vfxAnimHolder) {
+                        vfxAnimHolder = speciesKvPq.Pop();
+                        //Debug.Log(String.Format("@rdf.Id={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdf.Id, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+                    } else {
+                        //Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdf.Id, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+                    }
+
+                    if (null == vfxAnimHolder) {
+                        throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
+                    }
+                    // TODO: Currently the vfxAnimHolder is not visible in runtime because regardless of what "SortingLayer" or z-index set, it'd be covered by the "underlyingMap" and all children of "underlyingMap". 
+                    vfxAnimHolder.score = rdf.Id;
+                    newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                    vfxAnimHolder.gameObject.transform.position = newPosHolder;
+                    vfxAnimHolder.attachedPs.Simulate(0f, true, true);
+                    vfxAnimHolder.attachedPs.Play(); 
+                    speciesKvPq.Put(lookupKey, vfxAnimHolder);
+                }
+            }
         }
 
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
@@ -460,16 +489,18 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void preallocateVfxNodes() {
         Debug.Log("preallocateVfxNodes begins");
         cachedVfxNodes = new Dictionary<int, KvPriorityQueue<string, VfxNodeController>>();
+        vfxSpeciesPrefabDict = new Dictionary<int, GameObject>();
         int cacheCapacityPerSpeciesId = 5;
         DirectoryInfo dir = new DirectoryInfo("Assets/Resources/VfxPrefabs");
         FileInfo[] info = dir.GetFiles("*.prefab");
         foreach (FileInfo f in info) {
-            String name = f.Name;
+            string name = f.Name;
             string speciesIdStr = name.Split("_")[0];
             int speciesId = speciesIdStr.ToInt();
             var cachedVfxNodesOfThisSpecies = new KvPriorityQueue<string, VfxNodeController>(cacheCapacityPerSpeciesId, vfxNodeScore);
             string prefabPathUnderResources = "VfxPrefabs/" + name.Split(".")[0];
             var thePrefab = Resources.Load(prefabPathUnderResources) as GameObject;
+            vfxSpeciesPrefabDict[speciesId] = thePrefab;
             for (int i = 0; i < cacheCapacityPerSpeciesId; i++) {
                 GameObject newVfxNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
                 VfxNodeController newVfxNodeController = newVfxNode.GetComponent<VfxNodeController>();
@@ -495,7 +526,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int residueCollidedCap = 256;
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
-        
+
         renderBufferSize = 1024;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
@@ -507,7 +538,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (frameLogEnabled) {
             pushbackFrameLogBuffer = new FrameRingBuffer<RdfPushbackFrameLog>(renderBufferSize);
             for (int i = 0; i < renderBufferSize; i++) {
-                pushbackFrameLogBuffer.Put(new RdfPushbackFrameLog(TERMINATING_RENDER_FRAME_ID, roomCapacity+preallocNpcCapacity, softPushbacksCap));
+                pushbackFrameLogBuffer.Put(new RdfPushbackFrameLog(TERMINATING_RENDER_FRAME_ID, roomCapacity + preallocNpcCapacity, softPushbacksCap));
             }
             pushbackFrameLogBuffer.Clear(); // Then use it by "DryPut"
         }
@@ -540,7 +571,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 hardPushbackNormsArr[i][j] = new Vector(0, 0);
             }
         }
-        
+
         softPushbacks = new Vector[softPushbacksCap];
         for (int i = 0; i < softPushbacks.Length; i++) {
             softPushbacks[i] = new Vector(0, 0);
@@ -630,7 +661,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int cellWidth = 64;
         int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
         collisionSys = new CollisionSpace(spaceOffsetX << 1, spaceOffsetY << 1, cellWidth, cellHeight);
-        maxTouchingCellsCnt = ((spaceOffsetX << 1)/cellWidth) * ((spaceOffsetY << 1)/cellHeight) + 1;
+        maxTouchingCellsCnt = ((spaceOffsetX << 1) / cellWidth) * ((spaceOffsetY << 1) / cellHeight) + 1;
         for (int i = 0; i < dynamicRectangleColliders.Length; i++) {
             dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, null);
         }
@@ -767,7 +798,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     // Update is called once per frame
     protected void doUpdate() {
         if (isBattleResultSet(battleResult)) {
-            var (ok1, currRdf) = renderBuffer.GetByFrameId(renderFrameId-1); 
+            var (ok1, currRdf) = renderBuffer.GetByFrameId(renderFrameId - 1);
             if (ok1 && null != currRdf) {
                 cameraTrack(currRdf, null);
             }
@@ -972,7 +1003,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
                     }
                     break;
-                
+
                 case "TrapStartingPos":
                     foreach (Transform trapChild in child) {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
@@ -1003,7 +1034,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var trapSpeedXfac = invTrapDirMag * dirXVal;
                         var trapSpeedYfac = invTrapDirMag * dirYVal;
 
-                        int trapVelX = (int)(trapSpeedXfac * speedVal); 
+                        int trapVelX = (int)(trapSpeedXfac * speedVal);
                         int trapVelY = (int)(trapSpeedYfac * speedVal);
 
                         TrapConfig trapConfig = trapConfigs[speciesIdVal];
@@ -1061,7 +1092,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             trapLocalId++;
                             Debug.Log(String.Format("new completely static trap created {0}", trap));
                         } else {
-                            
+
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
                             var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                             var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
@@ -1091,12 +1122,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                                         childProvidesEscapeVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
                                     }
                                     if ("collisionTypeMask".Equals(collisionObjProp.m_Name) && !collisionObjProp.IsEmpty) {
-                                        collisionTypeMaskVal =  (ulong)collisionObjProp.GetValueAsInt();
+                                        collisionTypeMaskVal = (ulong)collisionObjProp.GetValueAsInt();
                                     }
                                 }
 
                                 // [WARNING] The offset (0, 0) of the tileObj within TSX is the top-left corner, but SuperTiled2Unity converted that to bottom-left corner and reverted y-axis by itself... 
-                                var (hitboxOffsetCx, hitboxOffsetCy) = (-tileObj.m_Width * 0.5f + collisionObj.m_Position.x + collisionObj.m_Size.x * 0.5f,  collisionObj.m_Position.y - collisionObj.m_Size.y * 0.5f - tileObj.m_Height * 0.5f);
+                                var (hitboxOffsetCx, hitboxOffsetCy) = (-tileObj.m_Width * 0.5f + collisionObj.m_Position.x + collisionObj.m_Size.x * 0.5f, collisionObj.m_Position.y - collisionObj.m_Size.y * 0.5f - tileObj.m_Height * 0.5f);
                                 var (hitboxOffsetVx, hitboxOffsetVy) = PolygonColliderCtrToVirtualGridPos(hitboxOffsetCx, hitboxOffsetCy);
                                 var (hitboxSizeVx, hitboxSizeVy) = PolygonColliderCtrToVirtualGridPos(collisionObj.m_Size.x, collisionObj.m_Size.y);
                                 TrapColliderAttr colliderAttr = new TrapColliderAttr {
@@ -1119,12 +1150,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                             trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
                             trapList.Add(trap);
                             trapLocalId++;
-                            
+
                             Destroy(child.gameObject); // [WARNING] It'll be animated by "TrapPrefab" in "applyRoomDownsyncFrame" instead!
                         }
                     }
                     break;
-                
+
                 default:
                     break;
             }
@@ -1459,12 +1490,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             var currTrap = rdf.TrapsArr[i];
             if (TERMINATING_TRAP_ID == currTrap.TrapLocalId) continue;
             if (currTrap.IsCompletelyStatic) continue;
-           
+
             List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[currTrap.TrapLocalId];
             foreach (var colliderAttr in colliderAttrs) {
                 float boxCx, boxCy, boxCw, boxCh;
                 calcTrapBoxInCollisionSpace(colliderAttr, currTrap.VirtualGridX, currTrap.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-                
+
                 string key = "DynamicTrap-" + currTrap.TrapLocalId.ToString() + "-" + colliderAttr.ProvidesDamage; // TODO: Use a collider ID for the last part
                 var line = cachedLineRenderers.PopAny(key);
                 if (null == line) {
@@ -1478,7 +1509,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 } else if (colliderAttr.ProvidesDamage) {
                     line.SetColor(Color.red);
                 }
-                
+
                 line.GetPositions(debugDrawPositionsHolder);
                 var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
 
