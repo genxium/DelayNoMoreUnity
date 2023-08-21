@@ -2,14 +2,22 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: cfxr aura rays hdr ab nosp
   m_Shader: {fileID: 4800000, guid: e198026df304af84a85675be636192ea, type: 3}
-  m_ShaderKeywords: _CFXR_HDR_BOOST _CFXR_SINGLE_CHANNEL
+  m_ValidKeywords:
+  - _ALPHABLEND_ON
+  - _CFXR_HDR_BOOST
+  - _CFXR_SINGLE_CHANNEL
+  m_InvalidKeywords:
+  - _
+  - _CFXR_DITHERED_SHADOWS_OFF
+  - _CFXR_OVERLAYBLEND_RGBA
+  - _CFXR_OVERLAYTEX_OFF
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -47,6 +55,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BacklightTransmittance: 1
     - _BlendingType: 0
@@ -59,6 +68,7 @@ Material:
     - _DirectLightingRamp: 1
     - _DissolveSmooth: 0.1
     - _Distort: 0.1
+    - _DoubleDissolve: 0
     - _DstBlend: 10
     - _EdgeFadePow: 1
     - _FadeAlongU: 0
@@ -79,6 +89,7 @@ Material:
     - _UseAlphaClip: 0
     - _UseBackLighting: 0
     - _UseDissolve: 0
+    - _UseDissolveOffsetUV: 0
     - _UseEF: 0
     - _UseEmission: 0
     - _UseFB: 0
@@ -93,7 +104,9 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 4.237095, g: 4.237095, b: 4.237095, a: 1}
+    - _DissolveScroll: {r: 0, g: 0, b: 0, a: 0}
     - _DistortScrolling: {r: 0, g: 0, b: 1, a: 1}
     - _OverlayTex_Scroll: {r: 0.1, g: 0.1, b: 1, a: 1}
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticlesFadeDistance: {r: 0, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []

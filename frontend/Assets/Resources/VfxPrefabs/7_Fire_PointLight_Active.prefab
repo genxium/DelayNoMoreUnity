@@ -4853,7 +4853,7 @@ Transform:
   m_GameObject: {fileID: 1206498299807332555}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1206498299248906753}
@@ -9619,12 +9619,12 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1952305777
+  m_SortingLayer: 2
+  m_SortingOrder: 10
   m_RenderMode: 1
   m_MeshDistribution: 0
-  m_SortMode: 0
+  m_SortMode: 4
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
@@ -9810,6 +9810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0
   attachedPs: {fileID: 0}
+  cfxrEff: {fileID: 0}
 --- !u!1 &7747002053765534775
 GameObject:
   m_ObjectHideFlags: 0
@@ -9855,7 +9856,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.6207441, b: 0.20392156, a: 1}
-  m_Intensity: 0
+  m_Intensity: 4.363909
   m_Range: 8
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

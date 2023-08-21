@@ -384,11 +384,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                     if (null == vfxAnimHolder) {
                         throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
                     }
-                    // TODO: Currently the vfxAnimHolder is not visible in runtime because regardless of what "SortingLayer" or z-index set, it'd be covered by the "underlyingMap" and all children of "underlyingMap". 
+                    // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet! 
                     vfxAnimHolder.score = rdf.Id;
                     newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
                     vfxAnimHolder.gameObject.transform.position = newPosHolder;
-                    vfxAnimHolder.attachedPs.Simulate(0f, true, true);
                     vfxAnimHolder.attachedPs.Play(); 
                     speciesKvPq.Put(lookupKey, vfxAnimHolder);
                 }
