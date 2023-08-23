@@ -106,6 +106,8 @@ message CharacterDownsync {
 	int32 frictionVelX = 38; // Mostly from a dynamic trap
     bool crouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
         
+	bool slipJumpTriggered = 40;
+
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
 	int32 framesInvinsible = 1026;
@@ -210,7 +212,7 @@ enum SkillTriggerType {
 	FallingEdge = 1;
 }
 
-enum VfxDuringType {
+enum VfxDurationType {
     OneOff = 0;
     Repeating = 1;
 }
@@ -224,7 +226,7 @@ enum VfxMotionType {
 message VfxConfig {
     int32 speciesId = 1;
     VfxMotionType motionType = 2;
-    VfxDuringType durationType = 3;
+    VfxDurationType durationType = 3;
 }
 
 message BulletConfig {
@@ -263,8 +265,8 @@ message BulletConfig {
 	map<int32, int32> cancelTransit = 25; // patternId -> skillId
     bool destroyUponHit = 26; // for long lasting melee bullet
 
-    VfxConfig activeVfx = 27; // currently only support 1 vfx config when active
-    VfxConfig explosionVfx = 28; // currently only support 1 vfx config when exploding
+    int32 activeVfxSpeciesId = 27; // currently only support 1 vfx config when active
+    int32 explosionVfxSpeciesId = 28; // currently only support 1 vfx config when exploding
 
 	uint64 collisionTypeMask = 1029;
 }
@@ -334,6 +336,7 @@ message TrapColliderAttr {
     bool providesHardPushback = 5;
     bool providesDamage = 6;
     bool providesEscape = 7;
+	bool providesSlipJump = 8;
 
 	int32 trapLocalId = 1024; // ref-back upon collision, for damage handling, hardPushback moving and effPushbacks recording (if the trap provides softPushback)
 	uint64 collisionTypeMask = 1029;

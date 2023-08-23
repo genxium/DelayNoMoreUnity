@@ -1034,7 +1034,7 @@ namespace shared {
                 }
 
                 // Remove any active skill if not attacking
-                if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState) && Dashing != thatCharacterInNextFrame.CharacterState) {
                     thatCharacterInNextFrame.ActiveSkillId = NO_SKILL;
                     thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
                 }

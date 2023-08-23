@@ -4,11 +4,13 @@ using UnityEngine;
 public class VfxNodeController : MonoBehaviour {
     public int score;
     public ParticleSystem attachedPs = null;
+    public ParticleSystemRenderer attachedPsr = null;
     public CFXR_Effect cfxrEff = null;
 
     // Start is called before the first frame update
     void Start() {
         attachedPs = this.gameObject.GetComponent<ParticleSystem>();
+        attachedPsr = this.gameObject.GetComponent<ParticleSystemRenderer>();
         cfxrEff = this.gameObject.GetComponent<CFXR_Effect>();
     }
 

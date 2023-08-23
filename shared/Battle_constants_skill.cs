@@ -4,6 +4,62 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+
+        public static VfxConfig VfxDashingActive = new VfxConfig {
+            SpeciesId = 1,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff
+        };
+
+        public static VfxConfig VfxFireExplodingBig = new VfxConfig {
+            SpeciesId = 2,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff
+        };
+
+        public static VfxConfig VfxIceExplodingBig = new VfxConfig {
+            SpeciesId = 3,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff
+        };
+
+        public static VfxConfig VfxFireSlashActive = new VfxConfig {
+            SpeciesId = 4,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff
+        };
+
+        public static VfxConfig VfxSlashActive = new VfxConfig {
+            SpeciesId = 5,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff
+        };
+
+        public static VfxConfig VfxSpikeSlashExplodingActive = new VfxConfig {
+            SpeciesId = 6,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff
+        };
+
+        public static VfxConfig VfxFirePointLightActive = new VfxConfig {
+            SpeciesId = 7,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.Repeating
+        };
+
+        public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
+             new[]
+             {
+                    new KeyValuePair<int, VfxConfig>(VfxDashingActive.SpeciesId, VfxDashingActive),
+                    new KeyValuePair<int, VfxConfig>(VfxFireExplodingBig.SpeciesId, VfxFireExplodingBig),
+                    new KeyValuePair<int, VfxConfig>(VfxIceExplodingBig.SpeciesId, VfxIceExplodingBig),
+                    new KeyValuePair<int, VfxConfig>(VfxFireSlashActive.SpeciesId, VfxFireSlashActive),
+                    new KeyValuePair<int, VfxConfig>(VfxSlashActive.SpeciesId, VfxSlashActive),
+                    new KeyValuePair<int, VfxConfig>(VfxSpikeSlashExplodingActive.SpeciesId, VfxSpikeSlashExplodingActive),
+                    new KeyValuePair<int, VfxConfig>(VfxFirePointLightActive.SpeciesId, VfxFirePointLightActive),
+             }
+            );
+
         public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>().AddRange(
                 new[]
                 {
@@ -104,6 +160,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -140,6 +197,8 @@ namespace shared {
                                 DirY = 0,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
+                                ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
                             }
                         )),
@@ -374,7 +433,7 @@ namespace shared {
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
                                 BType = BulletType.Melee,
-                                ActiveVfx = VfxDashingActive,
+                                ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -395,7 +454,7 @@ namespace shared {
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
                                 BType = BulletType.Melee,
-                                ActiveVfx = VfxDashingActive,
+                                ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -803,7 +862,7 @@ namespace shared {
                                 return currBulletConfig.CancelTransit[patternId];
                             }
                         case 3:
-                            if (!notRecovered) { 
+                            if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 255; // A fallback to "InAirAtk1"
                                 } else {
@@ -869,7 +928,7 @@ namespace shared {
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 256; // A fallback to "InAirAtk1" 
-                                } else {        
+                                } else {
                                     return 9;
                                 }
                             } else {
