@@ -123,7 +123,7 @@ Transform:
   m_GameObject: {fileID: 2433282508537954060}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.70710677}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalScale: {x: 12, y: 12, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2433282509751658719}
@@ -5025,6 +5025,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0
   attachedPs: {fileID: 0}
+  attachedPsr: {fileID: 0}
   cfxrEff: {fileID: 0}
 --- !u!1 &2433282508753476420
 GameObject:

@@ -227,6 +227,8 @@ message VfxConfig {
     int32 speciesId = 1;
     VfxMotionType motionType = 2;
     VfxDurationType durationType = 3;
+	bool onCharacter = 4;
+	bool onBullet = 5;
 }
 
 message BulletConfig {

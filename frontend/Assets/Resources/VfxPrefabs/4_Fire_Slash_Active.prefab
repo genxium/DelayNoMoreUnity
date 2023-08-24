@@ -9633,11 +9633,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6710139492206580329, guid: 95b8d3d65b5d7f1409c4ed1723887826, type: 3}
       propertyPath: m_LocalScale.x
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6710139492206580329, guid: 95b8d3d65b5d7f1409c4ed1723887826, type: 3}
       propertyPath: m_LocalScale.y
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6710139492206580329, guid: 95b8d3d65b5d7f1409c4ed1723887826, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9864,6 +9864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0
   attachedPs: {fileID: 0}
+  attachedPsr: {fileID: 0}
   cfxrEff: {fileID: 0}
 --- !u!114 &7770337310441391829
 MonoBehaviour:

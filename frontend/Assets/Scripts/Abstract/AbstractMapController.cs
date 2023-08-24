@@ -341,11 +341,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
 
-        /*
-        // Put all vfxNodes to infinitely far first
+        // Put "Tracing" vfxNodes to infinitely far first
         foreach (var entry in cachedVfxNodes) {
             var speciesId = entry.Key;
-            var speciesKvPq = entry.Value; 
+            var vfxConfig = vfxDict[speciesId];
+            if (VfxMotionType.Tracing != vfxConfig.MotionType) continue;
+            var speciesKvPq = entry.Value;
             for (int i = speciesKvPq.vals.StFrameId; i < speciesKvPq.vals.EdFrameId; i++) {
                 var (res, vfxAnimHolder) = speciesKvPq.vals.GetByFrameId(i);
                 if (!res || null == vfxAnimHolder) throw new ArgumentNullException(String.Format("There's no vfxAnimHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, speciesKvPq.vals.StFrameId, speciesKvPq.vals.EdFrameId));
@@ -354,7 +355,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 vfxAnimHolder.gameObject.transform.position = newPosHolder;
             }
         }
-        */
 
         for (int k = 0; k < roomCapacity; k++) {
             var currCharacterDownsync = rdf.PlayersArr[k];
@@ -407,6 +407,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             newPosHolder.Set(wx + teamRibbonOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
             chAnimCtrl.teamRibbon.transform.localPosition = newPosHolder;
+
+            // Add character vfx
+            playCharacterVfx(currNpcDownsync, chConfig, npcGameObj, wx, wy, rdf);
         }
 
         int kDynamicTrap = 0;
@@ -1529,6 +1532,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
         var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
         if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) return false;
+        var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
+        if (!vfxConfig.OnCharacter) return false;
         // The outer "if" is less costly than calculating viewport point.
         if (!isGameObjWithinCamera(playerGameObj)) return false;
         // if the current position is within camera FOV
@@ -1545,7 +1550,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (null == vfxAnimHolder) {
             throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
         }
-        var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
+        
         bool isInitialFrame = (0 == currCharacterDownsync.FramesInChState);
         // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet!
 
@@ -1579,22 +1584,25 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public bool playBulletVfx(Bullet bullet, bool isExploding, FireballAnimController explosionAnimHolder, float wx, float wy, RoomDownsyncFrame rdf) {
         int vfxSpeciesId = isExploding ? bullet.Config.ExplosionVfxSpeciesId : bullet.Config.ActiveVfxSpeciesId;
+        if (!isExploding && !IsBulletActive(bullet, rdf.Id)) return false;
         if (NO_VFX_ID == vfxSpeciesId || !isGameObjWithinCamera(explosionAnimHolder.gameObject)) return false;
+        var vfxConfig = vfxDict[vfxSpeciesId];
+        if (!vfxConfig.OnBullet) return false;
         var speciesKvPq = cachedVfxNodes[vfxSpeciesId];
         string vfxLookupKey = "bl-" + bullet.BattleAttr.BulletLocalId.ToString();
         var vfxAnimHolder = speciesKvPq.PopAny(vfxLookupKey);
         if (null == vfxAnimHolder) {
             vfxAnimHolder = speciesKvPq.Pop();
-            //Debug.Log(String.Format("@rdf.Id={0} using a new vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
+            Debug.Log(String.Format("@rdf.Id={0} using a new vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
         } else {
-            //Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
+            Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
         }
 
         if (null == vfxAnimHolder) {
             throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for vfxLookupKey={0}", vfxLookupKey));
         }
         // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet! 
-        var vfxConfig = vfxDict[vfxSpeciesId];
+
         bool isInitialFrame = (0 == bullet.FramesInBlState);
         if (vfxConfig.MotionType == VfxMotionType.Tracing) {
             newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);

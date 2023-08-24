@@ -4853,7 +4853,7 @@ Transform:
   m_GameObject: {fileID: 1206498299807332555}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 20, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1206498299248906753}
@@ -9810,6 +9810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0
   attachedPs: {fileID: 0}
+  attachedPsr: {fileID: 0}
   cfxrEff: {fileID: 0}
 --- !u!1 &7747002053765534775
 GameObject:
@@ -9856,7 +9857,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.6207441, b: 0.20392156, a: 1}
-  m_Intensity: 4.363909
+  m_Intensity: 4.73363
   m_Range: 8
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

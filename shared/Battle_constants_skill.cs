@@ -8,43 +8,57 @@ namespace shared {
         public static VfxConfig VfxDashingActive = new VfxConfig {
             SpeciesId = 1,
             MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
         };
 
         public static VfxConfig VfxFireExplodingBig = new VfxConfig {
             SpeciesId = 2,
             MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
         };
 
         public static VfxConfig VfxIceExplodingBig = new VfxConfig {
             SpeciesId = 3,
             MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
         };
 
         public static VfxConfig VfxFireSlashActive = new VfxConfig {
             SpeciesId = 4,
             MotionType = VfxMotionType.Tracing,
-            DurationType = VfxDurationType.OneOff
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
         };
 
         public static VfxConfig VfxSlashActive = new VfxConfig {
             SpeciesId = 5,
             MotionType = VfxMotionType.Tracing,
-            DurationType = VfxDurationType.OneOff
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
         };
 
         public static VfxConfig VfxSpikeSlashExplodingActive = new VfxConfig {
             SpeciesId = 6,
             MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
         };
 
         public static VfxConfig VfxFirePointLightActive = new VfxConfig {
             SpeciesId = 7,
             MotionType = VfxMotionType.Tracing,
-            DurationType = VfxDurationType.Repeating
+            DurationType = VfxDurationType.Repeating,
+            OnCharacter = false,
+            OnBullet = true
         };
 
         public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
@@ -197,7 +211,6 @@ namespace shared {
                                 DirY = 0,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
-                                ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
                             }
@@ -524,6 +537,8 @@ namespace shared {
                                 DirY = 0,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Fireball,
+                                ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX
                             }
                         )),
@@ -674,6 +689,74 @@ namespace shared {
                             }
                         )
                     ),
+
+                    new KeyValuePair<int, Skill>(16, new Skill{
+                        RecoveryFrames = 50,
+                        RecoveryFramesOnBlock = 30,
+                        RecoveryFramesOnHit = 30,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk1
+                     }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 9,
+                                ActiveFrames = 16,
+                                HitStunFrames = 10,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = 0,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SpeciesId = 2,
+                                ExplosionFrames = 25,
+                                BType = BulletType.Melee,
+                                DirX = 1,
+                                DirY = 0,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                        )),
+
+                    new KeyValuePair<int, Skill>(17, new Skill{
+                        RecoveryFrames = 55,
+                        RecoveryFramesOnBlock = 28,
+                        RecoveryFramesOnHit = 28,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk2
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 7,
+                                ActiveFrames = 20,
+                                HitStunFrames = MAX_INT,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                BlowUp = true,
+                                SpeciesId = 2,
+                                DirX = 1,
+                                DirY = 0,
+                                ExplosionFrames = 25,
+                                BType = BulletType.Melee,
+                                ActiveVfxSpeciesId = VfxFireSlashActive.SpeciesId,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                        )),
 
                     new KeyValuePair<int, Skill>(255, new Skill {
                         RecoveryFrames = 30,
@@ -949,13 +1032,13 @@ namespace shared {
                     switch (patternId) {
                         case 1:
                             if (!notRecovered && !currCharacterDownsync.InAir) {
-                                return 5;
+                                return 16;
                             } else {
                                 return NO_SKILL;
                             }
                         case 2:
                             if (!notRecovered && !currCharacterDownsync.InAir) {
-                                return 12;
+                                return 17;
                             } else {
                                 return NO_SKILL;
                             }
