@@ -7,6 +7,7 @@ using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
 using System.IO;
+using DG.Tweening;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -99,6 +100,13 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float fireballZ = -5;
     protected float lineRendererZ = +5;
     protected float inplaceHpBarZ = +10;
+
+    private string MATERIAL_REF_THICKNESS = "_Thickness";
+    private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
+    private string MATERIAL_REF_FLASH_COLOR = "_FlashColor";
+    private float DAMAGED_FLASH_INTENSITY = 5.0f;
+    private float DAMAGED_THICKNESS = 1.5f;
+    private float DAMAGED_BLINK_SECONDS_HALF = 0.5f;
 
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
@@ -383,7 +391,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             // Add character vfx
-            playCharacterVfx(currCharacterDownsync, chConfig, playerGameObj, wx, wy, rdf);
+            playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, playerGameObj);
+            playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, playerGameObj, wx, wy, rdf);
         }
 
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
@@ -409,7 +418,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             chAnimCtrl.teamRibbon.transform.localPosition = newPosHolder;
 
             // Add character vfx
-            playCharacterVfx(currNpcDownsync, chConfig, npcGameObj, wx, wy, rdf);
+            playCharacterDamagedVfx(currNpcDownsync, prevNpcDownsync, npcGameObj);
+            playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, npcGameObj, wx, wy, rdf);
         }
 
         int kDynamicTrap = 0;
@@ -1527,7 +1537,26 @@ public abstract class AbstractMapController : MonoBehaviour {
         return (0f <= posInMainCamViewport.x && posInMainCamViewport.x <= 1f && 0f <= posInMainCamViewport.y && posInMainCamViewport.y <= 1f && 0f < posInMainCamViewport.z);
     }
 
-    public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, GameObject playerGameObj, float wx, float wy, RoomDownsyncFrame rdf) {
+    public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, GameObject theGameObj) {
+        if (null == prevCharacterDownsync || prevCharacterDownsync.Hp <= currCharacterDownsync.Hp) return false;
+        
+        if (!isGameObjWithinCamera(theGameObj)) return false;
+        // Some characters, and almost all traps wouldn't have an "attacked state", hence showing their damaged animation by shader.
+        var spr = theGameObj.GetComponent<SpriteRenderer>();
+        var material = spr.material;
+        /*
+        DOTween.Sequence().Append(
+            DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))
+            .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
+        */
+        DOTween.Sequence().Append(
+            DOTween.To(() => material.GetFloat(MATERIAL_REF_FLASH_INTENSITY), x => material.SetFloat(MATERIAL_REF_FLASH_INTENSITY, x), DAMAGED_FLASH_INTENSITY, DAMAGED_BLINK_SECONDS_HALF))
+            .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_FLASH_INTENSITY), x => material.SetFloat(MATERIAL_REF_FLASH_INTENSITY, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
+        
+        return true;
+    }
+
+    public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, GameObject theGameObj, float wx, float wy, RoomDownsyncFrame rdf) {
         if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
         var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
         var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
@@ -1535,7 +1564,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
         if (!vfxConfig.OnCharacter) return false;
         // The outer "if" is less costly than calculating viewport point.
-        if (!isGameObjWithinCamera(playerGameObj)) return false;
+        if (!isGameObjWithinCamera(theGameObj)) return false;
         // if the current position is within camera FOV
         var speciesKvPq = cachedVfxNodes[currBulletConfig.ActiveVfxSpeciesId];
         string lookupKey = "ch-" + currCharacterDownsync.JoinIndex.ToString();
