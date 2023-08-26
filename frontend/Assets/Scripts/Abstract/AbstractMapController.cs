@@ -104,9 +104,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     private string MATERIAL_REF_THICKNESS = "_Thickness";
     private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
     private string MATERIAL_REF_FLASH_COLOR = "_FlashColor";
-    private float DAMAGED_FLASH_INTENSITY = 5.0f;
+    private float DAMAGED_FLASH_INTENSITY = 0.6f;
     private float DAMAGED_THICKNESS = 1.5f;
-    private float DAMAGED_BLINK_SECONDS_HALF = 0.5f;
+    private float DAMAGED_BLINK_SECONDS_HALF = 0.3f;
 
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
@@ -513,6 +513,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 GameObject newVfxNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
                 VfxNodeController newVfxNodeController = newVfxNode.GetComponent<VfxNodeController>();
                 newVfxNodeController.score = -1;
+                newVfxNodeController.speciesId = speciesId;
                 var initLookupKey = i.ToString();
                 cachedVfxNodesOfThisSpecies.Put(initLookupKey, newVfxNodeController);
             }
@@ -1580,7 +1581,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
         }
         
-        bool isInitialFrame = (0 == currCharacterDownsync.FramesInChState);
+        bool isInitialFrame = (currBulletConfig.StartupFrames == currCharacterDownsync.FramesInChState);
         // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet!
 
         if (vfxConfig.MotionType == VfxMotionType.Tracing) {
@@ -1603,7 +1604,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             } else {
                 vfxAnimHolder.attachedPsr.flip = new Vector3(1, 0);
             }
-            vfxAnimHolder.attachedPs.Play();
+            if (!vfxAnimHolder.attachedPs.isPlaying) {
+                // For a multi-hit bullet with vfx, we might need this to prevent duplicate triggers
+                vfxAnimHolder.attachedPs.Play();
+            }
         }
         vfxAnimHolder.score = rdf.Id;
         speciesKvPq.Put(lookupKey, vfxAnimHolder);
