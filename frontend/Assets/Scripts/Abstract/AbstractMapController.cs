@@ -499,14 +499,22 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedVfxNodes = new Dictionary<int, KvPriorityQueue<string, VfxNodeController>>();
         vfxSpeciesPrefabDict = new Dictionary<int, GameObject>();
         int cacheCapacityPerSpeciesId = 5;
-        DirectoryInfo dir = new DirectoryInfo("Assets/Resources/VfxPrefabs");
-        FileInfo[] info = dir.GetFiles("*.prefab");
-        foreach (FileInfo f in info) {
-            string name = f.Name;
+        string[] allVfxPrefabNames = new string[] {
+            "1_Dashing_Active",
+            "2_Fire_Exploding_Big",
+            "3_Ice_Exploding_Big",
+            "4_Fire_Slash_Active",
+            "5_Slash_Active",
+            "6_Spike_Slash_Exploding",
+            "7_Fire_PointLight_Active"
+        };
+
+
+        foreach (string name in allVfxPrefabNames) {
             string speciesIdStr = name.Split("_")[0];
             int speciesId = speciesIdStr.ToInt();
             var cachedVfxNodesOfThisSpecies = new KvPriorityQueue<string, VfxNodeController>(cacheCapacityPerSpeciesId, vfxNodeScore);
-            string prefabPathUnderResources = "VfxPrefabs/" + name.Split(".")[0];
+            string prefabPathUnderResources = "VfxPrefabs/" + name;
             var thePrefab = Resources.Load(prefabPathUnderResources) as GameObject;
             vfxSpeciesPrefabDict[speciesId] = thePrefab;
             for (int i = 0; i < cacheCapacityPerSpeciesId; i++) {

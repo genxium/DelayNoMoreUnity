@@ -48,6 +48,7 @@ public class OnlineMapController : AbstractMapController {
                     preallocateHolders();
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     resetCurrentMatch("Castle");
+                    preallocateVfxNodes();
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
