@@ -26,6 +26,7 @@ public class OfflineMapController : AbstractMapController {
         roomCapacity = 1;
         preallocateHolders();
         resetCurrentMatch("Castle");
+        preallocateVfxNodes();
         selfPlayerInfo.JoinIndex = 1;
 
         battleDurationFrames = 60 * 60;
@@ -53,11 +54,14 @@ public class OfflineMapController : AbstractMapController {
         onRoomDownsyncFrame(startRdf, null);
     }
 
+
     // Start is called before the first frame update
     void Start() {
-        postSettlementCallback = () => {
-            onBattleStopped();
-        };
+        if (null == postSettlementCallback) {
+            postSettlementCallback = () => {
+                onBattleStopped();
+            };
+        }
         debugDrawingEnabled = true;
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;

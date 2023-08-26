@@ -115,7 +115,7 @@ namespace shared {
         public static int INPUT_DELAY_FRAMES = 2; // in the count of render frames
         public static int DEFAULT_PATROL_CUE_WAIVING_FRAMES = 150; // in the count of render frames, should be big enough for any NPC to move across the largest patrol cue
         public static int NO_PATROL_CUE_ID = -1;
-
+        public static int NO_VFX_ID = 0;
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!

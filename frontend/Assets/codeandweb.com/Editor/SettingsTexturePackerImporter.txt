@@ -9,7 +9,6 @@ tpsheetFileNames:
 - Assets/Resources/Characters/MonkGirl/MonkGirl.tpsheet
 - Assets/Resources/Characters/SwordMan/SwordMan.tpsheet
 - Assets/Resources/Traps/Spike/Spike.tpsheet
-- Assets/Resources/VFX/VFX.tpsheet
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 - Assets/Resources/Bullets/Bullets.png
@@ -20,10 +19,8 @@ textureFileNames:
 - Assets/Resources/Characters/MonkGirl/MonkGirl.png
 - Assets/Resources/Characters/SwordMan/SwordMan.png
 - Assets/Resources/Traps/Spike/Spike.png
-- Assets/Resources/VFX/VFX.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
-- 
 - 
 - 
 - 

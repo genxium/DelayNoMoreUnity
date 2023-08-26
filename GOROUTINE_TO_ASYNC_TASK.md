@@ -135,6 +135,6 @@ void doLightWork(...) {
 
 void main() {
     doHeavyWork(...).Start(); // throws `InvalidOperationException` in runtime
-	doLightWork(...);
+    doLightWork(...);
 }
 ```

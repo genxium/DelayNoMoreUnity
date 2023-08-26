@@ -4,6 +4,76 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+
+        public static VfxConfig VfxDashingActive = new VfxConfig {
+            SpeciesId = 1,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
+        public static VfxConfig VfxFireExplodingBig = new VfxConfig {
+            SpeciesId = 2,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxIceExplodingBig = new VfxConfig {
+            SpeciesId = 3,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxFireSlashActive = new VfxConfig {
+            SpeciesId = 4,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
+        public static VfxConfig VfxSlashActive = new VfxConfig {
+            SpeciesId = 5,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
+        public static VfxConfig VfxSpikeSlashExplodingActive = new VfxConfig {
+            SpeciesId = 6,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxFirePointLightActive = new VfxConfig {
+            SpeciesId = 7,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.Repeating,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
+             new[]
+             {
+                    new KeyValuePair<int, VfxConfig>(VfxDashingActive.SpeciesId, VfxDashingActive),
+                    new KeyValuePair<int, VfxConfig>(VfxFireExplodingBig.SpeciesId, VfxFireExplodingBig),
+                    new KeyValuePair<int, VfxConfig>(VfxIceExplodingBig.SpeciesId, VfxIceExplodingBig),
+                    new KeyValuePair<int, VfxConfig>(VfxFireSlashActive.SpeciesId, VfxFireSlashActive),
+                    new KeyValuePair<int, VfxConfig>(VfxSlashActive.SpeciesId, VfxSlashActive),
+                    new KeyValuePair<int, VfxConfig>(VfxSpikeSlashExplodingActive.SpeciesId, VfxSpikeSlashExplodingActive),
+                    new KeyValuePair<int, VfxConfig>(VfxFirePointLightActive.SpeciesId, VfxFirePointLightActive),
+             }
+            );
+
         public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>().AddRange(
                 new[]
                 {
@@ -22,7 +92,7 @@ namespace shared {
                             HitStunFrames = 22,
                             BlockStunFrames = 9,
                             Damage = 13,
-                            PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            PushbackVelX = 0,
                             PushbackVelY = 0,
                             SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             SelfLockVelY = NO_LOCK_VEL,
@@ -56,13 +126,13 @@ namespace shared {
                                 HitStunFrames = 20,
                                 BlockStunFrames = 9,
                                 Damage = 14,
-                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = 0,
+                                PushbackVelX = 0,
+                                PushbackVelY = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(7*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 CancellableStFrame = 14,
                                 CancellableEdFrame = 36,
@@ -86,27 +156,81 @@ namespace shared {
                         .AddHit(
                             new BulletConfig {
                                 StartupFrames = 8,
-                                ActiveFrames = 30,
-                                HitStunFrames = MAX_INT,
+                                ActiveFrames = 5,
+                                HitStunFrames = 9,
+                                BlockStunFrames = 5,
+                                Damage = 3,
+                                PushbackVelX = 0,
+                                PushbackVelY = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                BlowUp = false,
+                                SpeciesId = 2,
+                                ExplosionFrames = 25,
+                                BType = BulletType.Melee,
+                                DirX = 1,
+                                DirY = 0,
+                                ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
+                                MhType = MultiHitType.FromEmission,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                        )
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 13,
+                                ActiveFrames = 10,
+                                HitStunFrames = 12,
                                 BlockStunFrames = 9,
-                                Damage = 18,
+                                Damage = 7,
+                                PushbackVelX = 0,
+                                PushbackVelY = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                BlowUp = false,
+                                SpeciesId = 2,
+                                ExplosionFrames = 25,
+                                BType = BulletType.Melee,
+                                DirX = 1,
+                                DirY = 0,
+                                ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
+                                MhType = MultiHitType.FromEmission,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                        )
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 23,
+                                ActiveFrames = 7,
+                                HitStunFrames = MAX_INT,
+                                BlockStunFrames = 10,
+                                Damage = 7,
                                 PushbackVelX = (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 PushbackVelY = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(64*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 BlowUp = true,
                                 SpeciesId = 2,
                                 ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
-                        )),
+                        )
+                        ),
 
                     new KeyValuePair<int, Skill>(4, new Skill{
                         RecoveryFrames = 60,
@@ -140,6 +264,7 @@ namespace shared {
                                 DirY = 0,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
                             }
                         )),
@@ -168,7 +293,7 @@ namespace shared {
                                 HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SpeciesId = 2,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
@@ -204,7 +329,7 @@ namespace shared {
                                 SpeciesId = 1,
                                 DirX = 1,
                                 DirY = 0,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 20,
                                 BType = BulletType.Melee,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }.UpsertCancelTransit(1, 7)
@@ -235,7 +360,7 @@ namespace shared {
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 BlowUp = true,
                                 SpeciesId = 1,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 20,
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
@@ -351,7 +476,7 @@ namespace shared {
                                 Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 DirX = 1,
                                 DirY = 0,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 25,
                                 BType = BulletType.Fireball,
                                 CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
                             }
@@ -374,6 +499,7 @@ namespace shared {
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
                                 BType = BulletType.Melee,
+                                ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -394,6 +520,7 @@ namespace shared {
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
                                 BType = BulletType.Melee,
+                                ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -425,7 +552,7 @@ namespace shared {
                                 SpeciesId = 2,
                                 DirX = 1,
                                 DirY = 0,
-                                ExplosionFrames = 20,
+                                ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -443,7 +570,7 @@ namespace shared {
                             new BulletConfig {
                                 StartupFrames = 21,
                                 ActiveFrames = 600,
-                                HitStunFrames = 12,
+                                HitStunFrames = 6,
                                 BlockStunFrames = 9,
                                 Damage = 11,
                                 PushbackVelX = (int)(.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -463,7 +590,9 @@ namespace shared {
                                 DirY = 0,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Fireball,
-                                CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX
+                                ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
                             }
                         )),
 
@@ -553,7 +682,8 @@ namespace shared {
                                 DirY = 0,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
-                                CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
                                 SimultaneousMultiHitCnt = 2
                             }
                         )
@@ -581,7 +711,8 @@ namespace shared {
                                 DirY = -1,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
-                                CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
                                 SimultaneousMultiHitCnt = 1
                             }
                         )
@@ -609,10 +740,79 @@ namespace shared {
                                 DirY = +1,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
-                                CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
                             }
                         )
                     ),
+
+                    new KeyValuePair<int, Skill>(16, new Skill{
+                        RecoveryFrames = 50,
+                        RecoveryFramesOnBlock = 30,
+                        RecoveryFramesOnHit = 30,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk1
+                     }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 9,
+                                ActiveFrames = 16,
+                                HitStunFrames = 10,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = 0,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SpeciesId = 2,
+                                ExplosionFrames = 25,
+                                BType = BulletType.Melee,
+                                DirX = 1,
+                                DirY = 0,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                        )),
+
+                    new KeyValuePair<int, Skill>(17, new Skill{
+                        RecoveryFrames = 55,
+                        RecoveryFramesOnBlock = 28,
+                        RecoveryFramesOnHit = 28,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk2
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 7,
+                                ActiveFrames = 20,
+                                HitStunFrames = MAX_INT,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = (int)(1.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                BlowUp = true,
+                                SpeciesId = 2,
+                                DirX = 1,
+                                DirY = 0,
+                                ExplosionFrames = 25,
+                                BType = BulletType.Melee,
+                                ActiveVfxSpeciesId = VfxFireSlashActive.SpeciesId,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                        )),
 
                     new KeyValuePair<int, Skill>(255, new Skill {
                         RecoveryFrames = 30,
@@ -670,7 +870,7 @@ namespace shared {
                                 HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SpeciesId = 1,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
                                 BType = BulletType.Melee,
@@ -694,7 +894,7 @@ namespace shared {
                                 HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SpeciesId = 1,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
                                 BType = BulletType.Melee,
@@ -718,7 +918,7 @@ namespace shared {
                                 HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SpeciesId = 1,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
                                 BType = BulletType.Melee,
@@ -742,7 +942,7 @@ namespace shared {
                                 HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SpeciesId = 1,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
                                 BType = BulletType.Melee,
@@ -766,7 +966,7 @@ namespace shared {
                                 HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SpeciesId = 1,
-                                ExplosionFrames = 15,
+                                ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
                                 BType = BulletType.Melee,
@@ -801,7 +1001,7 @@ namespace shared {
                                 return currBulletConfig.CancelTransit[patternId];
                             }
                         case 3:
-                            if (!notRecovered) { 
+                            if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 255; // A fallback to "InAirAtk1"
                                 } else {
@@ -867,7 +1067,7 @@ namespace shared {
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 256; // A fallback to "InAirAtk1" 
-                                } else {        
+                                } else {
                                     return 9;
                                 }
                             } else {
@@ -888,13 +1088,13 @@ namespace shared {
                     switch (patternId) {
                         case 1:
                             if (!notRecovered && !currCharacterDownsync.InAir) {
-                                return 5;
+                                return 16;
                             } else {
                                 return NO_SKILL;
                             }
                         case 2:
                             if (!notRecovered && !currCharacterDownsync.InAir) {
-                                return 12;
+                                return 17;
                             } else {
                                 return NO_SKILL;
                             }
