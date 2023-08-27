@@ -104,9 +104,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     private string MATERIAL_REF_THICKNESS = "_Thickness";
     private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
     private string MATERIAL_REF_FLASH_COLOR = "_FlashColor";
-    private float DAMAGED_FLASH_INTENSITY = 0.6f;
+    private float DAMAGED_FLASH_INTENSITY = 0.4f;
     private float DAMAGED_THICKNESS = 1.5f;
-    private float DAMAGED_BLINK_SECONDS_HALF = 0.3f;
+    private float DAMAGED_BLINK_SECONDS_HALF = 0.2f;
 
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
