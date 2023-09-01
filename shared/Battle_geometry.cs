@@ -44,7 +44,7 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNormsForCharacter(RoomDownsyncFrame currRenderFrame, CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider playerCollider, ConvexPolygon playerShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        public static int calcHardPushbacksNormsForCharacter(RoomDownsyncFrame currRenderFrame, CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             primaryTrap = null;
             float virtualGripToWall = 0.0f;
             if (OnWallIdle1 == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
@@ -59,7 +59,7 @@ namespace shared {
             float primaryOverlapMag = float.MinValue;
             bool primaryIsWall = true; // Initialized to "true" to be updated even if there's only 1 vertical wall 
             residueCollided.Clear();
-            bool collided = playerCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
+            bool collided = aCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
             if (!collided) {
 				//logger.LogInfo(String.Format("No collision object."));
                 return retCnt;
@@ -74,6 +74,7 @@ namespace shared {
                 int trapLocalId = TERMINATING_TRAP_ID;
                 bool isBarrier = false;
                 bool isDynamicTrap = false;
+                bool providesSlipJump = false;
                 switch (bCollider.Data) {
                     case CharacterDownsync v1:
                     case Bullet v2:
@@ -81,6 +82,7 @@ namespace shared {
                         break;
                     case TrapColliderAttr v4:
                         trapLocalId = v4.TrapLocalId;
+                        providesSlipJump = v4.ProvidesSlipJump;
                         isDynamicTrap = v4.ProvidesHardPushback;
                         isBarrier = v4.ProvidesHardPushback;
                         break;
@@ -97,12 +99,21 @@ namespace shared {
                     residueCollided.Put(bCollider);
                     continue;
                 }
+
+
                 ConvexPolygon bShape = bCollider.Shape;
 
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, playerShape, bShape, true, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, ref overlapResult);
 
                 if (!overlapped) {
                     continue;
+                }
+
+                if (providesSlipJump) {
+                    // Only provides hardPushbacks when the "bottom of the character" is higher than "top of the barrier rectangle - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE". 
+                    if (aCollider.Y < (bCollider.Y + bCollider.H - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE)) {
+                        continue;
+                    }
                 }
 
                 float normAlignmentWithHorizon1 = (overlapResult.OverlapX * +1f);

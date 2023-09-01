@@ -93,17 +93,17 @@ namespace shared {
             return hasInputFrameUpdatedOnDynamics;
         }
 
-        private static (int, bool, int, int) _derivePlayerOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
-            // returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
+        private static (int, bool, bool, int, int) _derivePlayerOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder) {
+            // returns (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
             int delayedInputFrameIdForPrevRdf = ConvertToDelayedInputFrameId(currRenderFrame.Id - 1);
 
             if (0 >= delayedInputFrameId) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
             }
 
             if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
             }
 
             var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
@@ -121,6 +121,7 @@ namespace shared {
             }
 
             bool jumpedOrNot = false;
+            bool slipJumpedOrNot = false;
             int joinIndex = currCharacterDownsync.JoinIndex;
 
             DecodeInput(delayedInputList[joinIndex - 1], decodedInputHolder);
@@ -144,6 +145,8 @@ namespace shared {
                     if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
                         // Checking "DashingEnabled" here to allow jumping when dashing-disabled players pressed "DOWN + BtnB"
                         patternId = 5;
+                    } else if (0 < decodedInputHolder.Dy) {
+                        slipJumpedOrNot = true;
                     } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState)) {
                         jumpedOrNot = true;
                     } else if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
@@ -168,7 +171,7 @@ namespace shared {
                 }
             }
 
-            return (patternId, jumpedOrNot, effDx, effDy);
+            return (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy);
         }
 
         private static bool inNonInertiaFramesToRecover(CharacterDownsync currCharacterDownsync) {
@@ -249,13 +252,14 @@ namespace shared {
                 var currCharacterDownsync = currRenderFrame.PlayersArr[i];
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     continue;
                 }
 
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
+                thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
 
                 /*
                    if (1 == currCharacterDownsync.JoinIndex && 2 == patternId) {
@@ -496,6 +500,8 @@ namespace shared {
                         thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY;
                         thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                     }
+                } else if (!currCharacterDownsync.InAir && currCharacterDownsync.SlipJumpTriggered) {
+                    newVy -= (SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL << 2);
                 }
 
                 if (0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
@@ -1134,7 +1140,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFramePlayers[i]);
             }
 
             int npcCnt = 0;
@@ -1158,7 +1164,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFrameNpcs[npcCnt]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, nextRenderFrameNpcs[npcCnt]);
                 npcCnt++;
             }
 
