@@ -496,6 +496,16 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void preallocateVfxNodes() {
         Debug.Log("preallocateVfxNodes begins");
+        if (null != cachedVfxNodes) {
+            foreach (var (_,v) in cachedVfxNodes) {
+                while (0 < v.Cnt()) {
+                    var g = v.Pop();
+                    if (null != g) {
+                        Destroy(g.gameObject);
+                    }
+                }
+            }
+        }
         cachedVfxNodes = new Dictionary<int, KvPriorityQueue<string, VfxNodeController>>();
         vfxSpeciesPrefabDict = new Dictionary<int, GameObject>();
         int cacheCapacityPerSpeciesId = 5;

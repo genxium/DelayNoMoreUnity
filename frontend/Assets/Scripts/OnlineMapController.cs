@@ -176,7 +176,6 @@ public class OnlineMapController : AbstractMapController {
     }
 
     void Start() {
-        preallocateVfxNodes();
         if (null == postSettlementCallback) {
             postSettlementCallback = () => {
                 onBattleStopped();
