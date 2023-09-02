@@ -68,7 +68,7 @@ message CharacterDownsync {
 	int32 joinIndex = 10;
 	
 	int32 framesToRecover = 11;
-	bool capturedByInertia = 12; // like "inAir", it’s by design a standalone field only inferred by the calc result of "applyInputFrameDownsyncDynamicsOnSingleRenderFrame" instead of "characterState"
+	bool capturedByInertia = 12; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
 
 	bool capturedByPatrolCue = 13;
 	int32 framesInPatrolCue = 14;
@@ -107,6 +107,7 @@ message CharacterDownsync {
     bool crouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
         
 	bool slipJumpTriggered = 40;
+	bool primarilyOnSlippableHardPushback = 41; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
 
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;

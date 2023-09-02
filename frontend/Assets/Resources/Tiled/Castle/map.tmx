@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="293">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="295">
  <tileset firstgid="1" source="tiles0.tsx"/>
  <tileset firstgid="65" source="tiles1.tsx"/>
  <tileset firstgid="129" source="tiles2.tsx"/>
@@ -9,7 +9,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2stKxDAYQOFgKXQzi2EQFXHnxr0rl/piPoAPbQsNhPAnaTNtrmfxUZx2OpmctEL1ppS6AQAAAAAAAAAARBoRLXe7o/rnHkONWpm35Xs8YLdW+l8j3pN77ktA/77Rv2/07xv9+0b/frzPJqV+r+t8XRvrL6G/3L3F/lvWxz39R2M7Gj+71p79nE06RjrfUc8yfN176e+6H7haaNJrKZ/Jhsaypbtv3fXeP3T975nzM75PzFjs7qH2PfUPzbGr/4shxe/qwTMW15hDjemfrv9gOGod7L3/70H/8/ov9+PXdRvbfqD/Xf19Qv3Hne3t/ss5LkI7aSxPBvt89M/XP2ZOdf+tnxc6jv7l9pfOOTj2hcbhGtvZ/X8K6Fdrf99a2PpZIVz/dfQ/C/3pT//2+3+s6J+u/+OqhP5c/+n66+9/dP+3RP2/heOk1+jv7++bc67/epTUf/kb3N+8tU30b77/0v553rpMEeOhfx39Q+19ayBXf33e3P1q639Zfc6+VNz/+Oj36nPRv47+o9FMs9va+6XjpH05+udud1R/xMndjv70BwAAAAAAAAAAAAAAAACU4x+rTvSK
+   eJzt2U1LwzAcgPFgKezSQxkiIt68ePfkUb+YH8AP7QoNhvBP0mRt3vocfgxn16Z50g3aq1LqCgAAAAAAAAAAkGhEstLt9upfegwt6mXelvN4QLRe+s8Jnyk99zWg/7n13v/XQv9z9ef6pz/96U9/pd5uLkr9zOt8zZ31l9Bf7t5j/y3r457+o/E6Gn+71p59n03aRtrfXvcyfN3P0t/1feBqoUnv5bwnGxrLlu6+dXf2/qHrP2bOjziflLHY3UPtz9Q/NMeu/s+GHL/Vg2csrjGHGtM/X//BsNc6iP3+j0H/4/ov38cv62tq+4H+d/X3CfUfI9vb/Zd9TEI7aSxPBnt/9C/XP2VOdf+txwttR/96+0v7HBz/C43DNbaj+39X0K/V/r61sPVYIVz/bfQ/Cv3pT//++7+v6J+v/+Oqhv5c//n66/Pfu/9rpv5fwnbSe/T39/fNOdd/O2rqbz6Dm9T/s7gL/bvvbz9/NfvrNRA7Hvq30d9uL/V3rYFS/fV+S/drrf+0+rj5FBr7+mv6s3pf9G+jv+5qkrpLfNu4jnd0/9Lt9uqPNKXb0Z/+AAAAAAAAAAAAAAAAAIB6/AEZuvK7
   </data>
  </layer>
  <layer id="12" name="StaticTrapPaint" width="128" height="64">
@@ -28,7 +28,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="504" y="302">
+  <object id="135" x="486" y="302">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -136,6 +136,15 @@
     <property name="dirX" value="0"/>
     <property name="dirY" value="-2"/>
     <property name="speed" value="4"/>
+   </properties>
+  </object>
+  <object id="294" x="528" y="272" width="64" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
    </properties>
   </object>
  </objectgroup>

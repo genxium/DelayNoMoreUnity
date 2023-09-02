@@ -496,6 +496,16 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void preallocateVfxNodes() {
         Debug.Log("preallocateVfxNodes begins");
+        if (null != cachedVfxNodes) {
+            foreach (var (_,v) in cachedVfxNodes) {
+                while (0 < v.Cnt()) {
+                    var g = v.Pop();
+                    if (null != g) {
+                        Destroy(g.gameObject);
+                    }
+                }
+            }
+        }
         cachedVfxNodes = new Dictionary<int, KvPriorityQueue<string, VfxNodeController>>();
         vfxSpeciesPrefabDict = new Dictionary<int, GameObject>();
         int cacheCapacityPerSpeciesId = 5;
@@ -1025,11 +1035,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
                         tileProps.TryGetCustomProperty("providesEscape", out providesEscape);
+                        tileProps.TryGetCustomProperty("providesSlipJump", out providesSlipJump);
                         tileProps.TryGetCustomProperty("static", out isCompletelyStatic);
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
@@ -1039,6 +1050,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
                         bool providesDamageVal = (null != providesDamage && !providesDamage.IsEmpty && 1 == providesDamage.GetValueAsInt()) ? true : false;
                         bool providesEscapeVal = (null != providesEscape && !providesEscape.IsEmpty && 1 == providesEscape.GetValueAsInt()) ? true : false;
+                        bool providesSlipJumpVal = (null != providesSlipJump && !providesSlipJump.IsEmpty && 1 == providesSlipJump.GetValueAsInt()) ? true : false;
                         bool isCompletelyStaticVal = (null != isCompletelyStatic && !isCompletelyStatic.IsEmpty && 1 == isCompletelyStatic.GetValueAsInt()) ? true : false;
 
                         int dirXVal = (null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt());
@@ -1089,6 +1101,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 ProvidesDamage = providesDamageVal,
                                 ProvidesHardPushback = providesHardPushbackVal,
                                 ProvidesEscape = providesEscapeVal,
+                                ProvidesSlipJump = providesSlipJumpVal,
                                 HitboxOffsetX = 0,
                                 HitboxOffsetY = 0,
                                 HitboxSizeX = rectVw,
@@ -1126,7 +1139,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             };
                             var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
                             foreach (var collisionObj in collisionObjs) {
-                                bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false, childProvidesEscapeVal = false;
+                                bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false, childProvidesEscapeVal = false, childProvidesSlipJumpVal = false;
                                 foreach (var collisionObjProp in collisionObj.m_CustomProperties) {
                                     if ("providesHardPushback".Equals(collisionObjProp.m_Name)) {
                                         childProvidesHardPushbackVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
@@ -1136,6 +1149,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                                     }
                                     if ("providesEscape".Equals(collisionObjProp.m_Name)) {
                                         childProvidesEscapeVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                    }
+                                    if ("providesSlipJump".Equals(collisionObjProp.m_Name)) {
+                                        childProvidesSlipJumpVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
                                     }
                                     if ("collisionTypeMask".Equals(collisionObjProp.m_Name) && !collisionObjProp.IsEmpty) {
                                         collisionTypeMaskVal = (ulong)collisionObjProp.GetValueAsInt();
@@ -1150,6 +1166,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                     ProvidesDamage = childProvidesDamageVal,
                                     ProvidesHardPushback = childProvidesHardPushbackVal,
                                     ProvidesEscape = childProvidesEscapeVal,
+                                    ProvidesSlipJump = childProvidesSlipJumpVal,
                                     HitboxOffsetX = hitboxOffsetVx,
                                     HitboxOffsetY = hitboxOffsetVy,
                                     HitboxSizeX = hitboxSizeVx,
@@ -1330,10 +1347,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         line.SetPositions(debugDrawPositionsHolder);
     }
 
+    public void toggleDebugDrawingEnabled() {
+        debugDrawingEnabled = !debugDrawingEnabled; 
+    }
+
     protected void urpDrawDebug() {
-        if (!debugDrawingEnabled) {
-            return;
-        }
         if (ROOM_STATE_IN_BATTLE != battleState) {
             return;
         }
@@ -1342,6 +1360,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (!res || null == line) throw new ArgumentNullException(String.Format("There's no line for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedLineRenderers.vals.EdFrameId));
 
             resetLine(line);
+        }
+        if (!debugDrawingEnabled) {
+            return;
         }
         var (_, rdf) = renderBuffer.GetByFrameId(renderFrameId);
         if (null == rdf) return;
