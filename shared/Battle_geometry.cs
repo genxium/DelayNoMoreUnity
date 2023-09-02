@@ -110,7 +110,14 @@ namespace shared {
                 }
 
                 if (providesSlipJump) {
-                    // Only provides hardPushbacks when the "bottom of the character" is higher than "top of the barrier rectangle - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE". 
+                    /*
+                    Only provides hardPushbacks when 
+                    - the character is not uprising, and
+                    - the "bottom of the character" is higher than "top of the barrier rectangle - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE". 
+                    */
+                    if (0 < currCharacterDownsync.VelY) {
+                        continue;
+                    }
                     if (aCollider.Y < (bCollider.Y + bCollider.H - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE)) {
                         continue;
                     }

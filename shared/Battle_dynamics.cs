@@ -501,7 +501,7 @@ namespace shared {
                         thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                     }
                 } else if (!currCharacterDownsync.InAir && currCharacterDownsync.PrimarilyOnSlippableHardPushback && currCharacterDownsync.SlipJumpTriggered) {
-                    newVy -= (SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL << 2);
+                    newVy -= SLIP_JUMP_CHARACTER_DROP_VIRTUAL;
                 } 
 
                 if (0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
@@ -551,14 +551,6 @@ namespace shared {
 
                 if (null != primaryTrap) {
                     thatCharacterInNextFrame.FrictionVelX = primaryTrap.VelX;
-                    List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[primaryTrap.TrapLocalId];
-                    for (int j = 0; j < colliderAttrs.Count; j++) {
-                        var colliderAttr = colliderAttrs[j];
-                        if (colliderAttr.ProvidesSlipJump) {
-                            thatCharacterInNextFrame.PrimarilyOnSlippableHardPushback = true;
-                            break;
-                        }
-                    }
                 }
 
                 if (0 < hardPushbackCnt) {
@@ -724,6 +716,16 @@ namespace shared {
 
                 if (landedOnGravityPushback) {
                     thatCharacterInNextFrame.InAir = false;
+                    if (null != primaryTrap) {
+                        List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[primaryTrap.TrapLocalId];
+                        for (int j = 0; j < colliderAttrs.Count; j++) {
+                            var colliderAttr = colliderAttrs[j];
+                            if (colliderAttr.ProvidesSlipJump) {
+                                thatCharacterInNextFrame.PrimarilyOnSlippableHardPushback = true;
+                                break;
+                            }
+                        }
+                    }
                     bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
                     if (fallStopping) {
                         thatCharacterInNextFrame.VelX = 0;

@@ -854,11 +854,6 @@ public class Room {
         }
 
         foreach (var player in playersArr) {
-            /*
-               [WARNING] While the order of generation of "inputBufferSnapshot" is preserved for sending, the underlying network I/O blocking action is dispatched to "downsyncLoop of each player" such that "markConfirmationIfApplicable & forceConfirmationIfApplicable" can re-hold "pR.inputBufferLock" asap and proceed with more inputFrameUpsyncs.
-
-               The use of "downsyncLoop of each player" also waives the need of guarding each "pR.CharacterDownsyncSessionDict[playerId]" from multithread-access (e.g. by a "pR.CharacterDownsyncSessionMutexDict[playerId]"), i.e. Gorilla v1.2.0 "conn.WriteMessage" isn't thread-safe https://github.com/gorilla/websocket/blob/v1.2.0/conn.go#L585.
-            */
             var playerBattleState = Interlocked.Read(ref player.BattleState);
 
             switch (playerBattleState) {
