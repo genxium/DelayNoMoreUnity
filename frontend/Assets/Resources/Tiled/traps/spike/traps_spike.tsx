@@ -28,7 +28,7 @@
      <property name="providesHardPushback" value="1"/>
     </properties>
    </object>
-   <object id="2" x="0" y="16" width="64" height="16">
+   <object id="2" x="4" y="18" width="56" height="14">
     <properties>
      <property name="collisionTypeMask" value="4"/>
      <property name="providesDamage" value="1"/>
