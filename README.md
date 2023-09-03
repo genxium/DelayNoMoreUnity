@@ -1,9 +1,9 @@
 # What's this project?
 It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a Multiplayer Platformer game demo on websocket with delayed-input Rollback Netcode inspired by GGPO -- but with the backend also rebuilt in C#.
 
-(battle between 4g Android v.s. Wifi Android via internet (and UDP peer-to-peer holepunch failed), input delay = 2 frames i.e. ~32ms, the following GIF is a merged from [these videos](https://pan.baidu.com/s/1Egq_vI7C9ANgiHO3vBGxcA?pwd=2m87), please also checkout [slope dynamics video here](https://pan.baidu.com/s/1ANH2nlcT09mHFJcuvDPZlA?pwd=ycuk) & [multi-enemy-head-walk video here](https://pan.baidu.com/s/1A1u3d4G943FLmdOFAblTJw?pwd=gez7))
+(battle between 4g Android v.s. Wifi Android via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms, the following GIF is converted from [this video](https://pan.baidu.com/s/1-VymVEIIFZ0W_9Uw5518Lw?pwd=l58c), please also checkout [these older version videos](https://pan.baidu.com/s/1Egq_vI7C9ANgiHO3vBGxcA?pwd=2m87), [this dedicated slope dynamics video](https://pan.baidu.com/s/1ANH2nlcT09mHFJcuvDPZlA?pwd=ycuk) and [this dedicated multi-enemy-head-walk video](https://pan.baidu.com/s/1A1u3d4G943FLmdOFAblTJw?pwd=gez7))
 
-![trap_dynamics](./charts/Merged_all_spedup.gif)
+![basic_ops](./charts/Merged_all_spedup.gif)
 
 # Notable Features (by far, would add more in the future)
 - Automatically correction for "slow ticker", especially "active slow ticker" which is well-known to be a headache for input synchronization
@@ -11,7 +11,8 @@ It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a
 - Frame logging toggle for both frontend & backend (i.e. `backend/Battle/Room.frameLogEnabled`), useful for debugging out of sync entities when developing new features -- **however, if you updated the battle dynamics and found certain introduced out-of-sync spots difficult to fix, please consider turning to `backend-dynamics` and broadcast reference-render-frames regularly, [the original Golang version backend](https://github.com/genxium/DelayNoMore/blob/v1.0.15/jsexport/battle/battle.go#L593) is a good reference for implementing `backend-dynamics`**
 - Rollback compatible NPC patrolling and vision reaction
 - Rollback compatible static and dynamic traps, including a WYSIWYG notation support in Tiled editor (since v1.1.4)
-- Simple slope dynamics 
+- Rollback compatible monodirectional platform which also supports _slip-down_ operation
+- Simple slope dynamics
 - Standing and walking on multiple enemy-heads
 
 _(a typical framelog comparison from 2 peers)_
