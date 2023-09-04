@@ -76,12 +76,13 @@ namespace shared {
                     // On frontend, a "self input" is only confirmed by websocket downsync, which is quite late and might get the "self input" incorrectly overwritten if not excluded here
                     continue;
                 }
-                ulong joinMask = ((ulong)1 << i);
+                ulong joinMask = (1UL << i);
                 if (0 < (confirmedList & joinMask)) {
                     // This in-place update is only valid when "delayed input for this player is not yet confirmed"
                     continue;
                 }
                 if (lastIndividuallyConfirmedInputFrameId[i] >= inputFrameId) {
+                    // Already confirmed, no need to predict.
                     continue;
                 }
                 ulong newVal = (lastIndividuallyConfirmedInputList[i] & 15);
@@ -530,7 +531,7 @@ namespace shared {
             }
         }
 
-        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPusbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, ref BattleResult battleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
+        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPusbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             int primaryHardOverlapIndex;
             for (int i = iSt; i < iEd; i++) {
@@ -626,8 +627,23 @@ namespace shared {
                             var (escaped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
                             // Currently only allowing "Player" to win.
                             if (escaped) {
-                                battleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
-                                return;
+                                int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
+                                if (0 >= delayedInputFrameId) {
+                                    throw new ArgumentNullException(String.Format("currRenderFrame.Id={0}, delayedInputFrameId={0} is invalid when escaped!", currRenderFrame.Id, delayedInputFrameId));
+                                }
+
+                                var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
+                                if (!ok || null == delayedInputFrameDownsync) {
+                                    throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null when escaped!", delayedInputFrameId));
+                                }
+                                if (1 == roomCapacity || (delayedInputFrameDownsync.ConfirmedList+1 == (1UL << roomCapacity))) {
+                                    confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
+                                    continue;
+                                } else {
+                                    // [WARNING] This cached information could be created by a CORRECTLY PREDICTED "delayedInputFrameDownsync", thus we need a rollback from there on to finally consilidate the result later!
+                                    unconfirmedBattleResults[delayedInputFrameId] = confirmedBattleResult; // The "value" here is actually not useful, it's just stuffed here for type-correctness :)
+                                    continue;
+                                }
                             } else {
                                 continue;
                             }
@@ -1085,15 +1101,12 @@ namespace shared {
             battleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, ref BattleResult battleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
             }
             
-            if (isBattleResultSet(battleResult)) {
-                return;
-            }
             int nextRenderFrameId = currRenderFrameId + 1;
             var (ok2, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
             if (!ok2 || null == candidate) {
@@ -1218,7 +1231,7 @@ namespace shared {
             int trapColliderCntOffset = colliderCnt;
             _moveAndInsertDynamicTrapColliders(currRenderFrame, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
 
-            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + npcCnt, residueCollided, ref battleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
+            _calcCharacterMovementPushbacks(currRenderFrame, inputBuffer, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + npcCnt, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
 
             int bulletColliderCntOffset = colliderCnt;
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);

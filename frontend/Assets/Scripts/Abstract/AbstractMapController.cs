@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
-using System.IO;
 using DG.Tweening;
 
 public abstract class AbstractMapController : MonoBehaviour {
@@ -54,7 +53,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected shared.Collision collisionHolder;
     protected SatResult overlapResult, primaryOverlapResult;
-    protected BattleResult battleResult;
+    protected Dictionary<int, BattleResult> unconfirmedBattleResult;
+    protected BattleResult confirmedBattleResult;
     protected Vector[] effPushbacks;
     protected Vector[][] hardPushbackNormsArr;
     protected Vector[] softPushbacks;
@@ -175,7 +175,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         ulong previousSelfInput = 0,
           currSelfInput = 0;
         int joinIndex = selfPlayerInfo.JoinIndex;
-        ulong selfJoinIndexMask = ((ulong)1 << (joinIndex - 1));
+        ulong selfJoinIndexMask = (1UL << (joinIndex - 1));
         var (_, existingInputFrame) = inputBuffer.GetByFrameId(inputFrameId);
         var (_, previousInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId - 1);
         previousSelfInput = (null == previousInputFrameDownsync ? 0 : previousInputFrameDownsync.InputList[joinIndex - 1]);
@@ -265,7 +265,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, ref battleResult, pushbackFrameLogBuffer, frameLogEnabled, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, _loggerBridge);
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -273,10 +273,14 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var (ok3, nextRdf) = renderBuffer.GetByFrameId(i + 1);
             if (false == ok3 || null == nextRdf) {
-                throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, renderFrameId={1}", i + 1, renderFrameId));
+                if (isChasing) { 
+                    throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, renderFrameId={1}: renderBuffer StFrameId={2}, EdFrameId={3}, Cnt={4}", i + 1, renderFrameId, renderBuffer.StFrameId, renderBuffer.EdFrameId, renderBuffer.Cnt));
+                } else {
+                    throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to generate, renderFrameId={1} while rendering: renderBuffer StFrameId={2}, EdFrameId={3}, Cnt={4}", i + 1, renderFrameId, renderBuffer.StFrameId, renderBuffer.EdFrameId, renderBuffer.Cnt));
+                }
             }
             if (nextRdf.Id != i + 1) {
-                throw new ArgumentException(String.Format("Corrupted historic rdf for i+1={0} to rollback, nextRdf={1}!", i, nextRdf));
+                throw new ArgumentException(String.Format("Corrupted historic rdf for i+1={0} to rollback/generate, nextRdf={1}!", i, nextRdf));
             }
             if (true == isChasing) {
                 // [WARNING] Move the cursor "chaserRenderFrameId" when "true == isChasing", keep in mind that "chaserRenderFrameId" is not monotonic!
@@ -292,7 +296,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     private bool _allConfirmed(ulong confirmedList) {
-        return (confirmedList + 1) == (ulong)(1 << roomCapacity);
+        return (confirmedList + 1) == (1UL << roomCapacity);
     }
 
     private int _markConfirmationIfApplicable() {
@@ -344,7 +348,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
-        if (isBattleResultSet(battleResult)) {
+        if (isBattleResultSet(confirmedBattleResult)) {
             StartCoroutine(delayToShowSettlementPanel());
             return;
         }
@@ -553,7 +557,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int residueCollidedCap = 256;
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
-        renderBufferSize = 1024;
+        renderBufferSize = 2048;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
             renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
@@ -649,7 +653,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             cachedLineRenderers.Put(initLookupKey, newLine);
         }
 
-        battleResult = new BattleResult {
+        confirmedBattleResult = new BattleResult {
             WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
         };
     }
@@ -666,6 +670,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
         completelyStaticTrapColliders = new List<shared.Collider>();
+        unconfirmedBattleResult = new Dictionary<int, BattleResult>();
 
         if (null != underlyingMap) {
             Destroy(underlyingMap);
@@ -707,7 +712,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
-        resetBattleResult(ref battleResult);
+        resetBattleResult(ref confirmedBattleResult);
         readyGoPanel.resetCountdown();
         settlementPanel.gameObject.SetActive(false);
     }
@@ -742,9 +747,17 @@ public abstract class AbstractMapController : MonoBehaviour {
               !shared.Battle.EqualInputLists(localInputFrame.InputList, inputFrameDownsync.InputList)
             ) {
                 firstPredictedYetIncorrectInputFrameId = inputFrameDownsyncId;
+            } else if (
+                TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId
+                && 
+                unconfirmedBattleResult.ContainsKey(inputFrameDownsyncId)
+                ) {
+                // [WARNING] Unconfirmed battle results must be revisited!
+                firstPredictedYetIncorrectInputFrameId = inputFrameDownsyncId;
+                unconfirmedBattleResult.Remove(inputFrameDownsyncId);
             }
             // [WARNING] Take all "inputFrameDownsync" from backend as all-confirmed, it'll be later checked by "rollbackAndChase". 
-            inputFrameDownsync.ConfirmedList = (ulong)(1 << roomCapacity) - 1;
+            inputFrameDownsync.ConfirmedList = (1UL << roomCapacity) - 1;
 
             for (int j = 0; j < roomCapacity; j++) {
                 if (inputFrameDownsync.InputFrameId > lastIndividuallyConfirmedInputFrameId[j]) {
@@ -823,7 +836,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     // Update is called once per frame
     protected void doUpdate() {
-        if (isBattleResultSet(battleResult)) {
+        if (isBattleResultSet(confirmedBattleResult)) {
             var (ok1, currRdf) = renderBuffer.GetByFrameId(renderFrameId - 1);
             if (ok1 && null != currRdf) {
                 cameraTrack(currRdf, null);
@@ -1305,7 +1318,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Vector2 camDiffDstHolder = new Vector2();
     protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
         if (null == selfPlayerInfo) return;
-        int targetJoinIndex = isBattleResultSet(battleResult) ? battleResult.WinnerJoinIndex : selfPlayerInfo.JoinIndex;
+        int targetJoinIndex = isBattleResultSet(confirmedBattleResult) ? confirmedBattleResult.WinnerJoinIndex : selfPlayerInfo.JoinIndex;
 
         var playerGameObj = playerGameObjs[targetJoinIndex - 1];
         var playerCharacterDownsync = rdf.PlayersArr[targetJoinIndex - 1];
@@ -1315,7 +1328,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var cameraSpeedInWorld = camSpeedHolder.magnitude * 100;
 
         var prevPlayerCharacterDownsync = prevRdf.PlayersArr[targetJoinIndex - 1];
-        if (CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState || isBattleResultSet(battleResult)) {
+        if (CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState || isBattleResultSet(confirmedBattleResult)) {
             cameraSpeedInWorld *= 200;
         }
 
