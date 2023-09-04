@@ -21,14 +21,14 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="137" x="490" y="524">
+  <object id="137" x="488" y="524">
    <properties>
-    <property name="dirX" value="-2"/>
+    <property name="dirX" value="+2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="135" x="486" y="302">
+  <object id="135" x="488" y="308">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>

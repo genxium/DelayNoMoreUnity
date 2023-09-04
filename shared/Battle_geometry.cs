@@ -73,7 +73,7 @@ namespace shared {
                 }
                 int trapLocalId = TERMINATING_TRAP_ID;
                 bool isBarrier = false;
-                bool isDynamicTrap = false;
+                bool onTrap = false;
                 bool providesSlipJump = false;
                 switch (bCollider.Data) {
                     case CharacterDownsync v1:
@@ -83,7 +83,7 @@ namespace shared {
                     case TrapColliderAttr v4:
                         trapLocalId = v4.TrapLocalId;
                         providesSlipJump = v4.ProvidesSlipJump;
-                        isDynamicTrap = v4.ProvidesHardPushback;
+                        onTrap = v4.ProvidesHardPushback;
                         isBarrier = v4.ProvidesHardPushback;
                         break;
                     default:
@@ -128,17 +128,18 @@ namespace shared {
                 bool isWall = (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1 || VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2);
                 // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the horizontal edge is chosen as primary!
                 if (!isWall && primaryIsWall) {
+                    // Initial non-wall transistion
                     primaryOverlapIndex = retCnt;
                     primaryOverlapMag = overlapResult.OverlapMag;
                     overlapResult.cloneInto(ref primaryOverlapResult);
                     primaryIsWall = isWall;
-                    if (isDynamicTrap) {
+                    if (onTrap) {
                         primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
                     } else {
                         primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
                     }
                 } else if (isWall && !primaryIsWall) {
-                    // Just skip...
+                    // Just skip, once the character is checked to collide with a non-wall, any parasitic wall collision would be ignored...
                 } else {
                     // Same polarity
                     if (overlapResult.OverlapMag > primaryOverlapMag) {
@@ -146,10 +147,20 @@ namespace shared {
                         primaryOverlapMag = overlapResult.OverlapMag;
                         overlapResult.cloneInto(ref primaryOverlapResult);
                         primaryIsWall = isWall;
-                        if (isDynamicTrap) {
+                        if (onTrap) {
                             primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
                         } else {
                             primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
+                        }
+                    } else if (overlapResult.OverlapMag == primaryOverlapMag) {
+                        // [WARNING] Here's an important block for guaranteeing determinism regardless of traversal order.
+                        if (onTrap && null == primaryTrap) {       
+                            // If currently straddling across a trap and a non-trap, with equal overlapMap, then the trap takes higher priority!
+                            primaryOverlapIndex = retCnt;
+                            primaryOverlapMag = overlapResult.OverlapMag;
+                            overlapResult.cloneInto(ref primaryOverlapResult);
+                            primaryIsWall = isWall;
+                            primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
                         }
                     }
                 }

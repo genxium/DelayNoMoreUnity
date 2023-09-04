@@ -557,7 +557,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int residueCollidedCap = 256;
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
-        renderBufferSize = 2048;
+        renderBufferSize = 1536;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
             renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
@@ -692,7 +692,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int cellWidth = 64;
         int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
         collisionSys = new CollisionSpace(spaceOffsetX << 1, spaceOffsetY << 1, cellWidth, cellHeight);
-        maxTouchingCellsCnt = ((spaceOffsetX << 1) / cellWidth) * ((spaceOffsetY << 1) / cellHeight) + 1;
+        maxTouchingCellsCnt = (((spaceOffsetX << 1) + cellWidth) / cellWidth) * (((spaceOffsetY << 1) + cellHeight) / cellHeight) + 1;
         for (int i = 0; i < dynamicRectangleColliders.Length; i++) {
             dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, null);
         }
@@ -836,14 +836,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     // Update is called once per frame
     protected void doUpdate() {
-        if (isBattleResultSet(confirmedBattleResult)) {
-            var (ok1, currRdf) = renderBuffer.GetByFrameId(renderFrameId - 1);
-            if (ok1 && null != currRdf) {
-                cameraTrack(currRdf, null);
-            }
-            return;
-        }
-
         int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
         ulong prevSelfInput = 0, currSelfInput = 0;
         if (ShouldGenerateInputFrameUpsync(renderFrameId)) {
@@ -856,9 +848,20 @@ public abstract class AbstractMapController : MonoBehaviour {
             getOrPrefabInputFrameUpsync(delayedInputFrameId, false, prefabbedInputListHolder);
         }
 
-        if (shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, noDelayInputFrameId)) {
-            // TODO: Is the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
+        bool battleResultIsSet = isBattleResultSet(confirmedBattleResult); 
+
+        if (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, noDelayInputFrameId)) {
+            // [WARNING] If "true == battleResultIsSet", we MUST IMMEDIATELY flush the local inputs to our peers to favor the formation of all-confirmed inputFrameDownsync asap! 
+            // TODO: Does the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
             sendInputFrameUpsyncBatch(noDelayInputFrameId);
+        }
+
+        if (battleResultIsSet) {
+            var (ok1, currRdf) = renderBuffer.GetByFrameId(renderFrameId - 1);
+            if (ok1 && null != currRdf) {
+                cameraTrack(currRdf, null);
+            }
+            return;
         }
 
         int prevChaserRenderFrameId = chaserRenderFrameId;
