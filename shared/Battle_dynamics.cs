@@ -757,6 +757,8 @@ namespace shared {
                                 case InAirIdle1NoJump:
                                 case InAirIdle1ByJump:
                                 case InAirIdle1ByWallJump:
+                                case InAirAtk1:
+                                case InAirAtked1:
                                 case OnWallIdle1:
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
                                     int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
@@ -769,6 +771,9 @@ namespace shared {
                                        }
                                      */
                                     break;
+                            }
+                            if (InAirAtk1 == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.FramesToRecover = 0;
                             }
                         }
                     } else {
@@ -1272,6 +1277,8 @@ namespace shared {
                 case InAirIdle1NoJump:
                 case InAirIdle1ByJump:
                 case InAirIdle1ByWallJump:
+                case InAirAtk1:
+                case InAirAtked1:
                 case OnWallIdle1:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.ShrinkedSizeX, chConfig.ShrinkedSizeY);
                     break;

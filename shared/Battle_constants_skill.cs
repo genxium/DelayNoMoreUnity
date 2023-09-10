@@ -1005,7 +1005,7 @@ namespace shared {
                                 if (currCharacterDownsync.InAir) {
                                     return 255; // A fallback to "InAirAtk1"
                                 } else {
-                                    return 4;
+                                    return 15;
                                 }
                             } else {
                                 return NO_SKILL;

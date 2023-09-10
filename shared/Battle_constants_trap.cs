@@ -33,6 +33,11 @@ namespace shared {
             SpeciesName = "LinearBallSpike"
         };
 
+        public static TrapConfig VerticalTrapBarrier = new TrapConfig {
+            SpeciesId = 4,
+            SpeciesName = "VerticalTrapBarrier"
+        };
+
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
                 new[]
                 {

@@ -25,7 +25,7 @@ public class OfflineMapController : AbstractMapController {
 
         roomCapacity = 1;
         preallocateHolders();
-        resetCurrentMatch("TriRoute");
+        resetCurrentMatch("Dungeon");
         preallocateVfxNodes();
         selfPlayerInfo.JoinIndex = 1;
 
