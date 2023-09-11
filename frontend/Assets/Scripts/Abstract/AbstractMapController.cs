@@ -16,6 +16,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
     protected int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     protected int preallocTrapCapacity = DEFAULT_PREALLOC_TRAP_CAPACITY;
+    protected int preallocTriggerCapacity = DEFAULT_PREALLOC_TRIGGER_CAPACITY;
 
     protected int renderFrameId; // After battle started
     protected int renderFrameIdLagTolerance;
@@ -74,6 +75,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
+    protected Dictionary<int, int> trapTrackingIdToLocalId;
+
     protected List<shared.Collider> completelyStaticTrapColliders;
 
     public CharacterSelectPanel characterSelectPanel;
@@ -560,7 +563,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         renderBufferSize = 1536;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity));
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
 
@@ -669,6 +672,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         maxChasingRenderFramesPerUpdate = 5;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
+        trapTrackingIdToLocalId = new Dictionary<int, int>();
         completelyStaticTrapColliders = new List<shared.Collider>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
 
@@ -709,7 +713,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         inputBuffer.Clear();
         residueCollided.Clear();
         trapLocalIdToColliderAttrs.Clear();
-
+        trapTrackingIdToLocalId.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
         resetBattleResult(ref confirmedBattleResult);
@@ -921,9 +925,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         var playerStartingCposList = new List<(Vector, int, int)>();
         var npcsStartingCposList = new List<(Vector, int, int, int, int, bool)>();
         var trapList = new List<Trap>();
+        var triggerList = new List<Trigger>();
         float defaultPatrolCueRadius = 10;
         int staticColliderIdx = 0;
         int trapLocalId = 0;
+        int triggerLocalId = 0;
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
                 case "Barrier":
@@ -1051,7 +1057,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
@@ -1061,6 +1067,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speed", out speed);
+                        tileProps.TryGetCustomProperty("triggerTrackingId", out triggerTrackingId);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // Not checking null or empty for this property because it shouldn't be, and in case it comes empty anyway, this automatically throws an error 
                         bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
@@ -1072,6 +1079,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int dirXVal = (null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt());
                         int dirYVal = (null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt());
                         int speedVal = (null == speed || speed.IsEmpty ? 0 : speed.GetValueAsInt());
+                        int triggerTrackingIdVal = (null == triggerTrackingId || triggerTrackingId.IsEmpty ? 0 : triggerTrackingId.GetValueAsInt());
 
                         var trapDirMagSq = dirXVal * dirXVal + dirYVal * dirYVal;
                         var invTrapDirMag = InvSqrt32(trapDirMagSq);
@@ -1110,6 +1118,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 DirY = dirYVal,
                                 VelX = trapVelX,
                                 VelY = trapVelY,
+                                TriggerTrackingId = triggerTrackingIdVal,
                                 IsCompletelyStatic = true
                             };
 
@@ -1133,11 +1142,13 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                             completelyStaticTrapColliders.Add(trapCollider);
                             trapList.Add(trap);
+                            if (0 != trap.TriggerTrackingId) {
+                                trapTrackingIdToLocalId[trap.TriggerTrackingId] = trap.TrapLocalId;
+                            }
                             staticColliders[staticColliderIdx++] = trapCollider;
                             trapLocalId++;
                             Debug.Log(String.Format("new completely static trap created {0}", trap));
                         } else {
-
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
                             var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                             var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
@@ -1151,6 +1162,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 DirY = dirYVal,
                                 VelX = trapVelX,
                                 VelY = trapVelY,
+                                TriggerTrackingId = triggerTrackingIdVal,
                                 IsCompletelyStatic = false
                             };
                             var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
@@ -1198,13 +1210,62 @@ public abstract class AbstractMapController : MonoBehaviour {
                             });
                             trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
                             trapList.Add(trap);
+                            if (0 != trap.TriggerTrackingId) {
+                                trapTrackingIdToLocalId[trap.TriggerTrackingId] = trap.TrapLocalId;
+                            }
                             trapLocalId++;
-
                             Destroy(child.gameObject); // [WARNING] It'll be animated by "TrapPrefab" in "applyRoomDownsyncFrame" instead!
                         }
                     }
                     break;
+                case "TriggerPos":
+                    foreach (Transform trapChild in child) {
+                        var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
+                        var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, triggerMask;
+                        tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
+                        tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
+                        tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
+                        tileProps.TryGetCustomProperty("initVelX", out initVelX);
+                        tileProps.TryGetCustomProperty("initVelY", out initVelY);
+                        tileProps.TryGetCustomProperty("quota", out quota);
+                        tileProps.TryGetCustomProperty("recoveryFrames", out recoveryFrames);
+                        tileProps.TryGetCustomProperty("speciesId", out speciesId);
+                        tileProps.TryGetCustomProperty("triggerMask", out triggerMask);
+                        tileProps.TryGetCustomProperty("trackingIdList", out trackingIdList);
+
+                        int speciesIdVal = speciesId.GetValueAsInt(); // must have 
+                        int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
+                        int chCollisionTeamIdVal = (null != chCollisionTeamId && !chCollisionTeamId.IsEmpty ? chCollisionTeamId.GetValueAsInt() : 0);
+                        int delayedFramesVal = (null != delayedFrames && !delayedFrames.IsEmpty ? delayedFrames.GetValueAsInt() : 0);
+                        int initVelXVal = (null != initVelX && !initVelX.IsEmpty ? initVelX.GetValueAsInt() : 0);
+                        int initVelYVal = (null != initVelY && !initVelY.IsEmpty ? initVelY.GetValueAsInt() : 0);
+                        int quotaVal = (null != quota && !quota.IsEmpty ? quota.GetValueAsInt() : 1);
+                        int recoveryFramesVal = (null != recoveryFrames && !recoveryFrames.IsEmpty ? recoveryFrames.GetValueAsInt() : delayedFramesVal+1); // By default we must have "recoveryFramesVal > delayedFramesVal"
+                        ulong triggerMaskVal = (null != triggerMask && !triggerMask.IsEmpty ? (ulong)triggerMask.GetValueAsInt() : TRIGGER_MASK_NONE);
+                        var trackingIdListStr = (null != trackingIdList && !trackingIdList.IsEmpty ? trackingIdList.GetValueAsString() : "");
+                        
+                        var trigger = new Trigger {
+                            TriggerLocalId = triggerLocalId,
+                            SpeciesId = speciesIdVal,
+                            BulletTeamId = bulletTeamIdVal,
+                            ChCollisionTeamId = chCollisionTeamIdVal,
+                            DelayedFrames = delayedFramesVal,
+                            RecoveryFrames = recoveryFramesVal,
+                            InitVelX = initVelXVal,
+                            InitVelY = initVelYVal,
+                            Quota = quotaVal,
+                            TriggerMask = triggerMaskVal,
+                        };
+
+                        string[] trackingIdListStrParts = trackingIdListStr.Split(',');
+                        foreach (var trackingIdListStrPart in trackingIdListStrParts) {
+                            trigger.TrackingIdList.Add(trackingIdListStrPart.ToInt());
+                        }
+                        ++triggerLocalId;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -1219,7 +1280,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             collisionSys.AddSingle(staticColliders[i]);
         }
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;
         startRdf.ShouldForceResync = false;
         for (int i = 0; i < roomCapacity; i++) {

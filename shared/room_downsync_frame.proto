@@ -370,6 +370,8 @@ message Trap {
 	int32 waivingPatrolCueId = 9;
 	bool waivingSpontaneousPatrol = 10;
 
+    int32 triggerTrackingId = 11;
+
 	int32 virtualGridX = 999; 
 	int32 virtualGridY = 1000;
 	int32 dirX = 1001;
@@ -378,20 +380,21 @@ message Trap {
 	int32 velY = 1004;
 }
 
-message TrapTrigger {
-    int32 id = 1;
-    repeated int32 trapIdList = 2;
-    int32 delayedFrames = 3; 
-    int32 recoveryFrames = 4; // must be > delayedFrames
-    int32 quota = 5; // -1 means infinite 
-    uint64 triggerMask = 6; // e.g. ByMovement, ByAttack
+message Trigger {
+    int32 triggerLocalId = 1;
+	int32 speciesId = 2;
+    repeated int32 trackingIdList = 3;
+    int32 delayedFrames = 4; 
+    int32 recoveryFrames = 5; // must be > delayedFrames
+    int32 quota = 6; // -1 means infinite 
+    uint64 triggerMask = 7; // of this trigger, e.g. ByMovement, ByAttack
 
-    int32 initVelX = 7; // for the triggered trap
-    int32 initVelY = 8; // for the triggered trap
+    int32 initVelX = 8; // for the triggered entity
+    int32 initVelY = 9; // for the triggered entity
 
-	int32 bulletTeamId = 1027;
-	int32 chCollisionTeamId = 1028;
-	uint64 collisionTypeMask = 1029;
+	int32 bulletTeamId = 1027; // of this trigger 
+	int32 chCollisionTeamId = 1028; // of this trigger
+	uint64 collisionTypeMask = 1029; // of this trigger
 }
 
 message PeerUdpAddr {
@@ -428,6 +431,7 @@ message RoomDownsyncFrame {
 
 	repeated CharacterDownsync npcsArr = 5;
 	repeated Trap trapsArr = 6;
+	repeated Trigger triggersArr = 7;
 
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;

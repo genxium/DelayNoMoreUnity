@@ -169,7 +169,7 @@ namespace shared {
             dst.WaivingPatrolCueId = waivingPatrolCueId;
         }
 
-        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount) {
+        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
             ret.BulletLocalIdCounter = 0;
@@ -198,6 +198,13 @@ namespace shared {
                     TrapLocalId = TERMINATING_TRAP_ID
                 };
                 ret.TrapsArr.Add(single);
+            }
+
+            for (int i = 0; i < preallocateTriggerCount; i++) {
+                var single = new Trigger {
+                    TriggerLocalId = TERMINATING_TRIGGER_ID
+                };
+                ret.TriggersArr.Add(single);
             }
 
             return ret;
