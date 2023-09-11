@@ -457,7 +457,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
             bool isExploding = IsBulletExploding(bullet);
-            bool isInMultiHitSubsequence = (0 < bullet.BattleAttr.ActiveSkillHit);
+            var skillConfig = skills[bullet.BattleAttr.SkillId];
+            BulletConfig? prevHitBulletConfig = (0 < bullet.BattleAttr.ActiveSkillHit ? skillConfig.Hits[bullet.BattleAttr.ActiveSkillHit-1]  : null); // TODO: Make this compatible with simultaneous bullets after a "FromPrevHitXxx" bullet!
+            bool isInPrevHitTriggeredMultiHitSubsequence = (null != prevHitBulletConfig && (MultiHitType.FromPrevHitActual == prevHitBulletConfig.MhType || MultiHitType.FromPrevHitAnyway == prevHitBulletConfig.MhType));
             string lookupKey = bullet.BattleAttr.BulletLocalId.ToString(), animName = null;
             var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
@@ -470,7 +472,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     }
                     break;
                 case BulletType.Fireball:
-                    if (IsBulletActive(bullet, rdf.Id) || isInMultiHitSubsequence || isExploding) {
+                    if (IsBulletActive(bullet, rdf.Id) || isInPrevHitTriggeredMultiHitSubsequence || isExploding) {
                         animName = isExploding ? String.Format("Explosion{0}", bullet.Config.SpeciesId) : String.Format("Fireball{0}", bullet.Config.SpeciesId);
                         spontaneousLooping = !isExploding;
                     }
