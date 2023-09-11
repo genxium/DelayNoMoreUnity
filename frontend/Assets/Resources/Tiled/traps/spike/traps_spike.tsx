@@ -81,7 +81,7 @@
  </tile>
  <tile id="7">
   <properties>
-   <property name="speciesId" value="5"/>
+   <property name="speciesId" value="6"/>
   </properties>
   <image width="96" height="96" source="SawBig.png"/>
   <objectgroup draworder="index" id="2">

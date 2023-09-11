@@ -38,12 +38,39 @@ namespace shared {
             SpeciesName = "VerticalTrapBarrier"
         };
 
+        public static TrapConfig SawSmall = new TrapConfig {
+            SpeciesId = 5,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 15,
+            BlowUp = false,
+            Damage = 8,
+            HitStunFrames = 30,
+            HitInvinsibleFrames = 60,
+            DestroyUponHit = false,
+            SpeciesName = "SawSmall"
+        };
+
+        public static TrapConfig SawBig = new TrapConfig {
+            SpeciesId = 6,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 15,
+            BlowUp = false,
+            Damage = 16,
+            HitStunFrames = 30,
+            HitInvinsibleFrames = 60,
+            DestroyUponHit = false,
+            SpeciesName = "SawBig"
+        };
+
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
                 new[]
                 {
                     new KeyValuePair<int, TrapConfig>(TrapBarrier.SpeciesId, TrapBarrier),
                     new KeyValuePair<int, TrapConfig>(LinearSpike.SpeciesId, LinearSpike),
                     new KeyValuePair<int, TrapConfig>(LinearBallSpike.SpeciesId, LinearBallSpike),
+                    new KeyValuePair<int, TrapConfig>(VerticalTrapBarrier.SpeciesId, VerticalTrapBarrier),
+                    new KeyValuePair<int, TrapConfig>(SawSmall.SpeciesId, SawSmall),
+                    new KeyValuePair<int, TrapConfig>(SawBig.SpeciesId, SawBig),
                 }
         );
     }

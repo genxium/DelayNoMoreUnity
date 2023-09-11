@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 50d62a1aa59150746b2e0d6be0f406ea
+guid: b83a568eaf6a974498458e3bd2854e3b
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -8,18 +8,16 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: cc34d0f3dc257a442819830b408c5322, type: 3}
-  missingFiles:
-  - ../Dungeon/static_traps.png
-  errors:
-  - 'Missing texture asset: ../Dungeon/static_traps.png'
+  missingFiles: []
+  errors: []
   warnings: []
   missingSortingLayers: []
   missingLayers: []
   missingTags: []
   importerVersion: 13
-  pixelsPerUnit: 100
+  pixelsPerUnit: 1
   edgesPerEllipse: 32
-  numberOfObjectsImported: 2
+  numberOfObjectsImported: 131
   useSpriteAtlas: 1
   atlasWidth: 2048
   atlasHeight: 2048

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2186353342994325327}
   - component: {fileID: 7158876479739140621}
   m_Layer: 0
-  m_Name: VerticalTrapBarrier 1
+  m_Name: VerticalTrapBarrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

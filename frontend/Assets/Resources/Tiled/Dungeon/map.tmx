@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="335">
- <tileset firstgid="1" source="tiles0.tsx"/>
- <tileset firstgid="65" source="tiles1.tsx"/>
- <tileset firstgid="129" source="tiles2.tsx"/>
+ <tileset firstgid="1" source="../shared_comps/tiles0.tsx"/>
+ <tileset firstgid="65" source="../shared_comps/tiles1.tsx"/>
+ <tileset firstgid="129" source="../shared_comps/tiles2.tsx"/>
  <tileset firstgid="193" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="202" source="../triggers/switch/triggers_switch.tsx"/>
  <layer id="8" name="Ground" width="128" height="64">

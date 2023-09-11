@@ -11,13 +11,13 @@ ScriptedImporter:
   missingFiles: []
   errors: []
   warnings:
-  - Pixels Per Unit mismatch between map (100) and tileset '../traps/spike/traps_spike.tsx'
-    (1)
+  - Pixels Per Unit mismatch between map (1) and tileset '../triggers/switch/triggers_switch.tsx'
+    (100)
   missingSortingLayers: []
   missingLayers: []
   missingTags: []
   importerVersion: 26
-  pixelsPerUnit: 100
+  pixelsPerUnit: 1
   edgesPerEllipse: 32
   numberOfObjectsImported: 2
   tilesAsObjects: 0
