@@ -1284,6 +1284,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                         var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, spaceOffsetX, spaceOffsetY);
                         triggerList.Add((trigger, wx, wy));
+                    
+                        var triggerCollderAttr = new TriggerColliderAttr {
+                           TriggerLocalId = triggerLocalId
+                        };
+                        var triggerCollider = NewRectCollider(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, triggerCollderAttr);
+                        staticColliders[staticColliderIdx++] = triggerCollider;
                         ++triggerLocalId;
                         Destroy(triggerChild.gameObject); // [WARNING] It'll be animated by "TriggerPrefab" in "applyRoomDownsyncFrame" instead!
                     }
@@ -1498,12 +1504,22 @@ public abstract class AbstractMapController : MonoBehaviour {
             line.SetColor(Color.white);
             if (null != collider.Data) {
 #nullable enable
-                TrapColliderAttr? colliderAttr = collider.Data as TrapColliderAttr;
-                if (null != colliderAttr) {
-                    if (colliderAttr.ProvidesHardPushback) {
+                TrapColliderAttr? trapColliderAttr = collider.Data as TrapColliderAttr;
+                if (null != trapColliderAttr) {
+                    if (trapColliderAttr.ProvidesHardPushback) {
                         line.SetColor(Color.green);
-                    } else if (colliderAttr.ProvidesDamage) {
+                    } else if (trapColliderAttr.ProvidesDamage) {
                         line.SetColor(Color.red);
+                    }
+                } else {
+                    TriggerColliderAttr? triggerColliderAttr = collider.Data as TriggerColliderAttr;
+                    if (null != triggerColliderAttr) {
+                        var trigger = rdf.TriggersArr[triggerColliderAttr.TriggerLocalId];
+                        if (0 < (TRIGGER_MASK_BY_MOVEMENT & trigger.Config.TriggerMask)) {
+                            line.SetColor(Color.magenta);
+                        } else if (0 < (TRIGGER_MASK_BY_ATK & trigger.Config.TriggerMask)) {
+                            line.SetColor(Color.cyan);
+                        }
                     }
                 }
 #nullable disable

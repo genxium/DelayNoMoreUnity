@@ -404,6 +404,10 @@ message TriggerConfigFromTiled {
 	int32 chCollisionTeamId = 7;  // of this trigger
 }
 
+message TriggerColliderAttr {
+	int32 triggerLocalId = 1; // ref-back upon collision, most (actually by now ALL) triggers are static, we use this "TriggerColliderAttr,triggerLocalId" to save the need of dynamically inserting and deleting colliders of each trigger while still being able to be rollback-compatible for "trigger.framesToFire & trigger.framesToRecover"!
+}
+
 message Trigger {
     int32 triggerLocalId = 1;
     int32 framesToFire = 2; 
