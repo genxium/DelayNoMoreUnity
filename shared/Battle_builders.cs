@@ -169,6 +169,16 @@ namespace shared {
             dst.WaivingPatrolCueId = waivingPatrolCueId;
         }
 
+        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
+            dst.TriggerLocalId = triggerLocalId;
+            dst.FramesToFire = framesToFire;
+            dst.FramesToRecover = framesToRecover;
+            dst.Quota = quota;
+            dst.BulletTeamId = bulletTeamId;
+            dst.Config = config;
+            dst.ConfigFromTiled = configFromTiled;
+        }
+
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
@@ -202,7 +212,8 @@ namespace shared {
 
             for (int i = 0; i < preallocateTriggerCount; i++) {
                 var single = new Trigger {
-                    TriggerLocalId = TERMINATING_TRIGGER_ID
+                    TriggerLocalId = TERMINATING_TRIGGER_ID,  
+                    Config = new TriggerConfig {}, 
                 };
                 ret.TriggersArr.Add(single);
             }

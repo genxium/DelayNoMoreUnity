@@ -54,6 +54,11 @@ enum TrapState {
 	TAtked1 = 3;
 	TDestroyed = 4;
 }
+
+enum TriggerState {
+	TReady = 0;
+	TCoolingDown = 1;
+}
  
 message CharacterDownsync {
 	int32 id = 1;
@@ -380,21 +385,34 @@ message Trap {
 	int32 velY = 1004;
 }
 
+message TriggerConfig {
+	int32 speciesId = 1;
+    string speciesName = 2; 
+    uint64 triggerMask = 3;
+	uint64 collisionTypeMask = 4; // of this trigger
+}
+
+message TriggerConfigFromTiled {
+	int32 speciesId = 1;
+    int32 delayedFrames = 2;  
+    int32 recoveryFrames = 3;
+    repeated int32 trackingIdList = 4;
+
+    int32 initVelX = 5;
+    int32 initVelY = 6;
+
+	int32 chCollisionTeamId = 7;  // of this trigger
+}
+
 message Trigger {
     int32 triggerLocalId = 1;
-	int32 speciesId = 2;
-    repeated int32 trackingIdList = 3;
-    int32 delayedFrames = 4; 
-    int32 recoveryFrames = 5; // must be > delayedFrames
-    int32 quota = 6; // -1 means infinite 
-    uint64 triggerMask = 7; // of this trigger, e.g. ByMovement, ByAttack
+    int32 framesToFire = 2; 
+    int32 framesToRecover = 3; 
+    int32 quota = 4; // -1 means infinite, the initial value is from static config, but decreases upon use 
+	int32 bulletTeamId = 5; 
 
-    int32 initVelX = 8; // for the triggered entity
-    int32 initVelY = 9; // for the triggered entity
-
-	int32 bulletTeamId = 1027; // of this trigger 
-	int32 chCollisionTeamId = 1028; // of this trigger
-	uint64 collisionTypeMask = 1029; // of this trigger
+    TriggerConfig config = 6; // static config, unchanged during battle
+    TriggerConfigFromTiled configFromTiled = 7; // static config, unchanged during battle
 }
 
 message PeerUdpAddr {

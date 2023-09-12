@@ -3,17 +3,13 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
-   <property name="collisionTypeMask" value="2048"/>
    <property name="speciesId" value="1"/>
-   <property name="triggerMask" value="1"/>
   </properties>
   <image width="24" height="24" source="NSwitch-0.png"/>
  </tile>
  <tile id="1">
   <properties>
-   <property name="collisionTypeMask" value="2048"/>
    <property name="speciesId" value="2"/>
-   <property name="triggerMask" value="2"/>
   </properties>
   <image width="24" height="24" source="PSwitch-0.png"/>
  </tile>

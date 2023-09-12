@@ -179,6 +179,10 @@ namespace shared {
             return (0 < currCharacterDownsync.FramesToRecover && false == currCharacterDownsync.CapturedByInertia);
         }
 
+        private static bool isTriggerClickable(Trigger trigger) {
+            return (0 == trigger.FramesToRecover);
+        }
+
         private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets) {
             bool skillUsed = false;
             if (PATTERN_ID_NO_OP == patternId || PATTERN_ID_UNABLE_TO_OP == patternId) {
@@ -1106,7 +1110,7 @@ namespace shared {
             battleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -1147,6 +1151,7 @@ namespace shared {
             var nextRenderFrameBullets = candidate.Bullets;
             int nextRenderFrameBulletLocalIdCounter = currRenderFrame.BulletLocalIdCounter;
             var nextRenderFrameTraps = candidate.TrapsArr;
+            var nextRenderFrameTriggers = candidate.TriggersArr;
             // Make a copy first
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var src = currRenderFrame.PlayersArr[i];
@@ -1206,6 +1211,21 @@ namespace shared {
                 }
                 AssignToTrap(src.TrapLocalId, src.Config, src.ConfigFromTiled, src.TrapState, framesInTrapState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, src.IsCompletelyStatic, src.CapturedByPatrolCue, framesInPatrolCue, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, nextRenderFrameTraps[k]);
                 k++;
+            }
+
+            int l = 0;
+            while (l < currRenderFrame.TriggersArr.Count && TERMINATING_TRIGGER_ID != currRenderFrame.TriggersArr[l].TriggerLocalId) {
+                var src = currRenderFrame.TriggersArr[l];
+                int framesToFire = src.FramesToFire - 1; 
+                if (framesToFire < 0) {
+                    framesToFire = 0;
+                }
+                int framesToRecover = src.FramesToRecover - 1; 
+                if (framesToRecover < 0) {
+                    framesToRecover = 0;
+                }
+                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
+                l++;
             }
 
             /*
