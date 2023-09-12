@@ -412,7 +412,7 @@ message Trigger {
     int32 triggerLocalId = 1;
     int32 framesToFire = 2; 
     int32 framesToRecover = 3; 
-    int32 quota = 4; // -1 means infinite, the initial value is from static config, but decreases upon use 
+    int32 quota = 4; // the initial value is from static config, but decreases upon use 
 	int32 bulletTeamId = 5; 
 
     TriggerConfig config = 6; // static config, unchanged during battle

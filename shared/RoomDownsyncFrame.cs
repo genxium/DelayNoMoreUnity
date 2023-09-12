@@ -10390,7 +10390,7 @@ namespace shared {
     public const int QuotaFieldNumber = 4;
     private int quota_;
     /// <summary>
-    /// -1 means infinite, the initial value is from static config, but decreases upon use 
+    /// the initial value is from static config, but decreases upon use 
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]

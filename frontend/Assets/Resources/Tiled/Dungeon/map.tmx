@@ -29,7 +29,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="488" y="308">
+  <object id="135" x="1023" y="308">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -43,7 +43,7 @@
     <property name="bulletTeamId" value="1024"/>
     <property name="delayedFrames" value="45"/>
     <property name="initVelX" value="0"/>
-    <property name="initVelY" value="-8"/>
+    <property name="initVelY" value="-2"/>
     <property name="quota" value="12"/>
     <property name="recoveryFrames" value="90"/>
     <property name="trackingIdList" value="2,3"/>
@@ -54,7 +54,7 @@
     <property name="bulletTeamId" value="1024"/>
     <property name="delayedFrames" value="30"/>
     <property name="initVelX" value="0"/>
-    <property name="initVelY" value="+8"/>
+    <property name="initVelY" value="+2"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="61857"/>
     <property name="trackingIdList" value="1"/>
@@ -523,7 +523,7 @@
    </properties>
    <point/>
   </object>
-  <object id="331" x="1008" y="420">
+  <object id="331" x="996" y="356">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
@@ -534,18 +534,22 @@
    </properties>
    <point/>
   </object>
-  <object id="332" x="1008" y="592">
+  <object id="332" x="996" y="592">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
-    <property name="fdAct" value="1"/>
+    <property name="fdAct" value="3"/>
     <property name="fdCaptureFrames" value="0"/>
-    <property name="fuAct" value="1"/>
+    <property name="flAct" value="1"/>
+    <property name="flCaptureFrames" value="0"/>
+    <property name="frAct" value="1"/>
+    <property name="frCaptureFrames" value="0"/>
+    <property name="fuAct" value="3"/>
     <property name="fuCaptureFrames" value="0"/>
     <property name="id" value="142"/>
    </properties>
    <point/>
   </object>
-  <object id="333" x="1104" y="320">
+  <object id="333" x="1148" y="240">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
@@ -556,12 +560,16 @@
    </properties>
    <point/>
   </object>
-  <object id="334" x="1104" y="592">
+  <object id="334" x="1148" y="592">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
-    <property name="fdAct" value="1"/>
+    <property name="fdAct" value="4"/>
     <property name="fdCaptureFrames" value="0"/>
-    <property name="fuAct" value="1"/>
+    <property name="flAct" value="1"/>
+    <property name="flCaptureFrames" value="0"/>
+    <property name="frAct" value="1"/>
+    <property name="frCaptureFrames" value="0"/>
+    <property name="fuAct" value="4"/>
     <property name="fuCaptureFrames" value="0"/>
     <property name="id" value="144"/>
    </properties>

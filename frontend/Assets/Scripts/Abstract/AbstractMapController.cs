@@ -513,6 +513,18 @@ public abstract class AbstractMapController : MonoBehaviour {
             // Add bullet vfx
             playBulletVfx(bullet, isExploding, explosionAnimHolder, wx, wy, rdf);
         }
+
+        for (int k = 0; k < rdf.TriggersArr.Count; k++) {
+            var trigger = rdf.TriggersArr[k];
+            if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId) break;
+            var triggerGameObj = triggerGameObjs[trigger.TriggerLocalId];
+            var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
+            if (Battle.isTriggerClickable(trigger)) {
+                animCtrl.updateAnim("Tready", 0, 0, true);
+            } else {
+                animCtrl.updateAnim("TcoolingDown", 0, 0, true);
+            }
+        }
     }
 
     protected void preallocateVfxNodes() {

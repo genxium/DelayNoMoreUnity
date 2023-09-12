@@ -201,12 +201,12 @@ namespace shared {
                     if (trapConfig.HitStunFrames > oldFramesToRecover) {
                         atkedCharacterInNextFrame.FramesToRecover = trapConfig.HitStunFrames;
                     }
-                    int oldInvincibleFrames = atkedCharacterInNextFrame.FramesInvinsible;
-                    if (trapConfig.HitInvinsibleFrames > oldInvincibleFrames) {
-                        atkedCharacterInNextFrame.FramesInvinsible = trapConfig.HitInvinsibleFrames;
-                    }
                     atkedCharacterInNextFrame.VelX = 0;
                     atkedCharacterInNextFrame.VelY = 0;
+                }
+                int oldInvincibleFrames = atkedCharacterInNextFrame.FramesInvinsible;
+                if (trapConfig.HitInvinsibleFrames > oldInvincibleFrames) {
+                    atkedCharacterInNextFrame.FramesInvinsible = trapConfig.HitInvinsibleFrames;
                 }
             }
         }
@@ -239,6 +239,8 @@ namespace shared {
             if (!fr && !fl && !fu && !fd) {
                 fr = 0 > currTrap.DirX;
                 fl = 0 < currTrap.DirX;
+                fd = 0 < currTrap.DirY;
+                fu = 0 > currTrap.DirY;
             }
 
             int targetFramesInPatrolCue = 0;

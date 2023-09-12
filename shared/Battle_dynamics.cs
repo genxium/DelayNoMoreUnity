@@ -179,8 +179,8 @@ namespace shared {
             return (0 < currCharacterDownsync.FramesToRecover && false == currCharacterDownsync.CapturedByInertia);
         }
 
-        private static bool isTriggerClickable(Trigger trigger) {
-            return (0 == trigger.FramesToRecover);
+        public static bool isTriggerClickable(Trigger trigger) {
+            return (0 == trigger.FramesToRecover && 0 < trigger.Quota);
         }
 
         private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets) {
@@ -839,7 +839,7 @@ namespace shared {
             }
         }
 
-        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, ILoggerBridge logger) {
+        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ILoggerBridge logger) {
             // [WARNING] Bullet collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
             // Check bullet-anything collisions
             for (int i = iSt; i < iEd; i++) {
@@ -873,6 +873,18 @@ namespace shared {
 
                     switch (bCollider.Data) {
                         case PatrolCue v:
+                            break;
+                        case TriggerColliderAttr atkedTriggerColliderAttr:
+                            var atkedTrigger = currRenderFrame.TriggersArr[atkedTriggerColliderAttr.TriggerLocalId];
+                            var triggerConfig = atkedTrigger.Config;
+                            if (0 == (triggerConfig.TriggerMask & TRIGGER_MASK_BY_ATK)) continue;
+                            if (!isTriggerClickable(atkedTrigger)) continue;
+                            var atkedTriggerInNextFrame = nextRenderFrameTriggers[atkedTriggerColliderAttr.TriggerLocalId];
+                            var triggerConfigFromTiled = atkedTrigger.ConfigFromTiled;
+                            exploded = true;
+                            atkedTriggerInNextFrame.Quota = atkedTrigger.Quota - 1;
+                            atkedTriggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
+                            atkedTriggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
                             break;
                         case CharacterDownsync atkedCharacterInCurrFrame:
                             if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
@@ -974,6 +986,34 @@ namespace shared {
                         // Nothing to do
                     }
                 }
+            }
+        }
+
+        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ILoggerBridge logger) {
+            for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
+                var currTrigger = currRenderFrame.TriggersArr[i];
+                if (TERMINATING_TRIGGER_ID == currTrigger.TriggerLocalId) break;
+                if (0 != currTrigger.FramesToFire) continue;
+                var configFromTiled = currTrigger.ConfigFromTiled;
+                var triggerInNextFrame = nextRenderFrameTriggers[i];
+                var trackingIdList = currTrigger.ConfigFromTiled.TrackingIdList;
+                foreach (int trackingId in trackingIdList) {
+                    if (triggerTrackingIdToTrapLocalId.ContainsKey(trackingId)) {
+                        int trapLocalId = triggerTrackingIdToTrapLocalId[trackingId];
+                        var trapInNextFrame = nextRenderFrameTraps[trapLocalId];
+                        trapInNextFrame.VelX = configFromTiled.InitVelX;
+                        trapInNextFrame.VelY = configFromTiled.InitVelY;
+                        trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
+                        var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
+                        var invDirMag = InvSqrt32(dirMagSq);
+                        var speedXfac = invDirMag * configFromTiled.InitVelX;
+                        var speedYfac = invDirMag * configFromTiled.InitVelY;
+                        var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
+                        trapInNextFrame.VelX = (int)(speedXfac * speedVal);
+                        trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                    }
+                }
+                triggerInNextFrame.FramesToFire = MAX_INT;
             }
         }
 
@@ -1093,7 +1133,7 @@ namespace shared {
                     throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where trapColliderCntOffset=" + trapColliderCntOffset + ", bulletColliderCntOffset=" + bulletColliderCntOffset);
                 }
 
-                if (!colliderAttr.ProvidesHardPushback) continue;
+                if (!colliderAttr.ProvidesHardPushback && !colliderAttr.ProvidesDamage) continue;
                 var trapInNextRenderFrame = nextRenderFrameTraps[colliderAttr.TrapLocalId];
                 // Update "virtual grid position"
                 var (nextColliderAttrVx, nextColliderAttrVy) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
@@ -1262,7 +1302,9 @@ namespace shared {
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _insertBulletColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, logger);
+
+            _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, logger);
 
             _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
 
