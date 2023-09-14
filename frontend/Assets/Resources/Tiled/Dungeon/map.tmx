@@ -29,7 +29,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="1023" y="308">
+  <object id="135" x="488" y="308">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -49,7 +49,7 @@
     <property name="trackingIdList" value="2,3"/>
    </properties>
   </object>
-  <object id="323" gid="202" x="988" y="400" width="24" height="24">
+  <object id="323" gid="202" x="1360" y="540" width="24" height="24">
    <properties>
     <property name="bulletTeamId" value="1024"/>
     <property name="delayedFrames" value="30"/>
