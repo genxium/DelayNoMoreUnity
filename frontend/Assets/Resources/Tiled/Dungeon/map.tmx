@@ -211,6 +211,7 @@
   </object>
   <object id="324" gid="198" x="1408" y="688" width="16" height="64">
    <properties>
+    <property name="speed" value="6"/>
     <property name="triggerTrackingId" value="1"/>
    </properties>
   </object>
@@ -512,7 +513,7 @@
    </properties>
    <point/>
   </object>
-  <object id="326" x="1408" y="540">
+  <object id="326" x="1408" y="536">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="0"/>
