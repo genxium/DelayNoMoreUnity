@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="traps_spike" tilewidth="64" tileheight="32" tilecount="4" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="traps_spike" tilewidth="96" tileheight="96" tilecount="7" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -63,5 +63,48 @@
  </tile>
  <tile id="3">
   <image width="16" height="32" source="SteelspikeUp.png"/>
+ </tile>
+ <tile id="5">
+  <properties>
+   <property name="collisionTypeMask" value="5"/>
+   <property name="providesHardPushback" value="1"/>
+   <property name="speciesId" value="4"/>
+  </properties>
+  <image width="16" height="64" source="verticalBlockSteel.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="64">
+    <properties>
+     <property name="providesHardPushback" value="1"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="7">
+  <properties>
+   <property name="speciesId" value="6"/>
+  </properties>
+  <image width="96" height="96" source="SawBig.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="96" height="96">
+    <properties>
+     <property name="collisionTypeMask" value="4"/>
+     <property name="providesDamage" value="1"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="8">
+  <properties>
+   <property name="speciesId" value="5"/>
+  </properties>
+  <image width="64" height="64" source="SawSmall.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="64" height="64">
+    <properties>
+     <property name="collisionTypeMask" value="4"/>
+     <property name="providesDamage" value="1"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
 </tileset>

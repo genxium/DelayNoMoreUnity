@@ -25,7 +25,7 @@ public class OfflineMapController : AbstractMapController {
 
         roomCapacity = 1;
         preallocateHolders();
-        resetCurrentMatch("TriRoute");
+        resetCurrentMatch("Dungeon");
         preallocateVfxNodes();
         selfPlayerInfo.JoinIndex = 1;
 
@@ -62,7 +62,7 @@ public class OfflineMapController : AbstractMapController {
                 onBattleStopped();
             };
         }
-        debugDrawingEnabled = true;
+        debugDrawingEnabled = false;
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;

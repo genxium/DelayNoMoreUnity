@@ -54,7 +54,7 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -106,6 +106,7 @@ namespace shared {
             dst.WaivingPatrolCueId = waivingPatrolCueId;
 
             dst.OnSlope = onSlope;
+            dst.ForcedCrouching = forcedCrouching;
         }
 
         public static Bullet NewBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState) {
@@ -169,7 +170,17 @@ namespace shared {
             dst.WaivingPatrolCueId = waivingPatrolCueId;
         }
 
-        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount) {
+        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
+            dst.TriggerLocalId = triggerLocalId;
+            dst.FramesToFire = framesToFire;
+            dst.FramesToRecover = framesToRecover;
+            dst.Quota = quota;
+            dst.BulletTeamId = bulletTeamId;
+            dst.Config = config;
+            dst.ConfigFromTiled = configFromTiled;
+        }
+
+        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
             ret.BulletLocalIdCounter = 0;
@@ -198,6 +209,14 @@ namespace shared {
                     TrapLocalId = TERMINATING_TRAP_ID
                 };
                 ret.TrapsArr.Add(single);
+            }
+
+            for (int i = 0; i < preallocateTriggerCount; i++) {
+                var single = new Trigger {
+                    TriggerLocalId = TERMINATING_TRIGGER_ID,  
+                    Config = new TriggerConfig {}, 
+                };
+                ret.TriggersArr.Add(single);
             }
 
             return ret;

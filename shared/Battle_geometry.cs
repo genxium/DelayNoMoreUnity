@@ -86,6 +86,8 @@ namespace shared {
                         onTrap = v4.ProvidesHardPushback;
                         isBarrier = v4.ProvidesHardPushback;
                         break;
+                    case TriggerColliderAttr v5:
+                        break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
                         isBarrier = true;
@@ -99,7 +101,6 @@ namespace shared {
                     residueCollided.Put(bCollider);
                     continue;
                 }
-
 
                 ConvexPolygon bShape = bCollider.Shape;
 

@@ -1,0 +1,21 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:268960a00a341cac0496dc66ae06a252:cb63af8421b55fcb8c3ecf19b2769518:d45aeb829491c8fe29c55032e5358035$
+#
+:format=40300
+:texture=Switch.png
+:size=64x128
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+NSwitch-0;0;80;23;24; 0.5217391304347826;0.5; 0;0;0;0
+NSwitch-1;23;80;23;24; 0.5217391304347826;0.5; 0;0;0;0
+NSwitch-2;0;104;24;24; 0.5;0.5; 0;0;0;0
+PSwitch-0;0;56;23;24; 0.5217391304347826;0.5; 0;0;0;0
+PSwitch-1;23;56;23;24; 0.5217391304347826;0.5; 0;0;0;0
+PSwitch-2;24;104;24;24; 0.5;0.5; 0;0;0;0

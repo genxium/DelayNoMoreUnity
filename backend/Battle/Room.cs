@@ -14,6 +14,8 @@ public class Room {
     public int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
     public int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     public int preallocTrapCapacity = DEFAULT_PREALLOC_TRAP_CAPACITY;
+    public int preallocTriggerCapacity = DEFAULT_PREALLOC_TRIGGER_CAPACITY;
+
     public int battleDurationFrames;
     public int estimatedMillisPerFrame;
 

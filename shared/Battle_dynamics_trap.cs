@@ -1,7 +1,6 @@
 using Google.Protobuf.Collections;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace shared {
     public partial class Battle {
@@ -36,11 +35,11 @@ namespace shared {
                 primaryOverlapResult.reset();
                 Collider aCollider = dynamicRectangleColliders[i];
                 TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;
-
+                
                 if (null == colliderAttr) {
                     throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where trapColliderCntOffset=" + trapColliderCntOffset + ", bulletColliderCntOffset=" + bulletColliderCntOffset + ", aCollider.Data=" + aCollider.Data);
                 }
-
+                Trap currTrap = currRenderFrame.TrapsArr[colliderAttr.TrapLocalId];
                 ConvexPolygon aShape = aCollider.Shape;
 
                 bool hitsAnActualBarrier;
@@ -51,9 +50,14 @@ namespace shared {
                     processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, 0);
 
                     if (hitsAnActualBarrier) {
-                        var trapInNextRenderFrame = nextRenderFrameTraps[i - trapColliderCntOffset];
-                        trapInNextRenderFrame.VelX = 0;
-                        trapInNextRenderFrame.VelY = 0;
+                        float primaryPushbackX = hardPushbackNormsArr[i][primaryHardOverlapIndex].X;
+                        float primaryPushbackY = hardPushbackNormsArr[i][primaryHardOverlapIndex].Y;
+                        float velProjected = currTrap.VelX*primaryPushbackX + currTrap.VelY*primaryPushbackY;
+                        if (SNAP_INTO_PLATFORM_THRESHOLD < Math.Abs(velProjected)) {
+                            var trapInNextRenderFrame = nextRenderFrameTraps[i - trapColliderCntOffset];
+                            trapInNextRenderFrame.VelX = 0;
+                            trapInNextRenderFrame.VelY = 0;
+                        }
                     }
                 }
 
@@ -197,12 +201,12 @@ namespace shared {
                     if (trapConfig.HitStunFrames > oldFramesToRecover) {
                         atkedCharacterInNextFrame.FramesToRecover = trapConfig.HitStunFrames;
                     }
-                    int oldInvincibleFrames = atkedCharacterInNextFrame.FramesInvinsible;
-                    if (trapConfig.HitInvinsibleFrames > oldInvincibleFrames) {
-                        atkedCharacterInNextFrame.FramesInvinsible = trapConfig.HitInvinsibleFrames;
-                    }
                     atkedCharacterInNextFrame.VelX = 0;
                     atkedCharacterInNextFrame.VelY = 0;
+                }
+                int oldInvincibleFrames = atkedCharacterInNextFrame.FramesInvinsible;
+                if (trapConfig.HitInvinsibleFrames > oldInvincibleFrames) {
+                    atkedCharacterInNextFrame.FramesInvinsible = trapConfig.HitInvinsibleFrames;
                 }
             }
         }
@@ -235,6 +239,8 @@ namespace shared {
             if (!fr && !fl && !fu && !fd) {
                 fr = 0 > currTrap.DirX;
                 fl = 0 < currTrap.DirX;
+                fd = 0 < currTrap.DirY;
+                fu = 0 > currTrap.DirY;
             }
 
             int targetFramesInPatrolCue = 0;
