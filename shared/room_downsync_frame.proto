@@ -41,6 +41,7 @@ enum CharacterState {
 	Atk5 = 1028;
 
 	InAirAtk1 = 2048;
+	WalkingAtk1 = 2049;
 
 	OnWallAtk1 = 3072; 
 
@@ -109,7 +110,7 @@ message CharacterDownsync {
 	bool onSlope = 37;
 
 	int32 frictionVelX = 38; // Mostly from a dynamic trap
-    bool crouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+    bool forcedCrouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
         
 	bool slipJumpTriggered = 40;
 	bool primarilyOnSlippableHardPushback = 41; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
@@ -275,6 +276,8 @@ message BulletConfig {
 
     int32 activeVfxSpeciesId = 27; // currently only support 1 vfx config when active
     int32 explosionVfxSpeciesId = 28; // currently only support 1 vfx config when exploding
+
+    bool allowsWalking = 29;
 
 	uint64 collisionTypeMask = 1029;
 }
