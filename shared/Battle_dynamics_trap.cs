@@ -190,7 +190,9 @@ namespace shared {
                 atkedCharacterInNextFrame.CharacterState = CharacterState.Dying;
                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
             } else {
-                bool shouldOmitStun = ((0 >= trapConfig.HitStunFrames) || (atkedCharacterInCurrFrame.OmitPushback));
+                var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
+                bool shouldOmitHitPushback = (atkedCharacterConfig.Hardness > trapConfig.Hardness);   
+                bool shouldOmitStun = ((0 >= trapConfig.HitStunFrames) || (shouldOmitHitPushback));
                 if (false == shouldOmitStun) {
                     if (trapConfig.BlowUp) {
                         atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;

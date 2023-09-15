@@ -1395,7 +1395,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
             npcInRdf.WaivingSpontaneousPatrol = isStatic;
             npcInRdf.OmitGravity = chConfig.OmitGravity;
-            npcInRdf.OmitPushback = chConfig.OmitPushback;
+            npcInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
             startRdf.NpcsArr[i] = npcInRdf;
         }
 

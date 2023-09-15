@@ -51,7 +51,7 @@
 
         // Collision masks
         public bool OmitGravity;
-        public bool OmitPushback;
+        public bool OmitSoftPushback;
         public ulong CollisionTypeMask;
 
         public bool HasTurnAroundAnim;

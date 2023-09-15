@@ -38,7 +38,7 @@
   </object>
  </objectgroup>
  <objectgroup id="13" name="TriggerPos">
-  <object id="322" gid="203" x="842" y="320" width="24" height="24">
+  <object id="322" gid="203" x="842" y="390" width="24" height="24">
    <properties>
     <property name="bulletTeamId" value="1024"/>
     <property name="delayedFrames" value="45"/>

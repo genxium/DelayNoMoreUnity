@@ -267,7 +267,7 @@ namespace shared {
                                 Speed = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 DirX = 1,
                                 DirY = 0,
-                                Hardness = 5,
+                                Hardness = 6,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
@@ -922,7 +922,7 @@ namespace shared {
                                 StartupFrames = 5,
                                 PushbackVelX = NO_LOCK_VEL,
                                 PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(7f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
                                 SpeciesId = 1,
                                 HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1106,7 +1106,7 @@ namespace shared {
         );
 
         public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
-            bool notRecovered = inNonInertiaFramesToRecover(currCharacterDownsync);
+            bool notRecovered = (0 < currCharacterDownsync.FramesToRecover);
             switch (speciesId) {
                 case 0:
                     switch (patternId) {

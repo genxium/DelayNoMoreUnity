@@ -140,7 +140,7 @@ namespace shared {
             }
 
             int patternId = PATTERN_ID_NO_OP;
-            var canJumpWithinInertia = (currCharacterDownsync.CapturedByInertia && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesToRecover));
+            var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia));
             if (0 == currCharacterDownsync.FramesToRecover || canJumpWithinInertia) {
                 if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
                     if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
@@ -175,10 +175,6 @@ namespace shared {
             }
 
             return (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy);
-        }
-
-        private static bool inNonInertiaFramesToRecover(CharacterDownsync currCharacterDownsync) {
-            return (0 < currCharacterDownsync.FramesToRecover && false == currCharacterDownsync.CapturedByInertia);
         }
 
         public static bool isTriggerClickable(Trigger trigger) {
@@ -268,16 +264,11 @@ namespace shared {
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
                 thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
 
-                /*
-                   if (1 == currCharacterDownsync.JoinIndex && 2 == patternId) {
-                   logger.LogInfo(String.Format("DragonPunch in air! JoinIndex: {0}, chState: {1}, framesToRecover: {2}, capturedByInertia: {3}", currCharacterDownsync.JoinIndex, currCharacterDownsync.CharacterState, currCharacterDownsync.FramesToRecover, currCharacterDownsync.CapturedByInertia));
-                   }
-                 */
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
                 if (usedSkill) {
                     var skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
                     if (!skillConfig.Hits[0].AllowsWalking) {
-                        thatCharacterInNextFrame.CapturedByInertia = false; // The use of a skill must break "CapturedByInertia"
+                        thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
                         continue; // Don't allow movement if skill is used
                     }
                 }
@@ -287,22 +278,10 @@ namespace shared {
         }
 
         public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill) {
-            if (usedSkill) {
-                /*
-                 * [WARNING]
-                 * 
-                 * A dirty fix here just for GunGirl "Atk1 -> WalkingAtk1" transition.
-                 * 
-                 * In this case "thatCharacterInNextFrame.FramesToRecover" is already set by the skill in use, and transition to "TurnAround" should NOT be supported!
-                 */
-                if (0 != thatCharacterInNextFrame.VelX) {
-                    thatCharacterInNextFrame.CharacterState = WalkingAtk1;
-                }
-            } else if (0 == currCharacterDownsync.FramesToRecover) {
+            if (usedSkill || 0 == currCharacterDownsync.FramesToRecover) {
                 thatCharacterInNextFrame.CharacterState = Idle1; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Idle" as a default action
-
                 if (shouldIgnoreInertia) {
-                    thatCharacterInNextFrame.CapturedByInertia = false;
+                    thatCharacterInNextFrame.FramesCapturedByInertia = 0;
                     if (0 != effDx) {
                         int xfac = (0 < effDx ? 1 : -1);
                         thatCharacterInNextFrame.DirX = effDx;
@@ -317,7 +296,9 @@ namespace shared {
                         thatCharacterInNextFrame.VelX = 0;
                     }
                 } else {
-                    bool prevCapturedByInertia = currCharacterDownsync.CapturedByInertia;
+                    bool currFreeFromInertia = (0 == currCharacterDownsync.FramesCapturedByInertia);
+                    bool currBreakingFromInertia = (1 == currCharacterDownsync.FramesCapturedByInertia);
+                    bool withInertiaBreakingState = ((jumpedOrNot) || (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState));
                     bool alignedWithInertia = true;
                     bool exactTurningAround = false;
                     bool stoppingFromWalking = false;
@@ -330,21 +311,12 @@ namespace shared {
                         alignedWithInertia = false;
                         exactTurningAround = true;
                     }
+                    if (alignedWithInertia || withInertiaBreakingState || currBreakingFromInertia) {
+                        if (!alignedWithInertia) {
+                            // Should reset "FramesCapturedByInertia" in this case!
+                            thatCharacterInNextFrame.FramesCapturedByInertia = 0;
+                        } 
 
-                    if (!(InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) && !jumpedOrNot && !prevCapturedByInertia && !alignedWithInertia) {
-                        thatCharacterInNextFrame.CapturedByInertia = true;
-                        if (exactTurningAround) {
-                            thatCharacterInNextFrame.CharacterState = chConfig.HasTurnAroundAnim ? TurnAround : Walking;
-                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
-                        } else if (stoppingFromWalking) {
-                            thatCharacterInNextFrame.FramesToRecover = chConfig.InertiaFramesToRecover;
-                        } else {
-                            // Updates CharacterState and thus the animation to make user see graphical feedback asap.
-                            thatCharacterInNextFrame.CharacterState = Walking;
-                            thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover >> 1);
-                        }
-                    } else {
-                        thatCharacterInNextFrame.CapturedByInertia = false;
                         if (0 != effDx) {
                             int xfac = (0 < effDx ? 1 : -1);
                             thatCharacterInNextFrame.DirX = effDx;
@@ -358,10 +330,34 @@ namespace shared {
                         } else {
                             thatCharacterInNextFrame.VelX = 0;
                         }
+                    } else if (currFreeFromInertia) {
+                        if (exactTurningAround) {
+                            thatCharacterInNextFrame.CharacterState = chConfig.HasTurnAroundAnim ? TurnAround : Walking;
+                            thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
+                        } else if (stoppingFromWalking) {
+                            thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
+                        } else {
+                            // Updates CharacterState and thus the animation to make user see graphical feedback asap.
+                            thatCharacterInNextFrame.CharacterState = Walking;
+                            thatCharacterInNextFrame.FramesCapturedByInertia = (chConfig.InertiaFramesToRecover >> 1);
+                        }
                     }
                 }
-            } else {
-                // Otherwise "thatCharacterInNextFrame.CapturedByInertia" remains unchanged
+
+                if (usedSkill) {
+                    /*
+                     * [WARNING]
+                     * 
+                     * A dirty fix here just for GunGirl "Atk1 -> WalkingAtk1" transition.
+                     * 
+                     * In this case "thatCharacterInNextFrame.FramesToRecover" is already set by the skill in use, and transition to "TurnAround" should NOT be supported!
+                     */
+                    if (0 != thatCharacterInNextFrame.VelX) {
+                        thatCharacterInNextFrame.CharacterState = WalkingAtk1;
+                    } else {
+                        thatCharacterInNextFrame.CharacterState = Atk1;
+                    }
+                }
             }
         }
 
@@ -626,7 +622,7 @@ namespace shared {
                      */
                 }
 
-                if (softPusbackEnabled && Dying != currCharacterDownsync.CharacterState && false == currCharacterDownsync.OmitPushback) {
+                if (softPusbackEnabled && Dying != currCharacterDownsync.CharacterState && false == currCharacterDownsync.OmitSoftPushback) {
                     int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
                     int totOtherChCnt = 0, cellOverlappedOtherChCnt = 0, shapeOverlappedOtherChCnt = 0;
                     int origResidueCollidedSt = residueCollided.StFrameId, origResidueCollidedEd = residueCollided.EdFrameId; 
@@ -911,12 +907,15 @@ namespace shared {
                             var triggerConfig = atkedTrigger.Config;
                             if (0 == (triggerConfig.TriggerMask & TRIGGER_MASK_BY_ATK)) continue;
                             if (!isTriggerClickable(atkedTrigger)) continue;
-                            var atkedTriggerInNextFrame = nextRenderFrameTriggers[atkedTriggerColliderAttr.TriggerLocalId];
-                            var triggerConfigFromTiled = atkedTrigger.ConfigFromTiled;
-                            exploded = true;
-                            atkedTriggerInNextFrame.Quota = atkedTrigger.Quota - 1;
-                            atkedTriggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
-                            atkedTriggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                            if (bullet.BattleAttr.OffenderJoinIndex <= roomCapacity) {
+                                // Only allowing Player to click
+                                var atkedTriggerInNextFrame = nextRenderFrameTriggers[atkedTriggerColliderAttr.TriggerLocalId];
+                                var triggerConfigFromTiled = atkedTrigger.ConfigFromTiled;
+                                exploded = true;
+                                atkedTriggerInNextFrame.Quota = atkedTrigger.Quota - 1;
+                                atkedTriggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
+                                atkedTriggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                            }
                             break;
                         case CharacterDownsync atkedCharacterInCurrFrame:
                             if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
@@ -940,13 +939,15 @@ namespace shared {
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
                             } else {
                                 // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
-                                if (false == atkedCharacterInCurrFrame.OmitPushback && BlownUp1 != oldNextCharacterState) {
+                                var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
+                                bool shouldOmitHitPushback = (atkedCharacterConfig.Hardness > bullet.Config.Hardness);   
+                                if (false == shouldOmitHitPushback && BlownUp1 != oldNextCharacterState) {
                                     var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
                                     atkedCharacterInNextFrame.VelX = pushbackVelX;
                                     atkedCharacterInNextFrame.VelY = pushbackVelY;
                                 }
 
-                                bool shouldOmitStun = ((0 >= bullet.Config.HitStunFrames) || (atkedCharacterInCurrFrame.OmitPushback));
+                                bool shouldOmitStun = ((0 >= bullet.Config.HitStunFrames) || shouldOmitHitPushback);
                                 if (false == shouldOmitStun) {
                                     if (bullet.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
@@ -965,6 +966,7 @@ namespace shared {
                                 break;
                             }
                             if (bullet.BattleAttr.TeamId == v4.BattleAttr.TeamId) continue;
+                            if (bullet.Config.Hardness > v4.Config.Hardness) continue; 
                             exploded = true;
                             break;
                         case TrapColliderAttr v5:
@@ -1229,6 +1231,10 @@ namespace shared {
                 var src = currRenderFrame.PlayersArr[i];
                 var chConfig = characters[src.SpeciesId];
                 int framesToRecover = src.FramesToRecover - 1;
+                int framesCapturedByInertia = src.FramesCapturedByInertia - 1; 
+                if (framesCapturedByInertia < 0) {
+                    framesCapturedByInertia = 0;
+                }
                 int framesInChState = src.FramesInChState + 1;
                 int framesInvinsible = src.FramesInvinsible - 1;
                 if (framesToRecover < 0) {
@@ -1245,7 +1251,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, nextRenderFramePlayers[i]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, nextRenderFramePlayers[i]);
             }
 
             int npcCnt = 0;
@@ -1258,6 +1264,10 @@ namespace shared {
                 if (framesToRecover < 0) {
                     framesToRecover = 0;
                 }
+                int framesCapturedByInertia = src.FramesCapturedByInertia - 1; 
+                if (framesCapturedByInertia < 0) {
+                    framesCapturedByInertia = 0;
+                }
                 if (framesInvinsible < 0) {
                     framesInvinsible = 0;
                 }
@@ -1269,7 +1279,7 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.CapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, nextRenderFrameNpcs[npcCnt]);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, nextRenderFrameNpcs[npcCnt]);
                 npcCnt++;
             }
 

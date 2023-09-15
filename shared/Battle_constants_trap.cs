@@ -49,7 +49,7 @@ namespace shared {
             HitInvinsibleFrames = 60,
             DestroyUponHit = false,
             SpeciesName = "SawSmall",
-            Hardness = 6, 
+            Hardness = 8, 
         };
 
         public static TrapConfig SawBig = new TrapConfig {
@@ -62,7 +62,7 @@ namespace shared {
             HitInvinsibleFrames = 60,
             DestroyUponHit = false,
             SpeciesName = "SawBig",
-            Hardness = 7, 
+            Hardness = 9, 
         };
 
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(

@@ -176,7 +176,7 @@ namespace shared {
                         LayDownSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -189,7 +189,7 @@ namespace shared {
                         SpeciesId = 4096,
                         SpeciesName = "BullWarrior",
                         Hp = 500,
-                        OmitPushback = true,
+                        OmitSoftPushback = true,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -216,7 +216,7 @@ namespace shared {
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         CloseEnoughVirtualGridDistance = (int)(200.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HasTurnAroundAnim = true,
-                        Hardness = 6
+                        Hardness = 8
                     }),
             });
     }

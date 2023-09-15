@@ -74,7 +74,7 @@ message CharacterDownsync {
 	int32 joinIndex = 10;
 	
 	int32 framesToRecover = 11;
-	bool capturedByInertia = 12; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
+	int32 framesCapturedByInertia = 12; 
 
 	bool capturedByPatrolCue = 13;
 	int32 framesInPatrolCue = 14;
@@ -97,7 +97,7 @@ message CharacterDownsync {
 	int32 onWallNormY = 28;
 
 	bool omitGravity = 29;
-	bool omitPushback = 30;
+	bool omitSoftPushback = 30;
 
 	int32 waivingPatrolCueId = 31;
 	bool waivingSpontaneousPatrol = 32;
