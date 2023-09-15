@@ -26,14 +26,14 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &-6921218021049751795
+--- !u!1102 &-5842952027008749363
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlownUp
+  m_Name: BlownUp1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -129,9 +129,6 @@ AnimatorStateMachine:
     m_State: {fileID: -7093956049310515764}
     m_Position: {x: 340, y: 260, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -6921218021049751795}
-    m_Position: {x: 375, y: 325, z: 0}
-  - serializedVersion: 1
     m_State: {fileID: 2837175371014075036}
     m_Position: {x: 410, y: 390, z: 0}
   - serializedVersion: 1
@@ -161,6 +158,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 6692444835473130800}
     m_Position: {x: 725, y: 975, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -5842952027008749363}
+    m_Position: {x: 380, y: 330, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
