@@ -280,7 +280,7 @@ namespace shared {
         
         public static void _resetVelocityOnRecovered(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame) {
             // [WARNING] This is a necessary cleanup before "_processInertiaWalking"!
-            if (1 == currCharacterDownsync.FramesToRecover && 0 == thatCharacterInNextFrame.FramesToRecover) {
+            if (1 == currCharacterDownsync.FramesToRecover && 0 == thatCharacterInNextFrame.FramesToRecover && (Atked1 == currCharacterDownsync.CharacterState || InAirAtked1 == currCharacterDownsync.CharacterState)) {
                 thatCharacterInNextFrame.VelX = 0;
                 thatCharacterInNextFrame.VelY = 0;
             }
