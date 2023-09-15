@@ -116,7 +116,7 @@ namespace shared {
         }
 
         private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
-            //return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+            // return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
 
             //This function returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
             if (0 < currCharacterDownsync.FramesToRecover) {

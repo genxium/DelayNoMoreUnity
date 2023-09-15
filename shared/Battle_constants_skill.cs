@@ -1250,11 +1250,15 @@ namespace shared {
                                 return NO_SKILL;
                             }
                         case 5:
-                            // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
-                            if (!currCharacterDownsync.InAir) {
-                                return 20;
+                            if (!notRecovered) {
+                                // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
+                                if (!currCharacterDownsync.InAir) {
+                                    return 20;
+                                } else {
+                                    // Air-sliding is non-sense
+                                    return NO_SKILL;
+                                }
                             } else {
-                                // Air-sliding is non-sense
                                 return NO_SKILL;
                             }
                         default:
