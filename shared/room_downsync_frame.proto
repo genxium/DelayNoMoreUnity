@@ -279,6 +279,7 @@ message BulletConfig {
 
     bool allowsWalking = 29;
     int32 hardness = 30;
+    bool takesGravity = 31; // e.g. a bomb
 
 	uint64 collisionTypeMask = 1029;
 }

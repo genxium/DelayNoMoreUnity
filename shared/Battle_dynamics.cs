@@ -146,6 +146,8 @@ namespace shared {
                     if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
                         // Checking "DashingEnabled" here to allow jumping when dashing-disabled players pressed "DOWN + BtnB"
                         patternId = 5;
+                    } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && Sliding != currCharacterDownsync.CharacterState) {  
+                        patternId = 5;
                     } else if (currCharacterDownsync.PrimarilyOnSlippableHardPushback && (0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
                         slipJumpedOrNot = true;
                     } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState)) {
@@ -219,7 +221,7 @@ namespace shared {
                     activeSkillHit++;
                 }
 
-                if (false == hasLockVel && false == currCharacterDownsync.InAir) {
+                if (false == hasLockVel && false == currCharacterDownsync.InAir && !pivotBulletConfig.AllowsWalking) {
                     thatCharacterInNextFrame.VelX = 0;
                 }
 
@@ -273,16 +275,30 @@ namespace shared {
                  */
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
                 if (usedSkill) {
-                    thatCharacterInNextFrame.CapturedByInertia = false; // The use of a skill must break "CapturedByInertia"
-                    continue; // Don't allow movement if skill is used
+                    var skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
+                    if (!skillConfig.Hits[0].AllowsWalking) {
+                        thatCharacterInNextFrame.CapturedByInertia = false; // The use of a skill must break "CapturedByInertia"
+                        continue; // Don't allow movement if skill is used
+                    }
                 }
 
-                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false);
+                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false, usedSkill);
             }
         }
 
-        public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia) {
-            if (0 == currCharacterDownsync.FramesToRecover) {
+        public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill) {
+            if (usedSkill) {
+                /*
+                 * [WARNING]
+                 * 
+                 * A dirty fix here just for GunGirl "Atk1 -> WalkingAtk1" transition.
+                 * 
+                 * In this case "thatCharacterInNextFrame.FramesToRecover" is already set by the skill in use, and transition to "TurnAround" should NOT be supported!
+                 */
+                if (0 != thatCharacterInNextFrame.VelX) {
+                    thatCharacterInNextFrame.CharacterState = WalkingAtk1;
+                }
+            } else if (0 == currCharacterDownsync.FramesToRecover) {
                 thatCharacterInNextFrame.CharacterState = Idle1; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Idle" as a default action
 
                 if (shouldIgnoreInertia) {
@@ -1358,6 +1374,7 @@ namespace shared {
                 case InAirAtk1:
                 case InAirAtked1:
                 case OnWallIdle1:
+                case Sliding:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.ShrinkedSizeX, chConfig.ShrinkedSizeY);
                     break;
                 default:

@@ -42,7 +42,8 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        HasTurnAroundAnim = true
+                        HasTurnAroundAnim = true,
+                        Hardness = 5
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
@@ -74,7 +75,8 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         CloseEnoughVirtualGridDistance = (int)(40.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        HasTurnAroundAnim = false
+                        HasTurnAroundAnim = false,
+                        Hardness = 5
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
@@ -112,7 +114,8 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         CloseEnoughVirtualGridDistance = (int)(90.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        HasTurnAroundAnim = true
+                        HasTurnAroundAnim = true,
+                        Hardness = 5
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(3, new CharacterConfig {
@@ -144,7 +147,42 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        HasTurnAroundAnim = false
+                        HasTurnAroundAnim = false,
+                        Hardness = 5
+                    }),
+
+                    new KeyValuePair<int, CharacterConfig>(4, new CharacterConfig {
+                        SpeciesId = 4,
+                        SpeciesName = "GunGirl",
+                        Hp = 120,
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 30,
+                        Speed = (int)(1.6f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8.2 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 8,
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HasTurnAroundAnim = false,
+                        SlidingEnabled = true,
+                        Hardness = 5
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(4096, new CharacterConfig {
@@ -177,7 +215,8 @@ namespace shared {
                         MpRegenRate = 2,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         CloseEnoughVirtualGridDistance = (int)(200.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        HasTurnAroundAnim = true
+                        HasTurnAroundAnim = true,
+                        Hardness = 6
                     }),
             });
     }

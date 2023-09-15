@@ -22,6 +22,7 @@
         public int JumpingInitVelY;
         public int InertiaFramesToRecover;
         public bool DashingEnabled;
+        public bool SlidingEnabled;
         public bool OnWallEnabled;
         public int WallJumpingFramesToRecover;
         public int WallJumpingInitVelX;
