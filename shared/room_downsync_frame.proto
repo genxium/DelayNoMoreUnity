@@ -27,12 +27,14 @@ enum CharacterState {
 	Dying = 11;
 
 	Dashing = 12;
+	Sliding = 13;
 
 	OnWallIdle1 = 128; 
     
 	CrouchIdle1 = 256; 
-	CrouchWalking = 257; 
-	CrouchAtked1 = 258;
+	CrouchAtk1 = 257; 
+	CrouchWalking = 258; 
+	CrouchAtked1 = 259;
 
 	Atk1 = 1024;
 	Atk2 = 1025;
@@ -44,8 +46,6 @@ enum CharacterState {
 	WalkingAtk1 = 2049;
 
 	OnWallAtk1 = 3072; 
-
-	CrouchAtk1 = 4096; 
 }
 
 enum TrapState {
@@ -278,6 +278,7 @@ message BulletConfig {
     int32 explosionVfxSpeciesId = 28; // currently only support 1 vfx config when exploding
 
     bool allowsWalking = 29;
+    int32 hardness = 30;
 
 	uint64 collisionTypeMask = 1029;
 }
@@ -319,6 +320,7 @@ message TrapConfig {
     bool destroyUponHit = 8; // for most traps and long lasting melee bullet
 
 	string speciesName = 9;
+    int32 hardness = 10;
 }
 
 message TrapConfigFromTiled {

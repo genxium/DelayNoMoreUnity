@@ -54,5 +54,7 @@
         public ulong CollisionTypeMask;
 
         public bool HasTurnAroundAnim;
+
+        public int Hardness;
     }
 }
