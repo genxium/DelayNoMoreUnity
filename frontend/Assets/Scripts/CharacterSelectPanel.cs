@@ -36,6 +36,9 @@ public class CharacterSelectPanel : MonoBehaviour {
                 case "MonkGirl":
                     selectedSpeciesId = 2;
                     break;
+                case "GunGirl":
+                    selectedSpeciesId = 4;
+                    break;
                 }
                 break;
             }

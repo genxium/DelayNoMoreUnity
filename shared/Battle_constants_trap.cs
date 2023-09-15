@@ -17,7 +17,8 @@ namespace shared {
             HitStunFrames = 25,
             HitInvinsibleFrames = 120,
             DestroyUponHit = false,
-            SpeciesName = "LinearSpike"
+            SpeciesName = "LinearSpike",
+            Hardness = 6, 
         };
 
         public static TrapConfig LinearBallSpike = new TrapConfig {
@@ -29,7 +30,8 @@ namespace shared {
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
             DestroyUponHit = false,
-            SpeciesName = "LinearBallSpike"
+            SpeciesName = "LinearBallSpike",
+            Hardness = 6, 
         };
 
         public static TrapConfig VerticalTrapBarrier = new TrapConfig {
@@ -46,7 +48,8 @@ namespace shared {
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
             DestroyUponHit = false,
-            SpeciesName = "SawSmall"
+            SpeciesName = "SawSmall",
+            Hardness = 8, 
         };
 
         public static TrapConfig SawBig = new TrapConfig {
@@ -58,7 +61,8 @@ namespace shared {
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
             DestroyUponHit = false,
-            SpeciesName = "SawBig"
+            SpeciesName = "SawBig",
+            Hardness = 9, 
         };
 
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(

@@ -27,12 +27,14 @@ enum CharacterState {
 	Dying = 11;
 
 	Dashing = 12;
+	Sliding = 13;
 
 	OnWallIdle1 = 128; 
     
 	CrouchIdle1 = 256; 
-	CrouchWalking = 257; 
-	CrouchAtked1 = 258;
+	CrouchAtk1 = 257; 
+	CrouchWalking = 258; 
+	CrouchAtked1 = 259;
 
 	Atk1 = 1024;
 	Atk2 = 1025;
@@ -44,8 +46,6 @@ enum CharacterState {
 	WalkingAtk1 = 2049;
 
 	OnWallAtk1 = 3072; 
-
-	CrouchAtk1 = 4096; 
 }
 
 enum TrapState {
@@ -74,7 +74,7 @@ message CharacterDownsync {
 	int32 joinIndex = 10;
 	
 	int32 framesToRecover = 11;
-	bool capturedByInertia = 12; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
+	int32 framesCapturedByInertia = 12; 
 
 	bool capturedByPatrolCue = 13;
 	int32 framesInPatrolCue = 14;
@@ -97,7 +97,7 @@ message CharacterDownsync {
 	int32 onWallNormY = 28;
 
 	bool omitGravity = 29;
-	bool omitPushback = 30;
+	bool omitSoftPushback = 30;
 
 	int32 waivingPatrolCueId = 31;
 	bool waivingSpontaneousPatrol = 32;
@@ -278,6 +278,8 @@ message BulletConfig {
     int32 explosionVfxSpeciesId = 28; // currently only support 1 vfx config when exploding
 
     bool allowsWalking = 29;
+    int32 hardness = 30;
+    bool takesGravity = 31; // e.g. a bomb
 
 	uint64 collisionTypeMask = 1029;
 }
@@ -319,6 +321,7 @@ message TrapConfig {
     bool destroyUponHit = 8; // for most traps and long lasting melee bullet
 
 	string speciesName = 9;
+    int32 hardness = 10;
 }
 
 message TrapConfigFromTiled {

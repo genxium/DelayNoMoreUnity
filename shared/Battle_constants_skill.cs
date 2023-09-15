@@ -107,6 +107,7 @@ namespace shared {
                             BType = BulletType.Melee,
                             DirX = 1,
                             DirY = 0,
+                            Hardness = 5,
                             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                         }.UpsertCancelTransit(1, 2)
                     )),
@@ -141,6 +142,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }.UpsertCancelTransit(1, 3)
                         )),
@@ -174,6 +176,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -200,6 +203,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -226,6 +230,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -262,6 +267,7 @@ namespace shared {
                                 Speed = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 6,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
@@ -297,6 +303,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -329,6 +336,7 @@ namespace shared {
                                 SpeciesId = 1,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Melee,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -364,6 +372,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -397,6 +406,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -428,6 +438,7 @@ namespace shared {
                                 Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 BType = BulletType.Fireball,
                                 MhType = MultiHitType.FromPrevHitActual,
                                 CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
@@ -452,6 +463,7 @@ namespace shared {
                                 Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 BType = BulletType.Fireball,
                                 MhType = MultiHitType.FromPrevHitActual,
                                 CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
@@ -476,6 +488,7 @@ namespace shared {
                                 Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 ExplosionFrames = 25,
                                 BType = BulletType.Fireball,
                                 CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
@@ -553,6 +566,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 ExplosionFrames = 25,
+                                Hardness = 5,
                                 BType = BulletType.Melee,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -589,6 +603,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 ExplosionFrames = 20,
+                                Hardness = 5,
                                 BType = BulletType.Fireball,
                                 ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
@@ -625,6 +640,7 @@ namespace shared {
                                 ExplosionFrames = 20,
                                 BType = BulletType.Melee,
                                 DirX = 1,
+                                Hardness = 5,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )
@@ -648,6 +664,7 @@ namespace shared {
                                 ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 DirX = 1,
+                                Hardness = 5,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )
@@ -680,6 +697,7 @@ namespace shared {
                                 Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 DirX = 2,
                                 DirY = 0,
+                                Hardness = 5,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
@@ -709,6 +727,7 @@ namespace shared {
                                 Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 DirX = 1,
                                 DirY = -1,
+                                Hardness = 5,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
@@ -739,6 +758,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = +1,
                                 ExplosionFrames = 30,
+                                Hardness = 5,
                                 BType = BulletType.Fireball,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
@@ -774,6 +794,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -806,10 +827,111 @@ namespace shared {
                                 SpeciesId = 2,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 ActiveVfxSpeciesId = VfxFireSlashActive.SpeciesId,
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                        )),
+
+                    new KeyValuePair<int, Skill>(18, new Skill{
+                        RecoveryFrames = 14,
+                        RecoveryFramesOnBlock = 10,
+                        RecoveryFramesOnHit = 10,
+                        MpDelta = 50,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk1
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 2,
+                                ActiveFrames = 600,
+                                HitStunFrames = 6,
+                                BlockStunFrames = 4,
+                                Damage = 4,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(28*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SpeciesId = 4,
+                                Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 2,
+                                DirY = 0,
+                                Hardness = 4,
+                                AllowsWalking = true,
+                                ExplosionFrames = 30,
+                                BType = BulletType.Fireball,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
+                            }
+                        )
+                    ),
+
+                    new KeyValuePair<int, Skill>(19, new Skill{
+                        RecoveryFrames = 14,
+                        RecoveryFramesOnBlock = 10,
+                        RecoveryFramesOnHit = 10,
+                        MpDelta = 50,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = InAirAtk1
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 2,
+                                ActiveFrames = 600,
+                                HitStunFrames = 6,
+                                BlockStunFrames = 4,
+                                Damage = 4,
+                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(28*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SpeciesId = 4,
+                                Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 2,
+                                DirY = 0,
+                                Hardness = 4,
+                                ExplosionFrames = 30,
+                                BType = BulletType.Fireball,
+                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
+                            }
+                        )
+                    ),
+
+                    new KeyValuePair<int, Skill>(20, new Skill{
+                        RecoveryFrames = 25,
+                        RecoveryFramesOnBlock = 25,
+                        RecoveryFramesOnHit = 25,
+                        MpDelta = 60,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Sliding
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 5,
+                                PushbackVelX = NO_LOCK_VEL,
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = (int)(7f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelY = 0,
+                                SpeciesId = 1,
+                                HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(-12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                BType = BulletType.Melee,
+                                Hardness = 5,
+                                ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -842,6 +964,7 @@ namespace shared {
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -873,6 +996,7 @@ namespace shared {
                                 ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 BType = BulletType.Melee,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -897,6 +1021,7 @@ namespace shared {
                                 ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 BType = BulletType.Melee,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -921,6 +1046,7 @@ namespace shared {
                                 ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 BType = BulletType.Melee,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -945,6 +1071,7 @@ namespace shared {
                                 ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 BType = BulletType.Melee,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -969,6 +1096,7 @@ namespace shared {
                                 ExplosionFrames = 20,
                                 DirX = 1,
                                 DirY = 0,
+                                Hardness = 5,
                                 BType = BulletType.Melee,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -978,7 +1106,7 @@ namespace shared {
         );
 
         public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
-            bool notRecovered = inNonInertiaFramesToRecover(currCharacterDownsync);
+            bool notRecovered = (0 < currCharacterDownsync.FramesToRecover);
             switch (speciesId) {
                 case 0:
                     switch (patternId) {
@@ -1102,6 +1230,31 @@ namespace shared {
                             if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 13;
                             } else {
+                                return NO_SKILL;
+                            }
+                        default:
+                            return NO_SKILL;
+                    }
+                case 4:
+                    switch (patternId) {
+                        case 1:
+                        case 2:
+                        case 3:
+                            if (!notRecovered) {
+                                if (currCharacterDownsync.InAir) {
+                                    return 19;
+                                } else {
+                                    return 18;
+                                }
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case 5:
+                            // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
+                            if (!currCharacterDownsync.InAir) {
+                                return 20;
+                            } else {
+                                // Air-sliding is non-sense
                                 return NO_SKILL;
                             }
                         default:

@@ -54,7 +54,7 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, bool capturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -78,7 +78,7 @@ namespace shared {
             dst.OnWall = onWall;
             dst.OnWallNormX = onWallNormX;
             dst.OnWallNormY = onWallNormY;
-            dst.CapturedByInertia = capturedByInertia;
+            dst.FramesCapturedByInertia = framesCapturedByInertia;
             dst.BulletTeamId = bulletTeamId;
             dst.ChCollisionTeamId = chCollisionTeamId;
             dst.RevivalVirtualGridX = revivalVirtualGridX;
@@ -101,7 +101,7 @@ namespace shared {
             dst.CollisionTypeMask = collisionMask;
 
             dst.OmitGravity = omitGravity;
-            dst.OmitPushback = omitPushback;
+            dst.OmitSoftPushback = omitSoftPushback;
             dst.WaivingSpontaneousPatrol = waivingSpontaneousPatrol;
             dst.WaivingPatrolCueId = waivingPatrolCueId;
 

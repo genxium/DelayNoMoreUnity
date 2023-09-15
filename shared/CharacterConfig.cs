@@ -22,6 +22,7 @@
         public int JumpingInitVelY;
         public int InertiaFramesToRecover;
         public bool DashingEnabled;
+        public bool SlidingEnabled;
         public bool OnWallEnabled;
         public int WallJumpingFramesToRecover;
         public int WallJumpingInitVelX;
@@ -50,9 +51,11 @@
 
         // Collision masks
         public bool OmitGravity;
-        public bool OmitPushback;
+        public bool OmitSoftPushback;
         public ulong CollisionTypeMask;
 
         public bool HasTurnAroundAnim;
+
+        public int Hardness;
     }
 }
