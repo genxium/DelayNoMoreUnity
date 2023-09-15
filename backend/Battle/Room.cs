@@ -516,7 +516,7 @@ public class Room {
 
                 if (nextRenderFrameId > renderFrameId) {
                     if (0 == renderFrameId) {
-                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity);
+                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
                         startRdf.PlayersArr.AddRange(clonePlayersArrToPb());
                         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
 
