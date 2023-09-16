@@ -24,6 +24,7 @@
         public bool DashingEnabled;
         public bool SlidingEnabled;
         public bool OnWallEnabled;
+        public bool CrouchingEnabled;
         public int WallJumpingFramesToRecover;
         public int WallJumpingInitVelX;
         public int WallJumpingInitVelY;

@@ -1,6 +1,7 @@
 using Google.Protobuf.Collections;
 using System;
 using System.Collections.Generic;
+using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
@@ -160,6 +161,7 @@ namespace shared {
         }
 
         private static void _processSingleTrapDamageOnSingleCharacter(RoomDownsyncFrame currRenderFrame, ConvexPolygon aShape, ConvexPolygon bShape, ref SatResult overlapResult, TrapColliderAttr colliderAttr, CharacterDownsync atkedCharacterInCurrFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
+            // The traversal order of traps (both static & dynamic) is deterministic, thus the following assignment is deterministic regardless of the order of collision result popping.
             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) return;
             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
@@ -187,7 +189,7 @@ namespace shared {
                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
                 atkedCharacterInNextFrame.Hp = 0;
                 atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
-                atkedCharacterInNextFrame.CharacterState = CharacterState.Dying;
+                atkedCharacterInNextFrame.CharacterState = Dying;
                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
             } else {
                 var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
@@ -195,9 +197,13 @@ namespace shared {
                 bool shouldOmitStun = ((0 >= trapConfig.HitStunFrames) || (shouldOmitHitPushback));
                 if (false == shouldOmitStun) {
                     if (trapConfig.BlowUp) {
-                        atkedCharacterInNextFrame.CharacterState = CharacterState.BlownUp1;
-                    } else {
-                        atkedCharacterInNextFrame.CharacterState = CharacterState.Atked1;
+                        atkedCharacterInNextFrame.CharacterState = BlownUp1;
+                    } else if (BlownUp1 != atkedCharacterInNextFrame.CharacterState) {
+                        if (CrouchIdle1 == atkedCharacterInNextFrame.CharacterState || CrouchIdle1 == atkedCharacterInNextFrame.CharacterState || CrouchAtked1 == atkedCharacterInNextFrame.CharacterState) {
+                            atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
+                        } else {
+                            atkedCharacterInNextFrame.CharacterState = Atked1;
+                        }
                     }
                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
                     if (trapConfig.HitStunFrames > oldFramesToRecover) {

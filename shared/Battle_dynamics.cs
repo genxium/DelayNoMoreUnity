@@ -280,7 +280,7 @@ namespace shared {
         
         public static void _resetVelocityOnRecovered(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame) {
             // [WARNING] This is a necessary cleanup before "_processInertiaWalking"!
-            if (1 == currCharacterDownsync.FramesToRecover && 0 == thatCharacterInNextFrame.FramesToRecover && (Atked1 == currCharacterDownsync.CharacterState || InAirAtked1 == currCharacterDownsync.CharacterState)) {
+            if (1 == currCharacterDownsync.FramesToRecover && 0 == thatCharacterInNextFrame.FramesToRecover && (Atked1 == currCharacterDownsync.CharacterState || InAirAtked1 == currCharacterDownsync.CharacterState || CrouchAtked1 == currCharacterDownsync.CharacterState)) {
                 thatCharacterInNextFrame.VelX = 0;
                 thatCharacterInNextFrame.VelY = 0;
             }
@@ -353,6 +353,10 @@ namespace shared {
                         }
                     }
                 }
+            
+                if (!jumpedOrNot && 0 > effDy && !currCharacterDownsync.InAir && 0 == thatCharacterInNextFrame.VelX && chConfig.CrouchingEnabled) {
+                    thatCharacterInNextFrame.CharacterState = CrouchIdle1;
+                }
             }
 
             if (usedSkill) {
@@ -365,6 +369,8 @@ namespace shared {
                  */
                 if (0 != thatCharacterInNextFrame.VelX) {
                     thatCharacterInNextFrame.CharacterState = WalkingAtk1;
+                } else if (CrouchIdle1 == thatCharacterInNextFrame.CharacterState) {
+                    thatCharacterInNextFrame.CharacterState = CrouchAtk1;
                 } else {
                     thatCharacterInNextFrame.CharacterState = Atk1;
                 }
@@ -498,6 +504,10 @@ namespace shared {
             nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
         }
 
+        public static bool isCrouching(CharacterState state) {
+            return (CrouchIdle1 == state || CrouchAtk1 == state || CrouchAtked1 == state || Sliding == state);
+        }
+
         private static void _moveAndInsertCharacterColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd, ILoggerBridge logger) {
             for (int i = iSt; i < iEd; i++) {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
@@ -507,8 +517,13 @@ namespace shared {
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 effPushbacks[i].X = 0;
                 effPushbacks[i].Y = 0;
+                int vhDiffInducedByCrouching = 0;
+                bool justBecameCrouching = !currCharacterDownsync.PrevWasCrouching && !currCharacterDownsync.InAir && (0 == currCharacterDownsync.FramesInChState) && isCrouching(currCharacterDownsync.CharacterState);
+                if (justBecameCrouching) {
+                    vhDiffInducedByCrouching -= ((chConfig.DefaultSizeY - chConfig.ShrinkedSizeY) >> 1);
+                }
 
-                int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY;
+                int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY + vhDiffInducedByCrouching;
                 if (currCharacterDownsync.JumpTriggered) {
                     // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
                     if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
@@ -802,6 +817,10 @@ namespace shared {
                                 case InAirAtk1:
                                 case InAirAtked1:
                                 case OnWallIdle1:
+                                case Sliding:
+                                case CrouchIdle1:
+                                case CrouchAtk1:
+                                case CrouchAtked1:
                                     // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
                                     int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
                                     var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
@@ -953,6 +972,7 @@ namespace shared {
                                 bool shouldOmitHitPushback = (atkedCharacterConfig.Hardness > bullet.Config.Hardness);   
                                 if (false == shouldOmitHitPushback && BlownUp1 != oldNextCharacterState) {
                                     var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
+                                    // The traversal order of bullets is deterministic, thus the following assignment is deterministic regardless of the order of collision result popping.
                                     atkedCharacterInNextFrame.VelX = pushbackVelX;
                                     atkedCharacterInNextFrame.VelY = pushbackVelY;
                                 }
@@ -962,7 +982,11 @@ namespace shared {
                                     if (bullet.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
                                     } else if (BlownUp1 != oldNextCharacterState) {
-                                        atkedCharacterInNextFrame.CharacterState = Atked1;
+                                        if (CrouchIdle1 == atkedCharacterInNextFrame.CharacterState || CrouchIdle1 == atkedCharacterInNextFrame.CharacterState || CrouchAtked1 == atkedCharacterInNextFrame.CharacterState) {
+                                            atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
+                                        } else {
+                                            atkedCharacterInNextFrame.CharacterState = Atked1;
+                                        }
                                     }
                                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
                                     if (bullet.Config.HitStunFrames > oldFramesToRecover) {
@@ -1066,7 +1090,6 @@ namespace shared {
                 var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
-
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 // Update "virtual grid position"
@@ -1157,6 +1180,7 @@ namespace shared {
                 if (thatCharacterInNextFrame.CharacterState != currCharacterDownsync.CharacterState) {
                     thatCharacterInNextFrame.FramesInChState = 0;
                 }
+                thatCharacterInNextFrame.PrevWasCrouching = isCrouching(currCharacterDownsync.CharacterState);
 
                 // Remove any active skill if not attacking
                 if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState) && Dashing != thatCharacterInNextFrame.CharacterState) {
@@ -1199,7 +1223,7 @@ namespace shared {
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
             }
-            
+
             int nextRenderFrameId = currRenderFrameId + 1;
             var (ok2, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
             if (!ok2 || null == candidate) {
@@ -1399,6 +1423,9 @@ namespace shared {
                 case InAirAtked1:
                 case OnWallIdle1:
                 case Sliding:
+                case CrouchIdle1:
+                case CrouchAtk1:
+                case CrouchAtked1:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.ShrinkedSizeX, chConfig.ShrinkedSizeY);
                     break;
                 default:

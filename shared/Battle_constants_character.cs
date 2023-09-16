@@ -182,6 +182,7 @@ namespace shared {
                         CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HasTurnAroundAnim = false,
                         SlidingEnabled = true,
+                        CrouchingEnabled = true,
                         Hardness = 5
                     }),
 
