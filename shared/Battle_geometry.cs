@@ -75,6 +75,7 @@ namespace shared {
                 bool isBarrier = false;
                 bool onTrap = false;
                 bool providesSlipJump = false;
+                bool forcesCrouching = false;
                 switch (bCollider.Data) {
                     case CharacterDownsync v1:
                     case Bullet v2:
@@ -83,6 +84,7 @@ namespace shared {
                     case TrapColliderAttr v4:
                         trapLocalId = v4.TrapLocalId;
                         providesSlipJump = v4.ProvidesSlipJump;
+                        forcesCrouching = v4.ForcesCrouching;
                         onTrap = v4.ProvidesHardPushback;
                         isBarrier = v4.ProvidesHardPushback;
                         break;
@@ -94,7 +96,7 @@ namespace shared {
                         break;
                 }
 
-                if (!isBarrier) {
+                if (!isBarrier && !forcesCrouching) {
                     if (residueCollided.Cnt >= residueCollided.N) {
                         throw new ArgumentException(String.Format("residueCollided is already full! residueCollided.Cnt={0}, residueCollided.N={1}: trying to insert collider.Shape={4}, collider.Data={5}", residueCollided.Cnt, residueCollided.N, bCollider.Shape, bCollider.Data));
                     }
@@ -110,6 +112,15 @@ namespace shared {
                     continue;
                 }
 
+                if (forcesCrouching) {
+                    float characterTop = aCollider.Y + aCollider.H;
+                    float barrierTop = bCollider.Y + bCollider.H;
+                    if (characterTop < barrierTop) {
+                        thatPlayerInNextFrame.ForcedCrouching = true;
+                    }
+                    continue;
+                }
+
                 if (providesSlipJump) {
                     /*
                     Only provides hardPushbacks when 
@@ -119,7 +130,9 @@ namespace shared {
                     if (0 < currCharacterDownsync.VelY) {
                         continue;
                     }
-                    if (aCollider.Y < (bCollider.Y + bCollider.H - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE)) {
+                    float characterBottom = aCollider.Y;
+                    float barrierTop = bCollider.Y + bCollider.H;
+                    if (characterBottom < (barrierTop - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE)) {
                         continue;
                     }
                 }

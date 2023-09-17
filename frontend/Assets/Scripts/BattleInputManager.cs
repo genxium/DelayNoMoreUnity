@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System;
 using UnityEngine.InputSystem.OnScreen;
 using DG.Tweening;
+using UnityEngine.InputSystem.Controls;
 
 public class BattleInputManager : MonoBehaviour {
     private const float magicLeanLowerBound = 0.1f;
@@ -124,8 +125,16 @@ public class BattleInputManager : MonoBehaviour {
 
     public void OnMoveByKeyboard(InputAction.CallbackContext context) {
 		if (!customEnabled) return;
-        joystickX = context.ReadValue<Vector2>().normalized.x;
-        joystickY = context.ReadValue<Vector2>().normalized.y;
+        switch (((KeyControl)context.control).keyCode) {
+            case Key.W:
+            case Key.S:
+                joystickY = Math.Sign(context.ReadValue<Vector2>().normalized.y);
+                break;
+            case Key.D:
+            case Key.A:
+                joystickX = 2*Math.Sign(context.ReadValue<Vector2>().normalized.x);
+                break;
+        }
         //Debug.Log(String.Format("(joystickX,joystickY) is changed to ({0},{1}) by keyboard", joystickX, joystickY));
 
         joystick.transform.position = new Vector3(

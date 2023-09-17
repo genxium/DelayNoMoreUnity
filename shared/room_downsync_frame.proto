@@ -114,6 +114,7 @@ message CharacterDownsync {
         
 	bool slipJumpTriggered = 40;
 	bool primarilyOnSlippableHardPushback = 41; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
+	bool prevWasCrouching = 42;
 
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
@@ -278,10 +279,11 @@ message BulletConfig {
     int32 explosionVfxSpeciesId = 28; // currently only support 1 vfx config when exploding
 
     bool allowsWalking = 29;
-    int32 hardness = 30;
-    bool takesGravity = 31; // e.g. a bomb
+    bool allowsCrouching = 30;
+    int32 hardness = 31;
 
 	uint64 collisionTypeMask = 1029;
+    bool takesGravity = 1030; // e.g. a bomb
 }
 
 message BulletBattleAttr {
@@ -351,6 +353,7 @@ message TrapColliderAttr {
     bool providesDamage = 6;
     bool providesEscape = 7;
 	bool providesSlipJump = 8;
+	bool forcesCrouching = 9;
 
 	int32 trapLocalId = 1024; // ref-back upon collision, for damage handling, hardPushback moving and effPushbacks recording (if the trap provides softPushback)
 	uint64 collisionTypeMask = 1029;

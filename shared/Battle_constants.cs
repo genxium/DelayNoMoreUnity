@@ -202,6 +202,7 @@ namespace shared {
         public static HashSet<CharacterState> noOpSet = new HashSet<CharacterState>() {
             Atked1,
             InAirAtked1,
+            CrouchAtked1,
             BlownUp1,
             LayDown1,
 			// [WARNING] During the invinsible frames of GET_UP1, the player is allowed to take any action
@@ -223,6 +224,7 @@ namespace shared {
             InAirIdle1ByJump,
             Atked1,
             InAirAtked1,
+            CrouchAtked1,
             BlownUp1,
             LayDown1,
             GetUp1,
