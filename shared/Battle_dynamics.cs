@@ -1183,6 +1183,7 @@ namespace shared {
                                 case InAirIdle1ByWallJump:
                                 case Walking:
                                 case GetUp1:
+                                case TurnAround:
                                     thatCharacterInNextFrame.CharacterState = CrouchIdle1;
                                     break;
                                 case Atk1:
