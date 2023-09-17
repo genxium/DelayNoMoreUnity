@@ -314,12 +314,14 @@ namespace shared {
                         int xfac = (0 < effDx ? 1 : -1);
                         thatCharacterInNextFrame.DirX = effDx;
                         thatCharacterInNextFrame.DirY = effDy;
-                        if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
-                            thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
-                        } else {
-                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                        if (!isStaticCrouching(currCharacterDownsync.CharacterState)) {
+                            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
+                            } else {
+                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                            }
+                            thatCharacterInNextFrame.CharacterState = Walking;
                         }
-                        thatCharacterInNextFrame.CharacterState = Walking;
                     } else {
                         thatCharacterInNextFrame.VelX = 0;
                     }
@@ -334,12 +336,14 @@ namespace shared {
                             int xfac = (0 < effDx ? 1 : -1);
                             thatCharacterInNextFrame.DirX = effDx;
                             thatCharacterInNextFrame.DirY = effDy;
-                            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
-                                thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
-                            } else {
-                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                            if (!isStaticCrouching(currCharacterDownsync.CharacterState)) {
+                                if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                                    thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
+                                } else {
+                                    thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                                }
+                                thatCharacterInNextFrame.CharacterState = Walking;
                             }
-                            thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
                             thatCharacterInNextFrame.VelX = 0;
                         }
@@ -508,6 +512,10 @@ namespace shared {
 
             // Explicitly specify termination of nextRenderFrameBullets
             nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+        }
+
+        public static bool isStaticCrouching(CharacterState state) {
+            return (CrouchIdle1 == state || CrouchAtk1 == state || CrouchAtked1 == state);
         }
 
         public static bool isCrouching(CharacterState state) {
@@ -988,7 +996,7 @@ namespace shared {
                                     if (bullet.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
                                     } else if (BlownUp1 != oldNextCharacterState) {
-                                        if (CrouchIdle1 == atkedCharacterInNextFrame.CharacterState || CrouchIdle1 == atkedCharacterInNextFrame.CharacterState || CrouchAtked1 == atkedCharacterInNextFrame.CharacterState) {
+                                        if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
                                             atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
                                         } else {
                                             atkedCharacterInNextFrame.CharacterState = Atked1;

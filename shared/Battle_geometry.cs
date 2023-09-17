@@ -96,7 +96,7 @@ namespace shared {
                         break;
                 }
 
-                if (!isBarrier) {
+                if (!isBarrier && !forcesCrouching) {
                     if (residueCollided.Cnt >= residueCollided.N) {
                         throw new ArgumentException(String.Format("residueCollided is already full! residueCollided.Cnt={0}, residueCollided.N={1}: trying to insert collider.Shape={4}, collider.Data={5}", residueCollided.Cnt, residueCollided.N, bCollider.Shape, bCollider.Data));
                     }
@@ -113,7 +113,11 @@ namespace shared {
                 }
 
                 if (forcesCrouching) {
-                    thatPlayerInNextFrame.ForcedCrouching = true;
+                    float characterTop = aCollider.Y + aCollider.H;
+                    float barrierTop = bCollider.Y + bCollider.H;
+                    if (characterTop < barrierTop) {
+                        thatPlayerInNextFrame.ForcedCrouching = true;
+                    }
                     continue;
                 }
 
