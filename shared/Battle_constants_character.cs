@@ -180,7 +180,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        HasTurnAroundAnim = false,
+                        HasTurnAroundAnim = true,
                         SlidingEnabled = true,
                         CrouchingEnabled = true,
                         Hardness = 5
