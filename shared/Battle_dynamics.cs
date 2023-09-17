@@ -377,12 +377,14 @@ namespace shared {
                  * 
                  * In this case "thatCharacterInNextFrame.FramesToRecover" is already set by the skill in use, and transition to "TurnAround" should NOT be supported!
                  */
-                if (0 != thatCharacterInNextFrame.VelX) {
-                    thatCharacterInNextFrame.CharacterState = WalkingAtk1;
-                } else if (CrouchIdle1 == thatCharacterInNextFrame.CharacterState) {
-                    thatCharacterInNextFrame.CharacterState = CrouchAtk1;
-                } else {
-                    thatCharacterInNextFrame.CharacterState = Atk1;
+                if (0 < thatCharacterInNextFrame.FramesToRecover) {
+                    if (0 != thatCharacterInNextFrame.VelX) {
+                        thatCharacterInNextFrame.CharacterState = WalkingAtk1;
+                    } else if (CrouchIdle1 == thatCharacterInNextFrame.CharacterState) {
+                        thatCharacterInNextFrame.CharacterState = CrouchAtk1;
+                    } else {
+                        thatCharacterInNextFrame.CharacterState = Atk1;
+                    }
                 }
             }
         }
