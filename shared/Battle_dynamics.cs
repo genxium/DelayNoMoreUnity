@@ -135,7 +135,8 @@ namespace shared {
             }
 
             // Jumping is partially allowed within "CapturedByInertia", but moving is only allowed when "0 == FramesToRecover" (constrained later in "ApplyInputFrameDownsyncDynamicsOnSingleRenderFrame")
-            if (0 == currCharacterDownsync.FramesToRecover) {
+            if (1 >= currCharacterDownsync.FramesToRecover) {
+                // Direction control is respected since "1 == currCharacterDownsync.FramesToRecover" to favor smooth crouching transition
                 effDx = decodedInputHolder.Dx;
                 effDy = decodedInputHolder.Dy;
             }
@@ -353,8 +354,13 @@ namespace shared {
                         }
                     }
                 }
-            
-                if (!jumpedOrNot && 0 > effDy && !currCharacterDownsync.InAir && 0 == thatCharacterInNextFrame.VelX && chConfig.CrouchingEnabled) {
+            }
+
+            if (!jumpedOrNot && 0 > effDy && !currCharacterDownsync.InAir && chConfig.CrouchingEnabled) {
+                if (1 == currCharacterDownsync.FramesToRecover) {
+                    thatCharacterInNextFrame.VelX = 0;
+                    thatCharacterInNextFrame.CharacterState = CrouchIdle1;
+                } else if (0 == currCharacterDownsync.FramesToRecover && 0 == thatCharacterInNextFrame.VelX) {
                     thatCharacterInNextFrame.CharacterState = CrouchIdle1;
                 }
             }
