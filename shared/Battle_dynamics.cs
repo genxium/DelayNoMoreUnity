@@ -139,6 +139,8 @@ namespace shared {
                 // Direction control is respected since "1 == currCharacterDownsync.FramesToRecover" to favor smooth crouching transition
                 effDx = decodedInputHolder.Dx;
                 effDy = decodedInputHolder.Dy;
+            } else if (WalkingAtk1 == currCharacterDownsync.CharacterState) {
+                effDx = decodedInputHolder.Dx;
             }
 
             int patternId = PATTERN_ID_NO_OP;
@@ -152,7 +154,7 @@ namespace shared {
                         patternId = 5;
                     } else if (currCharacterDownsync.PrimarilyOnSlippableHardPushback && (0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
                         slipJumpedOrNot = true;
-                    } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState)) {
+                    } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState) && !isCrouching(currCharacterDownsync.CharacterState)) {
                         jumpedOrNot = true;
                     } else if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                         jumpedOrNot = true;
@@ -304,7 +306,7 @@ namespace shared {
                 exactTurningAround = true;
             }
 
-            if (0 == currCharacterDownsync.FramesToRecover) {
+            if (0 == currCharacterDownsync.FramesToRecover || WalkingAtk1 == currCharacterDownsync.CharacterState) {
                 thatCharacterInNextFrame.CharacterState = Idle1; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Idle" as a default action
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0;
@@ -357,15 +359,13 @@ namespace shared {
             }
 
             if (!jumpedOrNot && 0 > effDy && !currCharacterDownsync.InAir && chConfig.CrouchingEnabled) {
-                if (1 == currCharacterDownsync.FramesToRecover) {
+                if (1 >= currCharacterDownsync.FramesToRecover) {
                     thatCharacterInNextFrame.VelX = 0;
-                    thatCharacterInNextFrame.CharacterState = CrouchIdle1;
-                } else if (0 == currCharacterDownsync.FramesToRecover && 0 == thatCharacterInNextFrame.VelX) {
                     thatCharacterInNextFrame.CharacterState = CrouchIdle1;
                 }
             }
 
-            if (usedSkill) {
+            if (usedSkill || WalkingAtk1 == currCharacterDownsync.CharacterState) {
                 /*
                  * [WARNING]
                  * 
@@ -1163,6 +1163,33 @@ namespace shared {
                             default:
                                 thatCharacterInNextFrame.CharacterState = Idle1;
                                 break;
+                        }
+                    } else if (thatCharacterInNextFrame.ForcedCrouching) {
+                        if (!isCrouching(thatCharacterInNextFrame.CharacterState)) {
+                            switch (thatCharacterInNextFrame.CharacterState) {
+                                case Idle1:
+                                case InAirIdle1ByJump:
+                                case InAirIdle1NoJump:
+                                case InAirIdle1ByWallJump:
+                                case Walking:
+                                case GetUp1:
+                                    thatCharacterInNextFrame.CharacterState = CrouchIdle1;
+                                    break;
+                                case Atk1:
+                                case Atk2:
+                                    thatCharacterInNextFrame.CharacterState = CrouchAtk1;
+                                    break;
+                                case Atked1:
+                                case InAirAtked1:
+                                    thatCharacterInNextFrame.CharacterState = CrouchAtked1;
+                                    break;
+                                case BlownUp1:
+                                case LayDown1:
+                                case Dying:
+                                    break;
+                                default:
+                                    throw new ArgumentException(String.Format("At rdf.Id={0}, unable to force crouching for character {1}", currRenderFrame.Id, i < currRenderFrame.PlayersArr.Count ? stringifyPlayer(thatCharacterInNextFrame) : stringifyNpc(thatCharacterInNextFrame) ));
+                            }
                         }
                     }
                 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="338">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="341">
  <tileset firstgid="1" source="../shared_comps/tiles0.tsx"/>
  <tileset firstgid="65" source="../shared_comps/tiles1.tsx"/>
  <tileset firstgid="129" source="../shared_comps/tiles2.tsx"/>
@@ -18,7 +18,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2NttwzAMhWGiK3SRjnBG62h9yGB9aVDBpW42dWn8f8BBAakmBTOJg5gBAAAAAAAAAHpo9QGwlIzXwJ3JmP+rU2b9zZj/HaiwrsI+XoPMn3NuHa9Fxvz/G1nMfEp1IurjOjUmqvZzne9/cRRwfS1RNZ97V+f/cchdyX7vZ5re62s5ey6vjoz3fxRZ7DO6lKt10z3m3yf3vpaVf2PJfRak91/J/6oxn4ccP3+8a9IzM/8Ysvo9rO179UYkrc/84+ji/tmepbpqiBnz75V7BpTU9keQ/Z21t57uoS73PC9R9CE6eyoT9Fs1/zN90/5eMIcG1n5v7N8SjKEN+ueC8bRBfy+YQxv094I5tEF/L5hDG/T3gjm0sG8tGE8L+vUEY2mT/nKC8bRRfxnzn02b9JcT1H1l0kqhp+mn5K8XjKUN+nvBHFp9AGPuO3v8RCeuVXI9AAAAAAAAAAAAAAAAAAAAsINvR7FaGA==
+   eJzt2FtOw0AMhWELiRWwEZZwlsbSeGBhvFAxCp5bMhfT/J90hDRD7FHcNlXNAAAAAAAAAAA9tPsA2ErGa+DOZMz/2Smz/mLM/w5UWFdhH89B5s85t47nImP+/41szHxKdUbUv6NXJ1eoMaNqP9b5/neON39drKmGjKr52Ls6//dD7kr2ez/T9F5fy9lzeXVkvP9HkY19RpdytW66x/z75N7XsvJvLLnPgvT+K/lfNebjkOPnj3dNembmP4asfg9r+169GUnrM/9xdHH/bM9SXTXEjPn3yj0DSmr7M8j+ztpbT/dQl3uel2j0ITp7KhP02zX/M33T/l6whibWfmvs3xLMoQD9c8F8CtDfC9ZQgP5esIYC9PeCNRSgvxesoY19a8F82tCvJ5hLQfrLCeZToP4y5r+agvSXE9R9ZtJKQ0/TT8lfL5hLAfp7wRrafQBj7pF9/UQnrlVyPQAAAAAAAAAAAAAAAAAAABDBN/HIWko=
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -229,6 +229,14 @@
     <property name="triggerTrackingId" value="3"/>
    </properties>
   </object>
+  <object id="340" x="560" y="304" width="64" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="forcesCrouching" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -351,6 +359,8 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
+  <object id="338" x="560" y="288" width="80" height="16"/>
+  <object id="339" x="624" y="288" width="16" height="48"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="172" x="776" y="683">

@@ -1083,12 +1083,13 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
                         tileProps.TryGetCustomProperty("providesEscape", out providesEscape);
                         tileProps.TryGetCustomProperty("providesSlipJump", out providesSlipJump);
+                        tileProps.TryGetCustomProperty("forcesCrouching", out forcesCrouching);
                         tileProps.TryGetCustomProperty("static", out isCompletelyStatic);
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
@@ -1100,6 +1101,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         bool providesDamageVal = (null != providesDamage && !providesDamage.IsEmpty && 1 == providesDamage.GetValueAsInt()) ? true : false;
                         bool providesEscapeVal = (null != providesEscape && !providesEscape.IsEmpty && 1 == providesEscape.GetValueAsInt()) ? true : false;
                         bool providesSlipJumpVal = (null != providesSlipJump && !providesSlipJump.IsEmpty && 1 == providesSlipJump.GetValueAsInt()) ? true : false;
+                        bool forcesCrouchingVal = (null != forcesCrouching && !forcesCrouching.IsEmpty && 1 == forcesCrouching.GetValueAsInt()) ? true : false;
                         bool isCompletelyStaticVal = (null != isCompletelyStatic && !isCompletelyStatic.IsEmpty && 1 == isCompletelyStatic.GetValueAsInt()) ? true : false;
 
                         int dirXVal = (null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt());
@@ -1153,6 +1155,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 ProvidesHardPushback = providesHardPushbackVal,
                                 ProvidesEscape = providesEscapeVal,
                                 ProvidesSlipJump = providesSlipJumpVal,
+                                ForcesCrouching = forcesCrouchingVal,
                                 HitboxOffsetX = 0,
                                 HitboxOffsetY = 0,
                                 HitboxSizeX = rectVw,
