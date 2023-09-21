@@ -132,6 +132,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public ReadyGo readyGoPanel;
     public SettlementPanel settlementPanel;
     protected Vector3 newPosHolder = new Vector3();
+    protected Vector3 newTlPosHolder = new Vector3(), newTrPosHolder = new Vector3(), newBlPosHolder = new Vector3(), newBrPosHolder = new Vector3();
     protected delegate void PostSettlementCallbackT();
 
     protected PostSettlementCallbackT postSettlementCallback;
@@ -422,18 +423,25 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (TERMINATING_PLAYER_ID == currNpcDownsync.Id) break;
             var prevNpcDownsync = (null == prevRdf ? null : prevRdf.NpcsArr[k]);
             // Debug.Log(String.Format("At rdf.Id={0}, currNpcDownsync[k:{1}] at [vx: {2}, vy: {3}, chState: {4}, framesInChState: {5}]", rdf.Id, k, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, currNpcDownsync.CharacterState, currNpcDownsync.FramesInChState));
-            var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
-            newPosHolder.Set(wx, wy, characterZ);
 
-            if (!isGameObjPositionWithinCamera(newPosHolder)) continue;
+            var chConfig = characters[currNpcDownsync.SpeciesId];
+            float boxCx, boxCy, boxCw, boxCh;
+            calcCharacterBoundingBoxInCollisionSpace(currNpcDownsync, chConfig, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+
+            newTlPosHolder.Set(wx - .5f * boxCw, wy + .5f * boxCh, characterZ);
+            newTrPosHolder.Set(wx + .5f * boxCw, wy + .5f * boxCh, characterZ);
+            newBlPosHolder.Set(wx - .5f * boxCw, wy - .5f * boxCh, characterZ);
+            newBrPosHolder.Set(wx + .5f * boxCw, wy - .5f * boxCh, characterZ);
+
+            if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
             // if the current position is within camera FOV
             var speciesKvPq = cachedNpcs[currNpcDownsync.SpeciesId];
             string lookupKey = "npc-" + currNpcDownsync.Id;
             var npcAnimHolder = speciesKvPq.PopAny(lookupKey);
             if (null == npcAnimHolder) {
                 npcAnimHolder = speciesKvPq.Pop();
-                Debug.Log(String.Format("@rdf.Id={0} using a new npcAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
+                //Debug.Log(String.Format("@rdf.Id={0} using a new npcAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
             } else {
                 //Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
             }
@@ -443,9 +451,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             var npcGameObj = npcAnimHolder.gameObject;
+            newPosHolder.Set(wx, wy, characterZ);
             npcGameObj.transform.position = newPosHolder;
 
-            var chConfig = characters[currNpcDownsync.SpeciesId];
             npcAnimHolder.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
             newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
             npcAnimHolder.hpBar.transform.localPosition = newPosHolder;
@@ -1860,9 +1868,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         var vfxAnimHolder = speciesKvPq.PopAny(vfxLookupKey);
         if (null == vfxAnimHolder) {
             vfxAnimHolder = speciesKvPq.Pop();
-            Debug.Log(String.Format("@rdf.Id={0} using a new vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
+            //Debug.Log(String.Format("@rdf.Id={0} using a new vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
         } else {
-            Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
+            //Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
         }
 
         if (null == vfxAnimHolder) {

@@ -61,6 +61,15 @@ namespace shared {
                 res2 = v3;
             }
         }
+        private static int countNpcI(RepeatedField<CharacterDownsync> npcsArr) {
+            int npcI = 0;
+            while (npcI < npcsArr.Count && TERMINATING_PLAYER_ID != npcsArr[npcI].Id) npcI++;
+            return npcI;
+        }
+
+        public static bool isNpcDeadToDisappear(CharacterDownsync currCharacterDownsync) {
+            return (0 >= currCharacterDownsync.Hp && 0 >= currCharacterDownsync.FramesToRecover);
+        }
 
         private static void findHorizontallyClosestPatrolCueCollider(CharacterDownsync currCharacterDownsync, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out PatrolCue? res2) {
             res1 = null;
