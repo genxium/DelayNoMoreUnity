@@ -44,7 +44,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected ulong[] prefabbedInputListHolder;
     protected GameObject[] playerGameObjs;
-    protected List<GameObject> npcGameObjs; // TODO: Use a "Heap with Key access" like https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/PriorityQueue.js to manage npc rendering, e.g. referencing the treatment of bullets in https://github.com/genxium/DelayNoMore/blob/main/frontend/assets/scripts/Map.js
     protected List<GameObject> dynamicTrapGameObjs;
     protected Dictionary<int, GameObject> triggerGameObjs; // They actually don't move
 
@@ -65,6 +64,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected shared.Collider[] staticColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
+    protected KvPriorityQueue<string, CharacterAnimController>.ValScore cachedNpcScore = (x) => x.score;
     protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
     protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
 
@@ -72,6 +72,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, FireballAnimController> cachedFireballs;
     protected Vector3[] debugDrawPositionsHolder = new Vector3[4]; // Currently only rectangles are drawn
     protected KvPriorityQueue<string, DebugLine> cachedLineRenderers;
+    protected Dictionary<int, GameObject> npcSpeciesPrefabDict;
+    protected Dictionary<int, KvPriorityQueue<string, CharacterAnimController>> cachedNpcs;
 
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
@@ -152,21 +154,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         } else {
             //selfPlayerLights = Instantiate(playerLightsPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform).GetComponent<PlayerLights>();
         }
-    }
-
-    protected void spawnNpcNode(int speciesId, float wx, float wy, int bulletTeamId) {
-        var characterPrefab = loadCharacterPrefab(characters[speciesId]);
-        GameObject newNpcNode = Instantiate(characterPrefab, new Vector3(wx, wy, characterZ), Quaternion.identity, underlyingMap.transform);
-        npcGameObjs.Add(newNpcNode);
-        InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
-
-        TeamRibbon associatedTeamRibbon = Instantiate(teamRibbonPrefab, new Vector3(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<TeamRibbon>();
-
-        var animController = newNpcNode.GetComponent<CharacterAnimController>();
-
-        animController.hpBar = associatedHpBar;
-        animController.teamRibbon = associatedTeamRibbon;
-        associatedTeamRibbon.setBulletTeamId(bulletTeamId);
     }
 
     protected void spawnDynamicTrapNode(int speciesId, float wx, float wy) {
@@ -414,27 +401,61 @@ public abstract class AbstractMapController : MonoBehaviour {
             playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, playerGameObj, wx, wy, rdf);
         }
 
+        // Put all npcNodes to infinitely far first
+        foreach (var entry in cachedNpcs) {
+            var speciesId = entry.Key;
+            var speciesKvPq = entry.Value;
+            for (int i = speciesKvPq.vals.StFrameId; i < speciesKvPq.vals.EdFrameId; i++) {
+                var (res, npcAnimHolder) = speciesKvPq.vals.GetByFrameId(i);
+                if (!res || null == npcAnimHolder) throw new ArgumentNullException(String.Format("There's no npcAnimHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, speciesKvPq.vals.StFrameId, speciesKvPq.vals.EdFrameId));
+
+                newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, npcAnimHolder.gameObject.transform.position.z);
+                npcAnimHolder.gameObject.transform.position = newPosHolder;
+                npcAnimHolder.hpBar.transform.localPosition = newPosHolder;
+                npcAnimHolder.teamRibbon.transform.localPosition = newPosHolder;
+            }
+        }
+
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
             var currNpcDownsync = rdf.NpcsArr[k];
-            var prevNpcDownsync = (null == prevRdf ? null : prevRdf.NpcsArr[k]);
 
             if (TERMINATING_PLAYER_ID == currNpcDownsync.Id) break;
+            var prevNpcDownsync = (null == prevRdf ? null : prevRdf.NpcsArr[k]);
             // Debug.Log(String.Format("At rdf.Id={0}, currNpcDownsync[k:{1}] at [vx: {2}, vy: {3}, chState: {4}, framesInChState: {5}]", rdf.Id, k, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, currNpcDownsync.CharacterState, currNpcDownsync.FramesInChState));
             var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
-            var npcGameObj = npcGameObjs[k];
-            newPosHolder.Set(wx, wy, npcGameObj.transform.position.z);
+            newPosHolder.Set(wx, wy, characterZ);
+
+            if (!isGameObjPositionWithinCamera(newPosHolder)) continue;
+            // if the current position is within camera FOV
+            var speciesKvPq = cachedNpcs[currNpcDownsync.SpeciesId];
+            string lookupKey = "npc-" + currNpcDownsync.Id;
+            var npcAnimHolder = speciesKvPq.PopAny(lookupKey);
+            if (null == npcAnimHolder) {
+                npcAnimHolder = speciesKvPq.Pop();
+                Debug.Log(String.Format("@rdf.Id={0} using a new npcAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
+            } else {
+                //Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
+            }
+
+            if (null == npcAnimHolder) {
+                throw new ArgumentNullException(String.Format("No available npcAnimHolder node for lookupKey={0}", lookupKey));
+            }
+
+            var npcGameObj = npcAnimHolder.gameObject;
             npcGameObj.transform.position = newPosHolder;
 
             var chConfig = characters[currNpcDownsync.SpeciesId];
-            var chAnimCtrl = npcGameObj.GetComponent<CharacterAnimController>();
-            chAnimCtrl.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
+            npcAnimHolder.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
             newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-            chAnimCtrl.hpBar.transform.localPosition = newPosHolder;
-            chAnimCtrl.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp, (float)currNpcDownsync.Mp / currNpcDownsync.MaxMp);
+            npcAnimHolder.hpBar.transform.localPosition = newPosHolder;
+            npcAnimHolder.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp, (float)currNpcDownsync.Mp / currNpcDownsync.MaxMp);
 
             newPosHolder.Set(wx + teamRibbonOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-            chAnimCtrl.teamRibbon.transform.localPosition = newPosHolder;
+            npcAnimHolder.teamRibbon.transform.localPosition = newPosHolder;
+            npcAnimHolder.teamRibbon.setBulletTeamId(currNpcDownsync.BulletTeamId);
+
+            speciesKvPq.Put(lookupKey, npcAnimHolder);
 
             // Add character vfx
             playCharacterDamagedVfx(currNpcDownsync, prevNpcDownsync, npcGameObj);
@@ -552,7 +573,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             "7_Fire_PointLight_Active"
         };
 
-
         foreach (string name in allVfxPrefabNames) {
             string speciesIdStr = name.Split("_")[0];
             int speciesId = speciesIdStr.ToInt();
@@ -573,13 +593,57 @@ public abstract class AbstractMapController : MonoBehaviour {
         Debug.Log("preallocateVfxNodes ends");
     }
 
+    protected void preallocateNpcNodes(int[] expectedSpeciesIds) {
+        Debug.Log("preallocateNpcNodes begins");
+
+        if (0 >= preallocNpcCapacity) {
+            throw new ArgumentException(String.Format("preallocNpcCapacity={0} is non-positive, please initialize it first!", preallocNpcCapacity));
+        }
+
+        if (null != cachedNpcs) {
+            foreach (var (_, v) in cachedNpcs) {
+                while (0 < v.Cnt()) {
+                    var g = v.Pop();
+                    if (null != g) {
+                        Destroy(g.gameObject);
+                    }
+                }
+            }
+        }
+        
+        int cacheCapacityPerSpeciesId = 3;
+        if (cacheCapacityPerSpeciesId * expectedSpeciesIds.Length < preallocNpcCapacity) {
+            Debug.Log(String.Format("cacheCapacityPerSpeciesId={0}, expectedSpeciesIds={1} are too small for preallocNpcCapacity={2}, maybe you should allocate more cacheCapacityPerSpeciesId?", cacheCapacityPerSpeciesId, expectedSpeciesIds, preallocNpcCapacity));
+        }
+        npcSpeciesPrefabDict = new Dictionary<int, GameObject>();
+        cachedNpcs = new Dictionary<int, KvPriorityQueue<string, CharacterAnimController>>();
+        foreach (int speciesId in expectedSpeciesIds) {
+            var cachedNpcNodesOfThisSpecies = new KvPriorityQueue<string, CharacterAnimController>(cacheCapacityPerSpeciesId, cachedNpcScore);
+            var thePrefab = loadCharacterPrefab(characters[speciesId]);
+            npcSpeciesPrefabDict[speciesId] = thePrefab;
+            for (int i = 0; i < cacheCapacityPerSpeciesId; i++) {
+                GameObject newNpcNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, characterZ), Quaternion.identity);
+                CharacterAnimController newNpcNodeController = newNpcNode.GetComponent<CharacterAnimController>();
+                newNpcNodeController.score = -1;
+                InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(effectivelyInfinitelyFar + inplaceHpBarOffset.x, effectivelyInfinitelyFar + inplaceHpBarOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
+
+                TeamRibbon associatedTeamRibbon = Instantiate(teamRibbonPrefab, new Vector3(effectivelyInfinitelyFar + teamRibbonOffset.x, effectivelyInfinitelyFar + teamRibbonOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<TeamRibbon>();
+
+                newNpcNodeController.hpBar = associatedHpBar;
+                newNpcNodeController.teamRibbon = associatedTeamRibbon;
+
+                var initLookupKey = i.ToString();
+                cachedNpcNodesOfThisSpecies.Put(initLookupKey, newNpcNodeController);
+            }
+            cachedNpcs[speciesId] = cachedNpcNodesOfThisSpecies;
+        }
+
+        Debug.Log("preallocateNpcNodes ends");
+    }
+
     protected void preallocateHolders() {
         if (0 >= roomCapacity) {
             throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
-        }
-
-        if (0 >= preallocNpcCapacity) {
-            throw new ArgumentException(String.Format("preallocAiPlayerCapacity={0} is non-positive, please initialize it first!", preallocNpcCapacity));
         }
 
         Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
@@ -706,7 +770,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             Destroy(underlyingMap);
         }
         playerGameObjs = new GameObject[roomCapacity];
-        npcGameObjs = new List<GameObject>();
         dynamicTrapGameObjs = new List<GameObject>();
         triggerGameObjs = new Dictionary<int, GameObject>();
         string path = String.Format("Tiled/{0}/map", theme);
@@ -1361,17 +1424,15 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
         }
 
+        int npcLocalId = 0;
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
             var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
-            spawnNpcNode(characterSpeciesId, wx, wy, teamId);
-
             var chConfig = Battle.characters[characterSpeciesId];
-
             var npcInRdf = new CharacterDownsync();
             var (vx, vy) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
-            npcInRdf.Id = 0; // Just for not being excluded 
+            npcInRdf.Id = npcLocalId; // Just for not being excluded 
             npcInRdf.JoinIndex = joinIndex;
             npcInRdf.VirtualGridX = vx;
             npcInRdf.VirtualGridY = vy;
@@ -1388,8 +1449,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.VelY = 0;
             npcInRdf.InAir = true;
             npcInRdf.OnWall = false;
-            npcInRdf.Hp = 100;
-            npcInRdf.MaxHp = 100;
+            npcInRdf.Hp = chConfig.Hp;
+            npcInRdf.MaxHp = chConfig.Hp;
             npcInRdf.Mp = 1000;
             npcInRdf.MaxMp = 1000;
             npcInRdf.SpeciesId = characterSpeciesId;
@@ -1400,7 +1461,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.OmitGravity = chConfig.OmitGravity;
             npcInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
             startRdf.NpcsArr[i] = npcInRdf;
+            npcLocalId++;
         }
+        startRdf.NpcLocalIdCounter = npcLocalId;
 
         for (int i = 0; i < trapList.Count; i++) {
             var trap = trapList[i];
@@ -1700,9 +1763,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-    public bool isGameObjWithinCamera(GameObject obj) {
-        var posInMainCamViewport = Camera.main.WorldToViewportPoint(obj.transform.position);
+    public bool isGameObjPositionWithinCamera(Vector3 positionHolder) {
+        var posInMainCamViewport = Camera.main.WorldToViewportPoint(positionHolder);
         return (0f <= posInMainCamViewport.x && posInMainCamViewport.x <= 1f && 0f <= posInMainCamViewport.y && posInMainCamViewport.y <= 1f && 0f < posInMainCamViewport.z);
+    }
+
+    public bool isGameObjWithinCamera(GameObject obj) {
+        return isGameObjPositionWithinCamera(obj.transform.position);
     }
 
     public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, GameObject theGameObj) {

@@ -469,9 +469,11 @@ message RoomDownsyncFrame {
 	repeated int32 speciesIdList = 1026;
 
 	int32 bulletLocalIdCounter = 1027;
-	repeated PeerUdpAddr peerUdpAddrList = 1028;
+	int32 npcLocalIdCounter = 1028;
 
 	int32 participantChangeId = 1029;
+
+	repeated PeerUdpAddr peerUdpAddrList = 2048;
 }
 
 message WsResp {

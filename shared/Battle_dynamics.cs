@@ -562,8 +562,8 @@ namespace shared {
                     newVy -= SLIP_JUMP_CHARACTER_DROP_VIRTUAL;
                 } 
 
-                if (0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
-                    // Revive from Dying
+                if (i < currRenderFrame.PlayersArr.Count && 0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
+                    // Revive player-controlled character from Dying
                     (newVx, newVy) = (currCharacterDownsync.RevivalVirtualGridX, currCharacterDownsync.RevivalVirtualGridY);
                     thatCharacterInNextFrame.CharacterState = GetUp1;
                     thatCharacterInNextFrame.FramesInChState = 0;
@@ -1302,6 +1302,7 @@ namespace shared {
             var nextRenderFrameNpcs = candidate.NpcsArr;
             var nextRenderFrameBullets = candidate.Bullets;
             int nextRenderFrameBulletLocalIdCounter = currRenderFrame.BulletLocalIdCounter;
+            int nextRenderFrameNpcLocalIdCounter = currRenderFrame.NpcLocalIdCounter;
             var nextRenderFrameTraps = candidate.TrapsArr;
             var nextRenderFrameTriggers = candidate.TriggersArr;
             // Make a copy first
@@ -1309,20 +1310,20 @@ namespace shared {
                 var src = currRenderFrame.PlayersArr[i];
                 var chConfig = characters[src.SpeciesId];
                 int framesToRecover = src.FramesToRecover - 1;
+                if (0 > framesToRecover) {
+                    framesToRecover = 0;
+                }
                 int framesCapturedByInertia = src.FramesCapturedByInertia - 1; 
-                if (framesCapturedByInertia < 0) {
+                if (0 > framesCapturedByInertia) {
                     framesCapturedByInertia = 0;
                 }
                 int framesInChState = src.FramesInChState + 1;
                 int framesInvinsible = src.FramesInvinsible - 1;
-                if (framesToRecover < 0) {
-                    framesToRecover = 0;
-                }
-                if (framesInvinsible < 0) {
+                if (0 > framesInvinsible ) {
                     framesInvinsible = 0;
                 }
                 int framesInPatrolCue = src.FramesInPatrolCue - 1;
-                if (framesInPatrolCue < 0) {
+                if (0 > framesInPatrolCue) {
                     framesInPatrolCue = 0;
                 }
                 int mp = src.Mp + chConfig.MpRegenRate;
@@ -1334,36 +1335,44 @@ namespace shared {
                 _resetVelocityOnRecovered(src, dst);
             }
 
-            int npcCnt = 0;
-            while (npcCnt < currRenderFrame.NpcsArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.NpcsArr[npcCnt].Id) {
-                var src = currRenderFrame.NpcsArr[npcCnt];
+            int nextNpcI = 0, currNpcI = 0;
+            while (currNpcI < currRenderFrame.NpcsArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.NpcsArr[currNpcI].Id) {
+                var src = currRenderFrame.NpcsArr[currNpcI];
                 var chConfig = characters[src.SpeciesId];
                 int framesToRecover = src.FramesToRecover - 1;
-                int framesInChState = src.FramesInChState + 1;
-                int framesInvinsible = src.FramesInvinsible - 1;
-                if (framesToRecover < 0) {
+                if (0 > framesToRecover) {
                     framesToRecover = 0;
                 }
+                if (0 >= src.Hp && 0 == framesToRecover) {
+                    // Removed npc character after Dying animation fully played
+                    currNpcI++;
+                    continue;
+                }
+                int framesInChState = src.FramesInChState + 1;
                 int framesCapturedByInertia = src.FramesCapturedByInertia - 1; 
-                if (framesCapturedByInertia < 0) {
+                if (0 > framesCapturedByInertia) {
                     framesCapturedByInertia = 0;
                 }
-                if (framesInvinsible < 0) {
+                int framesInvinsible = src.FramesInvinsible - 1;
+                if (0 > framesInvinsible) {
                     framesInvinsible = 0;
                 }
                 int framesInPatrolCue = src.FramesInPatrolCue - 1;
-                if (framesInPatrolCue < 0) {
+                if (0 > framesInPatrolCue) {
                     framesInPatrolCue = 0;
                 }
                 int mp = src.Mp + chConfig.MpRegenRate;
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
-                var dst = nextRenderFrameNpcs[npcCnt];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, dst);
+                var dst = nextRenderFrameNpcs[nextNpcI];
+                int joinIndex = roomCapacity + nextNpcI + 1;
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, joinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, dst);
                 _resetVelocityOnRecovered(src, dst);
-                npcCnt++;
+                currNpcI++;
+                nextNpcI++;
             }
+            nextRenderFrameNpcs[nextNpcI].Id = TERMINATING_PLAYER_ID;
 
             int k = 0;
             while (k < currRenderFrame.TrapsArr.Count && TERMINATING_TRAP_ID != currRenderFrame.TrapsArr[k].TrapLocalId) {
@@ -1376,6 +1385,7 @@ namespace shared {
                 AssignToTrap(src.TrapLocalId, src.Config, src.ConfigFromTiled, src.TrapState, framesInTrapState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, src.IsCompletelyStatic, src.CapturedByPatrolCue, framesInPatrolCue, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, nextRenderFrameTraps[k]);
                 k++;
             }
+            nextRenderFrameTraps[k].TrapLocalId = TERMINATING_TRAP_ID;
 
             int l = 0;
             while (l < currRenderFrame.TriggersArr.Count && TERMINATING_TRIGGER_ID != currRenderFrame.TriggersArr[l].TriggerLocalId) {
@@ -1391,6 +1401,7 @@ namespace shared {
                 AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
                 l++;
             }
+            nextRenderFrameTriggers[l].TriggerLocalId = TERMINATING_TRIGGER_ID;
 
             /*
                [WARNING]
@@ -1413,14 +1424,14 @@ namespace shared {
             int colliderCnt = 0, bulletCnt = 0;
 
             _processPlayerInputs(currRenderFrame, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, prevDecodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
-            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity + npcCnt, logger);
+            _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity + currNpcI, logger);
 
-            _processNpcInputs(currRenderFrame, roomCapacity, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
+            _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
             int trapColliderCntOffset = colliderCnt;
             _moveAndInsertDynamicTrapColliders(currRenderFrame, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
 
-            _calcCharacterMovementPushbacks(currRenderFrame, inputBuffer, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + npcCnt, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
+            _calcCharacterMovementPushbacks(currRenderFrame, inputBuffer, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
 
             int bulletColliderCntOffset = colliderCnt;
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
@@ -1446,6 +1457,7 @@ namespace shared {
 
             candidate.Id = nextRenderFrameId;
             candidate.BulletLocalIdCounter = nextRenderFrameBulletLocalIdCounter;
+            candidate.NpcLocalIdCounter = nextRenderFrameNpcLocalIdCounter;
         }
 
         public static void calcCharacterBoundingBoxInCollisionSpace(CharacterDownsync characterDownsync, CharacterConfig chConfig, int newVx, int newVy, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
@@ -1510,6 +1522,16 @@ namespace shared {
                 thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
             }
 
+            return true;
+        }
+
+        protected static bool addNewNpcToNextFrame(int virtualGridX, int virtualGridY, int dirX, int dirY, int characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
+            var chConfig = Battle.characters[characterSpeciesId];
+
+            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, virtualGridX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, virtualGridX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, nextRenderFrameNpcs[npcCnt]);
+
+            npcLocalIdCounter++;
+            npcCnt++;
             return true;
         }
     }

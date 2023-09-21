@@ -27,6 +27,8 @@ public class OfflineMapController : AbstractMapController {
         preallocateHolders();
         resetCurrentMatch("Dungeon");
         preallocateVfxNodes();
+        int[] npcSpeciesIds = new int[] { 1, 3, 4096 };
+        preallocateNpcNodes(npcSpeciesIds);
         selfPlayerInfo.JoinIndex = 1;
 
         battleDurationFrames = 60 * 60;

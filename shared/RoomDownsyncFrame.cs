@@ -150,7 +150,7 @@ namespace shared {
             "c2lvbk1pblN0ZXAYCSABKAUSGQoRYm91bmRSb29tQ2FwYWNpdHkYCiABKAUS",
             "GwoTcHJlYWxsb2NOcGNDYXBhY2l0eRgLIAEoBRIeChZwcmVhbGxvY0J1bGxl",
             "dENhcGFjaXR5GAwgASgFEi0KD2JhdHRsZVVkcFR1bm5lbBiACCABKAsyEy5z",
-            "aGFyZWQuUGVlclVkcEFkZHISGAoPZnJhbWVMb2dFbmFibGVkGIEIIAEoCCK6",
+            "aGFyZWQuUGVlclVkcEFkZHISGAoPZnJhbWVMb2dFbmFibGVkGIEIIAEoCCLn",
             "AwoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQYASABKAUSLQoKcGxheWVyc0Fy",
             "chgCIAMoCzIZLnNoYXJlZC5DaGFyYWN0ZXJEb3duc3luYxIWCg5jb3VudGRv",
             "d25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQgAygLMg4uc2hhcmVkLkJ1bGxl",
@@ -159,8 +159,9 @@ namespace shared {
             "cnIYByADKAsyDy5zaGFyZWQuVHJpZ2dlchIfChZiYWNrZW5kVW5jb25maXJt",
             "ZWRNYXNrGIAIIAEoBBIaChFzaG91bGRGb3JjZVJlc3luYxiBCCABKAgSFgoN",
             "c3BlY2llc0lkTGlzdBiCCCADKAUSHQoUYnVsbGV0TG9jYWxJZENvdW50ZXIY",
-            "gwggASgFEi0KD3BlZXJVZHBBZGRyTGlzdBiECCADKAsyEy5zaGFyZWQuUGVl",
-            "clVkcEFkZHISHAoTcGFydGljaXBhbnRDaGFuZ2VJZBiFCCABKAUi3AEKBldz",
+            "gwggASgFEhoKEW5wY0xvY2FsSWRDb3VudGVyGIQIIAEoBRIPCgZucGNDbnQY",
+            "hQggASgFEhwKE3BhcnRpY2lwYW50Q2hhbmdlSWQYhgggASgFEi0KD3BlZXJV",
+            "ZHBBZGRyTGlzdBiAECADKAsyEy5zaGFyZWQuUGVlclVkcEFkZHIi3AEKBldz",
             "UmVzcBILCgNyZXQYASABKAUSCwoDYWN0GAIgASgFEiYKA3JkZhgDIAEoCzIZ",
             "LnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRI7ChdpbnB1dEZyYW1lRG93bnN5",
             "bmNCYXRjaBgEIAMoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMSLAoI",
@@ -222,7 +223,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Trigger), global::shared.Trigger.Parser, new[]{ "TriggerLocalId", "FramesToFire", "FramesToRecover", "Quota", "BulletTeamId", "Config", "ConfigFromTiled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "PreallocNpcCapacity", "PreallocBulletCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "TriggersArr", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "PeerUdpAddrList", "ParticipantChangeId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "TriggersArr", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "NpcLocalIdCounter", "NpcCnt", "ParticipantChangeId", "PeerUdpAddrList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex", "ErrMsg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "MpDelta", "Hits" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null),
@@ -11990,8 +11991,10 @@ namespace shared {
       shouldForceResync_ = other.shouldForceResync_;
       speciesIdList_ = other.speciesIdList_.Clone();
       bulletLocalIdCounter_ = other.bulletLocalIdCounter_;
-      peerUdpAddrList_ = other.peerUdpAddrList_.Clone();
+      npcLocalIdCounter_ = other.npcLocalIdCounter_;
+      npcCnt_ = other.npcCnt_;
       participantChangeId_ = other.participantChangeId_;
+      peerUdpAddrList_ = other.peerUdpAddrList_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -12130,19 +12133,32 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "peerUdpAddrList" field.</summary>
-    public const int PeerUdpAddrListFieldNumber = 1028;
-    private static readonly pb::FieldCodec<global::shared.PeerUdpAddr> _repeated_peerUdpAddrList_codec
-        = pb::FieldCodec.ForMessage(8226, global::shared.PeerUdpAddr.Parser);
-    private readonly pbc::RepeatedField<global::shared.PeerUdpAddr> peerUdpAddrList_ = new pbc::RepeatedField<global::shared.PeerUdpAddr>();
+    /// <summary>Field number for the "npcLocalIdCounter" field.</summary>
+    public const int NpcLocalIdCounterFieldNumber = 1028;
+    private int npcLocalIdCounter_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::shared.PeerUdpAddr> PeerUdpAddrList {
-      get { return peerUdpAddrList_; }
+    public int NpcLocalIdCounter {
+      get { return npcLocalIdCounter_; }
+      set {
+        npcLocalIdCounter_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "npcCnt" field.</summary>
+    public const int NpcCntFieldNumber = 1029;
+    private int npcCnt_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int NpcCnt {
+      get { return npcCnt_; }
+      set {
+        npcCnt_ = value;
+      }
     }
 
     /// <summary>Field number for the "participantChangeId" field.</summary>
-    public const int ParticipantChangeIdFieldNumber = 1029;
+    public const int ParticipantChangeIdFieldNumber = 1030;
     private int participantChangeId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -12151,6 +12167,17 @@ namespace shared {
       set {
         participantChangeId_ = value;
       }
+    }
+
+    /// <summary>Field number for the "peerUdpAddrList" field.</summary>
+    public const int PeerUdpAddrListFieldNumber = 2048;
+    private static readonly pb::FieldCodec<global::shared.PeerUdpAddr> _repeated_peerUdpAddrList_codec
+        = pb::FieldCodec.ForMessage(16386, global::shared.PeerUdpAddr.Parser);
+    private readonly pbc::RepeatedField<global::shared.PeerUdpAddr> peerUdpAddrList_ = new pbc::RepeatedField<global::shared.PeerUdpAddr>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::shared.PeerUdpAddr> PeerUdpAddrList {
+      get { return peerUdpAddrList_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -12179,8 +12206,10 @@ namespace shared {
       if (ShouldForceResync != other.ShouldForceResync) return false;
       if(!speciesIdList_.Equals(other.speciesIdList_)) return false;
       if (BulletLocalIdCounter != other.BulletLocalIdCounter) return false;
-      if(!peerUdpAddrList_.Equals(other.peerUdpAddrList_)) return false;
+      if (NpcLocalIdCounter != other.NpcLocalIdCounter) return false;
+      if (NpcCnt != other.NpcCnt) return false;
       if (ParticipantChangeId != other.ParticipantChangeId) return false;
+      if(!peerUdpAddrList_.Equals(other.peerUdpAddrList_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -12199,8 +12228,10 @@ namespace shared {
       if (ShouldForceResync != false) hash ^= ShouldForceResync.GetHashCode();
       hash ^= speciesIdList_.GetHashCode();
       if (BulletLocalIdCounter != 0) hash ^= BulletLocalIdCounter.GetHashCode();
-      hash ^= peerUdpAddrList_.GetHashCode();
+      if (NpcLocalIdCounter != 0) hash ^= NpcLocalIdCounter.GetHashCode();
+      if (NpcCnt != 0) hash ^= NpcCnt.GetHashCode();
       if (ParticipantChangeId != 0) hash ^= ParticipantChangeId.GetHashCode();
+      hash ^= peerUdpAddrList_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -12245,11 +12276,19 @@ namespace shared {
         output.WriteRawTag(152, 64);
         output.WriteInt32(BulletLocalIdCounter);
       }
-      peerUdpAddrList_.WriteTo(output, _repeated_peerUdpAddrList_codec);
-      if (ParticipantChangeId != 0) {
+      if (NpcLocalIdCounter != 0) {
+        output.WriteRawTag(160, 64);
+        output.WriteInt32(NpcLocalIdCounter);
+      }
+      if (NpcCnt != 0) {
         output.WriteRawTag(168, 64);
+        output.WriteInt32(NpcCnt);
+      }
+      if (ParticipantChangeId != 0) {
+        output.WriteRawTag(176, 64);
         output.WriteInt32(ParticipantChangeId);
       }
+      peerUdpAddrList_.WriteTo(output, _repeated_peerUdpAddrList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -12286,11 +12325,19 @@ namespace shared {
         output.WriteRawTag(152, 64);
         output.WriteInt32(BulletLocalIdCounter);
       }
-      peerUdpAddrList_.WriteTo(ref output, _repeated_peerUdpAddrList_codec);
-      if (ParticipantChangeId != 0) {
+      if (NpcLocalIdCounter != 0) {
+        output.WriteRawTag(160, 64);
+        output.WriteInt32(NpcLocalIdCounter);
+      }
+      if (NpcCnt != 0) {
         output.WriteRawTag(168, 64);
+        output.WriteInt32(NpcCnt);
+      }
+      if (ParticipantChangeId != 0) {
+        output.WriteRawTag(176, 64);
         output.WriteInt32(ParticipantChangeId);
       }
+      peerUdpAddrList_.WriteTo(ref output, _repeated_peerUdpAddrList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -12322,10 +12369,16 @@ namespace shared {
       if (BulletLocalIdCounter != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(BulletLocalIdCounter);
       }
-      size += peerUdpAddrList_.CalculateSize(_repeated_peerUdpAddrList_codec);
+      if (NpcLocalIdCounter != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(NpcLocalIdCounter);
+      }
+      if (NpcCnt != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(NpcCnt);
+      }
       if (ParticipantChangeId != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(ParticipantChangeId);
       }
+      size += peerUdpAddrList_.CalculateSize(_repeated_peerUdpAddrList_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -12359,10 +12412,16 @@ namespace shared {
       if (other.BulletLocalIdCounter != 0) {
         BulletLocalIdCounter = other.BulletLocalIdCounter;
       }
-      peerUdpAddrList_.Add(other.peerUdpAddrList_);
+      if (other.NpcLocalIdCounter != 0) {
+        NpcLocalIdCounter = other.NpcLocalIdCounter;
+      }
+      if (other.NpcCnt != 0) {
+        NpcCnt = other.NpcCnt;
+      }
       if (other.ParticipantChangeId != 0) {
         ParticipantChangeId = other.ParticipantChangeId;
       }
+      peerUdpAddrList_.Add(other.peerUdpAddrList_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -12423,12 +12482,20 @@ namespace shared {
             BulletLocalIdCounter = input.ReadInt32();
             break;
           }
-          case 8226: {
-            peerUdpAddrList_.AddEntriesFrom(input, _repeated_peerUdpAddrList_codec);
+          case 8224: {
+            NpcLocalIdCounter = input.ReadInt32();
             break;
           }
           case 8232: {
+            NpcCnt = input.ReadInt32();
+            break;
+          }
+          case 8240: {
             ParticipantChangeId = input.ReadInt32();
+            break;
+          }
+          case 16386: {
+            peerUdpAddrList_.AddEntriesFrom(input, _repeated_peerUdpAddrList_codec);
             break;
           }
         }
@@ -12491,12 +12558,20 @@ namespace shared {
             BulletLocalIdCounter = input.ReadInt32();
             break;
           }
-          case 8226: {
-            peerUdpAddrList_.AddEntriesFrom(ref input, _repeated_peerUdpAddrList_codec);
+          case 8224: {
+            NpcLocalIdCounter = input.ReadInt32();
             break;
           }
           case 8232: {
+            NpcCnt = input.ReadInt32();
+            break;
+          }
+          case 8240: {
             ParticipantChangeId = input.ReadInt32();
+            break;
+          }
+          case 16386: {
+            peerUdpAddrList_.AddEntriesFrom(ref input, _repeated_peerUdpAddrList_codec);
             break;
           }
         }
