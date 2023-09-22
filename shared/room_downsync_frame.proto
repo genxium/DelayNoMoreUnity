@@ -472,6 +472,8 @@ message RoomDownsyncFrame {
 	int32 npcLocalIdCounter = 1028;
 
 	int32 participantChangeId = 1029;
+	repeated int32 reclaimedJoinIndexList = 1030;
+	int32 reclaimedJoinIndexCnt = 1031; // [WARNING] We need this extra field instead of relying only on "reclaimedJoinIndexList,Count" because when getting a reused "RoomDownsyncFrame" from a "FrameRingBuffer" just across its "stFrameId", the reused "reclaimedJoinIndexList" would be non-empty and there's no trival way to clean it up using Protobuf's generated data structure!
 
 	repeated PeerUdpAddr peerUdpAddrList = 2048;
 }

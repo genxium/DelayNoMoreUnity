@@ -118,6 +118,10 @@ namespace shared {
             return npcI;
         }
 
+        public static bool isNpcJustDeadToReclaim(CharacterDownsync currCharacterDownsync) {
+            return (DEAD_NPC_ID != currCharacterDownsync.Id && 0 >= currCharacterDownsync.Hp && 0 >= currCharacterDownsync.FramesToRecover);
+        }
+
         public static bool isNpcDeadToDisappear(CharacterDownsync currCharacterDownsync) {
             return (0 >= currCharacterDownsync.Hp && 0 >= currCharacterDownsync.FramesToRecover);
         }
@@ -339,6 +343,9 @@ namespace shared {
             for (int i = roomCapacity; i < roomCapacity + npcCnt; i++) {
                 var currCharacterDownsync = currRenderFrame.NpcsArr[i - roomCapacity];
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                if (isNpcDeadToDisappear(currCharacterDownsync)) {
+                    continue;
+                }
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);

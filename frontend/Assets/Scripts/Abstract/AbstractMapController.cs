@@ -421,6 +421,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             var currNpcDownsync = rdf.NpcsArr[k];
 
             if (TERMINATING_PLAYER_ID == currNpcDownsync.Id) break;
+            if (isNpcDeadToDisappear(currNpcDownsync)) {
+                continue;
+            }
             var prevNpcDownsync = (null == prevRdf ? null : prevRdf.NpcsArr[k]);
             // Debug.Log(String.Format("At rdf.Id={0}, currNpcDownsync[k:{1}] at [vx: {2}, vy: {3}, chState: {4}, framesInChState: {5}]", rdf.Id, k, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, currNpcDownsync.CharacterState, currNpcDownsync.FramesInChState));
 

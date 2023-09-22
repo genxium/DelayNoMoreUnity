@@ -173,6 +173,8 @@ namespace shared {
         public static int TERMINATING_TRAP_ID = (-1029);
         public static int TERMINATING_TRIGGER_ID = (-1030);
 
+        public static int DEAD_NPC_ID = (-1031);
+
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
 
         // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.
