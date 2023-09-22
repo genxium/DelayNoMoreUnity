@@ -48,8 +48,6 @@
         public int DyingSizeX;
         public int DyingSizeY;
 
-        public int CloseEnoughVirtualGridDistance;
-
         // Collision masks
         public bool OmitGravity;
         public bool OmitSoftPushback;

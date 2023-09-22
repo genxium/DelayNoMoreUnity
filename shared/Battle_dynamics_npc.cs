@@ -3,6 +3,57 @@ using Google.Protobuf.Collections;
 
 namespace shared {
     public partial class Battle {
+        private static bool frontOpponentReachableByDragonPunch(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float absColliderDx, float colliderDy, float absColliderDy, CharacterConfig opponentChConfig) {
+            int yfac = (0 < colliderDy ? 1 : -1);
+            float boxCx, boxCy, boxCwHalf, boxChHalf;
+            // No need to calculate the exact bounding box of opponent based on ChState, this is just an estimation.
+            switch (currCharacterDownsync.SpeciesId) {
+                case SPECIES_SWORDMAN:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(SwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * SwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeX >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (SwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
+                    break;
+                case SPECIES_FIRESWORDMAN:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * FireSwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeX >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (FireSwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
+                    break;
+                default:
+                    return false;
+            }
+            return (boxCx + boxCwHalf >= 0.5f*absColliderDx) && (0.1f*aCollider.H < colliderDy && boxCy + boxChHalf > 0.2f*colliderDy);
+        }
+
+        private static bool frontOpponentReachableByMelee1(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float absColliderDx, float colliderDy, float absColliderDy, CharacterConfig opponentChConfig) {
+            int yfac = (0 < colliderDy ? 1 : -1);
+            float boxCx, boxCy, boxCwHalf, boxChHalf;
+            switch (currCharacterDownsync.SpeciesId) {
+                case SPECIES_SWORDMAN:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(SwordManMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * SwordManMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SwordManMelee1PrimerBullet.HitboxSizeX >> 1), (SwordManMelee1PrimerBullet.HitboxSizeY >> 1));
+                    break;
+                case SPECIES_FIRESWORDMAN:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * FireSwordManMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManMelee1PrimerBullet.HitboxSizeX >> 1), (FireSwordManMelee1PrimerBullet.HitboxSizeY >> 1));
+                    break;
+                case SPECIES_BULLWARRIOR:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(BullWarriorMelee1PrimaryBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * BullWarriorMelee1PrimaryBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BullWarriorMelee1PrimaryBullet.HitboxSizeX >> 1), (BullWarriorMelee1PrimaryBullet.HitboxSizeY >> 1));
+                    break;
+                default:
+                    return false;
+            }
+            return (boxCx + boxCwHalf >= absColliderDx) && (boxCy + boxChHalf >= absColliderDy);
+        }
+
+        private static bool frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, CharacterConfig opponentChConfig) {
+            switch (currCharacterDownsync.SpeciesId) {
+                case SPECIES_FIRESWORDMAN:
+                    return currCharacterDownsync.Mp >= FireSwordManFireballSkill.MpDelta;
+                case SPECIES_BULLWARRIOR:
+                    return currCharacterDownsync.Mp >= BullWarriorFireballSkill.MpDelta;
+            }
+            return false;
+        }
+
         private static void findHorizontallyClosestCharacterCollider(CharacterDownsync currCharacterDownsync, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res2) {
             res1 = null;
             res2 = null;
@@ -146,7 +197,6 @@ namespace shared {
                 // TODO: There's no InAir vision reaction yet.
                 float visionCx, visionCy, visionCw, visionCh;
                 calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
-                float closeEnoughToAtkRange = chConfig.CloseEnoughVirtualGridDistance * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO;
 
                 var visionCollider = dynamicRectangleColliders[colliderCnt];
                 UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
@@ -163,66 +213,17 @@ namespace shared {
                         hasEnemyBehindMe = true;
                     } else {
                         var atkedChConfig = characters[v3.SpeciesId];
+                        float absColliderDx = Math.Abs(colliderDx), absColliderDy = Math.Abs(colliderDy);
                         // Opponent is in front of me
-                        if (Math.Abs(colliderDx) - atkedChConfig.DefaultSizeX * 0.5f * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO > closeEnoughToAtkRange) {
-                            // Not close enough to attack
+                        if (frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, colliderDy, absColliderDy, atkedChConfig)) {
+                            patternId = PATTERN_UP_B;
                             hasVisionReaction = true;
-                        } else {
-                            // close enough to attack
-                            switch (currCharacterDownsync.SpeciesId) {
-                                case 1:
-                                    if (0.2f * aCollider.H < colliderDy) {
-                                        // In air
-                                        patternId = 2;
-                                    } else {
-                                        // On ground
-                                        patternId = 1;
-                                    }
-                                    hasVisionReaction = true;
-                                    break;
-                                case 2:
-                                    if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
-                                        // Melee reachable
-                                        if (0.2f * aCollider.H < colliderDy) {
-                                            // In air
-                                            patternId = 2;
-                                        } else {
-                                            // On ground
-                                            patternId = 1;
-                                        }
-                                    } else {
-                                        // Use fireball
-                                        patternId = 3;
-                                    }
-                                    hasVisionReaction = true;
-                                    break;
-                                case 3:
-                                    if (Math.Abs(colliderDx) < 1.5f * aCollider.W) {
-                                        // Melee reachable
-                                        if (0.2f * aCollider.H < colliderDy) {
-                                            // In air
-                                            patternId = 2;
-                                        } else {
-                                            // On ground
-                                            patternId = 1;
-                                        }
-                                    } else {
-                                        // Use fireball
-                                        patternId = 3;
-                                    }
-                                    hasVisionReaction = true;
-                                    break;
-                                case 4096:
-                                    if (Math.Abs(colliderDx) < 1.2f * aCollider.W) {
-                                        // Use melee
-                                        patternId = 1;
-                                    } else {
-                                        // Use fireball
-                                        patternId = 3;
-                                    }
-                                    hasVisionReaction = true;
-                                    break;
-                            }
+                        } else if (frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, colliderDy, absColliderDy, atkedChConfig)) {
+                            patternId = PATTERN_B;
+                            hasVisionReaction = true;
+                        } else if (frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, colliderDx, colliderDy, atkedChConfig)) {
+                            patternId = PATTERN_DOWN_B;
+                            hasVisionReaction = true;
                         }
                     }
                 }

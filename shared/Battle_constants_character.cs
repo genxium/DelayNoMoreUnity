@@ -4,11 +4,18 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public const int SPECIES_KNIFEGIRL = 0;
+        public const int SPECIES_SWORDMAN = 1;
+        public const int SPECIES_MONKGIRL = 2;
+        public const int SPECIES_FIRESWORDMAN = 3;
+        public const int SPECIES_GUNGIRL = 4;
+
+        public const int SPECIES_BULLWARRIOR = 4096;
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
                 new[]
                 {
-                    new KeyValuePair<int, CharacterConfig>(0, new CharacterConfig {
-                        SpeciesId = 0,
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_KNIFEGIRL, new CharacterConfig {
+                        SpeciesId = SPECIES_KNIFEGIRL,
                         SpeciesName = "KnifeGirl",
                         Hp = 200,
                         InAirIdleFrameIdxTurningPoint = 11,
@@ -41,13 +48,12 @@ namespace shared {
                         DyingSizeY = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HasTurnAroundAnim = true,
                         Hardness = 5
                     }),
 
-                    new KeyValuePair<int, CharacterConfig>(1, new CharacterConfig {
-                        SpeciesId = 1,
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_SWORDMAN, new CharacterConfig {
+                        SpeciesId = SPECIES_SWORDMAN,
                         SpeciesName = "SwordMan",
                         Hp = 100,
                         InAirIdleFrameIdxTurningPoint = 11,
@@ -74,13 +80,12 @@ namespace shared {
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(40.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HasTurnAroundAnim = false,
                         Hardness = 5
                     }),
 
-                    new KeyValuePair<int, CharacterConfig>(2, new CharacterConfig {
-                        SpeciesId = 2,
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_MONKGIRL, new CharacterConfig {
+                        SpeciesId = SPECIES_MONKGIRL,
                         SpeciesName = "MonkGirl",
                         Hp = 230,
                         InAirIdleFrameIdxTurningPoint = 11,
@@ -113,13 +118,12 @@ namespace shared {
                         DyingSizeY = (int)(46f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(90.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HasTurnAroundAnim = true,
                         Hardness = 5
                     }),
 
-                    new KeyValuePair<int, CharacterConfig>(3, new CharacterConfig {
-                        SpeciesId = 3,
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_FIRESWORDMAN, new CharacterConfig {
+                        SpeciesId = SPECIES_FIRESWORDMAN,
                         SpeciesName = "FireSwordMan",
                         Hp = 150,
                         InAirIdleFrameIdxTurningPoint = 11,
@@ -146,13 +150,12 @@ namespace shared {
                         DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HasTurnAroundAnim = false,
                         Hardness = 5
                     }),
 
-                    new KeyValuePair<int, CharacterConfig>(4, new CharacterConfig {
-                        SpeciesId = 4,
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_GUNGIRL, new CharacterConfig {
+                        SpeciesId = SPECIES_GUNGIRL,
                         SpeciesName = "GunGirl",
                         Hp = 120,
                         InAirIdleFrameIdxTurningPoint = 11,
@@ -179,15 +182,14 @@ namespace shared {
                         DyingSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HasTurnAroundAnim = true,
                         SlidingEnabled = true,
                         CrouchingEnabled = true,
                         Hardness = 5
                     }),
 
-                    new KeyValuePair<int, CharacterConfig>(4096, new CharacterConfig {
-                        SpeciesId = 4096,
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_BULLWARRIOR, new CharacterConfig {
+                        SpeciesId = SPECIES_BULLWARRIOR,
                         SpeciesName = "BullWarrior",
                         Hp = 500,
                         OmitSoftPushback = true,
@@ -215,7 +217,6 @@ namespace shared {
                         DyingSizeY = (int)(140 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 2,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        CloseEnoughVirtualGridDistance = (int)(200.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HasTurnAroundAnim = true,
                         Hardness = 8
                     }),

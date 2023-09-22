@@ -11,6 +11,11 @@ namespace shared {
                 var currTrap = currRenderFrameTraps[i];
                 if (TERMINATING_TRAP_ID == currTrap.TrapLocalId) continue;
                 if (currTrap.IsCompletelyStatic) continue;
+                if (5 == currTrap.Config.SpeciesId || 6 == currTrap.Config.SpeciesId) {
+                    if (0 != currTrap.VelX || 0 != currTrap.VelY) {
+                        logger.LogInfo(String.Format("rdf.Id={0}, currTrap={1}", currRenderFrame.Id, stringifyTrap(currTrap)));
+                    }
+                }
                 int newVx = currTrap.VirtualGridX + currTrap.VelX, newVy = currTrap.VirtualGridY + currTrap.VelY;
                 effPushbacks[i + trapColliderCntOffset].X = 0;
                 effPushbacks[i + trapColliderCntOffset].Y = 0;
@@ -91,6 +96,9 @@ namespace shared {
                             }
                             isPatrolCue = true;
                             break;
+                        case TrapColliderAttr v4:
+                        case TriggerColliderAttr v5:
+                            break;
                         default:
                             // By default it's a regular barrier, even if data is nil
                             isBarrier = true;
@@ -117,7 +125,7 @@ namespace shared {
                         var patrolCue = bCollider.Data as PatrolCue;
                         if (null == patrolCue) {
                             throw new ArgumentNullException("The casting into patrolCue shouldn't be null for bCollider.Data=" + bCollider.Data);
-                        } 
+                        }
                         _processSingleTrapOnSinglePatrolCue(currRenderFrame, nextRenderFrameTraps, ref overlapResult, aCollider, bCollider, decodedInputHolder, colliderAttr, patrolCue, logger);
                     }
                 }
@@ -166,9 +174,6 @@ namespace shared {
             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
             // [WARNING] As trap damage is calculated after those of bullets, don't overwrite blown-up effect!
-            if (CharacterState.BlownUp1 == atkedCharacterInNextFrame.CharacterState) {
-                return;
-            }
             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) return;
 
             var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);

@@ -29,7 +29,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="488" y="308">
+  <object id="135" x="560" y="594">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -501,7 +501,7 @@
    </properties>
    <point/>
   </object>
-  <object id="287" x="944" y="455">
+  <object id="287" x="914" y="455">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
@@ -512,7 +512,7 @@
    </properties>
    <point/>
   </object>
-  <object id="288" x="944" y="592">
+  <object id="288" x="914" y="592">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="1"/>

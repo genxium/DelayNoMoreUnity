@@ -149,9 +149,9 @@ namespace shared {
                 if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
                     if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
                         // Checking "DashingEnabled" here to allow jumping when dashing-disabled players pressed "DOWN + BtnB"
-                        patternId = 5;
+                        patternId = PATTERN_DOWN_A;
                     } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && Sliding != currCharacterDownsync.CharacterState) {  
-                        patternId = 5;
+                        patternId = PATTERN_DOWN_A;
                     } else if (currCharacterDownsync.PrimarilyOnSlippableHardPushback && (0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
                         slipJumpedOrNot = true;
                     } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState) && !isCrouching(currCharacterDownsync.CharacterState)) {
@@ -166,14 +166,14 @@ namespace shared {
                 if (0 < decodedInputHolder.BtnBLevel) {
                     if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
                         if (0 > decodedInputHolder.Dy) {
-                            patternId = 3;
+                            patternId = PATTERN_DOWN_B;
                         } else if (0 < decodedInputHolder.Dy) {
-                            patternId = 2;
+                            patternId = PATTERN_UP_B;
                         } else {
-                            patternId = 1;
+                            patternId = PATTERN_B;
                         }
                     } else {
-                        patternId = 4; // Holding
+                        patternId = PATTERN_HOLD_B;
                     }
                 }
             }
@@ -1271,9 +1271,8 @@ namespace shared {
                 candidateI++;
                 aliveSlotI++;
             }
-            int t = aliveSlotI;
-            while (t < nextRenderFrameNpcs.Count) {
-                nextRenderFrameNpcs[t++].Id = TERMINATING_PLAYER_ID;
+            if (aliveSlotI < nextRenderFrameNpcs.Count) {
+                nextRenderFrameNpcs[aliveSlotI].Id = TERMINATING_PLAYER_ID;
             }
         }
 
