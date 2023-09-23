@@ -170,12 +170,15 @@ namespace shared {
             dst.WaivingPatrolCueId = waivingPatrolCueId;
         }
 
-        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
+        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
             dst.TriggerLocalId = triggerLocalId;
             dst.FramesToFire = framesToFire;
             dst.FramesToRecover = framesToRecover;
             dst.Quota = quota;
             dst.BulletTeamId = bulletTeamId;
+            dst.SubCycleQuotaLeft = subCycleQuotaLeft;
+            dst.State = state;
+            dst.FramesInState = framesInState;
             dst.Config = config;
             dst.ConfigFromTiled = configFromTiled;
         }

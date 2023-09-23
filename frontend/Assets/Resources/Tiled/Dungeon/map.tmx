@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="341">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="344">
  <tileset firstgid="1" source="../shared_comps/tiles0.tsx"/>
  <tileset firstgid="65" source="../shared_comps/tiles1.tsx"/>
  <tileset firstgid="129" source="../shared_comps/tiles2.tsx"/>
  <tileset firstgid="193" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="202" source="../triggers/switch/triggers_switch.tsx"/>
+ <tileset firstgid="204" source="../triggers/door/triggers_door.tsx"/>
  <layer id="8" name="Ground" width="128" height="64">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -58,6 +59,30 @@
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="61857"/>
     <property name="trackingIdList" value="1"/>
+   </properties>
+  </object>
+  <object id="341" gid="2147483852" x="672" y="560" width="16" height="32">
+   <properties>
+    <property name="bulletTeamId" value="2"/>
+    <property name="delayedFrames" value="30"/>
+    <property name="initVelX" value="-2"/>
+    <property name="initVelY" value="0"/>
+    <property name="quota" value="61857"/>
+    <property name="recoveryFrames" value="300"/>
+    <property name="subCycleQuota" value="3"/>
+    <property name="subCycleTriggerFrames" value="60"/>
+   </properties>
+  </object>
+  <object id="342" gid="204" x="672" y="448" width="16" height="32">
+   <properties>
+    <property name="bulletTeamId" value="1"/>
+    <property name="delayedFrames" value="30"/>
+    <property name="initVelX" value="+2"/>
+    <property name="initVelY" value="0"/>
+    <property name="quota" value="61857"/>
+    <property name="recoveryFrames" value="300"/>
+    <property name="subCycleQuota" value="3"/>
+    <property name="subCycleTriggerFrames" value="60"/>
    </properties>
   </object>
  </objectgroup>

@@ -398,6 +398,15 @@ message TriggerConfig {
 	int32 speciesId = 1;
     string speciesName = 2; 
     uint64 triggerMask = 3;
+    /*
+    By now "TRIGGER_MASK_BY_CYCLIC_TIMER" couldn't coexist with others, and here's how the major params work  
+
+    :repeats "quota" times
+                      |<-------------------------------------- recoveryFrames ----------------------------->|<-----------------recoveryFrames ---------->|.......
+                      :repeats "subCycleQuota" times                                                        :repeats "subCycleQuota" times
+    |<-delayedFrames->|<-subCycleTriggerFrames->|<-subCycleTriggerFrames->|<-subCycleTriggerFrames->|       |.......
+    |TReady           |TCoolingDown             |TCoolingDown(replay)     |TCoolingDown(replay)     |TReady |.......
+    */
 	uint64 collisionTypeMask = 4; // of this trigger
 }
 
@@ -411,6 +420,9 @@ message TriggerConfigFromTiled {
     int32 initVelY = 6;
 
 	int32 chCollisionTeamId = 7;  // of this trigger
+
+    int32 subCycleTriggerFrames = 8;
+    int32 subCycleQuota = 9;
 }
 
 message TriggerColliderAttr {
@@ -420,12 +432,17 @@ message TriggerColliderAttr {
 message Trigger {
     int32 triggerLocalId = 1;
     int32 framesToFire = 2; 
-    int32 framesToRecover = 3; 
+    int32 framesToRecover = 3; // if TRIGGER_MASK_BY_CYCLIC_TIMER, resets whenever "0 < subCycleQuotaLeft" and itself becomes 0
     int32 quota = 4; // the initial value is from static config, but decreases upon use 
 	int32 bulletTeamId = 5; 
 
     TriggerConfig config = 6; // static config, unchanged during battle
     TriggerConfigFromTiled configFromTiled = 7; // static config, unchanged during battle
+
+    int32 subCycleQuotaLeft = 8; // resets whenever "framesToRecover" becomes 0 
+   
+    TriggerState state = 9; 
+    int32 framesInState = 10; 
 }
 
 message PeerUdpAddr {

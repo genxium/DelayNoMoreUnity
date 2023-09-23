@@ -55,6 +55,7 @@ namespace shared {
         public static int PATTERN_ID_UNABLE_TO_OP = -2;
         public static int PATTERN_ID_NO_OP = -1;
 
+        public static ulong COLLISION_NONE_INDEX = 0;
         public static ulong COLLISION_BARRIER_INDEX_PREFIX = (1 << 0);
         public static ulong COLLISION_CHARACTER_INDEX_PREFIX = (1 << 1);
         public static ulong COLLISION_TRAP_INDEX_PREFIX = (1 << 2);
@@ -73,6 +74,7 @@ namespace shared {
         public static ulong TRIGGER_MASK_NONE = 0;
         public static ulong TRIGGER_MASK_BY_MOVEMENT = (1 << 0);
         public static ulong TRIGGER_MASK_BY_ATK = (1 << 1);
+        public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
 
         public static HashSet<ulong> COLLIDABLE_PAIRS = new HashSet<ulong>() {
             COLLISION_CHARACTER_INDEX_PREFIX, // such that characters collider with each other

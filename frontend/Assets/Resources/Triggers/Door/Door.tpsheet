@@ -1,0 +1,20 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:cba1f467fbc71807e76b396327f01014:a1723a597dfab73e069db1362a786178:65917bb82c44b9659f2aa7bf724dfa61$
+#
+:format=40300
+:texture=Door.png
+:size=64x64
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+TimedDoor1-0;0;36;16;28; 0.5;0.5714285714285714; 0;0;0;0; 4;16;0;0;0;0;28;16;28; 2;1;2;3;0;1;3
+TimedDoor1-1;0;8;16;28; 0.5;0.5714285714285714; 0;0;0;0; 4;16;0;0;0;0;28;16;28; 2;1;2;3;0;1;3
+TimedDoor1-2;16;36;16;28; 0.5;0.5714285714285714; 0;0;0;0; 4;16;0;0;0;0;28;16;28; 2;1;2;3;0;1;3
+TimedDoor1-3;16;8;16;28; 0.5;0.5714285714285714; 0;0;0;0; 4;16;0;0;0;0;28;16;28; 2;1;2;3;0;1;3
+TimedDoor1-4;32;36;16;28; 0.5;0.5714285714285714; 0;0;0;0; 4;16;0;0;0;0;28;16;28; 2;1;2;3;0;1;3

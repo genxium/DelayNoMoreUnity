@@ -548,10 +548,15 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId) break;
             var triggerGameObj = triggerGameObjs[trigger.TriggerLocalId];
             var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
-            if (Battle.isTriggerClickable(trigger)) {
-                animCtrl.updateAnim("Tready", 0, 0, true);
-            } else {
-                animCtrl.updateAnim("TcoolingDown", 0, 0, true);
+            if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask) {
+                animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, true);
+            } else {    
+                // TODO: Make use fo TriggerState in "shared.Battle_dynamics"!
+                if (Battle.isTriggerClickable(trigger)) {
+                    animCtrl.updateAnim("Tready", 0, 0, true);
+                } else {
+                    animCtrl.updateAnim("TcoolingDown", 0, 0, true);
+                }
             }
         }
     }
@@ -1323,7 +1328,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, triggerMask;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, triggerMask, subCycleTriggerFrames, subCycleQuota;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
@@ -1333,6 +1338,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("recoveryFrames", out recoveryFrames);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("trackingIdList", out trackingIdList);
+                        tileProps.TryGetCustomProperty("subCycleTriggerFrames", out subCycleTriggerFrames);
+                        tileProps.TryGetCustomProperty("subCycleQuota", out subCycleQuota);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
@@ -1343,14 +1350,18 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int quotaVal = (null != quota && !quota.IsEmpty ? quota.GetValueAsInt() : 1);
                         int recoveryFramesVal = (null != recoveryFrames && !recoveryFrames.IsEmpty ? recoveryFrames.GetValueAsInt() : delayedFramesVal+1); // By default we must have "recoveryFramesVal > delayedFramesVal"
                         var trackingIdListStr = (null != trackingIdList && !trackingIdList.IsEmpty ? trackingIdList.GetValueAsString() : "");
+                        int subCycleTriggerFramesVal = (null != subCycleTriggerFrames && !subCycleTriggerFrames.IsEmpty ? subCycleTriggerFrames.GetValueAsInt() : 0);
+                        int subCycleQuotaVal = (null != subCycleQuota && !subCycleQuota.IsEmpty ? subCycleQuota.GetValueAsInt() : 0);
 
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
                             TriggerLocalId = triggerLocalId,
                             BulletTeamId = bulletTeamIdVal,
                             Quota = quotaVal,
-                            FramesToFire = MAX_INT,
-                            FramesToRecover = 0,
+                            State = TriggerState.Tready,
+                            SubCycleQuotaLeft = subCycleQuotaVal,
+                            FramesToFire = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask ? delayedFramesVal : MAX_INT),
+                            FramesToRecover = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask ? delayedFramesVal : MAX_INT),
                             Config = triggerConfig,
                             ConfigFromTiled = new TriggerConfigFromTiled {
                                 SpeciesId = speciesIdVal,
@@ -1358,7 +1369,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 DelayedFrames = delayedFramesVal,
                                 RecoveryFrames = recoveryFramesVal,
                                 InitVelX = initVelXVal,
-                                InitVelY = initVelYVal
+                                InitVelY = initVelYVal,
+                                SubCycleTriggerFrames = subCycleTriggerFramesVal,
+                                SubCycleQuota = subCycleQuotaVal,
                             },
                         };
 

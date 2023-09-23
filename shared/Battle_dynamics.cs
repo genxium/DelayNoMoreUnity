@@ -1075,27 +1075,53 @@ namespace shared {
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
                 if (TERMINATING_TRIGGER_ID == currTrigger.TriggerLocalId) break;
-                if (0 != currTrigger.FramesToFire) continue;
-                var configFromTiled = currTrigger.ConfigFromTiled;
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
-                var trackingIdList = currTrigger.ConfigFromTiled.TrackingIdList;
-                foreach (int trackingId in trackingIdList) {
-                    if (triggerTrackingIdToTrapLocalId.ContainsKey(trackingId)) {
-                        int trapLocalId = triggerTrackingIdToTrapLocalId[trackingId];
-                        var trapInNextFrame = nextRenderFrameTraps[trapLocalId];
-                        trapInNextFrame.VelX = configFromTiled.InitVelX;
-                        trapInNextFrame.VelY = configFromTiled.InitVelY;
-                        trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
-                        var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
-                        var invDirMag = InvSqrt32(dirMagSq);
-                        var speedXfac = invDirMag * configFromTiled.InitVelX;
-                        var speedYfac = invDirMag * configFromTiled.InitVelY;
-                        var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
-                        trapInNextFrame.VelX = (int)(speedXfac * speedVal);
-                        trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                if (TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) {
+                    if (0 == currTrigger.FramesToFire) {
+                        if (0 < currTrigger.SubCycleQuotaLeft) {
+                            triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1; 
+                            triggerInNextFrame.State = TriggerState.TcoolingDown;
+                            triggerInNextFrame.FramesInState = 0;
+                            triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
+                        } else {
+                            // Wait for "FramesToRecover" to become 0
+                            triggerInNextFrame.State = TriggerState.Tready;
+                            triggerInNextFrame.FramesToFire = MAX_INT; 
+                        }
+                    } 
+
+                    if (0 == currTrigger.FramesToRecover) {
+                        if (0 < currTrigger.Quota) {
+                            triggerInNextFrame.Quota = currTrigger.Quota - 1; 
+                            triggerInNextFrame.SubCycleQuotaLeft = currTrigger.ConfigFromTiled.SubCycleQuota;
+                            triggerInNextFrame.State = TriggerState.TcoolingDown;
+                            triggerInNextFrame.FramesInState = 0;
+                            triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
+                            triggerInNextFrame.FramesToRecover = triggerInNextFrame.ConfigFromTiled.RecoveryFrames;
+                        } // else do nothing
                     }
+                } else {
+                    if (0 != currTrigger.FramesToFire) continue;
+                    var configFromTiled = currTrigger.ConfigFromTiled;
+                    var trackingIdList = currTrigger.ConfigFromTiled.TrackingIdList;
+                    foreach (int trackingId in trackingIdList) {
+                        if (triggerTrackingIdToTrapLocalId.ContainsKey(trackingId)) {
+                            int trapLocalId = triggerTrackingIdToTrapLocalId[trackingId];
+                            var trapInNextFrame = nextRenderFrameTraps[trapLocalId];
+                            trapInNextFrame.VelX = configFromTiled.InitVelX;
+                            trapInNextFrame.VelY = configFromTiled.InitVelY;
+                            trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
+                            var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
+                            var invDirMag = InvSqrt32(dirMagSq);
+                            var speedXfac = invDirMag * configFromTiled.InitVelX;
+                            var speedYfac = invDirMag * configFromTiled.InitVelY;
+                            var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
+                            trapInNextFrame.VelX = (int)(speedXfac * speedVal);
+                            trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                        }
+                    }
+                    triggerInNextFrame.FramesToFire = MAX_INT;
                 }
-                triggerInNextFrame.FramesToFire = MAX_INT;
             }
         }
 
@@ -1414,7 +1440,8 @@ namespace shared {
                 if (framesToRecover < 0) {
                     framesToRecover = 0;
                 }
-                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
+                int framesInState = src.FramesInState + 1;
+                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
                 l++;
             }
             nextRenderFrameTriggers[l].TriggerLocalId = TERMINATING_TRIGGER_ID;
