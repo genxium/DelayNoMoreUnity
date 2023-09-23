@@ -5,25 +5,20 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
-        private static void _moveAndInsertDynamicTrapColliders(RoomDownsyncFrame currRenderFrame, RepeatedField<Trap> nextRenderFrameTraps, Vector[] effPushbacks, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int trapColliderCntOffset, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ILoggerBridge logger) {
+        private static void _moveAndInsertDynamicTrapColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<Trap> nextRenderFrameTraps, Vector[] effPushbacks, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int trapColliderCntOffset, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ILoggerBridge logger) {
             var currRenderFrameTraps = currRenderFrame.TrapsArr;
             for (int i = 0; i < currRenderFrameTraps.Count; i++) {
                 var currTrap = currRenderFrameTraps[i];
-                if (TERMINATING_TRAP_ID == currTrap.TrapLocalId) continue;
+                if (TERMINATING_TRAP_ID == currTrap.TrapLocalId) break;
                 if (currTrap.IsCompletelyStatic) continue;
-                if (5 == currTrap.Config.SpeciesId || 6 == currTrap.Config.SpeciesId) {
-                    if (0 != currTrap.VelX || 0 != currTrap.VelY) {
-                        logger.LogInfo(String.Format("rdf.Id={0}, currTrap={1}", currRenderFrame.Id, stringifyTrap(currTrap)));
-                    }
-                }
+                
                 int newVx = currTrap.VirtualGridX + currTrap.VelX, newVy = currTrap.VirtualGridY + currTrap.VelY;
-                effPushbacks[i + trapColliderCntOffset].X = 0;
-                effPushbacks[i + trapColliderCntOffset].Y = 0;
-
                 List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[currTrap.TrapLocalId];
                 for (int j = 0; j < colliderAttrs.Count; j++) {
                     var colliderAttr = colliderAttrs[j];
                     Collider trapCollider = dynamicRectangleColliders[colliderCnt];
+                    effPushbacks[colliderCnt].X = 0;
+                    effPushbacks[colliderCnt].Y = 0;
                     float boxCx, boxCy, boxCw, boxCh;
                     calcTrapBoxInCollisionSpace(colliderAttr, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
                     UpdateRectCollider(trapCollider, boxCx, boxCy, boxCw, boxCh, 0, 0, 0, 0, 0, 0, colliderAttr); 
@@ -35,7 +30,7 @@ namespace shared {
             }
         }
 
-        private static void _calcDynamicTrapMovementCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, InputFrameDecoded decodedInputHolder, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        private static void _calcDynamicTrapMovementCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, InputFrameDecoded decodedInputHolder, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             int primaryHardOverlapIndex;
             for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
                 primaryOverlapResult.reset();
@@ -117,7 +112,7 @@ namespace shared {
                             throw new ArgumentNullException("The casting into atkedCharacterInCurrFrame shouldn't be null for bCollider.Data=" + bCollider.Data);
                         }
                         if (colliderAttr.ProvidesDamage) {
-                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aShape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
+                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aShape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
                         }
                     }
 
@@ -132,7 +127,7 @@ namespace shared {
             }
         }
 
-        private static void _calcCompletelyStaticTrapDamage(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
+        private static void _calcCompletelyStaticTrapDamage(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
             for (int i = 0; i < completelyStaticTrapColliders.Count; i++) {
                 Collider aCollider = completelyStaticTrapColliders[i];
                 TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;
@@ -156,7 +151,7 @@ namespace shared {
 
                     switch (bCollider.Data) {
                         case CharacterDownsync atkedCharacterInCurrFrame:
-                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aCollider.Shape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
+                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aCollider.Shape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
                         break;
                     }
                 }
@@ -168,7 +163,7 @@ namespace shared {
             (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(colliderAttr.HitboxSizeX, colliderAttr.HitboxSizeY);
         }
 
-        private static void _processSingleTrapDamageOnSingleCharacter(RoomDownsyncFrame currRenderFrame, ConvexPolygon aShape, ConvexPolygon bShape, ref SatResult overlapResult, TrapColliderAttr colliderAttr, CharacterDownsync atkedCharacterInCurrFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
+        private static void _processSingleTrapDamageOnSingleCharacter(RoomDownsyncFrame currRenderFrame, ConvexPolygon aShape, ConvexPolygon bShape, ref SatResult overlapResult, TrapColliderAttr colliderAttr, CharacterDownsync atkedCharacterInCurrFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
             // The traversal order of traps (both static & dynamic) is deterministic, thus the following assignment is deterministic regardless of the order of collision result popping.
             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) return;
             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
