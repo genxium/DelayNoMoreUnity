@@ -624,7 +624,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
         
-        int cacheCapacityPerSpeciesId = 3;
+        int cacheCapacityPerSpeciesId = 10;
         if (cacheCapacityPerSpeciesId * expectedSpeciesIds.Length < preallocNpcCapacity) {
             Debug.Log(String.Format("cacheCapacityPerSpeciesId={0}, expectedSpeciesIds={1} are too small for preallocNpcCapacity={2}, maybe you should allocate more cacheCapacityPerSpeciesId?", cacheCapacityPerSpeciesId, expectedSpeciesIds, preallocNpcCapacity));
         }
@@ -1328,7 +1328,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, triggerMask, subCycleTriggerFrames, subCycleQuota;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, triggerMask, subCycleTriggerFrames, subCycleQuota, spawnChSpeciesIdList;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
@@ -1340,6 +1340,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("trackingIdList", out trackingIdList);
                         tileProps.TryGetCustomProperty("subCycleTriggerFrames", out subCycleTriggerFrames);
                         tileProps.TryGetCustomProperty("subCycleQuota", out subCycleQuota);
+                        tileProps.TryGetCustomProperty("spawnChSpeciesIdList", out spawnChSpeciesIdList);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
@@ -1352,16 +1353,21 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var trackingIdListStr = (null != trackingIdList && !trackingIdList.IsEmpty ? trackingIdList.GetValueAsString() : "");
                         int subCycleTriggerFramesVal = (null != subCycleTriggerFrames && !subCycleTriggerFrames.IsEmpty ? subCycleTriggerFrames.GetValueAsInt() : 0);
                         int subCycleQuotaVal = (null != subCycleQuota && !subCycleQuota.IsEmpty ? subCycleQuota.GetValueAsInt() : 0);
+                        var spawnChSpeciesIdListStr = (null != spawnChSpeciesIdList && !spawnChSpeciesIdList.IsEmpty ? spawnChSpeciesIdList.GetValueAsString() : "");
 
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
                             TriggerLocalId = triggerLocalId,
                             BulletTeamId = bulletTeamIdVal,
-                            Quota = quotaVal,
+                            Quota = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask 
+                                    ? 
+                                    quotaVal - 1 // The first quota will be spent right at "delayedFramesVal"
+                                    :
+                                    quotaVal),
                             State = TriggerState.Tready,
                             SubCycleQuotaLeft = subCycleQuotaVal,
                             FramesToFire = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask ? delayedFramesVal : MAX_INT),
-                            FramesToRecover = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask ? delayedFramesVal : MAX_INT),
+                            FramesToRecover = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask ? delayedFramesVal+recoveryFramesVal : 0),
                             Config = triggerConfig,
                             ConfigFromTiled = new TriggerConfigFromTiled {
                                 SpeciesId = speciesIdVal,
@@ -1379,8 +1385,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                         foreach (var trackingIdListStrPart in trackingIdListStrParts) {
                             trigger.ConfigFromTiled.TrackingIdList.Add(trackingIdListStrPart.ToInt());
                         }
+                        string[] spawnChSpeciesIdListStrParts = spawnChSpeciesIdListStr.Split(',');
+                        foreach (var spawnChSpeciesIdListStrPart in spawnChSpeciesIdListStrParts) {
+                            trigger.ConfigFromTiled.SpawnChSpeciesIdList.Add(spawnChSpeciesIdListStrPart.ToInt());
+                        }
                         var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
                         var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                        var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
+                        trigger.VirtualGridX = rectCenterVx;
+                        trigger.VirtualGridY = rectCenterVy;
                         var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, spaceOffsetX, spaceOffsetY);
                         triggerList.Add((trigger, wx, wy));
                     
@@ -1794,7 +1807,11 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, GameObject theGameObj) {
-        if (null == prevCharacterDownsync || prevCharacterDownsync.Hp <= currCharacterDownsync.Hp) return false;
+        if (
+            null == prevCharacterDownsync 
+            || prevCharacterDownsync.Hp <= currCharacterDownsync.Hp 
+            || prevCharacterDownsync.Id != currCharacterDownsync.Id // for left-shifted NPCs
+        ) return false;
         
         if (!isGameObjWithinCamera(theGameObj)) return false;
         // Some characters, and almost all traps wouldn't have an "attacked state", hence showing their damaged animation by shader.

@@ -170,7 +170,7 @@ namespace shared {
             dst.WaivingPatrolCueId = waivingPatrolCueId;
         }
 
-        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
+        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, int virtualGridX, int virtualGridY, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
             dst.TriggerLocalId = triggerLocalId;
             dst.FramesToFire = framesToFire;
             dst.FramesToRecover = framesToRecover;
@@ -181,6 +181,8 @@ namespace shared {
             dst.FramesInState = framesInState;
             dst.Config = config;
             dst.ConfigFromTiled = configFromTiled;
+            dst.VirtualGridX = virtualGridX;
+            dst.VirtualGridY = virtualGridY;
         }
 
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount) {

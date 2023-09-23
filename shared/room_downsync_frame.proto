@@ -423,6 +423,8 @@ message TriggerConfigFromTiled {
 
     int32 subCycleTriggerFrames = 8;
     int32 subCycleQuota = 9;
+
+    repeated int32 spawnChSpeciesIdList = 10;
 }
 
 message TriggerColliderAttr {
@@ -443,6 +445,9 @@ message Trigger {
    
     TriggerState state = 9; 
     int32 framesInState = 10; 
+
+	int32 virtualGridX = 11;
+	int32 virtualGridY = 12;
 }
 
 message PeerUdpAddr {

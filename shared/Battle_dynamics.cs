@@ -1071,34 +1071,43 @@ namespace shared {
             }
         }
 
-        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ILoggerBridge logger) {
+        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
                 if (TERMINATING_TRIGGER_ID == currTrigger.TriggerLocalId) break;
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
                 if (TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) {
+                    // The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
                     if (0 == currTrigger.FramesToFire) {
                         if (0 < currTrigger.SubCycleQuotaLeft) {
                             triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1; 
                             triggerInNextFrame.State = TriggerState.TcoolingDown;
                             triggerInNextFrame.FramesInState = 0;
                             triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
+
+                            if (0 < currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count) {
+                                int pseudoRandomIdx = (currRenderFrame.Id % currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count);
+                                addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, currTrigger.ConfigFromTiled.SpawnChSpeciesIdList[pseudoRandomIdx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
+                            }
                         } else {
                             // Wait for "FramesToRecover" to become 0
                             triggerInNextFrame.State = TriggerState.Tready;
                             triggerInNextFrame.FramesToFire = MAX_INT; 
                         }
-                    } 
+                    }
 
                     if (0 == currTrigger.FramesToRecover) {
                         if (0 < currTrigger.Quota) {
-                            triggerInNextFrame.Quota = currTrigger.Quota - 1; 
+                            triggerInNextFrame.Quota = currTrigger.Quota - 1;
                             triggerInNextFrame.SubCycleQuotaLeft = currTrigger.ConfigFromTiled.SubCycleQuota;
                             triggerInNextFrame.State = TriggerState.TcoolingDown;
                             triggerInNextFrame.FramesInState = 0;
                             triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
                             triggerInNextFrame.FramesToRecover = triggerInNextFrame.ConfigFromTiled.RecoveryFrames;
-                        } // else do nothing
+                        } else {
+                            triggerInNextFrame.FramesToFire = MAX_INT;
+                            triggerInNextFrame.FramesToRecover = MAX_INT;
+                        }
                     }
                 } else {
                     if (0 != currTrigger.FramesToFire) continue;
@@ -1441,7 +1450,7 @@ namespace shared {
                     framesToRecover = 0;
                 }
                 int framesInState = src.FramesInState + 1;
-                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
+                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.VirtualGridX, src.VirtualGridY, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
                 l++;
             }
             nextRenderFrameTriggers[l].TriggerLocalId = TERMINATING_TRIGGER_ID;
@@ -1477,7 +1486,8 @@ namespace shared {
             
             _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, logger);
             
-            _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, logger);
+            int nextNpcI = currNpcI;
+            _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, logger);
             
             _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
             

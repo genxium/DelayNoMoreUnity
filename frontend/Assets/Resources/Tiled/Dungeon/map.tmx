@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="344">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="348">
  <tileset firstgid="1" source="../shared_comps/tiles0.tsx"/>
  <tileset firstgid="65" source="../shared_comps/tiles1.tsx"/>
  <tileset firstgid="129" source="../shared_comps/tiles2.tsx"/>
@@ -11,7 +11,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmrFOwzAQhqMipC4doqoDUnkAtgxMjFRBiI0JeAB4Dh4Aqa9MIvmk43R2bCdNgu8fPsWJE8fx5zsnVfdVVe0BAAAAAACI4BqsFvi3DfzbBv5tA/+2gX/bwL9t4N82a/U/R7+WZsPKrx1toeOc06+NMcj/mDZK8V9n3GNpfyEO8G/Wf+P8Ew38Z/vXnnlJ/2dHjPumgv/S4j/kv4F/k/4bwaX9N2xr1X/txqBmTOGXe9wo7Ur//Fzal+v+VP7lPCvNf6vwI6Dj5JzX1ROgtTfGv6zP8a95L9F/TJ5fa/4P+fe1NeQ/5N2Kfzkm/bHHAHP7j4n/VP8x3i37nzr+tfuexX34cV7XiOvIv8wLxCngP8W7Nf8xc0PjhjE2z/PjvrWdv/PLupPHf453+L+M/yuHb50f+v3Hty7A///0z7/hYv1fsev68tFB/mkf/v/6bxV8339D54bOI1L8y/wvn/cYgFyRf9qH/+H4D5GynqfA/dN9aKvFv69f8h0B+X99/rU2ff73lR7/WlvSP49/+F+Pf99ckP5l/o9pT7470ByA/3X6j/Gc4p+7pzL82/TP3wGoDP9l+b9z+NYA7r/nkOD/TfDiKMl/q5Dy/ZfKlP4PkZzEfox/ck7lD0dp/odiUot9Gsep4v42038o/1M/af1P8S/jvuez48ltl/AvXSyR/y+Z+6eE53qtPsX/V8dzVX3zHFZS/K/F/7YbY+rXjvVxm+k/lJ/k/0Q07++Kdyv++zGitX8O/9y99E9zIHU+Dq1RPvdavFvzP2f8S/eaf98cGGo7NAek91C8S2r4T2bnuO94GBhDzT9B11N7uf1JiXf4H+efnO5YWRvDnQd5Ti3qcvqU4rtk/yAP+LdNCf7BfMC/beDfNvBvmzn8AwAAAAAAAAAAAAAAAAAAAAAAWA+/afohgA==
+   eJztmktKxEAQhsOIMJtZhGEWgh7AXRauXDqMiDtX6gH0HB5A8Mom0AVlUf2cvOz6Fx95dFLp6a+rOhH3TdPsAQAAAAAASOASrBb4tw382wb+bQP/toF/28C/beDfNmv1P0e/lmbD9l96TpWOc0m/NsYg/+fEqMV/W/CMpf2FOMC/Wf+d80908F/sX/vNS/r/caS47xr4ry3/Q/47+DfpvxNM7b9jW6v+WzcGLWMMv9zjRokr/fNr6Viu+2P5l/OsNv8nhW8BnSfnvK0dAS3eOf5le4l/zXuN/lPq/Frrf8i/L1bMf8i7Ff9yTIZzDwHm9p+S/7n+U7xb8k/1eKr81577I57Dz/O2TtxH/mVdII4B/zneLfn3OUpxe8U4t87z8761nb/zy7ajx3+Jd/ifxv+Fw7fOx/7+41sX4P9/+uffcKn+L9h9w/61g/zTMfz/9X9S8H3/xa4NXUfk+Jf1X/7e6wDkivzTMfzH8z9EznqeA/dPz6Gtlv++fsl3BNT/9fnXYvr87xs9/7VY0j/Pf/hP9y9/75T5z2NL/7L+p8ST7w40B+B/PfnvI/b9lxqH13/4t+ufvwPQPvzX5f/W4VsDuP+BQ4b/V8Gzoyb/J4Wc779cxvR/SOQojlP8k3Paf3fU5j+Wk1ru0ziOlfc3hf5D9Z/6Set/jn+Z9wMfPY9uu4R/6WKJ+j9l7R8TXuu19hz/nz1PTfPFa1hN+b8W/9t+jKlfO9bHbaH/UH2S/yeieX9TvFvxP4wRrf1z+OfupX+aA7nzMbZG+dxr+W7N/5z5L91r/n1zIBY7NAek91C+S1r4z2bnuOu5j4yh5p+g+yleaX9y8h3+z/NPTndsXxvDnQd5TSvaSvqU47tm/6AM+LdNDf7BfMC/beDfNvBvmzn8AwAAAAAAAAAAAAAAAAAAAAAAWA+/xWcjCA==
   </data>
  </layer>
  <layer id="12" name="StaticTrapPaint" width="128" height="64">
@@ -30,7 +30,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="560" y="594">
+  <object id="135" x="544" y="528">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -64,68 +64,24 @@
   <object id="341" gid="2147483852" x="672" y="560" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="2"/>
-    <property name="delayedFrames" value="30"/>
+    <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
-    <property name="quota" value="61857"/>
-    <property name="recoveryFrames" value="300"/>
-    <property name="subCycleQuota" value="3"/>
-    <property name="subCycleTriggerFrames" value="60"/>
-   </properties>
-  </object>
-  <object id="342" gid="204" x="672" y="448" width="16" height="32">
-   <properties>
-    <property name="bulletTeamId" value="1"/>
-    <property name="delayedFrames" value="30"/>
-    <property name="initVelX" value="+2"/>
-    <property name="initVelY" value="0"/>
-    <property name="quota" value="61857"/>
-    <property name="recoveryFrames" value="300"/>
-    <property name="subCycleQuota" value="3"/>
-    <property name="subCycleTriggerFrames" value="60"/>
+    <property name="quota" value="2"/>
+    <property name="recoveryFrames" value="1500"/>
+    <property name="spawnChSpeciesIdList" value="1,3"/>
+    <property name="subCycleQuota" value="2"/>
+    <property name="subCycleTriggerFrames" value="90"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="183" x="1248" y="640">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="speciesId" value="1"/>
-    <property name="teamId" value="1"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="184" x="824" y="640">
-   <properties>
-    <property name="dirX" value="2"/>
-    <property name="speciesId" value="1"/>
-    <property name="static" value="0"/>
-    <property name="teamId" value="2"/>
-   </properties>
-   <point/>
-  </object>
   <object id="195" x="1044" y="524">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="4096"/>
     <property name="static" value="1"/>
     <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="291" x="653" y="645">
-   <properties>
-    <property name="dirX" value="2"/>
-    <property name="speciesId" value="3"/>
-    <property name="teamId" value="2"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="292" x="1344" y="684">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="speciesId" value="3"/>
-    <property name="teamId" value="1"/>
    </properties>
    <point/>
   </object>
@@ -258,6 +214,15 @@
    <properties>
     <property name="collisionTypeMask" value="5"/>
     <property name="forcesCrouching" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="346" x="544" y="384" width="32" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
     <property name="speciesId" value="1"/>
     <property name="static" value="1"/>
    </properties>
@@ -628,6 +593,26 @@
     <property name="frAct" value="4"/>
     <property name="frCaptureFrames" value="60"/>
     <property name="id" value="151"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="344" x="462.667" y="556">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="151"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="345" x="461.333" y="444">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="152"/>
    </properties>
    <point/>
   </object>
