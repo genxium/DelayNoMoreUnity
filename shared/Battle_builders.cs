@@ -197,7 +197,6 @@ namespace shared {
                 single.Id = TERMINATING_PLAYER_ID;
                 single.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
                 ret.NpcsArr.Add(single);
-                ret.ReclaimedJoinIndexList.Add(MAGIC_JOIN_INDEX_INVALID);
             }
 
             for (int i = 0; i < preallocBulletCount; i++) {

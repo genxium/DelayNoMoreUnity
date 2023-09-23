@@ -526,19 +526,13 @@ namespace shared {
 
         private static void _moveAndInsertCharacterColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Vector[] effPushbacks, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, int iSt, int iEd, ILoggerBridge logger) {
             for (int i = iSt; i < iEd; i++) {
-                var currCharacterDownsync = (i < roomCapacity ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
-                if (i >= roomCapacity && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
-                /*
-                if (i >= roomCapacity && isNpcDeadToDisappear(currCharacterDownsync)) {
-                    continue;
-                }
-                */
+                var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
+                if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
+
+                var chConfig = characters[currCharacterDownsync.SpeciesId];
                 effPushbacks[i].X = 0;
                 effPushbacks[i].Y = 0;
-
-                var thatCharacterInNextFrame = (i < roomCapacity ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
-                var chConfig = characters[currCharacterDownsync.SpeciesId];
-                
                 int vhDiffInducedByCrouching = 0;
                 bool justBecameCrouching = !currCharacterDownsync.PrevWasCrouching && !currCharacterDownsync.InAir && (0 == currCharacterDownsync.FramesInChState) && isCrouching(currCharacterDownsync.CharacterState);
                 if (justBecameCrouching) {
@@ -599,12 +593,9 @@ namespace shared {
             int primaryHardOverlapIndex;
             for (int i = iSt; i < iEd; i++) {
                 primaryOverlapResult.reset();
-                var currCharacterDownsync = (i < roomCapacity ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
-                if (i >= roomCapacity && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
-                if (i >= roomCapacity && isNpcDeadToDisappear(currCharacterDownsync)) {
-                    continue;
-                }
-                var thatCharacterInNextFrame = (i < roomCapacity ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
+                var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
+                if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+                var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
@@ -921,7 +912,7 @@ namespace shared {
             }
         }
 
-        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ILoggerBridge logger) {
+        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ILoggerBridge logger) {
             // [WARNING] Bullet collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
             // Check bullet-anything collisions
             for (int i = iSt; i < iEd; i++) {
@@ -1082,8 +1073,7 @@ namespace shared {
             }
         }
 
-        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ref int usedCurrRdfReclaimedJoinIndexEd, ILoggerBridge logger) {
-            // TODO: Handle NPC birth triggers!
+        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
                 if (TERMINATING_TRIGGER_ID == currTrigger.TriggerLocalId) break;
@@ -1111,16 +1101,11 @@ namespace shared {
             }
         }
 
-        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, int colliderCnt, ILoggerBridge logger) {
-            for (int i = 0; i < roomCapacity + currNpcI; i++) {
-                var currCharacterDownsync = (i < roomCapacity ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
+        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, int colliderCnt, ILoggerBridge logger) {
+            for (int i = 0; i < currRenderFrame.PlayersArr.Count + currRenderFrame.NpcsArr.Count; i++) {
+                var currCharacterDownsync = (i < currRenderFrame.PlayersArr.Count ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (i >= currRenderFrame.PlayersArr.Count && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
-                /*
-                if (i >= roomCapacity && isNpcDeadToDisappear(currCharacterDownsync)) {
-                    continue;
-                }
-                */
-                var thatCharacterInNextFrame = (i < roomCapacity ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
+                var thatCharacterInNextFrame = (i < currRenderFrame.PlayersArr.Count ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 Collider aCollider = dynamicRectangleColliders[i];
                 // Update "virtual grid position"
@@ -1264,14 +1249,30 @@ namespace shared {
                 var trapInNextRenderFrame = nextRenderFrameTraps[colliderAttr.TrapLocalId];
                 // Update "virtual grid position"
                 var (nextColliderAttrVx, nextColliderAttrVy) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
-                Trap currTrap = currRenderFrame.TrapsArr[colliderAttr.TrapLocalId];
-                if (5 == currTrap.Config.SpeciesId || 6 == currTrap.Config.SpeciesId) {
-                    if (0 != effPushbacks[i].X || 0 != effPushbacks[i].Y) {
-                        logger.LogInfo(String.Format("rdf.Id={0}, currTrap={1}", currRenderFrame.Id, stringifyTrap(currTrap)));
-                    }
-                }
                 trapInNextRenderFrame.VirtualGridX = nextColliderAttrVx - colliderAttr.HitboxOffsetX;
                 trapInNextRenderFrame.VirtualGridY = nextColliderAttrVy - colliderAttr.HitboxOffsetY;
+            }
+        }
+
+        private static void _leftShiftDeadNpcs(int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
+            int aliveSlotI = 0, candidateI = 0;
+            while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id) {
+                while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id && isNpcDeadToDisappear(nextRenderFrameNpcs[candidateI])) {
+                    candidateI++;
+                }
+                if (candidateI >= nextRenderFrameNpcs.Count || TERMINATING_PLAYER_ID == nextRenderFrameNpcs[candidateI].Id) {
+                    break;
+                }
+                var src = nextRenderFrameNpcs[candidateI];
+                var dst = nextRenderFrameNpcs[aliveSlotI];
+                int joinIndex = roomCapacity + aliveSlotI + 1;
+
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, joinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, dst);
+                candidateI++;
+                aliveSlotI++;
+            }
+            if (aliveSlotI < nextRenderFrameNpcs.Count) {
+                nextRenderFrameNpcs[aliveSlotI].Id = TERMINATING_PLAYER_ID;
             }
         }
 
@@ -1326,21 +1327,49 @@ namespace shared {
             int nextRenderFrameNpcLocalIdCounter = currRenderFrame.NpcLocalIdCounter;
             var nextRenderFrameTraps = candidate.TrapsArr;
             var nextRenderFrameTriggers = candidate.TriggersArr;
-           
             // Make a copy first
             for (int i = 0; i < currRenderFrame.PlayersArr.Count; i++) {
                 var src = currRenderFrame.PlayersArr[i];
-                var dst = nextRenderFramePlayers[i];
                 var chConfig = characters[src.SpeciesId];
                 int framesToRecover = src.FramesToRecover - 1;
                 if (0 > framesToRecover) {
                     framesToRecover = 0;
                 }
-                int framesCapturedByInertia = src.FramesCapturedByInertia - 1;
+                int framesCapturedByInertia = src.FramesCapturedByInertia - 1; 
                 if (0 > framesCapturedByInertia) {
                     framesCapturedByInertia = 0;
                 }
                 int framesInChState = src.FramesInChState + 1;
+                int framesInvinsible = src.FramesInvinsible - 1;
+                if (0 > framesInvinsible ) {
+                    framesInvinsible = 0;
+                }
+                int framesInPatrolCue = src.FramesInPatrolCue - 1;
+                if (0 > framesInPatrolCue) {
+                    framesInPatrolCue = 0;
+                }
+                int mp = src.Mp + chConfig.MpRegenRate;
+                if (mp >= src.MaxMp) {
+                    mp = src.MaxMp;
+                }
+                var dst = nextRenderFramePlayers[i];
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, dst);
+                _resetVelocityOnRecovered(src, dst);
+            }
+
+            int currNpcI = 0;
+            while (currNpcI < currRenderFrame.NpcsArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.NpcsArr[currNpcI].Id) {
+                var src = currRenderFrame.NpcsArr[currNpcI];
+                var chConfig = characters[src.SpeciesId];
+                int framesToRecover = src.FramesToRecover - 1;
+                if (0 > framesToRecover) {
+                    framesToRecover = 0;
+                }
+                int framesInChState = src.FramesInChState + 1;
+                int framesCapturedByInertia = src.FramesCapturedByInertia - 1; 
+                if (0 > framesCapturedByInertia) {
+                    framesCapturedByInertia = 0;
+                }
                 int framesInvinsible = src.FramesInvinsible - 1;
                 if (0 > framesInvinsible) {
                     framesInvinsible = 0;
@@ -1353,48 +1382,9 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
+                var dst = nextRenderFrameNpcs[currNpcI];
                 AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, dst);
                 _resetVelocityOnRecovered(src, dst);
-            }
-
-            var nextRenderFrameReclaimedJoinIndexList = candidate.ReclaimedJoinIndexList; // Should be updated by inheriting or Dying state expiry
-            int nextRenderFrameReclaimedJoinIndexCnt = 0;
-            int currNpcI = 0;
-            while (currNpcI < currRenderFrame.NpcsArr.Count && TERMINATING_PLAYER_ID != currRenderFrame.NpcsArr[currNpcI].Id) {
-                var src = currRenderFrame.NpcsArr[currNpcI];
-                var dst = nextRenderFrameNpcs[currNpcI];
-                if (isNpcDeadToDisappear(src)) {
-                    // [WARNING] The "joinIndex" is used extensively for indexing colliders and mapping around different collections, thus I don't want to change the "joinIndex" values of the alive NPCs by left-shifting or alike approach!
-                    AssignToCharacterDownsync(DEAD_NPC_ID, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, dst);
-                    if (isNpcJustDeadToReclaim(src)) {
-                        nextRenderFrameReclaimedJoinIndexList[nextRenderFrameReclaimedJoinIndexCnt++] = src.JoinIndex;
-                    }
-                } else {
-                    var chConfig = characters[src.SpeciesId];
-                    int framesToRecover = src.FramesToRecover - 1;
-                    if (0 > framesToRecover) {
-                        framesToRecover = 0;
-                    }
-                    int framesInChState = src.FramesInChState + 1;
-                    int framesCapturedByInertia = src.FramesCapturedByInertia - 1;
-                    if (0 > framesCapturedByInertia) {
-                        framesCapturedByInertia = 0;
-                    }
-                    int framesInvinsible = src.FramesInvinsible - 1;
-                    if (0 > framesInvinsible) {
-                        framesInvinsible = 0;
-                    }
-                    int framesInPatrolCue = src.FramesInPatrolCue - 1;
-                    if (0 > framesInPatrolCue) {
-                        framesInPatrolCue = 0;
-                    }
-                    int mp = src.Mp + chConfig.MpRegenRate;
-                    if (mp >= src.MaxMp) {
-                        mp = src.MaxMp;
-                    }
-                    AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, dst);
-                    _resetVelocityOnRecovered(src, dst);
-                }
                 currNpcI++;
             }
             nextRenderFrameNpcs[currNpcI].Id = TERMINATING_PLAYER_ID; // [WARNING] This is a CRITICAL assignment because "renderBuffer" is a ring, hence when cycling across "renderBuffer.StFrameId", we must ensure that the trailing NPCs existed from the startRdf wouldn't contaminate later calculation
@@ -1457,21 +1447,15 @@ namespace shared {
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _insertBulletColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
             
-            _calcBulletCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, logger);
-
-            int usedCurrRdfReclaimedJoinIndexEd = 0;
-            _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, ref usedCurrRdfReclaimedJoinIndexEd, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, logger);
+            
+            _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, logger);
             
             _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
             
             _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, completelyStaticTrapColliders, logger);
-            _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
-
-            // Inherits unused part of "currRenderFrame.ReclaimedJoinIndexList"
-            for (int i = usedCurrRdfReclaimedJoinIndexEd; i < currRenderFrame.ReclaimedJoinIndexCnt; i++) {
-                nextRenderFrameReclaimedJoinIndexList[nextRenderFrameReclaimedJoinIndexCnt++] = currRenderFrame.ReclaimedJoinIndexList[i];
-            }
-
+            _processEffPushbacks(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
+            _leftShiftDeadNpcs(roomCapacity, nextRenderFrameNpcs, logger);
             for (int i = 0; i < colliderCnt; i++) {
                 Collider dynamicCollider = dynamicRectangleColliders[i];
                 if (null == dynamicCollider.Space) {
@@ -1483,7 +1467,6 @@ namespace shared {
             candidate.Id = nextRenderFrameId;
             candidate.BulletLocalIdCounter = nextRenderFrameBulletLocalIdCounter;
             candidate.NpcLocalIdCounter = nextRenderFrameNpcLocalIdCounter;
-            candidate.ReclaimedJoinIndexCnt = nextRenderFrameReclaimedJoinIndexCnt;
         }
 
         public static void calcCharacterBoundingBoxInCollisionSpace(CharacterDownsync characterDownsync, CharacterConfig chConfig, int newVx, int newVy, out float boxCx, out float boxCy, out float boxCw, out float boxCh) {
@@ -1551,8 +1534,7 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewNpcToNextFrame(RoomDownsyncFrame currRdf, ref int usedCurrRdfReclaimedJoinIndexEd, int virtualGridX, int virtualGridY, int dirX, int dirY, int characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
-            // TODO: Use "currRdf.ReclaimedJoinIndexList" and update "usedCurrRdfReclaimedJoinIndexEd" first because using new slot (indicated by "npcCnt")!
+        protected static bool addNewNpcToNextFrame(int virtualGridX, int virtualGridY, int dirX, int dirY, int characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
             var chConfig = Battle.characters[characterSpeciesId];
 
             AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, virtualGridX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, virtualGridX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, nextRenderFrameNpcs[npcCnt]);
