@@ -467,6 +467,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             speciesKvPq.Put(lookupKey, npcAnimHolder);
 
             // Add character vfx
+            if (currNpcDownsync.NewBirth) {
+                var spr = npcGameObj.GetComponent<SpriteRenderer>();
+                var material = spr.material;
+                DOTween.Sequence().Append(
+                    DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))
+                    .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
+            }
             playCharacterDamagedVfx(currNpcDownsync, prevNpcDownsync, npcGameObj);
             playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, npcGameObj, wx, wy, rdf);
         }
@@ -550,7 +557,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var triggerGameObj = triggerGameObjs[trigger.TriggerLocalId];
             var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
             if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask) {
-                animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, true);
+                animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, false);
             } else {    
                 // TODO: Make use fo TriggerState in "shared.Battle_dynamics"!
                 if (Battle.isTriggerClickable(trigger)) {

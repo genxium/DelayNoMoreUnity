@@ -1082,6 +1082,25 @@ namespace shared {
             }
         }
 
+        private static void _tickSingleSubCycle(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
+            if (0 < currTrigger.SubCycleQuotaLeft) {
+                triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1;
+                triggerInNextFrame.State = TriggerState.TcoolingDown;
+                triggerInNextFrame.FramesInState = 0;
+                triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
+
+                if (0 < currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count) {
+                    int pseudoRandomIdx = (currRenderFrame.Id % currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count);
+                    addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, currTrigger.ConfigFromTiled.SpawnChSpeciesIdList[pseudoRandomIdx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
+                }
+            } else {
+                // Wait for "FramesToRecover" to become 0
+                triggerInNextFrame.State = TriggerState.Tready;
+                triggerInNextFrame.SubCycleQuotaLeft = currTrigger.ConfigFromTiled.SubCycleQuota; // Refill to be fired by the next "0 == currTrigger.FramesToRecover"
+                triggerInNextFrame.FramesToFire = MAX_INT;
+            }
+        }
+
         private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
@@ -1090,32 +1109,14 @@ namespace shared {
                 if (TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) {
                     // The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
                     if (0 == currTrigger.FramesToFire) {
-                        if (0 < currTrigger.SubCycleQuotaLeft) {
-                            triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1; 
-                            triggerInNextFrame.State = TriggerState.TcoolingDown;
-                            triggerInNextFrame.FramesInState = 0;
-                            triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
-
-                            if (0 < currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count) {
-                                int pseudoRandomIdx = (currRenderFrame.Id % currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count);
-                                addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, currTrigger.ConfigFromTiled.SpawnChSpeciesIdList[pseudoRandomIdx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
-                            }
-                        } else {
-                            // Wait for "FramesToRecover" to become 0
-                            triggerInNextFrame.State = TriggerState.Tready;
-                            triggerInNextFrame.FramesToFire = MAX_INT; 
-                        }
-                    }
-
-                    if (0 == currTrigger.FramesToRecover) {
+                        _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
+                    } else if (0 == currTrigger.FramesToRecover) {
                         if (0 < currTrigger.Quota) {
                             triggerInNextFrame.Quota = currTrigger.Quota - 1;
-                            triggerInNextFrame.SubCycleQuotaLeft = currTrigger.ConfigFromTiled.SubCycleQuota;
-                            triggerInNextFrame.State = TriggerState.TcoolingDown;
-                            triggerInNextFrame.FramesInState = 0;
-                            triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
-                            triggerInNextFrame.FramesToRecover = triggerInNextFrame.ConfigFromTiled.RecoveryFrames;
+                            triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
+                            _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
                         } else {
+                            triggerInNextFrame.State = TriggerState.Tready;
                             triggerInNextFrame.FramesToFire = MAX_INT;
                             triggerInNextFrame.FramesToRecover = MAX_INT;
                         }
@@ -1585,9 +1586,9 @@ namespace shared {
 
         protected static bool addNewNpcToNextFrame(int virtualGridX, int virtualGridY, int dirX, int dirY, int characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
             var chConfig = Battle.characters[characterSpeciesId];
-
-            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, virtualGridX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, virtualGridX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, nextRenderFrameNpcs[npcCnt]);
-
+            int birthVirtualX = virtualGridX + ((chConfig.DefaultSizeX >> 1) * dirX);
+            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, nextRenderFrameNpcs[npcCnt]);
+            nextRenderFrameNpcs[npcCnt].NewBirth = true;
             npcLocalIdCounter++;
             npcCnt++;
             return true;

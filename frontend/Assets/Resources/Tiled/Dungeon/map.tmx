@@ -68,7 +68,7 @@
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
     <property name="quota" value="2"/>
-    <property name="recoveryFrames" value="1500"/>
+    <property name="recoveryFrames" value="300"/>
     <property name="spawnChSpeciesIdList" value="1,3"/>
     <property name="subCycleQuota" value="2"/>
     <property name="subCycleTriggerFrames" value="90"/>
