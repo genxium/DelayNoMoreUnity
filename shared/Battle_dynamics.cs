@@ -227,6 +227,9 @@ namespace shared {
 
                 thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
                 thatCharacterInNextFrame.FramesInChState = 0; // Must reset "FramesInChState" here to handle the extreme case where a same skill, e.g. "Atk1", is used right after the previous one ended
+                if (thatCharacterInNextFrame.FramesInvinsible < pivotBulletConfig.StartupInvinsibleFrames) {
+                    thatCharacterInNextFrame.FramesInvinsible = pivotBulletConfig.StartupInvinsibleFrames;
+                }
 
                 skillUsed = true;
             }
@@ -433,7 +436,12 @@ namespace shared {
                     if (offenderNextFrame.ActiveSkillHit < skillConfig.Hits.Count) {
                         // No need to worry about Mp consumption here, it was already paid at "0 == offenderNextFrame.ActiveSkillHit" in "_useSkill"
                         int xfac = (0 < offenderNextFrame.DirX ? 1 : -1);
-                        addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel);
+                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel)) {
+                            var bulletConfig = skillConfig.Hits[offenderNextFrame.ActiveSkillHit];
+                            if (offenderNextFrame.FramesInvinsible < bulletConfig.StartupInvinsibleFrames) {
+                                offenderNextFrame.FramesInvinsible = bulletConfig.StartupInvinsibleFrames;
+                            }
+                        }
                     }
                 }
             }
@@ -1006,6 +1014,9 @@ namespace shared {
                                     if (bullet.Config.HitStunFrames > oldFramesToRecover) {
                                         atkedCharacterInNextFrame.FramesToRecover = bullet.Config.HitStunFrames;
                                     }
+                                }
+                                if (atkedCharacterInNextFrame.FramesInvinsible < bullet.Config.HitInvinsibleFrames) {
+                                    atkedCharacterInNextFrame.FramesInvinsible = bullet.Config.HitInvinsibleFrames;
                                 }
                             }
                             break;

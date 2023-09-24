@@ -80,18 +80,19 @@ namespace shared {
             );
 
         public static BulletConfig SwordManMelee1PrimerBullet = new BulletConfig {
-            StartupFrames = 9,
+            StartupFrames = 12,
             ActiveFrames = 16,
-            HitStunFrames = 10,
+            HitStunFrames = 4,
+            HitInvinsibleFrames = 8,
             BlockStunFrames = 9,
-            Damage = 13,
+            Damage = 11,
             PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = 0,
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(36 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 2,
             ExplosionFrames = 25,
@@ -127,18 +128,19 @@ namespace shared {
         };
 
         public static BulletConfig FireSwordManMelee1PrimerBullet = new BulletConfig {
-            StartupFrames = 9,
+            StartupFrames = 12,
             ActiveFrames = 16,
-            HitStunFrames = 10,
+            HitStunFrames = 4,
+            HitInvinsibleFrames = 8,
             BlockStunFrames = 9,
             Damage = 13,
             PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = 0,
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(36 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 2,
             ExplosionFrames = 25,
@@ -188,17 +190,18 @@ namespace shared {
                 new BulletConfig {
                     StartupFrames = 21,
                     ActiveFrames = 600,
-                    HitStunFrames = 6,
-                    BlockStunFrames = 9,
+                    HitStunFrames = 3,
+                    HitInvinsibleFrames = 8,
+                    BlockStunFrames = 3,
                     Damage = 11,
-                    PushbackVelX = (int)(.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    PushbackVelX = (int)(.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                     PushbackVelY = NO_LOCK_VEL,
                     SelfLockVelX = NO_LOCK_VEL,
                     SelfLockVelY = NO_LOCK_VEL,
                     HitboxOffsetX = (int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxOffsetY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxSizeX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxSizeY = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxOffsetY = (int)(9 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeX = (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                     CancellableStFrame = 0,
                     CancellableEdFrame = 0,
                     BlowUp = false,
@@ -235,7 +238,7 @@ namespace shared {
             ExplosionFrames = 20,
             BType = BulletType.Melee,
             DirX = 1,
-            Hardness = 5,
+            Hardness = 6,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
@@ -348,6 +351,7 @@ namespace shared {
                     .AddHit(
                         new BulletConfig {
                             StartupFrames = 3,
+                            StartupInvinsibleFrames = 3,
                             ActiveFrames = 22,
                             HitStunFrames = 22,
                             BlockStunFrames = 9,
@@ -356,9 +360,9 @@ namespace shared {
                             PushbackVelY = 0,
                             SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             SelfLockVelY = NO_LOCK_VEL,
-                            HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxOffsetX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             CancellableStFrame = 11,
                             CancellableEdFrame = 30,
@@ -383,6 +387,7 @@ namespace shared {
                         .AddHit(
                             new BulletConfig {
                                 StartupFrames = 6,
+                                StartupInvinsibleFrames = 3,
                                 ActiveFrames = 20,
                                 HitStunFrames = 20,
                                 BlockStunFrames = 9,
@@ -418,6 +423,7 @@ namespace shared {
                         .AddHit(
                             new BulletConfig {
                                 StartupFrames = 8,
+                                StartupInvinsibleFrames = 6,
                                 ActiveFrames = 5,
                                 HitStunFrames = 9,
                                 BlockStunFrames = 5,
@@ -806,10 +812,11 @@ namespace shared {
                             new BulletConfig {
                                 StartupFrames = 17,
                                 ActiveFrames = 19,
-                                HitStunFrames = 40,
+                                HitStunFrames = 10,
+                                HitInvinsibleFrames = 16,
                                 BlockStunFrames = 9,
                                 Damage = 25,
-                                PushbackVelX = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelX = (int)(2f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 PushbackVelY = (int)(-8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelX = NO_LOCK_VEL,
                                 SelfLockVelY = NO_LOCK_VEL,
@@ -822,7 +829,7 @@ namespace shared {
                                 ExplosionFrames = 25,
                                 BType = BulletType.Melee,
                                 DirX = 1,
-                                Hardness = 5,
+                                Hardness = 6,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )

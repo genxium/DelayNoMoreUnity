@@ -102,10 +102,11 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Vector2 teamRibbonOffset = new Vector2(-8f, +18f);
 
     protected Vector2 inplaceHpBarOffset = new Vector2(-16f, +24f);
-    protected float characterZ = 0;
-    protected float fireballZ = -5;
     protected float lineRendererZ = +5;
+    protected float triggerZ = 0;
+    protected float characterZ = 0;
     protected float inplaceHpBarZ = +10;
+    protected float fireballZ = -5;
 
     private string MATERIAL_REF_THICKNESS = "_Thickness";
     private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
@@ -159,13 +160,13 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void spawnDynamicTrapNode(int speciesId, float wx, float wy) {
         var trapPrefab = loadTrapPrefab(trapConfigs[speciesId]);
-        GameObject newTrapNode = Instantiate(trapPrefab, new Vector3(wx, wy, characterZ), Quaternion.identity, underlyingMap.transform);
+        GameObject newTrapNode = Instantiate(trapPrefab, new Vector3(wx, wy, triggerZ), Quaternion.identity, underlyingMap.transform);
         dynamicTrapGameObjs.Add(newTrapNode);
     }
 
     protected void spawnTriggerNode(int triggerLocalId, int speciesId, float wx, float wy) {
         var triggerPrefab = loadTriggerPrefab(triggerConfigs[speciesId]);
-        GameObject newTriggerNode = Instantiate(triggerPrefab, new Vector3(wx, wy, characterZ), Quaternion.identity, underlyingMap.transform);
+        GameObject newTriggerNode = Instantiate(triggerPrefab, new Vector3(wx, wy, triggerZ), Quaternion.identity, underlyingMap.transform);
         triggerGameObjs[triggerLocalId] = newTriggerNode;
     }
 

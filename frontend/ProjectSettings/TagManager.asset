@@ -44,9 +44,18 @@ TagManager:
   - name: Background
     uniqueID: 876889059
     locked: 0
-  - name: Character
+  - name: Trigger
     uniqueID: 2342661519
     locked: 0
-  - name: EmittingBullet
+  - name: Pickable
     uniqueID: 4161071285
+    locked: 0
+  - name: Character
+    uniqueID: 3324807227
+    locked: 0
+  - name: Trap
+    uniqueID: 3563880217
+    locked: 0
+  - name: EmittingBullet
+    uniqueID: 306415997
     locked: 0
