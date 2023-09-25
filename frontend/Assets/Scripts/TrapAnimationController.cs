@@ -5,9 +5,8 @@ public class TrapAnimationController : MonoBehaviour {
 
     public int score;
     Dictionary<string, AnimationClip> lookUpTable;
-
-    // Start is called before the first frame update
-    void Start() {
+    private void lazyInit() {
+        if (null != lookUpTable) return;
         lookUpTable = new Dictionary<string, AnimationClip>();
         var animator = this.gameObject.GetComponent<Animator>();
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) {
@@ -15,7 +14,13 @@ public class TrapAnimationController : MonoBehaviour {
         }
     }
 
+    // Start is called before the first frame update
+    void Start() {
+        lazyInit();
+    }
+
     public void updateAnim(string newAnimName, int frameIdxInAnim, int immediateDirX, bool spontaneousLooping) {
+        lazyInit();
         var animator = gameObject.GetComponent<Animator>();
         var spr = gameObject.GetComponent<SpriteRenderer>();
 

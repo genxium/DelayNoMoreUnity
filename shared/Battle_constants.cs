@@ -55,6 +55,7 @@ namespace shared {
         public static int PATTERN_ID_UNABLE_TO_OP = -2;
         public static int PATTERN_ID_NO_OP = -1;
 
+        public static ulong COLLISION_NONE_INDEX = 0;
         public static ulong COLLISION_BARRIER_INDEX_PREFIX = (1 << 0);
         public static ulong COLLISION_CHARACTER_INDEX_PREFIX = (1 << 1);
         public static ulong COLLISION_TRAP_INDEX_PREFIX = (1 << 2);
@@ -73,6 +74,7 @@ namespace shared {
         public static ulong TRIGGER_MASK_NONE = 0;
         public static ulong TRIGGER_MASK_BY_MOVEMENT = (1 << 0);
         public static ulong TRIGGER_MASK_BY_ATK = (1 << 1);
+        public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
 
         public static HashSet<ulong> COLLIDABLE_PAIRS = new HashSet<ulong>() {
             COLLISION_CHARACTER_INDEX_PREFIX, // such that characters collider with each other
@@ -138,6 +140,7 @@ namespace shared {
         public static int DEFAULT_PATROL_CUE_WAIVING_FRAMES = 150; // in the count of render frames, should be big enough for any NPC to move across the largest patrol cue
         public static int NO_PATROL_CUE_ID = -1;
         public static int NO_VFX_ID = 0;
+
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!
@@ -157,7 +160,7 @@ namespace shared {
         public static int MAGIC_FRAMES_TO_BE_ON_WALL = 12;
 
 
-        public static int DYING_FRAMES_TO_RECOVER = 240; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
+        public static int DYING_FRAMES_TO_RECOVER = 180; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
 
         public static int NO_SKILL = -1;
         public static int NO_SKILL_HIT = -1;

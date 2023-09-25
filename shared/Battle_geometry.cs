@@ -44,7 +44,7 @@ namespace shared {
             }
         }
 
-        public static int calcHardPushbacksNormsForCharacter(RoomDownsyncFrame currRenderFrame, CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        public static int calcHardPushbacksNormsForCharacter(RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, CharacterDownsync currCharacterDownsync, CharacterDownsync thatPlayerInNextFrame, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             primaryTrap = null;
             float virtualGripToWall = 0.0f;
             if (OnWallIdle1 == currCharacterDownsync.CharacterState && 0 == thatPlayerInNextFrame.VelX && currCharacterDownsync.DirX == thatPlayerInNextFrame.DirX) {
@@ -112,7 +112,8 @@ namespace shared {
                     continue;
                 }
 
-                if (forcesCrouching) {
+                if (forcesCrouching && chConfig.CrouchingEnabled) {
+                    // [WARNING] If "forcesCrouching" but "false == chConfig.CrouchingEnabled", then the current "bCollider" should be deemed as a regular barrier!
                     float characterTop = aCollider.Y + aCollider.H;
                     float barrierTop = bCollider.Y + bCollider.H;
                     if (characterTop < barrierTop) {

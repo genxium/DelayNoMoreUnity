@@ -164,6 +164,7 @@ namespace shared {
         }
 
         private void heapifyUp(int i) {
+            if (1 >= vals.Cnt) return;
             int u = getParent(i);
             while (TERMINATING_ID != u) {
                 var (res1, iVal) = vals.GetByFrameId(i);
@@ -183,6 +184,7 @@ namespace shared {
         }
 
         private void heapifyDown(int i) {
+            if (1 >= vals.Cnt) return;
             int cur = i;
             int smallest = TERMINATING_ID;
             while (cur != smallest) {

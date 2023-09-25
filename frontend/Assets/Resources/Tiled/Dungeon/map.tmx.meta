@@ -13,6 +13,8 @@ ScriptedImporter:
   warnings:
   - Pixels Per Unit mismatch between map (1) and tileset '../triggers/switch/triggers_switch.tsx'
     (100)
+  - Pixels Per Unit mismatch between map (1) and tileset '../triggers/door/triggers_door.tsx'
+    (100)
   missingSortingLayers: []
   missingLayers: []
   missingTags: []

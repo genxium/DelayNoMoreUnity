@@ -115,6 +115,7 @@ message CharacterDownsync {
 	bool slipJumpTriggered = 40;
 	bool primarilyOnSlippableHardPushback = 41; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
 	bool prevWasCrouching = 42;
+	bool newBirth = 43;
 
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
@@ -281,6 +282,8 @@ message BulletConfig {
     bool allowsWalking = 29;
     bool allowsCrouching = 30;
     int32 hardness = 31;
+    int32 startupInvinsibleFrames = 32;
+    int32 hitInvinsibleFrames = 33;
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
@@ -398,6 +401,15 @@ message TriggerConfig {
 	int32 speciesId = 1;
     string speciesName = 2; 
     uint64 triggerMask = 3;
+    /*
+    By now "TRIGGER_MASK_BY_CYCLIC_TIMER" couldn't coexist with others, and here's how the major params work  
+
+    :repeats "quota" times
+                      |<-------------------------------------- recoveryFrames ----------------------------->|<-----------------recoveryFrames ---------->|.......
+                      :repeats "subCycleQuota" times                                                        :repeats "subCycleQuota" times
+    |<-delayedFrames->|<-subCycleTriggerFrames->|<-subCycleTriggerFrames->|<-subCycleTriggerFrames->|       |.......
+    |TReady           |TCoolingDown             |TCoolingDown(replay)     |TCoolingDown(replay)     |TReady |.......
+    */
 	uint64 collisionTypeMask = 4; // of this trigger
 }
 
@@ -411,6 +423,11 @@ message TriggerConfigFromTiled {
     int32 initVelY = 6;
 
 	int32 chCollisionTeamId = 7;  // of this trigger
+
+    int32 subCycleTriggerFrames = 8;
+    int32 subCycleQuota = 9;
+
+    repeated int32 spawnChSpeciesIdList = 10;
 }
 
 message TriggerColliderAttr {
@@ -420,12 +437,20 @@ message TriggerColliderAttr {
 message Trigger {
     int32 triggerLocalId = 1;
     int32 framesToFire = 2; 
-    int32 framesToRecover = 3; 
+    int32 framesToRecover = 3; // if TRIGGER_MASK_BY_CYCLIC_TIMER, resets whenever "0 < subCycleQuotaLeft" and itself becomes 0
     int32 quota = 4; // the initial value is from static config, but decreases upon use 
 	int32 bulletTeamId = 5; 
 
     TriggerConfig config = 6; // static config, unchanged during battle
     TriggerConfigFromTiled configFromTiled = 7; // static config, unchanged during battle
+
+    int32 subCycleQuotaLeft = 8; // resets whenever "framesToRecover" becomes 0 
+   
+    TriggerState state = 9; 
+    int32 framesInState = 10; 
+
+	int32 virtualGridX = 11;
+	int32 virtualGridY = 12;
 }
 
 message PeerUdpAddr {
@@ -469,9 +494,11 @@ message RoomDownsyncFrame {
 	repeated int32 speciesIdList = 1026;
 
 	int32 bulletLocalIdCounter = 1027;
-	repeated PeerUdpAddr peerUdpAddrList = 1028;
+	int32 npcLocalIdCounter = 1028;
 
 	int32 participantChangeId = 1029;
+
+	repeated PeerUdpAddr peerUdpAddrList = 2048;
 }
 
 message WsResp {

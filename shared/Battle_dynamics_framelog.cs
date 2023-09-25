@@ -28,7 +28,7 @@ namespace shared {
 
         public static string stringifyTrap(Trap tr) {
             if (null == tr) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}", tr.TrapLocalId, tr.TrapState, tr.FramesInTrapState, tr.CapturedByPatrolCue, tr.FramesInPatrolCue, tr.WaivingPatrolCueId, tr.WaivingSpontaneousPatrol, tr.VirtualGridX, tr.VirtualGridY, tr.DirX, tr.DirY, tr.VelX, tr.VelY);
+            return String.Format("id:{0},ts:{1},fts:{2},cpc:{3},fpc:{4},wpcid:{5},wsp:{6},x:{7},y:{8},dx:{9},dy:{10},vx:{11},vy:{12}", tr.TrapLocalId, tr.TrapState, tr.FramesInTrapState, tr.CapturedByPatrolCue, tr.FramesInPatrolCue, tr.WaivingPatrolCueId, tr.WaivingSpontaneousPatrol, tr.VirtualGridX, tr.VirtualGridY, tr.DirX, tr.DirY, tr.VelX, tr.VelY);
         }
 
         public static string stringifyBullet(Bullet bt) {

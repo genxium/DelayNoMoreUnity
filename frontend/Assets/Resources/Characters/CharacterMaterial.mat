@@ -46,6 +46,6 @@ Material:
     - _Scale: 1.02
     - _Thickness: 0
     m_Colors:
-    - _Color: {r: 1, g: 0, b: 0.032821655, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 0.99215686}
     - _FlashColor: {r: 4, g: 4, b: 4, a: 0}
   m_BuildTextureStacks: []
