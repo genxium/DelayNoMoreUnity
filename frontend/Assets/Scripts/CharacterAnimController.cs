@@ -9,7 +9,7 @@ public class CharacterAnimController : MonoBehaviour {
 
     public InplaceHpBar hpBar;
     public TeamRibbon teamRibbon;
-    public Animator lowerPart;
+    public Animator lowerPart, upperPart;
 
     protected static HashSet<CharacterState> INTERRUPT_WAIVE_SET = new HashSet<CharacterState> {
         Idle1,
@@ -26,10 +26,14 @@ public class CharacterAnimController : MonoBehaviour {
 
     Dictionary<CharacterState, AnimationClip> lookUpTable;
 
+    private void getMainAnimator() {
+        return (null == upperPart ? this.gameObject.GetComponent<Animator>() : upperPart.GetComponent<Animator>());
+    }
+
     // Start is called before the first frame update
     void Start() {
         lookUpTable = new Dictionary<CharacterState, AnimationClip>();
-        var animator = this.gameObject.GetComponent<Animator>();
+        var animator = getMainAnimator();
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) {
             CharacterState chState;
             Enum.TryParse(clip.name, out chState);
@@ -41,7 +45,7 @@ public class CharacterAnimController : MonoBehaviour {
         // As this function might be called after many frames of a rollback, it's possible that the playing animation was predicted, different from "prevRdfCharacter.CharacterState" but same as "newCharacterState". More granular checks are needed to determine whether we should interrupt the playing animation.  
             var newCharacterState = rdfCharacter.CharacterState;
 
-            Animator animator = gameObject.GetComponent<Animator>();
+            var animator = getMainAnimator();
             // Update directions
             if (0 > rdfCharacter.DirX) {
                 this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
