@@ -614,7 +614,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         Debug.Log("preallocateVfxNodes ends");
     }
 
-    protected void preallocateNpcNodes(int[] expectedSpeciesIds) {
+    protected void preallocateNpcNodes() {
         Debug.Log("preallocateNpcNodes begins");
 
         if (0 >= preallocNpcCapacity) {
@@ -631,18 +631,30 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
         }
-        
-        int cacheCapacityPerSpeciesId = 10;
-        if (cacheCapacityPerSpeciesId * expectedSpeciesIds.Length < preallocNpcCapacity) {
-            Debug.Log(String.Format("cacheCapacityPerSpeciesId={0}, expectedSpeciesIds={1} are too small for preallocNpcCapacity={2}, maybe you should allocate more cacheCapacityPerSpeciesId?", cacheCapacityPerSpeciesId, expectedSpeciesIds, preallocNpcCapacity));
+
+        var mapProps = underlyingMap.GetComponent<SuperCustomProperties>();
+        CustomProperty npcPreallocCapDict;
+        mapProps.TryGetCustomProperty("npcPreallocCapDict", out npcPreallocCapDict);
+        if (null == npcPreallocCapDict || npcPreallocCapDict.IsEmpty) {
+            throw new ArgumentNullException("No `npcPreallocCapDict` found on map-scope properties, it's required! Example\n\tvalue `1:16;3:15;4096:1` means that we preallocate 16 slots for species 1, 15 slots for species 3 and 1 slot for species 4096");
+        }
+        Dictionary<int, int> npcPreallocCapDictVal = new Dictionary<int, int>();
+        string npcPreallocCapDictStr = npcPreallocCapDict.GetValueAsString();
+        foreach (var kvPairPart in npcPreallocCapDictStr.Trim().Split(';')) {
+            var intraKvPairParts = kvPairPart.Split(':');
+            int speciesId = intraKvPairParts[0].Trim().ToInt();
+            int speciesCapacity = intraKvPairParts[1].Trim().ToInt();
+            npcPreallocCapDictVal[speciesId] = speciesCapacity;
         }
         npcSpeciesPrefabDict = new Dictionary<int, GameObject>();
         cachedNpcs = new Dictionary<int, KvPriorityQueue<string, CharacterAnimController>>();
-        foreach (int speciesId in expectedSpeciesIds) {
-            var cachedNpcNodesOfThisSpecies = new KvPriorityQueue<string, CharacterAnimController>(cacheCapacityPerSpeciesId, cachedNpcScore);
+        foreach (var kvPair in npcPreallocCapDictVal) {
+            int speciesId = kvPair.Key;
+            int speciesCapacity = kvPair.Value;
+            var cachedNpcNodesOfThisSpecies = new KvPriorityQueue<string, CharacterAnimController>(speciesCapacity, cachedNpcScore);
             var thePrefab = loadCharacterPrefab(characters[speciesId]);
             npcSpeciesPrefabDict[speciesId] = thePrefab;
-            for (int i = 0; i < cacheCapacityPerSpeciesId; i++) {
+            for (int i = 0; i < speciesCapacity; i++) {
                 GameObject newNpcNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, characterZ), Quaternion.identity);
                 CharacterAnimController newNpcNodeController = newNpcNode.GetComponent<CharacterAnimController>();
                 newNpcNodeController.score = -1;

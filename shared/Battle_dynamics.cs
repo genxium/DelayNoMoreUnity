@@ -606,7 +606,7 @@ namespace shared {
                 Collider aCollider = dynamicRectangleColliders[i];
                 ConvexPolygon aShape = aCollider.Shape;
                 Trap? primaryTrap;
-                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, residueCollided, logger);
+                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, chConfig, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, residueCollided, logger);
 
                 if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
                     currPushbackFrameLog.setTouchingCellsByJoinIndex(currCharacterDownsync.JoinIndex, aCollider);
@@ -1218,7 +1218,7 @@ namespace shared {
                                 thatCharacterInNextFrame.CharacterState = Idle1;
                                 break;
                         }
-                    } else if (thatCharacterInNextFrame.ForcedCrouching) {
+                    } else if (thatCharacterInNextFrame.ForcedCrouching && chConfig.CrouchingEnabled) {
                         if (!isCrouching(thatCharacterInNextFrame.CharacterState)) {
                             switch (thatCharacterInNextFrame.CharacterState) {
                                 case Idle1:
