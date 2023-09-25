@@ -5,6 +5,7 @@ tpsheetFileNames:
 - Assets/Resources/Characters/BullWarrior/BullWarrior.tpsheet
 - Assets/Resources/Characters/FireSwordMan/FireSwordMan.tpsheet
 - Assets/Resources/Characters/GunGirl/GunGirl.tpsheet
+- Assets/Resources/Characters/GunGirl/GunGirlParts.tpsheet
 - Assets/Resources/Characters/KnifeGirl/KnifeGirl.tpsheet
 - Assets/Resources/Characters/Monk/Monk.tpsheet
 - Assets/Resources/Characters/MonkGirl/MonkGirl.tpsheet
@@ -18,6 +19,7 @@ textureFileNames:
 - Assets/Resources/Characters/BullWarrior/BullWarrior.png
 - Assets/Resources/Characters/FireSwordMan/FireSwordMan.png
 - Assets/Resources/Characters/GunGirl/GunGirl.png
+- Assets/Resources/Characters/GunGirl/GunGirlParts.png
 - Assets/Resources/Characters/KnifeGirl/KnifeGirl.png
 - Assets/Resources/Characters/Monk/Monk.png
 - Assets/Resources/Characters/MonkGirl/MonkGirl.png
@@ -27,6 +29,7 @@ textureFileNames:
 - Assets/Resources/Triggers/Switch/Switch.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 - 

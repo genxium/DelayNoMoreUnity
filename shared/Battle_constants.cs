@@ -141,6 +141,7 @@ namespace shared {
         public static int NO_PATROL_CUE_ID = -1;
         public static int NO_VFX_ID = 0;
 
+        public static int INVALID_FRAMES_IN_CH_STATE = -1;
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!

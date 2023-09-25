@@ -1266,7 +1266,21 @@ namespace shared {
 
                 // Reset "FramesInChState" if "CharacterState" is changed
                 if (thatCharacterInNextFrame.CharacterState != currCharacterDownsync.CharacterState) {
-                    thatCharacterInNextFrame.FramesInChState = 0;
+                    if ((Walking == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState)
+                        ||
+                        (WalkingAtk1 == currCharacterDownsync.CharacterState && Walking == thatCharacterInNextFrame.CharacterState)) {
+                        thatCharacterInNextFrame.LowerPartFramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
+                        thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
+                    } else if (Atk1 == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) {
+                        thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.FramesInChState + 1;
+                        thatCharacterInNextFrame.LowerPartFramesInChState = 0;
+                    } else if (WalkingAtk1 == currCharacterDownsync.CharacterState && Atk1 == thatCharacterInNextFrame.CharacterState) {
+                        thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.FramesInChState + 1;
+                        thatCharacterInNextFrame.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE; // not showing isolated lower part in "Atk1"
+                    } else {
+                        thatCharacterInNextFrame.FramesInChState = 0;
+                        thatCharacterInNextFrame.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE; // not showing isolated lower part in other ChStates
+                    }
                 }
                 thatCharacterInNextFrame.PrevWasCrouching = isCrouching(currCharacterDownsync.CharacterState);
 
@@ -1315,7 +1329,7 @@ namespace shared {
                 var dst = nextRenderFrameNpcs[aliveSlotI];
                 int joinIndex = roomCapacity + aliveSlotI + 1;
 
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, joinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, joinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, dst);
                 candidateI++;
                 aliveSlotI++;
             }
@@ -1388,6 +1402,7 @@ namespace shared {
                     framesCapturedByInertia = 0;
                 }
                 int framesInChState = src.FramesInChState + 1;
+                int lowerPartFramesInChState = src.LowerPartFramesInChState + 1;
                 int framesInvinsible = src.FramesInvinsible - 1;
                 if (0 > framesInvinsible ) {
                     framesInvinsible = 0;
@@ -1401,7 +1416,7 @@ namespace shared {
                     mp = src.MaxMp;
                 }
                 var dst = nextRenderFramePlayers[i];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, dst);
                 _resetVelocityOnRecovered(src, dst);
             }
 
@@ -1414,6 +1429,7 @@ namespace shared {
                     framesToRecover = 0;
                 }
                 int framesInChState = src.FramesInChState + 1;
+                int lowerPartFramesInChState = src.LowerPartFramesInChState + 1;
                 int framesCapturedByInertia = src.FramesCapturedByInertia - 1; 
                 if (0 > framesCapturedByInertia) {
                     framesCapturedByInertia = 0;
@@ -1431,7 +1447,7 @@ namespace shared {
                     mp = src.MaxMp;
                 }
                 var dst = nextRenderFrameNpcs[currNpcI];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, dst);
                 _resetVelocityOnRecovered(src, dst);
                 currNpcI++;
             }
@@ -1587,7 +1603,7 @@ namespace shared {
         protected static bool addNewNpcToNextFrame(int virtualGridX, int virtualGridY, int dirX, int dirY, int characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
             var chConfig = Battle.characters[characterSpeciesId];
             int birthVirtualX = virtualGridX + ((chConfig.DefaultSizeX >> 2) * dirX);
-            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, true, nextRenderFrameNpcs[npcCnt]);
+            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, true, 0, nextRenderFrameNpcs[npcCnt]);
             npcLocalIdCounter++;
             npcCnt++;
             return true;

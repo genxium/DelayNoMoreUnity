@@ -1348,7 +1348,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, triggerMask, subCycleTriggerFrames, subCycleQuota, spawnChSpeciesIdList;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, spawnChSpeciesIdList;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
