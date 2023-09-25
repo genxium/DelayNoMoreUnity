@@ -14,15 +14,15 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmktKxEAQhsOIMJtZhGEWgh7AXRauXDqMiDtX6gH0HB5A8Mom0AVlUf2cvOz6Fx95dFLp6a+rOhH3TdPsAQAAAAAASOASrBb4tw382wb+bQP/toF/28C/beDfNmv1P0e/lmbD9l96TpWOc0m/NsYg/+fEqMV/W/CMpf2FOMC/Wf+d80908F/sX/vNS/r/caS47xr4ry3/Q/47+DfpvxNM7b9jW6v+WzcGLWMMv9zjRokr/fNr6Viu+2P5l/OsNv8nhW8BnSfnvK0dAS3eOf5le4l/zXuN/lPq/Frrf8i/L1bMf8i7Ff9yTIZzDwHm9p+S/7n+U7xb8k/1eKr81577I57Dz/O2TtxH/mVdII4B/zneLfn3OUpxe8U4t87z8761nb/zy7ajx3+Jd/ifxv+Fw7fOx/7+41sX4P9/+uffcKn+L9h9w/61g/zTMfz/9X9S8H3/xa4NXUfk+Jf1X/7e6wDkivzTMfzH8z9EznqeA/dPz6Gtlv++fsl3BNT/9fnXYvr87xs9/7VY0j/Pf/hP9y9/75T5z2NL/7L+p8ST7w40B+B/PfnvI/b9lxqH13/4t+ufvwPQPvzX5f/W4VsDuP+BQ4b/V8Gzoyb/J4Wc779cxvR/SOQojlP8k3Paf3fU5j+Wk1ru0ziOlfc3hf5D9Z/6Set/jn+Z9wMfPY9uu4R/6WKJ+j9l7R8TXuu19hz/nz1PTfPFa1hN+b8W/9t+jKlfO9bHbaH/UH2S/yeieX9TvFvxP4wRrf1z+OfupX+aA7nzMbZG+dxr+W7N/5z5L91r/n1zIBY7NAek91C+S1r4z2bnuOu5j4yh5p+g+yleaX9y8h3+z/NPTndsXxvDnQd5TSvaSvqU47tm/6AM+LdNDf7BfMC/beDfNvBvmzn8AwAAAAAAAAAAAAAAAAAAAAAAWA+/xWcjCA==
+   eJztmjtOw0AQhq0gpDQpoigFUjgAnQsqSqIgREcFHADOwQGQcmUcaUcaRrNPP9n5i09+rD3e7LczayN2TdPsAAAAAAAASOAaLBb4tw382wb+bQP/toF/28C/beDfNkv1P0W/5mbF9l87TpWOc0m/VsYg/31i1OJ/W/CMuf2F2MO/Wf+t80+08F/sX/vNc/o/O1Lctw38D5X/W4Wl+W/h36T/VjC2/5ZtrfjX5sMYfrnHlfIc6Z9fS8dy3R/Kv5xntfk/KfwI6DzVAN6m1YhctHh9/Mv2Ev+a9xr9+2LxsfCdn7v+h/z7YsX8h7xb8S/H5HLuMcDU/lPyP9d/indL/qkej5X/2nPP4jn8PG9rxX3kX9YF4hjwn+Pdkn+foxS3N4y+dZ6f963t/J1fth09/ku8w/84/q8cvnU+9vcf37oA///TP/+GS/V/xe677B8c5J+O4f+v/5OC7/svdm3oOiLHv6z/8vceApAr8k/H8B/P/xA563kO3D89h7Za/vv6Jd8RUP+X51+L6fO/a/T812JJ/zz/4T/dv/y9Y+Y/jy39y/qfEk++O9AcgP/l5L+P2Pdfahxe/+Hfrn/+DkD78F+X/zuHbw3g/i/sM/y/CV4cNfk/KeR8/+UypP99IkdxnOKfnNP+h6M2/7Gc1HKfxnGovL8t9B+q/9RPWv9z/Mu8v/DZ8eS2c/iXLuao/2PW/iHhtV5rz/H/1fHcNN+8htWU/0vxv+7GmPq1YX1cF/oP1Sf5fyKa93fFuxX/sfo/pnvpn+ZA7nyMrVE+91q+W/M/Zf5L95p/3xyIxQ7NAek9lO+SLfxns3HcdzxExlDzT9D9FK+0Pzn5Dv/9/JPTDdvXxnDjQV6zFW0lfcrxXbN/UAb826YG/2A64N828G8b+LfNFP4BAAAAAAAAAAAAAAAAAAAAAAAsh18C4iGz
   </data>
  </layer>
- <layer id="12" name="StaticTrapPaint" width="128" height="64">
+ <layer id="12" name="StaticTrapPaint" width="128" height="64" visible="0">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2FtOw0AMhWELiRWwEZZwlsbSeGBhvFAxCp5bMhfT/J90hDRD7FHcNlXNAAAAAAAAAAA9tPsA2ErGa+DOZMz/2Smz/mLM/w5UWFdhH89B5s85t47nImP+/41szHxKdUbUv6NXJ1eoMaNqP9b5/neON39drKmGjKr52Ls6//dD7kr2ez/T9F5fy9lzeXVkvP9HkY19RpdytW66x/z75N7XsvJvLLnPgvT+K/lfNebjkOPnj3dNembmP4asfg9r+169GUnrM/9xdHH/bM9SXTXEjPn3yj0DSmr7M8j+ztpbT/dQl3uel2j0ITp7KhP02zX/M33T/l6whibWfmvs3xLMoQD9c8F8CtDfC9ZQgP5esIYC9PeCNRSgvxesoY19a8F82tCvJ5hLQfrLCeZToP4y5r+agvSXE9R9ZtJKQ0/TT8lfL5hLAfp7wRrafQBj7pF9/UQnrlVyPQAAAAAAAAAAAAAAAAAAABDBN/HIWko=
+   eJzt1UFuwzAMRFEebY7Wo3XRg3XTAoZASpRFOY7zHzBIK4mkEQWJGQAAAAAAAABghl79AHgpGZ+BTybj/p9OnXV19vEM6qyrs49nkPn3HK3jWWTc/7uR1dxPr09F/08kJ9X9qmZEfSp6fyoF2dEz29871+sz03s0b7XXu1MyV9WP+vZqME9W+xvdizeztz+qb9cRk/nv1Wh9V75O1ETPhvNkud/n2X47EvXHGi3uz8zZEeQpuTazn53bZmZ91Ac5uqimrc/Eq+nVY54uqmnr27Tr3vle/eozIU+LtZm051d6oJYKao+vcta9PW+9DfZTYZ//mPmfCW9Wux+dwx4q7DPKTB3qyHLf0asz2r/bWVGdF9SRxe9t+3/1LG/mynnMk8Xvq7dWNSuaGZ3L1KGWNvQ7ZrQ/CvbSTebLCfbTjebLuP+r6Sbz5QRj30GyVPo083R49YK9dIP5XnANvfoBjHu/s5+/6EStDvUAAAAAAAAAAAAAAAAAAADAHfwCAUSEUQ==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -33,7 +33,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="544" y="528">
+  <object id="135" x="488" y="304">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -184,15 +184,6 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="320" x="544" y="624" width="32" height="16">
-   <properties>
-    <property name="collisionTypeMask" value="5"/>
-    <property name="providesHardPushback" value="1"/>
-    <property name="providesSlipJump" value="1"/>
-    <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
-   </properties>
-  </object>
   <object id="324" gid="198" x="1408" y="688" width="16" height="64">
    <properties>
     <property name="speed" value="6"/>
@@ -272,11 +263,6 @@
   <object id="226" x="1008" y="608">
    <polyline points="0,0 -64,48 144,48 80,0"/>
   </object>
-  <object id="252" x="624" y="320" width="16" height="32">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
   <object id="253" x="1040" y="320" width="16" height="32">
    <properties>
     <property name="boundary_type" value="barrier"/>
@@ -353,7 +339,7 @@
    </properties>
   </object>
   <object id="338" x="560" y="288" width="80" height="16"/>
-  <object id="339" x="624" y="288" width="16" height="48"/>
+  <object id="339" x="624" y="288" width="16" height="64"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="172" x="776" y="683">
