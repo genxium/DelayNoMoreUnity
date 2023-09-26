@@ -116,6 +116,7 @@ message CharacterDownsync {
 	bool primarilyOnSlippableHardPushback = 41; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
 	bool prevWasCrouching = 42;
 	bool newBirth = 43;
+	int32 lowerPartFramesInChState = 44;
 
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;

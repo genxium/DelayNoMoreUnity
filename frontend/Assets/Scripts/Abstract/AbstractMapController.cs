@@ -384,7 +384,11 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var chConfig = characters[currCharacterDownsync.SpeciesId];
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
-            chAnimCtrl.updateCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig);
+            if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
+                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
+            } else {
+                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig);
+            }
             newPosHolder.Set(wx + teamRibbonOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
             chAnimCtrl.teamRibbon.transform.localPosition = newPosHolder;
             if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
@@ -1348,7 +1352,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, triggerMask, subCycleTriggerFrames, subCycleQuota, spawnChSpeciesIdList;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, spawnChSpeciesIdList;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
