@@ -11,6 +11,9 @@ public class CharacterAnimController : MonoBehaviour {
     public TeamRibbon teamRibbon;
     public Animator lowerPart, upperPart;
 
+    public Vector3 scaleHolder = new Vector3();
+    public Vector3 positionHolder = new Vector3();
+
     protected static HashSet<CharacterState> INTERRUPT_WAIVE_SET = new HashSet<CharacterState> {
         Idle1,
         Walking,
@@ -25,9 +28,10 @@ public class CharacterAnimController : MonoBehaviour {
     };
 
     Dictionary<CharacterState, AnimationClip> lookUpTable;
+    Dictionary<string, AnimationClip> lowerLookUpTable;
 
-    private void getMainAnimator() {
-        return (null == upperPart ? this.gameObject.GetComponent<Animator>() : upperPart.GetComponent<Animator>());
+    private Animator getMainAnimator() {
+        return (null == upperPart ? this.gameObject.GetComponent<Animator>() : upperPart);
     }
 
     // Start is called before the first frame update
@@ -39,49 +43,125 @@ public class CharacterAnimController : MonoBehaviour {
             Enum.TryParse(clip.name, out chState);
             lookUpTable[chState] = clip;
         }
+        
+        if (null != lowerPart) {
+            foreach (AnimationClip clip in lowerPart.runtimeAnimatorController.animationClips) {
+                lowerLookUpTable[clip.name] = clip;
+            }
+        }
     }
 
     public void updateCharacterAnim(CharacterDownsync rdfCharacter, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig) {
         // As this function might be called after many frames of a rollback, it's possible that the playing animation was predicted, different from "prevRdfCharacter.CharacterState" but same as "newCharacterState". More granular checks are needed to determine whether we should interrupt the playing animation.  
-            var newCharacterState = rdfCharacter.CharacterState;
+        var newCharacterState = rdfCharacter.CharacterState;
 
-            var animator = getMainAnimator();
-            // Update directions
-            if (0 > rdfCharacter.DirX) {
-                this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
-            } else if (0 < rdfCharacter.DirX) {
-                this.gameObject.transform.localScale = new Vector3(+1.0f, 1.0f);
+        var animator = getMainAnimator();
+        // Update directions
+        if (0 > rdfCharacter.DirX) {
+            scaleHolder.Set(-1.0f, 1.0f, this.gameObject.transform.localScale.z);
+            this.gameObject.transform.localScale = scaleHolder;
+        } else if (0 < rdfCharacter.DirX) {
+            scaleHolder.Set(+1.0f, 1.0f, this.gameObject.transform.localScale.z);
+            this.gameObject.transform.localScale = scaleHolder;
+        }
+        if (OnWallIdle1 == newCharacterState || TurnAround == newCharacterState) {
+            if (0 < rdfCharacter.OnWallNormX) {
+                scaleHolder.Set(-1.0f, 1.0f, this.gameObject.transform.localScale.z);
+                this.gameObject.transform.localScale = scaleHolder;
+            } else {
+                scaleHolder.Set(+1.0f, 1.0f, this.gameObject.transform.localScale.z);
+                this.gameObject.transform.localScale = scaleHolder;
             }
-            if (OnWallIdle1 == newCharacterState || TurnAround == newCharacterState) {
-                if (0 < rdfCharacter.OnWallNormX) {
-                    this.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f);
-                } else {
-                    this.gameObject.transform.localScale = new Vector3(+1.0f, 1.0f);
-                }
-            }
+        }
 
-            var newAnimName = newCharacterState.ToString();
-            int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
-            int targetClipIdx = 0; // We have only 1 frame anim playing at any time
-            var curClip = animator.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
-            var playingAnimName = curClip.name;
+        var newAnimName = newCharacterState.ToString();
+        int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
+        int targetClipIdx = 0; // We have only 1 frame anim playing at any time
+        var curClip = animator.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
+        var playingAnimName = curClip.name;
 
-            if (playingAnimName.Equals(newAnimName) && INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
-                return;
-            }
+        if (playingAnimName.Equals(newAnimName) && INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
+            return;
+        }
 
-            if (INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
-                animator.Play(newAnimName, targetLayer);
-                return;
-            }
+        if (INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
+            animator.Play(newAnimName, targetLayer);
+            return;
+        }
 
-            var targetClip = lookUpTable[newCharacterState];
-            var frameIdxInAnim = rdfCharacter.FramesInChState;
-            if (InAirIdle1ByJump == newCharacterState || InAirIdle1ByWallJump == newCharacterState) {
-                frameIdxInAnim = chConfig.InAirIdleFrameIdxTurningPoint + (frameIdxInAnim - chConfig.InAirIdleFrameIdxTurningPoint) % chConfig.InAirIdleFrameIdxTurnedCycle; // TODO: Anyway to avoid using division here?
+        var targetClip = lookUpTable[newCharacterState];
+        var frameIdxInAnim = rdfCharacter.FramesInChState;
+        if (InAirIdle1ByJump == newCharacterState || InAirIdle1ByWallJump == newCharacterState) {
+            frameIdxInAnim = chConfig.InAirIdleFrameIdxTurningPoint + (frameIdxInAnim - chConfig.InAirIdleFrameIdxTurningPoint) % chConfig.InAirIdleFrameIdxTurnedCycle; // TODO: Anyway to avoid using division here?
+        }
+        float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
+        animator.Play(newAnimName, targetLayer, normalizedFromTime);
+    }
+
+    public void updateTwoPartsCharacterAnim(CharacterDownsync rdfCharacter, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig, float effectivelyInfinitelyFar) {
+        var newCharacterState = rdfCharacter.CharacterState;
+
+        // Update directions
+        if (0 > rdfCharacter.DirX) {
+            scaleHolder.Set(-1.0f, 1.0f, this.gameObject.transform.localScale.z);
+            this.gameObject.transform.localScale = scaleHolder;
+        } else if (0 < rdfCharacter.DirX) {
+            scaleHolder.Set(+1.0f, 1.0f, this.gameObject.transform.localScale.z);
+            this.gameObject.transform.localScale = scaleHolder;
+        }
+        if (OnWallIdle1 == newCharacterState || TurnAround == newCharacterState) {
+            if (0 < rdfCharacter.OnWallNormX) {
+                scaleHolder.Set(-1.0f, 1.0f, this.gameObject.transform.localScale.z);
+                this.gameObject.transform.localScale = scaleHolder;
+            } else {
+                scaleHolder.Set(+1.0f, 1.0f, this.gameObject.transform.localScale.z);
+                this.gameObject.transform.localScale = scaleHolder;
             }
-            float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
-            animator.Play(newAnimName, targetLayer, normalizedFromTime);
+        }
+
+        int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
+        int targetClipIdx = 0; // We have only 1 frame anim playing at any time
+        // Hide lower part when necessary
+        if (shared.Battle.INVALID_FRAMES_IN_CH_STATE == rdfCharacter.LowerPartFramesInChState) {
+            positionHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lowerPart.gameObject.transform.position.z); 
+            lowerPart.gameObject.transform.position = positionHolder;
+        } else {
+            positionHolder.Set(0, 0, lowerPart.gameObject.transform.position.z); 
+            lowerPart.gameObject.transform.position = positionHolder;
+            var lowerNewAnimName = "WalkingLowerPart"; 
+            switch (newCharacterState) {
+            case Atk1:
+             lowerNewAnimName = "StandingLowerPart";
+            break;
+            default:
+            break;
+            }
+            var lowerFrameIdxInAnim = rdfCharacter.LowerPartFramesInChState;
+            var lowerTargetClip = lowerLookUpTable[lowerNewAnimName];
+            float lowerNormalizedFromTime = (lowerFrameIdxInAnim / (lowerTargetClip.frameRate * lowerTargetClip.length)); // TODO: Anyway to avoid using division here?
+            lowerPart.Play(lowerNewAnimName, targetLayer, lowerNormalizedFromTime);
+        }
+
+        var upperNewAnimName = newCharacterState.ToString();
+        var curClip = upperPart.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
+        var upperPlayingAnimName = curClip.name;
+
+        if (upperPlayingAnimName.Equals(upperNewAnimName) && INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
+            return;
+        }
+
+        if (INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
+            upperPart.Play(upperNewAnimName, targetLayer);
+            return;
+        }
+
+        var upperTargetClip = lookUpTable[newCharacterState];
+        var upperFrameIdxInAnim = rdfCharacter.FramesInChState;
+        if (InAirIdle1ByJump == newCharacterState || InAirIdle1ByWallJump == newCharacterState) {
+            upperFrameIdxInAnim = chConfig.InAirIdleFrameIdxTurningPoint + (upperFrameIdxInAnim - chConfig.InAirIdleFrameIdxTurningPoint) % chConfig.InAirIdleFrameIdxTurnedCycle; // TODO: Anyway to avoid using division here?
+        }
+        float upperNormalizedFromTime = (upperFrameIdxInAnim / (upperTargetClip.frameRate * upperTargetClip.length)); // TODO: Anyway to avoid using division here?
+        upperPart.Play(upperNewAnimName, targetLayer, upperNormalizedFromTime);
     }
 
     /*
