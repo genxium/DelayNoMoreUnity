@@ -34,8 +34,7 @@ public class CharacterAnimController : MonoBehaviour {
         return (null == upperPart ? this.gameObject.GetComponent<Animator>() : upperPart);
     }
 
-    // Start is called before the first frame update
-    void Start() {
+    private void lazyInit() {
         lookUpTable = new Dictionary<CharacterState, AnimationClip>();
         var animator = getMainAnimator();
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) {
@@ -43,12 +42,17 @@ public class CharacterAnimController : MonoBehaviour {
             Enum.TryParse(clip.name, out chState);
             lookUpTable[chState] = clip;
         }
-        
+
+        lowerLookUpTable = new Dictionary<string, AnimationClip>();
         if (null != lowerPart) {
             foreach (AnimationClip clip in lowerPart.runtimeAnimatorController.animationClips) {
                 lowerLookUpTable[clip.name] = clip;
             }
         }
+    }
+    // Start is called before the first frame update
+    void Start() {
+        lazyInit();
     }
 
     public void updateCharacterAnim(CharacterDownsync rdfCharacter, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig) {
@@ -98,7 +102,11 @@ public class CharacterAnimController : MonoBehaviour {
         animator.Play(newAnimName, targetLayer, normalizedFromTime);
     }
 
+    /*
+     [WARNING] I once considered the use of "multi-layer animation", yet failed to find well documented steps to efficiently edit and preview the layers simultaneously. If budget permits I'd advance the workflow directly into using Skeletal Animation.
+     */
     public void updateTwoPartsCharacterAnim(CharacterDownsync rdfCharacter, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig, float effectivelyInfinitelyFar) {
+        lazyInit();
         var newCharacterState = rdfCharacter.CharacterState;
 
         // Update directions
@@ -124,10 +132,10 @@ public class CharacterAnimController : MonoBehaviour {
         // Hide lower part when necessary
         if (shared.Battle.INVALID_FRAMES_IN_CH_STATE == rdfCharacter.LowerPartFramesInChState) {
             positionHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lowerPart.gameObject.transform.position.z); 
-            lowerPart.gameObject.transform.position = positionHolder;
+            lowerPart.gameObject.transform.localPosition = positionHolder;
         } else {
             positionHolder.Set(0, 0, lowerPart.gameObject.transform.position.z); 
-            lowerPart.gameObject.transform.position = positionHolder;
+            lowerPart.gameObject.transform.localPosition = positionHolder;
             var lowerNewAnimName = "WalkingLowerPart"; 
             switch (newCharacterState) {
             case Atk1:

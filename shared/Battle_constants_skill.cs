@@ -210,7 +210,7 @@ namespace shared {
                     DirX = 1,
                     DirY = 0,
                     ExplosionFrames = 20,
-                    Hardness = 5,
+                    Hardness = 4,
                     BType = BulletType.Fireball,
                     ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
                     ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
@@ -633,6 +633,7 @@ namespace shared {
                         .AddHit(
                             new BulletConfig {
                                 StartupFrames = 4,
+                                StartupInvinsibleFrames = 10,
                                 ActiveFrames = 30,
                                 HitStunFrames = MAX_INT,
                                 BlockStunFrames = 9,

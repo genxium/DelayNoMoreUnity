@@ -196,6 +196,7 @@ namespace shared {
             for (int i = 0; i < roomCapacity; i++) {
                 var single = new CharacterDownsync();
                 single.Id = TERMINATING_PLAYER_ID;
+                single.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE;
                 single.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
                 ret.PlayersArr.Add(single);
             }

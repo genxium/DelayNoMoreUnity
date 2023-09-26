@@ -1281,6 +1281,19 @@ namespace shared {
                         thatCharacterInNextFrame.FramesInChState = 0;
                         thatCharacterInNextFrame.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE; // not showing isolated lower part in other ChStates
                     }
+                } else {
+                    switch (thatCharacterInNextFrame.CharacterState) {
+                        case Walking:
+                        case WalkingAtk1:
+                        case Atk1:
+                            if (INVALID_FRAMES_IN_CH_STATE == thatCharacterInNextFrame.LowerPartFramesInChState) {
+                                thatCharacterInNextFrame.LowerPartFramesInChState = 0;
+                            }
+                            break;
+                        default:
+                            thatCharacterInNextFrame.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE; // not showing isolated lower part in other ChStates
+                            break;
+                    }
                 }
                 thatCharacterInNextFrame.PrevWasCrouching = isCrouching(currCharacterDownsync.CharacterState);
 
@@ -1402,7 +1415,7 @@ namespace shared {
                     framesCapturedByInertia = 0;
                 }
                 int framesInChState = src.FramesInChState + 1;
-                int lowerPartFramesInChState = src.LowerPartFramesInChState + 1;
+                int lowerPartFramesInChState = (INVALID_FRAMES_IN_CH_STATE == src.LowerPartFramesInChState ? INVALID_FRAMES_IN_CH_STATE : src.LowerPartFramesInChState + 1);
                 int framesInvinsible = src.FramesInvinsible - 1;
                 if (0 > framesInvinsible ) {
                     framesInvinsible = 0;
@@ -1429,7 +1442,7 @@ namespace shared {
                     framesToRecover = 0;
                 }
                 int framesInChState = src.FramesInChState + 1;
-                int lowerPartFramesInChState = src.LowerPartFramesInChState + 1;
+                int lowerPartFramesInChState = (INVALID_FRAMES_IN_CH_STATE == src.LowerPartFramesInChState ? INVALID_FRAMES_IN_CH_STATE : src.LowerPartFramesInChState + 1);
                 int framesCapturedByInertia = src.FramesCapturedByInertia - 1; 
                 if (0 > framesCapturedByInertia) {
                     framesCapturedByInertia = 0;
