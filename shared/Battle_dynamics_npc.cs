@@ -355,7 +355,7 @@ namespace shared {
                 }
 
                 _processNextFrameJumpStartup(currCharacterDownsync, thatCharacterInNextFrame, chConfig);
-                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, true, false);
+                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, true, false, logger);
             }
         }
 

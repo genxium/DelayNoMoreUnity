@@ -245,7 +245,7 @@ namespace shared {
                 return;
             }
             // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
-            if (!currCharacterDownsync.JumpStarted && OnWallIdle1 == currCharacterDownsync.CharacterState) {
+            if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
                 thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
             } else if (Dashing == currCharacterDownsync.CharacterState || Dashing == thatCharacterInNextFrame.CharacterState) {
@@ -280,7 +280,7 @@ namespace shared {
                     }
                 }
                 _processNextFrameJumpStartup(currCharacterDownsync, thatCharacterInNextFrame, chConfig);
-                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false, usedSkill);
+                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false, usedSkill, logger);
             }
         }
         
@@ -300,18 +300,34 @@ namespace shared {
             if (currCharacterDownsync.JumpTriggered) {
                 // [WARNING] This assignment blocks a lot of CharacterState transition logic, including "_processInertiaWalking"!
                 thatCharacterInNextFrame.FramesToRecover = chConfig.ProactiveJumpStartupFrames; 
-                thatCharacterInNextFrame.CharacterState = currCharacterDownsync.OnWall ? InAirIdle1ByWallJump : InAirIdle1ByJump; 
+                if (currCharacterDownsync.OnWall) {
+                    thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
+                } else {
+                    thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
+                }
             } else if (isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
                 thatCharacterInNextFrame.JumpStarted = true;
             }
         }
 
-        public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill) {
+        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, ILoggerBridge logger) {
             if (isInJumpStartup(thatCharacterInNextFrame) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
                 return;
             }
+            /*
+            if (TurnAround == currCharacterDownsync.CharacterState) {
+                logger.LogInfo(stringifyPlayer(currCharacterDownsync) + " is already turning around at rdfId=" + rdfId);
+            }
+            */
             bool currFreeFromInertia = (0 == currCharacterDownsync.FramesCapturedByInertia);
             bool currBreakingFromInertia = (1 == currCharacterDownsync.FramesCapturedByInertia);
+            /* 
+            [WARNING] 
+            Special cases for turn-around inertia handling:
+            1. if "true == jumpedOrNot", then we've already met the criterions of "canJumpWithinInertia" in "_derivePlayerOpPattern";
+            2. if "InAirIdle1ByJump || InAirIdle1NoJump", turn-around should still be bound by inertia just like that of ground movements; 
+            3. if "InAirIdle1ByWallJump", turn-around is NOT bound by inertia because in most cases characters couldn't perform wall-jump and even if it could, "WallJumpingFramesToRecover+ProactiveJumpStartupFrames" already dominates most of the time.
+            */
             bool withInertiaBreakingState = (jumpedOrNot || (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState));
             bool alignedWithInertia = true;
             bool exactTurningAround = false;
@@ -369,8 +385,13 @@ namespace shared {
                         }
                     } else if (currFreeFromInertia) {
                         if (exactTurningAround) {
-                            thatCharacterInNextFrame.CharacterState = chConfig.HasTurnAroundAnim ? TurnAround : Walking;
+                            // logger.LogInfo(stringifyPlayer(currCharacterDownsync) + " is turning around at rdfId=" + rdfId);
+                            thatCharacterInNextFrame.CharacterState = (chConfig.HasTurnAroundAnim && !currCharacterDownsync.InAir) ? TurnAround : Walking;
                             thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
+                            if (chConfig.InertiaFramesToRecover > thatCharacterInNextFrame.FramesToRecover) {
+                                // To favor animation playing and prevent skill use when turning-around
+                                thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover - 1);
+                            }
                         } else if (stoppingFromWalking) {
                             thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
                         } else {
@@ -565,14 +586,13 @@ namespace shared {
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY + vhDiffInducedByCrouching;
                 if (currCharacterDownsync.JumpStarted) {
                     // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
-                    if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
+                    if (currCharacterDownsync.OnWall && InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
                         if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
                             newVx -= currCharacterDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
                         }
                         // Always jump to the opposite direction of wall inward norm
                         int xfac = (0 > currCharacterDownsync.OnWallNormX ? 1 : -1);
                         newVx += xfac * chConfig.WallJumpingInitVelX; // Immediately gets out of the snap
-                        newVy += chConfig.WallJumpingInitVelY;
                         thatCharacterInNextFrame.VelX = (xfac * chConfig.WallJumpingInitVelX);
                         thatCharacterInNextFrame.VelY = (chConfig.WallJumpingInitVelY);
                         thatCharacterInNextFrame.FramesToRecover = chConfig.WallJumpingFramesToRecover;
@@ -1277,7 +1297,7 @@ namespace shared {
                         case InAirIdle1ByWallJump:
                             bool hasBeenOnWallChState = (OnWallIdle1 == currCharacterDownsync.CharacterState);
                             bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
-                            if (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState) {
+                            if (!isInJumpStartup(thatCharacterInNextFrame) && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame) && (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState)) {
                                 thatCharacterInNextFrame.CharacterState = OnWallIdle1;
                             }
                             break;
