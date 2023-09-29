@@ -17,7 +17,7 @@
    eJztmjtOw0AQhq0gpDQpoigFUjgAnQsqSqIgREcFHADOwQGQcmUcaUcaRrNPP9n5i09+rD3e7LczayN2TdPsAAAAAAAASOAaLBb4tw382wb+bQP/toF/28C/beDfNkv1P0W/5mbF9l87TpWOc0m/VsYg/31i1OJ/W/CMuf2F2MO/Wf+t80+08F/sX/vNc/o/O1Lctw38D5X/W4Wl+W/h36T/VjC2/5ZtrfjX5sMYfrnHlfIc6Z9fS8dy3R/Kv5xntfk/KfwI6DzVAN6m1YhctHh9/Mv2Ev+a9xr9+2LxsfCdn7v+h/z7YsX8h7xb8S/H5HLuMcDU/lPyP9d/indL/qkej5X/2nPP4jn8PG9rxX3kX9YF4hjwn+Pdkn+foxS3N4y+dZ6f963t/J1fth09/ku8w/84/q8cvnU+9vcf37oA///TP/+GS/V/xe677B8c5J+O4f+v/5OC7/svdm3oOiLHv6z/8vceApAr8k/H8B/P/xA563kO3D89h7Za/vv6Jd8RUP+X51+L6fO/a/T812JJ/zz/4T/dv/y9Y+Y/jy39y/qfEk++O9AcgP/l5L+P2Pdfahxe/+Hfrn/+DkD78F+X/zuHbw3g/i/sM/y/CV4cNfk/KeR8/+UypP99IkdxnOKfnNP+h6M2/7Gc1HKfxnGovL8t9B+q/9RPWv9z/Mu8v/DZ8eS2c/iXLuao/2PW/iHhtV5rz/H/1fHcNN+8htWU/0vxv+7GmPq1YX1cF/oP1Sf5fyKa93fFuxX/sfo/pnvpn+ZA7nyMrVE+91q+W/M/Zf5L95p/3xyIxQ7NAek9lO+SLfxns3HcdzxExlDzT9D9FK+0Pzn5Dv/9/JPTDdvXxnDjQV6zFW0lfcrxXbN/UAb826YG/2A64N828G8b+LfNFP4BAAAAAAAAAAAAAAAAAAAAAAAsh18C4iGz
   </data>
  </layer>
- <layer id="12" name="StaticTrapPaint" width="128" height="64" visible="0">
+ <layer id="12" name="StaticTrapPaint" width="128" height="64">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>

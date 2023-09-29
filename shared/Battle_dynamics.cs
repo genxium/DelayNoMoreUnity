@@ -237,12 +237,24 @@ namespace shared {
             return skillUsed;
         }
 
-        private static void _applyGravity(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+        private static void _applyGravity(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ILoggerBridge logger) {
+            /*
+            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                logger.LogInfo("_applyGravity: rdfId=" + rdfId + ", " + stringifyPlayer(currCharacterDownsync));
+            }
+            */
             if (currCharacterDownsync.OmitGravity) {
                 return;
             }
             if (!currCharacterDownsync.InAir) {
                 return;
+            }
+            if (
+                currCharacterDownsync.OnWall // [WARNING] It's important to have this "OnWall" criteria here, otherwise "isInJumpStartup(currCharacterDownsync)" would be confused by the "framesToRecover" assigned by "WallJumpingFramesToRecover"  
+                &&
+                (isInJumpStartup(thatCharacterInNextFrame) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame))
+            ) {
+                return; 
             }
             // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
             if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
@@ -265,6 +277,7 @@ namespace shared {
                 var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
+                    _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
                     continue;
                 }
 
@@ -279,7 +292,7 @@ namespace shared {
                         continue; // Don't allow movement if skill is used
                     }
                 }
-                _processNextFrameJumpStartup(currCharacterDownsync, thatCharacterInNextFrame, chConfig);
+                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
                 _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false, usedSkill, logger);
             }
         }
@@ -292,17 +305,24 @@ namespace shared {
             }
         }
 
-        public static void _processNextFrameJumpStartup(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig) {
+        public static void _processNextFrameJumpStartup(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, ILoggerBridge logger) {
+            /*
+            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                logger.LogInfo("_processNextFrameJumpStartup: rdfId=" + rdfId + ", " + stringifyPlayer(currCharacterDownsync));
+            }
+            */
             if (isInJumpStartup(thatCharacterInNextFrame)) {
                 return;
             }
 
             if (currCharacterDownsync.JumpTriggered) {
                 // [WARNING] This assignment blocks a lot of CharacterState transition logic, including "_processInertiaWalking"!
-                thatCharacterInNextFrame.FramesToRecover = chConfig.ProactiveJumpStartupFrames; 
                 if (currCharacterDownsync.OnWall) {
+                    thatCharacterInNextFrame.FramesToRecover = (chConfig.ProactiveJumpStartupFrames >> 1); // Don't make this too big, it'd be weird hanging in air for too long
                     thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
+                    thatCharacterInNextFrame.VelY = 0;
                 } else {
+                    thatCharacterInNextFrame.FramesToRecover = chConfig.ProactiveJumpStartupFrames;
                     thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                 }
             } else if (isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
@@ -587,6 +607,7 @@ namespace shared {
                 if (currCharacterDownsync.JumpStarted) {
                     // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
                     if (currCharacterDownsync.OnWall && InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                        // logger.LogInfo("rdfId=" + currRenderFrame.Id + ", wall jump started for " + stringifyPlayer(currCharacterDownsync));
                         if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
                             newVx -= currCharacterDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
                         }
@@ -628,7 +649,7 @@ namespace shared {
                 // Add to collision system
                 collisionSys.AddSingle(characterCollider);
 
-                _applyGravity(currCharacterDownsync, chConfig, thatCharacterInNextFrame);
+                _applyGravity(currRenderFrame.Id, currCharacterDownsync, chConfig, thatCharacterInNextFrame, logger);
             }
         }
 

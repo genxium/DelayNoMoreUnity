@@ -339,7 +339,11 @@ public abstract class AbstractMapController : MonoBehaviour {
 		   --------------------------------------------------------
 		 */
 
-        // Printing of this message might induce a performance impact.
+        /*
+         * Printing of this message might induce a performance impact.
+         * 
+         * TODO: Instead of printing, add frameLog for (currRenderFrameId, rolledBackInputFrameDownsyncId, rolledBackToRenderFrameId)!
+         */
         Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
@@ -1276,7 +1280,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             }
                             staticColliders[staticColliderIdx++] = trapCollider;
                             trapLocalId++;
-                            Debug.Log(String.Format("new completely static trap created {0}", trap));
+                            // Debug.Log(String.Format("new completely static trap created {0}", trap));
                         } else {
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
                             var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
@@ -1407,10 +1411,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         string[] trackingIdListStrParts = trackingIdListStr.Split(',');
                         foreach (var trackingIdListStrPart in trackingIdListStrParts) {
+                            if (String.IsNullOrEmpty(trackingIdListStrPart)) continue;
                             trigger.ConfigFromTiled.TrackingIdList.Add(trackingIdListStrPart.ToInt());
                         }
                         string[] spawnChSpeciesIdListStrParts = spawnChSpeciesIdListStr.Split(',');
                         foreach (var spawnChSpeciesIdListStrPart in spawnChSpeciesIdListStrParts) {
+                            if (String.IsNullOrEmpty(spawnChSpeciesIdListStrPart)) continue;
                             trigger.ConfigFromTiled.SpawnChSpeciesIdList.Add(spawnChSpeciesIdListStrPart.ToInt());
                         }
                         var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);

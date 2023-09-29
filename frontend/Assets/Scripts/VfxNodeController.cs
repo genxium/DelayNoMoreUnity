@@ -25,6 +25,6 @@ public class VfxNodeController : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        Debug.Log(this.gameObject.name + " is being destroyed");
+        // Debug.Log(this.gameObject.name + " is being destroyed");
     }
 }
