@@ -118,6 +118,8 @@ message CharacterDownsync {
 	bool newBirth = 43;
 	int32 lowerPartFramesInChState = 44;
 
+    bool jumpStarted = 45;
+
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
 	int32 framesInvinsible = 1026;

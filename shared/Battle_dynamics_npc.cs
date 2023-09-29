@@ -354,6 +354,7 @@ namespace shared {
                     continue; // Don't allow movement if skill is used
                 }
 
+                _processNextFrameJumpStartup(currCharacterDownsync, thatCharacterInNextFrame, chConfig);
                 _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, true, false);
             }
         }

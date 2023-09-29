@@ -56,5 +56,7 @@
         public bool HasTurnAroundAnim;
 
         public int Hardness;
+
+        public int ProactiveJumpStartupFrames;
     }
 }

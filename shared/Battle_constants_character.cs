@@ -49,6 +49,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = true,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 5
                     }),
 
@@ -81,6 +82,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 5
                     }),
 
@@ -119,6 +121,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = true,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 5
                     }),
 
@@ -151,6 +154,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 5
                     }),
 
@@ -185,6 +189,7 @@ namespace shared {
                         HasTurnAroundAnim = true,
                         SlidingEnabled = true,
                         CrouchingEnabled = true,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 5
                     }),
 
@@ -218,6 +223,7 @@ namespace shared {
                         MpRegenRate = 2,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = true,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 8
                     }),
             });
