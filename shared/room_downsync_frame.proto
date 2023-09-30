@@ -119,6 +119,7 @@ message CharacterDownsync {
 	int32 lowerPartFramesInChState = 44;
 
     bool jumpStarted = 45;
+    int32 framesToStartJump = 46;
 
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
