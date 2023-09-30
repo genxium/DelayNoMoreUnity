@@ -237,15 +237,27 @@ namespace shared {
             return skillUsed;
         }
 
-        private static void _applyGravity(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+        private static void _applyGravity(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ILoggerBridge logger) {
+            /*
+            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                logger.LogInfo("_applyGravity: rdfId=" + rdfId + ", " + stringifyPlayer(currCharacterDownsync));
+            }
+            */
             if (currCharacterDownsync.OmitGravity) {
                 return;
             }
             if (!currCharacterDownsync.InAir) {
                 return;
             }
+            if (
+                currCharacterDownsync.OnWall // [WARNING] It's important to have this "OnWall" criteria here, otherwise "isInJumpStartup(currCharacterDownsync)" would be confused by the "framesToRecover" assigned by "WallJumpingFramesToRecover"  
+                &&
+                (isInJumpStartup(thatCharacterInNextFrame) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame))
+            ) {
+                return; 
+            }
             // TODO: The current dynamics calculation has a bug. When "true == currCharacterDownsync.InAir" and the character lands on the intersecting edge of 2 parallel rectangles, the hardPushbacks are doubled.
-            if (!currCharacterDownsync.JumpTriggered && OnWallIdle1 == currCharacterDownsync.CharacterState) {
+            if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
                 thatCharacterInNextFrame.VelY = chConfig.WallSlidingVelY;
             } else if (Dashing == currCharacterDownsync.CharacterState || Dashing == thatCharacterInNextFrame.CharacterState) {
@@ -265,6 +277,7 @@ namespace shared {
                 var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
+                    _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
                     continue;
                 }
 
@@ -279,8 +292,8 @@ namespace shared {
                         continue; // Don't allow movement if skill is used
                     }
                 }
-
-                _processInertiaWalking(currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false, usedSkill);
+                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
+                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false, usedSkill, logger);
             }
         }
         
@@ -292,9 +305,49 @@ namespace shared {
             }
         }
 
-        public static void _processInertiaWalking(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill) {
+        public static void _processNextFrameJumpStartup(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, ILoggerBridge logger) {
+            /*
+            if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                logger.LogInfo("_processNextFrameJumpStartup: rdfId=" + rdfId + ", " + stringifyPlayer(currCharacterDownsync));
+            }
+            */
+            if (isInJumpStartup(thatCharacterInNextFrame)) {
+                return;
+            }
+
+            if (currCharacterDownsync.JumpTriggered) {
+                // [WARNING] This assignment blocks a lot of CharacterState transition logic, including "_processInertiaWalking"!
+                if (currCharacterDownsync.OnWall) {
+                    thatCharacterInNextFrame.FramesToStartJump = (chConfig.ProactiveJumpStartupFrames >> 1);
+                    thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
+                    thatCharacterInNextFrame.VelY = 0;
+                } else {
+                    thatCharacterInNextFrame.FramesToStartJump = chConfig.ProactiveJumpStartupFrames;
+                    thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
+                }
+            } else if (isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
+                thatCharacterInNextFrame.JumpStarted = true;
+            }
+        }
+
+        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, ILoggerBridge logger) {
+            if (isInJumpStartup(thatCharacterInNextFrame) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
+                return;
+            }
+            /*
+            if (TurnAround == currCharacterDownsync.CharacterState) {
+                logger.LogInfo(stringifyPlayer(currCharacterDownsync) + " is already turning around at rdfId=" + rdfId);
+            }
+            */
             bool currFreeFromInertia = (0 == currCharacterDownsync.FramesCapturedByInertia);
             bool currBreakingFromInertia = (1 == currCharacterDownsync.FramesCapturedByInertia);
+            /* 
+            [WARNING] 
+            Special cases for turn-around inertia handling:
+            1. if "true == jumpedOrNot", then we've already met the criterions of "canJumpWithinInertia" in "_derivePlayerOpPattern";
+            2. if "InAirIdle1ByJump || InAirIdle1NoJump", turn-around should still be bound by inertia just like that of ground movements; 
+            3. if "InAirIdle1ByWallJump", turn-around is NOT bound by inertia because in most cases characters couldn't perform wall-jump and even if it could, "WallJumpingFramesToRecover+ProactiveJumpStartupFrames" already dominates most of the time.
+            */
             bool withInertiaBreakingState = (jumpedOrNot || (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState));
             bool alignedWithInertia = true;
             bool exactTurningAround = false;
@@ -352,8 +405,13 @@ namespace shared {
                         }
                     } else if (currFreeFromInertia) {
                         if (exactTurningAround) {
-                            thatCharacterInNextFrame.CharacterState = chConfig.HasTurnAroundAnim ? TurnAround : Walking;
+                            // logger.LogInfo(stringifyPlayer(currCharacterDownsync) + " is turning around at rdfId=" + rdfId);
+                            thatCharacterInNextFrame.CharacterState = (chConfig.HasTurnAroundAnim && !currCharacterDownsync.InAir) ? TurnAround : Walking;
                             thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
+                            if (chConfig.InertiaFramesToRecover > thatCharacterInNextFrame.FramesToRecover) {
+                                // [WARNING] Deliberately not setting "thatCharacterInNextFrame.FramesToRecover" if not turning around to allow using skills!
+                                thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover - 1); // To favor animation playing and prevent skill use when turning-around
+                            }
                         } else if (stoppingFromWalking) {
                             thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
                         } else {
@@ -546,16 +604,16 @@ namespace shared {
                 }
 
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY + vhDiffInducedByCrouching;
-                if (currCharacterDownsync.JumpTriggered) {
+                if (currCharacterDownsync.JumpStarted) {
                     // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
-                    if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
+                    if (currCharacterDownsync.OnWall && InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
+                        // logger.LogInfo("rdfId=" + currRenderFrame.Id + ", wall jump started for " + stringifyPlayer(currCharacterDownsync));
                         if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
                             newVx -= currCharacterDownsync.VelX; // Cancel the alleged horizontal movement pointing to same direction of wall inward norm first
                         }
                         // Always jump to the opposite direction of wall inward norm
                         int xfac = (0 > currCharacterDownsync.OnWallNormX ? 1 : -1);
                         newVx += xfac * chConfig.WallJumpingInitVelX; // Immediately gets out of the snap
-                        newVy += chConfig.WallJumpingInitVelY;
                         thatCharacterInNextFrame.VelX = (xfac * chConfig.WallJumpingInitVelX);
                         thatCharacterInNextFrame.VelY = (chConfig.WallJumpingInitVelY);
                         thatCharacterInNextFrame.FramesToRecover = chConfig.WallJumpingFramesToRecover;
@@ -565,6 +623,7 @@ namespace shared {
                         thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                     }
                 } else if (!currCharacterDownsync.InAir && currCharacterDownsync.PrimarilyOnSlippableHardPushback && currCharacterDownsync.SlipJumpTriggered) {
+                    // [WARNING] By now "slipJump" is deliberately implemented without any startup frame, because I haven't prepared proper animations for it :(
                     newVy -= SLIP_JUMP_CHARACTER_DROP_VIRTUAL;
                 } 
 
@@ -590,7 +649,7 @@ namespace shared {
                 // Add to collision system
                 collisionSys.AddSingle(characterCollider);
 
-                _applyGravity(currCharacterDownsync, chConfig, thatCharacterInNextFrame);
+                _applyGravity(currRenderFrame.Id, currCharacterDownsync, chConfig, thatCharacterInNextFrame, logger);
             }
         }
 
@@ -639,7 +698,7 @@ namespace shared {
                 thatCharacterInNextFrame.OnSlope = (!thatCharacterInNextFrame.OnWall && 0 != primaryOverlapResult.OverlapY && 0 != primaryOverlapResult.OverlapX);
                 // Kindly remind that (primaryOverlapResult.OverlapX, primaryOverlapResult.OverlapY) points INTO the slope :) 
                 float projectedVel = (thatCharacterInNextFrame.VelX * primaryOverlapResult.OverlapX + thatCharacterInNextFrame.VelY * primaryOverlapResult.OverlapY); // This value is actually in VirtualGrid unit, but converted to float, thus it'd be eventually rounded 
-                bool goingDown = (thatCharacterInNextFrame.OnSlope && !currCharacterDownsync.JumpTriggered && thatCharacterInNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
+                bool goingDown = (thatCharacterInNextFrame.OnSlope && !currCharacterDownsync.JumpStarted && thatCharacterInNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
                 if (goingDown) {
                     /*
                        if (2 == currCharacterDownsync.SpeciesId) {
@@ -1198,6 +1257,7 @@ namespace shared {
                         }
                     }
                 } else {
+                    // next frame NOT in air
                     CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
                     if (inAirSet.Contains(oldNextCharacterState) && BlownUp1 != oldNextCharacterState && OnWallIdle1 != oldNextCharacterState && Dashing != oldNextCharacterState) {
                         switch (oldNextCharacterState) {
@@ -1206,7 +1266,8 @@ namespace shared {
                                 break;
                             case InAirIdle1ByJump:
                             case InAirIdle1ByWallJump:
-                                if (!currCharacterDownsync.InAir && currCharacterDownsync.JumpTriggered) {
+                                if ( isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame) || isInJumpStartup(thatCharacterInNextFrame) ) {
+                                    // [WARNING] Don't change CharacterState in this special case!
                                     break;
                                 }
                                 thatCharacterInNextFrame.CharacterState = Idle1;
@@ -1257,7 +1318,7 @@ namespace shared {
                         case InAirIdle1ByWallJump:
                             bool hasBeenOnWallChState = (OnWallIdle1 == currCharacterDownsync.CharacterState);
                             bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
-                            if (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState) {
+                            if (!isInJumpStartup(thatCharacterInNextFrame) && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame) && (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState)) {
                                 thatCharacterInNextFrame.CharacterState = OnWallIdle1;
                             }
                             break;
@@ -1342,7 +1403,7 @@ namespace shared {
                 var dst = nextRenderFrameNpcs[aliveSlotI];
                 int joinIndex = roomCapacity + aliveSlotI + 1;
 
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, joinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, joinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, dst);
                 candidateI++;
                 aliveSlotI++;
             }
@@ -1428,8 +1489,12 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
+                int framesToStartJump = src.FramesToStartJump - 1;
+                if (0 > framesToStartJump) {
+                    framesToStartJump = 0;
+                } 
                 var dst = nextRenderFramePlayers[i];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, dst);
                 _resetVelocityOnRecovered(src, dst);
             }
 
@@ -1459,8 +1524,12 @@ namespace shared {
                 if (mp >= src.MaxMp) {
                     mp = src.MaxMp;
                 }
+                int framesToStartJump = src.FramesToStartJump - 1;
+                if (0 > framesToStartJump) {
+                    framesToStartJump = 0;
+                } 
                 var dst = nextRenderFrameNpcs[currNpcI];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, dst);
                 _resetVelocityOnRecovered(src, dst);
                 currNpcI++;
             }
@@ -1616,10 +1685,18 @@ namespace shared {
         protected static bool addNewNpcToNextFrame(int virtualGridX, int virtualGridY, int dirX, int dirY, int characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
             var chConfig = Battle.characters[characterSpeciesId];
             int birthVirtualX = virtualGridX + ((chConfig.DefaultSizeX >> 2) * dirX);
-            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, true, 0, nextRenderFrameNpcs[npcCnt]);
+            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, true, 0, false, 0, nextRenderFrameNpcs[npcCnt]);
             npcLocalIdCounter++;
             npcCnt++;
             return true;
         }
+        
+        public static bool isInJumpStartup(CharacterDownsync cd) {
+            return (InAirIdle1ByJump == cd.CharacterState || InAirIdle1ByWallJump == cd.CharacterState) && (0 < cd.FramesToStartJump);
+        } 
+
+        public static bool isJumpStartupJustEnded(CharacterDownsync currCd, CharacterDownsync nextCd) {
+            return ((InAirIdle1ByJump == currCd.CharacterState && InAirIdle1ByJump == nextCd.CharacterState) || (InAirIdle1ByWallJump == currCd.CharacterState && InAirIdle1ByWallJump == nextCd.CharacterState)) && (1 == currCd.FramesToStartJump) && (0 == nextCd.FramesToStartJump);
+        } 
     }
 }
