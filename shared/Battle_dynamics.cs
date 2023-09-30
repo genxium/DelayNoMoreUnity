@@ -293,7 +293,7 @@ namespace shared {
                     }
                 }
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
-                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, jumpedOrNot, chConfig, false, usedSkill, logger);
+                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, logger);
             }
         }
         
@@ -330,7 +330,7 @@ namespace shared {
             }
         }
 
-        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, bool jumpedOrNot, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, ILoggerBridge logger) {
+        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, ILoggerBridge logger) {
             if (isInJumpStartup(thatCharacterInNextFrame) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
                 return;
             }
@@ -344,11 +344,11 @@ namespace shared {
             /* 
             [WARNING] 
             Special cases for turn-around inertia handling:
-            1. if "true == jumpedOrNot", then we've already met the criterions of "canJumpWithinInertia" in "_derivePlayerOpPattern";
+            1. if "true == thatCharacterInNextFrame.JumpTriggered", then we've already met the criterions of "canJumpWithinInertia" in "_derivePlayerOpPattern";
             2. if "InAirIdle1ByJump || InAirIdle1NoJump", turn-around should still be bound by inertia just like that of ground movements; 
             3. if "InAirIdle1ByWallJump", turn-around is NOT bound by inertia because in most cases characters couldn't perform wall-jump and even if it could, "WallJumpingFramesToRecover+ProactiveJumpStartupFrames" already dominates most of the time.
             */
-            bool withInertiaBreakingState = (jumpedOrNot || (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState));
+            bool withInertiaBreakingState = (thatCharacterInNextFrame.JumpTriggered || (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState));
             bool alignedWithInertia = true;
             bool exactTurningAround = false;
             bool stoppingFromWalking = false;
@@ -423,7 +423,8 @@ namespace shared {
                 }
             }
 
-            if (!jumpedOrNot && 0 > effDy && !currCharacterDownsync.InAir && chConfig.CrouchingEnabled) {
+            if (!thatCharacterInNextFrame.JumpTriggered && !currCharacterDownsync.InAir && 0 > effDy && chConfig.CrouchingEnabled) {
+                // [WARNING] This particular condition is set to favor a smooth "Sliding -> CrouchIdle1" & "CrouchAtk1 -> CrouchAtk1" transitions, we couldn't use "0 == thatCharacterInNextFrame.FramesToRecover" for checking here because "CrouchAtk1 -> CrouchAtk1" transition would break by 1 frame. 
                 if (1 >= currCharacterDownsync.FramesToRecover) {
                     thatCharacterInNextFrame.VelX = 0;
                     thatCharacterInNextFrame.CharacterState = CrouchIdle1;
