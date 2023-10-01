@@ -26,7 +26,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
     protected int maxChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
-    public InplaceHpBar inplaceHpBarPrefab;
+    public GameObject inplaceHpBarPrefab;
     public GameObject fireballPrefab;
     public GameObject errStackLogPanelPrefab;
     public GameObject teamRibbonPrefab;
@@ -72,7 +72,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Dictionary<int, GameObject> npcSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, CharacterAnimController>> cachedNpcs;
     protected KvPriorityQueue<string, TeamRibbon> cachedTeamRibbons;
-
+    protected KvPriorityQueue<string, InplaceHpBar> cachedHpBars;
 
     protected bool shouldDetectRealtimeRenderHistoryCorrection = false; // Don't enable this in prod, it might have significant memory performance impact!
     protected bool frameLogEnabled = false;
@@ -99,9 +99,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     public GameObject playerLightsPrefab;
     protected PlayerLights selfPlayerLights;
 
-    protected Vector2 teamRibbonOffset = new Vector2(-8f, +18f);
-
-    protected Vector2 inplaceHpBarOffset = new Vector2(-16f, +24f);
+    protected Vector2 teamRibbonOffset = new Vector2(-10f, +6f);
+    protected Vector2 inplaceHpBarOffset = new Vector2(-8f, +2f);
     protected float lineRendererZ = +5;
     protected float triggerZ = 0;
     protected float characterZ = 0;
@@ -115,7 +114,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     private float DAMAGED_THICKNESS = 1.5f;
     private float DAMAGED_BLINK_SECONDS_HALF = 0.2f;
 
-    protected KvPriorityQueue<string, TeamRibbon>.ValScore cachedTeamRibbonsScore = (x) => x.score;
+    protected KvPriorityQueue<string, TeamRibbon>.ValScore cachedTeamRibbonScore = (x) => x.score;
+    protected KvPriorityQueue<string, InplaceHpBar>.ValScore cachedHpBarScore = (x) => x.score;
     protected KvPriorityQueue<string, CharacterAnimController>.ValScore cachedNpcScore = (x) => x.score;
     protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
     protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
@@ -366,6 +366,23 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
 
+        // Put teamRibbons and hpBars to infinitely far first
+        for (int i = cachedTeamRibbons.vals.StFrameId; i < cachedTeamRibbons.vals.EdFrameId; i++) {
+            var (res, teamRibbon) = cachedTeamRibbons.vals.GetByFrameId(i);
+            if (!res || null == teamRibbon) throw new ArgumentNullException(String.Format("There's no cachedTeamRibbon for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedTeamRibbons.vals.StFrameId, cachedTeamRibbons.vals.EdFrameId));
+
+            newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, inplaceHpBarZ);
+            teamRibbon.gameObject.transform.position = newPosHolder;
+        }
+
+        for (int i = cachedHpBars.vals.StFrameId; i < cachedHpBars.vals.EdFrameId; i++) {
+            var (res, hpBar) = cachedHpBars.vals.GetByFrameId(i);
+            if (!res || null == hpBar) throw new ArgumentNullException(String.Format("There's no cachedHpBar for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedHpBars.vals.StFrameId, cachedHpBars.vals.EdFrameId));
+
+            newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, inplaceHpBarZ);
+            hpBar.gameObject.transform.position = newPosHolder;
+        }
+
         // Put "Tracing" vfxNodes to infinitely far first
         foreach (var entry in cachedVfxNodes) {
             var speciesId = entry.Key;
@@ -435,11 +452,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             calcCharacterBoundingBoxInCollisionSpace(currNpcDownsync, chConfig, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
 
-            newTlPosHolder.Set(wx - .5f * boxCw, wy + .5f * boxCh, characterZ);
-            newTrPosHolder.Set(wx + .5f * boxCw, wy + .5f * boxCh, characterZ);
-            newBlPosHolder.Set(wx - .5f * boxCw, wy - .5f * boxCh, characterZ);
-            newBrPosHolder.Set(wx + .5f * boxCw, wy - .5f * boxCh, characterZ);
-
+            float halfBoxCh = .5f * boxCh;
+            float halfBoxCw = .5f * boxCw;
+            newTlPosHolder.Set(wx - halfBoxCw, wy + halfBoxCh, characterZ);
+            newTrPosHolder.Set(wx + halfBoxCw, wy + halfBoxCh, characterZ);
+            newBlPosHolder.Set(wx - halfBoxCw, wy - halfBoxCh, characterZ);
+            newBrPosHolder.Set(wx + halfBoxCw, wy - halfBoxCh, characterZ);
+            
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
             // if the current position is within camera FOV
             var speciesKvPq = cachedNpcs[currNpcDownsync.SpeciesId];
@@ -461,8 +480,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcGameObj.transform.position = newPosHolder;
 
             npcAnimHolder.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
-
+            npcAnimHolder.score = rdf.Id;
             speciesKvPq.Put(lookupKey, npcAnimHolder);
+
+            // Add teamRibbon and inplaceHpBar
+            showTeamRibbonAndInplaceHpBar(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
 
             // Add character vfx
             if (currNpcDownsync.NewBirth) {
@@ -733,6 +755,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         decodedInputHolder = new InputFrameDecoded();
         prevDecodedInputHolder = new InputFrameDecoded();
 
+        // fireball
         int fireballHoldersCap = 48;
         if (null != cachedFireballs) {
             for (int i = cachedFireballs.vals.StFrameId; i < cachedFireballs.vals.EdFrameId; i++) {
@@ -752,18 +775,55 @@ public abstract class AbstractMapController : MonoBehaviour {
             cachedFireballs.Put(initLookupKey, holder);
         }
 
-        int HoldersCap = roomCapacity+preallocNpcCapacity;
-
-        int lineHoldersCap = 64;
-        if (null != cachedLineRenderers) {
-            for (int i = cachedLineRenderers.vals.StFrameId; i < cachedLineRenderers.vals.EdFrameId; i++) {
-                var (res, line) = cachedLineRenderers.vals.GetByFrameId(i);
-                if (!res || null == line) throw new ArgumentNullException(String.Format("There's no line for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedLineRenderers.vals.EdFrameId));
-                Destroy(line.gameObject);
+        // team ribbon
+        int teamRibbonHoldersCap = roomCapacity+preallocNpcCapacity;
+        if (null != cachedTeamRibbons) {
+            for (int i = cachedTeamRibbons.vals.StFrameId; i < cachedTeamRibbons.vals.EdFrameId; i++) {
+                var (res, teamRibbons) = cachedTeamRibbons.vals.GetByFrameId(i);
+                if (!res || null == teamRibbons) throw new ArgumentNullException(String.Format("There's no cachedTeamRibbon for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedTeamRibbons.vals.StFrameId, cachedTeamRibbons.vals.EdFrameId));
+                Destroy(teamRibbons.gameObject);
             }
         }
+        cachedTeamRibbons = new KvPriorityQueue<string, TeamRibbon>(teamRibbonHoldersCap, cachedTeamRibbonScore);
 
+        for (int i = 0; i < teamRibbonHoldersCap; i++) {
+            GameObject newTeamRibbonNode = Instantiate(teamRibbonPrefab, Vector3.zero, Quaternion.identity);
+            TeamRibbon holder = newTeamRibbonNode.GetComponent<TeamRibbon>();
+            holder.score = -1;
+            string initLookupKey = (-(i + 1)).ToString();
+            cachedTeamRibbons.Put(initLookupKey, holder);
+        }
+
+        // hp bar
+        if (null != cachedHpBars) {
+            for (int i = cachedHpBars.vals.StFrameId; i < cachedHpBars.vals.EdFrameId; i++) {
+                var (res, hpBar) = cachedHpBars.vals.GetByFrameId(i);
+                if (!res || null == hpBar) throw new ArgumentNullException(String.Format("There's no cachedHpBar for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedHpBars.vals.StFrameId, cachedHpBars.vals.EdFrameId));
+                Destroy(hpBar.gameObject);
+            }
+        }
+        int hpBarHoldersCap = teamRibbonHoldersCap;
+        cachedHpBars = new KvPriorityQueue<string, InplaceHpBar>(teamRibbonHoldersCap, cachedHpBarScore);
+
+        for (int i = 0; i < hpBarHoldersCap; i++) {
+            GameObject newHpBarNode = Instantiate(inplaceHpBarPrefab, Vector3.zero, Quaternion.identity);
+            InplaceHpBar holder = newHpBarNode.GetComponent<InplaceHpBar>();
+            holder.score = -1;
+            string initLookupKey = (-(i + 1)).ToString();
+            cachedHpBars.Put(initLookupKey, holder);
+        }
+
+        // debug line
         if (debugDrawingAllocation) {
+            int lineHoldersCap = 64;
+            if (null != cachedLineRenderers) {
+                for (int i = cachedLineRenderers.vals.StFrameId; i < cachedLineRenderers.vals.EdFrameId; i++) {
+                    var (res, line) = cachedLineRenderers.vals.GetByFrameId(i);
+                    if (!res || null == line) throw new ArgumentNullException(String.Format("There's no line for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedLineRenderers.vals.EdFrameId));
+                    Destroy(line.gameObject);
+                }
+            }
+
             cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
             for (int i = 0; i < lineHoldersCap; i++) {
                 GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lineRendererZ), Quaternion.identity);
@@ -1848,6 +1908,37 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public bool isGameObjWithinCamera(GameObject obj) {
         return isGameObjPositionWithinCamera(obj.transform.position);
+    }
+
+    public void showTeamRibbonAndInplaceHpBar(int rdfId, CharacterDownsync currCharacterDownsync, float wx, float wy, float halfBoxCw, float halfBoxCh, string lookupKey) {
+        var teamRibbon = cachedTeamRibbons.PopAny(lookupKey);
+        if (null == teamRibbon) {
+            teamRibbon = cachedTeamRibbons.Pop();
+        }
+
+        if (null == teamRibbon) {
+            throw new ArgumentNullException(String.Format("No available teamRibbon node for lookupKey={0}", lookupKey));
+        }
+
+        newPosHolder.Set(wx + teamRibbonOffset.x, wy + halfBoxCh + teamRibbonOffset.y, inplaceHpBarZ);
+        teamRibbon.gameObject.transform.position = newPosHolder;
+        teamRibbon.score = rdfId;
+        teamRibbon.setBulletTeamId(currCharacterDownsync.BulletTeamId);
+        cachedTeamRibbons.Put(lookupKey, teamRibbon);
+
+        var hpBar = cachedHpBars.PopAny(lookupKey);
+        if (null == hpBar) {
+            hpBar = cachedHpBars.Pop();
+        }
+
+        if (null == hpBar) {
+            throw new ArgumentNullException(String.Format("No available hpBar node for lookupKey={0}", lookupKey));
+        }
+        hpBar.score = rdfId;
+        hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);
+        newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + halfBoxCh + inplaceHpBarOffset.y, inplaceHpBarZ);
+        hpBar.gameObject.transform.position = newPosHolder;
+        cachedHpBars.Put(lookupKey, hpBar);
     }
 
     public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, GameObject theGameObj) {
