@@ -244,6 +244,118 @@ namespace shared {
 
             return ret;
         }
+
+        public static void AssignToRdfDeep(RoomDownsyncFrame src, RoomDownsyncFrame dst, int roomCapacity) {
+            // [WARNING] Deliberately ignoring backend-only fields, e.g. "backendUnconfirmedMask", "shouldForceResync", or "participantChangeId". 
+            dst.Id = src.Id;
+            dst.BulletLocalIdCounter = src.BulletLocalIdCounter;
+            dst.NpcLocalIdCounter = src.NpcLocalIdCounter;
+
+            for (int i = 0; i < roomCapacity; i++) {
+                var srcCh = src.PlayersArr[i];
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, dst.PlayersArr[i]);
+            }
+
+            int npcCnt = 0;
+            while (npcCnt < src.NpcsArr.Count) {
+                var srcCh = src.NpcsArr[npcCnt];
+                if (TERMINATING_PLAYER_ID == srcCh.Id) break;
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, dst.NpcsArr[npcCnt]);
+                npcCnt++;
+            }
+            dst.NpcsArr[npcCnt].Id = TERMINATING_PLAYER_ID;
+
+            int bulletCnt = 0;
+            while (bulletCnt < src.Bullets.Count) {
+                var srcBullet = src.Bullets[bulletCnt];
+                if (TERMINATING_BULLET_LOCAL_ID == srcBullet.BattleAttr.BulletLocalId) break;
+                AssignToBullet(
+                        srcBullet.BattleAttr.BulletLocalId,
+                        srcBullet.BattleAttr.OriginatedRenderFrameId,
+                        srcBullet.BattleAttr.OffenderJoinIndex,
+                        srcBullet.BattleAttr.TeamId,
+                        srcBullet.BlState, srcBullet.FramesInBlState,
+                        srcBullet.VirtualGridX, srcBullet.VirtualGridY,
+                        srcBullet.DirX, srcBullet.DirY,
+                        srcBullet.VelX, srcBullet.VelY,
+                        srcBullet.BattleAttr.ActiveSkillHit, srcBullet.BattleAttr.SkillId, srcBullet.Config,
+                        dst.Bullets[bulletCnt]);
+                 bulletCnt++;
+            }
+            dst.Bullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+            
+            int trapCnt = 0;
+            while (trapCnt < src.TrapsArr.Count) {
+                var srcTrap = src.TrapsArr[trapCnt];
+                if (TERMINATING_TRAP_ID == srcTrap.TrapLocalId) break;
+                AssignToTrap(srcTrap.TrapLocalId, srcTrap.Config, srcTrap.ConfigFromTiled, srcTrap.TrapState, srcTrap.FramesInTrapState, srcTrap.VirtualGridX, srcTrap.VirtualGridY, srcTrap.DirX, srcTrap.DirY, srcTrap.VelX, srcTrap.VelY, srcTrap.IsCompletelyStatic, srcTrap.CapturedByPatrolCue, srcTrap.FramesInPatrolCue, srcTrap.WaivingSpontaneousPatrol, srcTrap.WaivingPatrolCueId, dst.TrapsArr[trapCnt]);
+                trapCnt++;
+            }
+            dst.TrapsArr[trapCnt].TrapLocalId = TERMINATING_TRAP_ID;
+
+            int triggerCnt = 0;
+            while (triggerCnt < src.TriggersArr.Count) {
+                var srcTrigger = src.TriggersArr[triggerCnt];
+                if (TERMINATING_TRIGGER_ID == srcTrigger.TriggerLocalId) break;
+                AssignToTrigger(srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.Config, srcTrigger.ConfigFromTiled, dst.TriggersArr[triggerCnt]);
+                triggerCnt++;
+            }
+            dst.TriggersArr[triggerCnt].TriggerLocalId = TERMINATING_TRIGGER_ID;
+        }
+
+        public bool sameRdfs(RoomDownsyncFrame lhs, RoomDownsyncFrame rhs, int roomCapacity) {
+            // [WARNING] Deliberately ignoring backend-only fields, e.g. "backendUnconfirmedMask", "shouldForceResync", or "participantChangeId". 
+            if (lhs.Id != rhs.Id) return false;
+            if (lhs.BulletLocalIdCounter != rhs.BulletLocalIdCounter) return false;
+            if (lhs.NpcLocalIdCounter != rhs.NpcLocalIdCounter) return false;
+
+            for (int i = 0; i < roomCapacity; i++) {
+                if (!lhs.PlayersArr[i].Equals(rhs.PlayersArr[i])) return false;
+            }
+
+            int npcCnt = 0;
+            while (npcCnt < lhs.NpcsArr.Count) {
+                // This also compares field "Id" which is used to terminate the arr
+                if (!lhs.NpcsArr[npcCnt].Equals(rhs.NpcsArr[npcCnt])) return false;
+                npcCnt++;
+            }
+
+            int bulletCnt = 0;
+            while (bulletCnt < lhs.Bullets.Count) {
+                var lBullet = lhs.Bullets[bulletCnt];
+                var rBullet = rhs.Bullets[bulletCnt];
+                if (lBullet.BattleAttr.BulletLocalId == rBullet.BattleAttr.BulletLocalId) break;
+                // TODO: Compare "AssignToBullet" fields
+                 bulletCnt++;
+            }
+            
+            int trapCnt = 0;
+            while (trapCnt < lhs.TrapsArr.Count) {
+                // This also compares field "TrapLocalId" which is used to terminate the arr
+                if (!lhs.TrapsArr[trapCnt].Equals(rhs.TrapsArr[trapCnt])) return false;
+                trapCnt++;
+            }
+
+            int triggerCnt = 0;
+            while (triggerCnt < lhs.TriggersArr.Count) {
+                var lTrigger = lhs.TriggersArr[triggerCnt];
+                var rTrigger = rhs.TriggersArr[triggerCnt];
+                if (lTrigger.TriggerLocalId != rTrigger.TriggerLocalId) return false;
+                if (lTrigger.FramesToFire != rTrigger.FramesToFire) return false;
+                if (lTrigger.FramesToRecover != rTrigger.FramesToRecover) return false;
+                if (lTrigger.Quota != rTrigger.Quota) return false;
+                if (lTrigger.BulletTeamId != rTrigger.BulletTeamId) return false;
+                if (lTrigger.SubCycleQuotaLeft != rTrigger.SubCycleQuotaLeft) return false;
+                if (lTrigger.State != rTrigger.State) return false;
+                if (lTrigger.FramesInState != rTrigger.FramesInState) return false;
+                if (lTrigger.VirtualGridX != rTrigger.VirtualGridX) return false;
+                if (lTrigger.VirtualGridY != rTrigger.VirtualGridY) return false;
+                if (lTrigger.Config != rTrigger.Config) return false; // Should be exactly the same ptr
+                if (lTrigger.ConfigFromTiled != rTrigger.ConfigFromTiled) return false; // Should be exactly the same ptr
+                triggerCnt++;
+            }
+            return true;
+        }
     }
 
     public sealed partial class BulletConfig {
