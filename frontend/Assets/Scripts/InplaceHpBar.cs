@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class InplaceHpBar : MonoBehaviour {
+    public int score;
     public GameObject hpFiller;
     public GameObject mpFiller;
     private Vector3 newScaleHolder = new Vector3();

@@ -26,7 +26,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
     protected int maxChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
-    public InplaceHpBar inplaceHpBarPrefab;
+    public GameObject inplaceHpBarPrefab;
     public GameObject fireballPrefab;
     public GameObject errStackLogPanelPrefab;
     public GameObject teamRibbonPrefab;
@@ -64,9 +64,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected shared.Collider[] staticColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
-    protected KvPriorityQueue<string, CharacterAnimController>.ValScore cachedNpcScore = (x) => x.score;
-    protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
-    protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
 
     public GameObject linePrefab;
     protected KvPriorityQueue<string, FireballAnimController> cachedFireballs;
@@ -74,6 +71,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, DebugLine> cachedLineRenderers;
     protected Dictionary<int, GameObject> npcSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, CharacterAnimController>> cachedNpcs;
+    protected KvPriorityQueue<string, TeamRibbon> cachedTeamRibbons;
+    protected KvPriorityQueue<string, InplaceHpBar> cachedHpBars;
 
     protected bool shouldDetectRealtimeRenderHistoryCorrection = false; // Don't enable this in prod, it might have significant memory performance impact!
     protected bool frameLogEnabled = false;
@@ -85,12 +84,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public CharacterSelectPanel characterSelectPanel;
 
-    KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
     protected Dictionary<int, GameObject> vfxSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
     public abstract void onCharacterSelectGoAction(int speciesId);
 
+    protected bool debugDrawingAllocation = false;
     protected bool debugDrawingEnabled = false;
 
     protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
@@ -100,9 +99,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     public GameObject playerLightsPrefab;
     protected PlayerLights selfPlayerLights;
 
-    protected Vector2 teamRibbonOffset = new Vector2(-8f, +18f);
-
-    protected Vector2 inplaceHpBarOffset = new Vector2(-16f, +24f);
+    protected Vector2 teamRibbonOffset = new Vector2(-10f, +6f);
+    protected Vector2 inplaceHpBarOffset = new Vector2(-8f, +2f);
     protected float lineRendererZ = +5;
     protected float triggerZ = 0;
     protected float characterZ = 0;
@@ -115,6 +113,13 @@ public abstract class AbstractMapController : MonoBehaviour {
     private float DAMAGED_FLASH_INTENSITY = 0.4f;
     private float DAMAGED_THICKNESS = 1.5f;
     private float DAMAGED_BLINK_SECONDS_HALF = 0.2f;
+
+    protected KvPriorityQueue<string, TeamRibbon>.ValScore cachedTeamRibbonScore = (x) => x.score;
+    protected KvPriorityQueue<string, InplaceHpBar>.ValScore cachedHpBarScore = (x) => x.score;
+    protected KvPriorityQueue<string, CharacterAnimController>.ValScore cachedNpcScore = (x) => x.score;
+    protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
+    protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
+    protected KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
 
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
@@ -143,20 +148,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         var characterPrefab = loadCharacterPrefab(characters[speciesId]);
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, characterZ), Quaternion.identity, underlyingMap.transform);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
-
-        var animController = newPlayerNode.GetComponent<CharacterAnimController>();
-
-        TeamRibbon associatedTeamRibbon = Instantiate(teamRibbonPrefab, new Vector3(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<TeamRibbon>();
-        animController.teamRibbon = associatedTeamRibbon;
-        associatedTeamRibbon.setBulletTeamId(bulletTeamId);
-
-        if (joinIndex != selfPlayerInfo.JoinIndex) {
-            InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
-
-            animController.hpBar = associatedHpBar;
-        } else {
-            //selfPlayerLights = Instantiate(playerLightsPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform).GetComponent<PlayerLights>();
-        }
     }
 
     protected void spawnDynamicTrapNode(int speciesId, float wx, float wy) {
@@ -375,6 +366,23 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
 
+        // Put teamRibbons and hpBars to infinitely far first
+        for (int i = cachedTeamRibbons.vals.StFrameId; i < cachedTeamRibbons.vals.EdFrameId; i++) {
+            var (res, teamRibbon) = cachedTeamRibbons.vals.GetByFrameId(i);
+            if (!res || null == teamRibbon) throw new ArgumentNullException(String.Format("There's no cachedTeamRibbon for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedTeamRibbons.vals.StFrameId, cachedTeamRibbons.vals.EdFrameId));
+
+            newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, inplaceHpBarZ);
+            teamRibbon.gameObject.transform.position = newPosHolder;
+        }
+
+        for (int i = cachedHpBars.vals.StFrameId; i < cachedHpBars.vals.EdFrameId; i++) {
+            var (res, hpBar) = cachedHpBars.vals.GetByFrameId(i);
+            if (!res || null == hpBar) throw new ArgumentNullException(String.Format("There's no cachedHpBar for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedHpBars.vals.StFrameId, cachedHpBars.vals.EdFrameId));
+
+            newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, inplaceHpBarZ);
+            hpBar.gameObject.transform.position = newPosHolder;
+        }
+
         // Put "Tracing" vfxNodes to infinitely far first
         foreach (var entry in cachedVfxNodes) {
             var speciesId = entry.Key;
@@ -407,18 +415,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             } else {
                 chAnimCtrl.updateCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig);
             }
-            newPosHolder.Set(wx + teamRibbonOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-            chAnimCtrl.teamRibbon.transform.localPosition = newPosHolder;
             if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
                 selfBattleHeading.SetCharacter(currCharacterDownsync);
                 //newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
                 //selfPlayerLights.gameObject.transform.position = newPosHolder;
                 //selfPlayerLights.setDirX(currCharacterDownsync.DirX);
-            } else {
-                newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-                chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);
-                chAnimCtrl.hpBar.transform.localPosition = newPosHolder;
-            }
+            } 
 
             // Add character vfx
             playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, playerGameObj);
@@ -435,8 +437,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                 newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, npcAnimHolder.gameObject.transform.position.z);
                 npcAnimHolder.gameObject.transform.position = newPosHolder;
-                npcAnimHolder.hpBar.transform.localPosition = newPosHolder;
-                npcAnimHolder.teamRibbon.transform.localPosition = newPosHolder;
             }
         }
 
@@ -452,11 +452,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             calcCharacterBoundingBoxInCollisionSpace(currNpcDownsync, chConfig, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
 
-            newTlPosHolder.Set(wx - .5f * boxCw, wy + .5f * boxCh, characterZ);
-            newTrPosHolder.Set(wx + .5f * boxCw, wy + .5f * boxCh, characterZ);
-            newBlPosHolder.Set(wx - .5f * boxCw, wy - .5f * boxCh, characterZ);
-            newBrPosHolder.Set(wx + .5f * boxCw, wy - .5f * boxCh, characterZ);
-
+            float halfBoxCh = .5f * boxCh;
+            float halfBoxCw = .5f * boxCw;
+            newTlPosHolder.Set(wx - halfBoxCw, wy + halfBoxCh, characterZ);
+            newTrPosHolder.Set(wx + halfBoxCw, wy + halfBoxCh, characterZ);
+            newBlPosHolder.Set(wx - halfBoxCw, wy - halfBoxCh, characterZ);
+            newBrPosHolder.Set(wx + halfBoxCw, wy - halfBoxCh, characterZ);
+            
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
             // if the current position is within camera FOV
             var speciesKvPq = cachedNpcs[currNpcDownsync.SpeciesId];
@@ -478,15 +480,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcGameObj.transform.position = newPosHolder;
 
             npcAnimHolder.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
-            newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-            npcAnimHolder.hpBar.transform.localPosition = newPosHolder;
-            npcAnimHolder.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp, (float)currNpcDownsync.Mp / currNpcDownsync.MaxMp);
-
-            newPosHolder.Set(wx + teamRibbonOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-            npcAnimHolder.teamRibbon.transform.localPosition = newPosHolder;
-            npcAnimHolder.teamRibbon.setBulletTeamId(currNpcDownsync.BulletTeamId);
-
+            npcAnimHolder.score = rdf.Id;
             speciesKvPq.Put(lookupKey, npcAnimHolder);
+
+            // Add teamRibbon and inplaceHpBar
+            showTeamRibbonAndInplaceHpBar(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
 
             // Add character vfx
             if (currNpcDownsync.NewBirth) {
@@ -680,12 +678,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 GameObject newNpcNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, characterZ), Quaternion.identity);
                 CharacterAnimController newNpcNodeController = newNpcNode.GetComponent<CharacterAnimController>();
                 newNpcNodeController.score = -1;
-                InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(effectivelyInfinitelyFar + inplaceHpBarOffset.x, effectivelyInfinitelyFar + inplaceHpBarOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
-
-                TeamRibbon associatedTeamRibbon = Instantiate(teamRibbonPrefab, new Vector3(effectivelyInfinitelyFar + teamRibbonOffset.x, effectivelyInfinitelyFar + teamRibbonOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<TeamRibbon>();
-
-                newNpcNodeController.hpBar = associatedHpBar;
-                newNpcNodeController.teamRibbon = associatedTeamRibbon;
 
                 var initLookupKey = i.ToString();
                 cachedNpcNodesOfThisSpecies.Put(initLookupKey, newNpcNodeController);
@@ -701,7 +693,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
         }
 
-        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
+        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocNpcCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
         int residueCollidedCap = 256;
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
@@ -756,14 +748,15 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         softPushbackEnabled = true;
 
-        int dynamicRectangleCollidersCap = 128;
+        int dynamicRectangleCollidersCap = 96;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
         staticColliders = new shared.Collider[128];
 
         decodedInputHolder = new InputFrameDecoded();
         prevDecodedInputHolder = new InputFrameDecoded();
 
-        int fireballHoldersCap = 64;
+        // fireball
+        int fireballHoldersCap = 48;
         if (null != cachedFireballs) {
             for (int i = cachedFireballs.vals.StFrameId; i < cachedFireballs.vals.EdFrameId; i++) {
                 var (res, fireball) = cachedFireballs.vals.GetByFrameId(i);
@@ -782,23 +775,64 @@ public abstract class AbstractMapController : MonoBehaviour {
             cachedFireballs.Put(initLookupKey, holder);
         }
 
-        int lineHoldersCap = 192;
-        if (null != cachedLineRenderers) {
-            for (int i = cachedLineRenderers.vals.StFrameId; i < cachedLineRenderers.vals.EdFrameId; i++) {
-                var (res, line) = cachedLineRenderers.vals.GetByFrameId(i);
-                if (!res || null == line) throw new ArgumentNullException(String.Format("There's no line for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedLineRenderers.vals.EdFrameId));
-                Destroy(line.gameObject);
+        // team ribbon
+        int teamRibbonHoldersCap = roomCapacity+preallocNpcCapacity;
+        if (null != cachedTeamRibbons) {
+            for (int i = cachedTeamRibbons.vals.StFrameId; i < cachedTeamRibbons.vals.EdFrameId; i++) {
+                var (res, teamRibbons) = cachedTeamRibbons.vals.GetByFrameId(i);
+                if (!res || null == teamRibbons) throw new ArgumentNullException(String.Format("There's no cachedTeamRibbon for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedTeamRibbons.vals.StFrameId, cachedTeamRibbons.vals.EdFrameId));
+                Destroy(teamRibbons.gameObject);
             }
         }
+        cachedTeamRibbons = new KvPriorityQueue<string, TeamRibbon>(teamRibbonHoldersCap, cachedTeamRibbonScore);
 
-        cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
-        for (int i = 0; i < lineHoldersCap; i++) {
-            GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lineRendererZ), Quaternion.identity);
-            DebugLine newLine = newLineObj.GetComponent<DebugLine>();
-            newLine.score = -1;
-            newLine.SetWidth(2.0f);
-            var initLookupKey = i.ToString();
-            cachedLineRenderers.Put(initLookupKey, newLine);
+        for (int i = 0; i < teamRibbonHoldersCap; i++) {
+            GameObject newTeamRibbonNode = Instantiate(teamRibbonPrefab, Vector3.zero, Quaternion.identity);
+            TeamRibbon holder = newTeamRibbonNode.GetComponent<TeamRibbon>();
+            holder.score = -1;
+            string initLookupKey = (-(i + 1)).ToString();
+            cachedTeamRibbons.Put(initLookupKey, holder);
+        }
+
+        // hp bar
+        if (null != cachedHpBars) {
+            for (int i = cachedHpBars.vals.StFrameId; i < cachedHpBars.vals.EdFrameId; i++) {
+                var (res, hpBar) = cachedHpBars.vals.GetByFrameId(i);
+                if (!res || null == hpBar) throw new ArgumentNullException(String.Format("There's no cachedHpBar for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedHpBars.vals.StFrameId, cachedHpBars.vals.EdFrameId));
+                Destroy(hpBar.gameObject);
+            }
+        }
+        int hpBarHoldersCap = teamRibbonHoldersCap;
+        cachedHpBars = new KvPriorityQueue<string, InplaceHpBar>(teamRibbonHoldersCap, cachedHpBarScore);
+
+        for (int i = 0; i < hpBarHoldersCap; i++) {
+            GameObject newHpBarNode = Instantiate(inplaceHpBarPrefab, Vector3.zero, Quaternion.identity);
+            InplaceHpBar holder = newHpBarNode.GetComponent<InplaceHpBar>();
+            holder.score = -1;
+            string initLookupKey = (-(i + 1)).ToString();
+            cachedHpBars.Put(initLookupKey, holder);
+        }
+
+        // debug line
+        if (debugDrawingAllocation) {
+            int lineHoldersCap = 64;
+            if (null != cachedLineRenderers) {
+                for (int i = cachedLineRenderers.vals.StFrameId; i < cachedLineRenderers.vals.EdFrameId; i++) {
+                    var (res, line) = cachedLineRenderers.vals.GetByFrameId(i);
+                    if (!res || null == line) throw new ArgumentNullException(String.Format("There's no line for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedLineRenderers.vals.StFrameId, cachedLineRenderers.vals.EdFrameId));
+                    Destroy(line.gameObject);
+                }
+            }
+
+            cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
+            for (int i = 0; i < lineHoldersCap; i++) {
+                GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lineRendererZ), Quaternion.identity);
+                DebugLine newLine = newLineObj.GetComponent<DebugLine>();
+                newLine.score = -1;
+                newLine.SetWidth(2.0f);
+                var initLookupKey = i.ToString();
+                cachedLineRenderers.Put(initLookupKey, newLine);
+            }
         }
 
         confirmedBattleResult = new BattleResult {
@@ -1648,6 +1682,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (null == collider.Shape.Points) {
                 throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
             }
+
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(collider.X, collider.Y, spaceOffsetX, spaceOffsetY);;
+            newPosHolder.Set(wx, wy, 0);
+            if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                continue; // To save memory
+            }
+
             string key = "Static-" + lineIndex.ToString();
             lineIndex++;
             var line = cachedLineRenderers.PopAny(key);
@@ -1694,6 +1735,15 @@ public abstract class AbstractMapController : MonoBehaviour {
         // Draw dynamic colliders
         for (int k = 0; k < roomCapacity; k++) {
             var currCharacterDownsync = rdf.PlayersArr[k];
+            var chConfig = characters[currCharacterDownsync.SpeciesId];
+            float boxCx, boxCy, boxCw, boxCh;
+            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            newPosHolder.Set(wx, wy, 0);
+            if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                continue; // To save memory
+            }
+
             string key = "Player-" + currCharacterDownsync.JoinIndex.ToString();
             var line = cachedLineRenderers.PopAny(key);
             if (null == line) {
@@ -1704,11 +1754,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.white);
             line.GetPositions(debugDrawPositionsHolder);
-            var chConfig = characters[currCharacterDownsync.SpeciesId];
-            float boxCx, boxCy, boxCw, boxCh;
-            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+           
             // World space width and height are just the same as that of collision space.
 
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
@@ -1723,6 +1769,16 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
             var currCharacterDownsync = rdf.NpcsArr[k];
             if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+            var chConfig = characters[currCharacterDownsync.SpeciesId];
+            float boxCx, boxCy, boxCw, boxCh;
+            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            newPosHolder.Set(wx, wy, 0);
+            if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                continue; // To save memory
+            }
+
             string key = "Npc-" + currCharacterDownsync.JoinIndex.ToString();
             var line = cachedLineRenderers.PopAny(key);
             if (null == line) {
@@ -1733,11 +1789,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.gray);
             line.GetPositions(debugDrawPositionsHolder);
-            var chConfig = characters[currCharacterDownsync.SpeciesId];
-            float boxCx, boxCy, boxCw, boxCh;
-            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+           
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
@@ -1772,6 +1824,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int k = 0; k < rdf.Bullets.Count; k++) {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
+            var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);;
+            newPosHolder.Set(wx, wy, 0);
+            if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                continue; // To save memory
+            }
 
             string key = "Bullet-" + bullet.BattleAttr.BulletLocalId.ToString();
             var line = cachedLineRenderers.PopAny(key);
@@ -1787,8 +1845,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.red);
             line.GetPositions(debugDrawPositionsHolder);
-            var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
 
             var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX, bullet.Config.HitboxSizeY);
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
@@ -1811,6 +1867,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             foreach (var colliderAttr in colliderAttrs) {
                 float boxCx, boxCy, boxCw, boxCh;
                 calcTrapBoxInCollisionSpace(colliderAttr, currTrap.VirtualGridX, currTrap.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(wx, wy, 0);
+                if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                    continue; // To save memory
+                }
 
                 string key = "DynamicTrap-" + currTrap.TrapLocalId.ToString() + "-" + colliderAttr.ProvidesDamage; // TODO: Use a collider ID for the last part
                 var line = cachedLineRenderers.PopAny(key);
@@ -1827,8 +1888,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
 
                 line.GetPositions(debugDrawPositionsHolder);
-                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
-
+                
                 (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
                 (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
                 (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
@@ -1848,6 +1908,37 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public bool isGameObjWithinCamera(GameObject obj) {
         return isGameObjPositionWithinCamera(obj.transform.position);
+    }
+
+    public void showTeamRibbonAndInplaceHpBar(int rdfId, CharacterDownsync currCharacterDownsync, float wx, float wy, float halfBoxCw, float halfBoxCh, string lookupKey) {
+        var teamRibbon = cachedTeamRibbons.PopAny(lookupKey);
+        if (null == teamRibbon) {
+            teamRibbon = cachedTeamRibbons.Pop();
+        }
+
+        if (null == teamRibbon) {
+            throw new ArgumentNullException(String.Format("No available teamRibbon node for lookupKey={0}", lookupKey));
+        }
+
+        newPosHolder.Set(wx + teamRibbonOffset.x, wy + halfBoxCh + teamRibbonOffset.y, inplaceHpBarZ);
+        teamRibbon.gameObject.transform.position = newPosHolder;
+        teamRibbon.score = rdfId;
+        teamRibbon.setBulletTeamId(currCharacterDownsync.BulletTeamId);
+        cachedTeamRibbons.Put(lookupKey, teamRibbon);
+
+        var hpBar = cachedHpBars.PopAny(lookupKey);
+        if (null == hpBar) {
+            hpBar = cachedHpBars.Pop();
+        }
+
+        if (null == hpBar) {
+            throw new ArgumentNullException(String.Format("No available hpBar node for lookupKey={0}", lookupKey));
+        }
+        hpBar.score = rdfId;
+        hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);
+        newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + halfBoxCh + inplaceHpBarOffset.y, inplaceHpBarZ);
+        hpBar.gameObject.transform.position = newPosHolder;
+        cachedHpBars.Put(lookupKey, hpBar);
     }
 
     public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, GameObject theGameObj) {

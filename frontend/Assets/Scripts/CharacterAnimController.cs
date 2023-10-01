@@ -7,8 +7,6 @@ using System.Collections.Generic;
 public class CharacterAnimController : MonoBehaviour {
     public int score;
 
-    public InplaceHpBar hpBar;
-    public TeamRibbon teamRibbon;
     public Animator lowerPart, upperPart;
 
     public Vector3 scaleHolder = new Vector3();
