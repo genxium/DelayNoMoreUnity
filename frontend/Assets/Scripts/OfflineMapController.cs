@@ -63,6 +63,7 @@ public class OfflineMapController : AbstractMapController {
                 onBattleStopped();
             };
         }
+        debugDrawingAllocation = true;
         debugDrawingEnabled = false;
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;

@@ -64,9 +64,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected shared.Collider[] staticColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
-    protected KvPriorityQueue<string, CharacterAnimController>.ValScore cachedNpcScore = (x) => x.score;
-    protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
-    protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
 
     public GameObject linePrefab;
     protected KvPriorityQueue<string, FireballAnimController> cachedFireballs;
@@ -74,6 +71,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, DebugLine> cachedLineRenderers;
     protected Dictionary<int, GameObject> npcSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, CharacterAnimController>> cachedNpcs;
+    protected KvPriorityQueue<string, TeamRibbon> cachedTeamRibbons;
+
 
     protected bool shouldDetectRealtimeRenderHistoryCorrection = false; // Don't enable this in prod, it might have significant memory performance impact!
     protected bool frameLogEnabled = false;
@@ -85,12 +84,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public CharacterSelectPanel characterSelectPanel;
 
-    KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
     protected Dictionary<int, GameObject> vfxSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
     public abstract void onCharacterSelectGoAction(int speciesId);
 
+    protected bool debugDrawingAllocation = false;
     protected bool debugDrawingEnabled = false;
 
     protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
@@ -115,6 +114,12 @@ public abstract class AbstractMapController : MonoBehaviour {
     private float DAMAGED_FLASH_INTENSITY = 0.4f;
     private float DAMAGED_THICKNESS = 1.5f;
     private float DAMAGED_BLINK_SECONDS_HALF = 0.2f;
+
+    protected KvPriorityQueue<string, TeamRibbon>.ValScore cachedTeamRibbonsScore = (x) => x.score;
+    protected KvPriorityQueue<string, CharacterAnimController>.ValScore cachedNpcScore = (x) => x.score;
+    protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
+    protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
+    protected KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
 
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
@@ -143,20 +148,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         var characterPrefab = loadCharacterPrefab(characters[speciesId]);
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, characterZ), Quaternion.identity, underlyingMap.transform);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
-
-        var animController = newPlayerNode.GetComponent<CharacterAnimController>();
-
-        TeamRibbon associatedTeamRibbon = Instantiate(teamRibbonPrefab, new Vector3(wx + teamRibbonOffset.x, wy + teamRibbonOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<TeamRibbon>();
-        animController.teamRibbon = associatedTeamRibbon;
-        associatedTeamRibbon.setBulletTeamId(bulletTeamId);
-
-        if (joinIndex != selfPlayerInfo.JoinIndex) {
-            InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(wx + inplaceHpBarOffset.x, wy + inplaceHpBarOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
-
-            animController.hpBar = associatedHpBar;
-        } else {
-            //selfPlayerLights = Instantiate(playerLightsPrefab, new Vector3(wx, wy, 0), Quaternion.identity, underlyingMap.transform).GetComponent<PlayerLights>();
-        }
     }
 
     protected void spawnDynamicTrapNode(int speciesId, float wx, float wy) {
@@ -407,18 +398,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             } else {
                 chAnimCtrl.updateCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig);
             }
-            newPosHolder.Set(wx + teamRibbonOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-            chAnimCtrl.teamRibbon.transform.localPosition = newPosHolder;
             if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
                 selfBattleHeading.SetCharacter(currCharacterDownsync);
                 //newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
                 //selfPlayerLights.gameObject.transform.position = newPosHolder;
                 //selfPlayerLights.setDirX(currCharacterDownsync.DirX);
-            } else {
-                newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-                chAnimCtrl.hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);
-                chAnimCtrl.hpBar.transform.localPosition = newPosHolder;
-            }
+            } 
 
             // Add character vfx
             playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, playerGameObj);
@@ -435,8 +420,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                 newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, npcAnimHolder.gameObject.transform.position.z);
                 npcAnimHolder.gameObject.transform.position = newPosHolder;
-                npcAnimHolder.hpBar.transform.localPosition = newPosHolder;
-                npcAnimHolder.teamRibbon.transform.localPosition = newPosHolder;
             }
         }
 
@@ -478,13 +461,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcGameObj.transform.position = newPosHolder;
 
             npcAnimHolder.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
-            newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-            npcAnimHolder.hpBar.transform.localPosition = newPosHolder;
-            npcAnimHolder.hpBar.updateHp((float)currNpcDownsync.Hp / currNpcDownsync.MaxHp, (float)currNpcDownsync.Mp / currNpcDownsync.MaxMp);
-
-            newPosHolder.Set(wx + teamRibbonOffset.x, wy + .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, inplaceHpBarZ);
-            npcAnimHolder.teamRibbon.transform.localPosition = newPosHolder;
-            npcAnimHolder.teamRibbon.setBulletTeamId(currNpcDownsync.BulletTeamId);
 
             speciesKvPq.Put(lookupKey, npcAnimHolder);
 
@@ -680,12 +656,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 GameObject newNpcNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, characterZ), Quaternion.identity);
                 CharacterAnimController newNpcNodeController = newNpcNode.GetComponent<CharacterAnimController>();
                 newNpcNodeController.score = -1;
-                InplaceHpBar associatedHpBar = Instantiate(inplaceHpBarPrefab, new Vector3(effectivelyInfinitelyFar + inplaceHpBarOffset.x, effectivelyInfinitelyFar + inplaceHpBarOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<InplaceHpBar>();
-
-                TeamRibbon associatedTeamRibbon = Instantiate(teamRibbonPrefab, new Vector3(effectivelyInfinitelyFar + teamRibbonOffset.x, effectivelyInfinitelyFar + teamRibbonOffset.y, inplaceHpBarZ), Quaternion.identity, underlyingMap.transform).GetComponent<TeamRibbon>();
-
-                newNpcNodeController.hpBar = associatedHpBar;
-                newNpcNodeController.teamRibbon = associatedTeamRibbon;
 
                 var initLookupKey = i.ToString();
                 cachedNpcNodesOfThisSpecies.Put(initLookupKey, newNpcNodeController);
@@ -701,7 +671,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
         }
 
-        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocAiPlayerCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
+        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocNpcCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
         int residueCollidedCap = 256;
         residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
@@ -756,14 +726,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         softPushbackEnabled = true;
 
-        int dynamicRectangleCollidersCap = 128;
+        int dynamicRectangleCollidersCap = 96;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
         staticColliders = new shared.Collider[128];
 
         decodedInputHolder = new InputFrameDecoded();
         prevDecodedInputHolder = new InputFrameDecoded();
 
-        int fireballHoldersCap = 64;
+        int fireballHoldersCap = 48;
         if (null != cachedFireballs) {
             for (int i = cachedFireballs.vals.StFrameId; i < cachedFireballs.vals.EdFrameId; i++) {
                 var (res, fireball) = cachedFireballs.vals.GetByFrameId(i);
@@ -782,7 +752,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             cachedFireballs.Put(initLookupKey, holder);
         }
 
-        int lineHoldersCap = 192;
+        int HoldersCap = roomCapacity+preallocNpcCapacity;
+
+        int lineHoldersCap = 64;
         if (null != cachedLineRenderers) {
             for (int i = cachedLineRenderers.vals.StFrameId; i < cachedLineRenderers.vals.EdFrameId; i++) {
                 var (res, line) = cachedLineRenderers.vals.GetByFrameId(i);
@@ -791,14 +763,16 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
 
-        cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
-        for (int i = 0; i < lineHoldersCap; i++) {
-            GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lineRendererZ), Quaternion.identity);
-            DebugLine newLine = newLineObj.GetComponent<DebugLine>();
-            newLine.score = -1;
-            newLine.SetWidth(2.0f);
-            var initLookupKey = i.ToString();
-            cachedLineRenderers.Put(initLookupKey, newLine);
+        if (debugDrawingAllocation) {
+            cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
+            for (int i = 0; i < lineHoldersCap; i++) {
+                GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lineRendererZ), Quaternion.identity);
+                DebugLine newLine = newLineObj.GetComponent<DebugLine>();
+                newLine.score = -1;
+                newLine.SetWidth(2.0f);
+                var initLookupKey = i.ToString();
+                cachedLineRenderers.Put(initLookupKey, newLine);
+            }
         }
 
         confirmedBattleResult = new BattleResult {
@@ -1648,6 +1622,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (null == collider.Shape.Points) {
                 throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
             }
+
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(collider.X, collider.Y, spaceOffsetX, spaceOffsetY);;
+            newPosHolder.Set(wx, wy, 0);
+            if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                continue; // To save memory
+            }
+
             string key = "Static-" + lineIndex.ToString();
             lineIndex++;
             var line = cachedLineRenderers.PopAny(key);
@@ -1694,6 +1675,15 @@ public abstract class AbstractMapController : MonoBehaviour {
         // Draw dynamic colliders
         for (int k = 0; k < roomCapacity; k++) {
             var currCharacterDownsync = rdf.PlayersArr[k];
+            var chConfig = characters[currCharacterDownsync.SpeciesId];
+            float boxCx, boxCy, boxCw, boxCh;
+            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            newPosHolder.Set(wx, wy, 0);
+            if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                continue; // To save memory
+            }
+
             string key = "Player-" + currCharacterDownsync.JoinIndex.ToString();
             var line = cachedLineRenderers.PopAny(key);
             if (null == line) {
@@ -1704,11 +1694,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.white);
             line.GetPositions(debugDrawPositionsHolder);
-            var chConfig = characters[currCharacterDownsync.SpeciesId];
-            float boxCx, boxCy, boxCw, boxCh;
-            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+           
             // World space width and height are just the same as that of collision space.
 
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
@@ -1723,6 +1709,16 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
             var currCharacterDownsync = rdf.NpcsArr[k];
             if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
+            var chConfig = characters[currCharacterDownsync.SpeciesId];
+            float boxCx, boxCy, boxCw, boxCh;
+            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            newPosHolder.Set(wx, wy, 0);
+            if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                continue; // To save memory
+            }
+
             string key = "Npc-" + currCharacterDownsync.JoinIndex.ToString();
             var line = cachedLineRenderers.PopAny(key);
             if (null == line) {
@@ -1733,11 +1729,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.gray);
             line.GetPositions(debugDrawPositionsHolder);
-            var chConfig = characters[currCharacterDownsync.SpeciesId];
-            float boxCx, boxCy, boxCw, boxCh;
-            calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+           
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
@@ -1772,6 +1764,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int k = 0; k < rdf.Bullets.Count; k++) {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
+            var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);;
+            newPosHolder.Set(wx, wy, 0);
+            if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                continue; // To save memory
+            }
 
             string key = "Bullet-" + bullet.BattleAttr.BulletLocalId.ToString();
             var line = cachedLineRenderers.PopAny(key);
@@ -1787,8 +1785,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.red);
             line.GetPositions(debugDrawPositionsHolder);
-            var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
 
             var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX, bullet.Config.HitboxSizeY);
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
@@ -1811,6 +1807,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             foreach (var colliderAttr in colliderAttrs) {
                 float boxCx, boxCy, boxCw, boxCh;
                 calcTrapBoxInCollisionSpace(colliderAttr, currTrap.VirtualGridX, currTrap.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(wx, wy, 0);
+                if (!isGameObjPositionWithinCamera(newPosHolder)) {
+                    continue; // To save memory
+                }
 
                 string key = "DynamicTrap-" + currTrap.TrapLocalId.ToString() + "-" + colliderAttr.ProvidesDamage; // TODO: Use a collider ID for the last part
                 var line = cachedLineRenderers.PopAny(key);
@@ -1827,8 +1828,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
 
                 line.GetPositions(debugDrawPositionsHolder);
-                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
-
+                
                 (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
                 (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
                 (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
