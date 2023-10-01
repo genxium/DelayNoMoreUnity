@@ -18,7 +18,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int preallocTrapCapacity = DEFAULT_PREALLOC_TRAP_CAPACITY;
     protected int preallocTriggerCapacity = DEFAULT_PREALLOC_TRIGGER_CAPACITY;
 
-    protected int renderFrameId; // After battle started
+    protected int playerRdfId; // After battle started, always increments monotonically (even upon reconnection)
     protected int renderFrameIdLagTolerance;
     protected int lastAllConfirmedInputFrameId;
     protected int lastUpsyncInputFrameId;
@@ -75,6 +75,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Dictionary<int, GameObject> npcSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, CharacterAnimController>> cachedNpcs;
 
+    protected bool shouldDetectRealtimeRenderHistoryCorrection = false; // Don't enable this in prod, it might have significant memory performance impact!
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
@@ -241,7 +242,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = renderFrameIdSt; i < renderFrameIdEd; i++) {
             var (ok1, currRdf) = renderBuffer.GetByFrameId(i);
             if (false == ok1 || null == currRdf) {
-                throw new ArgumentNullException(String.Format("Couldn't find renderFrame for i={0} to rollback, renderFrameId={1}, might've been interruptted by onRoomDownsyncFrame", i, renderFrameId));
+                throw new ArgumentNullException(String.Format("Couldn't find renderFrame for i={0} to rollback, playerRdfId={1}, might've been interruptted by onRoomDownsyncFrame", i, playerRdfId));
             }
             if (currRdf.Id != i) {
                 throw new ArgumentException(String.Format("Corrupted historic rdf for i={0} to rollback, currRdf={1}!", i, currRdf));
@@ -249,7 +250,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             int j = ConvertToDelayedInputFrameId(i);
             var (ok2, delayedInputFrame) = inputBuffer.GetByFrameId(j);
             if (false == ok2 || null == delayedInputFrame) {
-                throw new ArgumentNullException(String.Format("Couldn't find delayedInputFrame for j={0} to rollback, renderFrameId={1}", j, renderFrameId));
+                throw new ArgumentNullException(String.Format("Couldn't find delayedInputFrame for j={0} to rollback, playerRdfId={1}", j, playerRdfId));
             }
 
             bool allowUpdateInputFrameInPlaceUponDynamics = (!isChasing);
@@ -269,7 +270,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, _loggerBridge);
+            bool hasIncorrectlyPredictedRenderFrame = false;
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, _loggerBridge);
+            if (hasIncorrectlyPredictedRenderFrame) {   
+                Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i+1));
+            }
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
@@ -278,9 +283,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (ok3, nextRdf) = renderBuffer.GetByFrameId(i + 1);
             if (false == ok3 || null == nextRdf) {
                 if (isChasing) { 
-                    throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, renderFrameId={1}: renderBuffer StFrameId={2}, EdFrameId={3}, Cnt={4}", i + 1, renderFrameId, renderBuffer.StFrameId, renderBuffer.EdFrameId, renderBuffer.Cnt));
+                    throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, playerRdfId={1}: renderBuffer StFrameId={2}, EdFrameId={3}, Cnt={4}", i + 1, playerRdfId, renderBuffer.StFrameId, renderBuffer.EdFrameId, renderBuffer.Cnt));
                 } else {
-                    throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to generate, renderFrameId={1} while rendering: renderBuffer StFrameId={2}, EdFrameId={3}, Cnt={4}", i + 1, renderFrameId, renderBuffer.StFrameId, renderBuffer.EdFrameId, renderBuffer.Cnt));
+                    throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to generate, playerRdfId={1} while rendering: renderBuffer StFrameId={2}, EdFrameId={3}, Cnt={4}", i + 1, playerRdfId, renderBuffer.StFrameId, renderBuffer.EdFrameId, renderBuffer.Cnt));
                 }
             }
             if (nextRdf.Id != i + 1) {
@@ -338,19 +343,28 @@ public abstract class AbstractMapController : MonoBehaviour {
 		   [this.renderFrameId]                       :              64
 		   --------------------------------------------------------
 		 */
-
-        /*
-         * Printing of this message might induce a performance impact.
-         * 
-         * TODO: Instead of printing, add frameLog for (currRenderFrameId, rolledBackInputFrameDownsyncId, rolledBackToRenderFrameId)!
-         */
-        Debug.Log(String.Format("Mismatched input detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP));
+    
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
 
-        int rollbackFrames = (renderFrameId - chaserRenderFrameId);
-        if (0 > rollbackFrames) {
+        int rollbackFrames = (playerRdfId - chaserRenderFrameId);
+        if (0 >= rollbackFrames) {
+            // The incorrect prediction is not yet rendered, no visual impact for player.
             rollbackFrames = 0;
+        } else {
+            /* 
+            [WARNING] The incorrect prediction was already rendered, there MIGHT BE a visual impact for player.
+
+            However, due to the use of 
+            - `UpdateInputFrameInPlaceUponDynamics`, and  
+            - `processInertiaWalking` 
+            , even if an "inputFrame" for "already rendered renderFrame" was incorrectly predicted, there's still chance that no visual impact is induced. See relevant sections in `README` for details.  
+
+            Printing of this message might induce a performance impact.
+            
+            TODO: Instead of printing, add frameLog for (currRenderFrameId, rolledBackInputFrameDownsyncId, rolledBackToRenderFrameId)!
+             */
+            Debug.Log(String.Format("@playerRdfId={5}, mismatched input for rendered history detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP, playerRdfId));
         }
         NetworkDoctor.Instance.LogRollbackFrames(rollbackFrames);
     }
@@ -795,7 +809,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected virtual void resetCurrentMatch(string theme) {
         Debug.Log(String.Format("resetCurrentMatch with roomCapacity={0}", roomCapacity));
         battleState = ROOM_STATE_IMPOSSIBLE;
-        renderFrameId = 0;
+        playerRdfId = 0;
         renderFrameIdLagTolerance = 4;
         chaserRenderFrameId = -1;
         lastAllConfirmedInputFrameId = -1;
@@ -920,7 +934,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         int rdfId = pbRdf.Id;
         bool shouldForceDumping1 = (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == rdfId);
-        bool shouldForceDumping2 = (rdfId >= renderFrameId + renderFrameIdLagTolerance);
+        bool shouldForceDumping2 = (rdfId >= playerRdfId + renderFrameIdLagTolerance);
         bool shouldForceResync = pbRdf.ShouldForceResync;
         ulong selfJoinIndexMask = ((ulong)1 << (selfPlayerInfo.JoinIndex - 1));
         bool notSelfUnconfirmed = (0 == (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
@@ -950,12 +964,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (shouldForceDumping1 || shouldForceDumping2 || shouldForceResync) {
             // In fact, not having "window.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet" should already imply that "renderFrameId <= rdfId", but here we double check and log the anomaly  
             if (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
-                Debug.Log(String.Format("On battle started! renderFrameId={0}", rdfId));
+                Debug.Log(String.Format("On battle started! received rdfId={0}", rdfId));
             } else {
-                Debug.Log(String.Format("On battle resynced! renderFrameId={0}", rdfId));
+                Debug.Log(String.Format("On battle resynced! received rdfId={0}", rdfId));
             }
 
-            renderFrameId = rdfId;
+            playerRdfId = rdfId;
             // In this case it must be true that "rdfId > chaserRenderFrameId".
             chaserRenderFrameId = rdfId;
 
@@ -970,12 +984,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     // Update is called once per frame
     protected void doUpdate() {
-        int noDelayInputFrameId = ConvertToNoDelayInputFrameId(renderFrameId);
+        int noDelayInputFrameId = ConvertToNoDelayInputFrameId(playerRdfId);
         ulong prevSelfInput = 0, currSelfInput = 0;
-        if (ShouldGenerateInputFrameUpsync(renderFrameId)) {
+        if (ShouldGenerateInputFrameUpsync(playerRdfId)) {
             (prevSelfInput, currSelfInput) = getOrPrefabInputFrameUpsync(noDelayInputFrameId, true, prefabbedInputListHolder);
         }
-        int delayedInputFrameId = ConvertToDelayedInputFrameId(renderFrameId);
+        int delayedInputFrameId = ConvertToDelayedInputFrameId(playerRdfId);
         var (delayedInputFrameExists, _) = inputBuffer.GetByFrameId(delayedInputFrameId);
         if (!delayedInputFrameExists) {
             // Possible edge case after resync, kindly note that it's OK to prefab a "future inputFrame" here, because "sendInputFrameUpsyncBatch" would be capped by "noDelayInputFrameId from self.renderFrameId". 
@@ -991,7 +1005,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         if (battleResultIsSet) {
-            var (ok1, currRdf) = renderBuffer.GetByFrameId(renderFrameId - 1);
+            var (ok1, currRdf) = renderBuffer.GetByFrameId(playerRdfId - 1);
             if (ok1 && null != currRdf) {
                 cameraTrack(currRdf, null);
             }
@@ -1001,8 +1015,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         int prevChaserRenderFrameId = chaserRenderFrameId;
         int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
 
-        if (nextChaserRenderFrameId > renderFrameId) {
-            nextChaserRenderFrameId = renderFrameId;
+        if (nextChaserRenderFrameId > playerRdfId) {
+            nextChaserRenderFrameId = playerRdfId;
         }
 
         if (prevChaserRenderFrameId < nextChaserRenderFrameId) {
@@ -1011,12 +1025,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         // Inside the following "rollbackAndChase" actually ROLLS FORWARD w.r.t. the corresponding delayedInputFrame, REGARDLESS OF whether or not "chaserRenderFrameId == renderFrameId" now. 
-        var (prevRdf, rdf) = rollbackAndChase(renderFrameId, renderFrameId + 1, collisionSys, false);
+        var (prevRdf, rdf) = rollbackAndChase(playerRdfId, playerRdfId + 1, collisionSys, false);
         // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
         cameraTrack(rdf, prevRdf);
-        ++renderFrameId;
+        ++playerRdfId;
     }
 
     protected virtual void onBattleStopped() {
@@ -1619,7 +1633,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (!debugDrawingEnabled) {
             return;
         }
-        var (_, rdf) = renderBuffer.GetByFrameId(renderFrameId);
+        var (_, rdf) = renderBuffer.GetByFrameId(playerRdfId);
         if (null == rdf) return;
 
         // Draw static colliders

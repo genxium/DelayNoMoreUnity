@@ -77,10 +77,10 @@ public class OfflineMapController : AbstractMapController {
             }
             doUpdate();
             urpDrawDebug();
-            if (renderFrameId >= battleDurationFrames) {
+            if (playerRdfId >= battleDurationFrames) {
                 onBattleStopped();
             } else {
-                readyGoPanel.setCountdown(renderFrameId, battleDurationFrames);
+                readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
             }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {

@@ -234,7 +234,7 @@ public class OnlineMapController : AbstractMapController {
                 return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
             }
             doUpdate();
-            readyGoPanel.setCountdown(renderFrameId, battleDurationFrames);
+            readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
             var (tooFastOrNot, _, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
             shouldLockStep = tooFastOrNot;
             networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
