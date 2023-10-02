@@ -303,7 +303,7 @@ namespace shared {
             dst.TriggersArr[triggerCnt].TriggerLocalId = TERMINATING_TRIGGER_ID;
         }
 
-        public bool sameRdfs(RoomDownsyncFrame lhs, RoomDownsyncFrame rhs, int roomCapacity) {
+        public static bool EqualRdfs(RoomDownsyncFrame lhs, RoomDownsyncFrame rhs, int roomCapacity) {
             // [WARNING] Deliberately ignoring backend-only fields, e.g. "backendUnconfirmedMask", "shouldForceResync", or "participantChangeId". 
             if (lhs.Id != rhs.Id) return false;
             if (lhs.BulletLocalIdCounter != rhs.BulletLocalIdCounter) return false;
@@ -317,6 +317,7 @@ namespace shared {
             while (npcCnt < lhs.NpcsArr.Count) {
                 // This also compares field "Id" which is used to terminate the arr
                 if (!lhs.NpcsArr[npcCnt].Equals(rhs.NpcsArr[npcCnt])) return false;
+                if (lhs.NpcsArr[npcCnt].Id == TERMINATING_PLAYER_ID) break;
                 npcCnt++;
             }
 
@@ -324,8 +325,19 @@ namespace shared {
             while (bulletCnt < lhs.Bullets.Count) {
                 var lBullet = lhs.Bullets[bulletCnt];
                 var rBullet = rhs.Bullets[bulletCnt];
-                if (lBullet.BattleAttr.BulletLocalId == rBullet.BattleAttr.BulletLocalId) break;
-                // TODO: Compare "AssignToBullet" fields
+                if (lBullet.BattleAttr.BulletLocalId != rBullet.BattleAttr.BulletLocalId) return false;
+                if (lBullet.BattleAttr.BulletLocalId == TERMINATING_BULLET_LOCAL_ID) break;
+                if (lBullet.BattleAttr.OriginatedRenderFrameId != rBullet.BattleAttr.OriginatedRenderFrameId) return false;
+                if (lBullet.BattleAttr.OffenderJoinIndex != rBullet.BattleAttr.OffenderJoinIndex) return false;
+                if (lBullet.BattleAttr.TeamId != rBullet.BattleAttr.TeamId) return false;
+                if (lBullet.BlState != rBullet.BlState) return false;
+                if (lBullet.FramesInBlState != rBullet.FramesInBlState) return false;
+                if (lBullet.VirtualGridX != rBullet.VirtualGridY) return false;
+                if (lBullet.DirX != rBullet.DirX) return false;
+                if (lBullet.DirY != rBullet.DirY) return false;
+                if (lBullet.BattleAttr.ActiveSkillHit != rBullet.BattleAttr.ActiveSkillHit) return false;
+                if (lBullet.BattleAttr.SkillId != rBullet.BattleAttr.SkillId) return false;
+                if (lBullet.Config != rBullet.Config) return false;  // Should be exactly the same ptr
                  bulletCnt++;
             }
             
@@ -333,6 +345,7 @@ namespace shared {
             while (trapCnt < lhs.TrapsArr.Count) {
                 // This also compares field "TrapLocalId" which is used to terminate the arr
                 if (!lhs.TrapsArr[trapCnt].Equals(rhs.TrapsArr[trapCnt])) return false;
+                if (lhs.TrapsArr[trapCnt].TrapLocalId == TERMINATING_TRAP_ID) break;
                 trapCnt++;
             }
 
@@ -341,6 +354,7 @@ namespace shared {
                 var lTrigger = lhs.TriggersArr[triggerCnt];
                 var rTrigger = rhs.TriggersArr[triggerCnt];
                 if (lTrigger.TriggerLocalId != rTrigger.TriggerLocalId) return false;
+                if (lTrigger.TriggerLocalId == TERMINATING_TRIGGER_ID) break;
                 if (lTrigger.FramesToFire != rTrigger.FramesToFire) return false;
                 if (lTrigger.FramesToRecover != rTrigger.FramesToRecover) return false;
                 if (lTrigger.Quota != rTrigger.Quota) return false;

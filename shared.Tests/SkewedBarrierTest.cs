@@ -15,8 +15,11 @@ public class SkewedBarrierTest {
         int tileWidth = 16, tileHeight = 16;
         int spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         int spaceOffsetY = ((mapHeight * tileHeight) >> 1);
+        int cellWidth = 64;
+        int cellHeight = 128;
 
         var collisionSys = new CollisionSpace(spaceOffsetX * 2, spaceOffsetY * 2, 64, 64);
+        int maxTouchingCellsCnt = (((spaceOffsetX << 1) + cellWidth) / cellWidth) * (((spaceOffsetY << 1) + cellHeight) / cellHeight) + 1;
         var collisionHolder = new Collision();
         var overlapResult = new SatResult();
         var primaryOverlapResult = new SatResult();
@@ -29,7 +32,12 @@ public class SkewedBarrierTest {
         var (rectCx, rectCy) = (36f, 28f);
         var (rectVx, rectVy) = Battle.PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
 
-        var currCharacterDownsync = new CharacterDownsync();
+        const int roomCapacity = 1;
+        var startRdf = Battle.NewPreallocatedRoomDownsyncFrame(roomCapacity, 8, 128, 64, 64);
+        startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
+        startRdf.ShouldForceResync = false;
+
+        var currCharacterDownsync = startRdf.PlayersArr[0];
         currCharacterDownsync.Id = 10;
         currCharacterDownsync.JoinIndex = 1;
         currCharacterDownsync.VirtualGridX = rectVx;
@@ -47,13 +55,13 @@ public class SkewedBarrierTest {
         currCharacterDownsync.OnWall = false;
         currCharacterDownsync.Hp = 100;
         currCharacterDownsync.MaxHp = 100;
-        currCharacterDownsync.SpeciesId = 0;
+        currCharacterDownsync.SpeciesId = SPECIES_KNIFEGIRL;
 
         var thatCharacterInNextFrame = new CharacterDownsync();
 
         var (rectCw, rectCh) = VirtualGridToPolygonColliderCtr(characters[currCharacterDownsync.SpeciesId].ShrinkedSizeX, characters[currCharacterDownsync.SpeciesId].ShrinkedSizeY);
 
-        var aCollider = NewRectCollider(rectCx, rectCy, rectCw, rectCh, 0, 0, 0, 0, 0, 0, currCharacterDownsync);
+        var aCollider = NewRectCollider(rectCx, rectCy, rectCw, rectCh, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, currCharacterDownsync);
 
         // Add a slope barrier collider
         _logger.LogInfo("-------------------------------------------------------------------");
@@ -61,12 +69,16 @@ public class SkewedBarrierTest {
         _logger.LogInfo(String.Format("aCollider={0}", aCollider.Shape.ToString(false) + "; touchingCells: " + aCollider.TouchingCellsStr())); 
         var points1 = new float[8] { 0,0, 0,-16f, 28f,-16f, 28f,16f};
         var (anchorCx1, anchorCy1) = (36f, 20f);
-        var bCollider1 = NewConvexPolygonCollider(new ConvexPolygon(anchorCx1, anchorCy1, points1), 0, 0, null);
+        var bCollider1 = NewConvexPolygonCollider(new ConvexPolygon(anchorCx1, anchorCy1, points1), 0, 0, maxTouchingCellsCnt, null);
         collisionSys.AddSingle(bCollider1);
         _logger.LogInfo(String.Format("bCollider1={0}", bCollider1.Shape.ToString(false) + "; touchingCells: " + bCollider1.TouchingCellsStr())); 
 
+        Trap? primaryTrap;
         int primaryOverlapIndex = -1;
-        int hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
+        int residueCollidedCap = 256;
+        var residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
+        var chConfig = characters[currCharacterDownsync.SpeciesId];
+        int hardPushbackCnt = calcHardPushbacksNormsForCharacter(startRdf, chConfig, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, out primaryTrap, residueCollided, _logger);
 
         _logger.LogInfo(String.Format("T#1 hardPushbackCnt={0}, primaryOverlapResult={1}", hardPushbackCnt, primaryOverlapResult.ToString()));
         for (int k = 0; k < hardPushbackCnt; k++) {
@@ -83,11 +95,12 @@ public class SkewedBarrierTest {
         float squareEdgeLength = 16f;
         var points2 = new float[8] { 0,0, squareEdgeLength,0, squareEdgeLength,squareEdgeLength, 0,squareEdgeLength};
         var (anchorCx2, anchorCy2) = (20f, 4f);
-        var bCollider2 = NewConvexPolygonCollider(new ConvexPolygon(anchorCx2, anchorCy2, points2), 0, 0, null);
+        var bCollider2 = NewConvexPolygonCollider(new ConvexPolygon(anchorCx2, anchorCy2, points2), 0, 0, maxTouchingCellsCnt, null);
         collisionSys.AddSingle(bCollider2);
         _logger.LogInfo(String.Format("bCollider2={0}", bCollider2.Shape.ToString(false) + "; touchingCells: " + bCollider2.TouchingCellsStr())); 
 
-        hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
+        hardPushbackCnt = calcHardPushbacksNormsForCharacter(startRdf, chConfig, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, out primaryTrap, residueCollided, _logger);
+
         _logger.LogInfo(String.Format("T#2 hardPushbackCnt={0}, primaryOverlapResult={1}", hardPushbackCnt, primaryOverlapResult.ToString()));
         for (int k = 0; k < hardPushbackCnt; k++) {
             var hardPushbackNorm = hardPushbackNorms[k];
@@ -99,7 +112,8 @@ public class SkewedBarrierTest {
         _logger.LogInfo("-------------------------------------------------------------------");
 		collisionSys.AddSingle(bCollider1);
 
-        hardPushbackCnt = calcHardPushbacksNorms(currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, _logger);
+        hardPushbackCnt = calcHardPushbacksNormsForCharacter(startRdf, chConfig, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aCollider.Shape, hardPushbackNorms, collisionHolder, ref overlapResult, ref primaryOverlapResult, out primaryOverlapIndex, out primaryTrap, residueCollided, _logger);
+
         _logger.LogInfo(String.Format("T#3 hardPushbackCnt={0}, primaryOverlapResult={1}", hardPushbackCnt, primaryOverlapResult.ToString()));
         for (int k = 0; k < hardPushbackCnt; k++) {
             var hardPushbackNorm = hardPushbackNorms[k];
