@@ -266,7 +266,7 @@ message BulletConfig {
 
 	bool blowUp = 16;
 
-	int32 speciesId = 17; // For fireball, this SpeciesId specifies both the active animation and the explosion animation, for melee it specifies the explosion animation
+	int32 speciesId = 17; // For fireball, this SpeciesId specifies both the active animation and the explosion animation (if "explosionSpeciesId" not explicitly assigned), for melee it specifies the explosion animation
 	int32 explosionFrames = 18;
 
 	BulletType bType = 19;
@@ -288,6 +288,7 @@ message BulletConfig {
     int32 hardness = 31;
     int32 startupInvinsibleFrames = 32;
     int32 hitInvinsibleFrames = 33;
+	int32 explosionSpeciesId = 34;
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb

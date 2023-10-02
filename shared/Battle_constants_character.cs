@@ -83,7 +83,7 @@ namespace shared {
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 2,
-                        Hardness = 5
+                        Hardness = 4
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_MONKGIRL, new CharacterConfig {
@@ -155,7 +155,7 @@ namespace shared {
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 2,
-                        Hardness = 5
+                        Hardness = 4
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_GUNGIRL, new CharacterConfig {

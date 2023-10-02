@@ -10,6 +10,9 @@ namespace shared {
         public const int PATTERN_HOLD_B = 4;
         public const int PATTERN_DOWN_A = 5;
 
+        public const int EXPLOSION_SPECIES_FOLLOW = 0;
+        public const int EXPLOSION_SPECIES_NONE = -1;
+
         public static VfxConfig VfxDashingActive = new VfxConfig {
             SpeciesId = 1,
             MotionType = VfxMotionType.Dropped,
@@ -189,7 +192,7 @@ namespace shared {
             .AddHit(
                 new BulletConfig {
                     StartupFrames = 21,
-                    ActiveFrames = 600,
+                    ActiveFrames = 360,
                     HitStunFrames = 3,
                     HitInvinsibleFrames = 8,
                     BlockStunFrames = 3,
@@ -253,7 +256,7 @@ namespace shared {
                         .AddHit(
                             new BulletConfig {
                                 StartupFrames = 33,
-                                ActiveFrames = 600,
+                                ActiveFrames = 360,
                                 HitStunFrames = 30,
                                 BlockStunFrames = 9,
                                 Damage = 12,
@@ -336,6 +339,34 @@ namespace shared {
                                 CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
                             }
                         );
+
+        private static BulletConfig PistolBulletAir = new BulletConfig {
+                        StartupFrames = 2,
+                        ActiveFrames = 180,
+                        HitStunFrames = 6,
+                        BlockStunFrames = 4,
+                        Damage = 4,
+                        PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        PushbackVelY = NO_LOCK_VEL,
+                        SelfLockVelX = NO_LOCK_VEL,
+                        SelfLockVelY = NO_LOCK_VEL,
+                        HitboxOffsetX = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        SpeciesId = 8,
+                        ExplosionSpeciesId = EXPLOSION_SPECIES_NONE,
+                        Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DirX = 2,
+                        DirY = 0,
+                        Hardness = 4,
+                        ExplosionFrames = 30,
+                        BType = BulletType.Fireball,
+                        ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                        CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
+        };
+
+        private static BulletConfig PistolBulletGround = new BulletConfig(PistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);
 
         public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>().AddRange(
                     new[]
@@ -871,32 +902,7 @@ namespace shared {
                         BoundChState = Atk1
                     }
                         .AddHit(
-                            new BulletConfig {
-                                StartupFrames = 2,
-                                ActiveFrames = 600,
-                                HitStunFrames = 6,
-                                BlockStunFrames = 4,
-                                Damage = 4,
-                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = NO_LOCK_VEL,
-                                SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(28*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SpeciesId = 4,
-                                Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                DirX = 2,
-                                DirY = 0,
-                                Hardness = 4,
-                                AllowsWalking = true,
-                                AllowsCrouching = true,
-                                ExplosionFrames = 30,
-                                BType = BulletType.Fireball,
-                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
-                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
-                            }
+                            PistolBulletGround
                         )
                     ),
 
@@ -909,30 +915,7 @@ namespace shared {
                         BoundChState = InAirAtk1
                     }
                         .AddHit(
-                            new BulletConfig {
-                                StartupFrames = 2,
-                                ActiveFrames = 600,
-                                HitStunFrames = 6,
-                                BlockStunFrames = 4,
-                                Damage = 4,
-                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = NO_LOCK_VEL,
-                                SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(28*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SpeciesId = 4,
-                                Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                DirX = 2,
-                                DirY = 0,
-                                Hardness = 4,
-                                ExplosionFrames = 30,
-                                BType = BulletType.Fireball,
-                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
-                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
-                            }
+                            PistolBulletAir
                         )
                     ),
 

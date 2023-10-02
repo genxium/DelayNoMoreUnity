@@ -4673,8 +4673,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -133896011
-  m_SortingLayer: 3
+  m_SortingLayerID: 306415997
+  m_SortingLayer: 6
   m_SortingOrder: 10
   m_RenderMode: 4
   m_MeshDistribution: 0
@@ -4767,7 +4767,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
+  speciesId: 0
   attachedPs: {fileID: 0}
+  attachedPsr: {fileID: 0}
   cfxrEff: {fileID: 0}
 --- !u!1 &4553287630628875899
 GameObject:
@@ -9618,12 +9620,12 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 306415997
+  m_SortingLayer: 6
+  m_SortingOrder: 10
   m_RenderMode: 1
   m_MeshDistribution: 0
-  m_SortMode: 0
+  m_SortMode: 4
   m_MinParticleSize: 0
   m_MaxParticleSize: 2
   m_CameraVelocityScale: 0
@@ -14500,12 +14502,12 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 306415997
+  m_SortingLayer: 6
+  m_SortingOrder: 10
   m_RenderMode: 0
   m_MeshDistribution: 0
-  m_SortMode: 0
+  m_SortMode: 4
   m_MinParticleSize: 0
   m_MaxParticleSize: 2
   m_CameraVelocityScale: 0

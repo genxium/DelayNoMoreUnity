@@ -559,17 +559,23 @@ public abstract class AbstractMapController : MonoBehaviour {
                 //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
             }
 
-            if (null == explosionAnimHolder) {
-                throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}, animName={1}", lookupKey, animName));
+            if (null != explosionAnimHolder) {
+                if (explosionAnimHolder.lookUpTable.ContainsKey(animName)) {
+                    explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf);
+                    newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
+                    explosionAnimHolder.gameObject.transform.position = newPosHolder;
+                }
+                explosionAnimHolder.score = rdf.Id;
+                cachedFireballs.Put(lookupKey, explosionAnimHolder);
+            } else {
+                // null == explosionAnimHolder
+                if (EXPLOSION_SPECIES_NONE != bullet.Config.ExplosionSpeciesId) {
+                    // Explosion of fireballs is now allowed to use pure particle vfx
+                    throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}, animName={1}", lookupKey, animName));
+                }
             }
-            explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf);
-            explosionAnimHolder.score = rdf.Id;
-            newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
-            explosionAnimHolder.gameObject.transform.position = newPosHolder;
-            cachedFireballs.Put(lookupKey, explosionAnimHolder);
 
-            // Add bullet vfx
-            playBulletVfx(bullet, isExploding, explosionAnimHolder, wx, wy, rdf);
+            playBulletVfx(bullet, isExploding, wx, wy, rdf);
         }
 
         for (int k = 0; k < rdf.TriggersArr.Count; k++) {
@@ -2025,10 +2031,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         return true;
     }
 
-    public bool playBulletVfx(Bullet bullet, bool isExploding, FireballAnimController explosionAnimHolder, float wx, float wy, RoomDownsyncFrame rdf) {
+    public bool playBulletVfx(Bullet bullet, bool isExploding, float wx, float wy, RoomDownsyncFrame rdf) {
         int vfxSpeciesId = isExploding ? bullet.Config.ExplosionVfxSpeciesId : bullet.Config.ActiveVfxSpeciesId;
         if (!isExploding && !IsBulletActive(bullet, rdf.Id)) return false;
-        if (NO_VFX_ID == vfxSpeciesId || !isGameObjWithinCamera(explosionAnimHolder.gameObject)) return false;
+        newPosHolder.Set(wx, wy, fireballZ);
+        if (NO_VFX_ID == vfxSpeciesId || !isGameObjPositionWithinCamera(newPosHolder)) return false;
         var vfxConfig = vfxDict[vfxSpeciesId];
         if (!vfxConfig.OnBullet) return false;
         var speciesKvPq = cachedVfxNodes[vfxSpeciesId];

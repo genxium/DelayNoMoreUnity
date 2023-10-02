@@ -378,6 +378,16 @@ namespace shared {
             this.CancelTransit.Add(patternId, skillId);
             return this;
         }
+        
+        public BulletConfig SetAllowsWalking(bool val) {
+            this.AllowsWalking = val;
+            return this;
+        }
+
+        public BulletConfig SetAllowsCrouching(bool val) {
+            this.AllowsCrouching = val;
+            return this;
+        }
     }
 
     public sealed partial class Skill {
