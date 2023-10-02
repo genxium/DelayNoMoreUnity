@@ -52,6 +52,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int spaceOffsetY;
     protected float effectivelyInfinitelyFar;
 
+    protected RoomDownsyncFrame historyRdfHolder;
     protected shared.Collision collisionHolder;
     protected SatResult overlapResult, primaryOverlapResult;
     protected Dictionary<int, BattleResult> unconfirmedBattleResult;
@@ -74,7 +75,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, TeamRibbon> cachedTeamRibbons;
     protected KvPriorityQueue<string, InplaceHpBar> cachedHpBars;
 
-    protected bool shouldDetectRealtimeRenderHistoryCorrection = false; // Don't enable this in prod, it might have significant memory performance impact!
+    protected bool shouldDetectRealtimeRenderHistoryCorrection = false; // Not recommended to enable in production, it might have some memory performance impact.
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
@@ -262,7 +263,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             bool hasIncorrectlyPredictedRenderFrame = false;
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, _loggerBridge);
             if (hasIncorrectlyPredictedRenderFrame) {   
                 Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i+1));
             }
@@ -1499,6 +1500,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
+        historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
+
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;
         startRdf.ShouldForceResync = false;
         for (int i = 0; i < roomCapacity; i++) {
