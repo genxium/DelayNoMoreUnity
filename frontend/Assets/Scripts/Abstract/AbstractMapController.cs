@@ -614,7 +614,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         cachedVfxNodes = new Dictionary<int, KvPriorityQueue<string, VfxNodeController>>();
         vfxSpeciesPrefabDict = new Dictionary<int, GameObject>();
-        int cacheCapacityPerSpeciesId = 5;
+        int cacheCapacityPerSpeciesId = 4;
         string[] allVfxPrefabNames = new string[] {
             "1_Dashing_Active",
             "2_Fire_Exploding_Big",
@@ -622,7 +622,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             "4_Fire_Slash_Active",
             "5_Slash_Active",
             "6_Spike_Slash_Exploding",
-            "7_Fire_PointLight_Active"
+            "7_Fire_PointLight_Active",
+            "8_Pistol_Bullet_Exploding",
+            "9_Slash_Exploding"
         };
 
         foreach (string name in allVfxPrefabNames) {

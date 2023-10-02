@@ -25,6 +25,7 @@ public class VfxNodeController : MonoBehaviour {
     }
 
     private void OnDestroy() {
+        // If mysterious "vfxAnimHolder being null" issue is encountered, try to uncomment the following log to see if it gets called due to "Destroy == CFXR_Effect.ClearBehaviour" which is the default. 
         // Debug.Log(this.gameObject.name + " is being destroyed");
     }
 }
