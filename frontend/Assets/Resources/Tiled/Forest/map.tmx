@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="341">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="350">
+ <properties>
+  <property name="npcPreallocCapDict" value="1:16;3:16;4096:1"/>
+ </properties>
  <tileset firstgid="1" source="../shared_comps/tiles0.tsx"/>
  <tileset firstgid="65" source="../shared_comps/tiles1.tsx"/>
  <tileset firstgid="129" source="../shared_comps/tiles2.tsx"/>
  <tileset firstgid="193" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="202" source="../triggers/switch/triggers_switch.tsx"/>
+ <tileset firstgid="204" source="../triggers/door/triggers_door.tsx"/>
+ <tileset firstgid="205" source="../shared_comps/forest.tsx"/>
  <layer id="8" name="Ground" width="128" height="64">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer id="12" name="StaticTrapPaint" width="128" height="64">
@@ -18,7 +23,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -29,7 +34,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="488" y="308">
+  <object id="135" x="488" y="304">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -60,47 +65,40 @@
     <property name="trackingIdList" value="1"/>
    </properties>
   </object>
+  <object id="341" gid="2147483852" x="672" y="560" width="16" height="32">
+   <properties>
+    <property name="bulletTeamId" value="1"/>
+    <property name="delayedFrames" value="120"/>
+    <property name="initVelX" value="-2"/>
+    <property name="initVelY" value="0"/>
+    <property name="quota" value="2"/>
+    <property name="recoveryFrames" value="1200"/>
+    <property name="spawnChSpeciesIdList" value="1,3"/>
+    <property name="subCycleQuota" value="2"/>
+    <property name="subCycleTriggerFrames" value="90"/>
+   </properties>
+  </object>
+  <object id="348" gid="2147483852" x="672" y="448" width="16" height="32">
+   <properties>
+    <property name="bulletTeamId" value="2"/>
+    <property name="delayedFrames" value="120"/>
+    <property name="initVelX" value="-2"/>
+    <property name="initVelY" value="0"/>
+    <property name="quota" value="2"/>
+    <property name="recoveryFrames" value="1200"/>
+    <property name="spawnChSpeciesIdList" value="1,3"/>
+    <property name="subCycleQuota" value="2"/>
+    <property name="subCycleTriggerFrames" value="90"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="183" x="1248" y="640">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="speciesId" value="1"/>
-    <property name="teamId" value="1"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="184" x="824" y="640">
-   <properties>
-    <property name="dirX" value="2"/>
-    <property name="speciesId" value="1"/>
-    <property name="static" value="0"/>
-    <property name="teamId" value="2"/>
-   </properties>
-   <point/>
-  </object>
   <object id="195" x="1044" y="524">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="4096"/>
     <property name="static" value="1"/>
     <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="291" x="653" y="645">
-   <properties>
-    <property name="dirX" value="2"/>
-    <property name="speciesId" value="3"/>
-    <property name="teamId" value="2"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="292" x="1344" y="684">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="speciesId" value="3"/>
-    <property name="teamId" value="1"/>
    </properties>
    <point/>
   </object>
@@ -200,15 +198,6 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="320" x="544" y="624" width="32" height="16">
-   <properties>
-    <property name="collisionTypeMask" value="5"/>
-    <property name="providesHardPushback" value="1"/>
-    <property name="providesSlipJump" value="1"/>
-    <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
-   </properties>
-  </object>
   <object id="324" gid="198" x="1408" y="688" width="16" height="64">
    <properties>
     <property name="speed" value="6"/>
@@ -233,6 +222,24 @@
    <properties>
     <property name="collisionTypeMask" value="5"/>
     <property name="forcesCrouching" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="346" x="544" y="384" width="32" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="349" x="544" y="608" width="32" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
     <property name="speciesId" value="1"/>
     <property name="static" value="1"/>
    </properties>
@@ -278,11 +285,6 @@
   <object id="219" x="1632" y="592" width="48" height="96"/>
   <object id="226" x="1008" y="608">
    <polyline points="0,0 -64,48 144,48 80,0"/>
-  </object>
-  <object id="252" x="624" y="320" width="16" height="32">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
   </object>
   <object id="253" x="1040" y="320" width="16" height="32">
    <properties>
@@ -360,7 +362,7 @@
    </properties>
   </object>
   <object id="338" x="560" y="288" width="80" height="16"/>
-  <object id="339" x="624" y="288" width="16" height="48"/>
+  <object id="339" x="624" y="288" width="16" height="64"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="172" x="776" y="683">
@@ -501,7 +503,7 @@
    </properties>
    <point/>
   </object>
-  <object id="287" x="944" y="455">
+  <object id="287" x="914" y="455">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
@@ -512,7 +514,7 @@
    </properties>
    <point/>
   </object>
-  <object id="288" x="944" y="592">
+  <object id="288" x="914" y="592">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="1"/>
@@ -603,6 +605,26 @@
     <property name="frAct" value="4"/>
     <property name="frCaptureFrames" value="60"/>
     <property name="id" value="151"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="344" x="462.667" y="556">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="151"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="345" x="461.333" y="444">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="152"/>
    </properties>
    <point/>
   </object>

@@ -47,7 +47,7 @@ public class OnlineMapController : AbstractMapController {
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     preallocateHolders();
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch("Dungeon");
+                    resetCurrentMatch("Forest");
                     preallocateVfxNodes();
                     preallocateNpcNodes();
                     var reqData = new WsReq {
