@@ -535,15 +535,19 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
             bool spontaneousLooping = false;
             
+            int explosionSpeciesId = bullet.Config.ExplosionSpeciesId;
+            if (EXPLOSION_SPECIES_FOLLOW == explosionSpeciesId) {
+                explosionSpeciesId = bullet.Config.SpeciesId;
+            }
             switch (bullet.Config.BType) {
                 case BulletType.Melee:
                     if (isExploding) {
-                        animName = String.Format("Melee_Explosion{0}", bullet.Config.SpeciesId);
+                        animName = String.Format("Melee_Explosion{0}", explosionSpeciesId);
                     }
                     break;
                 case BulletType.Fireball:
                     if (IsBulletActive(bullet, rdf.Id) || isInPrevHitTriggeredMultiHitSubsequence || isExploding) {
-                        animName = isExploding ? String.Format("Explosion{0}", bullet.Config.SpeciesId) : String.Format("Fireball{0}", bullet.Config.SpeciesId);
+                        animName = isExploding ? String.Format("Explosion{0}", explosionSpeciesId) : String.Format("Fireball{0}", bullet.Config.SpeciesId);
                         spontaneousLooping = !isExploding;
                     }
                     break;
@@ -569,7 +573,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 cachedFireballs.Put(lookupKey, explosionAnimHolder);
             } else {
                 // null == explosionAnimHolder
-                if (EXPLOSION_SPECIES_NONE != bullet.Config.ExplosionSpeciesId) {
+                if (EXPLOSION_SPECIES_NONE != explosionSpeciesId) {
                     // Explosion of fireballs is now allowed to use pure particle vfx
                     throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}, animName={1}", lookupKey, animName));
                 }
