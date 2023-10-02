@@ -33,7 +33,7 @@ namespace shared {
 
         public void unregister(Collider collider) {
             if (null == collider.Data) {
-                throw new ArgumentNullException("Are you trying to unregister a static barrier collider? " + collider.Shape.ToString(false));
+                // throw new ArgumentNullException("Are you trying to unregister a static barrier collider? " + collider.Shape.ToString(false));
             }
             for (int i = Colliders.StFrameId; i < Colliders.EdFrameId; i++) {
                 var (ok, o) = Colliders.GetByFrameId(i);

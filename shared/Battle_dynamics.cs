@@ -1421,7 +1421,7 @@ namespace shared {
             battleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
         }
 
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -1456,11 +1456,9 @@ namespace shared {
                 currRdfPushbackFrameLog.RdfId = currRenderFrameId;
             }
 
-            RoomDownsyncFrame? renderedHistoryHolder = null;
             hasIncorrectlyPredictedRenderFrame = false;
             if (shouldDetectRealtimeRenderHistoryCorrection && nextRenderFrameId <= playingRdfId && candidate.Id == nextRenderFrameId) {
-                // [WARNING] Clone "candidate" into "renderedHistoryHolder", note that the clone must be RECURSIVE such that we don't unexpectedly mutate contents in "PlayersArr" or "Bullets" etc. by updating "candidate", hence this part has a significant memory impact to performance due to heap-RAM allocation!  
-                renderedHistoryHolder = candidate.Clone();
+                AssignToRdfDeep(candidate, historyRdfHolder, roomCapacity);
             }
             // [WARNING] On backend this function MUST BE called while "InputsBufferLock" is locked!
             var nextRenderFramePlayers = candidate.PlayersArr;
@@ -1623,8 +1621,10 @@ namespace shared {
             candidate.BulletLocalIdCounter = nextRenderFrameBulletLocalIdCounter;
             candidate.NpcLocalIdCounter = nextRenderFrameNpcLocalIdCounter;
 
-            if (null != renderedHistoryHolder && !renderedHistoryHolder.Equals(candidate)) {
-                hasIncorrectlyPredictedRenderFrame = true; 
+            if (shouldDetectRealtimeRenderHistoryCorrection && nextRenderFrameId <= playingRdfId && candidate.Id == nextRenderFrameId) {
+                if (!EqualRdfs(historyRdfHolder, candidate, roomCapacity)) {
+                    hasIncorrectlyPredictedRenderFrame = true; 
+                }
             }
         }
 

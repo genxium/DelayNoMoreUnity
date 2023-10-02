@@ -1,9 +1,9 @@
 namespace shared.Tests;
 using shared;
 
-public class FrameLogTest {
+public class RdfInplaceCloneTest {
     [Fact]
-    public void TestStringify() {
+    public void TestRdfInplaceClone() {
         const int roomCapacity = 1;
         var startRdf = Battle.NewPreallocatedRoomDownsyncFrame(roomCapacity, 8, 128, 64, 64);
         startRdf.Id = Battle.DOWNSYNC_MSG_ACT_BATTLE_START;
@@ -34,17 +34,14 @@ public class FrameLogTest {
         selfPlayerInRdf.MaxHp = 100;
         selfPlayerInRdf.SpeciesId = 0;
 
+        var clonedRdf = Battle.NewPreallocatedRoomDownsyncFrame(roomCapacity, 8, 128, 64, 64);
+        Battle.AssignToRdfDeep(startRdf, clonedRdf, roomCapacity);
+        Assert.True(Battle.EqualRdfs(startRdf, clonedRdf, roomCapacity));
+
         var startIfd = new InputFrameDownsync {
-            InputFrameId = 132,
-            ConfirmedList = ((ulong)1 << roomCapacity) - 1
+            InputFrameId = Battle.ConvertToDelayedInputFrameId(startRdf.Id),
+            ConfirmedList = (1ul << roomCapacity) - 1
         };
         startIfd.InputList.AddRange(new ulong[roomCapacity] { 12 });
-
-        string s = Battle.stringifyFrameLog(new FrameLog {
-            Rdf = startRdf,
-            ActuallyUsedIdf = startIfd
-        }, true);
-
-        Assert.NotNull(s);
     }
 }
