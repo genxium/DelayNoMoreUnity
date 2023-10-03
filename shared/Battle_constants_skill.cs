@@ -383,6 +383,8 @@ namespace shared {
                         ExplosionFrames = 30,
                         BType = BulletType.Fireball,
                         ExplosionVfxSpeciesId = VfxPistolBulletExploding.SpeciesId,
+                        FireballEmitSfxName = "Fireball8",
+                        ExplosionSfxName = "Explosion8",
                         CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
@@ -424,6 +426,7 @@ namespace shared {
                             DirX = 1,
                             DirY = 0,
                             Hardness = 5,
+                            CharacterEmitSfxName = "SlashEmitSpd1",
                             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                         }.UpsertCancelTransit(1, 2)
                     )),
@@ -461,6 +464,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                CharacterEmitSfxName = "SlashEmitSpd1",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }.UpsertCancelTransit(1, 3)
                         )),
@@ -496,6 +500,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                CharacterEmitSfxName = "SlashEmitSpd2",
                                 ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
                                 MhType = MultiHitType.FromEmission,

@@ -278,7 +278,7 @@ message BulletConfig {
 	int32 dirY = 24; // the initial direction indicator for Y-axis
 
 	map<int32, int32> cancelTransit = 25; // patternId -> skillId
-    bool destroyUponHit = 26; // for long lasting melee bullet
+    int32 repeatQuota = 26; // for long lasting bullet, applicable for "mhType == (FromPrevHitActual | FromPrevHitAnyway)"
 
     int32 activeVfxSpeciesId = 27; // currently only support 1 vfx config when active
     int32 explosionVfxSpeciesId = 28; // currently only support 1 vfx config when exploding
@@ -290,8 +290,15 @@ message BulletConfig {
     int32 hitInvinsibleFrames = 33;
 	int32 explosionSpeciesId = 34;
 
+	int32 perpAccMag = 35; // acceleration perpendicular to instantaneous velocity per frame
+
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
+
+	// Sfx configs
+	string characterEmitSfxName = 2048;
+	string fireballEmitSfxName = 2049;
+	string explosionSfxName = 2050;
 }
 
 message BulletBattleAttr {
@@ -310,6 +317,7 @@ message Bullet {
 	int32 framesInBlState = 2;
 	BulletBattleAttr battleAttr = 3;
 	BulletConfig config = 4;
+	int32 repeatQuotaLeft = 5;
 
 	int32 virtualGridX = 999;
 	int32 virtualGridY = 1000;

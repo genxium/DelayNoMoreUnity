@@ -27,6 +27,7 @@ public class OfflineMapController : AbstractMapController {
         preallocateHolders();
         resetCurrentMatch("Forest");
         preallocateVfxNodes();
+        preallocateSfxNodes();
         preallocateNpcNodes();
         selfPlayerInfo.JoinIndex = 1;
 

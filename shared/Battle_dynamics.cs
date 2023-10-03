@@ -521,6 +521,7 @@ namespace shared {
                         src.DirX, src.DirY, // dir
                         src.VelX, src.VelY, // velocity
                         src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId, src.Config,
+                        src.Config.RepeatQuota,
                         dst);
 
                 int j = dst.BattleAttr.OffenderJoinIndex - 1;
@@ -1674,7 +1675,7 @@ namespace shared {
                     currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX, currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY, // virtual grid position
                     xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
                     (int)(bulletSpeedXfac * bulletConfig.Speed), (int)(bulletSpeedYfac * bulletConfig.Speed), // velocity
-                    activeSkillHit, activeSkillId, bulletConfig,
+                    activeSkillHit, activeSkillId, bulletConfig, bulletConfig.RepeatQuota,
                     nextRenderFrameBullets[bulletCnt]);
 
             bulletLocalIdCounter++;

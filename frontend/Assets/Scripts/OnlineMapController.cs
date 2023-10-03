@@ -49,6 +49,7 @@ public class OnlineMapController : AbstractMapController {
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     resetCurrentMatch("Forest");
                     preallocateVfxNodes();
+                    preallocateSfxNodes();
                     preallocateNpcNodes();
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
