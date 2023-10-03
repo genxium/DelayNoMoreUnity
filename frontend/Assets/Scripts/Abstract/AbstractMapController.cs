@@ -110,6 +110,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float characterZ = 0;
     protected float inplaceHpBarZ = +10;
     protected float fireballZ = -5;
+    protected float footstepAttenuationZ = 150.0f;
 
     private string MATERIAL_REF_THICKNESS = "_Thickness";
     private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
@@ -403,6 +404,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
 
+        float selfPlayerWx = 0f, selfPlayerWy = 0f;
+
         for (int k = 0; k < roomCapacity; k++) {
             var currCharacterDownsync = rdf.PlayersArr[k];
             var prevCharacterDownsync = (null == prevRdf ? null : prevRdf.PlayersArr[k]);
@@ -419,6 +422,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
                 selfBattleHeading.SetCharacter(currCharacterDownsync);
+                selfPlayerWx = wx;
+                selfPlayerWy = wy;
                 //newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
                 //selfPlayerLights.gameObject.transform.position = newPosHolder;
                 //selfPlayerLights.setDirX(currCharacterDownsync.DirX);
@@ -447,8 +452,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             // Add character vfx
-            playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, playerGameObj);
-            playCharacterSfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id);
+            float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
+            if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
+                playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, chAnimCtrl.upperPart.gameObject);
+            } else {
+                playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, playerGameObj);
+            }
+            playCharacterSfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id);
         }
 
@@ -520,7 +530,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                     .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
             }
             playCharacterDamagedVfx(currNpcDownsync, prevNpcDownsync, npcGameObj);
-            playCharacterSfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id);
+            float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
+            playCharacterSfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id);
         }
 
@@ -616,7 +627,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
 
-            playBulletSfx(bullet, isExploding, wx, wy, rdf.Id);
+            float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
+            playBulletSfx(bullet, isExploding, wx, wy, rdf.Id, distanceAttenuationZ);
             playBulletVfx(bullet, isExploding, wx, wy, rdf.Id);
         }
 
@@ -673,6 +685,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             GameObject newSfxNode = Instantiate(sfxSourcePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
             SFXSource newSfxSource = newSfxNode.GetComponent<SFXSource>();
             newSfxSource.score = -1;
+            newSfxSource.maxDistanceInWorld = effectivelyInfinitelyFar * 0.25f;
             newSfxSource.audioClipDict = audioClipDict;
             var initLookupKey = i.ToString();
             cachedSfxNodes.Put(initLookupKey, newSfxSource);
@@ -2060,7 +2073,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         return true;
     }
 
-    public bool playCharacterSfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId) {
+    public bool playCharacterSfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId, float distanceAttenuationZ) {
         // Cope with footstep sounds first
         if (CharacterState.Walking == currCharacterDownsync.CharacterState || CharacterState.WalkingAtk1 == currCharacterDownsync.CharacterState) {
             string ftSfxLookupKey = "ch-ft-" + currCharacterDownsync.JoinIndex.ToString();
@@ -2083,16 +2096,18 @@ public abstract class AbstractMapController : MonoBehaviour {
                     return false;
                 }
 
-                newPosHolder.Set(wx, wy, ftSfxSourceHolder.gameObject.transform.position.z);
+                float totAttZ = distanceAttenuationZ + footstepAttenuationZ;
+                newPosHolder.Set(wx, wy, totAttZ);
                 ftSfxSourceHolder.gameObject.transform.position = newPosHolder;
-                if (!ftSfxSourceHolder.audioSource.isPlaying) {
+                if (!ftSfxSourceHolder.audioSource.isPlaying) { 
+                    ftSfxSourceHolder.audioSource.volume = calcSfxVolume(ftSfxSourceHolder, totAttZ);
                     ftSfxSourceHolder.audioSource.PlayOneShot(ftSfxSourceHolder.audioClipDict[clipName]);
                 }
                 ftSfxSourceHolder.score = rdfId;
             } finally {
                 cachedSfxNodes.Put(ftSfxLookupKey, ftSfxSourceHolder);
             }
-        } 
+        }
 
         bool isInitialFrame = (0 == currCharacterDownsync.FramesInChState);
         if (!isInitialFrame) {
@@ -2124,8 +2139,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                 return false;
             }
 
-            newPosHolder.Set(wx, wy, sfxSourceHolder.gameObject.transform.position.z);
+            newPosHolder.Set(wx, wy, distanceAttenuationZ);
             sfxSourceHolder.gameObject.transform.position = newPosHolder;
+            sfxSourceHolder.audioSource.volume = calcSfxVolume(sfxSourceHolder, distanceAttenuationZ);
             sfxSourceHolder.audioSource.PlayOneShot(sfxSourceHolder.audioClipDict[clipName]);
             sfxSourceHolder.score = rdfId;
         } finally {
@@ -2192,7 +2208,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         return true;
     }
 
-    public bool playBulletSfx(Bullet bullet, bool isExploding, float wx, float wy, int rdfId) {
+    public bool playBulletSfx(Bullet bullet, bool isExploding, float wx, float wy, int rdfId, float distanceAttenuationZ) {
         bool isInitialFrame = (0 == bullet.FramesInBlState);
         if (!isInitialFrame) {
             return false;
@@ -2217,8 +2233,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                 return false;
             }
 
-            newPosHolder.Set(wx, wy, sfxSourceHolder.gameObject.transform.position.z);
+            newPosHolder.Set(wx, wy, distanceAttenuationZ);
             sfxSourceHolder.gameObject.transform.position = newPosHolder;
+            sfxSourceHolder.audioSource.volume = calcSfxVolume(sfxSourceHolder, distanceAttenuationZ);
             sfxSourceHolder.audioSource.PlayOneShot(sfxSourceHolder.audioClipDict[clipName]);
             sfxSourceHolder.score = rdfId;
         } finally {
@@ -2270,15 +2287,22 @@ public abstract class AbstractMapController : MonoBehaviour {
         return true;
     }
 
+    public float calcSfxVolume(SFXSource sfxSource, float totAttZ) {
+        if (totAttZ <= 0) return 1f;
+        if (totAttZ >= sfxSource.maxDistanceInWorld) return 0f;
+        return (float)Math.Pow((double)10f, (double)(-totAttZ/sfxSource.maxDistanceInWorld));
+    }
     public string calcFootStepSfxName(CharacterDownsync currCharacterDownsync) {
         // TODO: Record the contacted barrier material ID in "CharacterDownsync" to achieve more granular footstep sound derivation!  
         return "FootStep1";
     }
 
     public bool isSFXTracing(string name) {
-        switch (name) { 
-        case "FootStep1": 
-            return true;
+        switch (name) {
+            case "FootStep1":
+                return true;
+            case "FireballActive1":
+                return true;
         }
         return false;
     }

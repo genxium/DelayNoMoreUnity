@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class SFXSource : MonoBehaviour {
     public int score;
+    public float maxDistanceInWorld;
     public AudioSource audioSource;
     public Dictionary<string, AudioClip> audioClipDict;
 
