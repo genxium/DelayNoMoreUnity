@@ -84,6 +84,7 @@ public class OnlineMapController : AbstractMapController {
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
                     startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
                     readyGoPanel.playGoAnim();
+                    bgmSource.Play();
                     onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
                     break;

@@ -90,7 +90,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
     protected KvPriorityQueue<string, SFXSource> cachedSfxNodes;
-
+    public AudioSource bgmSource;
     public abstract void onCharacterSelectGoAction(int speciesId);
 
     protected bool debugDrawingAllocation = false;
@@ -448,7 +448,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             // Add character vfx
             playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, playerGameObj);
-            playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf);
+            playCharacterSfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id);
+            playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id);
         }
 
         // Put all npcNodes to infinitely far first
@@ -519,7 +520,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                     .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
             }
             playCharacterDamagedVfx(currNpcDownsync, prevNpcDownsync, npcGameObj);
-            playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf);
+            playCharacterSfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id);
+            playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id);
         }
 
         int kDynamicTrap = 0;
@@ -564,7 +566,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool isExploding = IsBulletExploding(bullet);
             var skillConfig = skills[bullet.BattleAttr.SkillId];
-            BulletConfig? prevHitBulletConfig = (0 < bullet.BattleAttr.ActiveSkillHit ? skillConfig.Hits[bullet.BattleAttr.ActiveSkillHit - 1] : null); // TODO: Make this compatible with simultaneous bullets after a "FromPrevHitXxx" bullet!
+            var prevHitBulletConfig = (0 < bullet.BattleAttr.ActiveSkillHit ? skillConfig.Hits[bullet.BattleAttr.ActiveSkillHit - 1] : null); // TODO: Make this compatible with simultaneous bullets after a "FromPrevHitXxx" bullet!
             bool isInPrevHitTriggeredMultiHitSubsequence = (null != prevHitBulletConfig && (MultiHitType.FromPrevHitActual == prevHitBulletConfig.MhType || MultiHitType.FromPrevHitAnyway == prevHitBulletConfig.MhType));
 
             string lookupKey = bullet.BattleAttr.BulletLocalId.ToString(), animName = null;
@@ -647,14 +649,18 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
         }
-        int sfxNodeCacheCapacity = 16;
+        int sfxNodeCacheCapacity = 64;
         cachedSfxNodes = new KvPriorityQueue<string, SFXSource>(sfxNodeCacheCapacity, sfxNodeScore);
         string[] allSfxClipsNames = new string[] {
             "Explosion1",
             "Explosion8",
             "Fireball8",
             "SlashEmitSpd1",
-            "SlashEmitSpd2"
+            "SlashEmitSpd2",
+            "SlashEmitSpd3",
+            "FootStep1",
+            "DoorOpen",
+            "DoorClose"
         };
         var audioClipDict = new Dictionary<string, AudioClip>();
         foreach (string name in allSfxClipsNames) {
@@ -1159,6 +1165,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState) {
             return;
         }
+        bgmSource.Stop();
         battleState = ROOM_STATE_STOPPED;
 
         BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
@@ -2053,7 +2060,82 @@ public abstract class AbstractMapController : MonoBehaviour {
         return true;
     }
 
-    public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, RoomDownsyncFrame rdf) {
+    public bool playCharacterSfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId) {
+        // Cope with footstep sounds first
+        if (CharacterState.Walking == currCharacterDownsync.CharacterState || CharacterState.WalkingAtk1 == currCharacterDownsync.CharacterState) {
+            string ftSfxLookupKey = "ch-ft-" + currCharacterDownsync.JoinIndex.ToString();
+            var ftSfxSourceHolder = cachedSfxNodes.PopAny(ftSfxLookupKey);
+            if (null == ftSfxSourceHolder) {
+                ftSfxSourceHolder = cachedSfxNodes.Pop();
+            }
+
+            if (null == ftSfxSourceHolder) {
+                return false;
+                // throw new ArgumentNullException(String.Format("No available ftSfxSourceHolder node for ftSfxLookupKey={0}", ftSfxLookupKey));
+            }
+
+            try {
+                var clipName = calcFootStepSfxName(currCharacterDownsync); 
+                if (null == clipName) {
+                    return false;
+                }
+                if (!ftSfxSourceHolder.audioClipDict.ContainsKey(clipName)) {
+                    return false;
+                }
+
+                newPosHolder.Set(wx, wy, ftSfxSourceHolder.gameObject.transform.position.z);
+                ftSfxSourceHolder.gameObject.transform.position = newPosHolder;
+                if (!ftSfxSourceHolder.audioSource.isPlaying) {
+                    ftSfxSourceHolder.audioSource.PlayOneShot(ftSfxSourceHolder.audioClipDict[clipName]);
+                }
+                ftSfxSourceHolder.score = rdfId;
+            } finally {
+                cachedSfxNodes.Put(ftSfxLookupKey, ftSfxSourceHolder);
+            }
+        } 
+
+        bool isInitialFrame = (0 == currCharacterDownsync.FramesInChState);
+        if (!isInitialFrame) {
+            return false;
+        }
+
+        if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
+        var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+        var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
+        if (null == currBulletConfig || null == currBulletConfig.CharacterEmitSfxName || currBulletConfig.CharacterEmitSfxName.IsEmpty()) return false;
+
+        string sfxLookupKey = "ch-emit-" + currCharacterDownsync.JoinIndex.ToString();
+        var sfxSourceHolder = cachedSfxNodes.PopAny(sfxLookupKey);
+        if (null == sfxSourceHolder) {
+            sfxSourceHolder = cachedSfxNodes.Pop();
+        }
+
+        if (null == sfxSourceHolder) {
+            return false;
+            // throw new ArgumentNullException(String.Format("No available sfxSourceHolder node for sfxLookupKey={0}", sfxLookupKey));
+        }
+
+        try {
+            string clipName = currBulletConfig.CharacterEmitSfxName;
+            if (null == clipName) {
+                return false;
+            }
+            if (!sfxSourceHolder.audioClipDict.ContainsKey(clipName)) {
+                return false;
+            }
+
+            newPosHolder.Set(wx, wy, sfxSourceHolder.gameObject.transform.position.z);
+            sfxSourceHolder.gameObject.transform.position = newPosHolder;
+            sfxSourceHolder.audioSource.PlayOneShot(sfxSourceHolder.audioClipDict[clipName]);
+            sfxSourceHolder.score = rdfId;
+        } finally {
+            cachedSfxNodes.Put(sfxLookupKey, sfxSourceHolder);
+        }
+        
+        return true;
+    }
+
+    public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId) {
         if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
         var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
         var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
@@ -2067,9 +2149,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
         if (null == vfxAnimHolder) {
             vfxAnimHolder = speciesKvPq.Pop();
-            //Debug.Log(String.Format("@rdf.Id={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdf.Id, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+            //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
         } else {
-            //Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdf.Id, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+            //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
         }
 
         if (null == vfxAnimHolder) {
@@ -2104,7 +2186,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 vfxAnimHolder.attachedPs.Play();
             }
         }
-        vfxAnimHolder.score = rdf.Id;
+        vfxAnimHolder.score = rdfId;
         speciesKvPq.Put(lookupKey, vfxAnimHolder);
 
         return true;
@@ -2186,5 +2268,18 @@ public abstract class AbstractMapController : MonoBehaviour {
         vfxAnimHolder.score = rdfId;
         speciesKvPq.Put(vfxLookupKey, vfxAnimHolder);
         return true;
+    }
+
+    public string calcFootStepSfxName(CharacterDownsync currCharacterDownsync) {
+        // TODO: Record the contacted barrier material ID in "CharacterDownsync" to achieve more granular footstep sound derivation!  
+        return "FootStep1";
+    }
+
+    public bool isSFXTracing(string name) {
+        switch (name) { 
+        case "FootStep1": 
+            return true;
+        }
+        return false;
     }
 }

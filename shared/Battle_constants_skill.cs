@@ -121,6 +121,7 @@ namespace shared {
             DirX = 1,
             DirY = 0,
             Hardness = 5,
+            CharacterEmitSfxName = "SlashEmitSpd2",
             ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
@@ -134,7 +135,7 @@ namespace shared {
             PushbackVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetX = (int)(14 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -146,6 +147,7 @@ namespace shared {
             ExplosionFrames = 25,
             Hardness = 5,
             BType = BulletType.Melee,
+            CharacterEmitSfxName = "SlashEmitSpd3",
             ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
@@ -171,6 +173,7 @@ namespace shared {
             DirX = 1,
             DirY = 0,
             Hardness = 5,
+            CharacterEmitSfxName = "SlashEmitSpd2",
             ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
@@ -184,7 +187,7 @@ namespace shared {
             PushbackVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetX = (int)(14 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -196,6 +199,7 @@ namespace shared {
             Hardness = 5,
             ExplosionFrames = 25,
             BType = BulletType.Melee,
+            CharacterEmitSfxName = "SlashEmitSpd3",
             ActiveVfxSpeciesId = VfxFireSlashActive.SpeciesId,
             ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -383,7 +387,7 @@ namespace shared {
                         ExplosionFrames = 30,
                         BType = BulletType.Fireball,
                         ExplosionVfxSpeciesId = VfxPistolBulletExploding.SpeciesId,
-                        FireballEmitSfxName = "Fireball8",
+                        CharacterEmitSfxName = "Fireball8",
                         ExplosionSfxName = "Explosion8",
                         CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
@@ -464,7 +468,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
-                                CharacterEmitSfxName = "SlashEmitSpd1",
+                                CharacterEmitSfxName = "SlashEmitSpd2",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }.UpsertCancelTransit(1, 3)
                         )),
@@ -500,7 +504,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
-                                CharacterEmitSfxName = "SlashEmitSpd2",
+                                CharacterEmitSfxName = "SlashEmitSpd3",
                                 ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
                                 MhType = MultiHitType.FromEmission,

@@ -1329,9 +1329,10 @@ namespace shared {
 
                 // Reset "FramesInChState" if "CharacterState" is changed
                 if (thatCharacterInNextFrame.CharacterState != currCharacterDownsync.CharacterState) {
-                    if ((Walking == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState)
-                        ||
-                        (WalkingAtk1 == currCharacterDownsync.CharacterState && Walking == thatCharacterInNextFrame.CharacterState)) {
+                    if (Walking == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) {
+                        thatCharacterInNextFrame.LowerPartFramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
+                        thatCharacterInNextFrame.FramesInChState = 0;
+                    } else if (WalkingAtk1 == currCharacterDownsync.CharacterState && Walking == thatCharacterInNextFrame.CharacterState) {
                         thatCharacterInNextFrame.LowerPartFramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
                     } else if (Atk1 == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) {
