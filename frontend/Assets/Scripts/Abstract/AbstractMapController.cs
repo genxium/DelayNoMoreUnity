@@ -110,7 +110,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float characterZ = 0;
     protected float inplaceHpBarZ = +10;
     protected float fireballZ = -5;
-    protected float footstepAttenuationZ = 150.0f;
+    protected float footstepAttenuationZ = 170.0f;
 
     private string MATERIAL_REF_THICKNESS = "_Thickness";
     private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
@@ -665,14 +665,21 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedSfxNodes = new KvPriorityQueue<string, SFXSource>(sfxNodeCacheCapacity, sfxNodeScore);
         string[] allSfxClipsNames = new string[] {
             "Explosion1",
+            "Explosion3",
+            "Explosion4",
             "Explosion8",
+            "Melee_Explosion1",
+            "Melee_Explosion2",
+            "Melee_Explosion3",
             "Fireball8",
+            "FlameBurning1",
+            "FlameEmit1",
             "SlashEmitSpd1",
             "SlashEmitSpd2",
             "SlashEmitSpd3",
             "FootStep1",
             "DoorOpen",
-            "DoorClose"
+            "DoorClose", 
         };
         var audioClipDict = new Dictionary<string, AudioClip>();
         foreach (string name in allSfxClipsNames) {
@@ -2290,7 +2297,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public float calcSfxVolume(SFXSource sfxSource, float totAttZ) {
         if (totAttZ <= 0) return 1f;
         if (totAttZ >= sfxSource.maxDistanceInWorld) return 0f;
-        return (float)Math.Pow((double)10f, (double)(-totAttZ/sfxSource.maxDistanceInWorld));
+        return (float)Math.Pow((double)12f, (double)(-totAttZ/sfxSource.maxDistanceInWorld));
     }
     public string calcFootStepSfxName(CharacterDownsync currCharacterDownsync) {
         // TODO: Record the contacted barrier material ID in "CharacterDownsync" to achieve more granular footstep sound derivation!  

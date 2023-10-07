@@ -299,6 +299,7 @@ message BulletConfig {
 	string characterEmitSfxName = 2048;
 	string fireballEmitSfxName = 2049;
 	string explosionSfxName = 2050;
+	string activeSfxName = 2051;
 }
 
 message BulletBattleAttr {
