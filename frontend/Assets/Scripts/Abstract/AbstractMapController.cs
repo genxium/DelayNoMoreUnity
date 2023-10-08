@@ -2166,7 +2166,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId) {
         if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
         var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
-        if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit > currSkillConfig.Hits.Count) {
+        if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit >= currSkillConfig.Hits.Count) {
             return false;
         }
         var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
