@@ -35,3 +35,8 @@ It can also crop an audio file, see below the sample command to crop only the fi
 ```
 ffmpeg -ss 0 -t 30 -i .\bgm.mp3 .\bgm_short.mp3
 ```
+
+To speed up audio by 2x.
+```
+ffmpeg -i .\bgm.mp3 -filter:a "atempo=2.0" .\bgm_fast.mp3
+```

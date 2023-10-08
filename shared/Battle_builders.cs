@@ -391,6 +391,10 @@ namespace shared {
             this.AllowsCrouching = val;
             return this;
         }
+
+        public bool isEmissionInducedMultiHit() {
+            return (MultiHitType.FromEmission == MhType);
+        }
     }
 
     public sealed partial class Skill {

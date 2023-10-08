@@ -562,6 +562,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int k = 0; k < rdf.Bullets.Count; k++) {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
+            
             var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
             var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX, bullet.Config.HitboxSizeY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
@@ -602,31 +603,32 @@ public abstract class AbstractMapController : MonoBehaviour {
                 default:
                     break;
             }
-            if (null == animName) continue;
-            var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
-            if (null == explosionAnimHolder) {
-                explosionAnimHolder = cachedFireballs.Pop();
-                //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
-            } else {
-                //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
-            }
-
-            if (null != explosionAnimHolder) {
-                if (explosionAnimHolder.lookUpTable.ContainsKey(animName)) {
-                    explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf);
-                    newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
-                    explosionAnimHolder.gameObject.transform.position = newPosHolder;
+            if (null != animName) {
+                var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
+                if (null == explosionAnimHolder) {
+                    explosionAnimHolder = cachedFireballs.Pop();
+                    //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
+                } else {
+                    //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
                 }
-                explosionAnimHolder.score = rdf.Id;
-                cachedFireballs.Put(lookupKey, explosionAnimHolder);
-            } else {
-                // null == explosionAnimHolder
-                if (EXPLOSION_SPECIES_NONE != explosionSpeciesId) {
-                    // Explosion of fireballs is now allowed to use pure particle vfx
-                    throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}, animName={1}", lookupKey, animName));
+
+                if (null != explosionAnimHolder) {
+                    if (explosionAnimHolder.lookUpTable.ContainsKey(animName)) {
+                        explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf);
+                        newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
+                        explosionAnimHolder.gameObject.transform.position = newPosHolder;
+                    }
+                    explosionAnimHolder.score = rdf.Id;
+                    cachedFireballs.Put(lookupKey, explosionAnimHolder);
+                } else {
+                    // null == explosionAnimHolder
+                    if (EXPLOSION_SPECIES_NONE != explosionSpeciesId) {
+                        // Explosion of fireballs is now allowed to use pure particle vfx
+                        throw new ArgumentNullException(String.Format("No available fireball node for lookupKey={0}, animName={1}", lookupKey, animName));
+                    }
                 }
             }
-
+            
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             playBulletSfx(bullet, isExploding, wx, wy, rdf.Id, distanceAttenuationZ);
             playBulletVfx(bullet, isExploding, wx, wy, rdf.Id);
@@ -665,6 +667,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedSfxNodes = new KvPriorityQueue<string, SFXSource>(sfxNodeCacheCapacity, sfxNodeScore);
         string[] allSfxClipsNames = new string[] {
             "Explosion1",
+            "Explosion2",
             "Explosion3",
             "Explosion4",
             "Explosion8",
@@ -2083,10 +2086,12 @@ public abstract class AbstractMapController : MonoBehaviour {
     public bool playCharacterSfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId, float distanceAttenuationZ) {
         // Cope with footstep sounds first
         if (CharacterState.Walking == currCharacterDownsync.CharacterState || CharacterState.WalkingAtk1 == currCharacterDownsync.CharacterState) {
+            bool usingSameAudSrc = true;
             string ftSfxLookupKey = "ch-ft-" + currCharacterDownsync.JoinIndex.ToString();
             var ftSfxSourceHolder = cachedSfxNodes.PopAny(ftSfxLookupKey);
             if (null == ftSfxSourceHolder) {
                 ftSfxSourceHolder = cachedSfxNodes.Pop();
+                usingSameAudSrc = false;
             }
 
             if (null == ftSfxSourceHolder) {
@@ -2106,7 +2111,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 float totAttZ = distanceAttenuationZ + footstepAttenuationZ;
                 newPosHolder.Set(wx, wy, totAttZ);
                 ftSfxSourceHolder.gameObject.transform.position = newPosHolder;
-                if (!ftSfxSourceHolder.audioSource.isPlaying) { 
+                if (!usingSameAudSrc || !ftSfxSourceHolder.audioSource.isPlaying) { 
                     ftSfxSourceHolder.audioSource.volume = calcSfxVolume(ftSfxSourceHolder, totAttZ);
                     ftSfxSourceHolder.audioSource.PlayOneShot(ftSfxSourceHolder.audioClipDict[clipName]);
                 }
@@ -2161,8 +2166,13 @@ public abstract class AbstractMapController : MonoBehaviour {
     public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId) {
         if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
         var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+        if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit > currSkillConfig.Hits.Count) {
+            return false;
+        }
         var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
-        if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) return false;
+        if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) {
+            return false;
+        }
         var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
         if (!vfxConfig.OnCharacter) return false;
         // The outer "if" is less costly than calculating viewport point.
@@ -2216,7 +2226,42 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public bool playBulletSfx(Bullet bullet, bool isExploding, float wx, float wy, int rdfId, float distanceAttenuationZ) {
-        bool isInitialFrame = (0 == bullet.FramesInBlState);
+        // Play "ActiveSfx" if configured
+        bool shouldPlayActiveSfx = (0 < bullet.FramesInBlState && BulletState.Active == bullet.BlState && null != bullet.Config.ActiveSfxName);
+        if (shouldPlayActiveSfx) {
+            bool usingSameAudSrc = true;
+            string atSfxLookupKey = "bl-at-" + bullet.BattleAttr.BulletLocalId.ToString();
+            var atSfxSourceHolder = cachedSfxNodes.PopAny(atSfxLookupKey);
+            if (null == atSfxSourceHolder) {
+                atSfxSourceHolder = cachedSfxNodes.Pop();
+                usingSameAudSrc = false;
+            }
+
+            if (null == atSfxSourceHolder) {
+                return false;
+                // throw new ArgumentNullException(String.Format("No available atSfxSourceHolder node for ftSfxLookupKey={0}", ftSfxLookupKey));
+            }
+
+            try {
+                if (!atSfxSourceHolder.audioClipDict.ContainsKey(bullet.Config.ActiveSfxName)) {
+                    return false;
+                }
+
+                float totAttZ = distanceAttenuationZ + footstepAttenuationZ; // Use footstep built-in attenuation for now
+                newPosHolder.Set(wx, wy, totAttZ);
+                atSfxSourceHolder.gameObject.transform.position = newPosHolder;
+                if (!usingSameAudSrc || !atSfxSourceHolder.audioSource.isPlaying) {
+                    atSfxSourceHolder.audioSource.volume = calcSfxVolume(atSfxSourceHolder, totAttZ);
+                    atSfxSourceHolder.audioSource.PlayOneShot(atSfxSourceHolder.audioClipDict[bullet.Config.ActiveSfxName]);
+                }
+                atSfxSourceHolder.score = rdfId;
+            } finally {
+                cachedSfxNodes.Put(atSfxLookupKey, atSfxSourceHolder);
+            }
+        }
+
+        // Play initla sfx for state
+        bool isInitialFrame = (0 == bullet.FramesInBlState && (BulletState.Active != bullet.BlState || (BulletState.Active == bullet.BlState && 0 < bullet.BattleAttr.ActiveSkillHit)));
         if (!isInitialFrame) {
             return false;
         }
@@ -2302,15 +2347,5 @@ public abstract class AbstractMapController : MonoBehaviour {
     public string calcFootStepSfxName(CharacterDownsync currCharacterDownsync) {
         // TODO: Record the contacted barrier material ID in "CharacterDownsync" to achieve more granular footstep sound derivation!  
         return "FootStep1";
-    }
-
-    public bool isSFXTracing(string name) {
-        switch (name) {
-            case "FootStep1":
-                return true;
-            case "FireballActive1":
-                return true;
-        }
-        return false;
     }
 }
