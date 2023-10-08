@@ -27,6 +27,7 @@ public class OfflineMapController : AbstractMapController {
         preallocateHolders();
         resetCurrentMatch("Forest");
         preallocateVfxNodes();
+        preallocateSfxNodes();
         preallocateNpcNodes();
         selfPlayerInfo.JoinIndex = 1;
 
@@ -50,6 +51,7 @@ public class OfflineMapController : AbstractMapController {
     private IEnumerator delayToStartBattle(RoomDownsyncFrame startRdf) {
         yield return new WaitForSeconds(1);
         readyGoPanel.playGoAnim();
+        bgmSource.Play();
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
         onRoomDownsyncFrame(startRdf, null);

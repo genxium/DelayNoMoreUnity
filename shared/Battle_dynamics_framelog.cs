@@ -18,12 +18,12 @@ namespace shared {
 
         public static string stringifyPlayer(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},fci:{12},jt:{13},fri:{14},dx:{15},dy:{16},ct:{17},sjt:{18},oshp:{19},js:{20},fsj:{21}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fc:{11},fi:{12},jt:{13},fri:{14},dx:{15},dy:{16},ct:{17},sjt:{18},oshp:{19},js:{20},fsj:{21}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump);
         }
 
         public static string stringifyNpc(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fcs:{11},fci:{12},jt:{13},fri:{14},frp:{15},wpc:{16},wsp:{17},cp:{18},dx:{19},dy:{20},ct:{21},sjt:{22},oshp:{23},js:{24},fsj:{25}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fc:{11},fi:{12},jt:{13},fri:{14},frp:{15},wpc:{16},wsp:{17},cp:{18},dx:{19},dy:{20},ct:{21},sjt:{22},oshp:{23},js:{24},fsj:{25}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump);
         }
 
         public static string stringifyTrap(Trap tr) {
@@ -33,7 +33,7 @@ namespace shared {
 
         public static string stringifyBullet(Bullet bt) {
             if (null == bt) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", bt.BattleAttr.BulletLocalId, bt.BattleAttr.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bt.Config.HitboxSizeX, bt.Config.HitboxSizeY);
+            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}", bt.BattleAttr.BulletLocalId, bt.BattleAttr.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bt.Config.HitboxSizeX, bt.Config.HitboxSizeY, bt.RepeatQuotaLeft);
         }
 
         public static string stringifyRdf(RoomDownsyncFrame rdf) {

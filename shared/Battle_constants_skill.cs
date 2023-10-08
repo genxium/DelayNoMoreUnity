@@ -69,6 +69,22 @@ namespace shared {
             OnBullet = true
         };
 
+        public static VfxConfig VfxPistolBulletExploding = new VfxConfig {
+            SpeciesId = 8,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxSlashExploding = new VfxConfig {
+            SpeciesId = 9,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
         public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
              new[]
              {
@@ -79,6 +95,8 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxSlashActive.SpeciesId, VfxSlashActive),
                     new KeyValuePair<int, VfxConfig>(VfxSpikeSlashExplodingActive.SpeciesId, VfxSpikeSlashExplodingActive),
                     new KeyValuePair<int, VfxConfig>(VfxFirePointLightActive.SpeciesId, VfxFirePointLightActive),
+                    new KeyValuePair<int, VfxConfig>(VfxPistolBulletExploding.SpeciesId, VfxPistolBulletExploding),
+                    new KeyValuePair<int, VfxConfig>(VfxSlashExploding.SpeciesId, VfxSlashExploding),
              }
             );
 
@@ -103,6 +121,9 @@ namespace shared {
             DirX = 1,
             DirY = 0,
             Hardness = 5,
+            CharacterEmitSfxName = "SlashEmitSpd2",
+            ExplosionSfxName = "Melee_Explosion2", 
+            ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
@@ -115,7 +136,7 @@ namespace shared {
             PushbackVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetX = (int)(14 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -127,6 +148,9 @@ namespace shared {
             ExplosionFrames = 25,
             Hardness = 5,
             BType = BulletType.Melee,
+            CharacterEmitSfxName = "SlashEmitSpd3",
+            ExplosionSfxName = "Melee_Explosion2", 
+            ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
@@ -151,6 +175,8 @@ namespace shared {
             DirX = 1,
             DirY = 0,
             Hardness = 5,
+            CharacterEmitSfxName = "SlashEmitSpd2",
+            ExplosionSfxName = "Explosion4", 
             ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
@@ -164,7 +190,7 @@ namespace shared {
             PushbackVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetX = (int)(14 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -176,6 +202,8 @@ namespace shared {
             Hardness = 5,
             ExplosionFrames = 25,
             BType = BulletType.Melee,
+            CharacterEmitSfxName = "SlashEmitSpd3",
+            ExplosionSfxName = "Explosion4", 
             ActiveVfxSpeciesId = VfxFireSlashActive.SpeciesId,
             ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -215,6 +243,8 @@ namespace shared {
                     ExplosionFrames = 20,
                     Hardness = 4,
                     BType = BulletType.Fireball,
+                    CharacterEmitSfxName="FlameEmit1",
+                    ExplosionSfxName="Explosion4",
                     ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
                     ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -242,6 +272,8 @@ namespace shared {
             BType = BulletType.Melee,
             DirX = 1,
             Hardness = 6,
+            CharacterEmitSfxName = "SlashEmitSpd3",
+            ExplosionSfxName = "Melee_Explosion2", 
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
@@ -275,6 +307,8 @@ namespace shared {
                                 Hardness = 5,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
+                                FireballEmitSfxName="FlameEmit1",
+                                ExplosionSfxName="Explosion4",
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
                                 SimultaneousMultiHitCnt = 2
@@ -305,6 +339,7 @@ namespace shared {
                                 Hardness = 5,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
+                                ExplosionSfxName="Explosion4",
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
                                 SimultaneousMultiHitCnt = 1
@@ -335,6 +370,7 @@ namespace shared {
                                 ExplosionFrames = 30,
                                 Hardness = 5,
                                 BType = BulletType.Fireball,
+                                ExplosionSfxName="Explosion4",
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
                             }
@@ -345,12 +381,12 @@ namespace shared {
                         ActiveFrames = 180,
                         HitStunFrames = 6,
                         BlockStunFrames = 4,
-                        Damage = 4,
+                        Damage = 6,
                         PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         PushbackVelY = NO_LOCK_VEL,
                         SelfLockVelX = NO_LOCK_VEL,
                         SelfLockVelY = NO_LOCK_VEL,
-                        HitboxOffsetX = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -362,7 +398,9 @@ namespace shared {
                         Hardness = 4,
                         ExplosionFrames = 30,
                         BType = BulletType.Fireball,
-                        ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                        ExplosionVfxSpeciesId = VfxPistolBulletExploding.SpeciesId,
+                        CharacterEmitSfxName = "Fireball8",
+                        ExplosionSfxName = "Explosion8",
                         CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
@@ -400,9 +438,12 @@ namespace shared {
                             SpeciesId = 2,
                             ExplosionFrames = 25,
                             BType = BulletType.Melee,
+                            ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
                             DirX = 1,
                             DirY = 0,
                             Hardness = 5,
+                            CharacterEmitSfxName = "SlashEmitSpd1",
+                            ExplosionSfxName="Melee_Explosion2",
                             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                         }.UpsertCancelTransit(1, 2)
                     )),
@@ -436,9 +477,12 @@ namespace shared {
                                 SpeciesId = 2,
                                 ExplosionFrames = 25,
                                 BType = BulletType.Melee,
+                                ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                CharacterEmitSfxName = "SlashEmitSpd2",
+                                ExplosionSfxName="Melee_Explosion2",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }.UpsertCancelTransit(1, 3)
                         )),
@@ -474,7 +518,10 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                CharacterEmitSfxName = "SlashEmitSpd3",
+                                ExplosionSfxName="Melee_Explosion2",
                                 ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
+                                ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -501,6 +548,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                ExplosionSfxName="Melee_Explosion2",
                                 ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -528,6 +576,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                ExplosionSfxName="Melee_Explosion2",
                                 ActiveVfxSpeciesId = VfxSlashActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -567,6 +616,9 @@ namespace shared {
                                 Hardness = 6,
                                 ExplosionFrames = 30,
                                 BType = BulletType.Fireball,
+                                CharacterEmitSfxName="FlameEmit1",
+                                ActiveSfxName="FlameBurning1",
+                                ExplosionSfxName="Explosion3",
                                 ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
                                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
                             }
@@ -615,6 +667,8 @@ namespace shared {
                                 Hardness = 5,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Melee,
+                                CharacterEmitSfxName="SlashEmitSpd1",
+                                ExplosionSfxName="Melee_Explosion1",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }.UpsertCancelTransit(1, 7)
                         )),
@@ -643,12 +697,14 @@ namespace shared {
                                 HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 BlowUp = true,
-                                SpeciesId = 1,
+                                SpeciesId = 3,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Melee,
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                CharacterEmitSfxName="SlashEmitSpd3",
+                                ExplosionSfxName="Melee_Explosion3",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -684,6 +740,8 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                CharacterEmitSfxName="SlashEmitSpd3",
+                                ExplosionSfxName="Melee_Explosion3",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -717,6 +775,8 @@ namespace shared {
                                 DirY = 0,
                                 Hardness = 5,
                                 BType = BulletType.Fireball,
+                                CharacterEmitSfxName="SlashEmitSpd1",
+                                ExplosionSfxName="Explosion2",
                                 MhType = MultiHitType.FromPrevHitActual,
                                 CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
                             }
@@ -742,6 +802,8 @@ namespace shared {
                                 DirY = 0,
                                 Hardness = 5,
                                 BType = BulletType.Fireball,
+                                FireballEmitSfxName="Explosion1",
+                                ExplosionSfxName="Explosion2",
                                 MhType = MultiHitType.FromPrevHitActual,
                                 CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
                             }
@@ -767,6 +829,8 @@ namespace shared {
                                 DirY = 0,
                                 Hardness = 5,
                                 ExplosionFrames = 25,
+                                FireballEmitSfxName="Explosion1",
+                                ExplosionSfxName="Explosion2",
                                 BType = BulletType.Fireball,
                                 CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
                             }
@@ -894,10 +958,10 @@ namespace shared {
                         )),
 
                     new KeyValuePair<int, Skill>(18, new Skill{
-                        RecoveryFrames = 14,
+                        RecoveryFrames = 12,
                         RecoveryFramesOnBlock = 10,
                         RecoveryFramesOnHit = 10,
-                        MpDelta = 50,
+                        MpDelta = 35,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk1
                     }
@@ -907,10 +971,10 @@ namespace shared {
                     ),
 
                     new KeyValuePair<int, Skill>(19, new Skill{
-                        RecoveryFrames = 14,
+                        RecoveryFrames = 12,
                         RecoveryFramesOnBlock = 10,
                         RecoveryFramesOnHit = 10,
-                        MpDelta = 50,
+                        MpDelta = 25,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = InAirAtk1
                     }
@@ -975,6 +1039,8 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 5,
+                                CharacterEmitSfxName="SlashEmitSpd1",
+                                ExplosionSfxName="Melee_Explosion2",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
@@ -1008,6 +1074,8 @@ namespace shared {
                                 DirY = 0,
                                 Hardness = 5,
                                 BType = BulletType.Melee,
+                                FireballEmitSfxName="SlashEmitSpd1",
+                                ExplosionSfxName="Melee_Explosion1",
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -1033,6 +1101,8 @@ namespace shared {
                                 DirY = 0,
                                 Hardness = 5,
                                 BType = BulletType.Melee,
+                                FireballEmitSfxName="SlashEmitSpd2",
+                                ExplosionSfxName="Melee_Explosion1",
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -1058,6 +1128,8 @@ namespace shared {
                                 DirY = 0,
                                 Hardness = 5,
                                 BType = BulletType.Melee,
+                                FireballEmitSfxName="SlashEmitSpd1",
+                                ExplosionSfxName="Melee_Explosion1",
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -1083,6 +1155,8 @@ namespace shared {
                                 DirY = 0,
                                 Hardness = 5,
                                 BType = BulletType.Melee,
+                                FireballEmitSfxName="SlashEmitSpd2",
+                                ExplosionSfxName="Melee_Explosion1",
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -1108,6 +1182,8 @@ namespace shared {
                                 DirY = 0,
                                 Hardness = 5,
                                 BType = BulletType.Melee,
+                                FireballEmitSfxName="SlashEmitSpd1",
+                                ExplosionSfxName="Melee_Explosion1",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )

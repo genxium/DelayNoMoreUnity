@@ -521,6 +521,7 @@ namespace shared {
                         src.DirX, src.DirY, // dir
                         src.VelX, src.VelY, // velocity
                         src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId, src.Config,
+                        src.Config.RepeatQuota,
                         dst);
 
                 int j = dst.BattleAttr.OffenderJoinIndex - 1;
@@ -1328,9 +1329,10 @@ namespace shared {
 
                 // Reset "FramesInChState" if "CharacterState" is changed
                 if (thatCharacterInNextFrame.CharacterState != currCharacterDownsync.CharacterState) {
-                    if ((Walking == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState)
-                        ||
-                        (WalkingAtk1 == currCharacterDownsync.CharacterState && Walking == thatCharacterInNextFrame.CharacterState)) {
+                    if (Walking == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) {
+                        thatCharacterInNextFrame.LowerPartFramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
+                        thatCharacterInNextFrame.FramesInChState = 0;
+                    } else if (WalkingAtk1 == currCharacterDownsync.CharacterState && Walking == thatCharacterInNextFrame.CharacterState) {
                         thatCharacterInNextFrame.LowerPartFramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
                     } else if (Atk1 == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) {
@@ -1674,7 +1676,7 @@ namespace shared {
                     currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX, currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY, // virtual grid position
                     xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
                     (int)(bulletSpeedXfac * bulletConfig.Speed), (int)(bulletSpeedYfac * bulletConfig.Speed), // velocity
-                    activeSkillHit, activeSkillId, bulletConfig,
+                    activeSkillHit, activeSkillId, bulletConfig, bulletConfig.RepeatQuota,
                     nextRenderFrameBullets[bulletCnt]);
 
             bulletLocalIdCounter++;

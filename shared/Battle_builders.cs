@@ -134,7 +134,7 @@ namespace shared {
             };
         }
 
-        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, Bullet dst) {
+        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, Bullet dst) {
             dst.BlState = blState;
             dst.FramesInBlState = framesInBlState;
             dst.Config = staticBulletConfig;
@@ -152,6 +152,8 @@ namespace shared {
             dst.DirY = dirY;
             dst.VelX = velX;
             dst.VelY = velY;
+
+            dst.RepeatQuotaLeft = repeatQuotaLeft;
         }
 
         public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, bool capturedByPatrolCue, int framesInPatrolCue, bool waivingSpontaneousPatrol, int waivingPatrolCueId, Trap dst) {
@@ -278,7 +280,7 @@ namespace shared {
                         srcBullet.VirtualGridX, srcBullet.VirtualGridY,
                         srcBullet.DirX, srcBullet.DirY,
                         srcBullet.VelX, srcBullet.VelY,
-                        srcBullet.BattleAttr.ActiveSkillHit, srcBullet.BattleAttr.SkillId, srcBullet.Config,
+                        srcBullet.BattleAttr.ActiveSkillHit, srcBullet.BattleAttr.SkillId, srcBullet.Config, srcBullet.RepeatQuotaLeft,
                         dst.Bullets[bulletCnt]);
                  bulletCnt++;
             }
@@ -338,6 +340,7 @@ namespace shared {
                 if (lBullet.BattleAttr.ActiveSkillHit != rBullet.BattleAttr.ActiveSkillHit) return false;
                 if (lBullet.BattleAttr.SkillId != rBullet.BattleAttr.SkillId) return false;
                 if (lBullet.Config != rBullet.Config) return false;  // Should be exactly the same ptr
+                if (lBullet.RepeatQuotaLeft != rBullet.RepeatQuotaLeft) return false;
                  bulletCnt++;
             }
             
@@ -387,6 +390,10 @@ namespace shared {
         public BulletConfig SetAllowsCrouching(bool val) {
             this.AllowsCrouching = val;
             return this;
+        }
+
+        public bool isEmissionInducedMultiHit() {
+            return (MultiHitType.FromEmission == MhType);
         }
     }
 
