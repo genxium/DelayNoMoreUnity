@@ -230,6 +230,8 @@ public class OnlineMapController : AbstractMapController {
             if (ROOM_STATE_IN_BATTLE != battleState) {
                 return;
             }
+            // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
+            chaseRolledbackRdfs();
             if (shouldLockStep) {
                 NetworkDoctor.Instance.LogLockedStepCnt();
                 shouldLockStep = false;

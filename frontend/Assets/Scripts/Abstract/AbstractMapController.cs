@@ -1163,6 +1163,16 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
 
+        // Inside the following "rollbackAndChase" actually ROLLS FORWARD w.r.t. the corresponding delayedInputFrame, REGARDLESS OF whether or not "chaserRenderFrameId == renderFrameId" now. 
+        var (prevRdf, rdf) = rollbackAndChase(playerRdfId, playerRdfId + 1, collisionSys, false);
+        // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
+
+        applyRoomDownsyncFrameDynamics(rdf, prevRdf);
+        cameraTrack(rdf, prevRdf);
+        ++playerRdfId;
+    }
+
+    protected void chaseRolledbackRdfs() {
         int prevChaserRenderFrameId = chaserRenderFrameId;
         int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
 
@@ -1174,14 +1184,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             // Do not execute "rollbackAndChase" when "prevChaserRenderFrameId == nextChaserRenderFrameId", otherwise if "nextChaserRenderFrameId == self.renderFrameId" we'd be wasting computing power once. 
             rollbackAndChase(prevChaserRenderFrameId, nextChaserRenderFrameId, collisionSys, true);
         }
-
-        // Inside the following "rollbackAndChase" actually ROLLS FORWARD w.r.t. the corresponding delayedInputFrame, REGARDLESS OF whether or not "chaserRenderFrameId == renderFrameId" now. 
-        var (prevRdf, rdf) = rollbackAndChase(playerRdfId, playerRdfId + 1, collisionSys, false);
-        // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
-
-        applyRoomDownsyncFrameDynamics(rdf, prevRdf);
-        cameraTrack(rdf, prevRdf);
-        ++playerRdfId;
     }
 
     protected virtual void onBattleStopped() {

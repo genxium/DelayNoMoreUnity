@@ -292,6 +292,8 @@ message BulletConfig {
 
 	int32 perpAccMag = 35; // acceleration perpendicular to instantaneous velocity per frame
 
+    bool delaySelfVelToActive = 36; // if true, "selfLockVelX" & "selfLockVelY" would only be applied when bullet is active 
+
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
 
@@ -339,8 +341,10 @@ message TrapConfig {
 	int32 hitInvinsibleFrames = 7;
     bool destroyUponHit = 8; // for most traps and long lasting melee bullet
 
-	string speciesName = 9;
-    int32 hardness = 10;
+    int32 hardness = 9;
+	bool prohibitsWallSticking = 10;
+
+	string speciesName = 1024;
 }
 
 message TrapConfigFromTiled {

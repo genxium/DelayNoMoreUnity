@@ -852,6 +852,7 @@ namespace shared {
                                 PushbackVelY = NO_LOCK_VEL,
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
+                                DelaySelfVelToActive = true,
                                 BType = BulletType.Melee,
                                 ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -873,6 +874,7 @@ namespace shared {
                                 PushbackVelY = NO_LOCK_VEL,
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
+                                DelaySelfVelToActive = true,
                                 BType = BulletType.Melee,
                                 ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -998,6 +1000,7 @@ namespace shared {
                                 PushbackVelY = NO_LOCK_VEL,
                                 SelfLockVelX = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = 0,
+                                DelaySelfVelToActive = true,
                                 SpeciesId = 1,
                                 HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(-12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),

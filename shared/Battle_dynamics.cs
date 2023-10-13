@@ -278,6 +278,7 @@ namespace shared {
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
+                    _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
                     continue;
                 }
 
@@ -294,6 +295,7 @@ namespace shared {
                 }
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
                 _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, logger);
+                _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
             }
         }
         
@@ -327,6 +329,34 @@ namespace shared {
                 }
             } else if (isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
                 thatCharacterInNextFrame.JumpStarted = true;
+            }
+        }
+    
+        public static void _processDelayedBulletSelfVel(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, ILoggerBridge logger) {
+            if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) {
+                return;
+            }
+            var skill = skills[currCharacterDownsync.ActiveSkillId];
+            if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || skill.Hits.Count <= currCharacterDownsync.ActiveSkillHit) {
+                return;
+            }
+            var bulletConfig = skill.Hits[currCharacterDownsync.ActiveSkillHit];
+            if (!bulletConfig.DelaySelfVelToActive) {   
+                return;
+            }
+            if (currCharacterDownsync.CharacterState != skill.BoundChState) {
+                // This shouldn't happen, but if it does, we don't proceed to set "selfLockVel"
+                return;
+            }
+            if (currCharacterDownsync.FramesInChState != bulletConfig.StartupFrames) {
+                return;
+            }
+            int xfac = (0 < currCharacterDownsync.DirX ? 1 : -1);
+            if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
+                thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+            }
+            if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
+                thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
             }
         }
 
@@ -1683,13 +1713,15 @@ namespace shared {
             bulletCnt++;
 
             // [WARNING] This part locks velocity by the last bullet in the simultaneous array
-            if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
-                hasLockVel = true;
-                thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
-            }
-            if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
-                hasLockVel = true;
-                thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
+            if (!bulletConfig.DelaySelfVelToActive) {
+                if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
+                    hasLockVel = true;
+                    thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
+                }
+                if (NO_LOCK_VEL != bulletConfig.SelfLockVelY) {
+                    hasLockVel = true;
+                    thatCharacterInNextFrame.VelY = bulletConfig.SelfLockVelY;
+                }
             }
 
             return true;
