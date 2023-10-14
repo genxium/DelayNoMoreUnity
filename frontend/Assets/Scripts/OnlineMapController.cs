@@ -15,6 +15,9 @@ public class OnlineMapController : AbstractMapController {
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
     bool shouldLockStep = false;
+    bool localTimerEnded = false;
+    bool lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = false;
+    int timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
 
     private RoomDownsyncFrame startRdf;
     
@@ -222,6 +225,21 @@ public class OnlineMapController : AbstractMapController {
         Debug.LogWarning(String.Format("In ws session ACTION and after first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
     }
 
+    protected override int chaseRolledbackRdfs() {
+        int nextChaserRenderFrameId = base.chaseRolledbackRdfs();
+        if (nextChaserRenderFrameId == playerRdfId && playerRdfId >= battleDurationFrames) {
+            int j = ConvertToDelayedInputFrameId(playerRdfId);
+            var (ok, delayedInputFrame) = inputBuffer.GetByFrameId(j);
+            if (false == ok || null == delayedInputFrame) {
+                throw new ArgumentNullException(String.Format("Couldn't find delayedInputFrame for j={0} to test online battle ending, playerRdfId={1}", j, playerRdfId));
+            }
+            if (_allConfirmed(delayedInputFrame.ConfirmedList)) {
+                lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = true;
+            }
+        }
+        return nextChaserRenderFrameId;
+    }
+
     // Update is called once per frame
     void Update() {
         try {
@@ -232,16 +250,29 @@ public class OnlineMapController : AbstractMapController {
             }
             // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
             chaseRolledbackRdfs();
+            if (localTimerEnded) {
+                if (!lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync && 0 < timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync) {
+                    // TODO: Popup some GUI hint to tell the player that we're awaiting downsync only, as the local "playerRdfId" is monotonically increasing, there's no way to rewind and change any input from here!
+                    timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync -= 16; // hardcoded for now
+                    return;
+                } else {
+                    onBattleStopped();
+                }
+            }
             if (shouldLockStep) {
                 NetworkDoctor.Instance.LogLockedStepCnt();
                 shouldLockStep = false;
                 return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
             }
             doUpdate();
-            readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
-            var (tooFastOrNot, _, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
-            shouldLockStep = tooFastOrNot;
-            networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
+            if (playerRdfId >= battleDurationFrames) {
+                localTimerEnded = true;
+            } else {
+                readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
+                var (tooFastOrNot, _, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
+                shouldLockStep = tooFastOrNot;
+                networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
+            }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
             var msg = String.Format("Error during OnlineMap.Update {0}", ex);
@@ -368,6 +399,9 @@ public class OnlineMapController : AbstractMapController {
 
         // Reset lockstep
         shouldLockStep = false;
+        localTimerEnded = false;
+        lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = false;
+        timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
         NetworkDoctor.Instance.Reset();
     }
 

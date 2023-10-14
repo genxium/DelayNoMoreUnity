@@ -404,6 +404,36 @@ namespace shared {
                         CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
+        private static BulletConfig GunGirlSlashNovaRepeatingBullet = new BulletConfig {
+            StartupFrames = 12,
+            ActiveFrames = 600,
+            HitStunFrames = 14,
+            BlockStunFrames = 9,
+            Damage = 3,
+            PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 9,
+            ExplosionSpeciesId = 2,
+            Speed = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeedIfNotHit = (int)(3 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Explosion2",
+            MhType = MultiHitType.FromPrevHitActual,
+            CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
+        };
+
+        private static BulletConfig GunGirlSlashNovaStarterBullet = new BulletConfig(GunGirlSlashNovaRepeatingBullet).SetStartupFrames(10).SetSpeed(GunGirlSlashNovaRepeatingBullet.SpeedIfNotHit);
+
         private static BulletConfig PistolBulletGround = new BulletConfig(PistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);
 
         public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>().AddRange(
@@ -1013,6 +1043,61 @@ namespace shared {
                             }
                         )),
 
+                    new KeyValuePair<int, Skill>(21, new Skill{
+                        RecoveryFrames = 60,
+                        RecoveryFramesOnBlock = 60,
+                        RecoveryFramesOnHit = 60,
+                        MpDelta = 50,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk3
+                    }
+                        .AddHit(GunGirlSlashNovaStarterBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 9,
+                                ActiveFrames = 600,
+                                HitStunFrames = 12,
+                                BlockStunFrames = 9,
+                                Damage = 10,
+                                PushbackVelX = (int)(0.3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // The last hit has some pushback
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SpeciesId = 9,
+                                ExplosionSpeciesId = 2,
+                                Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 1,
+                                DirY = 0,
+                                Hardness = 5,
+                                BType = BulletType.Fireball,
+                                FireballEmitSfxName="SlashEmitSpd2",
+                                ExplosionSfxName="Explosion2",
+                                CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
+                            }
+                        )
+                    ),
+
                     new KeyValuePair<int, Skill>(255, new Skill {
                         RecoveryFrames = 30,
                         RecoveryFramesOnBlock = 30,
@@ -1328,13 +1413,22 @@ namespace shared {
                 case SPECIES_GUNGIRL:
                     switch (patternId) {
                         case PATTERN_B:
-                        case PATTERN_UP_B:
                         case PATTERN_DOWN_B:
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 19;
                                 } else {
                                     return 18;
+                                }
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case PATTERN_UP_B:
+                            if (!notRecovered) {
+                                if (currCharacterDownsync.InAir) {
+                                    return 19;
+                                } else {
+                                    return 21;
                                 }
                             } else {
                                 return NO_SKILL;

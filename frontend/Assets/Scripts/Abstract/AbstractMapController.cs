@@ -110,7 +110,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float characterZ = 0;
     protected float inplaceHpBarZ = +10;
     protected float fireballZ = -5;
-    protected float footstepAttenuationZ = 170.0f;
+    protected float footstepAttenuationZ = 200.0f;
 
     private string MATERIAL_REF_THICKNESS = "_Thickness";
     private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
@@ -301,7 +301,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         return (prevLatestRdf, latestRdf);
     }
 
-    private bool _allConfirmed(ulong confirmedList) {
+    protected bool _allConfirmed(ulong confirmedList) {
         return (confirmedList + 1) == (1UL << roomCapacity);
     }
 
@@ -1172,7 +1172,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         ++playerRdfId;
     }
 
-    protected void chaseRolledbackRdfs() {
+    protected virtual int chaseRolledbackRdfs() {
         int prevChaserRenderFrameId = chaserRenderFrameId;
         int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
 
@@ -1184,6 +1184,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             // Do not execute "rollbackAndChase" when "prevChaserRenderFrameId == nextChaserRenderFrameId", otherwise if "nextChaserRenderFrameId == self.renderFrameId" we'd be wasting computing power once. 
             rollbackAndChase(prevChaserRenderFrameId, nextChaserRenderFrameId, collisionSys, true);
         }
+
+        return nextChaserRenderFrameId;
     }
 
     protected virtual void onBattleStopped() {

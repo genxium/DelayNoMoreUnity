@@ -392,6 +392,16 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetStartupFrames(int val) {
+            this.StartupFrames = val;
+            return this;
+        }
+
+        public BulletConfig SetSpeed(int val) {
+            this.Speed = val;
+            return this;
+        }
+
         public bool isEmissionInducedMultiHit() {
             return (MultiHitType.FromEmission == MhType);
         }

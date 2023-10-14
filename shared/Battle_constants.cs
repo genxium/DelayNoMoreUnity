@@ -3,6 +3,8 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public const int DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD = 10000; // in milliseconds
+
         // Deliberately NOT using enum for "room states" to make use of "C# CompareAndExchange" 
         public const long ROOM_STATE_IMPOSSIBLE = 0;
         public const long ROOM_STATE_IDLE = 1;
@@ -75,6 +77,8 @@ namespace shared {
         public static ulong TRIGGER_MASK_BY_MOVEMENT = (1 << 0);
         public static ulong TRIGGER_MASK_BY_ATK = (1 << 1);
         public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
+
+        public static int SPEED_NOT_HIT_NOT_SPECIFIED = 0;
 
         public static HashSet<ulong> COLLIDABLE_PAIRS = new HashSet<ulong>() {
             COLLISION_CHARACTER_INDEX_PREFIX, // such that characters collider with each other
