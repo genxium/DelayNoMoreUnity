@@ -344,7 +344,6 @@ message TrapConfig {
     bool destroyUponHit = 8; // for most traps and long lasting melee bullet
 
     int32 hardness = 9;
-	bool prohibitsWallGrabbing = 10;
 
 	string speciesName = 1024;
 }
@@ -364,6 +363,8 @@ message TrapConfigFromTiled {
 	int32 speed = 3; // For speed varying bullets, this is the initial speed
 	int32 dirX = 4; // the initial direction indicator for X-axis
 	int32 dirY = 5; // the initial direction indicator for Y-axis
+
+	bool prohibitsWallGrabbing = 6;
 }
 
 message TrapColliderAttr {

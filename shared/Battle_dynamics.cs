@@ -985,24 +985,28 @@ namespace shared {
                 }
 
                 if (chConfig.OnWallEnabled) {
-                    if (thatCharacterInNextFrame.InAir) {
-                        // [WARNING] Sticking to wall MUST BE based on "InAir", otherwise we would get gravity reduction from ground up incorrectly!
-                        if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
-                            if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1) {
-                                thatCharacterInNextFrame.OnWall = true;
-                                thatCharacterInNextFrame.OnWallNormX = +1;
-                                thatCharacterInNextFrame.OnWallNormY = 0;
-                            }
-                            if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2) {
-                                thatCharacterInNextFrame.OnWall = true;
-                                thatCharacterInNextFrame.OnWallNormX = -1;
-                                thatCharacterInNextFrame.OnWallNormY = 0;
+
+                    if (null == primaryTrap || (null != primaryTrap && !primaryTrap.ConfigFromTiled.ProhibitsWallGrabbing)) {
+
+                        if (thatCharacterInNextFrame.InAir) {
+                            // [WARNING] Grabbing to wall MUST BE based on "InAir", otherwise we would get gravity reduction from ground up incorrectly!
+                            if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
+                                if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1) {
+                                    thatCharacterInNextFrame.OnWall = true;
+                                    thatCharacterInNextFrame.OnWallNormX = +1;
+                                    thatCharacterInNextFrame.OnWallNormY = 0;
+                                }
+                                if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2) {
+                                    thatCharacterInNextFrame.OnWall = true;
+                                    thatCharacterInNextFrame.OnWallNormX = -1;
+                                    thatCharacterInNextFrame.OnWallNormY = 0;
+                                }
                             }
                         }
-                    }
-                    if (!thatCharacterInNextFrame.OnWall) {
-                        thatCharacterInNextFrame.OnWallNormX = 0;
-                        thatCharacterInNextFrame.OnWallNormY = 0;
+                        if (!thatCharacterInNextFrame.OnWall) {
+                            thatCharacterInNextFrame.OnWallNormX = 0;
+                            thatCharacterInNextFrame.OnWallNormY = 0;
+                        }
                     }
                 }
             }
