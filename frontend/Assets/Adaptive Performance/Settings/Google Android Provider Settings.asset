@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02a364304553d4fe797810bd5c88f9d8, type: 3}
-  m_Name: Samsung Android Provider Settings
+  m_Script: {fileID: 11500000, guid: 19bedd638b17440c6934f09de14d81c5, type: 3}
+  m_Name: Google Android Provider Settings
   m_EditorClassIdentifier: 
-  m_Logging: 0
+  m_Logging: 1
   m_AutomaticPerformanceModeEnabled: 1
   m_EnableBoostOnStartup: 1
   m_StatsLoggingFrequencyInFrames: 50
@@ -313,6 +313,4 @@ MonoBehaviour:
     m_Name: Default Scaler Profile
   m_DefaultScalerProfilerIndex: 0
   k_AssetVersion: 2
-  m_SamsungProviderLogging: 0
-  m_HighSpeedVRR: 0
-  m_AutomaticVRR: 0
+  m_GoogleProviderLogging: 0

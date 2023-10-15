@@ -117,7 +117,7 @@ namespace shared {
             "DgoGYmxvd1VwGAQgASgIEg4KBmRhbWFnZRgFIAEoBRIVCg1oaXRTdHVuRnJh",
             "bWVzGAYgASgFEhsKE2hpdEludmluc2libGVGcmFtZXMYByABKAUSFgoOZGVz",
             "dHJveVVwb25IaXQYCCABKAgSEAoIaGFyZG5lc3MYCSABKAUSHQoVcHJvaGli",
-            "aXRzV2FsbFN0aWNraW5nGAogASgIEhQKC3NwZWNpZXNOYW1lGIAIIAEoCSJi",
+            "aXRzV2FsbEdyYWJiaW5nGAogASgIEhQKC3NwZWNpZXNOYW1lGIAIIAEoCSJi",
             "ChNUcmFwQ29uZmlnRnJvbVRpbGVkEhEKCXNwZWNpZXNJZBgBIAEoBRINCgVx",
             "dW90YRgCIAEoBRINCgVzcGVlZBgDIAEoBRIMCgRkaXJYGAQgASgFEgwKBGRp",
             "clkYBSABKAUinQIKEFRyYXBDb2xsaWRlckF0dHISFQoNaGl0Ym94T2Zmc2V0",
@@ -227,7 +227,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "MhType", "SimultaneousMultiHitCnt", "Speed", "DirX", "DirY", "CancelTransit", "RepeatQuota", "ActiveVfxSpeciesId", "ExplosionVfxSpeciesId", "AllowsWalking", "AllowsCrouching", "Hardness", "StartupInvinsibleFrames", "HitInvinsibleFrames", "ExplosionSpeciesId", "PerpAccMag", "DelaySelfVelToActive", "SpeedIfNotHit", "CollisionTypeMask", "TakesGravity", "CharacterEmitSfxName", "FireballEmitSfxName", "ExplosionSfxName", "ActiveSfxName" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId", "ActiveSkillHit", "SkillId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "RepeatQuotaLeft", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfig), global::shared.TrapConfig.Parser, new[]{ "SpeciesId", "ExplosionSpeciesId", "ExplosionFrames", "BlowUp", "Damage", "HitStunFrames", "HitInvinsibleFrames", "DestroyUponHit", "Hardness", "ProhibitsWallSticking", "SpeciesName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfig), global::shared.TrapConfig.Parser, new[]{ "SpeciesId", "ExplosionSpeciesId", "ExplosionFrames", "BlowUp", "Damage", "HitStunFrames", "HitInvinsibleFrames", "DestroyUponHit", "Hardness", "ProhibitsWallGrabbing", "SpeciesName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfigFromTiled), global::shared.TrapConfigFromTiled.Parser, new[]{ "SpeciesId", "Quota", "Speed", "DirX", "DirY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapColliderAttr), global::shared.TrapColliderAttr.Parser, new[]{ "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "ProvidesHardPushback", "ProvidesDamage", "ProvidesEscape", "ProvidesSlipJump", "ForcesCrouching", "TrapLocalId", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Trap), global::shared.Trap.Parser, new[]{ "TrapLocalId", "Config", "ConfigFromTiled", "TrapState", "FramesInTrapState", "IsCompletelyStatic", "CapturedByPatrolCue", "FramesInPatrolCue", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "TriggerTrackingId", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
@@ -8026,7 +8026,7 @@ namespace shared {
       hitInvinsibleFrames_ = other.hitInvinsibleFrames_;
       destroyUponHit_ = other.destroyUponHit_;
       hardness_ = other.hardness_;
-      prohibitsWallSticking_ = other.prohibitsWallSticking_;
+      prohibitsWallGrabbing_ = other.prohibitsWallGrabbing_;
       speciesName_ = other.speciesName_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -8148,15 +8148,15 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "prohibitsWallSticking" field.</summary>
-    public const int ProhibitsWallStickingFieldNumber = 10;
-    private bool prohibitsWallSticking_;
+    /// <summary>Field number for the "prohibitsWallGrabbing" field.</summary>
+    public const int ProhibitsWallGrabbingFieldNumber = 10;
+    private bool prohibitsWallGrabbing_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool ProhibitsWallSticking {
-      get { return prohibitsWallSticking_; }
+    public bool ProhibitsWallGrabbing {
+      get { return prohibitsWallGrabbing_; }
       set {
-        prohibitsWallSticking_ = value;
+        prohibitsWallGrabbing_ = value;
       }
     }
 
@@ -8196,7 +8196,7 @@ namespace shared {
       if (HitInvinsibleFrames != other.HitInvinsibleFrames) return false;
       if (DestroyUponHit != other.DestroyUponHit) return false;
       if (Hardness != other.Hardness) return false;
-      if (ProhibitsWallSticking != other.ProhibitsWallSticking) return false;
+      if (ProhibitsWallGrabbing != other.ProhibitsWallGrabbing) return false;
       if (SpeciesName != other.SpeciesName) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -8214,7 +8214,7 @@ namespace shared {
       if (HitInvinsibleFrames != 0) hash ^= HitInvinsibleFrames.GetHashCode();
       if (DestroyUponHit != false) hash ^= DestroyUponHit.GetHashCode();
       if (Hardness != 0) hash ^= Hardness.GetHashCode();
-      if (ProhibitsWallSticking != false) hash ^= ProhibitsWallSticking.GetHashCode();
+      if (ProhibitsWallGrabbing != false) hash ^= ProhibitsWallGrabbing.GetHashCode();
       if (SpeciesName.Length != 0) hash ^= SpeciesName.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -8270,9 +8270,9 @@ namespace shared {
         output.WriteRawTag(72);
         output.WriteInt32(Hardness);
       }
-      if (ProhibitsWallSticking != false) {
+      if (ProhibitsWallGrabbing != false) {
         output.WriteRawTag(80);
-        output.WriteBool(ProhibitsWallSticking);
+        output.WriteBool(ProhibitsWallGrabbing);
       }
       if (SpeciesName.Length != 0) {
         output.WriteRawTag(130, 64);
@@ -8324,9 +8324,9 @@ namespace shared {
         output.WriteRawTag(72);
         output.WriteInt32(Hardness);
       }
-      if (ProhibitsWallSticking != false) {
+      if (ProhibitsWallGrabbing != false) {
         output.WriteRawTag(80);
-        output.WriteBool(ProhibitsWallSticking);
+        output.WriteBool(ProhibitsWallGrabbing);
       }
       if (SpeciesName.Length != 0) {
         output.WriteRawTag(130, 64);
@@ -8369,7 +8369,7 @@ namespace shared {
       if (Hardness != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Hardness);
       }
-      if (ProhibitsWallSticking != false) {
+      if (ProhibitsWallGrabbing != false) {
         size += 1 + 1;
       }
       if (SpeciesName.Length != 0) {
@@ -8414,8 +8414,8 @@ namespace shared {
       if (other.Hardness != 0) {
         Hardness = other.Hardness;
       }
-      if (other.ProhibitsWallSticking != false) {
-        ProhibitsWallSticking = other.ProhibitsWallSticking;
+      if (other.ProhibitsWallGrabbing != false) {
+        ProhibitsWallGrabbing = other.ProhibitsWallGrabbing;
       }
       if (other.SpeciesName.Length != 0) {
         SpeciesName = other.SpeciesName;
@@ -8472,7 +8472,7 @@ namespace shared {
             break;
           }
           case 80: {
-            ProhibitsWallSticking = input.ReadBool();
+            ProhibitsWallGrabbing = input.ReadBool();
             break;
           }
           case 8194: {
@@ -8531,7 +8531,7 @@ namespace shared {
             break;
           }
           case 80: {
-            ProhibitsWallSticking = input.ReadBool();
+            ProhibitsWallGrabbing = input.ReadBool();
             break;
           }
           case 8194: {

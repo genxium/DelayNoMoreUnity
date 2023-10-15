@@ -344,7 +344,7 @@ message TrapConfig {
     bool destroyUponHit = 8; // for most traps and long lasting melee bullet
 
     int32 hardness = 9;
-	bool prohibitsWallSticking = 10;
+	bool prohibitsWallGrabbing = 10;
 
 	string speciesName = 1024;
 }
