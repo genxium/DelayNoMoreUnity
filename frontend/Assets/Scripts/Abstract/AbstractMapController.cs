@@ -865,7 +865,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         softPushbackEnabled = true;
 
-        int dynamicRectangleCollidersCap = 96;
+        int dynamicRectangleCollidersCap = 192;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
         staticColliders = new shared.Collider[128];
 

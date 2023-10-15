@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="350">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="352">
  <properties>
-  <property name="npcPreallocCapDict" value="1:16;3:16;4096:1"/>
+  <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
  </properties>
  <tileset firstgid="1" source="../shared_comps/tiles0.tsx"/>
  <tileset firstgid="65" source="../shared_comps/tiles1.tsx"/>
@@ -91,6 +91,19 @@
     <property name="subCycleTriggerFrames" value="90"/>
    </properties>
   </object>
+  <object id="351" gid="2147483852" x="636" y="688" width="16" height="32">
+   <properties>
+    <property name="bulletTeamId" value="4"/>
+    <property name="delayedFrames" value="120"/>
+    <property name="initVelX" value="-2"/>
+    <property name="initVelY" value="0"/>
+    <property name="quota" value="2"/>
+    <property name="recoveryFrames" value="600"/>
+    <property name="spawnChSpeciesIdList" value="4097"/>
+    <property name="subCycleQuota" value="5"/>
+    <property name="subCycleTriggerFrames" value="50"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
   <object id="195" x="1044" y="524">
@@ -99,6 +112,14 @@
     <property name="speciesId" value="4096"/>
     <property name="static" value="1"/>
     <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="350" x="672" y="636">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="4097"/>
+    <property name="teamId" value="4"/>
    </properties>
    <point/>
   </object>

@@ -133,7 +133,7 @@ namespace shared {
         public static float VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO = 1.0f / COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO;
 
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
-        public static int DEFAULT_PREALLOC_NPC_CAPACITY = 16;
+        public static int DEFAULT_PREALLOC_NPC_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;

@@ -11,6 +11,7 @@ namespace shared {
         public const int SPECIES_GUNGIRL = 4;
 
         public const int SPECIES_BULLWARRIOR = 4096;
+        public const int SPECIES_GOBLIN = 4097;
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
                 new[]
                 {
@@ -225,6 +226,39 @@ namespace shared {
                         HasTurnAroundAnim = true,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 8
+                    }),
+
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_GOBLIN, new CharacterConfig {
+                        SpeciesId = SPECIES_GOBLIN,
+                        SpeciesName = "Goblin",
+                        Hp = 50,
+                        InAirIdleFrameIdxTurningPoint = 1,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 12,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 4,
+                        GetUpFramesToRecover = 12,
+                        Speed = (int)(1.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 8,
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        HasTurnAroundAnim = false,
+                        ProactiveJumpStartupFrames = 2,
+                        Hardness = 4
                     }),
             });
     }

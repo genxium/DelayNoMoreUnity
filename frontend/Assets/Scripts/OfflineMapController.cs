@@ -88,6 +88,7 @@ public class OfflineMapController : AbstractMapController {
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
             var msg = String.Format("Error during OfflineMap.Update {0}", ex);
+            Debug.Log(msg);
             popupErrStackPanel(msg);
             onBattleStopped();
         }

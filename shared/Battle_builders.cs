@@ -402,6 +402,29 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetDir(int dirX, int dirY) {
+            this.DirX = dirX;
+            this.DirY = dirY;
+            return this;
+        }
+
+        public BulletConfig SetHitboxOffsets(int hitboxOffsetX, int hitboxOffsetY) {
+            this.HitboxOffsetX = hitboxOffsetX;
+            this.HitboxOffsetY = hitboxOffsetY;
+            return this;
+        }
+
+        public BulletConfig SetPushbacks(int pushbackVelX, int pushbackVelY) {
+            this.PushbackVelX = pushbackVelX;
+            this.PushbackVelY = pushbackVelY;
+            return this;
+        }
+    
+        public BulletConfig SetSimultaneousMultiHitCnt(uint simultaneousMultiHitCnt) {
+            this.SimultaneousMultiHitCnt = simultaneousMultiHitCnt;
+            return this;
+        }
+
         public bool isEmissionInducedMultiHit() {
             return (MultiHitType.FromEmission == MhType);
         }
