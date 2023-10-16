@@ -110,7 +110,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float characterZ = 0;
     protected float inplaceHpBarZ = +10;
     protected float fireballZ = -5;
-    protected float footstepAttenuationZ = 170.0f;
+    protected float footstepAttenuationZ = 200.0f;
 
     private string MATERIAL_REF_THICKNESS = "_Thickness";
     private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
@@ -301,10 +301,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         return (prevLatestRdf, latestRdf);
     }
 
-    private bool _allConfirmed(ulong confirmedList) {
-        return (confirmedList + 1) == (1UL << roomCapacity);
-    }
-
     private int _markConfirmationIfApplicable() {
         int newAllConfirmedCnt = 0;
         int candidateInputFrameId = (lastAllConfirmedInputFrameId + 1);
@@ -314,7 +310,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         while (inputBuffer.StFrameId <= candidateInputFrameId && candidateInputFrameId < inputBuffer.EdFrameId) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(candidateInputFrameId);
             if (false == res1 || null == inputFrameDownsync) break;
-            if (false == _allConfirmed(inputFrameDownsync.ConfirmedList)) break;
+            if (false == isAllConfirmed(inputFrameDownsync.ConfirmedList, roomCapacity)) break;
             ++candidateInputFrameId;
             ++newAllConfirmedCnt;
         }
@@ -865,7 +861,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         softPushbackEnabled = true;
 
-        int dynamicRectangleCollidersCap = 96;
+        int dynamicRectangleCollidersCap = 192;
         dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
         staticColliders = new shared.Collider[128];
 
@@ -1172,7 +1168,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         ++playerRdfId;
     }
 
-    protected void chaseRolledbackRdfs() {
+    protected virtual int chaseRolledbackRdfs() {
         int prevChaserRenderFrameId = chaserRenderFrameId;
         int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
 
@@ -1184,6 +1180,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             // Do not execute "rollbackAndChase" when "prevChaserRenderFrameId == nextChaserRenderFrameId", otherwise if "nextChaserRenderFrameId == self.renderFrameId" we'd be wasting computing power once. 
             rollbackAndChase(prevChaserRenderFrameId, nextChaserRenderFrameId, collisionSys, true);
         }
+
+        return nextChaserRenderFrameId;
     }
 
     protected virtual void onBattleStopped() {
@@ -1355,7 +1353,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId, prohibitsWallGrabbing;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
@@ -1367,6 +1365,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speed", out speed);
                         tileProps.TryGetCustomProperty("triggerTrackingId", out triggerTrackingId);
+                        tileProps.TryGetCustomProperty("prohibitsWallGrabbing", out prohibitsWallGrabbing);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // Not checking null or empty for this property because it shouldn't be, and in case it comes empty anyway, this automatically throws an error 
                         bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
@@ -1375,6 +1374,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         bool providesSlipJumpVal = (null != providesSlipJump && !providesSlipJump.IsEmpty && 1 == providesSlipJump.GetValueAsInt()) ? true : false;
                         bool forcesCrouchingVal = (null != forcesCrouching && !forcesCrouching.IsEmpty && 1 == forcesCrouching.GetValueAsInt()) ? true : false;
                         bool isCompletelyStaticVal = (null != isCompletelyStatic && !isCompletelyStatic.IsEmpty && 1 == isCompletelyStatic.GetValueAsInt()) ? true : false;
+                        bool prohibitsWallGrabbingVal = (null != prohibitsWallGrabbing && !prohibitsWallGrabbing.IsEmpty && 1 == prohibitsWallGrabbing.GetValueAsInt()) ? true : false;
 
                         int dirXVal = (null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt());
                         int dirYVal = (null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt());
@@ -1395,7 +1395,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Quota = MAGIC_QUOTA_INFINITE,
                             Speed = speedVal,
                             DirX = dirXVal,
-                            DirY = dirYVal
+                            DirY = dirYVal,
+                            ProhibitsWallGrabbing = prohibitsWallGrabbingVal 
                         };
 
                         tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
@@ -1524,7 +1525,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, spawnChSpeciesIdList;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
@@ -1536,7 +1537,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("trackingIdList", out trackingIdList);
                         tileProps.TryGetCustomProperty("subCycleTriggerFrames", out subCycleTriggerFrames);
                         tileProps.TryGetCustomProperty("subCycleQuota", out subCycleQuota);
-                        tileProps.TryGetCustomProperty("spawnChSpeciesIdList", out spawnChSpeciesIdList);
+                        tileProps.TryGetCustomProperty("characterSpawnerTimeSeq", out characterSpawnerTimeSeq);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
@@ -1549,7 +1550,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var trackingIdListStr = (null != trackingIdList && !trackingIdList.IsEmpty ? trackingIdList.GetValueAsString() : "");
                         int subCycleTriggerFramesVal = (null != subCycleTriggerFrames && !subCycleTriggerFrames.IsEmpty ? subCycleTriggerFrames.GetValueAsInt() : 0);
                         int subCycleQuotaVal = (null != subCycleQuota && !subCycleQuota.IsEmpty ? subCycleQuota.GetValueAsInt() : 0);
-                        var spawnChSpeciesIdListStr = (null != spawnChSpeciesIdList && !spawnChSpeciesIdList.IsEmpty ? spawnChSpeciesIdList.GetValueAsString() : "");
+                        var characterSpawnerTimeSeqStr = (null != characterSpawnerTimeSeq && !characterSpawnerTimeSeq.IsEmpty ? characterSpawnerTimeSeq.GetValueAsString() : "");
 
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
@@ -1582,10 +1583,22 @@ public abstract class AbstractMapController : MonoBehaviour {
                             if (String.IsNullOrEmpty(trackingIdListStrPart)) continue;
                             trigger.ConfigFromTiled.TrackingIdList.Add(trackingIdListStrPart.ToInt());
                         }
-                        string[] spawnChSpeciesIdListStrParts = spawnChSpeciesIdListStr.Split(',');
-                        foreach (var spawnChSpeciesIdListStrPart in spawnChSpeciesIdListStrParts) {
-                            if (String.IsNullOrEmpty(spawnChSpeciesIdListStrPart)) continue;
-                            trigger.ConfigFromTiled.SpawnChSpeciesIdList.Add(spawnChSpeciesIdListStrPart.ToInt());
+                        string[] characterSpawnerTimeSeqStrParts = characterSpawnerTimeSeqStr.Split(';');
+                        foreach (var part in characterSpawnerTimeSeqStrParts) {
+                            if (String.IsNullOrEmpty(part)) continue;
+                            string[] subParts = part.Split(':');
+                            if (2 != subParts.Length) continue;
+                            if (String.IsNullOrEmpty(subParts[0])) continue;
+                            if (String.IsNullOrEmpty(subParts[1])) continue;
+                            int cutoffRdfFrameId = subParts[0].ToInt(); 
+                            var chSpawnerConfig = new CharacterSpawnerConfig{
+                                CutoffRdfFrameId = cutoffRdfFrameId
+                            };
+                            string[] speciesIdParts = subParts[1].Split(','); 
+                            foreach (var speciesIdPart in speciesIdParts) {
+                                chSpawnerConfig.SpeciesIdList.Add(speciesIdPart.ToInt());
+                            }
+                            trigger.ConfigFromTiled.CharacterSpawnerTimeSeq.Add(chSpawnerConfig);
                         }
                         var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
                         var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);

@@ -277,6 +277,34 @@ namespace shared {
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
+        public static BulletConfig BullWarriorFireballPivotBullet = new BulletConfig {
+            StartupFrames = 33,
+            ActiveFrames = 360,
+            HitStunFrames = 30,
+            BlockStunFrames = 9,
+            Damage = 12,
+            PushbackVelX = (int)(0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 4,
+            Speed = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 2,
+            DirY = 0,
+            Hardness = 5,
+            ExplosionFrames = 30,
+            BType = BulletType.Fireball,
+            FireballEmitSfxName="FlameEmit1",
+            ExplosionSfxName="Explosion4",
+            ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
+            SimultaneousMultiHitCnt = 2
+        };
+
         public static Skill BullWarriorFireballSkill = new Skill {
             RecoveryFrames = 60,
             RecoveryFramesOnBlock = 50,
@@ -286,94 +314,21 @@ namespace shared {
             BoundChState = Atk5
         }
                         .AddHit(
-                            new BulletConfig {
-                                StartupFrames = 33,
-                                ActiveFrames = 360,
-                                HitStunFrames = 30,
-                                BlockStunFrames = 9,
-                                Damage = 12,
-                                PushbackVelX = (int)(0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = NO_LOCK_VEL,
-                                SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SpeciesId = 4,
-                                Speed = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                DirX = 2,
-                                DirY = 0,
-                                Hardness = 5,
-                                ExplosionFrames = 30,
-                                BType = BulletType.Fireball,
-                                FireballEmitSfxName="FlameEmit1",
-                                ExplosionSfxName="Explosion4",
-                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
-                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
-                                SimultaneousMultiHitCnt = 2
-                            }
+                            BullWarriorFireballPivotBullet                            
                         )
                         .AddHit(
-                            new BulletConfig {
-                                StartupFrames = 33,
-                                ActiveFrames = 600,
-                                HitStunFrames = 30,
-                                BlockStunFrames = 9,
-                                Damage = 12,
-                                PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = (int)(-0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelX = NO_LOCK_VEL,
-                                SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(-4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                CancellableStFrame = 0,
-                                CancellableEdFrame = 0,
-                                BlowUp = false,
-                                SpeciesId = 4,
-                                Speed = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                DirX = 1,
-                                DirY = -1,
-                                Hardness = 5,
-                                ExplosionFrames = 30,
-                                BType = BulletType.Fireball,
-                                ExplosionSfxName="Explosion4",
-                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
-                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
-                                SimultaneousMultiHitCnt = 1
-                            }
+                            new BulletConfig(BullWarriorFireballPivotBullet)
+                                .SetDir(1, -1)
+                                .SetHitboxOffsets((int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
+                                .SetPushbacks((int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
+                                .SetSimultaneousMultiHitCnt(1u)
                         )
                         .AddHit(
-                            new BulletConfig {
-                                StartupFrames = 33,
-                                ActiveFrames = 600,
-                                HitStunFrames = 30,
-                                BlockStunFrames = 9,
-                                Damage = 12,
-                                PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelX = NO_LOCK_VEL,
-                                SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(28 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                CancellableStFrame = 0,
-                                CancellableEdFrame = 0,
-                                BlowUp = false,
-                                SpeciesId = 4,
-                                Speed = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                DirX = 1,
-                                DirY = +1,
-                                ExplosionFrames = 30,
-                                Hardness = 5,
-                                BType = BulletType.Fireball,
-                                ExplosionSfxName="Explosion4",
-                                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
-                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
-                            }
+                            new BulletConfig(BullWarriorFireballPivotBullet)
+                                .SetDir(1, +1)
+                                .SetHitboxOffsets((int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(28 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
+                                .SetPushbacks((int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(+0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
+                                .SetSimultaneousMultiHitCnt(0u)
                         );
 
         private static BulletConfig PistolBulletAir = new BulletConfig {
@@ -404,7 +359,63 @@ namespace shared {
                         CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
+        private static BulletConfig GunGirlSlashNovaRepeatingBullet = new BulletConfig {
+            StartupFrames = 12,
+            ActiveFrames = 600,
+            HitStunFrames = 14,
+            BlockStunFrames = 9,
+            Damage = 3,
+            PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 9,
+            ExplosionSpeciesId = 2,
+            Speed = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeedIfNotHit = (int)(3 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Explosion2",
+            MhType = MultiHitType.FromPrevHitActual,
+            CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
+        };
+
+        private static BulletConfig GunGirlSlashNovaStarterBullet = new BulletConfig(GunGirlSlashNovaRepeatingBullet).SetStartupFrames(10).SetSpeed(GunGirlSlashNovaRepeatingBullet.SpeedIfNotHit);
+
         private static BulletConfig PistolBulletGround = new BulletConfig(PistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);
+
+        public static BulletConfig GoblinMelee1PrimerBullet = new BulletConfig {
+            StartupFrames = 63,
+            ActiveFrames = 10,
+            HitStunFrames = 4,
+            HitInvinsibleFrames = 8,
+            BlockStunFrames = 2,
+            Damage = 12,
+            PushbackVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = 0,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(36 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 1,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Melee_Explosion1", 
+            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+        };
 
         public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>().AddRange(
                     new[]
@@ -426,13 +437,13 @@ namespace shared {
                             BlockStunFrames = 9,
                             Damage = 13,
                             PushbackVelX = 0,
-                            PushbackVelY = 0,
+                            PushbackVelY = NO_LOCK_VEL,
                             SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             SelfLockVelY = NO_LOCK_VEL,
-                            HitboxOffsetX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             CancellableStFrame = 11,
                             CancellableEdFrame = 30,
                             SpeciesId = 2,
@@ -460,7 +471,7 @@ namespace shared {
                             new BulletConfig {
                                 StartupFrames = 6,
                                 StartupInvinsibleFrames = 3,
-                                ActiveFrames = 20,
+                                ActiveFrames = 30,
                                 HitStunFrames = 20,
                                 BlockStunFrames = 9,
                                 Damage = 14,
@@ -468,10 +479,10 @@ namespace shared {
                                 PushbackVelY = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(7*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(56*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 CancellableStFrame = 14,
                                 CancellableEdFrame = 36,
                                 SpeciesId = 2,
@@ -896,9 +907,9 @@ namespace shared {
                     new KeyValuePair<int, Skill>(13, FireSwordManFireballSkill),
 
                     new KeyValuePair<int, Skill>(14, new Skill{
-                        RecoveryFrames = 50,
-                        RecoveryFramesOnBlock = 36,
-                        RecoveryFramesOnHit = 36,
+                        RecoveryFrames = 110,
+                        RecoveryFramesOnBlock = 110,
+                        RecoveryFramesOnHit = 110,
                         MpDelta = 0,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk1
@@ -1012,6 +1023,72 @@ namespace shared {
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
                         )),
+
+                    new KeyValuePair<int, Skill>(21, new Skill{
+                        RecoveryFrames = 60,
+                        RecoveryFramesOnBlock = 60,
+                        RecoveryFramesOnHit = 60,
+                        MpDelta = 50,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk3
+                    }
+                        .AddHit(GunGirlSlashNovaStarterBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(GunGirlSlashNovaRepeatingBullet)
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 9,
+                                ActiveFrames = 600,
+                                HitStunFrames = 12,
+                                BlockStunFrames = 9,
+                                Damage = 10,
+                                PushbackVelX = (int)(0.3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // The last hit has some pushback
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SpeciesId = 9,
+                                ExplosionSpeciesId = 2,
+                                Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                DirX = 1,
+                                DirY = 0,
+                                Hardness = 5,
+                                BType = BulletType.Fireball,
+                                FireballEmitSfxName="SlashEmitSpd2",
+                                ExplosionSfxName="Explosion2",
+                                CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
+                            }
+                        )
+                    ),
+
+                    new KeyValuePair<int, Skill>(22, new Skill{
+                            RecoveryFrames = 90,
+                            RecoveryFramesOnBlock = 80,
+                            RecoveryFramesOnHit = 70,
+                            MpDelta = 200,
+                            TriggerType = SkillTriggerType.RisingEdge,
+                            BoundChState = Atk1
+                        }
+                        .AddHit(GoblinMelee1PrimerBullet)
+                    ),
 
                     new KeyValuePair<int, Skill>(255, new Skill {
                         RecoveryFrames = 30,
@@ -1328,13 +1405,22 @@ namespace shared {
                 case SPECIES_GUNGIRL:
                     switch (patternId) {
                         case PATTERN_B:
-                        case PATTERN_UP_B:
                         case PATTERN_DOWN_B:
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 19;
                                 } else {
                                     return 18;
+                                }
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case PATTERN_UP_B:
+                            if (!notRecovered) {
+                                if (currCharacterDownsync.InAir) {
+                                    return 19;
+                                } else {
+                                    return 21;
                                 }
                             } else {
                                 return NO_SKILL;
@@ -1365,6 +1451,17 @@ namespace shared {
                         case PATTERN_DOWN_B:
                             if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 15;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        default:
+                            return NO_SKILL;
+                    }
+                  case SPECIES_GOBLIN:
+                    switch (patternId) {
+                        case PATTERN_B:
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
+                                return 22;
                             } else {
                                 return NO_SKILL;
                             }

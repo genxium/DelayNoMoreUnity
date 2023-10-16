@@ -3,6 +3,8 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public const int DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD = 10000; // in milliseconds
+
         // Deliberately NOT using enum for "room states" to make use of "C# CompareAndExchange" 
         public const long ROOM_STATE_IMPOSSIBLE = 0;
         public const long ROOM_STATE_IDLE = 1;
@@ -76,6 +78,8 @@ namespace shared {
         public static ulong TRIGGER_MASK_BY_ATK = (1 << 1);
         public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
 
+        public static int SPEED_NOT_HIT_NOT_SPECIFIED = 0;
+
         public static HashSet<ulong> COLLIDABLE_PAIRS = new HashSet<ulong>() {
             COLLISION_CHARACTER_INDEX_PREFIX, // such that characters collider with each other
             COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
@@ -129,7 +133,7 @@ namespace shared {
         public static float VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO = 1.0f / COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO;
 
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
-        public static int DEFAULT_PREALLOC_NPC_CAPACITY = 16;
+        public static int DEFAULT_PREALLOC_NPC_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;

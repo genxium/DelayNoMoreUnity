@@ -121,6 +121,10 @@ message CharacterDownsync {
     bool jumpStarted = 45;
     int32 framesToStartJump = 46;
 
+	string name = 997;
+	string displayName = 998;
+	string avatar = 999;
+
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
 	int32 framesInvinsible = 1026;
@@ -129,10 +133,6 @@ message CharacterDownsync {
 	int32 bulletTeamId = 1027;
 	int32 chCollisionTeamId = 1028;
 	uint64 collisionTypeMask = 1029;
-
-	string name = 997;
-	string displayName = 998;
-	string avatar = 999;
 }
 
 message InputFrameDecoded {
@@ -294,6 +294,8 @@ message BulletConfig {
 
     bool delaySelfVelToActive = 36; // if true, "selfLockVelX" & "selfLockVelY" would only be applied when bullet is active 
 
+	int32 speedIfNotHit = 37;
+
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
 
@@ -342,7 +344,8 @@ message TrapConfig {
     bool destroyUponHit = 8; // for most traps and long lasting melee bullet
 
     int32 hardness = 9;
-	bool prohibitsWallSticking = 10;
+
+	// TODO: Instead of damage, a trap should also be able to provide pushbacks like a "trampoline" in only a limited "framesToRecover", possible started by a Trigger.
 
 	string speciesName = 1024;
 }
@@ -362,6 +365,8 @@ message TrapConfigFromTiled {
 	int32 speed = 3; // For speed varying bullets, this is the initial speed
 	int32 dirX = 4; // the initial direction indicator for X-axis
 	int32 dirY = 5; // the initial direction indicator for Y-axis
+
+	bool prohibitsWallGrabbing = 6;
 }
 
 message TrapColliderAttr {
@@ -431,6 +436,11 @@ message TriggerConfig {
 	uint64 collisionTypeMask = 4; // of this trigger
 }
 
+message CharacterSpawnerConfig {
+    int32 cutoffRdfFrameId = 1;
+    repeated int32 speciesIdList = 2; // the k-th subcycle tick corresponds to speciesIdList[k]   
+}
+
 message TriggerConfigFromTiled {
 	int32 speciesId = 1;
     int32 delayedFrames = 2;  
@@ -445,7 +455,7 @@ message TriggerConfigFromTiled {
     int32 subCycleTriggerFrames = 8;
     int32 subCycleQuota = 9;
 
-    repeated int32 spawnChSpeciesIdList = 10;
+    repeated CharacterSpawnerConfig characterSpawnerTimeSeq = 10; // MUST Be configured by increasing "cutoffRdfFrameId"!
 }
 
 message TriggerColliderAttr {

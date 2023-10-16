@@ -2,7 +2,6 @@ using System;
 using static shared.CharacterState;
 using System.Collections.Generic;
 using Google.Protobuf.Collections;
-using System.Security.Cryptography;
 
 namespace shared {
     public partial class Battle {
@@ -217,7 +216,7 @@ namespace shared {
                 var pivotBulletConfig = skillConfig.Hits[activeSkillHit];
                 for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt + 1; i++) {
                     thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
-                    if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel)) break;
+                    if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null)) break;
                     activeSkillHit++;
                 }
 
@@ -525,7 +524,7 @@ namespace shared {
                     if (offenderNextFrame.ActiveSkillHit < skillConfig.Hits.Count) {
                         // No need to worry about Mp consumption here, it was already paid at "0 == offenderNextFrame.ActiveSkillHit" in "_useSkill"
                         int xfac = (0 < offenderNextFrame.DirX ? 1 : -1);
-                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel)) {
+                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, null)) {
                             var bulletConfig = skillConfig.Hits[offenderNextFrame.ActiveSkillHit];
                             if (offenderNextFrame.FramesInvinsible < bulletConfig.StartupInvinsibleFrames) {
                                 offenderNextFrame.FramesInvinsible = bulletConfig.StartupInvinsibleFrames;
@@ -797,16 +796,12 @@ namespace shared {
                             var (escaped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
                             // Currently only allowing "Player" to win.
                             if (escaped) {
-                                int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
-                                if (0 >= delayedInputFrameId) {
-                                    throw new ArgumentNullException(String.Format("currRenderFrame.Id={0}, delayedInputFrameId={0} is invalid when escaped!", currRenderFrame.Id, delayedInputFrameId));
-                                }
-
-                                var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
-                                if (!ok || null == delayedInputFrameDownsync) {
-                                    throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null when escaped!", delayedInputFrameId));
-                                }
-                                if (1 == roomCapacity || (delayedInputFrameDownsync.ConfirmedList+1 == (1UL << roomCapacity))) {
+                                if (1 == roomCapacity) {
+                                    confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
+                                    continue;
+                                } 
+                                var (rdfAllConfirmed, delayedInputFrameId) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity); 
+                                if (rdfAllConfirmed) {
                                     confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
                                     continue;
                                 } else {
@@ -986,37 +981,41 @@ namespace shared {
                 }
 
                 if (chConfig.OnWallEnabled) {
-                    if (thatCharacterInNextFrame.InAir) {
-                        // [WARNING] Sticking to wall MUST BE based on "InAir", otherwise we would get gravity reduction from ground up incorrectly!
-                        if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
-                            if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1) {
-                                thatCharacterInNextFrame.OnWall = true;
-                                thatCharacterInNextFrame.OnWallNormX = +1;
-                                thatCharacterInNextFrame.OnWallNormY = 0;
-                            }
-                            if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2) {
-                                thatCharacterInNextFrame.OnWall = true;
-                                thatCharacterInNextFrame.OnWallNormX = -1;
-                                thatCharacterInNextFrame.OnWallNormY = 0;
+
+                    if (null == primaryTrap || (null != primaryTrap && !primaryTrap.ConfigFromTiled.ProhibitsWallGrabbing)) {
+
+                        if (thatCharacterInNextFrame.InAir) {
+                            // [WARNING] Grabbing to wall MUST BE based on "InAir", otherwise we would get gravity reduction from ground up incorrectly!
+                            if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
+                                if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1) {
+                                    thatCharacterInNextFrame.OnWall = true;
+                                    thatCharacterInNextFrame.OnWallNormX = +1;
+                                    thatCharacterInNextFrame.OnWallNormY = 0;
+                                }
+                                if (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2) {
+                                    thatCharacterInNextFrame.OnWall = true;
+                                    thatCharacterInNextFrame.OnWallNormX = -1;
+                                    thatCharacterInNextFrame.OnWallNormY = 0;
+                                }
                             }
                         }
-                    }
-                    if (!thatCharacterInNextFrame.OnWall) {
-                        thatCharacterInNextFrame.OnWallNormX = 0;
-                        thatCharacterInNextFrame.OnWallNormY = 0;
+                        if (!thatCharacterInNextFrame.OnWall) {
+                            thatCharacterInNextFrame.OnWallNormX = 0;
+                            thatCharacterInNextFrame.OnWallNormY = 0;
+                        }
                     }
                 }
             }
         }
 
-        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ILoggerBridge logger) {
+        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
             // [WARNING] Bullet collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
             // Check bullet-anything collisions
             for (int i = iSt; i < iEd; i++) {
                 Collider bulletCollider = dynamicRectangleColliders[i];
                 if (null == bulletCollider.Data) continue;
-                var bullet = bulletCollider.Data as Bullet;
-                if (null == bullet || TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) {
+                var bulletNextFrame = bulletCollider.Data as Bullet; // [WARNING] See "_insertBulletColliders", the bound data in each collider is already belonging to "nextRenderFrameBullets"!
+                if (null == bulletNextFrame || TERMINATING_BULLET_LOCAL_ID == bulletNextFrame.BattleAttr.BulletLocalId) {
                     logger.LogWarn(String.Format("dynamicRectangleColliders[i:{0}] is not having bullet type! iSt={1}, iEd={2}", i, iSt, iEd));
                     continue;
                 }
@@ -1027,11 +1026,12 @@ namespace shared {
                 bool explodedOnAnotherCharacter = false;
 
                 var bulletShape = bulletCollider.Shape;
-                int j = bullet.BattleAttr.OffenderJoinIndex - 1;
+                int j = bulletNextFrame.BattleAttr.OffenderJoinIndex - 1;
                 var offender = (j < roomCapacity ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
-                int effDirX = (BulletType.Melee == bullet.Config.BType ? offender.DirX : bullet.DirX);
+                var offenderNextFrame = (j < roomCapacity ? nextRenderFramePlayers[j] : nextRenderFrameNpcs[j - roomCapacity]);
+                int effDirX = (BulletType.Melee == bulletNextFrame.Config.BType ? offender.DirX : bulletNextFrame.DirX);
                 int xfac = (0 < effDirX ? 1 : -1);
-                var skillConfig = skills[bullet.BattleAttr.SkillId];
+                var skillConfig = skills[bulletNextFrame.BattleAttr.SkillId];
                 while (true) {
                     var (ok, bCollider) = collision.PopFirstContactedCollider();
                     if (false == ok || null == bCollider) {
@@ -1049,7 +1049,7 @@ namespace shared {
                             var triggerConfig = atkedTrigger.Config;
                             if (0 == (triggerConfig.TriggerMask & TRIGGER_MASK_BY_ATK)) continue;
                             if (!isTriggerClickable(atkedTrigger)) continue;
-                            if (bullet.BattleAttr.OffenderJoinIndex <= roomCapacity) {
+                            if (bulletNextFrame.BattleAttr.OffenderJoinIndex <= roomCapacity) {
                                 // Only allowing Player to click
                                 var atkedTriggerInNextFrame = nextRenderFrameTriggers[atkedTriggerColliderAttr.TriggerLocalId];
                                 var triggerConfigFromTiled = atkedTrigger.ConfigFromTiled;
@@ -1060,8 +1060,8 @@ namespace shared {
                             }
                             break;
                         case CharacterDownsync atkedCharacterInCurrFrame:
-                            if (bullet.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
-                            if (bullet.BattleAttr.TeamId == atkedCharacterInCurrFrame.BulletTeamId) continue;
+                            if (bulletNextFrame.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
+                            if (bulletNextFrame.BattleAttr.TeamId == atkedCharacterInCurrFrame.BulletTeamId) continue;
                             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;
                             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
                             exploded = true;
@@ -1070,7 +1070,7 @@ namespace shared {
                             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
                             CharacterState oldNextCharacterState = atkedCharacterInNextFrame.CharacterState;
-                            atkedCharacterInNextFrame.Hp -= bullet.Config.Damage;
+                            atkedCharacterInNextFrame.Hp -= bulletNextFrame.Config.Damage;
                             atkedCharacterInNextFrame.FramesCapturedByInertia = 0; // Being attacked breaks movement inertia.
                             if (0 >= atkedCharacterInNextFrame.Hp) {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
@@ -1082,17 +1082,17 @@ namespace shared {
                             } else {
                                 // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
                                 var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
-                                bool shouldOmitHitPushback = (atkedCharacterConfig.Hardness > bullet.Config.Hardness);   
+                                bool shouldOmitHitPushback = (atkedCharacterConfig.Hardness > bulletNextFrame.Config.Hardness);   
                                 if (false == shouldOmitHitPushback && BlownUp1 != oldNextCharacterState) {
-                                    var (pushbackVelX, pushbackVelY) = (xfac * bullet.Config.PushbackVelX, bullet.Config.PushbackVelY);
+                                    var (pushbackVelX, pushbackVelY) = (xfac * bulletNextFrame.Config.PushbackVelX, bulletNextFrame.Config.PushbackVelY);
                                     // The traversal order of bullets is deterministic, thus the following assignment is deterministic regardless of the order of collision result popping.
                                     atkedCharacterInNextFrame.VelX = pushbackVelX;
                                     atkedCharacterInNextFrame.VelY = pushbackVelY;
                                 }
 
-                                bool shouldOmitStun = ((0 >= bullet.Config.HitStunFrames) || shouldOmitHitPushback);
+                                bool shouldOmitStun = ((0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
                                 if (false == shouldOmitStun) {
-                                    if (bullet.Config.BlowUp) {
+                                    if (bulletNextFrame.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
                                     } else if (BlownUp1 != oldNextCharacterState) {
                                         if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
@@ -1102,34 +1102,34 @@ namespace shared {
                                         }
                                     }
                                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
-                                    if (bullet.Config.HitStunFrames > oldFramesToRecover) {
-                                        atkedCharacterInNextFrame.FramesToRecover = bullet.Config.HitStunFrames;
+                                    if (bulletNextFrame.Config.HitStunFrames > oldFramesToRecover) {
+                                        atkedCharacterInNextFrame.FramesToRecover = bulletNextFrame.Config.HitStunFrames;
                                     }
                                 }
-                                if (atkedCharacterInNextFrame.FramesInvinsible < bullet.Config.HitInvinsibleFrames) {
-                                    atkedCharacterInNextFrame.FramesInvinsible = bullet.Config.HitInvinsibleFrames;
+                                if (atkedCharacterInNextFrame.FramesInvinsible < bulletNextFrame.Config.HitInvinsibleFrames) {
+                                    atkedCharacterInNextFrame.FramesInvinsible = bulletNextFrame.Config.HitInvinsibleFrames;
                                 }
                             }
                             break;
                         case Bullet v4:
-                            if (!COLLIDABLE_PAIRS.Contains(bullet.Config.CollisionTypeMask | v4.Config.CollisionTypeMask)) {
+                            if (!COLLIDABLE_PAIRS.Contains(bulletNextFrame.Config.CollisionTypeMask | v4.Config.CollisionTypeMask)) {
                                 break;
                             }
-                            if (bullet.BattleAttr.TeamId == v4.BattleAttr.TeamId) continue;
-                            if (bullet.Config.Hardness > v4.Config.Hardness) continue; 
+                            if (bulletNextFrame.BattleAttr.TeamId == v4.BattleAttr.TeamId) continue;
+                            if (bulletNextFrame.Config.Hardness > v4.Config.Hardness) continue; 
                             exploded = true;
                             break;
                         case TrapColliderAttr v5:
                             if (!v5.ProvidesHardPushback) {
                                 break;
                             }
-                            if (!COLLIDABLE_PAIRS.Contains(bullet.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
+                            if (!COLLIDABLE_PAIRS.Contains(bulletNextFrame.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
                                 break;
                             }
                             exploded = true;
                             break;
                         default:
-                            if (!COLLIDABLE_PAIRS.Contains(bullet.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
+                            if (!COLLIDABLE_PAIRS.Contains(bulletNextFrame.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
                                 break;
                             }
                             exploded = true;
@@ -1138,39 +1138,65 @@ namespace shared {
                 }
 
                 bool inTheMiddleOfMultihitTransition = false;
-                if (MultiHitType.None != bullet.Config.MhType) {
-                    if (bullet.BattleAttr.ActiveSkillHit + 1 < skillConfig.Hits.Count) {
+                if (MultiHitType.None != bulletNextFrame.Config.MhType) {
+                    if (bulletNextFrame.BattleAttr.ActiveSkillHit + 1 < skillConfig.Hits.Count) {
                         inTheMiddleOfMultihitTransition = true;
                     }
                 }
 
                 if (exploded) {
-                    if (BulletType.Melee == bullet.Config.BType) {
-                        bullet.BlState = BulletState.Exploding;
+                    if (BulletType.Melee == bulletNextFrame.Config.BType) {
+                        bulletNextFrame.BlState = BulletState.Exploding;
                         if (explodedOnAnotherCharacter) {
-                            bullet.FramesInBlState = 0;
+                            bulletNextFrame.FramesInBlState = 0;
                         } else {
                             // When hitting a barrier, don't play explosion anim
-                            bullet.FramesInBlState = bullet.Config.ExplosionFrames + 1;
+                            bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
                         }
-                    } else if (BulletType.Fireball == bullet.Config.BType) {
+                    } else if (BulletType.Fireball == bulletNextFrame.Config.BType) {
+                        bulletNextFrame.BlState = BulletState.Exploding;
+                        bulletNextFrame.FramesInBlState = 0;
                         if (inTheMiddleOfMultihitTransition) {
-                            bullet.BattleAttr.ActiveSkillHit += 1;
-                            if (MultiHitType.FromPrevHitActual == bullet.Config.MhType) {
-                                bullet.FramesInBlState = 0;
-                                bullet.BattleAttr.OriginatedRenderFrameId = currRenderFrame.Id;
+                            bool dummyHasLockVel = false;
+                            if (addNewBulletToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame)) {
+                                var targetNewBullet = nextRenderFrameBullets[bulletCnt-1];
+                                if (offenderNextFrame.FramesInvinsible < targetNewBullet.Config.StartupInvinsibleFrames) {
+                                    offenderNextFrame.FramesInvinsible = targetNewBullet.Config.StartupInvinsibleFrames;
+                                }
+                                // TODO: Support "MultiHitType.FromPrevHitAnyway"
                             }
-                            // TODO: Support "MultiHitType.FromPrevHitAnyway"
-                            bullet.Config = skillConfig.Hits[bullet.BattleAttr.ActiveSkillHit];
-                        } else {
-                            bullet.BlState = BulletState.Exploding;
-                            bullet.FramesInBlState = 0;
                         }
                     } else {
                         // Nothing to do
                     }
+                } else {
+                    if (BulletType.Fireball == bulletNextFrame.Config.BType && SPEED_NOT_HIT_NOT_SPECIFIED != bulletNextFrame.Config.SpeedIfNotHit && bulletNextFrame.Config.Speed != bulletNextFrame.Config.SpeedIfNotHit) {
+                        var bulletDirMagSq = bulletNextFrame.Config.DirX * bulletNextFrame.Config.DirX + bulletNextFrame.Config.DirY * bulletNextFrame.Config.DirY;
+                        var invBulletDirMag = InvSqrt32(bulletDirMagSq);
+                        var bulletSpeedXfac = xfac * invBulletDirMag * bulletNextFrame.Config.DirX;
+                        var bulletSpeedYfac = invBulletDirMag * bulletNextFrame.Config.DirY;
+                        bulletNextFrame.VelX = (int)(bulletSpeedXfac * bulletNextFrame.Config.SpeedIfNotHit);
+                        bulletNextFrame.VelY = (int)(bulletSpeedYfac * bulletNextFrame.Config.SpeedIfNotHit);
+                    }
                 }
             }
+        }
+
+        private static CharacterSpawnerConfig lowerBoundForSpawnerConfig(int rdfId, RepeatedField<CharacterSpawnerConfig> characterSpawnerTimeSeq) {
+            int l = 0, r = characterSpawnerTimeSeq.Count;
+            while (l < r) {
+                int m = ((l + r) >> 1);
+                var cand = characterSpawnerTimeSeq[m]; 
+                if (cand.CutoffRdfFrameId == rdfId) {
+                    return characterSpawnerTimeSeq[l]; 
+                } else if (cand.CutoffRdfFrameId < rdfId) {
+                    l = m+1;
+                } else {
+                    r = m;
+                }
+            }
+            if (l >= characterSpawnerTimeSeq.Count) l = characterSpawnerTimeSeq.Count-1; 
+            return characterSpawnerTimeSeq[l]; 
         }
 
         private static void _tickSingleSubCycle(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
@@ -1180,9 +1206,13 @@ namespace shared {
                 triggerInNextFrame.FramesInState = 0;
                 triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
 
-                if (0 < currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count) {
-                    int pseudoRandomIdx = (currRenderFrame.Id % currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count);
-                    addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, currTrigger.ConfigFromTiled.SpawnChSpeciesIdList[pseudoRandomIdx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
+                var chSpawnerConfig = lowerBoundForSpawnerConfig(currRenderFrame.Id, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq);  
+                var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList; 
+                if (0 < spawnerSpeciesIdList.Count) {
+                    int idx = currTrigger.ConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
+                    if (idx < 0) idx = 0;
+                    if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;  
+                    addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
                 }
             } else {
                 // Wait for "FramesToRecover" to become 0
@@ -1631,7 +1661,7 @@ namespace shared {
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _insertBulletColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
             
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             
             int nextNpcI = currNpcI;
             _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, logger);
@@ -1690,20 +1720,24 @@ namespace shared {
             }
         }
 
-        protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel) {
+        protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet) {
             if (activeSkillHit >= skillConfig.Hits.Count) return false;
             var bulletConfig = skillConfig.Hits[activeSkillHit];
             var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
             var invBulletDirMag = InvSqrt32(bulletDirMagSq);
             var bulletSpeedXfac = xfac * invBulletDirMag * bulletConfig.DirX;
             var bulletSpeedYfac = invBulletDirMag * bulletConfig.DirY;
+            int newVirtualX = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevHitBullet.VirtualGridX;
+            int newVirtualY = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY : referencePrevHitBullet.VirtualGridY;
+
             AssignToBullet(
                     bulletLocalIdCounter,
                     originatedRdfId,
                     currCharacterDownsync.JoinIndex,
                     currCharacterDownsync.BulletTeamId,
                     BulletState.StartUp, 0,
-                    currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX, currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY, // virtual grid position
+                    newVirtualX, 
+                    newVirtualY, 
                     xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
                     (int)(bulletSpeedXfac * bulletConfig.Speed), (int)(bulletSpeedYfac * bulletConfig.Speed), // velocity
                     activeSkillHit, activeSkillId, bulletConfig, bulletConfig.RepeatQuota,
@@ -1724,6 +1758,9 @@ namespace shared {
                 }
             }
 
+            // Explicitly specify termination of nextRenderFrameBullets
+            nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+
             return true;
         }
 
@@ -1743,5 +1780,22 @@ namespace shared {
         public static bool isJumpStartupJustEnded(CharacterDownsync currCd, CharacterDownsync nextCd) {
             return ((InAirIdle1ByJump == currCd.CharacterState && InAirIdle1ByJump == nextCd.CharacterState) || (InAirIdle1ByWallJump == currCd.CharacterState && InAirIdle1ByWallJump == nextCd.CharacterState)) && (1 == currCd.FramesToStartJump) && (0 == nextCd.FramesToStartJump);
         } 
+
+        public static bool isAllConfirmed(ulong confirmedList, int roomCapacity) {
+            return (confirmedList+1 == (1UL << roomCapacity));
+        }
+        
+        public static (bool, int) isRdfAllConfirmed(int rdfId, FrameRingBuffer<InputFrameDownsync> inputBuffer, int roomCapacity) {
+            int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
+            if (0 >= delayedInputFrameId) {
+                throw new ArgumentNullException(String.Format("rdfId={0}, delayedInputFrameId={0} is invalid when escaped!", rdfId, delayedInputFrameId));
+            }
+
+            var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
+            if (!ok || null == delayedInputFrameDownsync) {
+                throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null when escaped!", delayedInputFrameId));
+            }
+            return (isAllConfirmed(delayedInputFrameDownsync.ConfirmedList, roomCapacity), delayedInputFrameId);
+        }
     }
 }

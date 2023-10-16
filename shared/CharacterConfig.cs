@@ -29,6 +29,7 @@
         public int WallJumpingInitVelX;
         public int WallJumpingInitVelY;
         public int WallSlidingVelY;
+        public int MinFallingVelY;
 
         // Collision boxes
         public int VisionOffsetX;
