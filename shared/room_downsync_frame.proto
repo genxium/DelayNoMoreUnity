@@ -345,6 +345,8 @@ message TrapConfig {
 
     int32 hardness = 9;
 
+	// TODO: Instead of damage, a trap should also be able to provide pushbacks like a "trampoline" in only a limited "framesToRecover", possible started by a Trigger.
+
 	string speciesName = 1024;
 }
 
@@ -434,6 +436,11 @@ message TriggerConfig {
 	uint64 collisionTypeMask = 4; // of this trigger
 }
 
+message CharacterSpawnerConfig {
+    int32 cutoffRdfFrameId = 1;
+    repeated int32 speciesIdList = 2; // the k-th subcycle tick corresponds to speciesIdList[k]   
+}
+
 message TriggerConfigFromTiled {
 	int32 speciesId = 1;
     int32 delayedFrames = 2;  
@@ -448,7 +455,7 @@ message TriggerConfigFromTiled {
     int32 subCycleTriggerFrames = 8;
     int32 subCycleQuota = 9;
 
-    repeated int32 spawnChSpeciesIdList = 10;
+    repeated CharacterSpawnerConfig characterSpawnerTimeSeq = 10; // MUST Be configured by increasing "cutoffRdfFrameId"!
 }
 
 message TriggerColliderAttr {

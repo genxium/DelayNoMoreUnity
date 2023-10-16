@@ -624,7 +624,7 @@ public class Room {
             // by now "clientInputFrameId <= inputBuffer.EdFrameId"
             var targetInputFrameDownsync = getOrPrefabInputFrameDownsync(clientInputFrameId);
             targetInputFrameDownsync.InputList[player.CharacterDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
-            targetInputFrameDownsync.ConfirmedList = (targetInputFrameDownsync.ConfirmedList | ((ulong)1 << (player.CharacterDownsync.JoinIndex - 1)));
+            targetInputFrameDownsync.ConfirmedList = (targetInputFrameDownsync.ConfirmedList | (1UL << (player.CharacterDownsync.JoinIndex - 1)));
 
             if (false == fromUDP) {
                 /**
@@ -651,7 +651,7 @@ public class Room {
         // Step#2, mark confirmation without forcing
         int newAllConfirmedCount = 0;
         int inputFrameId1 = lastAllConfirmedInputFrameId + 1;
-        ulong allConfirmedMask = ((ulong)1 << capacity) - 1;
+        ulong allConfirmedMask = (1UL << capacity) - 1;
 
         for (int inputFrameId = inputFrameId1; inputFrameId < inputBuffer.EdFrameId; inputFrameId++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId);
@@ -664,7 +664,7 @@ public class Room {
                 //_logger.LogInformation("Found a non-all-confirmed inputFrame for roomId={0}, upsync player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4}) inputFrameId={5}, confirmedList={6}", id, playerId, player.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId, inputFrameId, inputFrameDownsync.ConfirmedList);
                 foreach (var thatPlayer in playersArr) {
                     var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
-                    var thatPlayerJoinMask = ((ulong)1 << (thatPlayer.CharacterDownsync.JoinIndex - 1));
+                    var thatPlayerJoinMask = (1UL << (thatPlayer.CharacterDownsync.JoinIndex - 1));
                     bool isSlowTicker = (0 == (inputFrameDownsync.ConfirmedList & thatPlayerJoinMask));
                     bool isActiveSlowTicker = (isSlowTicker && thatPlayerBattleState == PLAYER_BATTLE_STATE_ACTIVE);
                     if (isActiveSlowTicker) {
@@ -744,7 +744,7 @@ public class Room {
                 for (int i = 0; i < capacity; i++) {
                     // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
                     // Don't predict "btnA & btnB"!
-                    ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & (ulong)15));
+                    ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & 1UL5));
                 }
                 ifdHolder.ConfirmedList = 0;
                 currInputFrameDownsync = ifdHolder; // make sure that we return a pointer inside the inputBuffer for later writing
@@ -844,7 +844,7 @@ public class Room {
                 /*
                 [WARNING] The comment of this part in Golang version is obsolete. The field "ForceAllResyncOnAnyActiveSlowTicker" is always true, and setting "ShouldForceResync = true" here is only going to impact unconfirmed players on frontend, i.e. there's a filter on frontend to ignore "nonSelfForceConfirmation". 
                 */
-                ulong thatPlayerJoinMask = ((ulong)1 << (player.CharacterDownsync.JoinIndex - 1));
+                ulong thatPlayerJoinMask = (1UL << (player.CharacterDownsync.JoinIndex - 1));
 
                 bool isActiveSlowTicker = (0 < (thatPlayerJoinMask & inputBufferSnapshot.UnconfirmedMask)) && (PLAYER_BATTLE_STATE_ACTIVE == playerBattleState);
 
@@ -930,7 +930,7 @@ public class Room {
                 return;
         }
 
-        bool isSlowTicker = (0 < (inputBufferSnapshot.UnconfirmedMask & ((ulong)1 << (playerJoinIndexInBooleanArr))));
+        bool isSlowTicker = (0 < (inputBufferSnapshot.UnconfirmedMask & (1UL << (playerJoinIndexInBooleanArr))));
 
         bool shouldResync1 = (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState); // i.e. implies that "MAGIC_LAST_SENT_INPUT_FRAME_ID_READDED == player.LastSentInputFrameId"
 

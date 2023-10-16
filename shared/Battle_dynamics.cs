@@ -796,16 +796,12 @@ namespace shared {
                             var (escaped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
                             // Currently only allowing "Player" to win.
                             if (escaped) {
-                                int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
-                                if (0 >= delayedInputFrameId) {
-                                    throw new ArgumentNullException(String.Format("currRenderFrame.Id={0}, delayedInputFrameId={0} is invalid when escaped!", currRenderFrame.Id, delayedInputFrameId));
-                                }
-
-                                var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
-                                if (!ok || null == delayedInputFrameDownsync) {
-                                    throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null when escaped!", delayedInputFrameId));
-                                }
-                                if (1 == roomCapacity || (delayedInputFrameDownsync.ConfirmedList+1 == (1UL << roomCapacity))) {
+                                if (1 == roomCapacity) {
+                                    confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
+                                    continue;
+                                } 
+                                var (rdfAllConfirmed, delayedInputFrameId) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity); 
+                                if (rdfAllConfirmed) {
                                     confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
                                     continue;
                                 } else {
@@ -1186,6 +1182,23 @@ namespace shared {
             }
         }
 
+        private static CharacterSpawnerConfig lowerBoundForSpawnerConfig(int rdfId, RepeatedField<CharacterSpawnerConfig> characterSpawnerTimeSeq) {
+            int l = 0, r = characterSpawnerTimeSeq.Count;
+            while (l < r) {
+                int m = ((l + r) >> 1);
+                var cand = characterSpawnerTimeSeq[m]; 
+                if (cand.CutoffRdfFrameId == rdfId) {
+                    return characterSpawnerTimeSeq[l]; 
+                } else if (cand.CutoffRdfFrameId < rdfId) {
+                    l = m+1;
+                } else {
+                    r = m;
+                }
+            }
+            if (l >= characterSpawnerTimeSeq.Count) l = characterSpawnerTimeSeq.Count-1; 
+            return characterSpawnerTimeSeq[l]; 
+        }
+
         private static void _tickSingleSubCycle(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
             if (0 < currTrigger.SubCycleQuotaLeft) {
                 triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1;
@@ -1193,9 +1206,13 @@ namespace shared {
                 triggerInNextFrame.FramesInState = 0;
                 triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
 
-                if (0 < currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count) {
-                    int pseudoRandomIdx = (currRenderFrame.Id % currTrigger.ConfigFromTiled.SpawnChSpeciesIdList.Count);
-                    addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, currTrigger.ConfigFromTiled.SpawnChSpeciesIdList[pseudoRandomIdx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
+                var chSpawnerConfig = lowerBoundForSpawnerConfig(currRenderFrame.Id, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq);  
+                var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList; 
+                if (0 < spawnerSpeciesIdList.Count) {
+                    int idx = currTrigger.ConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
+                    if (idx < 0) idx = 0;
+                    if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;  
+                    addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);
                 }
             } else {
                 // Wait for "FramesToRecover" to become 0
@@ -1763,5 +1780,22 @@ namespace shared {
         public static bool isJumpStartupJustEnded(CharacterDownsync currCd, CharacterDownsync nextCd) {
             return ((InAirIdle1ByJump == currCd.CharacterState && InAirIdle1ByJump == nextCd.CharacterState) || (InAirIdle1ByWallJump == currCd.CharacterState && InAirIdle1ByWallJump == nextCd.CharacterState)) && (1 == currCd.FramesToStartJump) && (0 == nextCd.FramesToStartJump);
         } 
+
+        public static bool isAllConfirmed(ulong confirmedList, int roomCapacity) {
+            return (confirmedList+1 == (1UL << roomCapacity));
+        }
+        
+        public static (bool, int) isRdfAllConfirmed(int rdfId, FrameRingBuffer<InputFrameDownsync> inputBuffer, int roomCapacity) {
+            int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
+            if (0 >= delayedInputFrameId) {
+                throw new ArgumentNullException(String.Format("rdfId={0}, delayedInputFrameId={0} is invalid when escaped!", rdfId, delayedInputFrameId));
+            }
+
+            var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
+            if (!ok || null == delayedInputFrameDownsync) {
+                throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null when escaped!", delayedInputFrameId));
+            }
+            return (isAllConfirmed(delayedInputFrameDownsync.ConfirmedList, roomCapacity), delayedInputFrameId);
+        }
     }
 }

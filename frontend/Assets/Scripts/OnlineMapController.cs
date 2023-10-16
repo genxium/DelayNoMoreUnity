@@ -228,12 +228,8 @@ public class OnlineMapController : AbstractMapController {
     protected override int chaseRolledbackRdfs() {
         int nextChaserRenderFrameId = base.chaseRolledbackRdfs();
         if (nextChaserRenderFrameId == playerRdfId && playerRdfId >= battleDurationFrames) {
-            int j = ConvertToDelayedInputFrameId(playerRdfId);
-            var (ok, delayedInputFrame) = inputBuffer.GetByFrameId(j);
-            if (false == ok || null == delayedInputFrame) {
-                throw new ArgumentNullException(String.Format("Couldn't find delayedInputFrame for j={0} to test online battle ending, playerRdfId={1}", j, playerRdfId));
-            }
-            if (_allConfirmed(delayedInputFrame.ConfirmedList)) {
+            var (rdfAllConfirmed, _) = isRdfAllConfirmed(playerRdfId, inputBuffer, roomCapacity);
+            if (rdfAllConfirmed) {
                 lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = true;
             }
         }
