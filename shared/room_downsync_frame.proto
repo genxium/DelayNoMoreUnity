@@ -133,6 +133,9 @@ message CharacterDownsync {
 	int32 bulletTeamId = 1027;
 	int32 chCollisionTeamId = 1028;
 	uint64 collisionTypeMask = 1029;
+
+    repeated Buff buffList = 1030; 
+    repeated Debuff debuffList = 1031; 
 }
 
 message InputFrameDecoded {
@@ -558,4 +561,59 @@ message FrameLog {
 
 message BattleResult {
     int32 winnerJoinIndex = 1;
+}
+
+enum BuffStockType {
+	Timed = 0; // Would be calculated in number of renderFrames, not actual time in seconds or milliseconds
+	Quota = 1;
+}
+
+message DebuffType {
+    int32 speedDownOnly = 1;
+    int32 coldSpeedDown = 2;
+    int32 positionLockedOnly = 3;
+    int32 frozenPositionLocked = 4;
+}
+
+message DebuffConfig {
+    int32 speciesId = 1;
+    BuffStockType stockType = 2;
+    int32 stock = 3;
+    DebuffType type = 4;
+}
+
+message BuffConfig {
+    int32 speciesId = 1;
+    BuffStockType stockType = 2;
+    int32 stock = 3;
+    int32 speedDelta = 4;
+    int32 hitboxSizeXDelta = 5;
+    int32 hitboxSizeYDelta = 6;
+    /* 
+    It's not trivial to handle damage after the following sequence
+    1. Pick up damageDelta=+10 for 600 frames
+    2. Pick up damageDeltaByPercentage=+10% for 600 frames
+    3. Buff "damageDelta=+10" expires 
+    4. Buff "damageDeltaByPercentage=+10%" expires
+
+    Pick a deterministic way :)
+    */
+    int32 damageDelta = 7;
+    int32 damageDeltaByPercentage = 8;
+    int32 characterHardnessDelta = 9;
+    int32 meleeHardnessDelta = 10;
+    int32 fireballHardnessDelta = 11;
+    bool invinsible = 12;
+
+    repeated DebuffType asscociatedDebuffList = 1024;
+}
+
+message Buff {
+    int32 speciesId = 1;
+    int32 stock = 2;
+}
+
+message Debuff {
+    int32 speciesId = 1;
+    int32 stock = 2;
 }
