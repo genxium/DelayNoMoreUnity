@@ -139,6 +139,7 @@ namespace shared {
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 3;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 3;
+        public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases

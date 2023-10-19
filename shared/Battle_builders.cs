@@ -3,6 +3,10 @@ using System;
 
 namespace shared {
     public partial class Battle {
+        public static RepeatedField<Buff> defaultTemplateBuffList = new RepeatedField<Buff>(); 
+        public static RepeatedField<Debuff> defaultTemplateDebuffList = new RepeatedField<Debuff>(); 
+        public static Inventory defaultTemplateInventory = new Inventory(); 
+
         public static Collider NewConvexPolygonCollider(ConvexPolygon srcPolygon, float spaceOffsetX, float spaceOffsetY, int aMaxTouchingCellsCnt, object data) {
             if (null == srcPolygon) throw new ArgumentNullException("Null srcPolygon is not allowed in `NewConvexPolygonCollider`");
             AlignPolygon2DToBoundingBox(srcPolygon);
@@ -54,7 +58,27 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, CharacterDownsync dst) {
+        public static void AssignToBuff(int speciesId, int stock, BuffStockType stockType, Buff dst) {
+            dst.SpeciesId = speciesId; 
+            dst.Stock = stock;
+            dst.StockType = stockType; 
+        }
+
+        public static void AssignToDebuff(int speciesId, int stock, BuffStockType stockType, Debuff dst) {
+            dst.SpeciesId = speciesId; 
+            dst.Stock = stock;
+            dst.StockType = stockType; 
+        }
+
+        public static void AssignToInventorySlot(InventorySlotStockType stockType, int quota, int framesToRecover, int buffConfigSpeciesId, InventorySlot dst) {
+            dst.StockType = stockType; 
+            dst.Quota = quota; 
+            dst.FramesToRecover = framesToRecover; 
+            dst.BuffConfigSpeciesId = buffConfigSpeciesId;
+        }
+
+
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -113,6 +137,65 @@ namespace shared {
 
             dst.JumpStarted = jumpStarted;
             dst.FramesToStartJump = framesToStartJump;
+
+            int newBuffCnt = 0, prevBuffI = 0; 
+            while (prevBuffI < prevBuffList.Count) {
+                var cand = prevBuffList[prevBuffI++];
+                if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break; 
+                if (BuffStockType.Timed == cand.StockType && isRdfFrameElapsing) { 
+                    if (1 >= cand.Stock) {  
+                        continue;
+                    } else {
+                        AssignToBuff(cand.SpeciesId, cand.Stock-1, cand.StockType, dst.BuffList[newBuffCnt]);
+                    }
+                } else {
+                    AssignToBuff(cand.SpeciesId, cand.Stock, cand.StockType, dst.BuffList[newBuffCnt]);
+                }
+                ++newBuffCnt;
+            }
+            if (newBuffCnt < dst.BuffList.Count) dst.BuffList[newBuffCnt].SpeciesId = TERMINATING_BUFF_SPECIES_ID;    
+            
+            int newDebuffCnt = 0, prevDebuffI = 0; 
+            while (prevDebuffI < prevDebuffList.Count) {
+                var cand = prevDebuffList[prevDebuffI++];
+                if (TERMINATING_DEBUFF_SPECIES_ID == cand.SpeciesId) break; 
+                if (BuffStockType.Timed == cand.StockType && isRdfFrameElapsing) { 
+                    if (1 >= cand.Stock) {  
+                        continue;
+                    } else {
+                        AssignToDebuff(cand.SpeciesId, cand.Stock-1, cand.StockType, dst.DebuffList[newDebuffCnt]);
+                    }
+                } else {
+                    AssignToDebuff(cand.SpeciesId, cand.Stock, cand.StockType, dst.DebuffList[newDebuffCnt]);
+                }
+                ++newDebuffCnt;
+            }
+            if (newDebuffCnt < dst.DebuffList.Count) dst.DebuffList[newDebuffCnt].SpeciesId = TERMINATING_DEBUFF_SPECIES_ID;    
+
+            if (null != prevInventory) {
+                int newInventoryCnt = 0, prevInventoryI = 0;
+                while (prevInventoryI < prevInventory.Slots.Count) {
+                    var cand = prevInventory.Slots[prevInventoryI++];
+                    if (InventorySlotStockType.NoneIv == cand.StockType) break;
+                    if (InventorySlotStockType.TimedIv == cand.StockType && isRdfFrameElapsing) {
+                        if (1 == cand.FramesToRecover) {
+                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.DefaultFramesToRecover, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                        } else {
+                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover - 1, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                        }
+                    } else if (InventorySlotStockType.TimedMagazineIv == cand.StockType && isRdfFrameElapsing) {
+                        if (1 == cand.FramesToRecover) {
+                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                        } else {
+                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover - 1, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                        }
+                    } else {
+                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                    }
+                    ++newInventoryCnt;
+                }
+                if (newInventoryCnt < dst.Inventory.Slots.Count) dst.Inventory.Slots[newInventoryCnt].StockType = InventorySlotStockType.NoneIv;
+            }
         }
 
         public static Bullet NewBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState) {
@@ -193,23 +276,32 @@ namespace shared {
             dst.VirtualGridY = virtualGridY;
         }
 
-        public static CharacterDownsync NewPreallocatedCharacterDownsync(int buffCapacity, int debuffCapacity, ulong collisionTypeMask) {
-                var single = new CharacterDownsync();
-                single.Id = TERMINATING_PLAYER_ID;
-                single.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE;
-                single.CollisionTypeMask = collisionTypeMask;
-                for (int i = 0; i < buffCapacity; i++) {
-                    var singleBuff = new Buff();
-                    singleBuff.SpeciesId = TERMINATING_BUFF_SPECIES_ID;
-                    single.BuffList.Add(singleBuff);
+        public static CharacterDownsync NewPreallocatedCharacterDownsync(int buffCapacity, int debuffCapacity, int inventoryCapacity, ulong collisionTypeMask) {
+            var single = new CharacterDownsync();
+            single.Id = TERMINATING_PLAYER_ID;
+            single.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE;
+            single.CollisionTypeMask = collisionTypeMask;
+            for (int i = 0; i < buffCapacity; i++) {
+                var singleBuff = new Buff();
+                singleBuff.SpeciesId = TERMINATING_BUFF_SPECIES_ID;
+                single.BuffList.Add(singleBuff);
+            }
+            for (int i = 0; i < debuffCapacity; i++) {
+                var singleDebuff = new Debuff();
+                singleDebuff.SpeciesId = TERMINATING_DEBUFF_SPECIES_ID;
+                single.DebuffList.Add(singleDebuff);
+            }
+            if (0 < inventoryCapacity) {
+                single.Inventory = new Inventory();
+                for (int i = 0; i < inventoryCapacity; i++) {
+                    var singleSlot = new InventorySlot();
+                    singleSlot.StockType = InventorySlotStockType.NoneIv;
+                    singleSlot.BuffConfigSpeciesId = TERMINATING_BUFF_SPECIES_ID;
+                    single.Inventory.Slots.Add(singleSlot);
                 }
-                for (int i = 0; i < debuffCapacity; i++) {
-                    var singleDebuff = new Debuff();
-                    singleDebuff.SpeciesId = TERMINATING_DEBUFF_SPECIES_ID;
-                    single.DebuffList.Add(singleDebuff);
-                }
-
-                return single;
+            }
+            
+            return single;
         }
 
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount) {
@@ -218,12 +310,12 @@ namespace shared {
             ret.BulletLocalIdCounter = 0;
 
             for (int i = 0; i < roomCapacity; i++) {
-                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, COLLISION_CHARACTER_INDEX_PREFIX);
+                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY, COLLISION_CHARACTER_INDEX_PREFIX);
                 ret.PlayersArr.Add(single);
             }
 
             for (int i = 0; i < preallocNpcCount; i++) {
-                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, COLLISION_CHARACTER_INDEX_PREFIX);
+                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, 0, COLLISION_CHARACTER_INDEX_PREFIX);
                 ret.NpcsArr.Add(single);
             }
 
@@ -269,14 +361,14 @@ namespace shared {
 
             for (int i = 0; i < roomCapacity; i++) {
                 var srcCh = src.PlayersArr[i];
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, dst.PlayersArr[i]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, dst.PlayersArr[i]);
             }
 
             int npcCnt = 0;
             while (npcCnt < src.NpcsArr.Count) {
                 var srcCh = src.NpcsArr[npcCnt];
                 if (TERMINATING_PLAYER_ID == srcCh.Id) break;
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, dst.NpcsArr[npcCnt]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, dst.NpcsArr[npcCnt]);
                 npcCnt++;
             }
             dst.NpcsArr[npcCnt].Id = TERMINATING_PLAYER_ID;

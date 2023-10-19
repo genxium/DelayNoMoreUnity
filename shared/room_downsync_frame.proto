@@ -136,6 +136,8 @@ message CharacterDownsync {
 
     repeated Buff buffList = 1030; 
     repeated Debuff debuffList = 1031; 
+
+	Inventory Inventory = 1032;
 }
 
 message InputFrameDecoded {
@@ -564,8 +566,9 @@ message BattleResult {
 }
 
 enum BuffStockType {
-	Timed = 0; // Would be calculated in number of renderFrames, not actual time in seconds or milliseconds
-	Quota = 1;
+    NoneBf = 0;
+	Timed = 1; // Would be calculated in number of renderFrames, not actual time in seconds or milliseconds
+	Quota = 2;
 }
 
 message DebuffType {
@@ -611,9 +614,31 @@ message BuffConfig {
 message Buff {
     int32 speciesId = 1;
     int32 stock = 2;
+    BuffStockType stockType = 3; // Copied from BuffConifg to reduce heap-RAM traversal 
 }
 
 message Debuff {
     int32 speciesId = 1;
     int32 stock = 2;
+    BuffStockType stockType = 3; // Copied from BuffConifg to reduce heap-RAM traversal 
+}
+
+enum InventorySlotStockType {
+	NoneIv = 0;
+	TimedIv = 1; // Reusable after cooldown
+	QuotaIv = 2;
+	TimedMagazineIv = 3; // Has certain quotas before required to cooldown
+}
+
+message InventorySlot {
+	InventorySlotStockType stockType = 1;
+	int32 quota = 2; 
+	int32 framesToRecover = 3; 
+    int32 defaultQuota = 4;
+    int32 defaultFramesToRecover = 5;
+	int32 buffConfigSpeciesId = 1024;
+}
+
+message Inventory {
+	repeated InventorySlot slots = 1;
 }
