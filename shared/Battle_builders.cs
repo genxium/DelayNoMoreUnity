@@ -193,23 +193,37 @@ namespace shared {
             dst.VirtualGridY = virtualGridY;
         }
 
+        public static CharacterDownsync NewPreallocatedCharacterDownsync(int buffCapacity, int debuffCapacity, ulong collisionTypeMask) {
+                var single = new CharacterDownsync();
+                single.Id = TERMINATING_PLAYER_ID;
+                single.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE;
+                single.CollisionTypeMask = collisionTypeMask;
+                for (int i = 0; i < buffCapacity; i++) {
+                    var singleBuff = new Buff();
+                    singleBuff.SpeciesId = TERMINATING_BUFF_SPECIES_ID;
+                    single.BuffList.Add(singleBuff);
+                }
+                for (int i = 0; i < debuffCapacity; i++) {
+                    var singleDebuff = new Debuff();
+                    singleDebuff.SpeciesId = TERMINATING_DEBUFF_SPECIES_ID;
+                    single.DebuffList.Add(singleDebuff);
+                }
+
+                return single;
+        }
+
         public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
             ret.BulletLocalIdCounter = 0;
 
             for (int i = 0; i < roomCapacity; i++) {
-                var single = new CharacterDownsync();
-                single.Id = TERMINATING_PLAYER_ID;
-                single.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE;
-                single.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
+                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, COLLISION_CHARACTER_INDEX_PREFIX);
                 ret.PlayersArr.Add(single);
             }
 
             for (int i = 0; i < preallocNpcCount; i++) {
-                var single = new CharacterDownsync();
-                single.Id = TERMINATING_PLAYER_ID;
-                single.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
+                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, COLLISION_CHARACTER_INDEX_PREFIX);
                 ret.NpcsArr.Add(single);
             }
 

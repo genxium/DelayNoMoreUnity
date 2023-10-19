@@ -265,6 +265,9 @@ namespace shared {
             } else {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
                 thatCharacterInNextFrame.VelY += GRAVITY_Y;
+                if (thatCharacterInNextFrame.VelY < chConfig.MinFallingVelY) {
+                    thatCharacterInNextFrame.VelY = chConfig.MinFallingVelY;
+                }
             }
         }
 
@@ -661,7 +664,7 @@ namespace shared {
                 if (i < roomCapacity && 0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
                     // Revive player-controlled character from Dying
                     (newVx, newVy) = (currCharacterDownsync.RevivalVirtualGridX, currCharacterDownsync.RevivalVirtualGridY);
-                    thatCharacterInNextFrame.CharacterState = GetUp1;
+                    thatCharacterInNextFrame.CharacterState = GetUp1; // No need to tune bounding box and offset for this case, because the revival location is fixed :)
                     thatCharacterInNextFrame.FramesInChState = 0;
                     thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
                     thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
@@ -914,11 +917,13 @@ namespace shared {
                         if (Dying == thatCharacterInNextFrame.CharacterState) {
                             // No update needed for Dying
                         } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
+                            thatCharacterInNextFrame.VelY = 0;
                             thatCharacterInNextFrame.CharacterState = LayDown1;
                             thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                         } else {
                             switch (currCharacterDownsync.CharacterState) {
                                 case BlownUp1:
+                                case LayDown1:
                                 case InAirIdle1NoJump:
                                 case InAirIdle1ByJump:
                                 case InAirIdle1ByWallJump:
@@ -952,7 +957,7 @@ namespace shared {
                                 // No update needed for Dying
                             } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
                                 thatCharacterInNextFrame.VelX = 0;
-                                thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
+                                thatCharacterInNextFrame.VelY = 0;
                                 thatCharacterInNextFrame.CharacterState = LayDown1;
                                 thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                             } else if (LayDown1 == thatCharacterInNextFrame.CharacterState) {
@@ -964,6 +969,11 @@ namespace shared {
                                 if (0 == thatCharacterInNextFrame.FramesToRecover) {
                                     thatCharacterInNextFrame.CharacterState = Idle1;
                                     thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
+
+                                    int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                    var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.LayDownSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                    var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                    effPushbacks[i].Y -= halfColliderChDiff;
                                 }
                             } else if (0 >= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
                                 // [WARNING] Covers 2 situations:
@@ -1483,6 +1493,15 @@ namespace shared {
             battleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
         }
 
+        /*
+        [TODO] 
+
+        The "Step" function has become way more complicated than what it was back in the days only simple movements and hardpushbacks were supported. 
+        
+        Someday in the future, profiling result on low-end hardwares might complain that this function is taking too much time in the "Script" portion, thus need one or all of the following optimization techiques to help it go further.
+        - Make use of CPU parallelization -- better by using some libraries with sub-kernel-thread granularity(e.g. Goroutine or Greenlet equivalent) -- or GPU parallelization. It's not trivial to make an improvement because by dispatching smaller tasks to other resources other than the current kernel-thread, overhead I/O and synchronization/locking time is introduced. Moreover, we need guarantee that the dispatched smaller tasks can yield deterministic outputs regardless of processing order, e.g. that each "i" in "_calcCharacterMovementPushbacks" can be traversed earlier than another and same "effPushbacks" for the next render frame is obtained.   
+        - Enable "IL2CPP" when building client application.  
+        */
         public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
@@ -1696,6 +1715,7 @@ namespace shared {
 
             switch (characterDownsync.CharacterState) {
                 case LayDown1:
+                case GetUp1:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.LayDownSizeX, chConfig.LayDownSizeY);
                     break;
                 case Dying:

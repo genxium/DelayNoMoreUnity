@@ -68,7 +68,7 @@
   <object id="341" gid="2147483852" x="672" y="560" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="1"/>
-    <property name="characterSpawnerTimeSeq" value="1200:4097;1800:4097,4097,1;3600:1,1,3"/>
+    <property name="characterSpawnerTimeSeq" value="1200:4097,4097,1;1800:4097,1,1;3600:1,1,3"/>
     <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
@@ -81,7 +81,7 @@
   <object id="348" gid="2147483852" x="672" y="448" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="2"/>
-    <property name="characterSpawnerTimeSeq" value="1200:4097;1800:4097,4097,1;3600:1,1,3"/>
+    <property name="characterSpawnerTimeSeq" value="1200:4097,4097,1;1800:4097,1,1;3600:1,1,3"/>
     <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
