@@ -41,11 +41,15 @@ namespace shared {
             int encodedDirection = (int)(encodedInput & 15);
             int btnALevel = (int)((encodedInput >> 4) & 1);
             int btnBLevel = (int)((encodedInput >> 5) & 1);
+            int btnCLevel = (int)((encodedInput >> 6) & 1);
+            int btnDLevel = (int)((encodedInput >> 7) & 1);
 
             holder.Dx = DIRECTION_DECODER[encodedDirection, 0];
             holder.Dy = DIRECTION_DECODER[encodedDirection, 1];
             holder.BtnALevel = btnALevel;
             holder.BtnBLevel = btnBLevel;
+            holder.BtnCLevel = btnCLevel;
+            holder.BtnDLevel = btnDLevel;
             return true;
         }
 

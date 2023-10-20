@@ -1,0 +1,6405 @@
+fileFormatVersion: 2
+guid: ad77f696c623fe94cad87bfdbbb4b2f4
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SFIP-0
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 484
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c378f061fedbaa44b53e03b550ad89d
+      internalID: -223566443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-1
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 483
+        width: 32
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ea67a8b8b2343140b5833a206e4ae66
+      internalID: 1147716476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-10
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 388
+        width: 28
+        height: 31
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08890bfce792bb44c91b8be5f4d4d2b4
+      internalID: -681806979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-100
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 42
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6875e5a00df4dfd42823c53e41654b8e
+      internalID: 1174509856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-101
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 482
+        width: 20
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c77ebf3774e61ef47ad4931dda3195cf
+      internalID: -1510067163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-102
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 195
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8edd907abfe549c4db0f2bc7c6d200eb
+      internalID: -182573618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-103
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 223
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b81f328e14cc3e848bc0e0534011edeb
+      internalID: 321793906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-104
+      rect:
+        serializedVersion: 2
+        x: 318
+        y: 257
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ee9f8ab0943f5c459fa21a6c418b33d
+      internalID: -1953789753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-105
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 286
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae9d71960d9733849a92bbbdeec56dcb
+      internalID: -1561637719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-106
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 29
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b63149ebae63a34ab604867720cc3e8
+      internalID: 520654856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-107
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 29
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8170aba91fb1fa64ab61bf00b2bf1e2b
+      internalID: -1363678104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-108
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 29
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83bec0cc33994784f8ed39e1b0d54bcc
+      internalID: -2063387541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-109
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 29
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3321e49e7fdba544898ae05707ad2005
+      internalID: -971071000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-11
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 334
+        width: 27
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5555556, y: 0.55172414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7b846e047e14644f8e4a209047adfdd
+      internalID: 21651149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-110
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 316
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c9416cc7c5b6b2489bd036a287ba02a
+      internalID: -1741547931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-111
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 39
+        width: 25
+        height: 28
+      alignment: 9
+      pivot: {x: 0.48, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 374abf54b929b334fa25ce7d57f5a6b1
+      internalID: 1062780322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-112
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 11
+        width: 25
+        height: 28
+      alignment: 9
+      pivot: {x: 0.48, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a56308a970ef3c4aba55e93cb092fbf
+      internalID: -624331387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-113
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 67
+        width: 25
+        height: 28
+      alignment: 9
+      pivot: {x: 0.48, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b776a773a765ca841b7aa3adcf6f8478
+      internalID: -614525044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-114
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 122
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c29b52e911778754985cfbcca6d1e861
+      internalID: 148816938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-115
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 151
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 562a15f3becdf6b4e9538890d9d08b95
+      internalID: 1647171121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-116
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 182
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22868897bb8c51140aa1ed83f24260b2
+      internalID: 471653606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-117
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 456
+        width: 27
+        height: 28
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88ab4ec67a39607478aebd7295b1f798
+      internalID: 615862893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-118
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 133
+        width: 25
+        height: 28
+      alignment: 9
+      pivot: {x: 0.52, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00ac156aa235b214face925f18f601a9
+      internalID: -95171800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-119
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 179
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a95cd9ee15ba5bb449c9e00df6244250
+      internalID: 1554718456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-12
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 154
+        width: 26
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8484390ce8d87d7449f499c111339199
+      internalID: 972003107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-120
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 217
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdd6b686d0c8d9c4b8d1e4ace885b2ee
+      internalID: 190749152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-121
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 179
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a18d50eae5214e4b8f25730e154074b
+      internalID: -729091925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-122
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 233
+        width: 28
+        height: 22
+      alignment: 9
+      pivot: {x: 0.5, y: 0.54545456}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c8ac5b4b777cc14bb35f0c3c52af955
+      internalID: 809834280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-123
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 224
+        width: 30
+        height: 32
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a472f14310058241b7641354f763a5a
+      internalID: 1037090951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-124
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 68
+        width: 28
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0bf7f54253f0bf49a2d8a0a29b6f9c0
+      internalID: -1214297150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-125
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1bafb4964c015e4fb27030d78c659e8
+      internalID: -1904787951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-126
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 119
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ab17e02f27a46046a1ac13a3af04577
+      internalID: -638884889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-127
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 39
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f440012d3191dbc498fbe412b12eafa4
+      internalID: 2111308702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-128
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 369
+        width: 29
+        height: 28
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df192388db354784f9fa5db86a3bef0d
+      internalID: 1501016745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-129
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 303
+        width: 28
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f501c0a84d939144c9a22dba19a14346
+      internalID: -1150258422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-13
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 397
+        width: 30
+        height: 28
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fadaa11d6695bfb4f9c952beea84d955
+      internalID: 1545711976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-130
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 162
+        width: 30
+        height: 30
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3431b7e9386aa1544bb766a171de9328
+      internalID: 590662967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-131
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 78
+        width: 32
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 736cc643eb96e8f4692d660346e37664
+      internalID: 688897247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-132
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 231
+        width: 28
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.57894737}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cb8a61167e895448b8d9308f0c88422
+      internalID: 415597532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-133
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 263
+        width: 20
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58ea0e805882f09488bba0579427bb51
+      internalID: -1134132731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-134
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 419
+        width: 29
+        height: 31
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84a13019b504f064e9ab15fad42bc125
+      internalID: 54957688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-135
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 4
+        width: 21
+        height: 31
+      alignment: 9
+      pivot: {x: 0.52380955, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2935f80da0908b14a8fa8f355149b4fb
+      internalID: 1499490167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-136
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 450
+        width: 29
+        height: 31
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ae53d54887ec644c976882d8b9d5075
+      internalID: -1082127054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-137
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 113
+        width: 27
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2261a2401f0dc784799884f63a342770
+      internalID: -104404389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-138
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1932b25d6f93ebe43aa72e8adace6946
+      internalID: -618729423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-139
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 140
+        width: 30
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44444445}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e9061082897fb240a0e8efddafeed90
+      internalID: 943500460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-14
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 304
+        width: 28
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c3385e4eb4ef39419553cc4ffdead60
+      internalID: -1664952130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-140
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 352
+        width: 31
+        height: 32
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b63f88a69ca6a18489cce04ad60b6407
+      internalID: -2083550573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-141
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 459
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 012552209ef08a94088be9233748c71a
+      internalID: 1505135698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-142
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 150
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d30841207dd45a84c9b0059a0659f511
+      internalID: 2144939266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-143
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 103
+        width: 31
+        height: 29
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.44827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6df5a3c338e9632408abf82e4fed206a
+      internalID: -1254646255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-144
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 11
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7f5e28bd27213549801cde19ce81b7f
+      internalID: -112070080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-145
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 326
+        width: 28
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 016a7b36db4a6f04fb571aefe68d07c4
+      internalID: 780263504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-146
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 257
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f865f37b5ae9fcc498f97b9f9570b70c
+      internalID: -479566430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-147
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 246
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f64393cf6eee7e34e80988dd585b8f7d
+      internalID: -575502394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-148
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 230
+        width: 29
+        height: 27
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d76188fa037f424d9b77ae5a9c03466
+      internalID: -208745692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-149
+      rect:
+        serializedVersion: 2
+        x: 373
+        y: 290
+        width: 26
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9438e37bef3a62438eb5cbdba6a21a5
+      internalID: 23712979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-15
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 259
+        width: 29
+        height: 27
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6df41d8a02515543b9cdde9a4d7a0f7
+      internalID: -699853963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-150
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 226
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e465d0971c8f6e428c1a247c39f135e
+      internalID: 1867170326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-151
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 168
+        width: 30
+        height: 27
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 229acec3583a8714e8337bcf82932348
+      internalID: -1713227855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-152
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 369
+        width: 29
+        height: 28
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66fd965b937e85e4bae6be029e54753a
+      internalID: -409983255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-153
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 165
+        width: 21
+        height: 21
+      alignment: 9
+      pivot: {x: 0.52380955, y: 0.6666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93dd5046b60243a409b8514b30a69405
+      internalID: 53417453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-154
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 390
+        width: 23
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5652174, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd1f036cdd81d9b4e948d7e00d235c51
+      internalID: 2057958360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-155
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 344
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c3e2a07e9a160241adf51f5f4c5cf09
+      internalID: -48182796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-156
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 179
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c42d357bf60784748ac1734215eaf539
+      internalID: -1403872286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-157
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 191
+        width: 27
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.47826087}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d104baef0444fc742819b49c2a594817
+      internalID: 481820441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-158
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 67
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb2d9773e93d9f14693f270e7d104e70
+      internalID: 1627777947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-159
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 126
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ef32ffde18bee7429ce678286f38f50
+      internalID: -1216316872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-16
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 295
+        width: 24
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83053bb12edb05c4ca097da20f71bba8
+      internalID: 244436534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-160
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 161
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f932f7e086407bb4d86cd6e166d5ddef
+      internalID: -5960340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-161
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 279
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9240bb746442a8b419c5d4d0993747f3
+      internalID: 428729591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-162
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 31
+        height: 32
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00c825dc5e2e6f348848190b93485a55
+      internalID: 107113260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-163
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 372
+        width: 24
+        height: 28
+      alignment: 9
+      pivot: {x: 0.41666666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b6915abfd58fe543bc9c9601b333989
+      internalID: -1604201094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-164
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 71
+        width: 32
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a51284dfa7265e244a4d6d78fc466777
+      internalID: -753298253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-165
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 134
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 020f987e192ff4048bda6f3f6f60c81c
+      internalID: 759892215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-166
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 13
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e22004bb3da34e479dbcadef42cb168
+      internalID: -817054086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-167
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 108
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92010adecc842a447924b169ce302675
+      internalID: -551084410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-168
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 79
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a1e88acf8abf9b4bb36bddf7ef6a06c
+      internalID: -1329225292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-169
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 50
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9fb84c1f4c9f4b4084fe1d0d000ea70
+      internalID: -1802871509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-17
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 162
+        width: 25
+        height: 28
+      alignment: 9
+      pivot: {x: 0.52, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 794fcde698784a5469b8c2ffe8894835
+      internalID: -910749390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-170
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 21
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdc015d91e805154daeab49f97a4ba80
+      internalID: -2001600330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-171
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 206
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54fe05b50657f614da7df8ec7960ff02
+      internalID: -2037267113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-172
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 237
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0fbca47c3d10f0428401eaa4a636fd1
+      internalID: -1452686923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-173
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 268
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19e9a7326af33a64fbab6659f3322c34
+      internalID: 2026571327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-174
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 279
+        width: 28
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d7b6226cdafd5d42972104fc8b44c4f
+      internalID: 1146817326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-175
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 307
+        width: 31
+        height: 28
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b68597da7172554ba1428e3fb2505c0
+      internalID: 2137537963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-176
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 177
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb24dfb59a95a134880fb06783ff831b
+      internalID: 124665197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-177
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 205
+        width: 24
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe72f16d00a923646adea7e5aad996f5
+      internalID: -516921913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-178
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 113
+        width: 27
+        height: 27
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5628d2b5fa910894b9e7573808ec4ae6
+      internalID: 582409545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-179
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 196
+        width: 30
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82f92086455f21544bfa3ed4ba256641
+      internalID: -790799213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-18
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 141
+        width: 27
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ddb72c41c932fb0408ad4a359d922955
+      internalID: 797248564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-180
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 288
+        width: 31
+        height: 32
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 011ef83b00150814c9d5283d6935c059
+      internalID: 294445578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-181
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 210
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.44827586, y: 0.44827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17b545ec3d6a1034aab7795accf89e5e
+      internalID: -639143360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-182
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 190
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9970ea070943fc40b6fc3f6d406da8d
+      internalID: -2056320621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-183
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 148
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38c5fb5e912385144926fb5474ea68c7
+      internalID: -820439731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-184
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 77
+        width: 18
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a94c09e20e4be9242aee821351539058
+      internalID: 1975192093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-185
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 484
+        width: 27
+        height: 28
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 559f961f6fcc5444e8f4e34cd65fb868
+      internalID: -2118419556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-186
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 192
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 008c0adf0f03264469c4d8ed8f894c10
+      internalID: 1588853142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-187
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 483
+        width: 26
+        height: 29
+      alignment: 9
+      pivot: {x: 0.42307693, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33f72118fcdc1424096fdc7ec549ee0d
+      internalID: 1674594324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-188
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 30
+        height: 32
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f0aa58eb2458d641b5ed3025876cc3a
+      internalID: 621607772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-189
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 398
+        width: 29
+        height: 28
+      alignment: 9
+      pivot: {x: 0.44827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e75c45e045acaab4bb94de674d7e7225
+      internalID: -1870829015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-19
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 396
+        width: 27
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.44827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff14b419ad8f3894eb6b2ce6e23aa486
+      internalID: 1478228481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-190
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 223
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4501d027eb91f094180b10e868ed9e72
+      internalID: -1316841583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-191
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 67
+        width: 31
+        height: 30
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2ca21edc52a2d940bf08dc829d8543f
+      internalID: 327851445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-192
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 90
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c87434f0157edd40b9df4bb189a205b
+      internalID: 1854706889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-193
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 359
+        width: 24
+        height: 30
+      alignment: 9
+      pivot: {x: 0.45833334, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a87492e29738fc40a9fe7a5f27a96ce
+      internalID: -725087964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-194
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 307
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6e5427b22f02894981c2b110bdd35ab
+      internalID: -1674911437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-195
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 481
+        width: 29
+        height: 31
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15c9ee2c4030a8645a8f51edb3f3c184
+      internalID: -467461797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-196
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 460
+        width: 27
+        height: 26
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.53846157}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c574550f187ec148bf8ee09ce32de57
+      internalID: 491954055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-197
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 425
+        width: 24
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72690301d26317f409f63c1091d14d7c
+      internalID: 417745007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-198
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 358
+        width: 29
+        height: 30
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8aab922e3e3aac841a8f39e6481de34c
+      internalID: 1827274610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-199
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 341
+        width: 28
+        height: 28
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7373fb004601dc9478f8f41e20af2bd3
+      internalID: 1424464918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-2
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 252
+        width: 28
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5217391}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ebb561c76978f540be4723c981612fc
+      internalID: -1910438212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-20
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 370
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98e46634b079d16428583c3cad650e1b
+      internalID: -890613682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-200
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 396
+        width: 29
+        height: 20
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc14b80c2b0acb448b8b4e907715ecc9
+      internalID: -369321190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-201
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 137
+        width: 31
+        height: 29
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11a4face60a0de347a8bac9912fb4d36
+      internalID: -729093255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-202
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 251
+        width: 26
+        height: 28
+      alignment: 9
+      pivot: {x: 0.53846157, y: 0.4642857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc1a07c4c1ef2b644ab708bae269d283
+      internalID: 1177876697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-203
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 98
+        width: 31
+        height: 30
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69c5276b0d22c4940a8974b298f68818
+      internalID: 1137423575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-204
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 35
+        width: 22
+        height: 31
+      alignment: 9
+      pivot: {x: 0.54545456, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cf8fe44a4edf9143991e2d10bc02258
+      internalID: -147094756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-205
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 400
+        width: 28
+        height: 28
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4728e78d17418347b4e6520589d863b
+      internalID: 811082748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-206
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 389
+        width: 29
+        height: 30
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5098538505b8c264ea12bdcf77816a82
+      internalID: 1218112544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-207
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 39
+        width: 23
+        height: 28
+      alignment: 9
+      pivot: {x: 0.65217394, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c1a0911012d5934b9824d11bb9de890
+      internalID: 1057559544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-208
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 428
+        width: 28
+        height: 28
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f489358ae80d7f4fbc7a8366fccbdca
+      internalID: -1619247082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-209
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 456
+        width: 28
+        height: 28
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be86b5a9f8d7a4746b3d9c23c32d4b64
+      internalID: -100114206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-21
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 481
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56c7ea53a3d84a64eba9cbe6b99a6627
+      internalID: 454541942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-210
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 6
+        width: 30
+        height: 30
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6906f61fade1b444ca1255b1421260bf
+      internalID: -728015396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-211
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 484
+        width: 28
+        height: 28
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3b69a1ff86f45e4eb835d48f42fcc17
+      internalID: -1721106188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-212
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 285
+        width: 26
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ad814a48356957458de56fe016b5652
+      internalID: -1677312247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-213
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 454
+        width: 27
+        height: 29
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbce0c523f90a564e9da722e2a1c939d
+      internalID: 1906765227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-214
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 29
+        height: 32
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a36c7831c334d6449625189ebb574d0
+      internalID: -1245962470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-215
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 66
+        width: 23
+        height: 31
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3e0b80943572704fa926c66be1ba194
+      internalID: 430656490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-216
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 419
+        width: 30
+        height: 31
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2db5edfc1cb649f4c84a2d90ef2e9a8e
+      internalID: -1944152199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-217
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 388
+        width: 30
+        height: 31
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aefc1357babff9d4e82d11e619ac9f86
+      internalID: -1535766418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-218
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 295
+        width: 27
+        height: 31
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7149ea81b72f19d4e84ba54bb1281655
+      internalID: 1212001181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-219
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 204
+        width: 27
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d1fefdf54c3a7a4bb71615d4f4fde38
+      internalID: 1458707660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-22
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 94
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce6ed1a351b4fe848a72566639a2eb14
+      internalID: -29006646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-220
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 431
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b41a764636e33249ab34ee90f9d80f8
+      internalID: 674901238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-221
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 297
+        width: 26
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0789896482c5574cb21d9b3d9a9615b
+      internalID: -1485432694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-222
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 420
+        width: 29
+        height: 30
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3223c858ecf98b48826a12dabf4bf86
+      internalID: -378402293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-223
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 234
+        width: 30
+        height: 30
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c23f9a5ffef02f545a3042db6637880d
+      internalID: 1418787084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-224
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 289
+        width: 29
+        height: 27
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfe9cf1c4a66f1e499556854d77ff8ea
+      internalID: -1881989699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-225
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 265
+        width: 30
+        height: 30
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5632a74f91a2d0d4796e36b56795f82a
+      internalID: -666059659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-226
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 345
+        width: 28
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97980befe8b42e343b8f5a1786b14c88
+      internalID: 1087458052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-227
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 274
+        width: 28
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cfa68ef4ab689e44b9afd86ad8d85cf
+      internalID: -1355353232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-228
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 361
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1607a41193e289b44a0389bf96be78dd
+      internalID: 1590027785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-229
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 392
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.55172414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 271fa8f847203eb49a4162cd318d36f6
+      internalID: -2066642864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-23
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 428
+        width: 29
+        height: 28
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c6b5985e47e8c24ea95a5066231bb74
+      internalID: -553253110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-230
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 400
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43a4373b5ec571841ad12b9aaa3e387c
+      internalID: -395501098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-231
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 488
+        width: 30
+        height: 24
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.45833334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18cfe305021bd1b438adc690082726ac
+      internalID: 665046082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-232
+      rect:
+        serializedVersion: 2
+        x: 478
+        y: 250
+        width: 28
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5, y: 0.47826087}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1295c569b522c9f44b62390d758a91c1
+      internalID: -1180278635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-233
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 5
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c188155d8f65f33429d54a480b63e812
+      internalID: 2087327662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-234
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 66
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99b6b463a0dcc1c4b8b752eed8e56d66
+      internalID: -971335963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-235
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 357
+        width: 30
+        height: 31
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31f99a162923a6b42bd8340a32d135b8
+      internalID: 499224276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-236
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 95
+        width: 27
+        height: 28
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb78b2d9280a753419f62c389de80eac
+      internalID: -1826577115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-237
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 165
+        width: 26
+        height: 26
+      alignment: 9
+      pivot: {x: 0.53846157, y: 0.53846157}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 078976defb0f3da4b81ce9acecb4234b
+      internalID: -167132954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-238
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 208
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7a1621cfc0dc314cbde69a0a71e2059
+      internalID: 736751168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-239
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 435
+        width: 27
+        height: 25
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c09761bdeaccd04a95af5f5edc2f4ff
+      internalID: 1217399145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-24
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 454
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.55172414, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65f90164d3a46e9418f2f08686269798
+      internalID: -1572051162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-240
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 410
+        width: 27
+        height: 25
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18d59f680af81aa42a04e42d0d3a9f12
+      internalID: -1494538817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-241
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 354
+        width: 27
+        height: 25
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 514598cedf647e745b29efc1c0683572
+      internalID: -638940999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-242
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 329
+        width: 27
+        height: 25
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bce7ec369fdd06541a83ad94380e5c3f
+      internalID: 210818192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-243
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 205
+        width: 27
+        height: 25
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c73acc7b96c21540ba5cbd09909930c
+      internalID: 1572081378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-244
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 206
+        width: 27
+        height: 25
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19b91ff05d416c242946ed0b2d0b93d1
+      internalID: -1901664672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-245
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 428
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8138cacb66dad344e9574acecc75c3b6
+      internalID: -1589854028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-246
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 314
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbad19c5aa0aab94aaff96262181cd84
+      internalID: 491644845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-247
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 421
+        width: 23
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5217391, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0947d897dffd2b2468ec80b5d23efae1
+      internalID: -31876050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-248
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 160
+        width: 27
+        height: 32
+      alignment: 9
+      pivot: {x: 0.44444445, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73831d0b43d7c2d4e8ee1ca67b50fb1a
+      internalID: -868960658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-249
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 160
+        width: 27
+        height: 32
+      alignment: 9
+      pivot: {x: 0.44444445, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8868a62c81e42748947d41a60ce8a3c
+      internalID: 708272336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-25
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 38
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b51e3a6800645f459f2d0cfccfa1a43
+      internalID: 1331746428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-250
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 192
+        width: 27
+        height: 32
+      alignment: 9
+      pivot: {x: 0.44444445, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53649438180ab9a49bb8b3215a1445d3
+      internalID: -183938672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-251
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 352
+        width: 27
+        height: 32
+      alignment: 9
+      pivot: {x: 0.44444445, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9d9f59b172a9f740bcda00e4535bcb7
+      internalID: -849152518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-252
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 320
+        width: 27
+        height: 32
+      alignment: 9
+      pivot: {x: 0.44444445, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46e186e3c219a114faa2431512a523b6
+      internalID: -1211339094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-253
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 450
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59eb4b109878e2d4cb90fe96504bdf6e
+      internalID: 1570549297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-254
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 484
+        width: 32
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73789f612cdf81148801158bee70bbbc
+      internalID: -1012836681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-255
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 36
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f29181b63d866e41a8aa20921f931b7
+      internalID: -497736271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-256
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 486
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9754e8312a16d6b47ac3ab2efac7de8e
+      internalID: -803647517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-257
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 419
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 298768ed671658b49b6fd1a916d590c7
+      internalID: -1224946896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-258
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 377
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ac8a57645782e641ba750f13f94a14e
+      internalID: 1364979854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-259
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 405
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6b17b267b70f1f4d9958559844b7cce
+      internalID: 1188768397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-26
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 303
+        width: 28
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ce8c061c541992458b03fea6c4cf401
+      internalID: 1267222153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-260
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 10
+        width: 28
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0cc4519467efd964792937f47da4d4ff
+      internalID: -1836933182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-261
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 321
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74a6d4a7dbf96a04199e39be1157dafd
+      internalID: -2036145822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-262
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 295
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 208be2064e2770b4fb2f240223386763
+      internalID: -1235286729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-263
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 123
+        width: 28
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27064278f96a40b47906c6b1d1f14d0e
+      internalID: 1592034963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-264
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 321
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a3c118214a58594f952dd9bc37a54f1
+      internalID: 68730019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-265
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 351
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54d5a66ad7ac57945937e66d20612b48
+      internalID: -1741641849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-266
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 379
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ef7eae2472a3d04bb9bd66fba67d21a
+      internalID: -1220590284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-267
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 370
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0618fb72cb010f4419caa33e3a64abe4
+      internalID: -1300160710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-268
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 344
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c9bdc42ca8068b44bd43293ea50883f
+      internalID: -70537320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-269
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 318
+        width: 28
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fe95dd3c587f234fbb1f6806fe4c5ed
+      internalID: 1762589148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-27
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 373
+        width: 28
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00dc0e2ecfb7db444b9cce6d6f75da1c
+      internalID: -1345238802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-270
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 451
+        width: 29
+        height: 30
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 088d7ecc17dfe9b41bfdd43dd89be500
+      internalID: -164265967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-271
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 388
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32520141eedabbd4cab946e2a07ae73c
+      internalID: 1105461999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-272
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 357
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11d8db42148524443a54e5da3ed03a5f
+      internalID: -1459992096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-273
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 326
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c75736d0685832f4a8f4d9a831d640c9
+      internalID: -843035333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-274
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 295
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 981caf8845d00674ab1069d86cf5c30a
+      internalID: -1731469331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-275
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 264
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c327b032bf72c3642932547e6241f414
+      internalID: 54037859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-276
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 481
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d74ac399c2a4a649ae1fd02240e2859
+      internalID: -1490338741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-277
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 298
+        width: 32
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3d91b2a4a2b9754abb1b686cf96f69d
+      internalID: 987672168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-278
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 31
+        height: 32
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dc114542f91edf46a0b8b5e50b4c529
+      internalID: 760863703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-279
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 275
+        width: 32
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c89d4567d29386419b8bde93525aa2b
+      internalID: -1334885215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-28
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 154
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1385ab9e363328d4eae02a54e6d33146
+      internalID: 1127583462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-280
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 158
+        width: 19
+        height: 26
+      alignment: 9
+      pivot: {x: 0.47368422, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95059bf34aa4c8d449dd45649dd5975b
+      internalID: 1480835516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-281
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 328
+        width: 25
+        height: 30
+      alignment: 9
+      pivot: {x: 0.52, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a6cca23bfa59ee499eeb12ac8179371
+      internalID: 1536172879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-282
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 160
+        width: 30
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab5ea06c7e5c71444b189850ebd35cc3
+      internalID: 286616671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-283
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 97
+        width: 24
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 796e453f82d5db44f878cb86e9fa894b
+      internalID: -18810986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-29
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 67
+        width: 27
+        height: 28
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72e58211d29909b41bb37d74ae0dc8aa
+      internalID: -1766812343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-3
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 160
+        width: 26
+        height: 24
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5416667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 975da15143a742f4aa82c439ee87852e
+      internalID: -1990832539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-30
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 205
+        width: 24
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43ba136e34d59114dbab9120da4f1927
+      internalID: -294759069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-31
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 42
+        width: 31
+        height: 29
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ceec5befa070355419e254fc8d130563
+      internalID: -905243525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-32
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 245
+        width: 28
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b56c08950e437c942af9947195602a3b
+      internalID: 745244484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-33
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 128
+        width: 29
+        height: 32
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5b2d46f6aa5e9e48977de5a49a46772
+      internalID: -1054876607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-34
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 189
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4584e8e91b826d54aa9227429bfa613a
+      internalID: -215697754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-35
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 169
+        width: 27
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a27d1d9695db8d4d92bf45c2a984199
+      internalID: 623420632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-36
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 232
+        width: 27
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3e9fc9d7228f20489f736df416047b9
+      internalID: 1843356511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-37
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 344
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faf0e34c7743395449a37e5fda9b55da
+      internalID: 1106039805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-38
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 218
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef5e2378ebba3b64fb2023638ee4f676
+      internalID: -1468624525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-39
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 230
+        width: 28
+        height: 22
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 487f88ab816ef4b4d8615e65d9107952
+      internalID: 731752800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-4
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 317
+        width: 29
+        height: 27
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5925926}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1222332750446d41b511533affc25d7
+      internalID: 2093836799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-40
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 401
+        width: 28
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da89d1e973e16884ea1831ce0fabcffd
+      internalID: 892977368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-41
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 456
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a55395ce1315e5b4ea8a186809994150
+      internalID: -1026624955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-42
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 375
+        width: 30
+        height: 26
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc7ca722ea2c1f846805ca933cd7a2c8
+      internalID: -1684294484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-43
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 347
+        width: 32
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90ada225d1dc9564bb42d907f935ac32
+      internalID: -1137594168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-44
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 100
+        width: 28
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48c2a1b9a2674fb4c8190072511ff612
+      internalID: -1276712681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-45
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 224
+        width: 29
+        height: 32
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ff606c2a4a02704fb5804c2a214a2fe
+      internalID: -552095034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-46
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 130
+        width: 31
+        height: 30
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bc678b63b8ae5b499e28adfc3f6409b
+      internalID: -981602731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-47
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 255
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d14fa29cb93d2c041af320d70bc9158c
+      internalID: 753977007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-48
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 429
+        width: 28
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0c14660e3601eb4592c79438000c4ef
+      internalID: 264195277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-49
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 39
+        width: 27
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f6f37b54357dd0468ebd7f2877576a6
+      internalID: -1939207607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-5
+      rect:
+        serializedVersion: 2
+        x: 457
+        y: 486
+        width: 25
+        height: 26
+      alignment: 9
+      pivot: {x: 0.52, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5471f088d7923940b41b7f4765e0521
+      internalID: -1803485602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-50
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 274
+        width: 28
+        height: 29
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.55172414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4936f494d480417489419be9740176e3
+      internalID: -1476622194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-51
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 239
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b2d2cab49c056944a6a26d3dd02ba64
+      internalID: 516775571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-52
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 426
+        width: 30
+        height: 28
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27b2c4a5617c71449be44f0a6706c4e9
+      internalID: -1319522713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-53
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 450
+        width: 31
+        height: 31
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dea549886142aff42bea341a5cefa4bf
+      internalID: -1624332568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-54
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 058c29628be539349b18f78158ef4931
+      internalID: -2005047176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-55
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 13
+        width: 31
+        height: 29
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 864c79ea43bd46d4db28cc6dfd243c34
+      internalID: -1603183774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-56
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 296
+        width: 30
+        height: 30
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d80b18ca7e55a542ba0d456df98e307
+      internalID: -1739040508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-57
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 457
+        width: 28
+        height: 27
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f952fa77f3a2de54f97b421cb311f0dc
+      internalID: 149908348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-58
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 363
+        width: 28
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5714286, y: 0.55172414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a9adce00fcdb2747b92015c97d103c2
+      internalID: -1386617830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-59
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 485
+        width: 28
+        height: 27
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5c388765e766974d94cfe19d0117d7b
+      internalID: -1267340342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-6
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 327
+        width: 30
+        height: 30
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 664cb1a04cb0a1d4e9b7d1d8c561a490
+      internalID: 1007260176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-60
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 132
+        width: 28
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5714286, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 850f92a5c71ac9a42bca2df67f618c6e
+      internalID: -1408656327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-61
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 11
+        width: 27
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5555556, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f6227d0009f989458b22fc4d8129359
+      internalID: 551379355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-62
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 251
+        width: 28
+        height: 28
+      alignment: 9
+      pivot: {x: 0.53571427, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c33ffcf8e2329c74e92879326aab9fae
+      internalID: -275854734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-63
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 184
+        width: 27
+        height: 22
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c45af60dceaeda7428e3c59a24526817
+      internalID: 111942152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-64
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 335
+        width: 32
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf425dafa9969f046a2c49f3f75f28b1
+      internalID: -95927708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-65
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 484
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d271010bdbb102c44bfeb4764fa11880
+      internalID: 442531812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-66
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 456
+        width: 29
+        height: 28
+      alignment: 9
+      pivot: {x: 0.55172414, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd4df2111b9c9914fbdc310dfffce2bf
+      internalID: 833185450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-67
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 425
+        width: 25
+        height: 29
+      alignment: 9
+      pivot: {x: 0.48, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2fcdc41cda2e614288c2d027295dcd3
+      internalID: -1398455459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-68
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 279
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc49fb386bc27194a9320210d685eb4d
+      internalID: 361948021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-69
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 288
+        width: 27
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51518b5b52fafaf4eb2940d56220eca7
+      internalID: -1429195788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-7
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 0
+        width: 30
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.52380955}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3681e1ab3cd0a0045923df37554e68ef
+      internalID: 1794225080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-70
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 425
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 929553c717a91d748bcac2fe5676dc8e
+      internalID: -2081344423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-71
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 313
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac1759d87569c014caf6b0687eb03ecd
+      internalID: 1360333438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-72
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 342
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 139fda967675e56488a76c1f78c2ef97
+      internalID: 1828204053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-73
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 372
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad34346fa3693cd40836d6e44b630d73
+      internalID: 248289884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-74
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 400
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a2f1048537cc54459c5feea7b9deebb
+      internalID: -651594370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-75
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 428
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ccb07e824b2c174a98ca118b5576e85
+      internalID: 1309744341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-76
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 403
+        width: 30
+        height: 26
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4cf794191f4f244e86c0b248344d108
+      internalID: -623428507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-77
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 452
+        width: 22
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3044ed8d8be57d943b1e49b972b0fad5
+      internalID: -1752670201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-78
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 38
+        width: 28
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de55a9e1c1a91e540b531f259c9fac07
+      internalID: 1818274916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-79
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 454
+        width: 24
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51724136}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcc5cdd8674495a4e9a99e64c7a5e78f
+      internalID: -722751659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-8
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 95
+        width: 27
+        height: 28
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9313ce43c71c6d94f9865f8728c194fb
+      internalID: 351959312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-80
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 105
+        width: 21
+        height: 28
+      alignment: 9
+      pivot: {x: 0.47619048, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c6209bbb6681264f837a7fe5357ae61
+      internalID: -1750350208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-81
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 262
+        width: 27
+        height: 27
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cefea16623aae784795754e60ced44be
+      internalID: 1517915693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-82
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 167
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 452fee4f3b719b349a67be27e589e30f
+      internalID: 481483620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-83
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 464
+        width: 29
+        height: 24
+      alignment: 9
+      pivot: {x: 0.55172414, y: 0.5416667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27692656c7945b346af7a356e58fbbed
+      internalID: -181004826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-84
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 456
+        width: 30
+        height: 28
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5b3c8c8c7090c748b312140b7e569e4
+      internalID: -2104821346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-85
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 484
+        width: 30
+        height: 28
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b462b87aa38fb94984823a324087cf4
+      internalID: -1668199081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-86
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 11
+        width: 23
+        height: 28
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c69328283dc6b22488a513ab9e74999a
+      internalID: -1690346874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-87
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 273
+        width: 28
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e1556db76c91bf42bdc9b8f0b94803a
+      internalID: -1435776192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-88
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 186
+        width: 22
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5263158}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 460f54a244c98de48853f33d09c3593d
+      internalID: 1438001448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-89
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 196
+        width: 30
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0e07093bede22d4dbda1318963fcbcd
+      internalID: 1842644183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-9
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 235
+        width: 24
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5185185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71b0aac7513c54f4785590ce3125b9fd
+      internalID: 149431102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-90
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 105
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed8ca58647d24be498bb2edbcf2d32ad
+      internalID: 2047024987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-91
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 214
+        width: 28
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5263158}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ace10f8c95a558b469c362e257038bc1
+      internalID: -841588928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-92
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 235
+        width: 27
+        height: 30
+      alignment: 9
+      pivot: {x: 0.4074074, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a4a9e95b7a4c9046b7fc0948086e4b6
+      internalID: 55760448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-93
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 266
+        width: 27
+        height: 30
+      alignment: 9
+      pivot: {x: 0.4074074, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecace9062102fb24bb5920002e924eeb
+      internalID: -1012997759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-94
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 440
+        width: 29
+        height: 24
+      alignment: 9
+      pivot: {x: 0.44827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68dc9ec6665c48d44a1008709009c13e
+      internalID: 1472389173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-95
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 416
+        width: 29
+        height: 24
+      alignment: 9
+      pivot: {x: 0.44827586, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8df41fe6d8d5868439a6cb0afca79c07
+      internalID: -465754187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-96
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 147
+        width: 26
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a00dac92f481a6443a73cd018a8bfc75
+      internalID: 1987865962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-97
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 166
+        width: 28
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d394356ec5ef1f4a93fc40ec5b9da2d
+      internalID: 1315891477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-98
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 332
+        width: 29
+        height: 29
+      alignment: 9
+      pivot: {x: 0.55172414, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5ca1fa9093460145ba1fb707dce1ce4
+      internalID: 554785577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SFIP-99
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 482
+        width: 29
+        height: 30
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 795bb13d6d5c34b498a4401e0df9ebe4
+      internalID: -2028213952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPIP-108
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c0cd28d2f007b4498128d9f421f9141
+      internalID: -142517125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 7e2fcdb6a5b07cb4085756c83839d931
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      SFIP-45: -552095034
+      SFIP-13: 1545711976
+      SFIP-7: 1794225080
+      SFIP-95: -465754187
+      SFIP-166: -817054086
+      SFIP-6: 1007260176
+      SFIP-70: -2081344423
+      SFIP-207: 1057559544
+      SFIP-106: 520654856
+      SFIP-177: -516921913
+      SFIP-135: 1499490167
+      SFIP-235: 499224276
+      SFIP-169: -1802871509
+      SFIP-250: -183938672
+      SFIP-1: 1147716476
+      SFIP-82: 481483620
+      SFIP-237: -167132954
+      SFIP-269: 1762589148
+      SFIP-194: -1674911437
+      SFIP-43: -1137594168
+      SFIP-145: 780263504
+      SFIP-25: 1331746428
+      SFIP-152: -409983255
+      SFIP-39: 731752800
+      SFIP-215: 430656490
+      SFIP-114: 148816938
+      SFIP-245: -1589854028
+      SFIP-60: -1408656327
+      SFIP-120: 190749152
+      SFIP-0: -223566443
+      SFIP-116: 471653606
+      SFIP-150: 1867170326
+      SFIP-188: 621607772
+      SFIP-47: 753977007
+      SFIP-57: 149908348
+      SFIP-9: 149431102
+      SFIP-249: 708272336
+      SFIP-233: 2087327662
+      SFIP-201: -729093255
+      SFIP-33: -1054876607
+      SFIP-115: 1647171121
+      SFIP-179: -790799213
+      SFIP-248: -868960658
+      SFIP-81: 1517915693
+      SFIP-88: 1438001448
+      SFIP-131: 688897247
+      SFIP-202: 1177876697
+      SFIP-109: -971071000
+      SFIP-189: -1870829015
+      SFIP-246: 491644845
+      SFIP-275: 54037859
+      SFIP-91: -841588928
+      SFIP-97: 1315891477
+      SFIP-87: -1435776192
+      SFIP-19: 1478228481
+      SFIP-21: 454541942
+      SFIP-240: -1494538817
+      SFIP-262: -1235286729
+      SFIP-30: -294759069
+      SFIP-223: 1418787084
+      SFIP-119: 1554718456
+      SFIP-178: 582409545
+      SFIP-272: -1459992096
+      SFIP-55: -1603183774
+      SFIP-101: -1510067163
+      SFIP-165: 759892215
+      SFIP-141: 1505135698
+      SFIP-187: 1674594324
+      SFIP-222: -378402293
+      SFIP-239: 1217399145
+      SFIP-138: -618729423
+      SFIP-241: -638940999
+      SFIP-278: 760863703
+      SFIP-104: -1953789753
+      SFIP-170: -2001600330
+      SFIP-199: 1424464918
+      SFIP-46: -981602731
+      SFIP-74: -651594370
+      SFIP-168: -1329225292
+      SFIP-16: 244436534
+      SFIP-163: -1604201094
+      SFIP-51: 516775571
+      SFIP-181: -639143360
+      SFIP-198: 1827274610
+      SFIP-186: 1588853142
+      SFIP-206: 1218112544
+      SFIP-133: -1134132731
+      SFIP-176: 124665197
+      SFIP-10: -681806979
+      SFIP-268: -70537320
+      SFIP-234: -971335963
+      SFIP-49: -1939207607
+      SFIP-225: -666059659
+      SFIP-160: -5960340
+      SFIP-212: -1677312247
+      SFIP-99: -2028213952
+      SFIP-230: -395501098
+      SFIP-185: -2118419556
+      SFIP-195: -467461797
+      SFIP-139: 943500460
+      SFIP-182: -2056320621
+      SFIP-61: 551379355
+      SFIP-26: 1267222153
+      SFIP-102: -182573618
+      SFIP-282: 286616671
+      SFIP-28: 1127583462
+      SFIP-96: 1987865962
+      SFIP-31: -905243525
+      SFIP-123: 1037090951
+      SFIP-147: -575502394
+      SFIP-14: -1664952130
+      SFIP-264: 68730019
+      SFIP-242: 210818192
+      SFIP-35: 623420632
+      SFIP-8: 351959312
+      SFIP-68: 361948021
+      SFIP-128: 1501016745
+      SFIP-276: -1490338741
+      SFIP-132: 415597532
+      SPIP-108: -142517125
+      SFIP-164: -753298253
+      SFIP-257: -1224946896
+      SFIP-273: -843035333
+      SFIP-174: 1146817326
+      SFIP-146: -479566430
+      SFIP-22: -29006646
+      SFIP-108: -2063387541
+      SFIP-280: 1480835516
+      SFIP-261: -2036145822
+      SFIP-112: -624331387
+      SFIP-236: -1826577115
+      SFIP-69: -1429195788
+      SFIP-196: 491954055
+      SFIP-213: 1906765227
+      SFIP-73: 248289884
+      SFIP-3: -1990832539
+      SFIP-75: 1309744341
+      SFIP-238: 736751168
+      SFIP-229: -2066642864
+      SFIP-219: 1458707660
+      SFIP-15: -699853963
+      SFIP-156: -1403872286
+      SFIP-216: -1944152199
+      SFIP-184: 1975192093
+      SFIP-162: 107113260
+      SFIP-220: 674901238
+      SFIP-136: -1082127054
+      SFIP-37: 1106039805
+      SFIP-44: -1276712681
+      SFIP-205: 811082748
+      SFIP-17: -910749390
+      SFIP-228: 1590027785
+      SFIP-24: -1572051162
+      SFIP-89: 1842644183
+      SFIP-244: -1901664672
+      SFIP-4: 2093836799
+      SFIP-253: 1570549297
+      SFIP-63: 111942152
+      SFIP-11: 21651149
+      SFIP-157: 481820441
+      SFIP-20: -890613682
+      SFIP-171: -2037267113
+      SFIP-256: -803647517
+      SFIP-42: -1684294484
+      SFIP-243: 1572081378
+      SFIP-130: 590662967
+      SFIP-40: 892977368
+      SFIP-265: -1741641849
+      SFIP-32: 745244484
+      SFIP-58: -1386617830
+      SFIP-134: 54957688
+      SFIP-52: -1319522713
+      SFIP-122: 809834280
+      SFIP-153: 53417453
+      SFIP-221: -1485432694
+      SFIP-173: 2026571327
+      SFIP-227: -1355353232
+      SFIP-105: -1561637719
+      SFIP-53: -1624332568
+      SFIP-72: 1828204053
+      SFIP-12: 972003107
+      SFIP-266: -1220590284
+      SFIP-232: -1180278635
+      SFIP-180: 294445578
+      SFIP-260: -1836933182
+      SFIP-271: 1105461999
+      SFIP-217: -1535766418
+      SFIP-191: 327851445
+      SFIP-214: -1245962470
+      SFIP-159: -1216316872
+      SFIP-113: -614525044
+      SFIP-151: -1713227855
+      SFIP-158: 1627777947
+      SFIP-210: -728015396
+      SFIP-62: -275854734
+      SFIP-84: -2104821346
+      SFIP-103: 321793906
+      SFIP-263: 1592034963
+      SFIP-183: -820439731
+      SFIP-148: -208745692
+      SFIP-226: 1087458052
+      SFIP-78: 1818274916
+      SFIP-110: -1741547931
+      SFIP-267: -1300160710
+      SFIP-193: -725087964
+      SFIP-111: 1062780322
+      SFIP-67: -1398455459
+      SFIP-86: -1690346874
+      SFIP-80: -1750350208
+      SFIP-197: 417745007
+      SFIP-2: -1910438212
+      SFIP-50: -1476622194
+      SFIP-140: -2083550573
+      SFIP-64: -95927708
+      SFIP-117: 615862893
+      SFIP-41: -1026624955
+      SFIP-255: -497736271
+      SFIP-247: -31876050
+      SFIP-121: -729091925
+      SFIP-137: -104404389
+      SFIP-142: 2144939266
+      SFIP-92: 55760448
+      SFIP-143: -1254646255
+      SFIP-18: 797248564
+      SFIP-90: 2047024987
+      SFIP-29: -1766812343
+      SFIP-203: 1137423575
+      SFIP-154: 2057958360
+      SFIP-38: -1468624525
+      SFIP-283: -18810986
+      SFIP-100: 1174509856
+      SFIP-124: -1214297150
+      SFIP-149: 23712979
+      SFIP-218: 1212001181
+      SFIP-36: 1843356511
+      SFIP-94: 1472389173
+      SFIP-204: -147094756
+      SFIP-48: 264195277
+      SFIP-54: -2005047176
+      SFIP-77: -1752670201
+      SFIP-252: -1211339094
+      SFIP-144: -112070080
+      SFIP-167: -551084410
+      SFIP-98: 554785577
+      SFIP-118: -95171800
+      SFIP-83: -181004826
+      SFIP-274: -1731469331
+      SFIP-76: -623428507
+      SFIP-125: -1904787951
+      SFIP-211: -1721106188
+      SFIP-65: 442531812
+      SFIP-172: -1452686923
+      SFIP-129: -1150258422
+      SFIP-155: -48182796
+      SFIP-190: -1316841583
+      SFIP-161: 428729591
+      SFIP-79: -722751659
+      SFIP-281: 1536172879
+      SFIP-259: 1188768397
+      SFIP-270: -164265967
+      SFIP-231: 665046082
+      SFIP-192: 1854706889
+      SFIP-59: -1267340342
+      SFIP-279: -1334885215
+      SFIP-175: 2137537963
+      SFIP-5: -1803485602
+      SFIP-209: -100114206
+      SFIP-107: -1363678104
+      SFIP-258: 1364979854
+      SFIP-254: -1012836681
+      SFIP-56: -1739040508
+      SFIP-27: -1345238802
+      SFIP-93: -1012997759
+      SFIP-126: -638884889
+      SFIP-66: 833185450
+      SFIP-208: -1619247082
+      SFIP-200: -369321190
+      SFIP-23: -553253110
+      SFIP-71: 1360333438
+      SFIP-85: -1668199081
+      SFIP-251: -849152518
+      SFIP-34: -215697754
+      SFIP-127: 2111308702
+      SFIP-277: 987672168
+      SFIP-224: -1881989699
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

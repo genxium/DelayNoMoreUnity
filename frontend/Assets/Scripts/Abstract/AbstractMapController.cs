@@ -127,6 +127,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
     protected KvPriorityQueue<string, SFXSource>.ValScore sfxNodeScore = (x) => x.score;
 
+    public BattleInputManager iptmgr;
+
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
@@ -212,7 +214,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here
             initConfirmedList = (existingInputFrame.ConfirmedList | selfJoinIndexMask);
         }
-        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         currSelfInput = iptmgr.GetEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
         prefabbedInputList[(joinIndex - 1)] = currSelfInput;
         while (inputBuffer.EdFrameId <= inputFrameId) {
@@ -1191,7 +1192,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         bgmSource.Stop();
         battleState = ROOM_STATE_STOPPED;
 
-        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         iptmgr.reset();
     }
 
@@ -1212,7 +1212,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected abstract void sendInputFrameUpsyncBatch(int latestLocalInputFrameId);
 
     protected void enableBattleInput(bool yesOrNo) {
-        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         iptmgr.enable(yesOrNo);
     }
 

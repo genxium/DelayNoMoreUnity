@@ -145,6 +145,8 @@ message InputFrameDecoded {
 	int32 dy = 2;
 	int32 btnALevel = 3;
 	int32 btnBLevel = 4;
+	int32 btnCLevel = 5;
+	int32 btnDLevel = 6;
 }
 
 message InputFrameUpsync {
