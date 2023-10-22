@@ -1669,6 +1669,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.Mp = 1000;
             playerInRdf.MaxMp = 1000;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
+
+            // TODO: Remove the hardcoded InventorySlot
+            AssignToInventorySlot(InventorySlotStockType.TimedIv, 1, 0, ShortFreezer, playerInRdf.Inventory.Slots[0]);
+            playerInRdf.Inventory.Slots[0].DefaultQuota = 1;
+            playerInRdf.Inventory.Slots[0].DefaultFramesToRecover = 480;
         }
 
         int npcLocalId = 0;
@@ -2179,64 +2184,111 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId) {
-        if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
-        var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
-        if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit >= currSkillConfig.Hits.Count) {
-            return false;
-        }
-        var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
-        if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) {
-            return false;
-        }
-        var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
-        if (!vfxConfig.OnCharacter) return false;
-        // The outer "if" is less costly than calculating viewport point.
-        // if the current position is within camera FOV
-        var speciesKvPq = cachedVfxNodes[currBulletConfig.ActiveVfxSpeciesId];
-        string lookupKey = "ch-" + currCharacterDownsync.JoinIndex.ToString();
-        var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
-        if (null == vfxAnimHolder) {
-            vfxAnimHolder = speciesKvPq.Pop();
-            //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-        } else {
-            //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-        }
-
-        if (null == vfxAnimHolder) {
-            throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
-        }
-        
-        bool isInitialFrame = (currBulletConfig.StartupFrames == currCharacterDownsync.FramesInChState);
-        // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet!
-
-        if (vfxConfig.MotionType == VfxMotionType.Tracing) {
-            newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-            vfxAnimHolder.gameObject.transform.position = newPosHolder;
-        } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
-            if (VfxDashingActive.SpeciesId == currBulletConfig.ActiveVfxSpeciesId) {
-                // Special offset for Dashing
-                newPosHolder.Set(wx, wy - .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, vfxAnimHolder.gameObject.transform.position.z);
+        // Buff Vfx
+        for (int i = 0; i < currCharacterDownsync.BuffList.Count; i++) {
+            var buff = currCharacterDownsync.BuffList[i];
+            if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;
+            if (NO_VFX_ID == buff.BuffConfig.CharacterVfxSpeciesId) continue;
+            if (BuffStockType.Timed == buff.BuffConfig.StockType && 0 >= buff.Stock) continue;
+            var vfxConfig = vfxDict[buff.BuffConfig.CharacterVfxSpeciesId];
+            if (!vfxConfig.OnCharacter) continue;
+            var speciesKvPq = cachedVfxNodes[buff.BuffConfig.CharacterVfxSpeciesId];
+            string lookupKey = "ch-buff-" + currCharacterDownsync.JoinIndex.ToString() + "-" + i;
+            var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
+            if (null == vfxAnimHolder) {
+                vfxAnimHolder = speciesKvPq.Pop();
+                //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for lookupKey={1} at wpos=({2}, {3})", rdfId, lookupKey, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
             } else {
+                //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for lookupKey={1} at wpos=({2}, {3})", rdfId, lookupKey, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+            }
+
+            if (null == vfxAnimHolder) {
+                throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
+            }
+
+            bool isInitialFrame = (buff.Stock == buff.BuffConfig.Stock);
+
+            if (vfxConfig.MotionType == VfxMotionType.Tracing) {
                 newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                vfxAnimHolder.gameObject.transform.position = newPosHolder;
+            } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
+                newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                vfxAnimHolder.gameObject.transform.position = newPosHolder;
             }
-            vfxAnimHolder.gameObject.transform.position = newPosHolder;
-        }
 
-        if (isInitialFrame) {
-            // Regardless of "vfxConfig.DurationType" 
-            if (0 > currCharacterDownsync.DirX) {
-                vfxAnimHolder.attachedPsr.flip = new Vector3(-1, 0);
-            } else {
-                vfxAnimHolder.attachedPsr.flip = new Vector3(1, 0);
-            }
-            if (!vfxAnimHolder.attachedPs.isPlaying) {
-                // For a multi-hit bullet with vfx, we might need this to prevent duplicate triggers
+            if (isInitialFrame) {
+                vfxAnimHolder.attachedPs.Stop();
                 vfxAnimHolder.attachedPs.Play();
             }
+            vfxAnimHolder.score = rdfId;
+            speciesKvPq.Put(lookupKey, vfxAnimHolder);
         }
-        vfxAnimHolder.score = rdfId;
-        speciesKvPq.Put(lookupKey, vfxAnimHolder);
 
+        // Bullet Vfx
+        {
+            if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
+            var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+            if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit >= currSkillConfig.Hits.Count) {
+                return false;
+            }
+            var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
+            if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) {
+                return false;
+            }
+
+            var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
+            if (!vfxConfig.OnCharacter) return false;
+            // The outer "if" is less costly than calculating viewport point.
+            // if the current position is within camera FOV
+            var speciesKvPq = cachedVfxNodes[currBulletConfig.ActiveVfxSpeciesId];
+            string lookupKey = "ch-" + currCharacterDownsync.JoinIndex.ToString();
+            var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
+            if (null == vfxAnimHolder) {
+                vfxAnimHolder = speciesKvPq.Pop();
+                //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+            } else {
+                //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+            }
+
+            if (null == vfxAnimHolder) {
+                throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
+            }
+
+            bool isInitialFrame = (currBulletConfig.StartupFrames == currCharacterDownsync.FramesInChState);
+            // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet!
+
+            if (vfxConfig.MotionType == VfxMotionType.Tracing) {
+                newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                vfxAnimHolder.gameObject.transform.position = newPosHolder;
+            } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
+                if (VfxDashingActive.SpeciesId == currBulletConfig.ActiveVfxSpeciesId) {
+                    // Special offset for Dashing
+                    newPosHolder.Set(wx, wy - .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, vfxAnimHolder.gameObject.transform.position.z);
+                } else {
+                    newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                }
+                vfxAnimHolder.gameObject.transform.position = newPosHolder;
+            }
+
+            if (isInitialFrame) {
+                // Regardless of "vfxConfig.DurationType" 
+                if (0 > currCharacterDownsync.DirX) {
+                    vfxAnimHolder.attachedPsr.flip = new Vector3(-1, 0);
+                } else {
+                    vfxAnimHolder.attachedPsr.flip = new Vector3(1, 0);
+                }
+                if (0 < currCharacterDownsync.ActiveSkillHit && !vfxAnimHolder.attachedPs.isPlaying) { 
+                    // For a multi-hit bullet with vfx, we might need this to prevent duplicate triggers
+                    vfxAnimHolder.attachedPs.Play();
+                } else {
+                    vfxAnimHolder.attachedPs.Stop();
+                    vfxAnimHolder.attachedPs.Play();
+                }
+            }
+            vfxAnimHolder.score = rdfId;
+            speciesKvPq.Put(lookupKey, vfxAnimHolder);
+        }
+        
         return true;
     }
 

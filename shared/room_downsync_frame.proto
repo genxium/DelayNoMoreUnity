@@ -610,8 +610,9 @@ message BuffConfig {
     int32 meleeHardnessDelta = 10;
     int32 fireballHardnessDelta = 11;
     bool invinsible = 12;
-
     repeated DebuffConfig associatedDebuffs = 1024; // There's a reason why type "DebuffConfig" instead of just the speciesId is used here, as "BuffConfig" itself is already seeked via heap-RAM dictionary look from "Buff.speciesId", we'd like to reduce the count of heap-RAM access when stepping battle dynamics  
+
+    int32 characterVfxSpeciesId = 2048;
 }
 
 message Buff {

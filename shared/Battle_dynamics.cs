@@ -166,16 +166,18 @@ namespace shared {
             }
 
             if (PATTERN_ID_NO_OP == patternId) {
-                if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
-                    if (0 > decodedInputHolder.Dy) {
-                        patternId = PATTERN_DOWN_B;
-                    } else if (0 < decodedInputHolder.Dy) {
-                        patternId = PATTERN_UP_B;
+                if (0 < decodedInputHolder.BtnBLevel) {
+                    if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
+                        if (0 > decodedInputHolder.Dy) {
+                            patternId = PATTERN_DOWN_B;
+                        } else if (0 < decodedInputHolder.Dy) {
+                            patternId = PATTERN_UP_B;
+                        } else {
+                            patternId = PATTERN_B;
+                        }
                     } else {
-                        patternId = PATTERN_B;
+                        patternId = PATTERN_HOLD_B;
                     }
-                } else {
-                    patternId = PATTERN_HOLD_B;
                 }
             }
 

@@ -3,6 +3,106 @@ using System.Collections.Immutable;
 
 namespace shared {
     public partial class Battle {
+        // vfxConfigs
+        public const int EXPLOSION_SPECIES_FOLLOW = 0;
+        public const int EXPLOSION_SPECIES_NONE = -1;
+
+        public static VfxConfig VfxDashingActive = new VfxConfig {
+            SpeciesId = 1,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
+        public static VfxConfig VfxFireExplodingBig = new VfxConfig {
+            SpeciesId = 2,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxIceExplodingBig = new VfxConfig {
+            SpeciesId = 3,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxFireSlashActive = new VfxConfig {
+            SpeciesId = 4,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
+        public static VfxConfig VfxSlashActive = new VfxConfig {
+            SpeciesId = 5,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
+        public static VfxConfig VfxSpikeSlashExplodingActive = new VfxConfig {
+            SpeciesId = 6,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxFirePointLightActive = new VfxConfig {
+            SpeciesId = 7,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.Repeating,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxPistolBulletExploding = new VfxConfig {
+            SpeciesId = 8,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxSlashExploding = new VfxConfig {
+            SpeciesId = 9,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true
+        };
+
+        public static VfxConfig VfxIceLingering = new VfxConfig {
+            SpeciesId = 10,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.Repeating,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
+        public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
+             new[]
+             {
+                    new KeyValuePair<int, VfxConfig>(VfxDashingActive.SpeciesId, VfxDashingActive),
+                    new KeyValuePair<int, VfxConfig>(VfxFireExplodingBig.SpeciesId, VfxFireExplodingBig),
+                    new KeyValuePair<int, VfxConfig>(VfxIceExplodingBig.SpeciesId, VfxIceExplodingBig),
+                    new KeyValuePair<int, VfxConfig>(VfxFireSlashActive.SpeciesId, VfxFireSlashActive),
+                    new KeyValuePair<int, VfxConfig>(VfxSlashActive.SpeciesId, VfxSlashActive),
+                    new KeyValuePair<int, VfxConfig>(VfxSpikeSlashExplodingActive.SpeciesId, VfxSpikeSlashExplodingActive),
+                    new KeyValuePair<int, VfxConfig>(VfxFirePointLightActive.SpeciesId, VfxFirePointLightActive),
+                    new KeyValuePair<int, VfxConfig>(VfxPistolBulletExploding.SpeciesId, VfxPistolBulletExploding),
+                    new KeyValuePair<int, VfxConfig>(VfxSlashExploding.SpeciesId, VfxSlashExploding),
+                    new KeyValuePair<int, VfxConfig>(VfxIceLingering.SpeciesId, VfxIceLingering),
+             }
+            );
+
         // debuffConfigs
         public static DebuffConfig ShortFrozen = new DebuffConfig {
             SpeciesId = 1,
@@ -22,7 +122,8 @@ namespace shared {
         public static BuffConfig ShortFreezer = new BuffConfig {
             SpeciesId = 1,
             StockType = BuffStockType.Timed,
-            Stock = 600
+            Stock = 600,
+            CharacterVfxSpeciesId = VfxIceLingering.SpeciesId
         }.AddAssociatedDebuff(ShortFrozen);
     }
 }

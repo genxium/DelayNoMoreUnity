@@ -142,12 +142,10 @@ namespace shared {
             while (prevBuffI < prevBuffList.Count) {
                 var cand = prevBuffList[prevBuffI++];
                 if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break; 
-                if (BuffStockType.Timed == cand.BuffConfig.StockType && isRdfFrameElapsing) { 
-                    if (1 >= cand.Stock) {  
-                        continue;
-                    } else {
-                        AssignToBuff(cand.SpeciesId, cand.Stock-1, cand.BuffConfig, dst.BuffList[newBuffCnt]);
-                    }
+                if (BuffStockType.Timed == cand.BuffConfig.StockType && isRdfFrameElapsing) {
+                    int nextStock = cand.Stock - 1;
+                    if (0 > nextStock) nextStock = 0;
+                    AssignToBuff(cand.SpeciesId, nextStock, cand.BuffConfig, dst.BuffList[newBuffCnt]);
                 } else {
                     AssignToBuff(cand.SpeciesId, cand.Stock, cand.BuffConfig, dst.BuffList[newBuffCnt]);
                 }
@@ -159,12 +157,10 @@ namespace shared {
             while (prevDebuffI < prevDebuffList.Count) {
                 var cand = prevDebuffList[prevDebuffI++];
                 if (TERMINATING_DEBUFF_SPECIES_ID == cand.SpeciesId) break; 
-                if (BuffStockType.Timed == cand.DebuffConfig.StockType && isRdfFrameElapsing) { 
-                    if (1 >= cand.Stock) {  
-                        continue;
-                    } else {
-                        AssignToDebuff(cand.SpeciesId, cand.Stock-1, cand.DebuffConfig, dst.DebuffList[newDebuffCnt]);
-                    }
+                if (BuffStockType.Timed == cand.DebuffConfig.StockType && isRdfFrameElapsing) {
+                    int nextStock = cand.Stock - 1;
+                    if (0 > nextStock) nextStock = 0;
+                    AssignToDebuff(cand.SpeciesId, nextStock, cand.DebuffConfig, dst.DebuffList[newDebuffCnt]);
                 } else {
                     AssignToDebuff(cand.SpeciesId, cand.Stock, cand.DebuffConfig, dst.DebuffList[newDebuffCnt]);
                 }
@@ -178,16 +174,16 @@ namespace shared {
                     var cand = prevInventory.Slots[prevInventoryI++];
                     if (InventorySlotStockType.NoneIv == cand.StockType) break;
                     if (InventorySlotStockType.TimedIv == cand.StockType && isRdfFrameElapsing) {
-                        if (1 == cand.FramesToRecover) {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
-                        } else {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover - 1, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
-                        }
+                        int nextFramesToRecover = cand.FramesToRecover - 1;
+                        if (0 > nextFramesToRecover) nextFramesToRecover = 0;
+                        AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                     } else if (InventorySlotStockType.TimedMagazineIv == cand.StockType && isRdfFrameElapsing) {
-                        if (1 == cand.FramesToRecover) {
-                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                        int nextFramesToRecover = cand.FramesToRecover - 1;
+                        if (0 > nextFramesToRecover) nextFramesToRecover = 0;
+                        if (0 == nextFramesToRecover && 1 == cand.FramesToRecover) {
+                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, nextFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                         } else {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover - 1, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                         }
                     } else {
                         AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
