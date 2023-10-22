@@ -4,11 +4,16 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public static int PATTERN_ID_UNABLE_TO_OP = -2;
+        public static int PATTERN_ID_NO_OP = -1;
         public const int PATTERN_B = 1;
         public const int PATTERN_UP_B = 2;
         public const int PATTERN_DOWN_B = 3;
         public const int PATTERN_HOLD_B = 4;
         public const int PATTERN_DOWN_A = 5;
+
+        public const int PATTERN_INVENTORY_SLOT_C = 1024;
+        public const int PATTERN_INVENTORY_SLOT_D = 1025;
 
         public const int EXPLOSION_SPECIES_FOLLOW = 0;
         public const int EXPLOSION_SPECIES_NONE = -1;
@@ -85,6 +90,14 @@ namespace shared {
             OnBullet = true
         };
 
+        public static VfxConfig VfxIceLingering = new VfxConfig {
+            SpeciesId = 10,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.Repeating,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
         public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
              new[]
              {
@@ -97,6 +110,7 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxFirePointLightActive.SpeciesId, VfxFirePointLightActive),
                     new KeyValuePair<int, VfxConfig>(VfxPistolBulletExploding.SpeciesId, VfxPistolBulletExploding),
                     new KeyValuePair<int, VfxConfig>(VfxSlashExploding.SpeciesId, VfxSlashExploding),
+                    new KeyValuePair<int, VfxConfig>(VfxIceLingering.SpeciesId, VfxIceLingering),
              }
             );
 

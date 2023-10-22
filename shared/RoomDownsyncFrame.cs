@@ -53,7 +53,7 @@ namespace shared {
             "EGZyYW1lc0ludmluc2libGUYggggASgFEhUKDGJ1bGxldFRlYW1JZBiDCCAB",
             "KAUSGgoRY2hDb2xsaXNpb25UZWFtSWQYhAggASgFEhoKEWNvbGxpc2lvblR5",
             "cGVNYXNrGIUIIAEoBBIfCghidWZmTGlzdBiGCCADKAsyDC5zaGFyZWQuQnVm",
-            "ZhIjCgpkZWJ1ZmZMaXN0GIcIIAMoCzIOLnNoYXJlZC5EZWJ1ZmYSJQoJSW52",
+            "ZhIjCgpkZWJ1ZmZMaXN0GIcIIAMoCzIOLnNoYXJlZC5EZWJ1ZmYSJQoJaW52",
             "ZW50b3J5GIgIIAEoCzIRLnNoYXJlZC5JbnZlbnRvcnkidwoRSW5wdXRGcmFt",
             "ZURlY29kZWQSCgoCZHgYASABKAUSCgoCZHkYAiABKAUSEQoJYnRuQUxldmVs",
             "GAMgASgFEhEKCWJ0bkJMZXZlbBgEIAEoBRIRCglidG5DTGV2ZWwYBSABKAUS",
@@ -195,58 +195,58 @@ namespace shared {
             "ZWQuQnVsbGV0Q29uZmlnImcKCEZyYW1lTG9nEiYKA3JkZhgBIAEoCzIZLnNo",
             "YXJlZC5Sb29tRG93bnN5bmNGcmFtZRIzCg9hY3R1YWxseVVzZWRJZGYYAiAB",
             "KAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jIicKDEJhdHRsZVJlc3Vs",
-            "dBIXCg93aW5uZXJKb2luSW5kZXgYASABKAUidAoKRGVidWZmVHlwZRIVCg1z",
-            "cGVlZERvd25Pbmx5GAEgASgFEhUKDWNvbGRTcGVlZERvd24YAiABKAUSGgoS",
-            "cG9zaXRpb25Mb2NrZWRPbmx5GAMgASgFEhwKFGZyb3plblBvc2l0aW9uTG9j",
-            "a2VkGAQgASgFInwKDERlYnVmZkNvbmZpZxIRCglzcGVjaWVzSWQYASABKAUS",
-            "KAoJc3RvY2tUeXBlGAIgASgOMhUuc2hhcmVkLkJ1ZmZTdG9ja1R5cGUSDQoF",
-            "c3RvY2sYAyABKAUSIAoEdHlwZRgEIAEoCzISLnNoYXJlZC5EZWJ1ZmZUeXBl",
-            "IvkCCgpCdWZmQ29uZmlnEhEKCXNwZWNpZXNJZBgBIAEoBRIoCglzdG9ja1R5",
-            "cGUYAiABKA4yFS5zaGFyZWQuQnVmZlN0b2NrVHlwZRINCgVzdG9jaxgDIAEo",
-            "BRISCgpzcGVlZERlbHRhGAQgASgFEhgKEGhpdGJveFNpemVYRGVsdGEYBSAB",
-            "KAUSGAoQaGl0Ym94U2l6ZVlEZWx0YRgGIAEoBRITCgtkYW1hZ2VEZWx0YRgH",
-            "IAEoBRIfChdkYW1hZ2VEZWx0YUJ5UGVyY2VudGFnZRgIIAEoBRIeChZjaGFy",
-            "YWN0ZXJIYXJkbmVzc0RlbHRhGAkgASgFEhoKEm1lbGVlSGFyZG5lc3NEZWx0",
-            "YRgKIAEoBRIdChVmaXJlYmFsbEhhcmRuZXNzRGVsdGEYCyABKAUSEgoKaW52",
-            "aW5zaWJsZRgMIAEoCBIyChVhc3Njb2NpYXRlZERlYnVmZkxpc3QYgAggAygL",
-            "MhIuc2hhcmVkLkRlYnVmZlR5cGUiUgoEQnVmZhIRCglzcGVjaWVzSWQYASAB",
-            "KAUSDQoFc3RvY2sYAiABKAUSKAoJc3RvY2tUeXBlGAMgASgOMhUuc2hhcmVk",
-            "LkJ1ZmZTdG9ja1R5cGUiVAoGRGVidWZmEhEKCXNwZWNpZXNJZBgBIAEoBRIN",
-            "CgVzdG9jaxgCIAEoBRIoCglzdG9ja1R5cGUYAyABKA4yFS5zaGFyZWQuQnVm",
-            "ZlN0b2NrVHlwZSK+AQoNSW52ZW50b3J5U2xvdBIxCglzdG9ja1R5cGUYASAB",
-            "KA4yHi5zaGFyZWQuSW52ZW50b3J5U2xvdFN0b2NrVHlwZRINCgVxdW90YRgC",
-            "IAEoBRIXCg9mcmFtZXNUb1JlY292ZXIYAyABKAUSFAoMZGVmYXVsdFF1b3Rh",
-            "GAQgASgFEh4KFmRlZmF1bHRGcmFtZXNUb1JlY292ZXIYBSABKAUSHAoTYnVm",
-            "ZkNvbmZpZ1NwZWNpZXNJZBiACCABKAUiMQoJSW52ZW50b3J5EiQKBXNsb3Rz",
-            "GAEgAygLMhUuc2hhcmVkLkludmVudG9yeVNsb3QqNQoLQnVsbGV0U3RhdGUS",
-            "CwoHU3RhcnRVcBAAEgoKBkFjdGl2ZRABEg0KCUV4cGxvZGluZxACKq4DCg5D",
-            "aGFyYWN0ZXJTdGF0ZRIJCgVJZGxlMRAAEgsKB1dhbGtpbmcQARIOCgpUdXJu",
-            "QXJvdW5kEAISCgoGQXRrZWQxEAMSFAoQSW5BaXJJZGxlMU5vSnVtcBAEEhQK",
-            "EEluQWlySWRsZTFCeUp1bXAQBRIYChRJbkFpcklkbGUxQnlXYWxsSnVtcBAG",
-            "Eg8KC0luQWlyQXRrZWQxEAcSDAoIQmxvd25VcDEQCBIMCghMYXlEb3duMRAJ",
-            "EgoKBkdldFVwMRAKEgkKBUR5aW5nEAsSCwoHRGFzaGluZxAMEgsKB1NsaWRp",
-            "bmcQDRIQCgtPbldhbGxJZGxlMRCAARIQCgtDcm91Y2hJZGxlMRCAAhIPCgpD",
-            "cm91Y2hBdGsxEIECEhIKDUNyb3VjaFdhbGtpbmcQggISEQoMQ3JvdWNoQXRr",
-            "ZWQxEIMCEgkKBEF0azEQgAgSCQoEQXRrMhCBCBIJCgRBdGszEIIIEgkKBEF0",
-            "azQQgwgSCQoEQXRrNRCECBIOCglJbkFpckF0azEQgBASEAoLV2Fsa2luZ0F0",
-            "azEQgRASDwoKT25XYWxsQXRrMRCAGCpMCglUcmFwU3RhdGUSCQoFVElkbGUQ",
-            "ABIMCghUV2Fsa2luZxABEgkKBVRBdGsxEAISCwoHVEF0a2VkMRADEg4KClRE",
-            "ZXN0cm95ZWQQBCosCgxUcmlnZ2VyU3RhdGUSCgoGVFJlYWR5EAASEAoMVENv",
-            "b2xpbmdEb3duEAEqNwoKQnVsbGV0VHlwZRIQCgxVbmRldGVybWluZWQQABIJ",
-            "CgVNZWxlZRABEgwKCEZpcmViYWxsEAIqiAEKDE11bHRpSGl0VHlwZRIICgRO",
-            "b25lEAASEAoMRnJvbUVtaXNzaW9uEAESFgoSRnJvbUZpcnN0SGl0QWN0dWFs",
-            "EAISFgoSRnJvbUZpcnN0SGl0QW55d2F5EAMSFQoRRnJvbVByZXZIaXRBY3R1",
-            "YWwQBBIVChFGcm9tUHJldkhpdEFueXdheRAFKjMKEFNraWxsVHJpZ2dlclR5",
-            "cGUSDgoKUmlzaW5nRWRnZRAAEg8KC0ZhbGxpbmdFZGdlEAEqLAoPVmZ4RHVy",
-            "YXRpb25UeXBlEgoKBk9uZU9mZhAAEg0KCVJlcGVhdGluZxABKjcKDVZmeE1v",
-            "dGlvblR5cGUSDAoITm9Nb3Rpb24QABILCgdEcm9wcGVkEAESCwoHVHJhY2lu",
-            "ZxACKjEKDUJ1ZmZTdG9ja1R5cGUSCgoGTm9uZUJmEAASCQoFVGltZWQQARIJ",
-            "CgVRdW90YRACKlMKFkludmVudG9yeVNsb3RTdG9ja1R5cGUSCgoGTm9uZUl2",
-            "EAASCwoHVGltZWRJdhABEgsKB1F1b3RhSXYQAhITCg9UaW1lZE1hZ2F6aW5l",
-            "SXYQA0IJqgIGc2hhcmVkYgZwcm90bzM="));
+            "dBIXCg93aW5uZXJKb2luSW5kZXgYASABKAUifAoMRGVidWZmQ29uZmlnEhEK",
+            "CXNwZWNpZXNJZBgBIAEoBRIoCglzdG9ja1R5cGUYAiABKA4yFS5zaGFyZWQu",
+            "QnVmZlN0b2NrVHlwZRINCgVzdG9jaxgDIAEoBRIgCgR0eXBlGAQgASgOMhIu",
+            "c2hhcmVkLkRlYnVmZlR5cGUi9wIKCkJ1ZmZDb25maWcSEQoJc3BlY2llc0lk",
+            "GAEgASgFEigKCXN0b2NrVHlwZRgCIAEoDjIVLnNoYXJlZC5CdWZmU3RvY2tU",
+            "eXBlEg0KBXN0b2NrGAMgASgFEhIKCnNwZWVkRGVsdGEYBCABKAUSGAoQaGl0",
+            "Ym94U2l6ZVhEZWx0YRgFIAEoBRIYChBoaXRib3hTaXplWURlbHRhGAYgASgF",
+            "EhMKC2RhbWFnZURlbHRhGAcgASgFEh8KF2RhbWFnZURlbHRhQnlQZXJjZW50",
+            "YWdlGAggASgFEh4KFmNoYXJhY3RlckhhcmRuZXNzRGVsdGEYCSABKAUSGgoS",
+            "bWVsZWVIYXJkbmVzc0RlbHRhGAogASgFEh0KFWZpcmViYWxsSGFyZG5lc3NE",
+            "ZWx0YRgLIAEoBRISCgppbnZpbnNpYmxlGAwgASgIEjAKEWFzc29jaWF0ZWRE",
+            "ZWJ1ZmZzGIAIIAMoCzIULnNoYXJlZC5EZWJ1ZmZDb25maWciUAoEQnVmZhIR",
+            "CglzcGVjaWVzSWQYASABKAUSDQoFc3RvY2sYAiABKAUSJgoKYnVmZkNvbmZp",
+            "ZxgDIAEoCzISLnNoYXJlZC5CdWZmQ29uZmlnIlYKBkRlYnVmZhIRCglzcGVj",
+            "aWVzSWQYASABKAUSDQoFc3RvY2sYAiABKAUSKgoMZGVidWZmQ29uZmlnGAMg",
+            "ASgLMhQuc2hhcmVkLkRlYnVmZkNvbmZpZyLJAQoNSW52ZW50b3J5U2xvdBIx",
+            "CglzdG9ja1R5cGUYASABKA4yHi5zaGFyZWQuSW52ZW50b3J5U2xvdFN0b2Nr",
+            "VHlwZRINCgVxdW90YRgCIAEoBRIXCg9mcmFtZXNUb1JlY292ZXIYAyABKAUS",
+            "FAoMZGVmYXVsdFF1b3RhGAQgASgFEh4KFmRlZmF1bHRGcmFtZXNUb1JlY292",
+            "ZXIYBSABKAUSJwoKYnVmZkNvbmZpZxiACCABKAsyEi5zaGFyZWQuQnVmZkNv",
+            "bmZpZyIxCglJbnZlbnRvcnkSJAoFc2xvdHMYASADKAsyFS5zaGFyZWQuSW52",
+            "ZW50b3J5U2xvdCo1CgtCdWxsZXRTdGF0ZRILCgdTdGFydFVwEAASCgoGQWN0",
+            "aXZlEAESDQoJRXhwbG9kaW5nEAIqrgMKDkNoYXJhY3RlclN0YXRlEgkKBUlk",
+            "bGUxEAASCwoHV2Fsa2luZxABEg4KClR1cm5Bcm91bmQQAhIKCgZBdGtlZDEQ",
+            "AxIUChBJbkFpcklkbGUxTm9KdW1wEAQSFAoQSW5BaXJJZGxlMUJ5SnVtcBAF",
+            "EhgKFEluQWlySWRsZTFCeVdhbGxKdW1wEAYSDwoLSW5BaXJBdGtlZDEQBxIM",
+            "CghCbG93blVwMRAIEgwKCExheURvd24xEAkSCgoGR2V0VXAxEAoSCQoFRHlp",
+            "bmcQCxILCgdEYXNoaW5nEAwSCwoHU2xpZGluZxANEhAKC09uV2FsbElkbGUx",
+            "EIABEhAKC0Nyb3VjaElkbGUxEIACEg8KCkNyb3VjaEF0azEQgQISEgoNQ3Jv",
+            "dWNoV2Fsa2luZxCCAhIRCgxDcm91Y2hBdGtlZDEQgwISCQoEQXRrMRCACBIJ",
+            "CgRBdGsyEIEIEgkKBEF0azMQgggSCQoEQXRrNBCDCBIJCgRBdGs1EIQIEg4K",
+            "CUluQWlyQXRrMRCAEBIQCgtXYWxraW5nQXRrMRCBEBIPCgpPbldhbGxBdGsx",
+            "EIAYKkwKCVRyYXBTdGF0ZRIJCgVUSWRsZRAAEgwKCFRXYWxraW5nEAESCQoF",
+            "VEF0azEQAhILCgdUQXRrZWQxEAMSDgoKVERlc3Ryb3llZBAEKiwKDFRyaWdn",
+            "ZXJTdGF0ZRIKCgZUUmVhZHkQABIQCgxUQ29vbGluZ0Rvd24QASo3CgpCdWxs",
+            "ZXRUeXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmlyZWJh",
+            "bGwQAiqIAQoMTXVsdGlIaXRUeXBlEggKBE5vbmUQABIQCgxGcm9tRW1pc3Np",
+            "b24QARIWChJGcm9tRmlyc3RIaXRBY3R1YWwQAhIWChJGcm9tRmlyc3RIaXRB",
+            "bnl3YXkQAxIVChFGcm9tUHJldkhpdEFjdHVhbBAEEhUKEUZyb21QcmV2SGl0",
+            "QW55d2F5EAUqMwoQU2tpbGxUcmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdlEAAS",
+            "DwoLRmFsbGluZ0VkZ2UQASosCg9WZnhEdXJhdGlvblR5cGUSCgoGT25lT2Zm",
+            "EAASDQoJUmVwZWF0aW5nEAEqNwoNVmZ4TW90aW9uVHlwZRIMCghOb01vdGlv",
+            "bhAAEgsKB0Ryb3BwZWQQARILCgdUcmFjaW5nEAIqMQoNQnVmZlN0b2NrVHlw",
+            "ZRIKCgZOb25lQmYQABIJCgVUaW1lZBABEgkKBVF1b3RhEAIqcQoKRGVidWZm",
+            "VHlwZRILCgdOb25lRGJmEAASEQoNU3BlZWREb3duT25seRABEhEKDUNvbGRT",
+            "cGVlZERvd24QAhIWChJQb3NpdGlvbkxvY2tlZE9ubHkQAxIYChRGcm96ZW5Q",
+            "b3NpdGlvbkxvY2tlZBAEKlMKFkludmVudG9yeVNsb3RTdG9ja1R5cGUSCgoG",
+            "Tm9uZUl2EAASCwoHVGltZWRJdhABEgsKB1F1b3RhSXYQAhITCg9UaW1lZE1h",
+            "Z2F6aW5lSXYQA0IJqgIGc2hhcmVkYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.InventorySlotStockType), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.InventorySlotStockType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "FramesCapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "MaxHp", "Mp", "MaxMp", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitSoftPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "FrictionVelX", "ForcedCrouching", "SlipJumpTriggered", "PrimarilyOnSlippableHardPushback", "PrevWasCrouching", "NewBirth", "LowerPartFramesInChState", "JumpStarted", "FramesToStartJump", "Name", "DisplayName", "Avatar", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask", "BuffList", "DebuffList", "Inventory" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel", "BtnCLevel", "BtnDLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
@@ -275,12 +275,11 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "MpDelta", "Hits" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleResult), global::shared.BattleResult.Parser, new[]{ "WinnerJoinIndex" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.DebuffType), global::shared.DebuffType.Parser, new[]{ "SpeedDownOnly", "ColdSpeedDown", "PositionLockedOnly", "FrozenPositionLocked" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.DebuffConfig), global::shared.DebuffConfig.Parser, new[]{ "SpeciesId", "StockType", "Stock", "Type" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BuffConfig), global::shared.BuffConfig.Parser, new[]{ "SpeciesId", "StockType", "Stock", "SpeedDelta", "HitboxSizeXDelta", "HitboxSizeYDelta", "DamageDelta", "DamageDeltaByPercentage", "CharacterHardnessDelta", "MeleeHardnessDelta", "FireballHardnessDelta", "Invinsible", "AsscociatedDebuffList" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Buff), global::shared.Buff.Parser, new[]{ "SpeciesId", "Stock", "StockType" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Debuff), global::shared.Debuff.Parser, new[]{ "SpeciesId", "Stock", "StockType" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.InventorySlot), global::shared.InventorySlot.Parser, new[]{ "StockType", "Quota", "FramesToRecover", "DefaultQuota", "DefaultFramesToRecover", "BuffConfigSpeciesId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BuffConfig), global::shared.BuffConfig.Parser, new[]{ "SpeciesId", "StockType", "Stock", "SpeedDelta", "HitboxSizeXDelta", "HitboxSizeYDelta", "DamageDelta", "DamageDeltaByPercentage", "CharacterHardnessDelta", "MeleeHardnessDelta", "FireballHardnessDelta", "Invinsible", "AssociatedDebuffs" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Buff), global::shared.Buff.Parser, new[]{ "SpeciesId", "Stock", "BuffConfig" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Debuff), global::shared.Debuff.Parser, new[]{ "SpeciesId", "Stock", "DebuffConfig" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.InventorySlot), global::shared.InventorySlot.Parser, new[]{ "StockType", "Quota", "FramesToRecover", "DefaultQuota", "DefaultFramesToRecover", "BuffConfig" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Inventory), global::shared.Inventory.Parser, new[]{ "Slots" }, null, null, null, null)
           }));
     }
@@ -386,6 +385,14 @@ namespace shared {
     /// </summary>
     [pbr::OriginalName("Timed")] Timed = 1,
     [pbr::OriginalName("Quota")] Quota = 2,
+  }
+
+  public enum DebuffType {
+    [pbr::OriginalName("NoneDbf")] NoneDbf = 0,
+    [pbr::OriginalName("SpeedDownOnly")] SpeedDownOnly = 1,
+    [pbr::OriginalName("ColdSpeedDown")] ColdSpeedDown = 2,
+    [pbr::OriginalName("PositionLockedOnly")] PositionLockedOnly = 3,
+    [pbr::OriginalName("FrozenPositionLocked")] FrozenPositionLocked = 4,
   }
 
   public enum InventorySlotStockType {
@@ -1204,7 +1211,7 @@ namespace shared {
       get { return debuffList_; }
     }
 
-    /// <summary>Field number for the "Inventory" field.</summary>
+    /// <summary>Field number for the "inventory" field.</summary>
     public const int InventoryFieldNumber = 1032;
     private global::shared.Inventory inventory_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -15208,306 +15215,6 @@ namespace shared {
 
   }
 
-  public sealed partial class DebuffType : pb::IMessage<DebuffType>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<DebuffType> _parser = new pb::MessageParser<DebuffType>(() => new DebuffType());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<DebuffType> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[28]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DebuffType() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DebuffType(DebuffType other) : this() {
-      speedDownOnly_ = other.speedDownOnly_;
-      coldSpeedDown_ = other.coldSpeedDown_;
-      positionLockedOnly_ = other.positionLockedOnly_;
-      frozenPositionLocked_ = other.frozenPositionLocked_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DebuffType Clone() {
-      return new DebuffType(this);
-    }
-
-    /// <summary>Field number for the "speedDownOnly" field.</summary>
-    public const int SpeedDownOnlyFieldNumber = 1;
-    private int speedDownOnly_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int SpeedDownOnly {
-      get { return speedDownOnly_; }
-      set {
-        speedDownOnly_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "coldSpeedDown" field.</summary>
-    public const int ColdSpeedDownFieldNumber = 2;
-    private int coldSpeedDown_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ColdSpeedDown {
-      get { return coldSpeedDown_; }
-      set {
-        coldSpeedDown_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "positionLockedOnly" field.</summary>
-    public const int PositionLockedOnlyFieldNumber = 3;
-    private int positionLockedOnly_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PositionLockedOnly {
-      get { return positionLockedOnly_; }
-      set {
-        positionLockedOnly_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "frozenPositionLocked" field.</summary>
-    public const int FrozenPositionLockedFieldNumber = 4;
-    private int frozenPositionLocked_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int FrozenPositionLocked {
-      get { return frozenPositionLocked_; }
-      set {
-        frozenPositionLocked_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as DebuffType);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(DebuffType other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (SpeedDownOnly != other.SpeedDownOnly) return false;
-      if (ColdSpeedDown != other.ColdSpeedDown) return false;
-      if (PositionLockedOnly != other.PositionLockedOnly) return false;
-      if (FrozenPositionLocked != other.FrozenPositionLocked) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (SpeedDownOnly != 0) hash ^= SpeedDownOnly.GetHashCode();
-      if (ColdSpeedDown != 0) hash ^= ColdSpeedDown.GetHashCode();
-      if (PositionLockedOnly != 0) hash ^= PositionLockedOnly.GetHashCode();
-      if (FrozenPositionLocked != 0) hash ^= FrozenPositionLocked.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (SpeedDownOnly != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(SpeedDownOnly);
-      }
-      if (ColdSpeedDown != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(ColdSpeedDown);
-      }
-      if (PositionLockedOnly != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(PositionLockedOnly);
-      }
-      if (FrozenPositionLocked != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(FrozenPositionLocked);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (SpeedDownOnly != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(SpeedDownOnly);
-      }
-      if (ColdSpeedDown != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(ColdSpeedDown);
-      }
-      if (PositionLockedOnly != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(PositionLockedOnly);
-      }
-      if (FrozenPositionLocked != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(FrozenPositionLocked);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (SpeedDownOnly != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SpeedDownOnly);
-      }
-      if (ColdSpeedDown != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColdSpeedDown);
-      }
-      if (PositionLockedOnly != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PositionLockedOnly);
-      }
-      if (FrozenPositionLocked != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrozenPositionLocked);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(DebuffType other) {
-      if (other == null) {
-        return;
-      }
-      if (other.SpeedDownOnly != 0) {
-        SpeedDownOnly = other.SpeedDownOnly;
-      }
-      if (other.ColdSpeedDown != 0) {
-        ColdSpeedDown = other.ColdSpeedDown;
-      }
-      if (other.PositionLockedOnly != 0) {
-        PositionLockedOnly = other.PositionLockedOnly;
-      }
-      if (other.FrozenPositionLocked != 0) {
-        FrozenPositionLocked = other.FrozenPositionLocked;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            SpeedDownOnly = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            ColdSpeedDown = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            PositionLockedOnly = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            FrozenPositionLocked = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            SpeedDownOnly = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            ColdSpeedDown = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            PositionLockedOnly = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            FrozenPositionLocked = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
   public sealed partial class DebuffConfig : pb::IMessage<DebuffConfig>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -15522,7 +15229,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[29]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[28]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -15545,7 +15252,7 @@ namespace shared {
       speciesId_ = other.speciesId_;
       stockType_ = other.stockType_;
       stock_ = other.stock_;
-      type_ = other.type_ != null ? other.type_.Clone() : null;
+      type_ = other.type_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -15593,7 +15300,7 @@ namespace shared {
 
     /// <summary>Field number for the "type" field.</summary>
     public const int TypeFieldNumber = 4;
-    private global::shared.DebuffType type_;
+    private global::shared.DebuffType type_ = global::shared.DebuffType.NoneDbf;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::shared.DebuffType Type {
@@ -15621,7 +15328,7 @@ namespace shared {
       if (SpeciesId != other.SpeciesId) return false;
       if (StockType != other.StockType) return false;
       if (Stock != other.Stock) return false;
-      if (!object.Equals(Type, other.Type)) return false;
+      if (Type != other.Type) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -15632,7 +15339,7 @@ namespace shared {
       if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
       if (StockType != global::shared.BuffStockType.NoneBf) hash ^= StockType.GetHashCode();
       if (Stock != 0) hash ^= Stock.GetHashCode();
-      if (type_ != null) hash ^= Type.GetHashCode();
+      if (Type != global::shared.DebuffType.NoneDbf) hash ^= Type.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -15663,9 +15370,9 @@ namespace shared {
         output.WriteRawTag(24);
         output.WriteInt32(Stock);
       }
-      if (type_ != null) {
-        output.WriteRawTag(34);
-        output.WriteMessage(Type);
+      if (Type != global::shared.DebuffType.NoneDbf) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Type);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -15689,9 +15396,9 @@ namespace shared {
         output.WriteRawTag(24);
         output.WriteInt32(Stock);
       }
-      if (type_ != null) {
-        output.WriteRawTag(34);
-        output.WriteMessage(Type);
+      if (Type != global::shared.DebuffType.NoneDbf) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Type);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -15712,8 +15419,8 @@ namespace shared {
       if (Stock != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Stock);
       }
-      if (type_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Type);
+      if (Type != global::shared.DebuffType.NoneDbf) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Type);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -15736,11 +15443,8 @@ namespace shared {
       if (other.Stock != 0) {
         Stock = other.Stock;
       }
-      if (other.type_ != null) {
-        if (type_ == null) {
-          Type = new global::shared.DebuffType();
-        }
-        Type.MergeFrom(other.Type);
+      if (other.Type != global::shared.DebuffType.NoneDbf) {
+        Type = other.Type;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -15769,11 +15473,8 @@ namespace shared {
             Stock = input.ReadInt32();
             break;
           }
-          case 34: {
-            if (type_ == null) {
-              Type = new global::shared.DebuffType();
-            }
-            input.ReadMessage(Type);
+          case 32: {
+            Type = (global::shared.DebuffType) input.ReadEnum();
             break;
           }
         }
@@ -15803,11 +15504,8 @@ namespace shared {
             Stock = input.ReadInt32();
             break;
           }
-          case 34: {
-            if (type_ == null) {
-              Type = new global::shared.DebuffType();
-            }
-            input.ReadMessage(Type);
+          case 32: {
+            Type = (global::shared.DebuffType) input.ReadEnum();
             break;
           }
         }
@@ -15831,7 +15529,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[30]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[29]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -15863,7 +15561,7 @@ namespace shared {
       meleeHardnessDelta_ = other.meleeHardnessDelta_;
       fireballHardnessDelta_ = other.fireballHardnessDelta_;
       invinsible_ = other.invinsible_;
-      asscociatedDebuffList_ = other.asscociatedDebuffList_.Clone();
+      associatedDebuffs_ = other.associatedDebuffs_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -16027,15 +15725,18 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "asscociatedDebuffList" field.</summary>
-    public const int AsscociatedDebuffListFieldNumber = 1024;
-    private static readonly pb::FieldCodec<global::shared.DebuffType> _repeated_asscociatedDebuffList_codec
-        = pb::FieldCodec.ForMessage(8194, global::shared.DebuffType.Parser);
-    private readonly pbc::RepeatedField<global::shared.DebuffType> asscociatedDebuffList_ = new pbc::RepeatedField<global::shared.DebuffType>();
+    /// <summary>Field number for the "associatedDebuffs" field.</summary>
+    public const int AssociatedDebuffsFieldNumber = 1024;
+    private static readonly pb::FieldCodec<global::shared.DebuffConfig> _repeated_associatedDebuffs_codec
+        = pb::FieldCodec.ForMessage(8194, global::shared.DebuffConfig.Parser);
+    private readonly pbc::RepeatedField<global::shared.DebuffConfig> associatedDebuffs_ = new pbc::RepeatedField<global::shared.DebuffConfig>();
+    /// <summary>
+    /// There's a reason why type "DebuffConfig" instead of just the speciesId is used here, as "BuffConfig" itself is already seeked via heap-RAM dictionary look from "Buff.speciesId", we'd like to reduce the count of heap-RAM access when stepping battle dynamics  
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::shared.DebuffType> AsscociatedDebuffList {
-      get { return asscociatedDebuffList_; }
+    public pbc::RepeatedField<global::shared.DebuffConfig> AssociatedDebuffs {
+      get { return associatedDebuffs_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16065,7 +15766,7 @@ namespace shared {
       if (MeleeHardnessDelta != other.MeleeHardnessDelta) return false;
       if (FireballHardnessDelta != other.FireballHardnessDelta) return false;
       if (Invinsible != other.Invinsible) return false;
-      if(!asscociatedDebuffList_.Equals(other.asscociatedDebuffList_)) return false;
+      if(!associatedDebuffs_.Equals(other.associatedDebuffs_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -16085,7 +15786,7 @@ namespace shared {
       if (MeleeHardnessDelta != 0) hash ^= MeleeHardnessDelta.GetHashCode();
       if (FireballHardnessDelta != 0) hash ^= FireballHardnessDelta.GetHashCode();
       if (Invinsible != false) hash ^= Invinsible.GetHashCode();
-      hash ^= asscociatedDebuffList_.GetHashCode();
+      hash ^= associatedDebuffs_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -16152,7 +15853,7 @@ namespace shared {
         output.WriteRawTag(96);
         output.WriteBool(Invinsible);
       }
-      asscociatedDebuffList_.WriteTo(output, _repeated_asscociatedDebuffList_codec);
+      associatedDebuffs_.WriteTo(output, _repeated_associatedDebuffs_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -16211,7 +15912,7 @@ namespace shared {
         output.WriteRawTag(96);
         output.WriteBool(Invinsible);
       }
-      asscociatedDebuffList_.WriteTo(ref output, _repeated_asscociatedDebuffList_codec);
+      associatedDebuffs_.WriteTo(ref output, _repeated_associatedDebuffs_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -16258,7 +15959,7 @@ namespace shared {
       if (Invinsible != false) {
         size += 1 + 1;
       }
-      size += asscociatedDebuffList_.CalculateSize(_repeated_asscociatedDebuffList_codec);
+      size += associatedDebuffs_.CalculateSize(_repeated_associatedDebuffs_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -16307,7 +16008,7 @@ namespace shared {
       if (other.Invinsible != false) {
         Invinsible = other.Invinsible;
       }
-      asscociatedDebuffList_.Add(other.asscociatedDebuffList_);
+      associatedDebuffs_.Add(other.associatedDebuffs_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -16372,7 +16073,7 @@ namespace shared {
             break;
           }
           case 8194: {
-            asscociatedDebuffList_.AddEntriesFrom(input, _repeated_asscociatedDebuffList_codec);
+            associatedDebuffs_.AddEntriesFrom(input, _repeated_associatedDebuffs_codec);
             break;
           }
         }
@@ -16439,7 +16140,7 @@ namespace shared {
             break;
           }
           case 8194: {
-            asscociatedDebuffList_.AddEntriesFrom(ref input, _repeated_asscociatedDebuffList_codec);
+            associatedDebuffs_.AddEntriesFrom(ref input, _repeated_associatedDebuffs_codec);
             break;
           }
         }
@@ -16463,7 +16164,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[31]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[30]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16485,7 +16186,7 @@ namespace shared {
     public Buff(Buff other) : this() {
       speciesId_ = other.speciesId_;
       stock_ = other.stock_;
-      stockType_ = other.stockType_;
+      buffConfig_ = other.buffConfig_ != null ? other.buffConfig_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -16498,6 +16199,9 @@ namespace shared {
     /// <summary>Field number for the "speciesId" field.</summary>
     public const int SpeciesIdFieldNumber = 1;
     private int speciesId_;
+    /// <summary>
+    /// A redundancy of "buffConfig" for easy termination detection
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int SpeciesId {
@@ -16519,18 +16223,18 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "stockType" field.</summary>
-    public const int StockTypeFieldNumber = 3;
-    private global::shared.BuffStockType stockType_ = global::shared.BuffStockType.NoneBf;
+    /// <summary>Field number for the "buffConfig" field.</summary>
+    public const int BuffConfigFieldNumber = 3;
+    private global::shared.BuffConfig buffConfig_;
     /// <summary>
-    /// Copied from BuffConifg to reduce heap-RAM traversal 
+    /// Same type concern as "BuffConfig.associatedDebuffs". 
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::shared.BuffStockType StockType {
-      get { return stockType_; }
+    public global::shared.BuffConfig BuffConfig {
+      get { return buffConfig_; }
       set {
-        stockType_ = value;
+        buffConfig_ = value;
       }
     }
 
@@ -16551,7 +16255,7 @@ namespace shared {
       }
       if (SpeciesId != other.SpeciesId) return false;
       if (Stock != other.Stock) return false;
-      if (StockType != other.StockType) return false;
+      if (!object.Equals(BuffConfig, other.BuffConfig)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -16561,7 +16265,7 @@ namespace shared {
       int hash = 1;
       if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
       if (Stock != 0) hash ^= Stock.GetHashCode();
-      if (StockType != global::shared.BuffStockType.NoneBf) hash ^= StockType.GetHashCode();
+      if (buffConfig_ != null) hash ^= BuffConfig.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -16588,9 +16292,9 @@ namespace shared {
         output.WriteRawTag(16);
         output.WriteInt32(Stock);
       }
-      if (StockType != global::shared.BuffStockType.NoneBf) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) StockType);
+      if (buffConfig_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(BuffConfig);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -16610,9 +16314,9 @@ namespace shared {
         output.WriteRawTag(16);
         output.WriteInt32(Stock);
       }
-      if (StockType != global::shared.BuffStockType.NoneBf) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) StockType);
+      if (buffConfig_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(BuffConfig);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -16630,8 +16334,8 @@ namespace shared {
       if (Stock != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Stock);
       }
-      if (StockType != global::shared.BuffStockType.NoneBf) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) StockType);
+      if (buffConfig_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(BuffConfig);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -16651,8 +16355,11 @@ namespace shared {
       if (other.Stock != 0) {
         Stock = other.Stock;
       }
-      if (other.StockType != global::shared.BuffStockType.NoneBf) {
-        StockType = other.StockType;
+      if (other.buffConfig_ != null) {
+        if (buffConfig_ == null) {
+          BuffConfig = new global::shared.BuffConfig();
+        }
+        BuffConfig.MergeFrom(other.BuffConfig);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -16677,8 +16384,11 @@ namespace shared {
             Stock = input.ReadInt32();
             break;
           }
-          case 24: {
-            StockType = (global::shared.BuffStockType) input.ReadEnum();
+          case 26: {
+            if (buffConfig_ == null) {
+              BuffConfig = new global::shared.BuffConfig();
+            }
+            input.ReadMessage(BuffConfig);
             break;
           }
         }
@@ -16704,8 +16414,11 @@ namespace shared {
             Stock = input.ReadInt32();
             break;
           }
-          case 24: {
-            StockType = (global::shared.BuffStockType) input.ReadEnum();
+          case 26: {
+            if (buffConfig_ == null) {
+              BuffConfig = new global::shared.BuffConfig();
+            }
+            input.ReadMessage(BuffConfig);
             break;
           }
         }
@@ -16729,7 +16442,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[32]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[31]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16751,7 +16464,7 @@ namespace shared {
     public Debuff(Debuff other) : this() {
       speciesId_ = other.speciesId_;
       stock_ = other.stock_;
-      stockType_ = other.stockType_;
+      debuffConfig_ = other.debuffConfig_ != null ? other.debuffConfig_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -16764,6 +16477,9 @@ namespace shared {
     /// <summary>Field number for the "speciesId" field.</summary>
     public const int SpeciesIdFieldNumber = 1;
     private int speciesId_;
+    /// <summary>
+    /// A redundancy of "debuffConfig" for easy termination detection 
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int SpeciesId {
@@ -16785,18 +16501,18 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "stockType" field.</summary>
-    public const int StockTypeFieldNumber = 3;
-    private global::shared.BuffStockType stockType_ = global::shared.BuffStockType.NoneBf;
+    /// <summary>Field number for the "debuffConfig" field.</summary>
+    public const int DebuffConfigFieldNumber = 3;
+    private global::shared.DebuffConfig debuffConfig_;
     /// <summary>
-    /// Copied from BuffConifg to reduce heap-RAM traversal 
+    /// Same type concern as "BuffConfig.associatedDebuffs". 
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::shared.BuffStockType StockType {
-      get { return stockType_; }
+    public global::shared.DebuffConfig DebuffConfig {
+      get { return debuffConfig_; }
       set {
-        stockType_ = value;
+        debuffConfig_ = value;
       }
     }
 
@@ -16817,7 +16533,7 @@ namespace shared {
       }
       if (SpeciesId != other.SpeciesId) return false;
       if (Stock != other.Stock) return false;
-      if (StockType != other.StockType) return false;
+      if (!object.Equals(DebuffConfig, other.DebuffConfig)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -16827,7 +16543,7 @@ namespace shared {
       int hash = 1;
       if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
       if (Stock != 0) hash ^= Stock.GetHashCode();
-      if (StockType != global::shared.BuffStockType.NoneBf) hash ^= StockType.GetHashCode();
+      if (debuffConfig_ != null) hash ^= DebuffConfig.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -16854,9 +16570,9 @@ namespace shared {
         output.WriteRawTag(16);
         output.WriteInt32(Stock);
       }
-      if (StockType != global::shared.BuffStockType.NoneBf) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) StockType);
+      if (debuffConfig_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(DebuffConfig);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -16876,9 +16592,9 @@ namespace shared {
         output.WriteRawTag(16);
         output.WriteInt32(Stock);
       }
-      if (StockType != global::shared.BuffStockType.NoneBf) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) StockType);
+      if (debuffConfig_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(DebuffConfig);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -16896,8 +16612,8 @@ namespace shared {
       if (Stock != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Stock);
       }
-      if (StockType != global::shared.BuffStockType.NoneBf) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) StockType);
+      if (debuffConfig_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DebuffConfig);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -16917,8 +16633,11 @@ namespace shared {
       if (other.Stock != 0) {
         Stock = other.Stock;
       }
-      if (other.StockType != global::shared.BuffStockType.NoneBf) {
-        StockType = other.StockType;
+      if (other.debuffConfig_ != null) {
+        if (debuffConfig_ == null) {
+          DebuffConfig = new global::shared.DebuffConfig();
+        }
+        DebuffConfig.MergeFrom(other.DebuffConfig);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -16943,8 +16662,11 @@ namespace shared {
             Stock = input.ReadInt32();
             break;
           }
-          case 24: {
-            StockType = (global::shared.BuffStockType) input.ReadEnum();
+          case 26: {
+            if (debuffConfig_ == null) {
+              DebuffConfig = new global::shared.DebuffConfig();
+            }
+            input.ReadMessage(DebuffConfig);
             break;
           }
         }
@@ -16970,8 +16692,11 @@ namespace shared {
             Stock = input.ReadInt32();
             break;
           }
-          case 24: {
-            StockType = (global::shared.BuffStockType) input.ReadEnum();
+          case 26: {
+            if (debuffConfig_ == null) {
+              DebuffConfig = new global::shared.DebuffConfig();
+            }
+            input.ReadMessage(DebuffConfig);
             break;
           }
         }
@@ -16995,7 +16720,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[33]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[32]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -17020,7 +16745,7 @@ namespace shared {
       framesToRecover_ = other.framesToRecover_;
       defaultQuota_ = other.defaultQuota_;
       defaultFramesToRecover_ = other.defaultFramesToRecover_;
-      buffConfigSpeciesId_ = other.buffConfigSpeciesId_;
+      buffConfig_ = other.buffConfig_ != null ? other.buffConfig_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -17090,15 +16815,18 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "buffConfigSpeciesId" field.</summary>
-    public const int BuffConfigSpeciesIdFieldNumber = 1024;
-    private int buffConfigSpeciesId_;
+    /// <summary>Field number for the "buffConfig" field.</summary>
+    public const int BuffConfigFieldNumber = 1024;
+    private global::shared.BuffConfig buffConfig_;
+    /// <summary>
+    /// Same type concern as "BuffConfig.associatedDebuffs".
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int BuffConfigSpeciesId {
-      get { return buffConfigSpeciesId_; }
+    public global::shared.BuffConfig BuffConfig {
+      get { return buffConfig_; }
       set {
-        buffConfigSpeciesId_ = value;
+        buffConfig_ = value;
       }
     }
 
@@ -17122,7 +16850,7 @@ namespace shared {
       if (FramesToRecover != other.FramesToRecover) return false;
       if (DefaultQuota != other.DefaultQuota) return false;
       if (DefaultFramesToRecover != other.DefaultFramesToRecover) return false;
-      if (BuffConfigSpeciesId != other.BuffConfigSpeciesId) return false;
+      if (!object.Equals(BuffConfig, other.BuffConfig)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -17135,7 +16863,7 @@ namespace shared {
       if (FramesToRecover != 0) hash ^= FramesToRecover.GetHashCode();
       if (DefaultQuota != 0) hash ^= DefaultQuota.GetHashCode();
       if (DefaultFramesToRecover != 0) hash ^= DefaultFramesToRecover.GetHashCode();
-      if (BuffConfigSpeciesId != 0) hash ^= BuffConfigSpeciesId.GetHashCode();
+      if (buffConfig_ != null) hash ^= BuffConfig.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -17174,9 +16902,9 @@ namespace shared {
         output.WriteRawTag(40);
         output.WriteInt32(DefaultFramesToRecover);
       }
-      if (BuffConfigSpeciesId != 0) {
-        output.WriteRawTag(128, 64);
-        output.WriteInt32(BuffConfigSpeciesId);
+      if (buffConfig_ != null) {
+        output.WriteRawTag(130, 64);
+        output.WriteMessage(BuffConfig);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -17208,9 +16936,9 @@ namespace shared {
         output.WriteRawTag(40);
         output.WriteInt32(DefaultFramesToRecover);
       }
-      if (BuffConfigSpeciesId != 0) {
-        output.WriteRawTag(128, 64);
-        output.WriteInt32(BuffConfigSpeciesId);
+      if (buffConfig_ != null) {
+        output.WriteRawTag(130, 64);
+        output.WriteMessage(BuffConfig);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -17237,8 +16965,8 @@ namespace shared {
       if (DefaultFramesToRecover != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(DefaultFramesToRecover);
       }
-      if (BuffConfigSpeciesId != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(BuffConfigSpeciesId);
+      if (buffConfig_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(BuffConfig);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -17267,8 +16995,11 @@ namespace shared {
       if (other.DefaultFramesToRecover != 0) {
         DefaultFramesToRecover = other.DefaultFramesToRecover;
       }
-      if (other.BuffConfigSpeciesId != 0) {
-        BuffConfigSpeciesId = other.BuffConfigSpeciesId;
+      if (other.buffConfig_ != null) {
+        if (buffConfig_ == null) {
+          BuffConfig = new global::shared.BuffConfig();
+        }
+        BuffConfig.MergeFrom(other.BuffConfig);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -17305,8 +17036,11 @@ namespace shared {
             DefaultFramesToRecover = input.ReadInt32();
             break;
           }
-          case 8192: {
-            BuffConfigSpeciesId = input.ReadInt32();
+          case 8194: {
+            if (buffConfig_ == null) {
+              BuffConfig = new global::shared.BuffConfig();
+            }
+            input.ReadMessage(BuffConfig);
             break;
           }
         }
@@ -17344,8 +17078,11 @@ namespace shared {
             DefaultFramesToRecover = input.ReadInt32();
             break;
           }
-          case 8192: {
-            BuffConfigSpeciesId = input.ReadInt32();
+          case 8194: {
+            if (buffConfig_ == null) {
+              BuffConfig = new global::shared.BuffConfig();
+            }
+            input.ReadMessage(BuffConfig);
             break;
           }
         }
@@ -17369,7 +17106,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[34]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[33]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

@@ -137,7 +137,7 @@ message CharacterDownsync {
     repeated Buff buffList = 1030; 
     repeated Debuff debuffList = 1031; 
 
-	Inventory Inventory = 1032;
+	Inventory inventory = 1032;
 }
 
 message InputFrameDecoded {
@@ -573,11 +573,12 @@ enum BuffStockType {
 	Quota = 2;
 }
 
-message DebuffType {
-    int32 speedDownOnly = 1;
-    int32 coldSpeedDown = 2;
-    int32 positionLockedOnly = 3;
-    int32 frozenPositionLocked = 4;
+enum DebuffType {
+    NoneDbf = 0;
+    SpeedDownOnly = 1;
+    ColdSpeedDown = 2;
+    PositionLockedOnly = 3;
+    FrozenPositionLocked = 4;
 }
 
 message DebuffConfig {
@@ -610,19 +611,19 @@ message BuffConfig {
     int32 fireballHardnessDelta = 11;
     bool invinsible = 12;
 
-    repeated DebuffType asscociatedDebuffList = 1024;
+    repeated DebuffConfig associatedDebuffs = 1024; // There's a reason why type "DebuffConfig" instead of just the speciesId is used here, as "BuffConfig" itself is already seeked via heap-RAM dictionary look from "Buff.speciesId", we'd like to reduce the count of heap-RAM access when stepping battle dynamics  
 }
 
 message Buff {
-    int32 speciesId = 1;
+    int32 speciesId = 1; // A redundancy of "buffConfig" for easy termination detection
     int32 stock = 2;
-    BuffStockType stockType = 3; // Copied from BuffConifg to reduce heap-RAM traversal 
+    BuffConfig buffConfig = 3; // Same type concern as "BuffConfig.associatedDebuffs". 
 }
 
 message Debuff {
-    int32 speciesId = 1;
+    int32 speciesId = 1; // A redundancy of "debuffConfig" for easy termination detection 
     int32 stock = 2;
-    BuffStockType stockType = 3; // Copied from BuffConifg to reduce heap-RAM traversal 
+    DebuffConfig debuffConfig = 3; // Same type concern as "BuffConfig.associatedDebuffs". 
 }
 
 enum InventorySlotStockType {
@@ -638,7 +639,7 @@ message InventorySlot {
 	int32 framesToRecover = 3; 
     int32 defaultQuota = 4;
     int32 defaultFramesToRecover = 5;
-	int32 buffConfigSpeciesId = 1024;
+	BuffConfig buffConfig = 1024; // Same type concern as "BuffConfig.associatedDebuffs".
 }
 
 message Inventory {

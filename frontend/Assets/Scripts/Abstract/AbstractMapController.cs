@@ -725,7 +725,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             "6_Spike_Slash_Exploding",
             "7_Fire_PointLight_Active",
             "8_Pistol_Bullet_Exploding",
-            "9_Slash_Exploding"
+            "9_Slash_Exploding",
+            "10_Ice_Lingering"
         };
 
         foreach (string name in allVfxPrefabNames) {

@@ -2,14 +2,21 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: cfxr proc glow soft add
   m_Shader: {fileID: 4800000, guid: 714e760b98304b44292e04841e05f258, type: 3}
-  m_ShaderKeywords: _CFXR_GLOW_POW_P0 _FADING_ON _SUBGLOW_ON __CFXRGLOW_POW_P4 __CFXRGLOW_POW_P6
+  m_ValidKeywords:
+  - _FADING_ON
+  m_InvalidKeywords:
+  - _CFXR_DITHERED_SHADOWS_OFF
+  - _CFXR_GLOW_POW_P0
+  - _SUBGLOW_ON
+  - __CFXRGLOW_POW_P4
+  - __CFXRGLOW_POW_P6
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -27,6 +34,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _CFXR_DITHERED_SHADOWS: 0
     - _CFXR_GLOW_POW: 0
@@ -52,3 +60,4 @@ Material:
     - _UseSP: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

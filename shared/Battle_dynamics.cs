@@ -166,18 +166,24 @@ namespace shared {
             }
 
             if (PATTERN_ID_NO_OP == patternId) {
-                if (0 < decodedInputHolder.BtnBLevel) {
-                    if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
-                        if (0 > decodedInputHolder.Dy) {
-                            patternId = PATTERN_DOWN_B;
-                        } else if (0 < decodedInputHolder.Dy) {
-                            patternId = PATTERN_UP_B;
-                        } else {
-                            patternId = PATTERN_B;
-                        }
+                if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
+                    if (0 > decodedInputHolder.Dy) {
+                        patternId = PATTERN_DOWN_B;
+                    } else if (0 < decodedInputHolder.Dy) {
+                        patternId = PATTERN_UP_B;
                     } else {
-                        patternId = PATTERN_HOLD_B;
+                        patternId = PATTERN_B;
                     }
+                } else {
+                    patternId = PATTERN_HOLD_B;
+                }
+            }
+
+            if (PATTERN_ID_NO_OP == patternId) {
+                if (decodedInputHolder.BtnCLevel > prevDecodedInputHolder.BtnCLevel) {
+                    patternId = PATTERN_INVENTORY_SLOT_C;
+                } else if (decodedInputHolder.BtnDLevel > prevDecodedInputHolder.BtnDLevel) {
+                    patternId = PATTERN_INVENTORY_SLOT_D;
                 }
             }
 
@@ -196,7 +202,7 @@ namespace shared {
             var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
             int xfac = (0 < thatCharacterInNextFrame.DirX ? 1 : -1);
             bool hasLockVel = false;
-            if (skills.ContainsKey(skillId)) {
+            if (NO_SKILL != skillId) {
                 var skillConfig = skills[skillId];
                 if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
                     skillId = FindSkillId(1, currCharacterDownsync, chConfig.SpeciesId); // Fallback to basic atk
@@ -240,6 +246,43 @@ namespace shared {
             return skillUsed;
         }
 
+        private static bool _useInventorySlot(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+            bool slotUsed = false;
+            if (PATTERN_INVENTORY_SLOT_C != patternId && PATTERN_INVENTORY_SLOT_D != patternId) {
+                return false;
+            }
+            int slotIdx = (PATTERN_INVENTORY_SLOT_C == patternId ? 0 : 1); 
+            var targetSlotCurr = currCharacterDownsync.Inventory.Slots[slotIdx];
+            var targetSlotNext = thatCharacterInNextFrame.Inventory.Slots[slotIdx];
+            if (InventorySlotStockType.QuotaIv == targetSlotCurr.StockType) {
+                if (0 < targetSlotCurr.Quota) {
+                    targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
+                    slotUsed = true;
+                }
+            } else if (InventorySlotStockType.TimedIv == targetSlotCurr.StockType) {
+                if (0 == targetSlotCurr.FramesToRecover) {
+                    targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
+                    slotUsed = true;
+                }
+            } else if (InventorySlotStockType.TimedMagazineIv == targetSlotCurr.StockType) {
+                if (0 < targetSlotCurr.Quota) {
+                    targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
+                    if (0 == targetSlotNext.Quota) {
+                        targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
+                    }
+                    slotUsed = true;
+                }
+            }
+    
+            if (slotUsed) {
+                var buffConfig = targetSlotCurr.BuffConfig; 
+                // TODO: Support multi-buff simultaneously!
+                AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, buffConfig, thatCharacterInNextFrame.BuffList[0]);
+            }
+
+            return slotUsed;
+        }
+
         private static void _applyGravity(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ILoggerBridge logger) {
             /*
             if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
@@ -281,6 +324,9 @@ namespace shared {
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+
+                // Prioritize use of inventory slot over skills
+                _useInventorySlot(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);

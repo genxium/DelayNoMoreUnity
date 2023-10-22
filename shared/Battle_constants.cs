@@ -54,8 +54,6 @@ namespace shared {
 
         public static float MAX_FLOAT32 = float.MaxValue;
         public static int MAX_INT = 999999999;
-        public static int PATTERN_ID_UNABLE_TO_OP = -2;
-        public static int PATTERN_ID_NO_OP = -1;
 
         public static ulong COLLISION_NONE_INDEX = 0;
         public static ulong COLLISION_BARRIER_INDEX_PREFIX = (1 << 0);

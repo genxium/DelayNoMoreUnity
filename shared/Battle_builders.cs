@@ -58,23 +58,23 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToBuff(int speciesId, int stock, BuffStockType stockType, Buff dst) {
+        public static void AssignToBuff(int speciesId, int stock, BuffConfig buffConfig, Buff dst) {
             dst.SpeciesId = speciesId; 
             dst.Stock = stock;
-            dst.StockType = stockType; 
+            dst.BuffConfig = buffConfig;
         }
 
-        public static void AssignToDebuff(int speciesId, int stock, BuffStockType stockType, Debuff dst) {
+        public static void AssignToDebuff(int speciesId, int stock, DebuffConfig debuffConfig, Debuff dst) {
             dst.SpeciesId = speciesId; 
             dst.Stock = stock;
-            dst.StockType = stockType; 
+            dst.DebuffConfig = debuffConfig;
         }
 
-        public static void AssignToInventorySlot(InventorySlotStockType stockType, int quota, int framesToRecover, int buffConfigSpeciesId, InventorySlot dst) {
+        public static void AssignToInventorySlot(InventorySlotStockType stockType, int quota, int framesToRecover, BuffConfig buffConfig, InventorySlot dst) {
             dst.StockType = stockType; 
             dst.Quota = quota; 
             dst.FramesToRecover = framesToRecover; 
-            dst.BuffConfigSpeciesId = buffConfigSpeciesId;
+            dst.BuffConfig = buffConfig;
         }
 
 
@@ -142,14 +142,14 @@ namespace shared {
             while (prevBuffI < prevBuffList.Count) {
                 var cand = prevBuffList[prevBuffI++];
                 if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break; 
-                if (BuffStockType.Timed == cand.StockType && isRdfFrameElapsing) { 
+                if (BuffStockType.Timed == cand.BuffConfig.StockType && isRdfFrameElapsing) { 
                     if (1 >= cand.Stock) {  
                         continue;
                     } else {
-                        AssignToBuff(cand.SpeciesId, cand.Stock-1, cand.StockType, dst.BuffList[newBuffCnt]);
+                        AssignToBuff(cand.SpeciesId, cand.Stock-1, cand.BuffConfig, dst.BuffList[newBuffCnt]);
                     }
                 } else {
-                    AssignToBuff(cand.SpeciesId, cand.Stock, cand.StockType, dst.BuffList[newBuffCnt]);
+                    AssignToBuff(cand.SpeciesId, cand.Stock, cand.BuffConfig, dst.BuffList[newBuffCnt]);
                 }
                 ++newBuffCnt;
             }
@@ -159,14 +159,14 @@ namespace shared {
             while (prevDebuffI < prevDebuffList.Count) {
                 var cand = prevDebuffList[prevDebuffI++];
                 if (TERMINATING_DEBUFF_SPECIES_ID == cand.SpeciesId) break; 
-                if (BuffStockType.Timed == cand.StockType && isRdfFrameElapsing) { 
+                if (BuffStockType.Timed == cand.DebuffConfig.StockType && isRdfFrameElapsing) { 
                     if (1 >= cand.Stock) {  
                         continue;
                     } else {
-                        AssignToDebuff(cand.SpeciesId, cand.Stock-1, cand.StockType, dst.DebuffList[newDebuffCnt]);
+                        AssignToDebuff(cand.SpeciesId, cand.Stock-1, cand.DebuffConfig, dst.DebuffList[newDebuffCnt]);
                     }
                 } else {
-                    AssignToDebuff(cand.SpeciesId, cand.Stock, cand.StockType, dst.DebuffList[newDebuffCnt]);
+                    AssignToDebuff(cand.SpeciesId, cand.Stock, cand.DebuffConfig, dst.DebuffList[newDebuffCnt]);
                 }
                 ++newDebuffCnt;
             }
@@ -179,18 +179,18 @@ namespace shared {
                     if (InventorySlotStockType.NoneIv == cand.StockType) break;
                     if (InventorySlotStockType.TimedIv == cand.StockType && isRdfFrameElapsing) {
                         if (1 == cand.FramesToRecover) {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.DefaultFramesToRecover, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                         } else {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover - 1, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover - 1, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                         }
                     } else if (InventorySlotStockType.TimedMagazineIv == cand.StockType && isRdfFrameElapsing) {
                         if (1 == cand.FramesToRecover) {
-                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                         } else {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover - 1, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover - 1, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                         }
                     } else {
-                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.BuffConfigSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
+                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                     }
                     ++newInventoryCnt;
                 }
@@ -296,7 +296,7 @@ namespace shared {
                 for (int i = 0; i < inventoryCapacity; i++) {
                     var singleSlot = new InventorySlot();
                     singleSlot.StockType = InventorySlotStockType.NoneIv;
-                    singleSlot.BuffConfigSpeciesId = TERMINATING_BUFF_SPECIES_ID;
+                    singleSlot.BuffConfig = null;
                     single.Inventory.Slots.Add(singleSlot);
                 }
             }
@@ -540,6 +540,13 @@ namespace shared {
     
         public Skill AddHit(BulletConfig val) {
             Hits.Add(val);
+            return this;
+        }
+    }
+    
+    public sealed partial class BuffConfig {
+        public BuffConfig AddAssociatedDebuff(DebuffConfig val) {
+            AssociatedDebuffs.Add(val);
             return this;
         }
     }
