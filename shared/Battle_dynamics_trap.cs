@@ -48,7 +48,7 @@ namespace shared {
 
                 if (colliderAttr.ProvidesHardPushback && 0 < hardPushbackCnt) {
                     // We don't have any trap-slope interaction designed yet
-                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, 0);
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, 0, false);
 
                     if (hitsAnActualBarrier) {
                         float primaryPushbackX = hardPushbackNormsArr[i][primaryHardOverlapIndex].X;
