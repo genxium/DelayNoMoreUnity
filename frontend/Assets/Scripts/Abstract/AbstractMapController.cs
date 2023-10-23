@@ -7,6 +7,7 @@ using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.XR;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -424,6 +425,14 @@ public abstract class AbstractMapController : MonoBehaviour {
                 //newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
                 //selfPlayerLights.gameObject.transform.position = newPosHolder;
                 //selfPlayerLights.setDirX(currCharacterDownsync.DirX);
+
+                for (int i = 0; i < currCharacterDownsync.Inventory.Slots.Count; i++) {
+                    var slotData = currCharacterDownsync.Inventory.Slots[i];
+                    if (InventorySlotStockType.NoneIv == slotData.StockType) break;
+                    var targetBtn = (0 == i ? iptmgr.btnC : iptmgr.btnD); // TODO: Don't hardcode them
+                    var ivSlotGui = targetBtn.GetComponent<InventorySlot>();
+                    ivSlotGui.updateData(slotData);
+                }
             } else {
                 float halfBoxCh = .5f * boxCh;
                 float halfBoxCw = .5f * boxCw;
@@ -1671,9 +1680,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
 
             // TODO: Remove the hardcoded InventorySlot
-            AssignToInventorySlot(InventorySlotStockType.TimedIv, 1, 0, ShortFreezer, playerInRdf.Inventory.Slots[0]);
-            playerInRdf.Inventory.Slots[0].DefaultQuota = 1;
-            playerInRdf.Inventory.Slots[0].DefaultFramesToRecover = 480;
+            AssignToInventorySlot(InventorySlotStockType.TimedIv, 1, 0, 1, 720, ShortFreezer, playerInRdf.Inventory.Slots[0]);
         }
 
         int npcLocalId = 0;

@@ -586,6 +586,7 @@ message DebuffConfig {
     BuffStockType stockType = 2;
     int32 stock = 3;
     DebuffType type = 4;
+    int32 arrIdx = 5;
 }
 
 message BuffConfig {

@@ -104,11 +104,14 @@ namespace shared {
             );
 
         // debuffConfigs
+        public const int DEBUFF_ARR_IDX_FROZEN = 0; // Used to access "characterDownsync.DebuffList" to quickly detect conflicting debuffs 
+
         public static DebuffConfig ShortFrozen = new DebuffConfig {
             SpeciesId = 1,
             StockType = BuffStockType.Timed,
             Stock = 180,
-            Type = DebuffType.FrozenPositionLocked
+            Type = DebuffType.FrozenPositionLocked,
+            ArrIdx = DEBUFF_ARR_IDX_FROZEN
         };
 
         public static ImmutableDictionary<int, DebuffConfig> debuffConfigs = ImmutableDictionary.Create<int, DebuffConfig>().AddRange(
@@ -122,7 +125,7 @@ namespace shared {
         public static BuffConfig ShortFreezer = new BuffConfig {
             SpeciesId = 1,
             StockType = BuffStockType.Timed,
-            Stock = 600,
+            Stock = 480,
             CharacterVfxSpeciesId = VfxIceLingering.SpeciesId
         }.AddAssociatedDebuff(ShortFrozen);
     }

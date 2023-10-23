@@ -70,10 +70,12 @@ namespace shared {
             dst.DebuffConfig = debuffConfig;
         }
 
-        public static void AssignToInventorySlot(InventorySlotStockType stockType, int quota, int framesToRecover, BuffConfig buffConfig, InventorySlot dst) {
+        public static void AssignToInventorySlot(InventorySlotStockType stockType, int quota, int framesToRecover, int defaultQuota, int defaultFramesToRecover, BuffConfig buffConfig, InventorySlot dst) {
             dst.StockType = stockType; 
             dst.Quota = quota; 
             dst.FramesToRecover = framesToRecover; 
+            dst.DefaultQuota = defaultQuota;
+            dst.DefaultFramesToRecover = defaultFramesToRecover;
             dst.BuffConfig = buffConfig;
         }
 
@@ -176,17 +178,17 @@ namespace shared {
                     if (InventorySlotStockType.TimedIv == cand.StockType && isRdfFrameElapsing) {
                         int nextFramesToRecover = cand.FramesToRecover - 1;
                         if (0 > nextFramesToRecover) nextFramesToRecover = 0;
-                        AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                        AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                     } else if (InventorySlotStockType.TimedMagazineIv == cand.StockType && isRdfFrameElapsing) {
                         int nextFramesToRecover = cand.FramesToRecover - 1;
                         if (0 > nextFramesToRecover) nextFramesToRecover = 0;
                         if (0 == nextFramesToRecover && 1 == cand.FramesToRecover) {
-                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, nextFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                         } else {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                         }
                     } else {
-                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
                     }
                     ++newInventoryCnt;
                 }

@@ -43,7 +43,7 @@ namespace shared {
         };
 
         public static BulletConfig SwordManDragonPunchPrimerBullet = new BulletConfig {
-            StartupFrames = 7,
+            StartupFrames = 13,
             ActiveFrames = 20,
             HitStunFrames = MAX_INT,
             BlockStunFrames = 9,
@@ -97,7 +97,7 @@ namespace shared {
         };
 
         public static BulletConfig FireSwordManDragonPunchPrimerBullet = new BulletConfig {
-            StartupFrames = 7,
+            StartupFrames = 13,
             ActiveFrames = 20,
             HitStunFrames = MAX_INT,
             BlockStunFrames = 9,

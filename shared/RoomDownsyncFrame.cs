@@ -195,56 +195,56 @@ namespace shared {
             "ZWQuQnVsbGV0Q29uZmlnImcKCEZyYW1lTG9nEiYKA3JkZhgBIAEoCzIZLnNo",
             "YXJlZC5Sb29tRG93bnN5bmNGcmFtZRIzCg9hY3R1YWxseVVzZWRJZGYYAiAB",
             "KAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25zeW5jIicKDEJhdHRsZVJlc3Vs",
-            "dBIXCg93aW5uZXJKb2luSW5kZXgYASABKAUifAoMRGVidWZmQ29uZmlnEhEK",
-            "CXNwZWNpZXNJZBgBIAEoBRIoCglzdG9ja1R5cGUYAiABKA4yFS5zaGFyZWQu",
-            "QnVmZlN0b2NrVHlwZRINCgVzdG9jaxgDIAEoBRIgCgR0eXBlGAQgASgOMhIu",
-            "c2hhcmVkLkRlYnVmZlR5cGUilwMKCkJ1ZmZDb25maWcSEQoJc3BlY2llc0lk",
-            "GAEgASgFEigKCXN0b2NrVHlwZRgCIAEoDjIVLnNoYXJlZC5CdWZmU3RvY2tU",
-            "eXBlEg0KBXN0b2NrGAMgASgFEhIKCnNwZWVkRGVsdGEYBCABKAUSGAoQaGl0",
-            "Ym94U2l6ZVhEZWx0YRgFIAEoBRIYChBoaXRib3hTaXplWURlbHRhGAYgASgF",
-            "EhMKC2RhbWFnZURlbHRhGAcgASgFEh8KF2RhbWFnZURlbHRhQnlQZXJjZW50",
-            "YWdlGAggASgFEh4KFmNoYXJhY3RlckhhcmRuZXNzRGVsdGEYCSABKAUSGgoS",
-            "bWVsZWVIYXJkbmVzc0RlbHRhGAogASgFEh0KFWZpcmViYWxsSGFyZG5lc3NE",
-            "ZWx0YRgLIAEoBRISCgppbnZpbnNpYmxlGAwgASgIEjAKEWFzc29jaWF0ZWRE",
-            "ZWJ1ZmZzGIAIIAMoCzIULnNoYXJlZC5EZWJ1ZmZDb25maWcSHgoVY2hhcmFj",
-            "dGVyVmZ4U3BlY2llc0lkGIAQIAEoBSJQCgRCdWZmEhEKCXNwZWNpZXNJZBgB",
-            "IAEoBRINCgVzdG9jaxgCIAEoBRImCgpidWZmQ29uZmlnGAMgASgLMhIuc2hh",
-            "cmVkLkJ1ZmZDb25maWciVgoGRGVidWZmEhEKCXNwZWNpZXNJZBgBIAEoBRIN",
-            "CgVzdG9jaxgCIAEoBRIqCgxkZWJ1ZmZDb25maWcYAyABKAsyFC5zaGFyZWQu",
-            "RGVidWZmQ29uZmlnIskBCg1JbnZlbnRvcnlTbG90EjEKCXN0b2NrVHlwZRgB",
-            "IAEoDjIeLnNoYXJlZC5JbnZlbnRvcnlTbG90U3RvY2tUeXBlEg0KBXF1b3Rh",
-            "GAIgASgFEhcKD2ZyYW1lc1RvUmVjb3ZlchgDIAEoBRIUCgxkZWZhdWx0UXVv",
-            "dGEYBCABKAUSHgoWZGVmYXVsdEZyYW1lc1RvUmVjb3ZlchgFIAEoBRInCgpi",
-            "dWZmQ29uZmlnGIAIIAEoCzISLnNoYXJlZC5CdWZmQ29uZmlnIjEKCUludmVu",
-            "dG9yeRIkCgVzbG90cxgBIAMoCzIVLnNoYXJlZC5JbnZlbnRvcnlTbG90KjUK",
-            "C0J1bGxldFN0YXRlEgsKB1N0YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBs",
-            "b2RpbmcQAiquAwoOQ2hhcmFjdGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxr",
-            "aW5nEAESDgoKVHVybkFyb3VuZBACEgoKBkF0a2VkMRADEhQKEEluQWlySWRs",
-            "ZTFOb0p1bXAQBBIUChBJbkFpcklkbGUxQnlKdW1wEAUSGAoUSW5BaXJJZGxl",
-            "MUJ5V2FsbEp1bXAQBhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgS",
-            "DAoITGF5RG93bjEQCRIKCgZHZXRVcDEQChIJCgVEeWluZxALEgsKB0Rhc2hp",
-            "bmcQDBILCgdTbGlkaW5nEA0SEAoLT25XYWxsSWRsZTEQgAESEAoLQ3JvdWNo",
-            "SWRsZTEQgAISDwoKQ3JvdWNoQXRrMRCBAhISCg1Dcm91Y2hXYWxraW5nEIIC",
-            "EhEKDENyb3VjaEF0a2VkMRCDAhIJCgRBdGsxEIAIEgkKBEF0azIQgQgSCQoE",
-            "QXRrMxCCCBIJCgRBdGs0EIMIEgkKBEF0azUQhAgSDgoJSW5BaXJBdGsxEIAQ",
-            "EhAKC1dhbGtpbmdBdGsxEIEQEg8KCk9uV2FsbEF0azEQgBgqTAoJVHJhcFN0",
-            "YXRlEgkKBVRJZGxlEAASDAoIVFdhbGtpbmcQARIJCgVUQXRrMRACEgsKB1RB",
-            "dGtlZDEQAxIOCgpURGVzdHJveWVkEAQqLAoMVHJpZ2dlclN0YXRlEgoKBlRS",
-            "ZWFkeRAAEhAKDFRDb29saW5nRG93bhABKjcKCkJ1bGxldFR5cGUSEAoMVW5k",
-            "ZXRlcm1pbmVkEAASCQoFTWVsZWUQARIMCghGaXJlYmFsbBACKogBCgxNdWx0",
-            "aUhpdFR5cGUSCAoETm9uZRAAEhAKDEZyb21FbWlzc2lvbhABEhYKEkZyb21G",
-            "aXJzdEhpdEFjdHVhbBACEhYKEkZyb21GaXJzdEhpdEFueXdheRADEhUKEUZy",
-            "b21QcmV2SGl0QWN0dWFsEAQSFQoRRnJvbVByZXZIaXRBbnl3YXkQBSozChBT",
-            "a2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIPCgtGYWxsaW5nRWRn",
-            "ZRABKiwKD1ZmeER1cmF0aW9uVHlwZRIKCgZPbmVPZmYQABINCglSZXBlYXRp",
-            "bmcQASo3Cg1WZnhNb3Rpb25UeXBlEgwKCE5vTW90aW9uEAASCwoHRHJvcHBl",
-            "ZBABEgsKB1RyYWNpbmcQAioxCg1CdWZmU3RvY2tUeXBlEgoKBk5vbmVCZhAA",
-            "EgkKBVRpbWVkEAESCQoFUXVvdGEQAipxCgpEZWJ1ZmZUeXBlEgsKB05vbmVE",
-            "YmYQABIRCg1TcGVlZERvd25Pbmx5EAESEQoNQ29sZFNwZWVkRG93bhACEhYK",
-            "ElBvc2l0aW9uTG9ja2VkT25seRADEhgKFEZyb3plblBvc2l0aW9uTG9ja2Vk",
-            "EAQqUwoWSW52ZW50b3J5U2xvdFN0b2NrVHlwZRIKCgZOb25lSXYQABILCgdU",
-            "aW1lZEl2EAESCwoHUXVvdGFJdhACEhMKD1RpbWVkTWFnYXppbmVJdhADQgmq",
-            "AgZzaGFyZWRiBnByb3RvMw=="));
+            "dBIXCg93aW5uZXJKb2luSW5kZXgYASABKAUijAEKDERlYnVmZkNvbmZpZxIR",
+            "CglzcGVjaWVzSWQYASABKAUSKAoJc3RvY2tUeXBlGAIgASgOMhUuc2hhcmVk",
+            "LkJ1ZmZTdG9ja1R5cGUSDQoFc3RvY2sYAyABKAUSIAoEdHlwZRgEIAEoDjIS",
+            "LnNoYXJlZC5EZWJ1ZmZUeXBlEg4KBmFycklkeBgFIAEoBSKXAwoKQnVmZkNv",
+            "bmZpZxIRCglzcGVjaWVzSWQYASABKAUSKAoJc3RvY2tUeXBlGAIgASgOMhUu",
+            "c2hhcmVkLkJ1ZmZTdG9ja1R5cGUSDQoFc3RvY2sYAyABKAUSEgoKc3BlZWRE",
+            "ZWx0YRgEIAEoBRIYChBoaXRib3hTaXplWERlbHRhGAUgASgFEhgKEGhpdGJv",
+            "eFNpemVZRGVsdGEYBiABKAUSEwoLZGFtYWdlRGVsdGEYByABKAUSHwoXZGFt",
+            "YWdlRGVsdGFCeVBlcmNlbnRhZ2UYCCABKAUSHgoWY2hhcmFjdGVySGFyZG5l",
+            "c3NEZWx0YRgJIAEoBRIaChJtZWxlZUhhcmRuZXNzRGVsdGEYCiABKAUSHQoV",
+            "ZmlyZWJhbGxIYXJkbmVzc0RlbHRhGAsgASgFEhIKCmludmluc2libGUYDCAB",
+            "KAgSMAoRYXNzb2NpYXRlZERlYnVmZnMYgAggAygLMhQuc2hhcmVkLkRlYnVm",
+            "ZkNvbmZpZxIeChVjaGFyYWN0ZXJWZnhTcGVjaWVzSWQYgBAgASgFIlAKBEJ1",
+            "ZmYSEQoJc3BlY2llc0lkGAEgASgFEg0KBXN0b2NrGAIgASgFEiYKCmJ1ZmZD",
+            "b25maWcYAyABKAsyEi5zaGFyZWQuQnVmZkNvbmZpZyJWCgZEZWJ1ZmYSEQoJ",
+            "c3BlY2llc0lkGAEgASgFEg0KBXN0b2NrGAIgASgFEioKDGRlYnVmZkNvbmZp",
+            "ZxgDIAEoCzIULnNoYXJlZC5EZWJ1ZmZDb25maWciyQEKDUludmVudG9yeVNs",
+            "b3QSMQoJc3RvY2tUeXBlGAEgASgOMh4uc2hhcmVkLkludmVudG9yeVNsb3RT",
+            "dG9ja1R5cGUSDQoFcXVvdGEYAiABKAUSFwoPZnJhbWVzVG9SZWNvdmVyGAMg",
+            "ASgFEhQKDGRlZmF1bHRRdW90YRgEIAEoBRIeChZkZWZhdWx0RnJhbWVzVG9S",
+            "ZWNvdmVyGAUgASgFEicKCmJ1ZmZDb25maWcYgAggASgLMhIuc2hhcmVkLkJ1",
+            "ZmZDb25maWciMQoJSW52ZW50b3J5EiQKBXNsb3RzGAEgAygLMhUuc2hhcmVk",
+            "LkludmVudG9yeVNsb3QqNQoLQnVsbGV0U3RhdGUSCwoHU3RhcnRVcBAAEgoK",
+            "BkFjdGl2ZRABEg0KCUV4cGxvZGluZxACKq4DCg5DaGFyYWN0ZXJTdGF0ZRIJ",
+            "CgVJZGxlMRAAEgsKB1dhbGtpbmcQARIOCgpUdXJuQXJvdW5kEAISCgoGQXRr",
+            "ZWQxEAMSFAoQSW5BaXJJZGxlMU5vSnVtcBAEEhQKEEluQWlySWRsZTFCeUp1",
+            "bXAQBRIYChRJbkFpcklkbGUxQnlXYWxsSnVtcBAGEg8KC0luQWlyQXRrZWQx",
+            "EAcSDAoIQmxvd25VcDEQCBIMCghMYXlEb3duMRAJEgoKBkdldFVwMRAKEgkK",
+            "BUR5aW5nEAsSCwoHRGFzaGluZxAMEgsKB1NsaWRpbmcQDRIQCgtPbldhbGxJ",
+            "ZGxlMRCAARIQCgtDcm91Y2hJZGxlMRCAAhIPCgpDcm91Y2hBdGsxEIECEhIK",
+            "DUNyb3VjaFdhbGtpbmcQggISEQoMQ3JvdWNoQXRrZWQxEIMCEgkKBEF0azEQ",
+            "gAgSCQoEQXRrMhCBCBIJCgRBdGszEIIIEgkKBEF0azQQgwgSCQoEQXRrNRCE",
+            "CBIOCglJbkFpckF0azEQgBASEAoLV2Fsa2luZ0F0azEQgRASDwoKT25XYWxs",
+            "QXRrMRCAGCpMCglUcmFwU3RhdGUSCQoFVElkbGUQABIMCghUV2Fsa2luZxAB",
+            "EgkKBVRBdGsxEAISCwoHVEF0a2VkMRADEg4KClREZXN0cm95ZWQQBCosCgxU",
+            "cmlnZ2VyU3RhdGUSCgoGVFJlYWR5EAASEAoMVENvb2xpbmdEb3duEAEqNwoK",
+            "QnVsbGV0VHlwZRIQCgxVbmRldGVybWluZWQQABIJCgVNZWxlZRABEgwKCEZp",
+            "cmViYWxsEAIqiAEKDE11bHRpSGl0VHlwZRIICgROb25lEAASEAoMRnJvbUVt",
+            "aXNzaW9uEAESFgoSRnJvbUZpcnN0SGl0QWN0dWFsEAISFgoSRnJvbUZpcnN0",
+            "SGl0QW55d2F5EAMSFQoRRnJvbVByZXZIaXRBY3R1YWwQBBIVChFGcm9tUHJl",
+            "dkhpdEFueXdheRAFKjMKEFNraWxsVHJpZ2dlclR5cGUSDgoKUmlzaW5nRWRn",
+            "ZRAAEg8KC0ZhbGxpbmdFZGdlEAEqLAoPVmZ4RHVyYXRpb25UeXBlEgoKBk9u",
+            "ZU9mZhAAEg0KCVJlcGVhdGluZxABKjcKDVZmeE1vdGlvblR5cGUSDAoITm9N",
+            "b3Rpb24QABILCgdEcm9wcGVkEAESCwoHVHJhY2luZxACKjEKDUJ1ZmZTdG9j",
+            "a1R5cGUSCgoGTm9uZUJmEAASCQoFVGltZWQQARIJCgVRdW90YRACKnEKCkRl",
+            "YnVmZlR5cGUSCwoHTm9uZURiZhAAEhEKDVNwZWVkRG93bk9ubHkQARIRCg1D",
+            "b2xkU3BlZWREb3duEAISFgoSUG9zaXRpb25Mb2NrZWRPbmx5EAMSGAoURnJv",
+            "emVuUG9zaXRpb25Mb2NrZWQQBCpTChZJbnZlbnRvcnlTbG90U3RvY2tUeXBl",
+            "EgoKBk5vbmVJdhAAEgsKB1RpbWVkSXYQARILCgdRdW90YUl2EAISEwoPVGlt",
+            "ZWRNYWdhemluZUl2EANCCaoCBnNoYXJlZGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.InventorySlotStockType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -276,7 +276,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "MpDelta", "Hits" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleResult), global::shared.BattleResult.Parser, new[]{ "WinnerJoinIndex" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.DebuffConfig), global::shared.DebuffConfig.Parser, new[]{ "SpeciesId", "StockType", "Stock", "Type" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.DebuffConfig), global::shared.DebuffConfig.Parser, new[]{ "SpeciesId", "StockType", "Stock", "Type", "ArrIdx" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BuffConfig), global::shared.BuffConfig.Parser, new[]{ "SpeciesId", "StockType", "Stock", "SpeedDelta", "HitboxSizeXDelta", "HitboxSizeYDelta", "DamageDelta", "DamageDeltaByPercentage", "CharacterHardnessDelta", "MeleeHardnessDelta", "FireballHardnessDelta", "Invinsible", "AssociatedDebuffs", "CharacterVfxSpeciesId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Buff), global::shared.Buff.Parser, new[]{ "SpeciesId", "Stock", "BuffConfig" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Debuff), global::shared.Debuff.Parser, new[]{ "SpeciesId", "Stock", "DebuffConfig" }, null, null, null, null),
@@ -15254,6 +15254,7 @@ namespace shared {
       stockType_ = other.stockType_;
       stock_ = other.stock_;
       type_ = other.type_;
+      arrIdx_ = other.arrIdx_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -15311,6 +15312,18 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "arrIdx" field.</summary>
+    public const int ArrIdxFieldNumber = 5;
+    private int arrIdx_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ArrIdx {
+      get { return arrIdx_; }
+      set {
+        arrIdx_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -15330,6 +15343,7 @@ namespace shared {
       if (StockType != other.StockType) return false;
       if (Stock != other.Stock) return false;
       if (Type != other.Type) return false;
+      if (ArrIdx != other.ArrIdx) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -15341,6 +15355,7 @@ namespace shared {
       if (StockType != global::shared.BuffStockType.NoneBf) hash ^= StockType.GetHashCode();
       if (Stock != 0) hash ^= Stock.GetHashCode();
       if (Type != global::shared.DebuffType.NoneDbf) hash ^= Type.GetHashCode();
+      if (ArrIdx != 0) hash ^= ArrIdx.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -15375,6 +15390,10 @@ namespace shared {
         output.WriteRawTag(32);
         output.WriteEnum((int) Type);
       }
+      if (ArrIdx != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ArrIdx);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -15401,6 +15420,10 @@ namespace shared {
         output.WriteRawTag(32);
         output.WriteEnum((int) Type);
       }
+      if (ArrIdx != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ArrIdx);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -15422,6 +15445,9 @@ namespace shared {
       }
       if (Type != global::shared.DebuffType.NoneDbf) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Type);
+      }
+      if (ArrIdx != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ArrIdx);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -15446,6 +15472,9 @@ namespace shared {
       }
       if (other.Type != global::shared.DebuffType.NoneDbf) {
         Type = other.Type;
+      }
+      if (other.ArrIdx != 0) {
+        ArrIdx = other.ArrIdx;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -15478,6 +15507,10 @@ namespace shared {
             Type = (global::shared.DebuffType) input.ReadEnum();
             break;
           }
+          case 40: {
+            ArrIdx = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -15507,6 +15540,10 @@ namespace shared {
           }
           case 32: {
             Type = (global::shared.DebuffType) input.ReadEnum();
+            break;
+          }
+          case 40: {
+            ArrIdx = input.ReadInt32();
             break;
           }
         }
