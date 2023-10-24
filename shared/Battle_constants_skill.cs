@@ -4,101 +4,16 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public static int PATTERN_ID_UNABLE_TO_OP = -2;
+        public static int PATTERN_ID_NO_OP = -1;
         public const int PATTERN_B = 1;
         public const int PATTERN_UP_B = 2;
         public const int PATTERN_DOWN_B = 3;
         public const int PATTERN_HOLD_B = 4;
         public const int PATTERN_DOWN_A = 5;
 
-        public const int EXPLOSION_SPECIES_FOLLOW = 0;
-        public const int EXPLOSION_SPECIES_NONE = -1;
-
-        public static VfxConfig VfxDashingActive = new VfxConfig {
-            SpeciesId = 1,
-            MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff,
-            OnCharacter = true,
-            OnBullet = false
-        };
-
-        public static VfxConfig VfxFireExplodingBig = new VfxConfig {
-            SpeciesId = 2,
-            MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff,
-            OnCharacter = false,
-            OnBullet = true
-        };
-
-        public static VfxConfig VfxIceExplodingBig = new VfxConfig {
-            SpeciesId = 3,
-            MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff,
-            OnCharacter = false,
-            OnBullet = true
-        };
-
-        public static VfxConfig VfxFireSlashActive = new VfxConfig {
-            SpeciesId = 4,
-            MotionType = VfxMotionType.Tracing,
-            DurationType = VfxDurationType.OneOff,
-            OnCharacter = true,
-            OnBullet = false
-        };
-
-        public static VfxConfig VfxSlashActive = new VfxConfig {
-            SpeciesId = 5,
-            MotionType = VfxMotionType.Tracing,
-            DurationType = VfxDurationType.OneOff,
-            OnCharacter = true,
-            OnBullet = false
-        };
-
-        public static VfxConfig VfxSpikeSlashExplodingActive = new VfxConfig {
-            SpeciesId = 6,
-            MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff,
-            OnCharacter = false,
-            OnBullet = true
-        };
-
-        public static VfxConfig VfxFirePointLightActive = new VfxConfig {
-            SpeciesId = 7,
-            MotionType = VfxMotionType.Tracing,
-            DurationType = VfxDurationType.Repeating,
-            OnCharacter = false,
-            OnBullet = true
-        };
-
-        public static VfxConfig VfxPistolBulletExploding = new VfxConfig {
-            SpeciesId = 8,
-            MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff,
-            OnCharacter = false,
-            OnBullet = true
-        };
-
-        public static VfxConfig VfxSlashExploding = new VfxConfig {
-            SpeciesId = 9,
-            MotionType = VfxMotionType.Dropped,
-            DurationType = VfxDurationType.OneOff,
-            OnCharacter = false,
-            OnBullet = true
-        };
-
-        public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
-             new[]
-             {
-                    new KeyValuePair<int, VfxConfig>(VfxDashingActive.SpeciesId, VfxDashingActive),
-                    new KeyValuePair<int, VfxConfig>(VfxFireExplodingBig.SpeciesId, VfxFireExplodingBig),
-                    new KeyValuePair<int, VfxConfig>(VfxIceExplodingBig.SpeciesId, VfxIceExplodingBig),
-                    new KeyValuePair<int, VfxConfig>(VfxFireSlashActive.SpeciesId, VfxFireSlashActive),
-                    new KeyValuePair<int, VfxConfig>(VfxSlashActive.SpeciesId, VfxSlashActive),
-                    new KeyValuePair<int, VfxConfig>(VfxSpikeSlashExplodingActive.SpeciesId, VfxSpikeSlashExplodingActive),
-                    new KeyValuePair<int, VfxConfig>(VfxFirePointLightActive.SpeciesId, VfxFirePointLightActive),
-                    new KeyValuePair<int, VfxConfig>(VfxPistolBulletExploding.SpeciesId, VfxPistolBulletExploding),
-                    new KeyValuePair<int, VfxConfig>(VfxSlashExploding.SpeciesId, VfxSlashExploding),
-             }
-            );
+        public const int PATTERN_INVENTORY_SLOT_C = 1024;
+        public const int PATTERN_INVENTORY_SLOT_D = 1025;
 
         public static BulletConfig SwordManMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 12,
@@ -128,7 +43,7 @@ namespace shared {
         };
 
         public static BulletConfig SwordManDragonPunchPrimerBullet = new BulletConfig {
-            StartupFrames = 7,
+            StartupFrames = 13,
             ActiveFrames = 20,
             HitStunFrames = MAX_INT,
             BlockStunFrames = 9,
@@ -182,7 +97,7 @@ namespace shared {
         };
 
         public static BulletConfig FireSwordManDragonPunchPrimerBullet = new BulletConfig {
-            StartupFrames = 7,
+            StartupFrames = 13,
             ActiveFrames = 20,
             HitStunFrames = MAX_INT,
             BlockStunFrames = 9,

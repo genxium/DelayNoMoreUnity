@@ -54,8 +54,6 @@ namespace shared {
 
         public static float MAX_FLOAT32 = float.MaxValue;
         public static int MAX_INT = 999999999;
-        public static int PATTERN_ID_UNABLE_TO_OP = -2;
-        public static int PATTERN_ID_NO_OP = -1;
 
         public static ulong COLLISION_NONE_INDEX = 0;
         public static ulong COLLISION_BARRIER_INDEX_PREFIX = (1 << 0);
@@ -137,6 +135,9 @@ namespace shared {
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;
+        public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 3;
+        public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 3;
+        public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
@@ -180,6 +181,8 @@ namespace shared {
         public static int TERMINATING_BULLET_TEAM_ID = (-1028);
         public static int TERMINATING_TRAP_ID = (-1029);
         public static int TERMINATING_TRIGGER_ID = (-1030);
+        public static int TERMINATING_BUFF_SPECIES_ID = (-1031);
+        public static int TERMINATING_DEBUFF_SPECIES_ID = (-1032);
 
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
 

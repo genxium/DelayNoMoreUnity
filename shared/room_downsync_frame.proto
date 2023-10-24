@@ -133,6 +133,11 @@ message CharacterDownsync {
 	int32 bulletTeamId = 1027;
 	int32 chCollisionTeamId = 1028;
 	uint64 collisionTypeMask = 1029;
+
+    repeated Buff buffList = 1030; 
+    repeated Debuff debuffList = 1031; 
+
+	Inventory inventory = 1032;
 }
 
 message InputFrameDecoded {
@@ -140,6 +145,8 @@ message InputFrameDecoded {
 	int32 dy = 2;
 	int32 btnALevel = 3;
 	int32 btnBLevel = 4;
+	int32 btnCLevel = 5;
+	int32 btnDLevel = 6;
 }
 
 message InputFrameUpsync {
@@ -558,4 +565,85 @@ message FrameLog {
 
 message BattleResult {
     int32 winnerJoinIndex = 1;
+}
+
+enum BuffStockType {
+    NoneBf = 0;
+	Timed = 1; // Would be calculated in number of renderFrames, not actual time in seconds or milliseconds
+	Quota = 2;
+}
+
+enum DebuffType {
+    NoneDbf = 0;
+    SpeedDownOnly = 1;
+    ColdSpeedDown = 2;
+    PositionLockedOnly = 3;
+    FrozenPositionLocked = 4;
+}
+
+message DebuffConfig {
+    int32 speciesId = 1;
+    BuffStockType stockType = 2;
+    int32 stock = 3;
+    DebuffType type = 4;
+    int32 arrIdx = 5;
+}
+
+message BuffConfig {
+    int32 speciesId = 1;
+    BuffStockType stockType = 2;
+    int32 stock = 3;
+    int32 speedDelta = 4;
+    int32 hitboxSizeXDelta = 5;
+    int32 hitboxSizeYDelta = 6;
+    /* 
+    It's not trivial to handle damage after the following sequence
+    1. Pick up damageDelta=+10 for 600 frames
+    2. Pick up damageDeltaByPercentage=+10% for 600 frames
+    3. Buff "damageDelta=+10" expires 
+    4. Buff "damageDeltaByPercentage=+10%" expires
+
+    Pick a deterministic way :)
+    */
+    int32 damageDelta = 7;
+    int32 damageDeltaByPercentage = 8;
+    int32 characterHardnessDelta = 9;
+    int32 meleeHardnessDelta = 10;
+    int32 fireballHardnessDelta = 11;
+    bool invinsible = 12;
+    repeated DebuffConfig associatedDebuffs = 1024; // There's a reason why type "DebuffConfig" instead of just the speciesId is used here, as "BuffConfig" itself is already seeked via heap-RAM dictionary look from "Buff.speciesId", we'd like to reduce the count of heap-RAM access when stepping battle dynamics  
+
+    int32 characterVfxSpeciesId = 2048;
+}
+
+message Buff {
+    int32 speciesId = 1; // A redundancy of "buffConfig" for easy termination detection
+    int32 stock = 2;
+    BuffConfig buffConfig = 3; // Same type concern as "BuffConfig.associatedDebuffs". 
+}
+
+message Debuff {
+    int32 speciesId = 1; // A redundancy of "debuffConfig" for easy termination detection 
+    int32 stock = 2;
+    DebuffConfig debuffConfig = 3; // Same type concern as "BuffConfig.associatedDebuffs". 
+}
+
+enum InventorySlotStockType {
+	NoneIv = 0;
+	TimedIv = 1; // Reusable after cooldown
+	QuotaIv = 2;
+	TimedMagazineIv = 3; // Has certain quotas before required to cooldown
+}
+
+message InventorySlot {
+	InventorySlotStockType stockType = 1;
+	int32 quota = 2; 
+	int32 framesToRecover = 3; 
+    int32 defaultQuota = 4;
+    int32 defaultFramesToRecover = 5;
+	BuffConfig buffConfig = 1024; // Same type concern as "BuffConfig.associatedDebuffs".
+}
+
+message Inventory {
+	repeated InventorySlot slots = 1;
 }

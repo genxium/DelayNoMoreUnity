@@ -7,6 +7,7 @@ using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.XR;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int roomCapacity;
@@ -127,6 +128,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
     protected KvPriorityQueue<string, SFXSource>.ValScore sfxNodeScore = (x) => x.score;
 
+    public BattleInputManager iptmgr;
+
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
@@ -212,7 +215,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here
             initConfirmedList = (existingInputFrame.ConfirmedList | selfJoinIndexMask);
         }
-        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         currSelfInput = iptmgr.GetEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
         prefabbedInputList[(joinIndex - 1)] = currSelfInput;
         while (inputBuffer.EdFrameId <= inputFrameId) {
@@ -423,6 +425,14 @@ public abstract class AbstractMapController : MonoBehaviour {
                 //newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
                 //selfPlayerLights.gameObject.transform.position = newPosHolder;
                 //selfPlayerLights.setDirX(currCharacterDownsync.DirX);
+
+                for (int i = 0; i < currCharacterDownsync.Inventory.Slots.Count; i++) {
+                    var slotData = currCharacterDownsync.Inventory.Slots[i];
+                    if (InventorySlotStockType.NoneIv == slotData.StockType) break;
+                    var targetBtn = (0 == i ? iptmgr.btnC : iptmgr.btnD); // TODO: Don't hardcode them
+                    var ivSlotGui = targetBtn.GetComponent<InventorySlot>();
+                    ivSlotGui.updateData(slotData);
+                }
             } else {
                 float halfBoxCh = .5f * boxCh;
                 float halfBoxCw = .5f * boxCw;
@@ -442,17 +452,17 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
-                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
+                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, currCharacterDownsync.CharacterState, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
             } else {
-                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig);
+                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, currCharacterDownsync.CharacterState, prevCharacterDownsync, false, chConfig);
             }
 
             // Add character vfx
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
-                playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, chAnimCtrl.upperPart.gameObject);
+                playCharacterDamagedVfx(currCharacterDownsync, chConfig, prevCharacterDownsync, chAnimCtrl.upperPart.gameObject, chAnimCtrl);
             } else {
-                playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, playerGameObj);
+                playCharacterDamagedVfx(currCharacterDownsync, chConfig, prevCharacterDownsync, playerGameObj, chAnimCtrl);
             }
             playCharacterSfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id);
@@ -510,7 +520,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             newPosHolder.Set(wx, wy, characterZ);
             npcGameObj.transform.position = newPosHolder;
 
-            npcAnimHolder.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
+            npcAnimHolder.updateCharacterAnim(currNpcDownsync, currNpcDownsync.CharacterState, prevNpcDownsync, false, chConfig);
             npcAnimHolder.score = rdf.Id;
             speciesKvPq.Put(lookupKey, npcAnimHolder);
 
@@ -525,7 +535,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))
                     .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
             }
-            playCharacterDamagedVfx(currNpcDownsync, prevNpcDownsync, npcGameObj);
+            playCharacterDamagedVfx(currNpcDownsync, chConfig, prevNpcDownsync, npcGameObj, npcAnimHolder);
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             playCharacterSfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id);
@@ -724,7 +734,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             "6_Spike_Slash_Exploding",
             "7_Fire_PointLight_Active",
             "8_Pistol_Bullet_Exploding",
-            "9_Slash_Exploding"
+            "9_Slash_Exploding",
+            "10_Ice_Lingering"
         };
 
         foreach (string name in allVfxPrefabNames) {
@@ -1191,7 +1202,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         bgmSource.Stop();
         battleState = ROOM_STATE_STOPPED;
 
-        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         iptmgr.reset();
     }
 
@@ -1212,7 +1222,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected abstract void sendInputFrameUpsyncBatch(int latestLocalInputFrameId);
 
     protected void enableBattleInput(bool yesOrNo) {
-        BattleInputManager iptmgr = this.gameObject.GetComponent<BattleInputManager>();
         iptmgr.enable(yesOrNo);
     }
 
@@ -1669,6 +1678,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.Mp = 1000;
             playerInRdf.MaxMp = 1000;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
+
+            // TODO: Remove the hardcoded InventorySlot
+            AssignToInventorySlot(InventorySlotStockType.TimedIv, 1, 0, 1, 720, ShortFreezer, playerInRdf.Inventory.Slots[0]);
         }
 
         int npcLocalId = 0;
@@ -1677,7 +1689,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             var chConfig = Battle.characters[characterSpeciesId];
-            var npcInRdf = new CharacterDownsync();
+            var npcInRdf = startRdf.NpcsArr[i];
             var (vx, vy) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
             npcInRdf.Id = npcLocalId; // Just for not being excluded 
             npcInRdf.JoinIndex = joinIndex;
@@ -2076,7 +2088,34 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedHpBars.Put(lookupKey, hpBar);
     }
 
-    public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, GameObject theGameObj) {
+    public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync prevCharacterDownsync, GameObject theGameObj, CharacterAnimController chAnimCtrl) {
+        var spr = theGameObj.GetComponent<SpriteRenderer>();
+        var material = spr.material;
+        material.SetFloat("_CrackOpacity", 0f);
+
+        if (null != currCharacterDownsync.DebuffList) {
+            for (int i = 0; i < currCharacterDownsync.DebuffList.Count; i++) {
+                Debuff debuff = currCharacterDownsync.DebuffList[i];
+                if (TERMINATING_DEBUFF_SPECIES_ID == debuff.SpeciesId) break;
+                switch (debuff.DebuffConfig.Type) {
+                    case DebuffType.FrozenPositionLocked:
+                        if (0 < debuff.Stock) {
+                            material.SetFloat("_CrackOpacity", 0.75f);
+                            CharacterState overwriteChState = currCharacterDownsync.CharacterState;
+                            if (!noOpSet.Contains(overwriteChState)) {
+                                overwriteChState = CharacterState.Atked1;
+                            }
+                            if (SPECIES_GUNGIRL == currCharacterDownsync.SpeciesId) {
+                                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, overwriteChState, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
+                            } else {
+                                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, overwriteChState, prevCharacterDownsync, false, chConfig);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
         if (
             null == prevCharacterDownsync 
             || prevCharacterDownsync.Hp <= currCharacterDownsync.Hp 
@@ -2084,8 +2123,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         ) return false;
         
         // Some characters, and almost all traps wouldn't have an "attacked state", hence showing their damaged animation by shader.
-        var spr = theGameObj.GetComponent<SpriteRenderer>();
-        var material = spr.material;
         /*
         DOTween.Sequence().Append(
             DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))
@@ -2179,64 +2216,111 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId) {
-        if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
-        var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
-        if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit >= currSkillConfig.Hits.Count) {
-            return false;
-        }
-        var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
-        if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) {
-            return false;
-        }
-        var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
-        if (!vfxConfig.OnCharacter) return false;
-        // The outer "if" is less costly than calculating viewport point.
-        // if the current position is within camera FOV
-        var speciesKvPq = cachedVfxNodes[currBulletConfig.ActiveVfxSpeciesId];
-        string lookupKey = "ch-" + currCharacterDownsync.JoinIndex.ToString();
-        var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
-        if (null == vfxAnimHolder) {
-            vfxAnimHolder = speciesKvPq.Pop();
-            //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-        } else {
-            //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-        }
-
-        if (null == vfxAnimHolder) {
-            throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
-        }
-        
-        bool isInitialFrame = (currBulletConfig.StartupFrames == currCharacterDownsync.FramesInChState);
-        // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet!
-
-        if (vfxConfig.MotionType == VfxMotionType.Tracing) {
-            newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-            vfxAnimHolder.gameObject.transform.position = newPosHolder;
-        } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
-            if (VfxDashingActive.SpeciesId == currBulletConfig.ActiveVfxSpeciesId) {
-                // Special offset for Dashing
-                newPosHolder.Set(wx, wy - .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, vfxAnimHolder.gameObject.transform.position.z);
+        // Buff Vfx
+        for (int i = 0; i < currCharacterDownsync.BuffList.Count; i++) {
+            var buff = currCharacterDownsync.BuffList[i];
+            if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;
+            if (NO_VFX_ID == buff.BuffConfig.CharacterVfxSpeciesId) continue;
+            if (BuffStockType.Timed == buff.BuffConfig.StockType && 0 >= buff.Stock) continue;
+            var vfxConfig = vfxDict[buff.BuffConfig.CharacterVfxSpeciesId];
+            if (!vfxConfig.OnCharacter) continue;
+            var speciesKvPq = cachedVfxNodes[buff.BuffConfig.CharacterVfxSpeciesId];
+            string lookupKey = "ch-buff-" + currCharacterDownsync.JoinIndex.ToString() + "-" + i;
+            var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
+            if (null == vfxAnimHolder) {
+                vfxAnimHolder = speciesKvPq.Pop();
+                //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for lookupKey={1} at wpos=({2}, {3})", rdfId, lookupKey, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
             } else {
+                //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for lookupKey={1} at wpos=({2}, {3})", rdfId, lookupKey, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+            }
+
+            if (null == vfxAnimHolder) {
+                throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
+            }
+
+            bool isInitialFrame = (buff.Stock == buff.BuffConfig.Stock);
+
+            if (vfxConfig.MotionType == VfxMotionType.Tracing) {
                 newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                vfxAnimHolder.gameObject.transform.position = newPosHolder;
+            } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
+                newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                vfxAnimHolder.gameObject.transform.position = newPosHolder;
             }
-            vfxAnimHolder.gameObject.transform.position = newPosHolder;
-        }
 
-        if (isInitialFrame) {
-            // Regardless of "vfxConfig.DurationType" 
-            if (0 > currCharacterDownsync.DirX) {
-                vfxAnimHolder.attachedPsr.flip = new Vector3(-1, 0);
-            } else {
-                vfxAnimHolder.attachedPsr.flip = new Vector3(1, 0);
-            }
-            if (!vfxAnimHolder.attachedPs.isPlaying) {
-                // For a multi-hit bullet with vfx, we might need this to prevent duplicate triggers
+            if (isInitialFrame) {
+                vfxAnimHolder.attachedPs.Stop();
                 vfxAnimHolder.attachedPs.Play();
             }
+            vfxAnimHolder.score = rdfId;
+            speciesKvPq.Put(lookupKey, vfxAnimHolder);
         }
-        vfxAnimHolder.score = rdfId;
-        speciesKvPq.Put(lookupKey, vfxAnimHolder);
 
+        // Bullet Vfx
+        {
+            if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
+            var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+            if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit >= currSkillConfig.Hits.Count) {
+                return false;
+            }
+            var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
+            if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) {
+                return false;
+            }
+
+            var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
+            if (!vfxConfig.OnCharacter) return false;
+            // The outer "if" is less costly than calculating viewport point.
+            // if the current position is within camera FOV
+            var speciesKvPq = cachedVfxNodes[currBulletConfig.ActiveVfxSpeciesId];
+            string lookupKey = "ch-" + currCharacterDownsync.JoinIndex.ToString();
+            var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
+            if (null == vfxAnimHolder) {
+                vfxAnimHolder = speciesKvPq.Pop();
+                //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+            } else {
+                //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
+            }
+
+            if (null == vfxAnimHolder) {
+                throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
+            }
+
+            bool isInitialFrame = (currBulletConfig.StartupFrames == currCharacterDownsync.FramesInChState);
+            // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet!
+
+            if (vfxConfig.MotionType == VfxMotionType.Tracing) {
+                newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                vfxAnimHolder.gameObject.transform.position = newPosHolder;
+            } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
+                if (VfxDashingActive.SpeciesId == currBulletConfig.ActiveVfxSpeciesId) {
+                    // Special offset for Dashing
+                    newPosHolder.Set(wx, wy - .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, vfxAnimHolder.gameObject.transform.position.z);
+                } else {
+                    newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
+                }
+                vfxAnimHolder.gameObject.transform.position = newPosHolder;
+            }
+
+            if (isInitialFrame) {
+                // Regardless of "vfxConfig.DurationType" 
+                if (0 > currCharacterDownsync.DirX) {
+                    vfxAnimHolder.attachedPsr.flip = new Vector3(-1, 0);
+                } else {
+                    vfxAnimHolder.attachedPsr.flip = new Vector3(1, 0);
+                }
+                if (0 < currCharacterDownsync.ActiveSkillHit && !vfxAnimHolder.attachedPs.isPlaying) { 
+                    // For a multi-hit bullet with vfx, we might need this to prevent duplicate triggers
+                    vfxAnimHolder.attachedPs.Play();
+                } else {
+                    vfxAnimHolder.attachedPs.Stop();
+                    vfxAnimHolder.attachedPs.Play();
+                }
+            }
+            vfxAnimHolder.score = rdfId;
+            speciesKvPq.Put(lookupKey, vfxAnimHolder);
+        }
+        
         return true;
     }
 

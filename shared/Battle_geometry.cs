@@ -259,7 +259,7 @@ namespace shared {
             return retCnt;
         }
 
-        public static void processPrimaryAndImpactEffPushback(Vector effPushback, Vector[] pushbacks, int pushbacksCnt, int primaryOverlapIndex, float snapOverlap) {
+        public static void processPrimaryAndImpactEffPushback(Vector effPushback, Vector[] pushbacks, int pushbacksCnt, int primaryOverlapIndex, float snapOverlap, bool eraseReverseDirection) {
             if (0 == pushbacksCnt) {
                 return;
             }
@@ -277,6 +277,9 @@ namespace shared {
                         } else {
                             pushback.X = 0;
                         }
+                    } else if (eraseReverseDirection) {
+                        // Otherwise the sum over the reverse direction might pile up to large value.
+                        pushback.X = 0;
                     }
 
                     if (pushback.Y * primaryPushbackY > 0) {
@@ -285,6 +288,9 @@ namespace shared {
                         } else {
                             pushback.Y = 0;
                         }
+                    } else if (eraseReverseDirection) {
+                        // Otherwise the sum over the reverse direction might pile up to large value.
+                        pushback.Y = 0;
                     }
                 }
                 // Normalize and thus re-purpose "pushbacks[i]" to be later used

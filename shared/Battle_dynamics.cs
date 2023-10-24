@@ -2,6 +2,7 @@ using System;
 using static shared.CharacterState;
 using System.Collections.Generic;
 using Google.Protobuf.Collections;
+using System.Security.Cryptography;
 
 namespace shared {
     public partial class Battle {
@@ -41,11 +42,15 @@ namespace shared {
             int encodedDirection = (int)(encodedInput & 15);
             int btnALevel = (int)((encodedInput >> 4) & 1);
             int btnBLevel = (int)((encodedInput >> 5) & 1);
+            int btnCLevel = (int)((encodedInput >> 6) & 1);
+            int btnDLevel = (int)((encodedInput >> 7) & 1);
 
             holder.Dx = DIRECTION_DECODER[encodedDirection, 0];
             holder.Dy = DIRECTION_DECODER[encodedDirection, 1];
             holder.BtnALevel = btnALevel;
             holder.BtnBLevel = btnBLevel;
+            holder.BtnCLevel = btnCLevel;
+            holder.BtnDLevel = btnDLevel;
             return true;
         }
 
@@ -104,6 +109,11 @@ namespace shared {
             }
 
             if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
+            }
+
+            bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
+            if (interrupted) {
                 return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
             }
 
@@ -177,6 +187,14 @@ namespace shared {
                 }
             }
 
+            if (PATTERN_ID_NO_OP == patternId) {
+                if (decodedInputHolder.BtnCLevel > prevDecodedInputHolder.BtnCLevel) {
+                    patternId = PATTERN_INVENTORY_SLOT_C;
+                } else if (decodedInputHolder.BtnDLevel > prevDecodedInputHolder.BtnDLevel) {
+                    patternId = PATTERN_INVENTORY_SLOT_D;
+                }
+            }
+
             return (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy);
         }
 
@@ -192,7 +210,7 @@ namespace shared {
             var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
             int xfac = (0 < thatCharacterInNextFrame.DirX ? 1 : -1);
             bool hasLockVel = false;
-            if (skills.ContainsKey(skillId)) {
+            if (NO_SKILL != skillId) {
                 var skillConfig = skills[skillId];
                 if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
                     skillId = FindSkillId(1, currCharacterDownsync, chConfig.SpeciesId); // Fallback to basic atk
@@ -236,6 +254,43 @@ namespace shared {
             return skillUsed;
         }
 
+        private static bool _useInventorySlot(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+            bool slotUsed = false;
+            if (PATTERN_INVENTORY_SLOT_C != patternId && PATTERN_INVENTORY_SLOT_D != patternId) {
+                return false;
+            }
+            int slotIdx = (PATTERN_INVENTORY_SLOT_C == patternId ? 0 : 1); 
+            var targetSlotCurr = currCharacterDownsync.Inventory.Slots[slotIdx];
+            var targetSlotNext = thatCharacterInNextFrame.Inventory.Slots[slotIdx];
+            if (InventorySlotStockType.QuotaIv == targetSlotCurr.StockType) {
+                if (0 < targetSlotCurr.Quota) {
+                    targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
+                    slotUsed = true;
+                }
+            } else if (InventorySlotStockType.TimedIv == targetSlotCurr.StockType) {
+                if (0 == targetSlotCurr.FramesToRecover) {
+                    targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
+                    slotUsed = true;
+                }
+            } else if (InventorySlotStockType.TimedMagazineIv == targetSlotCurr.StockType) {
+                if (0 < targetSlotCurr.Quota) {
+                    targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
+                    if (0 == targetSlotNext.Quota) {
+                        targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
+                    }
+                    slotUsed = true;
+                }
+            }
+    
+            if (slotUsed) {
+                var buffConfig = targetSlotCurr.BuffConfig; 
+                // TODO: Support multi-buff simultaneously!
+                AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, buffConfig, thatCharacterInNextFrame.BuffList[0]);
+            }
+
+            return slotUsed;
+        }
+
         private static void _applyGravity(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ILoggerBridge logger) {
             /*
             if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
@@ -265,7 +320,26 @@ namespace shared {
             } else {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
                 thatCharacterInNextFrame.VelY += GRAVITY_Y;
+                if (thatCharacterInNextFrame.VelY < chConfig.MinFallingVelY) {
+                    thatCharacterInNextFrame.VelY = chConfig.MinFallingVelY;
+                }
             }
+        }
+
+        private static bool _processDebuffDuringInput(CharacterDownsync currCharacterDownsync) {
+            if (null == currCharacterDownsync.DebuffList) return false;
+            for (int i = 0; i < currCharacterDownsync.DebuffList.Count; i++) {
+                Debuff debuff = currCharacterDownsync.DebuffList[i];
+                if (TERMINATING_DEBUFF_SPECIES_ID == debuff.SpeciesId) break;
+                switch (debuff.DebuffConfig.Type) {
+                    case DebuffType.FrozenPositionLocked:
+                        if (0 < debuff.Stock) {
+                            return true;
+                        }
+                        break;
+                }
+            }
+            return false;
         }
 
         private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
@@ -274,6 +348,9 @@ namespace shared {
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
+
+                // Prioritize use of inventory slot over skills
+                _useInventorySlot(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
@@ -661,7 +738,7 @@ namespace shared {
                 if (i < roomCapacity && 0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
                     // Revive player-controlled character from Dying
                     (newVx, newVy) = (currCharacterDownsync.RevivalVirtualGridX, currCharacterDownsync.RevivalVirtualGridY);
-                    thatCharacterInNextFrame.CharacterState = GetUp1;
+                    thatCharacterInNextFrame.CharacterState = GetUp1; // No need to tune bounding box and offset for this case, because the revival location is fixed :)
                     thatCharacterInNextFrame.FramesInChState = 0;
                     thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
                     thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
@@ -713,7 +790,7 @@ namespace shared {
                        logger.LogInfo(String.Format("Before processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
                        }
                      */
-                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP);
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
                     /* 
                        if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
                        logger.LogInfo(String.Format("After processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
@@ -884,7 +961,7 @@ namespace shared {
                     }
                     // logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
 
-                    processPrimaryAndImpactEffPushback(effPushbacks[i], softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP);
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP, true);
 
                     //logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));                         
                 }
@@ -914,11 +991,13 @@ namespace shared {
                         if (Dying == thatCharacterInNextFrame.CharacterState) {
                             // No update needed for Dying
                         } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
+                            thatCharacterInNextFrame.VelY = 0;
                             thatCharacterInNextFrame.CharacterState = LayDown1;
                             thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                         } else {
                             switch (currCharacterDownsync.CharacterState) {
                                 case BlownUp1:
+                                case LayDown1:
                                 case InAirIdle1NoJump:
                                 case InAirIdle1ByJump:
                                 case InAirIdle1ByWallJump:
@@ -952,7 +1031,7 @@ namespace shared {
                                 // No update needed for Dying
                             } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
                                 thatCharacterInNextFrame.VelX = 0;
-                                thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
+                                thatCharacterInNextFrame.VelY = 0;
                                 thatCharacterInNextFrame.CharacterState = LayDown1;
                                 thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                             } else if (LayDown1 == thatCharacterInNextFrame.CharacterState) {
@@ -964,6 +1043,11 @@ namespace shared {
                                 if (0 == thatCharacterInNextFrame.FramesToRecover) {
                                     thatCharacterInNextFrame.CharacterState = Idle1;
                                     thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
+
+                                    int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                    var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.LayDownSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                    var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                    effPushbacks[i].Y -= halfColliderChDiff;
                                 }
                             } else if (0 >= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
                                 // [WARNING] Covers 2 situations:
@@ -1092,9 +1176,11 @@ namespace shared {
 
                                 bool shouldOmitStun = ((0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
                                 if (false == shouldOmitStun) {
-                                    if (bulletNextFrame.Config.BlowUp) {
+                                    var existingDebuff = atkedCharacterInNextFrame.DebuffList[DEBUFF_ARR_IDX_FROZEN];
+                                    bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == existingDebuff.DebuffConfig.Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
+                                    if (!isFrozen && bulletNextFrame.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
-                                    } else if (BlownUp1 != oldNextCharacterState) {
+                                    } else if (isFrozen || BlownUp1 != oldNextCharacterState) {
                                         if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
                                             atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
                                         } else {
@@ -1108,6 +1194,34 @@ namespace shared {
                                 }
                                 if (atkedCharacterInNextFrame.FramesInvinsible < bulletNextFrame.Config.HitInvinsibleFrames) {
                                     atkedCharacterInNextFrame.FramesInvinsible = bulletNextFrame.Config.HitInvinsibleFrames;
+                                }
+
+                                if (null != offender.BuffList) {
+                                    for (int w = 0; w < offender.BuffList.Count; w++) {
+                                        Buff buff = offender.BuffList[w];
+                                        if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;   
+                                        if (0 >= buff.Stock) continue;
+                                        BuffConfig buffConfig = buff.BuffConfig;
+                                        if (null == buffConfig.AssociatedDebuffs) continue;  
+                                        for (int q = 0; q < buffConfig.AssociatedDebuffs.Count; q++) {
+                                            DebuffConfig associatedDebuffConfig = buffConfig.AssociatedDebuffs[q];
+                                            if (TERMINATING_BUFF_SPECIES_ID == associatedDebuffConfig.SpeciesId) break;
+                                            switch (associatedDebuffConfig.Type) {
+                                                case DebuffType.ColdSpeedDown:
+                                                case DebuffType.FrozenPositionLocked:
+                                                    // Overwrite existing debuff for now
+                                                    int debuffArrIdx = associatedDebuffConfig.ArrIdx;
+                                                    AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, associatedDebuffConfig, atkedCharacterInNextFrame.DebuffList[debuffArrIdx]);
+                                                    // The following transition is deterministic because we checked "atkedCharacterInNextFrame.DebuffList" before transiting into BlownUp1.
+                                                    if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
+                                                        atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
+                                                    } else {
+                                                        atkedCharacterInNextFrame.CharacterState = Atked1;
+                                                    }
+                                                    break;
+                                            }
+                                        } 
+                                    }
                                 }
                             }
                             break;
@@ -1466,7 +1580,7 @@ namespace shared {
                 var dst = nextRenderFrameNpcs[aliveSlotI];
                 int joinIndex = roomCapacity + aliveSlotI + 1;
 
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, joinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, joinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, src.BuffList, src.DebuffList, src.Inventory, false, dst);
                 candidateI++;
                 aliveSlotI++;
             }
@@ -1483,6 +1597,15 @@ namespace shared {
             battleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
         }
 
+        /*
+        [TODO] 
+
+        The "Step" function has become way more complicated than what it was back in the days only simple movements and hardpushbacks were supported. 
+        
+        Someday in the future, profiling result on low-end hardwares might complain that this function is taking too much time in the "Script" portion, thus need one or all of the following optimization techiques to help it go further.
+        - Make use of CPU parallelization -- better by using some libraries with sub-kernel-thread granularity(e.g. Goroutine or Greenlet equivalent) -- or GPU parallelization. It's not trivial to make an improvement because by dispatching smaller tasks to other resources other than the current kernel-thread, overhead I/O and synchronization/locking time is introduced. Moreover, we need guarantee that the dispatched smaller tasks can yield deterministic outputs regardless of processing order, e.g. that each "i" in "_calcCharacterMovementPushbacks" can be traversed earlier than another and same "effPushbacks" for the next render frame is obtained.   
+        - Enable "IL2CPP" when building client application.  
+        */
         public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
@@ -1545,7 +1668,7 @@ namespace shared {
                 int framesInChState = src.FramesInChState + 1;
                 int lowerPartFramesInChState = (INVALID_FRAMES_IN_CH_STATE == src.LowerPartFramesInChState ? INVALID_FRAMES_IN_CH_STATE : src.LowerPartFramesInChState + 1);
                 int framesInvinsible = src.FramesInvinsible - 1;
-                if (0 > framesInvinsible ) {
+                if (0 > framesInvinsible) {
                     framesInvinsible = 0;
                 }
                 int framesInPatrolCue = src.FramesInPatrolCue - 1;
@@ -1561,7 +1684,7 @@ namespace shared {
                     framesToStartJump = 0;
                 } 
                 var dst = nextRenderFramePlayers[i];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, dst);
                 _resetVelocityOnRecovered(src, dst);
             }
 
@@ -1596,7 +1719,7 @@ namespace shared {
                     framesToStartJump = 0;
                 } 
                 var dst = nextRenderFrameNpcs[currNpcI];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, dst);
                 _resetVelocityOnRecovered(src, dst);
                 currNpcI++;
             }
@@ -1696,6 +1819,7 @@ namespace shared {
 
             switch (characterDownsync.CharacterState) {
                 case LayDown1:
+                case GetUp1:
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.LayDownSizeX, chConfig.LayDownSizeY);
                     break;
                 case Dying:
@@ -1767,7 +1891,7 @@ namespace shared {
         protected static bool addNewNpcToNextFrame(int virtualGridX, int virtualGridY, int dirX, int dirY, int characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt) {
             var chConfig = Battle.characters[characterSpeciesId];
             int birthVirtualX = virtualGridX + ((chConfig.DefaultSizeX >> 2) * dirX);
-            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, true, 0, false, 0, nextRenderFrameNpcs[npcCnt]);
+            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, isStatic, 0, false, false, true, 0, false, 0, defaultTemplateBuffList, defaultTemplateDebuffList, null, false, nextRenderFrameNpcs[npcCnt]);
             npcLocalIdCounter++;
             npcCnt++;
             return true;

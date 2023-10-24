@@ -16,6 +16,12 @@ public class BattleInputManager : MonoBehaviour {
     private int realtimeBtnBLevel = 0;
     private int cachedBtnBLevel = 0;
     private bool btnBEdgeTriggerLock = false;
+    private int realtimeBtnCLevel = 0;
+    private int cachedBtnCLevel = 0;
+    private bool btnCEdgeTriggerLock = false;
+    private int realtimeBtnDLevel = 0;
+    private int cachedBtnDLevel = 0;
+    private bool btnDEdgeTriggerLock = false;
 
     private Vector2 joystickInitPos;
     private float joystickKeyboardMoveRadius;
@@ -23,7 +29,9 @@ public class BattleInputManager : MonoBehaviour {
     public GameObject joystick;
     public GameObject btnA;
     public GameObject btnB;
-	private bool customEnabled = true;
+    public GameObject btnC;
+    public GameObject btnD;
+    private bool customEnabled = true;
 
     void Start() {
         joystickInitPos = joystick.transform.position;
@@ -102,6 +110,13 @@ public class BattleInputManager : MonoBehaviour {
         return (dx, dy, encodedIdx);
     }
 
+    public void OnBtnAInput(InputAction.CallbackContext context) {
+        if (!customEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        // Debug.Log(String.Format("btnALevel is changed to {0}", btnALevel));
+        _triggerEdgeBtnA(rising);
+    }
+
     public void OnBtnBInput(InputAction.CallbackContext context) {
 		if (!customEnabled) return;
         bool rising = context.ReadValueAsButton();
@@ -109,11 +124,18 @@ public class BattleInputManager : MonoBehaviour {
         _triggerEdgeBtnB(rising);
     }
 
-    public void OnBtnAInput(InputAction.CallbackContext context) {
-		if (!customEnabled) return;
+    public void OnBtnCInput(InputAction.CallbackContext context) {
+        if (!customEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        // Debug.Log(String.Format("btnBLevel is changed to {0}", btnBLevel));
+        _triggerEdgeBtnC(rising);
+    }
+
+    public void OnBtnDInput(InputAction.CallbackContext context) {
+        if (!customEnabled) return;
         bool rising = context.ReadValueAsButton();
         // Debug.Log(String.Format("btnALevel is changed to {0}", btnALevel));
-        _triggerEdgeBtnA(rising);
+        _triggerEdgeBtnD(rising);
     }
 
     public void OnMove(InputAction.CallbackContext context) {
@@ -147,17 +169,23 @@ public class BattleInputManager : MonoBehaviour {
     public ulong GetEncodedInput() {
         int btnALevel = (cachedBtnALevel << 4);
         int btnBLevel = (cachedBtnBLevel << 5);
+        int btnCLevel = (cachedBtnCLevel << 6);
+        int btnDLevel = (cachedBtnDLevel << 7);
 
         cachedBtnALevel = realtimeBtnALevel;
         cachedBtnBLevel = realtimeBtnBLevel;
+        cachedBtnCLevel = realtimeBtnCLevel;
+        cachedBtnDLevel = realtimeBtnDLevel;
 
         btnAEdgeTriggerLock = false;
         btnBEdgeTriggerLock = false;
+        btnCEdgeTriggerLock = false;
+        btnDEdgeTriggerLock = false;
 
         float continuousDx = joystickX;
         float continuousDy = joystickY;
         var (_, _, discretizedDir) = DiscretizeDirection(continuousDx, continuousDy, joystickMoveEps);
-        ulong ret = (ulong)(discretizedDir + btnALevel + btnBLevel);
+        ulong ret = (ulong)(discretizedDir + btnALevel + btnBLevel + btnCLevel + btnDLevel);
         return ret;
     }
 
@@ -175,6 +203,12 @@ public class BattleInputManager : MonoBehaviour {
         realtimeBtnBLevel = 0;
         cachedBtnBLevel = 0;
         btnBEdgeTriggerLock = false;
+        realtimeBtnCLevel = 0;
+        cachedBtnCLevel = 0;
+        btnCEdgeTriggerLock = false;
+        realtimeBtnDLevel = 0;
+        cachedBtnDLevel = 0;
+        btnDEdgeTriggerLock = false;
     }
 
     private void _triggerEdgeBtnA(bool rising) {
@@ -202,6 +236,34 @@ public class BattleInputManager : MonoBehaviour {
             btnB.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
             btnB.transform.DOScale(0.75f * Vector3.one, 0.8f);
+        }
+    }
+
+    private void _triggerEdgeBtnC(bool rising) {
+        realtimeBtnCLevel = (rising ? 1 : 0);
+        if (!btnCEdgeTriggerLock && (1 - realtimeBtnCLevel) == cachedBtnCLevel) {
+            cachedBtnCLevel = realtimeBtnCLevel;
+            btnCEdgeTriggerLock = true;
+        }
+
+        if (rising) {
+            btnC.transform.DOScale(0.3f * Vector3.one, 0.5f);
+        } else {
+            btnC.transform.DOScale(0.75f * Vector3.one, 0.8f);
+        }
+    }
+
+    private void _triggerEdgeBtnD(bool rising) {
+        realtimeBtnDLevel = (rising ? 1 : 0);
+        if (!btnDEdgeTriggerLock && (1 - realtimeBtnDLevel) == cachedBtnDLevel) {
+            cachedBtnDLevel = realtimeBtnDLevel;
+            btnDEdgeTriggerLock = true;
+        }
+
+        if (rising) {
+            btnD.transform.DOScale(0.3f * Vector3.one, 0.5f);
+        } else {
+            btnD.transform.DOScale(0.75f * Vector3.one, 0.8f);
         }
     }
 }
