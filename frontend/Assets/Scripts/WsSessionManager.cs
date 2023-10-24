@@ -9,7 +9,7 @@ using Google.Protobuf;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
-    private const int receiveChunkSize = 2048; // The "RoomDownsyncFrame" would be 1900+ bytes.
+    private const int receiveChunkSize = 16384; // The "RoomDownsyncFrame" would be 1900+ bytes.
 
     /**
     I'm aware of that "C# ConcurrentQueue" is lock-free, thus safe to be accessed from the MainThread during "Update()" without introducing significant graphic lags. Reference https://devblogs.microsoft.com/pfxteam/faq-are-all-of-the-new-concurrent-collections-lock-free/.
