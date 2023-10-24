@@ -2,6 +2,7 @@ using System;
 using static shared.CharacterState;
 using System.Collections.Generic;
 using Google.Protobuf.Collections;
+using System.Security.Cryptography;
 
 namespace shared {
     public partial class Battle {
@@ -108,6 +109,11 @@ namespace shared {
             }
 
             if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
+            }
+
+            bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
+            if (interrupted) {
                 return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
             }
 
@@ -318,6 +324,22 @@ namespace shared {
                     thatCharacterInNextFrame.VelY = chConfig.MinFallingVelY;
                 }
             }
+        }
+
+        private static bool _processDebuffDuringInput(CharacterDownsync currCharacterDownsync) {
+            if (null == currCharacterDownsync.DebuffList) return false;
+            for (int i = 0; i < currCharacterDownsync.DebuffList.Count; i++) {
+                Debuff debuff = currCharacterDownsync.DebuffList[i];
+                if (TERMINATING_DEBUFF_SPECIES_ID == debuff.SpeciesId) break;
+                switch (debuff.DebuffConfig.Type) {
+                    case DebuffType.FrozenPositionLocked:
+                        if (0 < debuff.Stock) {
+                            return true;
+                        }
+                        break;
+                }
+            }
+            return false;
         }
 
         private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
@@ -1170,6 +1192,28 @@ namespace shared {
                                 }
                                 if (atkedCharacterInNextFrame.FramesInvinsible < bulletNextFrame.Config.HitInvinsibleFrames) {
                                     atkedCharacterInNextFrame.FramesInvinsible = bulletNextFrame.Config.HitInvinsibleFrames;
+                                }
+
+                                if (null != offender.BuffList) {
+                                    for (int w = 0; w < offender.BuffList.Count; w++) {
+                                        Buff buff = offender.BuffList[w];
+                                        if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;   
+                                        if (0 >= buff.Stock) continue;
+                                        BuffConfig buffConfig = buff.BuffConfig;
+                                        if (null == buffConfig.AssociatedDebuffs) continue;  
+                                        for (int q = 0; q < buffConfig.AssociatedDebuffs.Count; q++) {
+                                            DebuffConfig associatedDebuffConfig = buffConfig.AssociatedDebuffs[q];
+                                            if (TERMINATING_BUFF_SPECIES_ID == associatedDebuffConfig.SpeciesId) break;
+                                            switch (associatedDebuffConfig.Type) {
+                                                case DebuffType.ColdSpeedDown:
+                                                case DebuffType.FrozenPositionLocked:
+                                                    // Overwrite existing debuff for now
+                                                    int debuffArrIdx = associatedDebuffConfig.ArrIdx;
+                                                    AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, associatedDebuffConfig, atkedCharacterInNextFrame.DebuffList[debuffArrIdx]);
+                                                    break;
+                                            }
+                                        } 
+                                    }
                                 }
                             }
                             break;

@@ -146,7 +146,9 @@ namespace shared {
                 if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break; 
                 if (BuffStockType.Timed == cand.BuffConfig.StockType && isRdfFrameElapsing) {
                     int nextStock = cand.Stock - 1;
-                    if (0 > nextStock) nextStock = 0;
+                    if (0 >= nextStock) {
+                        continue;
+                    }
                     AssignToBuff(cand.SpeciesId, nextStock, cand.BuffConfig, dst.BuffList[newBuffCnt]);
                 } else {
                     AssignToBuff(cand.SpeciesId, cand.Stock, cand.BuffConfig, dst.BuffList[newBuffCnt]);
@@ -161,8 +163,12 @@ namespace shared {
                 if (TERMINATING_DEBUFF_SPECIES_ID == cand.SpeciesId) break; 
                 if (BuffStockType.Timed == cand.DebuffConfig.StockType && isRdfFrameElapsing) {
                     int nextStock = cand.Stock - 1;
-                    if (0 > nextStock) nextStock = 0;
-                    AssignToDebuff(cand.SpeciesId, nextStock, cand.DebuffConfig, dst.DebuffList[newDebuffCnt]);
+                    int nextSpeciesId = cand.SpeciesId;
+                    DebuffConfig nextDebuffConfig = cand.DebuffConfig;
+                    if (0 >= nextStock) {
+                        continue;
+                    }
+                    AssignToDebuff(nextSpeciesId, nextStock, nextDebuffConfig, dst.DebuffList[newDebuffCnt]);
                 } else {
                     AssignToDebuff(cand.SpeciesId, cand.Stock, cand.DebuffConfig, dst.DebuffList[newDebuffCnt]);
                 }

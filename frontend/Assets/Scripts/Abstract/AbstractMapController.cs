@@ -452,17 +452,17 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
-                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
+                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, currCharacterDownsync.CharacterState, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
             } else {
-                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, prevCharacterDownsync, false, chConfig);
+                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, currCharacterDownsync.CharacterState, prevCharacterDownsync, false, chConfig);
             }
 
             // Add character vfx
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
-                playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, chAnimCtrl.upperPart.gameObject);
+                playCharacterDamagedVfx(currCharacterDownsync, chConfig, prevCharacterDownsync, chAnimCtrl.upperPart.gameObject, chAnimCtrl);
             } else {
-                playCharacterDamagedVfx(currCharacterDownsync, prevCharacterDownsync, playerGameObj);
+                playCharacterDamagedVfx(currCharacterDownsync, chConfig, prevCharacterDownsync, playerGameObj, chAnimCtrl);
             }
             playCharacterSfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id);
@@ -520,7 +520,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             newPosHolder.Set(wx, wy, characterZ);
             npcGameObj.transform.position = newPosHolder;
 
-            npcAnimHolder.updateCharacterAnim(currNpcDownsync, prevNpcDownsync, false, chConfig);
+            npcAnimHolder.updateCharacterAnim(currNpcDownsync, currNpcDownsync.CharacterState, prevNpcDownsync, false, chConfig);
             npcAnimHolder.score = rdf.Id;
             speciesKvPq.Put(lookupKey, npcAnimHolder);
 
@@ -535,7 +535,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))
                     .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
             }
-            playCharacterDamagedVfx(currNpcDownsync, prevNpcDownsync, npcGameObj);
+            playCharacterDamagedVfx(currNpcDownsync, chConfig, prevNpcDownsync, npcGameObj, npcAnimHolder);
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             playCharacterSfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id);
@@ -2088,7 +2088,30 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedHpBars.Put(lookupKey, hpBar);
     }
 
-    public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, GameObject theGameObj) {
+    public bool playCharacterDamagedVfx(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync prevCharacterDownsync, GameObject theGameObj, CharacterAnimController chAnimCtrl) {
+        var spr = theGameObj.GetComponent<SpriteRenderer>();
+        var material = spr.material;
+        material.SetFloat("_CrackOpacity", 0f);
+
+        if (null != currCharacterDownsync.DebuffList) {
+            for (int i = 0; i < currCharacterDownsync.DebuffList.Count; i++) {
+                Debuff debuff = currCharacterDownsync.DebuffList[i];
+                if (TERMINATING_DEBUFF_SPECIES_ID == debuff.SpeciesId) break;
+                switch (debuff.DebuffConfig.Type) {
+                    case DebuffType.FrozenPositionLocked:
+                        if (0 < debuff.Stock) {
+                            material.SetFloat("_CrackOpacity", 0.75f);
+                            if (SPECIES_GUNGIRL == currCharacterDownsync.SpeciesId) {
+                                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, CharacterState.Atked1, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
+                            } else {
+                                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, CharacterState.Atked1, prevCharacterDownsync, false, chConfig);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
         if (
             null == prevCharacterDownsync 
             || prevCharacterDownsync.Hp <= currCharacterDownsync.Hp 
@@ -2096,8 +2119,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         ) return false;
         
         // Some characters, and almost all traps wouldn't have an "attacked state", hence showing their damaged animation by shader.
-        var spr = theGameObj.GetComponent<SpriteRenderer>();
-        var material = spr.material;
         /*
         DOTween.Sequence().Append(
             DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))

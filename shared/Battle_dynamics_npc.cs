@@ -179,16 +179,23 @@ namespace shared {
             }
         }
 
-        private static (int, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
-            //return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+        private static (int, bool, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
+            //This function returns (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy)
+            
+            //return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
 
-            //This function returns (patternId, jumpedOrNot, effectiveDx, effectiveDy)
             if (0 < currCharacterDownsync.FramesToRecover) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
+            }
+
+            bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
+            if (interrupted) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
             }
 
             int patternId = PATTERN_ID_NO_OP;
             bool jumpedOrNot = false;
+            bool slipJumpedOrNot = false;
 
             // By default keeps the movement aligned with current facing
             int effectiveDx = currCharacterDownsync.DirX;
@@ -309,6 +316,7 @@ namespace shared {
                             effectiveDx = 0;
                             effectiveDy = 0;
                             jumpedOrNot = false;
+                            slipJumpedOrNot = false;
                             hasPatrolCueReaction = true;
                             break;
                         }
@@ -318,11 +326,13 @@ namespace shared {
                             effectiveDx = 0;
                             effectiveDy = 0;
                             jumpedOrNot = false;
+                            slipJumpedOrNot = false;
                             hasPatrolCueReaction = true;
                         } else {
                             effectiveDx = decodedInputHolder.Dx;
                             effectiveDy = decodedInputHolder.Dy;
-                            jumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
+                            slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && (currCharacterDownsync.PrimarilyOnSlippableHardPushback && 0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
+                            jumpedOrNot = !slipJumpedOrNot && (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
                             hasPatrolCueReaction = true;
                             thatCharacterInNextFrame.CapturedByPatrolCue = false;
                             thatCharacterInNextFrame.FramesInPatrolCue = DEFAULT_PATROL_CUE_WAIVING_FRAMES; // re-purposed
@@ -332,11 +342,11 @@ namespace shared {
                 }
 
                 if (false == hasVisionReaction && false == hasPatrolCueReaction && currCharacterDownsync.WaivingSpontaneousPatrol) {
-                    return (PATTERN_ID_UNABLE_TO_OP, false, 0, 0);
+                    return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
                 }
             }
 
-            return (patternId, jumpedOrNot, effectiveDx, effectiveDy);
+            return (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy);
         }
 
         private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, int colliderCnt, Collision collision, CollisionSpace collisionSys, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
@@ -345,7 +355,7 @@ namespace shared {
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
@@ -353,6 +363,7 @@ namespace shared {
                 }
 
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
+                thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
 
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
                 if (usedSkill) {

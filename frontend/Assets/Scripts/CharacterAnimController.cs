@@ -53,9 +53,10 @@ public class CharacterAnimController : MonoBehaviour {
         lazyInit();
     }
 
-    public void updateCharacterAnim(CharacterDownsync rdfCharacter, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig) {
+    public void updateCharacterAnim(CharacterDownsync rdfCharacter, CharacterState newCharacterState, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig) {
+        // [WARNING] Being frozen might invoke this function with "newCharacterState != rdfCharacter.ChState" 
+
         // As this function might be called after many frames of a rollback, it's possible that the playing animation was predicted, different from "prevRdfCharacter.CharacterState" but same as "newCharacterState". More granular checks are needed to determine whether we should interrupt the playing animation.  
-        var newCharacterState = rdfCharacter.CharacterState;
 
         var animator = getMainAnimator();
         // Update directions
@@ -103,9 +104,9 @@ public class CharacterAnimController : MonoBehaviour {
     /*
      [WARNING] I once considered the use of "multi-layer animation", yet failed to find well documented steps to efficiently edit and preview the layers simultaneously. If budget permits I'd advance the workflow directly into using Skeletal Animation.
      */
-    public void updateTwoPartsCharacterAnim(CharacterDownsync rdfCharacter, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig, float effectivelyInfinitelyFar) {
+    public void updateTwoPartsCharacterAnim(CharacterDownsync rdfCharacter, CharacterState newCharacterState, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig, float effectivelyInfinitelyFar) {
         lazyInit();
-        var newCharacterState = rdfCharacter.CharacterState;
+        // [WARNING] Being frozen might invoke this function with "newCharacterState != rdfCharacter.ChState"
 
         // Update directions
         if (0 > rdfCharacter.DirX) {
@@ -128,7 +129,7 @@ public class CharacterAnimController : MonoBehaviour {
         int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
         int targetClipIdx = 0; // We have only 1 frame anim playing at any time
         // Hide lower part when necessary
-        if (shared.Battle.INVALID_FRAMES_IN_CH_STATE == rdfCharacter.LowerPartFramesInChState) {
+        if (Battle.INVALID_FRAMES_IN_CH_STATE == rdfCharacter.LowerPartFramesInChState) {
             positionHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lowerPart.gameObject.transform.position.z); 
             lowerPart.gameObject.transform.localPosition = positionHolder;
         } else {
