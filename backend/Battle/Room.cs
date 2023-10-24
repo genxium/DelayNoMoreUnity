@@ -744,7 +744,7 @@ public class Room {
                 for (int i = 0; i < capacity; i++) {
                     // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
                     // Don't predict "btnA & btnB"!
-                    ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & 1UL5));
+                    ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & 1UL));
                 }
                 ifdHolder.ConfirmedList = 0;
                 currInputFrameDownsync = ifdHolder; // make sure that we return a pointer inside the inputBuffer for later writing
