@@ -161,6 +161,9 @@ namespace shared {
             while (prevDebuffI < prevDebuffList.Count) {
                 var cand = prevDebuffList[prevDebuffI++];
                 if (TERMINATING_DEBUFF_SPECIES_ID == cand.SpeciesId) break; 
+                if (newDebuffCnt >= dst.DebuffList.Count) {
+                    throw new ArgumentException("newDebuffCnt:" + newDebuffCnt + " is out of range while dst.DebuffList.Count:" + dst.DebuffList.Count);
+                }
                 if (BuffStockType.Timed == cand.DebuffConfig.StockType && isRdfFrameElapsing) {
                     int nextStock = cand.Stock - 1;
                     int nextSpeciesId = cand.SpeciesId;

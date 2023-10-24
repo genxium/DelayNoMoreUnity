@@ -1689,7 +1689,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             var chConfig = Battle.characters[characterSpeciesId];
-            var npcInRdf = new CharacterDownsync();
+            var npcInRdf = startRdf.NpcsArr[i];
             var (vx, vy) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
             npcInRdf.Id = npcLocalId; // Just for not being excluded 
             npcInRdf.JoinIndex = joinIndex;
@@ -2101,10 +2101,14 @@ public abstract class AbstractMapController : MonoBehaviour {
                     case DebuffType.FrozenPositionLocked:
                         if (0 < debuff.Stock) {
                             material.SetFloat("_CrackOpacity", 0.75f);
+                            CharacterState overwriteChState = currCharacterDownsync.CharacterState;
+                            if (!noOpSet.Contains(overwriteChState)) {
+                                overwriteChState = CharacterState.Atked1;
+                            }
                             if (SPECIES_GUNGIRL == currCharacterDownsync.SpeciesId) {
-                                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, CharacterState.Atked1, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
+                                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, overwriteChState, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
                             } else {
-                                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, CharacterState.Atked1, prevCharacterDownsync, false, chConfig);
+                                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, overwriteChState, prevCharacterDownsync, false, chConfig);
                             }
                         }
                         break;

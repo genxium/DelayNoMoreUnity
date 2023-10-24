@@ -1176,9 +1176,11 @@ namespace shared {
 
                                 bool shouldOmitStun = ((0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
                                 if (false == shouldOmitStun) {
-                                    if (bulletNextFrame.Config.BlowUp) {
+                                    var existingDebuff = atkedCharacterInNextFrame.DebuffList[DEBUFF_ARR_IDX_FROZEN];
+                                    bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == existingDebuff.DebuffConfig.Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
+                                    if (!isFrozen && bulletNextFrame.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
-                                    } else if (BlownUp1 != oldNextCharacterState) {
+                                    } else if (isFrozen || BlownUp1 != oldNextCharacterState) {
                                         if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
                                             atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
                                         } else {
@@ -1210,6 +1212,12 @@ namespace shared {
                                                     // Overwrite existing debuff for now
                                                     int debuffArrIdx = associatedDebuffConfig.ArrIdx;
                                                     AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, associatedDebuffConfig, atkedCharacterInNextFrame.DebuffList[debuffArrIdx]);
+                                                    // The following transition is deterministic because we checked "atkedCharacterInNextFrame.DebuffList" before transiting into BlownUp1.
+                                                    if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
+                                                        atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
+                                                    } else {
+                                                        atkedCharacterInNextFrame.CharacterState = Atked1;
+                                                    }
                                                     break;
                                             }
                                         } 
@@ -1660,7 +1668,7 @@ namespace shared {
                 int framesInChState = src.FramesInChState + 1;
                 int lowerPartFramesInChState = (INVALID_FRAMES_IN_CH_STATE == src.LowerPartFramesInChState ? INVALID_FRAMES_IN_CH_STATE : src.LowerPartFramesInChState + 1);
                 int framesInvinsible = src.FramesInvinsible - 1;
-                if (0 > framesInvinsible ) {
+                if (0 > framesInvinsible) {
                     framesInvinsible = 0;
                 }
                 int framesInPatrolCue = src.FramesInPatrolCue - 1;
