@@ -22,13 +22,13 @@ public class InventorySlot : MonoBehaviour {
             case shared.InventorySlotStockType.TimedIv:
                 quota.enabled = false;
                 if (content.enabled) content.enabled = true;
-                cooldownMask.fillAmount = (float)slot.FramesToRecover / slot.DefaultFramesToRecover;
+                cooldownMask.fillAmount = (float)slot.FramesToRecover / (float)slot.DefaultFramesToRecover;
             break;
             case shared.InventorySlotStockType.TimedMagazineIv:
                 if (quota.enabled) quota.enabled = true;
                 if (content.enabled) content.enabled = true;
                 quota.text = slot.Quota.ToString();
-                cooldownMask.fillAmount = (float)slot.FramesToRecover / slot.DefaultFramesToRecover;
+                cooldownMask.fillAmount = (float)slot.FramesToRecover / (float)slot.DefaultFramesToRecover;
                 break;
             default:
                 quota.enabled = false;

@@ -1218,9 +1218,14 @@ namespace shared {
                                                     } else {
                                                         atkedCharacterInNextFrame.CharacterState = Atked1;
                                                     }
+                                                    switch (associatedDebuffConfig.StockType) {
+                                                        case BuffStockType.Timed:
+                                                            atkedCharacterInNextFrame.FramesToRecover = associatedDebuffConfig.Stock;
+                                                            break;
+                                                    }
                                                     break;
                                             }
-                                        } 
+                                        }
                                     }
                                 }
                             }

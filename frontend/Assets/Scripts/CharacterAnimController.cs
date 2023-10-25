@@ -145,7 +145,7 @@ public class CharacterAnimController : MonoBehaviour {
             }
             var lowerFrameIdxInAnim = rdfCharacter.LowerPartFramesInChState;
             var lowerTargetClip = lowerLookUpTable[lowerNewAnimName];
-            float lowerNormalizedFromTime = (lowerFrameIdxInAnim / (lowerTargetClip.frameRate * lowerTargetClip.length)); // TODO: Anyway to avoid using division here?
+            float lowerNormalizedFromTime = ((float)lowerFrameIdxInAnim / (float)(lowerTargetClip.frameRate * lowerTargetClip.length)); // TODO: Anyway to avoid using division here?
             lowerPart.Play(lowerNewAnimName, targetLayer, lowerNormalizedFromTime);
         }
 
