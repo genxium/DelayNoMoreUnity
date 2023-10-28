@@ -254,7 +254,7 @@ namespace shared {
             return skillUsed;
         }
 
-        private static bool _useInventorySlot(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+        private static bool _useInventorySlot(int rdfId, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
             bool slotUsed = false;
             if (PATTERN_INVENTORY_SLOT_C != patternId && PATTERN_INVENTORY_SLOT_D != patternId) {
                 return false;
@@ -283,9 +283,15 @@ namespace shared {
             }
     
             if (slotUsed) {
-                var buffConfig = targetSlotCurr.BuffConfig; 
+                var buffConfig = targetSlotCurr.BuffConfig;
+                int origChSpeciesId = SPECIES_NONE_CH;
+                if (SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {
+                    origChSpeciesId = currCharacterDownsync.SpeciesId;
+                    var nextChConfig = characters[buffConfig.XformChSpeciesId];
+                    AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
+                }
                 // TODO: Support multi-buff simultaneously!
-                AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, buffConfig, thatCharacterInNextFrame.BuffList[0]);
+                AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, rdfId, origChSpeciesId, buffConfig, thatCharacterInNextFrame.BuffList[0]);
             }
 
             return slotUsed;
@@ -350,7 +356,7 @@ namespace shared {
                 var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
                 // Prioritize use of inventory slot over skills
-                _useInventorySlot(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame);
+                _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
@@ -1201,6 +1207,7 @@ namespace shared {
                                         Buff buff = offender.BuffList[w];
                                         if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;   
                                         if (0 >= buff.Stock) continue;
+                                        if (buff.OriginatedRenderFrameId > bulletNextFrame.BattleAttr.OriginatedRenderFrameId) continue;
                                         BuffConfig buffConfig = buff.BuffConfig;
                                         if (null == buffConfig.AssociatedDebuffs) continue;  
                                         for (int q = 0; q < buffConfig.AssociatedDebuffs.Count; q++) {

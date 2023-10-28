@@ -414,8 +414,15 @@ public abstract class AbstractMapController : MonoBehaviour {
             float boxCx, boxCy, boxCw, boxCh;
             calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+
+            if (null != prevCharacterDownsync && currCharacterDownsync.SpeciesId != prevCharacterDownsync.SpeciesId) {
+                Destroy(playerGameObjs[k]);
+                spawnPlayerNode(k+1, chConfig.SpeciesId, wx, wy, currCharacterDownsync.BulletTeamId);
+            }
+
             var playerGameObj = playerGameObjs[k];
             newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
+
             playerGameObj.transform.position = newPosHolder; // [WARNING] Even if not selfPlayer, we have to set position of the other players regardless of new positions being visible within camera or not, otherwise outdated other players' node might be rendered within camera! 
 
             if (currCharacterDownsync.JoinIndex == selfPlayerInfo.JoinIndex) {
@@ -735,7 +742,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             "7_Fire_PointLight_Active",
             "8_Pistol_Bullet_Exploding",
             "9_Slash_Exploding",
-            "10_Ice_Lingering"
+            "10_Ice_Lingering",
+            "11_Xform"
         };
 
         foreach (string name in allVfxPrefabNames) {
@@ -1679,8 +1687,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.MaxMp = 1000;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
 
-            // TODO: Remove the hardcoded InventorySlot
-            AssignToInventorySlot(InventorySlotStockType.TimedIv, 1, 0, 1, 720, ShortFreezer, playerInRdf.Inventory.Slots[0]);
+            // TODO: Remove the hardcoded index
+            var initIvSlot = chConfig.InitInventorySlots[0];
+            AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffConfig, playerInRdf.Inventory.Slots[0]);
         }
 
         int npcLocalId = 0;
