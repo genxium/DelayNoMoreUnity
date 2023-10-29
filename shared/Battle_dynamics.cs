@@ -576,14 +576,18 @@ namespace shared {
 
         public static bool IsBulletActive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
-                return false;
+                if (!bullet.Config.RemainUponHit) {
+                    return false;
+                }
             }
             return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames < currRenderFrameId) && (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
         }
 
         public static bool IsBulletAlive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
-                return bullet.FramesInBlState < bullet.Config.ExplosionFrames;
+                if (!bullet.Config.RemainUponHit) {
+                    return bullet.FramesInBlState < bullet.Config.ExplosionFrames;
+                }
             }
             return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
         }
@@ -623,6 +627,10 @@ namespace shared {
                 var src = currRenderFrameBullets[i];
                 if (TERMINATING_BULLET_LOCAL_ID == src.BattleAttr.BulletLocalId) break;
                 var dst = nextRenderFrameBullets[bulletCnt];
+                var dstVelY = src.VelY + (src.Config.TakesGravity ? GRAVITY_Y : 0);
+                if (dstVelY < DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID) {
+                    dstVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID;
+                }
                 AssignToBullet(
                         src.BattleAttr.BulletLocalId,
                         src.BattleAttr.OriginatedRenderFrameId,
@@ -631,7 +639,7 @@ namespace shared {
                         src.BlState, src.FramesInBlState + 1,
                         src.VirtualGridX, src.VirtualGridY, // virtual grid position
                         src.DirX, src.DirY, // dir
-                        src.VelX, src.VelY, // velocity
+                        src.VelX, dstVelY, // velocity
                         src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId, src.Config,
                         src.Config.RepeatQuota,
                         dst);
@@ -669,15 +677,17 @@ namespace shared {
                 } else if (BulletType.Fireball == src.Config.BType) {
                     if (IsBulletActive(dst, currRenderFrame.Id)) {
                         var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(src.VirtualGridX, src.VirtualGridY);
-                        var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX, src.Config.HitboxSizeY);
+                        var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX + src.Config.HitboxSizeIncX*src.FramesInBlState, src.Config.HitboxSizeY + src.Config.HitboxSizeIncY*src.FramesInBlState);
                         var newBulletCollider = dynamicRectangleColliders[colliderCnt];
                         UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst);
                         colliderCnt++;
 
                         collisionSys.AddSingle(newBulletCollider);
-                        dst.BlState = BulletState.Active;
-                        if (dst.BlState != src.BlState) {
-                            dst.FramesInBlState = 0;
+                        if (BulletState.StartUp == src.BlState && !dst.Config.RemainUponHit) {
+                            dst.BlState = BulletState.Active;
+                            if (dst.BlState != src.BlState) {
+                                dst.FramesInBlState = 0;
+                            }
                         }
                         (dst.VirtualGridX, dst.VirtualGridY) = (dst.VirtualGridX + dst.VelX, dst.VirtualGridY + dst.VelY);
                     } else {
@@ -1300,8 +1310,10 @@ namespace shared {
                             bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
                         }
                     } else if (BulletType.Fireball == bulletNextFrame.Config.BType) {
-                        bulletNextFrame.BlState = BulletState.Exploding;
-                        bulletNextFrame.FramesInBlState = 0;
+                        if (BulletState.Exploding != bulletNextFrame.BlState) {
+                            bulletNextFrame.BlState = BulletState.Exploding;
+                            bulletNextFrame.FramesInBlState = 0;
+                        }
                         if (inTheMiddleOfMultihitTransition) {
                             bool dummyHasLockVel = false;
                             if (addNewBulletToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame)) {

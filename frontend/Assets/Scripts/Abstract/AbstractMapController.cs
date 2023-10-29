@@ -2002,7 +2002,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             line.SetColor(Color.red);
             line.GetPositions(debugDrawPositionsHolder);
 
-            var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX, bullet.Config.HitboxSizeY);
+            var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX + bullet.Config.HitboxSizeIncX*bullet.FramesInBlState, bullet.Config.HitboxSizeY + bullet.Config.HitboxSizeIncY * bullet.FramesInBlState);
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
