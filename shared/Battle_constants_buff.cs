@@ -115,6 +115,10 @@ namespace shared {
         // debuffConfigs
         public const int DEBUFF_ARR_IDX_FROZEN = 0; // Used to access "characterDownsync.DebuffList" to quickly detect conflicting debuffs 
 
+        public static DebuffConfig NoDebuff = new DebuffConfig {
+            SpeciesId = TERMINATING_DEBUFF_SPECIES_ID,
+        };
+
         public static DebuffConfig ShortFrozen = new DebuffConfig {
             SpeciesId = 1,
             StockType = BuffStockType.Timed,
@@ -133,7 +137,7 @@ namespace shared {
         // buffConfigs
         public static BuffConfig NoBuff = new BuffConfig {
             SpeciesId = TERMINATING_BUFF_SPECIES_ID,
-            XformChSpeciesId = SPECIES_SUPERKNIFEGIRL,
+            XformChSpeciesId = SPECIES_NONE_CH,
         };
 
         public static BuffConfig ShortFreezer = new BuffConfig {

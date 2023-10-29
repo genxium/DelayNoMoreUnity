@@ -168,7 +168,7 @@ namespace shared {
 
         public static int DYING_FRAMES_TO_RECOVER = 180; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
 
-        public static int NO_SKILL = -1;
+        public static int NO_SKILL = 0;
         public static int NO_SKILL_HIT = -1;
 
         public static int NO_LOCK_VEL = -1;

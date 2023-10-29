@@ -752,6 +752,22 @@ namespace shared {
                     thatCharacterInNextFrame.Hp = currCharacterDownsync.MaxHp;
                     thatCharacterInNextFrame.DirX = currCharacterDownsync.RevivalDirX;
                     thatCharacterInNextFrame.DirY = currCharacterDownsync.RevivalDirY;
+                    
+                    int prevBuffI = 0; 
+                    while (prevBuffI < currCharacterDownsync.BuffList.Count) {
+                        var cand = currCharacterDownsync.BuffList[prevBuffI++];
+                        if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break; 
+                        revertBuff(cand, thatCharacterInNextFrame);
+                    }
+                    AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, NoBuff, thatCharacterInNextFrame.BuffList[0]);
+
+                    int prevDebuffI = 0; 
+                    while (prevDebuffI < currCharacterDownsync.DebuffList.Count) {
+                        var cand = currCharacterDownsync.DebuffList[prevDebuffI++];
+                        if (TERMINATING_DEBUFF_SPECIES_ID == cand.SpeciesId) break; 
+                        revertDebuff(cand, thatCharacterInNextFrame);
+                    }
+                    AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, NoDebuff, thatCharacterInNextFrame.DebuffList[0]);
                 }
 
                 float boxCx, boxCy, boxCw, boxCh;
@@ -841,8 +857,9 @@ namespace shared {
                        }
                      */
                 }
-
-                if (softPusbackEnabled && Dying != currCharacterDownsync.CharacterState && false == currCharacterDownsync.OmitSoftPushback) {
+    
+                bool shouldOmitSoftPushback = chOmittingSoftPushback(currCharacterDownsync);
+                if (softPusbackEnabled && Dying != currCharacterDownsync.CharacterState && false == shouldOmitSoftPushback) {
                     int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
                     int totOtherChCnt = 0, cellOverlappedOtherChCnt = 0, shapeOverlappedOtherChCnt = 0;
                     int origResidueCollidedSt = residueCollided.StFrameId, origResidueCollidedEd = residueCollided.EdFrameId; 
@@ -905,6 +922,9 @@ namespace shared {
                             continue;
                         }
                         if (Dying == v1.CharacterState) {
+                            continue;
+                        }
+                        if (chOmittingSoftPushback(v1)) {
                             continue;
                         }
                         if (currCharacterDownsync.ChCollisionTeamId == v1.ChCollisionTeamId) {
@@ -1932,6 +1952,18 @@ namespace shared {
                 throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null when escaped!", delayedInputFrameId));
             }
             return (isAllConfirmed(delayedInputFrameDownsync.ConfirmedList, roomCapacity), delayedInputFrameId);
+        }
+
+        public static bool chOmittingSoftPushback(CharacterDownsync currCharacterDownsync) {
+            if (currCharacterDownsync.OmitSoftPushback) return true;
+            if (NO_SKILL != currCharacterDownsync.ActiveSkillId && NO_SKILL_HIT != currCharacterDownsync.ActiveSkillHit) {
+                var skillConfig = skills[currCharacterDownsync.ActiveSkillId];
+                if (0 <= currCharacterDownsync.ActiveSkillHit && currCharacterDownsync.ActiveSkillHit < skillConfig.Hits.Count) {
+                    var bulletConfig = skillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
+                    return (BulletType.Melee == bulletConfig.BType && bulletConfig.OmitSoftPushback);
+                }
+            } 
+            return false;
         }
     }
 }

@@ -302,6 +302,7 @@ message BulletConfig {
     bool delaySelfVelToActive = 36; // if true, "selfLockVelX" & "selfLockVelY" would only be applied when bullet is active 
 
 	int32 speedIfNotHit = 37;
+    bool omitSoftPushback = 38; // Only used for melee bullets
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb

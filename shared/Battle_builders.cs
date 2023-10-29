@@ -155,10 +155,7 @@ namespace shared {
                     if (0 >= nextStock) {
                         if (0 >= framesToRecover) {
                             // [WARNING] It's very unnatural to transform back when not being able to operate!
-                            if (SPECIES_NONE_CH != cand.BuffConfig.XformChSpeciesId) {
-                                var nextChConfig = characters[cand.OrigChSpeciesId];
-                                AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, dst);
-                            }
+                            revertBuff(cand, dst);
                         }
                         continue;
                     }
@@ -193,7 +190,7 @@ namespace shared {
                 ++newDebuffCnt;
             }
             if (newDebuffCnt < dst.DebuffList.Count) {
-                dst.DebuffList[newDebuffCnt].SpeciesId = TERMINATING_DEBUFF_SPECIES_ID;
+                AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, NoDebuff, dst.DebuffList[newDebuffCnt]);
             }
 
             if (null != prevInventory) {
@@ -504,6 +501,18 @@ namespace shared {
                 triggerCnt++;
             }
             return true;
+        }
+
+        public static void revertBuff(Buff cand, CharacterDownsync thatCharacterInNextFrame) {
+
+            if (SPECIES_NONE_CH != cand.BuffConfig.XformChSpeciesId) {
+                var nextChConfig = characters[cand.OrigChSpeciesId];
+                AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
+            }
+        }
+
+        public static void revertDebuff(Debuff cand, CharacterDownsync thatCharacterInNextFrame) {
+            // TBD
         }
     }
 
