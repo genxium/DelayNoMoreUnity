@@ -7,6 +7,9 @@ public class InventorySlot : MonoBehaviour {
     public Image cooldownMask;
     public Image content;
 
+    [SerializeField] 
+    public Sprite[] buffConfigSprites; 
+
     // Start is called before the first frame update
     void Start() {
 
@@ -18,17 +21,23 @@ public class InventorySlot : MonoBehaviour {
     }
 
     public void updateData(shared.InventorySlot slot) {
+        if (null != slot.BuffConfig) {
+            int spriteIdx = slot.BuffConfig.SpeciesId - 1;  
+            Sprite spr = buffConfigSprites[spriteIdx]; 
+            content.color = Color.white;
+            content.sprite = spr;
+        }
         switch (slot.StockType) {
             case shared.InventorySlotStockType.TimedIv:
                 quota.enabled = false;
                 if (content.enabled) content.enabled = true;
-                cooldownMask.fillAmount = (float)slot.FramesToRecover / (float)slot.DefaultFramesToRecover;
+                cooldownMask.fillAmount = (float)slot.FramesToRecover / slot.DefaultFramesToRecover;
             break;
             case shared.InventorySlotStockType.TimedMagazineIv:
                 if (quota.enabled) quota.enabled = true;
                 if (content.enabled) content.enabled = true;
                 quota.text = slot.Quota.ToString();
-                cooldownMask.fillAmount = (float)slot.FramesToRecover / (float)slot.DefaultFramesToRecover;
+                cooldownMask.fillAmount = (float)slot.FramesToRecover / slot.DefaultFramesToRecover;
                 break;
             default:
                 quota.enabled = false;

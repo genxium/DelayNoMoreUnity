@@ -87,6 +87,14 @@ namespace shared {
             OnBullet = false
         };
 
+        public static VfxConfig VfxXform = new VfxConfig {
+            SpeciesId = 11,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false
+        };
+
         public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
              new[]
              {
@@ -100,11 +108,16 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxPistolBulletExploding.SpeciesId, VfxPistolBulletExploding),
                     new KeyValuePair<int, VfxConfig>(VfxSlashExploding.SpeciesId, VfxSlashExploding),
                     new KeyValuePair<int, VfxConfig>(VfxIceLingering.SpeciesId, VfxIceLingering),
+                    new KeyValuePair<int, VfxConfig>(VfxXform.SpeciesId, VfxXform),
              }
-            );
+        );
 
         // debuffConfigs
         public const int DEBUFF_ARR_IDX_FROZEN = 0; // Used to access "characterDownsync.DebuffList" to quickly detect conflicting debuffs 
+
+        public static DebuffConfig NoDebuff = new DebuffConfig {
+            SpeciesId = TERMINATING_DEBUFF_SPECIES_ID,
+        };
 
         public static DebuffConfig ShortFrozen = new DebuffConfig {
             SpeciesId = 1,
@@ -122,11 +135,25 @@ namespace shared {
         );
 
         // buffConfigs
+        public static BuffConfig NoBuff = new BuffConfig {
+            SpeciesId = TERMINATING_BUFF_SPECIES_ID,
+            XformChSpeciesId = SPECIES_NONE_CH,
+        };
+
         public static BuffConfig ShortFreezer = new BuffConfig {
             SpeciesId = 1,
             StockType = BuffStockType.Timed,
             Stock = 480,
+            XformChSpeciesId = SPECIES_NONE_CH,
             CharacterVfxSpeciesId = VfxIceLingering.SpeciesId
         }.AddAssociatedDebuff(ShortFrozen);
+
+        public static BuffConfig XformToSuperKnifeGirl = new BuffConfig {
+            SpeciesId = 2,
+            StockType = BuffStockType.Timed,
+            Stock = 900,
+            XformChSpeciesId = SPECIES_SUPERKNIFEGIRL,  
+            CharacterVfxSpeciesId = VfxXform.SpeciesId // TODO: Use another spell launch vfx
+        };
     }
 }

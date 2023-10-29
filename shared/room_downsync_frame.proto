@@ -302,6 +302,7 @@ message BulletConfig {
     bool delaySelfVelToActive = 36; // if true, "selfLockVelX" & "selfLockVelY" would only be applied when bullet is active 
 
 	int32 speedIfNotHit = 37;
+    bool omitSoftPushback = 38; // Only used for melee bullets
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
@@ -611,6 +612,7 @@ message BuffConfig {
     int32 meleeHardnessDelta = 10;
     int32 fireballHardnessDelta = 11;
     bool invinsible = 12;
+    int32 xformChSpeciesId = 13;
     repeated DebuffConfig associatedDebuffs = 1024; // There's a reason why type "DebuffConfig" instead of just the speciesId is used here, as "BuffConfig" itself is already seeked via heap-RAM dictionary look from "Buff.speciesId", we'd like to reduce the count of heap-RAM access when stepping battle dynamics  
 
     int32 characterVfxSpeciesId = 2048;
@@ -620,6 +622,8 @@ message Buff {
     int32 speciesId = 1; // A redundancy of "buffConfig" for easy termination detection
     int32 stock = 2;
     BuffConfig buffConfig = 3; // Same type concern as "BuffConfig.associatedDebuffs". 
+    int32 originatedRenderFrameId = 4;
+    int32 origChSpeciesId = 5;
 }
 
 message Debuff {

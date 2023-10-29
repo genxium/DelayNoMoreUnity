@@ -33,6 +33,7 @@ public class CharacterAnimController : MonoBehaviour {
     }
 
     private void lazyInit() {
+        if (null != lookUpTable && null != lowerLookUpTable) return;
         lookUpTable = new Dictionary<CharacterState, AnimationClip>();
         var animator = getMainAnimator();
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) {
@@ -54,6 +55,7 @@ public class CharacterAnimController : MonoBehaviour {
     }
 
     public void updateCharacterAnim(CharacterDownsync rdfCharacter, CharacterState newCharacterState, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig) {
+        lazyInit();
         // [WARNING] Being frozen might invoke this function with "newCharacterState != rdfCharacter.ChState" 
 
         // As this function might be called after many frames of a rollback, it's possible that the playing animation was predicted, different from "prevRdfCharacter.CharacterState" but same as "newCharacterState". More granular checks are needed to determine whether we should interrupt the playing animation.  
@@ -145,7 +147,7 @@ public class CharacterAnimController : MonoBehaviour {
             }
             var lowerFrameIdxInAnim = rdfCharacter.LowerPartFramesInChState;
             var lowerTargetClip = lowerLookUpTable[lowerNewAnimName];
-            float lowerNormalizedFromTime = ((float)lowerFrameIdxInAnim / (float)(lowerTargetClip.frameRate * lowerTargetClip.length)); // TODO: Anyway to avoid using division here?
+            float lowerNormalizedFromTime = ((float)lowerFrameIdxInAnim / (lowerTargetClip.frameRate * lowerTargetClip.length)); // TODO: Anyway to avoid using division here?
             lowerPart.Play(lowerNewAnimName, targetLayer, lowerNormalizedFromTime);
         }
 
@@ -181,7 +183,7 @@ public class CharacterAnimController : MonoBehaviour {
     - Exactly 1 pixel per direction 
 
     In contrast I've also considered "scaling by a factor then color the bigger image and superpose it onto the original". It turns out not easy because 
-    - scaling each sprite in the sprite-sheet w.r.t. the chosen pivot requries a knowledge of the pivot-locations in the meta data, and 
+    - scaling each sprite in the sprite-sheet w.r.t. the chosen pivot requires a knowledge of the pivot-locations in the meta data, and 
     - scaling the vertex positions in "object space" is fine, but it's difficult for me to superpose it before feeding to "vertex shader" -- thus not "one-pass". 
 
     Seems to me like the only other approaches that satisfy the above criterions are "Blurred Buffer" and "Jump Flood" as described by https://alexanderameye.github.io/notes/rendering-outlines/.

@@ -516,14 +516,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1536172879, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -870,6 +870,9 @@ MonoBehaviour:
   quota: {fileID: 3626212355175964312}
   cooldownMask: {fileID: 7438132291021823011}
   content: {fileID: 5682018450581253479}
+  buffConfigSprites:
+  - {fileID: 1536172879, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  - {fileID: 1106039805, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
 --- !u!1 &6920229130417370427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1024,7 +1027,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8475371383641800034
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1114,6 +1117,7 @@ MonoBehaviour:
   quota: {fileID: 788886216445420493}
   cooldownMask: {fileID: 5065648989520050467}
   content: {fileID: 2716019483823401529}
+  buffConfigSprites: []
 --- !u!1 &8618004679042237299
 GameObject:
   m_ObjectHideFlags: 0
