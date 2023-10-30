@@ -54,6 +54,7 @@ namespace shared {
         // Collision masks
         public bool OmitGravity;
         public bool OmitSoftPushback;
+        public bool RepelSoftPushback;
         public ulong CollisionTypeMask;
 
         public bool HasTurnAroundAnim;

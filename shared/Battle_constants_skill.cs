@@ -1357,7 +1357,7 @@ namespace shared {
                             new BulletConfig {
                                 StartupFrames = 8,
                                 StartupInvinsibleFrames = 3,
-                                ActiveFrames = MAX_INT,
+                                ActiveFrames = 1200, // At most flies for 20 seconds 
                                 HitStunFrames = 0,
                                 BlockStunFrames = 0,
                                 Damage = 0,
@@ -1373,7 +1373,7 @@ namespace shared {
                                 ExplosionFrames = 0,
                                 BType = BulletType.Fireball,
                                 DirX = 1,
-                                DirY = 2,
+                                DirY = 1,
                                 Hardness = 4,
                                 Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 CharacterEmitSfxName = "SlashEmitSpd2",
@@ -1388,9 +1388,9 @@ namespace shared {
                             new BulletConfig {
                                 StartupFrames = 0,
                                 StartupInvinsibleFrames = 0,
-                                HitInvinsibleFrames = 40,
+                                HitInvinsibleFrames = 20,
                                 BlowUp = true,
-                                ActiveFrames = 40, 
+                                ActiveFrames = 20, 
                                 HitStunFrames = MAX_INT,
                                 Damage = 45,
                                 PushbackVelX = NO_LOCK_VEL,
@@ -1401,13 +1401,14 @@ namespace shared {
                                 ExplosionFrames = 40,
                                 HitboxSizeX = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeIncX = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 
-                                HitboxSizeIncY = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeIncX = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 
+                                HitboxSizeIncY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 BType = BulletType.Fireball,
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 8,
                                 RemainUponHit = true,
+                                ExplosionSfxName="Explosion3",
                                 CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
                             }
                         )

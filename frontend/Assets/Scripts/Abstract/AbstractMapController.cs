@@ -1685,6 +1685,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.MaxHp = chConfig.Hp;
             playerInRdf.Mp = 1000;
             playerInRdf.MaxMp = 1000;
+            playerInRdf.OmitGravity = chConfig.OmitGravity;
+            playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
+            playerInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
 
             // TODO: Remove the hardcoded index
@@ -1728,6 +1731,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.WaivingSpontaneousPatrol = isStatic;
             npcInRdf.OmitGravity = chConfig.OmitGravity;
             npcInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
+            npcInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
             startRdf.NpcsArr[i] = npcInRdf;
             npcLocalId++;
         }

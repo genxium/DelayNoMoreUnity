@@ -245,7 +245,7 @@ namespace shared {
                         SpeciesId = SPECIES_BULLWARRIOR,
                         SpeciesName = "BullWarrior",
                         Hp = 500,
-                        OmitSoftPushback = true,
+                        RepelSoftPushback = true,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
