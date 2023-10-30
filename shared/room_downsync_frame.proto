@@ -121,6 +121,8 @@ message CharacterDownsync {
     bool jumpStarted = 45;
     int32 framesToStartJump = 46;
 
+	bool repelSoftPushback = 47;
+
 	string name = 997;
 	string displayName = 998;
 	string avatar = 999;
@@ -303,6 +305,11 @@ message BulletConfig {
 
 	int32 speedIfNotHit = 37;
     bool omitSoftPushback = 38; // Only used for melee bullets
+
+    int32 hitboxSizeIncX = 39; // Change of hitboxSizeX per frame
+    int32 hitboxSizeIncY = 40; // Change of hitboxSizeY per frame
+
+    bool remainUponHit = 41; 
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb

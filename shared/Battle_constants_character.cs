@@ -17,6 +17,7 @@ namespace shared {
         public const int SPECIES_GOBLIN = 4097;
 
         public const float DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE = -4.5f; 
+        public const int DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); 
 
         /**
          [WARNING] 
@@ -63,7 +64,7 @@ namespace shared {
                         HasTurnAroundAnim = true,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 5,
-                        MinFallingVelY = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedIv,
@@ -107,7 +108,7 @@ namespace shared {
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 4,
-                        MinFallingVelY = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_MONKGIRL, new CharacterConfig {
@@ -147,7 +148,7 @@ namespace shared {
                         HasTurnAroundAnim = true,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 5,
-                        MinFallingVelY = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedIv,
@@ -191,7 +192,7 @@ namespace shared {
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 4,
-                        MinFallingVelY = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_GUNGIRL, new CharacterConfig {
@@ -227,7 +228,7 @@ namespace shared {
                         CrouchingEnabled = true,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 5,
-                        MinFallingVelY = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedIv,
@@ -244,7 +245,7 @@ namespace shared {
                         SpeciesId = SPECIES_BULLWARRIOR,
                         SpeciesName = "BullWarrior",
                         Hp = 500,
-                        OmitSoftPushback = true,
+                        RepelSoftPushback = true,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -272,7 +273,7 @@ namespace shared {
                         HasTurnAroundAnim = true,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 8,
-                        MinFallingVelY = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_GOBLIN, new CharacterConfig {
@@ -306,7 +307,7 @@ namespace shared {
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 4,
-                        MinFallingVelY = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_SUPERKNIFEGIRL, new CharacterConfig {
@@ -342,7 +343,7 @@ namespace shared {
                         HasTurnAroundAnim = true,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 5,
-                        MinFallingVelY = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),
             });
     }

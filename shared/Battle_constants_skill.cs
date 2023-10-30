@@ -14,7 +14,7 @@ namespace shared {
 
         public const int PATTERN_INVENTORY_SLOT_C = 1024;
         public const int PATTERN_INVENTORY_SLOT_D = 1025;
-
+    
         public static BulletConfig SwordManMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 12,
             ActiveFrames = 16,
@@ -1345,6 +1345,75 @@ namespace shared {
                         )
                     ),
 
+                    new KeyValuePair<int, Skill>(27, new Skill{
+                        RecoveryFrames = 23,
+                        RecoveryFramesOnBlock = 23,
+                        RecoveryFramesOnHit = 23,
+                        MpDelta = 0,
+                        TriggerType = SkillTriggerType.RisingEdge,
+                        BoundChState = Atk4
+                    }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 8,
+                                StartupInvinsibleFrames = 3,
+                                ActiveFrames = 1200, // At most flies for 20 seconds 
+                                HitStunFrames = 0,
+                                BlockStunFrames = 0,
+                                Damage = 0,
+                                PushbackVelX = NO_LOCK_VEL,
+                                PushbackVelY = NO_LOCK_VEL,
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SpeciesId = 10,
+                                ExplosionFrames = 0,
+                                BType = BulletType.Fireball,
+                                DirX = 1,
+                                DirY = 1,
+                                Hardness = 4,
+                                Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                CharacterEmitSfxName = "SlashEmitSpd2",
+                                MhType = MultiHitType.FromPrevHitActual,
+                                AllowsWalking = true,  
+                                TakesGravity = true,
+                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX // Will trigger the explosive wave when hitting anything
+                            }
+                        )
+                        .AddHit(
+                            // Just used to stop the character
+                            new BulletConfig {
+                                StartupFrames = 0,
+                                StartupInvinsibleFrames = 0,
+                                HitInvinsibleFrames = 20,
+                                BlowUp = true,
+                                ActiveFrames = 20, 
+                                HitStunFrames = MAX_INT,
+                                Damage = 45,
+                                PushbackVelX = NO_LOCK_VEL,
+                                PushbackVelY = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                SpeciesId = 10,
+                                ExplosionFrames = 40,
+                                HitboxSizeX = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeIncX = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 
+                                HitboxSizeIncY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                BType = BulletType.Fireball,
+                                DirX = 1,
+                                DirY = 0,
+                                Hardness = 8,
+                                RemainUponHit = true,
+                                ExplosionSfxName="Explosion3",
+                                CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
+                            }
+                        )
+                   ),
+
                     new KeyValuePair<int, Skill>(255, new Skill {
                         RecoveryFrames = 30,
                         RecoveryFramesOnBlock = 30,
@@ -1819,7 +1888,7 @@ namespace shared {
                                 if (currCharacterDownsync.InAir) {
                                     return 19;
                                 } else {
-                                    return 21;
+                                    return 27;
                                 }
                             } else {
                                 return NO_SKILL;

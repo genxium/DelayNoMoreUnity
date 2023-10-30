@@ -1685,6 +1685,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.MaxHp = chConfig.Hp;
             playerInRdf.Mp = 1000;
             playerInRdf.MaxMp = 1000;
+            playerInRdf.OmitGravity = chConfig.OmitGravity;
+            playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
+            playerInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
 
             // TODO: Remove the hardcoded index
@@ -1728,6 +1731,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.WaivingSpontaneousPatrol = isStatic;
             npcInRdf.OmitGravity = chConfig.OmitGravity;
             npcInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
+            npcInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
             startRdf.NpcsArr[i] = npcInRdf;
             npcLocalId++;
         }
@@ -2002,7 +2006,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             line.SetColor(Color.red);
             line.GetPositions(debugDrawPositionsHolder);
 
-            var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX, bullet.Config.HitboxSizeY);
+            var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX + bullet.Config.HitboxSizeIncX*bullet.FramesInBlState, bullet.Config.HitboxSizeY + bullet.Config.HitboxSizeIncY * bullet.FramesInBlState);
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));

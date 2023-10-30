@@ -40,3 +40,8 @@ To speed up audio by 2x.
 ```
 ffmpeg -i .\bgm.mp3 -filter:a "atempo=2.0" .\bgm_fast.mp3
 ```
+
+To lower volume by a considerable amount.
+```
+ffmpeg -i .\bgm.mp3 -filter:a "volume=0.1" .\bgm_low.mp3
+```
