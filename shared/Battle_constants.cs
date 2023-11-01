@@ -75,6 +75,8 @@ namespace shared {
         public static ulong TRIGGER_MASK_BY_MOVEMENT = (1 << 0);
         public static ulong TRIGGER_MASK_BY_ATK = (1 << 1);
         public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
+        public static ulong TRIGGER_MASK_BY_ANOTHER_TRIGGER = (1 << 3); // Mainly used to invoke other triggers by a wave trigger 
+        public static ulong TRIGGER_MASK_BY_WAVE = (1 << 4); // Except for the first wave, subsequent waves are triggered by end of HP of the last NPC in previous wave
 
         public static int SPEED_NOT_HIT_NOT_SPECIFIED = 0;
 

@@ -12107,7 +12107,7 @@ namespace shared {
     public const int SubCycleQuotaLeftFieldNumber = 8;
     private int subCycleQuotaLeft_;
     /// <summary>
-    /// resets whenever "framesToRecover" becomes 0 
+    /// resets whenever "framesToRecover" becomes 0; for TRIGGER_MASK_BY_WAVE, this field is repurposed as the "remaining NPC count of current wave" 
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]

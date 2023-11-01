@@ -25,7 +25,7 @@ public class OfflineMapController : AbstractMapController {
 
         roomCapacity = 1;
         preallocateHolders();
-        resetCurrentMatch("Forest");
+        resetCurrentMatch("TwoStepStage");
         preallocateVfxNodes();
         preallocateSfxNodes();
         preallocateNpcNodes();

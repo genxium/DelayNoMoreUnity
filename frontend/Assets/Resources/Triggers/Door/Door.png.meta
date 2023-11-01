@@ -121,7 +121,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 36
+        y: 4
         width: 16
         height: 28
       alignment: 9
@@ -141,8 +141,8 @@ TextureImporter:
       name: TimedDoor1-1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 8
+        x: 16
+        y: 4
         width: 16
         height: 28
       alignment: 9
@@ -162,7 +162,7 @@ TextureImporter:
       name: TimedDoor1-2
       rect:
         serializedVersion: 2
-        x: 16
+        x: 32
         y: 36
         width: 16
         height: 28
@@ -183,8 +183,8 @@ TextureImporter:
       name: TimedDoor1-3
       rect:
         serializedVersion: 2
-        x: 16
-        y: 8
+        x: 48
+        y: 36
         width: 16
         height: 28
       alignment: 9
@@ -205,7 +205,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 36
+        y: 8
         width: 16
         height: 28
       alignment: 9
@@ -217,6 +217,111 @@ TextureImporter:
       bones: []
       spriteID: ecd655be0238a884bb781ca5c8fdda73
       internalID: 184567213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WaveTimedDoor-0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fcc785cf3f9e4e4da84684b5398b999
+      internalID: -1894346205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WaveTimedDoor-1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d06d718491fb1b47b866711ee96f383
+      internalID: -343751668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WaveTimedDoor-2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5126a996e99298c4eaae6fc5a7d2480b
+      internalID: 1305825011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WaveTimedDoor-3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 618710b83387a9c48af1a1a249320043
+      internalID: -829934087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WaveTimedDoor-4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 958d6d17b39eab945b9331dfee346a21
+      internalID: -80240103
       vertices: []
       indices: 
       edges: []
@@ -236,7 +341,12 @@ TextureImporter:
       TimedDoor1-0: 1018736461
       TimedDoor1-1: 1362925970
       TimedDoor1-3: 713190724
+      WaveTimedDoor-2: 1305825011
+      WaveTimedDoor-3: -829934087
+      WaveTimedDoor-4: -80240103
       TimedDoor1-2: -671575411
+      WaveTimedDoor-1: -343751668
+      WaveTimedDoor-0: -1894346205
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -487,7 +487,7 @@ message Trigger {
     TriggerConfig config = 6; // static config, unchanged during battle
     TriggerConfigFromTiled configFromTiled = 7; // static config, unchanged during battle
 
-    int32 subCycleQuotaLeft = 8; // resets whenever "framesToRecover" becomes 0 
+    int32 subCycleQuotaLeft = 8; // resets whenever "framesToRecover" becomes 0; for TRIGGER_MASK_BY_WAVE, this field is repurposed as the "remaining NPC count of current wave" 
    
     TriggerState state = 9; 
     int32 framesInState = 10; 
