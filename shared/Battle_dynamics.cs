@@ -283,7 +283,7 @@ namespace shared {
             }
     
             if (slotUsed) {
-                var buffConfig = targetSlotCurr.BuffConfig;
+                var buffConfig = buffConfigs[targetSlotCurr.BuffSpeciesId];
                 int origChSpeciesId = SPECIES_NONE_CH;
                 if (SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {
                     origChSpeciesId = currCharacterDownsync.SpeciesId;
@@ -291,7 +291,7 @@ namespace shared {
                     AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
                 }
                 // TODO: Support multi-buff simultaneously!
-                AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, rdfId, origChSpeciesId, buffConfig, thatCharacterInNextFrame.BuffList[0]);
+                AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, rdfId, origChSpeciesId, thatCharacterInNextFrame.BuffList[0]);
             }
 
             return slotUsed;
@@ -337,7 +337,8 @@ namespace shared {
             for (int i = 0; i < currCharacterDownsync.DebuffList.Count; i++) {
                 Debuff debuff = currCharacterDownsync.DebuffList[i];
                 if (TERMINATING_DEBUFF_SPECIES_ID == debuff.SpeciesId) break;
-                switch (debuff.DebuffConfig.Type) {
+                var debuffConfig = debuffConfigs[debuff.SpeciesId];
+                switch (debuffConfig.Type) {
                     case DebuffType.FrozenPositionLocked:
                         if (0 < debuff.Stock) {
                             return true;
@@ -767,7 +768,7 @@ namespace shared {
                         if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break; 
                         revertBuff(cand, thatCharacterInNextFrame);
                     }
-                    AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, NoBuff, thatCharacterInNextFrame.BuffList[0]);
+                    AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, thatCharacterInNextFrame.BuffList[0]);
 
                     int prevDebuffI = 0; 
                     while (prevDebuffI < currCharacterDownsync.DebuffList.Count) {
@@ -775,7 +776,7 @@ namespace shared {
                         if (TERMINATING_DEBUFF_SPECIES_ID == cand.SpeciesId) break; 
                         revertDebuff(cand, thatCharacterInNextFrame);
                     }
-                    AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, NoDebuff, thatCharacterInNextFrame.DebuffList[0]);
+                    AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, thatCharacterInNextFrame.DebuffList[0]);
                 }
 
                 float boxCx, boxCy, boxCw, boxCh;
@@ -1211,7 +1212,7 @@ namespace shared {
                                 bool shouldOmitStun = ((0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
                                 if (false == shouldOmitStun) {
                                     var existingDebuff = atkedCharacterInNextFrame.DebuffList[DEBUFF_ARR_IDX_FROZEN];
-                                    bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == existingDebuff.DebuffConfig.Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
+                                    bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == debuffConfigs[existingDebuff.SpeciesId].Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
                                     if (!isFrozen && bulletNextFrame.Config.BlowUp) {
                                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
                                     } else if (isFrozen || BlownUp1 != oldNextCharacterState) {
@@ -1236,17 +1237,17 @@ namespace shared {
                                         if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;   
                                         if (0 >= buff.Stock) continue;
                                         if (buff.OriginatedRenderFrameId > bulletNextFrame.BattleAttr.OriginatedRenderFrameId) continue;
-                                        BuffConfig buffConfig = buff.BuffConfig;
+                                        BuffConfig buffConfig = buffConfigs[buff.SpeciesId];
                                         if (null == buffConfig.AssociatedDebuffs) continue;  
                                         for (int q = 0; q < buffConfig.AssociatedDebuffs.Count; q++) {
-                                            DebuffConfig associatedDebuffConfig = buffConfig.AssociatedDebuffs[q];
-                                            if (TERMINATING_BUFF_SPECIES_ID == associatedDebuffConfig.SpeciesId) break;
+                                            DebuffConfig associatedDebuffConfig = debuffConfigs[buffConfig.AssociatedDebuffs[q]];
+                                            if (null == associatedDebuffConfig || TERMINATING_BUFF_SPECIES_ID == associatedDebuffConfig.SpeciesId) break;
                                             switch (associatedDebuffConfig.Type) {
                                                 case DebuffType.ColdSpeedDown:
                                                 case DebuffType.FrozenPositionLocked:
                                                     // Overwrite existing debuff for now
                                                     int debuffArrIdx = associatedDebuffConfig.ArrIdx;
-                                                    AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, associatedDebuffConfig, atkedCharacterInNextFrame.DebuffList[debuffArrIdx]);
+                                                    AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, atkedCharacterInNextFrame.DebuffList[debuffArrIdx]);
                                                     // The following transition is deterministic because we checked "atkedCharacterInNextFrame.DebuffList" before transiting into BlownUp1.
                                                     if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
                                                         atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
@@ -1383,7 +1384,7 @@ namespace shared {
                 var currTrigger = currRenderFrame.TriggersArr[i];
                 if (TERMINATING_TRIGGER_ID == currTrigger.TriggerLocalId) break;
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
-                if (TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) {
+                if (0 < (TRIGGER_MASK_BY_CYCLIC_TIMER & currTrigger.Config.TriggerMask)) {
                     // The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
                     if (0 == currTrigger.FramesToFire) {
                         _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt);

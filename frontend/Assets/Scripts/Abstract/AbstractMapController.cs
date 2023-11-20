@@ -18,6 +18,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     protected int preallocTrapCapacity = DEFAULT_PREALLOC_TRAP_CAPACITY;
     protected int preallocTriggerCapacity = DEFAULT_PREALLOC_TRIGGER_CAPACITY;
+    protected int preallocEvtSubCapacity = DEFAULT_PREALLOC_EVTSUB_CAPACITY;
 
     protected int playerRdfId; // After battle started, always increments monotonically (even upon reconnection)
     protected int renderFrameIdLagTolerance;
@@ -649,7 +650,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         for (int k = 0; k < rdf.TriggersArr.Count; k++) {
             var trigger = rdf.TriggersArr[k];
-            if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId) break;
+            if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId || !triggerGameObjs.ContainsKey(trigger.TriggerLocalId)) break;
             var triggerGameObj = triggerGameObjs[trigger.TriggerLocalId];
             var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
             if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask) {
@@ -832,7 +833,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         renderBufferSize = 1536;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity));
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
 
@@ -1648,8 +1649,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             collisionSys.AddSingle(staticColliders[i]);
         }
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
-        historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
+        historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
 
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;
         startRdf.ShouldForceResync = false;
@@ -1692,7 +1693,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             // TODO: Remove the hardcoded index
             var initIvSlot = chConfig.InitInventorySlots[0];
-            AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffConfig, playerInRdf.Inventory.Slots[0]);
+            AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, playerInRdf.Inventory.Slots[0]);
         }
 
         int npcLocalId = 0;
@@ -1749,6 +1750,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < triggerList.Count; i++) {
             var (trigger, wx, wy) = triggerList[i];
             startRdf.TriggersArr[i] = trigger;
+            if (Waver.SpeciesId == trigger.Config.SpeciesId) continue;
             spawnTriggerNode(trigger.TriggerLocalId, trigger.Config.SpeciesId, wx, wy);
         }
 
@@ -2110,7 +2112,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             for (int i = 0; i < currCharacterDownsync.DebuffList.Count; i++) {
                 Debuff debuff = currCharacterDownsync.DebuffList[i];
                 if (TERMINATING_DEBUFF_SPECIES_ID == debuff.SpeciesId) break;
-                switch (debuff.DebuffConfig.Type) {
+                var debuffConfig = debuffConfigs[debuff.SpeciesId];
+                switch (debuffConfig.Type) {
                     case DebuffType.FrozenPositionLocked:
                         if (0 < debuff.Stock) {
                             material.SetFloat("_CrackOpacity", 0.75f);
@@ -2233,11 +2236,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < currCharacterDownsync.BuffList.Count; i++) {
             var buff = currCharacterDownsync.BuffList[i];
             if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;
-            if (NO_VFX_ID == buff.BuffConfig.CharacterVfxSpeciesId) continue;
-            if (BuffStockType.Timed == buff.BuffConfig.StockType && 0 >= buff.Stock) continue;
-            var vfxConfig = vfxDict[buff.BuffConfig.CharacterVfxSpeciesId];
+            var buffConfig = buffConfigs[buff.SpeciesId];
+            if (NO_VFX_ID == buffConfig.CharacterVfxSpeciesId) continue;
+            if (BuffStockType.Timed == buffConfig.StockType && 0 >= buff.Stock) continue;
+            var vfxConfig = vfxDict[buffConfig.CharacterVfxSpeciesId];
             if (!vfxConfig.OnCharacter) continue;
-            var speciesKvPq = cachedVfxNodes[buff.BuffConfig.CharacterVfxSpeciesId];
+            var speciesKvPq = cachedVfxNodes[buffConfig.CharacterVfxSpeciesId];
             string lookupKey = "ch-buff-" + currCharacterDownsync.JoinIndex.ToString() + "-" + i;
             var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
             if (null == vfxAnimHolder) {
@@ -2251,7 +2255,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
             }
 
-            bool isInitialFrame = (buff.Stock == buff.BuffConfig.Stock);
+            bool isInitialFrame = (buff.Stock == buffConfig.Stock);
 
             if (vfxConfig.MotionType == VfxMotionType.Tracing) {
                 newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="361">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="364">
  <properties>
   <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
  </properties>
@@ -43,6 +43,22 @@
    <point/>
   </object>
  </objectgroup>
+ <objectgroup id="19" name="EvtSubscription">
+  <object id="361" x="960" y="0">
+   <properties>
+    <property name="demanded" value="1"/>
+    <property name="id" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="363" x="1024" y="0">
+   <properties>
+    <property name="demanded" value="2"/>
+    <property name="id" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="13" name="TriggerPos">
   <object id="360" gid="13" x="1568" y="992" width="32" height="32">
    <properties>
@@ -51,11 +67,22 @@
     <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
-    <property name="quota" value="2"/>
+    <property name="quota" value="1"/>
     <property name="recoveryFrames" value="300"/>
     <property name="subCycleQuota" value="2"/>
     <property name="subCycleTriggerFrames" value="90"/>
+    <property name="subscriptionId" value="0"/>
    </properties>
+  </object>
+  <object id="362" x="960" y="1024">
+   <properties>
+    <property name="bulletTeamId" value="3"/>
+    <property name="publishingEvtMask" value="1"/>
+    <property name="quota" value="3"/>
+    <property name="speciesId" value="1024"/>
+    <property name="subscriptionId" value="1"/>
+   </properties>
+   <point/>
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos"/>

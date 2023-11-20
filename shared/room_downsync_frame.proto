@@ -382,6 +382,8 @@ message TrapConfigFromTiled {
 	int32 dirY = 5; // the initial direction indicator for Y-axis
 
 	bool prohibitsWallGrabbing = 6;
+
+    int32 subscriptionId = 7;
 }
 
 message TrapColliderAttr {
@@ -435,6 +437,12 @@ message Trap {
 	int32 velY = 1004;
 }
 
+message EvtSubscription {
+    int32 id = 1;
+    uint64 demanded = 2;
+    uint64 fulfilled = 3;
+}
+
 message TriggerConfig {
 	int32 speciesId = 1;
     string speciesName = 2; 
@@ -471,6 +479,10 @@ message TriggerConfigFromTiled {
     int32 subCycleQuota = 9;
 
     repeated CharacterSpawnerConfig characterSpawnerTimeSeq = 10; // MUST Be configured by increasing "cutoffRdfFrameId"!
+
+    // TODO: Adoption of multi-subscription of a single trigger
+    int32 subscriptionId = 11; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"  
+    uint64 publishingEvtMask = 12; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"
 }
 
 message TriggerColliderAttr {
@@ -531,6 +543,8 @@ message RoomDownsyncFrame {
 	repeated CharacterDownsync npcsArr = 5;
 	repeated Trap trapsArr = 6;
 	repeated Trigger triggersArr = 7;
+
+    repeated EvtSubscription evtSubsArr = 8;
 
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;
@@ -620,23 +634,23 @@ message BuffConfig {
     int32 fireballHardnessDelta = 11;
     bool invinsible = 12;
     int32 xformChSpeciesId = 13;
-    repeated DebuffConfig associatedDebuffs = 1024; // There's a reason why type "DebuffConfig" instead of just the speciesId is used here, as "BuffConfig" itself is already seeked via heap-RAM dictionary look from "Buff.speciesId", we'd like to reduce the count of heap-RAM access when stepping battle dynamics  
+    
+    // [WARNING] The following field previously had type "repeated DebuffConfig" and the reason given was "to reduce the count of heap-RAM access when stepping battle dynamics", it was not a bad reason yet such complicated type imposed a heavy burden on serialization/deserialization of "RoomDownsyncFrame" which would be used frequently when we use "backend forceResync" for "active slow ticker" or "recovery upon reconnection". See "ConcerningEdgeCases.md" for details.
+    repeated int32 associatedDebuffs = 1024;   
 
     int32 characterVfxSpeciesId = 2048;
 }
 
 message Buff {
-    int32 speciesId = 1; // A redundancy of "buffConfig" for easy termination detection
+    int32 speciesId = 1; 
     int32 stock = 2;
-    BuffConfig buffConfig = 3; // Same type concern as "BuffConfig.associatedDebuffs". 
-    int32 originatedRenderFrameId = 4;
-    int32 origChSpeciesId = 5;
+    int32 originatedRenderFrameId = 3;
+    int32 origChSpeciesId = 4;
 }
 
 message Debuff {
     int32 speciesId = 1; // A redundancy of "debuffConfig" for easy termination detection 
     int32 stock = 2;
-    DebuffConfig debuffConfig = 3; // Same type concern as "BuffConfig.associatedDebuffs". 
 }
 
 enum InventorySlotStockType {
@@ -652,7 +666,7 @@ message InventorySlot {
 	int32 framesToRecover = 3; 
     int32 defaultQuota = 4;
     int32 defaultFramesToRecover = 5;
-	BuffConfig buffConfig = 1024; // Same type concern as "BuffConfig.associatedDebuffs".
+    int32 buffSpeciesId = 6;
 }
 
 message Inventory {

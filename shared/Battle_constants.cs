@@ -75,8 +75,7 @@ namespace shared {
         public static ulong TRIGGER_MASK_BY_MOVEMENT = (1 << 0);
         public static ulong TRIGGER_MASK_BY_ATK = (1 << 1);
         public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
-        public static ulong TRIGGER_MASK_BY_ANOTHER_TRIGGER = (1 << 3); // Mainly used to invoke other triggers by a wave trigger 
-        public static ulong TRIGGER_MASK_BY_WAVE = (1 << 4); // Except for the first wave, subsequent waves are triggered by end of HP of the last NPC in previous wave
+        public static ulong TRIGGER_MASK_BY_SUBSCRIPTION = (1 << 3);
 
         public static int SPEED_NOT_HIT_NOT_SPECIFIED = 0;
 
@@ -137,6 +136,7 @@ namespace shared {
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;
+        public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 4;
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 3;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 3;
         public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;
@@ -185,6 +185,7 @@ namespace shared {
         public static int TERMINATING_TRIGGER_ID = (-1030);
         public static int TERMINATING_BUFF_SPECIES_ID = (-1031);
         public static int TERMINATING_DEBUFF_SPECIES_ID = (-1032);
+        public static int TERMINATING_EVTSUB_ID = (-1033);
 
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
 
