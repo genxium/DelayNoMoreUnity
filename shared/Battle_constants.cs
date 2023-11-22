@@ -175,6 +175,8 @@ namespace shared {
 
         public static int NO_LOCK_VEL = -1;
 
+        public static ulong EVTSUB_NO_DEMAND_MASK = 0;
+
         // Used in preallocated RoomDownsyncFrame to check termination
         public static int TERMINATING_BULLET_LOCAL_ID = (-1024);
         public static int TERMINATING_PLAYER_ID = (-1025);

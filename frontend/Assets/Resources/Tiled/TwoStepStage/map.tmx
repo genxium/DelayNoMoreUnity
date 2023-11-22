@@ -46,15 +46,15 @@
  <objectgroup id="19" name="EvtSubscription">
   <object id="361" x="960" y="0">
    <properties>
-    <property name="demanded" value="1"/>
+    <property name="demandedEvtMask" value="1"/>
     <property name="id" value="0"/>
    </properties>
    <point/>
   </object>
   <object id="363" x="1024" y="0">
    <properties>
-    <property name="demanded" value="2"/>
     <property name="id" value="1"/>
+    <property name="publishingEvtMask" value="1"/>
    </properties>
    <point/>
   </object>
