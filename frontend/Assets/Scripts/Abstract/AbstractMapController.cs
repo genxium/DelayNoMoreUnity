@@ -1240,12 +1240,29 @@ public abstract class AbstractMapController : MonoBehaviour {
         var npcsStartingCposList = new List<(Vector, int, int, int, int, bool)>();
         var trapList = new List<Trap>();
         var triggerList = new List<(Trigger, float, float)>();
+        var evtSubList = new List<EvtSubscription>();
         float defaultPatrolCueRadius = 10;
         int staticColliderIdx = 0;
         int trapLocalId = 0;
         int triggerLocalId = 0;
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
+                case "EvtSubscription":
+                    foreach (Transform evtSubTsf in child) {
+                        var evtSubTileObj = evtSubTsf.gameObject.GetComponent<SuperObject>();
+                        var tileProps = evtSubTsf.gameObject.gameObject.GetComponent<SuperCustomProperties>();
+                        CustomProperty id, demandedEvtMask;
+                        tileProps.TryGetCustomProperty("id", out id);
+                        tileProps.TryGetCustomProperty("demandedEvtMask", out demandedEvtMask);
+                        
+                        var evtSub = new EvtSubscription {
+                            Id = id.GetValueAsInt(),
+                            DemandedEvtMask = (null == demandedEvtMask || demandedEvtMask.IsEmpty) ? EVTSUB_NO_DEMAND_MASK : (ulong)demandedEvtMask.GetValueAsInt(),
+                        };
+
+                        evtSubList.Add(evtSub);
+                    }
+                    break;
                 case "Barrier":
                     foreach (Transform barrierChild in child) {
                         var barrierTileObj = barrierChild.gameObject.GetComponent<SuperObject>();
@@ -1645,6 +1662,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             return Math.Sign(lhs.Item2 - rhs.Item2);
         });
 
+        evtSubList.Sort(delegate (EvtSubscription lhs, EvtSubscription rhs) {
+            return Math.Sign(lhs.Id - rhs.Id);
+        });
+
         for (int i = 0; i < staticColliderIdx; i++) {
             collisionSys.AddSingle(staticColliders[i]);
         }
@@ -1752,6 +1773,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             startRdf.TriggersArr[i] = trigger;
             if (Waver.SpeciesId == trigger.Config.SpeciesId) continue;
             spawnTriggerNode(trigger.TriggerLocalId, trigger.Config.SpeciesId, wx, wy);
+        }
+
+        for (int i = 0; i < evtSubList.Count; i++) {
+            startRdf.EvtSubsArr[i] = evtSubList[i];
         }
 
         return startRdf;

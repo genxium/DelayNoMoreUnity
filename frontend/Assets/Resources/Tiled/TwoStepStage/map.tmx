@@ -54,7 +54,6 @@
   <object id="363" x="1024" y="0">
    <properties>
     <property name="id" value="1"/>
-    <property name="publishingEvtMask" value="1"/>
    </properties>
    <point/>
   </object>
@@ -71,7 +70,7 @@
     <property name="recoveryFrames" value="300"/>
     <property name="subCycleQuota" value="2"/>
     <property name="subCycleTriggerFrames" value="90"/>
-    <property name="subscriptionId" value="0"/>
+    <property name="subscriptionId" value="1"/>
    </properties>
   </object>
   <object id="362" x="960" y="1024">

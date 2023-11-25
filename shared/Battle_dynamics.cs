@@ -1358,7 +1358,7 @@ namespace shared {
             return characterSpawnerTimeSeq[l]; 
         }
 
-        private static void _tickSingleSubCycle(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription waveNpcKilledEvtSub) {
+        private static void _tickSingleSubCycle(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter) {
             if (0 < currTrigger.SubCycleQuotaLeft) {
                 triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1;
                 triggerInNextFrame.State = TriggerState.TcoolingDown;
@@ -1372,7 +1372,6 @@ namespace shared {
                     if (idx < 0) idx = 0;
                     if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;  
                     if (addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, currRenderFrame.WaveNpcKilledEvtMaskCounter)) {
-                        waveNpcKilledEvtSub.DemandedEvtMask |= nextWaveNpcKilledEvtMaskCounter;
                         nextWaveNpcKilledEvtMaskCounter <<= 1;
                     }
                 }
@@ -1384,25 +1383,46 @@ namespace shared {
             }
         }
 
-        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription waveNpcKilledEvtSub, ILoggerBridge logger) {
+        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription waveNpcKilledEvtSub, ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
+            bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << waveNpcKilledEvtSub.Id)));
+            int nextWaveNpcCnt = 0;
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
                 if (TERMINATING_TRIGGER_ID == currTrigger.TriggerLocalId) break;
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
-                if (0 < (TRIGGER_MASK_BY_CYCLIC_TIMER & currTrigger.Config.TriggerMask)) {
+                if (TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) {
                     // The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
                     if (0 == currTrigger.FramesToFire) {
-                        _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter, waveNpcKilledEvtSub);
+                        _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
                     } else if (0 == currTrigger.FramesToRecover) {
                         if (0 < currTrigger.Quota) {
                             triggerInNextFrame.Quota = currTrigger.Quota - 1;
                             triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                            _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter, waveNpcKilledEvtSub);
+                            _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
                         } else {
                             triggerInNextFrame.State = TriggerState.Tready;
                             triggerInNextFrame.FramesToFire = MAX_INT;
                             triggerInNextFrame.FramesToRecover = MAX_INT;
                         }
+                    }
+                } else if (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask) {
+                    bool justFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << currTrigger.ConfigFromTiled.SubscriptionId)));
+                    if (justFulfilled && 0 < currTrigger.Quota) {
+                        if (currTrigger.ConfigFromTiled.SubscriptionId == waveNpcKilledEvtSub.Id) {
+                            nextWaveNpcCnt += currTrigger.ConfigFromTiled.SubCycleQuota;
+                        }
+                        triggerInNextFrame.Quota = currTrigger.Quota - 1;
+                        triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
+                        _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
+                    } else if (0 <= currTrigger.FramesToFire) {
+                        // [WARNING] The information of "justFulfilled" will be lost after then just-fulfilled renderFrame, thus temporarily using "FramesToFire" to keep track of subsequent spawning
+                        if (0 == currTrigger.FramesToFire) {
+                            _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
+                        }
+                    } else {
+                        triggerInNextFrame.State = TriggerState.Tready;
+                        triggerInNextFrame.FramesToFire = MAX_INT;
+                        triggerInNextFrame.FramesToRecover = MAX_INT;
                     }
                 } else {
                     if (0 != currTrigger.FramesToFire) continue;
@@ -1426,6 +1446,10 @@ namespace shared {
                     }
                     triggerInNextFrame.FramesToFire = MAX_INT;
                 }
+            }
+
+            if (nextWaveTriggerJustFulfilled) {
+                waveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
             }
         }
 
@@ -1845,16 +1869,21 @@ namespace shared {
             int hardcodedWaveNpcKilledEvtSubIdx = 1; // TODO: Remove the hardcoded constant, at least remove defining it here...
             EvtSubscription waveNpcKilledEvtSub = nextEvtSubs[hardcodedWaveNpcKilledEvtSubIdx];
             ulong fulfilledEvtSubscriptionSetMask = 0; // By default no EvtSub is fulfilled yet
+            if (0 == currRenderFrame.Id) {
+                fulfilledEvtSubscriptionSetMask |= (1ul << hardcodedWaveNpcKilledEvtSubIdx);
+            }
 
             _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
             
             int nextNpcI = currNpcI;
-
-            _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, waveNpcKilledEvtSub, logger);
-            
+ 
             _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
             
             _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, completelyStaticTrapColliders, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+
+            // [WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled-evtsub. 
+            _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, waveNpcKilledEvtSub, fulfilledEvtSubscriptionSetMask, logger);
+
             _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
             _leftShiftDeadNpcs(roomCapacity, nextRenderFrameNpcs, logger);
             for (int i = 0; i < colliderCnt; i++) {
