@@ -28,13 +28,6 @@ namespace shared {
         public static TriggerConfig WaveTimedDoor1 = new TriggerConfig {
             SpeciesId = 4,
             SpeciesName = "WaveTimedDoor1",
-            TriggerMask = (TRIGGER_MASK_BY_CYCLIC_TIMER | TRIGGER_MASK_BY_SUBSCRIPTION),
-            CollisionTypeMask = COLLISION_NONE_INDEX
-        };
-
-        public static TriggerConfig Waver = new TriggerConfig {
-            SpeciesId = 1024,
-            SpeciesName = "Waver",
             TriggerMask = TRIGGER_MASK_BY_SUBSCRIPTION,
             CollisionTypeMask = COLLISION_NONE_INDEX
         };
@@ -46,7 +39,6 @@ namespace shared {
                     new KeyValuePair<int, TriggerConfig>(PSwitch.SpeciesId, PSwitch),
                     new KeyValuePair<int, TriggerConfig>(TimedDoor1.SpeciesId, TimedDoor1),
                     new KeyValuePair<int, TriggerConfig>(WaveTimedDoor1.SpeciesId, WaveTimedDoor1),
-                    new KeyValuePair<int, TriggerConfig>(Waver.SpeciesId, Waver),
                 }
         );
     }

@@ -35,7 +35,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="104" y="696">
+  <object id="135" x="1416" y="972">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -44,16 +44,9 @@
   </object>
  </objectgroup>
  <objectgroup id="19" name="EvtSubscription">
-  <object id="361" x="960" y="0">
-   <properties>
-    <property name="demandedEvtMask" value="1"/>
-    <property name="id" value="0"/>
-   </properties>
-   <point/>
-  </object>
   <object id="363" x="1024" y="0">
    <properties>
-    <property name="id" value="1"/>
+    <property name="id" value="0"/>
    </properties>
    <point/>
   </object>
@@ -66,22 +59,12 @@
     <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
-    <property name="quota" value="1"/>
+    <property name="quota" value="4"/>
     <property name="recoveryFrames" value="300"/>
-    <property name="subCycleQuota" value="2"/>
+    <property name="subCycleQuota" value="3"/>
     <property name="subCycleTriggerFrames" value="90"/>
-    <property name="subscriptionId" value="1"/>
+    <property name="subscriptionId" value="0"/>
    </properties>
-  </object>
-  <object id="362" x="960" y="1024">
-   <properties>
-    <property name="bulletTeamId" value="3"/>
-    <property name="publishingEvtMask" value="1"/>
-    <property name="quota" value="3"/>
-    <property name="speciesId" value="1024"/>
-    <property name="subscriptionId" value="1"/>
-   </properties>
-   <point/>
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos"/>

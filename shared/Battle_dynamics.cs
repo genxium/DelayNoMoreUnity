@@ -1370,9 +1370,10 @@ namespace shared {
                 if (0 < spawnerSpeciesIdList.Count) {
                     int idx = currTrigger.ConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
                     if (idx < 0) idx = 0;
-                    if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;  
-                    if (addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, currRenderFrame.WaveNpcKilledEvtMaskCounter)) {
-                        nextWaveNpcKilledEvtMaskCounter <<= 1;
+                    if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;
+                    ulong candNextWaveNpcKilledEvtMaskCounter = (0 == nextWaveNpcKilledEvtMaskCounter ? 1 : (nextWaveNpcKilledEvtMaskCounter << 1));
+                    if (addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, candNextWaveNpcKilledEvtMaskCounter)) {
+                        nextWaveNpcKilledEvtMaskCounter = candNextWaveNpcKilledEvtMaskCounter;
                     }
                 }
             } else {
@@ -1410,11 +1411,12 @@ namespace shared {
                     if (justFulfilled && 0 < currTrigger.Quota) {
                         if (currTrigger.ConfigFromTiled.SubscriptionId == waveNpcKilledEvtSub.Id) {
                             nextWaveNpcCnt += currTrigger.ConfigFromTiled.SubCycleQuota;
+                            nextWaveNpcKilledEvtMaskCounter = 0;
                         }
                         triggerInNextFrame.Quota = currTrigger.Quota - 1;
                         triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                        _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
-                    } else if (0 <= currTrigger.FramesToFire) {
+                        triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;   
+                    } else if (0 <= currTrigger.FramesToFire && MAX_INT != currTrigger.FramesToFire) {
                         // [WARNING] The information of "justFulfilled" will be lost after then just-fulfilled renderFrame, thus temporarily using "FramesToFire" to keep track of subsequent spawning
                         if (0 == currTrigger.FramesToFire) {
                             _tickSingleSubCycle(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
@@ -1866,7 +1868,7 @@ namespace shared {
             
 
             ulong nextWaveNpcKilledEvtMaskCounter = currRenderFrame.WaveNpcKilledEvtMaskCounter;
-            int hardcodedWaveNpcKilledEvtSubIdx = 1; // TODO: Remove the hardcoded constant, at least remove defining it here...
+            int hardcodedWaveNpcKilledEvtSubIdx = 0; // TODO: Remove the hardcoded constant, at least remove defining it here...
             EvtSubscription waveNpcKilledEvtSub = nextEvtSubs[hardcodedWaveNpcKilledEvtSubIdx];
             ulong fulfilledEvtSubscriptionSetMask = 0; // By default no EvtSub is fulfilled yet
             if (0 == currRenderFrame.Id) {

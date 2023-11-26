@@ -1771,7 +1771,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < triggerList.Count; i++) {
             var (trigger, wx, wy) = triggerList[i];
             startRdf.TriggersArr[i] = trigger;
-            if (Waver.SpeciesId == trigger.Config.SpeciesId) continue;
             spawnTriggerNode(trigger.TriggerLocalId, trigger.Config.SpeciesId, wx, wy);
         }
 
