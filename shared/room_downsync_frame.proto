@@ -484,6 +484,8 @@ message TriggerConfigFromTiled {
     // TODO: Adoption of multi-subscription of a single trigger
     int32 subscriptionId = 11; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"  
     uint64 publishingEvtMask = 12; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"
+
+    int32 quotaCap = 13;
 }
 
 message TriggerColliderAttr {

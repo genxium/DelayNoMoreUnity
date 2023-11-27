@@ -653,7 +653,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId || !triggerGameObjs.ContainsKey(trigger.TriggerLocalId)) break;
             var triggerGameObj = triggerGameObjs[trigger.TriggerLocalId];
             var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
-            if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask) {
+            if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask || TRIGGER_MASK_BY_SUBSCRIPTION == trigger.Config.TriggerMask) {
                 animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, false);
             } else {    
                 // TODO: Make use fo TriggerState in "shared.Battle_dynamics"!
@@ -1610,6 +1610,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 InitVelY = initVelYVal,
                                 SubCycleTriggerFrames = subCycleTriggerFramesVal,
                                 SubCycleQuota = subCycleQuotaVal,
+                                QuotaCap = quotaVal,
                             },
                         };
 

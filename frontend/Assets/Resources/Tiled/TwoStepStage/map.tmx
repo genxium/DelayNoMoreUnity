@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="364">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="365">
  <properties>
   <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
  </properties>
@@ -55,7 +55,7 @@
   <object id="360" gid="13" x="1568" y="992" width="32" height="32">
    <properties>
     <property name="bulletTeamId" value="3"/>
-    <property name="characterSpawnerTimeSeq" value="1200:4097,4097,1;1800:4097,1,1;3600:1,1,3"/>
+    <property name="characterSpawnerTimeSeq" value="1:4097,4097,1;2:4097,1,1;3:1,1,3;4:1,3,3"/>
     <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
@@ -156,7 +156,7 @@
     <property name="fdCaptureFrames" value="8"/>
     <property name="fuAct" value="2"/>
     <property name="fuCaptureFrames" value="8"/>
-    <property name="id" value="132"/>
+    <property name="id" value="5"/>
    </properties>
    <point/>
   </object>
@@ -166,7 +166,7 @@
     <property name="flCaptureFrames" value="60"/>
     <property name="frAct" value="3"/>
     <property name="frCaptureFrames" value="60"/>
-    <property name="id" value="150"/>
+    <property name="id" value="4"/>
    </properties>
    <point/>
   </object>
@@ -176,7 +176,7 @@
     <property name="flCaptureFrames" value="60"/>
     <property name="frAct" value="3"/>
     <property name="frCaptureFrames" value="60"/>
-    <property name="id" value="152"/>
+    <property name="id" value="3"/>
    </properties>
    <point/>
   </object>
@@ -190,7 +190,7 @@
     <property name="frCaptureFrames" value="8"/>
     <property name="fuAct" value="17"/>
     <property name="fuCaptureFrames" value="8"/>
-    <property name="id" value="153"/>
+    <property name="id" value="2"/>
    </properties>
    <point/>
   </object>
@@ -204,7 +204,21 @@
     <property name="frCaptureFrames" value="8"/>
     <property name="fuAct" value="17"/>
     <property name="fuCaptureFrames" value="8"/>
-    <property name="id" value="154"/>
+    <property name="id" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="364" x="1128" y="986">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="8"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="20"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="20"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="8"/>
+    <property name="id" value="6"/>
    </properties>
    <point/>
   </object>

@@ -1347,7 +1347,7 @@ namespace shared {
                 int m = ((l + r) >> 1);
                 var cand = characterSpawnerTimeSeq[m]; 
                 if (cand.CutoffRdfFrameId == rdfId) {
-                    return characterSpawnerTimeSeq[l]; 
+                    return cand; 
                 } else if (cand.CutoffRdfFrameId < rdfId) {
                     l = m+1;
                 } else {
@@ -1365,8 +1365,8 @@ namespace shared {
                 triggerInNextFrame.FramesInState = 0;
                 triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
 
-                var chSpawnerConfig = lowerBoundForSpawnerConfig(currRenderFrame.Id, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq);  
-                var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList; 
+                var chSpawnerConfig = (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask ? lowerBoundForSpawnerConfig(currTrigger.ConfigFromTiled.QuotaCap - currTrigger.Quota, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq) : lowerBoundForSpawnerConfig(currRenderFrame.Id, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq));  
+                var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList;
                 if (0 < spawnerSpeciesIdList.Count) {
                     int idx = currTrigger.ConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
                     if (idx < 0) idx = 0;
