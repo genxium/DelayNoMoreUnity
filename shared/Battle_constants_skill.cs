@@ -66,6 +66,7 @@ namespace shared {
             CharacterEmitSfxName = "SlashEmitSpd3",
             ExplosionSfxName = "Melee_Explosion2", 
             ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
+            DelaySelfVelToActive = true,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
@@ -121,6 +122,7 @@ namespace shared {
             ExplosionSfxName = "Explosion4", 
             ActiveVfxSpeciesId = VfxFireSlashActive.SpeciesId,
             ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+            DelaySelfVelToActive = true,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
