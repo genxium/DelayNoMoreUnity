@@ -1592,8 +1592,11 @@ namespace shared {
                     } else if ((Atk1 == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) || (Atk4 == currCharacterDownsync.CharacterState && WalkingAtk4 == thatCharacterInNextFrame.CharacterState)) {
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.FramesInChState + 1;
                         thatCharacterInNextFrame.LowerPartFramesInChState = 0;
-                    } else if ((Atk1 == thatCharacterInNextFrame.CharacterState) || (Atk4 == thatCharacterInNextFrame.CharacterState)) {
+                    } else if ((WalkingAtk1 == thatCharacterInNextFrame.CharacterState && Atk1 == thatCharacterInNextFrame.CharacterState) || (WalkingAtk4 == thatCharacterInNextFrame.CharacterState && Atk4 == thatCharacterInNextFrame.CharacterState)) {
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.FramesInChState + 1;
+                        thatCharacterInNextFrame.LowerPartFramesInChState = 0;
+                    } else if (SPECIES_GUNGIRL == thatCharacterInNextFrame.SpeciesId && (Atk1 == thatCharacterInNextFrame.CharacterState || Atk4 == thatCharacterInNextFrame.CharacterState)) {
+                        thatCharacterInNextFrame.FramesInChState = 0;
                         thatCharacterInNextFrame.LowerPartFramesInChState = 0;
                     } else {
                         thatCharacterInNextFrame.FramesInChState = 0;
