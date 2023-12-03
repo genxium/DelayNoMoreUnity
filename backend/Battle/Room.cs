@@ -15,6 +15,7 @@ public class Room {
     public int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     public int preallocTrapCapacity = DEFAULT_PREALLOC_TRAP_CAPACITY;
     public int preallocTriggerCapacity = DEFAULT_PREALLOC_TRIGGER_CAPACITY;
+    public int preallocEvtSubCapacity = DEFAULT_PREALLOC_EVTSUB_CAPACITY;
 
     public int battleDurationFrames;
     public int estimatedMillisPerFrame;
@@ -516,7 +517,7 @@ public class Room {
 
                 if (nextRenderFrameId > renderFrameId) {
                     if (0 == renderFrameId) {
-                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
+                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
                         startRdf.PlayersArr.AddRange(clonePlayersArrToPb());
                         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
 

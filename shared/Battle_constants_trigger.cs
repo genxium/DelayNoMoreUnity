@@ -25,12 +25,20 @@ namespace shared {
             CollisionTypeMask = COLLISION_NONE_INDEX
         };
 
+        public static TriggerConfig WaveTimedDoor1 = new TriggerConfig {
+            SpeciesId = 4,
+            SpeciesName = "WaveTimedDoor1",
+            TriggerMask = TRIGGER_MASK_BY_SUBSCRIPTION,
+            CollisionTypeMask = COLLISION_NONE_INDEX
+        };
+
         public static ImmutableDictionary<int, TriggerConfig> triggerConfigs = ImmutableDictionary.Create<int, TriggerConfig>().AddRange(
                 new[]
                 {
                     new KeyValuePair<int, TriggerConfig>(NSwitch.SpeciesId, NSwitch),
                     new KeyValuePair<int, TriggerConfig>(PSwitch.SpeciesId, PSwitch),
                     new KeyValuePair<int, TriggerConfig>(TimedDoor1.SpeciesId, TimedDoor1),
+                    new KeyValuePair<int, TriggerConfig>(WaveTimedDoor1.SpeciesId, WaveTimedDoor1),
                 }
         );
     }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2186353342994325327}
   - component: {fileID: 7158876479739140621}
   m_Layer: 0
-  m_Name: TimedDoor1
+  m_Name: WaveTimedDoor1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,12 +75,12 @@ SpriteRenderer:
   m_SortingLayerID: -1952305777
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1018736461, guid: 5c5090fa56a4df94ab89ef51205d9926, type: 3}
+  m_Sprite: {fileID: -1894346205, guid: 5c5090fa56a4df94ab89ef51205d9926, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 16, y: 28}
+  m_Size: {x: 64, y: 64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -96,7 +96,7 @@ Animator:
   m_GameObject: {fileID: 2186353342994325362}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b728ab633278a734cb2b80fc1082b0fa, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5c321aeb66765c34c8cc535bb39fa601, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

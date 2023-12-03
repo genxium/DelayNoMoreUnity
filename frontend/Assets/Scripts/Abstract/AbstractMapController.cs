@@ -18,6 +18,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int preallocBulletCapacity = DEFAULT_PREALLOC_BULLET_CAPACITY;
     protected int preallocTrapCapacity = DEFAULT_PREALLOC_TRAP_CAPACITY;
     protected int preallocTriggerCapacity = DEFAULT_PREALLOC_TRIGGER_CAPACITY;
+    protected int preallocEvtSubCapacity = DEFAULT_PREALLOC_EVTSUB_CAPACITY;
 
     protected int playerRdfId; // After battle started, always increments monotonically (even upon reconnection)
     protected int renderFrameIdLagTolerance;
@@ -649,10 +650,10 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         for (int k = 0; k < rdf.TriggersArr.Count; k++) {
             var trigger = rdf.TriggersArr[k];
-            if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId) break;
+            if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId || !triggerGameObjs.ContainsKey(trigger.TriggerLocalId)) break;
             var triggerGameObj = triggerGameObjs[trigger.TriggerLocalId];
             var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
-            if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask) {
+            if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask || TRIGGER_MASK_BY_SUBSCRIPTION == trigger.Config.TriggerMask) {
                 animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, false);
             } else {    
                 // TODO: Make use fo TriggerState in "shared.Battle_dynamics"!
@@ -832,7 +833,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         renderBufferSize = 1536;
         renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
         for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity));
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity));
         }
         renderBuffer.Clear(); // Then use it by "DryPut"
 
@@ -1239,12 +1240,29 @@ public abstract class AbstractMapController : MonoBehaviour {
         var npcsStartingCposList = new List<(Vector, int, int, int, int, bool)>();
         var trapList = new List<Trap>();
         var triggerList = new List<(Trigger, float, float)>();
+        var evtSubList = new List<EvtSubscription>();
         float defaultPatrolCueRadius = 10;
         int staticColliderIdx = 0;
         int trapLocalId = 0;
         int triggerLocalId = 0;
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
+                case "EvtSubscription":
+                    foreach (Transform evtSubTsf in child) {
+                        var evtSubTileObj = evtSubTsf.gameObject.GetComponent<SuperObject>();
+                        var tileProps = evtSubTsf.gameObject.gameObject.GetComponent<SuperCustomProperties>();
+                        CustomProperty id, demandedEvtMask;
+                        tileProps.TryGetCustomProperty("id", out id);
+                        tileProps.TryGetCustomProperty("demandedEvtMask", out demandedEvtMask);
+                        
+                        var evtSub = new EvtSubscription {
+                            Id = id.GetValueAsInt(),
+                            DemandedEvtMask = (null == demandedEvtMask || demandedEvtMask.IsEmpty) ? EVTSUB_NO_DEMAND_MASK : (ulong)demandedEvtMask.GetValueAsInt(),
+                        };
+
+                        evtSubList.Add(evtSub);
+                    }
+                    break;
                 case "Barrier":
                     foreach (Transform barrierChild in child) {
                         var barrierTileObj = barrierChild.gameObject.GetComponent<SuperObject>();
@@ -1542,7 +1560,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, subscriptionId;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
@@ -1555,7 +1573,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("subCycleTriggerFrames", out subCycleTriggerFrames);
                         tileProps.TryGetCustomProperty("subCycleQuota", out subCycleQuota);
                         tileProps.TryGetCustomProperty("characterSpawnerTimeSeq", out characterSpawnerTimeSeq);
-
+                        tileProps.TryGetCustomProperty("subscriptionId", out subscriptionId);
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
                         int chCollisionTeamIdVal = (null != chCollisionTeamId && !chCollisionTeamId.IsEmpty ? chCollisionTeamId.GetValueAsInt() : 0);
@@ -1568,7 +1586,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int subCycleTriggerFramesVal = (null != subCycleTriggerFrames && !subCycleTriggerFrames.IsEmpty ? subCycleTriggerFrames.GetValueAsInt() : 0);
                         int subCycleQuotaVal = (null != subCycleQuota && !subCycleQuota.IsEmpty ? subCycleQuota.GetValueAsInt() : 0);
                         var characterSpawnerTimeSeqStr = (null != characterSpawnerTimeSeq && !characterSpawnerTimeSeq.IsEmpty ? characterSpawnerTimeSeq.GetValueAsString() : "");
-
+                        int subscriptionIdVal = (null != subscriptionId && !subscriptionId.IsEmpty ? subscriptionId.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
                             TriggerLocalId = triggerLocalId,
@@ -1592,6 +1610,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 InitVelY = initVelYVal,
                                 SubCycleTriggerFrames = subCycleTriggerFramesVal,
                                 SubCycleQuota = subCycleQuotaVal,
+                                QuotaCap = quotaVal,
+                                SubscriptionId = subscriptionIdVal,
                             },
                         };
 
@@ -1644,12 +1664,16 @@ public abstract class AbstractMapController : MonoBehaviour {
             return Math.Sign(lhs.Item2 - rhs.Item2);
         });
 
+        evtSubList.Sort(delegate (EvtSubscription lhs, EvtSubscription rhs) {
+            return Math.Sign(lhs.Id - rhs.Id);
+        });
+
         for (int i = 0; i < staticColliderIdx; i++) {
             collisionSys.AddSingle(staticColliders[i]);
         }
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
-        historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
+        historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
 
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;
         startRdf.ShouldForceResync = false;
@@ -1692,7 +1716,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             // TODO: Remove the hardcoded index
             var initIvSlot = chConfig.InitInventorySlots[0];
-            AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffConfig, playerInRdf.Inventory.Slots[0]);
+            AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, playerInRdf.Inventory.Slots[0]);
         }
 
         int npcLocalId = 0;
@@ -1750,6 +1774,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (trigger, wx, wy) = triggerList[i];
             startRdf.TriggersArr[i] = trigger;
             spawnTriggerNode(trigger.TriggerLocalId, trigger.Config.SpeciesId, wx, wy);
+        }
+
+        for (int i = 0; i < evtSubList.Count; i++) {
+            startRdf.EvtSubsArr[i] = evtSubList[i];
         }
 
         return startRdf;
@@ -2110,7 +2138,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             for (int i = 0; i < currCharacterDownsync.DebuffList.Count; i++) {
                 Debuff debuff = currCharacterDownsync.DebuffList[i];
                 if (TERMINATING_DEBUFF_SPECIES_ID == debuff.SpeciesId) break;
-                switch (debuff.DebuffConfig.Type) {
+                var debuffConfig = debuffConfigs[debuff.SpeciesId];
+                switch (debuffConfig.Type) {
                     case DebuffType.FrozenPositionLocked:
                         if (0 < debuff.Stock) {
                             material.SetFloat("_CrackOpacity", 0.75f);
@@ -2233,11 +2262,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < currCharacterDownsync.BuffList.Count; i++) {
             var buff = currCharacterDownsync.BuffList[i];
             if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;
-            if (NO_VFX_ID == buff.BuffConfig.CharacterVfxSpeciesId) continue;
-            if (BuffStockType.Timed == buff.BuffConfig.StockType && 0 >= buff.Stock) continue;
-            var vfxConfig = vfxDict[buff.BuffConfig.CharacterVfxSpeciesId];
+            var buffConfig = buffConfigs[buff.SpeciesId];
+            if (NO_VFX_ID == buffConfig.CharacterVfxSpeciesId) continue;
+            if (BuffStockType.Timed == buffConfig.StockType && 0 >= buff.Stock) continue;
+            var vfxConfig = vfxDict[buffConfig.CharacterVfxSpeciesId];
             if (!vfxConfig.OnCharacter) continue;
-            var speciesKvPq = cachedVfxNodes[buff.BuffConfig.CharacterVfxSpeciesId];
+            var speciesKvPq = cachedVfxNodes[buffConfig.CharacterVfxSpeciesId];
             string lookupKey = "ch-buff-" + currCharacterDownsync.JoinIndex.ToString() + "-" + i;
             var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
             if (null == vfxAnimHolder) {
@@ -2251,7 +2281,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
             }
 
-            bool isInitialFrame = (buff.Stock == buff.BuffConfig.Stock);
+            bool isInitialFrame = (buff.Stock == buffConfig.Stock);
 
             if (vfxConfig.MotionType == VfxMotionType.Tracing) {
                 newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);

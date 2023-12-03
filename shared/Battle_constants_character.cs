@@ -72,7 +72,7 @@ namespace shared {
                                 FramesToRecover = 0,
                                 DefaultQuota = 1,
                                 DefaultFramesToRecover = 1800,
-                                BuffConfig = XformToSuperKnifeGirl
+                                BuffSpeciesId = XformToSuperKnifeGirl.SpeciesId
                             }
                         }
                     }),
@@ -156,7 +156,7 @@ namespace shared {
                                 FramesToRecover = 0,
                                 DefaultQuota = 1,
                                 DefaultFramesToRecover = 720,
-                                BuffConfig = ShortFreezer
+                                BuffSpeciesId = ShortFreezer.SpeciesId
                             }
                         }
                     }),
@@ -236,7 +236,7 @@ namespace shared {
                                 FramesToRecover = 0,
                                 DefaultQuota = 1,
                                 DefaultFramesToRecover = 720,
-                                BuffConfig = ShortFreezer
+                                BuffSpeciesId = ShortFreezer.SpeciesId
                             }
                         }
                     }),

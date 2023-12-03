@@ -58,27 +58,44 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static void AssignToBuff(int speciesId, int stock, int originatedRenderFrameId, int origChSpeciesId, BuffConfig buffConfig, Buff dst) {
+        public static bool UpdateWaveNpcKilledEvtSub(ulong publishingEvtMaskUponKilled, EvtSubscription dst, ref ulong fulfilledEvtSubscriptionSetMask) {
+            if (EVTSUB_NO_DEMAND_MASK != dst.DemandedEvtMask) {
+                dst.FulfilledEvtMask |= publishingEvtMaskUponKilled;
+                if (dst.DemandedEvtMask == dst.FulfilledEvtMask) {
+                    fulfilledEvtSubscriptionSetMask |= (1ul << (dst.Id-1));
+                    dst.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
+                    dst.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
+                    return true;
+                }
+            } 
+            return false;
+        }
+
+        public static void AssignToEvtSubscription(int id, ulong demandedEvtMask, ulong fulfilledEvtMask, EvtSubscription dst) {
+            dst.Id = id;
+            dst.DemandedEvtMask = demandedEvtMask;
+            dst.FulfilledEvtMask = fulfilledEvtMask;
+        }
+
+        public static void AssignToBuff(int speciesId, int stock, int originatedRenderFrameId, int origChSpeciesId, Buff dst) {
             dst.SpeciesId = speciesId; 
             dst.Stock = stock;
             dst.OriginatedRenderFrameId = originatedRenderFrameId;
-            dst.BuffConfig = buffConfig;
             dst.OrigChSpeciesId = origChSpeciesId;
         }
 
-        public static void AssignToDebuff(int speciesId, int stock, DebuffConfig debuffConfig, Debuff dst) {
+        public static void AssignToDebuff(int speciesId, int stock, Debuff dst) {
             dst.SpeciesId = speciesId; 
             dst.Stock = stock;
-            dst.DebuffConfig = debuffConfig;
         }
 
-        public static void AssignToInventorySlot(InventorySlotStockType stockType, int quota, int framesToRecover, int defaultQuota, int defaultFramesToRecover, BuffConfig buffConfig, InventorySlot dst) {
+        public static void AssignToInventorySlot(InventorySlotStockType stockType, int quota, int framesToRecover, int defaultQuota, int defaultFramesToRecover, int buffSpeciesId, InventorySlot dst) {
             dst.StockType = stockType; 
             dst.Quota = quota; 
             dst.FramesToRecover = framesToRecover; 
             dst.DefaultQuota = defaultQuota;
             dst.DefaultFramesToRecover = defaultFramesToRecover;
-            dst.BuffConfig = buffConfig;
+            dst.BuffSpeciesId = buffSpeciesId;
         }
 
         public static void AssignToCharacterDownsyncFromCharacterConfig(CharacterConfig chConfig, CharacterDownsync dst) {
@@ -89,7 +106,7 @@ namespace shared {
             dst.Speed = chConfig.Speed;
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitSoftPushback, bool repelSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitSoftPushback, bool repelSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, ulong publishingEvtMaskUponKilled, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -149,12 +166,14 @@ namespace shared {
 
             dst.JumpStarted = jumpStarted;
             dst.FramesToStartJump = framesToStartJump;
+            dst.PublishingEvtMaskUponKilled = publishingEvtMaskUponKilled;
 
             int newBuffCnt = 0, prevBuffI = 0; 
             while (prevBuffI < prevBuffList.Count) {
                 var cand = prevBuffList[prevBuffI++];
                 if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break; 
-                if (BuffStockType.Timed == cand.BuffConfig.StockType && isRdfFrameElapsing) {
+                var buffConfig  = buffConfigs[cand.SpeciesId];
+                if (BuffStockType.Timed == buffConfig.StockType && isRdfFrameElapsing) {
                     int nextStock = cand.Stock - 1;
                     if (0 >= nextStock) {
                         if (0 >= framesToRecover) {
@@ -163,14 +182,14 @@ namespace shared {
                         }
                         continue;
                     }
-                    AssignToBuff(cand.SpeciesId, nextStock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, cand.BuffConfig, dst.BuffList[newBuffCnt]);
+                    AssignToBuff(cand.SpeciesId, nextStock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, dst.BuffList[newBuffCnt]);
                 } else {
-                    AssignToBuff(cand.SpeciesId, cand.Stock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, cand.BuffConfig, dst.BuffList[newBuffCnt]);
+                    AssignToBuff(cand.SpeciesId, cand.Stock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, dst.BuffList[newBuffCnt]);
                 }
                 ++newBuffCnt;
             }
             if (newBuffCnt < dst.BuffList.Count) {
-                AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, NoBuff, dst.BuffList[newBuffCnt]);
+                AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, dst.BuffList[newBuffCnt]);
             }
 
             int newDebuffCnt = 0, prevDebuffI = 0; 
@@ -180,21 +199,21 @@ namespace shared {
                 if (newDebuffCnt >= dst.DebuffList.Count) {
                     throw new ArgumentException("newDebuffCnt:" + newDebuffCnt + " is out of range while dst.DebuffList.Count:" + dst.DebuffList.Count);
                 }
-                if (BuffStockType.Timed == cand.DebuffConfig.StockType && isRdfFrameElapsing) {
+                var debuffConfig = debuffConfigs[cand.SpeciesId];
+                if (BuffStockType.Timed == debuffConfig.StockType && isRdfFrameElapsing) {
                     int nextStock = cand.Stock - 1;
                     int nextSpeciesId = cand.SpeciesId;
-                    DebuffConfig nextDebuffConfig = cand.DebuffConfig;
                     if (0 >= nextStock) {
                         continue;
                     }
-                    AssignToDebuff(nextSpeciesId, nextStock, nextDebuffConfig, dst.DebuffList[newDebuffCnt]);
+                    AssignToDebuff(nextSpeciesId, nextStock, dst.DebuffList[newDebuffCnt]);
                 } else {
-                    AssignToDebuff(cand.SpeciesId, cand.Stock, cand.DebuffConfig, dst.DebuffList[newDebuffCnt]);
+                    AssignToDebuff(cand.SpeciesId, cand.Stock, dst.DebuffList[newDebuffCnt]);
                 }
                 ++newDebuffCnt;
             }
             if (newDebuffCnt < dst.DebuffList.Count) {
-                AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, NoDebuff, dst.DebuffList[newDebuffCnt]);
+                AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, dst.DebuffList[newDebuffCnt]);
             }
 
             if (null != prevInventory) {
@@ -205,17 +224,17 @@ namespace shared {
                     if (InventorySlotStockType.TimedIv == cand.StockType && isRdfFrameElapsing) {
                         int nextFramesToRecover = cand.FramesToRecover - 1;
                         if (0 > nextFramesToRecover) nextFramesToRecover = 0;
-                        AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                        AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
                     } else if (InventorySlotStockType.TimedMagazineIv == cand.StockType && isRdfFrameElapsing) {
                         int nextFramesToRecover = cand.FramesToRecover - 1;
                         if (0 > nextFramesToRecover) nextFramesToRecover = 0;
                         if (0 == nextFramesToRecover && 1 == cand.FramesToRecover) {
-                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
                         } else {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
                         }
                     } else {
-                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffConfig, dst.Inventory.Slots[newInventoryCnt]);
+                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, dst.Inventory.Slots[newInventoryCnt]);
                     }
                     ++newInventoryCnt;
                 }
@@ -323,7 +342,6 @@ namespace shared {
                 for (int i = 0; i < inventoryCapacity; i++) {
                     var singleSlot = new InventorySlot();
                     singleSlot.StockType = InventorySlotStockType.NoneIv;
-                    singleSlot.BuffConfig = null;
                     single.Inventory.Slots.Add(singleSlot);
                 }
             }
@@ -331,7 +349,7 @@ namespace shared {
             return single;
         }
 
-        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount) {
+        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount, int preallocateEvtSubCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
             ret.BulletLocalIdCounter = 0;
@@ -366,6 +384,13 @@ namespace shared {
                 ret.TriggersArr.Add(single);
             }
 
+            for (int i = 0; i < preallocateEvtSubCount; i++) {
+                var single = new EvtSubscription {
+                    Id = TERMINATING_EVTSUB_ID,  
+                };
+                ret.EvtSubsArr.Add(single);
+            }
+
             return ret;
         }
 
@@ -388,14 +413,14 @@ namespace shared {
 
             for (int i = 0; i < roomCapacity; i++) {
                 var srcCh = src.PlayersArr[i];
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, dst.PlayersArr[i]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtMaskUponKilled, dst.PlayersArr[i]);
             }
 
             int npcCnt = 0;
             while (npcCnt < src.NpcsArr.Count) {
                 var srcCh = src.NpcsArr[npcCnt];
                 if (TERMINATING_PLAYER_ID == srcCh.Id) break;
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, dst.NpcsArr[npcCnt]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtMaskUponKilled, dst.NpcsArr[npcCnt]);
                 npcCnt++;
             }
             dst.NpcsArr[npcCnt].Id = TERMINATING_PLAYER_ID;
@@ -508,8 +533,8 @@ namespace shared {
         }
 
         public static void revertBuff(Buff cand, CharacterDownsync thatCharacterInNextFrame) {
-
-            if (SPECIES_NONE_CH != cand.BuffConfig.XformChSpeciesId) {
+            var buffConfig = buffConfigs[cand.SpeciesId];
+            if (SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {
                 var nextChConfig = characters[cand.OrigChSpeciesId];
                 AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
             }
@@ -585,7 +610,7 @@ namespace shared {
     
     public sealed partial class BuffConfig {
         public BuffConfig AddAssociatedDebuff(DebuffConfig val) {
-            AssociatedDebuffs.Add(val);
+            AssociatedDebuffs.Add(val.SpeciesId);
             return this;
         }
     }

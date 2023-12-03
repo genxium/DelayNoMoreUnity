@@ -227,6 +227,7 @@ namespace shared {
                         float absColliderDx = Math.Abs(colliderDx), absColliderDy = Math.Abs(colliderDy);
                         // Opponent is in front of me
                         if (frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, colliderDy, absColliderDy, atkedChConfig)) {
+                            // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
                             patternId = PATTERN_UP_B;
                             hasVisionReaction = true;
                         } else if (frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, colliderDy, absColliderDy, atkedChConfig)) {
@@ -359,6 +360,7 @@ namespace shared {
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
+                    _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
                     continue;
                 }
 
@@ -366,12 +368,15 @@ namespace shared {
                 thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
 
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
+                Skill? skillConfig = null;
                 if (usedSkill) {
+                    skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
                     continue; // Don't allow movement if skill is used
                 }
 
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
-                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, logger);
+                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, skillConfig, logger);
+                _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
             }
         }
 

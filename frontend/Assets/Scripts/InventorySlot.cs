@@ -21,8 +21,8 @@ public class InventorySlot : MonoBehaviour {
     }
 
     public void updateData(shared.InventorySlot slot) {
-        if (null != slot.BuffConfig) {
-            int spriteIdx = slot.BuffConfig.SpeciesId - 1;  
+        if (shared.Battle.TERMINATING_BUFF_SPECIES_ID != slot.BuffSpeciesId) {
+            int spriteIdx = slot.BuffSpeciesId - 1;  
             Sprite spr = buffConfigSprites[spriteIdx]; 
             content.color = Color.white;
             content.sprite = spr;
