@@ -176,11 +176,11 @@ namespace shared {
                 if (BuffStockType.Timed == buffConfig.StockType && isRdfFrameElapsing) {
                     int nextStock = cand.Stock - 1;
                     if (0 >= nextStock) {
-                        if (0 >= framesToRecover) {
-                            // [WARNING] It's very unnatural to transform back when not being able to operate!
+                        if (noOpSet.Contains(characterState) || 0 >= framesToRecover) {
+                            // [WARNING] It's very unnatural to transform back when the character is actively using a skill!
                             revertBuff(cand, dst);
+                            continue;
                         }
-                        continue;
                     }
                     AssignToBuff(cand.SpeciesId, nextStock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, dst.BuffList[newBuffCnt]);
                 } else {
