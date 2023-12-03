@@ -62,7 +62,7 @@ namespace shared {
             if (EVTSUB_NO_DEMAND_MASK != dst.DemandedEvtMask) {
                 dst.FulfilledEvtMask |= publishingEvtMaskUponKilled;
                 if (dst.DemandedEvtMask == dst.FulfilledEvtMask) {
-                    fulfilledEvtSubscriptionSetMask |= (1ul << dst.Id);
+                    fulfilledEvtSubscriptionSetMask |= (1ul << (dst.Id-1));
                     dst.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
                     dst.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
                     return true;

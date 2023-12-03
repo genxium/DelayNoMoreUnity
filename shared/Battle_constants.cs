@@ -77,6 +77,9 @@ namespace shared {
         public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
         public static ulong TRIGGER_MASK_BY_SUBSCRIPTION = (1 << 3);
 
+        public static int MAGIC_EVTSUB_ID_NONE = 0;
+        public static int MAGIC_EVTSUB_ID_WAVER = 1;
+
         public static int SPEED_NOT_HIT_NOT_SPECIFIED = 0;
 
         public static HashSet<ulong> COLLIDABLE_PAIRS = new HashSet<ulong>() {

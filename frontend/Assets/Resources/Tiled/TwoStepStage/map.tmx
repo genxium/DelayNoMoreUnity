@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="365">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="366">
  <properties>
   <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
  </properties>
@@ -9,22 +9,22 @@
  <tileset firstgid="14" source="../shared_comps/forest.tsx"/>
  <layer id="18" name="Background3" width="64" height="32">
   <data encoding="base64" compression="zlib">
-   eJztw8EJAAAIBKCj/T81cXNECiYAAAAAAAAAcF9XMo8v6Y4lAA==
+   eJztxsEJADAMxLAj+0NpJ863K4RIYHACAAAAAAAAADOd728lb3ENf1Eljw==
   </data>
  </layer>
  <layer id="17" name="Background2" width="64" height="32">
   <data encoding="base64" compression="zlib">
-   eJztmO1NAzEMhrMBzAE/YA6QoGsAErAGqgSsAZ0EWIpYule4xnHs9JJeEZZeVW3vcn78lehS+reo3WTdTrrbsy+9jVgl41vW+6TNcI/6GnILZmLdpO2c/+W8P2WdpN95pTicTv+15l3GUIujds3IeBP/WvGHno9a2GXtj/QTQy2O2jUj+0zy0/fPrIu0ew6w1tq4BrOF88qe7GX0nMu07R/q/iu1xeAq6zprlXQ2j7XeFzWr92UdenqZ2M+zjrJe+7g8q8naJ9P2etQJ1QTVM/qVx20kO/Zo/tkyNzV+Lff8N/kf6n1k3uE35jNmKHrWGwc532t7Pli5wP2S/Ox8nVXh2ZYfxMtnk9yrW2YHalyuwc+D91kPQtGco09w/yNjQm8hl1qfkWnzEbmUOVoln5VmLq8RyR9h533C1wC/1mMteXzOOlbWL5l23tdM5i3KLrmhs+TPkfdMzvNUW99zxtP8r8XVuldKW0uegUr9qZmsU6+v0m8+41rq3mLHzCzNTdmP/Hutx6M9EPHbu16NPbpPWvnQajzSA9K0OR/13VqjFD9tfy0xa3OkdH003lQ/VJe8hry5L8156UvpLGExtqq1/zV/EGdZTzVueX8v1jn4PTPbqrelKcLvYT80RfjR+z2lzZV98/d65zJyzrXwgxtnqznfuSyll0r88kw5B7t1Tlkav+c9m3Um0bQUZm/915iXyNOb3zq7HqKi/CP2wJE6hHfRo+wbk2jBKg==
+   eJztmO1NAzEMhi0WgDngB8wBEnQNQALWQJWANaCTAEsRS32Fa5zETi/ptcLSq6rtXc6PvxId0b9F7Tbpbq37HfvS25hVM74nfay1Gu5RX0NuwcysK9rM+SHn/TnplP7mleNwtv6vNe86hlYcrWtGxpv5l4Y//HzUwjZrf9JvDK04WteM7DPNz9+/ki5p+xxgrWXhGswWyat7spfxc65o0z/U/Te1xeA66SZpQTabx1rvi1qp93UdenqZ2S+SjpPe+rg8qenaZ7P2etQJ1wTXM/pVxm0kO/Zo+dkyNy1+K/fyN/0f6n1k3uE35jNmKHrWGwc932t7PlilwP1Kfna5ziLz7JIfzCtnk96rW2YHalyvIc+DD0mPStGco09w/5NgQm8hl1afsVnzEbnUOVqQz3IzV9aI5o+wyz6Ra4Df6rGWPL4knRjr58w671um8xZl19zQOflz5D2TyzzV1vec8Sz/a3Et3atlraXPQLn+tEzXqddX7beccS11X2LHzMzNTd2P8nutx6M9EPHbu16NPbpPlvJh1XikB7RZcz7qe2mNXPys/TXHbM2R3PXReHP9cF3KGvLmPjfntS+5s0SJsVWt/W/5gzjreqpx6/t7sU7B75nZpXqbmyL8HvZ9U4Qfvd9T1lzZNX+vdy4j51wLP7hxtprynctceinHr8+UU7CXzilz4/e8ZyudSSzNhdlb/zXmOfL05i+dXfdRUf4Re+BI0VEwAAdsP/6vwJw=
   </data>
  </layer>
  <layer id="16" name="Background" width="64" height="32">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer id="15" name="Ground" width="64" height="32">
   <data encoding="base64" compression="zlib">
-   eJztmMENgCAMRZERuKDDAGOgc7uPkUZIPMCZhNcmPcCJxy/tD89msBGtMQ+cP9jZp5gXCc4v+kflx0aA80vvJ/d/0T+B9afzS+2T33+C9z+6/5P6J/Or/2Xz0/XX+cfWn/7/I+xk/zvy/77cy17yWLw2RvMvF+6z5LU4f6//+Y7uvb0V4v//4+yXuere1qM9t0DfUP+n/oc8/+j6B/j7D1D/e1dmKn8L4X8BZREc1Q==
+   eJztmMENgCAMRSsjcEGHAcZA99+DSKMmHuBMwmuTHuDE45f2h7oJNpITqXD+6GafYl5kOL/qn4wfGxHOr72f3P9V/wzWn86vtU9+/xne/+j+T+ufzG/+l81P19/mH1t/+v+PspP978j/h3Yve8tj8doYzb/SuM+W1+L8vf4XOrr39laI//+Pd0+WV/dvPdrzC/QN83/mf8jzj65/hL//CPe/xi9yA4cTHAE=
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -46,7 +46,7 @@
  <objectgroup id="19" name="EvtSubscription">
   <object id="363" x="1024" y="0">
    <properties>
-    <property name="id" value="0"/>
+    <property name="id" value="1"/>
    </properties>
    <point/>
   </object>
@@ -63,7 +63,7 @@
     <property name="recoveryFrames" value="300"/>
     <property name="subCycleQuota" value="3"/>
     <property name="subCycleTriggerFrames" value="90"/>
-    <property name="subscriptionId" value="0"/>
+    <property name="subscriptionId" value="1"/>
    </properties>
   </object>
  </objectgroup>
@@ -219,6 +219,20 @@
     <property name="fuAct" value="3"/>
     <property name="fuCaptureFrames" value="8"/>
     <property name="id" value="6"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="365" x="1936.67" y="988.667">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="8"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="20"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="20"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="8"/>
+    <property name="id" value="7"/>
    </properties>
    <point/>
   </object>

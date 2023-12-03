@@ -369,15 +369,16 @@ namespace shared {
                 thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
 
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
+                Skill? skillConfig = null;
                 if (usedSkill) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
-                    var skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
+                    skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
                     if (!skillConfig.Hits[0].AllowsWalking) {
                         continue; // Don't allow movement if skill is used
                     }
                 }
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
-                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, logger);
+                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, skillConfig, logger);
                 _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
             }
         }
@@ -443,7 +444,7 @@ namespace shared {
             }
         }
 
-        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, ILoggerBridge logger) {
+        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
             if (isInJumpStartup(thatCharacterInNextFrame) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
                 return;
             }
@@ -475,7 +476,7 @@ namespace shared {
                 exactTurningAround = true;
             }
 
-            if (0 == currCharacterDownsync.FramesToRecover || WalkingAtk1 == currCharacterDownsync.CharacterState) {
+            if (0 == currCharacterDownsync.FramesToRecover || (WalkingAtk1 == currCharacterDownsync.CharacterState || WalkingAtk4 == currCharacterDownsync.CharacterState)) {
                 thatCharacterInNextFrame.CharacterState = Idle1; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Idle" as a default action
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0;
@@ -544,7 +545,7 @@ namespace shared {
                 }
             }
 
-            if (usedSkill || WalkingAtk1 == currCharacterDownsync.CharacterState) {
+            if (usedSkill || (WalkingAtk1 == currCharacterDownsync.CharacterState || WalkingAtk4 == currCharacterDownsync.CharacterState)) {
                 /*
                  * [WARNING]
                  * 
@@ -554,11 +555,16 @@ namespace shared {
                  */
                 if (0 < thatCharacterInNextFrame.FramesToRecover) {
                     if (0 != thatCharacterInNextFrame.VelX) {
-                        thatCharacterInNextFrame.CharacterState = WalkingAtk1;
+                        if ((null != skillConfig && Atk1 == skillConfig.BoundChState) || WalkingAtk1 == currCharacterDownsync.CharacterState) {
+                            thatCharacterInNextFrame.CharacterState = WalkingAtk1;
+                        }
+                        if ((null != skillConfig && Atk4 == skillConfig.BoundChState) || WalkingAtk4 == currCharacterDownsync.CharacterState) {
+                            thatCharacterInNextFrame.CharacterState = WalkingAtk4;
+                        }
                     } else if (CrouchIdle1 == thatCharacterInNextFrame.CharacterState) {
                         thatCharacterInNextFrame.CharacterState = CrouchAtk1;
-                    } else {
-                        thatCharacterInNextFrame.CharacterState = Atk1;
+                    } else if (null != skillConfig) {
+                        thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
                     }
                 }
             }
@@ -1385,7 +1391,7 @@ namespace shared {
         }
 
         private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription waveNpcKilledEvtSub, ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
-            bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << waveNpcKilledEvtSub.Id)));
+            bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (waveNpcKilledEvtSub.Id-1))));
             int nextWaveNpcCnt = 0;
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
@@ -1407,7 +1413,7 @@ namespace shared {
                         }
                     }
                 } else if (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask) {
-                    bool justFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << currTrigger.ConfigFromTiled.SubscriptionId)));
+                    bool justFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (currTrigger.ConfigFromTiled.SubscriptionId-1))));
                     if (justFulfilled && 0 < currTrigger.Quota) {
                         if (currTrigger.ConfigFromTiled.SubscriptionId == waveNpcKilledEvtSub.Id) {
                             nextWaveNpcCnt += currTrigger.ConfigFromTiled.SubCycleQuota;
@@ -1577,18 +1583,18 @@ namespace shared {
 
                 // Reset "FramesInChState" if "CharacterState" is changed
                 if (thatCharacterInNextFrame.CharacterState != currCharacterDownsync.CharacterState) {
-                    if (Walking == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) {
+                    if (Walking == currCharacterDownsync.CharacterState && (WalkingAtk1 == thatCharacterInNextFrame.CharacterState || WalkingAtk4 == thatCharacterInNextFrame.CharacterState)) {
                         thatCharacterInNextFrame.LowerPartFramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
                         thatCharacterInNextFrame.FramesInChState = 0;
-                    } else if (WalkingAtk1 == currCharacterDownsync.CharacterState && Walking == thatCharacterInNextFrame.CharacterState) {
+                    } else if ((WalkingAtk1 == currCharacterDownsync.CharacterState || WalkingAtk4 == currCharacterDownsync.CharacterState) && Walking == thatCharacterInNextFrame.CharacterState) {
                         thatCharacterInNextFrame.LowerPartFramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.LowerPartFramesInChState + 1;
-                    } else if (Atk1 == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) {
+                    } else if ((Atk1 == currCharacterDownsync.CharacterState && WalkingAtk1 == thatCharacterInNextFrame.CharacterState) || (Atk4 == currCharacterDownsync.CharacterState && WalkingAtk4 == thatCharacterInNextFrame.CharacterState)) {
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.FramesInChState + 1;
                         thatCharacterInNextFrame.LowerPartFramesInChState = 0;
-                    } else if (WalkingAtk1 == currCharacterDownsync.CharacterState && Atk1 == thatCharacterInNextFrame.CharacterState) {
+                    } else if ((Atk1 == thatCharacterInNextFrame.CharacterState) || (Atk4 == thatCharacterInNextFrame.CharacterState)) {
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.FramesInChState + 1;
-                        thatCharacterInNextFrame.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE; // not showing isolated lower part in "Atk1"
+                        thatCharacterInNextFrame.LowerPartFramesInChState = 0;
                     } else {
                         thatCharacterInNextFrame.FramesInChState = 0;
                         thatCharacterInNextFrame.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE; // not showing isolated lower part in other ChStates
@@ -1597,7 +1603,9 @@ namespace shared {
                     switch (thatCharacterInNextFrame.CharacterState) {
                         case Walking:
                         case WalkingAtk1:
+                        case WalkingAtk4:
                         case Atk1:
+                        case Atk4:
                             if (INVALID_FRAMES_IN_CH_STATE == thatCharacterInNextFrame.LowerPartFramesInChState) {
                                 thatCharacterInNextFrame.LowerPartFramesInChState = 0;
                             }
@@ -1868,7 +1876,7 @@ namespace shared {
             
 
             ulong nextWaveNpcKilledEvtMaskCounter = currRenderFrame.WaveNpcKilledEvtMaskCounter;
-            int hardcodedWaveNpcKilledEvtSubIdx = 0; // TODO: Remove the hardcoded constant, at least remove defining it here...
+            int hardcodedWaveNpcKilledEvtSubIdx = MAGIC_EVTSUB_ID_WAVER-1;
             EvtSubscription waveNpcKilledEvtSub = nextEvtSubs[hardcodedWaveNpcKilledEvtSubIdx];
             ulong fulfilledEvtSubscriptionSetMask = 0; // By default no EvtSub is fulfilled yet
             if (0 == currRenderFrame.Id) {

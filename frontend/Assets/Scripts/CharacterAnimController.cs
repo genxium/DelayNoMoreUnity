@@ -140,7 +140,8 @@ public class CharacterAnimController : MonoBehaviour {
             var lowerNewAnimName = "WalkingLowerPart"; 
             switch (newCharacterState) {
             case Atk1:
-             lowerNewAnimName = "StandingLowerPart";
+            case Atk4:
+                lowerNewAnimName = "StandingLowerPart";
             break;
             default:
             break;
