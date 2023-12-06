@@ -124,6 +124,7 @@ message CharacterDownsync {
 
 	bool repelSoftPushback = 47;
     uint64 publishingEvtMaskUponKilled = 48;
+    int32 publishingEvtSubIdUponKilled = 49;
 
 	string name = 997;
 	string displayName = 998;
@@ -484,9 +485,10 @@ message TriggerConfigFromTiled {
 
     // TODO: Adoption of multi-subscription of a single trigger
     int32 subscriptionId = 11; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"  
-    uint64 publishingEvtMask = 12; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"
+    uint64 publishingEvtMaskUponExhaust = 12; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"
+    int32 publishingToEvtSubIdUponExhaust = 13; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"
 
-    int32 quotaCap = 13;
+    int32 quotaCap = 14;
 }
 
 message TriggerColliderAttr {

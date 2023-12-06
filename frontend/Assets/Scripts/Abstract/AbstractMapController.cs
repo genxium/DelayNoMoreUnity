@@ -10,6 +10,8 @@ using DG.Tweening;
 using UnityEngine.XR;
 
 public abstract class AbstractMapController : MonoBehaviour {
+    protected int[] justFulfilledEvtSubArr;
+    protected int justFulfilledEvtSubCnt;
     protected int roomCapacity;
     protected int maxTouchingCellsCnt;
     protected int battleDurationFrames;
@@ -271,7 +273,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             bool hasIncorrectlyPredictedRenderFrame = false;
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, _loggerBridge);
             if (hasIncorrectlyPredictedRenderFrame) {   
                 Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i+1));
             }
@@ -786,11 +788,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         var mapProps = underlyingMap.GetComponent<SuperCustomProperties>();
-        CustomProperty npcPreallocCapDict;
+        CustomProperty npcPreallocCapDict, missionEvtSubId;
         mapProps.TryGetCustomProperty("npcPreallocCapDict", out npcPreallocCapDict);
+        mapProps.TryGetCustomProperty("missionEvtSubId", out missionEvtSubId);
         if (null == npcPreallocCapDict || npcPreallocCapDict.IsEmpty) {
             throw new ArgumentNullException("No `npcPreallocCapDict` found on map-scope properties, it's required! Example\n\tvalue `1:16;3:15;4096:1` means that we preallocate 16 slots for species 1, 15 slots for species 3 and 1 slot for species 4096");
         }
+        int missionEvtSubIdVal = (null == missionEvtSubId || missionEvtSubId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : missionEvtSubId.GetValueAsInt());
         Dictionary<int, int> npcPreallocCapDictVal = new Dictionary<int, int>();
         string npcPreallocCapDictStr = npcPreallocCapDict.GetValueAsString();
         foreach (var kvPairPart in npcPreallocCapDictStr.Trim().Split(';')) {
@@ -825,6 +829,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (0 >= roomCapacity) {
             throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
         }
+
+        justFulfilledEvtSubCnt = 0;
+        justFulfilledEvtSubArr = new int[16]; // TODO: Remove this hardcoded capacity 
 
         Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocNpcCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
         int residueCollidedCap = 256;
@@ -1237,7 +1244,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected RoomDownsyncFrame mockStartRdf(int[] speciesIdList) {
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         var playerStartingCposList = new List<(Vector, int, int)>();
-        var npcsStartingCposList = new List<(Vector, int, int, int, int, bool)>();
+        var npcsStartingCposList = new List<(Vector, int, int, int, int, bool, int, ulong)>();
         var trapList = new List<Trap>();
         var triggerList = new List<(Trigger, float, float)>();
         var evtSubList = new List<EvtSubscription>();
@@ -1326,19 +1333,23 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
                         var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        CustomProperty dirX, dirY, speciesId, teamId, isStatic;
+                        CustomProperty dirX, dirY, speciesId, teamId, isStatic, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled;
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("teamId", out teamId);
                         tileProps.TryGetCustomProperty("static", out isStatic);
+                        tileProps.TryGetCustomProperty("publishingEvtSubIdUponKilled", out publishingEvtSubIdUponKilled);
+                        tileProps.TryGetCustomProperty("publishingEvtMaskUponKilled", out publishingEvtMaskUponKilled);
                         npcsStartingCposList.Add((
                                                     new Vector(cx, cy),
                                                     null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt(),
                                                     null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt(),
                                                     null == speciesId || speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt(),
                                                     null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt(),
-                                                    null == isStatic || isStatic.IsEmpty ? false : (1 == isStatic.GetValueAsInt())
+                                                    null == isStatic || isStatic.IsEmpty ? false : (1 == isStatic.GetValueAsInt()),
+                                                    null == publishingEvtSubIdUponKilled || publishingEvtSubIdUponKilled.IsEmpty ? MAGIC_EVTSUB_ID_NONE : publishingEvtSubIdUponKilled.GetValueAsInt(), 
+                                                    null == publishingEvtMaskUponKilled || publishingEvtMaskUponKilled.IsEmpty ? 0ul : (ulong)publishingEvtMaskUponKilled.GetValueAsInt()
                         ));
                     }
                     break;
@@ -1559,8 +1570,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform triggerChild in child) {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
-
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, subscriptionId;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, publishingToEvtSubIdUponExhaust, publishingEvtMaskUponExhaust, subscriptionId;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
@@ -1573,6 +1583,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("subCycleTriggerFrames", out subCycleTriggerFrames);
                         tileProps.TryGetCustomProperty("subCycleQuota", out subCycleQuota);
                         tileProps.TryGetCustomProperty("characterSpawnerTimeSeq", out characterSpawnerTimeSeq);
+                        tileProps.TryGetCustomProperty("publishingToEvtSubIdUponExhaust", out publishingToEvtSubIdUponExhaust);
+                        tileProps.TryGetCustomProperty("publishingEvtMaskUponExhaust", out publishingEvtMaskUponExhaust);
                         tileProps.TryGetCustomProperty("subscriptionId", out subscriptionId);
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
@@ -1586,6 +1598,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int subCycleTriggerFramesVal = (null != subCycleTriggerFrames && !subCycleTriggerFrames.IsEmpty ? subCycleTriggerFrames.GetValueAsInt() : 0);
                         int subCycleQuotaVal = (null != subCycleQuota && !subCycleQuota.IsEmpty ? subCycleQuota.GetValueAsInt() : 0);
                         var characterSpawnerTimeSeqStr = (null != characterSpawnerTimeSeq && !characterSpawnerTimeSeq.IsEmpty ? characterSpawnerTimeSeq.GetValueAsString() : "");
+                        int publishingToEvtSubIdUponExhaustVal = (null != publishingToEvtSubIdUponExhaust && !publishingToEvtSubIdUponExhaust.IsEmpty ? publishingToEvtSubIdUponExhaust.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
+                        ulong publishingEvtMaskUponExhaustVal = (null !=  publishingEvtMaskUponExhaust && !publishingEvtMaskUponExhaust.IsEmpty ? (ulong)publishingEvtMaskUponExhaust.GetValueAsInt() : 0ul);
                         int subscriptionIdVal = (null != subscriptionId && !subscriptionId.IsEmpty ? subscriptionId.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
@@ -1611,6 +1625,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 SubCycleTriggerFrames = subCycleTriggerFramesVal,
                                 SubCycleQuota = subCycleQuotaVal,
                                 QuotaCap = quotaVal,
+                                PublishingToEvtSubIdUponExhaust = publishingToEvtSubIdUponExhaustVal,
+                                PublishingEvtMaskUponExhaust = publishingEvtMaskUponExhaustVal,
                                 SubscriptionId = subscriptionIdVal,
                             },
                         };
@@ -1722,7 +1738,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int npcLocalId = 0;
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic) = npcsStartingCposList[i];
+            var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             var chConfig = Battle.characters[characterSpeciesId];
             var npcInRdf = startRdf.NpcsArr[i];
@@ -1756,6 +1772,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.OmitGravity = chConfig.OmitGravity;
             npcInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
             npcInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
+            npcInRdf.PublishingEvtSubIdUponKilled = publishingEvtSubIdUponKilledVal;
+            npcInRdf.PublishingEvtMaskUponKilled = publishingEvtMaskUponKilledVal;
             startRdf.NpcsArr[i] = npcInRdf;
             npcLocalId++;
         }

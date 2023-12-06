@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="366">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="367">
  <properties>
+  <property name="missionEvtSubId" value="2"/>
   <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
@@ -50,6 +51,13 @@
    </properties>
    <point/>
   </object>
+  <object id="366" x="1186" y="0">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="2"/>
+   </properties>
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="13" name="TriggerPos">
   <object id="360" gid="13" x="1568" y="992" width="32" height="32">
@@ -59,6 +67,8 @@
     <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
+    <property name="publishingEvtMaskUponExhaust" value="1"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="2"/>
     <property name="quota" value="4"/>
     <property name="recoveryFrames" value="300"/>
     <property name="subCycleQuota" value="3"/>
