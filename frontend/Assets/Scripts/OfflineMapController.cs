@@ -41,7 +41,6 @@ public class OfflineMapController : AbstractMapController {
         cameraTrack(startRdf, null);
         var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
         Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
-        Camera.main.transform.position = new Vector3(playerGameObj.transform.position.x, playerGameObj.transform.position.y, Camera.main.transform.position.z);
         characterSelectPanel.gameObject.SetActive(false);
         readyGoPanel.playReadyAnim();
 

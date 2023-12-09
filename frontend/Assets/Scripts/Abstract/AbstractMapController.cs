@@ -1010,7 +1010,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
-        cameraCapMinX = 0 + (spaceOffsetX >> 3);
+        cameraCapMinX = 0 + (spaceOffsetX >> 3) + (spaceOffsetX >> 4);
         cameraCapMaxX = (spaceOffsetX << 1) - (spaceOffsetX >> 2);
         cameraCapMinY = - (spaceOffsetY << 1) + (spaceOffsetY >> 2);
         cameraCapMaxY = 0 - (spaceOffsetY >> 2) - (spaceOffsetX >> 3);
@@ -1848,7 +1848,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
         var stepLength = Time.deltaTime * cameraSpeedInWorld;
-        if (stepLength > camDiffDstHolder.magnitude) {
+        if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || stepLength > camDiffDstHolder.magnitude) {
             newPosHolder.Set(dst.x, dst.y, camOldPos.z);
         } else {
             var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
