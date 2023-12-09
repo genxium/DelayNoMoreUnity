@@ -55,6 +55,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected long battleState;
     protected int spaceOffsetX;
     protected int spaceOffsetY;
+    protected float cameraCapMinX, cameraCapMaxX, cameraCapMinY, cameraCapMaxY;
     protected float effectivelyInfinitelyFar;
 
     protected RoomDownsyncFrame historyRdfHolder;
@@ -1009,6 +1010,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
+        cameraCapMinX = 0 + (spaceOffsetX >> 3);
+        cameraCapMaxX = (spaceOffsetX << 1) - (spaceOffsetX >> 2);
+        cameraCapMinY = - (spaceOffsetY << 1) + (spaceOffsetY >> 2);
+        cameraCapMaxY = 0 - (spaceOffsetY >> 2) - (spaceOffsetX >> 3);
+
         effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
 
         int cellWidth = 64;
@@ -1809,9 +1815,17 @@ public abstract class AbstractMapController : MonoBehaviour {
         errStackLogPanel.content.text = msg;
     }
 
-
     protected Vector2 camSpeedHolder = new Vector2();
     protected Vector2 camDiffDstHolder = new Vector2();
+    protected void clampToMapBoundary(ref Vector3 posHolder) {
+        float newX = posHolder.x, newY = posHolder.y, newZ = posHolder.z;
+        if (newX > cameraCapMaxX) newX = cameraCapMaxX;  
+        if (newX < cameraCapMinX) newX = cameraCapMinX;  
+        if (newY > cameraCapMaxY) newY = cameraCapMaxY;  
+        if (newY < cameraCapMinY) newY = cameraCapMinY;
+        posHolder.Set(newX, newY, newZ); 
+    }
+
     protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
         if (null == selfPlayerInfo) return;
         int targetJoinIndex = isBattleResultSet(confirmedBattleResult) ? confirmedBattleResult.WinnerJoinIndex : selfPlayerInfo.JoinIndex;
@@ -1823,8 +1837,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         camSpeedHolder.Set(velCX, velCY);
         var cameraSpeedInWorld = camSpeedHolder.magnitude * 100;
 
-        var prevPlayerCharacterDownsync = prevRdf.PlayersArr[targetJoinIndex - 1];
-        if (CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState || isBattleResultSet(confirmedBattleResult)) {
+        var prevPlayerCharacterDownsync = (null == prevRdf || null == prevRdf.PlayersArr) ? null : prevRdf.PlayersArr[targetJoinIndex - 1];
+        if ((null != prevPlayerCharacterDownsync && CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState) || isBattleResultSet(confirmedBattleResult)) {
             cameraSpeedInWorld *= 200;
         }
 
@@ -1836,12 +1850,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         var stepLength = Time.deltaTime * cameraSpeedInWorld;
         if (stepLength > camDiffDstHolder.magnitude) {
             newPosHolder.Set(dst.x, dst.y, camOldPos.z);
-            Camera.main.transform.position = newPosHolder;
         } else {
             var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
             newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
-            Camera.main.transform.position = newPosHolder;
         }
+        clampToMapBoundary(ref newPosHolder);
+        Camera.main.transform.position = newPosHolder;
     }
 
     protected void resetLine(DebugLine line) {
