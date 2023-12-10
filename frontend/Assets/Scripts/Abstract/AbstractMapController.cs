@@ -7,7 +7,6 @@ using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
 using DG.Tweening;
-using UnityEngine.XR;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int[] justFulfilledEvtSubArr;
@@ -134,6 +133,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public BattleInputManager iptmgr;
 
+    protected int missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
+    protected bool isOnlineMode;
+
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
@@ -153,9 +155,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     public SettlementPanel settlementPanel;
     protected Vector3 newPosHolder = new Vector3();
     protected Vector3 newTlPosHolder = new Vector3(), newTrPosHolder = new Vector3(), newBlPosHolder = new Vector3(), newBrPosHolder = new Vector3();
-    protected delegate void PostSettlementCallbackT();
-
-    protected PostSettlementCallbackT postSettlementCallback;
 
     protected void spawnPlayerNode(int joinIndex, int speciesId, float wx, float wy, int bulletTeamId) {
         var characterPrefab = loadCharacterPrefab(characters[speciesId]);
@@ -274,7 +273,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             bool hasIncorrectlyPredictedRenderFrame = false;
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, selfPlayerInfo.JoinIndex, _loggerBridge);
             if (hasIncorrectlyPredictedRenderFrame) {   
                 Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i+1));
             }
@@ -789,13 +788,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         var mapProps = underlyingMap.GetComponent<SuperCustomProperties>();
-        CustomProperty npcPreallocCapDict, missionEvtSubId;
+        CustomProperty npcPreallocCapDict, missionEvtSubIdProp;
         mapProps.TryGetCustomProperty("npcPreallocCapDict", out npcPreallocCapDict);
-        mapProps.TryGetCustomProperty("missionEvtSubId", out missionEvtSubId);
+        mapProps.TryGetCustomProperty("missionEvtSubId", out missionEvtSubIdProp);
         if (null == npcPreallocCapDict || npcPreallocCapDict.IsEmpty) {
             throw new ArgumentNullException("No `npcPreallocCapDict` found on map-scope properties, it's required! Example\n\tvalue `1:16;3:15;4096:1` means that we preallocate 16 slots for species 1, 15 slots for species 3 and 1 slot for species 4096");
         }
-        int missionEvtSubIdVal = (null == missionEvtSubId || missionEvtSubId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : missionEvtSubId.GetValueAsInt());
+        missionEvtSubId = (null == missionEvtSubIdProp || missionEvtSubIdProp.IsEmpty ? MAGIC_EVTSUB_ID_NONE : missionEvtSubIdProp.GetValueAsInt());
         Dictionary<int, int> npcPreallocCapDictVal = new Dictionary<int, int>();
         string npcPreallocCapDictStr = npcPreallocCapDict.GetValueAsString();
         foreach (var kvPairPart in npcPreallocCapDictStr.Trim().Split(';')) {
@@ -831,6 +830,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
         }
 
+        missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
         justFulfilledEvtSubCnt = 0;
         justFulfilledEvtSubArr = new int[16]; // TODO: Remove this hardcoded capacity 
 
@@ -1178,7 +1178,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         bool battleResultIsSet = isBattleResultSet(confirmedBattleResult); 
 
-        if (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, noDelayInputFrameId)) {
+        if (isOnlineMode && (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, noDelayInputFrameId))) {
             // [WARNING] If "true == battleResultIsSet", we MUST IMMEDIATELY flush the local inputs to our peers to favor the formation of all-confirmed inputFrameDownsync asap! 
             // TODO: Does the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
             sendInputFrameUpsyncBatch(noDelayInputFrameId);
@@ -1198,7 +1198,11 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
         cameraTrack(rdf, prevRdf);
-        ++playerRdfId;
+
+        bool battleResultIsSetAgain = isBattleResultSet(confirmedBattleResult);
+        if (!battleResultIsSetAgain) {
+            ++playerRdfId;
+        }
     }
 
     protected virtual int chaseRolledbackRdfs() {
@@ -1231,11 +1235,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (ROOM_STATE_IN_BATTLE != battleState) {
             yield return new WaitForSeconds(0);
         } else {
-            battleState = ROOM_STATE_IN_SETTLEMENT;
-            settlementPanel.gameObject.SetActive(true);
-            settlementPanel.playFinishedAnim();
             yield return new WaitForSeconds(1);
-            postSettlementCallback();
+            battleState = ROOM_STATE_IN_SETTLEMENT;
+            settlementPanel.postSettlementCallback = () => {
+                onBattleStopped();
+            };
+            settlementPanel.gameObject.SetActive(true);
+            settlementPanel.PlayFinishedAnim();
         }
     }
 

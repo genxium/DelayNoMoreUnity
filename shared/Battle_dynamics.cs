@@ -920,7 +920,7 @@ namespace shared {
                                     confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
                                     continue;
                                 } else {
-                                    // [WARNING] This cached information could be created by a CORRECTLY PREDICTED "delayedInputFrameDownsync", thus we need a rollback from there on to finally consilidate the result later!
+                                    // [WARNING] This cached information could be created by a CORRECTLY PREDICTED "delayedInputFrameDownsync", thus we need a rollback from there on to finally consolidate the result later!
                                     unconfirmedBattleResults[delayedInputFrameId] = confirmedBattleResult; // The "value" here is actually not useful, it's just stuffed here for type-correctness :)
                                     continue;
                                 }
@@ -1390,7 +1390,7 @@ namespace shared {
             }
         }
 
-        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription waveNpcKilledEvtSub, ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ILoggerBridge logger) {
+        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ILoggerBridge logger) {
             bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (waveNpcKilledEvtSub.Id-1))));
             int nextWaveNpcCnt = 0;
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
@@ -1432,7 +1432,15 @@ namespace shared {
                         triggerInNextFrame.FramesToFire = MAX_INT;
                         triggerInNextFrame.FramesToRecover = MAX_INT;
                         if (justFulfilled) {
-                            // Publishes trigger completed evtMask 
+                            var currExhaustEvtSub = currRenderFrame.EvtSubsArr[currTrigger.ConfigFromTiled.PublishingToEvtSubIdUponExhaust-1];
+                            var nextExhaustEvtSub = nextRenderFrame.EvtSubsArr[currTrigger.ConfigFromTiled.PublishingToEvtSubIdUponExhaust-1];
+                            nextExhaustEvtSub.FulfilledEvtMask |= currTrigger.ConfigFromTiled.PublishingEvtMaskUponExhaust;
+                            if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
+                                fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id-1));
+                                nextExhaustEvtSub.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
+                                nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
+                                justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
+                            }
                         }
                     }
                 } else {
@@ -1473,7 +1481,7 @@ namespace shared {
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
 
                 float characterVirtualGridTop = currCharacterDownsync.VirtualGridY + (chConfig.DefaultSizeY >> 1);
-                if (0 > characterVirtualGridTop) {
+                if (0 > characterVirtualGridTop && Dying != currCharacterDownsync.CharacterState) {
                     thatCharacterInNextFrame.Hp = 0;
                     thatCharacterInNextFrame.VelX = 0;
                     thatCharacterInNextFrame.CharacterState = Dying;
@@ -1716,7 +1724,7 @@ namespace shared {
         - Make use of CPU parallelization -- better by using some libraries with sub-kernel-thread granularity(e.g. Goroutine or Greenlet equivalent) -- or GPU parallelization. It's not trivial to make an improvement because by dispatching smaller tasks to other resources other than the current kernel-thread, overhead I/O and synchronization/locking time is introduced. Moreover, we need guarantee that the dispatched smaller tasks can yield deterministic outputs regardless of processing order, e.g. that each "i" in "_calcCharacterMovementPushbacks" can be traversed earlier than another and same "effPushbacks" for the next render frame is obtained.   
         - Enable "IL2CPP" when building client application.  
         */
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, int missionEvtSubId, int selfPlayerJoinIndex, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -1920,11 +1928,25 @@ namespace shared {
             _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, completelyStaticTrapColliders, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
 
             // [WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled-evtsub. 
-            _calcTriggerReactions(currRenderFrame, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, waveNpcKilledEvtSub, fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, logger);
+            _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, logger);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
 
             _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+
+            if (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (missionEvtSubId-1)))) {
+                if (1 == roomCapacity) {
+                    confirmedBattleResult.WinnerJoinIndex = selfPlayerJoinIndex;
+                } else {
+                    var (rdfAllConfirmed, delayedInputFrameId) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity);
+                    if (rdfAllConfirmed) {
+                        confirmedBattleResult.WinnerJoinIndex = selfPlayerJoinIndex;
+                    } else {
+                        // [WARNING] This cached information could be created by a CORRECTLY PREDICTED "delayedInputFrameDownsync", thus we need a rollback from there on to finally consolidate the result later!
+                        unconfirmedBattleResults[delayedInputFrameId] = confirmedBattleResult; // The "value" here is actually not useful, it's just stuffed here for type-correctness :)
+                    }
+                }
+            }
 
             _leftShiftDeadNpcs(roomCapacity, nextRenderFrameNpcs, logger);
             for (int i = 0; i < colliderCnt; i++) {

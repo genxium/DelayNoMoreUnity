@@ -182,18 +182,13 @@ public class OnlineMapController : AbstractMapController {
     }
 
     void Start() {
-        if (null == postSettlementCallback) {
-            postSettlementCallback = () => {
-                onBattleStopped();
-            };
-        }
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
 
         selfPlayerInfo = new CharacterDownsync();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = 60;
-
+        isOnlineMode = true;
         enableBattleInput(false);
     }
 

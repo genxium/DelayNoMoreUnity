@@ -36,7 +36,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="1416" y="972">
+  <object id="135" x="1192" y="972">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -69,7 +69,7 @@
     <property name="initVelY" value="0"/>
     <property name="publishingEvtMaskUponExhaust" value="1"/>
     <property name="publishingToEvtSubIdUponExhaust" value="2"/>
-    <property name="quota" value="4"/>
+    <property name="quota" value="2"/>
     <property name="recoveryFrames" value="300"/>
     <property name="subCycleQuota" value="3"/>
     <property name="subCycleTriggerFrames" value="90"/>

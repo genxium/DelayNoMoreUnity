@@ -553,6 +553,7 @@ message RoomDownsyncFrame {
     repeated EvtSubscription evtSubsArr = 8;
     uint64 waveNpcKilledEvtMaskCounter = 9;
 
+
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;
 	repeated int32 speciesIdList = 1026;

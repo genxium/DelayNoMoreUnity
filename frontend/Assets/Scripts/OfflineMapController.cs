@@ -59,16 +59,12 @@ public class OfflineMapController : AbstractMapController {
 
     // Start is called before the first frame update
     void Start() {
-        if (null == postSettlementCallback) {
-            postSettlementCallback = () => {
-                onBattleStopped();
-            };
-        }
         debugDrawingAllocation = true;
         debugDrawingEnabled = false;
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
+        isOnlineMode = false;
     }
 
     // Update is called once per frame

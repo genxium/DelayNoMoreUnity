@@ -1703,7 +1703,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1637482306 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8026480808352807326, guid: 9b2b9eeff27a1d8448ae29a1af22c881, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8924790441666836530, guid: 9b2b9eeff27a1d8448ae29a1af22c881, type: 3}
   m_PrefabInstance: {fileID: 1637482304}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -1744,7 +1744,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1901904083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleInputManager, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -1760,7 +1760,7 @@ MonoBehaviour:
     m_ActionName: SelfPlayer/Move
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1901904083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleInputManager, Assembly-CSharp
         m_MethodName: OnBtnAInput
         m_Mode: 0
@@ -1776,7 +1776,7 @@ MonoBehaviour:
     m_ActionName: SelfPlayer/BtnA[/Keyboard/j]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1901904083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleInputManager, Assembly-CSharp
         m_MethodName: OnMoveByKeyboard
         m_Mode: 0
@@ -1792,7 +1792,7 @@ MonoBehaviour:
     m_ActionName: SelfPlayer/MoveByKeyboard[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1901904083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleInputManager, Assembly-CSharp
         m_MethodName: OnBtnBInput
         m_Mode: 0
@@ -1806,26 +1806,19 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 964a175b-56ab-4ef5-a92b-2923730553bb
     m_ActionName: SelfPlayer/BtnB[/Keyboard/h]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 73666606-069a-4a5b-8965-b4a06dbc35b3
+    m_ActionName: SelfPlayer/BtnC[/Keyboard/b]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a4c50372-52f7-4770-b1f7-74de3694dc54
+    m_ActionName: SelfPlayer/BtnD[/Keyboard/n]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: SelfPlayer
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &1901904083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3520107860604785142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8424a36e930936244bdf59ec0a459d81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  joystick: {fileID: 0}
-  btnA: {fileID: 0}
-  btnB: {fileID: 0}
 --- !u!114 &1901904084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2003,7 +1996,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3353121542170924449}
   - component: {fileID: 1901904082}
-  - component: {fileID: 1901904083}
   - component: {fileID: 1901904084}
   m_Layer: 0
   m_Name: MapController

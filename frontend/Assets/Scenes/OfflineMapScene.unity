@@ -613,17 +613,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8411099102924968178, guid: 9b2b9eeff27a1d8448ae29a1af22c881, type: 3}
   m_PrefabInstance: {fileID: 290108738}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &290108740 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8026480808352807326, guid: 9b2b9eeff27a1d8448ae29a1af22c881, type: 3}
-  m_PrefabInstance: {fileID: 290108738}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea58b0ad02f5d154ba5d8d614ee73e1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,6 +1727,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1500191155 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8924790441666836530, guid: 9b2b9eeff27a1d8448ae29a1af22c881, type: 3}
+  m_PrefabInstance: {fileID: 290108738}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea58b0ad02f5d154ba5d8d614ee73e1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1688422935
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1876,7 +1876,7 @@ MonoBehaviour:
   playerLightsPrefab: {fileID: 5304118936468543971, guid: 004535d351f4d1b4a9826cae8e5d4c47, type: 3}
   iptmgr: {fileID: 1688422937}
   readyGoPanel: {fileID: 800821809}
-  settlementPanel: {fileID: 290108740}
+  settlementPanel: {fileID: 1500191155}
 --- !u!4 &3353121542170924449
 Transform:
   m_ObjectHideFlags: 0
