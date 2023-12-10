@@ -1231,17 +1231,21 @@ public abstract class AbstractMapController : MonoBehaviour {
         iptmgr.reset();
     }
 
-    private IEnumerator delayToShowSettlementPanel() {
+    protected IEnumerator delayToShowSettlementPanel() {
         if (ROOM_STATE_IN_BATTLE != battleState) {
             yield return new WaitForSeconds(0);
         } else {
-            yield return new WaitForSeconds(1);
             battleState = ROOM_STATE_IN_SETTLEMENT;
             settlementPanel.postSettlementCallback = () => {
                 onBattleStopped();
             };
             settlementPanel.gameObject.SetActive(true);
-            settlementPanel.PlayFinishedAnim();
+            // TODO: In versus mode, should differentiate between "winnerJoinIndex == selfPlayerIndex" and otherwise
+            if (isBattleResultSet(confirmedBattleResult)) {
+                settlementPanel.PlaySettlementAnim(true);
+            } else {
+                settlementPanel.PlaySettlementAnim(false);
+            }
         }
     }
 
@@ -1809,6 +1813,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < evtSubList.Count; i++) {
             startRdf.EvtSubsArr[i] = evtSubList[i];
         }
+        // Initialize trigger for the first wave
+        startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER-1].DemandedEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
+        startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER-1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
 
         return startRdf;
     }

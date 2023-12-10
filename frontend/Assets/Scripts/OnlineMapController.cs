@@ -93,7 +93,7 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     enableBattleInput(false);
-                    onBattleStopped();
+                    StartCoroutine(delayToShowSettlementPanel());
                     // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
                     if (frameLogEnabled) {
                         wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, pushbackFrameLogBuffer, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
@@ -199,6 +199,7 @@ public class OnlineMapController : AbstractMapController {
 
     public void onWsSessionClosed() {
         Debug.Log("Handling WsSession closed in main thread.");
+        // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
         onBattleStopped();
         playerWaitingPanel.gameObject.SetActive(false);
         characterSelectPanel.gameObject.SetActive(true);
@@ -245,10 +246,10 @@ public class OnlineMapController : AbstractMapController {
                 if (!lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync && 0 < timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync) {
                     // TODO: Popup some GUI hint to tell the player that we're awaiting downsync only, as the local "playerRdfId" is monotonically increasing, there's no way to rewind and change any input from here!
                     timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync -= 16; // hardcoded for now
-                    return;
                 } else {
-                    onBattleStopped();
+                    StartCoroutine(delayToShowSettlementPanel());
                 }
+                return;
             }
             if (shouldLockStep) {
                 NetworkDoctor.Instance.LogLockedStepCnt();
@@ -268,6 +269,7 @@ public class OnlineMapController : AbstractMapController {
         } catch (Exception ex) {
             var msg = String.Format("Error during OnlineMap.Update {0}", ex);
             popupErrStackPanel(msg);
+            // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
             onBattleStopped();
         }
     }

@@ -30,7 +30,7 @@ namespace shared {
             }
         }
 
-        private static void _calcDynamicTrapMovementCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, InputFrameDecoded decodedInputHolder, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
+        private static void _calcDynamicTrapMovementCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, InputFrameDecoded decodedInputHolder, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             int primaryHardOverlapIndex;
             for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
                 primaryOverlapResult.reset();
@@ -112,7 +112,7 @@ namespace shared {
                             throw new ArgumentNullException("The casting into atkedCharacterInCurrFrame shouldn't be null for bCollider.Data=" + bCollider.Data);
                         }
                         if (colliderAttr.ProvidesDamage) {
-                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aShape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aShape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
                         }
                     }
 
@@ -127,7 +127,7 @@ namespace shared {
             }
         }
 
-        private static void _calcCompletelyStaticTrapDamage(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, List<Collider> completelyStaticTrapColliders, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
+        private static void _calcCompletelyStaticTrapDamage(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref SatResult overlapResult, Collision collision, List<Collider> completelyStaticTrapColliders, ILoggerBridge logger) {
             for (int i = 0; i < completelyStaticTrapColliders.Count; i++) {
                 Collider aCollider = completelyStaticTrapColliders[i];
                 TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;
@@ -151,7 +151,7 @@ namespace shared {
 
                     switch (bCollider.Data) {
                         case CharacterDownsync atkedCharacterInCurrFrame:
-                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aCollider.Shape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+                            _processSingleTrapDamageOnSingleCharacter(currRenderFrame, aCollider.Shape, bCollider.Shape, ref overlapResult, colliderAttr, atkedCharacterInCurrFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
                         break;
                     }
                 }
@@ -163,7 +163,7 @@ namespace shared {
             (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(colliderAttr.HitboxSizeX, colliderAttr.HitboxSizeY);
         }
 
-        private static void _processSingleTrapDamageOnSingleCharacter(RoomDownsyncFrame currRenderFrame, ConvexPolygon aShape, ConvexPolygon bShape, ref SatResult overlapResult, TrapColliderAttr colliderAttr, CharacterDownsync atkedCharacterInCurrFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
+        private static void _processSingleTrapDamageOnSingleCharacter(RoomDownsyncFrame currRenderFrame, ConvexPolygon aShape, ConvexPolygon bShape, ref SatResult overlapResult, TrapColliderAttr colliderAttr, CharacterDownsync atkedCharacterInCurrFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
             // The traversal order of traps (both static & dynamic) is deterministic, thus the following assignment is deterministic regardless of the order of collision result popping.
             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) return;
             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
@@ -190,8 +190,7 @@ namespace shared {
                 atkedCharacterInNextFrame.Hp = 0;
                 atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
                 atkedCharacterInNextFrame.CharacterState = Dying;
-                atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
-                UpdateWaveNpcKilledEvtSub(atkedCharacterInNextFrame.PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask); 
+                atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER; 
             } else {
                 var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
                 bool shouldOmitHitPushback = (atkedCharacterConfig.Hardness > trapConfig.Hardness);   

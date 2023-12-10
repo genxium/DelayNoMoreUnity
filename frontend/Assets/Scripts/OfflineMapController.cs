@@ -76,7 +76,7 @@ public class OfflineMapController : AbstractMapController {
             doUpdate();
             urpDrawDebug();
             if (playerRdfId >= battleDurationFrames) {
-                onBattleStopped();
+                StartCoroutine(delayToShowSettlementPanel());
             } else {
                 readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
             }

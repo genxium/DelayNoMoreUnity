@@ -1204,8 +1204,6 @@ namespace shared {
                                 atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
                                 atkedCharacterInNextFrame.CharacterState = Dying;
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
-
-                                UpdateWaveNpcKilledEvtSub(atkedCharacterInNextFrame.PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask); 
                             } else {
                                 // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
                                 var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
@@ -1390,8 +1388,8 @@ namespace shared {
             }
         }
 
-        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ILoggerBridge logger) {
-            bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (waveNpcKilledEvtSub.Id-1))));
+        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription currRdfWaveNpcKilledEvtSub, EvtSubscription nextRdfWaveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ILoggerBridge logger) {
+            bool nextWaveTriggerJustFulfilled = (EVTSUB_NO_DEMAND_MASK != currRdfWaveNpcKilledEvtSub.DemandedEvtMask && currRdfWaveNpcKilledEvtSub.FulfilledEvtMask == currRdfWaveNpcKilledEvtSub.DemandedEvtMask); ;
             int nextWaveNpcCnt = 0;
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
@@ -1413,9 +1411,10 @@ namespace shared {
                         }
                     }
                 } else if (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask) {
-                    bool justFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (currTrigger.ConfigFromTiled.SubscriptionId-1))));
-                    if (justFulfilled && 0 < currTrigger.Quota) {
-                        if (currTrigger.ConfigFromTiled.SubscriptionId == waveNpcKilledEvtSub.Id) {
+                    EvtSubscription triggerSubscribedInstance = currRenderFrame.EvtSubsArr[currTrigger.ConfigFromTiled.SubscriptionId - 1];
+                    bool fulfilled = (EVTSUB_NO_DEMAND_MASK != triggerSubscribedInstance.DemandedEvtMask && triggerSubscribedInstance.FulfilledEvtMask == triggerSubscribedInstance.DemandedEvtMask);
+                    if (fulfilled && 0 < currTrigger.Quota) {
+                        if (currTrigger.ConfigFromTiled.SubscriptionId == nextRdfWaveNpcKilledEvtSub.Id) {
                             nextWaveNpcCnt += currTrigger.ConfigFromTiled.SubCycleQuota;
                             nextWaveNpcKilledEvtMaskCounter = 0;
                         }
@@ -1431,8 +1430,7 @@ namespace shared {
                         triggerInNextFrame.State = TriggerState.Tready;
                         triggerInNextFrame.FramesToFire = MAX_INT;
                         triggerInNextFrame.FramesToRecover = MAX_INT;
-                        if (justFulfilled) {
-                            var currExhaustEvtSub = currRenderFrame.EvtSubsArr[currTrigger.ConfigFromTiled.PublishingToEvtSubIdUponExhaust-1];
+                        if (fulfilled) {
                             var nextExhaustEvtSub = nextRenderFrame.EvtSubsArr[currTrigger.ConfigFromTiled.PublishingToEvtSubIdUponExhaust-1];
                             nextExhaustEvtSub.FulfilledEvtMask |= currTrigger.ConfigFromTiled.PublishingEvtMaskUponExhaust;
                             if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
@@ -1468,12 +1466,14 @@ namespace shared {
             }
 
             if (nextWaveTriggerJustFulfilled) {
-                waveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
-                justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = waveNpcKilledEvtSub.Id;
+                fulfilledEvtSubscriptionSetMask |= (1ul << (nextRdfWaveNpcKilledEvtSub.Id - 1));
+                nextRdfWaveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
+                nextRdfWaveNpcKilledEvtSub.FulfilledEvtMask = 0;
+                justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextRdfWaveNpcKilledEvtSub.Id;
             }
         }
 
-        private static void _calcFallenDeath(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
+        private static void _calcFallenDeath(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
             for (int i = 0; i < roomCapacity + currNpcI; i++) {
                 var currCharacterDownsync = (i < roomCapacity ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (i >= roomCapacity && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
@@ -1486,10 +1486,6 @@ namespace shared {
                     thatCharacterInNextFrame.VelX = 0;
                     thatCharacterInNextFrame.CharacterState = Dying;
                     thatCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
-
-                    if (i >= roomCapacity) {
-                        UpdateWaveNpcKilledEvtSub(thatCharacterInNextFrame.PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask);
-                    }
                 }
             }
         }
@@ -1685,10 +1681,11 @@ namespace shared {
             }
         }
 
-        private static void _leftShiftDeadNpcs(int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
+        private static void _leftShiftDeadNpcs(int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask,  ILoggerBridge logger) {
             int aliveSlotI = 0, candidateI = 0;
             while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id) {
                 while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id && isNpcDeadToDisappear(nextRenderFrameNpcs[candidateI])) {
+                    UpdateWaveNpcKilledEvtSub(nextRenderFrameNpcs[candidateI].PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask);
                     candidateI++;
                 }
                 if (candidateI >= nextRenderFrameNpcs.Count || TERMINATING_PLAYER_ID == nextRenderFrameNpcs[candidateI].Id) {
@@ -1912,29 +1909,27 @@ namespace shared {
             _insertBulletColliders(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
             
             ulong nextWaveNpcKilledEvtMaskCounter = currRenderFrame.WaveNpcKilledEvtMaskCounter;
-            int hardcodedWaveNpcKilledEvtSubIdx = MAGIC_EVTSUB_ID_WAVER-1;
-            EvtSubscription waveNpcKilledEvtSub = nextEvtSubs[hardcodedWaveNpcKilledEvtSubIdx];
+            EvtSubscription currRdfWaveNpcKilledEvtSub = currRenderFrame.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1];
+            EvtSubscription nextRdfWaveNpcKilledEvtSub = nextEvtSubs[MAGIC_EVTSUB_ID_WAVER - 1];
             ulong fulfilledEvtSubscriptionSetMask = 0; // By default no EvtSub is fulfilled yet
-            if (0 == currRenderFrame.Id) {
-                fulfilledEvtSubscriptionSetMask |= (1ul << hardcodedWaveNpcKilledEvtSubIdx);
-            }
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
             
             int nextNpcI = currNpcI;
- 
-            _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
-            
-            _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, completelyStaticTrapColliders, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
-
             // [WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled-evtsub. 
-            _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, logger);
+            _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, currRdfWaveNpcKilledEvtSub, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, logger);
+
+            _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
+            
+            _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, completelyStaticTrapColliders, logger);
 
             _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
 
-            _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+            _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
 
-            if (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (missionEvtSubId-1)))) {
+            _leftShiftDeadNpcs(roomCapacity, nextRenderFrameNpcs, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+
+            if (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (missionEvtSubId - 1)))) {
                 if (1 == roomCapacity) {
                     confirmedBattleResult.WinnerJoinIndex = selfPlayerJoinIndex;
                 } else {
@@ -1948,7 +1943,6 @@ namespace shared {
                 }
             }
 
-            _leftShiftDeadNpcs(roomCapacity, nextRenderFrameNpcs, logger);
             for (int i = 0; i < colliderCnt; i++) {
                 Collider dynamicCollider = dynamicRectangleColliders[i];
                 if (null == dynamicCollider.Space) {
