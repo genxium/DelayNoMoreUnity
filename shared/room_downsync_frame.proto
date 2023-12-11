@@ -680,3 +680,20 @@ message InventorySlot {
 message Inventory {
 	repeated InventorySlot slots = 1;
 }
+
+message PlayerSettings {
+    int32 soundVolume = 1;
+}
+
+message PlayerLevelProgress {
+    int32 levelId = 1;
+    int32 highestScore = 2;
+    int32 shortestFinishTimeAtHighestScore = 3;
+
+    int32 shortestFinishTime = 4;
+    int32 highestScoreAtShortestFinishTime = 5;
+}
+
+message PlayerStoryProgress {
+    map<int32, PlayerLevelProgress> levelProgressDict = 1;
+}

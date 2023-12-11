@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 
 namespace shared {
@@ -138,6 +139,20 @@ namespace shared {
 
                     if (null != rdfPfl) {       
                         outputFile.Write(rdfPfl.toString() + "\n");
+                    }
+                }
+            }
+        }
+
+        public static PlayerStoryProgress? loadStoryProgress(string dirPath, string filename) {
+            const int CHUNK_SIZE = (1 << 12);
+            using (FileStream fs = new FileStream(Path.Combine(dirPath, filename), FileMode.Open, FileAccess.Read)) {
+                using (BinaryReader br = new BinaryReader(fs, new ASCIIEncoding())) {
+                    byte[] chunk = br.ReadBytes(CHUNK_SIZE);
+                    if (0 < chunk.Length) {
+                        return PlayerStoryProgress.Parser.ParseFrom(chunk);
+                    } else {
+                        return null;
                     }
                 }
             }
