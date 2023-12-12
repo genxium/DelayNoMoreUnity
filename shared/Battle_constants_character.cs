@@ -72,7 +72,8 @@ namespace shared {
                                 FramesToRecover = 0,
                                 DefaultQuota = 1,
                                 DefaultFramesToRecover = 1800,
-                                BuffSpeciesId = XformToSuperKnifeGirl.SpeciesId
+                                BuffSpeciesId = XformToSuperKnifeGirl.SpeciesId,
+                                SkillId = NO_SKILL,
                             }
                         }
                     }),
@@ -156,7 +157,8 @@ namespace shared {
                                 FramesToRecover = 0,
                                 DefaultQuota = 1,
                                 DefaultFramesToRecover = 720,
-                                BuffSpeciesId = ShortFreezer.SpeciesId
+                                BuffSpeciesId = ShortFreezer.SpeciesId,
+                                SkillId = NO_SKILL,
                             }
                         }
                     }),
@@ -231,12 +233,13 @@ namespace shared {
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
-                                StockType = InventorySlotStockType.TimedIv,
-                                Quota = 1,
+                                StockType = InventorySlotStockType.TimedMagazineIv,
+                                Quota = 5,
                                 FramesToRecover = 0,
-                                DefaultQuota = 1,
+                                DefaultQuota = 5,
                                 DefaultFramesToRecover = 720,
-                                BuffSpeciesId = ShortFreezer.SpeciesId
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = 27, // TODO: Remove this hardcoded "skillId"!
                             }
                         }
                     }),

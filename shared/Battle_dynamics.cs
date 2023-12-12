@@ -202,18 +202,18 @@ namespace shared {
             return (0 == trigger.FramesToRecover && 0 < trigger.Quota);
         }
 
-        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets) {
+        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed) {
             bool skillUsed = false;
             if (PATTERN_ID_NO_OP == patternId || PATTERN_ID_UNABLE_TO_OP == patternId) {
                 return false;
             }
-            var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId);
+            var skillId = FindSkillId(patternId, currCharacterDownsync, chConfig.SpeciesId, slotUsed);
             int xfac = (0 < thatCharacterInNextFrame.DirX ? 1 : -1);
             bool hasLockVel = false;
             if (NO_SKILL != skillId) {
                 var skillConfig = skills[skillId];
                 if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
-                    skillId = FindSkillId(1, currCharacterDownsync, chConfig.SpeciesId); // Fallback to basic atk
+                    skillId = FindSkillId(1, currCharacterDownsync, chConfig.SpeciesId, slotUsed); // Fallback to basic atk
                     if (!skills.ContainsKey(skillId)) {
                         return false;
                     }
@@ -283,15 +283,17 @@ namespace shared {
             }
     
             if (slotUsed) {
-                var buffConfig = buffConfigs[targetSlotCurr.BuffSpeciesId];
-                int origChSpeciesId = SPECIES_NONE_CH;
-                if (SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {
-                    origChSpeciesId = currCharacterDownsync.SpeciesId;
-                    var nextChConfig = characters[buffConfig.XformChSpeciesId];
-                    AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
+                if (TERMINATING_BUFF_SPECIES_ID != targetSlotCurr.BuffSpeciesId) {
+                    var buffConfig = buffConfigs[targetSlotCurr.BuffSpeciesId];
+                    int origChSpeciesId = SPECIES_NONE_CH;
+                    if (SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {
+                        origChSpeciesId = currCharacterDownsync.SpeciesId;
+                        var nextChConfig = characters[buffConfig.XformChSpeciesId];
+                        AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
+                    }
+                    // TODO: Support multi-buff simultaneously!
+                    AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, rdfId, origChSpeciesId, thatCharacterInNextFrame.BuffList[0]);
                 }
-                // TODO: Support multi-buff simultaneously!
-                AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, rdfId, origChSpeciesId, thatCharacterInNextFrame.BuffList[0]);
             }
 
             return slotUsed;
@@ -357,7 +359,7 @@ namespace shared {
                 var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
                 // Prioritize use of inventory slot over skills
-                _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame);
+                bool slotUsed = _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
@@ -368,7 +370,7 @@ namespace shared {
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
                 thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
 
-                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
+                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed);
                 Skill? skillConfig = null;
                 if (usedSkill) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"

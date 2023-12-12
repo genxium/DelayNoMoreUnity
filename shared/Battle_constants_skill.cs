@@ -946,7 +946,7 @@ namespace shared {
                         RecoveryFrames = 60,
                         RecoveryFramesOnBlock = 60,
                         RecoveryFramesOnHit = 60,
-                        MpDelta = 50,
+                        MpDelta = 650,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk3
                     }
@@ -1741,7 +1741,7 @@ namespace shared {
                     }
             );
 
-        public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId) {
+        public static int FindSkillId(int patternId, CharacterDownsync currCharacterDownsync, int speciesId, bool slotUsed) {
             bool notRecovered = (0 < currCharacterDownsync.FramesToRecover);
             switch (speciesId) {
                 case SPECIES_KNIFEGIRL:
@@ -1890,8 +1890,14 @@ namespace shared {
                                 if (currCharacterDownsync.InAir) {
                                     return 19;
                                 } else {
-                                    return 27;
+                                    return 21;
                                 }
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case PATTERN_INVENTORY_SLOT_C:
+                            if (!notRecovered && slotUsed) {
+                                return 27;
                             } else {
                                 return NO_SKILL;
                             }

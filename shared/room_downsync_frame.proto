@@ -675,6 +675,7 @@ message InventorySlot {
     int32 defaultQuota = 4;
     int32 defaultFramesToRecover = 5;
     int32 buffSpeciesId = 6;
+    int32 skillId = 7;
 }
 
 message Inventory {

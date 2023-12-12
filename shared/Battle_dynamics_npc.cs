@@ -367,7 +367,7 @@ namespace shared {
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
                 thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
 
-                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets);
+                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, false);
                 Skill? skillConfig = null;
                 if (usedSkill) {
                     skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
