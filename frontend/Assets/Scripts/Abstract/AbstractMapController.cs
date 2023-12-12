@@ -97,6 +97,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     public AudioSource bgmSource;
     public abstract void onCharacterSelectGoAction(int speciesId);
 
+    public abstract void onCharacterAndLevelSelectGoAction(int speciesId, string levelName);
+
     protected bool debugDrawingAllocation = false;
     protected bool debugDrawingEnabled = false;
 

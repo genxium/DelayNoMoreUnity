@@ -146,7 +146,7 @@ namespace shared {
 
         public static PlayerStoryProgress? loadStoryProgress(string dirPath, string filename) {
             const int CHUNK_SIZE = (1 << 12);
-            using (FileStream fs = new FileStream(Path.Combine(dirPath, filename), FileMode.Open, FileAccess.Read)) {
+            using (FileStream fs = new FileStream(Path.Combine(dirPath, filename), FileMode.OpenOrCreate, FileAccess.Read)) {
                 using (BinaryReader br = new BinaryReader(fs, new ASCIIEncoding())) {
                     byte[] chunk = br.ReadBytes(CHUNK_SIZE);
                     if (0 < chunk.Length) {

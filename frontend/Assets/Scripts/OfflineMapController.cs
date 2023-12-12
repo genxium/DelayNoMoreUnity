@@ -20,12 +20,16 @@ public class OfflineMapController : AbstractMapController {
     }
 
     public override void onCharacterSelectGoAction(int speciesId) {
-        Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
+        throw new NotImplementedException();
+    }
+
+    public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
+        Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}, selectedLevelName={1}", speciesId, levelName));
         selfPlayerInfo = new CharacterDownsync();
 
         roomCapacity = 1;
         preallocateHolders();
-        resetCurrentMatch("TwoStepStage");
+        resetCurrentMatch(levelName);
         preallocateVfxNodes();
         preallocateSfxNodes();
         preallocateNpcNodes();

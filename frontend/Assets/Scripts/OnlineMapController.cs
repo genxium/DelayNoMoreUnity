@@ -181,6 +181,10 @@ public class OnlineMapController : AbstractMapController {
         characterSelectPanel.gameObject.SetActive(false);
     }
 
+    public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
+        throw new NotImplementedException();
+    }
+
     void Start() {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;

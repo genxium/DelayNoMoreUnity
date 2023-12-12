@@ -17,11 +17,11 @@ public class CharacterSelectPanel : MonoBehaviour {
 
     }
 
-    void toggleUIInteractability(bool enabled) {
+    public void toggleUIInteractability(bool enabled) {
         GoActionButton.interactable = enabled;
     }
 
-    public void OnGoActionClicked(AbstractMapController map) {
+    public virtual void OnGoActionClicked(AbstractMapController map) {
         toggleUIInteractability(false);
         Debug.Log(String.Format("GoAction button clicked with map={0}", map));
         var toggles = characters.gameObject.GetComponentsInChildren<Toggle>();
