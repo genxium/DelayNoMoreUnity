@@ -1375,6 +1375,7 @@ namespace shared {
                 var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList;
                 if (0 < spawnerSpeciesIdList.Count) {
                     int idx = currTrigger.ConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
+                    if (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask && (idx < 0 || idx >= spawnerSpeciesIdList.Count)) return;
                     if (idx < 0) idx = 0;
                     if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;
                     ulong candNextWaveNpcKilledEvtMaskCounter = (0 == nextWaveNpcKilledEvtMaskCounter ? 1 : (nextWaveNpcKilledEvtMaskCounter << 1));
