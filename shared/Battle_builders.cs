@@ -65,7 +65,7 @@ namespace shared {
                     fulfilledEvtSubscriptionSetMask |= (1ul << (dst.Id-1));
                     return true;
                 }
-            } 
+            }
             return false;
         }
 

@@ -1088,7 +1088,7 @@ namespace shared {
                         RecoveryFrames = 23,
                         RecoveryFramesOnBlock = 23,
                         RecoveryFramesOnHit = 23,
-                        MpDelta = 0,
+                        MpDelta = 400,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk4
                     }
@@ -1152,7 +1152,7 @@ namespace shared {
                         RecoveryFrames = 55,
                         RecoveryFramesOnBlock = 55,
                         RecoveryFramesOnHit = 55,
-                        MpDelta = 120,
+                        MpDelta = 550,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Dashing
                     }

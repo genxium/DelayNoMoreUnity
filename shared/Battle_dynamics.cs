@@ -1367,10 +1367,7 @@ namespace shared {
         private static void _tickSingleSubCycle(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter) {
             if (0 < currTrigger.SubCycleQuotaLeft) {
                 triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1;
-                triggerInNextFrame.State = TriggerState.TcoolingDown;
-                triggerInNextFrame.FramesInState = 0;
-                triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
-
+                
                 var chSpawnerConfig = (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask ? lowerBoundForSpawnerConfig(currTrigger.ConfigFromTiled.QuotaCap - currTrigger.Quota, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq) : lowerBoundForSpawnerConfig(currRenderFrame.Id, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq));  
                 var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList;
                 if (0 < spawnerSpeciesIdList.Count) {
@@ -1381,6 +1378,9 @@ namespace shared {
                     ulong candNextWaveNpcKilledEvtMaskCounter = (0 == nextWaveNpcKilledEvtMaskCounter ? 1 : (nextWaveNpcKilledEvtMaskCounter << 1));
                     if (addNewNpcToNextFrame(currTrigger.VirtualGridX, currTrigger.VirtualGridY, currTrigger.ConfigFromTiled.InitVelX, currTrigger.ConfigFromTiled.InitVelY, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, MAGIC_EVTSUB_ID_WAVER, candNextWaveNpcKilledEvtMaskCounter)) {
                         nextWaveNpcKilledEvtMaskCounter = candNextWaveNpcKilledEvtMaskCounter;
+                        triggerInNextFrame.State = TriggerState.TcoolingDown;
+                        triggerInNextFrame.FramesInState = 0;
+                        triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
                     }
                 }
             } else {
@@ -1417,13 +1417,14 @@ namespace shared {
                     EvtSubscription triggerSubscribedInstance = currRenderFrame.EvtSubsArr[currTrigger.ConfigFromTiled.SubscriptionId - 1];
                     bool fulfilled = (EVTSUB_NO_DEMAND_MASK != triggerSubscribedInstance.DemandedEvtMask && triggerSubscribedInstance.FulfilledEvtMask == triggerSubscribedInstance.DemandedEvtMask);
                     if (fulfilled && 0 < currTrigger.Quota) {
-                        if (currTrigger.ConfigFromTiled.SubscriptionId == nextRdfWaveNpcKilledEvtSub.Id) {
-                            nextWaveNpcCnt += currTrigger.ConfigFromTiled.SubCycleQuota;
-                            nextWaveNpcKilledEvtMaskCounter = 0;
-                        }
                         triggerInNextFrame.Quota = currTrigger.Quota - 1;
                         triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                        triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;   
+                        triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;
+                        if (currTrigger.ConfigFromTiled.SubscriptionId == nextRdfWaveNpcKilledEvtSub.Id) {
+                            var chSpawnerConfig = lowerBoundForSpawnerConfig(triggerInNextFrame.ConfigFromTiled.QuotaCap - triggerInNextFrame.Quota, triggerInNextFrame.ConfigFromTiled.CharacterSpawnerTimeSeq);
+                            nextWaveNpcCnt += (chSpawnerConfig.SpeciesIdList.Count < triggerInNextFrame.ConfigFromTiled.SubCycleQuota ? chSpawnerConfig.SpeciesIdList.Count : triggerInNextFrame.ConfigFromTiled.SubCycleQuota);
+                            nextWaveNpcKilledEvtMaskCounter = 0;
+                        }
                     } else if (0 <= currTrigger.FramesToFire && MAX_INT != currTrigger.FramesToFire) {
                         // [WARNING] The information of "justFulfilled" will be lost after then just-fulfilled renderFrame, thus temporarily using "FramesToFire" to keep track of subsequent spawning
                         if (0 == currTrigger.FramesToFire) {
@@ -1684,11 +1685,15 @@ namespace shared {
             }
         }
 
-        private static void _leftShiftDeadNpcs(int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask,  ILoggerBridge logger) {
+        private static void _leftShiftDeadNpcs(int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<EvtSubscription> nextRdfEvtSubsArr, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask,  ILoggerBridge logger) {
             int aliveSlotI = 0, candidateI = 0;
             while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id) {
                 while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id && isNpcDeadToDisappear(nextRenderFrameNpcs[candidateI])) {
-                    UpdateWaveNpcKilledEvtSub(nextRenderFrameNpcs[candidateI].PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask);
+                    if (MAGIC_EVTSUB_ID_NONE != nextRenderFrameNpcs[candidateI].PublishingEvtSubIdUponKilled) {
+                        UpdateWaveNpcKilledEvtSub(nextRenderFrameNpcs[candidateI].PublishingEvtMaskUponKilled, nextRdfEvtSubsArr[nextRenderFrameNpcs[candidateI].PublishingEvtSubIdUponKilled-1], ref fulfilledEvtSubscriptionSetMask);
+                    } else {
+                        UpdateWaveNpcKilledEvtSub(nextRenderFrameNpcs[candidateI].PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask);
+                    }
                     candidateI++;
                 }
                 if (candidateI >= nextRenderFrameNpcs.Count || TERMINATING_PLAYER_ID == nextRenderFrameNpcs[candidateI].Id) {
@@ -1720,7 +1725,7 @@ namespace shared {
 
         The "Step" function has become way more complicated than what it was back in the days only simple movements and hardpushbacks were supported. 
         
-        Someday in the future, profiling result on low-end hardwares might complain that this function is taking too much time in the "Script" portion, thus need one or all of the following optimization techiques to help it go further.
+        Someday in the future, profiling result on low-end hardware might complain that this function is taking too much time in the "Script" portion, thus need one or all of the following optimization techniques to help it go further.
         - Make use of CPU parallelization -- better by using some libraries with sub-kernel-thread granularity(e.g. Goroutine or Greenlet equivalent) -- or GPU parallelization. It's not trivial to make an improvement because by dispatching smaller tasks to other resources other than the current kernel-thread, overhead I/O and synchronization/locking time is introduced. Moreover, we need guarantee that the dispatched smaller tasks can yield deterministic outputs regardless of processing order, e.g. that each "i" in "_calcCharacterMovementPushbacks" can be traversed earlier than another and same "effPushbacks" for the next render frame is obtained.   
         - Enable "IL2CPP" when building client application.  
         */
@@ -1930,7 +1935,7 @@ namespace shared {
 
             _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
 
-            _leftShiftDeadNpcs(roomCapacity, nextRenderFrameNpcs, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+            _leftShiftDeadNpcs(roomCapacity, nextRenderFrameNpcs, nextEvtSubs, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
 
             if (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (missionEvtSubId - 1)))) {
                 if (1 == roomCapacity) {
@@ -2047,6 +2052,7 @@ namespace shared {
             AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, chConfig.RepelSoftPushback, isStatic, 0, false, false, true, 0, false, 0, defaultTemplateBuffList, defaultTemplateDebuffList, null, false, evtSubIdUponKilled, waveNpcKilledEvtMaskCounter, nextRenderFrameNpcs[npcCnt]);
             npcLocalIdCounter++;
             npcCnt++;
+            nextRenderFrameNpcs[npcCnt].Id = TERMINATING_PLAYER_ID;
             return true;
         }
         

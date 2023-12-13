@@ -20,7 +20,7 @@
  </layer>
  <layer id="15" name="Ground" width="64" height="32">
   <data encoding="base64" compression="zlib">
-   eJztmEsKwCAMRNMcwfvE3P9SUobuCl11ofAm4EJXPiefwXUFNmZGLDh/5e5b7IuG80v/aX5sFJxfvZ/c/6V/g/Wn8yv3yfXf8P5H93/KfzK//S+bn66/5x9bf/r/j9jJ/pfu/z3/2Pz0/x/nP1v/hvd/uv71o/5HPuu9/zobB75zwf2v+SNu5pEY4w==
+   eJztmEsKwCAMRNMcofeJuf+lpAzdCV11ofAm4ELd+Jh8BucV2BgZMeH8lbtfsS8azi/9h/mxUXB+9X5y/5f+Ddafzq/cJ9d/w/sf3f8p/8n89r9sfrr+nn9s/en/P2In+1+6//f8Y/PT/3+c/2z9G97/6frXj/q/813r/utsvTshCu5/zR/xABouGPc=
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -31,7 +31,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="250" y="937">
+  <object id="135" x="376" y="947">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -75,8 +75,8 @@
  <objectgroup id="4" name="NpcStartingPos">
   <object id="372" x="482" y="914">
    <properties>
-    <property name=" publishingEvtMaskUponKilled" value="2"/>
     <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="2"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4097"/>
     <property name="teamId" value="4"/>
@@ -85,8 +85,8 @@
   </object>
   <object id="373" x="815" y="916">
    <properties>
-    <property name=" publishingEvtMaskUponKilled" value="4"/>
     <property name="dirX" value="+2"/>
+    <property name="publishingEvtMaskUponKilled" value="4"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4097"/>
     <property name="teamId" value="4"/>
@@ -95,10 +95,10 @@
   </object>
   <object id="374" x="1088" y="972">
    <properties>
-    <property name=" publishingEvtMaskUponKilled" value="7"/>
     <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="8"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
-    <property name="speciesId" value="3"/>
+    <property name="speciesId" value="1"/>
     <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
@@ -127,7 +127,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="368" gid="2" x="886" y="915" width="64" height="32">
+  <object id="368" gid="2" x="920" y="915" width="64" height="32">
    <properties>
     <property name="dirX" value="0"/>
     <property name="dirY" value="-2"/>
@@ -154,7 +154,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="310" x="736" y="936" width="128" height="24">
+  <object id="310" x="736" y="936" width="160" height="24">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -247,7 +247,7 @@
    </properties>
    <point/>
   </object>
-  <object id="369" x="914" y="856">
+  <object id="369" x="948" y="856">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
@@ -262,7 +262,7 @@
    </properties>
    <point/>
   </object>
-  <object id="370" x="914" y="993">
+  <object id="370" x="948" y="993">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="1"/>
