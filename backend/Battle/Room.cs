@@ -29,6 +29,7 @@ public class Room {
     int curDynamicsRenderFrameId;
     int nstDelayFrames;
 
+    RoomDownsyncFrame? startRdf;
     Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex
 
@@ -109,11 +110,17 @@ public class Room {
 
         int renderBufferSize = 1024;
         int inputBufferSize = (renderBufferSize >> 1) + 1;
+        renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
+        for (int i = 0; i < renderBufferSize; i++) {
+            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity));
+        }
+        renderBuffer.Clear(); // Then use it by "DryPut"
         inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
         for (int i = 0; i < inputBufferSize; i++) {
             inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
         }
         inputBuffer.Clear(); // Then use it by "DryPut"
+        startRdf = null;
         players = new Dictionary<int, Player>();
         playersArr = new Player[capacity];
 
@@ -287,7 +294,7 @@ public class Room {
         return ret;
     }
 
-    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId) {
+    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId, RoomDownsyncFrame selfParsedRdf) {
         Player? targetPlayer;
         if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
             return false;
@@ -329,6 +336,14 @@ public class Room {
         }
 
         _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+
+        if (null == startRdf) {
+            startRdf = selfParsedRdf;
+        } else {
+            var src = selfParsedRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
+            var dst = startRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
+            AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, dst);
+        }
 
         if (shouldTryToStartBattle) {
             if (capacity == effectivePlayerCount) {
@@ -390,7 +405,7 @@ public class Room {
         /**
 		  [WARNING] We actually need the "battleMainLoop" immediately switch into another thread for running, such that we can avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
 
-          Moreover, I'm deliberately NOT AWAITING here, because the execution of "OnPlayerBattleColliderAcked > startBattleAsync" should continue without the result of "battleMainLoopActionAsync"!
+          Moreover, I'm deliberately NOT AWAITING here, because the execution of "OnPlayerBattleColliderAcked -> startBattleAsync" should continue without the result of "battleMainLoopActionAsync"!
 		 */
         _ = Task.Run(battleMainLoopActionAsync);
     }
@@ -531,7 +546,14 @@ public class Room {
                         _logger.LogInformation("In `battleMainLoop` for roomId={0} sent out startRdf with {1} bytes", id, startRdf.ToByteArray().Length);
                     }
 
+                    int prevRenderFrameId = renderFrameId;
                     renderFrameId = nextRenderFrameId;
+                    
+                    ulong dynamicsDuration = 0ul;
+                    // Prefab and buffer backend inputFrameDownsync
+                    if (backendDynamicsEnabled) {
+                        doBattleMainLoopPerTickBackendDynamicsWithProperLocking(prevRenderFrameId, ref dynamicsDuration);
+                    }
 
                     var elapsedInCalculation = (nowMillis - stCalculation);
                     toSleepMillis = (int)(estimatedMillisPerFrame - elapsedInCalculation);
@@ -830,7 +852,11 @@ public class Room {
         }
     }
 
-    private void downsyncToAllPlayers(InputBufferSnapshot inputBufferSnapshot) {
+    private void downsyncToAllPlayers(InputBufferSnapshot? inputBufferSnapshot) {
+        if (null == inputBufferSnapshot) {
+            _logger.LogWarning("inputBufferSnapshot is null when calling downsyncToAllPlayers for (roomId: {0})", id);
+            return;
+        }
         /*
         [WARNING] This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
         */
@@ -1098,6 +1124,106 @@ public class Room {
             battleUdpTask = Task.Run(async () => {
                 await startBattleUdpTunnelAsyncTask();
             });
+        }
+    }
+
+    private void doBattleMainLoopPerTickBackendDynamicsWithProperLocking(int prevRenderFrameId, ref ulong dynamicsDuration) {
+        inputBufferLock.WaitOne();
+        try {
+            var (ok, thatRenderFrameId) = ShouldPrefabInputFrameDownsync(prevRenderFrameId, renderFrameId);
+            if (ok) {
+                int noDelayInputFrameId = ConvertToNoDelayInputFrameId(thatRenderFrameId);
+                getOrPrefabInputFrameDownsync(noDelayInputFrameId);
+            }
+
+            // Force setting all-confirmed of buffered inputFrames periodically, kindly note that if "backendDynamicsEnabled", what we want to achieve is "recovery upon reconnection", which certainly requires "forceConfirmationIfApplicable" to move "lastAllConfirmedInputFrameId" forward as much as possible
+            int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
+            ulong unconfirmedMask = forceConfirmationIfApplicable(prevRenderFrameId);
+
+            if (0 <= lastAllConfirmedInputFrameId) {
+                // Apply "all-confirmed inputFrames" to move forward "curDynamicsRenderFrameId"
+                int nextDynamicsRenderFrameId = ConvertToLastUsedRenderFrameId(lastAllConfirmedInputFrameId) + 1;
+                multiStep(curDynamicsRenderFrameId, nextDynamicsRenderFrameId);
+            }
+
+            /*
+               [WARNING]
+
+               It's critical to create the snapshot AFTER "multiStep" for `ACTIVE SLOW TICKER` to avoid lag avalanche (see `<proj-root>/ConcerningEdgeCases.md` for introduction).
+
+               Consider that in a 4-player battle, player#1 is once disconnected but soon reconnected in 2 seconds, during its absence, "markConfirmationIfApplicable" would skip it and increment "LastAllConfirmedInputFrameId" and when backend is sending "DOWNSYNC_MSG_ACT_FORCED_RESYNC" it'd be always based on "LatestPlayerUpsyncedInputFrameId == LastAllConfirmedInputFrameId" thus NOT triggering "[type#1 forceConfirmation]".
+
+               However, if player#1 remains connected but ticks very slowly (i.e. an "ACTIVE SLOW TICKER"), "markConfirmationIfApplicable" couldn't increment "LastAllConfirmedInputFrameId", thus "[type#1 forceConfirmation]" will be triggered, but what's worse is that after "[type#1 forceConfirmation]" if the "refRenderFrameId" is not advanced enough, player#1 could never catch up even if it resumed from slow ticking!
+            */
+
+            if (0 < unconfirmedMask) {
+                // [WARNING] As "curDynamicsRenderFrameId" was just incremented above, "refSnapshotStFrameId" is most possibly larger than "oldLastAllConfirmedInputFrameId + 1", therefore this initial assignment is critical for `ACTIVE NORMAL TICKER`s to receive consecutive ids of inputFrameDownsync.
+                int snapshotStFrameId = oldLastAllConfirmedInputFrameId + 1;
+                int refSnapshotStFrameId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId - 1);
+                if (refSnapshotStFrameId < snapshotStFrameId) {
+                    snapshotStFrameId = refSnapshotStFrameId;
+                }
+                var inputsBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
+                downsyncToAllPlayers(inputsBufferSnapshot);
+            }
+        } finally {
+            inputBufferLock.ReleaseMutex();
+            //_logger.LogInformation("doBattleMainLoopPerTickBackendDynamicsWithProperLocking-inputBufferLock unlocked: roomId={0}, fromPlayerId={1}", id, playerId);
+        }
+    }
+
+    private ulong forceConfirmationIfApplicable(int prevRenderFrameId) {
+        // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
+        int totPlayerCnt = capacity;
+        ulong allConfirmedMask = ((1ul << totPlayerCnt) - 1);
+        ulong unconfirmedMask = 0;
+        // As "lastAllConfirmedInputFrameId" can be advanced by UDP but "latestPlayerUpsyncedInputFrameId" could only be advanced by ws session, when the following condition is met we know that the slow ticker is really in trouble!
+        if (latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance + 1)) {
+            // Type#1 check whether there's a significantly slow ticker among players
+            int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
+            for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {
+                var (res1, foo) = inputBuffer.GetByFrameId(j);
+                if (!res1 || null == foo) {
+                    throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={5}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", j, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N, id));
+                }
+                unconfirmedMask |= (allConfirmedMask ^ foo.ConfirmedList);
+                foo.ConfirmedList = allConfirmedMask;
+                onInputFrameDownsyncAllConfirmed(foo, -1);
+            }
+            if (0 < unconfirmedMask) {
+                //Logger.Info(fmt.Sprintf("[type#1 forceConfirmation] For roomId=%d@renderFrameId=%d, curDynamicsRenderFrameId=%d, LatestPlayerUpsyncedInputFrameId:%d, LastAllConfirmedInputFrameId:%d -> %d, InputFrameUpsyncDelayTolerance:%d, unconfirmedMask=%d; there's a slow ticker suspect, forcing all-confirmation", pR.Id, pR.RenderFrameId, pR.CurDynamicsRenderFrameId, pR.LatestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, pR.LastAllConfirmedInputFrameId, pR.InputFrameUpsyncDelayTolerance, unconfirmedMask))
+            }
+        } else {
+            // Type#2 helps resolve the edge case when all players are disconnected temporarily
+            bool shouldForceResync = false;
+            foreach (var player in playersArr) {
+                var playerBattleState = Interlocked.Read(ref player.BattleState);
+                if (PLAYER_BATTLE_STATE_READDED_PENDING_BATTLE_COLLIDER_ACK == playerBattleState) {
+                    shouldForceResync = true;
+                    break;
+                }
+            }
+            if (shouldForceResync) {
+                //Logger.Warn(fmt.Sprintf("[type#2 forceConfirmation] For roomId=%d@renderFrameId=%d, curDynamicsRenderFrameId=%d, LatestPlayerUpsyncedInputFrameId:%d, LastAllConfirmedInputFrameId:%d; there's at least one reconnected player, forcing all-confirmation", pR.Id, pR.RenderFrameId, pR.CurDynamicsRenderFrameId, pR.LatestPlayerUpsyncedInputFrameId, pR.LastAllConfirmedInputFrameId))
+                unconfirmedMask = allConfirmedMask;
+            }
+        }
+
+        return unconfirmedMask;
+    }
+
+    private void multiStep(int fromRenderFrameId, int toRenderFrameId) {
+        // [WARNING] This function MUST BE called while "pR.InputsBufferLock" is locked!
+        if (fromRenderFrameId >= toRenderFrameId) {
+            return;
+        }
+
+        //Logger.Debug(fmt.Sprintf("Applying inputFrame dynamics: roomId=%v, room.RenderFrameId=%v, fromRenderFrameId=%v, toRenderFrameId=%v", pR.Id, pR.RenderFrameId, fromRenderFrameId, toRenderFrameId))
+
+        for (var i = fromRenderFrameId; i < toRenderFrameId; i++) {
+            // TODO: write framelogs
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, selfPlayerInfo.JoinIndex, _loggerBridge);
+            curDynamicsRenderFrameId++;
         }
     }
 

@@ -111,6 +111,20 @@ namespace shared {
             return true;
         }
 
+        public SerializableConvexPolygon Serialize() {
+            var ret = new SerializableConvexPolygon {
+                AnchorX = X,
+                AnchorY = Y,
+            };
+            for (int i = Points.StFrameId; i < Points.EdFrameId; i++) {
+                var p = GetPointByOffset(i);
+                if (null == p) throw new ArgumentNullException(String.Format("i={0} got a null point", i));
+                ret.Points.Add(p.X);
+                ret.Points.Add(p.Y);
+            }
+            return ret;
+        }
+
         public string ToString(bool anchorMode) {
             if (anchorMode) {
                 var s = String.Format("[anchorX:{0}, anchorY:{1}; ", X, Y);

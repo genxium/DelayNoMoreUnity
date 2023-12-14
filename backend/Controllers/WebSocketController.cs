@@ -113,8 +113,9 @@ public class WebSocketController : ControllerBase {
 
                 _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1} ]: {2}", room.id, playerId, initWsResp);
                 await session.SendAsync(new ArraySegment<byte>(initWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
-
-                var buffer = new byte[1024];
+                
+                const int receiveChunkSize = 16384; // The "RoomDownsyncFrame" would be 1900+ bytes.
+    var buffer = new byte[receiveChunkSize];
                 while (!cancellationToken.IsCancellationRequested) {
                     try {
                         var receiveResult = await session.ReceiveAsync(
@@ -130,7 +131,7 @@ public class WebSocketController : ControllerBase {
                         WsReq pReq = WsReq.Parser.ParseFrom(buffer, 0, receiveResult.Count);
                         switch (pReq.Act) {
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK:
-                                var res1 = await room.OnPlayerBattleColliderAcked(playerId);
+                                var res1 = await room.OnPlayerBattleColliderAcked(playerId, pReq.SelfParsedRdf);
                                 if (!res1) {
                                     if (!cancellationToken.IsCancellationRequested) {
                                         cancellationTokenSource.Cancel();

@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using shared;
 using static shared.Battle;
+using Google.Protobuf.Collections;
+using System.Collections.Generic;
 
 public class OfflineMapController : AbstractMapController {
 
@@ -40,7 +42,8 @@ public class OfflineMapController : AbstractMapController {
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
         int[] speciesIdList = new int[roomCapacity];
         speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
-        var startRdf = mockStartRdf(speciesIdList);
+        var (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers) = mockStartRdf(speciesIdList);
+        refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref  completelyStaticTrapColliders);
         applyRoomDownsyncFrameDynamics(startRdf, null);
         cameraTrack(startRdf, null);
         var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];

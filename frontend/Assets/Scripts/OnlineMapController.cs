@@ -54,10 +54,20 @@ public class OnlineMapController : AbstractMapController {
                     preallocateVfxNodes();
                     preallocateSfxNodes();
                     preallocateNpcNodes();
+    
+                    var tempSpeciesIdList = new int[roomCapacity];
+                    for (int i = 0; i < roomCapacity; i++) {
+                        tempSpeciesIdList[i] = SPECIES_NONE_CH;
+                    }
+                    tempSpeciesIdList[selfPlayerInfo.JoinIndex-1] = selfPlayerInfo.SpeciesId;
+                    var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers) = mockStartRdf(tempSpeciesIdList);
+                    startRdf = thatStartRdf;
+                    refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders);
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
-                        JoinIndex = selfPlayerInfo.JoinIndex
+                        JoinIndex = selfPlayerInfo.JoinIndex,
+                        SelfParsedRdf = startRdf, 
                     };
                     WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
@@ -118,7 +128,7 @@ public class OnlineMapController : AbstractMapController {
                     for (int i = 0; i < roomCapacity; i++) {
                         speciesIdList[i] = wsRespHolder.Rdf.PlayersArr[i].SpeciesId;
                     }
-                    startRdf = mockStartRdf(speciesIdList);
+                    patchStartRdf(startRdf, speciesIdList);
                     applyRoomDownsyncFrameDynamics(startRdf, null);
                     cameraTrack(startRdf, null);
                     var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];

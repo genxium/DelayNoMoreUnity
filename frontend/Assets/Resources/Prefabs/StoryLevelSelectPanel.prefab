@@ -1671,7 +1671,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 175680026932867768}
         m_TargetAssemblyTypeName: CharacterSelectPanel, Assembly-CSharp
         m_MethodName: OnBackButtonClicked
         m_Mode: 1

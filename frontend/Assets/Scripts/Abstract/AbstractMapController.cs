@@ -7,6 +7,7 @@ using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
 using DG.Tweening;
+using Google.Protobuf.Collections;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int[] justFulfilledEvtSubArr;
@@ -828,75 +829,13 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected void preallocateHolders() {
-        if (0 >= roomCapacity) {
-            throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
-        }
+        preallocateStepHolders(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, ref justFulfilledEvtSubCnt, ref justFulfilledEvtSubArr, ref residueCollided, ref renderBuffer, ref pushbackFrameLogBuffer, ref inputBuffer, ref lastIndividuallyConfirmedInputFrameId, ref lastIndividuallyConfirmedInputList, ref effPushbacks, ref hardPushbackNormsArr, ref softPushbacks, ref dynamicRectangleColliders, ref staticColliders, ref decodedInputHolder, ref prevDecodedInputHolder, ref confirmedBattleResult, ref softPushbackEnabled, frameLogEnabled);
 
+        //---------------------------------------------FRONTEND USE ONLY SEPERARTION---------------------------------------------
         missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
-        justFulfilledEvtSubCnt = 0;
-        justFulfilledEvtSubArr = new int[16]; // TODO: Remove this hardcoded capacity 
-
-        Debug.Log(String.Format("preallocateHolders with roomCapacity={0}, preallocNpcCapacity={1}, preallocBulletCapacity={2}", roomCapacity, preallocNpcCapacity, preallocBulletCapacity));
-        int residueCollidedCap = 256;
-        residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
-
-        renderBufferSize = 1536;
-        renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
-        for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity));
-        }
-        renderBuffer.Clear(); // Then use it by "DryPut"
-
-        int softPushbacksCap = 16;
-        if (frameLogEnabled) {
-            pushbackFrameLogBuffer = new FrameRingBuffer<RdfPushbackFrameLog>(renderBufferSize);
-            for (int i = 0; i < renderBufferSize; i++) {
-                pushbackFrameLogBuffer.Put(new RdfPushbackFrameLog(TERMINATING_RENDER_FRAME_ID, roomCapacity + preallocNpcCapacity, softPushbacksCap));
-            }
-            pushbackFrameLogBuffer.Clear(); // Then use it by "DryPut"
-        }
-
-        int inputBufferSize = (renderBufferSize >> 1) + 1;
-        inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
-        for (int i = 0; i < inputBufferSize; i++) {
-            inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
-        }
-        inputBuffer.Clear(); // Then use it by "DryPut"
-
-        lastIndividuallyConfirmedInputFrameId = new int[roomCapacity];
-        Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
-
-        lastIndividuallyConfirmedInputList = new ulong[roomCapacity];
-        Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
 
         prefabbedInputListHolder = new ulong[roomCapacity];
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
-
-        effPushbacks = new Vector[roomCapacity + preallocNpcCapacity + preallocTrapCapacity];
-        for (int i = 0; i < effPushbacks.Length; i++) {
-            effPushbacks[i] = new Vector(0, 0);
-        }
-        hardPushbackNormsArr = new Vector[roomCapacity + preallocNpcCapacity + preallocTrapCapacity][];
-        for (int i = 0; i < hardPushbackNormsArr.Length; i++) {
-            int cap = 5;
-            hardPushbackNormsArr[i] = new Vector[cap];
-            for (int j = 0; j < cap; j++) {
-                hardPushbackNormsArr[i][j] = new Vector(0, 0);
-            }
-        }
-
-        softPushbacks = new Vector[softPushbacksCap];
-        for (int i = 0; i < softPushbacks.Length; i++) {
-            softPushbacks[i] = new Vector(0, 0);
-        }
-        softPushbackEnabled = true;
-
-        int dynamicRectangleCollidersCap = 192;
-        dynamicRectangleColliders = new shared.Collider[dynamicRectangleCollidersCap];
-        staticColliders = new shared.Collider[128];
-
-        decodedInputHolder = new InputFrameDecoded();
-        prevDecodedInputHolder = new InputFrameDecoded();
 
         // fireball
         int fireballHoldersCap = 48;
@@ -977,10 +916,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 cachedLineRenderers.Put(initLookupKey, newLine);
             }
         }
-
-        confirmedBattleResult = new BattleResult {
-            WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
-        };
     }
 
     protected virtual void resetCurrentMatch(string theme) {
@@ -1018,16 +953,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         cameraCapMaxY = 0 - (spaceOffsetY >> 2) - (spaceOffsetX >> 3);
 
         effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
-
-        int cellWidth = 64;
-        int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
-        collisionSys = new CollisionSpace(spaceOffsetX << 1, spaceOffsetY << 1, cellWidth, cellHeight);
-        maxTouchingCellsCnt = (((spaceOffsetX << 1) + cellWidth) / cellWidth) * (((spaceOffsetY << 1) + cellHeight) / cellHeight) + 1;
-        for (int i = 0; i < dynamicRectangleColliders.Length; i++) {
-            dynamicRectangleColliders[i] = NewRectCollider(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, null);
-        }
-
-        collisionHolder = new shared.Collision();
 
         // Reset the preallocated
         Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
@@ -1259,7 +1184,36 @@ public abstract class AbstractMapController : MonoBehaviour {
         iptmgr.enable(yesOrNo);
     }
 
-    protected RoomDownsyncFrame mockStartRdf(int[] speciesIdList) {
+    protected void patchStartRdf(RoomDownsyncFrame startRdf, int[] speciesIdList) {
+        for (int i = 0; i < roomCapacity; i++) {
+            if (SPECIES_NONE_CH == speciesIdList[i]) continue;
+    
+            var playerInRdf = startRdf.PlayersArr[i];
+            // Only copied species specific part from "mockStartRdf"
+            playerInRdf.SpeciesId = speciesIdList[i];
+            var chConfig = Battle.characters[playerInRdf.SpeciesId];
+            playerInRdf.Hp = chConfig.Hp;
+            playerInRdf.MaxHp = chConfig.Hp;
+            playerInRdf.Speed = chConfig.Speed;
+            playerInRdf.OmitGravity = chConfig.OmitGravity;
+            playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
+            playerInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
+
+            var (playerCposX, playerCposY) = VirtualGridToPolygonColliderCtr(playerInRdf.VirtualGridX, playerInRdf.VirtualGridY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(playerCposX, playerCposY, spaceOffsetX, spaceOffsetY);
+
+            // TODO: Remove the hardcoded index
+            var initIvSlot = chConfig.InitInventorySlots[0];
+            AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, playerInRdf.Inventory.Slots[0]);
+            spawnPlayerNode(playerInRdf.JoinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
+        }
+    }
+
+    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>) mockStartRdf(int[] speciesIdList) {
+        var serializedBarrierPolygons = new RepeatedField<SerializableConvexPolygon>();
+        var serializedStaticPatrolCues = new RepeatedField<SerializedCompletelyStaticPatrolCueCollider>();
+        var serializedCompletelyStaticTraps = new RepeatedField<SerializedCompletelyStaticTrapCollider>();
+        var serializedStaticTriggers = new RepeatedField<SerializedCompletelyStaticTriggerCollider>();
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         var playerStartingCposList = new List<(Vector, int, int)>();
         var npcsStartingCposList = new List<(Vector, int, int, int, int, bool, int, ulong)>();
@@ -1267,7 +1221,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         var triggerList = new List<(Trigger, float, float)>();
         var evtSubList = new List<EvtSubscription>();
         float defaultPatrolCueRadius = 10;
-        int staticColliderIdx = 0;
         int trapLocalId = 0;
         int triggerLocalId = 0;
         foreach (Transform child in grid.transform) {
@@ -1303,9 +1256,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                             It's noticeable that all the "Collider"s in "CollisionSpace" must be of positive coordinates to work due to the implementation details of "resolv". Thus I'm using a "Collision Space (0, 0)" aligned with the bottom-left of the rendered "TiledMap (via SuperMap)". 
                             */
-                            var barrierCollider = NewRectCollider(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, null);
-                            //Debug.Log(String.Format("new barrierCollider=[X: {0}, Y: {1}, Width: {2}, Height: {3}]", barrierCollider.X, barrierCollider.Y, barrierCollider.W, barrierCollider.H));
-                            staticColliders[staticColliderIdx++] = barrierCollider;
+                            var srcPolygon = NewRectPolygon(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0);
+                            serializedBarrierPolygons.Add(srcPolygon.Serialize());
                         } else {
                             var points = inMapCollider.points;
                             List<float> points2 = new List<float>();
@@ -1315,9 +1267,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             }
                             var (anchorCx, anchorCy) = TiledLayerPositionToCollisionSpacePosition(barrierTileObj.m_X, barrierTileObj.m_Y, spaceOffsetX, spaceOffsetY);
                             var srcPolygon = new ConvexPolygon(anchorCx, anchorCy, points2.ToArray());
-                            var barrierCollider = NewConvexPolygonCollider(srcPolygon, 0, 0, maxTouchingCellsCnt, null);
-
-                            staticColliders[staticColliderIdx++] = barrierCollider;
+                            serializedBarrierPolygons.Add(srcPolygon.Serialize());
                         }
 
                         // TODO: By now I have to enable the import of all colliders to see the "inMapCollider: EdgeCollider2D" component, then remove unused components here :(
@@ -1405,10 +1355,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                             FuCaptureFrames = (null == fuCaptureFrames || fuCaptureFrames.IsEmpty) ? 0 : (ulong)fuCaptureFrames.GetValueAsInt(),
                             CollisionTypeMask = collisionTypeMaskVal
                         };
-
-                        var patrolCueCollider = NewRectCollider(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, newPatrolCue);
-                        staticColliders[staticColliderIdx++] = patrolCueCollider;
-                        //Debug.Log(String.Format("newPatrolCue={0} at [X:{1}, Y:{2}]", newPatrolCue, patrolCueCx, patrolCueCy));
+                        var srcPolygon = NewRectPolygon(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0);
+                        serializedStaticPatrolCues.Add(new SerializedCompletelyStaticPatrolCueCollider {
+                            Polygon = srcPolygon.Serialize(),
+                            Attr = newPatrolCue,
+                        });
                     }
                     break;
                 case "TrapStartingPos":
@@ -1500,17 +1451,19 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 TrapLocalId = trapLocalId
                             };
 
-                            colliderAttrs.Add(colliderAttr);
+                            colliderAttrs.Add(colliderAttr); // [WARNING] A single completely static trap only supports 1 colliderAttr for now.
                             trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
 
-                            var trapCollider = NewRectCollider(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, colliderAttr);
+                            var srcPolygon = NewRectPolygon(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0);
+                            serializedCompletelyStaticTraps.Add(new SerializedCompletelyStaticTrapCollider {
+                                Polygon = srcPolygon.Serialize(),
+                                Attr = colliderAttr,
+                            });
 
-                            completelyStaticTrapColliders.Add(trapCollider);
                             trapList.Add(trap);
                             if (0 != trap.TriggerTrackingId) {
                                 triggerTrackingIdToTrapLocalId[trap.TriggerTrackingId] = trap.TrapLocalId;
                             }
-                            staticColliders[staticColliderIdx++] = trapCollider;
                             trapLocalId++;
                             // Debug.Log(String.Format("new completely static trap created {0}", trap));
                         } else {
@@ -1678,11 +1631,14 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, spaceOffsetX, spaceOffsetY);
                         triggerList.Add((trigger, wx, wy));
                     
-                        var triggerCollderAttr = new TriggerColliderAttr {
+                        var triggerColliderAttr = new TriggerColliderAttr {
                            TriggerLocalId = triggerLocalId
                         };
-                        var triggerCollider = NewRectCollider(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0, 0, 0, maxTouchingCellsCnt, triggerCollderAttr);
-                        staticColliders[staticColliderIdx++] = triggerCollider;
+                        var srcPolygon = NewRectPolygon(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0);
+                        serializedStaticTriggers.Add(new SerializedCompletelyStaticTriggerCollider {
+                            Polygon = srcPolygon.Serialize(),
+                            Attr = triggerColliderAttr,
+                        });
                         ++triggerLocalId;
                         Destroy(triggerChild.gameObject); // [WARNING] It'll be animated by "TriggerPrefab" in "applyRoomDownsyncFrame" instead!
                     }
@@ -1701,10 +1657,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             return Math.Sign(lhs.Id - rhs.Id);
         });
 
-        for (int i = 0; i < staticColliderIdx; i++) {
-            collisionSys.AddSingle(staticColliders[i]);
-        }
-
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
         historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
 
@@ -1716,12 +1668,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             teamId = (DEFAULT_BULLET_TEAM_ID == teamId ? joinIndex : teamId);
             var playerInRdf = startRdf.PlayersArr[i];
-            playerInRdf.SpeciesId = speciesIdList[i];
             playerInRdf.JoinIndex = joinIndex;
             playerInRdf.BulletTeamId = teamId;
             playerInRdf.ChCollisionTeamId = teamId; // If we want to stand on certain teammates' shoulder, then this value should be tuned accordingly. 
-            var chConfig = Battle.characters[playerInRdf.SpeciesId];
-            spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
+            
             var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
             playerInRdf.VirtualGridX = playerVposX;
             playerInRdf.VirtualGridY = playerVposY;
@@ -1729,7 +1679,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.RevivalVirtualGridY = playerVposY;
             playerInRdf.RevivalDirX = dirX;
             playerInRdf.RevivalDirY = 0;
-            playerInRdf.Speed = chConfig.Speed;
             playerInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
             playerInRdf.FramesToRecover = 0;
             playerInRdf.DirX = dirX;
@@ -1738,18 +1687,25 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.VelY = 0;
             playerInRdf.InAir = true;
             playerInRdf.OnWall = false;
-            playerInRdf.Hp = chConfig.Hp;
-            playerInRdf.MaxHp = chConfig.Hp;
             playerInRdf.Mp = 1000;
             playerInRdf.MaxMp = 1000;
+            playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
+
+            if (SPECIES_NONE_CH == speciesIdList[i]) continue;
+
+            // Species specific
+            playerInRdf.SpeciesId = speciesIdList[i];
+            var chConfig = Battle.characters[playerInRdf.SpeciesId];
+            playerInRdf.Hp = chConfig.Hp;
+            playerInRdf.MaxHp = chConfig.Hp;
+            playerInRdf.Speed = chConfig.Speed;
             playerInRdf.OmitGravity = chConfig.OmitGravity;
             playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
             playerInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
-            playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
-
             // TODO: Remove the hardcoded index
             var initIvSlot = chConfig.InitInventorySlots[0];
             AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, playerInRdf.Inventory.Slots[0]);
+            spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
         }
 
         int npcLocalId = 0;
@@ -1818,7 +1774,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER-1].DemandedEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
         startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER-1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
 
-        return startRdf;
+        return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers);
     }
 
     protected void popupErrStackPanel(string msg) {
