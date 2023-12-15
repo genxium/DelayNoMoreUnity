@@ -175,6 +175,12 @@ message WsReq {
 	int32 authKey = 6;
 	repeated InputFrameUpsync inputFrameUpsyncBatch = 7;
     RoomDownsyncFrame selfParsedRdf = 8;
+	repeated SerializableConvexPolygon serializedBarrierPolygons = 9;
+	repeated SerializedCompletelyStaticPatrolCueCollider serializedStaticPatrolCues = 10;
+	repeated SerializedCompletelyStaticTrapCollider serializedCompletelyStaticTraps = 11;
+	repeated SerializedCompletelyStaticTriggerCollider serializedStaticTriggers = 12;
+	SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs = 13; 
+	SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId = 14;
 }
 
 message InputBufferSnapshot {
@@ -719,4 +725,16 @@ message SerializedCompletelyStaticTrapCollider {
 message SerializedCompletelyStaticTriggerCollider {
     TriggerColliderAttr attr = 1;
     SerializableConvexPolygon polygon = 2;
+}
+
+message TrapColliderAttrArray {
+	repeated TrapColliderAttr list = 1;
+}
+
+message SerializedTrapLocalIdToColliderAttrs {
+	map<int32, TrapColliderAttrArray> dict = 1;
+}
+
+message SerializedTriggerTrackingIdToTrapLocalId {
+	map<int32, int32> dict = 1;
 }

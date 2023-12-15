@@ -63,9 +63,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected SatResult overlapResult, primaryOverlapResult;
     protected Dictionary<int, BattleResult> unconfirmedBattleResult;
     protected BattleResult confirmedBattleResult;
-    protected Vector[] effPushbacks;
+    protected Vector[] effPushbacks, softPushbacks;
     protected Vector[][] hardPushbackNormsArr;
-    protected Vector[] softPushbacks;
     protected bool softPushbackEnabled;
     protected shared.Collider[] dynamicRectangleColliders;
     protected shared.Collider[] staticColliders;
@@ -829,7 +828,32 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected void preallocateHolders() {
-        preallocateStepHolders(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, ref justFulfilledEvtSubCnt, ref justFulfilledEvtSubArr, ref residueCollided, ref renderBuffer, ref pushbackFrameLogBuffer, ref inputBuffer, ref lastIndividuallyConfirmedInputFrameId, ref lastIndividuallyConfirmedInputList, ref effPushbacks, ref hardPushbackNormsArr, ref softPushbacks, ref dynamicRectangleColliders, ref staticColliders, ref decodedInputHolder, ref prevDecodedInputHolder, ref confirmedBattleResult, ref softPushbackEnabled, frameLogEnabled);
+        preallocateStepHolders(
+            roomCapacity, 
+            preallocNpcCapacity, 
+            preallocBulletCapacity, 
+            preallocTrapCapacity, 
+            preallocTriggerCapacity, 
+            preallocEvtSubCapacity, 
+            out justFulfilledEvtSubCnt, 
+            out justFulfilledEvtSubArr, 
+            out residueCollided, 
+            out renderBuffer, 
+            out pushbackFrameLogBuffer, 
+            out inputBuffer, 
+            out lastIndividuallyConfirmedInputFrameId, 
+            out lastIndividuallyConfirmedInputList, 
+            out effPushbacks,
+            out hardPushbackNormsArr, 
+            out softPushbacks, 
+            out dynamicRectangleColliders, 
+            out staticColliders,
+            out decodedInputHolder, 
+            out prevDecodedInputHolder, 
+            out confirmedBattleResult, 
+            out softPushbackEnabled, 
+            frameLogEnabled
+        );
 
         //---------------------------------------------FRONTEND USE ONLY SEPERARTION---------------------------------------------
         missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
@@ -928,9 +952,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         lastUpsyncInputFrameId = -1;
         maxChasingRenderFramesPerUpdate = 5;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
-        trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
-        triggerTrackingIdToTrapLocalId = new Dictionary<int, int>();
-        completelyStaticTrapColliders = new List<shared.Collider>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
 
         if (null != underlyingMap) {
@@ -957,14 +978,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         // Reset the preallocated
         Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
         Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
-        renderBuffer.Clear();
         if (frameLogEnabled) {
             pushbackFrameLogBuffer.Clear();
         }
-        inputBuffer.Clear();
         residueCollided.Clear();
-        trapLocalIdToColliderAttrs.Clear();
-        triggerTrackingIdToTrapLocalId.Clear();
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 
         resetBattleResult(ref confirmedBattleResult);
@@ -1209,11 +1226,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>) mockStartRdf(int[] speciesIdList) {
+    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId) mockStartRdf(int[] speciesIdList) {
         var serializedBarrierPolygons = new RepeatedField<SerializableConvexPolygon>();
         var serializedStaticPatrolCues = new RepeatedField<SerializedCompletelyStaticPatrolCueCollider>();
         var serializedCompletelyStaticTraps = new RepeatedField<SerializedCompletelyStaticTrapCollider>();
         var serializedStaticTriggers = new RepeatedField<SerializedCompletelyStaticTriggerCollider>();
+        var serializedTrapLocalIdToColliderAttrs = new SerializedTrapLocalIdToColliderAttrs();
+        var serializedTriggerTrackingIdToTrapLocalId = new SerializedTriggerTrackingIdToTrapLocalId();
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         var playerStartingCposList = new List<(Vector, int, int)>();
         var npcsStartingCposList = new List<(Vector, int, int, int, int, bool, int, ulong)>();
@@ -1416,7 +1435,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
                         ulong collisionTypeMaskVal = (null != collisionTypeMask && !collisionTypeMask.IsEmpty) ? (ulong)collisionTypeMask.GetValueAsInt() : 0;
 
-                        List<TrapColliderAttr> colliderAttrs = new List<TrapColliderAttr>();
+                        TrapColliderAttrArray colliderAttrs = new TrapColliderAttrArray();
                         if (isCompletelyStaticVal) {
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f);
                             var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
@@ -1451,8 +1470,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 TrapLocalId = trapLocalId
                             };
 
-                            colliderAttrs.Add(colliderAttr); // [WARNING] A single completely static trap only supports 1 colliderAttr for now.
-                            trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
+                            colliderAttrs.List.Add(colliderAttr); // [WARNING] A single completely static trap only supports 1 colliderAttr for now.
+                            serializedTrapLocalIdToColliderAttrs.Dict[trapLocalId] = colliderAttrs;
 
                             var srcPolygon = NewRectPolygon(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0);
                             serializedCompletelyStaticTraps.Add(new SerializedCompletelyStaticTrapCollider {
@@ -1462,7 +1481,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                             trapList.Add(trap);
                             if (0 != trap.TriggerTrackingId) {
-                                triggerTrackingIdToTrapLocalId[trap.TriggerTrackingId] = trap.TrapLocalId;
+                                serializedTriggerTrackingIdToTrapLocalId.Dict[trap.TriggerTrackingId] = trap.TrapLocalId;
                             }
                             trapLocalId++;
                             // Debug.Log(String.Format("new completely static trap created {0}", trap));
@@ -1520,16 +1539,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                                     CollisionTypeMask = collisionTypeMaskVal,
                                     TrapLocalId = trapLocalId
                                 };
-                                colliderAttrs.Add(colliderAttr);
+                                colliderAttrs.List.Add(colliderAttr);
                             }
-                            // Sort to avoid any platform-specific uncertainty
-                            colliderAttrs.Sort(delegate (TrapColliderAttr lhs, TrapColliderAttr rhs) {
-                                return Math.Sign(lhs.TrapLocalId - rhs.TrapLocalId);
-                            });
-                            trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
+                            serializedTrapLocalIdToColliderAttrs.Dict[trapLocalId] = colliderAttrs;
                             trapList.Add(trap);
                             if (0 != trap.TriggerTrackingId) {
-                                triggerTrackingIdToTrapLocalId[trap.TriggerTrackingId] = trap.TrapLocalId;
+                                serializedTriggerTrackingIdToTrapLocalId.Dict[trap.TriggerTrackingId] = trap.TrapLocalId;
                             }
                             trapLocalId++;
                             Destroy(trapChild.gameObject); // [WARNING] It'll be animated by "TrapPrefab" in "applyRoomDownsyncFrame" instead!
@@ -1660,7 +1675,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
         historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
 
-        startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START;
+        startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
         for (int i = 0; i < roomCapacity; i++) {
             int joinIndex = i + 1;
@@ -1774,7 +1789,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER-1].DemandedEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
         startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER-1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
 
-        return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers);
+        return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId);
     }
 
     protected void popupErrStackPanel(string msg) {
@@ -1818,7 +1833,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
         var stepLength = Time.deltaTime * cameraSpeedInWorld;
-        if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || stepLength > camDiffDstHolder.magnitude) {
+        if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id || stepLength > camDiffDstHolder.magnitude) {
             newPosHolder.Set(dst.x, dst.y, camOldPos.z);
         } else {
             var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;

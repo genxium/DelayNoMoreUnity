@@ -1,7 +1,6 @@
 ﻿using Google.Protobuf.Collections;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace shared {
     public partial class Battle {
@@ -9,7 +8,7 @@ namespace shared {
         public static RepeatedField<Debuff> defaultTemplateDebuffList = new RepeatedField<Debuff>(); 
         public static Inventory defaultTemplateInventory = new Inventory(); 
 
-        public static Collider NewConvexPolygonCollider(ConvexPolygon srcPolygon, float spaceOffsetX, float spaceOffsetY, int aMaxTouchingCellsCnt, object data) {
+        public static Collider NewConvexPolygonCollider(ConvexPolygon srcPolygon, float spaceOffsetX, float spaceOffsetY, int aMaxTouchingCellsCnt, object? data) {
             if (null == srcPolygon) throw new ArgumentNullException("Null srcPolygon is not allowed in `NewConvexPolygonCollider`");
             AlignPolygon2DToBoundingBox(srcPolygon);
             float w = 0, h = 0;
@@ -544,7 +543,7 @@ namespace shared {
             // TBD
         }
 
-        public static void preallocateStepHolders(int roomCapacity, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocEvtSubCapacity, ref int justFulfilledEvtSubCnt, ref int[] justFulfilledEvtSubArr, ref FrameRingBuffer<Collider> residueCollided, ref FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, ref FrameRingBuffer<InputFrameDownsync> inputBuffer, ref int[] lastIndividuallyConfirmedInputFrameId, ref ulong[] lastIndividuallyConfirmedInputList, ref Vector[] effPushbacks, ref Vector[][] hardPushbackNormsArr, ref Vector[] softPushbacks, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, ref InputFrameDecoded decodedInputHolder, ref InputFrameDecoded prevDecodedInputHolder, ref BattleResult confirmedBattleResult, ref bool softPushbackEnabled, bool frameLogEnabled) {
+        public static void preallocateStepHolders(int roomCapacity, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocEvtSubCapacity, out int justFulfilledEvtSubCnt, out int[] justFulfilledEvtSubArr, out FrameRingBuffer<Collider> residueCollided, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out Collider[] dynamicRectangleColliders, out Collider[] staticColliders, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
             if (0 >= roomCapacity) {
                 throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
             }
@@ -569,6 +568,8 @@ namespace shared {
                     pushbackFrameLogBuffer.Put(new RdfPushbackFrameLog(TERMINATING_RENDER_FRAME_ID, roomCapacity + preallocNpcCapacity, softPushbacksCap));
                 }
                 pushbackFrameLogBuffer.Clear(); // Then use it by "DryPut"
+            } else {
+                pushbackFrameLogBuffer = new FrameRingBuffer<RdfPushbackFrameLog>(1);
             }
 
             int inputBufferSize = (renderBufferSize >> 1) + 1;
@@ -615,8 +616,7 @@ namespace shared {
             };
         }
 
-        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, ref Collision collisionHolder, ref List<Collider> completelyStaticTrapColliders) {
-            completelyStaticTrapColliders = new List<Collider>();
+        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, ref Collision collisionHolder, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerTrackingIdToTrapLocalId) {
 
             int cellWidth = 64;
             int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
@@ -648,6 +648,7 @@ namespace shared {
                 staticColliders[staticCollidersCnt++] = cueCollider;
             }
 
+            completelyStaticTrapColliders = new List<Collider>();
             for (int i = 0; i < serializedCompletelyStaticTraps.Count; i++) {
                 var s = serializedCompletelyStaticTraps[i];
                 float[] points = new float[s.Polygon.Points.Count];
@@ -665,6 +666,20 @@ namespace shared {
                 var triggerPolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
                 var triggerCollider = NewConvexPolygonCollider(triggerPolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
                 staticColliders[staticCollidersCnt++] = triggerCollider;
+            }
+
+            trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
+            foreach (var entry in serializedTrapLocalIdToColliderAttrs.Dict) {
+                var trapLocalId = entry.Key;
+                var attrs = entry.Value.List;
+                var colliderAttrs = new List<TrapColliderAttr>();
+                colliderAttrs.AddRange(attrs);
+                trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
+            }
+
+            triggerTrackingIdToTrapLocalId = new Dictionary<int, int>();
+            foreach (var entry in serializedTriggerTrackingIdToTrapLocalId.Dict) {
+                triggerTrackingIdToTrapLocalId[entry.Key] = entry.Value; 
             }
 
             for (int i = 0; i < staticCollidersCnt; i++) {

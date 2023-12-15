@@ -5,6 +5,7 @@ using System.Net.WebSockets;
 using System.Net.Sockets;
 using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
+using Google.Protobuf.Collections;
 
 namespace backend.Battle;
 public class Room {
@@ -29,11 +30,12 @@ public class Room {
     int curDynamicsRenderFrameId;
     int nstDelayFrames;
 
-    RoomDownsyncFrame? startRdf;
     Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex
 
     private readonly Random _randGenerator = new Random();
+
+    ILoggerBridge loggerBridge;
 
     /**
 		 * The following `CharacterDownsyncSessionDict` is NOT individually put
@@ -60,7 +62,33 @@ public class Room {
     int effectivePlayerCount;
     int participantChangeId;
 
-    FrameRingBuffer<InputFrameDownsync> inputBuffer; // Indices are STRICTLY consecutive
+    protected int missionEvtSubId;
+    protected int[] justFulfilledEvtSubArr;
+    protected int justFulfilledEvtSubCnt;
+    protected int[] lastIndividuallyConfirmedInputFrameId;
+    protected ulong[] lastIndividuallyConfirmedInputList;
+    protected FrameRingBuffer<RoomDownsyncFrame> renderBuffer;
+    protected FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer;
+    protected FrameRingBuffer<InputFrameDownsync> inputBuffer;
+    protected FrameRingBuffer<Collider> residueCollided;
+
+    protected RoomDownsyncFrame historyRdfHolder;
+    protected Collision collisionHolder;
+    protected SatResult overlapResult, primaryOverlapResult;
+    protected Dictionary<int, BattleResult> unconfirmedBattleResult;
+    protected BattleResult confirmedBattleResult;
+    protected Vector[] effPushbacks, softPushbacks;
+    protected Vector[][] hardPushbackNormsArr;
+    protected bool softPushbackEnabled;
+    protected Collider[] dynamicRectangleColliders;
+    protected Collider[] staticColliders;
+    protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
+    protected CollisionSpace collisionSys;
+
+    protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
+    protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
+    protected Dictionary<int, int> triggerTrackingIdToTrapLocalId;
+    protected List<Collider> completelyStaticTrapColliders;
 
     Mutex inputBufferLock;         // Guards [inputBuffer, latestPlayerUpsyncedInputFrameId, lastAllConfirmedInputFrameId, lastAllConfirmedInputList, lastAllConfirmedInputFrameIdWithChange, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, player.LastConsecutiveRecvInputFrameId]
 
@@ -73,9 +101,6 @@ public class Room {
 
     bool backendDynamicsEnabled;
 
-    int[] lastIndividuallyConfirmedInputFrameId;
-    ulong[] lastIndividuallyConfirmedInputList;
-
     Mutex battleUdpTunnelLock;
     Task? battleUdpTask;
     public PeerUdpAddr? battleUdpTunnelAddr;
@@ -86,6 +111,26 @@ public class Room {
     IRoomManager _roomManager;
     ILoggerFactory _loggerFactory;
     ILogger<Room> _logger;
+
+    public class RoomLoggerBridge : ILoggerBridge {
+        private ILogger<Room> _intLogger;
+
+        public RoomLoggerBridge(ILogger<Room> extLogger) {
+            _intLogger = extLogger;
+        }
+        public void LogError(string str, Exception ex) {
+            _intLogger.LogError(ex, str);
+        }
+
+        public void LogInfo(string str) {
+            _intLogger.LogInformation(str);
+        }
+
+        public void LogWarn(string str) {
+            _intLogger.LogWarning(str);
+        }
+    }
+
     public Room(IRoomManager roomManager, ILoggerFactory loggerFactory, int roomId, int roomCapacity) {
         _roomManager = roomManager;
         _loggerFactory = loggerFactory;
@@ -101,26 +146,23 @@ public class Room {
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
-
         nstDelayFrames = 24;
         inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         state = ROOM_STATE_IDLE;
         effectivePlayerCount = 0;
         backendDynamicsEnabled = false;
 
-        int renderBufferSize = 1024;
-        int inputBufferSize = (renderBufferSize >> 1) + 1;
-        renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
-        for (int i = 0; i < renderBufferSize; i++) {
-            renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity));
-        }
-        renderBuffer.Clear(); // Then use it by "DryPut"
-        inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
-        for (int i = 0; i < inputBufferSize; i++) {
-            inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
-        }
-        inputBuffer.Clear(); // Then use it by "DryPut"
-        startRdf = null;
+        rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
+        trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
+        triggerTrackingIdToTrapLocalId = new Dictionary<int, int>();
+        completelyStaticTrapColliders = new List<Collider>();
+        unconfirmedBattleResult = new Dictionary<int, BattleResult>();
+        historyRdfHolder = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
+
+        collisionSys = new CollisionSpace(0, 0, 0, 0); // Will be reset in "refreshCollider" anyway
+        collisionHolder = new Collision();
+        preallocateStepHolders(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out residueCollided, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out dynamicRectangleColliders, out staticColliders, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
+
         players = new Dictionary<int, Player>();
         playersArr = new Player[capacity];
 
@@ -140,6 +182,8 @@ public class Room {
         inputBufferLock = new Mutex();
         battleUdpTunnelLock = new Mutex();
         battleUdpTunnelCancellationTokenSource = new CancellationTokenSource();
+
+        loggerBridge = new RoomLoggerBridge(_logger);
 
         lazyInitBattleUdpTunnel();
     }
@@ -294,7 +338,7 @@ public class Room {
         return ret;
     }
 
-    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId, RoomDownsyncFrame selfParsedRdf) {
+    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId, RoomDownsyncFrame selfParsedRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId) {
         Player? targetPlayer;
         if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
             return false;
@@ -336,13 +380,23 @@ public class Room {
         }
 
         _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
-
-        if (null == startRdf) {
-            startRdf = selfParsedRdf;
-        } else {
-            var src = selfParsedRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
-            var dst = startRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
-            AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, dst);
+        
+        try {
+            joinerLock.WaitOne();
+            if (0 < renderBuffer.Cnt) {
+                renderBuffer.Put(selfParsedRdf);
+                _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: Initialized renderBuffer by incoming startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}; now renderBuffer: {6}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, renderBuffer.toSimpleStat());
+            } else {
+                var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
+                if (!ok1 || null == startRdf) {
+                    throw new ArgumentNullException(String.Format("OnPlayerBattleColliderAcked-post-downsync: No existing startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}; now renderBuffer: {6}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, renderBuffer.toSimpleStat()));
+                }
+                var src = selfParsedRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
+                var dst = startRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, dst);
+            }
+        } finally {
+            joinerLock.ReleaseMutex();
         }
 
         if (shouldTryToStartBattle) {
@@ -473,7 +527,14 @@ public class Room {
 
             backendDynamicsEnabled = false;
 
-            inputBuffer.Clear();
+            rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
+            trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
+            triggerTrackingIdToTrapLocalId = new Dictionary<int, int>();
+            completelyStaticTrapColliders = new List<Collider>();
+            unconfirmedBattleResult = new Dictionary<int, BattleResult>();
+            historyRdfHolder = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
+
+            preallocateStepHolders(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out residueCollided, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out dynamicRectangleColliders, out staticColliders, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
 
             lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED; // Such that the initial "lastAllConfirmedInputFrameId + 1" is 0, for use in "markConfirmationIfApplicable" 
             latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
@@ -532,9 +593,7 @@ public class Room {
 
                 if (nextRenderFrameId > renderFrameId) {
                     if (0 == renderFrameId) {
-                        var startRdf = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
-                        startRdf.PlayersArr.AddRange(clonePlayersArrToPb());
-                        startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
+                        var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
 
                         var tList = new List<Task>();
                         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
@@ -746,7 +805,7 @@ public class Room {
                 inputBuffer.DryPut();
                 var (ok, ifdHolder) = inputBuffer.GetByFrameId(gapInputFrameId);
                 if (!ok || null == ifdHolder) {
-                    throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", gapInputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
+                    throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}! Now inputBuffer: {1}", gapInputFrameId, inputBuffer.ToString()));
                 }
                 ifdHolder.InputFrameId = gapInputFrameId;
                 /*
@@ -1184,7 +1243,7 @@ public class Room {
             for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {
                 var (res1, foo) = inputBuffer.GetByFrameId(j);
                 if (!res1 || null == foo) {
-                    throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={5}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", j, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N, id));
+                    throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.ToString()));
                 }
                 unconfirmedMask |= (allConfirmedMask ^ foo.ConfirmedList);
                 foo.ConfirmedList = allConfirmedMask;
@@ -1220,9 +1279,10 @@ public class Room {
 
         //Logger.Debug(fmt.Sprintf("Applying inputFrame dynamics: roomId=%v, room.RenderFrameId=%v, fromRenderFrameId=%v, toRenderFrameId=%v", pR.Id, pR.RenderFrameId, fromRenderFrameId, toRenderFrameId))
 
+        bool hasIncorrectlyPredictedRenderFrame = false;
         for (var i = fromRenderFrameId; i < toRenderFrameId; i++) {
-            // TODO: write framelogs
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, selfPlayerInfo.JoinIndex, _loggerBridge);
+            // TODO: write framelogs for each single "Step"
+            Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, loggerBridge);
             curDynamicsRenderFrameId++;
         }
     }
