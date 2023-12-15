@@ -635,7 +635,7 @@ namespace shared {
                 float[] points = new float[serializedPolygon.Points.Count];
                 serializedPolygon.Points.CopyTo(points, 0);
                 var barrierPolygon = new ConvexPolygon(serializedPolygon.AnchorX, serializedPolygon.AnchorY, points);
-                var barrierCollider = NewConvexPolygonCollider(barrierPolygon, spaceOffsetX, spaceOffsetY, maxTouchingCellsCnt, null);
+                var barrierCollider = NewConvexPolygonCollider(barrierPolygon, 0, 0, maxTouchingCellsCnt, null);
                 staticColliders[staticCollidersCnt++] = barrierCollider;
             }
 
@@ -644,7 +644,7 @@ namespace shared {
                 float[] points = new float[s.Polygon.Points.Count];
                 s.Polygon.Points.CopyTo(points, 0);
                 var cuePolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
-                var cueCollider = NewConvexPolygonCollider(cuePolygon, spaceOffsetX, spaceOffsetY, maxTouchingCellsCnt, s.Attr);
+                var cueCollider = NewConvexPolygonCollider(cuePolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
                 staticColliders[staticCollidersCnt++] = cueCollider;
             }
 
@@ -653,7 +653,7 @@ namespace shared {
                 float[] points = new float[s.Polygon.Points.Count];
                 s.Polygon.Points.CopyTo(points, 0);
                 var trapPolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
-                var trapCollider = NewConvexPolygonCollider(trapPolygon, spaceOffsetX, spaceOffsetY, maxTouchingCellsCnt, s.Attr);
+                var trapCollider = NewConvexPolygonCollider(trapPolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
                 staticColliders[staticCollidersCnt++] = trapCollider;
                 completelyStaticTrapColliders.Add(trapCollider);
             }
@@ -663,7 +663,7 @@ namespace shared {
                 float[] points = new float[s.Polygon.Points.Count];
                 s.Polygon.Points.CopyTo(points, 0);
                 var triggerPolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
-                var triggerCollider = NewConvexPolygonCollider(triggerPolygon, spaceOffsetX, spaceOffsetY, maxTouchingCellsCnt, s.Attr);
+                var triggerCollider = NewConvexPolygonCollider(triggerPolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
                 staticColliders[staticCollidersCnt++] = triggerCollider;
             }
 

@@ -3,8 +3,6 @@ using System;
 using System.Collections;
 using shared;
 using static shared.Battle;
-using Google.Protobuf.Collections;
-using System.Collections.Generic;
 
 public class OfflineMapController : AbstractMapController {
 
