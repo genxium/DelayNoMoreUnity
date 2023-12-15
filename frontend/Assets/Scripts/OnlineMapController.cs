@@ -20,18 +20,18 @@ public class OnlineMapController : AbstractMapController {
     int timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
 
     private RoomDownsyncFrame startRdf;
-    
+
     public PlayerWaitingPanel playerWaitingPanel;
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
             //Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
-			if (ErrCode.Ok != wsRespHolder.Ret) {
-				var msg = String.Format("Received ws error {0}", wsRespHolder);
-				popupErrStackPanel(msg);
-				onWsSessionClosed();
-				break;
-			}
+            if (ErrCode.Ok != wsRespHolder.Ret) {
+                var msg = String.Format("Received ws error {0}", wsRespHolder);
+                popupErrStackPanel(msg);
+                onWsSessionClosed();
+                break;
+            }
             switch (wsRespHolder.Act) {
                 case DOWNSYNC_MSG_WS_OPEN:
                     onWsSessionOpen();
@@ -54,12 +54,12 @@ public class OnlineMapController : AbstractMapController {
                     preallocateVfxNodes();
                     preallocateSfxNodes();
                     preallocateNpcNodes();
-    
+
                     var tempSpeciesIdList = new int[roomCapacity];
                     for (int i = 0; i < roomCapacity; i++) {
                         tempSpeciesIdList[i] = SPECIES_NONE_CH;
                     }
-                    tempSpeciesIdList[selfPlayerInfo.JoinIndex-1] = selfPlayerInfo.SpeciesId;
+                    tempSpeciesIdList[selfPlayerInfo.JoinIndex - 1] = selfPlayerInfo.SpeciesId;
                     var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId) = mockStartRdf(tempSpeciesIdList);
 
                     startRdf = thatStartRdf;
@@ -69,8 +69,15 @@ public class OnlineMapController : AbstractMapController {
                         PlayerId = selfPlayerInfo.Id,
                         Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
                         JoinIndex = selfPlayerInfo.JoinIndex,
-                        SelfParsedRdf = startRdf, 
+                        SelfParsedRdf = startRdf,
+                        SerializedTrapLocalIdToColliderAttrs = serializedTrapLocalIdToColliderAttrs,
+                        SerializedTriggerTrackingIdToTrapLocalId = serializedTriggerTrackingIdToTrapLocalId,
                     };
+
+                    reqData.SerializedStaticPatrolCues.AddRange(serializedStaticPatrolCues);
+                    reqData.SerializedCompletelyStaticTraps.AddRange(serializedCompletelyStaticTraps);
+                    reqData.SerializedStaticTriggers.AddRange(serializedStaticTriggers);
+
                     WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
 
@@ -138,7 +145,7 @@ public class OnlineMapController : AbstractMapController {
                     readyGoPanel.playReadyAnim();
 
                     networkInfoPanel.gameObject.SetActive(true);
-					playerWaitingPanel.gameObject.SetActive(false);
+                    playerWaitingPanel.gameObject.SetActive(false);
                     UdpSessionManager.Instance.PunchBackendUdpTunnel();
                     UdpSessionManager.Instance.PunchAllPeers();
                     break;

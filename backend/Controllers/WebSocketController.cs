@@ -114,8 +114,8 @@ public class WebSocketController : ControllerBase {
                 _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1} ]: {2}", room.id, playerId, initWsResp);
                 await session.SendAsync(new ArraySegment<byte>(initWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
                 
-                const int receiveChunkSize = 16384; // The "RoomDownsyncFrame" would be 1900+ bytes.
-    var buffer = new byte[receiveChunkSize];
+                const int receiveChunkSize = 65535;
+                var buffer = new byte[receiveChunkSize];
                 while (!cancellationToken.IsCancellationRequested) {
                     try {
                         var receiveResult = await session.ReceiveAsync(
