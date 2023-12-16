@@ -162,6 +162,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var characterPrefab = loadCharacterPrefab(characters[speciesId]);
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, characterZ), Quaternion.identity, underlyingMap.transform);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
+        playerGameObjs[joinIndex - 1].GetComponent<CharacterAnimController>().speciesId = speciesId;
     }
 
     protected void spawnDynamicTrapNode(int speciesId, float wx, float wy) {
@@ -420,12 +421,14 @@ public abstract class AbstractMapController : MonoBehaviour {
             calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
 
-            if (null != prevCharacterDownsync && currCharacterDownsync.SpeciesId != prevCharacterDownsync.SpeciesId) {
+            var playerGameObj = playerGameObjs[k];
+            var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
+
+            if (chAnimCtrl.speciesId != currCharacterDownsync.SpeciesId) {
                 Destroy(playerGameObjs[k]);
                 spawnPlayerNode(k+1, chConfig.SpeciesId, wx, wy, currCharacterDownsync.BulletTeamId);
             }
 
-            var playerGameObj = playerGameObjs[k];
             newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
 
             playerGameObj.transform.position = newPosHolder; // [WARNING] Even if not selfPlayer, we have to set position of the other players regardless of new positions being visible within camera or not, otherwise outdated other players' node might be rendered within camera! 
@@ -462,7 +465,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 showTeamRibbonAndInplaceHpBar(rdf.Id, currCharacterDownsync, wx, wy, halfBoxCw, halfBoxCh, "pl-" + currCharacterDownsync.JoinIndex);
             }
 
-            var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
                 chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, currCharacterDownsync.CharacterState, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
             } else {

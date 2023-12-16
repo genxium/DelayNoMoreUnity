@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class CharacterAnimController : MonoBehaviour {
     public int score;
+    public int speciesId = Battle.SPECIES_NONE_CH;
 
     public Animator lowerPart, upperPart;
 
@@ -59,7 +60,7 @@ public class CharacterAnimController : MonoBehaviour {
         // [WARNING] Being frozen might invoke this function with "newCharacterState != rdfCharacter.ChState" 
 
         // As this function might be called after many frames of a rollback, it's possible that the playing animation was predicted, different from "prevRdfCharacter.CharacterState" but same as "newCharacterState". More granular checks are needed to determine whether we should interrupt the playing animation.  
-
+        speciesId = chConfig.SpeciesId;
         var animator = getMainAnimator();
         // Update directions
         if (0 > rdfCharacter.DirX) {

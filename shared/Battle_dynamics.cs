@@ -257,7 +257,10 @@ namespace shared {
         private static bool _useInventorySlot(int rdfId, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
             bool slotUsed = false;
             if (PATTERN_INVENTORY_SLOT_C != patternId && PATTERN_INVENTORY_SLOT_D != patternId) {
-                return false;
+                return slotUsed;
+            }
+            if (0 < currCharacterDownsync.FramesToRecover) {
+                return slotUsed;
             }
             int slotIdx = (PATTERN_INVENTORY_SLOT_C == patternId ? 0 : 1); 
             var targetSlotCurr = currCharacterDownsync.Inventory.Slots[slotIdx];
