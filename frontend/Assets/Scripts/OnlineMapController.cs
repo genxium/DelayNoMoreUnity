@@ -151,6 +151,13 @@ public class OnlineMapController : AbstractMapController {
                     UdpSessionManager.Instance.PunchBackendUdpTunnel();
                     UdpSessionManager.Instance.PunchAllPeers();
                     break;
+                case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
+                  if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {
+                    Debug.LogWarning(String.Format("Got empty inputFrameDownsyncBatch upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
+                    return;
+                  }
+                  onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
+                  break;
                 default:
                     break;
             }
@@ -324,7 +331,7 @@ public class OnlineMapController : AbstractMapController {
         for (var i = batchInputFrameIdSt; i <= latestLocalInputFrameId; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
             if (false == res1 || null == inputFrameDownsync) {
-                Debug.LogError(String.Format("sendInputFrameUpsyncBatch: recentInputCache is NOT having i={0}, latestLocalInputFrameId={1}", i, latestLocalInputFrameId));
+                Debug.LogError(String.Format("sendInputFrameUpsyncBatch: recentInputCache is NOT having i={0}, latestLocalInputFrameId={1}, inputBuffer:{2}", i, latestLocalInputFrameId, inputBuffer.toSimpleStat()));
             } else {
                 var inputFrameUpsync = new InputFrameUpsync {
                     InputFrameId = i,

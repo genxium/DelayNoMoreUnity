@@ -1011,6 +1011,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (inputFrameDownsyncId <= lastAllConfirmedInputFrameId) {
                 continue;
             }
+            if (inputFrameDownsyncId > inputBuffer.EdFrameId) {
+                Debug.LogWarning(String.Format("Possibly resyncing#1 for inputFrameDownsyncId={0}! Now inputBuffer: {1}", inputFrameDownsyncId, inputBuffer.toSimpleStat()));
+            }
             // [WARNING] Now that "inputFrameDownsyncId > self.lastAllConfirmedInputFrameId", we should make an update immediately because unlike its backend counterpart "Room.LastAllConfirmedInputFrameId", the frontend "mapIns.lastAllConfirmedInputFrameId" might inevitably get gaps among discrete values due to "either type#1 or type#2 forceConfirmation" -- and only "onInputFrameDownsyncBatch" can catch this! 
             lastAllConfirmedInputFrameId = inputFrameDownsyncId;
             var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
@@ -1030,7 +1033,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 firstPredictedYetIncorrectInputFrameId = inputFrameDownsyncId;
                 unconfirmedBattleResult.Remove(inputFrameDownsyncId);
             }
-            // [WARNING] Take all "inputFrameDownsync" from backend as all-confirmed, it'll be later checked by "rollbackAndChase". 
+            // [WARNING] Take all "inputFrameDownsyncBatch" from backend as all-confirmed, it'll be later checked by "rollbackAndChase". 
             inputFrameDownsync.ConfirmedList = (1UL << roomCapacity) - 1;
 
             for (int j = 0; j < roomCapacity; j++) {
@@ -1043,6 +1046,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (res2, oldStFrameId, oldEdFrameId) = inputBuffer.SetByFrameId(inputFrameDownsync, inputFrameDownsync.InputFrameId);
             if (RingBuffer<InputFrameDownsync>.RING_BUFF_FAILED_TO_SET == res2) {
                 throw new ArgumentException(String.Format("Failed to dump input cache(maybe recentInputCache too small)! inputFrameDownsync.inputFrameId={0}, lastAllConfirmedInputFrameId={1}", inputFrameDownsyncId, lastAllConfirmedInputFrameId));
+            } else if (RingBuffer<InputFrameDownsync>.RING_BUFF_NON_CONSECUTIVE_SET == res2) {
+                Debug.LogWarning(String.Format("Possibly resyncing#2! Now inputBuffer: {0}", inputBuffer.toSimpleStat()));
             }
         }
         _markConfirmationIfApplicable();
@@ -1079,7 +1084,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             throw new ArgumentException(String.Format("Failed to dump render cache#1 (maybe recentRenderCache too small)! rdfId={0}", rdfId));
         }
 
-        if (!shouldForceResync && (Battle.DOWNSYNC_MSG_ACT_BATTLE_START < rdfId && RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet)) {
+        if (!shouldForceResync && (DOWNSYNC_MSG_ACT_BATTLE_START < rdfId && RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet)) {
             /*
 			   Don't change 
 			   - chaserRenderFrameId, it's updated only in "rollbackAndChase & onInputFrameDownsyncBatch" (except for when RING_BUFF_NON_CONSECUTIVE_SET)
@@ -1088,11 +1093,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         if (shouldForceDumping1 || shouldForceDumping2 || shouldForceResync) {
-            // In fact, not having "window.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet" should already imply that "renderFrameId <= rdfId", but here we double check and log the anomaly  
-            if (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
+            // In fact, not having "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet" should already imply that "renderFrameId <= rdfId", but here we double check and log the anomaly  
+            if (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
                 Debug.Log(String.Format("On battle started! received rdfId={0}", rdfId));
             } else {
-                Debug.Log(String.Format("On battle resynced! received rdfId={0}", rdfId));
+                Debug.Log(String.Format("On battle resynced! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId));
             }
 
             playerRdfId = rdfId;
