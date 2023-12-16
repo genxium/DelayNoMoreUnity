@@ -151,7 +151,7 @@ public class Room {
         inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         state = ROOM_STATE_IDLE;
         effectivePlayerCount = 0;
-        backendDynamicsEnabled = false;
+        backendDynamicsEnabled = true;
 
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
@@ -1037,7 +1037,23 @@ public class Room {
         var toSendInputFrameIdEd = inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
 
         if (backendDynamicsEnabled && shouldResyncOverall) {
-            // TODO
+            var (ok1, refRenderFrame) = renderBuffer.GetByFrameId(inputBufferSnapshot.RefRenderFrameId);
+            if (!ok1 || null == refRenderFrame) {
+                throw new ArgumentNullException(String.Format("Required refRenderFrameId={0} for (roomId={1}, renderFrameId={2}, playerId={3}, playerLastSentInputFrameId={4}) doesn't exist! inputBuffer={5}, renderBuffer={6}", inputBufferSnapshot.RefRenderFrameId, renderFrameId, playerId, player.LastSentInputFrameId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
+            }
+
+            if (shouldResync3) {
+                refRenderFrame.ShouldForceResync = true;
+            }
+            refRenderFrame.BackendUnconfirmedMask = inputBufferSnapshot.UnconfirmedMask;
+
+            await sendSafelyAsync(refRenderFrame, inputBufferSnapshot.ToSendInputFrameDownsyncs, DOWNSYNC_MSG_ACT_FORCED_RESYNC, playerId, player, MAGIC_JOIN_INDEX_DEFAULT);
+
+            if (shouldResync1 || shouldResync3) {
+                _logger.LogInformation(String.Format("Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: shouldResync1={9}, shouldResync2={10}, shouldResync3={11}, playerBattleState={12}", inputBufferSnapshot.RefRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, shouldResync1, shouldResync2, shouldResync3, playerBattleState));
+            } else {
+                _logger.LogInformation(String.Format("Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}; inputBuffer: {9}", inputBufferSnapshot.RefRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, inputBuffer.toSimpleStat()));
+            }
         } else {
             await sendSafelyAsync(null, inputBufferSnapshot.ToSendInputFrameDownsyncs, DOWNSYNC_MSG_ACT_INPUT_BATCH, playerId, player, MAGIC_JOIN_INDEX_DEFAULT);
         }
