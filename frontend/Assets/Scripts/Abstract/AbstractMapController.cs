@@ -1201,14 +1201,25 @@ public abstract class AbstractMapController : MonoBehaviour {
         iptmgr.enable(yesOrNo);
     }
 
+    protected string ArrToString(int[] speciesIdList) {
+        var ret = "";
+        for (int i = 0; i < speciesIdList.Length; i++) {
+            ret += speciesIdList[i].ToString(); 
+            if (i < speciesIdList.Length-1) ret += ", ";
+        }
+        return ret;
+    }
+
     protected void patchStartRdf(RoomDownsyncFrame startRdf, int[] speciesIdList) {
         for (int i = 0; i < roomCapacity; i++) {
             if (SPECIES_NONE_CH == speciesIdList[i]) continue;
-    
+            if (selfPlayerInfo.JoinIndex == i+1) continue;
+
+            Debug.Log(String.Format("Patching speciesIdList={0} for selfJoinIndex={1}", ArrToString(speciesIdList), selfPlayerInfo.JoinIndex));
             var playerInRdf = startRdf.PlayersArr[i];
             // Only copied species specific part from "mockStartRdf"
             playerInRdf.SpeciesId = speciesIdList[i];
-            var chConfig = Battle.characters[playerInRdf.SpeciesId];
+            var chConfig = characters[playerInRdf.SpeciesId];
             playerInRdf.Hp = chConfig.Hp;
             playerInRdf.MaxHp = chConfig.Hp;
             playerInRdf.Speed = chConfig.Speed;
@@ -1227,6 +1238,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId) mockStartRdf(int[] speciesIdList) {
+        Debug.Log(String.Format("mockStartRdf with speciesIdList={0} for selfJoinIndex={1}", ArrToString(speciesIdList), selfPlayerInfo.JoinIndex));
         var serializedBarrierPolygons = new RepeatedField<SerializableConvexPolygon>();
         var serializedStaticPatrolCues = new RepeatedField<SerializedCompletelyStaticPatrolCueCollider>();
         var serializedCompletelyStaticTraps = new RepeatedField<SerializedCompletelyStaticTrapCollider>();

@@ -12,7 +12,7 @@ public class PriorityBasedRoomManager : IRoomManager {
 
         mux = new Mutex();
 
-        int initialCountOfRooms = 32;
+        int initialCountOfRooms = 8;
         pq = new PriorityQueue<Room, float>(initialCountOfRooms);
         dict = new Dictionary<int, Room>();
 

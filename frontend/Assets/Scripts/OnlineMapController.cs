@@ -19,8 +19,6 @@ public class OnlineMapController : AbstractMapController {
     bool lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = false;
     int timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
 
-    private RoomDownsyncFrame startRdf;
-
     public PlayerWaitingPanel playerWaitingPanel;
 
     void pollAndHandleWsRecvBuffer() {
@@ -50,7 +48,7 @@ public class OnlineMapController : AbstractMapController {
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     preallocateHolders();
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch("Forest");
+                    resetCurrentMatch("TwoStepStageDeep");
                     preallocateVfxNodes();
                     preallocateSfxNodes();
                     preallocateNpcNodes();
@@ -59,19 +57,22 @@ public class OnlineMapController : AbstractMapController {
                     for (int i = 0; i < roomCapacity; i++) {
                         tempSpeciesIdList[i] = SPECIES_NONE_CH;
                     }
-                    tempSpeciesIdList[selfPlayerInfo.JoinIndex - 1] = selfPlayerInfo.SpeciesId;
+                    tempSpeciesIdList[selfPlayerInfo.JoinIndex - 1] = WsSessionManager.Instance.GetSpeciesId();
                     var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId) = mockStartRdf(tempSpeciesIdList);
-
-                    startRdf = thatStartRdf;
-                    refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
+                    
+                    renderBuffer.Put(thatStartRdf);
+                    
+                    refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
 
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
                         JoinIndex = selfPlayerInfo.JoinIndex,
-                        SelfParsedRdf = startRdf,
+                        SelfParsedRdf = thatStartRdf,
                         SerializedTrapLocalIdToColliderAttrs = serializedTrapLocalIdToColliderAttrs,
                         SerializedTriggerTrackingIdToTrapLocalId = serializedTriggerTrackingIdToTrapLocalId,
+                        SpaceOffsetX = spaceOffsetX,
+                        SpaceOffsetY = spaceOffsetY,
                     };
 
                     reqData.SerializedStaticPatrolCues.AddRange(serializedStaticPatrolCues);
@@ -104,7 +105,7 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
-                    startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
+                    var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
                     readyGoPanel.playGoAnim();
                     bgmSource.Play();
                     onRoomDownsyncFrame(startRdf, null);
@@ -137,9 +138,10 @@ public class OnlineMapController : AbstractMapController {
                     for (int i = 0; i < roomCapacity; i++) {
                         speciesIdList[i] = wsRespHolder.Rdf.PlayersArr[i].SpeciesId;
                     }
-                    patchStartRdf(startRdf, speciesIdList);
-                    applyRoomDownsyncFrameDynamics(startRdf, null);
-                    cameraTrack(startRdf, null);
+                    var (ok2, toPatchStartRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
+                    patchStartRdf(toPatchStartRdf, speciesIdList);
+                    applyRoomDownsyncFrameDynamics(toPatchStartRdf, null);
+                    cameraTrack(toPatchStartRdf, null);
                     var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
                     Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
                     readyGoPanel.playReadyAnim();
@@ -188,7 +190,7 @@ public class OnlineMapController : AbstractMapController {
             if (null != udpTask) {
                 UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
             }
-            // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed > cleanupNetworkSessions" to clean up other network resources!
+            // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed -> cleanupNetworkSessions" to clean up other network resources!
         });
 
         //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "cleanupNetworkSessions".

@@ -114,7 +114,7 @@ public class WebSocketController : ControllerBase {
                 _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1} ]: {2}", room.id, playerId, initWsResp);
                 await session.SendAsync(new ArraySegment<byte>(initWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
                 
-                const int receiveChunkSize = 65535;
+                const int receiveChunkSize = 21845;
                 var buffer = new byte[receiveChunkSize];
                 while (!cancellationToken.IsCancellationRequested) {
                     try {
@@ -132,7 +132,7 @@ public class WebSocketController : ControllerBase {
                         switch (pReq.Act) {
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK:
 
-                                var res1 = await room.OnPlayerBattleColliderAcked(playerId, pReq.SelfParsedRdf, pReq.SerializedBarrierPolygons, pReq.SerializedStaticPatrolCues, pReq.SerializedCompletelyStaticTraps, pReq.SerializedStaticTriggers, pReq.SerializedTrapLocalIdToColliderAttrs, pReq.SerializedTriggerTrackingIdToTrapLocalId);
+                                var res1 = await room.OnPlayerBattleColliderAcked(playerId, pReq.SelfParsedRdf, pReq.SerializedBarrierPolygons, pReq.SerializedStaticPatrolCues, pReq.SerializedCompletelyStaticTraps, pReq.SerializedStaticTriggers, pReq.SerializedTrapLocalIdToColliderAttrs, pReq.SerializedTriggerTrackingIdToTrapLocalId, pReq.SpaceOffsetX, pReq.SpaceOffsetY);
                                 if (!res1) {
                                     if (!cancellationToken.IsCancellationRequested) {
                                         cancellationTokenSource.Cancel();

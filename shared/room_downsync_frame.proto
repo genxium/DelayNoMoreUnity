@@ -181,6 +181,8 @@ message WsReq {
 	repeated SerializedCompletelyStaticTriggerCollider serializedStaticTriggers = 12;
 	SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs = 13; 
 	SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId = 14;
+    int32 spaceOffsetX = 15; 
+    int32 spaceOffsetY = 16; 
 }
 
 message InputBufferSnapshot {

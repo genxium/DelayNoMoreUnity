@@ -84,6 +84,7 @@ public class Room {
     protected Collider[] staticColliders;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
+    protected int maxTouchingCellsCnt;
 
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
@@ -285,12 +286,12 @@ public class Room {
                     if (0 == effectivePlayerCount) {
                         Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
                     }
-                    _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
+                    _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
                 default:
                     Interlocked.Exchange(ref thatPlayer.BattleState, PLAYER_BATTLE_STATE_DISCONNECTED);
                     clearPlayerNetworkSession(playerId);
-                    _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
+                    _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
             }
         } finally {
@@ -312,7 +313,7 @@ public class Room {
             }
 
             playerDownsyncSessionDict.Remove(playerId);
-            _logger.LogInformation("clearPlayerNetworkSession finished: [ roomId={0}, playerId={1}, RoomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
+            _logger.LogInformation("clearPlayerNetworkSession finished: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
         }
     }
 
@@ -338,7 +339,7 @@ public class Room {
         return ret;
     }
 
-    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId, RoomDownsyncFrame selfParsedRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId) {
+    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId, RoomDownsyncFrame selfParsedRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId, int spaceOffsetX, int spaceOffsetY) {
         Player? targetPlayer;
         if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
             return false;
@@ -384,8 +385,12 @@ public class Room {
         try {
             joinerLock.WaitOne();
             if (0 >= renderBuffer.Cnt) {
+                preallocateStepHolders(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out residueCollided, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out dynamicRectangleColliders, out staticColliders, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
+
                 renderBuffer.Put(selfParsedRdf);
                 _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: Initialized renderBuffer by incoming startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}; now renderBuffer: {6}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, renderBuffer.toSimpleStat());
+
+                refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
             } else {
                 var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
                 if (!ok1 || null == startRdf) {
@@ -525,16 +530,10 @@ public class Room {
             players.Clear();
             playersArr = new Player[capacity];
 
-            backendDynamicsEnabled = false;
-
-            rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
-            trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
-            triggerTrackingIdToTrapLocalId = new Dictionary<int, int>();
-            completelyStaticTrapColliders = new List<Collider>();
-            unconfirmedBattleResult = new Dictionary<int, BattleResult>();
-            historyRdfHolder = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
-
-            preallocateStepHolders(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out residueCollided, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out dynamicRectangleColliders, out staticColliders, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
+            rdfIdToActuallyUsedInput.Clear();
+            collisionHolder.Clear();
+            renderBuffer.Clear();
+            inputBuffer.Clear();
 
             lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED; // Such that the initial "lastAllConfirmedInputFrameId + 1" is 0, for use in "markConfirmationIfApplicable" 
             latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
@@ -594,7 +593,9 @@ public class Room {
                 if (nextRenderFrameId > renderFrameId) {
                     if (0 == renderFrameId) {
                         var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
-
+                        if (!ok1 || null == startRdf) {
+                            throw new ArgumentNullException(String.Format("OnPlayerBattleColliderAcked-post-downsync: No existing startRdf for roomId={0}, roomState={1}, capacity={2}, effectivePlayerCount={3}; now renderBuffer: {4}", id, state, capacity, effectivePlayerCount, renderBuffer.toSimpleStat()));
+                        }
                         var tList = new List<Task>();
                         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
                         
@@ -614,8 +615,9 @@ public class Room {
                         doBattleMainLoopPerTickBackendDynamicsWithProperLocking(prevRenderFrameId, ref dynamicsDuration);
                     }
 
-                    var elapsedInCalculation = (nowMillis - stCalculation);
+                    var elapsedInCalculation = (DateTimeOffset.Now.ToUnixTimeMilliseconds() - stCalculation);
                     toSleepMillis = (int)(estimatedMillisPerFrame - elapsedInCalculation);
+                    if (0 > toSleepMillis) toSleepMillis = 0; 
                 }
 
                 await Task.Delay(toSleepMillis);
@@ -1197,7 +1199,7 @@ public class Room {
 
             // Force setting all-confirmed of buffered inputFrames periodically, kindly note that if "backendDynamicsEnabled", what we want to achieve is "recovery upon reconnection", which certainly requires "forceConfirmationIfApplicable" to move "lastAllConfirmedInputFrameId" forward as much as possible
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
-            ulong unconfirmedMask = forceConfirmationIfApplicable(prevRenderFrameId);
+            ulong unconfirmedMask = forceConfirmationIfApplicable();
 
             if (0 <= lastAllConfirmedInputFrameId) {
                 // Apply "all-confirmed inputFrames" to move forward "curDynamicsRenderFrameId"
@@ -1231,7 +1233,7 @@ public class Room {
         }
     }
 
-    private ulong forceConfirmationIfApplicable(int prevRenderFrameId) {
+    private ulong forceConfirmationIfApplicable() {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
         int totPlayerCnt = capacity;
         ulong allConfirmedMask = ((1ul << totPlayerCnt) - 1);
@@ -1250,7 +1252,7 @@ public class Room {
                 onInputFrameDownsyncAllConfirmed(foo, -1);
             }
             if (0 < unconfirmedMask) {
-                //Logger.Info(fmt.Sprintf("[type#1 forceConfirmation] For roomId=%d@renderFrameId=%d, curDynamicsRenderFrameId=%d, LatestPlayerUpsyncedInputFrameId:%d, LastAllConfirmedInputFrameId:%d -> %d, InputFrameUpsyncDelayTolerance:%d, unconfirmedMask=%d; there's a slow ticker suspect, forcing all-confirmation", pR.Id, pR.RenderFrameId, pR.CurDynamicsRenderFrameId, pR.LatestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, pR.LastAllConfirmedInputFrameId, pR.InputFrameUpsyncDelayTolerance, unconfirmedMask))
+                _logger.LogInformation(String.Format("[type#1 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, InputFrameUpsyncDelayTolerance:{6}, unconfirmedMask={7}; there's a slow ticker suspect, forcing all-confirmation", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance, unconfirmedMask));
             }
         } else {
             // Type#2 helps resolve the edge case when all players are disconnected temporarily
