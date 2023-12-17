@@ -325,13 +325,19 @@ public class OnlineMapController : AbstractMapController {
             // Upon resync, "this.lastUpsyncInputFrameId" might not have been updated properly.
             batchInputFrameIdSt = inputBuffer.StFrameId;
         }
+
+        var batchInputFrameIdEdClosed = latestLocalInputFrameId;
+        if (batchInputFrameIdEdClosed >= inputBuffer.EdFrameId) {
+            batchInputFrameIdEdClosed = inputBuffer.EdFrameId-1;
+        }
+
         NetworkDoctor.Instance.LogInputFrameIdFront(latestLocalInputFrameId);
         NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
 
-        for (var i = batchInputFrameIdSt; i <= latestLocalInputFrameId; i++) {
+        for (var i = batchInputFrameIdSt; i <= batchInputFrameIdEdClosed; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
             if (false == res1 || null == inputFrameDownsync) {
-                Debug.LogError(String.Format("sendInputFrameUpsyncBatch: recentInputCache is NOT having i={0}, latestLocalInputFrameId={1}, inputBuffer:{2}", i, latestLocalInputFrameId, inputBuffer.toSimpleStat()));
+                Debug.LogError(String.Format("sendInputFrameUpsyncBatch: recentInputCache is NOT having i={0}, at playerRdfId={1}, latestLocalInputFrameId={2}, inputBuffer:{3} ", i, playerRdfId, latestLocalInputFrameId, inputBuffer.toSimpleStat()));
             } else {
                 var inputFrameUpsync = new InputFrameUpsync {
                     InputFrameId = i,

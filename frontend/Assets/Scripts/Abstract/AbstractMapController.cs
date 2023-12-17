@@ -62,6 +62,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected shared.Collision collisionHolder;
     protected SatResult overlapResult, primaryOverlapResult;
     protected Dictionary<int, BattleResult> unconfirmedBattleResult;
+    protected bool useOthersForcedDownsyncRenderFrameDict = false;
+    protected Dictionary<int, RoomDownsyncFrame> othersForcedDownsyncRenderFrameDict;
     protected BattleResult confirmedBattleResult;
     protected Vector[] effPushbacks, softPushbacks;
     protected Vector[][] hardPushbackNormsArr;
@@ -277,8 +279,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool hasIncorrectlyPredictedRenderFrame = false;
             Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, selfPlayerInfo.JoinIndex, _loggerBridge);
-            if (hasIncorrectlyPredictedRenderFrame) {   
-                Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i+1));
+            if (hasIncorrectlyPredictedRenderFrame) {
+                Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i + 1));
             }
 
             if (frameLogEnabled) {
@@ -287,7 +289,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var (ok3, nextRdf) = renderBuffer.GetByFrameId(i + 1);
             if (false == ok3 || null == nextRdf) {
-                if (isChasing) { 
+                if (isChasing) {
                     throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to rollback, playerRdfId={1}: renderBuffer StFrameId={2}, EdFrameId={3}, Cnt={4}", i + 1, playerRdfId, renderBuffer.StFrameId, renderBuffer.EdFrameId, renderBuffer.Cnt));
                 } else {
                     throw new ArgumentNullException(String.Format("Couldn't find nextRdf for i+1={0} to generate, playerRdfId={1} while rendering: renderBuffer StFrameId={2}, EdFrameId={3}, Cnt={4}", i + 1, playerRdfId, renderBuffer.StFrameId, renderBuffer.EdFrameId, renderBuffer.Cnt));
@@ -344,7 +346,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 		   [this.renderFrameId]                       :              64
 		   --------------------------------------------------------
 		 */
-    
+
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
 
@@ -426,7 +428,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (chAnimCtrl.speciesId != currCharacterDownsync.SpeciesId) {
                 Destroy(playerGameObjs[k]);
-                spawnPlayerNode(k+1, chConfig.SpeciesId, wx, wy, currCharacterDownsync.BulletTeamId);
+                spawnPlayerNode(k + 1, chConfig.SpeciesId, wx, wy, currCharacterDownsync.BulletTeamId);
             }
 
             newPosHolder.Set(wx, wy, playerGameObj.transform.position.z);
@@ -513,7 +515,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             newTrPosHolder.Set(wx + halfBoxCw, wy + halfBoxCh, characterZ);
             newBlPosHolder.Set(wx - halfBoxCw, wy - halfBoxCh, characterZ);
             newBrPosHolder.Set(wx + halfBoxCw, wy - halfBoxCh, characterZ);
-            
+
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
             // if the current position is within camera FOV
             var speciesKvPq = cachedNpcs[currNpcDownsync.SpeciesId];
@@ -582,7 +584,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int k = 0; k < rdf.Bullets.Count; k++) {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
-            
+
             var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
             var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX, bullet.Config.HitboxSizeY);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
@@ -603,7 +605,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             string lookupKey = bullet.BattleAttr.BulletLocalId.ToString(), animName = null;
             bool spontaneousLooping = false;
-            
+
             int explosionSpeciesId = bullet.Config.ExplosionSpeciesId;
             if (EXPLOSION_SPECIES_FOLLOW == explosionSpeciesId) {
                 explosionSpeciesId = bullet.Config.SpeciesId;
@@ -648,7 +650,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     }
                 }
             }
-            
+
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             playBulletSfx(bullet, isExploding, wx, wy, rdf.Id, distanceAttenuationZ);
             playBulletVfx(bullet, isExploding, wx, wy, rdf.Id);
@@ -661,7 +663,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
             if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask || TRIGGER_MASK_BY_SUBSCRIPTION == trigger.Config.TriggerMask) {
                 animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, false);
-            } else {    
+            } else {
                 // TODO: Make use fo TriggerState in "shared.Battle_dynamics"!
                 if (Battle.isTriggerClickable(trigger)) {
                     animCtrl.updateAnim("Tready", 0, 0, true);
@@ -702,7 +704,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             "SlashEmitSpd3",
             "FootStep1",
             "DoorOpen",
-            "DoorClose", 
+            "DoorClose",
         };
         var audioClipDict = new Dictionary<string, AudioClip>();
         foreach (string name in allSfxClipsNames) {
@@ -720,14 +722,14 @@ public abstract class AbstractMapController : MonoBehaviour {
             var initLookupKey = i.ToString();
             cachedSfxNodes.Put(initLookupKey, newSfxSource);
         }
-        
+
         Debug.Log("preallocateSfxNodes ends");
     }
 
     protected void preallocateVfxNodes() {
         Debug.Log("preallocateVfxNodes begins");
         if (null != cachedVfxNodes) {
-            foreach (var (_,v) in cachedVfxNodes) {
+            foreach (var (_, v) in cachedVfxNodes) {
                 while (0 < v.Cnt()) {
                     var g = v.Pop();
                     if (null != g) {
@@ -831,33 +833,34 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void preallocateHolders() {
         preallocateStepHolders(
-            roomCapacity, 
-            preallocNpcCapacity, 
-            preallocBulletCapacity, 
-            preallocTrapCapacity, 
-            preallocTriggerCapacity, 
-            preallocEvtSubCapacity, 
-            out justFulfilledEvtSubCnt, 
-            out justFulfilledEvtSubArr, 
-            out residueCollided, 
-            out renderBuffer, 
-            out pushbackFrameLogBuffer, 
-            out inputBuffer, 
-            out lastIndividuallyConfirmedInputFrameId, 
-            out lastIndividuallyConfirmedInputList, 
+            roomCapacity,
+            preallocNpcCapacity,
+            preallocBulletCapacity,
+            preallocTrapCapacity,
+            preallocTriggerCapacity,
+            preallocEvtSubCapacity,
+            out justFulfilledEvtSubCnt,
+            out justFulfilledEvtSubArr,
+            out residueCollided,
+            out renderBuffer,
+            out pushbackFrameLogBuffer,
+            out inputBuffer,
+            out lastIndividuallyConfirmedInputFrameId,
+            out lastIndividuallyConfirmedInputList,
             out effPushbacks,
-            out hardPushbackNormsArr, 
-            out softPushbacks, 
-            out dynamicRectangleColliders, 
+            out hardPushbackNormsArr,
+            out softPushbacks,
+            out dynamicRectangleColliders,
             out staticColliders,
-            out decodedInputHolder, 
-            out prevDecodedInputHolder, 
-            out confirmedBattleResult, 
-            out softPushbackEnabled, 
+            out decodedInputHolder,
+            out prevDecodedInputHolder,
+            out confirmedBattleResult,
+            out softPushbackEnabled,
             frameLogEnabled
         );
 
         //---------------------------------------------FRONTEND USE ONLY SEPERARTION---------------------------------------------
+        othersForcedDownsyncRenderFrameDict = new Dictionary<int, RoomDownsyncFrame>();
         missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
 
         prefabbedInputListHolder = new ulong[roomCapacity];
@@ -884,7 +887,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         // team ribbon
-        int teamRibbonHoldersCap = roomCapacity+preallocNpcCapacity;
+        int teamRibbonHoldersCap = roomCapacity + preallocNpcCapacity;
         if (null != cachedTeamRibbons) {
             for (int i = cachedTeamRibbons.vals.StFrameId; i < cachedTeamRibbons.vals.EdFrameId; i++) {
                 var (res, teamRibbons) = cachedTeamRibbons.vals.GetByFrameId(i);
@@ -972,7 +975,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
         cameraCapMinX = 0 + (spaceOffsetX >> 3) + (spaceOffsetX >> 4);
         cameraCapMaxX = (spaceOffsetX << 1) - (spaceOffsetX >> 2);
-        cameraCapMinY = - (spaceOffsetY << 1) + (spaceOffsetY >> 2);
+        cameraCapMinY = -(spaceOffsetY << 1) + (spaceOffsetY >> 2);
         cameraCapMaxY = 0 - (spaceOffsetY >> 2) - (spaceOffsetX >> 3);
 
         effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
@@ -1026,7 +1029,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 firstPredictedYetIncorrectInputFrameId = inputFrameDownsyncId;
             } else if (
                 TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId
-                && 
+                &&
                 unconfirmedBattleResult.ContainsKey(inputFrameDownsyncId)
                 ) {
                 // [WARNING] Unconfirmed battle results must be revisited!
@@ -1064,7 +1067,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
         int rdfId = pbRdf.Id;
-        bool shouldForceDumping1 = (Battle.DOWNSYNC_MSG_ACT_BATTLE_START == rdfId);
+        bool shouldForceDumping1 = (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId);
         bool shouldForceDumping2 = (rdfId >= playerRdfId + renderFrameIdLagTolerance);
         bool shouldForceResync = pbRdf.ShouldForceResync;
         ulong selfJoinIndexMask = ((ulong)1 << (selfPlayerInfo.JoinIndex - 1));
@@ -1072,7 +1075,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (notSelfUnconfirmed) {
             shouldForceDumping2 = false;
             shouldForceResync = false;
-            // othersForcedDownsyncRenderFrameDict.set(rdfId, pbRdf);
+            if (useOthersForcedDownsyncRenderFrameDict) {
+                othersForcedDownsyncRenderFrameDict[rdfId] = pbRdf;
+            }
         }
         /*
 		   If "BackendUnconfirmedMask" is non-all-1 and contains the current player, show a label/button to hint manual reconnection. Note that the continuity of "recentInputCache" is not a good indicator, because due to network delay upon a [type#1 forceConfirmation] a player might just lag in upsync networking and have all consecutive inputFrameIds locally. 
@@ -1097,13 +1102,22 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
                 Debug.Log(String.Format("On battle started! received rdfId={0}", rdfId));
             } else {
-                Debug.Log(String.Format("On battle resynced! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId));
+                if (null == accompaniedInputFrameDownsyncBatch) {
+                    if (useOthersForcedDownsyncRenderFrameDict) {
+                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict! received rdfId={0} & now inputBuffer: {1}", rdfId, inputBuffer.toSimpleStat()));
+                    }
+                } else {
+                    Debug.Log(String.Format("On battle resynced! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId));
+                }
             }
 
             playerRdfId = rdfId;
             // In this case it must be true that "rdfId > chaserRenderFrameId".
             chaserRenderFrameId = rdfId;
-
+            pushbackFrameLogBuffer.Clear();
+            pushbackFrameLogBuffer.StFrameId = rdfId;
+            pushbackFrameLogBuffer.EdFrameId = rdfId;
+            othersForcedDownsyncRenderFrameDict.Clear();
             NetworkDoctor.Instance.LogRollbackFrames(0);
 
             battleState = ROOM_STATE_IN_BATTLE;
@@ -1127,7 +1141,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             getOrPrefabInputFrameUpsync(delayedInputFrameId, false, prefabbedInputListHolder);
         }
 
-        bool battleResultIsSet = isBattleResultSet(confirmedBattleResult); 
+        bool battleResultIsSet = isBattleResultSet(confirmedBattleResult);
 
         if (isOnlineMode && (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, noDelayInputFrameId))) {
             // [WARNING] If "true == battleResultIsSet", we MUST IMMEDIATELY flush the local inputs to our peers to favor the formation of all-confirmed inputFrameDownsync asap! 
@@ -1144,8 +1158,22 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         // Inside the following "rollbackAndChase" actually ROLLS FORWARD w.r.t. the corresponding delayedInputFrame, REGARDLESS OF whether or not "chaserRenderFrameId == renderFrameId" now. 
-        var (prevRdf, rdf) = rollbackAndChase(playerRdfId, playerRdfId + 1, collisionSys, false);
-        // Having "prevRdf.Id == renderFrameId" & "rdf.Id == renderFrameId+1" 
+        var (prevRdf, rdf) = rollbackAndChase(playerRdfId, playerRdfId + 1, collisionSys, false); // Having "prevRdf.Id == playerRdfId" & "rdf.Id == playerRdfId+1" 
+
+        if (useOthersForcedDownsyncRenderFrameDict) {
+            // [WARNING] The following calibration against "othersForcedDownsyncRenderFrameDict" can also be placed inside "chaseRolledbackRdfs" for a more rigorous treatment. However, when "othersForcedDownsyncRenderFrameDict" is updated, the corresponding "resynced rdf" always has an id not smaller than "playerRdfId", thus no need to take those wasting calibrations.  
+            if (othersForcedDownsyncRenderFrameDict.ContainsKey(rdf.Id)) {
+                var othersForcedDownsyncRenderFrame = othersForcedDownsyncRenderFrameDict[rdf.Id];
+                if (lastAllConfirmedInputFrameId >= delayedInputFrameId && !EqualRdfs(othersForcedDownsyncRenderFrame, rdf, roomCapacity)) {
+                    Debug.LogWarning(String.Format("Mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}:\nrdf=${2}\nothersForcedDownsyncRenderFrame={3}", rdf.Id, delayedInputFrameId, stringifyRdf(rdf), stringifyRdf(othersForcedDownsyncRenderFrame)));
+                    // [WARNING] When this happens, something is intrinsically wrong -- to avoid having an inconsistent history in the "renderBuffer", thus a wrong prediction all the way from here on, clear the history!
+                    othersForcedDownsyncRenderFrame.ShouldForceResync = true;
+                    othersForcedDownsyncRenderFrame.BackendUnconfirmedMask = ((1ul << roomCapacity) - 1);
+                    onRoomDownsyncFrame(othersForcedDownsyncRenderFrame, null);
+                    othersForcedDownsyncRenderFrameDict.Remove(rdf.Id);
+                }
+            }
+        }
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
         cameraTrack(rdf, prevRdf);
@@ -1211,8 +1239,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected string ArrToString(int[] speciesIdList) {
         var ret = "";
         for (int i = 0; i < speciesIdList.Length; i++) {
-            ret += speciesIdList[i].ToString(); 
-            if (i < speciesIdList.Length-1) ret += ", ";
+            ret += speciesIdList[i].ToString();
+            if (i < speciesIdList.Length - 1) ret += ", ";
         }
         return ret;
     }
@@ -1220,7 +1248,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void patchStartRdf(RoomDownsyncFrame startRdf, int[] speciesIdList) {
         for (int i = 0; i < roomCapacity; i++) {
             if (SPECIES_NONE_CH == speciesIdList[i]) continue;
-            if (selfPlayerInfo.JoinIndex == i+1) continue;
+            if (selfPlayerInfo.JoinIndex == i + 1) continue;
 
             Debug.Log(String.Format("Patching speciesIdList={0} for selfJoinIndex={1}", ArrToString(speciesIdList), selfPlayerInfo.JoinIndex));
             var playerInRdf = startRdf.PlayersArr[i];
@@ -1270,7 +1298,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         CustomProperty id, demandedEvtMask;
                         tileProps.TryGetCustomProperty("id", out id);
                         tileProps.TryGetCustomProperty("demandedEvtMask", out demandedEvtMask);
-                        
+
                         var evtSub = new EvtSubscription {
                             Id = id.GetValueAsInt(),
                             DemandedEvtMask = (null == demandedEvtMask || demandedEvtMask.IsEmpty) ? EVTSUB_NO_DEMAND_MASK : (ulong)demandedEvtMask.GetValueAsInt(),
@@ -1354,7 +1382,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                                     null == speciesId || speciesId.IsEmpty ? 0 : speciesId.GetValueAsInt(),
                                                     null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt(),
                                                     null == isStatic || isStatic.IsEmpty ? false : (1 == isStatic.GetValueAsInt()),
-                                                    null == publishingEvtSubIdUponKilled || publishingEvtSubIdUponKilled.IsEmpty ? MAGIC_EVTSUB_ID_NONE : publishingEvtSubIdUponKilled.GetValueAsInt(), 
+                                                    null == publishingEvtSubIdUponKilled || publishingEvtSubIdUponKilled.IsEmpty ? MAGIC_EVTSUB_ID_NONE : publishingEvtSubIdUponKilled.GetValueAsInt(),
                                                     null == publishingEvtMaskUponKilled || publishingEvtMaskUponKilled.IsEmpty ? 0ul : (ulong)publishingEvtMaskUponKilled.GetValueAsInt()
                         ));
                     }
@@ -1448,7 +1476,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Speed = speedVal,
                             DirX = dirXVal,
                             DirY = dirYVal,
-                            ProhibitsWallGrabbing = prohibitsWallGrabbingVal 
+                            ProhibitsWallGrabbing = prohibitsWallGrabbingVal
                         };
 
                         tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
@@ -1597,27 +1625,27 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int initVelXVal = (null != initVelX && !initVelX.IsEmpty ? initVelX.GetValueAsInt() : 0);
                         int initVelYVal = (null != initVelY && !initVelY.IsEmpty ? initVelY.GetValueAsInt() : 0);
                         int quotaVal = (null != quota && !quota.IsEmpty ? quota.GetValueAsInt() : 1);
-                        int recoveryFramesVal = (null != recoveryFrames && !recoveryFrames.IsEmpty ? recoveryFrames.GetValueAsInt() : delayedFramesVal+1); // By default we must have "recoveryFramesVal > delayedFramesVal"
+                        int recoveryFramesVal = (null != recoveryFrames && !recoveryFrames.IsEmpty ? recoveryFrames.GetValueAsInt() : delayedFramesVal + 1); // By default we must have "recoveryFramesVal > delayedFramesVal"
                         var trackingIdListStr = (null != trackingIdList && !trackingIdList.IsEmpty ? trackingIdList.GetValueAsString() : "");
                         int subCycleTriggerFramesVal = (null != subCycleTriggerFrames && !subCycleTriggerFrames.IsEmpty ? subCycleTriggerFrames.GetValueAsInt() : 0);
                         int subCycleQuotaVal = (null != subCycleQuota && !subCycleQuota.IsEmpty ? subCycleQuota.GetValueAsInt() : 0);
                         var characterSpawnerTimeSeqStr = (null != characterSpawnerTimeSeq && !characterSpawnerTimeSeq.IsEmpty ? characterSpawnerTimeSeq.GetValueAsString() : "");
                         int publishingToEvtSubIdUponExhaustVal = (null != publishingToEvtSubIdUponExhaust && !publishingToEvtSubIdUponExhaust.IsEmpty ? publishingToEvtSubIdUponExhaust.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
-                        ulong publishingEvtMaskUponExhaustVal = (null !=  publishingEvtMaskUponExhaust && !publishingEvtMaskUponExhaust.IsEmpty ? (ulong)publishingEvtMaskUponExhaust.GetValueAsInt() : 0ul);
+                        ulong publishingEvtMaskUponExhaustVal = (null != publishingEvtMaskUponExhaust && !publishingEvtMaskUponExhaust.IsEmpty ? (ulong)publishingEvtMaskUponExhaust.GetValueAsInt() : 0ul);
                         int subscriptionIdVal = (null != subscriptionId && !subscriptionId.IsEmpty ? subscriptionId.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
                             TriggerLocalId = triggerLocalId,
                             BulletTeamId = bulletTeamIdVal,
-                            Quota = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask 
-                                    ? 
+                            Quota = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask
+                                    ?
                                     quotaVal - 1 // The first quota will be spent right at "delayedFramesVal"
                                     :
                                     quotaVal),
                             State = TriggerState.Tready,
                             SubCycleQuotaLeft = subCycleQuotaVal,
                             FramesToFire = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask ? delayedFramesVal : MAX_INT),
-                            FramesToRecover = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask ? delayedFramesVal+recoveryFramesVal : 0),
+                            FramesToRecover = (TRIGGER_MASK_BY_CYCLIC_TIMER == triggerConfig.TriggerMask ? delayedFramesVal + recoveryFramesVal : 0),
                             Config = triggerConfig,
                             ConfigFromTiled = new TriggerConfigFromTiled {
                                 SpeciesId = speciesIdVal,
@@ -1647,11 +1675,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                             if (2 != subParts.Length) continue;
                             if (String.IsNullOrEmpty(subParts[0])) continue;
                             if (String.IsNullOrEmpty(subParts[1])) continue;
-                            int cutoffRdfFrameId = subParts[0].ToInt(); 
-                            var chSpawnerConfig = new CharacterSpawnerConfig{
+                            int cutoffRdfFrameId = subParts[0].ToInt();
+                            var chSpawnerConfig = new CharacterSpawnerConfig {
                                 CutoffRdfFrameId = cutoffRdfFrameId
                             };
-                            string[] speciesIdParts = subParts[1].Split(','); 
+                            string[] speciesIdParts = subParts[1].Split(',');
                             foreach (var speciesIdPart in speciesIdParts) {
                                 chSpawnerConfig.SpeciesIdList.Add(speciesIdPart.ToInt());
                             }
@@ -1664,9 +1692,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                         trigger.VirtualGridY = rectCenterVy;
                         var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, spaceOffsetX, spaceOffsetY);
                         triggerList.Add((trigger, wx, wy));
-                    
+
                         var triggerColliderAttr = new TriggerColliderAttr {
-                           TriggerLocalId = triggerLocalId
+                            TriggerLocalId = triggerLocalId
                         };
                         var srcPolygon = NewRectPolygon(rectCx, rectCy, tileObj.m_Width, tileObj.m_Height, 0, 0, 0, 0);
                         serializedStaticTriggers.Add(new SerializedCompletelyStaticTriggerCollider {
@@ -1705,7 +1733,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.JoinIndex = joinIndex;
             playerInRdf.BulletTeamId = teamId;
             playerInRdf.ChCollisionTeamId = teamId; // If we want to stand on certain teammates' shoulder, then this value should be tuned accordingly. 
-            
+
             var (playerVposX, playerVposY) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y); // World and CollisionSpace coordinates have the same scale, just translated
             playerInRdf.VirtualGridX = playerVposX;
             playerInRdf.VirtualGridY = playerVposY;
@@ -1805,8 +1833,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             startRdf.EvtSubsArr[i] = evtSubList[i];
         }
         // Initialize trigger for the first wave
-        startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER-1].DemandedEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
-        startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER-1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
+        startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].DemandedEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
+        startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
 
         return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId);
     }
@@ -1823,11 +1851,11 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Vector2 camDiffDstHolder = new Vector2();
     protected void clampToMapBoundary(ref Vector3 posHolder) {
         float newX = posHolder.x, newY = posHolder.y, newZ = posHolder.z;
-        if (newX > cameraCapMaxX) newX = cameraCapMaxX;  
-        if (newX < cameraCapMinX) newX = cameraCapMinX;  
-        if (newY > cameraCapMaxY) newY = cameraCapMaxY;  
+        if (newX > cameraCapMaxX) newX = cameraCapMaxX;
+        if (newX < cameraCapMinX) newX = cameraCapMinX;
+        if (newY > cameraCapMaxY) newY = cameraCapMaxY;
         if (newY < cameraCapMinY) newY = cameraCapMinY;
-        posHolder.Set(newX, newY, newZ); 
+        posHolder.Set(newX, newY, newZ);
     }
 
     protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
@@ -1875,7 +1903,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public void toggleDebugDrawingEnabled() {
-        debugDrawingEnabled = !debugDrawingEnabled; 
+        debugDrawingEnabled = !debugDrawingEnabled;
     }
 
     protected void urpDrawDebug() {
@@ -1907,7 +1935,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
             }
 
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(collider.X, collider.Y, spaceOffsetX, spaceOffsetY);;
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(collider.X, collider.Y, spaceOffsetX, spaceOffsetY); ;
             newPosHolder.Set(wx, wy, 0);
             if (!isGameObjPositionWithinCamera(newPosHolder)) {
                 continue; // To save memory
@@ -1978,7 +2006,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.white);
             line.GetPositions(debugDrawPositionsHolder);
-           
+
             // World space width and height are just the same as that of collision space.
 
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
@@ -2013,7 +2041,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             line.SetColor(Color.gray);
             line.GetPositions(debugDrawPositionsHolder);
-           
+
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
@@ -2049,7 +2077,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var bullet = rdf.Bullets[k];
             if (TERMINATING_BULLET_LOCAL_ID == bullet.BattleAttr.BulletLocalId) break;
             var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);;
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY); ;
             newPosHolder.Set(wx, wy, 0);
             if (!isGameObjPositionWithinCamera(newPosHolder)) {
                 continue; // To save memory
@@ -2070,7 +2098,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             line.SetColor(Color.red);
             line.GetPositions(debugDrawPositionsHolder);
 
-            var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX + bullet.Config.HitboxSizeIncX*bullet.FramesInBlState, bullet.Config.HitboxSizeY + bullet.Config.HitboxSizeIncY * bullet.FramesInBlState);
+            var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.Config.HitboxSizeX + bullet.Config.HitboxSizeIncX * bullet.FramesInBlState, bullet.Config.HitboxSizeY + bullet.Config.HitboxSizeIncY * bullet.FramesInBlState);
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
             (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
@@ -2112,7 +2140,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
 
                 line.GetPositions(debugDrawPositionsHolder);
-                
+
                 (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
                 (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
                 (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
@@ -2195,11 +2223,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         if (
-            null == prevCharacterDownsync 
-            || prevCharacterDownsync.Hp <= currCharacterDownsync.Hp 
+            null == prevCharacterDownsync
+            || prevCharacterDownsync.Hp <= currCharacterDownsync.Hp
             || prevCharacterDownsync.Id != currCharacterDownsync.Id // for left-shifted NPCs
         ) return false;
-        
+
         // Some characters, and almost all traps wouldn't have an "attacked state", hence showing their damaged animation by shader.
         /*
         DOTween.Sequence().Append(
@@ -2209,7 +2237,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         DOTween.Sequence().Append(
             DOTween.To(() => material.GetFloat(MATERIAL_REF_FLASH_INTENSITY), x => material.SetFloat(MATERIAL_REF_FLASH_INTENSITY, x), DAMAGED_FLASH_INTENSITY, DAMAGED_BLINK_SECONDS_HALF))
             .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_FLASH_INTENSITY), x => material.SetFloat(MATERIAL_REF_FLASH_INTENSITY, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
-        
+
         return true;
     }
 
@@ -2230,7 +2258,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             try {
-                var clipName = calcFootStepSfxName(currCharacterDownsync); 
+                var clipName = calcFootStepSfxName(currCharacterDownsync);
                 if (null == clipName) {
                     return false;
                 }
@@ -2241,7 +2269,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 float totAttZ = distanceAttenuationZ + footstepAttenuationZ;
                 newPosHolder.Set(wx, wy, totAttZ);
                 ftSfxSourceHolder.gameObject.transform.position = newPosHolder;
-                if (!usingSameAudSrc || !ftSfxSourceHolder.audioSource.isPlaying) { 
+                if (!usingSameAudSrc || !ftSfxSourceHolder.audioSource.isPlaying) {
                     ftSfxSourceHolder.audioSource.volume = calcSfxVolume(ftSfxSourceHolder, totAttZ);
                     ftSfxSourceHolder.audioSource.PlayOneShot(ftSfxSourceHolder.audioClipDict[clipName]);
                 }
@@ -2289,7 +2317,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         } finally {
             cachedSfxNodes.Put(sfxLookupKey, sfxSourceHolder);
         }
-        
+
         return true;
     }
 
@@ -2388,7 +2416,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 } else {
                     vfxAnimHolder.attachedPsr.flip = new Vector3(1, 0);
                 }
-                if (0 < currCharacterDownsync.ActiveSkillHit && !vfxAnimHolder.attachedPs.isPlaying) { 
+                if (0 < currCharacterDownsync.ActiveSkillHit && !vfxAnimHolder.attachedPs.isPlaying) {
                     // For a multi-hit bullet with vfx, we might need this to prevent duplicate triggers
                     vfxAnimHolder.attachedPs.Play();
                 } else {
@@ -2399,7 +2427,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             vfxAnimHolder.score = rdfId;
             speciesKvPq.Put(lookupKey, vfxAnimHolder);
         }
-        
+
         return true;
     }
 
@@ -2471,8 +2499,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         } finally {
             cachedSfxNodes.Put(sfxLookupKey, sfxSourceHolder);
         }
-        
-           
+
+
         return true;
     }
 
@@ -2520,7 +2548,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public float calcSfxVolume(SFXSource sfxSource, float totAttZ) {
         if (totAttZ <= 0) return 1f;
         if (totAttZ >= sfxSource.maxDistanceInWorld) return 0f;
-        return (float)Math.Pow((double)12f, (double)(-totAttZ/sfxSource.maxDistanceInWorld));
+        return (float)Math.Pow((double)12f, (double)(-totAttZ / sfxSource.maxDistanceInWorld));
     }
     public string calcFootStepSfxName(CharacterDownsync currCharacterDownsync) {
         // TODO: Record the contacted barrier material ID in "CharacterDownsync" to achieve more granular footstep sound derivation!  
