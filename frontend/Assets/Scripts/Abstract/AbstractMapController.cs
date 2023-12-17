@@ -1057,7 +1057,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, false);
     }
 
-    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, Pbc::RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
+    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
         // This function is also applicable to "re-joining".
         onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch); // Important to do this step before setting IN_BATTLE
         if (null == renderBuffer) {
@@ -1100,14 +1100,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (shouldForceDumping1 || shouldForceDumping2 || shouldForceResync) {
             // In fact, not having "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet" should already imply that "renderFrameId <= rdfId", but here we double check and log the anomaly  
             if (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
-                Debug.Log(String.Format("On battle started! received rdfId={0}", rdfId));
+                Debug.Log(String.Format("On battle started! received rdfId={0}; downsynced rdf={1}", rdfId, stringifyRdf(pbRdf)));
             } else {
                 if (null == accompaniedInputFrameDownsyncBatch) {
                     if (useOthersForcedDownsyncRenderFrameDict) {
-                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict! received rdfId={0} & now inputBuffer: {1}", rdfId, inputBuffer.toSimpleStat()));
+                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict! received rdfId={0} & now inputBuffer: {1}; downsynced rdf={2}", rdfId, inputBuffer.toSimpleStat(), stringifyRdf(pbRdf)));
                     }
                 } else {
-                    Debug.Log(String.Format("On battle resynced! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId));
+                    Debug.Log(String.Format("On battle resynced! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf)));
                 }
             }
 
@@ -1165,7 +1165,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (othersForcedDownsyncRenderFrameDict.ContainsKey(rdf.Id)) {
                 var othersForcedDownsyncRenderFrame = othersForcedDownsyncRenderFrameDict[rdf.Id];
                 if (lastAllConfirmedInputFrameId >= delayedInputFrameId && !EqualRdfs(othersForcedDownsyncRenderFrame, rdf, roomCapacity)) {
-                    Debug.LogWarning(String.Format("Mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}:\nrdf=${2}\nothersForcedDownsyncRenderFrame={3}", rdf.Id, delayedInputFrameId, stringifyRdf(rdf), stringifyRdf(othersForcedDownsyncRenderFrame)));
+                    Debug.LogWarning(String.Format("Mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}:\nrdf={2}\nothersForcedDownsyncRenderFrame={3}", rdf.Id, delayedInputFrameId, stringifyRdf(rdf), stringifyRdf(othersForcedDownsyncRenderFrame)));
                     // [WARNING] When this happens, something is intrinsically wrong -- to avoid having an inconsistent history in the "renderBuffer", thus a wrong prediction all the way from here on, clear the history!
                     othersForcedDownsyncRenderFrame.ShouldForceResync = true;
                     othersForcedDownsyncRenderFrame.BackendUnconfirmedMask = ((1ul << roomCapacity) - 1);

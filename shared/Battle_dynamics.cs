@@ -2,7 +2,6 @@ using System;
 using static shared.CharacterState;
 using System.Collections.Generic;
 using Google.Protobuf.Collections;
-using System.Security.Cryptography;
 
 namespace shared {
     public partial class Battle {

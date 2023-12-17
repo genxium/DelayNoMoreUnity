@@ -75,6 +75,7 @@ public class OnlineMapController : AbstractMapController {
                         SpaceOffsetY = spaceOffsetY,
                     };
 
+                    reqData.SerializedBarrierPolygons.AddRange(serializedBarrierPolygons);
                     reqData.SerializedStaticPatrolCues.AddRange(serializedStaticPatrolCues);
                     reqData.SerializedCompletelyStaticTraps.AddRange(serializedCompletelyStaticTraps);
                     reqData.SerializedStaticTriggers.AddRange(serializedStaticTriggers);
