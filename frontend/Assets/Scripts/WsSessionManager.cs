@@ -51,6 +51,10 @@ public class WsSessionManager {
     public void SetSpeciesId(int theSpeciesId) {
         speciesId = theSpeciesId;
     }
+
+    public int GetSpeciesId() {
+        return speciesId;
+    }
     
     public void ClearCredentials() {
         SetCredentials(null, Battle.TERMINATING_PLAYER_ID);

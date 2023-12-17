@@ -135,13 +135,13 @@ namespace shared {
         public static float VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO = 1.0f / COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO;
 
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
-        public static int DEFAULT_PREALLOC_NPC_CAPACITY = 64;
+        public static int DEFAULT_PREALLOC_NPC_CAPACITY = 32;
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;
         public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 4;
-        public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 3;
-        public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 3;
+        public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 1;
+        public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;
 
         public static int GRAVITY_X = 0;
@@ -171,7 +171,7 @@ namespace shared {
         public static int MAGIC_FRAMES_TO_BE_ON_WALL = 12;
 
 
-        public static int DYING_FRAMES_TO_RECOVER = 180; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
+        public static int DYING_FRAMES_TO_RECOVER = 100; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
 
         public static int NO_SKILL = 0;
         public static int NO_SKILL_HIT = -1;

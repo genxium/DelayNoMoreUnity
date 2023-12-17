@@ -19,19 +19,17 @@ public class OnlineMapController : AbstractMapController {
     bool lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = false;
     int timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
 
-    private RoomDownsyncFrame startRdf;
-    
     public PlayerWaitingPanel playerWaitingPanel;
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
             //Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
-			if (ErrCode.Ok != wsRespHolder.Ret) {
-				var msg = String.Format("Received ws error {0}", wsRespHolder);
-				popupErrStackPanel(msg);
-				onWsSessionClosed();
-				break;
-			}
+            if (ErrCode.Ok != wsRespHolder.Ret) {
+                var msg = String.Format("Received ws error {0}", wsRespHolder);
+                popupErrStackPanel(msg);
+                onWsSessionClosed();
+                break;
+            }
             switch (wsRespHolder.Act) {
                 case DOWNSYNC_MSG_WS_OPEN:
                     onWsSessionOpen();
@@ -50,15 +48,38 @@ public class OnlineMapController : AbstractMapController {
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     preallocateHolders();
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch("Forest");
+                    resetCurrentMatch("TwoStepStageDeep");
                     preallocateVfxNodes();
                     preallocateSfxNodes();
                     preallocateNpcNodes();
+
+                    var tempSpeciesIdList = new int[roomCapacity];
+                    for (int i = 0; i < roomCapacity; i++) {
+                        tempSpeciesIdList[i] = SPECIES_NONE_CH;
+                    }
+                    tempSpeciesIdList[selfPlayerInfo.JoinIndex - 1] = WsSessionManager.Instance.GetSpeciesId();
+                    var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId) = mockStartRdf(tempSpeciesIdList);
+                    
+                    renderBuffer.Put(thatStartRdf);
+                    
+                    refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
+
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
-                        JoinIndex = selfPlayerInfo.JoinIndex
+                        JoinIndex = selfPlayerInfo.JoinIndex,
+                        SelfParsedRdf = thatStartRdf,
+                        SerializedTrapLocalIdToColliderAttrs = serializedTrapLocalIdToColliderAttrs,
+                        SerializedTriggerTrackingIdToTrapLocalId = serializedTriggerTrackingIdToTrapLocalId,
+                        SpaceOffsetX = spaceOffsetX,
+                        SpaceOffsetY = spaceOffsetY,
                     };
+
+                    reqData.SerializedBarrierPolygons.AddRange(serializedBarrierPolygons);
+                    reqData.SerializedStaticPatrolCues.AddRange(serializedStaticPatrolCues);
+                    reqData.SerializedCompletelyStaticTraps.AddRange(serializedCompletelyStaticTraps);
+                    reqData.SerializedStaticTriggers.AddRange(serializedStaticTriggers);
+
                     WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
 
@@ -85,7 +106,7 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
-                    startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
+                    var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
                     readyGoPanel.playGoAnim();
                     bgmSource.Play();
                     onRoomDownsyncFrame(startRdf, null);
@@ -118,18 +139,26 @@ public class OnlineMapController : AbstractMapController {
                     for (int i = 0; i < roomCapacity; i++) {
                         speciesIdList[i] = wsRespHolder.Rdf.PlayersArr[i].SpeciesId;
                     }
-                    startRdf = mockStartRdf(speciesIdList);
-                    applyRoomDownsyncFrameDynamics(startRdf, null);
-                    cameraTrack(startRdf, null);
+                    var (ok2, toPatchStartRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
+                    patchStartRdf(toPatchStartRdf, speciesIdList);
+                    applyRoomDownsyncFrameDynamics(toPatchStartRdf, null);
+                    cameraTrack(toPatchStartRdf, null);
                     var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
                     Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
                     readyGoPanel.playReadyAnim();
 
                     networkInfoPanel.gameObject.SetActive(true);
-					playerWaitingPanel.gameObject.SetActive(false);
+                    playerWaitingPanel.gameObject.SetActive(false);
                     UdpSessionManager.Instance.PunchBackendUdpTunnel();
                     UdpSessionManager.Instance.PunchAllPeers();
                     break;
+                case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
+                  if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {
+                    Debug.LogWarning(String.Format("Got empty inputFrameDownsyncBatch upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
+                    return;
+                  }
+                  onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
+                  break;
                 default:
                     break;
             }
@@ -169,7 +198,7 @@ public class OnlineMapController : AbstractMapController {
             if (null != udpTask) {
                 UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
             }
-            // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed > cleanupNetworkSessions" to clean up other network resources!
+            // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed -> cleanupNetworkSessions" to clean up other network resources!
         });
 
         //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "cleanupNetworkSessions".
@@ -297,13 +326,19 @@ public class OnlineMapController : AbstractMapController {
             // Upon resync, "this.lastUpsyncInputFrameId" might not have been updated properly.
             batchInputFrameIdSt = inputBuffer.StFrameId;
         }
+
+        var batchInputFrameIdEdClosed = latestLocalInputFrameId;
+        if (batchInputFrameIdEdClosed >= inputBuffer.EdFrameId) {
+            batchInputFrameIdEdClosed = inputBuffer.EdFrameId-1;
+        }
+
         NetworkDoctor.Instance.LogInputFrameIdFront(latestLocalInputFrameId);
         NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
 
-        for (var i = batchInputFrameIdSt; i <= latestLocalInputFrameId; i++) {
+        for (var i = batchInputFrameIdSt; i <= batchInputFrameIdEdClosed; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
             if (false == res1 || null == inputFrameDownsync) {
-                Debug.LogError(String.Format("sendInputFrameUpsyncBatch: recentInputCache is NOT having i={0}, latestLocalInputFrameId={1}", i, latestLocalInputFrameId));
+                Debug.LogError(String.Format("sendInputFrameUpsyncBatch: recentInputCache is NOT having i={0}, at playerRdfId={1}, latestLocalInputFrameId={2}, inputBuffer:{3} ", i, playerRdfId, latestLocalInputFrameId, inputBuffer.toSimpleStat()));
             } else {
                 var inputFrameUpsync = new InputFrameUpsync {
                     InputFrameId = i,

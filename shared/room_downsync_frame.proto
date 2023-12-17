@@ -174,6 +174,15 @@ message WsReq {
 	int32 ackingInputFrameId = 5;
 	int32 authKey = 6;
 	repeated InputFrameUpsync inputFrameUpsyncBatch = 7;
+    RoomDownsyncFrame selfParsedRdf = 8;
+	repeated SerializableConvexPolygon serializedBarrierPolygons = 9;
+	repeated SerializedCompletelyStaticPatrolCueCollider serializedStaticPatrolCues = 10;
+	repeated SerializedCompletelyStaticTrapCollider serializedCompletelyStaticTraps = 11;
+	repeated SerializedCompletelyStaticTriggerCollider serializedStaticTriggers = 12;
+	SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs = 13; 
+	SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId = 14;
+    int32 spaceOffsetX = 15; 
+    int32 spaceOffsetY = 16; 
 }
 
 message InputBufferSnapshot {
@@ -697,4 +706,37 @@ message PlayerLevelProgress {
 
 message PlayerStoryProgress {
     map<int32, PlayerLevelProgress> levelProgressDict = 1;
+}
+
+message SerializableConvexPolygon {
+	float anchorX = 1;
+	float anchorY = 2;
+    repeated float points = 3;
+}
+
+message SerializedCompletelyStaticPatrolCueCollider {
+    PatrolCue attr = 1;
+    SerializableConvexPolygon polygon = 2;
+}
+
+message SerializedCompletelyStaticTrapCollider {
+    TrapColliderAttr attr = 1;
+    SerializableConvexPolygon polygon = 2;
+}
+
+message SerializedCompletelyStaticTriggerCollider {
+    TriggerColliderAttr attr = 1;
+    SerializableConvexPolygon polygon = 2;
+}
+
+message TrapColliderAttrArray {
+	repeated TrapColliderAttr list = 1;
+}
+
+message SerializedTrapLocalIdToColliderAttrs {
+	map<int32, TrapColliderAttrArray> dict = 1;
+}
+
+message SerializedTriggerTrackingIdToTrapLocalId {
+	map<int32, int32> dict = 1;
 }

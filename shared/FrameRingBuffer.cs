@@ -1,4 +1,6 @@
-﻿namespace shared {
+﻿using System;
+
+namespace shared {
     // [WARNING] This class is NOT thread-safe!
     public class FrameRingBuffer<T> : RingBuffer<T> where T : class {
         public int EdFrameId;
@@ -86,6 +88,10 @@
         public new void Clear() {
             base.Clear();
             StFrameId = EdFrameId = 0;
+        }
+
+        public string toSimpleStat() {
+            return String.Format("StFrameId={0}, EdFrameId={1}, Cnt/N={2}/{3}", StFrameId, EdFrameId, Cnt, N);
         }
     }
 }

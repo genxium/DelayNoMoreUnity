@@ -40,7 +40,8 @@ public class OfflineMapController : AbstractMapController {
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
         int[] speciesIdList = new int[roomCapacity];
         speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
-        var startRdf = mockStartRdf(speciesIdList);
+        var (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId) = mockStartRdf(speciesIdList);
+        refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref  completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
         applyRoomDownsyncFrameDynamics(startRdf, null);
         cameraTrack(startRdf, null);
         var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
