@@ -89,6 +89,7 @@ public class Room {
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
     protected Dictionary<int, int> triggerTrackingIdToTrapLocalId;
+    protected Dictionary<int, int> joinIndexRemap;
     protected List<Collider> completelyStaticTrapColliders;
 
     Mutex inputBufferLock;         // Guards [inputBuffer, latestPlayerUpsyncedInputFrameId, lastAllConfirmedInputFrameId, lastAllConfirmedInputList, lastAllConfirmedInputFrameIdWithChange, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, player.LastConsecutiveRecvInputFrameId]
@@ -156,6 +157,7 @@ public class Room {
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
         triggerTrackingIdToTrapLocalId = new Dictionary<int, int>();
+        joinIndexRemap = new Dictionary<int, int>();
         completelyStaticTrapColliders = new List<Collider>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
         historyRdfHolder = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
@@ -1301,8 +1303,8 @@ public class Room {
 
         bool hasIncorrectlyPredictedRenderFrame = false;
         for (var i = fromRenderFrameId; i < toRenderFrameId; i++) {
-            // TODO: write framelogs for each single "Step"
-            Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, loggerBridge);
+            // TODO: write framelogs for each single "Step"?
+            Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, joinIndexRemap, loggerBridge);
             curDynamicsRenderFrameId++;
         }
     }

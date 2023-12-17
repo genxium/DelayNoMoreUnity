@@ -554,7 +554,7 @@ namespace shared {
             int residueCollidedCap = 256;
             residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap);
 
-            int renderBufferSize = 512;
+            int renderBufferSize = 2400;
             renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
             for (int i = 0; i < renderBufferSize; i++) {
                 renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity));

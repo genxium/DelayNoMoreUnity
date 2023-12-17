@@ -48,7 +48,8 @@ public class OnlineMapController : AbstractMapController {
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     preallocateHolders();
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch("TwoStepStageDeep");
+                    //resetCurrentMatch("TwoStepStageDeep");
+                    resetCurrentMatch("Forest");
                     preallocateVfxNodes();
                     preallocateSfxNodes();
                     preallocateNpcNodes();
@@ -222,6 +223,7 @@ public class OnlineMapController : AbstractMapController {
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = 60;
         isOnlineMode = true;
+        useOthersForcedDownsyncRenderFrameDict = false;
         enableBattleInput(false);
     }
 

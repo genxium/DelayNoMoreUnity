@@ -51,6 +51,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected GameObject[] playerGameObjs;
     protected List<GameObject> dynamicTrapGameObjs;
     protected Dictionary<int, GameObject> triggerGameObjs; // They actually don't move
+    protected Dictionary<int, int> joinIndexRemap;
 
     protected long battleState;
     protected int spaceOffsetX;
@@ -278,7 +279,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             bool hasIncorrectlyPredictedRenderFrame = false;
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, selfPlayerInfo.JoinIndex, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, selfPlayerInfo.JoinIndex, joinIndexRemap, _loggerBridge);
             if (hasIncorrectlyPredictedRenderFrame) {
                 Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i + 1));
             }
@@ -859,9 +860,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             frameLogEnabled
         );
 
-        //---------------------------------------------FRONTEND USE ONLY SEPERARTION---------------------------------------------
+        joinIndexRemap = new Dictionary<int, int>();
         othersForcedDownsyncRenderFrameDict = new Dictionary<int, RoomDownsyncFrame>();
         missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
+
+        //---------------------------------------------FRONTEND USE ONLY SEPERARTION---------------------------------------------
 
         prefabbedInputListHolder = new ulong[roomCapacity];
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
