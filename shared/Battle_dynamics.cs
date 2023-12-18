@@ -891,7 +891,7 @@ namespace shared {
                     int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
                     int totOtherChCnt = 0, cellOverlappedOtherChCnt = 0, shapeOverlappedOtherChCnt = 0;
                     int origResidueCollidedSt = residueCollided.StFrameId, origResidueCollidedEd = residueCollided.EdFrameId; 
-                    float primarySoftOverlapMagSqr = float.MinValue;
+                    float primarySoftOverlapMagSqr = float.MinValue, primarySoftPushbackX = float.MinValue, primarySoftPushbackY = float.MinValue;
                     /*
                        if (0 == currCharacterDownsync.SpeciesId) {
                        logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
@@ -1001,6 +1001,13 @@ namespace shared {
                         var magSqr = softPushbackX * softPushbackX + softPushbackY * softPushbackY;
                         if (primarySoftOverlapMagSqr < magSqr) {
                             primarySoftOverlapMagSqr = magSqr;
+                            primarySoftPushbackX = softPushbackX;
+                            primarySoftPushbackY = softPushbackY;
+                            primarySoftOverlapIndex = softPushbacksCnt;
+                        } else if ((softPushbackX < primarySoftPushbackX) || (softPushbackX == primarySoftPushbackX && softPushbackY < primarySoftPushbackY)) {
+                            primarySoftOverlapMagSqr = magSqr;
+                            primarySoftPushbackX = softPushbackX;
+                            primarySoftPushbackY = softPushbackY;
                             primarySoftOverlapIndex = softPushbacksCnt;
                         }
 

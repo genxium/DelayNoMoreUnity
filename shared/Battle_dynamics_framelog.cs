@@ -34,7 +34,7 @@ namespace shared {
 
         public static string stringifyBullet(Bullet bt) {
             if (null == bt) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}", bt.BattleAttr.BulletLocalId, bt.BattleAttr.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bt.Config.HitboxSizeX, bt.Config.HitboxSizeY, bt.RepeatQuotaLeft);
+            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},j:{13}", bt.BattleAttr.BulletLocalId, bt.BattleAttr.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bt.Config.HitboxSizeX, bt.Config.HitboxSizeY, bt.RepeatQuotaLeft, bt.BattleAttr.OffenderJoinIndex);
         }
 
         public static string stringifyRdf(RoomDownsyncFrame rdf) {
@@ -106,7 +106,7 @@ namespace shared {
                 for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
                     var (ok1, rdf) = renderBuffer.GetByFrameId(i);
                     if (!ok1 || null == rdf) {
-                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId));
+                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer:{1}", i, renderBuffer.StFrameId, renderBuffer.toSimpleStat()));
                     }
 
                     trimRdfInPlace(rdf);
@@ -118,7 +118,7 @@ namespace shared {
                             break;
                         }
                         var j = ConvertToDelayedInputFrameId(i);
-                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 ifd for i={0}, j={1} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{2}, {3}), inputBuffer[StFrameId, EdFrameId)=[{4}, {5})", i, j, renderBuffer.StFrameId, renderBuffer.EdFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId));
+                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 ifd for i={0}, j={1} doesn't exist! renderBuffer:{2}, inputBuffer:{3}", i, j, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
                     }
                     if (trimConfirmedList) {
                         trimIfdInPlace(ifd);
@@ -134,7 +134,7 @@ namespace shared {
                 for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
                     var (ok2, rdfPfl) = pushbackFrameLogBuffer.GetByFrameId(i);
                     if ((!ok2 || null == rdfPfl) && i+1 < renderBuffer.EdFrameId) {
-                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 rdfPfl for i={0} doesn't exist! renderBuffer[StFrameId, EdFrameId)=[{1}, {2}), pushbackFrameLogBuffer[StFrameId, EdFrameId)=[{3}, {4})", i, renderBuffer.StFrameId, renderBuffer.EdFrameId, pushbackFrameLogBuffer.StFrameId, pushbackFrameLogBuffer.EdFrameId));
+                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 rdfPfl for i={0} doesn't exist! renderBuffer:{1}, pushbackFrameLogBuffer:{2}", i, renderBuffer.toSimpleStat(), pushbackFrameLogBuffer.toSimpleStat()));
                     }
 
                     if (null != rdfPfl) {       

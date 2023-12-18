@@ -176,6 +176,18 @@ namespace shared {
                             overlapResult.cloneInto(ref primaryOverlapResult);
                             primaryIsWall = isWall;
                             primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
+                        } else {
+                            if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                                primaryOverlapIndex = retCnt;
+                                primaryOverlapMag = overlapResult.OverlapMag;
+                                overlapResult.cloneInto(ref primaryOverlapResult);
+                                primaryIsWall = isWall;
+                                if (onTrap) {
+                                    primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
+                                } else {
+                                    primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
+                                }
+                            }
                         }
                     }
                 }
@@ -248,6 +260,12 @@ namespace shared {
                     primaryOverlapIndex = retCnt;
                     primaryOverlapMag = overlapResult.OverlapMag;
                     overlapResult.cloneInto(ref primaryOverlapResult);
+                } else {
+                    if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                        primaryOverlapIndex = retCnt;
+                        primaryOverlapMag = overlapResult.OverlapMag;
+                        overlapResult.cloneInto(ref primaryOverlapResult);
+                    }
                 }
 
                 hardPushbacks[retCnt].X = pushbackX;
