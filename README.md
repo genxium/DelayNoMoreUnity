@@ -1,3 +1,12 @@
+# Latest tag change notes
+v1.2.8 new features
+- wave-based triggers (implemented by event mask subscription, configured in Tiled `EvtSub` object layer)
+- character specific inventory & buff (including xform for knifegirl, and bomb for gungirl with different inventory types)
+- backend dynamics (thus recovery reconnection & active slow ticker force resync) 
+- more rigorous deterministic game dynamics
+
+Please checkout the demo video on [YouTube](https://www.youtube.com/watch?v=gu_MfR2oWw0) or [BaiduNetDisk](https://pan.baidu.com/s/1WPXsaxrkcQvZaQV0Kd75rg?pwd=vtzg) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
+
 # What's this project?
 It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a Multiplayer Platformer game demo on websocket with delayed-input Rollback Netcode inspired by GGPO -- but with the backend also rebuilt in C#.
 
@@ -12,7 +21,6 @@ _(demo for freezer buff since v1.2.7, [original video here](https://pan.baidu.co
 # Notable Features (by far, would add more in the future)
 - Automatic correction for "slow ticker", especially "active slow ticker" which is well-known to be a headache for input synchronization
 - Peer-to-peer UDP holepunching whenever possible, and will fallback to use the backend as a UDP relay/tunnel if holepunching failed for any participant (kindly note that UDP is always used along side with WebSocket, where the latter is a golden source of frame info)
-- Frame logging toggle for both frontend & backend (i.e. `backend/Battle/Room.frameLogEnabled`), useful for debugging out of sync entities when developing new features -- **however, if you updated the battle dynamics and found certain introduced out-of-sync spots difficult to fix, please consider turning to `backend-dynamics` and broadcast reference-render-frames regularly, [the original Golang version backend](https://github.com/genxium/DelayNoMore/blob/v1.0.15/jsexport/battle/battle.go#L593) is a good reference for implementing `backend-dynamics`**
 - Rollback compatible NPC patrolling and vision reaction
 - Rollback compatible static and dynamic traps, including a WYSIWYG notation support in Tiled editor (since v1.1.4)
 - Rollback compatible monodirectional platform which also supports _slip-down_ operation
