@@ -5,7 +5,7 @@ v1.2.8 new features
 - backend dynamics (thus recovery reconnection & active slow ticker force resync) 
 - more rigorous deterministic game dynamics
 
-Please checkout the demo video on [YouTube](https://www.youtube.com/watch?v=gu_MfR2oWw0) or [BaiduNetDisk](https://pan.baidu.com/s/1WPXsaxrkcQvZaQV0Kd75rg?pwd=vtzg) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
+Please checkout the demo video on YouTube([basic ops](https://www.youtube.com/watch?v=gu_MfR2oWw0), [field tests](https://www.youtube.com/watch?v=le-gEMUMysM)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/1WPXsaxrkcQvZaQV0Kd75rg?pwd=vtzg), [field tests](https://pan.baidu.com/s/1WVDlJ1u40qctMFcdYuCw9g?pwd=nxa9)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
 
 # What's this project?
 It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a Multiplayer Platformer game demo on websocket with delayed-input Rollback Netcode inspired by GGPO -- but with the backend also rebuilt in C#.
