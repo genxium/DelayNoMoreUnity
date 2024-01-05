@@ -1270,11 +1270,6 @@ public class Room {
                 }
                 unconfirmedMask |= (allConfirmedMask ^ foo.ConfirmedList);
                 foo.ConfirmedList = allConfirmedMask;
-                for (int k = 0; k < capacity; ++k) {
-                    if (lastIndividuallyConfirmedInputFrameId[k] <= j && 0 < (unconfirmedMask & (1UL << k))) {
-                        foo.InputList[k] = (lastIndividuallyConfirmedInputList[k] & 1UL);
-                    }
-                }
                 onInputFrameDownsyncAllConfirmed(foo, -1);
             }
             if (0 < unconfirmedMask) {
