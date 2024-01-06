@@ -1061,7 +1061,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, false);
     }
 
-    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch, bool usingOthersForcedDownsyncRenderFrameDict) {
+    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch, bool usingOthersForcedDownsyncRenderFrameDict = false) {
         // This function is also applicable to "re-joining".
         onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch); // Important to do this step before setting IN_BATTLE
         if (null == renderBuffer) {
@@ -1118,7 +1118,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerRdfId = rdfId;
             // In this case it must be true that "rdfId > chaserRenderFrameId".
             chaserRenderFrameId = rdfId;
-            if (!usingOthersForcedDownsyncRenderFrameDict) {
+            if (RingBuffer<RoomDownsyncFrame>.RING_BUFF_NON_CONSECUTIVE_SET == dumpRenderCacheRet) {
                 pushbackFrameLogBuffer.Clear();
                 pushbackFrameLogBuffer.StFrameId = rdfId;
                 pushbackFrameLogBuffer.EdFrameId = rdfId;
