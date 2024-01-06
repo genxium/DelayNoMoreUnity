@@ -57,7 +57,7 @@ namespace shared {
 
         public ConvexPolygon(float x, float y, float[] points) {
             X = x;
-			Y = y;
+            Y = y;
             Points = new FrameRingBuffer<Vector>(6); // I don't expected more points to be coped with in this particular game
             for (int i = 0; i < points.GetLength(0); i += 2) {
                 Vector v = new Vector(points[i], points[i + 1]);
@@ -114,7 +114,7 @@ namespace shared {
         public SerializableConvexPolygon Serialize() {
             var ret = new SerializableConvexPolygon {
                 AnchorX = X,
-                AnchorY = Y,
+                        AnchorY = Y,
             };
             for (int i = Points.StFrameId; i < Points.EdFrameId; i++) {
                 var p = GetPointByOffset(i);
@@ -136,7 +136,7 @@ namespace shared {
                     else s += ", ";
                 }
 
-				return s;
+                return s;
             } else {
                 var s = String.Format("[");
                 for (int i = Points.StFrameId; i < Points.EdFrameId; i++) {
@@ -147,7 +147,7 @@ namespace shared {
                     else s += ", ";
                 }
 
-				return s;
+                return s;
             }
         }
     }

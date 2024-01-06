@@ -10,7 +10,7 @@ using Google.Protobuf.Collections;
 namespace backend.Battle;
 public class Room {
 
-    private int renderBufferSize = 512;
+    private int renderBufferSize = 2400;
     public int id;
     public int capacity;
     public int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
@@ -144,7 +144,7 @@ public class Room {
         curDynamicsRenderFrameId = 0;
         frameLogEnabled = true;
         int fps = 60;
-        int durationSeconds = 90;
+        int durationSeconds = 60;
         battleDurationFrames = durationSeconds * fps;
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";
@@ -393,7 +393,7 @@ public class Room {
                 renderBuffer.Put(selfParsedRdf);
                 _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: Initialized renderBuffer by incoming startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}; now renderBuffer: {6}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, renderBuffer.toSimpleStat());
 
-                _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync details: roomId={0}, selfParsedRdf={1}, serializedBarrierPolygons={2}", id, selfParsedRdf, serializedBarrierPolygons);
+                //_logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync details: roomId={0}, selfParsedRdf={1}, serializedBarrierPolygons={2}", id, selfParsedRdf, serializedBarrierPolygons);
 
                 refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
             } else {
@@ -521,6 +521,10 @@ public class Room {
             var nowRoomState = Interlocked.Read(ref state);
             if (ROOM_STATE_IN_SETTLEMENT != nowRoomState) {
                 return;
+            }
+
+            if (frameLogEnabled) {
+                wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, pushbackFrameLogBuffer, Directory.GetCurrentDirectory(), String.Format("room-{0}.log", id));
             }
 
             /**
@@ -1307,7 +1311,14 @@ public class Room {
 
         bool hasIncorrectlyPredictedRenderFrame = false;
         for (var i = fromRenderFrameId; i < toRenderFrameId; i++) {
-            // TODO: write framelogs for each single "Step"?
+            if (frameLogEnabled) {
+                int j = ConvertToDelayedInputFrameId(i);
+                var (ok, delayedInputFrame) = inputBuffer.GetByFrameId(j);
+                if (false == ok || null == delayedInputFrame) {
+                    throw new ArgumentNullException(String.Format("Couldn't find delayedInputFrame for j={0} to log frame info", j));
+                }
+                rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
+            }
             Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, joinIndexRemap, loggerBridge);
             curDynamicsRenderFrameId++;
         }

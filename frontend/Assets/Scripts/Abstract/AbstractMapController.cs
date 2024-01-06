@@ -1061,7 +1061,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, false);
     }
 
-    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
+    public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch, bool usingOthersForcedDownsyncRenderFrameDict) {
         // This function is also applicable to "re-joining".
         onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch); // Important to do this step before setting IN_BATTLE
         if (null == renderBuffer) {
@@ -1118,10 +1118,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerRdfId = rdfId;
             // In this case it must be true that "rdfId > chaserRenderFrameId".
             chaserRenderFrameId = rdfId;
-            pushbackFrameLogBuffer.Clear();
-            pushbackFrameLogBuffer.StFrameId = rdfId;
-            pushbackFrameLogBuffer.EdFrameId = rdfId;
-            othersForcedDownsyncRenderFrameDict.Clear();
+            if (!usingOthersForcedDownsyncRenderFrameDict) {
+                pushbackFrameLogBuffer.Clear();
+                pushbackFrameLogBuffer.StFrameId = rdfId;
+                pushbackFrameLogBuffer.EdFrameId = rdfId;
+                othersForcedDownsyncRenderFrameDict.Clear();
+            }
             NetworkDoctor.Instance.LogRollbackFrames(0);
 
             battleState = ROOM_STATE_IN_BATTLE;
@@ -1173,7 +1175,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     // [WARNING] When this happens, something is intrinsically wrong -- to avoid having an inconsistent history in the "renderBuffer", thus a wrong prediction all the way from here on, clear the history!
                     othersForcedDownsyncRenderFrame.ShouldForceResync = true;
                     othersForcedDownsyncRenderFrame.BackendUnconfirmedMask = ((1ul << roomCapacity) - 1);
-                    onRoomDownsyncFrame(othersForcedDownsyncRenderFrame, null);
+                    onRoomDownsyncFrame(othersForcedDownsyncRenderFrame, null, true);
                     othersForcedDownsyncRenderFrameDict.Remove(rdf.Id);
                 }
             }
@@ -2290,6 +2292,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
         var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+        if (0 > currCharacterDownsync.ActiveSkillHit || currSkillConfig.Hits.Count <= currCharacterDownsync.ActiveSkillHit) return false;
         var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
         if (null == currBulletConfig || null == currBulletConfig.CharacterEmitSfxName || currBulletConfig.CharacterEmitSfxName.IsEmpty()) return false;
 

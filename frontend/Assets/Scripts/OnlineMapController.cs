@@ -223,7 +223,8 @@ public class OnlineMapController : AbstractMapController {
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = 60;
         isOnlineMode = true;
-        useOthersForcedDownsyncRenderFrameDict = false;
+        // [WARNING] Keep this property true if you want to use backendDynamics! Read the comments around "shapeOverlappedOtherChCnt" in "shared/Battle_dynamics.cs" for details.
+        useOthersForcedDownsyncRenderFrameDict = true;
         enableBattleInput(false);
     }
 

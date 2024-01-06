@@ -20,34 +20,34 @@ namespace shared {
             }
         }
 
-		// WorldToSpace converts from a world position (x, y) to a position in the Space (a grid-based position).
-		public (int, int) WorldToSpace(float x, float y) {
-			int fx = (int)(Math.Floor(x / CellWidth));
-			int fy = (int)(Math.Floor(y / CellHeight));
-			return (fx, fy);
-		}
+        // WorldToSpace converts from a world position (x, y) to a position in the Space (a grid-based position).
+        public (int, int) WorldToSpace(float x, float y) {
+            int fx = (int)(Math.Floor(x / CellWidth));
+            int fy = (int)(Math.Floor(y / CellHeight));
+            return (fx, fy);
+        }
 
-		// SpaceToWorld converts from a position in the Space (on a grid) to a world-based position, given the size of the Space when first created.
-		public (float, float) SpaceToWorld(int x, int y) {
-			float fx = (float)(x * CellWidth);
-			float fy = (float)(y * CellHeight);
-			return (fx, fy);
-		}
+        // SpaceToWorld converts from a position in the Space (on a grid) to a world-based position, given the size of the Space when first created.
+        public (float, float) SpaceToWorld(int x, int y) {
+            float fx = (float)(x * CellWidth);
+            float fy = (float)(y * CellHeight);
+            return (fx, fy);
+        }
 
-		public CollisionCell? GetCell(int x, int y) {
-			if (y >= 0 && y < Cells.GetLength(0) && x >= 0 && x < Cells.GetLength(1)) {
-				return Cells[y, x];
-			}
-			return null;
-		}
+        public CollisionCell? GetCell(int x, int y) {
+            if (y >= 0 && y < Cells.GetLength(0) && x >= 0 && x < Cells.GetLength(1)) {
+                return Cells[y, x];
+            }
+            return null;
+        }
         public void AddSingle(Collider collider) {
             /*
-             [WARNING] 
-            
-            1. For a static collider, this "AddSingle" would only be called once, thus no cleanup for static collider is needed.
-            2. For a dynamic collider, this "AddSingle" would be called multiple times, but at the end of each "Step", we'd call "Space.RemoveSingle" to clean up for the dynamic collider.
-            */
-			collider.Space = this;
+               [WARNING] 
+
+               1. For a static collider, this "AddSingle" would only be called once, thus no cleanup for static collider is needed.
+               2. For a dynamic collider, this "AddSingle" would be called multiple times, but at the end of each "Step", we'd call "Space.RemoveSingle" to clean up for the dynamic collider.
+             */
+            collider.Space = this;
             var (cx, cy, ex, ey) = collider.BoundsToSpace(0, 0);
             for (int y = cy; y <= ey; y++) {
                 for (int x = cx; x <= ex; x++) {
@@ -69,14 +69,14 @@ namespace shared {
         }
 
         public void RemoveSingle(Collider collider) {
-			while (0 < collider.TouchingCells.Cnt) {
-				var (_, cell) = collider.TouchingCells.Pop();
-				if (null != cell) {
-					cell.unregister(collider);
-				}
-			}
+            while (0 < collider.TouchingCells.Cnt) {
+                var (_, cell) = collider.TouchingCells.Pop();
+                if (null != cell) {
+                    cell.unregister(collider);
+                }
+            }
 
-			collider.Space = null;
-		}
+            collider.Space = null;
+        }
     }
 }

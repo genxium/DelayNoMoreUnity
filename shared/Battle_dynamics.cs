@@ -813,6 +813,10 @@ namespace shared {
 
         private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
+            if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
+                currPushbackFrameLog.Reset();
+                currPushbackFrameLog.setMaxJoinIndex(roomCapacity+currNpcI);
+            }
             int primaryHardOverlapIndex;
             for (int i = iSt; i < iEd; i++) {
                 primaryOverlapResult.reset();
@@ -826,6 +830,7 @@ namespace shared {
                 int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, chConfig, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, residueCollided, logger);
 
                 if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
+                    currPushbackFrameLog.ResetJoinIndex(currCharacterDownsync.JoinIndex);
                     currPushbackFrameLog.setTouchingCellsByJoinIndex(currCharacterDownsync.JoinIndex, aCollider);
                     currPushbackFrameLog.setHardPushbacksByJoinIndex(currCharacterDownsync.JoinIndex, primaryHardOverlapIndex, hardPushbackNormsArr[i] /* [WARNING] by now "hardPushbackNormsArr[i]" is not yet normalized */, hardPushbackCnt);
                 }
@@ -967,13 +972,6 @@ namespace shared {
                             continue;
                         }
 
-                        shapeOverlappedOtherChCnt++;
-
-                        normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
-                        if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
-                            landedOnGravityPushback = true;
-                        }
-
                         // [WARNING] Due to yet unknown reason, the resultant order of "hardPushbackNormsArr[i]" could be random for different characters in the same battle (maybe due to rollback not recovering the existing StaticCollider-TouchingCell information which could've been swapped by "TouchingCell.unregister(...)", please generate FrameLog and see the PushbackFrameLog part for details), the following traversal processing MUST BE ORDER-INSENSITIVE for softPushbackX & softPushbackY!
                         float softPushbackXReduction = 0f, softPushbackYReduction = 0f; 
                         for (int k = 0; k < hardPushbackCnt; k++) {
@@ -999,6 +997,19 @@ namespace shared {
                         }
 
                         var magSqr = softPushbackX * softPushbackX + softPushbackY * softPushbackY;
+                        if (0 >= magSqr) {
+                            // [WARNING] In field test, the backend (.net 7.0) and frontend (.net 2.1/4.0) might disagree on whether or not 2 colliders have overlapped by shape check (due to possibly different treatment of floating errors -- no direct evidence can be provided but from pushbackFrameLogs it's most suspicious), and if one party doesn't recognize any softPushback while the other does, the latter would proceed with "processPrimaryAndImpactEffPushback", resulting in different SNAP_INTO_CHARACTER_OVERLAP usage, thus different RoomDownsyncFrame!   
+                            // [WARNING] Hereby we skip recognizing effectively zero softPushbacks, yet a closed-loop control on frontend by "onRoomDownsyncFrame & useOthersForcedDownsyncRenderFrameDict" is required because such (suspicious) floating errors are too difficult to completely avoid.
+                            continue;
+                        }
+                        
+                        shapeOverlappedOtherChCnt++;
+
+                        normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
+                        if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
+                            landedOnGravityPushback = true;
+                        }
+
                         if (primarySoftOverlapMagSqr < magSqr) {
                             primarySoftOverlapMagSqr = magSqr;
                             primarySoftPushbackX = softPushbackX;

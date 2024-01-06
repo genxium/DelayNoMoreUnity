@@ -23,9 +23,9 @@ namespace shared {
         }
 
         public (int, int, int, int) BoundsToSpace(float dx, float dy) {
-			if (null == Space) {
-				throw new ArgumentException("Collider Space is null when calling `BoundsToSpace`!");
-			}
+            if (null == Space) {
+                throw new ArgumentException("Collider Space is null when calling `BoundsToSpace`!");
+            }
             var (cx, cy) = Space.WorldToSpace(X + dx, Y + dy);
             var (ex, ey) = Space.WorldToSpace(X + W + dx, Y + H + dy);
             return (cx, cy, ex, ey);
@@ -69,7 +69,7 @@ namespace shared {
                         if (o == this) {
                             continue;
                         }
-                        
+
                         if (cc.HasSeen(o)) {
                             continue;
                         }
@@ -92,19 +92,19 @@ namespace shared {
             return true;
         }
 
-		public String TouchingCellsStr() {
-			var rb = this.TouchingCells;
-			var sb = new StringBuilder();
-			for (int i = rb.StFrameId; i < rb.EdFrameId; i++) {
-				var (ok, cell) = rb.GetByFrameId(i);
-				if (!ok || null == cell) {
-					continue;
-				}
-				sb.AppendFormat("(X:{0}, Y:{1}) ", cell.X, cell.Y);
-			}
+        public String TouchingCellsStr() {
+            var rb = this.TouchingCells;
+            var sb = new StringBuilder();
+            for (int i = rb.StFrameId; i < rb.EdFrameId; i++) {
+                var (ok, cell) = rb.GetByFrameId(i);
+                if (!ok || null == cell) {
+                    continue;
+                }
+                sb.AppendFormat("(X:{0}, Y:{1}) ", cell.X, cell.Y);
+            }
 
-			return sb.ToString();
-		}
+            return sb.ToString();
+        }
 
         public String TouchingCellsStaticColliderStr() {
             var rb = this.TouchingCells;
