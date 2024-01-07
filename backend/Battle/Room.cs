@@ -10,7 +10,7 @@ using Google.Protobuf.Collections;
 namespace backend.Battle;
 public class Room {
 
-    private int renderBufferSize = 2400;
+    private int renderBufferSize = 512;
     public int id;
     public int capacity;
     public int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
