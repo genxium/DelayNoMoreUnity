@@ -1,4 +1,8 @@
 # Latest tag change notes
+v1.2.9 new features
+- Fixed ringbuff contamination for pushback framelogging 
+- Fixed resync continuation handling on the ACTIVE NORMAL TICKER side
+
 v1.2.8 new features
 - wave-based triggers (implemented by event mask subscription, configured in Tiled `EvtSub` object layer)
 - character specific inventory & buff (including xform for knifegirl, and bomb for gungirl with different inventory types)

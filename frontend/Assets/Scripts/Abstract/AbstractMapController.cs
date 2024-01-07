@@ -1120,7 +1120,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             if (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId || RingBuffer<RoomDownsyncFrame>.RING_BUFF_NON_CONSECUTIVE_SET == dumpRenderCacheRet) {
-                playerRdfId = rdfId;
+                playerRdfId = rdfId; // [WARNING] It's important NOT to re-assign "playerRdfId" when "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet", e.g. when "true == usingOthersForcedDownsyncRenderFrameDict" (on the ACTIVE NORMAL TICKER side).
                 pushbackFrameLogBuffer.Clear();
                 pushbackFrameLogBuffer.StFrameId = rdfId;
                 pushbackFrameLogBuffer.EdFrameId = rdfId;
@@ -1175,13 +1175,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (othersForcedDownsyncRenderFrameDict.ContainsKey(rdf.Id)) {
                 var othersForcedDownsyncRenderFrame = othersForcedDownsyncRenderFrameDict[rdf.Id];
                 if (lastAllConfirmedInputFrameId >= delayedInputFrameId && !EqualRdfs(othersForcedDownsyncRenderFrame, rdf, roomCapacity)) {
-                    Debug.LogWarning(String.Format("Mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}:\nrdf={2}\nothersForcedDownsyncRenderFrame={3}", rdf.Id, delayedInputFrameId, stringifyRdf(rdf), stringifyRdf(othersForcedDownsyncRenderFrame)));
+                    Debug.LogWarning(String.Format("Mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}:\nrdf={2}\nothersForcedDownsyncRenderFrame={3}\nnow inputBuffer:{4}, renderBuffer:{5}", rdf.Id, delayedInputFrameId, stringifyRdf(rdf), stringifyRdf(othersForcedDownsyncRenderFrame), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
                     // [WARNING] When this happens, something is intrinsically wrong -- to avoid having an inconsistent history in the "renderBuffer", thus a wrong prediction all the way from here on, clear the history!
                     othersForcedDownsyncRenderFrame.ShouldForceResync = true;
                     othersForcedDownsyncRenderFrame.BackendUnconfirmedMask = ((1ul << roomCapacity) - 1);
                     onRoomDownsyncFrame(othersForcedDownsyncRenderFrame, null, true);
                     othersForcedDownsyncRenderFrameDict.Remove(rdf.Id);
-                    Debug.LogWarning(String.Format("Handled mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}, playerRdfId={4}:\nnow inputBuffer:{2}, renderBuffer:{3}", rdf.Id, delayedInputFrameId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat(), playerRdfId));
+                    Debug.LogWarning(String.Format("Handled mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}, playerRdfId={2}:\nnow inputBuffer:{3}, renderBuffer:{4}", rdf.Id, delayedInputFrameId, playerRdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
                 }
             }
         }
