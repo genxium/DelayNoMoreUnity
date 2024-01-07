@@ -416,7 +416,9 @@ public class OnlineMapController : AbstractMapController {
                 firstPredictedYetIncorrectInputFrameId = inputFrameId;
             }
         }
-        NetworkDoctor.Instance.LogPeerInputFrameUpsync(batch[0].InputFrameId, batch[batchCnt - 1].InputFrameId);
+        if (null != batch && 0 < batchCnt) {
+            NetworkDoctor.Instance.LogPeerInputFrameUpsync(batch[0].InputFrameId, batch[batchCnt - 1].InputFrameId);
+        }
         /*
         [WARNING] 
 

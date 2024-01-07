@@ -112,6 +112,19 @@ namespace shared {
                     continue;
                 }
 
+                if (Math.Abs(pushbackX) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
+                    // Clamp to zero if it does not move at least 1 virtual grid step
+                    pushbackX = 0;
+                }
+                if (Math.Abs(pushbackY) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
+                    // Clamp to zero if it does not move at least 1 virtual grid step
+                    pushbackY = 0;
+                }
+                if (0 == pushbackX && 0 == pushbackY) {
+                    // Read the comments around "shapeOverlappedOtherChCnt" in "shared/Battle_dynamics.cs" for details.
+                    continue;
+                }
+
                 if (forcesCrouching && chConfig.CrouchingEnabled) {
                     // [WARNING] If "forcesCrouching" but "false == chConfig.CrouchingEnabled", then the current "bCollider" should be deemed as a regular barrier!
                     float characterTop = aCollider.Y + aCollider.H;

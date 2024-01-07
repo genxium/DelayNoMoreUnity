@@ -1802,14 +1802,14 @@ namespace shared {
             if (pushbackFrameLogEnabled) {
                 (ok3, currRdfPushbackFrameLog) = pushbackFrameLogBuffer.GetByFrameId(currRenderFrameId);
                 if (!ok3 || null == currRdfPushbackFrameLog) {
-                    if (currRenderFrameId == pushbackFrameLogBuffer.EdFrameId) {
+                    while (currRenderFrameId >= pushbackFrameLogBuffer.EdFrameId) {
                         pushbackFrameLogBuffer.DryPut();
-                        (_, currRdfPushbackFrameLog) = pushbackFrameLogBuffer.GetByFrameId(currRenderFrameId);
                     }
+                    (_, currRdfPushbackFrameLog) = pushbackFrameLogBuffer.GetByFrameId(currRenderFrameId);
                 }
                 if (null == currRdfPushbackFrameLog) {
                     // Get the pointer to currRdfPushbackFrameLog anyway, but don't throw error if it's null but not required!
-                    throw new ArgumentNullException(String.Format("pushbackFrameLogBuffer was not fully pre-allocated for currRenderFrameId={0}!", currRenderFrameId));
+                    throw new ArgumentNullException(String.Format("pushbackFrameLogBuffer was not fully pre-allocated for currRenderFrameId={0}! pushbackFrameLogBuffer:{1}", currRenderFrameId, pushbackFrameLogBuffer.toSimpleStat()));
                 }
                 currRdfPushbackFrameLog.RdfId = currRenderFrameId;
             }

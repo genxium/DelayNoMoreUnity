@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using Google.Protobuf.Collections;
 
 namespace shared {
     public partial class Battle {
@@ -96,12 +97,21 @@ namespace shared {
             }
         }
 
+        public static string stringifyIfdBatch(RepeatedField<InputFrameDownsync> ifdBatch, bool trimConfirmedList) {
+            var listSb = new List<String>();
+            for (int k = 0; k < ifdBatch.Count; k++) {
+                listSb.Add(stringifyIfd(ifdBatch[k], trimConfirmedList));
+            }
+            return String.Join('\n', listSb);
+        }
+
         public static string stringifyFrameLog(FrameLog fl, bool trimConfirmedList) {
             // Why do we need an extra class definition of "FrameLog" while having methods "stringifyRdf" & "stringifyIfd"? That's because we might need put "FrameLog" on transmission, i.e. sending to backend upon battle stopped, thus a wrapper class would provide some convenience though not 100% necessary.
             return String.Format("{0}\n{1}", stringifyRdf(fl.Rdf), stringifyIfd(fl.ActuallyUsedIdf, trimConfirmedList));
         }
 
         public static void wrapUpFrameLogs(FrameRingBuffer<RoomDownsyncFrame> renderBuffer, FrameRingBuffer<InputFrameDownsync> inputBuffer, Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput, bool trimConfirmedList, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, string dirPath, string filename) {
+            // TODO: On frontend, log "chaserRenderFrameId" at the end of its framelog file -- kindly note that for "rdfId > chaserRenderFrameId", they might be uncorrected by the latest inputs and thus expected to show some differences.  
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(dirPath, filename))) {
                 for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
                     var (ok1, rdf) = renderBuffer.GetByFrameId(i);
