@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="21" nextobjectid="379">
+ <properties>
+  <property name="missionEvtSubId" value="2"/>
+  <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
+ </properties>
+ <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
+ <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
+ <tileset firstgid="12" source="../triggers/door/triggers_door.tsx"/>
+ <tileset firstgid="14" source="../shared_comps/forest16.tsx"/>
+ <layer id="18" name="Background2" width="128" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt0csNwjAMANCIGYFJCIMwS9L5AKmWjLnAJXB4T7LqOr+6aQ0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgH9wO/z6CwB4Oi2M86KevnFsa//Bv8XYoz9i7s/IY2wrY1GLfJZ5W9pjS+uuH97JSpf23nP0Ee99r400N9dq77n/Weq11tO+I+05y1n5fmbKR1nX01m5NtvrPUZvd/6lWO0=
+  </data>
+ </layer>
+ <layer id="20" name="Background1" width="128" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt0bERgDAMBDCHJYDJCGsxMbRAlSJOCunuC3d+OwIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBlcyzvAeGuJ2DpnL6Nb/mX0brlL1j7fXxzPXDvnnPD/Gb1b7pK1z4y/IN8NpTspDw==
+  </data>
+ </layer>
+ <layer id="15" name="Ground" width="128" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt20FOAkEQhtEZjuA1jEdADuSZxQN4BsAhWguNCTExuvjeS2YFbPjT1dVFc1yX5WV7aHneMj9uz+NuWS7yzzltmR+27M+r/ItOH2vf+m+a/A/yT7rmf17lX3XNf6/+Z83638s/Sf/XNvXf+a/J/t82+7/8m5z/2qb+y79p+n/9X5P13+b81zb13/yvyfyvzfpvc/+nzfynzf2fNvP/NvO/Nvt/m/Nfm/Nf2+Sv/jeZ/7bp/9v0/21+/2+b/s/+32T/b3P/r83/P9vMf9vk36b/a3P/p838r838p835v039b1P/26z/Nvf/2yZ/858m9z/b1P82v/+26f/bZv+3/pvk36b/b9P/tZn/t6n/bf9V/+92n59br//0fbc+x7u5/2H/bzL/abt1//vhS+28V0v/1NMvft+v3+Tr/n/b7P9v6vm9LA==
+  </data>
+ </layer>
+ <objectgroup id="1" name="PlayerStartingPos">
+  <object id="137" x="141" y="935">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="teamId" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="135" x="376" y="947">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="teamId" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="19" name="EvtSubscription">
+  <object id="363" x="1024" y="0">
+   <properties>
+    <property name="id" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="366" x="1186" y="0">
+   <properties>
+    <property name="demandedEvtMask" value="15"/>
+    <property name="id" value="2"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="13" name="TriggerPos">
+  <object id="360" gid="13" x="1568" y="992" width="32" height="32">
+   <properties>
+    <property name="bulletTeamId" value="3"/>
+    <property name="characterSpawnerTimeSeq" value="1:4097,4097,4097;2:1,1;3:3;4:1,3,3"/>
+    <property name="delayedFrames" value="120"/>
+    <property name="initVelX" value="-2"/>
+    <property name="initVelY" value="0"/>
+    <property name="publishingEvtMaskUponExhaust" value="1"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="2"/>
+    <property name="quota" value="3"/>
+    <property name="recoveryFrames" value="300"/>
+    <property name="subCycleQuota" value="3"/>
+    <property name="subCycleTriggerFrames" value="90"/>
+    <property name="subscriptionId" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="NpcStartingPos">
+  <object id="372" x="482" y="914">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="2"/>
+    <property name="publishingEvtSubIdUponKilled" value="2"/>
+    <property name="speciesId" value="4097"/>
+    <property name="teamId" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="373" x="815" y="916">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="publishingEvtMaskUponKilled" value="4"/>
+    <property name="publishingEvtSubIdUponKilled" value="2"/>
+    <property name="speciesId" value="4097"/>
+    <property name="teamId" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="374" x="1088" y="972">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="8"/>
+    <property name="publishingEvtSubIdUponKilled" value="2"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="TrapStartingPos">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <object id="352" x="-32" y="0" width="64" height="1024">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="prohibitsWallGrabbing" value="1"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="359" x="2016" y="0" width="64" height="1024">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="prohibitsWallGrabbing" value="1"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="368" gid="2" x="920" y="915" width="64" height="32">
+   <properties>
+    <property name="dirX" value="0"/>
+    <property name="dirY" value="-2"/>
+    <property name="speed" value="6"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="2" name="Barrier">
+  <properties>
+   <property name="type" value="barrier_and_shelter"/>
+  </properties>
+  <object id="114" x="-32" y="-32" width="2112" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="305" x="448" y="944" width="64" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="309" x="576" y="944" width="96" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="310" x="736" y="944" width="160" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="358" x="-32" y="992" width="482" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="367" x="1024" y="992" width="1024" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="PatrolCue">
+  <object id="336" x="81.333" y="988">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="345" x="453" y="924">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="364" x="1025" y="986">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="8"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="20"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="20"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="8"/>
+    <property name="id" value="6"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="365" x="1936.67" y="988.667">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="8"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="20"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="20"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="8"/>
+    <property name="id" value="7"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="371" x="1243" y="988">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="8"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="20"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="20"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="8"/>
+    <property name="id" value="8"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="376" x="849" y="931">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="8"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="20"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="20"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="8"/>
+    <property name="id" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="369" x="948" y="856">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="2"/>
+    <property name="fdCaptureFrames" value="8"/>
+    <property name="flAct" value="2"/>
+    <property name="flCaptureFrames" value="8"/>
+    <property name="frAct" value="2"/>
+    <property name="frCaptureFrames" value="8"/>
+    <property name="fuAct" value="2"/>
+    <property name="fuCaptureFrames" value="8"/>
+    <property name="id" value="9"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="370" x="948" y="993">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="1"/>
+    <property name="fdCaptureFrames" value="8"/>
+    <property name="flAct" value="1"/>
+    <property name="flCaptureFrames" value="8"/>
+    <property name="frAct" value="1"/>
+    <property name="frCaptureFrames" value="8"/>
+    <property name="fuAct" value="1"/>
+    <property name="fuCaptureFrames" value="8"/>
+    <property name="id" value="10"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="377" x="508" y="925">
+   <properties>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="11"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="378" x="748" y="926">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="id" value="12"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+</map>

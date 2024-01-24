@@ -10,6 +10,7 @@ namespace shared {
         public const int SPECIES_FIRESWORDMAN = 3;
         public const int SPECIES_GUNGIRL = 4;
         public const int SPECIES_SUPERKNIFEGIRL = 5;
+        public const int SPECIES_MAGSWORDGIRL = 6;
 
         public const int SPECIES_BULLWARRIOR = 4096;
         public const int SPECIES_GOBLIN = 4097;
@@ -345,6 +346,42 @@ namespace shared {
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
+                    }),
+
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_MAGSWORDGIRL, new CharacterConfig {
+                        SpeciesId = SPECIES_MAGSWORDGIRL,
+                        SpeciesName = "MagSwordGirl",
+                        Hp = 120,
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 16,
+                        LayDownFramesToRecover = 16,
+                        GetUpInvinsibleFrames = 10,
+                        GetUpFramesToRecover = 30,
+                        Speed = (int)(1.6f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8.9 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 8,
+                        VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(100.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        HasTurnAroundAnim = false,
+                        SlidingEnabled = false,
+                        CrouchingEnabled = false,
+                        ProactiveJumpStartupFrames = 2,
+                        Hardness = 5,
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                     }),
             });
     }
