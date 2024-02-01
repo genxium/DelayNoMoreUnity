@@ -358,6 +358,7 @@ namespace shared {
                         LayDownFramesToRecover = 16,
                         GetUpInvinsibleFrames = 10,
                         GetUpFramesToRecover = 30,
+                        DashingEnabled = true,
                         Speed = (int)(1.6f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         JumpingInitVelY = (int)(8.9 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),

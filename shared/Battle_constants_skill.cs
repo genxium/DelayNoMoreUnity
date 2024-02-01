@@ -1416,6 +1416,43 @@ namespace shared {
                                 )
                                     ),
 
+                                    new KeyValuePair<int, Skill>(28, new Skill{
+                                            RecoveryFrames = 12,
+                                            RecoveryFramesOnBlock = 12,
+                                            RecoveryFramesOnHit = 12,
+                                            MpDelta = 60,
+                                            TriggerType = SkillTriggerType.RisingEdge,
+                                            BoundChState = Dashing
+                                            }
+                                            .AddHit(
+                                                new BulletConfig {
+                                                StartupFrames = 4,
+                                                ActiveFrames = 8,
+                                                HitStunFrames = 12,
+                                                BlockStunFrames = 9,
+                                                Damage = 13,
+                                                PushbackVelX = NO_LOCK_VEL,
+                                                PushbackVelY = NO_LOCK_VEL,
+                                                SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                                SelfLockVelY = 0,
+                                                HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                                HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                                SpeciesId = 2,
+                                                ExplosionFrames = 25,
+                                                DirX = 1,
+                                                DirY = 0,
+                                                Hardness = 5,
+                                                BType = BulletType.Melee,
+                                                FireballEmitSfxName="SlashEmitSpd2",
+                                                ExplosionSfxName="Melee_Explosion2",
+                                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX,
+                                                ActiveVfxSpeciesId = VfxDashingActive.SpeciesId
+                                                }
+                                )
+                                        ),
+
                                     new KeyValuePair<int, Skill>(255, new Skill {
                                             RecoveryFrames = 30,
                                             RecoveryFramesOnBlock = 30,
@@ -1972,6 +2009,8 @@ namespace shared {
                             } else {
                                 return NO_SKILL;
                             }
+                        case PATTERN_DOWN_A:
+                            return 28;
                         default:
                             return NO_SKILL;
                     }
