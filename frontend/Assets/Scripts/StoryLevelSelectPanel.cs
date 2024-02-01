@@ -31,7 +31,11 @@ public class StoryLevelSelectPanel : CharacterSelectPanel {
                 case "GunGirl":
                     selectedSpeciesId = 4;
                     break;
+                case "MagSwordGirl":
+                    selectedSpeciesId = 6;
+                    break;
                 }
+
                 break;
             }
         }

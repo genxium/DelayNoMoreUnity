@@ -8,6 +8,7 @@ tpsheetFileNames:
 - Assets/Resources/Characters/GunGirl/GunGirl.tpsheet
 - Assets/Resources/Characters/GunGirl/GunGirlParts.tpsheet
 - Assets/Resources/Characters/KnifeGirl/KnifeGirl.tpsheet
+- Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.tpsheet
 - Assets/Resources/Characters/Monk/Monk.tpsheet
 - Assets/Resources/Characters/MonkGirl/MonkGirl.tpsheet
 - Assets/Resources/Characters/SuperKnifeGirl/SuperKnifeGirl.tpsheet
@@ -25,6 +26,7 @@ textureFileNames:
 - Assets/Resources/Characters/GunGirl/GunGirl.png
 - Assets/Resources/Characters/GunGirl/GunGirlParts.png
 - Assets/Resources/Characters/KnifeGirl/KnifeGirl.png
+- Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.png
 - Assets/Resources/Characters/Monk/Monk.png
 - Assets/Resources/Characters/MonkGirl/MonkGirl.png
 - Assets/Resources/Characters/SuperKnifeGirl/SuperKnifeGirl.png
@@ -35,6 +37,7 @@ textureFileNames:
 - Assets/Resources/UI/SFIP.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 - 
