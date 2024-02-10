@@ -1300,6 +1300,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         float defaultPatrolCueRadius = 10;
         int trapLocalId = 0;
         int triggerLocalId = 0;
+
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
                 case "EvtSubscription":

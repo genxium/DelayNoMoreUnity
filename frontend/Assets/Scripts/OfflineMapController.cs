@@ -79,6 +79,11 @@ public class OfflineMapController : AbstractMapController {
                 return;
             }
             doUpdate();
+            if (0 < justFulfilledEvtSubCnt) {
+                for (int i = 0; i < justFulfilledEvtSubCnt; i++) {
+                    int justFulfilledEvtSub = justFulfilledEvtSubArr[i]; 
+                }  
+            }
             urpDrawDebug();
             if (playerRdfId >= battleDurationFrames) {
                 StartCoroutine(delayToShowSettlementPanel());
