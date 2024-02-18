@@ -175,6 +175,21 @@ public class CharacterAnimController : MonoBehaviour {
         upperPart.Play(upperNewAnimName, targetLayer, upperNormalizedFromTime);
     }
 
+    public void pause(bool toPause) {
+        var mainAnimator = getMainAnimator();
+        if (toPause) {
+            if (null != lowerPart) {
+                lowerPart.speed = 0f;
+            }
+            mainAnimator.speed = 0f;
+        } else {
+            if (null != lowerPart) {
+                lowerPart.speed = 1f;
+            }
+            mainAnimator.speed = 1f;
+        }
+    }
+
     /*
     There're certainly many approaches to outline around a sprite, thus a sprite-sequence-animation, the approach used here is simplest in terms of not being mind tweaking because I'm so new to shaders -- yet not necessarily the best.     
 

@@ -2569,4 +2569,39 @@ public abstract class AbstractMapController : MonoBehaviour {
         // TODO: Record the contacted barrier material ID in "CharacterDownsync" to achieve more granular footstep sound derivation!  
         return "FootStep1";
     }
+
+    public void pauseAllAnimatingCharacters(bool toPause) {
+        iptmgr.gameObject.SetActive(!toPause);
+
+        for (int k = 0; k < roomCapacity; k++) {
+            var playerGameObj = playerGameObjs[k];
+            var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
+            chAnimCtrl.pause(toPause);
+        }
+
+        var (ok, playerRdf) = renderBuffer.GetByFrameId(playerRdfId);
+        if (!ok || null == playerRdf) {
+            Debug.LogWarning("Unable to get playerRdf by playerRdfId=" + playerRdfId);
+            return;
+        }
+        for (int k = 0; k < playerRdf.NpcsArr.Count; k++) {
+            var currNpcDownsync = playerRdf.NpcsArr[k];
+            if (TERMINATING_PLAYER_ID == currNpcDownsync.Id) break;
+            var speciesKvPq = cachedNpcs[currNpcDownsync.SpeciesId];
+            string lookupKey = "npc-" + currNpcDownsync.Id;
+            var npcAnimHolder = speciesKvPq.PopAny(lookupKey);
+            if (null == npcAnimHolder) {
+                npcAnimHolder = speciesKvPq.Pop();
+                //Debug.Log(String.Format("@rdf.Id={0} using a new npcAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
+            } else {
+                //Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
+            }
+
+            if (null == npcAnimHolder) {
+                throw new ArgumentNullException(String.Format("No available npcAnimHolder node for lookupKey={0}", lookupKey));
+            }
+
+            npcAnimHolder.pause(toPause);
+        }
+    }
 }

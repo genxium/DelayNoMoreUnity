@@ -79,6 +79,7 @@ namespace shared {
 
         public static int MAGIC_EVTSUB_ID_NONE = 0;
         public static int MAGIC_EVTSUB_ID_WAVER = 1;
+        public static int MAGIC_EVTSUB_ID_STORYPOINT = 3;
 
         public static int SPEED_NOT_HIT_NOT_SPECIFIED = 0;
 

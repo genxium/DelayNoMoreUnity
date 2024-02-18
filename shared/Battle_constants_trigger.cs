@@ -32,6 +32,13 @@ namespace shared {
             CollisionTypeMask = COLLISION_NONE_INDEX
         };
 
+        public static TriggerConfig StoryPoint = new TriggerConfig {
+            SpeciesId = 5,
+            SpeciesName = "StoryPoint",
+            TriggerMask = TRIGGER_MASK_BY_MOVEMENT,
+            CollisionTypeMask = COLLISION_TRIGGER_INDEX_PREFIX
+        };
+
         public static ImmutableDictionary<int, TriggerConfig> triggerConfigs = ImmutableDictionary.Create<int, TriggerConfig>().AddRange(
                 new[]
                 {
@@ -39,6 +46,7 @@ namespace shared {
                     new KeyValuePair<int, TriggerConfig>(PSwitch.SpeciesId, PSwitch),
                     new KeyValuePair<int, TriggerConfig>(TimedDoor1.SpeciesId, TimedDoor1),
                     new KeyValuePair<int, TriggerConfig>(WaveTimedDoor1.SpeciesId, WaveTimedDoor1),
+                    new KeyValuePair<int, TriggerConfig>(StoryPoint.SpeciesId, StoryPoint),
                 }
         );
     }

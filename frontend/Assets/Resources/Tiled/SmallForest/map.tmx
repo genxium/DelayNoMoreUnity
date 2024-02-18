@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="384">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="386">
  <properties>
   <property name="missionEvtSubId" value="2"/>
   <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
@@ -58,16 +58,23 @@
   <object id="383" gid="1040" x="1601.33" y="997.333" width="32" height="72"/>
  </objectgroup>
  <objectgroup id="19" name="EvtSubscription">
-  <object id="363" x="1024" y="0">
+  <object id="363" name="WaveTrigger" x="1024" y="0">
    <properties>
     <property name="id" value="1"/>
    </properties>
    <point/>
   </object>
-  <object id="366" x="1186" y="0">
+  <object id="366" name="WaveExhaust" x="1186" y="0">
    <properties>
     <property name="demandedEvtMask" value="15"/>
     <property name="id" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="385" name="StoryPointSub" x="1334" y="0">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="3"/>
    </properties>
    <point/>
   </object>
@@ -88,6 +95,16 @@
     <property name="subCycleTriggerFrames" value="90"/>
     <property name="subscriptionId" value="1"/>
    </properties>
+  </object>
+  <object id="384" name="StoryPoint1" x="167" y="981">
+   <properties>
+    <property name="publishingEvtMaskUponExhaust" value="1"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="3"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="5"/>
+   </properties>
+   <point/>
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">

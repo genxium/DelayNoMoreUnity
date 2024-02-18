@@ -708,6 +708,18 @@ message PlayerStoryProgress {
     map<int32, PlayerLevelProgress> levelProgressDict = 1;
 }
 
+message StoryPointDialogLine {
+	// [WARNING] Only one of "narratorJoinIndex" and "narratorSpeciesId" should be available for each "StoryPointDialogLine".
+	int32 narratorJoinIndex = 1;
+	int32 narratorSpeciesId = 2;
+
+	string content = 3;
+}
+
+message StoryPointDialogStep {
+	repeated StoryPointDialogLine lines = 1;
+}
+
 message SerializableConvexPolygon {
 	float anchorX = 1;
 	float anchorY = 2;
