@@ -3,6 +3,7 @@ using shared;
 using static shared.CharacterState;
 using System;
 using System.Collections.Generic;
+using Story;
 
 public class CharacterAnimController : MonoBehaviour {
     public int score;
@@ -149,7 +150,7 @@ public class CharacterAnimController : MonoBehaviour {
             }
             var lowerFrameIdxInAnim = rdfCharacter.LowerPartFramesInChState;
             var lowerTargetClip = lowerLookUpTable[lowerNewAnimName];
-            float lowerNormalizedFromTime = ((float)lowerFrameIdxInAnim / (lowerTargetClip.frameRate * lowerTargetClip.length)); // TODO: Anyway to avoid using division here?
+            float lowerNormalizedFromTime = (lowerFrameIdxInAnim / (lowerTargetClip.frameRate * lowerTargetClip.length)); // TODO: Anyway to avoid using division here?
             lowerPart.Play(lowerNewAnimName, targetLayer, lowerNormalizedFromTime);
         }
 

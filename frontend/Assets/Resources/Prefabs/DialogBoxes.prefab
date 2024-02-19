@@ -197,10 +197,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f853e3203de21104a9d7152af0ff9b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatarL: {fileID: 6800952184087978219}
-  avatarR: {fileID: 8614913629001591630}
-  textL: {fileID: 199464199804111894}
-  textR: {fileID: 2955245036727797580}
+  dialogUp: {fileID: 2242556597693428295}
+  avatarDown: {fileID: 6800952184087978219}
+  avatarUp: {fileID: 8614913629001591630}
+  textDown: {fileID: 199464199804111894}
+  textUp: {fileID: 2955245036727797580}
   nextBtn: {fileID: 5524642922360959593}
 --- !u!1 &1807109332847986264
 GameObject:
@@ -289,7 +290,7 @@ GameObject:
   - component: {fileID: 4553620019307666186}
   - component: {fileID: 5890733580451290094}
   m_Layer: 5
-  m_Name: Dialog_R
+  m_Name: DialogUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -461,7 +462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4433962, g: 0.37089115, b: 0.37089115, a: 0.6}
+  m_Color: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 0.8784314}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1045,7 +1046,7 @@ GameObject:
   - component: {fileID: 640615316852775494}
   - component: {fileID: 7561120639779759587}
   m_Layer: 5
-  m_Name: Dialog_L
+  m_Name: DialogDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

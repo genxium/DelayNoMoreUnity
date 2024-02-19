@@ -5,7 +5,7 @@ using shared;
 using static shared.Battle;
 
 public class OfflineMapController : AbstractMapController {
-
+    
     private bool isInStoryControl = false;
     public DialogBoxes dialogBoxes;
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
@@ -83,7 +83,14 @@ public class OfflineMapController : AbstractMapController {
             if (isInStoryControl) {
                 // No stepping during "InStoryControl".
                 // TODO: What if dynamics should be updated during story narrative? A simple proposal is to cover all objects with a preset RenderFrame, yet there's a lot to hardcode by this approach. 
-                return;
+                bool stepped = dialogBoxes.renderStoryPoint(LEVEL_SMALL_FOREST, 1);
+                if (stepped) {
+                    return;
+                } else {
+                    dialogBoxes.gameObject.SetActive(false);
+                    isInStoryControl = false;
+                    pauseAllAnimatingCharacters(false);
+                }
             }
             doUpdate();
             if (0 < justFulfilledEvtSubCnt) {
@@ -96,9 +103,10 @@ public class OfflineMapController : AbstractMapController {
                         var msg = String.Format("Story control handover triggered at playerRdfId={0}", playerRdfId);
                         Debug.Log(msg);
                         dialogBoxes.gameObject.SetActive(true);
+                        dialogBoxes.stepCnt = 0;
                         break;
                     }
-                }  
+                }
             }
             urpDrawDebug();
             if (playerRdfId >= battleDurationFrames) {

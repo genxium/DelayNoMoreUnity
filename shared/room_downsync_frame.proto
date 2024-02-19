@@ -714,10 +714,7 @@ message StoryPointDialogLine {
 	int32 narratorSpeciesId = 2;
 
 	string content = 3;
-}
-
-message StoryPointDialogStep {
-	repeated StoryPointDialogLine lines = 1;
+    bool downOrNot = 4; // true is "down"
 }
 
 message SerializableConvexPolygon {

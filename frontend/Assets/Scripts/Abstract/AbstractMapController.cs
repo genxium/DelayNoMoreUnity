@@ -10,6 +10,8 @@ using DG.Tweening;
 using Google.Protobuf.Collections;
 
 public abstract class AbstractMapController : MonoBehaviour {
+    protected int levelId = LEVEL_NONE;
+
     protected int[] justFulfilledEvtSubArr;
     protected int justFulfilledEvtSubCnt;
     protected int roomCapacity;
@@ -797,13 +799,15 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         var mapProps = underlyingMap.GetComponent<SuperCustomProperties>();
-        CustomProperty npcPreallocCapDict, missionEvtSubIdProp;
+        CustomProperty npcPreallocCapDict, missionEvtSubIdProp, levelIdProp;
         mapProps.TryGetCustomProperty("npcPreallocCapDict", out npcPreallocCapDict);
         mapProps.TryGetCustomProperty("missionEvtSubId", out missionEvtSubIdProp);
+        mapProps.TryGetCustomProperty("levelIdProp", out levelIdProp);
         if (null == npcPreallocCapDict || npcPreallocCapDict.IsEmpty) {
             throw new ArgumentNullException("No `npcPreallocCapDict` found on map-scope properties, it's required! Example\n\tvalue `1:16;3:15;4096:1` means that we preallocate 16 slots for species 1, 15 slots for species 3 and 1 slot for species 4096");
         }
         missionEvtSubId = (null == missionEvtSubIdProp || missionEvtSubIdProp.IsEmpty ? MAGIC_EVTSUB_ID_NONE : missionEvtSubIdProp.GetValueAsInt());
+        levelId = (null == levelIdProp || levelIdProp.IsEmpty ? LEVEL_NONE : levelIdProp.GetValueAsInt());
         Dictionary<int, int> npcPreallocCapDictVal = new Dictionary<int, int>();
         string npcPreallocCapDictStr = npcPreallocCapDict.GetValueAsString();
         foreach (var kvPairPart in npcPreallocCapDictStr.Trim().Split(';')) {
@@ -1697,7 +1701,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                             }
                             trigger.ConfigFromTiled.CharacterSpawnerTimeSeq.Add(chSpawnerConfig);
                         }
-                        var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
+
+                        var (tiledRectCx, tiledRectCy) = StoryPoint.SpeciesId == speciesIdVal ? (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f) : (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
+
                         var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                         var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
                         trigger.VirtualGridX = rectCenterVx;
@@ -2590,17 +2596,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var speciesKvPq = cachedNpcs[currNpcDownsync.SpeciesId];
             string lookupKey = "npc-" + currNpcDownsync.Id;
             var npcAnimHolder = speciesKvPq.PopAny(lookupKey);
-            if (null == npcAnimHolder) {
-                npcAnimHolder = speciesKvPq.Pop();
-                //Debug.Log(String.Format("@rdf.Id={0} using a new npcAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
-            } else {
-                //Debug.Log(String.Format("@rdf.Id={0} using a cached vfxAnimHolder for rendering for npcId={1}, joinIndex={2} at wpos=({3}, {4})", rdf.Id, currNpcDownsync.Id, currNpcDownsync.JoinIndex, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY));
-            }
-
-            if (null == npcAnimHolder) {
-                throw new ArgumentNullException(String.Format("No available npcAnimHolder node for lookupKey={0}", lookupKey));
-            }
-
+            if (null == npcAnimHolder) continue;
             npcAnimHolder.pause(toPause);
         }
     }
