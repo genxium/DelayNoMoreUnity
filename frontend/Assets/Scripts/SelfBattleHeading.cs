@@ -22,7 +22,7 @@ public class SelfBattleHeading : MonoBehaviour {
     public void SetCharacter(CharacterDownsync chd) {
         if (chd.SpeciesId != speciesId) {
             speciesId = chd.SpeciesId; 
-            string speciesName = shared.Battle.characters[speciesId].SpeciesName;
+            string speciesName = Battle.characters[speciesId].SpeciesName;
             string spriteSheetPath = String.Format("Characters/{0}/{0}", speciesName, speciesName);
             var sprites = Resources.LoadAll<Sprite>(spriteSheetPath);
             foreach (Sprite sprite in sprites) {

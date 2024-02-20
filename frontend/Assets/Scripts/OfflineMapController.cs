@@ -3,9 +3,12 @@ using System;
 using System.Collections;
 using shared;
 using static shared.Battle;
+using static Story.StoryConstants;
 
 public class OfflineMapController : AbstractMapController {
-
+    
+    private bool isInStoryControl = false;
+    public DialogBoxes dialogBoxes;
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
     }
@@ -78,7 +81,36 @@ public class OfflineMapController : AbstractMapController {
             if (ROOM_STATE_IN_BATTLE != battleState) {
                 return;
             }
+            if (isInStoryControl) {
+                // TODO: What if dynamics should be updated during story narrative? A simple proposal is to cover all objects with a preset RenderFrame, yet there's a lot to hardcode by this approach. 
+                var (ok, rdf) = renderBuffer.GetByFrameId(playerRdfId);
+                if (!ok || null == rdf || !dialogBoxes.renderStoryPoint(rdf, levelId, justTriggeredStoryId)) {
+                    dialogBoxes.gameObject.SetActive(false);
+                    isInStoryControl = false;
+                    pauseAllAnimatingCharacters(false);
+                    iptmgr.enable(true);
+                } else {
+                    // No dynamics during "InStoryControl".
+                    return;
+                }
+            }
             doUpdate();
+            if (0 < justFulfilledEvtSubCnt) {
+                for (int i = 0; i < justFulfilledEvtSubCnt; i++) {
+                    int justFulfilledEvtSub = justFulfilledEvtSubArr[i]; 
+                    if (MAGIC_EVTSUB_ID_STORYPOINT == justFulfilledEvtSub) {
+                        iptmgr.enable(false);
+                        // Handover control to DialogBox GUI
+                        isInStoryControl = true; // Set it back to "false" in the DialogBox control!
+                        pauseAllAnimatingCharacters(true);
+                        var msg = String.Format("Story control handover triggered at playerRdfId={0}", playerRdfId);
+                        Debug.Log(msg);
+                        dialogBoxes.gameObject.SetActive(true);
+                        dialogBoxes.stepCnt = 0;
+                        break;
+                    }
+                }
+            }
             urpDrawDebug();
             if (playerRdfId >= battleDurationFrames) {
                 StartCoroutine(delayToShowSettlementPanel());

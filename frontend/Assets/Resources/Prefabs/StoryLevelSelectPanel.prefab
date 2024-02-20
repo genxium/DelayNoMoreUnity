@@ -431,7 +431,7 @@ GameObject:
   - component: {fileID: 3628720812649624801}
   - component: {fileID: 1399705664641983808}
   m_Layer: 5
-  m_Name: TwoStepStageDeep
+  m_Name: SmallForest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2842,7 +2842,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1833606812, guid: c3b4d75f15bf4aa4c9f9cb32feb68e41, type: 3}
+  m_Sprite: {fileID: 415300874, guid: c3b4d75f15bf4aa4c9f9cb32feb68e41, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

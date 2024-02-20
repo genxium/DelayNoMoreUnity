@@ -34,6 +34,11 @@ public class BattleInputManager : MonoBehaviour {
     private bool customEnabled = true;
 
     void Start() {
+        if (!Application.isMobilePlatform) {
+            joystick.gameObject.SetActive(false);
+            btnA.gameObject.SetActive(false);
+            btnB.gameObject.SetActive(false);
+        }
         joystickInitPos = joystick.transform.position;
         joystickKeyboardMoveRadius = 0.5f*joystick.GetComponent<OnScreenStick>().movementRange;
         joystickMoveEps = 0.1f;
@@ -218,6 +223,7 @@ public class BattleInputManager : MonoBehaviour {
             btnAEdgeTriggerLock = true;
         }
 
+        if (!Application.isMobilePlatform) return; // Save some resources on animating
         if (rising) {
             btnA.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
@@ -232,6 +238,7 @@ public class BattleInputManager : MonoBehaviour {
             btnBEdgeTriggerLock = true;
         }
 
+        if (!Application.isMobilePlatform) return; // Save some resources on animating
         if (rising) {
             btnB.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {

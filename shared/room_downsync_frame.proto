@@ -498,6 +498,8 @@ message TriggerConfigFromTiled {
     int32 publishingToEvtSubIdUponExhaust = 13; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"
 
     int32 quotaCap = 14;
+
+	int32 storyPointId = 15;
 }
 
 message TriggerColliderAttr {
@@ -706,6 +708,15 @@ message PlayerLevelProgress {
 
 message PlayerStoryProgress {
     map<int32, PlayerLevelProgress> levelProgressDict = 1;
+}
+
+message StoryPointDialogLine {
+	// [WARNING] Only one of "narratorJoinIndex" and "narratorSpeciesId" should be available for each "StoryPointDialogLine".
+	int32 narratorJoinIndex = 1;
+	int32 narratorSpeciesId = 2;
+
+	string content = 3;
+    bool downOrNot = 4; // true is "down"
 }
 
 message SerializableConvexPolygon {

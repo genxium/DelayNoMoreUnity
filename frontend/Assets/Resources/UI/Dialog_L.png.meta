@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,10 +46,10 @@ TextureImporter:
   spriteExtrude: 0
   spriteMeshType: 0
   alignment: 9
-  spritePivot: {x: 0.87, y: 0.5}
-  spritePixelsToUnits: 2
-  spriteBorder: {x: 117, y: 50, z: 168, w: 50}
-  spriteGenerateFallbackPhysicsShape: 0
+  spritePivot: {x: 0.867, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 117, y: 52, z: 170, w: 52}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1

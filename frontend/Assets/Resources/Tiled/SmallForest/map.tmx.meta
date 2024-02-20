@@ -15,8 +15,6 @@ ScriptedImporter:
     (100)
   - Pixels Per Unit mismatch between map (1) and tileset '../triggers/door/triggers_door.tsx'
     (100)
-  - Pixels Per Unit mismatch between map (1) and tileset '../shared_comps/forest16.tsx'
-    (100)
   missingSortingLayers: []
   missingLayers: []
   missingTags: []

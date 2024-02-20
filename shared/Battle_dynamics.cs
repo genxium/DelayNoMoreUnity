@@ -811,7 +811,7 @@ namespace shared {
             }
         }
 
-        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
+        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, RepeatedField<EvtSubscription> nextRenderFrameEvtSubs, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref int justTriggeredStoryPointId, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
                 currPushbackFrameLog.Reset();
@@ -910,6 +910,7 @@ namespace shared {
                         ConvexPolygon bShape = bCollider.Shape;
                         var v3 = bCollider.Data as TriggerColliderAttr;  
                         if (null != v3 && currCharacterDownsync.JoinIndex <= roomCapacity) {
+                            // By now only "Player" can click "Trigger"s.
                             var atkedTrigger = currRenderFrame.TriggersArr[v3.TriggerLocalId];
                             var triggerConfig = atkedTrigger.Config;
                             if (0 == (triggerConfig.TriggerMask & TRIGGER_MASK_BY_MOVEMENT)) continue;
@@ -922,6 +923,19 @@ namespace shared {
                                 atkedTriggerInNextFrame.Quota = atkedTrigger.Quota - 1;
                                 atkedTriggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
                                 atkedTriggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+
+                                if (StoryPoint.SpeciesId == atkedTriggerInNextFrame.ConfigFromTiled.SpeciesId) {
+                                    justTriggeredStoryPointId = atkedTriggerInNextFrame.ConfigFromTiled.StoryPointId;
+                                }
+
+                                var nextExhaustEvtSub = nextRenderFrameEvtSubs[atkedTriggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust-1];
+                                nextExhaustEvtSub.FulfilledEvtMask |= atkedTriggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
+                                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
+                                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id-1));
+                                    nextExhaustEvtSub.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
+                                    nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
+                                    justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
+                                }
                             }
                         }
                         var v2 = bCollider.Data as TrapColliderAttr;
@@ -1779,7 +1793,7 @@ namespace shared {
         - Make use of CPU parallelization -- better by using some libraries with sub-kernel-thread granularity(e.g. Goroutine or Greenlet equivalent) -- or GPU parallelization. It's not trivial to make an improvement because by dispatching smaller tasks to other resources other than the current kernel-thread, overhead I/O and synchronization/locking time is introduced. Moreover, we need guarantee that the dispatched smaller tasks can yield deterministic outputs regardless of processing order, e.g. that each "i" in "_calcCharacterMovementPushbacks" can be traversed earlier than another and same "effPushbacks" for the next render frame is obtained.   
         - Enable "IL2CPP" when building client application.  
         */
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, int missionEvtSubId, int selfPlayerJoinIndex, Dictionary<int, int> joinIndexRemap, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, int> triggerTrackingIdToTrapLocalId, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, int missionEvtSubId, int selfPlayerJoinIndex, Dictionary<int, int> joinIndexRemap, ref int justTriggeredStoryPointId, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -1961,7 +1975,8 @@ namespace shared {
             _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             int trapColliderCntOffset = colliderCnt;
             _moveAndInsertDynamicTrapColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
-            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
+            ulong fulfilledEvtSubscriptionSetMask = 0; // By default no EvtSub is fulfilled yet
+            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, nextEvtSubs, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, ref justTriggeredStoryPointId, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
             int bulletColliderCntOffset = colliderCnt;
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _insertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
@@ -1969,7 +1984,6 @@ namespace shared {
             ulong nextWaveNpcKilledEvtMaskCounter = currRenderFrame.WaveNpcKilledEvtMaskCounter;
             EvtSubscription currRdfWaveNpcKilledEvtSub = currRenderFrame.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1];
             EvtSubscription nextRdfWaveNpcKilledEvtSub = nextEvtSubs[MAGIC_EVTSUB_ID_WAVER - 1];
-            ulong fulfilledEvtSubscriptionSetMask = 0; // By default no EvtSub is fulfilled yet
 
             _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
             
