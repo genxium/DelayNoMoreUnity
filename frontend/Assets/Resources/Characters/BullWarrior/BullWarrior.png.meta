@@ -788,7 +788,7 @@ TextureImporter:
         width: 249
         height: 84
       alignment: 9
-      pivot: {x: 0.502008, y: 0.5595238}
+      pivot: {x: 0.502008, y: 0.559524}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -809,7 +809,7 @@ TextureImporter:
         width: 214
         height: 118
       alignment: 9
-      pivot: {x: 0.5, y: 0.6101695}
+      pivot: {x: 0.5, y: 0.610169}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1355,7 +1355,7 @@ TextureImporter:
         width: 247
         height: 71
       alignment: 9
-      pivot: {x: 0.5020243, y: 0.7746479}
+      pivot: {x: 0.502024, y: 0.77464813}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1397,7 +1397,7 @@ TextureImporter:
         width: 226
         height: 84
       alignment: 9
-      pivot: {x: 0.5, y: 0.8571427}
+      pivot: {x: 0.5, y: 0.857143}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1418,7 +1418,7 @@ TextureImporter:
         width: 226
         height: 84
       alignment: 9
-      pivot: {x: 0.5, y: 0.8571427}
+      pivot: {x: 0.5, y: 0.857143}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1439,7 +1439,7 @@ TextureImporter:
         width: 65
         height: 45
       alignment: 9
-      pivot: {x: 0.507692, y: 0.82222235}
+      pivot: {x: 0.507692, y: 0.822222}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1447,6 +1447,27 @@ TextureImporter:
       bones: []
       spriteID: 41dc10f35d89d574189e30185d15a3d2
       internalID: -509502663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Avatar_1
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 1896
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d868d2a26dcbeb45837be4297d8f9b8
+      internalID: 841602365
       vertices: []
       indices: 
       edges: []
@@ -1502,6 +1523,7 @@ TextureImporter:
       Atk3_1: -1660701586
       Atk1_8: -12935992
       Dying_5: -1409322206
+      Avatar_1: 841602365
       Atk1_5: -2099499217
       Dying_7: -509502663
       Atk1_4: -341033902

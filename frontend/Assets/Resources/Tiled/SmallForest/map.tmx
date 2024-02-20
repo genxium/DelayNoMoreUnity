@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="387">
  <properties>
-  <property name="levelId" value="0"/>
+  <property name="levelId" value="1"/>
   <property name="missionEvtSubId" value="2"/>
   <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
  </properties>
@@ -97,13 +97,14 @@
     <property name="subscriptionId" value="1"/>
    </properties>
   </object>
-  <object id="386" name="StoryPoint1" x="144" y="720" width="42" height="334">
+  <object id="386" name="StoryPoint1" x="406" y="720" width="42" height="334">
    <properties>
     <property name="publishingEvtMaskUponExhaust" value="1"/>
     <property name="publishingToEvtSubIdUponExhaust" value="3"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
     <property name="speciesId" value="5"/>
+    <property name="storyPointId" value="1"/>
    </properties>
   </object>
  </objectgroup>

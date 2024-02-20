@@ -183,7 +183,7 @@ TextureImporter:
       name: Atk1_4
       rect:
         serializedVersion: 2
-        x: 69
+        x: 94
         y: 343
         width: 67
         height: 73
@@ -293,7 +293,7 @@ TextureImporter:
         width: 53
         height: 59
       alignment: 9
-      pivot: {x: 0.6415094, y: 0.7288135}
+      pivot: {x: 0.6415094, y: 0.72881275}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -314,7 +314,7 @@ TextureImporter:
         width: 48
         height: 74
       alignment: 9
-      pivot: {x: 0.6458333, y: 0.6081081}
+      pivot: {x: 0.6458333, y: 0.60810745}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -419,7 +419,7 @@ TextureImporter:
         width: 69
         height: 55
       alignment: 9
-      pivot: {x: 0.76811594, y: 0.74545455}
+      pivot: {x: 0.76811576, y: 0.74545336}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -440,7 +440,7 @@ TextureImporter:
         width: 74
         height: 57
       alignment: 9
-      pivot: {x: 0.8108108, y: 0.7368421}
+      pivot: {x: 0.8108106, y: 0.73684096}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -461,7 +461,7 @@ TextureImporter:
         width: 95
         height: 39
       alignment: 9
-      pivot: {x: 0.70526314, y: 1.051282}
+      pivot: {x: 0.705263, y: 1.0512804}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -599,6 +599,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Avatar_1
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 413
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a26da416c18fc1541b42f1983c708cfa
+      internalID: -1134290200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -615,6 +636,7 @@ TextureImporter:
       Walking_6: -971422181
       GetUp_2: 953016190
       Idle1_1: -46125260
+      Avatar_1: -1134290200
       InAirIdle1_1: 854664236
       LayDown_3: 308639946
       Atk1_4: -1251983993

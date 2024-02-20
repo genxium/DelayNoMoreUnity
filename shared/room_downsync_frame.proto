@@ -498,6 +498,8 @@ message TriggerConfigFromTiled {
     int32 publishingToEvtSubIdUponExhaust = 13; // only used when "0 < (triggerMask & TRIGGER_MASK_BY_SUBSCRIPTION)"
 
     int32 quotaCap = 14;
+
+	int32 storyPointId = 15;
 }
 
 message TriggerColliderAttr {

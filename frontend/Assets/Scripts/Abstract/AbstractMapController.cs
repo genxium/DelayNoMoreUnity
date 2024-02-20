@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using shared;
-using static shared.Battle;
 using System;
 using System.Collections.Generic;
-using Pbc = Google.Protobuf.Collections;
 using SuperTiled2Unity;
 using System.Collections;
 using DG.Tweening;
 using Google.Protobuf.Collections;
+using static shared.Battle;
+using static Story.StoryConstants;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int levelId = LEVEL_NONE;
+    protected int justTriggeredStoryId = STORY_POINT_NONE;
 
     protected int[] justFulfilledEvtSubArr;
     protected int justFulfilledEvtSubCnt;
@@ -283,7 +284,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             bool hasIncorrectlyPredictedRenderFrame = false;
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, selfPlayerInfo.JoinIndex, joinIndexRemap, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, trapLocalIdToColliderAttrs, triggerTrackingIdToTrapLocalId, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, missionEvtSubId, selfPlayerInfo.JoinIndex, joinIndexRemap, ref justTriggeredStoryId, _loggerBridge);
             if (hasIncorrectlyPredictedRenderFrame) {
                 Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i + 1));
             }
@@ -802,7 +803,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         CustomProperty npcPreallocCapDict, missionEvtSubIdProp, levelIdProp;
         mapProps.TryGetCustomProperty("npcPreallocCapDict", out npcPreallocCapDict);
         mapProps.TryGetCustomProperty("missionEvtSubId", out missionEvtSubIdProp);
-        mapProps.TryGetCustomProperty("levelIdProp", out levelIdProp);
+        mapProps.TryGetCustomProperty("levelId", out levelIdProp);
         if (null == npcPreallocCapDict || npcPreallocCapDict.IsEmpty) {
             throw new ArgumentNullException("No `npcPreallocCapDict` found on map-scope properties, it's required! Example\n\tvalue `1:16;3:15;4096:1` means that we preallocate 16 slots for species 1, 15 slots for species 3 and 1 slot for species 4096");
         }
@@ -960,6 +961,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected virtual void resetCurrentMatch(string theme) {
         Debug.Log(String.Format("resetCurrentMatch with roomCapacity={0}", roomCapacity));
         battleState = ROOM_STATE_IMPOSSIBLE;
+        levelId = LEVEL_NONE;
+        justTriggeredStoryId = STORY_POINT_NONE;
         playerRdfId = 0;
         renderFrameIdLagTolerance = 4;
         chaserRenderFrameId = -1;
@@ -1004,7 +1007,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         settlementPanel.gameObject.SetActive(false);
     }
 
-    public void onInputFrameDownsyncBatch(Pbc.RepeatedField<InputFrameDownsync> batch) {
+    public void onInputFrameDownsyncBatch(RepeatedField<InputFrameDownsync> batch) {
         // This method is guaranteed to run in UIThread only.
         if (null == batch) {
             return;
@@ -1618,7 +1621,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform triggerChild in child) {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, publishingToEvtSubIdUponExhaust, publishingEvtMaskUponExhaust, subscriptionId;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, publishingToEvtSubIdUponExhaust, publishingEvtMaskUponExhaust, subscriptionId, storyPointId;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
@@ -1634,6 +1637,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("publishingToEvtSubIdUponExhaust", out publishingToEvtSubIdUponExhaust);
                         tileProps.TryGetCustomProperty("publishingEvtMaskUponExhaust", out publishingEvtMaskUponExhaust);
                         tileProps.TryGetCustomProperty("subscriptionId", out subscriptionId);
+                        tileProps.TryGetCustomProperty("storyPointId", out storyPointId);
+
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
                         int chCollisionTeamIdVal = (null != chCollisionTeamId && !chCollisionTeamId.IsEmpty ? chCollisionTeamId.GetValueAsInt() : 0);
@@ -1649,6 +1654,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int publishingToEvtSubIdUponExhaustVal = (null != publishingToEvtSubIdUponExhaust && !publishingToEvtSubIdUponExhaust.IsEmpty ? publishingToEvtSubIdUponExhaust.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
                         ulong publishingEvtMaskUponExhaustVal = (null != publishingEvtMaskUponExhaust && !publishingEvtMaskUponExhaust.IsEmpty ? (ulong)publishingEvtMaskUponExhaust.GetValueAsInt() : 0ul);
                         int subscriptionIdVal = (null != subscriptionId && !subscriptionId.IsEmpty ? subscriptionId.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
+                        int storyPointIdVal = (null != storyPointId && !storyPointId.IsEmpty ? storyPointId.GetValueAsInt() : STORY_POINT_NONE);
+
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
                             TriggerLocalId = triggerLocalId,
@@ -1676,6 +1683,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 PublishingToEvtSubIdUponExhaust = publishingToEvtSubIdUponExhaustVal,
                                 PublishingEvtMaskUponExhaust = publishingEvtMaskUponExhaustVal,
                                 SubscriptionId = subscriptionIdVal,
+                                StoryPointId = storyPointIdVal,
                             },
                         };
 
@@ -2598,6 +2606,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var npcAnimHolder = speciesKvPq.PopAny(lookupKey);
             if (null == npcAnimHolder) continue;
             npcAnimHolder.pause(toPause);
+            speciesKvPq.Put(lookupKey, npcAnimHolder);
         }
     }
 }

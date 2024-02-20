@@ -198,11 +198,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogUp: {fileID: 2242556597693428295}
+  dialogDown: {fileID: 7620873962908913453}
   avatarDown: {fileID: 6800952184087978219}
   avatarUp: {fileID: 8614913629001591630}
   textDown: {fileID: 199464199804111894}
   textUp: {fileID: 2955245036727797580}
   nextBtn: {fileID: 5524642922360959593}
+  stepCnt: 0
 --- !u!1 &1807109332847986264
 GameObject:
   m_ObjectHideFlags: 0

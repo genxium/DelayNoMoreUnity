@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using shared;
 using static shared.Battle;
+using static Story.StoryConstants;
 
 public class OfflineMapController : AbstractMapController {
     
@@ -81,15 +82,16 @@ public class OfflineMapController : AbstractMapController {
                 return;
             }
             if (isInStoryControl) {
-                // No stepping during "InStoryControl".
                 // TODO: What if dynamics should be updated during story narrative? A simple proposal is to cover all objects with a preset RenderFrame, yet there's a lot to hardcode by this approach. 
-                bool stepped = dialogBoxes.renderStoryPoint(LEVEL_SMALL_FOREST, 1);
-                if (stepped) {
-                    return;
-                } else {
+                var (ok, rdf) = renderBuffer.GetByFrameId(playerRdfId);
+                if (!ok || null == rdf || !dialogBoxes.renderStoryPoint(rdf, levelId, justTriggeredStoryId)) {
                     dialogBoxes.gameObject.SetActive(false);
                     isInStoryControl = false;
                     pauseAllAnimatingCharacters(false);
+                    iptmgr.enable(true);
+                } else {
+                    // No dynamics during "InStoryControl".
+                    return;
                 }
             }
             doUpdate();
@@ -97,6 +99,7 @@ public class OfflineMapController : AbstractMapController {
                 for (int i = 0; i < justFulfilledEvtSubCnt; i++) {
                     int justFulfilledEvtSub = justFulfilledEvtSubArr[i]; 
                     if (MAGIC_EVTSUB_ID_STORYPOINT == justFulfilledEvtSub) {
+                        iptmgr.enable(false);
                         // Handover control to DialogBox GUI
                         isInStoryControl = true; // Set it back to "false" in the DialogBox control!
                         pauseAllAnimatingCharacters(true);
