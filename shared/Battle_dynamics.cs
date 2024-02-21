@@ -658,7 +658,7 @@ namespace shared {
                         dst);
 
                 int j = dst.BattleAttr.OffenderJoinIndex - 1;
-                if (j >= roomCapacity && j >= npcCnt) {
+                if (j >= roomCapacity+npcCnt) {
                     // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "BattleAttr.OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
                     continue;
                 }
