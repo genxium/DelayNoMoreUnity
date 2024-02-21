@@ -126,6 +126,8 @@ message CharacterDownsync {
     uint64 publishingEvtMaskUponKilled = 48;
     int32 publishingEvtSubIdUponKilled = 49;
 
+    int32 subscriptionId = 50; 
+
 	string name = 997;
 	string displayName = 998;
 	string avatar = 999;

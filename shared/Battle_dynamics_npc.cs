@@ -116,6 +116,7 @@ namespace shared {
                 res2 = v3;
             }
         }
+
         private static int countNpcI(RepeatedField<CharacterDownsync> npcsArr) {
             int npcI = 0;
             while (npcI < npcsArr.Count && TERMINATING_PLAYER_ID != npcsArr[npcI].Id) npcI++;
@@ -342,7 +343,7 @@ namespace shared {
                     } while (false);
                 }
 
-                if (false == hasVisionReaction && false == hasPatrolCueReaction && currCharacterDownsync.WaivingSpontaneousPatrol) {
+                if (false == hasVisionReaction && false == hasPatrolCueReaction && (currCharacterDownsync.WaivingSpontaneousPatrol || MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId)) {
                     return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
                 }
             }

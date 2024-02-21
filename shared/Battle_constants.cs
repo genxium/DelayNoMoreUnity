@@ -140,7 +140,7 @@ namespace shared {
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;
-        public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 4;
+        public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 8;
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;

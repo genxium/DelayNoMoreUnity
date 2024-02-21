@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="392">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="387">
  <properties>
   <property name="levelId" value="1"/>
   <property name="missionEvtSubId" value="2"/>
@@ -36,47 +36,17 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="137" name="Player2St" x="63" y="887">
+  <object id="137" x="63" y="887">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="135" name="Player1St" x="160" y="934">
+  <object id="135" x="120" y="934">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
-   </properties>
-   <point/>
-  </object>
- </objectgroup>
- <objectgroup id="19" name="EvtSubscription">
-  <object id="391" name="PseudoStaticNpcEvtSub" x="400" y="0">
-   <properties>
-    <property name="demandedEvtMask" value="1"/>
-    <property name="id" value="4"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="385" name="StoryPointSub" x="1280" y="0">
-   <properties>
-    <property name="demandedEvtMask" value="1"/>
-    <property name="id" value="3"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="366" name="WaveExhaust" x="1024" y="0">
-   <properties>
-    <property name="demandedEvtMask" value="15"/>
-    <property name="id" value="2"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="389" name="WaveTrigger" x="1098" y="0">
-   <properties>
-    <property name="demandedEvtMask" value="1"/>
-    <property name="id" value="1"/>
    </properties>
    <point/>
   </object>
@@ -88,25 +58,29 @@
   <object id="382" gid="1040" x="1534" y="996" width="32" height="72"/>
   <object id="383" gid="1040" x="1601.33" y="997.333" width="32" height="72"/>
  </objectgroup>
+ <objectgroup id="19" name="EvtSubscription">
+  <object id="363" name="WaveTrigger" x="1024" y="0">
+   <properties>
+    <property name="id" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="366" name="WaveExhaust" x="1186" y="0">
+   <properties>
+    <property name="demandedEvtMask" value="15"/>
+    <property name="id" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="385" name="StoryPointSub" x="1334" y="0">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="3"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="13" name="TriggerPos">
-  <object id="388" name="WaveInducer" x="1361" y="33" width="42" height="994">
-   <properties>
-    <property name="publishingEvtMaskUponExhaust" value="1"/>
-    <property name="publishingToEvtSubIdUponExhaust" value="1"/>
-    <property name="quota" value="1"/>
-    <property name="recoveryFrames" value="65535"/>
-    <property name="speciesId" value="6"/>
-   </properties>
-  </object>
-  <object id="390" name="PseudoStaticNpcTrigger" x="386" y="36" width="42" height="1018">
-   <properties>
-    <property name="publishingEvtMaskUponExhaust" value="1"/>
-    <property name="publishingToEvtSubIdUponExhaust" value="4"/>
-    <property name="quota" value="1"/>
-    <property name="recoveryFrames" value="65535"/>
-    <property name="speciesId" value="6"/>
-   </properties>
-  </object>
   <object id="360" gid="13" x="1568" y="992" width="32" height="32">
    <properties>
     <property name="bulletTeamId" value="3"/>
@@ -123,17 +97,7 @@
     <property name="subscriptionId" value="1"/>
    </properties>
   </object>
-  <object id="387" name="StoryPoint2" x="1337" y="37" width="42" height="990">
-   <properties>
-    <property name="publishingEvtMaskUponExhaust" value="1"/>
-    <property name="publishingToEvtSubIdUponExhaust" value="3"/>
-    <property name="quota" value="1"/>
-    <property name="recoveryFrames" value="65535"/>
-    <property name="speciesId" value="5"/>
-    <property name="storyPointId" value="2"/>
-   </properties>
-  </object>
-  <object id="386" name="StoryPoint1" x="406" y="36" width="42" height="1018">
+  <object id="386" name="StoryPoint1" x="406" y="720" width="42" height="334">
    <properties>
     <property name="publishingEvtMaskUponExhaust" value="1"/>
     <property name="publishingToEvtSubIdUponExhaust" value="3"/>
@@ -145,29 +109,27 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="372" name="Goblin" x="482" y="914">
+  <object id="372" x="482" y="914">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="2"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4097"/>
-    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="4"/>
    </properties>
    <point/>
   </object>
-  <object id="373" name="Goblin" x="815" y="916">
+  <object id="373" x="815" y="916">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="publishingEvtMaskUponKilled" value="4"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4097"/>
-    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="4"/>
    </properties>
    <point/>
   </object>
-  <object id="374" name="SwordMan" x="1088" y="972">
+  <object id="374" x="1088" y="972">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="8"/>

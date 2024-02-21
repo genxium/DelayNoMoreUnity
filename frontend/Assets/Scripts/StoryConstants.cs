@@ -48,15 +48,29 @@ namespace Story {
                 }
             );
 
+        public static StoryPointStep SMALL_FOREST_STORY_POINT_2_STEP_1 = ImmutableArray.Create<StoryPointDialogLine>().AddRange(
+                new StoryPointDialogLine {
+                    NarratorJoinIndex = 1,
+                    NarratorSpeciesId = Battle.SPECIES_NONE_CH,
+                    Content = "There should be a way out!",
+                    DownOrNot = true
+                }
+            );
+
         public static StoryPoint SMALL_FOREST_STORY_POINT_1 = ImmutableArray.Create<StoryPointStep>().AddRange(
             SMALL_FOREST_STORY_POINT_1_STEP_1,
             SMALL_FOREST_STORY_POINT_1_STEP_2,
             SMALL_FOREST_STORY_POINT_1_STEP_3
             );
 
+        public static StoryPoint SMALL_FOREST_STORY_POINT_2 = ImmutableArray.Create<StoryPointStep>().AddRange(
+            SMALL_FOREST_STORY_POINT_2_STEP_1
+            );
+
         public static Story SMALL_FOREST_STORY = ImmutableDictionary.Create<int, StoryPoint>().AddRange(new[]
             {
-            new KeyValuePair<int, StoryPoint>(1, SMALL_FOREST_STORY_POINT_1)
+            new KeyValuePair<int, StoryPoint>(1, SMALL_FOREST_STORY_POINT_1),
+            new KeyValuePair<int, StoryPoint>(2, SMALL_FOREST_STORY_POINT_2)
         });
 
         public static ImmutableDictionary<int, Story> STORIES_OF_LEVELS = ImmutableDictionary.Create<int, Story>().AddRange(new[]

@@ -1302,7 +1302,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var serializedTriggerTrackingIdToTrapLocalId = new SerializedTriggerTrackingIdToTrapLocalId();
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         var playerStartingCposList = new List<(Vector, int, int)>();
-        var npcsStartingCposList = new List<(Vector, int, int, int, int, bool, int, ulong)>();
+        var npcsStartingCposList = new List<(Vector, int, int, int, int, bool, int, ulong, int)>();
         var trapList = new List<Trap>();
         var triggerList = new List<(Trigger, float, float)>();
         var evtSubList = new List<EvtSubscription>();
@@ -1388,7 +1388,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
                         var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        CustomProperty dirX, dirY, speciesId, teamId, isStatic, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled;
+                        CustomProperty dirX, dirY, speciesId, teamId, isStatic, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId;
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
@@ -1396,6 +1396,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("static", out isStatic);
                         tileProps.TryGetCustomProperty("publishingEvtSubIdUponKilled", out publishingEvtSubIdUponKilled);
                         tileProps.TryGetCustomProperty("publishingEvtMaskUponKilled", out publishingEvtMaskUponKilled);
+                        tileProps.TryGetCustomProperty("subscriptionId", out subscriptionId);
                         npcsStartingCposList.Add((
                                                     new Vector(cx, cy),
                                                     null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt(),
@@ -1404,7 +1405,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                                     null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt(),
                                                     null == isStatic || isStatic.IsEmpty ? false : (1 == isStatic.GetValueAsInt()),
                                                     null == publishingEvtSubIdUponKilled || publishingEvtSubIdUponKilled.IsEmpty ? MAGIC_EVTSUB_ID_NONE : publishingEvtSubIdUponKilled.GetValueAsInt(),
-                                                    null == publishingEvtMaskUponKilled || publishingEvtMaskUponKilled.IsEmpty ? 0ul : (ulong)publishingEvtMaskUponKilled.GetValueAsInt()
+                                                    null == publishingEvtMaskUponKilled || publishingEvtMaskUponKilled.IsEmpty ? 0ul : (ulong)publishingEvtMaskUponKilled.GetValueAsInt(),
+                                                    null == subscriptionId || subscriptionId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : subscriptionId.GetValueAsInt()
                         ));
                     }
                     break;
@@ -1712,7 +1714,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             trigger.ConfigFromTiled.CharacterSpawnerTimeSeq.Add(chSpawnerConfig);
                         }
 
-                        var (tiledRectCx, tiledRectCy) = StoryPoint.SpeciesId == speciesIdVal ? (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f) : (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
+                        var (tiledRectCx, tiledRectCy) = (StoryPoint.SpeciesId == speciesIdVal || WaveInducer.SpeciesId == speciesIdVal) ? (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f) : (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
 
                         var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                         var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
@@ -1803,7 +1805,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int npcLocalId = 0;
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal) = npcsStartingCposList[i];
+            var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal, subscriptionId) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             var chConfig = Battle.characters[characterSpeciesId];
             var npcInRdf = startRdf.NpcsArr[i];
@@ -1839,6 +1841,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
             npcInRdf.PublishingEvtSubIdUponKilled = publishingEvtSubIdUponKilledVal;
             npcInRdf.PublishingEvtMaskUponKilled = publishingEvtMaskUponKilledVal;
+            npcInRdf.SubscriptionId = subscriptionId;
             startRdf.NpcsArr[i] = npcInRdf;
             npcLocalId++;
         }
@@ -1862,9 +1865,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < evtSubList.Count; i++) {
             startRdf.EvtSubsArr[i] = evtSubList[i];
         }
-        // Initialize trigger for the first wave
-        startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].DemandedEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
-        startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
+        
+        if (0ul == startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].DemandedEvtMask) {
+            // Initialize trigger for the first wave if attr "DemandedEvtMask" was not set explicitly!
+            startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].DemandedEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
+            startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
+        }
 
         return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId);
     }
