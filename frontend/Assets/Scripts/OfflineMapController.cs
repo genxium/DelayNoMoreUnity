@@ -106,7 +106,7 @@ public class OfflineMapController : AbstractMapController {
                         var msg = String.Format("Story control handover triggered at playerRdfId={0}", playerRdfId);
                         Debug.Log(msg);
                         dialogBoxes.gameObject.SetActive(true);
-                        dialogBoxes.stepCnt = 0;
+                        dialogBoxes.init();
                         break;
                     }
                 }

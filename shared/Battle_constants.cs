@@ -146,7 +146,8 @@ namespace shared {
         public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;
 
         public static int GRAVITY_X = 0;
-        public static int GRAVITY_Y = -(int)(0.5 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); // makes all "playerCollider.Y" a multiple of 0.5 in all cases
+        public static int GRAVITY_Y = -(int)(0.62f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int GRAVITY_Y_JUMP_HOLDING = -(int)(0.42f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int INPUT_DELAY_FRAMES = 2; // in the count of render frames
         public static int DEFAULT_PATROL_CUE_WAIVING_FRAMES = 150; // in the count of render frames, should be big enough for any NPC to move across the largest patrol cue
         public static int NO_PATROL_CUE_ID = -1;
