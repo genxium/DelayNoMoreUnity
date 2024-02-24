@@ -128,6 +128,8 @@ message CharacterDownsync {
 
     int32 subscriptionId = 50; 
 
+    bool jumpHolding = 51;
+
 	string name = 997;
 	string displayName = 998;
 	string avatar = 999;

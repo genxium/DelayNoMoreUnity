@@ -1,5 +1,7 @@
+using DG.Tweening;
 using shared;
 using System;
+using System.Collections;
 using System.Collections.Immutable;
 using TMPro;
 using UnityEngine;
@@ -10,7 +12,8 @@ public class DialogBoxes : MonoBehaviour {
     public Image avatarDown, avatarUp;
     public TMP_Text textDown, textUp;
     public Button nextBtn; // to toggle interactability
-    public int stepCnt = 0; 
+    protected int stepCnt = 0;
+    protected int renderingStepCnt = 0;
 
     // Start is called before the first frame update
     void Start() {
@@ -22,6 +25,11 @@ public class DialogBoxes : MonoBehaviour {
 
     }
 
+    public void init() {
+        stepCnt = 0;
+        renderingStepCnt = -1;
+    }
+
     public virtual void OnNextBtnClicked() {
         Debug.Log(String.Format("Next button clicked, now stepCnt = " + stepCnt));
         stepCnt++;
@@ -31,17 +39,27 @@ public class DialogBoxes : MonoBehaviour {
         ImmutableDictionary<int, ImmutableArray<ImmutableArray<StoryPointDialogLine>>> levelStory = Story.StoryConstants.STORIES_OF_LEVELS[levelId];
         ImmutableArray<ImmutableArray<StoryPointDialogLine>> storyPoint = levelStory[storyPointId];
         if (stepCnt >= storyPoint.Length) {
+            dialogUp.SetActive(false);
+            dialogDown.SetActive(false);
+            nextBtn.gameObject.SetActive(false);
             return false;
         } else {
-            ImmutableArray<StoryPointDialogLine> storyPointStep = storyPoint[stepCnt];
-            return renderStoryPointStep(rdf, storyPointStep);
+            if (renderingStepCnt < stepCnt) {
+                dialogUp.SetActive(false);
+                dialogDown.SetActive(false);
+                nextBtn.gameObject.SetActive(false);
+                ImmutableArray<StoryPointDialogLine> storyPointStep = storyPoint[stepCnt];
+                StartCoroutine(renderStoryPointStep(rdf, storyPointStep));
+                renderingStepCnt = stepCnt;
+            }
+            
+            return true;
         }
     }
 
-    public bool renderStoryPointStep(RoomDownsyncFrame rdf, ImmutableArray<StoryPointDialogLine> step) {
+    protected IEnumerator renderStoryPointStep(RoomDownsyncFrame rdf, ImmutableArray<StoryPointDialogLine> step) {
         // Hide "up" dialog box by default
-        dialogUp.SetActive(false);
-        dialogDown.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
 
         for (int i = 0; i < step.Length; i++) {
             var line = step[i];
@@ -74,7 +92,9 @@ public class DialogBoxes : MonoBehaviour {
                 }
             }
         }
-
-        return true;
+        nextBtn.gameObject.SetActive(true);
+        DOTween.Sequence()
+            .Append(nextBtn.transform.DOScale(0.3f * Vector3.one, 0.25f))
+            .Append(nextBtn.transform.DOScale(1.0f * Vector3.one, 0.25f));
     }
 }
