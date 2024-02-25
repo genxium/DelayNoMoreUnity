@@ -1276,26 +1276,25 @@ namespace shared {
                                 if (false == shouldOmitStun) {
                                     var existingDebuff = atkedCharacterInNextFrame.DebuffList[DEBUFF_ARR_IDX_FROZEN];
                                     bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == debuffConfigs[existingDebuff.SpeciesId].Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
-                                    CharacterState newChState = Atked1;
+                                    CharacterState newNextCharacterState = Atked1;
                                     if (!isFrozen && bulletNextFrame.Config.BlowUp) {
-                                        newChState = BlownUp1;
+                                        newNextCharacterState = BlownUp1;
                                     } else if (isFrozen || BlownUp1 != oldNextCharacterState) {
                                         if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
-                                            newChState = CrouchAtked1;
+                                            newNextCharacterState = CrouchAtked1;
                                         }
                                     }
                                     
                                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
-                                    CharacterState origNextChState = atkedCharacterInNextFrame.CharacterState;
                                     // [WARNING] The following assignment should be both order-insensitive and avoiding incorrect transfer of recovery frames from Atk[N] to Atked1!
-                                    if (Atked1 != origNextChState || InAirAtked1 != origNextChState || BlownUp1 != origNextChState || CrouchAtked1 != origNextChState) {
+                                    if (Atked1 != oldNextCharacterState || InAirAtked1 != oldNextCharacterState || BlownUp1 != oldNextCharacterState || CrouchAtked1 != oldNextCharacterState) {
                                             atkedCharacterInNextFrame.FramesToRecover = bulletNextFrame.Config.HitStunFrames;
                                     } else {
                                         if (bulletNextFrame.Config.HitStunFrames > oldFramesToRecover) {
                                             atkedCharacterInNextFrame.FramesToRecover = bulletNextFrame.Config.HitStunFrames;
                                         }
                                     }
-                                    atkedCharacterInNextFrame.CharacterState = newChState;
+                                    atkedCharacterInNextFrame.CharacterState = newNextCharacterState;
                                 }
 
                                 if (atkedCharacterInNextFrame.FramesInvinsible < bulletNextFrame.Config.HitInvinsibleFrames) {
