@@ -543,11 +543,18 @@ namespace shared {
                                 thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover - 1); // To favor animation playing and prevent skill use when turning-around
                             }
                         } else if (stoppingFromWalking) {
+                            // Keeps CharacterState and thus the animation to make user see graphical feedback asap.
+                            thatCharacterInNextFrame.CharacterState = Walking;
                             thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
                         } else {
                             // Updates CharacterState and thus the animation to make user see graphical feedback asap.
                             thatCharacterInNextFrame.CharacterState = Walking;
                             thatCharacterInNextFrame.FramesCapturedByInertia = (chConfig.InertiaFramesToRecover >> 3);
+                        }
+                    } else {
+                        // [WARNING] Not free from inertia, just set proper next chState
+                        if (0 != thatCharacterInNextFrame.VelX) {
+                            thatCharacterInNextFrame.CharacterState = Walking;
                         }
                     }
                 }

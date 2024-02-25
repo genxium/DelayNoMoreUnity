@@ -27,7 +27,7 @@
  </layer>
  <layer id="20" name="Background1" width="128" height="64">
   <data encoding="base64" compression="zlib">
-   eJzt0zEOQEAQQNHlEjgZzuIWTkyjIJotzErmvWQK3cz+KAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBpb6wVoSv/c9M9N/9z0z03/3KL77/19aMv/n9vVf+hKGT+eqWt66quIu2veJWqfZ4v5/F4+nvWH/SPurnmXqH3+2IJ4BzLOLWI=
+   eJzt2LENg0AMQNGDJSCTEWbJFhmVCUJDAR2RsE/ye5ILOt99XUNrAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMA/tiF7A7J8shcglf616V+b/rXpX5v+tUX3/47nIZf3X9vRfxpamx+eV4f/mSLOfedeova5tlj27/fDs3bYP+Lcd+4lap8eWxDvB/hLLlU=
   </data>
  </layer>
  <layer id="15" name="Ground" width="128" height="64">
