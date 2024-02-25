@@ -1,4 +1,9 @@
 # Latest tag change notes
+v1.3.0 new features
+- Added offline mode evt-triggered dialogs
+- Enhanced inertia handling for jumping
+- Added hold-to-jump-further dynamics
+
 v1.2.9 new features
 - Fixed ringbuff contamination for pushback framelogging 
 - Fixed resync continuation handling on the ACTIVE NORMAL TICKER side
