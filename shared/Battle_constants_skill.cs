@@ -251,15 +251,15 @@ namespace shared {
         private static BulletConfig PistolBulletAir = new BulletConfig {
             StartupFrames = 2,
                           ActiveFrames = 180,
-                          HitStunFrames = 6,
-                          BlockStunFrames = 4,
-                          Damage = 6,
-                          PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          HitStunFrames = 1,
+                          BlockStunFrames = 2,
+                          Damage = 5,
+                          PushbackVelX = (int)(1.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                           PushbackVelY = NO_LOCK_VEL,
                           SelfLockVelX = NO_LOCK_VEL,
                           SelfLockVelY = NO_LOCK_VEL,
-                          HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          HitboxOffsetX = (int)(15*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                           HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                           HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                           SpeciesId = 8,
@@ -273,6 +273,33 @@ namespace shared {
                           ExplosionVfxSpeciesId = VfxPistolBulletExploding.SpeciesId,
                           CharacterEmitSfxName = "Fireball8",
                           ExplosionSfxName = "Explosion8",
+                          CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
+        };
+
+        private static BulletConfig MagicPistolBulletAir = new BulletConfig {
+            StartupFrames = 2,
+                          ActiveFrames = 180,
+                          HitStunFrames = 2,
+                          BlockStunFrames = 2,
+                          Damage = 8,
+                          PushbackVelX = (int)(0.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          PushbackVelY = NO_LOCK_VEL,
+                          SelfLockVelX = NO_LOCK_VEL,
+                          SelfLockVelY = NO_LOCK_VEL,
+                          HitboxOffsetX = (int)(15*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          HitboxOffsetY = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          SpeciesId = 1,
+                          ExplosionSpeciesId = 1,
+                          Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          DirX = 2,
+                          DirY = 0,
+                          Hardness = 4,
+                          ExplosionFrames = 30,
+                          BType = BulletType.Fireball,
+                          CharacterEmitSfxName="SlashEmitSpd1",
+                          ExplosionSfxName = "Explosion2",
                           CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
@@ -308,15 +335,16 @@ namespace shared {
         private static BulletConfig GunGirlSlashNovaStarterBullet = new BulletConfig(GunGirlSlashNovaRepeatingBullet).SetStartupFrames(10).SetSpeed(GunGirlSlashNovaRepeatingBullet.SpeedIfNotHit);
 
         private static BulletConfig PistolBulletGround = new BulletConfig(PistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);
+        private static BulletConfig MagicPistolBulletGround = new BulletConfig(MagicPistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);
 
         public static BulletConfig GoblinMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 63,
                           ActiveFrames = 10,
-                          HitStunFrames = 4,
+                          HitStunFrames = 6,
                           HitInvinsibleFrames = 8,
                           BlockStunFrames = 2,
                           Damage = 12,
-                          PushbackVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          PushbackVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                           PushbackVelY = 0,
                           SelfLockVelX = NO_LOCK_VEL,
                           SelfLockVelY = NO_LOCK_VEL,
@@ -892,7 +920,7 @@ namespace shared {
                             RecoveryFrames = 12,
                             RecoveryFramesOnBlock = 10,
                             RecoveryFramesOnHit = 10,
-                            MpDelta = 35,
+                            MpDelta = 25,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Atk1
                             }
@@ -905,7 +933,7 @@ namespace shared {
                             RecoveryFrames = 12,
                             RecoveryFramesOnBlock = 10,
                             RecoveryFramesOnHit = 10,
-                            MpDelta = 25,
+                            MpDelta = 20,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = InAirAtk1
                             }
@@ -1377,7 +1405,7 @@ namespace shared {
                                                 DirX = 1,
                                                 DirY = 1,
                                                 Hardness = 4,
-                                                Speed = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                                Speed = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                                 CharacterEmitSfxName = "SlashEmitSpd2",
                                                 MhType = MultiHitType.FromPrevHitActual,
                                                 AllowsWalking = true,  
@@ -1451,6 +1479,32 @@ namespace shared {
                                                 ActiveVfxSpeciesId = VfxDashingActive.SpeciesId
                                                 }
                                 )
+                                        ),
+
+                                new KeyValuePair<int, Skill>(29, new Skill{
+                                        RecoveryFrames = 12,
+                                        RecoveryFramesOnBlock = 10,
+                                        RecoveryFramesOnHit = 10,
+                                        MpDelta = 35,
+                                        TriggerType = SkillTriggerType.RisingEdge,
+                                        BoundChState = Atk1
+                                        }
+                                        .AddHit(
+                                            MagicPistolBulletGround
+                                            )
+                                        ),
+
+                                new KeyValuePair<int, Skill>(30, new Skill{
+                                        RecoveryFrames = 12,
+                                        RecoveryFramesOnBlock = 10,
+                                        RecoveryFramesOnHit = 10,
+                                        MpDelta = 30,
+                                        TriggerType = SkillTriggerType.RisingEdge,
+                                        BoundChState = InAirAtk1
+                                        }
+                                        .AddHit(
+                                            MagicPistolBulletAir
+                                            )
                                         ),
 
                                     new KeyValuePair<int, Skill>(255, new Skill {
@@ -2002,9 +2056,9 @@ namespace shared {
                         case PATTERN_UP_B:
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
-                                    return 19;
+                                    return 30;
                                 } else {
-                                    return 18;
+                                    return 29;
                                 }
                             } else {
                                 return NO_SKILL;

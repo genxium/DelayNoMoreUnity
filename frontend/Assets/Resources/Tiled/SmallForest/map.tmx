@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="393">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="394">
  <properties>
   <property name="levelId" value="1"/>
   <property name="missionEvtSubId" value="2"/>
@@ -17,7 +17,7 @@
  </layer>
  <layer id="24" name="Background3" width="128" height="64">
   <data encoding="base64" compression="zlib">
-   eJztwwENAAAMw6DKnvwLOSSsmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqo+f8UKAOI=
+   eJzt2DEKgzAUgOH0lOpJtCexgxfxKF7DtUsVHFykpNga+r7hI4uBwC8vkPmW0gwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZHuk68/ANe7ah6Z/bPrHpn9s+se27z9u63Dw7bOA8/K9/tOb/mdozZui/Hr+98l7Q0nc/7F1S/86U7OoPthX+9eKs/bPtc4M9/h/eAGC4ELt
   </data>
  </layer>
  <layer id="18" name="Background2" width="128" height="64">
@@ -27,12 +27,12 @@
  </layer>
  <layer id="20" name="Background1" width="128" height="64">
   <data encoding="base64" compression="zlib">
-   eJzt0bERgDAMBDCHJYDJCGsxMbRAlSJOCunuC3d+OwIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBlcyzvAeGuJ2DpnL6Nb/mX0brlL1j7fXxzPXDvnnPD/Gb1b7pK1z4y/IN8NpTspDw==
+   eJzt0zEOQEAQQNHlEjgZzuIWTkyjIJotzErmvWQK3cz+KAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBpb6wVoSv/c9M9N/9z0z03/3KL77/19aMv/n9vVf+hKGT+eqWt66quIu2veJWqfZ4v5/F4+nvWH/SPurnmXqH3+2IJ4BzLOLWI=
   </data>
  </layer>
  <layer id="15" name="Ground" width="128" height="64">
   <data encoding="base64" compression="zlib">
-   eJzt29EJwjAQgOE064gj1A7kNOok6jzWAZyh1RR6FIrFl1If/v+DPBUUPO5yuca2SulZllgeJeZtWYec0tv443Ql5k2JfV8Zf6JuzH3znyni3xh/pCH+fWX8qYb419Z/rMj/2vgj2f+xRf33/Mfk/s8W+7/xZ/L8xxb13/gzRf9v/8dk/rN5/mOL+u/8j8n5H5v5z+b9HzbnP2ze/2Fz/s/m/I/N/Z/N8x+b5z+2iL/1n8n5L5v9P5v9P5vv/9mi/3P/Z3L/Z/P+H5v//2Rz/stm/Nns/9i8/8Pm/I/N+Q+b53826z+b9Z/N/Gfz/j9bxN/5D5P3P9ms/2y+/2Wz/2eL/d/8ZzL+bPb/bPZ/bM7/2az/bP+q/6fyfedxXfLyszXW/PM1ifsfW8f/Wr7vNq57Xn62xpp/vibOf9h+3f/ez3JnZy5t6rji7/36El/v/7PF/v8BQ6vbpA==
+   eJzt2sEJwkAQRuFksQtPehVLUBuwBDuwGvWaJtR6tAFrUNyAS2QxtyVB3vtgQRES8XdmNpo6VFWISyy3uqrucdXmj/SM2W+C+VO1+a/NH8v82dr8X85/rDb/lfWPZf2zOf/Z7P9s5s/m/Gczfzb7P5v7fzbrn8382ez/bObPZv5s3v/D5u8/bPZ/Nuufzfpns/7ZrH82r//YzJ/N/s9m/mzu/9n8/5/N/R+b85/N/s/m/o/N/s9m/mzmz2b+bO7/2Pz9h83rfzb7P5v9ny3V/8T8kez/bObP5vxns/7ZzJ/N/NnS/J/FNTd/nJS/mMyfLc1/MVn/bObPNlb/P8Tv3PGzTqH/tRIrP7466f6PoZ3jOS+fdQ39r5VY+fHV+a7/3bhvRSNI9/9O4+Mmrm1WK8vs+cJaGtS+4Of9+DHnU/5NudPoj6T5/wat34Rl
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -183,7 +183,7 @@
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
-  <object id="352" x="-32" y="0" width="64" height="1024">
+  <object id="352" x="-32" y="0" width="64" height="848">
    <properties>
     <property name="collisionTypeMask" value="5"/>
     <property name="prohibitsWallGrabbing" value="1"/>
@@ -234,6 +234,11 @@
    </properties>
   </object>
   <object id="367" x="1024" y="992" width="1024" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="393" x="-32" y="848" width="48" height="160.333">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

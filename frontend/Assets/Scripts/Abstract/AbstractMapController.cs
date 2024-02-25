@@ -449,12 +449,20 @@ public abstract class AbstractMapController : MonoBehaviour {
                 //selfPlayerLights.gameObject.transform.position = newPosHolder;
                 //selfPlayerLights.setDirX(currCharacterDownsync.DirX);
 
+                int effInventoryCount = 0;
                 for (int i = 0; i < currCharacterDownsync.Inventory.Slots.Count; i++) {
                     var slotData = currCharacterDownsync.Inventory.Slots[i];
                     if (InventorySlotStockType.NoneIv == slotData.StockType) break;
                     var targetBtn = (0 == i ? iptmgr.btnC : iptmgr.btnD); // TODO: Don't hardcode them
+                    targetBtn.gameObject.SetActive(true);
                     var ivSlotGui = targetBtn.GetComponent<InventorySlot>();
                     ivSlotGui.updateData(slotData);
+                    effInventoryCount++;
+                }
+
+                if (0 >= effInventoryCount) {
+                    iptmgr.btnC.gameObject.SetActive(false);
+                    iptmgr.btnD.gameObject.SetActive(false);
                 }
             } else {
                 float halfBoxCh = .5f * boxCh;

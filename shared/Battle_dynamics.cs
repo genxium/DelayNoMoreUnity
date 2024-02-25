@@ -153,7 +153,7 @@ namespace shared {
             }
 
             int patternId = PATTERN_ID_NO_OP;
-            var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia));
+            var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 2) > currCharacterDownsync.FramesCapturedByInertia));
             if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
                 if (canJumpWithinInertia) {
                     if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
@@ -528,7 +528,10 @@ namespace shared {
                                 thatCharacterInNextFrame.CharacterState = Walking;
                             }
                         } else {
-                            thatCharacterInNextFrame.VelX = 0;
+                            if (!(InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState)) {
+                                // [WARNING] In general a character is not permitted to just stop velX during proactive jumping.
+                                thatCharacterInNextFrame.VelX = 0;
+                            }
                         }
                     } else if (currFreeFromInertia) {
                         if (exactTurningAround) {
@@ -544,7 +547,7 @@ namespace shared {
                         } else {
                             // Updates CharacterState and thus the animation to make user see graphical feedback asap.
                             thatCharacterInNextFrame.CharacterState = Walking;
-                            thatCharacterInNextFrame.FramesCapturedByInertia = (chConfig.InertiaFramesToRecover >> 1);
+                            thatCharacterInNextFrame.FramesCapturedByInertia = (chConfig.InertiaFramesToRecover >> 3);
                         }
                     }
                 }
@@ -649,7 +652,7 @@ namespace shared {
                 var src = currRenderFrameBullets[i];
                 if (TERMINATING_BULLET_LOCAL_ID == src.BattleAttr.BulletLocalId) break;
                 var dst = nextRenderFrameBullets[bulletCnt];
-                var dstVelY = src.VelY + (src.Config.TakesGravity ? GRAVITY_Y : 0);
+                var dstVelY = src.VelY + (src.Config.TakesGravity ? GRAVITY_Y_JUMP_HOLDING : 0);
                 if (dstVelY < DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID) {
                     dstVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID;
                 }
@@ -1283,9 +1286,9 @@ namespace shared {
                                         }
                                     }
                                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
-                                    if (bulletNextFrame.Config.HitStunFrames > oldFramesToRecover) {
-                                        atkedCharacterInNextFrame.FramesToRecover = bulletNextFrame.Config.HitStunFrames;
-                                    }
+                                    // if (bulletNextFrame.Config.HitStunFrames > oldFramesToRecover) {
+                                    atkedCharacterInNextFrame.FramesToRecover = bulletNextFrame.Config.HitStunFrames;
+                                    //}
                                 }
                                 if (atkedCharacterInNextFrame.FramesInvinsible < bulletNextFrame.Config.HitInvinsibleFrames) {
                                     atkedCharacterInNextFrame.FramesInvinsible = bulletNextFrame.Config.HitInvinsibleFrames;
