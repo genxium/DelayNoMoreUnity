@@ -153,15 +153,14 @@ namespace shared {
             }
 
             int patternId = PATTERN_ID_NO_OP;
-            var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 3) > currCharacterDownsync.FramesCapturedByInertia));
+            var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia));
             if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
-                if (canJumpWithinInertia) {
-                    if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
-                        // Checking "DashingEnabled" here to allow jumping when dashing-disabled players pressed "DOWN + BtnB"
-                        patternId = PATTERN_DOWN_A;
-                    } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && Sliding != currCharacterDownsync.CharacterState) {
-                        patternId = PATTERN_DOWN_A;
-                    } else if (currCharacterDownsync.PrimarilyOnSlippableHardPushback && (0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
+                if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
+                    patternId = PATTERN_DOWN_A;
+                } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && Sliding != currCharacterDownsync.CharacterState) {
+                    patternId = PATTERN_DOWN_A;
+                } else if (canJumpWithinInertia) {
+                    if (currCharacterDownsync.PrimarilyOnSlippableHardPushback && (0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
                         slipJumpedOrNot = true;
                     } else if (!inAirSet.Contains(currCharacterDownsync.CharacterState) && !isCrouching(currCharacterDownsync.CharacterState)) {
                         jumpedOrNot = true;
@@ -947,13 +946,15 @@ namespace shared {
                                     justTriggeredStoryPointId = atkedTriggerInNextFrame.ConfigFromTiled.StoryPointId;
                                 }
 
-                                var nextExhaustEvtSub = nextRenderFrameEvtSubs[atkedTriggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust-1];
-                                nextExhaustEvtSub.FulfilledEvtMask |= atkedTriggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
-                                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
-                                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id-1));
-                                    nextExhaustEvtSub.DemandedEvtMask = (MAGIC_EVTSUB_ID_STORYPOINT == nextExhaustEvtSub.Id ? nextExhaustEvtSub.DemandedEvtMask : EVTSUB_NO_DEMAND_MASK);
-                                    nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
-                                    justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
+                                if (null != nextRenderFrameEvtSubs && 0 < atkedTriggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && atkedTriggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrameEvtSubs.Count) {
+                                    var nextExhaustEvtSub = nextRenderFrameEvtSubs[atkedTriggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust - 1];
+                                    nextExhaustEvtSub.FulfilledEvtMask |= atkedTriggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
+                                    if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
+                                        fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id - 1));
+                                        nextExhaustEvtSub.DemandedEvtMask = (MAGIC_EVTSUB_ID_STORYPOINT == nextExhaustEvtSub.Id ? nextExhaustEvtSub.DemandedEvtMask : EVTSUB_NO_DEMAND_MASK);
+                                        nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
+                                        justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
+                                    }
                                 }
                             }
                         }
