@@ -153,7 +153,7 @@ namespace shared {
             }
 
             int patternId = PATTERN_ID_NO_OP;
-            var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 2) > currCharacterDownsync.FramesCapturedByInertia));
+            var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 3) > currCharacterDownsync.FramesCapturedByInertia));
             if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
                 if (canJumpWithinInertia) {
                     if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
@@ -412,7 +412,7 @@ namespace shared {
                 return;
             }
 
-            if (currCharacterDownsync.JumpTriggered) {
+            if (thatCharacterInNextFrame.JumpTriggered) {
                 // [WARNING] This assignment blocks a lot of CharacterState transition logic, including "_processInertiaWalking"!
                 if (currCharacterDownsync.OnWall) {
                     thatCharacterInNextFrame.FramesToStartJump = (chConfig.ProactiveJumpStartupFrames >> 1);
@@ -765,7 +765,7 @@ namespace shared {
                 }
 
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY + vhDiffInducedByCrouching;
-                if (currCharacterDownsync.JumpStarted) {
+                if (thatCharacterInNextFrame.JumpStarted) {
                     // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
                     if (currCharacterDownsync.OnWall && InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
                         // logger.LogInfo("rdfId=" + currRenderFrame.Id + ", wall jump started for " + stringifyPlayer(currCharacterDownsync));

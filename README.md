@@ -1,8 +1,9 @@
 # Latest tag change notes
-v1.3.1 new features
+v1.3.2 new features
 - Added offline mode evt-triggered dialogs
-- Enhanced inertia handling for walking and jumping
 - Added hold-to-jump-further dynamics
+- Enhanced inertia handling for walking and jumping
+- Reduced jumpng latency
 
 v1.2.9 new features
 - Fixed ringbuff contamination for pushback framelogging 
