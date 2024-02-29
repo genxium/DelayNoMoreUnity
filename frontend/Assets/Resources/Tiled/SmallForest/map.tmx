@@ -3,7 +3,7 @@
  <properties>
   <property name="levelId" value="1"/>
   <property name="missionEvtSubId" value="2"/>
-  <property name="npcPreallocCapDict" value="1:16;3:16;4096:1;4097:16"/>
+  <property name="npcPreallocCapDict" value="1:4;3:2;4097:8"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
