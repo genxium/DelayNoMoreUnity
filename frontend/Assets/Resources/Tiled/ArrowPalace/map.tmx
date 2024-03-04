@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="401">
+ <properties>
+  <property name="levelId" value="2"/>
+  <property name="missionEvtSubId" value="2"/>
+  <property name="npcPreallocCapDict" value="4098:4"/>
+ </properties>
+ <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
+ <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
+ <tileset firstgid="12" source="../triggers/door/triggers_door.tsx"/>
+ <tileset firstgid="14" source="../shared_comps/forest16.tsx"/>
+ <tileset firstgid="1038" source="../decoration/trees.tsx"/>
+ <layer id="28" name="Background" width="64" height="128">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENACAMBLAL/j/MyVAI6FibNAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg2yupwfs9g18koVH/
+  </data>
+ </layer>
+ <layer id="29" name="Ground" width="64" height="128">
+  <data encoding="base64" compression="zlib">
+   eJzt24ENgzAQQ9GESWgnIew/RLtJg9Qt3kfKAJZ9Pt8lrGOMYx/t+8wxvvssFP/YmK99bhj/w/2E8c/w8/q/cPy6/+v4Zf3f8c/3Pxn/qv/z/qfrX/b/+p+tf33+0/m/45/v/zp+vf/p+GX96/Ofzr+e/5r/bP3r+VfHP3H96/lP93/9/Uv+l/71/Z+OX+7/+vs/Pf/kf3b96/svff+p5z89/1T/dv3X/8Mv+3/zT/4n6z//t/nv/wfb//T9h/7/h55/uv+1+S//2vrv/WP1L/d/ff7R+S//2vj196/5n82/vv9p/2fzr+d//f5Xf/+jz/96/2//lf/J+tf9T5//uv/N/+T61/Hr9a/j1/1P3//r+w+9/ut/Nv72f+GX/b/9Z/qX+dfrX/f//M/Of/r7Bz3/6/rX+7/Ov/7/V/qP//K/i1/f/+v8P/732ucN4j//2H8umjf1
+  </data>
+ </layer>
+ <objectgroup id="1" name="PlayerStartingPos">
+  <object id="137" name="Player2St" x="917" y="1958">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="teamId" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="135" name="Player1St" x="96" y="1958">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="teamId" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="19" name="EvtSubscription">
+  <object id="391" name="PseudoStaticNpcEvtSub" x="400" y="0">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="366" name="WaveExhaust" x="1024" y="0">
+   <properties>
+    <property name="demandedEvtMask" value="15"/>
+    <property name="id" value="2"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="27" name="Decoration"/>
+ <objectgroup id="13" name="TriggerPos"/>
+ <objectgroup id="4" name="NpcStartingPos">
+  <object id="372" name="Goblin" x="310" y="1982">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="2"/>
+    <property name="publishingEvtSubIdUponKilled" value="2"/>
+    <property name="speciesId" value="4098"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="373" name="Goblin" x="757" y="1986">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="publishingEvtMaskUponKilled" value="4"/>
+    <property name="publishingEvtSubIdUponKilled" value="2"/>
+    <property name="speciesId" value="4098"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="TrapStartingPos">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <object id="352" name="SlippperySide1" x="-32" y="0" width="64" height="2048">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="prohibitsWallGrabbing" value="1"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="400" name="SlippperySide2" x="990" y="1" width="64" height="2048">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="prohibitsWallGrabbing" value="1"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="2" name="Barrier">
+  <properties>
+   <property name="type" value="barrier_and_shelter"/>
+  </properties>
+  <object id="114" name="Ceiling" x="-32" y="-32" width="1056" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="358" name="Ground" x="-32" y="2016" width="1056" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="PatrolCue"/>
+</map>

@@ -326,6 +326,7 @@ message BulletConfig {
     int32 hitboxSizeIncY = 40; // Change of hitboxSizeY per frame
 
     bool remainUponHit = 41; 
+	bool rotatesAlongVelocity = 42;
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb

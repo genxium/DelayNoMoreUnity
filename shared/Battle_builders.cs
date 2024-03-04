@@ -740,6 +740,16 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetTakesGravity(bool yesOrNo) {
+            this.TakesGravity = yesOrNo;
+            return this;
+        }
+
+        public BulletConfig SetRotateAlongVelocity(bool yesOrNo) {
+            RotatesAlongVelocity = yesOrNo;
+            return this;
+        }
+
         public bool isEmissionInducedMultiHit() {
             return (MultiHitType.FromEmission == MhType);
         }

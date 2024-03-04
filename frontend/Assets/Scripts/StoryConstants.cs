@@ -11,7 +11,7 @@ namespace Story {
         public const int LEVEL_NONE = 0;
 
         public const int LEVEL_SMALL_FOREST = 1;
-        public const int LEVEL_FOREST = 2;
+        public const int ARCHER_PALACE = 2;
 
         public const int STORY_POINT_NONE = 0;
 

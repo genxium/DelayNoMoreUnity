@@ -9,12 +9,16 @@ namespace shared {
             // No need to calculate the exact bounding box of opponent based on ChState, this is just an estimation.
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_SWORDMAN:
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(SwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * SwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeX >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(SwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * SwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (SwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_FIRESWORDMAN:
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * FireSwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeX >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * FireSwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (FireSwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
+                    break;
+                case SPECIES_SKELEARCHER:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(PurpleArrowBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX), yfac * PurpleArrowBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((PurpleArrowBullet.HitboxSizeX), (PurpleArrowBullet.HitboxSizeY));
                     break;
                 default:
                     return false;
@@ -42,6 +46,10 @@ namespace shared {
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(GoblinMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * GoblinMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((GoblinMelee1PrimerBullet.HitboxSizeX >> 1), (GoblinMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
+                case SPECIES_SKELEARCHER:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(PurpleArrowBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * PurpleArrowBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((PurpleArrowBullet.HitboxSizeX >> 2), (PurpleArrowBullet.HitboxSizeY >> 2));
+                    break;
                 default:
                     return false;
             }
@@ -53,6 +61,8 @@ namespace shared {
                 case SPECIES_FIRESWORDMAN:
                     return currCharacterDownsync.Mp >= FireSwordManFireballSkill.MpDelta;
                 case SPECIES_BULLWARRIOR:
+                    return currCharacterDownsync.Mp >= BullWarriorFireballSkill.MpDelta;
+                case SPECIES_SKELEARCHER:
                     return currCharacterDownsync.Mp >= BullWarriorFireballSkill.MpDelta;
             }
             return false;

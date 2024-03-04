@@ -640,22 +640,22 @@ public abstract class AbstractMapController : MonoBehaviour {
                     break;
             }
             if (null != animName) {
-                var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
-                if (null == explosionAnimHolder) {
-                    explosionAnimHolder = cachedFireballs.Pop();
+                var fireballOrExplosionAnimHolder = cachedFireballs.PopAny(lookupKey);
+                if (null == fireballOrExplosionAnimHolder) {
+                    fireballOrExplosionAnimHolder = cachedFireballs.Pop();
                     //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
                 } else {
                     //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
                 }
 
-                if (null != explosionAnimHolder) {
-                    if (explosionAnimHolder.lookUpTable.ContainsKey(animName)) {
-                        explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf);
-                        newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
-                        explosionAnimHolder.gameObject.transform.position = newPosHolder;
+                if (null != fireballOrExplosionAnimHolder) {
+                    if (fireballOrExplosionAnimHolder.lookUpTable.ContainsKey(animName)) {
+                        fireballOrExplosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf, bullet.VelX, bullet.VelY);
+                        newPosHolder.Set(wx, wy, fireballOrExplosionAnimHolder.gameObject.transform.position.z);
+                        fireballOrExplosionAnimHolder.gameObject.transform.position = newPosHolder;
                     }
-                    explosionAnimHolder.score = rdf.Id;
-                    cachedFireballs.Put(lookupKey, explosionAnimHolder);
+                    fireballOrExplosionAnimHolder.score = rdf.Id;
+                    cachedFireballs.Put(lookupKey, fireballOrExplosionAnimHolder);
                 } else {
                     // null == explosionAnimHolder
                     if (EXPLOSION_SPECIES_NONE != explosionSpeciesId) {
@@ -994,10 +994,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
-        cameraCapMinX = 0 + (spaceOffsetX >> 3) + (spaceOffsetX >> 4);
-        cameraCapMaxX = (spaceOffsetX << 1) - (spaceOffsetX >> 2);
-        cameraCapMinY = -(spaceOffsetY << 1) + (spaceOffsetY >> 2);
-        cameraCapMaxY = 0 - (spaceOffsetY >> 2) - (spaceOffsetX >> 3);
+
+        int paddingX = (tileWidth << 4) + (tileWidth << 2);
+        int paddingY = (tileHeight << 3);
+        cameraCapMinX = 0 + paddingX;
+        cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
+
+        cameraCapMinY = -(spaceOffsetY << 1) + paddingY;
+        cameraCapMaxY = 0 - paddingY;
 
         effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
 
