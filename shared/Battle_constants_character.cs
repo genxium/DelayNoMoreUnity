@@ -418,7 +418,7 @@ namespace shared {
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 2,
-                        Hardness = 99,
+                        Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                     }),
             });
