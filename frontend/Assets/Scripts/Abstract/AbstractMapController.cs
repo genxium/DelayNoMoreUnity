@@ -179,6 +179,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void spawnTriggerNode(int triggerLocalId, int speciesId, float wx, float wy) {
         var triggerPrefab = loadTriggerPrefab(triggerConfigs[speciesId]);
+        if (null == triggerPrefab) return;
         GameObject newTriggerNode = Instantiate(triggerPrefab, new Vector3(wx, wy, triggerZ), Quaternion.identity, underlyingMap.transform);
         triggerGameObjs[triggerLocalId] = newTriggerNode;
     }
@@ -1584,44 +1585,46 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 TriggerTrackingId = triggerTrackingIdVal,
                                 IsCompletelyStatic = false
                             };
-                            var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
-                            foreach (var collisionObj in collisionObjs) {
-                                bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false, childProvidesEscapeVal = false, childProvidesSlipJumpVal = false;
-                                foreach (var collisionObjProp in collisionObj.m_CustomProperties) {
-                                    if ("providesHardPushback".Equals(collisionObjProp.m_Name)) {
-                                        childProvidesHardPushbackVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                            if (null != tileObj.m_SuperTile && null != tileObj.m_SuperTile.m_CollisionObjects) {
+                                var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
+                                foreach (var collisionObj in collisionObjs) {
+                                    bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false, childProvidesEscapeVal = false, childProvidesSlipJumpVal = false;
+                                    foreach (var collisionObjProp in collisionObj.m_CustomProperties) {
+                                        if ("providesHardPushback".Equals(collisionObjProp.m_Name)) {
+                                            childProvidesHardPushbackVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                        }
+                                        if ("providesDamage".Equals(collisionObjProp.m_Name)) {
+                                            childProvidesDamageVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                        }
+                                        if ("providesEscape".Equals(collisionObjProp.m_Name)) {
+                                            childProvidesEscapeVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                        }
+                                        if ("providesSlipJump".Equals(collisionObjProp.m_Name)) {
+                                            childProvidesSlipJumpVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                        }
+                                        if ("collisionTypeMask".Equals(collisionObjProp.m_Name) && !collisionObjProp.IsEmpty) {
+                                            collisionTypeMaskVal = (ulong)collisionObjProp.GetValueAsInt();
+                                        }
                                     }
-                                    if ("providesDamage".Equals(collisionObjProp.m_Name)) {
-                                        childProvidesDamageVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
-                                    }
-                                    if ("providesEscape".Equals(collisionObjProp.m_Name)) {
-                                        childProvidesEscapeVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
-                                    }
-                                    if ("providesSlipJump".Equals(collisionObjProp.m_Name)) {
-                                        childProvidesSlipJumpVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
-                                    }
-                                    if ("collisionTypeMask".Equals(collisionObjProp.m_Name) && !collisionObjProp.IsEmpty) {
-                                        collisionTypeMaskVal = (ulong)collisionObjProp.GetValueAsInt();
-                                    }
-                                }
 
-                                // [WARNING] The offset (0, 0) of the tileObj within TSX is the top-left corner, but SuperTiled2Unity converted that to bottom-left corner and reverted y-axis by itself... 
-                                var (hitboxOffsetCx, hitboxOffsetCy) = (-tileObj.m_Width * 0.5f + collisionObj.m_Position.x + collisionObj.m_Size.x * 0.5f, collisionObj.m_Position.y - collisionObj.m_Size.y * 0.5f - tileObj.m_Height * 0.5f);
-                                var (hitboxOffsetVx, hitboxOffsetVy) = PolygonColliderCtrToVirtualGridPos(hitboxOffsetCx, hitboxOffsetCy);
-                                var (hitboxSizeVx, hitboxSizeVy) = PolygonColliderCtrToVirtualGridPos(collisionObj.m_Size.x, collisionObj.m_Size.y);
-                                TrapColliderAttr colliderAttr = new TrapColliderAttr {
-                                    ProvidesDamage = childProvidesDamageVal,
-                                    ProvidesHardPushback = childProvidesHardPushbackVal,
-                                    ProvidesEscape = childProvidesEscapeVal,
-                                    ProvidesSlipJump = childProvidesSlipJumpVal,
-                                    HitboxOffsetX = hitboxOffsetVx,
-                                    HitboxOffsetY = hitboxOffsetVy,
-                                    HitboxSizeX = hitboxSizeVx,
-                                    HitboxSizeY = hitboxSizeVy,
-                                    CollisionTypeMask = collisionTypeMaskVal,
-                                    TrapLocalId = trapLocalId
-                                };
-                                colliderAttrs.List.Add(colliderAttr);
+                                    // [WARNING] The offset (0, 0) of the tileObj within TSX is the top-left corner, but SuperTiled2Unity converted that to bottom-left corner and reverted y-axis by itself... 
+                                    var (hitboxOffsetCx, hitboxOffsetCy) = (-tileObj.m_Width * 0.5f + collisionObj.m_Position.x + collisionObj.m_Size.x * 0.5f, collisionObj.m_Position.y - collisionObj.m_Size.y * 0.5f - tileObj.m_Height * 0.5f);
+                                    var (hitboxOffsetVx, hitboxOffsetVy) = PolygonColliderCtrToVirtualGridPos(hitboxOffsetCx, hitboxOffsetCy);
+                                    var (hitboxSizeVx, hitboxSizeVy) = PolygonColliderCtrToVirtualGridPos(collisionObj.m_Size.x, collisionObj.m_Size.y);
+                                    TrapColliderAttr colliderAttr = new TrapColliderAttr {
+                                        ProvidesDamage = childProvidesDamageVal,
+                                        ProvidesHardPushback = childProvidesHardPushbackVal,
+                                        ProvidesEscape = childProvidesEscapeVal,
+                                        ProvidesSlipJump = childProvidesSlipJumpVal,
+                                        HitboxOffsetX = hitboxOffsetVx,
+                                        HitboxOffsetY = hitboxOffsetVy,
+                                        HitboxSizeX = hitboxSizeVx,
+                                        HitboxSizeY = hitboxSizeVy,
+                                        CollisionTypeMask = collisionTypeMaskVal,
+                                        TrapLocalId = trapLocalId
+                                    };
+                                    colliderAttrs.List.Add(colliderAttr);
+                                }
                             }
                             serializedTrapLocalIdToColliderAttrs.Dict[trapLocalId] = colliderAttrs;
                             trapList.Add(trap);

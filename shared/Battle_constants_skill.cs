@@ -1540,7 +1540,7 @@ namespace shared {
                                         ),
 
                                 new KeyValuePair<int, Skill>(31, new Skill{
-                                        RecoveryFrames = 50,
+                                        RecoveryFrames = 100,
                                         RecoveryFramesOnBlock = 10,
                                         RecoveryFramesOnHit = 10,
                                         MpDelta = 30,
@@ -1553,7 +1553,7 @@ namespace shared {
                                         ),
 
                                 new KeyValuePair<int, Skill>(32, new Skill{
-                                        RecoveryFrames = 50,
+                                        RecoveryFrames = 100,
                                         RecoveryFramesOnBlock = 10,
                                         RecoveryFramesOnHit = 10,
                                         MpDelta = 60,

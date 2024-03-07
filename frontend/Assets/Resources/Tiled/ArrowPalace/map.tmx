@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="408">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="417">
  <properties>
   <property name="levelId" value="2"/>
   <property name="missionEvtSubId" value="2"/>
@@ -17,23 +17,23 @@
  </layer>
  <layer id="28" name="Background1" width="64" height="128">
   <data encoding="base64" compression="zlib">
-   eJzt1MEJgCAAhtFsm1Zrm9qklmiXpkiJIMI6KuR78ONJ8LvYdQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACRjX/sF5Wzh3N1e5ylFXd25/iHk7/zBs7uV/rfur/4p/gNzg0v96Vzi1oZ3AFBwYwk=
+   eJzt1M0NQEAURlGjGlrTDZ3QhF5UwWQiRBCx8nNO8sVCLO5byDIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACiKj9+V4a0r+hD2tpw4bu332Hu3uu/0lWEZW+6w7b7bv/WfIunOuo+66+n/0Dzw8X++GyndT/eCEETZKg=
   </data>
  </layer>
  <layer id="29" name="Ground" width="64" height="128">
   <data encoding="base64" compression="zlib">
-   eJzt28tNxEAQBNAZRwLcyGLtMIAEIBM4khRpwIk06JUY2VoJLXACvxqp7i51dfVnxvPU2lTQzmtv7a0wo/xbcT4UFpj/MfYd5t/Dn9f/Aeev+7/OX9b/kvjz9U/mP6f+8/6n61/2/9Q/W//6/KfHf0n8+fqv89frn85f1r8+/+nx1/u/zH+2/vX+V+ffcf3r/Z/u//r7l/hf9K/v/3T+cv3X3//p/U/8z85/ff+l7z/1/k/vf5L/dv6n/oe/7P+Zf+J/sv7j/3b88/+D7X/6/kP//0Pvf3L/a8c//a+t/7x/TP7L9V+ff/T4p/+1+evvX+N/dvz1/U/2f3b89f5fv//V3//o879e/7P/iv/J+tf9T5//cv8b/5PzX+ev57/OX/c/ff+v7z/0/E/9s/ln/xf+sv9n/xn9y/HX81/3//if3f/p7x+2/f9Nb+12g+fpPP7K+c63brndFaL/1H89/vr/X4r+78vvHo6YVgjzz+D9WHgqvLcVe+7/T3mPc91X7LH//4r3OKf897L/P8d7nL3Gf/B++QGG/10Wrv45/9+ci0/uHxMFXNo=
+   eJztm0FOw0AMRT05Aico7LhFkjtQUOEErCnlHIg79RqwYt8T1JVq1RqFUJVFU94f6S+qbvLn298eZ9I1Zo2Dtj6L2Zejg/I359w6ejD/nfYFzL+IPz7+Wzh/uv/T+ZPjv5f++PpH5t+p/uP9jx7/ZP9X/WPHP/38R9e/l/74+k/nT69/dP7k+Kef/+j60/s/nf/Y8U/vf+n8Czz+6f0f3f/p91/kf4p/+vyPzp9c/+n3/+j9j/yPnf/0+Rd9/knv/+j9j/Kfnf+q/+JP9n+df+R/5PiX/7P11/cPbP+jzz/o33/Q+x+9/2Xrr/6XHf+6/6j8J9d/+vmHrr/6XzZ/+v1X+R9bf/r8R/M/tv70/p/+/pd+/4d+/qfXf82/5H/k+Kf7H/38p/e/8j9y/tP50/Ofzp/uf/T5P33+Qc9/1T82f83/xJ/s/5p/Kv7J+tPzn+7/8j92/0e//5D7/0Uxe0x4b37HVNYxz5q5PTkU/6r/dP3p33/l+H9OuHc8/KM9uXMu84pjff75tgNW/vvN8XLBexGcdxyWjteKY93/35YDrhprA7EXl7IPwTs4Zy6ZY93/5/82CfU+fExwL4a0jufOXGr+/Q/6bwYwxZgY03qIwyn6jyH24VxrTOshrBPC/64dNxWHY/kHzrX+8pyzPfctDFWiOw==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="137" name="Player2St" x="820" y="1994">
+  <object id="137" name="Player2St" x="820" y="1946">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="135" name="Player1St" x="213" y="1992">
+  <object id="135" name="Player1St" x="220" y="1946">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -42,23 +42,42 @@
   </object>
  </objectgroup>
  <objectgroup id="19" name="EvtSubscription">
-  <object id="391" name="PseudoStaticNpcEvtSub" x="400" y="0">
+  <object id="411" name="StoryPointSub" x="603.212" y="21.2121">
    <properties>
     <property name="demandedEvtMask" value="1"/>
-    <property name="id" value="4"/>
+    <property name="id" value="3"/>
    </properties>
    <point/>
   </object>
-  <object id="366" name="WaveExhaust" x="1024" y="0">
+  <object id="412" name="WaveExhaust" x="347.212" y="21.2121">
    <properties>
-    <property name="demandedEvtMask" value="15"/>
+    <property name="demandedEvtMask" value="3"/>
     <property name="id" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="413" name="WaveTrigger" x="421.212" y="21.2121">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="1"/>
    </properties>
    <point/>
   </object>
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
- <objectgroup id="13" name="TriggerPos"/>
+ <objectgroup id="13" name="TriggerPos">
+  <object id="416" x="512" y="1710">
+   <properties>
+    <property name="delayedFrames" value="30"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="61857"/>
+    <property name="speciesId" value="7"/>
+    <property name="subscriptionId" value="2"/>
+    <property name="trackingIdList" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
   <object id="372" name="Goblin" x="128" y="1832">
    <properties>
@@ -74,7 +93,7 @@
   <object id="373" name="Goblin" x="853" y="1832">
    <properties>
     <property name="dirX" value="-2"/>
-    <property name="publishingEvtMaskUponKilled" value="4"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4098"/>
     <property name="static" value="1"/>
@@ -123,6 +142,17 @@
     <property name="static" value="1"/>
    </properties>
   </object>
+  <object id="410" name="Escape" x="504" y="1775.33" width="16" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="delayedFrames" value="5"/>
+    <property name="dirY" value="-2"/>
+    <property name="providesEscape" value="1"/>
+    <property name="speciesId" value="2"/>
+    <property name="speed" value="16"/>
+    <property name="triggerTrackingId" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -148,10 +178,30 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="406" name="Slope" x="1024" y="1936">
-   <polyline points="-80,0 -240,80 -240,96 -80,96"/>
+  <object id="406" name="SlopeR" x="944" y="1936">
+   <polyline points="0,0 -240,96 -240,96 0,96"/>
   </object>
-  <object id="407" x="944" y="1936" width="48" height="96"/>
+  <object id="407" name="TerraceR" x="944" y="1936" width="48" height="96"/>
+  <object id="408" name="TerraceL" x="32" y="1936" width="48" height="96"/>
+  <object id="409" name="SlopeL" x="80" y="1936">
+   <polyline points="0,96 240,96 240,96 0,0"/>
+  </object>
  </objectgroup>
- <objectgroup id="5" name="PatrolCue"/>
+ <objectgroup id="5" name="PatrolCue">
+  <object id="414" x="512" y="2049">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="0"/>
+    <property name="fdCaptureFrames" value="0"/>
+    <property name="flAct" value="0"/>
+    <property name="flCaptureFrames" value="0"/>
+    <property name="frAct" value="0"/>
+    <property name="frCaptureFrames" value="0"/>
+    <property name="fuAct" value="0"/>
+    <property name="fuCaptureFrames" value="0"/>
+    <property name="id" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
 </map>
