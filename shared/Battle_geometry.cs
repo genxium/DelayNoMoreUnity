@@ -116,6 +116,8 @@ namespace shared {
                     // Clamp to zero if it does not move at least 1 virtual grid step
                     pushbackX = 0;
                 }
+
+                // [WARNING] DELIBERATELY NOT clamping "pushbackY", otherwise it would cause unintended bouncing between "DefaultSizeY & ShrinkedSizeY" on slopes!
              
                 if (0 == pushbackX && 0 == pushbackY) {
                     // Read the comments around "shapeOverlappedOtherChCnt" in "shared/Battle_dynamics.cs" for details.
