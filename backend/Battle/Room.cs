@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
 using Google.Protobuf.Collections;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace backend.Battle;
 public class Room {
@@ -32,6 +33,8 @@ public class Room {
     int renderFrameId;
     int curDynamicsRenderFrameId;
     int nstDelayFrames;
+
+    private int fps = 60;
 
     Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex
@@ -145,7 +148,6 @@ public class Room {
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
         frameLogEnabled = true;
-        int fps = 60;
         int durationSeconds = 60;
         battleDurationFrames = durationSeconds * fps;
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
@@ -344,11 +346,12 @@ public class Room {
         return ret;
     }
 
-    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId, RoomDownsyncFrame selfParsedRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId, int spaceOffsetX, int spaceOffsetY) {
+    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId, RoomDownsyncFrame selfParsedRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId, int spaceOffsetX, int spaceOffsetY, int battleDurationSeconds) {
         Player? targetPlayer;
         if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
             return false;
         }
+        battleDurationFrames = battleDurationSeconds * fps;
         bool shouldTryToStartBattle = true;
         var targetPlayerBattleState = Interlocked.Read(ref targetPlayer.BattleState);
         _logger.LogInformation("OnPlayerBattleColliderAcked-before: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
@@ -555,6 +558,7 @@ public class Room {
 
             effectivePlayerCount = 0; // guaranteed to succeed at the end of "dismiss"
             participantChangeId = 0;
+            battleDurationFrames = 60 * fps;
         } finally {
             joinerLock.ReleaseMutex();
         }

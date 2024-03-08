@@ -144,6 +144,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
     protected bool isOnlineMode;
 
+    protected int fps = 60;
+
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
@@ -1305,7 +1307,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId) mockStartRdf(int[] speciesIdList) {
+    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId, int) mockStartRdf(int[] speciesIdList) {
         Debug.Log(String.Format("mockStartRdf with speciesIdList={0} for selfJoinIndex={1}", ArrToString(speciesIdList), selfPlayerInfo.JoinIndex));
         var serializedBarrierPolygons = new RepeatedField<SerializableConvexPolygon>();
         var serializedStaticPatrolCues = new RepeatedField<SerializedCompletelyStaticPatrolCueCollider>();
@@ -1322,6 +1324,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         float defaultPatrolCueRadius = 10;
         int trapLocalId = 0;
         int triggerLocalId = 0;
+
+        var mapProps = underlyingMap.GetComponent<SuperCustomProperties>();
+        CustomProperty battleDurationSeconds;
+        mapProps.TryGetCustomProperty("battleDurationSeconds", out battleDurationSeconds);
+        int battleDurationSecondsVal = (null == battleDurationSeconds || battleDurationSeconds.IsEmpty) ? 60 : battleDurationSeconds.GetValueAsInt();
 
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
@@ -1887,7 +1894,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
         }
 
-        return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId);
+        return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, battleDurationSecondsVal);
     }
 
     protected void popupErrStackPanel(string msg) {

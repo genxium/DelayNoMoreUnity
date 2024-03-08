@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="417">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="424">
  <properties>
+  <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="2"/>
-  <property name="missionEvtSubId" value="2"/>
-  <property name="npcPreallocCapDict" value="4098:4"/>
+  <property name="npcPreallocCapDict" value="4098:2"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
@@ -12,17 +12,17 @@
  <tileset firstgid="1038" source="../decoration/trees.tsx"/>
  <layer id="30" name="Background2" width="64" height="128">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYgAAAAQ==
+   eJztw7ENAAAIA6Ae7+Ge0E0XSEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAL1MCdxb5EgQh
   </data>
  </layer>
  <layer id="28" name="Background1" width="64" height="128">
   <data encoding="base64" compression="zlib">
-   eJzt1M0NQEAURlGjGlrTDZ3QhF5UwWQiRBCx8nNO8sVCLO5byDIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACiKj9+V4a0r+hD2tpw4bu332Hu3uu/0lWEZW+6w7b7bv/WfIunOuo+66+n/0Dzw8X++GyndT/eCEETZKg=
+   eJzt1MsJwkAUBdBMOhCb0NaswwbUStQi0ou7YAPOEIISzIdxIAvPgUsWQ/K4LyFVBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQHKox8/2oUtp1zjzPjF37jxXE7p8eiy4r/Qe2jDf71lwXt/7W/8lvXbhnRJ7aBc8o0T/Ye/c/kP9LnJt4rs/VtPZ/vD9j/We6n+K884r5FKvOz/1T9f0z7n9cV4Oc2+t
   </data>
  </layer>
  <layer id="29" name="Ground" width="64" height="128">
   <data encoding="base64" compression="zlib">
-   eJztm0FOw0AMRT05Aico7LhFkjtQUOEErCnlHIg79RqwYt8T1JVq1RqFUJVFU94f6S+qbvLn298eZ9I1Zo2Dtj6L2Zejg/I359w6ejD/nfYFzL+IPz7+Wzh/uv/T+ZPjv5f++PpH5t+p/uP9jx7/ZP9X/WPHP/38R9e/l/74+k/nT69/dP7k+Kef/+j60/s/nf/Y8U/vf+n8Czz+6f0f3f/p91/kf4p/+vyPzp9c/+n3/+j9j/yPnf/0+Rd9/knv/+j9j/Kfnf+q/+JP9n+df+R/5PiX/7P11/cPbP+jzz/o33/Q+x+9/2Xrr/6XHf+6/6j8J9d/+vmHrr/6XzZ/+v1X+R9bf/r8R/M/tv70/p/+/pd+/4d+/qfXf82/5H/k+Kf7H/38p/e/8j9y/tP50/Ofzp/uf/T5P33+Qc9/1T82f83/xJ/s/5p/Kv7J+tPzn+7/8j92/0e//5D7/0Uxe0x4b37HVNYxz5q5PTkU/6r/dP3p33/l+H9OuHc8/KM9uXMu84pjff75tgNW/vvN8XLBexGcdxyWjteKY93/35YDrhprA7EXl7IPwTs4Zy6ZY93/5/82CfU+fExwL4a0jufOXGr+/Q/6bwYwxZgY03qIwyn6jyH24VxrTOshrBPC/64dNxWHY/kHzrX+8pyzPfctDFWiOw==
+   eJztm01OwzAQhe0cgQ2wA3acALFrcgdo+VkDYg2UEwBrxBmAm3ANWLGmXICJVKuWZZqQBIH0vUhPFaqAfJ7xm7HjlIVzhYl2vXrn3kwllN8Z88hUgfnr2Hswvxc/Pv9HcH66/9P5yflfKf74+kfmL1X/8f5Hz3+y/6v+sfOfvv6jx79S/PH1n85Pr390fnL+09d/9PjT+z+t/9j5T+9/6fwenv/0/o/u//TzL/I/5T99/4/OT67/9PN/9P5H/see//T9L/r+J73/o/c/mv/s+a/6L36y/2v9I/8j57/8nx1/vf/A9j/6/gf9/Q96/6Pnv+z4q/9l57/OP2r+k+s/ff1Dj7/6XzY//fyr/I8df/r+j/b/2PGn9//057/08z/09T+9/mv/S/5Hzn+6/9HXf3r+K/8jz386P33+0/np/kff/6fvf9Dnv+ofm1/7f+In+7/2P5X/5PjT5z/d/+V/7P6Pfv4h7v8PvXNHke6LZv2Xq829xmzHJuW/6j89/vT3v+L8P480Nk1+YUxWzXfWGrTuh/+/e8aynzCm6593t9DUfr42XQw8Fjst2HYH4g/MNcOl6SphTPv/bb/QSuFGQWEshhiHsf3tSYMOevIH7sAcs8SMaf8ffzeLlI7DQ8+x+Jzzndjnqeks4v3oyJ6LdbjvmCXlr76J/yyjIXKi5gv8N/Z5a7rz+e9/wp2LdY6hS/yXKYxDl+vRfv/J9Nwj35fFOqeXSMH/Nk1bCUNb/qC/uvrc58ac/Qv/DbGb
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -66,14 +66,29 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="416" x="512" y="1710">
+  <object id="416" x="496" y="1710">
    <properties>
     <property name="delayedFrames" value="30"/>
+    <property name="initVelX" value="-2"/>
+    <property name="initVelY" value="0"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="61857"/>
     <property name="speciesId" value="7"/>
     <property name="subscriptionId" value="2"/>
     <property name="trackingIdList" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="423" x="528" y="1710">
+   <properties>
+    <property name="delayedFrames" value="30"/>
+    <property name="initVelX" value="+2"/>
+    <property name="initVelY" value="0"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="61857"/>
+    <property name="speciesId" value="7"/>
+    <property name="subscriptionId" value="2"/>
+    <property name="trackingIdList" value="2"/>
    </properties>
    <point/>
   </object>
@@ -142,15 +157,24 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="410" name="Escape" x="504" y="1775.33" width="16" height="16">
+  <object id="418" gid="1" x="448" y="1968" width="64" height="16">
    <properties>
-    <property name="collisionTypeMask" value="5"/>
-    <property name="delayedFrames" value="5"/>
-    <property name="dirY" value="-2"/>
+    <property name="speed" value="6"/>
+    <property name="triggerTrackingId" value="1"/>
+   </properties>
+  </object>
+  <object id="419" gid="1" x="512" y="1968" width="64" height="16">
+   <properties>
+    <property name="speed" value="6"/>
+    <property name="triggerTrackingId" value="2"/>
+   </properties>
+  </object>
+  <object id="422" x="496" y="2000" width="16" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="4"/>
     <property name="providesEscape" value="1"/>
     <property name="speciesId" value="2"/>
-    <property name="speed" value="16"/>
-    <property name="triggerTrackingId" value="1"/>
+    <property name="static" value="1"/>
    </properties>
   </object>
  </objectgroup>
@@ -186,22 +210,8 @@
   <object id="409" name="SlopeL" x="80" y="1936">
    <polyline points="0,96 240,96 240,96 0,0"/>
   </object>
+  <object id="420" name="TerraceL" x="440" y="1984" width="16" height="32"/>
+  <object id="421" name="TerraceL" x="568" y="1984" width="16" height="32"/>
  </objectgroup>
- <objectgroup id="5" name="PatrolCue">
-  <object id="414" x="512" y="2049">
-   <properties>
-    <property name="collisionTypeMask" value="1024"/>
-    <property name="fdAct" value="0"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="0"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="0"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="0"/>
-    <property name="fuCaptureFrames" value="0"/>
-    <property name="id" value="1"/>
-   </properties>
-   <point/>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="PatrolCue"/>
 </map>

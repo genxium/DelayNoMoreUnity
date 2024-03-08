@@ -187,6 +187,7 @@ message WsReq {
 	SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId = 14;
     int32 spaceOffsetX = 15; 
     int32 spaceOffsetY = 16; 
+    int32 battleDurationSeconds = 17;
 }
 
 message InputBufferSnapshot {
