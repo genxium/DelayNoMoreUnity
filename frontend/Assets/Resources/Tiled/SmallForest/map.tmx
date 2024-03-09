@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="394">
  <properties>
+  <property name="battleDurationSeconds" value="100"/>
   <property name="levelId" value="1"/>
   <property name="missionEvtSubId" value="2"/>
   <property name="npcPreallocCapDict" value="1:4;3:2;4097:8"/>

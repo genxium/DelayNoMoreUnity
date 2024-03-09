@@ -57,11 +57,11 @@ namespace shared {
             collider.Data = data;
         }
 
-        public static bool UpdateWaveNpcKilledEvtSub(ulong publishingEvtMaskUponKilled, EvtSubscription dst, ref ulong fulfilledEvtSubscriptionSetMask) {
-            if (EVTSUB_NO_DEMAND_MASK != dst.DemandedEvtMask) {
-                dst.FulfilledEvtMask |= publishingEvtMaskUponKilled;
-                if (dst.DemandedEvtMask == dst.FulfilledEvtMask) {
-                    fulfilledEvtSubscriptionSetMask |= (1ul << (dst.Id-1));
+        public static bool UpdateWaveNpcKilledEvtSub(ulong publishingEvtMaskUponKilled, EvtSubscription nextExhaustEvtSub, ref ulong fulfilledEvtSubscriptionSetMask) {
+            if (EVTSUB_NO_DEMAND_MASK != nextExhaustEvtSub.DemandedEvtMask) {
+                nextExhaustEvtSub.FulfilledEvtMask |= publishingEvtMaskUponKilled;
+                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
+                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id-1));
                     return true;
                 }
             }
