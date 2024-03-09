@@ -998,7 +998,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        int paddingX = (tileWidth << 4) + (tileWidth << 2);
+        int paddingX = (tileWidth << 3) + (tileWidth << 2);
         int paddingY = (tileHeight << 3);
         cameraCapMinX = 0 + paddingX;
         cameraCapMaxX = (spaceOffsetX << 1) - paddingX;

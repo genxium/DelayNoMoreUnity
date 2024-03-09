@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="424">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="426">
  <properties>
   <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="2"/>
@@ -213,5 +213,36 @@
   <object id="420" name="TerraceL" x="440" y="1984" width="16" height="32"/>
   <object id="421" name="TerraceL" x="568" y="1984" width="16" height="32"/>
  </objectgroup>
- <objectgroup id="5" name="PatrolCue"/>
+ <objectgroup id="5" name="PatrolCue">
+  <object id="424" x="412" y="1960">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="0"/>
+    <property name="fdCaptureFrames" value="65535"/>
+    <property name="flAct" value="0"/>
+    <property name="flCaptureFrames" value="65535"/>
+    <property name="frAct" value="0"/>
+    <property name="frCaptureFrames" value="65535"/>
+    <property name="fuAct" value="0"/>
+    <property name="fuCaptureFrames" value="65535"/>
+    <property name="id" value="141"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="425" x="612" y="1960">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="0"/>
+    <property name="fdCaptureFrames" value="65535"/>
+    <property name="flAct" value="0"/>
+    <property name="flCaptureFrames" value="65535"/>
+    <property name="frAct" value="0"/>
+    <property name="frCaptureFrames" value="65535"/>
+    <property name="fuAct" value="0"/>
+    <property name="fuCaptureFrames" value="65535"/>
+    <property name="id" value="142"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
 </map>
