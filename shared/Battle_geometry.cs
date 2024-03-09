@@ -116,10 +116,9 @@ namespace shared {
                     // Clamp to zero if it does not move at least 1 virtual grid step
                     pushbackX = 0;
                 }
-                if (Math.Abs(pushbackY) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
-                    // Clamp to zero if it does not move at least 1 virtual grid step
-                    pushbackY = 0;
-                }
+
+                // [WARNING] DELIBERATELY NOT clamping "pushbackY", otherwise it would cause unintended bouncing between "DefaultSizeY & ShrinkedSizeY" on slopes!
+             
                 if (0 == pushbackX && 0 == pushbackY) {
                     // Read the comments around "shapeOverlappedOtherChCnt" in "shared/Battle_dynamics.cs" for details.
                     continue;
@@ -156,7 +155,7 @@ namespace shared {
                 bool isWall = (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1 || VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2);
                 // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the horizontal edge is chosen as primary!
                 if (!isWall && primaryIsWall) {
-                    // Initial non-wall transistion
+                    // Initial non-wall transition
                     primaryOverlapIndex = retCnt;
                     primaryOverlapMag = overlapResult.OverlapMag;
                     overlapResult.cloneInto(ref primaryOverlapResult);

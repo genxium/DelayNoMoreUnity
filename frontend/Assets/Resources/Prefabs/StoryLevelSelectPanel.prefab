@@ -1504,7 +1504,7 @@ GameObject:
   - component: {fileID: 8483175977039708128}
   - component: {fileID: 184614989006642413}
   m_Layer: 5
-  m_Name: Forest
+  m_Name: ArrowPalace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

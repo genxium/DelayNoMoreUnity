@@ -132,7 +132,7 @@ public class WebSocketController : ControllerBase {
                         switch (pReq.Act) {
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK:
 
-                                var res1 = await room.OnPlayerBattleColliderAcked(playerId, pReq.SelfParsedRdf, pReq.SerializedBarrierPolygons, pReq.SerializedStaticPatrolCues, pReq.SerializedCompletelyStaticTraps, pReq.SerializedStaticTriggers, pReq.SerializedTrapLocalIdToColliderAttrs, pReq.SerializedTriggerTrackingIdToTrapLocalId, pReq.SpaceOffsetX, pReq.SpaceOffsetY);
+                                var res1 = await room.OnPlayerBattleColliderAcked(playerId, pReq.SelfParsedRdf, pReq.SerializedBarrierPolygons, pReq.SerializedStaticPatrolCues, pReq.SerializedCompletelyStaticTraps, pReq.SerializedStaticTriggers, pReq.SerializedTrapLocalIdToColliderAttrs, pReq.SerializedTriggerTrackingIdToTrapLocalId, pReq.SpaceOffsetX, pReq.SpaceOffsetY, pReq.BattleDurationSeconds);
                                 if (!res1) {
                                     if (!cancellationToken.IsCancellationRequested) {
                                         cancellationTokenSource.Cancel();

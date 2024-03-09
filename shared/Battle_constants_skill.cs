@@ -303,7 +303,7 @@ namespace shared {
                           CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
-        private static BulletConfig GunGirlSlashNovaRepeatingBullet = new BulletConfig {
+        private static BulletConfig SlashNovaRepeatingBullet = new BulletConfig {
             StartupFrames = 12,
                           ActiveFrames = 600,
                           HitStunFrames = 14,
@@ -318,7 +318,7 @@ namespace shared {
                           HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                           HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                           SpeciesId = 9,
-                          ExplosionSpeciesId = 5,
+                          ExplosionSpeciesId = 9,
                           ExplosionFrames = 25,
                           Speed = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                           SpeedIfNotHit = (int)(3 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -332,10 +332,42 @@ namespace shared {
                           CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
         };
 
-        private static BulletConfig GunGirlSlashNovaStarterBullet = new BulletConfig(GunGirlSlashNovaRepeatingBullet).SetStartupFrames(10).SetSpeed(GunGirlSlashNovaRepeatingBullet.SpeedIfNotHit);
+        private static BulletConfig SlashNovaStarterBullet = new BulletConfig(SlashNovaRepeatingBullet).SetStartupFrames(10).SetSpeed(SlashNovaRepeatingBullet.SpeedIfNotHit);
 
         private static BulletConfig PistolBulletGround = new BulletConfig(PistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);
         private static BulletConfig MagicPistolBulletGround = new BulletConfig(MagicPistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);
+
+        private static BulletConfig PurpleArrowBullet = new BulletConfig {
+            StartupFrames = 12,
+            ActiveFrames = 180,
+            HitStunFrames = 10,
+            BlockStunFrames = 10,
+            Damage = 15,
+            PushbackVelX = (int)(0.05f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(15 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 11,
+            ExplosionSpeciesId = EXPLOSION_SPECIES_NONE,
+            Speed = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 2,
+            DirY = 0,
+            Hardness = 5,
+            ExplosionFrames = 30,
+            BType = BulletType.Fireball,
+            ExplosionVfxSpeciesId = VfxPistolBulletExploding.SpeciesId,
+            CharacterEmitSfxName = "Fireball8",
+            ExplosionSfxName = "Explosion2",
+            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
+        };
+
+        private static BulletConfig PurpleArrowRainBullet1 = new BulletConfig(PurpleArrowBullet).SetSpeed((int)(13 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).SetHitboxOffsets((int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).SetSimultaneousMultiHitCnt(2u).SetDir(+2, +1).SetTakesGravity(true).SetRotateAlongVelocity(true);
+        private static BulletConfig PurpleArrowRainBullet2 = new BulletConfig(PurpleArrowRainBullet1).SetSimultaneousMultiHitCnt(1u).SetDir(+1, +1).SetHitboxOffsets((int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
+        private static BulletConfig PurpleArrowRainBullet3 = new BulletConfig(PurpleArrowRainBullet1).SetSimultaneousMultiHitCnt(0u).SetDir(+1, +2).SetHitboxOffsets((int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
 
         public static BulletConfig GoblinMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 63,
@@ -971,31 +1003,31 @@ namespace shared {
                                 )),
 
                                     new KeyValuePair<int, Skill>(21, new Skill{
-                                            RecoveryFrames = 60,
+                                            RecoveryFrames = 30,
                                             RecoveryFramesOnBlock = 60,
                                             RecoveryFramesOnHit = 60,
                                             MpDelta = 650,
                                             TriggerType = SkillTriggerType.RisingEdge,
-                                            BoundChState = Atk3
+                                            BoundChState = Atk2
                                             }
-                                            .AddHit(GunGirlSlashNovaStarterBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
-                                            .AddHit(GunGirlSlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaStarterBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
+                                            .AddHit(SlashNovaRepeatingBullet)
                                             .AddHit(
                                                     new BulletConfig {
                                                     StartupFrames = 9,
@@ -1507,6 +1539,38 @@ namespace shared {
                                             )
                                         ),
 
+                                new KeyValuePair<int, Skill>(31, new Skill{
+                                        RecoveryFrames = 100,
+                                        RecoveryFramesOnBlock = 10,
+                                        RecoveryFramesOnHit = 10,
+                                        MpDelta = 30,
+                                        TriggerType = SkillTriggerType.RisingEdge,
+                                        BoundChState = Atk1
+                                        }
+                                        .AddHit(
+                                            PurpleArrowBullet
+                                            )
+                                        ),
+
+                                new KeyValuePair<int, Skill>(32, new Skill{
+                                        RecoveryFrames = 100,
+                                        RecoveryFramesOnBlock = 10,
+                                        RecoveryFramesOnHit = 10,
+                                        MpDelta = 60,
+                                        TriggerType = SkillTriggerType.RisingEdge,
+                                        BoundChState = Atk2
+                                        }
+                                        .AddHit(
+                                            PurpleArrowRainBullet1
+                                            )
+                                        .AddHit(
+                                            PurpleArrowRainBullet2
+                                            )
+                                        .AddHit(
+                                            PurpleArrowRainBullet3
+                                            )
+                                        ),
+
                                     new KeyValuePair<int, Skill>(255, new Skill {
                                             RecoveryFrames = 30,
                                             RecoveryFramesOnBlock = 30,
@@ -1966,22 +2030,13 @@ namespace shared {
                 case SPECIES_GUNGIRL:
                     switch (patternId) {
                         case PATTERN_B:
+                        case PATTERN_UP_B:
                         case PATTERN_DOWN_B:
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 19;
                                 } else {
                                     return 18;
-                                }
-                            } else {
-                                return NO_SKILL;
-                            }
-                        case PATTERN_UP_B:
-                            if (!notRecovered) {
-                                if (currCharacterDownsync.InAir) {
-                                    return 19;
-                                } else {
-                                    return 21;
                                 }
                             } else {
                                 return NO_SKILL;
@@ -2052,13 +2107,22 @@ namespace shared {
                 case SPECIES_MAGSWORDGIRL:
                     switch (patternId) {
                         case PATTERN_B:
-                        case PATTERN_DOWN_B:
                         case PATTERN_UP_B:
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     return 30;
                                 } else {
                                     return 29;
+                                }
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case PATTERN_DOWN_B:
+                            if (!notRecovered) {
+                                if (currCharacterDownsync.InAir) {
+                                    return 30;
+                                } else {
+                                    return 21;
                                 }
                             } else {
                                 return NO_SKILL;
@@ -2090,6 +2154,24 @@ namespace shared {
                         case PATTERN_B:
                             if (!notRecovered && !currCharacterDownsync.InAir) {
                                 return 22;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        default:
+                            return NO_SKILL;
+                    }
+                case SPECIES_SKELEARCHER:
+                    switch (patternId) {
+                        case PATTERN_B:
+                        case PATTERN_DOWN_B:
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
+                                return 31;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        case PATTERN_UP_B:
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
+                                return 32;
                             } else {
                                 return NO_SKILL;
                             }

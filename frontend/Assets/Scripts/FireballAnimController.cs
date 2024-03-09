@@ -1,10 +1,13 @@
 using UnityEngine;
 using shared;
 using System.Collections.Generic;
+using Unity.Mathematics;
 
 public class FireballAnimController : MonoBehaviour {
 
     public int score;
+    private static float radToAngle = 180f / math.PI;
+    private Vector3 zAxis = new Vector3 (0f, 0f, 1f);
     public Dictionary<string, AnimationClip> lookUpTable;
 
     // Start is called before the first frame update
@@ -16,9 +19,16 @@ public class FireballAnimController : MonoBehaviour {
         }
     }
 
-    public void updateAnim(string newAnimName, int frameIdxInAnim, int immediateDirX, bool spontaneousLooping, BulletConfig bulletConfig, RoomDownsyncFrame rdf) {
+    public void updateAnim(string newAnimName, int frameIdxInAnim, int immediateDirX, bool spontaneousLooping, BulletConfig bulletConfig, RoomDownsyncFrame rdf, int immediateVelX, int immediateVelY) {
         var animator = gameObject.GetComponent<Animator>();
         var spr = gameObject.GetComponent<SpriteRenderer>();
+        
+        if (bulletConfig.RotatesAlongVelocity && 0 != immediateVelX) {
+            // Rotate before flipping
+            spr.transform.localRotation = Quaternion.AngleAxis(math.atan((immediateVelY)/(math.PI*immediateVelX))*radToAngle, zAxis);
+        } else {
+            spr.transform.localRotation = Quaternion.AngleAxis(0, zAxis);
+        }
 
         if (0 > immediateDirX) {
             spr.flipX = true;

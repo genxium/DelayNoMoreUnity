@@ -5,6 +5,7 @@ using static shared.Battle;
 using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf.Collections;
+using UnityEngine.Experimental.Rendering;
 
 public class OnlineMapController : AbstractMapController {
     Task wsTask, udpTask;
@@ -59,8 +60,9 @@ public class OnlineMapController : AbstractMapController {
                         tempSpeciesIdList[i] = SPECIES_NONE_CH;
                     }
                     tempSpeciesIdList[selfPlayerInfo.JoinIndex - 1] = WsSessionManager.Instance.GetSpeciesId();
-                    var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId) = mockStartRdf(tempSpeciesIdList);
-                    
+                    var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, battleDurationSeconds) = mockStartRdf(tempSpeciesIdList);
+
+                    battleDurationFrames = battleDurationSeconds * fps;
                     renderBuffer.Put(thatStartRdf);
                     
                     refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
@@ -74,6 +76,7 @@ public class OnlineMapController : AbstractMapController {
                         SerializedTriggerTrackingIdToTrapLocalId = serializedTriggerTrackingIdToTrapLocalId,
                         SpaceOffsetX = spaceOffsetX,
                         SpaceOffsetY = spaceOffsetY,
+                        BattleDurationSeconds = battleDurationSeconds,
                     };
 
                     reqData.SerializedBarrierPolygons.AddRange(serializedBarrierPolygons);

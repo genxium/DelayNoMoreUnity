@@ -46,6 +46,13 @@ namespace shared {
             CollisionTypeMask = COLLISION_TRIGGER_INDEX_PREFIX
         };
 
+        public static TriggerConfig InvisibleEvtSubSwitch = new TriggerConfig {
+            SpeciesId = 7,
+            SpeciesName = "InvisibleEvtSubSwitch",
+            TriggerMask = TRIGGER_MASK_BY_SUBSCRIPTION,
+            CollisionTypeMask = COLLISION_NONE_INDEX
+        };
+
         public static ImmutableDictionary<int, TriggerConfig> triggerConfigs = ImmutableDictionary.Create<int, TriggerConfig>().AddRange(
                 new[]
                 {
@@ -55,6 +62,7 @@ namespace shared {
                     new KeyValuePair<int, TriggerConfig>(WaveTimedDoor1.SpeciesId, WaveTimedDoor1),
                     new KeyValuePair<int, TriggerConfig>(StoryPoint.SpeciesId, StoryPoint),
                     new KeyValuePair<int, TriggerConfig>(WaveInducer.SpeciesId, WaveInducer),
+                    new KeyValuePair<int, TriggerConfig>(InvisibleEvtSubSwitch.SpeciesId, InvisibleEvtSubSwitch),
                 }
         );
     }

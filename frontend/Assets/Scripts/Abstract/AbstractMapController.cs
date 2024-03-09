@@ -144,6 +144,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
     protected bool isOnlineMode;
 
+    protected int fps = 60;
+
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
@@ -179,6 +181,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void spawnTriggerNode(int triggerLocalId, int speciesId, float wx, float wy) {
         var triggerPrefab = loadTriggerPrefab(triggerConfigs[speciesId]);
+        if (null == triggerPrefab) return;
         GameObject newTriggerNode = Instantiate(triggerPrefab, new Vector3(wx, wy, triggerZ), Quaternion.identity, underlyingMap.transform);
         triggerGameObjs[triggerLocalId] = newTriggerNode;
     }
@@ -640,22 +643,22 @@ public abstract class AbstractMapController : MonoBehaviour {
                     break;
             }
             if (null != animName) {
-                var explosionAnimHolder = cachedFireballs.PopAny(lookupKey);
-                if (null == explosionAnimHolder) {
-                    explosionAnimHolder = cachedFireballs.Pop();
+                var fireballOrExplosionAnimHolder = cachedFireballs.PopAny(lookupKey);
+                if (null == fireballOrExplosionAnimHolder) {
+                    fireballOrExplosionAnimHolder = cachedFireballs.Pop();
                     //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a new fireball node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
                 } else {
                     //Debug.Log(String.Format("@rdf.Id={0}, origRdfId={1} using a cached node for rendering for bulletLocalId={2}, btype={3} at wpos=({4}, {5})", rdf.Id, bullet.BattleAttr.OriginatedRenderFrameId, bullet.BattleAttr.BulletLocalId, bullet.Config.BType, wx, wy));
                 }
 
-                if (null != explosionAnimHolder) {
-                    if (explosionAnimHolder.lookUpTable.ContainsKey(animName)) {
-                        explosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf);
-                        newPosHolder.Set(wx, wy, explosionAnimHolder.gameObject.transform.position.z);
-                        explosionAnimHolder.gameObject.transform.position = newPosHolder;
+                if (null != fireballOrExplosionAnimHolder) {
+                    if (fireballOrExplosionAnimHolder.lookUpTable.ContainsKey(animName)) {
+                        fireballOrExplosionAnimHolder.updateAnim(animName, bullet.FramesInBlState, bullet.DirX, spontaneousLooping, bullet.Config, rdf, bullet.VelX, bullet.VelY);
+                        newPosHolder.Set(wx, wy, fireballOrExplosionAnimHolder.gameObject.transform.position.z);
+                        fireballOrExplosionAnimHolder.gameObject.transform.position = newPosHolder;
                     }
-                    explosionAnimHolder.score = rdf.Id;
-                    cachedFireballs.Put(lookupKey, explosionAnimHolder);
+                    fireballOrExplosionAnimHolder.score = rdf.Id;
+                    cachedFireballs.Put(lookupKey, fireballOrExplosionAnimHolder);
                 } else {
                     // null == explosionAnimHolder
                     if (EXPLOSION_SPECIES_NONE != explosionSpeciesId) {
@@ -994,10 +997,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
-        cameraCapMinX = 0 + (spaceOffsetX >> 3) + (spaceOffsetX >> 4);
-        cameraCapMaxX = (spaceOffsetX << 1) - (spaceOffsetX >> 2);
-        cameraCapMinY = -(spaceOffsetY << 1) + (spaceOffsetY >> 2);
-        cameraCapMaxY = 0 - (spaceOffsetY >> 2) - (spaceOffsetX >> 3);
+
+        int paddingX = (tileWidth << 4) + (tileWidth << 2);
+        int paddingY = (tileHeight << 3);
+        cameraCapMinX = 0 + paddingX;
+        cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
+
+        cameraCapMinY = -(spaceOffsetY << 1) + paddingY;
+        cameraCapMaxY = 0 - paddingY;
 
         effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
 
@@ -1300,7 +1307,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId) mockStartRdf(int[] speciesIdList) {
+    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId, int) mockStartRdf(int[] speciesIdList) {
         Debug.Log(String.Format("mockStartRdf with speciesIdList={0} for selfJoinIndex={1}", ArrToString(speciesIdList), selfPlayerInfo.JoinIndex));
         var serializedBarrierPolygons = new RepeatedField<SerializableConvexPolygon>();
         var serializedStaticPatrolCues = new RepeatedField<SerializedCompletelyStaticPatrolCueCollider>();
@@ -1317,6 +1324,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         float defaultPatrolCueRadius = 10;
         int trapLocalId = 0;
         int triggerLocalId = 0;
+
+        var mapProps = underlyingMap.GetComponent<SuperCustomProperties>();
+        CustomProperty battleDurationSeconds;
+        mapProps.TryGetCustomProperty("battleDurationSeconds", out battleDurationSeconds);
+        int battleDurationSecondsVal = (null == battleDurationSeconds || battleDurationSeconds.IsEmpty) ? 60 : battleDurationSeconds.GetValueAsInt();
 
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
@@ -1580,44 +1592,46 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 TriggerTrackingId = triggerTrackingIdVal,
                                 IsCompletelyStatic = false
                             };
-                            var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
-                            foreach (var collisionObj in collisionObjs) {
-                                bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false, childProvidesEscapeVal = false, childProvidesSlipJumpVal = false;
-                                foreach (var collisionObjProp in collisionObj.m_CustomProperties) {
-                                    if ("providesHardPushback".Equals(collisionObjProp.m_Name)) {
-                                        childProvidesHardPushbackVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                            if (null != tileObj.m_SuperTile && null != tileObj.m_SuperTile.m_CollisionObjects) {
+                                var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
+                                foreach (var collisionObj in collisionObjs) {
+                                    bool childProvidesHardPushbackVal = false, childProvidesDamageVal = false, childProvidesEscapeVal = false, childProvidesSlipJumpVal = false;
+                                    foreach (var collisionObjProp in collisionObj.m_CustomProperties) {
+                                        if ("providesHardPushback".Equals(collisionObjProp.m_Name)) {
+                                            childProvidesHardPushbackVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                        }
+                                        if ("providesDamage".Equals(collisionObjProp.m_Name)) {
+                                            childProvidesDamageVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                        }
+                                        if ("providesEscape".Equals(collisionObjProp.m_Name)) {
+                                            childProvidesEscapeVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                        }
+                                        if ("providesSlipJump".Equals(collisionObjProp.m_Name)) {
+                                            childProvidesSlipJumpVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
+                                        }
+                                        if ("collisionTypeMask".Equals(collisionObjProp.m_Name) && !collisionObjProp.IsEmpty) {
+                                            collisionTypeMaskVal = (ulong)collisionObjProp.GetValueAsInt();
+                                        }
                                     }
-                                    if ("providesDamage".Equals(collisionObjProp.m_Name)) {
-                                        childProvidesDamageVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
-                                    }
-                                    if ("providesEscape".Equals(collisionObjProp.m_Name)) {
-                                        childProvidesEscapeVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
-                                    }
-                                    if ("providesSlipJump".Equals(collisionObjProp.m_Name)) {
-                                        childProvidesSlipJumpVal = (!collisionObjProp.IsEmpty && 1 == collisionObjProp.GetValueAsInt());
-                                    }
-                                    if ("collisionTypeMask".Equals(collisionObjProp.m_Name) && !collisionObjProp.IsEmpty) {
-                                        collisionTypeMaskVal = (ulong)collisionObjProp.GetValueAsInt();
-                                    }
-                                }
 
-                                // [WARNING] The offset (0, 0) of the tileObj within TSX is the top-left corner, but SuperTiled2Unity converted that to bottom-left corner and reverted y-axis by itself... 
-                                var (hitboxOffsetCx, hitboxOffsetCy) = (-tileObj.m_Width * 0.5f + collisionObj.m_Position.x + collisionObj.m_Size.x * 0.5f, collisionObj.m_Position.y - collisionObj.m_Size.y * 0.5f - tileObj.m_Height * 0.5f);
-                                var (hitboxOffsetVx, hitboxOffsetVy) = PolygonColliderCtrToVirtualGridPos(hitboxOffsetCx, hitboxOffsetCy);
-                                var (hitboxSizeVx, hitboxSizeVy) = PolygonColliderCtrToVirtualGridPos(collisionObj.m_Size.x, collisionObj.m_Size.y);
-                                TrapColliderAttr colliderAttr = new TrapColliderAttr {
-                                    ProvidesDamage = childProvidesDamageVal,
-                                    ProvidesHardPushback = childProvidesHardPushbackVal,
-                                    ProvidesEscape = childProvidesEscapeVal,
-                                    ProvidesSlipJump = childProvidesSlipJumpVal,
-                                    HitboxOffsetX = hitboxOffsetVx,
-                                    HitboxOffsetY = hitboxOffsetVy,
-                                    HitboxSizeX = hitboxSizeVx,
-                                    HitboxSizeY = hitboxSizeVy,
-                                    CollisionTypeMask = collisionTypeMaskVal,
-                                    TrapLocalId = trapLocalId
-                                };
-                                colliderAttrs.List.Add(colliderAttr);
+                                    // [WARNING] The offset (0, 0) of the tileObj within TSX is the top-left corner, but SuperTiled2Unity converted that to bottom-left corner and reverted y-axis by itself... 
+                                    var (hitboxOffsetCx, hitboxOffsetCy) = (-tileObj.m_Width * 0.5f + collisionObj.m_Position.x + collisionObj.m_Size.x * 0.5f, collisionObj.m_Position.y - collisionObj.m_Size.y * 0.5f - tileObj.m_Height * 0.5f);
+                                    var (hitboxOffsetVx, hitboxOffsetVy) = PolygonColliderCtrToVirtualGridPos(hitboxOffsetCx, hitboxOffsetCy);
+                                    var (hitboxSizeVx, hitboxSizeVy) = PolygonColliderCtrToVirtualGridPos(collisionObj.m_Size.x, collisionObj.m_Size.y);
+                                    TrapColliderAttr colliderAttr = new TrapColliderAttr {
+                                        ProvidesDamage = childProvidesDamageVal,
+                                        ProvidesHardPushback = childProvidesHardPushbackVal,
+                                        ProvidesEscape = childProvidesEscapeVal,
+                                        ProvidesSlipJump = childProvidesSlipJumpVal,
+                                        HitboxOffsetX = hitboxOffsetVx,
+                                        HitboxOffsetY = hitboxOffsetVy,
+                                        HitboxSizeX = hitboxSizeVx,
+                                        HitboxSizeY = hitboxSizeVy,
+                                        CollisionTypeMask = collisionTypeMaskVal,
+                                        TrapLocalId = trapLocalId
+                                    };
+                                    colliderAttrs.List.Add(colliderAttr);
+                                }
                             }
                             serializedTrapLocalIdToColliderAttrs.Dict[trapLocalId] = colliderAttrs;
                             trapList.Add(trap);
@@ -1880,7 +1894,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             startRdf.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1].FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK + 1;
         }
 
-        return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId);
+        return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, battleDurationSecondsVal);
     }
 
     protected void popupErrStackPanel(string msg) {

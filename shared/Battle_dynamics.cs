@@ -1250,6 +1250,7 @@ namespace shared {
                             }
                             break;
                         case CharacterDownsync atkedCharacterInCurrFrame:
+                            if (MAGIC_EVTSUB_ID_NONE != atkedCharacterInCurrFrame.SubscriptionId) continue; // Skip if evtsub-triggered but but triggered yet
                             if (bulletNextFrame.BattleAttr.OffenderJoinIndex == atkedCharacterInCurrFrame.JoinIndex) continue;
                             if (bulletNextFrame.BattleAttr.TeamId == atkedCharacterInCurrFrame.BulletTeamId) continue;
                             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;
@@ -1288,7 +1289,7 @@ namespace shared {
                                     if (!isFrozen && bulletNextFrame.Config.BlowUp) {
                                         newNextCharacterState = BlownUp1;
                                     } else if (isFrozen || BlownUp1 != oldNextCharacterState) {
-                                        if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
+                                        if (isCrouching(oldNextCharacterState)) {
                                             newNextCharacterState = CrouchAtked1;
                                         }
                                     }
@@ -1296,7 +1297,7 @@ namespace shared {
                                     int oldFramesToRecover = atkedCharacterInNextFrame.FramesToRecover;
                                     // [WARNING] The following assignment should be both order-insensitive and avoiding incorrect transfer of recovery frames from Atk[N] to Atked1!
                                     if (Atked1 != oldNextCharacterState || InAirAtked1 != oldNextCharacterState || BlownUp1 != oldNextCharacterState || CrouchAtked1 != oldNextCharacterState) {
-                                            atkedCharacterInNextFrame.FramesToRecover = bulletNextFrame.Config.HitStunFrames;
+                                        atkedCharacterInNextFrame.FramesToRecover = bulletNextFrame.Config.HitStunFrames;
                                     } else {
                                         if (bulletNextFrame.Config.HitStunFrames > oldFramesToRecover) {
                                             atkedCharacterInNextFrame.FramesToRecover = bulletNextFrame.Config.HitStunFrames;
