@@ -914,7 +914,7 @@ namespace shared {
                     int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
                     int totOtherChCnt = 0, cellOverlappedOtherChCnt = 0, shapeOverlappedOtherChCnt = 0;
                     int origResidueCollidedSt = residueCollided.StFrameId, origResidueCollidedEd = residueCollided.EdFrameId; 
-                    float primarySoftOverlapMagSqr = float.MinValue, primarySoftPushbackX = float.MinValue, primarySoftPushbackY = float.MinValue;
+                    float primarySoftOverlapMagSquared = float.MinValue, primarySoftPushbackX = float.MinValue, primarySoftPushbackY = float.MinValue;
                     /*
                        if (0 == currCharacterDownsync.SpeciesId) {
                        logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
@@ -1021,22 +1021,23 @@ namespace shared {
                         softPushbackX -= softPushbackXReduction;
                         softPushbackY -= softPushbackYReduction;
 
-                        if (Math.Abs(softPushbackX) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
-                            // Clamp to zero if it does not move at least 1 virtual grid step
-                            softPushbackX = 0;
-                        }
-                        if (Math.Abs(softPushbackY) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
-                            // Clamp to zero if it does not move at least 1 virtual grid step
-                            softPushbackY = 0;
-                        }
+                        var magSquared = (softPushbackX * softPushbackX + softPushbackY * softPushbackY);
 
-                        var magSqr = softPushbackX * softPushbackX + softPushbackY * softPushbackY;
-                        if (0 >= magSqr) {
-                            // [WARNING] In field test, the backend (.net 7.0) and frontend (.net 2.1/4.0) might disagree on whether or not 2 colliders have overlapped by shape check (due to possibly different treatment of floating errors -- no direct evidence can be provided but from pushbackFrameLogs it's most suspicious), and if one party doesn't recognize any softPushback while the other does, the latter would proceed with "processPrimaryAndImpactEffPushback", resulting in different SNAP_INTO_CHARACTER_OVERLAP usage, thus different RoomDownsyncFrame!   
-                            // [WARNING] Hereby we skip recognizing effectively zero softPushbacks, yet a closed-loop control on frontend by "onRoomDownsyncFrame & useOthersForcedDownsyncRenderFrameDict" is required because such (suspicious) floating errors are too difficult to completely avoid.
+                        if (magSquared < CLAMPABLE_COLLISION_SPACE_MAG_SQUARED) {
+                            /*
+                            [WARNING] 
+
+                            Clamp to zero if it does not contribute to at least 1 virtual grid step by rounding. 
+
+                            In field test, the backend (.net 7.0) and frontend (.net 2.1/4.0) might disagree on whether or not 2 colliders have overlapped by shape check (due to possibly different treatment of floating errors -- no direct evidence can be provided but from pushbackFrameLogs it's most suspicious), and if one party doesn't recognize any softPushback while the other does, the latter would proceed with "processPrimaryAndImpactEffPushback", resulting in different SNAP_INTO_CHARACTER_OVERLAP usage, thus different RoomDownsyncFrame!   
+
+                            Hereby we SKIP recognizing "effectively zero softPushbacks", yet a closed-loop control on frontend by "onRoomDownsyncFrame & useOthersForcedDownsyncRenderFrameDict" is required because such (suspicious) floating errors are too difficult to completely avoid.
+
+                            A similar clamping is used in "Battle_geometry.calcHardPushbacksNormsForCharacter" -- and there's an explanation for why this clamping magnitude is chosen.
+                            */
                             continue;
                         }
-                        
+
                         shapeOverlappedOtherChCnt++;
 
                         normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
@@ -1044,13 +1045,13 @@ namespace shared {
                             landedOnGravityPushback = true;
                         }
 
-                        if (primarySoftOverlapMagSqr < magSqr) {
-                            primarySoftOverlapMagSqr = magSqr;
+                        if (primarySoftOverlapMagSquared < magSquared) {
+                            primarySoftOverlapMagSquared = magSquared;
                             primarySoftPushbackX = softPushbackX;
                             primarySoftPushbackY = softPushbackY;
                             primarySoftOverlapIndex = softPushbacksCnt;
                         } else if ((softPushbackX < primarySoftPushbackX) || (softPushbackX == primarySoftPushbackX && softPushbackY < primarySoftPushbackY)) {
-                            primarySoftOverlapMagSqr = magSqr;
+                            primarySoftOverlapMagSquared = magSquared;
                             primarySoftPushbackX = softPushbackX;
                             primarySoftPushbackY = softPushbackY;
                             primarySoftOverlapIndex = softPushbacksCnt;

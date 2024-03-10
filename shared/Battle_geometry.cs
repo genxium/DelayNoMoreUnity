@@ -112,15 +112,14 @@ namespace shared {
                     continue;
                 }
 
-                if (Math.Abs(pushbackX) < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO) {
-                    // Clamp to zero if it does not move at least 1 virtual grid step
-                    pushbackX = 0;
-                }
+                if (overlapResult.OverlapMag < CLAMPABLE_COLLISION_SPACE_MAG) {
+                    /*
+                    [WARNING] 
 
-                // [WARNING] DELIBERATELY NOT clamping "pushbackY", otherwise it would cause unintended bouncing between "DefaultSizeY & ShrinkedSizeY" on slopes!
-             
-                if (0 == pushbackX && 0 == pushbackY) {
-                    // Read the comments around "shapeOverlappedOtherChCnt" in "shared/Battle_dynamics.cs" for details.
+                    Kindly note that if I clamped by a larger threshold here, e.g. "overlapResult.OverlapMag < VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO", it would cause unintended bouncing between "DefaultSizeY & ShrinkedSizeY" on slopes!
+
+                    Moreover if I didn't clamp "pushbackX & pushbackY" here, there could be disagreed shape overlapping between backend and frontend, see comments around "shapeOverlappedOtherChCnt" in "Battle_dynamics". 
+                    */
                     continue;
                 }
 
