@@ -1,5 +1,6 @@
 # Latest tag change notes
-v1.3.3 new features
+v1.3.4 new features
+- Added new NPC character SkeleArcher 
 - Added offline mode evt-triggered dialogs
 - Added hold-to-jump-further dynamics
 - Enhanced inertia handling for walking and jumping
