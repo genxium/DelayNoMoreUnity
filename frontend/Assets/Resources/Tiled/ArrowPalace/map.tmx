@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="426">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="429">
  <properties>
   <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="2"/>
@@ -7,22 +7,22 @@
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
- <tileset firstgid="12" source="../triggers/door/triggers_door.tsx"/>
- <tileset firstgid="14" source="../shared_comps/forest16.tsx"/>
- <tileset firstgid="1038" source="../decoration/trees.tsx"/>
+ <tileset firstgid="12" source="../shared_comps/forest16.tsx"/>
+ <tileset firstgid="1036" source="../decoration/trees.tsx"/>
+ <tileset firstgid="1039" source="../doors/doors.tsx"/>
  <layer id="30" name="Background2" width="64" height="128">
   <data encoding="base64" compression="zlib">
-   eJztw7ENAAAIA6Ae7+Ge0E0XSEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAL1MCdxb5EgQh
+   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYgAAAAQ==
   </data>
  </layer>
  <layer id="28" name="Background1" width="64" height="128">
   <data encoding="base64" compression="zlib">
-   eJzt1MsJwkAUBdBMOhCb0NaswwbUStQi0ou7YAPOEIISzIdxIAvPgUsWQ/K4LyFVBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQHKox8/2oUtp1zjzPjF37jxXE7p8eiy4r/Qe2jDf71lwXt/7W/8lvXbhnRJ7aBc8o0T/Ye/c/kP9LnJt4rs/VtPZ/vD9j/We6n+K884r5FKvOz/1T9f0z7n9cV4Oc2+t
+   eJzt1NEJgzAUBVDjMHY1t9FOYjuEu3QMDTYoUkX8SZVz4JKPEB73faQoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiOpy++4RptxFH6YsfQ68u/oeUu9f/Y/0qsKcK+1h3fts/7W0i3+11XuvfzP+A22GPMu882P/eHZjXhny/vbPNT9lAAriYh4=
   </data>
  </layer>
  <layer id="29" name="Ground" width="64" height="128">
   <data encoding="base64" compression="zlib">
-   eJztm01OwzAQhe0cgQ2wA3acALFrcgdo+VkDYg2UEwBrxBmAm3ANWLGmXICJVKuWZZqQBIH0vUhPFaqAfJ7xm7HjlIVzhYl2vXrn3kwllN8Z88hUgfnr2Hswvxc/Pv9HcH66/9P5yflfKf74+kfmL1X/8f5Hz3+y/6v+sfOfvv6jx79S/PH1n85Pr390fnL+09d/9PjT+z+t/9j5T+9/6fwenv/0/o/u//TzL/I/5T99/4/OT67/9PN/9P5H/see//T9L/r+J73/o/c/mv/s+a/6L36y/2v9I/8j57/8nx1/vf/A9j/6/gf9/Q96/6Pnv+z4q/9l57/OP2r+k+s/ff1Dj7/6XzY//fyr/I8df/r+j/b/2PGn9//057/08z/09T+9/mv/S/5Hzn+6/9HXf3r+K/8jz386P33+0/np/kff/6fvf9Dnv+ofm1/7f+In+7/2P5X/5PjT5z/d/+V/7P6Pfv4h7v8PvXNHke6LZv2Xq829xmzHJuW/6j89/vT3v+L8P480Nk1+YUxWzXfWGrTuh/+/e8aynzCm6593t9DUfr42XQw8Fjst2HYH4g/MNcOl6SphTPv/bb/QSuFGQWEshhiHsf3tSYMOevIH7sAcs8SMaf8ffzeLlI7DQ8+x+Jzzndjnqeks4v3oyJ6LdbjvmCXlr76J/yyjIXKi5gv8N/Z5a7rz+e9/wp2LdY6hS/yXKYxDl+vRfv/J9Nwj35fFOqeXSMH/Nk1bCUNb/qC/uvrc58ac/Qv/DbGb
+   eJztm8tNw0AQhnddARUAt3QRuwceIpwBcQ6PCoAzSg1AJUAZcOJOBZixlFVGK2Mi2wfC91v6haKIyN/O7Ly8LosQQiPY9RZDeDeVUP4vY58adwXmb2xf218qfx3FT/f/KZyfHv/p/GT/r2R/fP4j85eqf/Hxj+7/5Piv/Mf2f3r/R7d/Bc//6n/ET89/dH6y/9P7P7r96fWf+j+2/9PrXzp/Hdn+T6//6PGffv5F8U/+T5//0fnJ+Z9+/o9e/yj+sfc/ff5Fn3/S6z96/aP9z97/yv/iJ8d/9T+Kf2T/V/xn21/vP7DjH33+QX//g17/6Pkv2/6qf9n+r/OP2v/k/E/vf+j2V/3L5qeff1X8Y9ufPv/R/I9tf3r9T3/+Sz//Q+//6flf8y/FP7L/0+Mfvf/T81/FP/L+p/PT9z+dnx7/6PN/+vyDvv+V/9j8mv+Jnxz/Nf+U/5PtT9//9Piv+Meu/+jnH3z9f2SfZ073xe/6K9c69+rZjqP8X/lf9qe//+X9/9zpwHT4j9Zkz1j2M8a8//kIK13Z52vTfIPXIjE3DBemy4wxr/8ncaWtIlRJaS02ZR0Sd2L2LJ4xr//9d59O+TosRlqLE/vtU9NZHI953sLtWXJ+P///iT9fh7F84sZ+89Z0N4C/y9ZtDH3s36W0Dn2uB/v/R9PTAP4uW7fpxSnFvx3TbsawLn9Sn+t5eR+vA/iH3Of2kv0bGwtfKg==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -66,29 +66,14 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="416" x="496" y="1710">
+  <object id="416" x="512" y="1710">
    <properties>
     <property name="delayedFrames" value="30"/>
-    <property name="initVelX" value="-2"/>
-    <property name="initVelY" value="0"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="61857"/>
     <property name="speciesId" value="7"/>
     <property name="subscriptionId" value="2"/>
     <property name="trackingIdList" value="1"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="423" x="528" y="1710">
-   <properties>
-    <property name="delayedFrames" value="30"/>
-    <property name="initVelX" value="+2"/>
-    <property name="initVelY" value="0"/>
-    <property name="quota" value="1"/>
-    <property name="recoveryFrames" value="61857"/>
-    <property name="speciesId" value="7"/>
-    <property name="subscriptionId" value="2"/>
-    <property name="trackingIdList" value="2"/>
    </properties>
    <point/>
   </object>
@@ -157,24 +142,17 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="418" gid="1" x="448" y="1968" width="64" height="16">
-   <properties>
-    <property name="speed" value="6"/>
-    <property name="triggerTrackingId" value="1"/>
-   </properties>
-  </object>
-  <object id="419" gid="1" x="512" y="1968" width="64" height="16">
-   <properties>
-    <property name="speed" value="6"/>
-    <property name="triggerTrackingId" value="2"/>
-   </properties>
-  </object>
-  <object id="422" x="496" y="2000" width="16" height="16">
+  <object id="422" name="Escape" x="488" y="2024" width="32" height="16">
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesEscape" value="1"/>
     <property name="speciesId" value="2"/>
     <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="427" gid="1041" x="456" y="2016" width="96" height="64">
+   <properties>
+    <property name="triggerTrackingId" value="1"/>
    </properties>
   </object>
  </objectgroup>
@@ -187,7 +165,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="358" name="Ground" x="-32" y="2016" width="1056" height="64">
+  <object id="358" name="Ground" x="-32" y="2016" width="520" height="64">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -210,39 +188,11 @@
   <object id="409" name="SlopeL" x="80" y="1936">
    <polyline points="0,96 240,96 240,96 0,0"/>
   </object>
-  <object id="420" name="TerraceL" x="440" y="1984" width="16" height="32"/>
-  <object id="421" name="TerraceL" x="568" y="1984" width="16" height="32"/>
- </objectgroup>
- <objectgroup id="5" name="PatrolCue">
-  <object id="424" x="412" y="1960">
+  <object id="428" name="Ground" x="520" y="2016" width="520" height="64">
    <properties>
-    <property name="collisionTypeMask" value="1024"/>
-    <property name="fdAct" value="0"/>
-    <property name="fdCaptureFrames" value="65535"/>
-    <property name="flAct" value="0"/>
-    <property name="flCaptureFrames" value="65535"/>
-    <property name="frAct" value="0"/>
-    <property name="frCaptureFrames" value="65535"/>
-    <property name="fuAct" value="0"/>
-    <property name="fuCaptureFrames" value="65535"/>
-    <property name="id" value="141"/>
+    <property name="boundary_type" value="barrier"/>
    </properties>
-   <point/>
-  </object>
-  <object id="425" x="612" y="1960">
-   <properties>
-    <property name="collisionTypeMask" value="1024"/>
-    <property name="fdAct" value="0"/>
-    <property name="fdCaptureFrames" value="65535"/>
-    <property name="flAct" value="0"/>
-    <property name="flCaptureFrames" value="65535"/>
-    <property name="frAct" value="0"/>
-    <property name="frCaptureFrames" value="65535"/>
-    <property name="fuAct" value="0"/>
-    <property name="fuCaptureFrames" value="65535"/>
-    <property name="id" value="142"/>
-   </properties>
-   <point/>
   </object>
  </objectgroup>
+ <objectgroup id="5" name="PatrolCue"/>
 </map>

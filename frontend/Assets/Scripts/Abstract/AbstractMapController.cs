@@ -1996,7 +1996,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (wx, wy) = CollisionSpacePositionToWorldPosition(collider.X, collider.Y, spaceOffsetX, spaceOffsetY); ;
             newPosHolder.Set(wx, wy, 0);
             if (!isGameObjPositionWithinCamera(newPosHolder)) {
-                continue; // To save memory
+                //continue; // To save memory
             }
 
             string key = "Static-" + lineIndex.ToString();

@@ -65,6 +65,18 @@ namespace shared {
             Hardness = 9, 
         };
 
+        public static TrapConfig EscapeDoor = new TrapConfig {
+            SpeciesId = 7,
+            DestroyUponHit = false,
+            SpeciesName = "EscapeDoor",
+        };
+
+        public static TrapConfig GreenGate = new TrapConfig {
+            SpeciesId = 8,
+            DestroyUponHit = false,
+            SpeciesName = "GreenGate",
+        };
+
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
                 new[]
                 {
@@ -74,6 +86,7 @@ namespace shared {
                     new KeyValuePair<int, TrapConfig>(VerticalTrapBarrier.SpeciesId, VerticalTrapBarrier),
                     new KeyValuePair<int, TrapConfig>(SawSmall.SpeciesId, SawSmall),
                     new KeyValuePair<int, TrapConfig>(SawBig.SpeciesId, SawBig),
+                    new KeyValuePair<int, TrapConfig>(GreenGate.SpeciesId, GreenGate),
                 }
         );
     }
