@@ -236,6 +236,7 @@ namespace shared {
             .AddHit(
                     new BulletConfig(BullWarriorFireballPivotBullet)
                     .SetDir(1, -1)
+                    .SetRotateAlongVelocity(true)
                     .SetHitboxOffsets((int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                     .SetPushbacks((int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                     .SetSimultaneousMultiHitCnt(1u)
@@ -243,6 +244,7 @@ namespace shared {
             .AddHit(
                     new BulletConfig(BullWarriorFireballPivotBullet)
                     .SetDir(1, +1)
+                    .SetRotateAlongVelocity(true)
                     .SetHitboxOffsets((int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(28 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                     .SetPushbacks((int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(+0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                     .SetSimultaneousMultiHitCnt(0u)

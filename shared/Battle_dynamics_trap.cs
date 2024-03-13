@@ -55,7 +55,7 @@ namespace shared {
                         float primaryPushbackY = hardPushbackNormsArr[i][primaryHardOverlapIndex].Y;
                         float velProjected = currTrap.VelX*primaryPushbackX + currTrap.VelY*primaryPushbackY;
                         if (SNAP_INTO_PLATFORM_THRESHOLD < Math.Abs(velProjected)) {
-                            var trapInNextRenderFrame = nextRenderFrameTraps[i - trapColliderCntOffset];
+                            var trapInNextRenderFrame = nextRenderFrameTraps[colliderAttr.TrapLocalId];
                             trapInNextRenderFrame.VelX = 0;
                             trapInNextRenderFrame.VelY = 0;
                         }

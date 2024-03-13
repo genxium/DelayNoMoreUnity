@@ -585,7 +585,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             newPosHolder.Set(wx, wy, dynamicTrapObj.transform.position.z);
             dynamicTrapObj.transform.position = newPosHolder;
             var chAnimCtrl = dynamicTrapObj.GetComponent<TrapAnimationController>();
-            chAnimCtrl.updateAnim("Tidle", 0, 0, true); // TODO: remove the hardcoded value
+            chAnimCtrl.updateAnim(currTrap.TrapState.ToString(), currTrap.FramesInTrapState, currTrap.DirX, false);
             kDynamicTrap++;
         }
 
@@ -675,19 +675,11 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         for (int k = 0; k < rdf.TriggersArr.Count; k++) {
             var trigger = rdf.TriggersArr[k];
-            if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId || !triggerGameObjs.ContainsKey(trigger.TriggerLocalId)) break;
+            if (!triggerGameObjs.ContainsKey(trigger.TriggerLocalId)) continue;
+            if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId) break;
             var triggerGameObj = triggerGameObjs[trigger.TriggerLocalId];
             var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
-            if (TRIGGER_MASK_BY_CYCLIC_TIMER == trigger.Config.TriggerMask || TRIGGER_MASK_BY_SUBSCRIPTION == trigger.Config.TriggerMask) {
-                animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, false);
-            } else {
-                // TODO: Make use fo TriggerState in "shared.Battle_dynamics"!
-                if (Battle.isTriggerClickable(trigger)) {
-                    animCtrl.updateAnim("Tready", 0, 0, true);
-                } else {
-                    animCtrl.updateAnim("TcoolingDown", 0, 0, true);
-                }
-            }
+            animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, false);
         }
     }
 

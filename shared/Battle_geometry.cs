@@ -85,8 +85,9 @@ namespace shared {
                         trapLocalId = v4.TrapLocalId;
                         providesSlipJump = v4.ProvidesSlipJump;
                         forcesCrouching = v4.ForcesCrouching;
-                        onTrap = v4.ProvidesHardPushback;
-                        isBarrier = v4.ProvidesHardPushback;
+                        var trap = currRenderFrame.TrapsArr[trapLocalId];
+                        onTrap = (v4.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
+                        isBarrier = onTrap;
                         break;
                     case TriggerColliderAttr v5:
                         break;

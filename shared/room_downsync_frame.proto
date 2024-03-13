@@ -374,9 +374,11 @@ message TrapConfig {
     int32 damage = 5;
 	int32 hitStunFrames = 6;
 	int32 hitInvinsibleFrames = 7;
-    bool destroyUponHit = 8; // for most traps and long lasting melee bullet
+    bool destroyable = 8;
 
     int32 hardness = 9;
+
+    bool destroyUponTriggered = 10;
 
 	// TODO: Instead of damage, a trap should also be able to provide pushbacks like a "trampoline" in only a limited "framesToRecover", possible started by a Trigger.
 

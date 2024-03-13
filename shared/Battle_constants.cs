@@ -174,8 +174,9 @@ namespace shared {
         public static float VERTICAL_PLATFORM_THRESHOLD = 0.9f;
         public static int MAGIC_FRAMES_TO_BE_ON_WALL = 12;
 
-
         public static int DYING_FRAMES_TO_RECOVER = 100; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
+
+        public static int PROACTIVE_TRIGGER_MAGIC_ACTIVE_FRAMES_TO_RECOVER = -1;
 
         public static int NO_SKILL = 0;
         public static int NO_SKILL_HIT = -1;

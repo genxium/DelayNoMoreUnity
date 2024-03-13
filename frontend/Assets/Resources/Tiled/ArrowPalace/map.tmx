@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="429">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="432">
  <properties>
   <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="2"/>
@@ -66,9 +66,9 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="416" x="512" y="1710">
+  <object id="416" name="WaveExhaustTrigger" x="512" y="1710">
    <properties>
-    <property name="delayedFrames" value="30"/>
+    <property name="delayedFrames" value="10"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="61857"/>
     <property name="speciesId" value="7"/>
@@ -76,6 +76,28 @@
     <property name="trackingIdList" value="1"/>
    </properties>
    <point/>
+  </object>
+  <object id="430" name="PSwitch-2" gid="11" x="748" y="1830" width="24" height="24">
+   <properties>
+    <property name="bulletTeamId" value="1024"/>
+    <property name="delayedFrames" value="10"/>
+    <property name="initVelX" value="-2"/>
+    <property name="initVelY" value="0"/>
+    <property name="quota" value="3"/>
+    <property name="recoveryFrames" value="90"/>
+    <property name="trackingIdList" value="2"/>
+   </properties>
+  </object>
+  <object id="431" name="PSwitch-1" gid="11" x="248" y="1830" width="24" height="24">
+   <properties>
+    <property name="bulletTeamId" value="1024"/>
+    <property name="delayedFrames" value="10"/>
+    <property name="initVelX" value="+2"/>
+    <property name="initVelY" value="0"/>
+    <property name="quota" value="3"/>
+    <property name="recoveryFrames" value="90"/>
+    <property name="trackingIdList" value="2"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
@@ -153,6 +175,12 @@
   <object id="427" gid="1041" x="456" y="2016" width="96" height="64">
    <properties>
     <property name="triggerTrackingId" value="1"/>
+   </properties>
+  </object>
+  <object id="429" gid="1" x="242" y="1872" width="64" height="16">
+   <properties>
+    <property name="speed" value="6"/>
+    <property name="triggerTrackingId" value="2"/>
    </properties>
   </object>
  </objectgroup>
