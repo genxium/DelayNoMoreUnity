@@ -44,7 +44,7 @@ namespace shared {
                 ConvexPolygon aShape = aCollider.Shape;
 
                 bool hitsAnActualBarrier;
-                int hardPushbackCnt = calcHardPushbacksNormsForTrap(colliderAttr, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, out hitsAnActualBarrier, logger);
+                int hardPushbackCnt = calcHardPushbacksNormsForTrap(currRenderFrame, colliderAttr, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, residueCollided, out hitsAnActualBarrier, logger);
 
                 if (colliderAttr.ProvidesHardPushback && 0 < hardPushbackCnt) {
                     // We don't have any trap-slope interaction designed yet

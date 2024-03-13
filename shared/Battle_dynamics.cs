@@ -1473,8 +1473,13 @@ namespace shared {
         }
 
         private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<EvtSubscription> nextRenderFrameEvtSubs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription currRdfWaveNpcKilledEvtSub, EvtSubscription nextRdfWaveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ref int justTriggeredStoryPointId, ILoggerBridge logger) {
-            bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (currRdfWaveNpcKilledEvtSub.Id - 1))));
-
+            if (1ul == fulfilledEvtSubscriptionSetMask) {
+                logger.LogInfo("wave inducer is fulfilled");
+            }
+            if (2ul == fulfilledEvtSubscriptionSetMask) {
+                logger.LogInfo("wave exhaust is fulfilled");
+            }
+            
             int nextWaveNpcCnt = 0;
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
@@ -1511,7 +1516,6 @@ namespace shared {
                         ) {
                             var chSpawnerConfig = lowerBoundForSpawnerConfig(triggerInNextFrame.ConfigFromTiled.QuotaCap - triggerInNextFrame.Quota, triggerInNextFrame.ConfigFromTiled.CharacterSpawnerTimeSeq);
                             nextWaveNpcCnt += (chSpawnerConfig.SpeciesIdList.Count < triggerInNextFrame.ConfigFromTiled.SubCycleQuota ? chSpawnerConfig.SpeciesIdList.Count : triggerInNextFrame.ConfigFromTiled.SubCycleQuota);
-                            nextWaveNpcKilledEvtMaskCounter = 0; // TODO: What happens if multiple triggers subsequently execute this line in a relatively short window?
                         } else {
                             if (StoryPoint.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId) {
                                 justTriggeredStoryPointId = triggerInNextFrame.ConfigFromTiled.StoryPointId;
@@ -1540,7 +1544,11 @@ namespace shared {
                 }
             }
 
+            ulong currRdfWaveKilledEvtSubMask = (1ul << (currRdfWaveNpcKilledEvtSub.Id - 1));
+            bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & currRdfWaveKilledEvtSubMask)); // [WARNING] MUST be put after traversal of all triggers, because during traversal "fulfilledEvtSubscriptionSetMask" might still be updated.
+
             if (nextWaveTriggerJustFulfilled) {
+                nextWaveNpcKilledEvtMaskCounter = 0; // [WARNING] Multiple NPC spawning triggers for a same round MUST enter "mainCycleFulfilled" block in the same renderFrame, such that they share this "nextWaveNpcKilledEvtMaskCounter"; they may differentiate from each other by different "delayedFrames".
                 fulfilledEvtSubscriptionSetMask |= (1ul << (nextRdfWaveNpcKilledEvtSub.Id - 1));
                 nextRdfWaveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
                 nextRdfWaveNpcKilledEvtSub.FulfilledEvtMask = 0;
@@ -2226,12 +2234,7 @@ namespace shared {
             if (MAGIC_EVTSUB_ID_NONE != configFromTiled.PublishingToEvtSubIdUponExhaust && (0 <= configFromTiled.PublishingToEvtSubIdUponExhaust && configFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrame.EvtSubsArr.Count)) {
                 var nextExhaustEvtSub = nextRenderFrame.EvtSubsArr[configFromTiled.PublishingToEvtSubIdUponExhaust - 1];
                 nextExhaustEvtSub.FulfilledEvtMask |= configFromTiled.PublishingEvtMaskUponExhaust;
-                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
-                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id - 1));
-                    nextExhaustEvtSub.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
-                    nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
-                    justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
-                }
+                // [WARNING] DON'T check fulfillment or update "fulfilledEvtSubscriptionSetMask" here, leave it to the next "Step(...)" and we'll be more clear on that "fulfilledEvtSubscriptionSetMask obtained during assignment" only impacts "_calcTriggerReactions" within the same "Step(...)"
             }
         }
     }

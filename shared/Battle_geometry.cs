@@ -213,7 +213,7 @@ namespace shared {
             return retCnt;
         }
 
-        public static int calcHardPushbacksNormsForTrap(TrapColliderAttr colliderAttr, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, FrameRingBuffer<Collider> residueCollided, out bool hitsAnActualBarrier, ILoggerBridge logger) {
+        public static int calcHardPushbacksNormsForTrap(RoomDownsyncFrame currRenderFrame, TrapColliderAttr colliderAttr, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, FrameRingBuffer<Collider> residueCollided, out bool hitsAnActualBarrier, ILoggerBridge logger) {
             hitsAnActualBarrier = false;
             int retCnt = 0;
             primaryOverlapIndex = -1;
@@ -238,9 +238,11 @@ namespace shared {
                     case CharacterDownsync v1:
                     case Bullet v2:
                     case PatrolCue v3:
+                    case TriggerColliderAttr v4:
                         break;
-                    case TrapColliderAttr v4:
-                        isAnotherHardPushbackTrap = v4.ProvidesHardPushback;
+                    case TrapColliderAttr v5:
+                        var trap = currRenderFrame.TrapsArr[v5.TrapLocalId];
+                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed == trap.TrapState);
                         break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
