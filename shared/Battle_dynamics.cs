@@ -2029,16 +2029,6 @@ namespace shared {
             
             _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
 
-            // Trigger subscription-based NPC movements
-            for (int i = 0; i < currNpcI; i++) {
-                var src = currRenderFrame.NpcsArr[i];
-                if (TERMINATING_PLAYER_ID == src.Id) break;
-                if (MAGIC_EVTSUB_ID_NONE == src.SubscriptionId) continue; // No subscription or already triggered
-                if (0 >= (fulfilledEvtSubscriptionSetMask & (1ul << (src.SubscriptionId - 1)))) continue; // Subscription not fulfilled
-                var dst = nextRenderFrameNpcs[i];
-                dst.SubscriptionId = MAGIC_EVTSUB_ID_NONE;
-            }
-
             int bulletColliderCntOffset = colliderCnt;
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _insertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
@@ -2052,6 +2042,16 @@ namespace shared {
             int nextNpcI = currNpcI;
             // [WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled-evtsub. 
             _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextEvtSubs, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, currRdfWaveNpcKilledEvtSub, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, ref justTriggeredStoryPointId, logger);
+
+            // Trigger subscription-based NPC movements
+            for (int i = 0; i < currNpcI; i++) {
+                var src = currRenderFrame.NpcsArr[i];
+                if (TERMINATING_PLAYER_ID == src.Id) break;
+                if (MAGIC_EVTSUB_ID_NONE == src.SubscriptionId) continue; // No subscription or already triggered
+                if (0 >= (fulfilledEvtSubscriptionSetMask & (1ul << (src.SubscriptionId - 1)))) continue; // Subscription not fulfilled
+                var dst = nextRenderFrameNpcs[i];
+                dst.SubscriptionId = MAGIC_EVTSUB_ID_NONE;
+            }
 
             _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
             
