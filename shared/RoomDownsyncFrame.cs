@@ -276,38 +276,51 @@ namespace shared {
             "dHJBcnJheToCOAEioQEKKFNlcmlhbGl6ZWRUcmlnZ2VyVHJhY2tpbmdJZFRv",
             "VHJhcExvY2FsSWQSSAoEZGljdBgBIAMoCzI6LnNoYXJlZC5TZXJpYWxpemVk",
             "VHJpZ2dlclRyYWNraW5nSWRUb1RyYXBMb2NhbElkLkRpY3RFbnRyeRorCglE",
-            "aWN0RW50cnkSCwoDa2V5GAEgASgFEg0KBXZhbHVlGAIgASgFOgI4ASo1CgtC",
-            "dWxsZXRTdGF0ZRILCgdTdGFydFVwEAASCgoGQWN0aXZlEAESDQoJRXhwbG9k",
-            "aW5nEAIqwAMKDkNoYXJhY3RlclN0YXRlEgkKBUlkbGUxEAASCwoHV2Fsa2lu",
-            "ZxABEg4KClR1cm5Bcm91bmQQAhIKCgZBdGtlZDEQAxIUChBJbkFpcklkbGUx",
-            "Tm9KdW1wEAQSFAoQSW5BaXJJZGxlMUJ5SnVtcBAFEhgKFEluQWlySWRsZTFC",
-            "eVdhbGxKdW1wEAYSDwoLSW5BaXJBdGtlZDEQBxIMCghCbG93blVwMRAIEgwK",
-            "CExheURvd24xEAkSCgoGR2V0VXAxEAoSCQoFRHlpbmcQCxILCgdEYXNoaW5n",
-            "EAwSCwoHU2xpZGluZxANEhAKC09uV2FsbElkbGUxEIABEhAKC0Nyb3VjaElk",
-            "bGUxEIACEg8KCkNyb3VjaEF0azEQgQISEgoNQ3JvdWNoV2Fsa2luZxCCAhIR",
-            "CgxDcm91Y2hBdGtlZDEQgwISCQoEQXRrMRCACBIJCgRBdGsyEIEIEgkKBEF0",
-            "azMQgggSCQoEQXRrNBCDCBIJCgRBdGs1EIQIEg4KCUluQWlyQXRrMRCAEBIQ",
-            "CgtXYWxraW5nQXRrMRCBEBIQCgtXYWxraW5nQXRrNBCCEBIPCgpPbldhbGxB",
-            "dGsxEIAYKkwKCVRyYXBTdGF0ZRIJCgVUSWRsZRAAEgwKCFRXYWxraW5nEAES",
-            "CQoFVEF0azEQAhILCgdUQXRrZWQxEAMSDgoKVERlc3Ryb3llZBAEKiwKDFRy",
-            "aWdnZXJTdGF0ZRIKCgZUUmVhZHkQABIQCgxUQ29vbGluZ0Rvd24QASo3CgpC",
-            "dWxsZXRUeXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAESDAoIRmly",
-            "ZWJhbGwQAiqIAQoMTXVsdGlIaXRUeXBlEggKBE5vbmUQABIQCgxGcm9tRW1p",
-            "c3Npb24QARIWChJGcm9tRmlyc3RIaXRBY3R1YWwQAhIWChJGcm9tRmlyc3RI",
-            "aXRBbnl3YXkQAxIVChFGcm9tUHJldkhpdEFjdHVhbBAEEhUKEUZyb21QcmV2",
-            "SGl0QW55d2F5EAUqMwoQU2tpbGxUcmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdl",
-            "EAASDwoLRmFsbGluZ0VkZ2UQASosCg9WZnhEdXJhdGlvblR5cGUSCgoGT25l",
-            "T2ZmEAASDQoJUmVwZWF0aW5nEAEqNwoNVmZ4TW90aW9uVHlwZRIMCghOb01v",
-            "dGlvbhAAEgsKB0Ryb3BwZWQQARILCgdUcmFjaW5nEAIqMQoNQnVmZlN0b2Nr",
-            "VHlwZRIKCgZOb25lQmYQABIJCgVUaW1lZBABEgkKBVF1b3RhEAIqcQoKRGVi",
-            "dWZmVHlwZRILCgdOb25lRGJmEAASEQoNU3BlZWREb3duT25seRABEhEKDUNv",
-            "bGRTcGVlZERvd24QAhIWChJQb3NpdGlvbkxvY2tlZE9ubHkQAxIYChRGcm96",
-            "ZW5Qb3NpdGlvbkxvY2tlZBAEKlMKFkludmVudG9yeVNsb3RTdG9ja1R5cGUS",
-            "CgoGTm9uZUl2EAASCwoHVGltZWRJdhABEgsKB1F1b3RhSXYQAhITCg9UaW1l",
-            "ZE1hZ2F6aW5lSXYQA0IJqgIGc2hhcmVkYgZwcm90bzM="));
+            "aWN0RW50cnkSCwoDa2V5GAEgASgFEg0KBXZhbHVlGAIgASgFOgI4ASLTAgoW",
+            "UGlja2FibGVDb25maWdGcm9tVGlsZRIYChBpbml0VmlydHVhbEdyaWRYGAEg",
+            "ASgFEhgKEGluaXRWaXJ0dWFsR3JpZFkYAiABKAUSFAoMdGFrZXNHcmF2aXR5",
+            "GAMgASgIEhYKDmZpcnN0U2hvd1JkZklkGAQgASgFEhIKCnJlY3VyUXVvdGEY",
+            "BSABKAUSHQoVcmVjdXJJbnRlcnZhbFJkZkNvdW50GAYgASgFEiUKHWxpZmV0",
+            "aW1lUmRmQ291bnRQZXJPY2N1cnJlbmNlGAcgASgFEiYKCnBpY2t1cFR5cGUY",
+            "CCABKA4yEi5zaGFyZWQuUGlja3VwVHlwZRIfChdzdG9ja1F1b3RhUGVyT2Nj",
+            "dXJyZW5jZRgJIAEoBRIWCg1idWZmU3BlY2llc0lkGIAIIAEoBRIcChNjb25z",
+            "dW1hYmxlU3BlY2llc0lkGIEIIAEoBSKuAQoIUGlja2FibGUSFAoMdmlydHVh",
+            "bEdyaWRYGAEgASgFEhQKDHZpcnR1YWxHcmlkWRgCIAEoBRI2Cg5jb25maWdG",
+            "cm9tVGlsZRgDIAEoCzIeLnNoYXJlZC5QaWNrYWJsZUNvbmZpZ0Zyb21UaWxl",
+            "EiEKGXJlbWFpbmluZ0xpZmV0aW1lUmRmQ291bnQYBCABKAUSGwoTcmVtYWlu",
+            "aW5nUmVjdXJRdW90YRgFIAEoBSo1CgtCdWxsZXRTdGF0ZRILCgdTdGFydFVw",
+            "EAASCgoGQWN0aXZlEAESDQoJRXhwbG9kaW5nEAIqwAMKDkNoYXJhY3RlclN0",
+            "YXRlEgkKBUlkbGUxEAASCwoHV2Fsa2luZxABEg4KClR1cm5Bcm91bmQQAhIK",
+            "CgZBdGtlZDEQAxIUChBJbkFpcklkbGUxTm9KdW1wEAQSFAoQSW5BaXJJZGxl",
+            "MUJ5SnVtcBAFEhgKFEluQWlySWRsZTFCeVdhbGxKdW1wEAYSDwoLSW5BaXJB",
+            "dGtlZDEQBxIMCghCbG93blVwMRAIEgwKCExheURvd24xEAkSCgoGR2V0VXAx",
+            "EAoSCQoFRHlpbmcQCxILCgdEYXNoaW5nEAwSCwoHU2xpZGluZxANEhAKC09u",
+            "V2FsbElkbGUxEIABEhAKC0Nyb3VjaElkbGUxEIACEg8KCkNyb3VjaEF0azEQ",
+            "gQISEgoNQ3JvdWNoV2Fsa2luZxCCAhIRCgxDcm91Y2hBdGtlZDEQgwISCQoE",
+            "QXRrMRCACBIJCgRBdGsyEIEIEgkKBEF0azMQgggSCQoEQXRrNBCDCBIJCgRB",
+            "dGs1EIQIEg4KCUluQWlyQXRrMRCAEBIQCgtXYWxraW5nQXRrMRCBEBIQCgtX",
+            "YWxraW5nQXRrNBCCEBIPCgpPbldhbGxBdGsxEIAYKkwKCVRyYXBTdGF0ZRIJ",
+            "CgVUSWRsZRAAEgwKCFRXYWxraW5nEAESCQoFVEF0azEQAhILCgdUQXRrZWQx",
+            "EAMSDgoKVERlc3Ryb3llZBAEKiwKDFRyaWdnZXJTdGF0ZRIKCgZUUmVhZHkQ",
+            "ABIQCgxUQ29vbGluZ0Rvd24QASo3CgpCdWxsZXRUeXBlEhAKDFVuZGV0ZXJt",
+            "aW5lZBAAEgkKBU1lbGVlEAESDAoIRmlyZWJhbGwQAiqIAQoMTXVsdGlIaXRU",
+            "eXBlEggKBE5vbmUQABIQCgxGcm9tRW1pc3Npb24QARIWChJGcm9tRmlyc3RI",
+            "aXRBY3R1YWwQAhIWChJGcm9tRmlyc3RIaXRBbnl3YXkQAxIVChFGcm9tUHJl",
+            "dkhpdEFjdHVhbBAEEhUKEUZyb21QcmV2SGl0QW55d2F5EAUqMwoQU2tpbGxU",
+            "cmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdlEAASDwoLRmFsbGluZ0VkZ2UQASos",
+            "Cg9WZnhEdXJhdGlvblR5cGUSCgoGT25lT2ZmEAASDQoJUmVwZWF0aW5nEAEq",
+            "NwoNVmZ4TW90aW9uVHlwZRIMCghOb01vdGlvbhAAEgsKB0Ryb3BwZWQQARIL",
+            "CgdUcmFjaW5nEAIqMQoNQnVmZlN0b2NrVHlwZRIKCgZOb25lQmYQABIJCgVU",
+            "aW1lZBABEgkKBVF1b3RhEAIqcQoKRGVidWZmVHlwZRILCgdOb25lRGJmEAAS",
+            "EQoNU3BlZWREb3duT25seRABEhEKDUNvbGRTcGVlZERvd24QAhIWChJQb3Np",
+            "dGlvbkxvY2tlZE9ubHkQAxIYChRGcm96ZW5Qb3NpdGlvbkxvY2tlZBAEKlMK",
+            "FkludmVudG9yeVNsb3RTdG9ja1R5cGUSCgoGTm9uZUl2EAASCwoHVGltZWRJ",
+            "dhABEgsKB1F1b3RhSXYQAhITCg9UaW1lZE1hZ2F6aW5lSXYQAyoxCgpQaWNr",
+            "dXBUeXBlEg0KCUltbWVkaWF0ZRAAEhQKEFB1dEludG9JbnZlbnRvcnkQAUIJ",
+            "qgIGc2hhcmVkYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.InventorySlotStockType), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.InventorySlotStockType), typeof(global::shared.PickupType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "FramesCapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "MaxHp", "Mp", "MaxMp", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitSoftPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "FrictionVelX", "ForcedCrouching", "SlipJumpTriggered", "PrimarilyOnSlippableHardPushback", "PrevWasCrouching", "NewBirth", "LowerPartFramesInChState", "JumpStarted", "FramesToStartJump", "RepelSoftPushback", "PublishingEvtMaskUponKilled", "PublishingEvtSubIdUponKilled", "SubscriptionId", "JumpHolding", "Name", "DisplayName", "Avatar", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask", "BuffList", "DebuffList", "Inventory" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel", "BtnCLevel", "BtnDLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
@@ -353,7 +366,9 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.SerializedCompletelyStaticTriggerCollider), global::shared.SerializedCompletelyStaticTriggerCollider.Parser, new[]{ "Attr", "Polygon" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapColliderAttrArray), global::shared.TrapColliderAttrArray.Parser, new[]{ "List" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.SerializedTrapLocalIdToColliderAttrs), global::shared.SerializedTrapLocalIdToColliderAttrs.Parser, new[]{ "Dict" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.SerializedTriggerTrackingIdToTrapLocalId), global::shared.SerializedTriggerTrackingIdToTrapLocalId.Parser, new[]{ "Dict" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, })
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.SerializedTriggerTrackingIdToTrapLocalId), global::shared.SerializedTriggerTrackingIdToTrapLocalId.Parser, new[]{ "Dict" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.PickableConfigFromTile), global::shared.PickableConfigFromTile.Parser, new[]{ "InitVirtualGridX", "InitVirtualGridY", "TakesGravity", "FirstShowRdfId", "RecurQuota", "RecurIntervalRdfCount", "LifetimeRdfCountPerOccurrence", "PickupType", "StockQuotaPerOccurrence", "BuffSpeciesId", "ConsumableSpeciesId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Pickable), global::shared.Pickable.Parser, new[]{ "VirtualGridX", "VirtualGridY", "ConfigFromTile", "RemainingLifetimeRdfCount", "RemainingRecurQuota" }, null, null, null, null)
           }));
     }
     #endregion
@@ -480,6 +495,11 @@ namespace shared {
     /// Has certain quotas before required to cooldown
     /// </summary>
     [pbr::OriginalName("TimedMagazineIv")] TimedMagazineIv = 3,
+  }
+
+  public enum PickupType {
+    [pbr::OriginalName("Immediate")] Immediate = 0,
+    [pbr::OriginalName("PutIntoInventory")] PutIntoInventory = 1,
   }
 
   #endregion
@@ -21299,6 +21319,914 @@ namespace shared {
             break;
           case 10: {
             dict_.AddEntriesFrom(ref input, _map_dict_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class PickableConfigFromTile : pb::IMessage<PickableConfigFromTile>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<PickableConfigFromTile> _parser = new pb::MessageParser<PickableConfigFromTile>(() => new PickableConfigFromTile());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<PickableConfigFromTile> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[46]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PickableConfigFromTile() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PickableConfigFromTile(PickableConfigFromTile other) : this() {
+      initVirtualGridX_ = other.initVirtualGridX_;
+      initVirtualGridY_ = other.initVirtualGridY_;
+      takesGravity_ = other.takesGravity_;
+      firstShowRdfId_ = other.firstShowRdfId_;
+      recurQuota_ = other.recurQuota_;
+      recurIntervalRdfCount_ = other.recurIntervalRdfCount_;
+      lifetimeRdfCountPerOccurrence_ = other.lifetimeRdfCountPerOccurrence_;
+      pickupType_ = other.pickupType_;
+      stockQuotaPerOccurrence_ = other.stockQuotaPerOccurrence_;
+      buffSpeciesId_ = other.buffSpeciesId_;
+      consumableSpeciesId_ = other.consumableSpeciesId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PickableConfigFromTile Clone() {
+      return new PickableConfigFromTile(this);
+    }
+
+    /// <summary>Field number for the "initVirtualGridX" field.</summary>
+    public const int InitVirtualGridXFieldNumber = 1;
+    private int initVirtualGridX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int InitVirtualGridX {
+      get { return initVirtualGridX_; }
+      set {
+        initVirtualGridX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "initVirtualGridY" field.</summary>
+    public const int InitVirtualGridYFieldNumber = 2;
+    private int initVirtualGridY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int InitVirtualGridY {
+      get { return initVirtualGridY_; }
+      set {
+        initVirtualGridY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "takesGravity" field.</summary>
+    public const int TakesGravityFieldNumber = 3;
+    private bool takesGravity_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool TakesGravity {
+      get { return takesGravity_; }
+      set {
+        takesGravity_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "firstShowRdfId" field.</summary>
+    public const int FirstShowRdfIdFieldNumber = 4;
+    private int firstShowRdfId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FirstShowRdfId {
+      get { return firstShowRdfId_; }
+      set {
+        firstShowRdfId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "recurQuota" field.</summary>
+    public const int RecurQuotaFieldNumber = 5;
+    private int recurQuota_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RecurQuota {
+      get { return recurQuota_; }
+      set {
+        recurQuota_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "recurIntervalRdfCount" field.</summary>
+    public const int RecurIntervalRdfCountFieldNumber = 6;
+    private int recurIntervalRdfCount_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RecurIntervalRdfCount {
+      get { return recurIntervalRdfCount_; }
+      set {
+        recurIntervalRdfCount_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "lifetimeRdfCountPerOccurrence" field.</summary>
+    public const int LifetimeRdfCountPerOccurrenceFieldNumber = 7;
+    private int lifetimeRdfCountPerOccurrence_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int LifetimeRdfCountPerOccurrence {
+      get { return lifetimeRdfCountPerOccurrence_; }
+      set {
+        lifetimeRdfCountPerOccurrence_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "pickupType" field.</summary>
+    public const int PickupTypeFieldNumber = 8;
+    private global::shared.PickupType pickupType_ = global::shared.PickupType.Immediate;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::shared.PickupType PickupType {
+      get { return pickupType_; }
+      set {
+        pickupType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "stockQuotaPerOccurrence" field.</summary>
+    public const int StockQuotaPerOccurrenceFieldNumber = 9;
+    private int stockQuotaPerOccurrence_;
+    /// <summary>
+    /// Only meaningful when "pickupType == PutIntoInventory"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int StockQuotaPerOccurrence {
+      get { return stockQuotaPerOccurrence_; }
+      set {
+        stockQuotaPerOccurrence_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "buffSpeciesId" field.</summary>
+    public const int BuffSpeciesIdFieldNumber = 1024;
+    private int buffSpeciesId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int BuffSpeciesId {
+      get { return buffSpeciesId_; }
+      set {
+        buffSpeciesId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "consumableSpeciesId" field.</summary>
+    public const int ConsumableSpeciesIdFieldNumber = 1025;
+    private int consumableSpeciesId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ConsumableSpeciesId {
+      get { return consumableSpeciesId_; }
+      set {
+        consumableSpeciesId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as PickableConfigFromTile);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(PickableConfigFromTile other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (InitVirtualGridX != other.InitVirtualGridX) return false;
+      if (InitVirtualGridY != other.InitVirtualGridY) return false;
+      if (TakesGravity != other.TakesGravity) return false;
+      if (FirstShowRdfId != other.FirstShowRdfId) return false;
+      if (RecurQuota != other.RecurQuota) return false;
+      if (RecurIntervalRdfCount != other.RecurIntervalRdfCount) return false;
+      if (LifetimeRdfCountPerOccurrence != other.LifetimeRdfCountPerOccurrence) return false;
+      if (PickupType != other.PickupType) return false;
+      if (StockQuotaPerOccurrence != other.StockQuotaPerOccurrence) return false;
+      if (BuffSpeciesId != other.BuffSpeciesId) return false;
+      if (ConsumableSpeciesId != other.ConsumableSpeciesId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (InitVirtualGridX != 0) hash ^= InitVirtualGridX.GetHashCode();
+      if (InitVirtualGridY != 0) hash ^= InitVirtualGridY.GetHashCode();
+      if (TakesGravity != false) hash ^= TakesGravity.GetHashCode();
+      if (FirstShowRdfId != 0) hash ^= FirstShowRdfId.GetHashCode();
+      if (RecurQuota != 0) hash ^= RecurQuota.GetHashCode();
+      if (RecurIntervalRdfCount != 0) hash ^= RecurIntervalRdfCount.GetHashCode();
+      if (LifetimeRdfCountPerOccurrence != 0) hash ^= LifetimeRdfCountPerOccurrence.GetHashCode();
+      if (PickupType != global::shared.PickupType.Immediate) hash ^= PickupType.GetHashCode();
+      if (StockQuotaPerOccurrence != 0) hash ^= StockQuotaPerOccurrence.GetHashCode();
+      if (BuffSpeciesId != 0) hash ^= BuffSpeciesId.GetHashCode();
+      if (ConsumableSpeciesId != 0) hash ^= ConsumableSpeciesId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (InitVirtualGridX != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(InitVirtualGridX);
+      }
+      if (InitVirtualGridY != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(InitVirtualGridY);
+      }
+      if (TakesGravity != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(TakesGravity);
+      }
+      if (FirstShowRdfId != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(FirstShowRdfId);
+      }
+      if (RecurQuota != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(RecurQuota);
+      }
+      if (RecurIntervalRdfCount != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(RecurIntervalRdfCount);
+      }
+      if (LifetimeRdfCountPerOccurrence != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(LifetimeRdfCountPerOccurrence);
+      }
+      if (PickupType != global::shared.PickupType.Immediate) {
+        output.WriteRawTag(64);
+        output.WriteEnum((int) PickupType);
+      }
+      if (StockQuotaPerOccurrence != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(StockQuotaPerOccurrence);
+      }
+      if (BuffSpeciesId != 0) {
+        output.WriteRawTag(128, 64);
+        output.WriteInt32(BuffSpeciesId);
+      }
+      if (ConsumableSpeciesId != 0) {
+        output.WriteRawTag(136, 64);
+        output.WriteInt32(ConsumableSpeciesId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (InitVirtualGridX != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(InitVirtualGridX);
+      }
+      if (InitVirtualGridY != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(InitVirtualGridY);
+      }
+      if (TakesGravity != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(TakesGravity);
+      }
+      if (FirstShowRdfId != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(FirstShowRdfId);
+      }
+      if (RecurQuota != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(RecurQuota);
+      }
+      if (RecurIntervalRdfCount != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(RecurIntervalRdfCount);
+      }
+      if (LifetimeRdfCountPerOccurrence != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(LifetimeRdfCountPerOccurrence);
+      }
+      if (PickupType != global::shared.PickupType.Immediate) {
+        output.WriteRawTag(64);
+        output.WriteEnum((int) PickupType);
+      }
+      if (StockQuotaPerOccurrence != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(StockQuotaPerOccurrence);
+      }
+      if (BuffSpeciesId != 0) {
+        output.WriteRawTag(128, 64);
+        output.WriteInt32(BuffSpeciesId);
+      }
+      if (ConsumableSpeciesId != 0) {
+        output.WriteRawTag(136, 64);
+        output.WriteInt32(ConsumableSpeciesId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (InitVirtualGridX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InitVirtualGridX);
+      }
+      if (InitVirtualGridY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InitVirtualGridY);
+      }
+      if (TakesGravity != false) {
+        size += 1 + 1;
+      }
+      if (FirstShowRdfId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FirstShowRdfId);
+      }
+      if (RecurQuota != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RecurQuota);
+      }
+      if (RecurIntervalRdfCount != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RecurIntervalRdfCount);
+      }
+      if (LifetimeRdfCountPerOccurrence != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LifetimeRdfCountPerOccurrence);
+      }
+      if (PickupType != global::shared.PickupType.Immediate) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) PickupType);
+      }
+      if (StockQuotaPerOccurrence != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(StockQuotaPerOccurrence);
+      }
+      if (BuffSpeciesId != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(BuffSpeciesId);
+      }
+      if (ConsumableSpeciesId != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(ConsumableSpeciesId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(PickableConfigFromTile other) {
+      if (other == null) {
+        return;
+      }
+      if (other.InitVirtualGridX != 0) {
+        InitVirtualGridX = other.InitVirtualGridX;
+      }
+      if (other.InitVirtualGridY != 0) {
+        InitVirtualGridY = other.InitVirtualGridY;
+      }
+      if (other.TakesGravity != false) {
+        TakesGravity = other.TakesGravity;
+      }
+      if (other.FirstShowRdfId != 0) {
+        FirstShowRdfId = other.FirstShowRdfId;
+      }
+      if (other.RecurQuota != 0) {
+        RecurQuota = other.RecurQuota;
+      }
+      if (other.RecurIntervalRdfCount != 0) {
+        RecurIntervalRdfCount = other.RecurIntervalRdfCount;
+      }
+      if (other.LifetimeRdfCountPerOccurrence != 0) {
+        LifetimeRdfCountPerOccurrence = other.LifetimeRdfCountPerOccurrence;
+      }
+      if (other.PickupType != global::shared.PickupType.Immediate) {
+        PickupType = other.PickupType;
+      }
+      if (other.StockQuotaPerOccurrence != 0) {
+        StockQuotaPerOccurrence = other.StockQuotaPerOccurrence;
+      }
+      if (other.BuffSpeciesId != 0) {
+        BuffSpeciesId = other.BuffSpeciesId;
+      }
+      if (other.ConsumableSpeciesId != 0) {
+        ConsumableSpeciesId = other.ConsumableSpeciesId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            InitVirtualGridX = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            InitVirtualGridY = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            TakesGravity = input.ReadBool();
+            break;
+          }
+          case 32: {
+            FirstShowRdfId = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            RecurQuota = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            RecurIntervalRdfCount = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            LifetimeRdfCountPerOccurrence = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            PickupType = (global::shared.PickupType) input.ReadEnum();
+            break;
+          }
+          case 72: {
+            StockQuotaPerOccurrence = input.ReadInt32();
+            break;
+          }
+          case 8192: {
+            BuffSpeciesId = input.ReadInt32();
+            break;
+          }
+          case 8200: {
+            ConsumableSpeciesId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            InitVirtualGridX = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            InitVirtualGridY = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            TakesGravity = input.ReadBool();
+            break;
+          }
+          case 32: {
+            FirstShowRdfId = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            RecurQuota = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            RecurIntervalRdfCount = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            LifetimeRdfCountPerOccurrence = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            PickupType = (global::shared.PickupType) input.ReadEnum();
+            break;
+          }
+          case 72: {
+            StockQuotaPerOccurrence = input.ReadInt32();
+            break;
+          }
+          case 8192: {
+            BuffSpeciesId = input.ReadInt32();
+            break;
+          }
+          case 8200: {
+            ConsumableSpeciesId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class Pickable : pb::IMessage<Pickable>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<Pickable> _parser = new pb::MessageParser<Pickable>(() => new Pickable());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<Pickable> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[47]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Pickable() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Pickable(Pickable other) : this() {
+      virtualGridX_ = other.virtualGridX_;
+      virtualGridY_ = other.virtualGridY_;
+      configFromTile_ = other.configFromTile_ != null ? other.configFromTile_.Clone() : null;
+      remainingLifetimeRdfCount_ = other.remainingLifetimeRdfCount_;
+      remainingRecurQuota_ = other.remainingRecurQuota_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Pickable Clone() {
+      return new Pickable(this);
+    }
+
+    /// <summary>Field number for the "virtualGridX" field.</summary>
+    public const int VirtualGridXFieldNumber = 1;
+    private int virtualGridX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int VirtualGridX {
+      get { return virtualGridX_; }
+      set {
+        virtualGridX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "virtualGridY" field.</summary>
+    public const int VirtualGridYFieldNumber = 2;
+    private int virtualGridY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int VirtualGridY {
+      get { return virtualGridY_; }
+      set {
+        virtualGridY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "configFromTile" field.</summary>
+    public const int ConfigFromTileFieldNumber = 3;
+    private global::shared.PickableConfigFromTile configFromTile_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::shared.PickableConfigFromTile ConfigFromTile {
+      get { return configFromTile_; }
+      set {
+        configFromTile_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "remainingLifetimeRdfCount" field.</summary>
+    public const int RemainingLifetimeRdfCountFieldNumber = 4;
+    private int remainingLifetimeRdfCount_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RemainingLifetimeRdfCount {
+      get { return remainingLifetimeRdfCount_; }
+      set {
+        remainingLifetimeRdfCount_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "remainingRecurQuota" field.</summary>
+    public const int RemainingRecurQuotaFieldNumber = 5;
+    private int remainingRecurQuota_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RemainingRecurQuota {
+      get { return remainingRecurQuota_; }
+      set {
+        remainingRecurQuota_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as Pickable);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(Pickable other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (VirtualGridX != other.VirtualGridX) return false;
+      if (VirtualGridY != other.VirtualGridY) return false;
+      if (!object.Equals(ConfigFromTile, other.ConfigFromTile)) return false;
+      if (RemainingLifetimeRdfCount != other.RemainingLifetimeRdfCount) return false;
+      if (RemainingRecurQuota != other.RemainingRecurQuota) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (VirtualGridX != 0) hash ^= VirtualGridX.GetHashCode();
+      if (VirtualGridY != 0) hash ^= VirtualGridY.GetHashCode();
+      if (configFromTile_ != null) hash ^= ConfigFromTile.GetHashCode();
+      if (RemainingLifetimeRdfCount != 0) hash ^= RemainingLifetimeRdfCount.GetHashCode();
+      if (RemainingRecurQuota != 0) hash ^= RemainingRecurQuota.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (VirtualGridX != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(VirtualGridX);
+      }
+      if (VirtualGridY != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(VirtualGridY);
+      }
+      if (configFromTile_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(ConfigFromTile);
+      }
+      if (RemainingLifetimeRdfCount != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RemainingLifetimeRdfCount);
+      }
+      if (RemainingRecurQuota != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(RemainingRecurQuota);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (VirtualGridX != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(VirtualGridX);
+      }
+      if (VirtualGridY != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(VirtualGridY);
+      }
+      if (configFromTile_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(ConfigFromTile);
+      }
+      if (RemainingLifetimeRdfCount != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RemainingLifetimeRdfCount);
+      }
+      if (RemainingRecurQuota != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(RemainingRecurQuota);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (VirtualGridX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(VirtualGridX);
+      }
+      if (VirtualGridY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(VirtualGridY);
+      }
+      if (configFromTile_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ConfigFromTile);
+      }
+      if (RemainingLifetimeRdfCount != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RemainingLifetimeRdfCount);
+      }
+      if (RemainingRecurQuota != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RemainingRecurQuota);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(Pickable other) {
+      if (other == null) {
+        return;
+      }
+      if (other.VirtualGridX != 0) {
+        VirtualGridX = other.VirtualGridX;
+      }
+      if (other.VirtualGridY != 0) {
+        VirtualGridY = other.VirtualGridY;
+      }
+      if (other.configFromTile_ != null) {
+        if (configFromTile_ == null) {
+          ConfigFromTile = new global::shared.PickableConfigFromTile();
+        }
+        ConfigFromTile.MergeFrom(other.ConfigFromTile);
+      }
+      if (other.RemainingLifetimeRdfCount != 0) {
+        RemainingLifetimeRdfCount = other.RemainingLifetimeRdfCount;
+      }
+      if (other.RemainingRecurQuota != 0) {
+        RemainingRecurQuota = other.RemainingRecurQuota;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            VirtualGridX = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            VirtualGridY = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            if (configFromTile_ == null) {
+              ConfigFromTile = new global::shared.PickableConfigFromTile();
+            }
+            input.ReadMessage(ConfigFromTile);
+            break;
+          }
+          case 32: {
+            RemainingLifetimeRdfCount = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            RemainingRecurQuota = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            VirtualGridX = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            VirtualGridY = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            if (configFromTile_ == null) {
+              ConfigFromTile = new global::shared.PickableConfigFromTile();
+            }
+            input.ReadMessage(ConfigFromTile);
+            break;
+          }
+          case 32: {
+            RemainingLifetimeRdfCount = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            RemainingRecurQuota = input.ReadInt32();
             break;
           }
         }

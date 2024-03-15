@@ -759,3 +759,31 @@ message SerializedTrapLocalIdToColliderAttrs {
 message SerializedTriggerTrackingIdToTrapLocalId {
 	map<int32, int32> dict = 1;
 }
+
+enum PickupType {
+    Immediate = 0;
+	PutIntoInventory = 1; 
+}
+
+message PickableConfigFromTile {
+    int32 initVirtualGridX = 1;
+    int32 initVirtualGridY = 2;
+    bool takesGravity = 3; 
+    int32 firstShowRdfId = 4; 
+    int32 recurQuota = 5;
+    int32 recurIntervalRdfCount = 6;
+    int32 lifetimeRdfCountPerOccurrence = 7;
+    PickupType pickupType = 8;
+    int32 stockQuotaPerOccurrence = 9; // Only meaningful when "pickupType == PutIntoInventory"
+
+    int32 buffSpeciesId = 1024;
+    int32 consumableSpeciesId = 1025; 
+}
+
+message Pickable {
+    int32 virtualGridX = 1;
+    int32 virtualGridY = 2;
+    PickableConfigFromTile configFromTile = 3; 
+    int32 remainingLifetimeRdfCount = 4; 
+    int32 remainingRecurQuota = 5;
+}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="395">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="29" nextobjectid="398">
  <properties>
   <property name="battleDurationSeconds" value="100"/>
   <property name="levelId" value="1"/>
@@ -11,6 +11,7 @@
  <tileset firstgid="12" source="../shared_comps/forest16.tsx"/>
  <tileset firstgid="1036" source="../decoration/trees.tsx"/>
  <tileset firstgid="1039" source="../doors/doors.tsx"/>
+ <tileset firstgid="1048" source="../shared_comps/pickable.tsx"/>
  <layer id="26" name="Background4" width="128" height="64">
   <data encoding="base64" compression="zlib">
    eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYgAAAAQ==
@@ -247,6 +248,11 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="28" name="Pickable">
+  <object id="395" gid="1193" x="234" y="990" width="32" height="32"/>
+  <object id="396" gid="1194" x="1159" y="988" width="32" height="32"/>
+  <object id="397" gid="1235" x="1297" y="990" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="336" x="81.333" y="988">
