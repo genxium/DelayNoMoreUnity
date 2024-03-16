@@ -322,6 +322,28 @@ namespace shared {
             dst.VirtualGridY = virtualGridY;
         }
 
+        public static void AssignToPickable(int pickableLocalId, int virtualGridX, int virtualGridY, PickableConfigFromTiled configFromTiled, int remainingLifetimeRdfCount, int remainingRecurQuota, Pickable dst) {
+            dst.PickableLocalId = pickableLocalId;
+            dst.VirtualGridX = virtualGridX;
+            dst.VirtualGridY = virtualGridY;
+            dst.ConfigFromTiled = configFromTiled;
+            dst.RemainingLifetimeRdfCount = remainingLifetimeRdfCount; 
+            dst.RemainingRecurQuota = remainingRecurQuota; 
+        }
+
+        public static Pickable NewPrealloatedPickable() {
+            var single = new Pickable {
+                PickableLocalId = TERMINATING_PICKABLE_LOCAL_ID,
+                ConfigFromTiled = new PickableConfigFromTiled {
+                    SubscriptionId = MAGIC_EVTSUB_ID_NONE,  
+                    BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                    ConsumableSpeciesId = TERMINATING_CONSUMABLE_SPECIES_ID,
+                },
+            };
+
+            return single;
+        }
+
         public static CharacterDownsync NewPreallocatedCharacterDownsync(int buffCapacity, int debuffCapacity, int inventoryCapacity, ulong collisionTypeMask) {
             var single = new CharacterDownsync();
             single.Id = TERMINATING_PLAYER_ID;
@@ -351,7 +373,7 @@ namespace shared {
             return single;
         }
 
-        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount, int preallocateEvtSubCount) {
+        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount, int preallocateEvtSubCount, int preallocatePickableCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
             ret.BulletLocalIdCounter = 0;
@@ -391,6 +413,11 @@ namespace shared {
                     Id = TERMINATING_EVTSUB_ID,  
                 };
                 ret.EvtSubsArr.Add(single);
+            }
+
+            for (int i = 0; i < preallocatePickableCount; i++) {
+                var single = NewPrealloatedPickable();
+                ret.Pickables.Add(single);
             }
 
             return ret;
@@ -546,7 +573,7 @@ namespace shared {
             // TBD
         }
 
-        public static void preallocateStepHolders(int roomCapacity, int renderBufferSize, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocEvtSubCapacity, out int justFulfilledEvtSubCnt, out int[] justFulfilledEvtSubArr, out FrameRingBuffer<Collider> residueCollided, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out Collider[] dynamicRectangleColliders, out Collider[] staticColliders, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
+        public static void preallocateStepHolders(int roomCapacity, int renderBufferSize, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocEvtSubCapacity, int preallocPickableCount, out int justFulfilledEvtSubCnt, out int[] justFulfilledEvtSubArr, out FrameRingBuffer<Collider> residueCollided, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out Collider[] dynamicRectangleColliders, out Collider[] staticColliders, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
             if (0 >= roomCapacity) {
                 throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
             }
@@ -559,7 +586,7 @@ namespace shared {
 
             renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
             for (int i = 0; i < renderBufferSize; i++) {
-                renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity));
+                renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCount));
             }
             renderBuffer.Clear(); // Then use it by "DryPut"
 

@@ -197,7 +197,7 @@ namespace shared {
             "IAEoBRIZChFib3VuZFJvb21DYXBhY2l0eRgKIAEoBRIbChNwcmVhbGxvY05w",
             "Y0NhcGFjaXR5GAsgASgFEh4KFnByZWFsbG9jQnVsbGV0Q2FwYWNpdHkYDCAB",
             "KAUSLQoPYmF0dGxlVWRwVHVubmVsGIAIIAEoCzITLnNoYXJlZC5QZWVyVWRw",
-            "QWRkchIYCg9mcmFtZUxvZ0VuYWJsZWQYgQggASgIIqgEChFSb29tRG93bnN5",
+            "QWRkchIYCg9mcmFtZUxvZ0VuYWJsZWQYgQggASgIIs0EChFSb29tRG93bnN5",
             "bmNGcmFtZRIKCgJpZBgBIAEoBRItCgpwbGF5ZXJzQXJyGAIgAygLMhkuc2hh",
             "cmVkLkNoYXJhY3RlckRvd25zeW5jEhYKDmNvdW50ZG93bk5hbm9zGAMgASgD",
             "Eh8KB2J1bGxldHMYBCADKAsyDi5zaGFyZWQuQnVsbGV0EioKB25wY3NBcnIY",
@@ -205,122 +205,126 @@ namespace shared {
             "BiADKAsyDC5zaGFyZWQuVHJhcBIkCgt0cmlnZ2Vyc0FychgHIAMoCzIPLnNo",
             "YXJlZC5UcmlnZ2VyEisKCmV2dFN1YnNBcnIYCCADKAsyFy5zaGFyZWQuRXZ0",
             "U3Vic2NyaXB0aW9uEiMKG3dhdmVOcGNLaWxsZWRFdnRNYXNrQ291bnRlchgJ",
-            "IAEoBBIfChZiYWNrZW5kVW5jb25maXJtZWRNYXNrGIAIIAEoBBIaChFzaG91",
-            "bGRGb3JjZVJlc3luYxiBCCABKAgSFgoNc3BlY2llc0lkTGlzdBiCCCADKAUS",
-            "HQoUYnVsbGV0TG9jYWxJZENvdW50ZXIYgwggASgFEhoKEW5wY0xvY2FsSWRD",
-            "b3VudGVyGIQIIAEoBRIcChNwYXJ0aWNpcGFudENoYW5nZUlkGIUIIAEoBRIt",
-            "Cg9wZWVyVWRwQWRkckxpc3QYgBAgAygLMhMuc2hhcmVkLlBlZXJVZHBBZGRy",
-            "ItwBCgZXc1Jlc3ASCwoDcmV0GAEgASgFEgsKA2FjdBgCIAEoBRImCgNyZGYY",
-            "AyABKAsyGS5zaGFyZWQuUm9vbURvd25zeW5jRnJhbWUSOwoXaW5wdXRGcmFt",
-            "ZURvd25zeW5jQmF0Y2gYBCADKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25z",
-            "eW5jEiwKCGJjaUZyYW1lGAUgASgLMhouc2hhcmVkLkJhdHRsZUNvbGxpZGVy",
-            "SW5mbxIVCg1wZWVySm9pbkluZGV4GAYgASgFEg4KBmVyck1zZxgHIAEoCSKF",
-            "AgoFU2tpbGwSFQoNYmF0dGxlTG9jYWxJZBgBIAEoBRIWCg5yZWNvdmVyeUZy",
-            "YW1lcxgCIAEoBRIdChVyZWNvdmVyeUZyYW1lc09uQmxvY2sYAyABKAUSGwoT",
-            "cmVjb3ZlcnlGcmFtZXNPbkhpdBgEIAEoBRItCgt0cmlnZ2VyVHlwZRgFIAEo",
-            "DjIYLnNoYXJlZC5Ta2lsbFRyaWdnZXJUeXBlEiwKDGJvdW5kQ2hTdGF0ZRgG",
-            "IAEoDjIWLnNoYXJlZC5DaGFyYWN0ZXJTdGF0ZRIPCgdtcERlbHRhGAcgASgF",
-            "EiMKBGhpdHMYgAggAygLMhQuc2hhcmVkLkJ1bGxldENvbmZpZyJnCghGcmFt",
-            "ZUxvZxImCgNyZGYYASABKAsyGS5zaGFyZWQuUm9vbURvd25zeW5jRnJhbWUS",
-            "MwoPYWN0dWFsbHlVc2VkSWRmGAIgASgLMhouc2hhcmVkLklucHV0RnJhbWVE",
-            "b3duc3luYyInCgxCYXR0bGVSZXN1bHQSFwoPd2lubmVySm9pbkluZGV4GAEg",
-            "ASgFIowBCgxEZWJ1ZmZDb25maWcSEQoJc3BlY2llc0lkGAEgASgFEigKCXN0",
-            "b2NrVHlwZRgCIAEoDjIVLnNoYXJlZC5CdWZmU3RvY2tUeXBlEg0KBXN0b2Nr",
-            "GAMgASgFEiAKBHR5cGUYBCABKA4yEi5zaGFyZWQuRGVidWZmVHlwZRIOCgZh",
-            "cnJJZHgYBSABKAUimwMKCkJ1ZmZDb25maWcSEQoJc3BlY2llc0lkGAEgASgF",
-            "EigKCXN0b2NrVHlwZRgCIAEoDjIVLnNoYXJlZC5CdWZmU3RvY2tUeXBlEg0K",
-            "BXN0b2NrGAMgASgFEhIKCnNwZWVkRGVsdGEYBCABKAUSGAoQaGl0Ym94U2l6",
-            "ZVhEZWx0YRgFIAEoBRIYChBoaXRib3hTaXplWURlbHRhGAYgASgFEhMKC2Rh",
-            "bWFnZURlbHRhGAcgASgFEh8KF2RhbWFnZURlbHRhQnlQZXJjZW50YWdlGAgg",
-            "ASgFEh4KFmNoYXJhY3RlckhhcmRuZXNzRGVsdGEYCSABKAUSGgoSbWVsZWVI",
-            "YXJkbmVzc0RlbHRhGAogASgFEh0KFWZpcmViYWxsSGFyZG5lc3NEZWx0YRgL",
-            "IAEoBRISCgppbnZpbnNpYmxlGAwgASgIEhgKEHhmb3JtQ2hTcGVjaWVzSWQY",
-            "DSABKAUSGgoRYXNzb2NpYXRlZERlYnVmZnMYgAggAygFEh4KFWNoYXJhY3Rl",
-            "clZmeFNwZWNpZXNJZBiAECABKAUiYgoEQnVmZhIRCglzcGVjaWVzSWQYASAB",
-            "KAUSDQoFc3RvY2sYAiABKAUSHwoXb3JpZ2luYXRlZFJlbmRlckZyYW1lSWQY",
-            "AyABKAUSFwoPb3JpZ0NoU3BlY2llc0lkGAQgASgFIioKBkRlYnVmZhIRCglz",
-            "cGVjaWVzSWQYASABKAUSDQoFc3RvY2sYAiABKAUiyAEKDUludmVudG9yeVNs",
-            "b3QSMQoJc3RvY2tUeXBlGAEgASgOMh4uc2hhcmVkLkludmVudG9yeVNsb3RT",
-            "dG9ja1R5cGUSDQoFcXVvdGEYAiABKAUSFwoPZnJhbWVzVG9SZWNvdmVyGAMg",
-            "ASgFEhQKDGRlZmF1bHRRdW90YRgEIAEoBRIeChZkZWZhdWx0RnJhbWVzVG9S",
-            "ZWNvdmVyGAUgASgFEhUKDWJ1ZmZTcGVjaWVzSWQYBiABKAUSDwoHc2tpbGxJ",
-            "ZBgHIAEoBSIxCglJbnZlbnRvcnkSJAoFc2xvdHMYASADKAsyFS5zaGFyZWQu",
-            "SW52ZW50b3J5U2xvdCIlCg5QbGF5ZXJTZXR0aW5ncxITCgtzb3VuZFZvbHVt",
-            "ZRgBIAEoBSKsAQoTUGxheWVyTGV2ZWxQcm9ncmVzcxIPCgdsZXZlbElkGAEg",
-            "ASgFEhQKDGhpZ2hlc3RTY29yZRgCIAEoBRIoCiBzaG9ydGVzdEZpbmlzaFRp",
-            "bWVBdEhpZ2hlc3RTY29yZRgDIAEoBRIaChJzaG9ydGVzdEZpbmlzaFRpbWUY",
-            "BCABKAUSKAogaGlnaGVzdFNjb3JlQXRTaG9ydGVzdEZpbmlzaFRpbWUYBSAB",
-            "KAUiuwEKE1BsYXllclN0b3J5UHJvZ3Jlc3MSTQoRbGV2ZWxQcm9ncmVzc0Rp",
-            "Y3QYASADKAsyMi5zaGFyZWQuUGxheWVyU3RvcnlQcm9ncmVzcy5MZXZlbFBy",
-            "b2dyZXNzRGljdEVudHJ5GlUKFkxldmVsUHJvZ3Jlc3NEaWN0RW50cnkSCwoD",
-            "a2V5GAEgASgFEioKBXZhbHVlGAIgASgLMhsuc2hhcmVkLlBsYXllckxldmVs",
-            "UHJvZ3Jlc3M6AjgBInAKFFN0b3J5UG9pbnREaWFsb2dMaW5lEhkKEW5hcnJh",
-            "dG9ySm9pbkluZGV4GAEgASgFEhkKEW5hcnJhdG9yU3BlY2llc0lkGAIgASgF",
-            "Eg8KB2NvbnRlbnQYAyABKAkSEQoJZG93bk9yTm90GAQgASgIIk0KGVNlcmlh",
-            "bGl6YWJsZUNvbnZleFBvbHlnb24SDwoHYW5jaG9yWBgBIAEoAhIPCgdhbmNo",
-            "b3JZGAIgASgCEg4KBnBvaW50cxgDIAMoAiKCAQorU2VyaWFsaXplZENvbXBs",
-            "ZXRlbHlTdGF0aWNQYXRyb2xDdWVDb2xsaWRlchIfCgRhdHRyGAEgASgLMhEu",
-            "c2hhcmVkLlBhdHJvbEN1ZRIyCgdwb2x5Z29uGAIgASgLMiEuc2hhcmVkLlNl",
-            "cmlhbGl6YWJsZUNvbnZleFBvbHlnb24ihAEKJlNlcmlhbGl6ZWRDb21wbGV0",
-            "ZWx5U3RhdGljVHJhcENvbGxpZGVyEiYKBGF0dHIYASABKAsyGC5zaGFyZWQu",
-            "VHJhcENvbGxpZGVyQXR0chIyCgdwb2x5Z29uGAIgASgLMiEuc2hhcmVkLlNl",
-            "cmlhbGl6YWJsZUNvbnZleFBvbHlnb24iigEKKVNlcmlhbGl6ZWRDb21wbGV0",
-            "ZWx5U3RhdGljVHJpZ2dlckNvbGxpZGVyEikKBGF0dHIYASABKAsyGy5zaGFy",
-            "ZWQuVHJpZ2dlckNvbGxpZGVyQXR0chIyCgdwb2x5Z29uGAIgASgLMiEuc2hh",
-            "cmVkLlNlcmlhbGl6YWJsZUNvbnZleFBvbHlnb24iPwoVVHJhcENvbGxpZGVy",
-            "QXR0ckFycmF5EiYKBGxpc3QYASADKAsyGC5zaGFyZWQuVHJhcENvbGxpZGVy",
-            "QXR0ciK4AQokU2VyaWFsaXplZFRyYXBMb2NhbElkVG9Db2xsaWRlckF0dHJz",
-            "EkQKBGRpY3QYASADKAsyNi5zaGFyZWQuU2VyaWFsaXplZFRyYXBMb2NhbElk",
-            "VG9Db2xsaWRlckF0dHJzLkRpY3RFbnRyeRpKCglEaWN0RW50cnkSCwoDa2V5",
-            "GAEgASgFEiwKBXZhbHVlGAIgASgLMh0uc2hhcmVkLlRyYXBDb2xsaWRlckF0",
-            "dHJBcnJheToCOAEioQEKKFNlcmlhbGl6ZWRUcmlnZ2VyVHJhY2tpbmdJZFRv",
-            "VHJhcExvY2FsSWQSSAoEZGljdBgBIAMoCzI6LnNoYXJlZC5TZXJpYWxpemVk",
-            "VHJpZ2dlclRyYWNraW5nSWRUb1RyYXBMb2NhbElkLkRpY3RFbnRyeRorCglE",
-            "aWN0RW50cnkSCwoDa2V5GAEgASgFEg0KBXZhbHVlGAIgASgFOgI4ASLTAgoW",
-            "UGlja2FibGVDb25maWdGcm9tVGlsZRIYChBpbml0VmlydHVhbEdyaWRYGAEg",
-            "ASgFEhgKEGluaXRWaXJ0dWFsR3JpZFkYAiABKAUSFAoMdGFrZXNHcmF2aXR5",
-            "GAMgASgIEhYKDmZpcnN0U2hvd1JkZklkGAQgASgFEhIKCnJlY3VyUXVvdGEY",
-            "BSABKAUSHQoVcmVjdXJJbnRlcnZhbFJkZkNvdW50GAYgASgFEiUKHWxpZmV0",
-            "aW1lUmRmQ291bnRQZXJPY2N1cnJlbmNlGAcgASgFEiYKCnBpY2t1cFR5cGUY",
-            "CCABKA4yEi5zaGFyZWQuUGlja3VwVHlwZRIfChdzdG9ja1F1b3RhUGVyT2Nj",
-            "dXJyZW5jZRgJIAEoBRIWCg1idWZmU3BlY2llc0lkGIAIIAEoBRIcChNjb25z",
-            "dW1hYmxlU3BlY2llc0lkGIEIIAEoBSKuAQoIUGlja2FibGUSFAoMdmlydHVh",
-            "bEdyaWRYGAEgASgFEhQKDHZpcnR1YWxHcmlkWRgCIAEoBRI2Cg5jb25maWdG",
-            "cm9tVGlsZRgDIAEoCzIeLnNoYXJlZC5QaWNrYWJsZUNvbmZpZ0Zyb21UaWxl",
-            "EiEKGXJlbWFpbmluZ0xpZmV0aW1lUmRmQ291bnQYBCABKAUSGwoTcmVtYWlu",
-            "aW5nUmVjdXJRdW90YRgFIAEoBSo1CgtCdWxsZXRTdGF0ZRILCgdTdGFydFVw",
-            "EAASCgoGQWN0aXZlEAESDQoJRXhwbG9kaW5nEAIqwAMKDkNoYXJhY3RlclN0",
-            "YXRlEgkKBUlkbGUxEAASCwoHV2Fsa2luZxABEg4KClR1cm5Bcm91bmQQAhIK",
-            "CgZBdGtlZDEQAxIUChBJbkFpcklkbGUxTm9KdW1wEAQSFAoQSW5BaXJJZGxl",
-            "MUJ5SnVtcBAFEhgKFEluQWlySWRsZTFCeVdhbGxKdW1wEAYSDwoLSW5BaXJB",
-            "dGtlZDEQBxIMCghCbG93blVwMRAIEgwKCExheURvd24xEAkSCgoGR2V0VXAx",
-            "EAoSCQoFRHlpbmcQCxILCgdEYXNoaW5nEAwSCwoHU2xpZGluZxANEhAKC09u",
-            "V2FsbElkbGUxEIABEhAKC0Nyb3VjaElkbGUxEIACEg8KCkNyb3VjaEF0azEQ",
-            "gQISEgoNQ3JvdWNoV2Fsa2luZxCCAhIRCgxDcm91Y2hBdGtlZDEQgwISCQoE",
-            "QXRrMRCACBIJCgRBdGsyEIEIEgkKBEF0azMQgggSCQoEQXRrNBCDCBIJCgRB",
-            "dGs1EIQIEg4KCUluQWlyQXRrMRCAEBIQCgtXYWxraW5nQXRrMRCBEBIQCgtX",
-            "YWxraW5nQXRrNBCCEBIPCgpPbldhbGxBdGsxEIAYKkwKCVRyYXBTdGF0ZRIJ",
-            "CgVUSWRsZRAAEgwKCFRXYWxraW5nEAESCQoFVEF0azEQAhILCgdUQXRrZWQx",
-            "EAMSDgoKVERlc3Ryb3llZBAEKiwKDFRyaWdnZXJTdGF0ZRIKCgZUUmVhZHkQ",
-            "ABIQCgxUQ29vbGluZ0Rvd24QASo3CgpCdWxsZXRUeXBlEhAKDFVuZGV0ZXJt",
-            "aW5lZBAAEgkKBU1lbGVlEAESDAoIRmlyZWJhbGwQAiqIAQoMTXVsdGlIaXRU",
-            "eXBlEggKBE5vbmUQABIQCgxGcm9tRW1pc3Npb24QARIWChJGcm9tRmlyc3RI",
-            "aXRBY3R1YWwQAhIWChJGcm9tRmlyc3RIaXRBbnl3YXkQAxIVChFGcm9tUHJl",
-            "dkhpdEFjdHVhbBAEEhUKEUZyb21QcmV2SGl0QW55d2F5EAUqMwoQU2tpbGxU",
-            "cmlnZ2VyVHlwZRIOCgpSaXNpbmdFZGdlEAASDwoLRmFsbGluZ0VkZ2UQASos",
-            "Cg9WZnhEdXJhdGlvblR5cGUSCgoGT25lT2ZmEAASDQoJUmVwZWF0aW5nEAEq",
-            "NwoNVmZ4TW90aW9uVHlwZRIMCghOb01vdGlvbhAAEgsKB0Ryb3BwZWQQARIL",
-            "CgdUcmFjaW5nEAIqMQoNQnVmZlN0b2NrVHlwZRIKCgZOb25lQmYQABIJCgVU",
-            "aW1lZBABEgkKBVF1b3RhEAIqcQoKRGVidWZmVHlwZRILCgdOb25lRGJmEAAS",
-            "EQoNU3BlZWREb3duT25seRABEhEKDUNvbGRTcGVlZERvd24QAhIWChJQb3Np",
-            "dGlvbkxvY2tlZE9ubHkQAxIYChRGcm96ZW5Qb3NpdGlvbkxvY2tlZBAEKlMK",
-            "FkludmVudG9yeVNsb3RTdG9ja1R5cGUSCgoGTm9uZUl2EAASCwoHVGltZWRJ",
-            "dhABEgsKB1F1b3RhSXYQAhITCg9UaW1lZE1hZ2F6aW5lSXYQAyoxCgpQaWNr",
-            "dXBUeXBlEg0KCUltbWVkaWF0ZRAAEhQKEFB1dEludG9JbnZlbnRvcnkQAUIJ",
-            "qgIGc2hhcmVkYgZwcm90bzM="));
+            "IAEoBBIjCglwaWNrYWJsZXMYCiADKAsyEC5zaGFyZWQuUGlja2FibGUSHwoW",
+            "YmFja2VuZFVuY29uZmlybWVkTWFzaxiACCABKAQSGgoRc2hvdWxkRm9yY2VS",
+            "ZXN5bmMYgQggASgIEhYKDXNwZWNpZXNJZExpc3QYggggAygFEh0KFGJ1bGxl",
+            "dExvY2FsSWRDb3VudGVyGIMIIAEoBRIaChFucGNMb2NhbElkQ291bnRlchiE",
+            "CCABKAUSHAoTcGFydGljaXBhbnRDaGFuZ2VJZBiFCCABKAUSLQoPcGVlclVk",
+            "cEFkZHJMaXN0GIAQIAMoCzITLnNoYXJlZC5QZWVyVWRwQWRkciLcAQoGV3NS",
+            "ZXNwEgsKA3JldBgBIAEoBRILCgNhY3QYAiABKAUSJgoDcmRmGAMgASgLMhku",
+            "c2hhcmVkLlJvb21Eb3duc3luY0ZyYW1lEjsKF2lucHV0RnJhbWVEb3duc3lu",
+            "Y0JhdGNoGAQgAygLMhouc2hhcmVkLklucHV0RnJhbWVEb3duc3luYxIsCghi",
+            "Y2lGcmFtZRgFIAEoCzIaLnNoYXJlZC5CYXR0bGVDb2xsaWRlckluZm8SFQoN",
+            "cGVlckpvaW5JbmRleBgGIAEoBRIOCgZlcnJNc2cYByABKAkihQIKBVNraWxs",
+            "EhUKDWJhdHRsZUxvY2FsSWQYASABKAUSFgoOcmVjb3ZlcnlGcmFtZXMYAiAB",
+            "KAUSHQoVcmVjb3ZlcnlGcmFtZXNPbkJsb2NrGAMgASgFEhsKE3JlY292ZXJ5",
+            "RnJhbWVzT25IaXQYBCABKAUSLQoLdHJpZ2dlclR5cGUYBSABKA4yGC5zaGFy",
+            "ZWQuU2tpbGxUcmlnZ2VyVHlwZRIsCgxib3VuZENoU3RhdGUYBiABKA4yFi5z",
+            "aGFyZWQuQ2hhcmFjdGVyU3RhdGUSDwoHbXBEZWx0YRgHIAEoBRIjCgRoaXRz",
+            "GIAIIAMoCzIULnNoYXJlZC5CdWxsZXRDb25maWciZwoIRnJhbWVMb2cSJgoD",
+            "cmRmGAEgASgLMhkuc2hhcmVkLlJvb21Eb3duc3luY0ZyYW1lEjMKD2FjdHVh",
+            "bGx5VXNlZElkZhgCIAEoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMi",
+            "JwoMQmF0dGxlUmVzdWx0EhcKD3dpbm5lckpvaW5JbmRleBgBIAEoBSKMAQoM",
+            "RGVidWZmQ29uZmlnEhEKCXNwZWNpZXNJZBgBIAEoBRIoCglzdG9ja1R5cGUY",
+            "AiABKA4yFS5zaGFyZWQuQnVmZlN0b2NrVHlwZRINCgVzdG9jaxgDIAEoBRIg",
+            "CgR0eXBlGAQgASgOMhIuc2hhcmVkLkRlYnVmZlR5cGUSDgoGYXJySWR4GAUg",
+            "ASgFIpsDCgpCdWZmQ29uZmlnEhEKCXNwZWNpZXNJZBgBIAEoBRIoCglzdG9j",
+            "a1R5cGUYAiABKA4yFS5zaGFyZWQuQnVmZlN0b2NrVHlwZRINCgVzdG9jaxgD",
+            "IAEoBRISCgpzcGVlZERlbHRhGAQgASgFEhgKEGhpdGJveFNpemVYRGVsdGEY",
+            "BSABKAUSGAoQaGl0Ym94U2l6ZVlEZWx0YRgGIAEoBRITCgtkYW1hZ2VEZWx0",
+            "YRgHIAEoBRIfChdkYW1hZ2VEZWx0YUJ5UGVyY2VudGFnZRgIIAEoBRIeChZj",
+            "aGFyYWN0ZXJIYXJkbmVzc0RlbHRhGAkgASgFEhoKEm1lbGVlSGFyZG5lc3NE",
+            "ZWx0YRgKIAEoBRIdChVmaXJlYmFsbEhhcmRuZXNzRGVsdGEYCyABKAUSEgoK",
+            "aW52aW5zaWJsZRgMIAEoCBIYChB4Zm9ybUNoU3BlY2llc0lkGA0gASgFEhoK",
+            "EWFzc29jaWF0ZWREZWJ1ZmZzGIAIIAMoBRIeChVjaGFyYWN0ZXJWZnhTcGVj",
+            "aWVzSWQYgBAgASgFImIKBEJ1ZmYSEQoJc3BlY2llc0lkGAEgASgFEg0KBXN0",
+            "b2NrGAIgASgFEh8KF29yaWdpbmF0ZWRSZW5kZXJGcmFtZUlkGAMgASgFEhcK",
+            "D29yaWdDaFNwZWNpZXNJZBgEIAEoBSIqCgZEZWJ1ZmYSEQoJc3BlY2llc0lk",
+            "GAEgASgFEg0KBXN0b2NrGAIgASgFIjoKEENvbnN1bWFibGVDb25maWcSEQoJ",
+            "c3BlY2llc0lkGAEgASgFEhMKC3JlZmlsbERlbHRhGAIgASgFIsgBCg1JbnZl",
+            "bnRvcnlTbG90EjEKCXN0b2NrVHlwZRgBIAEoDjIeLnNoYXJlZC5JbnZlbnRv",
+            "cnlTbG90U3RvY2tUeXBlEg0KBXF1b3RhGAIgASgFEhcKD2ZyYW1lc1RvUmVj",
+            "b3ZlchgDIAEoBRIUCgxkZWZhdWx0UXVvdGEYBCABKAUSHgoWZGVmYXVsdEZy",
+            "YW1lc1RvUmVjb3ZlchgFIAEoBRIVCg1idWZmU3BlY2llc0lkGAYgASgFEg8K",
+            "B3NraWxsSWQYByABKAUiMQoJSW52ZW50b3J5EiQKBXNsb3RzGAEgAygLMhUu",
+            "c2hhcmVkLkludmVudG9yeVNsb3QiJQoOUGxheWVyU2V0dGluZ3MSEwoLc291",
+            "bmRWb2x1bWUYASABKAUirAEKE1BsYXllckxldmVsUHJvZ3Jlc3MSDwoHbGV2",
+            "ZWxJZBgBIAEoBRIUCgxoaWdoZXN0U2NvcmUYAiABKAUSKAogc2hvcnRlc3RG",
+            "aW5pc2hUaW1lQXRIaWdoZXN0U2NvcmUYAyABKAUSGgoSc2hvcnRlc3RGaW5p",
+            "c2hUaW1lGAQgASgFEigKIGhpZ2hlc3RTY29yZUF0U2hvcnRlc3RGaW5pc2hU",
+            "aW1lGAUgASgFIrsBChNQbGF5ZXJTdG9yeVByb2dyZXNzEk0KEWxldmVsUHJv",
+            "Z3Jlc3NEaWN0GAEgAygLMjIuc2hhcmVkLlBsYXllclN0b3J5UHJvZ3Jlc3Mu",
+            "TGV2ZWxQcm9ncmVzc0RpY3RFbnRyeRpVChZMZXZlbFByb2dyZXNzRGljdEVu",
+            "dHJ5EgsKA2tleRgBIAEoBRIqCgV2YWx1ZRgCIAEoCzIbLnNoYXJlZC5QbGF5",
+            "ZXJMZXZlbFByb2dyZXNzOgI4ASJwChRTdG9yeVBvaW50RGlhbG9nTGluZRIZ",
+            "ChFuYXJyYXRvckpvaW5JbmRleBgBIAEoBRIZChFuYXJyYXRvclNwZWNpZXNJ",
+            "ZBgCIAEoBRIPCgdjb250ZW50GAMgASgJEhEKCWRvd25Pck5vdBgEIAEoCCJN",
+            "ChlTZXJpYWxpemFibGVDb252ZXhQb2x5Z29uEg8KB2FuY2hvclgYASABKAIS",
+            "DwoHYW5jaG9yWRgCIAEoAhIOCgZwb2ludHMYAyADKAIiggEKK1NlcmlhbGl6",
+            "ZWRDb21wbGV0ZWx5U3RhdGljUGF0cm9sQ3VlQ29sbGlkZXISHwoEYXR0chgB",
+            "IAEoCzIRLnNoYXJlZC5QYXRyb2xDdWUSMgoHcG9seWdvbhgCIAEoCzIhLnNo",
+            "YXJlZC5TZXJpYWxpemFibGVDb252ZXhQb2x5Z29uIoQBCiZTZXJpYWxpemVk",
+            "Q29tcGxldGVseVN0YXRpY1RyYXBDb2xsaWRlchImCgRhdHRyGAEgASgLMhgu",
+            "c2hhcmVkLlRyYXBDb2xsaWRlckF0dHISMgoHcG9seWdvbhgCIAEoCzIhLnNo",
+            "YXJlZC5TZXJpYWxpemFibGVDb252ZXhQb2x5Z29uIooBCilTZXJpYWxpemVk",
+            "Q29tcGxldGVseVN0YXRpY1RyaWdnZXJDb2xsaWRlchIpCgRhdHRyGAEgASgL",
+            "Mhsuc2hhcmVkLlRyaWdnZXJDb2xsaWRlckF0dHISMgoHcG9seWdvbhgCIAEo",
+            "CzIhLnNoYXJlZC5TZXJpYWxpemFibGVDb252ZXhQb2x5Z29uIj8KFVRyYXBD",
+            "b2xsaWRlckF0dHJBcnJheRImCgRsaXN0GAEgAygLMhguc2hhcmVkLlRyYXBD",
+            "b2xsaWRlckF0dHIiuAEKJFNlcmlhbGl6ZWRUcmFwTG9jYWxJZFRvQ29sbGlk",
+            "ZXJBdHRycxJECgRkaWN0GAEgAygLMjYuc2hhcmVkLlNlcmlhbGl6ZWRUcmFw",
+            "TG9jYWxJZFRvQ29sbGlkZXJBdHRycy5EaWN0RW50cnkaSgoJRGljdEVudHJ5",
+            "EgsKA2tleRgBIAEoBRIsCgV2YWx1ZRgCIAEoCzIdLnNoYXJlZC5UcmFwQ29s",
+            "bGlkZXJBdHRyQXJyYXk6AjgBIqEBCihTZXJpYWxpemVkVHJpZ2dlclRyYWNr",
+            "aW5nSWRUb1RyYXBMb2NhbElkEkgKBGRpY3QYASADKAsyOi5zaGFyZWQuU2Vy",
+            "aWFsaXplZFRyaWdnZXJUcmFja2luZ0lkVG9UcmFwTG9jYWxJZC5EaWN0RW50",
+            "cnkaKwoJRGljdEVudHJ5EgsKA2tleRgBIAEoBRINCgV2YWx1ZRgCIAEoBToC",
+            "OAEi7AIKF1BpY2thYmxlQ29uZmlnRnJvbVRpbGVkEhgKEGluaXRWaXJ0dWFs",
+            "R3JpZFgYASABKAUSGAoQaW5pdFZpcnR1YWxHcmlkWRgCIAEoBRIUCgx0YWtl",
+            "c0dyYXZpdHkYAyABKAgSFgoOZmlyc3RTaG93UmRmSWQYBCABKAUSEgoKcmVj",
+            "dXJRdW90YRgFIAEoBRIdChVyZWN1ckludGVydmFsUmRmQ291bnQYBiABKAUS",
+            "JQodbGlmZXRpbWVSZGZDb3VudFBlck9jY3VycmVuY2UYByABKAUSJgoKcGlj",
+            "a3VwVHlwZRgIIAEoDjISLnNoYXJlZC5QaWNrdXBUeXBlEh8KF3N0b2NrUXVv",
+            "dGFQZXJPY2N1cnJlbmNlGAkgASgFEhYKDnN1YnNjcmlwdGlvbklkGAogASgF",
+            "EhYKDWJ1ZmZTcGVjaWVzSWQYgAggASgFEhwKE2NvbnN1bWFibGVTcGVjaWVz",
+            "SWQYgQggASgFIskBCghQaWNrYWJsZRIXCg9waWNrYWJsZUxvY2FsSWQYASAB",
+            "KAUSFAoMdmlydHVhbEdyaWRYGAIgASgFEhQKDHZpcnR1YWxHcmlkWRgDIAEo",
+            "BRI4Cg9jb25maWdGcm9tVGlsZWQYBCABKAsyHy5zaGFyZWQuUGlja2FibGVD",
+            "b25maWdGcm9tVGlsZWQSIQoZcmVtYWluaW5nTGlmZXRpbWVSZGZDb3VudBgF",
+            "IAEoBRIbChNyZW1haW5pbmdSZWN1clF1b3RhGAYgASgFKjUKC0J1bGxldFN0",
+            "YXRlEgsKB1N0YXJ0VXAQABIKCgZBY3RpdmUQARINCglFeHBsb2RpbmcQAirA",
+            "AwoOQ2hhcmFjdGVyU3RhdGUSCQoFSWRsZTEQABILCgdXYWxraW5nEAESDgoK",
+            "VHVybkFyb3VuZBACEgoKBkF0a2VkMRADEhQKEEluQWlySWRsZTFOb0p1bXAQ",
+            "BBIUChBJbkFpcklkbGUxQnlKdW1wEAUSGAoUSW5BaXJJZGxlMUJ5V2FsbEp1",
+            "bXAQBhIPCgtJbkFpckF0a2VkMRAHEgwKCEJsb3duVXAxEAgSDAoITGF5RG93",
+            "bjEQCRIKCgZHZXRVcDEQChIJCgVEeWluZxALEgsKB0Rhc2hpbmcQDBILCgdT",
+            "bGlkaW5nEA0SEAoLT25XYWxsSWRsZTEQgAESEAoLQ3JvdWNoSWRsZTEQgAIS",
+            "DwoKQ3JvdWNoQXRrMRCBAhISCg1Dcm91Y2hXYWxraW5nEIICEhEKDENyb3Vj",
+            "aEF0a2VkMRCDAhIJCgRBdGsxEIAIEgkKBEF0azIQgQgSCQoEQXRrMxCCCBIJ",
+            "CgRBdGs0EIMIEgkKBEF0azUQhAgSDgoJSW5BaXJBdGsxEIAQEhAKC1dhbGtp",
+            "bmdBdGsxEIEQEhAKC1dhbGtpbmdBdGs0EIIQEg8KCk9uV2FsbEF0azEQgBgq",
+            "TAoJVHJhcFN0YXRlEgkKBVRJZGxlEAASDAoIVFdhbGtpbmcQARIJCgVUQXRr",
+            "MRACEgsKB1RBdGtlZDEQAxIOCgpURGVzdHJveWVkEAQqLAoMVHJpZ2dlclN0",
+            "YXRlEgoKBlRSZWFkeRAAEhAKDFRDb29saW5nRG93bhABKjcKCkJ1bGxldFR5",
+            "cGUSEAoMVW5kZXRlcm1pbmVkEAASCQoFTWVsZWUQARIMCghGaXJlYmFsbBAC",
+            "KogBCgxNdWx0aUhpdFR5cGUSCAoETm9uZRAAEhAKDEZyb21FbWlzc2lvbhAB",
+            "EhYKEkZyb21GaXJzdEhpdEFjdHVhbBACEhYKEkZyb21GaXJzdEhpdEFueXdh",
+            "eRADEhUKEUZyb21QcmV2SGl0QWN0dWFsEAQSFQoRRnJvbVByZXZIaXRBbnl3",
+            "YXkQBSozChBTa2lsbFRyaWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIPCgtG",
+            "YWxsaW5nRWRnZRABKiwKD1ZmeER1cmF0aW9uVHlwZRIKCgZPbmVPZmYQABIN",
+            "CglSZXBlYXRpbmcQASo3Cg1WZnhNb3Rpb25UeXBlEgwKCE5vTW90aW9uEAAS",
+            "CwoHRHJvcHBlZBABEgsKB1RyYWNpbmcQAioxCg1CdWZmU3RvY2tUeXBlEgoK",
+            "Bk5vbmVCZhAAEgkKBVRpbWVkEAESCQoFUXVvdGEQAipxCgpEZWJ1ZmZUeXBl",
+            "EgsKB05vbmVEYmYQABIRCg1TcGVlZERvd25Pbmx5EAESEQoNQ29sZFNwZWVk",
+            "RG93bhACEhYKElBvc2l0aW9uTG9ja2VkT25seRADEhgKFEZyb3plblBvc2l0",
+            "aW9uTG9ja2VkEAQqNgoOQ29uc3VtYWJsZVR5cGUSDAoITm9uZUNzbWIQABIK",
+            "CgZSZWZpbGwQARIKCgZEYmZSY3YQAipTChZJbnZlbnRvcnlTbG90U3RvY2tU",
+            "eXBlEgoKBk5vbmVJdhAAEgsKB1RpbWVkSXYQARILCgdRdW90YUl2EAISEwoP",
+            "VGltZWRNYWdhemluZUl2EAMqMQoKUGlja3VwVHlwZRINCglJbW1lZGlhdGUQ",
+            "ABIUChBQdXRJbnRvSW52ZW50b3J5EAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.InventorySlotStockType), typeof(global::shared.PickupType), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.ConsumableType), typeof(global::shared.InventorySlotStockType), typeof(global::shared.PickupType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "FramesCapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "MaxHp", "Mp", "MaxMp", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitSoftPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "FrictionVelX", "ForcedCrouching", "SlipJumpTriggered", "PrimarilyOnSlippableHardPushback", "PrevWasCrouching", "NewBirth", "LowerPartFramesInChState", "JumpStarted", "FramesToStartJump", "RepelSoftPushback", "PublishingEvtMaskUponKilled", "PublishingEvtSubIdUponKilled", "SubscriptionId", "JumpHolding", "Name", "DisplayName", "Avatar", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask", "BuffList", "DebuffList", "Inventory" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel", "BtnCLevel", "BtnDLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
@@ -345,7 +349,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Trigger), global::shared.Trigger.Parser, new[]{ "TriggerLocalId", "FramesToFire", "FramesToRecover", "Quota", "BulletTeamId", "Config", "ConfigFromTiled", "SubCycleQuotaLeft", "State", "FramesInState", "VirtualGridX", "VirtualGridY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "PreallocNpcCapacity", "PreallocBulletCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "TriggersArr", "EvtSubsArr", "WaveNpcKilledEvtMaskCounter", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "NpcLocalIdCounter", "ParticipantChangeId", "PeerUdpAddrList" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "TriggersArr", "EvtSubsArr", "WaveNpcKilledEvtMaskCounter", "Pickables", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "NpcLocalIdCounter", "ParticipantChangeId", "PeerUdpAddrList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex", "ErrMsg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "MpDelta", "Hits" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null),
@@ -354,6 +358,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BuffConfig), global::shared.BuffConfig.Parser, new[]{ "SpeciesId", "StockType", "Stock", "SpeedDelta", "HitboxSizeXDelta", "HitboxSizeYDelta", "DamageDelta", "DamageDeltaByPercentage", "CharacterHardnessDelta", "MeleeHardnessDelta", "FireballHardnessDelta", "Invinsible", "XformChSpeciesId", "AssociatedDebuffs", "CharacterVfxSpeciesId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Buff), global::shared.Buff.Parser, new[]{ "SpeciesId", "Stock", "OriginatedRenderFrameId", "OrigChSpeciesId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Debuff), global::shared.Debuff.Parser, new[]{ "SpeciesId", "Stock" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.ConsumableConfig), global::shared.ConsumableConfig.Parser, new[]{ "SpeciesId", "RefillDelta" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InventorySlot), global::shared.InventorySlot.Parser, new[]{ "StockType", "Quota", "FramesToRecover", "DefaultQuota", "DefaultFramesToRecover", "BuffSpeciesId", "SkillId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Inventory), global::shared.Inventory.Parser, new[]{ "Slots" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PlayerSettings), global::shared.PlayerSettings.Parser, new[]{ "SoundVolume" }, null, null, null, null),
@@ -367,8 +372,8 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapColliderAttrArray), global::shared.TrapColliderAttrArray.Parser, new[]{ "List" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.SerializedTrapLocalIdToColliderAttrs), global::shared.SerializedTrapLocalIdToColliderAttrs.Parser, new[]{ "Dict" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.SerializedTriggerTrackingIdToTrapLocalId), global::shared.SerializedTriggerTrackingIdToTrapLocalId.Parser, new[]{ "Dict" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.PickableConfigFromTile), global::shared.PickableConfigFromTile.Parser, new[]{ "InitVirtualGridX", "InitVirtualGridY", "TakesGravity", "FirstShowRdfId", "RecurQuota", "RecurIntervalRdfCount", "LifetimeRdfCountPerOccurrence", "PickupType", "StockQuotaPerOccurrence", "BuffSpeciesId", "ConsumableSpeciesId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Pickable), global::shared.Pickable.Parser, new[]{ "VirtualGridX", "VirtualGridY", "ConfigFromTile", "RemainingLifetimeRdfCount", "RemainingRecurQuota" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.PickableConfigFromTiled), global::shared.PickableConfigFromTiled.Parser, new[]{ "InitVirtualGridX", "InitVirtualGridY", "TakesGravity", "FirstShowRdfId", "RecurQuota", "RecurIntervalRdfCount", "LifetimeRdfCountPerOccurrence", "PickupType", "StockQuotaPerOccurrence", "SubscriptionId", "BuffSpeciesId", "ConsumableSpeciesId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.Pickable), global::shared.Pickable.Parser, new[]{ "PickableLocalId", "VirtualGridX", "VirtualGridY", "ConfigFromTiled", "RemainingLifetimeRdfCount", "RemainingRecurQuota" }, null, null, null, null)
           }));
     }
     #endregion
@@ -482,6 +487,15 @@ namespace shared {
     [pbr::OriginalName("ColdSpeedDown")] ColdSpeedDown = 2,
     [pbr::OriginalName("PositionLockedOnly")] PositionLockedOnly = 3,
     [pbr::OriginalName("FrozenPositionLocked")] FrozenPositionLocked = 4,
+  }
+
+  public enum ConsumableType {
+    [pbr::OriginalName("NoneCsmb")] NoneCsmb = 0,
+    [pbr::OriginalName("Refill")] Refill = 1,
+    /// <summary>
+    /// Debuff recovery
+    /// </summary>
+    [pbr::OriginalName("DbfRcv")] DbfRcv = 2,
   }
 
   public enum InventorySlotStockType {
@@ -14720,6 +14734,7 @@ namespace shared {
       triggersArr_ = other.triggersArr_.Clone();
       evtSubsArr_ = other.evtSubsArr_.Clone();
       waveNpcKilledEvtMaskCounter_ = other.waveNpcKilledEvtMaskCounter_;
+      pickables_ = other.pickables_.Clone();
       backendUnconfirmedMask_ = other.backendUnconfirmedMask_;
       shouldForceResync_ = other.shouldForceResync_;
       speciesIdList_ = other.speciesIdList_.Clone();
@@ -14838,6 +14853,17 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "pickables" field.</summary>
+    public const int PickablesFieldNumber = 10;
+    private static readonly pb::FieldCodec<global::shared.Pickable> _repeated_pickables_codec
+        = pb::FieldCodec.ForMessage(82, global::shared.Pickable.Parser);
+    private readonly pbc::RepeatedField<global::shared.Pickable> pickables_ = new pbc::RepeatedField<global::shared.Pickable>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::shared.Pickable> Pickables {
+      get { return pickables_; }
+    }
+
     /// <summary>Field number for the "backendUnconfirmedMask" field.</summary>
     public const int BackendUnconfirmedMaskFieldNumber = 1024;
     private ulong backendUnconfirmedMask_;
@@ -14947,6 +14973,7 @@ namespace shared {
       if(!triggersArr_.Equals(other.triggersArr_)) return false;
       if(!evtSubsArr_.Equals(other.evtSubsArr_)) return false;
       if (WaveNpcKilledEvtMaskCounter != other.WaveNpcKilledEvtMaskCounter) return false;
+      if(!pickables_.Equals(other.pickables_)) return false;
       if (BackendUnconfirmedMask != other.BackendUnconfirmedMask) return false;
       if (ShouldForceResync != other.ShouldForceResync) return false;
       if(!speciesIdList_.Equals(other.speciesIdList_)) return false;
@@ -14970,6 +14997,7 @@ namespace shared {
       hash ^= triggersArr_.GetHashCode();
       hash ^= evtSubsArr_.GetHashCode();
       if (WaveNpcKilledEvtMaskCounter != 0UL) hash ^= WaveNpcKilledEvtMaskCounter.GetHashCode();
+      hash ^= pickables_.GetHashCode();
       if (BackendUnconfirmedMask != 0UL) hash ^= BackendUnconfirmedMask.GetHashCode();
       if (ShouldForceResync != false) hash ^= ShouldForceResync.GetHashCode();
       hash ^= speciesIdList_.GetHashCode();
@@ -15013,6 +15041,7 @@ namespace shared {
         output.WriteRawTag(72);
         output.WriteUInt64(WaveNpcKilledEvtMaskCounter);
       }
+      pickables_.WriteTo(output, _repeated_pickables_codec);
       if (BackendUnconfirmedMask != 0UL) {
         output.WriteRawTag(128, 64);
         output.WriteUInt64(BackendUnconfirmedMask);
@@ -15063,6 +15092,7 @@ namespace shared {
         output.WriteRawTag(72);
         output.WriteUInt64(WaveNpcKilledEvtMaskCounter);
       }
+      pickables_.WriteTo(ref output, _repeated_pickables_codec);
       if (BackendUnconfirmedMask != 0UL) {
         output.WriteRawTag(128, 64);
         output.WriteUInt64(BackendUnconfirmedMask);
@@ -15110,6 +15140,7 @@ namespace shared {
       if (WaveNpcKilledEvtMaskCounter != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(WaveNpcKilledEvtMaskCounter);
       }
+      size += pickables_.CalculateSize(_repeated_pickables_codec);
       if (BackendUnconfirmedMask != 0UL) {
         size += 2 + pb::CodedOutputStream.ComputeUInt64Size(BackendUnconfirmedMask);
       }
@@ -15154,6 +15185,7 @@ namespace shared {
       if (other.WaveNpcKilledEvtMaskCounter != 0UL) {
         WaveNpcKilledEvtMaskCounter = other.WaveNpcKilledEvtMaskCounter;
       }
+      pickables_.Add(other.pickables_);
       if (other.BackendUnconfirmedMask != 0UL) {
         BackendUnconfirmedMask = other.BackendUnconfirmedMask;
       }
@@ -15220,6 +15252,10 @@ namespace shared {
           }
           case 72: {
             WaveNpcKilledEvtMaskCounter = input.ReadUInt64();
+            break;
+          }
+          case 82: {
+            pickables_.AddEntriesFrom(input, _repeated_pickables_codec);
             break;
           }
           case 8192: {
@@ -15300,6 +15336,10 @@ namespace shared {
           }
           case 72: {
             WaveNpcKilledEvtMaskCounter = input.ReadUInt64();
+            break;
+          }
+          case 82: {
+            pickables_.AddEntriesFrom(ref input, _repeated_pickables_codec);
             break;
           }
           case 8192: {
@@ -18209,6 +18249,232 @@ namespace shared {
 
   }
 
+  public sealed partial class ConsumableConfig : pb::IMessage<ConsumableConfig>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ConsumableConfig> _parser = new pb::MessageParser<ConsumableConfig>(() => new ConsumableConfig());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ConsumableConfig> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[33]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ConsumableConfig() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ConsumableConfig(ConsumableConfig other) : this() {
+      speciesId_ = other.speciesId_;
+      refillDelta_ = other.refillDelta_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ConsumableConfig Clone() {
+      return new ConsumableConfig(this);
+    }
+
+    /// <summary>Field number for the "speciesId" field.</summary>
+    public const int SpeciesIdFieldNumber = 1;
+    private int speciesId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int SpeciesId {
+      get { return speciesId_; }
+      set {
+        speciesId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "refillDelta" field.</summary>
+    public const int RefillDeltaFieldNumber = 2;
+    private int refillDelta_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RefillDelta {
+      get { return refillDelta_; }
+      set {
+        refillDelta_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ConsumableConfig);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ConsumableConfig other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (SpeciesId != other.SpeciesId) return false;
+      if (RefillDelta != other.RefillDelta) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (SpeciesId != 0) hash ^= SpeciesId.GetHashCode();
+      if (RefillDelta != 0) hash ^= RefillDelta.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (SpeciesId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(SpeciesId);
+      }
+      if (RefillDelta != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(RefillDelta);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (SpeciesId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(SpeciesId);
+      }
+      if (RefillDelta != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(RefillDelta);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (SpeciesId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SpeciesId);
+      }
+      if (RefillDelta != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RefillDelta);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ConsumableConfig other) {
+      if (other == null) {
+        return;
+      }
+      if (other.SpeciesId != 0) {
+        SpeciesId = other.SpeciesId;
+      }
+      if (other.RefillDelta != 0) {
+        RefillDelta = other.RefillDelta;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            SpeciesId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            RefillDelta = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            SpeciesId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            RefillDelta = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   public sealed partial class InventorySlot : pb::IMessage<InventorySlot>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -18223,7 +18489,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[33]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[34]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -18634,7 +18900,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[34]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[35]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -18812,7 +19078,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[35]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[36]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -19001,7 +19267,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[36]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[37]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -19338,7 +19604,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[37]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[38]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -19516,7 +19782,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[38]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[39]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -19822,7 +20088,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[39]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[40]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20076,7 +20342,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[40]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[41]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20320,7 +20586,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[41]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[42]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20564,7 +20830,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[42]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[43]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20808,7 +21074,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[43]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[44]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20986,7 +21252,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[44]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[45]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -21164,7 +21430,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[45]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[46]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -21328,21 +21594,21 @@ namespace shared {
 
   }
 
-  public sealed partial class PickableConfigFromTile : pb::IMessage<PickableConfigFromTile>
+  public sealed partial class PickableConfigFromTiled : pb::IMessage<PickableConfigFromTiled>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<PickableConfigFromTile> _parser = new pb::MessageParser<PickableConfigFromTile>(() => new PickableConfigFromTile());
+    private static readonly pb::MessageParser<PickableConfigFromTiled> _parser = new pb::MessageParser<PickableConfigFromTiled>(() => new PickableConfigFromTiled());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<PickableConfigFromTile> Parser { get { return _parser; } }
+    public static pb::MessageParser<PickableConfigFromTiled> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[46]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[47]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -21353,7 +21619,7 @@ namespace shared {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PickableConfigFromTile() {
+    public PickableConfigFromTiled() {
       OnConstruction();
     }
 
@@ -21361,7 +21627,7 @@ namespace shared {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PickableConfigFromTile(PickableConfigFromTile other) : this() {
+    public PickableConfigFromTiled(PickableConfigFromTiled other) : this() {
       initVirtualGridX_ = other.initVirtualGridX_;
       initVirtualGridY_ = other.initVirtualGridY_;
       takesGravity_ = other.takesGravity_;
@@ -21371,6 +21637,7 @@ namespace shared {
       lifetimeRdfCountPerOccurrence_ = other.lifetimeRdfCountPerOccurrence_;
       pickupType_ = other.pickupType_;
       stockQuotaPerOccurrence_ = other.stockQuotaPerOccurrence_;
+      subscriptionId_ = other.subscriptionId_;
       buffSpeciesId_ = other.buffSpeciesId_;
       consumableSpeciesId_ = other.consumableSpeciesId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -21378,8 +21645,8 @@ namespace shared {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PickableConfigFromTile Clone() {
-      return new PickableConfigFromTile(this);
+    public PickableConfigFromTiled Clone() {
+      return new PickableConfigFromTiled(this);
     }
 
     /// <summary>Field number for the "initVirtualGridX" field.</summary>
@@ -21421,6 +21688,9 @@ namespace shared {
     /// <summary>Field number for the "firstShowRdfId" field.</summary>
     public const int FirstShowRdfIdFieldNumber = 4;
     private int firstShowRdfId_;
+    /// <summary>
+    /// If "MAGIC_EVTSUB_ID_NONE != subscriptionId", then this field represents the "firstShowRdfId" after subscriptionId is fulfilled
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int FirstShowRdfId {
@@ -21493,6 +21763,18 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "subscriptionId" field.</summary>
+    public const int SubscriptionIdFieldNumber = 10;
+    private int subscriptionId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int SubscriptionId {
+      get { return subscriptionId_; }
+      set {
+        subscriptionId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "buffSpeciesId" field.</summary>
     public const int BuffSpeciesIdFieldNumber = 1024;
     private int buffSpeciesId_;
@@ -21520,12 +21802,12 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as PickableConfigFromTile);
+      return Equals(other as PickableConfigFromTiled);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(PickableConfigFromTile other) {
+    public bool Equals(PickableConfigFromTiled other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -21541,6 +21823,7 @@ namespace shared {
       if (LifetimeRdfCountPerOccurrence != other.LifetimeRdfCountPerOccurrence) return false;
       if (PickupType != other.PickupType) return false;
       if (StockQuotaPerOccurrence != other.StockQuotaPerOccurrence) return false;
+      if (SubscriptionId != other.SubscriptionId) return false;
       if (BuffSpeciesId != other.BuffSpeciesId) return false;
       if (ConsumableSpeciesId != other.ConsumableSpeciesId) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -21559,6 +21842,7 @@ namespace shared {
       if (LifetimeRdfCountPerOccurrence != 0) hash ^= LifetimeRdfCountPerOccurrence.GetHashCode();
       if (PickupType != global::shared.PickupType.Immediate) hash ^= PickupType.GetHashCode();
       if (StockQuotaPerOccurrence != 0) hash ^= StockQuotaPerOccurrence.GetHashCode();
+      if (SubscriptionId != 0) hash ^= SubscriptionId.GetHashCode();
       if (BuffSpeciesId != 0) hash ^= BuffSpeciesId.GetHashCode();
       if (ConsumableSpeciesId != 0) hash ^= ConsumableSpeciesId.GetHashCode();
       if (_unknownFields != null) {
@@ -21615,6 +21899,10 @@ namespace shared {
         output.WriteRawTag(72);
         output.WriteInt32(StockQuotaPerOccurrence);
       }
+      if (SubscriptionId != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(SubscriptionId);
+      }
       if (BuffSpeciesId != 0) {
         output.WriteRawTag(128, 64);
         output.WriteInt32(BuffSpeciesId);
@@ -21669,6 +21957,10 @@ namespace shared {
         output.WriteRawTag(72);
         output.WriteInt32(StockQuotaPerOccurrence);
       }
+      if (SubscriptionId != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(SubscriptionId);
+      }
       if (BuffSpeciesId != 0) {
         output.WriteRawTag(128, 64);
         output.WriteInt32(BuffSpeciesId);
@@ -21714,6 +22006,9 @@ namespace shared {
       if (StockQuotaPerOccurrence != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(StockQuotaPerOccurrence);
       }
+      if (SubscriptionId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SubscriptionId);
+      }
       if (BuffSpeciesId != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(BuffSpeciesId);
       }
@@ -21728,7 +22023,7 @@ namespace shared {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(PickableConfigFromTile other) {
+    public void MergeFrom(PickableConfigFromTiled other) {
       if (other == null) {
         return;
       }
@@ -21758,6 +22053,9 @@ namespace shared {
       }
       if (other.StockQuotaPerOccurrence != 0) {
         StockQuotaPerOccurrence = other.StockQuotaPerOccurrence;
+      }
+      if (other.SubscriptionId != 0) {
+        SubscriptionId = other.SubscriptionId;
       }
       if (other.BuffSpeciesId != 0) {
         BuffSpeciesId = other.BuffSpeciesId;
@@ -21816,6 +22114,10 @@ namespace shared {
             StockQuotaPerOccurrence = input.ReadInt32();
             break;
           }
+          case 80: {
+            SubscriptionId = input.ReadInt32();
+            break;
+          }
           case 8192: {
             BuffSpeciesId = input.ReadInt32();
             break;
@@ -21875,6 +22177,10 @@ namespace shared {
             StockQuotaPerOccurrence = input.ReadInt32();
             break;
           }
+          case 80: {
+            SubscriptionId = input.ReadInt32();
+            break;
+          }
           case 8192: {
             BuffSpeciesId = input.ReadInt32();
             break;
@@ -21904,7 +22210,7 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[47]; }
+      get { return global::shared.RoomDownsyncFrameReflection.Descriptor.MessageTypes[48]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -21924,9 +22230,10 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Pickable(Pickable other) : this() {
+      pickableLocalId_ = other.pickableLocalId_;
       virtualGridX_ = other.virtualGridX_;
       virtualGridY_ = other.virtualGridY_;
-      configFromTile_ = other.configFromTile_ != null ? other.configFromTile_.Clone() : null;
+      configFromTiled_ = other.configFromTiled_ != null ? other.configFromTiled_.Clone() : null;
       remainingLifetimeRdfCount_ = other.remainingLifetimeRdfCount_;
       remainingRecurQuota_ = other.remainingRecurQuota_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -21938,8 +22245,20 @@ namespace shared {
       return new Pickable(this);
     }
 
+    /// <summary>Field number for the "pickableLocalId" field.</summary>
+    public const int PickableLocalIdFieldNumber = 1;
+    private int pickableLocalId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int PickableLocalId {
+      get { return pickableLocalId_; }
+      set {
+        pickableLocalId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "virtualGridX" field.</summary>
-    public const int VirtualGridXFieldNumber = 1;
+    public const int VirtualGridXFieldNumber = 2;
     private int virtualGridX_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -21951,7 +22270,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "virtualGridY" field.</summary>
-    public const int VirtualGridYFieldNumber = 2;
+    public const int VirtualGridYFieldNumber = 3;
     private int virtualGridY_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -21962,20 +22281,20 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "configFromTile" field.</summary>
-    public const int ConfigFromTileFieldNumber = 3;
-    private global::shared.PickableConfigFromTile configFromTile_;
+    /// <summary>Field number for the "configFromTiled" field.</summary>
+    public const int ConfigFromTiledFieldNumber = 4;
+    private global::shared.PickableConfigFromTiled configFromTiled_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::shared.PickableConfigFromTile ConfigFromTile {
-      get { return configFromTile_; }
+    public global::shared.PickableConfigFromTiled ConfigFromTiled {
+      get { return configFromTiled_; }
       set {
-        configFromTile_ = value;
+        configFromTiled_ = value;
       }
     }
 
     /// <summary>Field number for the "remainingLifetimeRdfCount" field.</summary>
-    public const int RemainingLifetimeRdfCountFieldNumber = 4;
+    public const int RemainingLifetimeRdfCountFieldNumber = 5;
     private int remainingLifetimeRdfCount_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -21987,7 +22306,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "remainingRecurQuota" field.</summary>
-    public const int RemainingRecurQuotaFieldNumber = 5;
+    public const int RemainingRecurQuotaFieldNumber = 6;
     private int remainingRecurQuota_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -22013,9 +22332,10 @@ namespace shared {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (PickableLocalId != other.PickableLocalId) return false;
       if (VirtualGridX != other.VirtualGridX) return false;
       if (VirtualGridY != other.VirtualGridY) return false;
-      if (!object.Equals(ConfigFromTile, other.ConfigFromTile)) return false;
+      if (!object.Equals(ConfigFromTiled, other.ConfigFromTiled)) return false;
       if (RemainingLifetimeRdfCount != other.RemainingLifetimeRdfCount) return false;
       if (RemainingRecurQuota != other.RemainingRecurQuota) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -22025,9 +22345,10 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (PickableLocalId != 0) hash ^= PickableLocalId.GetHashCode();
       if (VirtualGridX != 0) hash ^= VirtualGridX.GetHashCode();
       if (VirtualGridY != 0) hash ^= VirtualGridY.GetHashCode();
-      if (configFromTile_ != null) hash ^= ConfigFromTile.GetHashCode();
+      if (configFromTiled_ != null) hash ^= ConfigFromTiled.GetHashCode();
       if (RemainingLifetimeRdfCount != 0) hash ^= RemainingLifetimeRdfCount.GetHashCode();
       if (RemainingRecurQuota != 0) hash ^= RemainingRecurQuota.GetHashCode();
       if (_unknownFields != null) {
@@ -22048,24 +22369,28 @@ namespace shared {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (VirtualGridX != 0) {
+      if (PickableLocalId != 0) {
         output.WriteRawTag(8);
+        output.WriteInt32(PickableLocalId);
+      }
+      if (VirtualGridX != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(VirtualGridX);
       }
       if (VirtualGridY != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(VirtualGridY);
       }
-      if (configFromTile_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(ConfigFromTile);
+      if (configFromTiled_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(ConfigFromTiled);
       }
       if (RemainingLifetimeRdfCount != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteInt32(RemainingLifetimeRdfCount);
       }
       if (RemainingRecurQuota != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(48);
         output.WriteInt32(RemainingRecurQuota);
       }
       if (_unknownFields != null) {
@@ -22078,24 +22403,28 @@ namespace shared {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (VirtualGridX != 0) {
+      if (PickableLocalId != 0) {
         output.WriteRawTag(8);
+        output.WriteInt32(PickableLocalId);
+      }
+      if (VirtualGridX != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(VirtualGridX);
       }
       if (VirtualGridY != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(VirtualGridY);
       }
-      if (configFromTile_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(ConfigFromTile);
+      if (configFromTiled_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(ConfigFromTiled);
       }
       if (RemainingLifetimeRdfCount != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteInt32(RemainingLifetimeRdfCount);
       }
       if (RemainingRecurQuota != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(48);
         output.WriteInt32(RemainingRecurQuota);
       }
       if (_unknownFields != null) {
@@ -22108,14 +22437,17 @@ namespace shared {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (PickableLocalId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PickableLocalId);
+      }
       if (VirtualGridX != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(VirtualGridX);
       }
       if (VirtualGridY != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(VirtualGridY);
       }
-      if (configFromTile_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ConfigFromTile);
+      if (configFromTiled_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ConfigFromTiled);
       }
       if (RemainingLifetimeRdfCount != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(RemainingLifetimeRdfCount);
@@ -22135,17 +22467,20 @@ namespace shared {
       if (other == null) {
         return;
       }
+      if (other.PickableLocalId != 0) {
+        PickableLocalId = other.PickableLocalId;
+      }
       if (other.VirtualGridX != 0) {
         VirtualGridX = other.VirtualGridX;
       }
       if (other.VirtualGridY != 0) {
         VirtualGridY = other.VirtualGridY;
       }
-      if (other.configFromTile_ != null) {
-        if (configFromTile_ == null) {
-          ConfigFromTile = new global::shared.PickableConfigFromTile();
+      if (other.configFromTiled_ != null) {
+        if (configFromTiled_ == null) {
+          ConfigFromTiled = new global::shared.PickableConfigFromTiled();
         }
-        ConfigFromTile.MergeFrom(other.ConfigFromTile);
+        ConfigFromTiled.MergeFrom(other.ConfigFromTiled);
       }
       if (other.RemainingLifetimeRdfCount != 0) {
         RemainingLifetimeRdfCount = other.RemainingLifetimeRdfCount;
@@ -22169,25 +22504,29 @@ namespace shared {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            VirtualGridX = input.ReadInt32();
+            PickableLocalId = input.ReadInt32();
             break;
           }
           case 16: {
+            VirtualGridX = input.ReadInt32();
+            break;
+          }
+          case 24: {
             VirtualGridY = input.ReadInt32();
             break;
           }
-          case 26: {
-            if (configFromTile_ == null) {
-              ConfigFromTile = new global::shared.PickableConfigFromTile();
+          case 34: {
+            if (configFromTiled_ == null) {
+              ConfigFromTiled = new global::shared.PickableConfigFromTiled();
             }
-            input.ReadMessage(ConfigFromTile);
-            break;
-          }
-          case 32: {
-            RemainingLifetimeRdfCount = input.ReadInt32();
+            input.ReadMessage(ConfigFromTiled);
             break;
           }
           case 40: {
+            RemainingLifetimeRdfCount = input.ReadInt32();
+            break;
+          }
+          case 48: {
             RemainingRecurQuota = input.ReadInt32();
             break;
           }
@@ -22207,25 +22546,29 @@ namespace shared {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            VirtualGridX = input.ReadInt32();
+            PickableLocalId = input.ReadInt32();
             break;
           }
           case 16: {
+            VirtualGridX = input.ReadInt32();
+            break;
+          }
+          case 24: {
             VirtualGridY = input.ReadInt32();
             break;
           }
-          case 26: {
-            if (configFromTile_ == null) {
-              ConfigFromTile = new global::shared.PickableConfigFromTile();
+          case 34: {
+            if (configFromTiled_ == null) {
+              ConfigFromTiled = new global::shared.PickableConfigFromTiled();
             }
-            input.ReadMessage(ConfigFromTile);
-            break;
-          }
-          case 32: {
-            RemainingLifetimeRdfCount = input.ReadInt32();
+            input.ReadMessage(ConfigFromTiled);
             break;
           }
           case 40: {
+            RemainingLifetimeRdfCount = input.ReadInt32();
+            break;
+          }
+          case 48: {
             RemainingRecurQuota = input.ReadInt32();
             break;
           }

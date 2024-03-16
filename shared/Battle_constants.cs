@@ -143,6 +143,7 @@ namespace shared {
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;
         public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 8;
+        public static int DEFAULT_PREALLOC_PICKABLE_CAPACITY = 16;
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;
@@ -196,6 +197,8 @@ namespace shared {
         public static int TERMINATING_BUFF_SPECIES_ID = (-1031);
         public static int TERMINATING_DEBUFF_SPECIES_ID = (-1032);
         public static int TERMINATING_EVTSUB_ID = (-1033);
+        public static int TERMINATING_CONSUMABLE_SPECIES_ID = (-1034);
+        public static int TERMINATING_PICKABLE_LOCAL_ID = (-1035);
 
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
 

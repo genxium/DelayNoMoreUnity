@@ -572,6 +572,7 @@ message RoomDownsyncFrame {
     repeated EvtSubscription evtSubsArr = 8;
     uint64 waveNpcKilledEvtMaskCounter = 9;
 
+	repeated Pickable pickables = 10;  
 
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;
@@ -680,6 +681,17 @@ message Debuff {
     int32 stock = 2;
 }
 
+enum ConsumableType {
+    NoneCsmb = 0;
+    Refill = 1;
+    DbfRcv = 2; // Debuff recovery
+}
+
+message ConsumableConfig {
+    int32 speciesId = 1; 
+    int32 refillDelta = 2;
+};
+
 enum InventorySlotStockType {
 	NoneIv = 0;
 	TimedIv = 1; // Reusable after cooldown
@@ -765,25 +777,27 @@ enum PickupType {
 	PutIntoInventory = 1; 
 }
 
-message PickableConfigFromTile {
+message PickableConfigFromTiled {
     int32 initVirtualGridX = 1;
     int32 initVirtualGridY = 2;
     bool takesGravity = 3; 
-    int32 firstShowRdfId = 4; 
+    int32 firstShowRdfId = 4; // If "MAGIC_EVTSUB_ID_NONE != subscriptionId", then this field represents the "firstShowRdfId" after subscriptionId is fulfilled
     int32 recurQuota = 5;
     int32 recurIntervalRdfCount = 6;
     int32 lifetimeRdfCountPerOccurrence = 7;
     PickupType pickupType = 8;
     int32 stockQuotaPerOccurrence = 9; // Only meaningful when "pickupType == PutIntoInventory"
+    int32 subscriptionId = 10;
 
     int32 buffSpeciesId = 1024;
     int32 consumableSpeciesId = 1025; 
 }
 
 message Pickable {
-    int32 virtualGridX = 1;
-    int32 virtualGridY = 2;
-    PickableConfigFromTile configFromTile = 3; 
-    int32 remainingLifetimeRdfCount = 4; 
-    int32 remainingRecurQuota = 5;
+    int32 pickableLocalId = 1;
+    int32 virtualGridX = 2;
+    int32 virtualGridY = 3;
+    PickableConfigFromTiled configFromTiled = 4; 
+    int32 remainingLifetimeRdfCount = 5; 
+    int32 remainingRecurQuota = 6;
 }

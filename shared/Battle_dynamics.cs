@@ -1877,6 +1877,7 @@ namespace shared {
             var nextRenderFrameTraps = candidate.TrapsArr;
             var nextRenderFrameTriggers = candidate.TriggersArr;
             var nextEvtSubs = candidate.EvtSubsArr; 
+            var nextPickables = candidate.Pickables; 
             // Make a copy first
             for (int i = 0; i < roomCapacity; i++) {
                 var src = currRenderFrame.PlayersArr[i];
@@ -2001,6 +2002,17 @@ namespace shared {
                 l++;
             }
             nextRenderFrameTriggers[l].TriggerLocalId = TERMINATING_TRIGGER_ID;
+
+            int currPickableI = 0;
+            while (currPickableI < currRenderFrame.Pickables.Count && TERMINATING_PICKABLE_LOCAL_ID != currRenderFrame.Pickables[currPickableI].PickableLocalId) {
+                var src = currRenderFrame.Pickables[currPickableI];
+                int remainingLifetimeRdfCount = src.RemainingLifetimeRdfCount - 1;
+                if (remainingLifetimeRdfCount < 0) {
+                    continue;
+                }
+                AssignToPickable(src.PickableLocalId, src.VirtualGridX, src.VirtualGridY, src.ConfigFromTiled, remainingLifetimeRdfCount, src.RemainingRecurQuota, nextPickables[currPickableI]);
+                currPickableI++;
+            }
 
             /*
                [WARNING]

@@ -24,6 +24,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int preallocTrapCapacity = DEFAULT_PREALLOC_TRAP_CAPACITY;
     protected int preallocTriggerCapacity = DEFAULT_PREALLOC_TRIGGER_CAPACITY;
     protected int preallocEvtSubCapacity = DEFAULT_PREALLOC_EVTSUB_CAPACITY;
+    protected int preallocPickableCapacity = DEFAULT_PREALLOC_PICKABLE_CAPACITY;
 
     protected int playerRdfId; // After battle started, always increments monotonically (even upon reconnection)
     protected int renderFrameIdLagTolerance;
@@ -845,12 +846,13 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void preallocateHolders() {
         preallocateStepHolders(
             roomCapacity,
-            2400,
+            1024,
             preallocNpcCapacity,
             preallocBulletCapacity,
             preallocTrapCapacity,
             preallocTriggerCapacity,
             preallocEvtSubCapacity,
+            preallocPickableCapacity,
             out justFulfilledEvtSubCnt,
             out justFulfilledEvtSubArr,
             out residueCollided,
@@ -1358,6 +1360,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             var srcPolygon = NewRectPolygon(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0);
                             serializedBarrierPolygons.Add(srcPolygon.Serialize());
                         } else {
+                            // TODO: Sort the points by CounterClockwise order here!
                             var points = inMapCollider.points;
                             List<float> points2 = new List<float>();
                             foreach (var point in points) {
@@ -1763,8 +1766,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             return Math.Sign(lhs.Id - rhs.Id);
         });
 
-        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
-        historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity);
+        var startRdf = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity);
+        historyRdfHolder = NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity);
 
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
         startRdf.ShouldForceResync = false;
