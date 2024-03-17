@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="29" nextobjectid="398">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="398">
  <properties>
   <property name="battleDurationSeconds" value="100"/>
   <property name="levelId" value="1"/>
@@ -12,22 +12,51 @@
  <tileset firstgid="1036" source="../decoration/trees.tsx"/>
  <tileset firstgid="1039" source="../doors/doors.tsx"/>
  <tileset firstgid="1048" source="../shared_comps/pickable.tsx"/>
- <layer id="26" name="Background4" width="128" height="64">
+ <tileset firstgid="1480" source="../shared_comps/bkg-shrinked/sky-bkg.tsx"/>
+ <tileset firstgid="1496" source="../shared_comps/bkg-shrinked/mountain3-bkg.tsx"/>
+ <tileset firstgid="1528" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
+ <tileset firstgid="1544" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
+ <layer id="32" name="Background" width="128" height="64">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYgAAAAQ==
+   eJztmc0OgjAYBLnw/q/lwX8RX8ePQ2NiQiJC2y07m0y0RmTptL3YdcQ5h3456bp/rwcN8OcN/r3Bvzf49wb/3uDfG/x7g39v8O8N/r3Bvzf49wb/3qz9HxDaBu/e4N8b/HuDf2/w7w3+vcG/N/j3Bv/e4N8b/HuDf2/w7w3+vSGk9hqEuvu/dgfAP+Af8A/4B/wD/gH/gH/AP+Af8A/4h239E+8cYx2cgnNw6Rm3Nl7jcMo1Xm/BPXj0jFsbr3E4ZYjXZzAGr55xa+M1DgnZ8jypcYbt7R45es55nrLleVLjDNvbPXL0nPNcKirrS6WLQodh5t45+tR4xlb3f87frHUGqMyRSheFDuz/vOcq+URlfal0UejA/mf/l4rK+lLpotBBaT7Y+/VSwn96P2aY9yXXfH+WY0388h2V/VYqSs+r0EWhQ5oPzn/v879EVNaXSheFDmk+3teT5Ug=
   </data>
  </layer>
- <layer id="24" name="Background3" width="128" height="64">
+ <layer id="34" name="Background1" width="128" height="64">
   <data encoding="base64" compression="zlib">
-   eJzt1T0OgjAYgOF6SPEk6E0YvIjXYOMarG5CwsCAMSX8NH7P8KRLm7R5m7a/pNQDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANmadP4eOMdD+9D0j03/2PSPTf/Y5v1f0/j8MvddwH7Zr3/3o/8W2gLOzHL/I7TuQFH8/7Hdh/5VptvgumJd5a4VZ+yfa3wzai3/wgcF+wPA
+   eJztyUESgkAUQ8GPMuP9bwuiYhbIBdwx3VVvk1QBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/1ha1ZqeaWu+Ub6fV/Z3+qS9+Ub5Tr1qSrd0775hvsOcvaWeHt03ygcAAAAAXNsXpBCVoQ==
   </data>
  </layer>
- <layer id="18" name="Background2" width="128" height="64">
+ <layer id="33" name="Background2" width="128" height="64">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJzt0cERwiAQAMBLI2oPWon6VmswVhZSoHnADCF+8mF87M7chFwIcFwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/JfDEHHMcRr67n3rGPdONe1xjb538OtOHkvPnzleQ98zTTnGJVJ+lnH5NjffSq6MUzNvrtaYq/8+O/rSyzu2NZc6yvuYc1M1t861tdf1pybf5s6x7ckl1vddn69ed2z2r886N7kU6z6W2r6P8VWg
+   eJzt19lugzAQhWFueP/X677vK20T9bYHVSgIeeyxIY3b/p80UjqYie2BQJsGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFBqr22afcWB4lBxpDhWnChO2/m1yNeb753p87niQnGpuFJcK24Ut+1mzJDvjY9Nx01rka8337vT53vFg+JR8aR4VrwoXtvNmCHfGx+bjpvWIl9vvmu/403xrvhQrCafh3ErY2zq7+H80nxqfl1rr2PO9/6XvLV3n5FzQ7lYPnTMGuv5LqtOFwjvurzrzJlP6Bxvj6w6OXOKrT90n3lq5/R4VVgnpyexMdaa/lL/U+sP9T92D5SsL3Ysp2+e6ym3bz/Zf889VHP/U8/T1O/23P6X7L9nv1PrjK3Z+8zyvofU3v+1sX+h9Xn2b9f9D42x5lv62z6u9dv67w1r/tSps46nXujdKxTUqavOUvW2wbr2lrpuPe+HoXzsmTKeu3XMWltpjdSY2PGSfixVr3QOVg9zr1vrOrH+94tdW7m92+Z+7MIXhUxC8Q==
   </data>
  </layer>
- <layer id="20" name="Background1" width="128" height="64">
+ <layer id="35" name="Background3" width="128" height="64">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt0tFOwjAUBuDdsICCzKnw/m/ljfIqniU2aWqHdQQ1+n3Jn3U9J11p6ToAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlnpefZx7ibnXyKlS++pa5n/vPAAAAPD3rfuu20RuIreRbWQXuYvs++X1daV26bcm24a+NC5/X8u4XK9lTy3neK7nWneQ6nNnPxnieR8ZIw+Rx8hT5BA59svrQ6V26bfS3Gd9aVzuoWVcrtey55ZzPNdzrTvIz63W8xOG9z2lMzn280n9kzF7zqXsH2e+k975fkPDvecp77P8H9TqeWr3nr//d29HDC1M
+  </data>
+ </layer>
+ <layer id="18" name="Ground2" width="128" height="64">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt0UEOwiAQAMDtR9Q/6EvUs/oG+7PSB9oDJJReMDGmh5lkU7oQ2IUIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2JfDEHHMcRr+e/atI36x915do+8Oenro3aeO+xKP5c2fOV7DuqZvz/m2vinHuETK3zIuc3MzV3JlnJp1c7NHnd+bd2x7LvWW/zHnpmptnWt7rPtPTb7NnWP7JpdY33ddX73v2Jxf1zo3uRTrdyy9fQB+90qy
+  </data>
+ </layer>
+ <layer id="20" name="Ground1" width="128" height="64">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt2LENgCAQQFEYQp1MncWtHUEbGztNOEjuveQKuoPfUQoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8MdZe29AL0fvBehK/9z0z03/3PTPTf/c9M9N/9ye/lMtZW48y4D/TBH3/vIuUfu8W6z3eWs8+4D9I+795V2i9hmxBfEucOcqlQ==
   </data>
@@ -249,7 +278,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="28" name="Pickable">
+ <objectgroup id="28" name="Pickable" visible="0">
   <object id="395" gid="1193" x="234" y="990" width="32" height="32"/>
   <object id="396" gid="1194" x="1159" y="988" width="32" height="32"/>
   <object id="397" gid="1235" x="1297" y="990" width="32" height="32"/>
