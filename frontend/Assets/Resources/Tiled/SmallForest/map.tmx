@@ -16,6 +16,7 @@
  <tileset firstgid="1496" source="../shared_comps/bkg-shrinked/mountain3-bkg.tsx"/>
  <tileset firstgid="1528" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
  <tileset firstgid="1544" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
+ <tileset firstgid="1560" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
  <layer id="32" name="Background" width="128" height="64">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -26,7 +27,7 @@
  </layer>
  <layer id="34" name="Background1" width="128" height="64">
   <data encoding="base64" compression="zlib">
-   eJztyUESgkAUQ8GPMuP9bwuiYhbIBdwx3VVvk1QBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/1ha1ZqeaWu+Ub6fV/Z3+qS9+Ub5Tr1qSrd0775hvsOcvaWeHt03ygcAAAAAXNsXpBCVoQ==
+   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYgAAAAQ==
   </data>
  </layer>
  <layer id="33" name="Background2" width="128" height="64">
@@ -34,7 +35,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt19lugzAQhWFueP/X677vK20T9bYHVSgIeeyxIY3b/p80UjqYie2BQJsGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFBqr22afcWB4lBxpDhWnChO2/m1yNeb753p87niQnGpuFJcK24Ut+1mzJDvjY9Nx01rka8337vT53vFg+JR8aR4VrwoXtvNmCHfGx+bjpvWIl9vvmu/403xrvhQrCafh3ErY2zq7+H80nxqfl1rr2PO9/6XvLV3n5FzQ7lYPnTMGuv5LqtOFwjvurzrzJlP6Bxvj6w6OXOKrT90n3lq5/R4VVgnpyexMdaa/lL/U+sP9T92D5SsL3Ysp2+e6ym3bz/Zf889VHP/U8/T1O/23P6X7L9nv1PrjK3Z+8zyvofU3v+1sX+h9Xn2b9f9D42x5lv62z6u9dv67w1r/tSps46nXujdKxTUqavOUvW2wbr2lrpuPe+HoXzsmTKeu3XMWltpjdSY2PGSfixVr3QOVg9zr1vrOrH+94tdW7m92+Z+7MIXhUxC8Q==
+   eJztyckNwjAARFFfTBf031LCJpYQhSXUwLiFHK33pK85TCkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbDHUUsZ0SMd0Sud0qb7ev+aavaV7eqQpPdNcfb1/zZJ9pXf6pG9a06/6ev+a/U6SJEmSJElSr/0BDzMIXg==
   </data>
  </layer>
  <layer id="35" name="Background3" width="128" height="64">

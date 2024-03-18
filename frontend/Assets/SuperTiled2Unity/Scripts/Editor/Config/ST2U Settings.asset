@@ -25,6 +25,14 @@ MonoBehaviour:
     m_Material: {fileID: 2100000, guid: 4e2e0719d541a3a4d962ba3e17b987f2, type: 2}
   - m_LayerName: Ground3
     m_Material: {fileID: 2100000, guid: 4e2e0719d541a3a4d962ba3e17b987f2, type: 2}
+  - m_LayerName: Background
+    m_Material: {fileID: 2100000, guid: f227fffc8f933344cb200c7733fa09dd, type: 2}
+  - m_LayerName: Background1
+    m_Material: {fileID: 2100000, guid: f227fffc8f933344cb200c7733fa09dd, type: 2}
+  - m_LayerName: Background2
+    m_Material: {fileID: 2100000, guid: f227fffc8f933344cb200c7733fa09dd, type: 2}
+  - m_LayerName: Background3
+    m_Material: {fileID: 2100000, guid: f227fffc8f933344cb200c7733fa09dd, type: 2}
   m_ObjectTypesXml: {fileID: 0}
   m_ParseXmlError: 
   m_CollisionGeometryType: 1
