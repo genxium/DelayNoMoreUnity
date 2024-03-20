@@ -1398,6 +1398,35 @@ namespace shared {
             }
         }
 
+        private static void _calcPickableMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Pickable> nextRenderFramePickables, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Collider[] dynamicRectangleColliders, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, int iSt, int iEd, ILoggerBridge logger) {
+            int primaryHardOverlapIndex;
+            for (int i = iSt; i < iEd; i++) {
+                Collider pickableCollider = dynamicRectangleColliders[i];
+                if (null == pickableCollider.Data) continue;
+                var pickableNextFrame = pickableCollider.Data as Pickable; // [WARNING] See "_moveAndInsertPickableColliders", the bound data in each collider is already belonging to "nextRenderFramePickables"!
+                if (null == pickableNextFrame || TERMINATING_PICKABLE_LOCAL_ID == pickableNextFrame.PickableLocalId) {
+                    logger.LogWarn(String.Format("dynamicRectangleColliders[i:{0}] is not having pickable type! iSt={1}, iEd={2}", i, iSt, iEd));
+                    continue;
+                }
+
+                primaryOverlapResult.reset();
+
+                Collider aCollider = dynamicRectangleColliders[i];
+                ConvexPolygon aShape = aCollider.Shape;
+                int hardPushbackCnt = calcHardPushbacksNormsForPickable(currRenderFrame, pickableNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, logger);
+
+                if (0 < hardPushbackCnt) {
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, 0, false);
+
+                    float primaryPushbackX = hardPushbackNormsArr[i][primaryHardOverlapIndex].X;
+                    float primaryPushbackY = hardPushbackNormsArr[i][primaryHardOverlapIndex].Y;
+                    if (SNAP_INTO_PLATFORM_THRESHOLD < Math.Abs(pickableNextFrame.VelY)) {
+                        pickableNextFrame.VelY = 0;
+                    }
+                }
+            }
+        }
+
         private static CharacterSpawnerConfig lowerBoundForSpawnerConfig(int rdfId, RepeatedField<CharacterSpawnerConfig> characterSpawnerTimeSeq) {
             int l = 0, r = characterSpawnerTimeSeq.Count;
             while (l < r) {
@@ -1473,10 +1502,10 @@ namespace shared {
         }
 
         private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<EvtSubscription> nextRenderFrameEvtSubs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription currRdfWaveNpcKilledEvtSub, EvtSubscription nextRdfWaveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ref int justTriggeredStoryPointId, ILoggerBridge logger) {
-            if (1ul == fulfilledEvtSubscriptionSetMask) {
+            if (0 < ((ulong)MAGIC_EVTSUB_ID_WAVER & fulfilledEvtSubscriptionSetMask)) {
                 logger.LogInfo("wave inducer is fulfilled");
             }
-            if (2ul == fulfilledEvtSubscriptionSetMask) {
+            if (0 < ((ulong)MAGIC_EVTSUB_ID_WAVE_EXHAUST & fulfilledEvtSubscriptionSetMask)) {
                 logger.LogInfo("wave exhaust is fulfilled");
             }
             
@@ -1573,7 +1602,7 @@ namespace shared {
             }
         }
 
-        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, int colliderCnt, ILoggerBridge logger) {
+        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Pickable> nextRenderFramePickables, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, int pickableColliderCntOffset, int colliderCnt, ILoggerBridge logger) {
             for (int i = 0; i < roomCapacity + currNpcI; i++) {
                 var currCharacterDownsync = (i < roomCapacity ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 var thatCharacterInNextFrame = (i < roomCapacity ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
@@ -1762,6 +1791,19 @@ namespace shared {
                 trapInNextRenderFrame.VirtualGridX = nextColliderAttrVx - colliderAttr.HitboxOffsetX;
                 trapInNextRenderFrame.VirtualGridY = nextColliderAttrVy - colliderAttr.HitboxOffsetY;
             }
+
+            for (int i = pickableColliderCntOffset; i < colliderCnt; i++) {
+                var aCollider = dynamicRectangleColliders[i];
+                Pickable? pickableNextRenderFrame = aCollider.Data as Pickable;
+                if (null == pickableNextRenderFrame) {
+                    throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where pickableColliderCntOffset=" + pickableColliderCntOffset + ", colliderCnt=" + colliderCnt);
+                }
+
+                // Update "virtual grid position"
+                var (nextColliderVx, nextColliderVy) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
+                pickableNextRenderFrame.VirtualGridX = nextColliderVx;
+                pickableNextRenderFrame.VirtualGridY = nextColliderVy;
+            }
         }
 
         private static void _leftShiftDeadNpcs(int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<EvtSubscription> nextRdfEvtSubsArr, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, ref int nextNpcI, ILoggerBridge logger) {
@@ -1876,8 +1918,8 @@ namespace shared {
             int nextRenderFrameNpcLocalIdCounter = currRenderFrame.NpcLocalIdCounter;
             var nextRenderFrameTraps = candidate.TrapsArr;
             var nextRenderFrameTriggers = candidate.TriggersArr;
+            var nextRenderFramePickables = candidate.Pickables; 
             var nextEvtSubs = candidate.EvtSubsArr; 
-            var nextPickables = candidate.Pickables; 
             // Make a copy first
             for (int i = 0; i < roomCapacity; i++) {
                 var src = currRenderFrame.PlayersArr[i];
@@ -2003,17 +2045,6 @@ namespace shared {
             }
             nextRenderFrameTriggers[l].TriggerLocalId = TERMINATING_TRIGGER_ID;
 
-            int currPickableI = 0;
-            while (currPickableI < currRenderFrame.Pickables.Count && TERMINATING_PICKABLE_LOCAL_ID != currRenderFrame.Pickables[currPickableI].PickableLocalId) {
-                var src = currRenderFrame.Pickables[currPickableI];
-                int remainingLifetimeRdfCount = src.RemainingLifetimeRdfCount - 1;
-                if (remainingLifetimeRdfCount < 0) {
-                    continue;
-                }
-                AssignToPickable(src.PickableLocalId, src.VirtualGridX, src.VirtualGridY, src.ConfigFromTiled, remainingLifetimeRdfCount, src.RemainingRecurQuota, nextPickables[currPickableI]);
-                currPickableI++;
-            }
-
             /*
                [WARNING]
                1. The dynamic colliders will all be removed from "Space" at the end of this function due to the need for being rollback-compatible.
@@ -2032,7 +2063,7 @@ namespace shared {
 
                5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
              */
-            int colliderCnt = 0, bulletCnt = 0;
+            int colliderCnt = 0, bulletCnt = 0, pickableCnt = 0;
             _processPlayerInputs(currRenderFrame, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, prevDecodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity + currNpcI, logger);
             _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
@@ -2044,12 +2075,17 @@ namespace shared {
             int bulletColliderCntOffset = colliderCnt;
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _insertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
+
+            int pickableColliderCntOffset = colliderCnt;
+            _moveAndInsertPickableColliders(currRenderFrame, roomCapacity, nextRenderFramePickables, collisionSys, dynamicRectangleColliders, ref colliderCnt, ref pickableCnt, logger);
             
             ulong nextWaveNpcKilledEvtMaskCounter = currRenderFrame.WaveNpcKilledEvtMaskCounter;
             EvtSubscription currRdfWaveNpcKilledEvtSub = currRenderFrame.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1];
             EvtSubscription nextRdfWaveNpcKilledEvtSub = nextEvtSubs[MAGIC_EVTSUB_ID_WAVER - 1];
 
             _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+        
+            _calcPickableMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePickables, ref overlapResult, ref primaryOverlapResult, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, pickableColliderCntOffset, colliderCnt, logger);
             
             int nextNpcI = currNpcI;
             // [WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled-evtsub. 
@@ -2069,7 +2105,7 @@ namespace shared {
             
             _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, completelyStaticTrapColliders, logger);
 
-            _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
+            _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFramePickables, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, pickableColliderCntOffset, colliderCnt, logger);
 
             _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
 

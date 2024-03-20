@@ -279,10 +279,12 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="28" name="Pickable" visible="0">
-  <object id="395" gid="1193" x="234" y="990" width="32" height="32"/>
-  <object id="396" gid="1194" x="1159" y="988" width="32" height="32"/>
-  <object id="397" gid="1235" x="1297" y="990" width="32" height="32"/>
+ <objectgroup id="28" name="Pickable">
+  <object id="395" gid="1193" x="234" y="990" width="32" height="32">
+   <properties>
+    <property name="lifetimeRdfCountPerOccurrence" value="65535"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="336" x="81.333" y="988">

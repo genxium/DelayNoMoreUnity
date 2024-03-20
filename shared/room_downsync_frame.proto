@@ -583,6 +583,8 @@ message RoomDownsyncFrame {
 
 	int32 participantChangeId = 1029;
 
+	int32 pickableLocalIdCounter = 1030;
+
 	repeated PeerUdpAddr peerUdpAddrList = 2048;
 }
 
@@ -773,8 +775,8 @@ message SerializedTriggerTrackingIdToTrapLocalId {
 }
 
 enum PickupType {
-    Immediate = 0;
-	PutIntoInventory = 1; 
+    Immediate = 1;
+	PutIntoInventory = 2; 
 }
 
 message PickableConfigFromTiled {
@@ -800,4 +802,5 @@ message Pickable {
     PickableConfigFromTiled configFromTiled = 4; 
     int32 remainingLifetimeRdfCount = 5; 
     int32 remainingRecurQuota = 6;
+    int32 velY = 7;
 }

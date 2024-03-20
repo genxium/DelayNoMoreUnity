@@ -79,6 +79,7 @@ namespace shared {
 
         public static int MAGIC_EVTSUB_ID_NONE = 0;
         public static int MAGIC_EVTSUB_ID_WAVER = 1;
+        public static int MAGIC_EVTSUB_ID_WAVE_EXHAUST = 2;
         public static int MAGIC_EVTSUB_ID_STORYPOINT = 3;
 
         public static int SPEED_NOT_HIT_NOT_SPECIFIED = 0;
@@ -157,6 +158,9 @@ namespace shared {
         public static int NO_VFX_ID = 0;
 
         public static int INVALID_FRAMES_IN_CH_STATE = -1;
+        
+        public static int DEFAULT_PICKABLE_HITBOX_SIZE_X = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PICKABLE_HITBOX_SIZE_Y = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!

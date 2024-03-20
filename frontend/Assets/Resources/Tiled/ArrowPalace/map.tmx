@@ -11,11 +11,17 @@
  <tileset firstgid="1036" source="../decoration/trees.tsx"/>
  <tileset firstgid="1039" source="../doors/doors.tsx"/>
  <layer id="30" name="Background2" width="64" height="128">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYgAAAAQ==
   </data>
  </layer>
  <layer id="28" name="Background1" width="64" height="128">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt1NEJgzAUBVDjMHY1t9FOYjuEu3QMDTYoUkX8SZVz4JKPEB73faQoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiOpy++4RptxFH6YsfQ68u/oeUu9f/Y/0qsKcK+1h3fts/7W0i3+11XuvfzP+A22GPMu882P/eHZjXhny/vbPNT9lAAriYh4=
   </data>
