@@ -1416,10 +1416,8 @@ namespace shared {
                 int hardPushbackCnt = calcHardPushbacksNormsForPickable(currRenderFrame, pickableNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, logger);
 
                 if (0 < hardPushbackCnt) {
-                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, 0, false);
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
 
-                    float primaryPushbackX = hardPushbackNormsArr[i][primaryHardOverlapIndex].X;
-                    float primaryPushbackY = hardPushbackNormsArr[i][primaryHardOverlapIndex].Y;
                     if (SNAP_INTO_PLATFORM_THRESHOLD < Math.Abs(pickableNextFrame.VelY)) {
                         pickableNextFrame.VelY = 0;
                     }
@@ -2083,7 +2081,7 @@ namespace shared {
             EvtSubscription currRdfWaveNpcKilledEvtSub = currRenderFrame.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1];
             EvtSubscription nextRdfWaveNpcKilledEvtSub = nextEvtSubs[MAGIC_EVTSUB_ID_WAVER - 1];
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, pickableColliderCntOffset, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
         
             _calcPickableMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePickables, ref overlapResult, ref primaryOverlapResult, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, pickableColliderCntOffset, colliderCnt, logger);
             

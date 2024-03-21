@@ -1992,6 +1992,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inplaceHpBarPrefab: {fileID: 8851270757501664641, guid: 8c99894d84155ab4da3e74a60667137f, type: 3}
   fireballPrefab: {fileID: 2186353342994325362, guid: dd46b2abba7393549bb66bcf0b11127f, type: 3}
+  pickablePrefab: {fileID: 2186353342994325362, guid: 58137232783ef7440abd6b82c0761455, type: 3}
   errStackLogPanelPrefab: {fileID: 8411099102924968189, guid: e6ed24770a15248459edcefb9fad6256, type: 3}
   teamRibbonPrefab: {fileID: 764080390846769356, guid: 4ed940d7fecafa345a394af6e218fba0, type: 3}
   sfxSourcePrefab: {fileID: 7574081736914354599, guid: 7eed82879a8460e4c814eec5a7a1c3a6, type: 3}

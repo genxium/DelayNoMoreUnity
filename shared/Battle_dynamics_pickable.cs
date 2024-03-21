@@ -1,7 +1,4 @@
 using Google.Protobuf.Collections;
-using System;
-using System.Collections.Generic;
-using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2186353342994325325}
   - component: {fileID: 2186353342994325324}
   - component: {fileID: 2186353342994325327}
-  - component: {fileID: 6062873986988419954}
+  - component: {fileID: 8968216955811638024}
   m_Layer: 0
   m_Name: Pickable
   m_TagString: Untagged
@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 306415997
-  m_SortingLayer: 7
+  m_SortingLayerID: -133896011
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 321793906, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -106,7 +106,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &6062873986988419954
+--- !u!114 &8968216955811638024
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2186353342994325362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bf47ebba10393a4487abaed7b77a932, type: 3}
+  m_Script: {fileID: 11500000, guid: 65a790f681a036348b6abec99e148f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0

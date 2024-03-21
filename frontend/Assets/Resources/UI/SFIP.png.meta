@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
@@ -6263,19 +6263,19 @@ TextureImporter:
       SFIP-44: -1276712681
       SFIP-205: 811082748
       SFIP-17: -910749390
-      SFIP-228: 1590027785
       SFIP-24: -1572051162
+      SFIP-228: 1590027785
       SFIP-89: 1842644183
       SFIP-244: -1901664672
       SFIP-4: 2093836799
       SFIP-253: 1570549297
       SFIP-63: 111942152
       SFIP-11: 21651149
-      SFIP-157: 481820441
       SFIP-20: -890613682
       SFIP-171: -2037267113
-      SFIP-256: -803647517
       SFIP-42: -1684294484
+      SFIP-256: -803647517
+      SFIP-157: 481820441
       SFIP-243: 1572081378
       SFIP-130: 590662967
       SFIP-40: 892977368

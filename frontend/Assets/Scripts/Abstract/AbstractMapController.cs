@@ -36,6 +36,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int renderBufferSize;
     public GameObject inplaceHpBarPrefab;
     public GameObject fireballPrefab;
+    public GameObject pickablePrefab;
     public GameObject errStackLogPanelPrefab;
     public GameObject teamRibbonPrefab;
     public GameObject sfxSourcePrefab;
@@ -80,6 +81,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public GameObject linePrefab;
     protected KvPriorityQueue<string, FireballAnimController> cachedFireballs;
+    protected KvPriorityQueue<string, PickableAnimController> cachedPickables;
     protected Vector3[] debugDrawPositionsHolder = new Vector3[4]; // Currently only rectangles are drawn
     protected KvPriorityQueue<string, DebugLine> cachedLineRenderers;
     protected Dictionary<int, GameObject> npcSpeciesPrefabDict;
@@ -136,6 +138,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, InplaceHpBar>.ValScore cachedHpBarScore = (x) => x.score;
     protected KvPriorityQueue<string, CharacterAnimController>.ValScore cachedNpcScore = (x) => x.score;
     protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
+    protected KvPriorityQueue<string, PickableAnimController>.ValScore cachedPickableScore = (x) => x.score;
     protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
     protected KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
     protected KvPriorityQueue<string, SFXSource>.ValScore sfxNodeScore = (x) => x.score;
@@ -161,6 +164,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         string path = String.Format("Prefabs/{0}", triggerConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
     }
+
+    protected GameObject loadPickablePrefab(Pickable pickable) {
+        return Resources.Load("Prefabs/Pickable") as GameObject;
+    }
+
 
     public ReadyGo readyGoPanel;
     public SettlementPanel settlementPanel;
@@ -682,6 +690,61 @@ public abstract class AbstractMapController : MonoBehaviour {
             var animCtrl = triggerGameObj.GetComponent<TrapAnimationController>();
             animCtrl.updateAnim(trigger.State.ToString(), trigger.FramesInState, trigger.ConfigFromTiled.InitVelX, false);
         }
+
+        // Put all pickable nodes to infinitely far first
+        for (int i = cachedPickables.vals.StFrameId; i < cachedPickables.vals.EdFrameId; i++) {
+            var (res, pickableHolder) = cachedPickables.vals.GetByFrameId(i);
+            if (!res || null == pickableHolder) throw new ArgumentNullException(String.Format("There's no pickableHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedPickables.vals.StFrameId, cachedPickables.vals.EdFrameId));
+
+            newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, pickableHolder.gameObject.transform.position.z);
+            pickableHolder.gameObject.transform.position = newPosHolder;
+        }
+
+        for (int k = 0; k < rdf.Pickables.Count; k++) {
+            var pickable = rdf.Pickables[k];
+            if (TERMINATING_PICKABLE_LOCAL_ID == pickable.PickableLocalId) break;
+
+            var (cx, cy) = VirtualGridToPolygonColliderCtr(pickable.VirtualGridX, pickable.VirtualGridY);
+            var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(DEFAULT_PICKABLE_HITBOX_SIZE_X, DEFAULT_PICKABLE_HITBOX_SIZE_Y);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+
+            float halfBoxCh = .5f * boxCh;
+            float halfBoxCw = .5f * boxCw;
+            newTlPosHolder.Set(wx - halfBoxCw, wy + halfBoxCh, 0);
+            newTrPosHolder.Set(wx + halfBoxCw, wy + halfBoxCh, 0);
+            newBlPosHolder.Set(wx - halfBoxCw, wy - halfBoxCh, 0);
+            newBrPosHolder.Set(wx + halfBoxCw, wy - halfBoxCh, 0);
+
+            if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
+
+            string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
+
+            if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                animName = String.Format("Consumable{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
+            } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
+                animName = String.Format("Buff{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
+            }
+
+            if (null != animName) {
+                var pickableAnimHolder = cachedPickables.PopAny(lookupKey);
+                if (null == pickableAnimHolder) {
+                    pickableAnimHolder = cachedPickables.Pop();
+                    //Debug.Log(String.Format("@rdf.Id={0}, using a new pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                } else {
+                    //Debug.Log(String.Format("@rdf.Id={0}, using a cached pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                }
+
+                if (null != pickableAnimHolder) {
+                    if (pickableAnimHolder.lookUpTable.ContainsKey(animName)) {
+                        pickableAnimHolder.updateAnim(animName);
+                        newPosHolder.Set(wx, wy, pickableAnimHolder.gameObject.transform.position.z);
+                        pickableAnimHolder.gameObject.transform.position = newPosHolder;
+                    }
+                    pickableAnimHolder.score = rdf.Id;
+                    cachedPickables.Put(lookupKey, pickableAnimHolder);
+                }
+            }
+        }
     }
 
     protected void preallocateSfxNodes() {
@@ -900,6 +963,25 @@ public abstract class AbstractMapController : MonoBehaviour {
             holder.score = -1;
             string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
             cachedFireballs.Put(initLookupKey, holder);
+        }
+
+        // pickable
+        int pickableHoldersCap = 16;
+        if (null != cachedPickables) {
+            for (int i = cachedPickables.vals.StFrameId; i < cachedPickables.vals.EdFrameId; i++) {
+                var (res, pickable) = cachedPickables.vals.GetByFrameId(i);
+                if (!res || null == pickable) throw new ArgumentNullException(String.Format("There's no cachedPickable for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedPickables.vals.StFrameId, cachedPickables.vals.EdFrameId));
+                Destroy(pickable.gameObject);
+            }
+        }
+        cachedPickables = new KvPriorityQueue<string, PickableAnimController>(pickableHoldersCap, cachedPickableScore);
+
+        for (int i = 0; i < pickableHoldersCap; i++) {
+            GameObject newPickableNode = Instantiate(pickablePrefab, Vector3.zero, Quaternion.identity);
+            PickableAnimController holder = newPickableNode.GetComponent<PickableAnimController>();
+            holder.score = -1;
+            string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
+            cachedPickables.Put(initLookupKey, holder);
         }
 
         // team ribbon
@@ -1314,10 +1396,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         var npcsStartingCposList = new List<(Vector, int, int, int, int, bool, int, ulong, int)>();
         var trapList = new List<Trap>();
         var triggerList = new List<(Trigger, float, float)>();
+        var pickableList = new List<(Pickable, float, float)>();
         var evtSubList = new List<EvtSubscription>();
         float defaultPatrolCueRadius = 10;
         int trapLocalId = 0;
         int triggerLocalId = 0;
+        int pickableLocalId = 0;
 
         var mapProps = underlyingMap.GetComponent<SuperCustomProperties>();
         CustomProperty battleDurationSeconds;
@@ -1752,6 +1836,57 @@ public abstract class AbstractMapController : MonoBehaviour {
                         Destroy(triggerChild.gameObject); // [WARNING] It'll be animated by "TriggerPrefab" in "applyRoomDownsyncFrame" instead!
                     }
                     break;
+                case "Pickable":
+                    foreach (Transform pickableChild in child) {
+                        var tileObj = pickableChild.gameObject.GetComponent<SuperObject>();
+                        var tileProps = pickableChild.gameObject.GetComponent<SuperCustomProperties>();
+                        CustomProperty consumableSpeciesId, pickupType, takesGravity;
+                        tileProps.TryGetCustomProperty("consumableSpeciesId", out consumableSpeciesId);
+                        tileProps.TryGetCustomProperty("pickupType", out pickupType);
+                        tileProps.TryGetCustomProperty("takesGravity", out takesGravity);
+
+                        int consumableSpeciesIdVal = consumableSpeciesId.GetValueAsInt(); 
+                        PickupType pickupTypeVal = (
+                            null != pickupType && !pickupType.IsEmpty 
+                            ?  
+                            ("PutIntoInventory" == pickupType.GetValueAsString() ? PickupType.PutIntoInventory : PickupType.Immediate)  
+                            : 
+                            PickupType.Immediate
+                        );
+                        bool takesGravityVal = (
+                            null != takesGravity && !takesGravity.IsEmpty 
+                            ?  
+                            (1 == takesGravity.GetValueAsInt())  
+                            : 
+                            false
+                        );
+
+                        var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
+
+                        var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                        var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
+                        var pickable = new Pickable {
+                            PickableLocalId = pickableLocalId,
+                            VirtualGridX = rectCenterVx,
+                            VirtualGridY = rectCenterVy, 
+                            VelY = 0,
+                            RemainingLifetimeRdfCount = MAX_INT, // TODO: Read from the map
+                            ConfigFromTiled = new PickableConfigFromTiled {
+                                TakesGravity = takesGravityVal,
+                                InitVirtualGridX = rectCenterVx,
+                                InitVirtualGridY = rectCenterVy, 
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                ConsumableSpeciesId = consumableSpeciesIdVal,
+                                PickupType = pickupTypeVal,
+                            },
+                        };
+                        var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, spaceOffsetX, spaceOffsetY);
+                        pickableList.Add((pickable, wx, wy));
+
+                        ++pickableLocalId;
+                        Destroy(child.gameObject); // [WARNING] It'll be animated by "TriggerPrefab" in "applyRoomDownsyncFrame" instead!
+                    }
+                    break;
                 default:
                     break;
             }
@@ -1877,6 +2012,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (trigger, wx, wy) = triggerList[i];
             startRdf.TriggersArr[i] = trigger;
             spawnTriggerNode(trigger.TriggerLocalId, trigger.Config.SpeciesId, wx, wy);
+        }
+
+        for (int i = 0; i < pickableList.Count; i++) {
+            var (pickable, wx, wy) = pickableList[i];
+            startRdf.Pickables[i] = pickable;
         }
 
         for (int i = 0; i < evtSubList.Count; i++) {
