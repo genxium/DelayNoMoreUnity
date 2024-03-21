@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2186353342994325324}
   - component: {fileID: 2186353342994325327}
   - component: {fileID: 6062873986988419954}
-  m_Layer: 3
-  m_Name: Fireball
+  m_Layer: 0
+  m_Name: Pickable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9048bfd5a721aaa41881c661d33a510a, type: 2}
+  - {fileID: 2100000, guid: b50dc87dd1966734b84eecf26c8426c8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -75,12 +75,12 @@ SpriteRenderer:
   m_SortingLayerID: 306415997
   m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1494758721, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
+  m_Sprite: {fileID: 321793906, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 68.666664, y: 30.666666}
+  m_Size: {x: 0.24, y: 0.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -96,7 +96,7 @@ Animator:
   m_GameObject: {fileID: 2186353342994325362}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f46dce53bace3444797ed6b055e6ab9f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 67447db88ef011d4cb3c618355d52443, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
