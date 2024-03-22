@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
 using UnityEngine.InputSystem.OnScreen;
@@ -33,8 +34,12 @@ public class BattleInputManager : MonoBehaviour {
     public GameObject btnD;
     private bool customEnabled = true;
 
+    public bool enablePlatformSpecificHiding = false;
+    public Image joystickImg;
+    public Sprite joystickIdle, joystickLeft, joystickRight, joystickUp, joystickDown; 
+
     void Start() {
-        if (!Application.isMobilePlatform) {
+        if (enablePlatformSpecificHiding && !Application.isMobilePlatform) {
             joystick.gameObject.SetActive(false);
             btnA.gameObject.SetActive(false);
             btnB.gameObject.SetActive(false);
@@ -190,6 +195,25 @@ public class BattleInputManager : MonoBehaviour {
         float continuousDx = joystickX;
         float continuousDy = joystickY;
         var (_, _, discretizedDir) = DiscretizeDirection(continuousDx, continuousDy, joystickMoveEps);
+        // "GetEncodedInput" gets called by "AbstractMapController.doUpdate()", thus a proper spot to update UI
+        // TODO: Add sprites on skewed directions.
+        switch (discretizedDir) {
+        case 1:
+            joystickImg.sprite = joystickUp;
+            break;
+        case 2:
+            joystickImg.sprite = joystickDown;
+            break;
+        case 3:
+            joystickImg.sprite = joystickRight;
+            break;
+        case 4:
+            joystickImg.sprite = joystickLeft;
+            break;
+        default:
+            joystickImg.sprite = joystickIdle;
+            break;
+        }
         ulong ret = (ulong)(discretizedDir + btnALevel + btnBLevel + btnCLevel + btnDLevel);
         return ret;
     }
@@ -202,6 +226,7 @@ public class BattleInputManager : MonoBehaviour {
     public void reset() {
         joystickX = 0;
         joystickY = 0;
+        joystickImg.sprite = joystickIdle;
         realtimeBtnALevel = 0;
         cachedBtnALevel = 0;
         btnAEdgeTriggerLock = false;
@@ -223,11 +248,11 @@ public class BattleInputManager : MonoBehaviour {
             btnAEdgeTriggerLock = true;
         }
 
-        if (!Application.isMobilePlatform) return; // Save some resources on animating
+        if (enablePlatformSpecificHiding && !Application.isMobilePlatform) return; // Save some resources on animating
         if (rising) {
             btnA.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
-            btnA.transform.DOScale(0.75f * Vector3.one, 0.8f);
+            btnA.transform.DOScale(1.0f * Vector3.one, 0.8f);
         }
     }
 
@@ -238,11 +263,11 @@ public class BattleInputManager : MonoBehaviour {
             btnBEdgeTriggerLock = true;
         }
 
-        if (!Application.isMobilePlatform) return; // Save some resources on animating
+        if (enablePlatformSpecificHiding && !Application.isMobilePlatform) return; // Save some resources on animating
         if (rising) {
             btnB.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
-            btnB.transform.DOScale(0.75f * Vector3.one, 0.8f);
+            btnB.transform.DOScale(1.0f * Vector3.one, 0.8f);
         }
     }
 
@@ -256,7 +281,7 @@ public class BattleInputManager : MonoBehaviour {
         if (rising) {
             btnC.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
-            btnC.transform.DOScale(0.75f * Vector3.one, 0.8f);
+            btnC.transform.DOScale(1.0f * Vector3.one, 0.8f);
         }
     }
 
@@ -270,7 +295,7 @@ public class BattleInputManager : MonoBehaviour {
         if (rising) {
             btnD.transform.DOScale(0.3f * Vector3.one, 0.5f);
         } else {
-            btnD.transform.DOScale(0.75f * Vector3.one, 0.8f);
+            btnD.transform.DOScale(1.0f * Vector3.one, 0.8f);
         }
     }
 }

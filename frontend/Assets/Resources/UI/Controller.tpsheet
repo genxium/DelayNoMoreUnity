@@ -1,0 +1,56 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:60e2a6d5aa3f5c50270acfc55dda2204:a98593fde294d767cf77017a9f035aa9:4ad2382af953f0aec227f232847c5d5b$
+#
+:format=40300
+:texture=Controller.png
+:size=128x128
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+Bulleted-List;43;82;14;14; 0.5;0.5; 0;0;0;0
+Chevron-Arrow-Down;30;103;14;9; 0.5;0.5; 0;0;0;0
+Chevron-Arrow-Left;119;86;9;14; 0.5;0.5; 0;0;0;0
+Chevron-Arrow-Right;109;58;9;14; 0.5;0.5; 0;0;0;0
+Chevron-Arrow-Up;85;87;14;9; 0.5;0.5; 0;0;0;0
+Exit;31;89;12;14; 0.5;0.5; 0;0;0;0
+Game-Controller;99;89;14;7; 0.5;0.5; 0;0;0;0
+gamepad-blue;0;112;16;16; 0.5;0.5; 0;0;0;0
+gamepad-green;0;96;16;16; 0.5;0.5; 0;0;0;0
+gamepad-red;0;80;16;16; 0.5;0.5; 0;0;0;0
+gamepad-yellow;0;64;16;16; 0.5;0.5; 0;0;0;0
+Grid;16;70;14;14; 0.5;0.5; 0;0;0;0
+Heart;16;101;14;11; 0.5;0.5; 0;0;0;0
+Home;57;82;14;14; 0.5;0.5; 0;0;0;0
+Info;122;114;6;14; 0.5;0.5; 0;0;0;0
+joystick-down;0;48;16;16; 0.5;0.5; 0;0;0;0
+joystick-idle;0;32;16;16; 0.5;0.5; 0;0;0;0
+joystick-left;0;16;16;16; 0.5;0.5; 0;0;0;0
+joystick-right;0;0;16;16; 0.5;0.5; 0;0;0;0
+joystick-up;16;112;16;16; 0.5;0.5; 0;0;0;0
+keyboard-A;32;112;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-B;47;112;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-D;62;112;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-down;59;96;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-H;77;112;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-J;92;112;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-left;74;96;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-N;107;112;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-right;89;96;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-S;16;84;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-up;104;96;15;16; 0.5333333333333333;0.5; 0;0;0;0
+keyboard-W;44;96;15;16; 0.5333333333333333;0.5; 0;0;0;0
+Lock-Closed;31;75;12;14; 0.5;0.5; 0;0;0;0
+Lock-Open;85;73;12;14; 0.5;0.5; 0;0;0;0
+Music-0;113;72;12;14; 0.5;0.5; 0;0;0;0
+Music-1;43;69;8;13; 0.5;0.5; 0;0;0;0
+Question-Mark;118;58;9;14; 0.5;0.5; 0;0;0;0
+Redo;97;71;12;14; 0.5;0.5; 0;0;0;0
+Star;71;82;14;14; 0.5;0.5; 0;0;0;0
+Three-Dots-Horizontal;99;85;14;4; 0.5;0.5; 0;0;0;0
+Three-Dots-Vertical;122;100;4;14; 0.5;0.5; 0;0;0;0
