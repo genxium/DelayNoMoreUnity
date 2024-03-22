@@ -79,6 +79,7 @@ namespace shared {
 
         public static int MAGIC_EVTSUB_ID_NONE = 0;
         public static int MAGIC_EVTSUB_ID_WAVER = 1;
+        public static int MAGIC_EVTSUB_ID_WAVE_EXHAUST = 2;
         public static int MAGIC_EVTSUB_ID_STORYPOINT = 3;
 
         public static int SPEED_NOT_HIT_NOT_SPECIFIED = 0;
@@ -143,6 +144,7 @@ namespace shared {
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;
         public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 8;
+        public static int DEFAULT_PREALLOC_PICKABLE_CAPACITY = 16;
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;
@@ -156,6 +158,9 @@ namespace shared {
         public static int NO_VFX_ID = 0;
 
         public static int INVALID_FRAMES_IN_CH_STATE = -1;
+        
+        public static int DEFAULT_PICKABLE_HITBOX_SIZE_X = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PICKABLE_HITBOX_SIZE_Y = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!
@@ -174,8 +179,9 @@ namespace shared {
         public static float VERTICAL_PLATFORM_THRESHOLD = 0.9f;
         public static int MAGIC_FRAMES_TO_BE_ON_WALL = 12;
 
-
         public static int DYING_FRAMES_TO_RECOVER = 100; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
+
+        public static int PROACTIVE_TRIGGER_MAGIC_ACTIVE_FRAMES_TO_RECOVER = -1;
 
         public static int NO_SKILL = 0;
         public static int NO_SKILL_HIT = -1;
@@ -195,6 +201,8 @@ namespace shared {
         public static int TERMINATING_BUFF_SPECIES_ID = (-1031);
         public static int TERMINATING_DEBUFF_SPECIES_ID = (-1032);
         public static int TERMINATING_EVTSUB_ID = (-1033);
+        public static int TERMINATING_CONSUMABLE_SPECIES_ID = (-1034);
+        public static int TERMINATING_PICKABLE_LOCAL_ID = (-1035);
 
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
 

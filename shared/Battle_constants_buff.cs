@@ -154,5 +154,23 @@ namespace shared {
                     new KeyValuePair<int, BuffConfig>(XformToSuperKnifeGirl.SpeciesId, XformToSuperKnifeGirl),
                 }
         );
+
+        public static ConsumableConfig MpRefillSmall = new ConsumableConfig {
+            SpeciesId = 1,
+            RefillDelta = 800,
+        };
+
+        public static ConsumableConfig MpRefillMiddle = new ConsumableConfig {
+            SpeciesId = 2,
+            RefillDelta = 1600,
+        };
+
+        public static ImmutableDictionary<int, ConsumableConfig> consumableConfigs = ImmutableDictionary.Create<int, ConsumableConfig>().AddRange(
+                new[]
+                {
+                    new KeyValuePair<int, ConsumableConfig>(MpRefillSmall.SpeciesId, MpRefillSmall),
+                    new KeyValuePair<int, ConsumableConfig>(MpRefillMiddle.SpeciesId, MpRefillMiddle),
+                }
+        );
     }
 }

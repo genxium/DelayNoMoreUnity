@@ -1,0 +1,22 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:0d21199fa9b14e44c16dce3db59fb3a7:7cfa757c00c779244c0394018e13bcf9:b29f65abf55e255f545c274846dab46e$
+#
+:format=40300
+:texture=Spike.png
+:size=128x256
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+blockSteel;0;80;64;16; 0.5;0.5; 0;0;0;0
+SawBig;0;160;96;96; 0.48958299999999993;0.5052079999999999; 0;0;0;0
+SawSmall;0;96;64;64; 0.492188;0.5; 0;0;0;0
+SpikeblockSteel;64;96;64;32; 0.5;0.5; 0;0;0;0
+SpikeGroundTrap;64;128;64;32; 0.5;0.5; 0;0;0;0
+SteelspikeUp;112;224;16;32; 0.5;0.5; 0;0;0;0
+verticalBlockSteel;96;192;16;64; 0.5;0.5; 0;0;0;0

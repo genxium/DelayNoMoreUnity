@@ -4,6 +4,7 @@
  <tile id="0">
   <properties>
    <property name="collisionTypeMask" value="5"/>
+   <property name="prohibitsWallGrabbing" value="1"/>
    <property name="providesHardPushback" value="1"/>
    <property name="speciesId" value="1"/>
   </properties>
@@ -18,6 +19,7 @@
  </tile>
  <tile id="1">
   <properties>
+   <property name="prohibitsWallGrabbing" value="1"/>
    <property name="speciesId" value="2"/>
   </properties>
   <image width="64" height="32" source="SpikeblockSteel.png"/>
@@ -38,6 +40,7 @@
  </tile>
  <tile id="2">
   <properties>
+   <property name="prohibitsWallGrabbing" value="1"/>
    <property name="speciesId" value="3"/>
   </properties>
   <image width="64" height="32" source="SpikeGroundTrap.png"/>
@@ -67,6 +70,7 @@
  <tile id="5">
   <properties>
    <property name="collisionTypeMask" value="5"/>
+   <property name="prohibitsWallGrabbing" value="1"/>
    <property name="providesHardPushback" value="1"/>
    <property name="speciesId" value="4"/>
   </properties>

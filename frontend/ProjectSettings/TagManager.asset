@@ -8,7 +8,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - BloomingCamera
   - Water
   - UI
   - 
@@ -43,6 +43,9 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 876889059
+    locked: 0
+  - name: Ground
+    uniqueID: 2009823545
     locked: 0
   - name: Trigger
     uniqueID: 2342661519

@@ -829,7 +829,7 @@ namespace shared {
             }
         }
 
-        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, RepeatedField<EvtSubscription> nextRenderFrameEvtSubs, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref int justTriggeredStoryPointId, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
+        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
             // Calc pushbacks for each player (after its movement) w/o bullets
             if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
                 currPushbackFrameLog.Reset();
@@ -926,6 +926,26 @@ namespace shared {
                             break;
                         }
                         ConvexPolygon bShape = bCollider.Shape;
+                        var v4 = bCollider.Data as Pickable;
+                        if (null != v4 && currCharacterDownsync.JoinIndex <= roomCapacity) {
+                            if (TERMINATING_CONSUMABLE_SPECIES_ID != v4.ConfigFromTiled.ConsumableSpeciesId && 0 < v4.RemainingLifetimeRdfCount) {
+                                if (PickupType.Immediate == v4.ConfigFromTiled.PickupType) {
+                                    var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                                    if (clicked) {
+                                        var consumableConfig = consumableConfigs[v4.ConfigFromTiled.ConsumableSpeciesId];
+                                        if (MpRefillSmall.SpeciesId == consumableConfig.SpeciesId || MpRefillMiddle.SpeciesId == consumableConfig.SpeciesId) {
+                                            thatCharacterInNextFrame.Mp += consumableConfig.RefillDelta;
+                                            if (thatCharacterInNextFrame.Mp > thatCharacterInNextFrame.MaxMp) {
+                                                thatCharacterInNextFrame.Mp = thatCharacterInNextFrame.MaxMp;
+                                            }
+                                        }
+                                        v4.RemainingLifetimeRdfCount = -1; /// [WARNING] Prohibit concurrent pick-up, the character with smaller join index will win in case of a tie.
+                                    }
+
+                                }
+                            }
+                            continue;
+                        }
                         var v3 = bCollider.Data as TriggerColliderAttr;  
                         if (null != v3 && currCharacterDownsync.JoinIndex <= roomCapacity) {
                             // By now only "Player" can click "Trigger"s.
@@ -937,25 +957,7 @@ namespace shared {
                             if (clicked) {
                                 // Currently only allowing "Player" to click.
                                 var atkedTriggerInNextFrame = nextRenderFrameTriggers[v3.TriggerLocalId];
-                                var triggerConfigFromTiled = atkedTrigger.ConfigFromTiled;
-                                atkedTriggerInNextFrame.Quota = atkedTrigger.Quota - 1;
-                                atkedTriggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
-                                atkedTriggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
-
-                                if (StoryPoint.SpeciesId == atkedTriggerInNextFrame.ConfigFromTiled.SpeciesId) {
-                                    justTriggeredStoryPointId = atkedTriggerInNextFrame.ConfigFromTiled.StoryPointId;
-                                }
-
-                                if (null != nextRenderFrameEvtSubs && 0 < atkedTriggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && atkedTriggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrameEvtSubs.Count) {
-                                    var nextExhaustEvtSub = nextRenderFrameEvtSubs[atkedTriggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust - 1];
-                                    nextExhaustEvtSub.FulfilledEvtMask |= atkedTriggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
-                                    if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
-                                        fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id - 1));
-                                        nextExhaustEvtSub.DemandedEvtMask = (MAGIC_EVTSUB_ID_STORYPOINT == nextExhaustEvtSub.Id ? nextExhaustEvtSub.DemandedEvtMask : EVTSUB_NO_DEMAND_MASK);
-                                        nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
-                                        justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
-                                    }
-                                }
+                                atkedTriggerInNextFrame.FramesToRecover = PROACTIVE_TRIGGER_MAGIC_ACTIVE_FRAMES_TO_RECOVER; // then fired in "_calcTriggerReactions"
                             }
                         }
                         var v2 = bCollider.Data as TrapColliderAttr;
@@ -1038,12 +1040,27 @@ namespace shared {
                             continue;
                         }
 
-                        shapeOverlappedOtherChCnt++;
-
                         normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
                         if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
-                            landedOnGravityPushback = true;
+                            if (                
+                                Atk1         == v1.CharacterState ||
+                                Atk2         == v1.CharacterState ||
+                                Atk3         == v1.CharacterState ||
+                                Atk4         == v1.CharacterState ||
+                                Atk5         == v1.CharacterState ||
+                                InAirAtk1    == v1.CharacterState || 
+                                WalkingAtk1  == v1.CharacterState ||
+                                WalkingAtk4  == v1.CharacterState ||
+                                OnWallAtk1   == v1.CharacterState 
+                            ) {
+                                // [WARNING] Prohibit landing on attacking characters.
+                                continue;
+                            } else {
+                                landedOnGravityPushback = true;
+                            }
                         }
+
+                        shapeOverlappedOtherChCnt++;
 
                         if (primarySoftOverlapMagSquared < magSquared) {
                             primarySoftOverlapMagSquared = magSquared;
@@ -1243,11 +1260,8 @@ namespace shared {
                             if (bulletNextFrame.BattleAttr.OffenderJoinIndex <= roomCapacity) {
                                 // Only allowing Player to click
                                 var atkedTriggerInNextFrame = nextRenderFrameTriggers[atkedTriggerColliderAttr.TriggerLocalId];
-                                var triggerConfigFromTiled = atkedTrigger.ConfigFromTiled;
+                                atkedTriggerInNextFrame.FramesToRecover = PROACTIVE_TRIGGER_MAGIC_ACTIVE_FRAMES_TO_RECOVER; // then fired in "_calcTriggerReactions"
                                 exploded = true;
-                                atkedTriggerInNextFrame.Quota = atkedTrigger.Quota - 1;
-                                atkedTriggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
-                                atkedTriggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
                             }
                             break;
                         case CharacterDownsync atkedCharacterInCurrFrame:
@@ -1419,6 +1433,33 @@ namespace shared {
             }
         }
 
+        private static void _calcPickableMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Pickable> nextRenderFramePickables, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Collider[] dynamicRectangleColliders, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, int iSt, int iEd, ILoggerBridge logger) {
+            int primaryHardOverlapIndex;
+            for (int i = iSt; i < iEd; i++) {
+                Collider pickableCollider = dynamicRectangleColliders[i];
+                if (null == pickableCollider.Data) continue;
+                var pickableNextFrame = pickableCollider.Data as Pickable; // [WARNING] See "_moveAndInsertPickableColliders", the bound data in each collider is already belonging to "nextRenderFramePickables"!
+                if (null == pickableNextFrame || TERMINATING_PICKABLE_LOCAL_ID == pickableNextFrame.PickableLocalId) {
+                    logger.LogWarn(String.Format("dynamicRectangleColliders[i:{0}] is not having pickable type! iSt={1}, iEd={2}", i, iSt, iEd));
+                    continue;
+                }
+
+                primaryOverlapResult.reset();
+
+                Collider aCollider = dynamicRectangleColliders[i];
+                ConvexPolygon aShape = aCollider.Shape;
+                int hardPushbackCnt = calcHardPushbacksNormsForPickable(currRenderFrame, pickableNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, logger);
+
+                if (0 < hardPushbackCnt) {
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
+
+                    if (SNAP_INTO_PLATFORM_THRESHOLD < Math.Abs(pickableNextFrame.VelY)) {
+                        pickableNextFrame.VelY = 0;
+                    }
+                }
+            }
+        }
+
         private static CharacterSpawnerConfig lowerBoundForSpawnerConfig(int rdfId, RepeatedField<CharacterSpawnerConfig> characterSpawnerTimeSeq) {
             int l = 0, r = characterSpawnerTimeSeq.Count;
             while (l < r) {
@@ -1464,63 +1505,112 @@ namespace shared {
             }
         }
 
-        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription currRdfWaveNpcKilledEvtSub, EvtSubscription nextRdfWaveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ILoggerBridge logger) {
-            bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (currRdfWaveNpcKilledEvtSub.Id - 1))));
+        public static void fireTriggerTrackingTraps(Trigger triggerInNextFrame, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RoomDownsyncFrame nextRenderFrame, RepeatedField<Trap> nextRenderFrameTraps) {
 
+            triggerInNextFrame.FramesToFire = MAX_INT;
+            var configFromTiled = triggerInNextFrame.ConfigFromTiled;
+
+            var trackingIdList = configFromTiled.TrackingIdList;
+            foreach (int trackingId in trackingIdList) {
+                if (triggerTrackingIdToTrapLocalId.ContainsKey(trackingId)) {
+                    int trapLocalId = triggerTrackingIdToTrapLocalId[trackingId];
+                    var trapInNextFrame = nextRenderFrameTraps[trapLocalId];
+                    if (trapInNextFrame.Config.DestroyUponTriggered) {
+                        trapInNextFrame.TrapState = TrapState.Tdestroyed;
+                        trapInNextFrame.FramesInTrapState = 0;
+                    } else {
+                        trapInNextFrame.DirX = configFromTiled.InitVelX;
+                        trapInNextFrame.DirY = configFromTiled.InitVelY;
+                        trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
+                        var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
+                        var invDirMag = InvSqrt32(dirMagSq);
+                        var speedXfac = invDirMag * configFromTiled.InitVelX;
+                        var speedYfac = invDirMag * configFromTiled.InitVelY;
+                        var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
+                        trapInNextFrame.VelX = (int)(speedXfac * speedVal);
+                        trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                    }
+                }
+            }
+        }
+
+        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<EvtSubscription> nextRenderFrameEvtSubs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription currRdfWaveNpcKilledEvtSub, EvtSubscription nextRdfWaveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ref int justTriggeredStoryPointId, ILoggerBridge logger) {
+            if (0 < ((ulong)MAGIC_EVTSUB_ID_WAVER & fulfilledEvtSubscriptionSetMask)) {
+                logger.LogInfo("wave inducer is fulfilled");
+            }
+            if (0 < ((ulong)MAGIC_EVTSUB_ID_WAVE_EXHAUST & fulfilledEvtSubscriptionSetMask)) {
+                logger.LogInfo("wave exhaust is fulfilled");
+            }
+            
             int nextWaveNpcCnt = 0;
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
                 if (TERMINATING_TRIGGER_ID == currTrigger.TriggerLocalId) break;
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
-                if (TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) {
-                    // The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
-                    if (0 == currTrigger.FramesToFire) {
-                        fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
-                    } else if (0 == currTrigger.FramesToRecover) {
-                        if (0 < currTrigger.Quota) {
-                            triggerInNextFrame.Quota = currTrigger.Quota - 1;
-                            triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                            fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
-                        } else {
-                            triggerInNextFrame.State = TriggerState.Tready;
-                            triggerInNextFrame.FramesToFire = MAX_INT;
-                            triggerInNextFrame.FramesToRecover = MAX_INT;
-                        }
-                    }
-                } else if (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask) {
-                    EvtSubscription triggerSubscribedInstance = currRenderFrame.EvtSubsArr[currTrigger.ConfigFromTiled.SubscriptionId - 1];
-                    bool fulfilledFromEvtSub = (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (currTrigger.ConfigFromTiled.SubscriptionId - 1))));
 
-                    if (fulfilledFromEvtSub) {
-                        if (0 < currTrigger.Quota) {
-                            triggerInNextFrame.Quota = currTrigger.Quota - 1;
-                            triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                            triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;
-                            if (currTrigger.ConfigFromTiled.SubscriptionId == nextRdfWaveNpcKilledEvtSub.Id) {
-                                var chSpawnerConfig = lowerBoundForSpawnerConfig(triggerInNextFrame.ConfigFromTiled.QuotaCap - triggerInNextFrame.Quota, triggerInNextFrame.ConfigFromTiled.CharacterSpawnerTimeSeq);
-                                nextWaveNpcCnt += (chSpawnerConfig.SpeciesIdList.Count < triggerInNextFrame.ConfigFromTiled.SubCycleQuota ? chSpawnerConfig.SpeciesIdList.Count : triggerInNextFrame.ConfigFromTiled.SubCycleQuota);
-                                nextWaveNpcKilledEvtMaskCounter = 0;
-                            }
-                        } else {
-                            publishTriggerExhausted(triggerInNextFrame, nextRenderFrame, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt);
-                        }
-                    } else if (0 == currTrigger.FramesToFire) {
-                        // [WARNING] The information of "justFulfilled" will be lost after then just-fulfilled renderFrame, thus temporarily using "FramesToFire" to keep track of subsequent spawning
-                        if (TimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId || WaveTimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId) {
-                            fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
-                        } else {
-                            fireTriggerTrackingTraps(triggerInNextFrame, triggerTrackingIdToTrapLocalId, nextRenderFrame, nextRenderFrameTraps);
-                        }
-                    }
-                } else {
-                    bool fulfilledByFramesToFire = (StoryPoint.SpeciesId != currTrigger.ConfigFromTiled.SpeciesId && 0 == currTrigger.FramesToFire);
-                    if (fulfilledByFramesToFire) {
+                // [WARNING] The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
+                bool mainCycleFulfilled = (
+                    (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask && (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (currTrigger.ConfigFromTiled.SubscriptionId - 1))))) // TODO: Make TRIGGER_MASK_BY_SUBSCRIPTION respect "currTrigger.FramesToRecover" too
+                    ||
+                    ((TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) && (0 == currTrigger.FramesToRecover))
+                    ||
+                    ((TRIGGER_MASK_BY_MOVEMENT == currTrigger.Config.TriggerMask || TRIGGER_MASK_BY_ATK == currTrigger.Config.TriggerMask) && PROACTIVE_TRIGGER_MAGIC_ACTIVE_FRAMES_TO_RECOVER == triggerInNextFrame.FramesToRecover)
+                    );
+                if (0 == currTrigger.FramesToFire) {
+                    // [WARNING] The information of "justFulfilled" will be lost after then just-fulfilled renderFrame, thus temporarily using "FramesToFire" to keep track of subsequent spawning
+                    if (TimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId || WaveTimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId) {
+                        fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
+                    } else {
                         fireTriggerTrackingTraps(triggerInNextFrame, triggerTrackingIdToTrapLocalId, nextRenderFrame, nextRenderFrameTraps);
+                    }
+                } else if (mainCycleFulfilled) {
+                    if (0 < currTrigger.Quota) {
+                        triggerInNextFrame.State = TriggerState.TcoolingDown;
+                        triggerInNextFrame.FramesInState = 0;
+
+                        triggerInNextFrame.Quota = currTrigger.Quota - 1;
+                        triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
+                        triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;
+                        if (
+                            (TimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId || WaveTimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId)
+                            &&
+                            currTrigger.ConfigFromTiled.SubscriptionId == nextRdfWaveNpcKilledEvtSub.Id
+                        ) {
+                            var chSpawnerConfig = lowerBoundForSpawnerConfig(triggerInNextFrame.ConfigFromTiled.QuotaCap - triggerInNextFrame.Quota, triggerInNextFrame.ConfigFromTiled.CharacterSpawnerTimeSeq);
+                            nextWaveNpcCnt += (chSpawnerConfig.SpeciesIdList.Count < triggerInNextFrame.ConfigFromTiled.SubCycleQuota ? chSpawnerConfig.SpeciesIdList.Count : triggerInNextFrame.ConfigFromTiled.SubCycleQuota);
+                        } else {
+                            if (StoryPoint.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId) {
+                                justTriggeredStoryPointId = triggerInNextFrame.ConfigFromTiled.StoryPointId;
+                            }
+
+                            if (null != nextRenderFrameEvtSubs && 0 < triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrameEvtSubs.Count) {
+                                var nextExhaustEvtSub = nextRenderFrameEvtSubs[triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust - 1];
+                                nextExhaustEvtSub.FulfilledEvtMask |= triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
+                                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
+                                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id - 1));
+                                    nextExhaustEvtSub.DemandedEvtMask = (MAGIC_EVTSUB_ID_STORYPOINT == nextExhaustEvtSub.Id ? nextExhaustEvtSub.DemandedEvtMask : EVTSUB_NO_DEMAND_MASK);
+                                    nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
+                                    justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
+                                }
+                            }
+                        }
+                    } else {
+                        handleTriggerExhausted(triggerInNextFrame, nextRenderFrame, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt);
+                    }
+                } else if (0 == currTrigger.FramesToRecover) {
+                    // replenish upon mainCycle ends, but "false == mainCycleFulfilled"
+                    if (0 < currTrigger.Quota) {
+                        triggerInNextFrame.State = TriggerState.Tready;
+                        triggerInNextFrame.FramesInState = 0;
                     }
                 }
             }
 
+            ulong currRdfWaveKilledEvtSubMask = (1ul << (currRdfWaveNpcKilledEvtSub.Id - 1));
+            bool nextWaveTriggerJustFulfilled = (0 < (fulfilledEvtSubscriptionSetMask & currRdfWaveKilledEvtSubMask)); // [WARNING] MUST be put after traversal of all triggers, because during traversal "fulfilledEvtSubscriptionSetMask" might still be updated.
+
             if (nextWaveTriggerJustFulfilled) {
+                nextWaveNpcKilledEvtMaskCounter = 0; // [WARNING] Multiple NPC spawning triggers for a same round MUST enter "mainCycleFulfilled" block in the same renderFrame, such that they share this "nextWaveNpcKilledEvtMaskCounter"; they may differentiate from each other by different "delayedFrames".
                 fulfilledEvtSubscriptionSetMask |= (1ul << (nextRdfWaveNpcKilledEvtSub.Id - 1));
                 nextRdfWaveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
                 nextRdfWaveNpcKilledEvtSub.FulfilledEvtMask = 0;
@@ -1545,7 +1635,7 @@ namespace shared {
             }
         }
 
-        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, int colliderCnt, ILoggerBridge logger) {
+        private static void _processEffPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Pickable> nextRenderFramePickables, Vector[] effPushbacks, Collider[] dynamicRectangleColliders, int trapColliderCntOffset, int bulletColliderCntOffset, int pickableColliderCntOffset, int colliderCnt, ILoggerBridge logger) {
             for (int i = 0; i < roomCapacity + currNpcI; i++) {
                 var currCharacterDownsync = (i < roomCapacity ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 var thatCharacterInNextFrame = (i < roomCapacity ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
@@ -1734,6 +1824,19 @@ namespace shared {
                 trapInNextRenderFrame.VirtualGridX = nextColliderAttrVx - colliderAttr.HitboxOffsetX;
                 trapInNextRenderFrame.VirtualGridY = nextColliderAttrVy - colliderAttr.HitboxOffsetY;
             }
+
+            for (int i = pickableColliderCntOffset; i < colliderCnt; i++) {
+                var aCollider = dynamicRectangleColliders[i];
+                Pickable? pickableNextRenderFrame = aCollider.Data as Pickable;
+                if (null == pickableNextRenderFrame) {
+                    throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where pickableColliderCntOffset=" + pickableColliderCntOffset + ", colliderCnt=" + colliderCnt);
+                }
+
+                // Update "virtual grid position"
+                var (nextColliderVx, nextColliderVy) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
+                pickableNextRenderFrame.VirtualGridX = nextColliderVx;
+                pickableNextRenderFrame.VirtualGridY = nextColliderVy;
+            }
         }
 
         private static void _leftShiftDeadNpcs(int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<EvtSubscription> nextRdfEvtSubsArr, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, ref int nextNpcI, ILoggerBridge logger) {
@@ -1848,6 +1951,7 @@ namespace shared {
             int nextRenderFrameNpcLocalIdCounter = currRenderFrame.NpcLocalIdCounter;
             var nextRenderFrameTraps = candidate.TrapsArr;
             var nextRenderFrameTriggers = candidate.TriggersArr;
+            var nextRenderFramePickables = candidate.Pickables; 
             var nextEvtSubs = candidate.EvtSubsArr; 
             // Make a copy first
             for (int i = 0; i < roomCapacity; i++) {
@@ -1992,14 +2096,33 @@ namespace shared {
 
                5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
              */
-            int colliderCnt = 0, bulletCnt = 0;
+            int colliderCnt = 0, bulletCnt = 0, pickableCnt = 0;
             _processPlayerInputs(currRenderFrame, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, prevDecodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity + currNpcI, logger);
             _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             int trapColliderCntOffset = colliderCnt;
             _moveAndInsertDynamicTrapColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
             
-            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, nextEvtSubs, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, ref justTriggeredStoryPointId, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
+            int bulletColliderCntOffset = colliderCnt;
+            _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
+            _insertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
+
+            int pickableColliderCntOffset = colliderCnt;
+            _moveAndInsertPickableColliders(currRenderFrame, roomCapacity, nextRenderFramePickables, collisionSys, dynamicRectangleColliders, effPushbacks, ref colliderCnt, ref pickableCnt, logger);
+
+            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
+
+            ulong nextWaveNpcKilledEvtMaskCounter = currRenderFrame.WaveNpcKilledEvtMaskCounter;
+            EvtSubscription currRdfWaveNpcKilledEvtSub = currRenderFrame.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1];
+            EvtSubscription nextRdfWaveNpcKilledEvtSub = nextEvtSubs[MAGIC_EVTSUB_ID_WAVER - 1];
+
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, pickableColliderCntOffset, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+        
+            _calcPickableMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePickables, ref overlapResult, ref primaryOverlapResult, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, pickableColliderCntOffset, colliderCnt, logger);
+            
+            int nextNpcI = currNpcI;
+            // [WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled-evtsub. 
+            _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextEvtSubs, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, currRdfWaveNpcKilledEvtSub, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, ref justTriggeredStoryPointId, logger);
 
             // Trigger subscription-based NPC movements
             for (int i = 0; i < currNpcI; i++) {
@@ -2011,25 +2134,11 @@ namespace shared {
                 dst.SubscriptionId = MAGIC_EVTSUB_ID_NONE;
             }
 
-            int bulletColliderCntOffset = colliderCnt;
-            _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
-            _insertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
-            
-            ulong nextWaveNpcKilledEvtMaskCounter = currRenderFrame.WaveNpcKilledEvtMaskCounter;
-            EvtSubscription currRdfWaveNpcKilledEvtSub = currRenderFrame.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1];
-            EvtSubscription nextRdfWaveNpcKilledEvtSub = nextEvtSubs[MAGIC_EVTSUB_ID_WAVER - 1];
-
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, colliderCnt, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
-            
-            int nextNpcI = currNpcI;
-            // [WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled-evtsub. 
-            _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextRenderFrameTraps, nextRenderFrameTriggers, triggerTrackingIdToTrapLocalId, nextRenderFrameNpcs, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextWaveNpcKilledEvtMaskCounter, currRdfWaveNpcKilledEvtSub, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, logger);
-
             _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);
             
             _calcCompletelyStaticTrapDamage(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, ref overlapResult, collision, completelyStaticTrapColliders, logger);
 
-            _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, colliderCnt, logger);
+            _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFramePickables, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, pickableColliderCntOffset, colliderCnt, logger);
 
             _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
 
@@ -2196,33 +2305,7 @@ namespace shared {
             return false;
         }
 
-        public static void fireTriggerTrackingTraps(Trigger triggerInNextFrame, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RoomDownsyncFrame nextRenderFrame, RepeatedField<Trap> nextRenderFrameTraps) {
-            
-            triggerInNextFrame.State = TriggerState.Tready;
-            triggerInNextFrame.FramesToFire = MAX_INT;
-            triggerInNextFrame.FramesToRecover = MAX_INT;
-            var configFromTiled = triggerInNextFrame.ConfigFromTiled;
-
-            var trackingIdList = configFromTiled.TrackingIdList;
-            foreach (int trackingId in trackingIdList) {
-                if (triggerTrackingIdToTrapLocalId.ContainsKey(trackingId)) {
-                    int trapLocalId = triggerTrackingIdToTrapLocalId[trackingId];
-                    var trapInNextFrame = nextRenderFrameTraps[trapLocalId];
-                    trapInNextFrame.VelX = configFromTiled.InitVelX;
-                    trapInNextFrame.VelY = configFromTiled.InitVelY;
-                    trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
-                    var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
-                    var invDirMag = InvSqrt32(dirMagSq);
-                    var speedXfac = invDirMag * configFromTiled.InitVelX;
-                    var speedYfac = invDirMag * configFromTiled.InitVelY;
-                    var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
-                    trapInNextFrame.VelX = (int)(speedXfac * speedVal);
-                    trapInNextFrame.VelY = (int)(speedYfac * speedVal);
-                }
-            }
-        }
-
-        private static void publishTriggerExhausted(Trigger triggerInNextFrame, RoomDownsyncFrame nextRenderFrame, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt) {
+        private static void handleTriggerExhausted(Trigger triggerInNextFrame, RoomDownsyncFrame nextRenderFrame, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt) {
 
             triggerInNextFrame.State = TriggerState.Tready;
             triggerInNextFrame.FramesToFire = MAX_INT;
@@ -2232,12 +2315,7 @@ namespace shared {
             if (MAGIC_EVTSUB_ID_NONE != configFromTiled.PublishingToEvtSubIdUponExhaust && (0 <= configFromTiled.PublishingToEvtSubIdUponExhaust && configFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrame.EvtSubsArr.Count)) {
                 var nextExhaustEvtSub = nextRenderFrame.EvtSubsArr[configFromTiled.PublishingToEvtSubIdUponExhaust - 1];
                 nextExhaustEvtSub.FulfilledEvtMask |= configFromTiled.PublishingEvtMaskUponExhaust;
-                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
-                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id - 1));
-                    nextExhaustEvtSub.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
-                    nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
-                    justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
-                }
+                // [WARNING] DON'T check fulfillment or update "fulfilledEvtSubscriptionSetMask" here, leave it to the next "Step(...)" and we'll be more clear on that "fulfilledEvtSubscriptionSetMask obtained during assignment" only impacts "_calcTriggerReactions" within the same "Step(...)"
             }
         }
     }

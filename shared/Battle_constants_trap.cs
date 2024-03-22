@@ -16,7 +16,7 @@ namespace shared {
             Damage = 15,
             HitStunFrames = 25,
             HitInvinsibleFrames = 120,
-            DestroyUponHit = false,
+            Destroyable = false,
             SpeciesName = "LinearSpike",
             Hardness = 6, 
         };
@@ -29,7 +29,7 @@ namespace shared {
             Damage = 5,
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
-            DestroyUponHit = false,
+            Destroyable = false,
             SpeciesName = "LinearBallSpike",
             Hardness = 6, 
         };
@@ -47,7 +47,7 @@ namespace shared {
             Damage = 8,
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
-            DestroyUponHit = false,
+            Destroyable = false,
             SpeciesName = "SawSmall",
             Hardness = 8, 
         };
@@ -60,9 +60,22 @@ namespace shared {
             Damage = 16,
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
-            DestroyUponHit = false,
+            Destroyable = false,
             SpeciesName = "SawBig",
             Hardness = 9, 
+        };
+
+        public static TrapConfig EscapeDoor = new TrapConfig {
+            SpeciesId = 7,
+            Destroyable = false,
+            SpeciesName = "EscapeDoor",
+        };
+
+        public static TrapConfig GreenGate = new TrapConfig {
+            SpeciesId = 8,
+            Destroyable = true,
+            SpeciesName = "GreenGate",
+            DestroyUponTriggered = true,
         };
 
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
@@ -74,6 +87,7 @@ namespace shared {
                     new KeyValuePair<int, TrapConfig>(VerticalTrapBarrier.SpeciesId, VerticalTrapBarrier),
                     new KeyValuePair<int, TrapConfig>(SawSmall.SpeciesId, SawSmall),
                     new KeyValuePair<int, TrapConfig>(SawBig.SpeciesId, SawBig),
+                    new KeyValuePair<int, TrapConfig>(GreenGate.SpeciesId, GreenGate),
                 }
         );
     }

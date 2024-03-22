@@ -374,9 +374,11 @@ message TrapConfig {
     int32 damage = 5;
 	int32 hitStunFrames = 6;
 	int32 hitInvinsibleFrames = 7;
-    bool destroyUponHit = 8; // for most traps and long lasting melee bullet
+    bool destroyable = 8;
 
     int32 hardness = 9;
+
+    bool destroyUponTriggered = 10;
 
 	// TODO: Instead of damage, a trap should also be able to provide pushbacks like a "trampoline" in only a limited "framesToRecover", possible started by a Trigger.
 
@@ -570,6 +572,7 @@ message RoomDownsyncFrame {
     repeated EvtSubscription evtSubsArr = 8;
     uint64 waveNpcKilledEvtMaskCounter = 9;
 
+	repeated Pickable pickables = 10;  
 
 	uint64 backendUnconfirmedMask = 1024; // Indexed by "joinIndex", same compression concern as stated in InputFrameDownsync
 	bool shouldForceResync = 1025;
@@ -579,6 +582,8 @@ message RoomDownsyncFrame {
 	int32 npcLocalIdCounter = 1028;
 
 	int32 participantChangeId = 1029;
+
+	int32 pickableLocalIdCounter = 1030;
 
 	repeated PeerUdpAddr peerUdpAddrList = 2048;
 }
@@ -678,6 +683,17 @@ message Debuff {
     int32 stock = 2;
 }
 
+enum ConsumableType {
+    NoneCsmb = 0;
+    Refill = 1;
+    DbfRcv = 2; // Debuff recovery
+}
+
+message ConsumableConfig {
+    int32 speciesId = 1; 
+    int32 refillDelta = 2;
+};
+
 enum InventorySlotStockType {
 	NoneIv = 0;
 	TimedIv = 1; // Reusable after cooldown
@@ -756,4 +772,35 @@ message SerializedTrapLocalIdToColliderAttrs {
 
 message SerializedTriggerTrackingIdToTrapLocalId {
 	map<int32, int32> dict = 1;
+}
+
+enum PickupType {
+    Immediate = 1;
+	PutIntoInventory = 2; 
+}
+
+message PickableConfigFromTiled {
+    int32 initVirtualGridX = 1;
+    int32 initVirtualGridY = 2;
+    bool takesGravity = 3; 
+    int32 firstShowRdfId = 4; // If "MAGIC_EVTSUB_ID_NONE != subscriptionId", then this field represents the "firstShowRdfId" after subscriptionId is fulfilled
+    int32 recurQuota = 5;
+    int32 recurIntervalRdfCount = 6;
+    int32 lifetimeRdfCountPerOccurrence = 7;
+    PickupType pickupType = 8;
+    int32 stockQuotaPerOccurrence = 9; // Only meaningful when "pickupType == PutIntoInventory"
+    int32 subscriptionId = 10;
+
+    int32 buffSpeciesId = 1024;
+    int32 consumableSpeciesId = 1025; 
+}
+
+message Pickable {
+    int32 pickableLocalId = 1;
+    int32 virtualGridX = 2;
+    int32 virtualGridY = 3;
+    PickableConfigFromTiled configFromTiled = 4; 
+    int32 remainingLifetimeRdfCount = 5; 
+    int32 remainingRecurQuota = 6;
+    int32 velY = 7;
 }
