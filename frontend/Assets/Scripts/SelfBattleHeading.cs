@@ -8,16 +8,7 @@ public class SelfBattleHeading : MonoBehaviour {
     public Image avatar;
     public Slider hpBar;
     public Slider mpBar;
-
-    // Start is called before the first frame update
-    void Start() {
-        
-    }
-
-    // Update is called once per frame
-    void Update() {
-        
-    }
+    public BuffActiveCountDown buffActiveCountDown;
 
     public void SetCharacter(CharacterDownsync chd) {
         if (chd.SpeciesId != speciesId) {
@@ -35,5 +26,10 @@ public class SelfBattleHeading : MonoBehaviour {
         
         hpBar.SetValueWithoutNotify((float)chd.Hp/chd.MaxHp);
         mpBar.SetValueWithoutNotify((float)chd.Mp / chd.MaxMp);
+
+        if (null != chd.BuffList && 0 < chd.BuffList.Count) {
+            // TODO: Handle multiple slots.
+            buffActiveCountDown.updateData(chd.BuffList[0]);
+        }
     }
 }

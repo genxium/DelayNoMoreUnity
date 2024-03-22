@@ -42,10 +42,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _CrackOpacity: 0
     - _FlashIntensity: 0
     - _Scale: 1.02
     - _Thickness: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0.99215686}
-    - _FlashColor: {r: 4, g: 4, b: 4, a: 0}
+    - _CrackColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FlashColor: {r: 6.524382, g: 6.524382, b: 6.524382, a: 0.5019608}
   m_BuildTextureStacks: []

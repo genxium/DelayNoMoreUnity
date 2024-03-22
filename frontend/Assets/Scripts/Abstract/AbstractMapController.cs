@@ -736,7 +736,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     //Debug.Log(String.Format("@rdf.Id={0}, using a cached pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
                 }
 
-                if (null != pickableAnimHolder) {
+                if (null != pickableAnimHolder && null != pickableAnimHolder.lookUpTable) {
                     if (pickableAnimHolder.lookUpTable.ContainsKey(animName)) {
                         pickableAnimHolder.updateAnim(animName);
                         newPosHolder.Set(wx, wy, pickableAnimHolder.gameObject.transform.position.z);

@@ -10,16 +10,6 @@ public class InventorySlot : MonoBehaviour {
     [SerializeField] 
     public Sprite[] buffConfigSprites; 
 
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-        
-    }
-
     public void updateData(shared.InventorySlot slot) {
         if (shared.Battle.TERMINATING_BUFF_SPECIES_ID != slot.BuffSpeciesId) {
             int spriteIdx = slot.BuffSpeciesId - 1;  

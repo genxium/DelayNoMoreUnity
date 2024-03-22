@@ -1800,7 +1800,7 @@ namespace shared {
                     thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
                 }
 
-                if (Atked1 == thatCharacterInNextFrame.CharacterState && (MAX_INT >> 1) < thatCharacterInNextFrame.FramesToRecover) {
+                if ((InAirAtked1 == thatCharacterInNextFrame.CharacterState || CrouchAtked1 == thatCharacterInNextFrame.CharacterState || Atked1 == thatCharacterInNextFrame.CharacterState) && (MAX_INT >> 1) < thatCharacterInNextFrame.FramesToRecover) {
                     logger.LogWarn(String.Format("thatCharacterInNextFrame has invalid frameToRecover={0} and chState={1}! Re-assigning characterState to BlownUp1 for recovery!", thatCharacterInNextFrame.FramesToRecover, thatCharacterInNextFrame.CharacterState));
                     thatCharacterInNextFrame.CharacterState = BlownUp1;
                 }
