@@ -80,7 +80,9 @@ namespace shared {
                     case CharacterDownsync v0:
                     case Bullet v1:
                     case PatrolCue v2:
+                        break;
                     case Pickable v3:
+                        logger.LogInfo(String.Format("Character encountered a pickable v3 = {0}", v3));
                         break;
                     case TrapColliderAttr v4:
                         trapLocalId = v4.TrapLocalId;

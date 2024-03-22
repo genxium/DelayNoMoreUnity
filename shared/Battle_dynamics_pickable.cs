@@ -6,12 +6,12 @@ namespace shared {
             return (0 < pickable.RemainingLifetimeRdfCount);
         }
 
-        private static void _moveAndInsertPickableColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Pickable> nextRenderFramePickables, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, ref int colliderCnt, ref int pickableCnt, ILoggerBridge logger) {
+        private static void _moveAndInsertPickableColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Pickable> nextRenderFramePickables, CollisionSpace collisionSys, Collider[] dynamicRectangleColliders, Vector[] effPushbacks, ref int colliderCnt, ref int pickableCnt, ILoggerBridge logger) {
             var currRenderFramePickables = currRenderFrame.Pickables;
             for (int i = 0; i < currRenderFramePickables.Count; i++) {
                 var src = currRenderFramePickables[i];
                 if (TERMINATING_PICKABLE_LOCAL_ID == src.PickableLocalId) break;
-                
+
                 var dst = nextRenderFramePickables[pickableCnt];
 
                 int remainingLifetimeRdfCount = src.RemainingLifetimeRdfCount - 1;
@@ -32,6 +32,9 @@ namespace shared {
                 var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(DEFAULT_PICKABLE_HITBOX_SIZE_X, DEFAULT_PICKABLE_HITBOX_SIZE_Y);
                 var newCollider = dynamicRectangleColliders[colliderCnt];
                 UpdateRectCollider(newCollider, cx, cy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst);
+
+                effPushbacks[colliderCnt].X = 0;
+                effPushbacks[colliderCnt].Y = 0;
                 colliderCnt++;
 
                 collisionSys.AddSingle(newCollider);

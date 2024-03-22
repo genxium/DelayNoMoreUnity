@@ -703,7 +703,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int k = 0; k < rdf.Pickables.Count; k++) {
             var pickable = rdf.Pickables[k];
             if (TERMINATING_PICKABLE_LOCAL_ID == pickable.PickableLocalId) break;
-
+            if (!IsPickableAlive(pickable, rdf.Id)) {
+                continue;
+            }
             var (cx, cy) = VirtualGridToPolygonColliderCtr(pickable.VirtualGridX, pickable.VirtualGridY);
             var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(DEFAULT_PICKABLE_HITBOX_SIZE_X, DEFAULT_PICKABLE_HITBOX_SIZE_Y);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
@@ -1931,8 +1933,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.VelY = 0;
             playerInRdf.InAir = true;
             playerInRdf.OnWall = false;
-            playerInRdf.Mp = 1000;
-            playerInRdf.MaxMp = 1000;
+            playerInRdf.Mp = 60*fps; // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty
+            playerInRdf.MaxMp = 60*fps;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
 
             if (SPECIES_NONE_CH == speciesIdList[i]) continue;

@@ -157,12 +157,12 @@ namespace shared {
 
         public static ConsumableConfig MpRefillSmall = new ConsumableConfig {
             SpeciesId = 1,
-            RefillDelta = 100,
+            RefillDelta = 800,
         };
 
         public static ConsumableConfig MpRefillMiddle = new ConsumableConfig {
             SpeciesId = 2,
-            RefillDelta = 500,
+            RefillDelta = 1600,
         };
 
         public static ImmutableDictionary<int, ConsumableConfig> consumableConfigs = ImmutableDictionary.Create<int, ConsumableConfig>().AddRange(

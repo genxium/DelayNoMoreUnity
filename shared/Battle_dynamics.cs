@@ -926,6 +926,26 @@ namespace shared {
                             break;
                         }
                         ConvexPolygon bShape = bCollider.Shape;
+                        var v4 = bCollider.Data as Pickable;
+                        if (null != v4 && currCharacterDownsync.JoinIndex <= roomCapacity) {
+                            if (TERMINATING_CONSUMABLE_SPECIES_ID != v4.ConfigFromTiled.ConsumableSpeciesId && 0 < v4.RemainingLifetimeRdfCount) {
+                                if (PickupType.Immediate == v4.ConfigFromTiled.PickupType) {
+                                    var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                                    if (clicked) {
+                                        var consumableConfig = consumableConfigs[v4.ConfigFromTiled.ConsumableSpeciesId];
+                                        if (MpRefillSmall.SpeciesId == consumableConfig.SpeciesId || MpRefillMiddle.SpeciesId == consumableConfig.SpeciesId) {
+                                            thatCharacterInNextFrame.Mp += consumableConfig.RefillDelta;
+                                            if (thatCharacterInNextFrame.Mp > thatCharacterInNextFrame.MaxMp) {
+                                                thatCharacterInNextFrame.Mp = thatCharacterInNextFrame.MaxMp;
+                                            }
+                                        }
+                                        v4.RemainingLifetimeRdfCount = -1; /// [WARNING] Prohibit concurrent pick-up, the character with smaller join index will win in case of a tie.
+                                    }
+
+                                }
+                            }
+                            continue;
+                        }
                         var v3 = bCollider.Data as TriggerColliderAttr;  
                         if (null != v3 && currCharacterDownsync.JoinIndex <= roomCapacity) {
                             // By now only "Player" can click "Trigger"s.
@@ -1020,12 +1040,27 @@ namespace shared {
                             continue;
                         }
 
-                        shapeOverlappedOtherChCnt++;
-
                         normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
                         if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
-                            landedOnGravityPushback = true;
+                            if (                
+                                Atk1         == v1.CharacterState ||
+                                Atk2         == v1.CharacterState ||
+                                Atk3         == v1.CharacterState ||
+                                Atk4         == v1.CharacterState ||
+                                Atk5         == v1.CharacterState ||
+                                InAirAtk1    == v1.CharacterState || 
+                                WalkingAtk1  == v1.CharacterState ||
+                                WalkingAtk4  == v1.CharacterState ||
+                                OnWallAtk1   == v1.CharacterState 
+                            ) {
+                                // [WARNING] Prohibit landing on attacking characters.
+                                continue;
+                            } else {
+                                landedOnGravityPushback = true;
+                            }
                         }
+
+                        shapeOverlappedOtherChCnt++;
 
                         if (primarySoftOverlapMagSquared < magSquared) {
                             primarySoftOverlapMagSquared = magSquared;
@@ -2068,15 +2103,15 @@ namespace shared {
             int trapColliderCntOffset = colliderCnt;
             _moveAndInsertDynamicTrapColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameTraps, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, trapColliderCntOffset, trapLocalIdToColliderAttrs, logger);
             
-            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
-
             int bulletColliderCntOffset = colliderCnt;
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
             _insertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
 
             int pickableColliderCntOffset = colliderCnt;
-            _moveAndInsertPickableColliders(currRenderFrame, roomCapacity, nextRenderFramePickables, collisionSys, dynamicRectangleColliders, ref colliderCnt, ref pickableCnt, logger);
-            
+            _moveAndInsertPickableColliders(currRenderFrame, roomCapacity, nextRenderFramePickables, collisionSys, dynamicRectangleColliders, effPushbacks, ref colliderCnt, ref pickableCnt, logger);
+
+            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTriggers, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
+
             ulong nextWaveNpcKilledEvtMaskCounter = currRenderFrame.WaveNpcKilledEvtMaskCounter;
             EvtSubscription currRdfWaveNpcKilledEvtSub = currRenderFrame.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1];
             EvtSubscription nextRdfWaveNpcKilledEvtSub = nextEvtSubs[MAGIC_EVTSUB_ID_WAVER - 1];
