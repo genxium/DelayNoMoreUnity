@@ -36,7 +36,7 @@ public class BattleInputManager : MonoBehaviour {
 
     public bool enablePlatformSpecificHiding = false;
     public Image joystickImg;
-    public Sprite joystickIdle, joystickLeft, joystickRight, joystickUp, joystickDown; 
+    public Sprite joystickIdle, joystickLeft, joystickRight, joystickUp, joystickDown, joystickDownLeft, joystickDownRight, joystickUpLeft, joystickUpRight; 
 
     void Start() {
         if (enablePlatformSpecificHiding && !Application.isMobilePlatform) {
@@ -209,6 +209,18 @@ public class BattleInputManager : MonoBehaviour {
             break;
         case 4:
             joystickImg.sprite = joystickLeft;
+            break;
+        case 5:
+            joystickImg.sprite = joystickUpRight;
+            break;
+        case 6:
+            joystickImg.sprite = joystickDownLeft;
+            break;
+        case 7:
+            joystickImg.sprite = joystickDownRight;
+            break;
+        case 8:
+            joystickImg.sprite = joystickUpLeft;
             break;
         default:
             joystickImg.sprite = joystickIdle;

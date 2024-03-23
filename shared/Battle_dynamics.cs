@@ -1250,7 +1250,8 @@ namespace shared {
                     if (!overlapped) continue;
 
                     switch (bCollider.Data) {
-                        case PatrolCue v:
+                        case PatrolCue v0:
+                        case Pickable v1:
                             break;
                         case TriggerColliderAttr atkedTriggerColliderAttr:
                             var atkedTrigger = currRenderFrame.TriggersArr[atkedTriggerColliderAttr.TriggerLocalId];

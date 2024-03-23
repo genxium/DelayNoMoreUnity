@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CharacterMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: 6302039d5c9a90c4a9c2a033ed09f3f7, type: 3}
+  m_Name: FillerMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: af8998d0db84eb24da77563987d8bead, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -21,11 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 0abc45ebae47fae48be0eaf9e10357cc, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_df17af1248f74c7bb55ec8472b590ce5_Texture_1:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -44,10 +40,10 @@ Material:
     m_Floats:
     - _CrackOpacity: 0
     - _FlashIntensity: 0
-    - _Scale: 1.02
+    - _Opacity: 0.75
     - _Thickness: 0
     m_Colors:
-    - _Color: {r: 2.6282723, g: 2.6282723, b: 2.6282723, a: 0.99215686}
-    - _CrackColor: {r: 1, g: 1, b: 1, a: 0}
-    - _FlashColor: {r: 6.524382, g: 6.524382, b: 6.524382, a: 0.5019608}
+    - _Color: {r: 0.9751038, g: 0.98039216, b: 0.16078429, a: 0.9647059}
+    - _CrackColor: {r: 0.02264148, g: 0.3330473, b: 1, a: 1}
+    - _FlashColor: {r: 11.84489, g: 11.84489, b: 11.84489, a: 1}
   m_BuildTextureStacks: []
