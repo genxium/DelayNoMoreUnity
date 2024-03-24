@@ -16,14 +16,17 @@ public class CaptchaLoginFormController : MonoBehaviour {
 	public Button GetCaptchaButton;
 	public Button LoginActionButton;
     public Button CloseButton;
-    public WsSessionManager.OnLoginResult OnLoginResultCallback = null;
+    private WsSessionManager.OnLoginResult onLoginResultCallback = null;
 
-    public void clearOnLoginResultCallback() {
-        OnLoginResultCallback = null;
+    public void SetOnLoginResultCallback(WsSessionManager.OnLoginResult newOnLoginResultCallback) {
+        onLoginResultCallback = newOnLoginResultCallback;
+    }
+    public void ClearOnLoginResultCallback() {
+        onLoginResultCallback = null;
     }
 
     public void OnClose() {
-        clearOnLoginResultCallback();
+        ClearOnLoginResultCallback();
         gameObject.SetActive(false);
     }
 
@@ -103,10 +106,9 @@ public class CaptchaLoginFormController : MonoBehaviour {
                         var authToken = res["newAuthToken"].Value<string>();
                         var playerId = res["playerId"].Value<int>();
                         Debug.Log(String.Format("newAuthToken: {0}, playerId: {1}", authToken, playerId));
-                        // TODO: Jump to OnlineMap with "authToken" and "playerId"
                         WsSessionManager.Instance.SetCredentials(authToken, playerId);
-                        if (null != OnLoginResultCallback) {
-                            OnLoginResultCallback(ErrCode.Ok, uname, playerId, authToken);
+                        if (null != onLoginResultCallback) {
+                            onLoginResultCallback(ErrCode.Ok, uname, playerId, authToken);
                         }
                     } else {
                         toggleUIInteractability(true);

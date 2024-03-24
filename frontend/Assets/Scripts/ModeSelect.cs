@@ -15,14 +15,19 @@ public class ModeSelect : AbstractSingleSelectGroup {
     }
 
     public delegate void OnLoginRequiredDelegate(WsSessionManager.OnLoginResult callback);
+    private OnLoginRequiredDelegate onLoginRequired = null;
 
-    public void ConfirmSelection(OnLoginRequiredDelegate onLoginRequired) {
+    public void SetOnLoginRequired(OnLoginRequiredDelegate newOnLoginRequired) {
+        onLoginRequired = newOnLoginRequired;
+    }
+
+    public void ConfirmSelection() {
         switch (selectedIdx) {
             case 0:
                 enterStoryMode();
             break;
             case 1:
-                tryEnteringOnlineArena(onLoginRequired);
+                TryEnteringOnlineArena();
             break;
         }
     }
@@ -39,11 +44,22 @@ public class ModeSelect : AbstractSingleSelectGroup {
         SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
     };
 
-    private void tryEnteringOnlineArena(OnLoginRequiredDelegate onLoginRequired) {
+    public void TryEnteringOnlineArena() {
         if (WsSessionManager.Instance.IsPossiblyLoggedIn()) {
             SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
         } else {
             onLoginRequired(onLoggedInPerAdhocRequirement);
         }
     }
+
+    public override void onCellSelected(int newSelectedIdx) {
+        if (newSelectedIdx == selectedIdx) {
+            ConfirmSelection();
+        } else {
+            cells[selectedIdx].setSelected(false);
+            cells[newSelectedIdx].setSelected(true);
+            selectedIdx = newSelectedIdx;
+        }
+    }
+
 }

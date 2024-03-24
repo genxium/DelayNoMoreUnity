@@ -1,11 +1,20 @@
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
+using static WsSessionManager;
 
 public class LoginPageController : MonoBehaviour {
     public LoginStatusBarController loginStatusBarController;
     public ModeSelect modeSelect;
     public CaptchaLoginFormController captchaLoginForm;
+
+    private void Start() {
+        ModeSelect.OnLoginRequiredDelegate onArenaLoginRequired = (OnLoginResult newOnLoginResultCallback) => {
+            captchaLoginForm.SetOnLoginResultCallback(newOnLoginResultCallback);
+            captchaLoginForm.gameObject.SetActive(true);
+        };
+        modeSelect.SetOnLoginRequired(onArenaLoginRequired);
+    }
 
     void toggleUIInteractability(bool enabled) {
         modeSelect.toggleUIInteractability(enabled);
@@ -28,10 +37,7 @@ public class LoginPageController : MonoBehaviour {
         bool rising = context.ReadValueAsButton();
         if (rising) {
             toggleUIInteractability(false);
-            ModeSelect.OnLoginRequiredDelegate onArenaLoginRequired = (WsSessionManager.OnLoginResult callback) => {
-                captchaLoginForm.gameObject.SetActive(true);
-            };
-            modeSelect.ConfirmSelection(onArenaLoginRequired);
+            modeSelect.ConfirmSelection();
             toggleUIInteractability(true);
         }
     }

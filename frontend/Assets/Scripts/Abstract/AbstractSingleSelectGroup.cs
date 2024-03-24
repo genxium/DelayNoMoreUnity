@@ -2,7 +2,6 @@ using System.Linq;
 using UnityEngine;
 
 public class AbstractSingleSelectGroup : MonoBehaviour {
-    public bool doubleClickToConfirm = false;
     protected int selectedIdx = 0;
     public AbstractSingleSelectCell[] cells = null;
 
@@ -16,7 +15,7 @@ public class AbstractSingleSelectGroup : MonoBehaviour {
 
     }
 
-    public void onCellSelected(int newSelectedIdx) {
+    public virtual void onCellSelected(int newSelectedIdx) {
         cells[selectedIdx].setSelected(false);
         cells[newSelectedIdx].setSelected(true);
         selectedIdx = newSelectedIdx;

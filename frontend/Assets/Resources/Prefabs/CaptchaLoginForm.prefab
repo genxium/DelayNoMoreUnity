@@ -856,8 +856,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LoginInputManager, Assembly-CSharp
+      - m_Target: {fileID: 81606503815139888}
+        m_TargetAssemblyTypeName: CaptchaLoginFormController, Assembly-CSharp
         m_MethodName: OnLoginActionButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -1744,8 +1744,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LoginInputManager, Assembly-CSharp
+      - m_Target: {fileID: 81606503815139888}
+        m_TargetAssemblyTypeName: CaptchaLoginFormController, Assembly-CSharp
         m_MethodName: OnGetCaptchaButtonClicked
         m_Mode: 1
         m_Arguments:

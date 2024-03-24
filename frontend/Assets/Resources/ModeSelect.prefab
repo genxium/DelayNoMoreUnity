@@ -368,6 +368,7 @@ GameObject:
   - component: {fileID: 2651332894417464428}
   - component: {fileID: 5729851159741745625}
   - component: {fileID: 8041551264100772119}
+  - component: {fileID: 3299576991650147951}
   m_Layer: 5
   m_Name: Arena
   m_TagString: Untagged
@@ -450,6 +451,35 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3299576991650147951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3445534333507269809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7500168210569740152}
+          m_TargetAssemblyTypeName: AbstractSingleSelectGroup, Assembly-CSharp
+          m_MethodName: onCellSelected
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &5060847227167037580
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,7 +490,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5060847227167037581}
   - component: {fileID: 2085222646465260128}
-  - component: {fileID: 2467190742468568172}
   - component: {fileID: 7500168210569740152}
   m_Layer: 5
   m_Name: ModeSelect
@@ -517,20 +546,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &2467190742468568172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5060847227167037580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be1192cfc3b1ab5488e3da57fa38ed37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  doubleClickToConfirm: 0
-  cells: []
 --- !u!114 &7500168210569740152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,7 +558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be1192cfc3b1ab5488e3da57fa38ed37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doubleClickToConfirm: 0
+  doubleClickToConfirm: 1
   cells:
   - {fileID: 8261715714002962563}
   - {fileID: 5729851159741745625}
@@ -559,6 +574,7 @@ GameObject:
   - component: {fileID: 8463101641810809955}
   - component: {fileID: 8261715714002962563}
   - component: {fileID: 8919875690167823939}
+  - component: {fileID: 4166167716183508719}
   m_Layer: 5
   m_Name: Story
   m_TagString: Untagged
@@ -641,3 +657,32 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4166167716183508719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545420299407822090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7500168210569740152}
+          m_TargetAssemblyTypeName: AbstractSingleSelectGroup, Assembly-CSharp
+          m_MethodName: onCellSelected
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
