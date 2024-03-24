@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ModeSelect : AbstractSingleSelectGroup {
-
+    private AllSettings allSettingsPanel;
     // Start is called before the first frame update
     void Start() {
         Debug.Log("ModeSelect: cells count = " + cells.Length);
@@ -19,6 +19,10 @@ public class ModeSelect : AbstractSingleSelectGroup {
     public delegate void OnLoginRequiredDelegate(WsSessionManager.OnLoginResult callback);
     private OnLoginRequiredDelegate onLoginRequired = null;
     private ParentUIInteractabilityDelegate parentUIInteractabilityToggle = null;
+
+    public void SetAllSettingsPanel(AllSettings theAllSettingsPanel) {
+        allSettingsPanel = theAllSettingsPanel;
+    }
 
     public void SetOnLoginRequired(OnLoginRequiredDelegate newOnLoginRequired) {
         onLoginRequired = newOnLoginRequired;
@@ -56,7 +60,7 @@ public class ModeSelect : AbstractSingleSelectGroup {
     }
 
     private void enterAllSettings() {
-
+        allSettingsPanel.gameObject.SetActive(true);
     }
 
     private WsSessionManager.OnLoginResult onLoggedInPerAdhocRequirement = (int retCode, string? uname, int? playerId, string? authToken) => {

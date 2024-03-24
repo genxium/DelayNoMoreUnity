@@ -6,6 +6,7 @@ public class LoginPageController : MonoBehaviour {
     public LoginStatusBarController loginStatusBarController;
     public ModeSelect modeSelect;
     public CaptchaLoginFormController captchaLoginForm;
+    public AllSettings allSettingsPanel;
 
     private void Start() {
         ModeSelect.OnLoginRequiredDelegate onArenaLoginRequired = (WsSessionManager.OnLoginResult newOnLoginResultCallback) => {
@@ -19,6 +20,8 @@ public class LoginPageController : MonoBehaviour {
         };
         modeSelect.SetParentUIInteractabilityToggle(parentUIInteractabilityToggle);
 
+        modeSelect.SetAllSettingsPanel(allSettingsPanel);
+        allSettingsPanel.SetSameSceneLoginStatusBar(loginStatusBarController);
         loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
     }
 
