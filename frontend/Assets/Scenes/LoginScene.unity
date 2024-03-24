@@ -816,6 +816,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3996213055086682637, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3996213055086682637, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3996213055086682637, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3996213055086682637, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3996213055086682637, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5060847227167037580, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
       propertyPath: m_Name
       value: ModeSelect

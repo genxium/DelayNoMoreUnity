@@ -24,6 +24,7 @@ public class WsSessionManager {
     */
     public Queue<WsReq> senderBuffer;
     public Queue<WsResp> recvBuffer;
+    private string uname;
     private string authToken; // cached for auto-login (TODO: link "save/load" of this value with persistent storage)
     private int playerId = Battle.TERMINATING_PLAYER_ID;
     private int speciesId = Battle.SPECIES_NONE_CH;
@@ -47,7 +48,8 @@ public class WsSessionManager {
         recvBuffer = new Queue<WsResp>();
     }
 
-    public void SetCredentials(string theAuthToken, int thePlayerId) {
+    public void SetCredentials(string theUname, string theAuthToken, int thePlayerId) {
+        uname = theUname; 
         authToken = theAuthToken;
         playerId = thePlayerId;
     }
@@ -59,9 +61,13 @@ public class WsSessionManager {
     public int GetSpeciesId() {
         return speciesId;
     }
+
+    public string GetUname() {
+        return uname;
+    }
     
     public void ClearCredentials() {
-        SetCredentials(null, Battle.TERMINATING_PLAYER_ID);
+        SetCredentials(null, null, Battle.TERMINATING_PLAYER_ID);
         speciesId = Battle.SPECIES_NONE_CH;
     }
 

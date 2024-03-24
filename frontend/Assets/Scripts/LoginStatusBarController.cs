@@ -17,8 +17,12 @@ public class LoginStatusBarController : MonoBehaviour {
     }
 
     public void SetLoggedInData(string aUname) {
-        loggedInIcon.sprite = loggedInSpr;
-        uname.text = aUname;
+        if (null == aUname) {
+            ClearLoggedInData();
+        } else {    
+            loggedInIcon.sprite = loggedInSpr;
+            uname.text = aUname;
+        }
     }
 
     public void ClearLoggedInData() {

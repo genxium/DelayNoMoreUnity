@@ -106,7 +106,7 @@ public class CaptchaLoginFormController : MonoBehaviour {
                         var authToken = res["newAuthToken"].Value<string>();
                         var playerId = res["playerId"].Value<int>();
                         Debug.Log(String.Format("newAuthToken: {0}, playerId: {1}", authToken, playerId));
-                        WsSessionManager.Instance.SetCredentials(authToken, playerId);
+                        WsSessionManager.Instance.SetCredentials(uname, authToken, playerId);
                         if (null != onLoginResultCallback) {
                             onLoginResultCallback(ErrCode.Ok, uname, playerId, authToken);
                         }
