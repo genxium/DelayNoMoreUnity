@@ -8,6 +8,7 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
     private readonly ILogger<SimpleRamAuthTokenCache> _logger;
     private readonly IWebHostEnvironment _environment;
     private readonly Random _randGenerator = new Random();
+    private readonly IServiceScopeFactory _scopeFactory;
     private const string tokenAllowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789$_-";
 
     private MemoryCache inRamCache { get; } = new MemoryCache(
@@ -18,9 +19,10 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
         .SetSlidingExpiration(TimeSpan.FromMinutes(2))
         .SetSize(1); // Always use size=1 for AuthToken
 
-    public SimpleRamAuthTokenCache(ILogger<SimpleRamAuthTokenCache> logger, IWebHostEnvironment environment) {
+    public SimpleRamAuthTokenCache(ILogger<SimpleRamAuthTokenCache> logger, IWebHostEnvironment environment, IServiceScopeFactory scopeFactory) {
         _logger = logger;
         _environment = environment;
+        _scopeFactory = scopeFactory;
     }
     
     private string genToken() {
@@ -44,5 +46,22 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
         string proposedKey = (token + "/" + proposedPlayerId.ToString());
         bool res = inRamCache.TryGetValue(proposedKey, out cachedPlayerId);
         return (res && cachedPlayerId == proposedPlayerId);
+    }
+
+    public (bool, string?) ValidateTokenAndRetrieveUname(string token, int proposedPlayerId) {
+        bool res = ValidateToken(token, proposedPlayerId);
+        if (!res) return (false, null);
+
+        if (_environment.IsDevelopment()) {
+            using (var scope = _scopeFactory.CreateScope()) {
+                var db = scope.ServiceProvider.GetRequiredService<DevEnvResourcesSqliteContext>();
+                SqlitePlayer? testPlayer = db.Players.Where(p => p.id == proposedPlayerId).First();
+                if (null != testPlayer) {
+                    return (true, testPlayer.name);
+                }
+            }
+        }
+
+        return (false, null);
     }
 }

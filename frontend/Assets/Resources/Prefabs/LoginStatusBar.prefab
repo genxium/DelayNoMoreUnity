@@ -222,8 +222,9 @@ GameObject:
   - component: {fileID: 5639207819612963277}
   - component: {fileID: 5639207819612963279}
   - component: {fileID: 9200094227910661652}
+  - component: {fileID: 90912236411310387}
   m_Layer: 5
-  m_Name: LoginStatus
+  m_Name: LoginStatusBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,3 +286,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &90912236411310387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5639207819612963276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810cda80750c91946b092d7dba7fbe97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loggedInSpr: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  notLoggedInSpr: {fileID: 92648016, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
+  uname: {fileID: 7192573881690383154}
+  loggedInIcon: {fileID: 3263341936121093569}

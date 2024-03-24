@@ -7,33 +7,32 @@ using System.Collections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using shared;
-using UnityEngine.SceneManagement;
 
-public class LoginInputManager : MonoBehaviour {
+public class CaptchaLoginFormController : MonoBehaviour {
 
     // UI bindings are done in the Editor, the field bindings here are used for enabling/disabling in script.
     public TMP_InputField UnameInput;
 	public TMP_InputField CaptchaInput;
 	public Button GetCaptchaButton;
 	public Button LoginActionButton;
-	public Button OfflineModeButton;
+    public Button CloseButton;
+    public WsSessionManager.OnLoginResult OnLoginResultCallback = null;
 
-    // Start is called before the first frame update
-    void Start() {
-        
+    public void clearOnLoginResultCallback() {
+        OnLoginResultCallback = null;
     }
 
-    // Update is called once per frame
-    void Update() {
-
+    public void OnClose() {
+        clearOnLoginResultCallback();
+        gameObject.SetActive(false);
     }
 
-    void toggleUIInteractability(bool enabled) {
+    public void toggleUIInteractability(bool enabled) {
         UnameInput.interactable = enabled;
         CaptchaInput.interactable = enabled;
         GetCaptchaButton.interactable = enabled;
         LoginActionButton.interactable = enabled;
-        OfflineModeButton.interactable = enabled;
+        CloseButton.interactable = enabled;
     }
 
     public void OnGetCaptchaButtonClicked() {
@@ -73,13 +72,14 @@ public class LoginInputManager : MonoBehaviour {
         string httpHost = Env.Instance.getHttpHost();
         Debug.Log(String.Format("LoginActionButton is clicked, httpHost={0}", httpHost));
         toggleUIInteractability(false);
-        StartCoroutine(doLoginAction(httpHost));
+        StartCoroutine(doSmsCaptchaLoginAction(httpHost));
     }
 
-    IEnumerator doLoginAction(string httpHost) {
+    IEnumerator doSmsCaptchaLoginAction(string httpHost) {
         string uri = httpHost + String.Format("/Auth/SmsCaptcha/Login");
         WWWForm form = new WWWForm();
-        form.AddField("uname", UnameInput.text); 
+        string uname = UnameInput.text; // must remain const after http resp
+        form.AddField("uname", uname); 
         form.AddField("captcha", CaptchaInput.text); 
         using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form)) {
             // Request and wait for the desired page.
@@ -97,14 +97,17 @@ public class LoginInputManager : MonoBehaviour {
                     break;
                 case UnityWebRequest.Result.Success:
                     var res = JsonConvert.DeserializeObject<JObject>(webRequest.downloadHandler.text);
+                    int retCode = res["retCode"].Value<int>();
                     Debug.Log(String.Format("Received: {0}", res));
-                    if (ErrCode.Ok == res["retCode"].Value<int>()) {
+                    if (ErrCode.Ok == retCode) {
                         var authToken = res["newAuthToken"].Value<string>();
                         var playerId = res["playerId"].Value<int>();
                         Debug.Log(String.Format("newAuthToken: {0}, playerId: {1}", authToken, playerId));
                         // TODO: Jump to OnlineMap with "authToken" and "playerId"
                         WsSessionManager.Instance.SetCredentials(authToken, playerId);
-                        SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
+                        if (null != OnLoginResultCallback) {
+                            OnLoginResultCallback(ErrCode.Ok, uname, playerId, authToken);
+                        }
                     } else {
                         toggleUIInteractability(true);
                     }
@@ -112,10 +115,4 @@ public class LoginInputManager : MonoBehaviour {
             }
         }
     }
-
-	public void OnGoToOfflineSceneButtonClicked() {
-        toggleUIInteractability(false);
-		SceneManager.LoadScene("OfflineMapScene", LoadSceneMode.Single);
-        toggleUIInteractability(true);
-	}
 }
