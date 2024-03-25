@@ -1383,9 +1383,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (wx, wy) = CollisionSpacePositionToWorldPosition(playerCposX, playerCposY, spaceOffsetX, spaceOffsetY);
 
             if (null != chConfig.InitInventorySlots) {
-                // TODO: Remove the hardcoded index
-                var initIvSlot = chConfig.InitInventorySlots[0];
-                AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, playerInRdf.Inventory.Slots[0]);
+                for (int t = 0; t < chConfig.InitInventorySlots.Count; t++) {
+                    var initIvSlot = chConfig.InitInventorySlots[t];
+                    if (InventorySlotStockType.NoneIv == initIvSlot.StockType) break;
+                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, playerInRdf.Inventory.Slots[t]);
+                }
             }
             spawnPlayerNode(playerInRdf.JoinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
         }
