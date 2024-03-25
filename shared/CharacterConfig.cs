@@ -33,6 +33,8 @@ namespace shared {
         public int WallSlidingVelY;
         public int MinFallingVelY;
 
+        public bool UseInventoryBtnB;
+
         // Collision boxes
         public int VisionOffsetX;
         public int VisionOffsetY;

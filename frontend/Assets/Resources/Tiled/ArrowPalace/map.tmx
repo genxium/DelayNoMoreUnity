@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="31" nextobjectid="437">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="33" nextobjectid="437">
  <properties>
   <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="2"/>
@@ -10,12 +10,23 @@
  <tileset firstgid="12" source="../shared_comps/forest16.tsx"/>
  <tileset firstgid="1036" source="../decoration/trees.tsx"/>
  <tileset firstgid="1039" source="../doors/doors.tsx"/>
+ <tileset firstgid="1048" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
+ <tileset firstgid="1056" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
+ <tileset firstgid="1072" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
+ <layer id="32" name="Background3" width="64" height="128">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt0DENACAMALAdiBgJ/nVOw56RQI8aaK6IBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICmAwAAADxvf+72PwAwrwCDmphu
+  </data>
+ </layer>
  <layer id="30" name="Background2" width="64" height="128">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYgAAAAQ==
+   eJztybcNgEAABMEPqIII703/3XE5HcCMtNGWAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb01VSpu61KchjWlKc/X9v6Q1bWlPRzrTle4f/FqSpB/2ANXrSkE=
   </data>
  </layer>
  <layer id="28" name="Background1" width="64" height="128">
@@ -23,7 +34,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1NEJgzAUBVDjMHY1t9FOYjuEu3QMDTYoUkX8SZVz4JKPEB73faQoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiOpy++4RptxFH6YsfQ68u/oeUu9f/Y/0qsKcK+1h3fts/7W0i3+11XuvfzP+A22GPMu882P/eHZjXhny/vbPNT9lAAriYh4=
+   eJzt1NFNwzAUQNEk8hJdoPwChQKl0HW6DTBJyxDswhi8qEStLIoifkKcc6SryI4i6/kjVQUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDPZaqqq+g6WqTy17mb2LuNltFdKn+du4+9h2gVPaby17l17D1Fz9Emlb/OzZIkTbOp/wNhirbN+XcX9aFSfNSHTn32+G7s99DN/dP8feaa18fGdA/53H+dP9fdxX91bu7f5n+J/8DrAL01w57fzt8+d9F+gN6/5x/q/K4vTTvFSQ==
   </data>
  </layer>
  <layer id="29" name="Ground" width="64" height="128">

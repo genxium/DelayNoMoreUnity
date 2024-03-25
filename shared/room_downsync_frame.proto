@@ -696,9 +696,10 @@ message ConsumableConfig {
 
 enum InventorySlotStockType {
 	NoneIv = 0;
-	TimedIv = 1; // Reusable after cooldown
-	QuotaIv = 2;
-	TimedMagazineIv = 3; // Has certain quotas before required to cooldown
+	DummyIv = 1;
+	TimedIv = 2; // Reusable after cooldown
+	QuotaIv = 3;
+	TimedMagazineIv = 4; // Has certain quotas before required to cooldown
 }
 
 message InventorySlot {
@@ -775,8 +776,8 @@ message SerializedTriggerTrackingIdToTrapLocalId {
 }
 
 enum PickupType {
-    Immediate = 1;
-	PutIntoInventory = 2; 
+    Immediate = 0;
+	PutIntoInventory = 1; 
 }
 
 message PickableConfigFromTiled {

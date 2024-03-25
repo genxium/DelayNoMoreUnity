@@ -8,7 +8,9 @@ using static Story.StoryConstants;
 public class OfflineMapController : AbstractMapController {
     
     private bool isInStoryControl = false;
+    private bool isInStorySettings = false;
     public DialogBoxes dialogBoxes;
+    public StoryModeSettings storyModeSettings;
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
     }
@@ -72,6 +74,14 @@ public class OfflineMapController : AbstractMapController {
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
         isOnlineMode = false;
+
+        StoryModeSettings.SimpleDelegate onExitCallback = () => {
+            onBattleStopped();
+        };
+        StoryModeSettings.SimpleDelegate onCloseCallback = () => {
+            isInStorySettings = false;
+        };
+        storyModeSettings.SetCallbacks(onExitCallback, onCloseCallback);
     }
 
     // Update is called once per frame
@@ -87,11 +97,16 @@ public class OfflineMapController : AbstractMapController {
                     dialogBoxes.gameObject.SetActive(false);
                     isInStoryControl = false;
                     pauseAllAnimatingCharacters(false);
+                    iptmgr.resumeScales();
                     iptmgr.enable(true);
                 } else {
                     // No dynamics during "InStoryControl".
                     return;
                 }
+            }
+            if (isInStorySettings) {
+                // No dynamics during "InStorySettings".
+                return;
             }
             doUpdate();
             if (0 < justFulfilledEvtSubCnt) {
@@ -125,8 +140,7 @@ public class OfflineMapController : AbstractMapController {
         }
     }
 
-    public void OnBackButtonClicked() {
-        Debug.Log("OnBackButtonClicked");
-        onBattleStopped();
+    public void OnSettingsClicked() {
+        storyModeSettings.gameObject.SetActive(true);
     }
 }

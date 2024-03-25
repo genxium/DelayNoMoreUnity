@@ -310,4 +310,11 @@ public class BattleInputManager : MonoBehaviour {
             btnD.transform.DOScale(1.0f * Vector3.one, 0.8f);
         }
     }
+
+    public void resumeScales() {
+        btnA.transform.localScale = Vector3.one;
+        btnB.transform.localScale = Vector3.one;
+        btnC.transform.localScale = Vector3.one;
+        btnD.transform.localScale = Vector3.one;
+    }
 }

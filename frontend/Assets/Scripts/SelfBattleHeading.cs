@@ -11,9 +11,10 @@ public class SelfBattleHeading : MonoBehaviour {
     public BuffActiveCountDown buffActiveCountDown;
 
     public void SetCharacter(CharacterDownsync chd) {
+        var newChConfig = Battle.characters[chd.SpeciesId];
         if (chd.SpeciesId != speciesId) {
             speciesId = chd.SpeciesId; 
-            string speciesName = Battle.characters[speciesId].SpeciesName;
+            string speciesName = newChConfig.SpeciesName;
             string spriteSheetPath = String.Format("Characters/{0}/{0}", speciesName, speciesName);
             var sprites = Resources.LoadAll<Sprite>(spriteSheetPath);
             foreach (Sprite sprite in sprites) {
@@ -25,7 +26,12 @@ public class SelfBattleHeading : MonoBehaviour {
         }
         
         hpBar.SetValueWithoutNotify((float)chd.Hp/chd.MaxHp);
-        mpBar.SetValueWithoutNotify((float)chd.Mp / chd.MaxMp);
+        if (newChConfig.UseInventoryBtnB) {
+            mpBar.gameObject.SetActive(false);
+        } else {
+            mpBar.gameObject.SetActive(true);
+            mpBar.SetValueWithoutNotify((float)chd.Mp / chd.MaxMp);
+        }
 
         if (null != chd.BuffList && 0 < chd.BuffList.Count) {
             // TODO: Handle multiple slots.

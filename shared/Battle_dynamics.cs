@@ -260,13 +260,19 @@ namespace shared {
 
         private static bool _useInventorySlot(int rdfId, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
             bool slotUsed = false;
-            if (PATTERN_INVENTORY_SLOT_C != patternId && PATTERN_INVENTORY_SLOT_D != patternId) {
-                return slotUsed;
-            }
             if (0 < currCharacterDownsync.FramesToRecover) {
-                return slotUsed;
+                return false;
             }
-            int slotIdx = (PATTERN_INVENTORY_SLOT_C == patternId ? 0 : 1); 
+
+            int slotIdx = -1;
+            if (PATTERN_INVENTORY_SLOT_C == patternId || PATTERN_INVENTORY_SLOT_D == patternId) {
+                slotIdx = (PATTERN_INVENTORY_SLOT_C == patternId ? 0 : 1); 
+            } else if (chConfig.UseInventoryBtnB && (PATTERN_B == patternId || PATTERN_DOWN_B == patternId || PATTERN_UP_B == patternId)) {
+                slotIdx = 2;
+            } else {
+                return false;
+            }
+
             var targetSlotCurr = currCharacterDownsync.Inventory.Slots[slotIdx];
             var targetSlotNext = thatCharacterInNextFrame.Inventory.Slots[slotIdx];
             if (InventorySlotStockType.QuotaIv == targetSlotCurr.StockType) {

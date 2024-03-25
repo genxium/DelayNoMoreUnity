@@ -283,7 +283,7 @@ namespace shared {
             ActiveFrames = 180,
             HitStunFrames = 2,
             BlockStunFrames = 2,
-            Damage = 8,
+            Damage = 25,
             PushbackVelX = (int)(0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = NO_LOCK_VEL,
@@ -954,7 +954,6 @@ namespace shared {
                             RecoveryFrames = 12,
                             RecoveryFramesOnBlock = 10,
                             RecoveryFramesOnHit = 10,
-                            MpDelta = 25,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Atk1
                             }
@@ -967,7 +966,6 @@ namespace shared {
                             RecoveryFrames = 12,
                             RecoveryFramesOnBlock = 10,
                             RecoveryFramesOnHit = 10,
-                            MpDelta = 20,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = InAirAtk1
                             }
@@ -980,7 +978,6 @@ namespace shared {
                             RecoveryFrames = 25,
                             RecoveryFramesOnBlock = 25,
                             RecoveryFramesOnHit = 25,
-                            MpDelta = 20,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Sliding
                             }
@@ -1519,7 +1516,7 @@ namespace shared {
                                         RecoveryFrames = 12,
                                         RecoveryFramesOnBlock = 10,
                                         RecoveryFramesOnHit = 10,
-                                        MpDelta = 35,
+                                        MpDelta = 220,
                                         TriggerType = SkillTriggerType.RisingEdge,
                                         BoundChState = Atk1
                                         }
@@ -1532,7 +1529,7 @@ namespace shared {
                                         RecoveryFrames = 12,
                                         RecoveryFramesOnBlock = 10,
                                         RecoveryFramesOnHit = 10,
-                                        MpDelta = 30,
+                                        MpDelta = 240,
                                         TriggerType = SkillTriggerType.RisingEdge,
                                         BoundChState = InAirAtk1
                                         }
@@ -2034,7 +2031,7 @@ namespace shared {
                         case PATTERN_B:
                         case PATTERN_UP_B:
                         case PATTERN_DOWN_B:
-                            if (!notRecovered) {
+                            if (!notRecovered && slotUsed) {
                                 if (currCharacterDownsync.InAir) {
                                     return 19;
                                 } else {
