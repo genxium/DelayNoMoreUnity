@@ -1,11 +1,15 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using shared;
 using Google.Protobuf;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
@@ -20,9 +24,10 @@ public class WsSessionManager {
     */
     public Queue<WsReq> senderBuffer;
     public Queue<WsResp> recvBuffer;
-    private string authToken;
+    private string uname;
+    private string authToken; // cached for auto-login (TODO: link "save/load" of this value with persistent storage)
     private int playerId = Battle.TERMINATING_PLAYER_ID;
-    private int speciesId;
+    private int speciesId = Battle.SPECIES_NONE_CH;
 
     public int GetPlayerId() {
         return playerId;
@@ -43,7 +48,8 @@ public class WsSessionManager {
         recvBuffer = new Queue<WsResp>();
     }
 
-    public void SetCredentials(string theAuthToken, int thePlayerId) {
+    public void SetCredentials(string theUname, string theAuthToken, int thePlayerId) {
+        uname = theUname; 
         authToken = theAuthToken;
         playerId = thePlayerId;
     }
@@ -55,10 +61,18 @@ public class WsSessionManager {
     public int GetSpeciesId() {
         return speciesId;
     }
+
+    public string GetUname() {
+        return uname;
+    }
     
     public void ClearCredentials() {
-        SetCredentials(null, Battle.TERMINATING_PLAYER_ID);
-        speciesId = 0;
+        SetCredentials(null, null, Battle.TERMINATING_PLAYER_ID);
+        speciesId = Battle.SPECIES_NONE_CH;
+    }
+
+    public bool IsPossiblyLoggedIn() {
+        return (Battle.TERMINATING_PLAYER_ID != playerId);
     }
 
     public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
@@ -156,4 +170,47 @@ public class WsSessionManager {
         }
     }
 
+    public delegate void OnLoginResult(int retCode, string? uname, int? playerId, string? authToken);
+
+    public IEnumerator doCachedAutoTokenLoginAction(string httpHost, OnLoginResult? onLoginCallback) {
+        string uri = httpHost + String.Format("/Auth/Token/Login");
+        WWWForm form = new WWWForm();
+        form.AddField("token", authToken); 
+        form.AddField("playerId", playerId); 
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form)) {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result) {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError("Error: " + webRequest.error);
+                    if (null != onLoginCallback) {
+                        onLoginCallback(ErrCode.UnknownError, null, null, null);
+                    }
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError("HTTP Error: " + webRequest.error);
+                    onLoginCallback(ErrCode.UnknownError, null, null, null);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    var res = JsonConvert.DeserializeObject<JObject>(webRequest.downloadHandler.text);
+                    Debug.Log(String.Format("Received: {0}", res));
+                    int retCode = res["retCode"].Value<int>();
+                    if (ErrCode.Ok == retCode) {
+                        var uname = res["uname"].Value<string>();
+                        Debug.Log(String.Format("Token/Login succeeded, uname: {1}", uname));
+                        if (null != onLoginCallback) {
+                            onLoginCallback(ErrCode.Ok, uname, playerId, authToken);
+                        }
+                    } else {
+                        ClearCredentials();
+                        if (null != onLoginCallback) {
+                            onLoginCallback(retCode, null, null, null);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
 }

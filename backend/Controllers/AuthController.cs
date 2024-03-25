@@ -63,10 +63,10 @@ public class AuthController : Controller {
     public JsonResult Login([FromForm] string token, [FromForm] int playerId) {
         string apiPath = "/Auth/Token/Login";
         _logger.LogInformation("{0}#1 [ token={1}, playerId={2} ]", apiPath, token, playerId);
-        bool res = _tokenCache.ValidateToken(token, playerId);
+        var (res, uname) = _tokenCache.ValidateTokenAndRetrieveUname(token, playerId);
         if (res) {
-            _logger.LogInformation("{0}#2 [ token={1}, proposedPlayerId={2} ]: Validated successfully ]", apiPath, token, playerId);
-            return Json(new { RetCode = ErrCode.Ok });
+            _logger.LogInformation("{0}#2 [ token={1}, proposedPlayerId={2} ]: Retrieved uname={3} successfully ]", apiPath, token, playerId, uname);
+            return Json(new { RetCode = ErrCode.Ok, Uname = uname });
         } else {
             _logger.LogWarning("{0}#2 [ token={1}, proposedPlayerId={2} ]: Failed auth token validation ]", apiPath, token, playerId);
             return Json(new { RetCode = ErrCode.UnknownError });

@@ -319,10 +319,11 @@ namespace shared {
             "cGUSCwoHTm9uZURiZhAAEhEKDVNwZWVkRG93bk9ubHkQARIRCg1Db2xkU3Bl",
             "ZWREb3duEAISFgoSUG9zaXRpb25Mb2NrZWRPbmx5EAMSGAoURnJvemVuUG9z",
             "aXRpb25Mb2NrZWQQBCo2Cg5Db25zdW1hYmxlVHlwZRIMCghOb25lQ3NtYhAA",
-            "EgoKBlJlZmlsbBABEgoKBkRiZlJjdhACKlMKFkludmVudG9yeVNsb3RTdG9j",
-            "a1R5cGUSCgoGTm9uZUl2EAASCwoHVGltZWRJdhABEgsKB1F1b3RhSXYQAhIT",
-            "Cg9UaW1lZE1hZ2F6aW5lSXYQAyoxCgpQaWNrdXBUeXBlEg0KCUltbWVkaWF0",
-            "ZRAAEhQKEFB1dEludG9JbnZlbnRvcnkQAUIJqgIGc2hhcmVkYgZwcm90bzM="));
+            "EgoKBlJlZmlsbBABEgoKBkRiZlJjdhACKmAKFkludmVudG9yeVNsb3RTdG9j",
+            "a1R5cGUSCgoGTm9uZUl2EAASCwoHRHVtbXlJdhABEgsKB1RpbWVkSXYQAhIL",
+            "CgdRdW90YUl2EAMSEwoPVGltZWRNYWdhemluZUl2EAQqMQoKUGlja3VwVHlw",
+            "ZRINCglJbW1lZGlhdGUQABIUChBQdXRJbnRvSW52ZW50b3J5EAFCCaoCBnNo",
+            "YXJlZGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.ConsumableType), typeof(global::shared.InventorySlotStockType), typeof(global::shared.PickupType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -501,15 +502,16 @@ namespace shared {
 
   public enum InventorySlotStockType {
     [pbr::OriginalName("NoneIv")] NoneIv = 0,
+    [pbr::OriginalName("DummyIv")] DummyIv = 1,
     /// <summary>
     /// Reusable after cooldown
     /// </summary>
-    [pbr::OriginalName("TimedIv")] TimedIv = 1,
-    [pbr::OriginalName("QuotaIv")] QuotaIv = 2,
+    [pbr::OriginalName("TimedIv")] TimedIv = 2,
+    [pbr::OriginalName("QuotaIv")] QuotaIv = 3,
     /// <summary>
     /// Has certain quotas before required to cooldown
     /// </summary>
-    [pbr::OriginalName("TimedMagazineIv")] TimedMagazineIv = 3,
+    [pbr::OriginalName("TimedMagazineIv")] TimedMagazineIv = 4,
   }
 
   public enum PickupType {

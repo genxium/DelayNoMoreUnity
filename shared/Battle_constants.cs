@@ -147,7 +147,7 @@ namespace shared {
         public static int DEFAULT_PREALLOC_PICKABLE_CAPACITY = 16;
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 1;
-        public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 2;
+        public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 3;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.62f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
@@ -185,6 +185,8 @@ namespace shared {
 
         public static int NO_SKILL = 0;
         public static int NO_SKILL_HIT = -1;
+
+        public static int INVENTORY_BTN_B_SKILL = 65535;
 
         public static int NO_LOCK_VEL = -1;
 

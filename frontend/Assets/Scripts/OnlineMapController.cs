@@ -5,7 +5,6 @@ using static shared.Battle;
 using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf.Collections;
-using UnityEngine.Experimental.Rendering;
 
 public class OnlineMapController : AbstractMapController {
     Task wsTask, udpTask;
@@ -484,8 +483,7 @@ public class OnlineMapController : AbstractMapController {
 
     protected void OnDestroy() {
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
-        cleanupNetworkSessions();
-        WsSessionManager.Instance.ClearCredentials();
+        cleanupNetworkSessions();  
         Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
     }
 

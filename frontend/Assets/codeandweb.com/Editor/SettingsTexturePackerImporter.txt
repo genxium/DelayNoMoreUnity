@@ -17,6 +17,7 @@ tpsheetFileNames:
 - Assets/Resources/Doors/Door.tpsheet
 - Assets/Resources/Traps/Spike.tpsheet
 - Assets/Resources/Triggers/Switch/Switch.tpsheet
+- Assets/Resources/UI/Controller.tpsheet
 - Assets/Resources/UI/SFIP.tpsheet
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
@@ -36,9 +37,11 @@ textureFileNames:
 - Assets/Resources/Doors/Door.png
 - Assets/Resources/Traps/Spike.png
 - Assets/Resources/Triggers/Switch/Switch.png
+- Assets/Resources/UI/Controller.png
 - Assets/Resources/UI/SFIP.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 - 

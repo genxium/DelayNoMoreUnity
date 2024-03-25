@@ -223,7 +223,8 @@ namespace shared {
                         LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 3,
+                        MpRegenRate = 0,
+                        UseInventoryBtnB = true,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = true,
                         SlidingEnabled = true,
@@ -240,6 +241,23 @@ namespace shared {
                                 DefaultFramesToRecover = 720,
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = 27, // TODO: Remove this hardcoded "skillId"!
+                            },
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.DummyIv,
+                                Quota = 0,
+                                FramesToRecover = 0,
+                                DefaultQuota = 0,
+                                DefaultFramesToRecover = MAX_INT, 
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                            },
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.TimedMagazineIv,
+                                Quota = 10,
+                                FramesToRecover = 0,
+                                DefaultQuota = 10,
+                                DefaultFramesToRecover = 30, 
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = INVENTORY_BTN_B_SKILL,
                             }
                         }
                     }),

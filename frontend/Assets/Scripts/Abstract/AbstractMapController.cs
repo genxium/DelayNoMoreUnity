@@ -465,11 +465,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                 for (int i = 0; i < currCharacterDownsync.Inventory.Slots.Count; i++) {
                     var slotData = currCharacterDownsync.Inventory.Slots[i];
                     if (InventorySlotStockType.NoneIv == slotData.StockType) break;
-                    var targetBtn = (0 == i ? iptmgr.btnC : iptmgr.btnD); // TODO: Don't hardcode them
+                    if (InventorySlotStockType.DummyIv == slotData.StockType) continue;
+                    var targetBtn = (0 == i ? iptmgr.btnC : (1 == i ? iptmgr.btnD : iptmgr.btnB)); // TODO: Don't hardcode them
                     targetBtn.gameObject.SetActive(true);
                     var ivSlotGui = targetBtn.GetComponent<InventorySlot>();
                     ivSlotGui.updateData(slotData);
-                    effInventoryCount++;
+                    if (i < 2) {
+                        // TODO: Don't hardcode this!
+                        effInventoryCount++;
+                    }
                 }
 
                 if (0 >= effInventoryCount) {
@@ -1098,6 +1102,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         resetBattleResult(ref confirmedBattleResult);
         readyGoPanel.resetCountdown();
         settlementPanel.gameObject.SetActive(false);
+
+        iptmgr.btnB.GetComponent<InventorySlot>().resumeRegularBtnB();
     }
 
     public void onInputFrameDownsyncBatch(RepeatedField<InputFrameDownsync> batch) {
@@ -1949,9 +1955,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
             playerInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;
             if (null != chConfig.InitInventorySlots) {
-                // TODO: Remove the hardcoded index
-                var initIvSlot = chConfig.InitInventorySlots[0];
-                AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, playerInRdf.Inventory.Slots[0]);
+                for (int t = 0; t < chConfig.InitInventorySlots.Count; t++) {
+                    var initIvSlot = chConfig.InitInventorySlots[t];
+                    if (InventorySlotStockType.NoneIv == initIvSlot.StockType) break;
+                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, playerInRdf.Inventory.Slots[t]);
+                }
             }
             spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
         }
