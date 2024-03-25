@@ -1,4 +1,7 @@
 # Latest tag change notes
+v1.3.5 new features
+- Refactored UI for better login flow and inventory-btnB feature 
+
 v1.3.4 new features
 - Added new NPC character SkeleArcher 
 - Added offline mode evt-triggered dialogs
