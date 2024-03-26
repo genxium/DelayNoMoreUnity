@@ -559,7 +559,7 @@ public class Room {
 
             effectivePlayerCount = 0; // guaranteed to succeed at the end of "dismiss"
             participantChangeId = 0;
-            battleDurationFrames = 60 * fps;
+            battleDurationFrames = 10 * fps;
         } finally {
             joinerLock.ReleaseMutex();
         }

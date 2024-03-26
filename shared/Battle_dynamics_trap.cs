@@ -276,12 +276,6 @@ namespace shared {
 
             bool shouldEnterCapturedPeriod = ((false == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (0 < targetFramesInPatrolCue));
 
-            if (141 == patrolCue.Id || 142 == patrolCue.Id) {
-                if (shouldBreakPatrolCueCapture || !shouldEnterCapturedPeriod) {
-                    logger.LogWarn(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but not captured!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue, currTrap.DirX));
-                }
-            }
-
             if (shouldEnterCapturedPeriod) {
                 nextTrap.CapturedByPatrolCue = true;
                 nextTrap.FramesInPatrolCue = targetFramesInPatrolCue;

@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 394, y: -79}
+  m_AnchoredPosition: {x: 357, y: -79}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &143196050630596460
@@ -100,7 +100,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 267, y: -43}
+  m_AnchoredPosition: {x: 230, y: -43}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &143196051110400668
@@ -293,7 +293,7 @@ MonoBehaviour:
   btnB: {fileID: 143196051110400656}
   btnC: {fileID: 3663465933373420665}
   btnD: {fileID: 8440989369061049111}
-  enablePlatformSpecificHiding: 0
+  enablePlatformSpecificHiding: 1
   joystickImg: {fileID: 3343911075328830854}
   joystickIdle: {fileID: -97564264, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
   joystickLeft: {fileID: 516886332, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
@@ -694,7 +694,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1858405948822721703
 CanvasRenderer:
@@ -1061,7 +1061,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 394, y: 29}
+  m_AnchoredPosition: {x: 357, y: 29}
   m_SizeDelta: {x: 80, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &705298728585859144
@@ -1463,7 +1463,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -134, y: -96}
+  m_AnchoredPosition: {x: -171, y: -96}
   m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2580628993664397363

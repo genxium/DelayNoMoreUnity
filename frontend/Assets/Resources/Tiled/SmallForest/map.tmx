@@ -280,7 +280,7 @@
   </object>
  </objectgroup>
  <objectgroup id="28" name="Pickable">
-  <object id="395" gid="1193" x="1072.03" y="978.72" width="32" height="32">
+  <object id="395" gid="1193" x="1179.03" y="978.72" width="32" height="32">
    <properties>
     <property name="lifetimeRdfCountPerOccurrence" value="65535"/>
    </properties>

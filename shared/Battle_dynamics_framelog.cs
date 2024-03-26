@@ -18,9 +18,25 @@ namespace shared {
             ifd.ConfirmedList = 0;
         }
 
+        public static string stringifyInventorySlot(InventorySlot slot) {
+            if (null == slot) return "";
+            return String.Format("q:{0},fr:{1}", slot.Quota, slot.FramesToRecover);
+        }
+
+        public static string stringifyInventory(Inventory iv) {
+            if (null == iv) return "";
+            var slotsSb = new List<String>();
+            for (int k = 0; k < iv.Slots.Count; k++) {
+                var slot = iv.Slots[k];
+                if (InventorySlotStockType.NoneIv == slot.StockType) break;
+                slotsSb.Add(stringifyInventorySlot(slot));
+            }
+            return String.Join('|', slotsSb);
+        }
+
         public static string stringifyPlayer(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fc:{11},fi:{12},jt:{13},fri:{14},dx:{15},dy:{16},ct:{17},sjt:{18},oshp:{19},js:{20},fsj:{21}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fc:{11},fi:{12},jt:{13},fri:{14},dx:{15},dy:{16},ct:{17},sjt:{18},oshp:{19},js:{20},fsj:{21},iv:[{22}]", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump, stringifyInventory(pd.Inventory));
         }
 
         public static string stringifyNpc(CharacterDownsync pd) {

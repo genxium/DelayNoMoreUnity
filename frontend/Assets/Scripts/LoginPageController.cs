@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class LoginPageController : MonoBehaviour {
     public LoginStatusBarController loginStatusBarController;
     public ModeSelect modeSelect;
     public CaptchaLoginFormController captchaLoginForm;
     public AllSettings allSettingsPanel;
+    public TMP_Text appVersion;
 
     private void Start() {
         ModeSelect.OnLoginRequiredDelegate onArenaLoginRequired = (WsSessionManager.OnLoginResult newOnLoginResultCallback) => {
@@ -23,6 +25,7 @@ public class LoginPageController : MonoBehaviour {
         modeSelect.SetAllSettingsPanel(allSettingsPanel);
         allSettingsPanel.SetSameSceneLoginStatusBar(loginStatusBarController);
         loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
+        appVersion.text = Application.version;
     }
 
     private void Awake() {

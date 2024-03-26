@@ -41,7 +41,7 @@ public class BattleInputManager : MonoBehaviour {
     void Start() {
         if (enablePlatformSpecificHiding && !Application.isMobilePlatform) {
             joystick.gameObject.SetActive(false);
-            btnA.gameObject.SetActive(false);
+            btnA.gameObject.SetActive(false); // if "chConfig.UseInventoryBtnB", it'll be later enabled in MapController
             btnB.gameObject.SetActive(false);
         }
         joystickInitPos = joystick.transform.position;
