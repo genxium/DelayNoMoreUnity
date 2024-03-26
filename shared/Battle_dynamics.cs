@@ -258,7 +258,7 @@ namespace shared {
             return skillUsed;
         }
 
-        private static bool _useInventorySlot(int rdfId, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame) {
+        private static bool _useInventorySlot(int rdfId, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ILoggerBridge logger) {
             bool slotUsed = false;
             if (0 < currCharacterDownsync.FramesToRecover) {
                 return false;
@@ -290,6 +290,7 @@ namespace shared {
                     targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
                     if (0 == targetSlotNext.Quota) {
                         targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
+                        logger.LogInfo(String.Format("At rdfId={0}, player joinIndex={1} starts reloading inventoryBtnB", rdfId, currCharacterDownsync.JoinIndex));
                     }
                     slotUsed = true;
                 }
@@ -372,7 +373,7 @@ namespace shared {
                 var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHolding, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder);
 
                 // Prioritize use of inventory slot over skills
-                bool slotUsed = _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame);
+                bool slotUsed = _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, logger);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
