@@ -1080,8 +1080,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        int paddingX = (tileWidth << 3) + (tileWidth << 2);
-        int paddingY = (tileHeight << 3);
+        // TODO: Use dynamic padding if camera zoom in/out is required during battle!
+        int camFovW = (int)(2.0f * Camera.main.orthographicSize * Camera.main.aspect);
+        int camFovH = (int)(2.0f * Camera.main.orthographicSize);
+        int paddingX = (camFovW >> 1);
+        int paddingY = (camFovH >> 1);
         cameraCapMinX = 0 + paddingX;
         cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
 
