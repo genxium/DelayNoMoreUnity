@@ -937,7 +937,7 @@ namespace shared {
                         if (null != v4 && currCharacterDownsync.JoinIndex <= roomCapacity) {
                             if (TERMINATING_CONSUMABLE_SPECIES_ID != v4.ConfigFromTiled.ConsumableSpeciesId && 0 < v4.RemainingLifetimeRdfCount) {
                                 if (PickupType.Immediate == v4.ConfigFromTiled.PickupType) {
-                                    var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                                    var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                                     if (clicked) {
                                         var consumableConfig = consumableConfigs[v4.ConfigFromTiled.ConsumableSpeciesId];
                                         if (MpRefillSmall.SpeciesId == consumableConfig.SpeciesId || MpRefillMiddle.SpeciesId == consumableConfig.SpeciesId) {
@@ -960,7 +960,7 @@ namespace shared {
                             var triggerConfig = atkedTrigger.Config;
                             if (0 == (triggerConfig.TriggerMask & TRIGGER_MASK_BY_MOVEMENT)) continue;
                             if (!isTriggerClickable(atkedTrigger)) continue;
-                            var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                            var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                             if (clicked) {
                                 // Currently only allowing "Player" to click.
                                 var atkedTriggerInNextFrame = nextRenderFrameTriggers[v3.TriggerLocalId];
@@ -969,7 +969,7 @@ namespace shared {
                         }
                         var v2 = bCollider.Data as TrapColliderAttr;
                         if (null != v2 && v2.ProvidesEscape && currCharacterDownsync.JoinIndex <= roomCapacity) {
-                            var (escaped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                            var (escaped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                             // Currently only allowing "Player" to win.
                             if (escaped) {
                                 if (1 == roomCapacity) {
@@ -1010,7 +1010,7 @@ namespace shared {
 
                         cellOverlappedOtherChCnt++;
 
-                        var (overlapped, softPushbackX, softPushbackY) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                        var (overlapped, softPushbackX, softPushbackY) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                         if (!overlapped) {
                             continue;
                         }
@@ -1253,7 +1253,7 @@ namespace shared {
                         break;
                     }
                     var defenderShape = bCollider.Shape;
-                    var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, false, ref overlapResult);
+                    var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, false, false, ref overlapResult);
                     if (!overlapped) continue;
 
                     switch (bCollider.Data) {
@@ -1280,6 +1280,11 @@ namespace shared {
                             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
                             exploded = true;
                             explodedOnAnotherCharacter = true;
+                            if (BulletType.Melee == bulletNextFrame.Config.BType) {     
+                                // To make explosion visually more consistent
+                                bulletNextFrame.VirtualGridX = ((bulletNextFrame.VirtualGridX + atkedCharacterInCurrFrame.VirtualGridX) >> 1);
+                                bulletNextFrame.VirtualGridY = ((bulletNextFrame.VirtualGridY + atkedCharacterInCurrFrame.VirtualGridY) >> 1);
+                            }
                             //logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], atkedCharacterInCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, atkedCharacterInCurrFrame));
                             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);

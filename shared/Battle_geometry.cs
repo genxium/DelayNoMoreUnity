@@ -3,6 +3,16 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        private static SatResult tmpResultHolder = new SatResult {
+            OverlapMag = 0,
+            OverlapX = 0,
+            OverlapY = 0,
+            AContainedInB = false,
+            BContainedInA = false,
+            AxisX = 0,
+            AxisY = 0    
+        };
+
         public static void roundToRectilinearDir(ref float normX, ref float normY) {
             if (0 == normX) {
                 if (0 > normY) {
@@ -19,7 +29,7 @@ namespace shared {
             }
         }
 
-        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, ref SatResult overlapResult) {
+        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, bool prefersAOnBShapeTopEdges, ref SatResult overlapResult) {
             float origX = a.X, origY = a.Y;
             try {
                 a.SetPosition(origX + oldDx, origY + oldDy);
@@ -31,7 +41,7 @@ namespace shared {
                 overlapResult.AxisX = 0;
                 overlapResult.AxisY = 0;
 
-                bool overlapped = isPolygonPairOverlapped(a, b, onlyOnBShapeEdges, ref overlapResult);
+                bool overlapped = isPolygonPairOverlapped(a, b, onlyOnBShapeEdges, prefersAOnBShapeTopEdges, ref overlapResult);
                 if (true == overlapped) {
                     float pushbackX = overlapResult.OverlapMag * overlapResult.OverlapX;
                     float pushbackY = overlapResult.OverlapMag * overlapResult.OverlapY;
@@ -110,7 +120,7 @@ namespace shared {
 
                 ConvexPolygon bShape = bCollider.Shape;
 
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult);
 
                 if (!overlapped) {
                     continue;
@@ -257,7 +267,7 @@ namespace shared {
                 }
                 ConvexPolygon bShape = bCollider.Shape;
 
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult);
 
                 if (!overlapped) {
                     continue;
@@ -332,10 +342,14 @@ namespace shared {
                 }
                 ConvexPolygon bShape = bCollider.Shape;
 
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, false, ref overlapResult);
 
                 if (!overlapped) {
                     continue;
+                }
+
+                if (isAnActualBarrier) {
+                    hitsAnActualBarrier = true;
                 }
 
                 // Same polarity
@@ -427,7 +441,7 @@ namespace shared {
             return x;
         }
 
-        public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, ref SatResult result) {
+        public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, bool prefersAOnBShapeTopEdges, ref SatResult result) {
             int aCnt = a.Points.Cnt;
             int bCnt = b.Points.Cnt;
             // Single point case
@@ -457,12 +471,14 @@ namespace shared {
                     float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
+                    tmpResultHolder.reset();
                     if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
                         return false;
                     }
                 }
             }
 
+            bool alreadyGotPreferredAOnBTopResult = false;
             if (1 < bCnt) {
                 for (int i = 0; i < bCnt; i++) {
                     Vector? u = b.GetPointByOffset(i);
@@ -476,13 +492,31 @@ namespace shared {
                     if (null == v) {
                         throw new ArgumentNullException("Getting a null point v from polygon b!");
                     }
+
                     float dx = (v.Y - u.Y);
                     float dy = -(v.X - u.X);
                     float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
-                    if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
-                        return false;
+                    if (onlyOnBShapeEdges && prefersAOnBShapeTopEdges) {
+                        tmpResultHolder.reset();
+                        if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref tmpResultHolder)) {
+                            return false;
+                        } else {
+                            if (alreadyGotPreferredAOnBTopResult && u.X == v.X) {
+                                continue;
+                            } else {
+                                tmpResultHolder.cloneInto(ref result);
+                                if (u.X != v.X) {
+                                    alreadyGotPreferredAOnBTopResult = true;
+                                }
+                            }
+                        }
+                    } else {
+                        // Just regular usage -- always pick the last overlapping result 
+                        if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
+                            return false;
+                        }
                     }
                 }
             }

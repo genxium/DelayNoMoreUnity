@@ -103,7 +103,7 @@ namespace shared {
                 if (invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
 
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                 if (!overlapped) {
                     continue;
                 }
@@ -166,7 +166,7 @@ namespace shared {
                 }
 
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                 if (!overlapped) {
                     continue;
                 }

@@ -169,9 +169,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         return Resources.Load("Prefabs/Pickable") as GameObject;
     }
 
-
     public ReadyGo readyGoPanel;
     public SettlementPanel settlementPanel;
+
     protected Vector3 newPosHolder = new Vector3();
     protected Vector3 newTlPosHolder = new Vector3(), newTrPosHolder = new Vector3(), newBlPosHolder = new Vector3(), newBrPosHolder = new Vector3();
 
@@ -2088,8 +2088,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
         var stepLength = Time.deltaTime * cameraSpeedInWorld;
-        if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id || stepLength > camDiffDstHolder.magnitude) {
+        if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id) {
+            // Immediately teleport
             newPosHolder.Set(dst.x, dst.y, camOldPos.z);
+        } else if (stepLength > camDiffDstHolder.magnitude) {
+            var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength * 0.1f;
+            newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
         } else {
             var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
             newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);

@@ -171,7 +171,7 @@ namespace shared {
             // [WARNING] As trap damage is calculated after those of bullets, don't overwrite blown-up effect!
             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) return;
 
-            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
             if (!overlapped) {
                 return;
             }
@@ -232,7 +232,7 @@ namespace shared {
             ConvexPolygon aShape = aCollider.Shape;
             ConvexPolygon bShape = bCollider.Shape;
 
-            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
             if (!overlapped) {
                 return;
             }

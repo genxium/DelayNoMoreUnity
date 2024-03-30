@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using shared;
 using static shared.Battle;
-using static Story.StoryConstants;
 
 public class OfflineMapController : AbstractMapController {
     
@@ -51,18 +50,24 @@ public class OfflineMapController : AbstractMapController {
         var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
         Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
         characterSelectPanel.gameObject.SetActive(false);
-        readyGoPanel.playReadyAnim();
-
         StartCoroutine(delayToStartBattle(startRdf));
+        Debug.Log("Started routine of delayToStartBattle");
     }
 
     private IEnumerator delayToStartBattle(RoomDownsyncFrame startRdf) {
+        readyGoPanel.playReadyAnim();
+        Debug.Log("Played READY anim, about to wait for playing GO anim");
         yield return new WaitForSeconds(1);
+        Debug.Log("Returned from yield, about to play GO anim");
         readyGoPanel.playGoAnim();
+        Debug.Log("Played GO anim");
         bgmSource.Play();
+        Debug.Log("Played BGM");
         // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
         startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
         onRoomDownsyncFrame(startRdf, null);
+        Debug.Log("onRoomDownsyncFrame of startRdf");
+
     }
 
 
