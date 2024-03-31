@@ -422,7 +422,7 @@ namespace shared {
                         OnWallEnabled = false,
                         VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(480.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(30.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),

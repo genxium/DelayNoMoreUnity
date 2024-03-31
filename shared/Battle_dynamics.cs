@@ -865,17 +865,17 @@ namespace shared {
                 }
 
                 if (0 < hardPushbackCnt) {
-                    /* 
-                       if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("Before processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
-                       }
-                     */
+                    /*
+                    if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
+                       logger.LogInfo(String.Format("Rdf.Id={6}, before processing hardpushbacks with chState={3}, vx={6}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
+                    }
+                    */
                     processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
-                    /* 
-                       if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("After processing hardpushbacks with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
-                       }
-                     */
+                    /*
+                    if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
+                       logger.LogInfo(String.Format("Rdf.Id={6}, after processing hardpushbacks with chState={3}, vx={6}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
+                    }
+                    */
                 }
 
                 bool landedOnGravityPushback = false;
@@ -1042,7 +1042,8 @@ namespace shared {
 
                             Hereby we SKIP recognizing "effectively zero softPushbacks", yet a closed-loop control on frontend by "onRoomDownsyncFrame & useOthersForcedDownsyncRenderFrameDict" is required because such (suspicious) floating errors are too difficult to completely avoid.
 
-                            A similar clamping is used in "Battle_geometry.calcHardPushbacksNormsForCharacter" -- and there's an explanation for why this clamping magnitude is chosen.
+                            A similar clamping is used in "Battle_geometry.
+                            sNormsForCharacter" -- and there's an explanation for why this clamping magnitude is chosen.
                             */
                             continue;
                         }
@@ -1099,7 +1100,7 @@ namespace shared {
 
                 /*
                 if (!landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
-                    logger.LogInfo(String.Format("Rdf.Id={0}, character {1} slipped with aShape={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, touchCells=\n{6}", currRenderFrame.Id, currCharacterDownsync, aShape.ToString(false), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), aCollider.TouchingCellsStaticColliderStr()));
+                    logger.LogInfo(String.Format("Rdf.Id={0}, character vx={1},vy={7} slipped with aShape={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, touchCells=\n{6}", currRenderFrame.Id, currCharacterDownsync.VirtualGridX, aShape.ToString(false), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), aCollider.TouchingCellsStaticColliderStr(), currCharacterDownsync.VirtualGridY));
                 }
                 */
 

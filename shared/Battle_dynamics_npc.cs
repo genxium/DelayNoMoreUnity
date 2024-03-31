@@ -17,9 +17,7 @@ namespace shared {
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (FireSwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_SKELEARCHER:
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(PurpleArrowBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX), yfac * PurpleArrowBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
-                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((PurpleArrowBullet.HitboxSizeX), (PurpleArrowBullet.HitboxSizeY));
-                    break;
+                    return (0 < colliderDy && absColliderDy > 0.3f * (bCollider.H-aCollider.H));
                 default:
                     return false;
             }

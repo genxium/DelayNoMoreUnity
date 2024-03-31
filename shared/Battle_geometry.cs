@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using static shared.CharacterState;
 
 namespace shared {
@@ -441,6 +442,7 @@ namespace shared {
             return x;
         }
 
+        private static float TOO_FAR_FOR_PUSHBACK_MAGNITUDE = 64.0f; // Roughly the height of a character
         public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, bool prefersAOnBShapeTopEdges, ref SatResult result) {
             int aCnt = a.Points.Cnt;
             int bCnt = b.Points.Cnt;
@@ -452,6 +454,7 @@ namespace shared {
                 return null != aPoint && null != bPoint && aPoint.X == bPoint.X && aPoint.Y == bPoint.Y;
             }
 
+            bool foundNonOverwhelmingOverlap = false;
             if (1 < aCnt && !onlyOnBShapeEdges) {
                 // Deliberately using "Points" instead of "SATAxes" to avoid unnecessary heap memory alloc
                 for (int i = 0; i < aCnt; i++) {
@@ -471,15 +474,18 @@ namespace shared {
                     float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
-                    tmpResultHolder.reset();
                     if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
                         return false;
+                    }
+                    if (result.OverlapMag < TOO_FAR_FOR_PUSHBACK_MAGNITUDE) {
+                        foundNonOverwhelmingOverlap = true;
                     }
                 }
             }
 
             bool alreadyGotPreferredAOnBTopResult = false;
             if (1 < bCnt) {
+                tmpResultHolder.reset(); // [WARNING] It's important NOT to reset "tmpResultHolder" on each "i in [0, bCnt)", because inside "isPolygonPairSeparatedByDir(a, b, dx, dy, ref tmpResultHolder)" we rely on the historic value of "tmpResultHolder" to check whether or not we're currently on "shortest path to escape overlap"!
                 for (int i = 0; i < bCnt; i++) {
                     Vector? u = b.GetPointByOffset(i);
                     if (null == u) {
@@ -498,18 +504,19 @@ namespace shared {
                     float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
+                    
                     if (onlyOnBShapeEdges && prefersAOnBShapeTopEdges) {
-                        tmpResultHolder.reset();
                         if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref tmpResultHolder)) {
                             return false;
-                        } else {
-                            if (alreadyGotPreferredAOnBTopResult && u.X == v.X) {
-                                continue;
-                            } else {
-                                tmpResultHolder.cloneInto(ref result);
-                                if (u.X != v.X) {
-                                    alreadyGotPreferredAOnBTopResult = true;
-                                }
+                        } 
+                        // Overlapped if only axis projection separation were required
+                        if (alreadyGotPreferredAOnBTopResult && u.X == v.X) {
+                            continue;
+                        } else if (tmpResultHolder.OverlapMag < TOO_FAR_FOR_PUSHBACK_MAGNITUDE) {
+                            foundNonOverwhelmingOverlap = true;
+                            tmpResultHolder.cloneInto(ref result);
+                            if (u.X != v.X) {
+                                alreadyGotPreferredAOnBTopResult = true;
                             }
                         }
                     } else {
@@ -517,11 +524,15 @@ namespace shared {
                         if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
                             return false;
                         }
+                        // Overlapped if only axis projection separation were required
+                        if (result.OverlapMag < TOO_FAR_FOR_PUSHBACK_MAGNITUDE) {
+                            foundNonOverwhelmingOverlap = true;
+                        }
                     }
                 }
             }
 
-            return true;
+            return foundNonOverwhelmingOverlap;
         }
 
         public static bool isPolygonPairSeparatedByDir(ConvexPolygon a, ConvexPolygon b, float axisX, float axisY, ref SatResult result) {
@@ -631,10 +642,9 @@ namespace shared {
                 result.OverlapMag = absoluteOverlap;
                 result.OverlapX = axisX * sign;
                 result.OverlapY = axisY * sign;
+                result.AxisX = axisX;
+                result.AxisY = axisY;
             }
-
-            result.AxisX = axisX;
-            result.AxisY = axisY;
 
             // the specified unit vector (axisX, axisY) doesn't separate "a" and "b", overlap result is generated
             return false;

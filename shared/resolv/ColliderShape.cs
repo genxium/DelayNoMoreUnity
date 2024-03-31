@@ -1,28 +1,13 @@
 using System;
+using System.Collections.Generic;
 
 namespace shared {
     // [WARNING] It's non-trivial to declare "Vector" as a "struct" due to the generic type constraint imposed on "RingBuffer<T>"; moreover it's also unnecessary to save heap RAM allocation this way, as shown below the "ConvexPolygon" should hold retained "Points" in heap RAM anyway, and the "ConvexPolygon instances" themselves are reused by the "Collider instances" which are also reused in battle.
-    public class Vector : IComparable<Vector> {
+    public class Vector {
         public float X, Y;
         public Vector(float x, float y) {
             X = x;
             Y = y;
-        }
-
-        public int CompareTo(Vector other) {
-            if (X < other.X) {     
-                return -1;
-            } else if (X > other.X) {
-                return +1;
-            } else {
-                if (Y < other.Y) {  
-                    return -1;
-                } else if (Y > other.Y) {  
-                    return +1;
-                } else {
-                    return 0;
-                }
-            }
         }
 
         public new String ToString() {
@@ -49,19 +34,47 @@ namespace shared {
         }
     }
 
-
     public class ConvexPolygon {
         public FrameRingBuffer<Vector> Points;
         public float X, Y; // The anchor position coordinates
         public bool Closed;
 
         public ConvexPolygon(float x, float y, float[] points) {
-            X = x;
-            Y = y;
-            Points = new FrameRingBuffer<Vector>(6); // I don't expected more points to be coped with in this particular game
+            int ptsCnt = (points.Length >> 1);
+            int bottomMostAndLeftMostJ = 0;
+            List<Vector> arrPoints = new List<Vector>(ptsCnt);
+            Points = new FrameRingBuffer<Vector>(ptsCnt); // I don't expected more points to be coped with in this particular game
             for (int i = 0; i < points.GetLength(0); i += 2) {
                 Vector v = new Vector(points[i], points[i + 1]);
-                Points.Put(v);
+                int j = (i >> 1);
+                arrPoints.Add(v);
+                if (j > 0) {
+                    if (v.Y > arrPoints[bottomMostAndLeftMostJ].Y) continue;
+                    if (v.Y < arrPoints[bottomMostAndLeftMostJ].Y || v.X < arrPoints[bottomMostAndLeftMostJ].X) {
+                        bottomMostAndLeftMostJ = j;
+                    }
+                }
+            }
+            float anchorOffsetX = arrPoints[bottomMostAndLeftMostJ].X, anchorOffsetY = arrPoints[bottomMostAndLeftMostJ].Y; // cache before sorting
+            // Assuming that the first point is always (0, 0), rectify the anchor values
+            arrPoints.Sort((p1, p2) => {
+                float dy1 = p1.Y - anchorOffsetY, dx1 = p1.X - anchorOffsetX;
+                float dy2 = p2.Y - anchorOffsetY, dx2 = p2.X - anchorOffsetX;
+                float crossProd = dx1 * dy2 - dy1 * dx2;
+                if (0 < crossProd) {
+                    return -1;
+                }
+                if (0 > crossProd) {
+                    return +1;
+                }
+                return 0;
+            });
+            X = x + anchorOffsetX;
+            Y = y + anchorOffsetY;
+            for (int i = 0; i < ptsCnt; i++) {
+                arrPoints[i].X -= anchorOffsetX;
+                arrPoints[i].Y -= anchorOffsetY;
+                Points.Put(arrPoints[i]);
             }
             Closed = true;
         }
@@ -114,7 +127,7 @@ namespace shared {
         public SerializableConvexPolygon Serialize() {
             var ret = new SerializableConvexPolygon {
                 AnchorX = X,
-                        AnchorY = Y,
+                AnchorY = Y,
             };
             for (int i = Points.StFrameId; i < Points.EdFrameId; i++) {
                 var p = GetPointByOffset(i);

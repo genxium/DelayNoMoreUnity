@@ -2088,12 +2088,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
         var stepLength = Time.deltaTime * cameraSpeedInWorld;
-        if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id) {
+        if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id || stepLength > camDiffDstHolder.magnitude) {
             // Immediately teleport
             newPosHolder.Set(dst.x, dst.y, camOldPos.z);
-        } else if (stepLength > camDiffDstHolder.magnitude) {
-            var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength * 0.1f;
-            newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
         } else {
             var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
             newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
@@ -2187,7 +2184,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             int m = collider.Shape.Points.Cnt;
             line.GetPositions(debugDrawPositionsHolder);
-            for (int i = 0; i < m; i++) {
+            for (int i = 0; i < 4; i++) {
+                int effI = (i >= m ? m - 1 : i);
                 var (_, pi) = collider.Shape.Points.GetByOffset(i);
                 (debugDrawPositionsHolder[i].x, debugDrawPositionsHolder[i].y) = CollisionSpacePositionToWorldPosition(collider.X + pi.X, collider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
             }
