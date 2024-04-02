@@ -1632,7 +1632,7 @@ namespace shared {
             }
         }
 
-        private static void _calcFallenDeath(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
+        private static void _calcFallenDeath(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Pickable> nextRenderFramePickables, ILoggerBridge logger) {
             for (int i = 0; i < roomCapacity + currNpcI; i++) {
                 var currCharacterDownsync = (i < roomCapacity ? currRenderFrame.PlayersArr[i] : currRenderFrame.NpcsArr[i - roomCapacity]);
                 if (i >= roomCapacity && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
@@ -1645,6 +1645,17 @@ namespace shared {
                     thatCharacterInNextFrame.VelX = 0;
                     thatCharacterInNextFrame.CharacterState = Dying;
                     thatCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
+                }
+            }
+
+            for (int i = 0; i < nextRenderFramePickables.Count; i++) {
+                var nextPickable = nextRenderFramePickables[i];
+                if (TERMINATING_PICKABLE_LOCAL_ID == nextPickable.PickableLocalId) break;
+                float pickableVirtualGridTop = nextPickable.VirtualGridY + (DEFAULT_PICKABLE_HITBOX_SIZE_Y >> 1);
+                if (0 > pickableVirtualGridTop && PickableState.Pidle == nextPickable.PkState) {
+                    nextPickable.PkState = PickableState.Pdisappearing;
+                    nextPickable.FramesInPkState = 0;
+                    nextPickable.RemainingLifetimeRdfCount = DEFAULT_PICKABLE_DISAPPEARING_ANIM_FRAMES; // When ended, will be reclaimed by "_moveAndInsertPickableColliders"
                 }
             }
         }
@@ -1853,16 +1864,21 @@ namespace shared {
             }
         }
 
-        private static void _leftShiftDeadNpcs(int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<EvtSubscription> nextRdfEvtSubsArr, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, ref int nextNpcI, ILoggerBridge logger) {
+        private static void _leftShiftDeadNpcs(int rdfId, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<EvtSubscription> nextRdfEvtSubsArr, ref int pickableLocalIdCounter, RepeatedField<Pickable> nextRenderFramePickables, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, ref int nextNpcI, ILoggerBridge logger) {
             isRemapNeeded = false;
             int aliveSlotI = 0, candidateI = 0;
+            int pseudoPickableCnt = 0;
             while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id) {
                 while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id && isNpcDeadToDisappear(nextRenderFrameNpcs[candidateI])) {
-                    if (MAGIC_EVTSUB_ID_NONE != nextRenderFrameNpcs[candidateI].PublishingEvtSubIdUponKilled) {
-                        UpdateWaveNpcKilledEvtSub(nextRenderFrameNpcs[candidateI].PublishingEvtMaskUponKilled, nextRdfEvtSubsArr[nextRenderFrameNpcs[candidateI].PublishingEvtSubIdUponKilled-1], ref fulfilledEvtSubscriptionSetMask);
+                    var candidate = nextRenderFrameNpcs[candidateI];
+                    if (MAGIC_EVTSUB_ID_NONE != candidate.PublishingEvtSubIdUponKilled) {
+                        UpdateWaveNpcKilledEvtSub(candidate.PublishingEvtMaskUponKilled, nextRdfEvtSubsArr[candidate.PublishingEvtSubIdUponKilled-1], ref fulfilledEvtSubscriptionSetMask);
                     } else {
-                        UpdateWaveNpcKilledEvtSub(nextRenderFrameNpcs[candidateI].PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask);
+                        UpdateWaveNpcKilledEvtSub(candidate.PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask);
                     }
+
+                    addNewPickableToNextFrame(rdfId, candidate.VirtualGridX, candidate.VirtualGridY, MAX_INT, 0, true, MAX_INT, MAX_INT, PickupType.Immediate, 1, nextRenderFramePickables, candidate.KilledToDropConsumableSpeciesId, candidate.KilledToDropBuffSpeciesId, ref pickableLocalIdCounter, ref pseudoPickableCnt);
+
                     candidateI++;
                 }
                 if (candidateI >= nextRenderFrameNpcs.Count || TERMINATING_PLAYER_ID == nextRenderFrameNpcs[candidateI].Id) {
@@ -1880,7 +1896,7 @@ namespace shared {
                 if (isRemapNeeded) {
                     joinIndexRemap[src.JoinIndex] = newJoinIndex;
                 }
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, newJoinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHolding, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, newJoinIndex, src.Hp, src.MaxHp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHolding, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, dst);
                 candidateI++;
                 aliveSlotI++;
             }
@@ -1963,6 +1979,7 @@ namespace shared {
             var nextRenderFrameBullets = candidate.Bullets;
             int nextRenderFrameBulletLocalIdCounter = currRenderFrame.BulletLocalIdCounter;
             int nextRenderFrameNpcLocalIdCounter = currRenderFrame.NpcLocalIdCounter;
+            int nextRenderFramePickableLocalIdCounter = currRenderFrame.PickableLocalIdCounter;
             var nextRenderFrameTraps = candidate.TrapsArr;
             var nextRenderFrameTriggers = candidate.TriggersArr;
             var nextRenderFramePickables = candidate.Pickables; 
@@ -1998,7 +2015,7 @@ namespace shared {
                     framesToStartJump = 0;
                 } 
                 var dst = nextRenderFramePlayers[i];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHolding, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHolding, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, dst);
                 _resetVelocityOnRecovered(src, dst);
             }
 
@@ -2033,7 +2050,7 @@ namespace shared {
                     framesToStartJump = 0;
                 } 
                 var dst = nextRenderFrameNpcs[currNpcI];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHolding, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, 0, src.VelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.MaxHp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.MaxMp, src.CollisionTypeMask, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHolding, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, dst);
                 _resetVelocityOnRecovered(src, dst);
                 currNpcI++;
             }
@@ -2154,10 +2171,11 @@ namespace shared {
 
             _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFramePickables, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, pickableColliderCntOffset, colliderCnt, logger);
 
-            _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, logger);
+            _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFramePickables, logger);
 
             bool isRemapNeeded = false;
-            _leftShiftDeadNpcs(roomCapacity, nextRenderFrameNpcs, nextEvtSubs, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, joinIndexRemap, out isRemapNeeded, ref nextNpcI, logger);
+
+            _leftShiftDeadNpcs(currRenderFrame.Id, roomCapacity, nextRenderFrameNpcs, nextEvtSubs, ref nextRenderFramePickableLocalIdCounter, nextRenderFramePickables, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, joinIndexRemap, out isRemapNeeded, ref nextNpcI, logger);
 
             if (isRemapNeeded) {
                 remapBulletOffenderJoinIndex(roomCapacity, nextNpcI, nextRenderFrameBullets, joinIndexRemap);
@@ -2189,6 +2207,7 @@ namespace shared {
             candidate.BulletLocalIdCounter = nextRenderFrameBulletLocalIdCounter;
             candidate.NpcLocalIdCounter = nextRenderFrameNpcLocalIdCounter;
             candidate.WaveNpcKilledEvtMaskCounter = nextWaveNpcKilledEvtMaskCounter;
+            candidate.PickableLocalIdCounter = nextRenderFramePickableLocalIdCounter;
 
             if (shouldDetectRealtimeRenderHistoryCorrection && nextRenderFrameId <= playingRdfId && candidate.Id == nextRenderFrameId) {
                 if (!EqualRdfs(historyRdfHolder, candidate, roomCapacity)) {
@@ -2226,6 +2245,19 @@ namespace shared {
                     (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.DefaultSizeX, chConfig.DefaultSizeY);
                     break;
             }
+        }
+
+        protected static bool addNewPickableToNextFrame(int rdfId, int virtualGridX, int virtualGridY, int remainingLifetimeRdfCount, int recurQuota, bool takesGravity, int recurIntervalRdfCount, int lifetimeRdfCountPerOccurrence, PickupType pkType, int stockQuotaPerOccurrence, RepeatedField<Pickable> nextRenderFramePickables, int consumableSpeciesId, int buffSpeciesId, ref int pickableLocalIdCounter, ref int pickableCnt) {
+            
+            AssignToPickable(pickableLocalIdCounter, virtualGridX, virtualGridY, remainingLifetimeRdfCount, recurQuota, PickableState.Pidle, 0, virtualGridX, virtualGridY, takesGravity, rdfId, recurQuota, recurIntervalRdfCount, lifetimeRdfCountPerOccurrence, pkType, stockQuotaPerOccurrence, MAGIC_EVTSUB_ID_NONE, consumableSpeciesId, buffSpeciesId, nextRenderFramePickables[pickableCnt]);
+
+            pickableLocalIdCounter++;
+            pickableCnt++;
+
+            // Explicitly specify termination of nextRenderFramePickables
+            nextRenderFramePickables[pickableCnt].PickableLocalId = TERMINATING_PICKABLE_LOCAL_ID;
+
+            return true;
         }
 
         protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet) {
@@ -2275,7 +2307,7 @@ namespace shared {
         protected static bool addNewNpcToNextFrame(int virtualGridX, int virtualGridY, int dirX, int dirY, int characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, int evtSubIdUponKilled, ulong waveNpcKilledEvtMaskCounter, int subscriptionId) {
             var chConfig = characters[characterSpeciesId];
             int birthVirtualX = virtualGridX + ((chConfig.DefaultSizeX >> 2) * dirX);
-            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, chConfig.RepelSoftPushback, isStatic, 0, false, false, true, 0, false, 0, defaultTemplateBuffList, defaultTemplateDebuffList, null, false, evtSubIdUponKilled, waveNpcKilledEvtMaskCounter, subscriptionId, false, nextRenderFrameNpcs[npcCnt]);
+            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, Idle1, npcCnt, chConfig.Hp, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, 1000, 1000, COLLISION_CHARACTER_INDEX_PREFIX, chConfig.OmitGravity, chConfig.OmitSoftPushback, chConfig.RepelSoftPushback, isStatic, 0, false, false, true, 0, false, 0, defaultTemplateBuffList, defaultTemplateDebuffList, null, false, evtSubIdUponKilled, waveNpcKilledEvtMaskCounter, subscriptionId, false, TERMINATING_CONSUMABLE_SPECIES_ID, TERMINATING_BUFF_SPECIES_ID, nextRenderFrameNpcs[npcCnt]); // TODO: Support killedToDropConsumable/Buff here
             npcLocalIdCounter++;
             npcCnt++;
             nextRenderFrameNpcs[npcCnt].Id = TERMINATING_PLAYER_ID;

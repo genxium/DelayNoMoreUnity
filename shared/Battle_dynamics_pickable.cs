@@ -15,8 +15,9 @@ namespace shared {
                 var dst = nextRenderFramePickables[pickableCnt];
 
                 int remainingLifetimeRdfCount = src.RemainingLifetimeRdfCount - 1;
-                AssignToPickable(src.PickableLocalId, src.VirtualGridX, src.VirtualGridY, src.ConfigFromTiled, remainingLifetimeRdfCount, src.RemainingRecurQuota, dst);
-        
+                var srcConfigFromTile = src.ConfigFromTiled;
+                AssignToPickable(src.PickableLocalId, src.VirtualGridX, src.VirtualGridY, remainingLifetimeRdfCount, src.RemainingRecurQuota, src.PkState, src.FramesInPkState + 1, srcConfigFromTile.InitVirtualGridX, srcConfigFromTile.InitVirtualGridY, srcConfigFromTile.TakesGravity, srcConfigFromTile.FirstShowRdfId, srcConfigFromTile.RecurQuota, srcConfigFromTile.RecurIntervalRdfCount, srcConfigFromTile.LifetimeRdfCountPerOccurrence, srcConfigFromTile.PickupType, srcConfigFromTile.StockQuotaPerOccurrence, srcConfigFromTile.SubscriptionId, srcConfigFromTile.ConsumableSpeciesId, srcConfigFromTile.BuffSpeciesId, dst);
+
                 if (!IsPickableAlive(dst, currRenderFrame.Id)) {
                     continue;
                 }

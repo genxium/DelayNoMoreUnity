@@ -120,12 +120,12 @@ TextureImporter:
       name: Atk1_1
       rect:
         serializedVersion: 2
-        x: 909
-        y: 1534
+        x: 315
+        y: 1585
         width: 94
         height: 75
       alignment: 9
-      pivot: {x: 0.80851066, y: 0.7866667}
+      pivot: {x: 0.80851066, y: 0.96}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -146,7 +146,7 @@ TextureImporter:
         width: 88
         height: 101
       alignment: 9
-      pivot: {x: 0.7386364, y: 0.5841584}
+      pivot: {x: 0.7386364, y: 0.7128713}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -162,12 +162,12 @@ TextureImporter:
       name: Atk1_11
       rect:
         serializedVersion: 2
-        x: 83
-        y: 1407
+        x: 0
+        y: 1324
         width: 83
         height: 95
       alignment: 9
-      pivot: {x: 0.8192771, y: 0.6210526}
+      pivot: {x: 0.8192771, y: 0.75789475}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -183,12 +183,12 @@ TextureImporter:
       name: Atk1_2
       rect:
         serializedVersion: 2
-        x: 79
-        y: 1089
+        x: 0
+        y: 1115
         width: 76
         height: 101
       alignment: 9
-      pivot: {x: 0.67105263, y: 0.5841584}
+      pivot: {x: 0.67105263, y: 0.7128713}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -209,7 +209,7 @@ TextureImporter:
         width: 123
         height: 133
       alignment: 9
-      pivot: {x: 0.3821138, y: 0.44360903}
+      pivot: {x: 0.3821138, y: 0.5413534}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -230,7 +230,7 @@ TextureImporter:
         width: 125
         height: 144
       alignment: 9
-      pivot: {x: 0.4, y: 0.4097222}
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -251,7 +251,7 @@ TextureImporter:
         width: 125
         height: 144
       alignment: 9
-      pivot: {x: 0.4, y: 0.4097222}
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -267,12 +267,12 @@ TextureImporter:
       name: Atk1_6
       rect:
         serializedVersion: 2
-        x: 962
-        y: 1296
+        x: 829
+        y: 883
         width: 61
         height: 142
       alignment: 9
-      pivot: {x: 0.7704918, y: 0.41549295}
+      pivot: {x: 0.7704918, y: 0.5070422}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -288,12 +288,12 @@ TextureImporter:
       name: Atk1_7
       rect:
         serializedVersion: 2
-        x: 962
-        y: 1296
+        x: 829
+        y: 883
         width: 61
         height: 142
       alignment: 9
-      pivot: {x: 0.7704918, y: 0.41549295}
+      pivot: {x: 0.7704918, y: 0.5070422}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -309,12 +309,12 @@ TextureImporter:
       name: Atk1_8
       rect:
         serializedVersion: 2
-        x: 808
-        y: 1485
+        x: 122
+        y: 1566
         width: 93
         height: 109
       alignment: 9
-      pivot: {x: 0.75268817, y: 0.5412844}
+      pivot: {x: 0.75268817, y: 0.6605505}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -330,12 +330,12 @@ TextureImporter:
       name: Atk1_9
       rect:
         serializedVersion: 2
-        x: 808
-        y: 1485
+        x: 122
+        y: 1566
         width: 93
         height: 109
       alignment: 9
-      pivot: {x: 0.75268817, y: 0.5412844}
+      pivot: {x: 0.75268817, y: 0.6605505}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -351,12 +351,12 @@ TextureImporter:
       name: Atk2_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1100
+        x: 839
+        y: 1238
         width: 79
         height: 107
       alignment: 9
-      pivot: {x: 0.5253165, y: 0.53271025}
+      pivot: {x: 0.5253165, y: 0.6542056}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -372,12 +372,12 @@ TextureImporter:
       name: Atk2_10
       rect:
         serializedVersion: 2
-        x: 165
-        y: 1264
+        x: 314
+        y: 1199
         width: 80
         height: 111
       alignment: 9
-      pivot: {x: 0.78125, y: 0.5135135}
+      pivot: {x: 0.78125, y: 0.6306306}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -393,12 +393,12 @@ TextureImporter:
       name: Atk2_11
       rect:
         serializedVersion: 2
-        x: 170
-        y: 1501
+        x: 738
+        y: 1574
         width: 79
         height: 109
       alignment: 9
-      pivot: {x: 0.778481, y: 0.5229358}
+      pivot: {x: 0.778481, y: 0.64220184}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -414,12 +414,12 @@ TextureImporter:
       name: Atk2_12
       rect:
         serializedVersion: 2
-        x: 0
-        y: 901
+        x: 554
+        y: 1125
         width: 74
         height: 107
       alignment: 9
-      pivot: {x: 0.7364865, y: 0.53271025}
+      pivot: {x: 0.7364865, y: 0.6542056}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -435,12 +435,12 @@ TextureImporter:
       name: Atk2_13
       rect:
         serializedVersion: 2
-        x: 533
-        y: 1138
+        x: 747
+        y: 1158
         width: 70
         height: 106
       alignment: 9
-      pivot: {x: 0.75, y: 0.5377358}
+      pivot: {x: 0.75, y: 0.6603774}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -456,12 +456,12 @@ TextureImporter:
       name: Atk2_14
       rect:
         serializedVersion: 2
-        x: 457
-        y: 1036
+        x: 817
+        y: 1132
         width: 70
         height: 106
       alignment: 9
-      pivot: {x: 0.60714287, y: 0.5377358}
+      pivot: {x: 0.60714287, y: 0.6603774}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -477,12 +477,12 @@ TextureImporter:
       name: Atk2_15
       rect:
         serializedVersion: 2
-        x: 613
-        y: 1204
+        x: 244
+        y: 1028
         width: 70
         height: 111
       alignment: 9
-      pivot: {x: 0.5214286, y: 0.5135135}
+      pivot: {x: 0.5214286, y: 0.6306306}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -498,12 +498,12 @@ TextureImporter:
       name: Atk2_2
       rect:
         serializedVersion: 2
-        x: 81
-        y: 1190
+        x: 165
+        y: 1225
         width: 80
         height: 109
       alignment: 9
-      pivot: {x: 0.56875, y: 0.5229358}
+      pivot: {x: 0.56875, y: 0.64220184}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -519,12 +519,12 @@ TextureImporter:
       name: Atk2_3
       rect:
         serializedVersion: 2
-        x: 792
-        y: 1268
+        x: 93
+        y: 1452
         width: 83
         height: 114
       alignment: 9
-      pivot: {x: 0.70481926, y: 0.5}
+      pivot: {x: 0.70481926, y: 0.61403507}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -540,12 +540,12 @@ TextureImporter:
       name: Atk2_4
       rect:
         serializedVersion: 2
-        x: 953
-        y: 938
+        x: 535
+        y: 873
         width: 63
         height: 140
       alignment: 9
-      pivot: {x: 0.76984125, y: 0.40714285}
+      pivot: {x: 0.76984125, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -561,12 +561,12 @@ TextureImporter:
       name: Atk2_5
       rect:
         serializedVersion: 2
-        x: 239
-        y: 1115
+        x: 176
+        y: 1426
         width: 73
         height: 140
       alignment: 9
-      pivot: {x: 0.70547944, y: 0.40714285}
+      pivot: {x: 0.70547944, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -582,12 +582,12 @@ TextureImporter:
       name: Atk2_6
       rect:
         serializedVersion: 2
-        x: 646
-        y: 1592
+        x: 249
+        y: 1558
         width: 66
         height: 140
       alignment: 9
-      pivot: {x: 0.7651515, y: 0.40714285}
+      pivot: {x: 0.7651515, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -603,12 +603,12 @@ TextureImporter:
       name: Atk2_7
       rect:
         serializedVersion: 2
-        x: 387
-        y: 1146
+        x: 394
+        y: 1066
         width: 73
         height: 138
       alignment: 9
-      pivot: {x: 0.8150685, y: 0.41304347}
+      pivot: {x: 0.8150685, y: 0.5072464}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -629,7 +629,7 @@ TextureImporter:
         width: 131
         height: 139
       alignment: 9
-      pivot: {x: 0.5, y: 0.41007194}
+      pivot: {x: 0.5, y: 0.50359714}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -650,7 +650,7 @@ TextureImporter:
         width: 131
         height: 112
       alignment: 9
-      pivot: {x: 0.5, y: 0.5089286}
+      pivot: {x: 0.5, y: 0.625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -750,8 +750,8 @@ TextureImporter:
       name: Atk4_5
       rect:
         serializedVersion: 2
-        x: 545
-        y: 1650
+        x: 817
+        y: 1567
         width: 101
         height: 129
       alignment: 9
@@ -771,8 +771,8 @@ TextureImporter:
       name: Atk4_6
       rect:
         serializedVersion: 2
-        x: 712
-        y: 1577
+        x: 418
+        y: 1649
         width: 96
         height: 102
       alignment: 9
@@ -792,8 +792,8 @@ TextureImporter:
       name: Atk4_7
       rect:
         serializedVersion: 2
-        x: 155
-        y: 1076
+        x: 394
+        y: 1204
         width: 75
         height: 98
       alignment: 9
@@ -813,8 +813,8 @@ TextureImporter:
       name: Atk4_8
       rect:
         serializedVersion: 2
-        x: 958
-        y: 1186
+        x: 249
+        y: 1336
         width: 65
         height: 110
       alignment: 9
@@ -834,8 +834,8 @@ TextureImporter:
       name: Atked1_1
       rect:
         serializedVersion: 2
-        x: 404
-        y: 1507
+        x: 786
+        y: 1474
         width: 87
         height: 93
       alignment: 9
@@ -855,8 +855,8 @@ TextureImporter:
       name: Atked1_2
       rect:
         serializedVersion: 2
-        x: 901
-        y: 1438
+        x: 0
+        y: 1527
         width: 93
         height: 96
       alignment: 0
@@ -876,8 +876,8 @@ TextureImporter:
       name: BlownUp_1
       rect:
         serializedVersion: 2
-        x: 315
-        y: 1612
+        x: 514
+        y: 1585
         width: 92
         height: 90
       alignment: 9
@@ -897,8 +897,8 @@ TextureImporter:
       name: BlownUp_2
       rect:
         serializedVersion: 2
-        x: 315
-        y: 1702
+        x: 645
+        y: 1606
         width: 93
         height: 90
       alignment: 9
@@ -918,8 +918,8 @@ TextureImporter:
       name: BlownUp_3
       rect:
         serializedVersion: 2
-        x: 315
-        y: 1612
+        x: 514
+        y: 1585
         width: 92
         height: 90
       alignment: 9
@@ -939,8 +939,8 @@ TextureImporter:
       name: BlownUp_4
       rect:
         serializedVersion: 2
-        x: 620
-        y: 1315
+        x: 918
+        y: 1242
         width: 84
         height: 88
       alignment: 9
@@ -960,8 +960,8 @@ TextureImporter:
       name: BlownUp_5
       rect:
         serializedVersion: 2
-        x: 712
-        y: 1506
+        x: 500
+        y: 1514
         width: 91
         height: 71
       alignment: 9
@@ -982,7 +982,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 443
-        y: 1813
+        y: 1751
         width: 104
         height: 57
       alignment: 9
@@ -1002,8 +1002,8 @@ TextureImporter:
       name: BlownUp_7
       rect:
         serializedVersion: 2
-        x: 533
-        y: 1577
+        x: 606
+        y: 1533
         width: 91
         height: 73
       alignment: 9
@@ -1023,8 +1023,8 @@ TextureImporter:
       name: BlownUp_8
       rect:
         serializedVersion: 2
-        x: 655
-        y: 883
+        x: 949
+        y: 898
         width: 59
         height: 106
       alignment: 9
@@ -1044,8 +1044,8 @@ TextureImporter:
       name: Dashing_1
       rect:
         serializedVersion: 2
-        x: 466
-        y: 1252
+        x: 469
+        y: 1106
         width: 74
         height: 103
       alignment: 9
@@ -1065,7 +1065,7 @@ TextureImporter:
       name: Dashing_10
       rect:
         serializedVersion: 2
-        x: 645
+        x: 796
         y: 773
         width: 55
         height: 110
@@ -1107,8 +1107,8 @@ TextureImporter:
       name: Dashing_12
       rect:
         serializedVersion: 2
-        x: 712
-        y: 1679
+        x: 918
+        y: 1560
         width: 99
         height: 118
       alignment: 9
@@ -1128,8 +1128,8 @@ TextureImporter:
       name: Dashing_13
       rect:
         serializedVersion: 2
-        x: 714
-        y: 769
+        x: 947
+        y: 673
         width: 56
         height: 115
       alignment: 9
@@ -1191,8 +1191,8 @@ TextureImporter:
       name: Dashing_16
       rect:
         serializedVersion: 2
-        x: 248
-        y: 1365
+        x: 765
+        y: 1021
         width: 64
         height: 111
       alignment: 9
@@ -1212,7 +1212,7 @@ TextureImporter:
       name: Dashing_17
       rect:
         serializedVersion: 2
-        x: 645
+        x: 796
         y: 773
         width: 55
         height: 110
@@ -1254,8 +1254,8 @@ TextureImporter:
       name: Dashing_19
       rect:
         serializedVersion: 2
-        x: 712
-        y: 1679
+        x: 918
+        y: 1560
         width: 99
         height: 118
       alignment: 9
@@ -1275,8 +1275,8 @@ TextureImporter:
       name: Dashing_2
       rect:
         serializedVersion: 2
-        x: 248
-        y: 1365
+        x: 765
+        y: 1021
         width: 64
         height: 111
       alignment: 9
@@ -1296,8 +1296,8 @@ TextureImporter:
       name: Dashing_20
       rect:
         serializedVersion: 2
-        x: 714
-        y: 769
+        x: 947
+        y: 673
         width: 56
         height: 115
       alignment: 9
@@ -1359,8 +1359,8 @@ TextureImporter:
       name: Dashing_23
       rect:
         serializedVersion: 2
-        x: 595
-        y: 983
+        x: 598
+        y: 820
         width: 60
         height: 111
       alignment: 9
@@ -1380,8 +1380,8 @@ TextureImporter:
       name: Dashing_24
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1411
+        x: 83
+        y: 1349
         width: 83
         height: 103
       alignment: 9
@@ -1401,8 +1401,8 @@ TextureImporter:
       name: Dashing_25
       rect:
         serializedVersion: 2
-        x: 443
-        y: 1712
+        x: 681
+        y: 1696
         width: 102
         height: 101
       alignment: 9
@@ -1422,8 +1422,8 @@ TextureImporter:
       name: Dashing_26
       rect:
         serializedVersion: 2
-        x: 811
-        y: 1594
+        x: 547
+        y: 1675
         width: 98
         height: 102
       alignment: 9
@@ -1443,8 +1443,8 @@ TextureImporter:
       name: Dashing_27
       rect:
         serializedVersion: 2
-        x: 708
-        y: 1405
+        x: 668
+        y: 1297
         width: 86
         height: 101
       alignment: 9
@@ -1506,7 +1506,7 @@ TextureImporter:
       name: Dashing_3
       rect:
         serializedVersion: 2
-        x: 645
+        x: 796
         y: 773
         width: 55
         height: 110
@@ -1569,8 +1569,8 @@ TextureImporter:
       name: Dashing_32
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1008
+        x: 479
+        y: 1313
         width: 76
         height: 92
       alignment: 9
@@ -1590,8 +1590,8 @@ TextureImporter:
       name: Dashing_33
       rect:
         serializedVersion: 2
-        x: 312
-        y: 1109
+        x: 314
+        y: 1089
         width: 73
         height: 110
       alignment: 9
@@ -1632,8 +1632,8 @@ TextureImporter:
       name: Dashing_5
       rect:
         serializedVersion: 2
-        x: 712
-        y: 1679
+        x: 918
+        y: 1560
         width: 99
         height: 118
       alignment: 9
@@ -1653,8 +1653,8 @@ TextureImporter:
       name: Dashing_6
       rect:
         serializedVersion: 2
-        x: 714
-        y: 769
+        x: 947
+        y: 673
         width: 56
         height: 115
       alignment: 9
@@ -1716,8 +1716,8 @@ TextureImporter:
       name: Dashing_9
       rect:
         serializedVersion: 2
-        x: 248
-        y: 1365
+        x: 765
+        y: 1021
         width: 64
         height: 111
       alignment: 9
@@ -1737,12 +1737,12 @@ TextureImporter:
       name: Dying_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1514
+        x: 495
+        y: 1405
         width: 87
         height: 109
       alignment: 9
-      pivot: {x: 0.5632184, y: 0.3119268}
+      pivot: {x: 0.5632184, y: 0.4174312}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1758,12 +1758,12 @@ TextureImporter:
       name: Dying_10
       rect:
         serializedVersion: 2
-        x: 575
-        y: 1842
+        x: 443
+        y: 1808
         width: 104
         height: 62
       alignment: 9
-      pivot: {x: 0.50961536, y: 0.58064556}
+      pivot: {x: 0.50961536, y: 0.766129}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1784,7 +1784,7 @@ TextureImporter:
         width: 126
         height: 64
       alignment: 9
-      pivot: {x: 0.48412699, y: 0.79687536}
+      pivot: {x: 0.48412699, y: 0.9765625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1805,7 +1805,7 @@ TextureImporter:
         width: 136
         height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 1.1333338}
+      pivot: {x: 0.5, y: 1.3888888}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1826,7 +1826,7 @@ TextureImporter:
         width: 136
         height: 38
       alignment: 9
-      pivot: {x: 0.5, y: 1.3684217}
+      pivot: {x: 0.5, y: 1.6710526}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1842,12 +1842,12 @@ TextureImporter:
       name: Dying_2
       rect:
         serializedVersion: 2
-        x: 87
-        y: 1502
+        x: 0
+        y: 1419
         width: 83
         height: 108
       alignment: 9
-      pivot: {x: 0.61445785, y: 0.314815}
+      pivot: {x: 0.61445785, y: 0.4212963}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1863,12 +1863,12 @@ TextureImporter:
       name: Dying_3
       rect:
         serializedVersion: 2
-        x: 490
-        y: 1355
+        x: 765
+        y: 1367
         width: 86
         height: 107
       alignment: 9
-      pivot: {x: 0.60465115, y: 0.31775722}
+      pivot: {x: 0.60465115, y: 0.42523363}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1889,7 +1889,7 @@ TextureImporter:
         width: 94
         height: 82
       alignment: 9
-      pivot: {x: 0.59574467, y: 0.43902466}
+      pivot: {x: 0.59574467, y: 0.5792683}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1905,12 +1905,12 @@ TextureImporter:
       name: Dying_5
       rect:
         serializedVersion: 2
-        x: 624
-        y: 1514
+        x: 591
+        y: 1455
         width: 88
         height: 78
       alignment: 9
-      pivot: {x: 0.57954544, y: 0.46153876}
+      pivot: {x: 0.57954544, y: 0.60897434}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1926,12 +1926,12 @@ TextureImporter:
       name: Dying_6
       rect:
         serializedVersion: 2
-        x: 527
-        y: 1068
+        x: 387
+        y: 996
         width: 68
         height: 70
       alignment: 9
-      pivot: {x: 0.7058824, y: 0.51428604}
+      pivot: {x: 0.7058824, y: 0.6785714}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1947,12 +1947,12 @@ TextureImporter:
       name: Dying_7
       rect:
         serializedVersion: 2
-        x: 889
-        y: 1132
+        x: 611
+        y: 1039
         width: 67
         height: 66
       alignment: 9
-      pivot: {x: 0.7164179, y: 0.5454549}
+      pivot: {x: 0.7164179, y: 0.719697}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1968,12 +1968,12 @@ TextureImporter:
       name: Dying_8
       rect:
         serializedVersion: 2
-        x: 732
-        y: 996
+        x: 658
+        y: 762
         width: 60
         height: 78
       alignment: 9
-      pivot: {x: 0.7, y: 0.46153876}
+      pivot: {x: 0.7, y: 0.60897434}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1994,7 +1994,7 @@ TextureImporter:
         width: 77
         height: 75
       alignment: 9
-      pivot: {x: 0.54545456, y: 0.48000032}
+      pivot: {x: 0.54545456, y: 0.6333333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2052,8 +2052,8 @@ TextureImporter:
       name: GetUp_3
       rect:
         serializedVersion: 2
-        x: 547
-        y: 1779
+        x: 315
+        y: 1729
         width: 103
         height: 63
       alignment: 9
@@ -2073,8 +2073,8 @@ TextureImporter:
       name: GetUp_4
       rect:
         serializedVersion: 2
-        x: 909
-        y: 1609
+        x: 315
+        y: 1660
         width: 96
         height: 69
       alignment: 9
@@ -2095,7 +2095,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 314
-        y: 1414
+        y: 1310
         width: 81
         height: 75
       alignment: 9
@@ -2115,8 +2115,8 @@ TextureImporter:
       name: GetUp_6
       rect:
         serializedVersion: 2
-        x: 527
-        y: 979
+        x: 736
+        y: 823
         width: 60
         height: 89
       alignment: 9
@@ -2136,8 +2136,8 @@ TextureImporter:
       name: GetUp_7
       rect:
         serializedVersion: 2
-        x: 302
-        y: 1003
+        x: 0
+        y: 904
         width: 71
         height: 106
       alignment: 9
@@ -2157,8 +2157,8 @@ TextureImporter:
       name: Idle1_1
       rect:
         serializedVersion: 2
-        x: 540
-        y: 1244
+        x: 314
+        y: 979
         width: 73
         height: 110
       alignment: 9
@@ -2178,8 +2178,8 @@ TextureImporter:
       name: Idle1_10
       rect:
         serializedVersion: 2
-        x: 956
-        y: 1078
+        x: 678
+        y: 949
         width: 64
         height: 108
       alignment: 9
@@ -2199,8 +2199,8 @@ TextureImporter:
       name: Idle1_11
       rect:
         serializedVersion: 2
-        x: 889
-        y: 1024
+        x: 611
+        y: 931
         width: 64
         height: 108
       alignment: 9
@@ -2220,8 +2220,8 @@ TextureImporter:
       name: Idle1_12
       rect:
         serializedVersion: 2
-        x: 751
-        y: 1074
+        x: 829
+        y: 1025
         width: 63
         height: 107
       alignment: 9
@@ -2241,8 +2241,8 @@ TextureImporter:
       name: Idle1_13
       rect:
         serializedVersion: 2
-        x: 875
-        y: 915
+        x: 742
+        y: 912
         width: 61
         height: 109
       alignment: 9
@@ -2262,8 +2262,8 @@ TextureImporter:
       name: Idle1_14
       rect:
         serializedVersion: 2
-        x: 587
-        y: 873
+        x: 949
+        y: 788
         width: 58
         height: 110
       alignment: 9
@@ -2283,8 +2283,8 @@ TextureImporter:
       name: Idle1_15
       rect:
         serializedVersion: 2
-        x: 650
-        y: 1732
+        x: 892
+        y: 1004
         width: 62
         height: 110
       alignment: 9
@@ -2304,8 +2304,8 @@ TextureImporter:
       name: Idle1_16
       rect:
         serializedVersion: 2
-        x: 603
-        y: 1094
+        x: 467
+        y: 996
         width: 68
         height: 110
       alignment: 9
@@ -2325,8 +2325,8 @@ TextureImporter:
       name: Idle1_17
       rect:
         serializedVersion: 2
-        x: 0
-        y: 791
+        x: 72
+        y: 913
         width: 71
         height: 110
       alignment: 9
@@ -2346,8 +2346,8 @@ TextureImporter:
       name: Idle1_2
       rect:
         serializedVersion: 2
-        x: 385
-        y: 1036
+        x: 233
+        y: 918
         width: 72
         height: 110
       alignment: 9
@@ -2367,8 +2367,8 @@ TextureImporter:
       name: Idle1_3
       rect:
         serializedVersion: 2
-        x: 460
-        y: 1142
+        x: 160
+        y: 1024
         width: 73
         height: 110
       alignment: 9
@@ -2388,8 +2388,8 @@ TextureImporter:
       name: Idle1_4
       rect:
         serializedVersion: 2
-        x: 230
-        y: 1005
+        x: 76
+        y: 1023
         width: 72
         height: 110
       alignment: 9
@@ -2409,8 +2409,8 @@ TextureImporter:
       name: Idle1_5
       rect:
         serializedVersion: 2
-        x: 245
-        y: 1255
+        x: 851
+        y: 1345
         width: 67
         height: 110
       alignment: 9
@@ -2431,7 +2431,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 249
-        y: 1476
+        y: 1226
         width: 65
         height: 110
       alignment: 9
@@ -2451,8 +2451,8 @@ TextureImporter:
       name: Idle1_7
       rect:
         serializedVersion: 2
-        x: 814
-        y: 987
+        x: 954
+        y: 1004
         width: 61
         height: 110
       alignment: 9
@@ -2472,8 +2472,8 @@ TextureImporter:
       name: Idle1_8
       rect:
         serializedVersion: 2
-        x: 791
-        y: 877
+        x: 890
+        y: 782
         width: 57
         height: 110
       alignment: 9
@@ -2493,8 +2493,8 @@ TextureImporter:
       name: Idle1_9
       rect:
         serializedVersion: 2
-        x: 671
-        y: 989
+        x: 675
+        y: 840
         width: 61
         height: 109
       alignment: 9
@@ -2514,8 +2514,8 @@ TextureImporter:
       name: InAirAtk1_1
       rect:
         serializedVersion: 2
-        x: 312
-        y: 1219
+        x: 479
+        y: 1209
         width: 75
         height: 104
       alignment: 9
@@ -2535,8 +2535,8 @@ TextureImporter:
       name: InAirAtk1_10
       rect:
         serializedVersion: 2
-        x: 161
-        y: 1174
+        x: 82
+        y: 1133
         width: 78
         height: 90
       alignment: 9
@@ -2556,8 +2556,8 @@ TextureImporter:
       name: InAirAtk1_11
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1319
+        x: 166
+        y: 1334
         width: 83
         height: 92
       alignment: 9
@@ -2577,8 +2577,8 @@ TextureImporter:
       name: InAirAtk1_12
       rect:
         serializedVersion: 2
-        x: 794
-        y: 1382
+        x: 754
+        y: 1264
         width: 85
         height: 103
       alignment: 9
@@ -2619,8 +2619,8 @@ TextureImporter:
       name: InAirAtk1_14
       rect:
         serializedVersion: 2
-        x: 753
-        y: 1181
+        x: 245
+        y: 1139
         width: 69
         height: 87
       alignment: 9
@@ -2640,8 +2640,8 @@ TextureImporter:
       name: InAirAtk1_15
       rect:
         serializedVersion: 2
-        x: 122
-        y: 1610
+        x: 697
+        y: 1509
         width: 89
         height: 65
       alignment: 9
@@ -2661,8 +2661,8 @@ TextureImporter:
       name: InAirAtk1_16
       rect:
         serializedVersion: 2
-        x: 408
-        y: 1678
+        x: 783
+        y: 1683
         width: 34
         height: 114
       alignment: 9
@@ -2682,8 +2682,8 @@ TextureImporter:
       name: InAirAtk1_17
       rect:
         serializedVersion: 2
-        x: 161
-        y: 1174
+        x: 82
+        y: 1133
         width: 78
         height: 90
       alignment: 9
@@ -2703,8 +2703,8 @@ TextureImporter:
       name: InAirAtk1_18
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1319
+        x: 166
+        y: 1334
         width: 83
         height: 92
       alignment: 9
@@ -2724,8 +2724,8 @@ TextureImporter:
       name: InAirAtk1_19
       rect:
         serializedVersion: 2
-        x: 794
-        y: 1382
+        x: 754
+        y: 1264
         width: 85
         height: 103
       alignment: 9
@@ -2745,8 +2745,8 @@ TextureImporter:
       name: InAirAtk1_2
       rect:
         serializedVersion: 2
-        x: 408
-        y: 1678
+        x: 783
+        y: 1683
         width: 34
         height: 114
       alignment: 9
@@ -2787,8 +2787,8 @@ TextureImporter:
       name: InAirAtk1_21
       rect:
         serializedVersion: 2
-        x: 753
-        y: 1181
+        x: 245
+        y: 1139
         width: 69
         height: 87
       alignment: 9
@@ -2808,8 +2808,8 @@ TextureImporter:
       name: InAirAtk1_22
       rect:
         serializedVersion: 2
-        x: 122
-        y: 1610
+        x: 697
+        y: 1509
         width: 89
         height: 65
       alignment: 9
@@ -2829,8 +2829,8 @@ TextureImporter:
       name: InAirAtk1_23
       rect:
         serializedVersion: 2
-        x: 315
-        y: 1489
+        x: 406
+        y: 1414
         width: 89
         height: 123
       alignment: 9
@@ -2850,8 +2850,8 @@ TextureImporter:
       name: InAirAtk1_24
       rect:
         serializedVersion: 2
-        x: 491
-        y: 1462
+        x: 918
+        y: 1445
         width: 86
         height: 115
       alignment: 9
@@ -2871,8 +2871,8 @@ TextureImporter:
       name: InAirAtk1_25
       rect:
         serializedVersion: 2
-        x: 879
-        y: 1310
+        x: 918
+        y: 1114
         width: 83
         height: 128
       alignment: 9
@@ -2892,8 +2892,8 @@ TextureImporter:
       name: InAirAtk1_26
       rect:
         serializedVersion: 2
-        x: 879
-        y: 1310
+        x: 918
+        y: 1114
         width: 83
         height: 128
       alignment: 9
@@ -2913,8 +2913,8 @@ TextureImporter:
       name: InAirAtk1_27
       rect:
         serializedVersion: 2
-        x: 83
-        y: 1299
+        x: 0
+        y: 1216
         width: 82
         height: 108
       alignment: 9
@@ -2934,8 +2934,8 @@ TextureImporter:
       name: InAirAtk1_28
       rect:
         serializedVersion: 2
-        x: 150
-        y: 971
+        x: 0
+        y: 1010
         width: 72
         height: 105
       alignment: 9
@@ -2955,8 +2955,8 @@ TextureImporter:
       name: InAirAtk1_29
       rect:
         serializedVersion: 2
-        x: 76
-        y: 977
+        x: 630
+        y: 1185
         width: 74
         height: 112
       alignment: 9
@@ -2976,8 +2976,8 @@ TextureImporter:
       name: InAirAtk1_3
       rect:
         serializedVersion: 2
-        x: 161
-        y: 1174
+        x: 82
+        y: 1133
         width: 78
         height: 90
       alignment: 9
@@ -2997,8 +2997,8 @@ TextureImporter:
       name: InAirAtk1_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1319
+        x: 166
+        y: 1334
         width: 83
         height: 92
       alignment: 9
@@ -3018,8 +3018,8 @@ TextureImporter:
       name: InAirAtk1_5
       rect:
         serializedVersion: 2
-        x: 794
-        y: 1382
+        x: 754
+        y: 1264
         width: 85
         height: 103
       alignment: 9
@@ -3060,8 +3060,8 @@ TextureImporter:
       name: InAirAtk1_7
       rect:
         serializedVersion: 2
-        x: 753
-        y: 1181
+        x: 245
+        y: 1139
         width: 69
         height: 87
       alignment: 9
@@ -3081,8 +3081,8 @@ TextureImporter:
       name: InAirAtk1_8
       rect:
         serializedVersion: 2
-        x: 122
-        y: 1610
+        x: 697
+        y: 1509
         width: 89
         height: 65
       alignment: 9
@@ -3102,8 +3102,8 @@ TextureImporter:
       name: InAirAtk1_9
       rect:
         serializedVersion: 2
-        x: 408
-        y: 1678
+        x: 783
+        y: 1683
         width: 34
         height: 114
       alignment: 9
@@ -3123,8 +3123,8 @@ TextureImporter:
       name: InAirIdle1_1
       rect:
         serializedVersion: 2
-        x: 732
-        y: 884
+        x: 890
+        y: 892
         width: 59
         height: 112
       alignment: 9
@@ -3144,8 +3144,8 @@ TextureImporter:
       name: InAirIdle1_2
       rect:
         serializedVersion: 2
-        x: 822
-        y: 1097
+        x: 698
+        y: 1057
         width: 67
         height: 101
       alignment: 9
@@ -3165,8 +3165,8 @@ TextureImporter:
       name: InAirIdle1_3
       rect:
         serializedVersion: 2
-        x: 222
-        y: 922
+        x: 71
+        y: 830
         width: 71
         height: 83
       alignment: 9
@@ -3186,8 +3186,8 @@ TextureImporter:
       name: InAirIdle1_4
       rect:
         serializedVersion: 2
-        x: 683
-        y: 1210
+        x: 628
+        y: 1105
         width: 70
         height: 80
       alignment: 9
@@ -3207,8 +3207,8 @@ TextureImporter:
       name: InAirIdle1_5
       rect:
         serializedVersion: 2
-        x: 145
-        y: 891
+        x: 0
+        y: 824
         width: 71
         height: 80
       alignment: 9
@@ -3228,8 +3228,8 @@ TextureImporter:
       name: InAirIdle1_6
       rect:
         serializedVersion: 2
-        x: 312
-        y: 1323
+        x: 165
+        y: 1134
         width: 79
         height: 91
       alignment: 9
@@ -3249,8 +3249,8 @@ TextureImporter:
       name: InAirIdle1_7
       rect:
         serializedVersion: 2
-        x: 708
-        y: 1290
+        x: 918
+        y: 1330
         width: 84
         height: 115
       alignment: 9
@@ -3270,8 +3270,8 @@ TextureImporter:
       name: InAirIdle1_8
       rect:
         serializedVersion: 2
-        x: 166
-        y: 1375
+        x: 83
+        y: 1223
         width: 82
         height: 126
       alignment: 9
@@ -3375,8 +3375,8 @@ TextureImporter:
       name: TurnAround1_1
       rect:
         serializedVersion: 2
-        x: 404
-        y: 1396
+        x: 679
+        y: 1398
         width: 86
         height: 111
       alignment: 9
@@ -3396,8 +3396,8 @@ TextureImporter:
       name: TurnAround1_2
       rect:
         serializedVersion: 2
-        x: 622
-        y: 1403
+        x: 582
+        y: 1344
         width: 86
         height: 111
       alignment: 9
@@ -3438,8 +3438,8 @@ TextureImporter:
       name: Walking_10
       rect:
         serializedVersion: 2
-        x: 875
-        y: 1198
+        x: 315
+        y: 1385
         width: 83
         height: 112
       alignment: 9
@@ -3459,8 +3459,8 @@ TextureImporter:
       name: Walking_11
       rect:
         serializedVersion: 2
-        x: 683
-        y: 1098
+        x: 543
+        y: 1013
         width: 68
         height: 112
       alignment: 9
@@ -3480,8 +3480,8 @@ TextureImporter:
       name: Walking_12
       rect:
         serializedVersion: 2
-        x: 577
-        y: 1354
+        x: 704
+        y: 1186
         width: 43
         height: 111
       alignment: 9
@@ -3522,8 +3522,8 @@ TextureImporter:
       name: Walking_3
       rect:
         serializedVersion: 2
-        x: 577
-        y: 1465
+        x: 873
+        y: 1455
         width: 45
         height: 112
       alignment: 0
@@ -3544,7 +3544,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 249
-        y: 1586
+        y: 1446
         width: 66
         height: 112
       alignment: 9
@@ -3585,8 +3585,8 @@ TextureImporter:
       name: Walking_6
       rect:
         serializedVersion: 2
-        x: 391
-        y: 1284
+        x: 555
+        y: 1232
         width: 75
         height: 112
       alignment: 9
@@ -3606,8 +3606,8 @@ TextureImporter:
       name: Walking_7
       rect:
         serializedVersion: 2
-        x: 74
-        y: 865
+        x: 148
+        y: 912
         width: 71
         height: 112
       alignment: 9
@@ -3627,8 +3627,8 @@ TextureImporter:
       name: Walking_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1207
+        x: 398
+        y: 1302
         width: 81
         height: 112
       alignment: 9
@@ -3648,8 +3648,8 @@ TextureImporter:
       name: Walking_9
       rect:
         serializedVersion: 2
-        x: 442
-        y: 1600
+        x: 409
+        y: 1537
         width: 91
         height: 112
       alignment: 0
@@ -3661,6 +3661,48 @@ TextureImporter:
       bones: []
       spriteID: bd99b19c31dcf3745b5e018dec7f60b9
       internalID: -121143589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Avatar_1
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 1777
+        width: 106
+        height: 127
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5511811}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c99651fd092feea44bfe741b233f0692
+      internalID: 1154350250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InAirAtked1
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 1497
+        width: 91
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da9e4dedd549b6d4997ed8e78d6364ef
+      internalID: 1793706145
       vertices: []
       indices: 
       edges: []
@@ -3677,174 +3719,176 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       BlownUp_6: -436080804
-      Idle1_2: 1775892635
       Dying_4: -899138281
       Walking_3: -912024377
-      InAirAtk1_24: 1938102575
       Atk2_11: -1604543096
-      Atk1_7: -178681191
-      Atk4_7: -1114032816
-      Atk4_4: 1436825421
       Atk4_1: 1683625917
-      BlownUp_4: -1538705976
-      BlownUp_3: 1909336663
-      Idle1_7: -937749823
+      Atk4_4: 1436825421
       GetUp_6: 977767862
-      Dashing_31: -1129385456
-      Dying_13: 1353878148
-      GetUp_3: 1555481105
-      Idle1_16: 1274375321
+      BlownUp_3: 1909336663
+      LayDown_3: 1114372926
       Atk2_14: 993942267
-      Dying_12: -1734031544
       TurnAround1_2: -1348046762
-      GetUp_1: -284434494
-      InAirIdle1_7: 1581104085
-      Atk1_10: 1204898632
-      Dashing_13: -1661699024
-      TurnAround1_1: -671212440
       Walking_9: -121143589
       Dashing_28: 1385110848
-      Idle1_8: -375800335
-      LayDown_3: 1114372926
-      Dashing_9: 387515584
-      GetUp_4: -1303692003
-      Atk1_9: 1394216837
-      InAirAtk1_27: -575236479
-      Walking_2: 1866007412
       Atk2_13: 859931699
       Atk2_10: -191883288
-      Dashing_12: -1058296597
       Idle1_14: -471880358
       InAirIdle1_2: -1379717246
       Dying_2: -7493645
-      Dying_10: -1543216066
-      Idle1_4: 100600542
       Atk1_2: 759128328
-      Dashing_4: -1451096270
-      InAirIdle1_3: 167102621
-      Atk4_2: -773375593
       Dashing_3: 1733582521
-      Atk2_4: -974103012
-      Dying_3: -684751931
-      InAirAtk1_8: 711396798
       Atk4_3: 1530133050
-      Idle1_6: -1214749672
+      LayDown_4: 847232944
       Atk1_11: 461702135
       Dashing_23: -1196216332
       Atk1_8: -1938209153
       Idle1_11: -1109563766
-      LayDown_4: 847232944
-      InAirIdle1_6: 1021017322
       Atk1_5: 1662777394
       Idle1_13: 734497506
       InAirAtk1_25: -1756755291
-      Atk1_4: -55517013
-      Dashing_32: 989243491
-      Dashing_11: -1156133561
-      Idle1_9: 1145318583
       Dashing_29: 1791155276
-      Dashing_30: 1832525897
       InAirAtk1_12: -20914736
-      Atk1_1: -1546483811
-      Dashing_21: 732415513
-      Dying_1: -113950256
-      Walking_1: -636707270
       InAirAtk1_3: 578079297
+      Walking_1: -636707270
       Dashing_33: 1583112049
-      InAirAtk1_17: 569656802
-      Walking_8: -837016311
-      InAirIdle1_4: 1478358433
-      Walking_10: 1855090446
-      Dashing_15: 671006208
       InAirIdle1_8: 506365210
+      Dashing_15: 671006208
       Atk2_1: 434681581
-      Atk2_12: -651701955
       InAirAtk1_15: -1954155373
       Atk2_8: 765993184
-      Atked1_2: -1093339191
       InAirAtk1_26: -232416953
       Atk1_6: -664854803
       Dashing_17: -1338796267
       Atk2_15: 615822986
       InAirAtk1_29: 2078339216
+      Idle1_5: -2133838812
+      Idle1_1: 1282416668
+      InAirIdle1_1: -511487517
+      Dashing_6: 457299376
+      InAirAtk1_23: -1756732681
+      InAirAtk1_1: 1097048626
+      BlownUp_2: 248797465
+      Dashing_25: -1314261257
+      InAirAtk1_9: -559021854
+      Dashing_19: -611778550
+      Dashing_7: 313457191
+      Dashing_24: 211465902
+      InAirAtk1_19: -950796753
+      Dashing_27: -709387518
+      InAirAtk1_20: -71776828
+      InAirAtk1_4: -1057492273
+      InAirAtk1_6: -1998677930
+      Walking_6: -1682344709
+      Dying_5: -445880063
+      Avatar_1: 1154350250
+      Dashing_10: 210314199
+      Dashing_1: -1952071449
+      BlownUp_8: 1046577659
+      Walking_7: 810699061
+      Dying_6: -1560093819
+      Dashing_26: -79408040
+      Dying_9: -1377724891
+      Dashing_22: 1977582467
+      InAirIdle1_5: -697491822
+      InAirAtk1_16: 743784637
+      Dying_8: -1289258300
+      Walking_4: -1770321468
+      Idle1_10: 2073843370
+      Atk2_2: 474607419
+      Dashing_16: 139306250
+      BlownUp_7: -1788206536
+      InAirAtk1_22: -324841499
+      Idle1_2: 1775892635
+      Atk1_7: -178681191
+      Atk4_7: -1114032816
+      BlownUp_4: -1538705976
+      Idle1_7: -937749823
+      Dashing_31: -1129385456
+      InAirIdle1_7: 1581104085
+      Dying_13: 1353878148
+      GetUp_3: 1555481105
+      Idle1_16: 1274375321
+      Dying_12: -1734031544
+      GetUp_1: -284434494
+      Atk1_10: 1204898632
+      Dashing_13: -1661699024
+      TurnAround1_1: -671212440
+      Idle1_8: -375800335
+      Dashing_9: 387515584
+      GetUp_4: -1303692003
+      Atk1_9: 1394216837
+      InAirAtk1_27: -575236479
+      Walking_2: 1866007412
+      Dashing_12: -1058296597
+      Dying_10: -1543216066
+      Idle1_4: 100600542
+      Dashing_4: -1451096270
+      InAirIdle1_3: 167102621
+      Atk4_2: -773375593
+      Atk2_4: -974103012
+      Dying_3: -684751931
+      InAirAtk1_8: 711396798
+      InAirIdle1_6: 1021017322
+      Idle1_6: -1214749672
+      Atk1_4: -55517013
+      Dashing_32: 989243491
+      Dashing_11: -1156133561
+      Idle1_9: 1145318583
+      Dashing_30: 1832525897
+      Atk1_1: -1546483811
+      Dashing_21: 732415513
+      Dying_1: -113950256
+      InAirAtk1_17: 569656802
+      Walking_8: -837016311
+      InAirAtked1: 1793706145
+      Walking_10: 1855090446
+      InAirIdle1_4: 1478358433
+      Atk2_12: -651701955
+      Atked1_2: -1093339191
       InAirAtk1_11: -358464927
       Idle1_17: 1475494756
       GetUp_2: 1288799564
-      Idle1_5: -2133838812
       Atk2_3: 1011955274
-      Idle1_1: 1282416668
-      InAirIdle1_1: -511487517
       InAirAtk1_10: -32514465
       InAirAtk1_14: -950438928
       Dying_11: 1480871074
-      Dashing_6: 457299376
-      InAirAtk1_23: -1756732681
       Atk4_6: -102050686
       Atk2_5: -1908613180
-      InAirAtk1_1: 1097048626
       Atk2_7: -1866340165
       Idle1_12: 717872342
       InAirAtk1_5: -549751790
       InAirAtk1_21: 1253348656
       GetUp_5: 697244820
       Dashing_14: -1048017743
-      BlownUp_2: 248797465
-      Dashing_25: -1314261257
-      InAirAtk1_9: -559021854
-      Dashing_19: -611778550
-      Dashing_7: 313457191
+      Walking_11: 783342740
       LayDown_2: -793370276
-      Dashing_24: 211465902
       GetUp_7: 1421011495
       BlownUp_1: 1676154295
-      InAirAtk1_19: -950796753
       Atked1_1: 993276386
-      Dashing_27: -709387518
       Dashing_8: 1027836834
-      InAirAtk1_20: -71776828
       Idle1_15: 300103015
       Atk4_5: 1994118766
       Atk2_6: -868749380
-      InAirAtk1_4: -1057492273
       Atk4_8: -103322375
       InAirAtk1_2: 648022515
-      Dying_5: -445880063
       InAirAtk1_13: 1542573828
-      InAirAtk1_6: -1998677930
       InAirAtk1_7: -1335086543
-      Dashing_10: 210314199
-      Walking_6: -1682344709
       Dying_7: 1358623023
-      Dashing_1: -1952071449
       BlownUp_5: 1086288086
-      BlownUp_8: 1046577659
       InAirAtk1_18: 1595294168
-      Walking_7: 810699061
-      Dying_6: -1560093819
-      Walking_11: 783342740
       Dashing_20: -402315714
       InAirAtk1_28: 1225785227
-      Dashing_26: -79408040
-      Dying_9: -1377724891
       Walking_5: 1590528939
       Walking_12: 451889708
       Atk1_3: -474224742
-      Dashing_22: 1977582467
-      InAirIdle1_5: -697491822
-      InAirAtk1_16: 743784637
-      Dying_8: -1289258300
       LayDown_1: -1835396409
       Dashing_2: 1611779446
-      Walking_4: -1770321468
       Dashing_5: 1220134449
-      Idle1_10: 2073843370
-      Atk2_2: 474607419
-      Dashing_16: 139306250
-      BlownUp_7: -1788206536
+      InAirAtk1_24: 1938102575
       Idle1_3: -33530898
       Atk2_9: 482188919
       Dashing_18: 1849809398
-      InAirAtk1_22: -324841499
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

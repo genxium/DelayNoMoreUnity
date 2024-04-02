@@ -61,6 +61,12 @@ enum TriggerState {
 	TReady = 0;
 	TCoolingDown = 1;
 }
+
+enum PickableState {
+	PIdle = 0;
+	PDisappearing = 1;
+	PConsumed = 2;
+}
  
 message CharacterDownsync {
 	int32 id = 1;
@@ -129,6 +135,9 @@ message CharacterDownsync {
     int32 subscriptionId = 50; 
 
     bool jumpHolding = 51;
+
+    int32 killedToDropConsumableSpeciesId = 52;
+	int32 killedToDropBuffSpeciesId = 53;
 
 	string name = 997;
 	string displayName = 998;
@@ -792,8 +801,8 @@ message PickableConfigFromTiled {
     int32 stockQuotaPerOccurrence = 9; // Only meaningful when "pickupType == PutIntoInventory"
     int32 subscriptionId = 10;
 
-    int32 buffSpeciesId = 1024;
-    int32 consumableSpeciesId = 1025; 
+    int32 consumableSpeciesId = 1024; 
+    int32 buffSpeciesId = 1025;
 }
 
 message Pickable {
@@ -804,4 +813,6 @@ message Pickable {
     int32 remainingLifetimeRdfCount = 5; 
     int32 remainingRecurQuota = 6;
     int32 velY = 7;
+    PickableState pkState = 8;    
+    int32 framesInPkState = 9;    
 }

@@ -255,7 +255,7 @@ namespace shared {
                         break;
                     case TrapColliderAttr v5:
                         var trap = currRenderFrame.TrapsArr[v5.TrapLocalId];
-                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed == trap.TrapState);
+                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
                         break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
@@ -326,7 +326,7 @@ namespace shared {
                         break;
                     case TrapColliderAttr v5:
                         var trap = currRenderFrame.TrapsArr[v5.TrapLocalId];
-                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed == trap.TrapState);
+                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
                         break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".

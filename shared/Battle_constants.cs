@@ -77,7 +77,7 @@ namespace shared {
         public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
         public static ulong TRIGGER_MASK_BY_SUBSCRIPTION = (1 << 3);
 
-        public static int MAGIC_EVTSUB_ID_NONE = 0;
+        public static int MAGIC_EVTSUB_ID_NONE = 0; // Default for proto int32 to save space in "CharacterDownsync.subscriptionId"
         public static int MAGIC_EVTSUB_ID_WAVER = 1;
         public static int MAGIC_EVTSUB_ID_WAVE_EXHAUST = 2;
         public static int MAGIC_EVTSUB_ID_STORYPOINT = 3;
@@ -161,6 +161,8 @@ namespace shared {
         
         public static int DEFAULT_PICKABLE_HITBOX_SIZE_X = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PICKABLE_HITBOX_SIZE_Y = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PICKABLE_DISAPPEARING_ANIM_FRAMES = 10;
+
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!
@@ -200,11 +202,12 @@ namespace shared {
         public static int TERMINATING_BULLET_TEAM_ID = (-1028);
         public static int TERMINATING_TRAP_ID = (-1029);
         public static int TERMINATING_TRIGGER_ID = (-1030);
-        public static int TERMINATING_BUFF_SPECIES_ID = (-1031);
-        public static int TERMINATING_DEBUFF_SPECIES_ID = (-1032);
-        public static int TERMINATING_EVTSUB_ID = (-1033);
-        public static int TERMINATING_CONSUMABLE_SPECIES_ID = (-1034);
         public static int TERMINATING_PICKABLE_LOCAL_ID = (-1035);
+
+        public static int TERMINATING_BUFF_SPECIES_ID = 0; // Default for proto int32 to save space in "CharacterDownsync.killedToDropBuffSpeciesId"
+        public static int TERMINATING_DEBUFF_SPECIES_ID = (-1032);
+        public static int TERMINATING_EVTSUB_ID = MAGIC_EVTSUB_ID_NONE;
+        public static int TERMINATING_CONSUMABLE_SPECIES_ID = 0; // Default for proto int32 to save space in "CharacterDownsync.killedToDropConsumableSpeciesId"
 
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
 

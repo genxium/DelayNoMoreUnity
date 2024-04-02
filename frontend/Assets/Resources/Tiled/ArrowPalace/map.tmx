@@ -148,6 +148,7 @@
   <object id="372" name="Goblin" x="128" y="1832">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="2"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4098"/>
@@ -159,6 +160,7 @@
   <object id="373" name="Goblin" x="853" y="1832">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4098"/>
