@@ -28,6 +28,9 @@ enum CharacterState {
 
 	Dashing = 12;
 	Sliding = 13;
+   
+    Dimmed = 14; // Pre-activated state for evtsub-based NPC 
+    TransformingInto = 15; // When at this state, the character has already completed transform, i.e. in new speciesId
 
 	OnWallIdle1 = 128; 
     
@@ -135,9 +138,11 @@ message CharacterDownsync {
     int32 subscriptionId = 50; 
 
     bool jumpHolding = 51;
+    int32 remainingAirJumpQuota = 52;
+    int32 remainingAirDashQuota = 53;
 
-    int32 killedToDropConsumableSpeciesId = 52;
-	int32 killedToDropBuffSpeciesId = 53;
+    int32 killedToDropConsumableSpeciesId = 54;
+	int32 killedToDropBuffSpeciesId = 55;
 
 	string name = 997;
 	string displayName = 998;
@@ -277,6 +282,7 @@ message VfxConfig {
     VfxDurationType durationType = 3;
 	bool onCharacter = 4;
 	bool onBullet = 5;
+    bool usePixelatedVer = 6;
 }
 
 message BulletConfig {
@@ -338,6 +344,10 @@ message BulletConfig {
     bool remainUponHit = 41; 
 	bool rotatesAlongVelocity = 42;
 
+    int32 defaultHardPushbackBounceQuota = 43;
+    float hardPushbackBounceNormFactor = 44; // For attenuation
+    float hardPushbackBounceSheerFactor = 45; // For attenuation
+
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
 
@@ -365,6 +375,7 @@ message Bullet {
 	BulletBattleAttr battleAttr = 3;
 	BulletConfig config = 4;
 	int32 repeatQuotaLeft = 5;
+    int32 remainingHardPushbackBounceQuota = 6;
 
 	int32 virtualGridX = 999;
 	int32 virtualGridY = 1000;

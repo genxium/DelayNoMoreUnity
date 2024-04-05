@@ -75,7 +75,8 @@ namespace shared {
                                 BuffSpeciesId = XformToSuperKnifeGirl.SpeciesId,
                                 SkillId = NO_SKILL,
                             }
-                        }
+                        }, 
+                        DefaultAirDashQuota = 5, // Virtually unlimited
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_SWORDMAN, new CharacterConfig {
@@ -252,10 +253,10 @@ namespace shared {
                             },
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,
-                                Quota = 10,
+                                Quota = 36,
                                 FramesToRecover = 0,
-                                DefaultQuota = 10,
-                                DefaultFramesToRecover = 30, 
+                                DefaultQuota = 36,
+                                DefaultFramesToRecover = 45, 
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = INVENTORY_BTN_B_SKILL,
                             }
@@ -397,11 +398,23 @@ namespace shared {
                         MpRegenRate = 3,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
-                        SlidingEnabled = false,
-                        CrouchingEnabled = false,
+                        SlidingEnabled = true,
+                        CrouchingEnabled = true,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        DefaultAirDashQuota = 1, // Her air dash is an attack, thus should be quite limited
+                        InitInventorySlots = new List<InventorySlot> {
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.TimedMagazineIv,
+                                Quota = 1,
+                                FramesToRecover = 0,
+                                DefaultQuota = 1,
+                                DefaultFramesToRecover = 720,
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = 21, // TODO: Remove this hardcoded "skillId"!
+                            },
+                        }
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_SKELEARCHER, new CharacterConfig {
@@ -422,7 +435,7 @@ namespace shared {
                         OnWallEnabled = false,
                         VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(220.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(30.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),

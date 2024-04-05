@@ -64,6 +64,11 @@ namespace shared {
         public int Hardness;
 
         public int ProactiveJumpStartupFrames;
+        
+        public int DefaultAirJumpQuota;
+        public int DefaultAirDashQuota;
+
+        public bool IsolatedAirJumpAndDashQuota; // default is false, in most cases AirJump and AirDash quotas are deduced together (but default initial quota can be different) 
 
         public List<InventorySlot> InitInventorySlots;
     }

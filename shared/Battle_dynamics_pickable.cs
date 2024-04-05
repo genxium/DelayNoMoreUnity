@@ -16,7 +16,7 @@ namespace shared {
 
                 int remainingLifetimeRdfCount = src.RemainingLifetimeRdfCount - 1;
                 var srcConfigFromTile = src.ConfigFromTiled;
-                AssignToPickable(src.PickableLocalId, src.VirtualGridX, src.VirtualGridY, remainingLifetimeRdfCount, src.RemainingRecurQuota, src.PkState, src.FramesInPkState + 1, srcConfigFromTile.InitVirtualGridX, srcConfigFromTile.InitVirtualGridY, srcConfigFromTile.TakesGravity, srcConfigFromTile.FirstShowRdfId, srcConfigFromTile.RecurQuota, srcConfigFromTile.RecurIntervalRdfCount, srcConfigFromTile.LifetimeRdfCountPerOccurrence, srcConfigFromTile.PickupType, srcConfigFromTile.StockQuotaPerOccurrence, srcConfigFromTile.SubscriptionId, srcConfigFromTile.ConsumableSpeciesId, srcConfigFromTile.BuffSpeciesId, dst);
+                AssignToPickable(src.PickableLocalId, src.VirtualGridX, src.VirtualGridY, src.VelY, remainingLifetimeRdfCount, src.RemainingRecurQuota, src.PkState, src.FramesInPkState + 1, srcConfigFromTile.InitVirtualGridX, srcConfigFromTile.InitVirtualGridY, srcConfigFromTile.TakesGravity, srcConfigFromTile.FirstShowRdfId, srcConfigFromTile.RecurQuota, srcConfigFromTile.RecurIntervalRdfCount, srcConfigFromTile.LifetimeRdfCountPerOccurrence, srcConfigFromTile.PickupType, srcConfigFromTile.StockQuotaPerOccurrence, srcConfigFromTile.SubscriptionId, srcConfigFromTile.ConsumableSpeciesId, srcConfigFromTile.BuffSpeciesId, dst);
 
                 if (!IsPickableAlive(dst, currRenderFrame.Id)) {
                     continue;
@@ -25,7 +25,7 @@ namespace shared {
                 pickableCnt++;
 
                 int newVx = src.VirtualGridX, newVy = src.VirtualGridY + src.VelY;
-                var dstVelY = src.VelY + (src.ConfigFromTiled.TakesGravity ? GRAVITY_Y_JUMP_HOLDING : 0);
+                var dstVelY = src.VelY + (src.ConfigFromTiled.TakesGravity ? GRAVITY_Y : 0);
                 if (dstVelY < DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID) {
                     dstVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID;
                 }

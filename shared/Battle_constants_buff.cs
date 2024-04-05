@@ -95,6 +95,24 @@ namespace shared {
             OnBullet = false
         };
 
+        public static VfxConfig VfxHealing = new VfxConfig {
+            SpeciesId = 1,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false, 
+            UsePixelatedVer = true
+        };
+
+        public static VfxConfig VfxMpHealing = new VfxConfig {
+            SpeciesId = 2,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false,
+            UsePixelatedVer = true
+        };
+
         public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
              new[]
              {
@@ -109,6 +127,14 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxSlashExploding.SpeciesId, VfxSlashExploding),
                     new KeyValuePair<int, VfxConfig>(VfxIceLingering.SpeciesId, VfxIceLingering),
                     new KeyValuePair<int, VfxConfig>(VfxXform.SpeciesId, VfxXform),
+             }
+        );
+
+        public static ImmutableDictionary<int, VfxConfig> pixelatedVfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
+             new[]
+             {
+                    new KeyValuePair<int, VfxConfig>(VfxHealing.SpeciesId, VfxHealing),
+                    new KeyValuePair<int, VfxConfig>(VfxMpHealing.SpeciesId, VfxMpHealing),
              }
         );
 

@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Explosion4
+  m_Name: Common_Pconsumed
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -17,45 +17,21 @@ AnimationClip:
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
-  m_PPtrCurves:
-  - curve:
-    - time: 0
-      value: {fileID: -1754849813, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
-    - time: 0.016666668
-      value: {fileID: 404126875, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
-    - time: 0.033333335
-      value: {fileID: 1977146685, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
-    - time: 0.05
-      value: {fileID: 529722540, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
-    attribute: m_Sprite
-    path: 
-    classID: 212
-    script: {fileID: 0}
+  m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
-    genericBindings:
-    - serializedVersion: 2
-      path: 0
-      attribute: 0
-      script: {fileID: 0}
-      typeID: 212
-      customType: 23
-      isPPtrCurve: 1
-    pptrCurveMapping:
-    - {fileID: -1754849813, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
-    - {fileID: 404126875, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
-    - {fileID: 1977146685, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
-    - {fileID: 529722540, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
+    genericBindings: []
+    pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.06666667
+    m_StopTime: 1
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
