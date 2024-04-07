@@ -205,6 +205,7 @@
   <object id="374" name="SwordMan" x="1088" y="972">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="8"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="1"/>

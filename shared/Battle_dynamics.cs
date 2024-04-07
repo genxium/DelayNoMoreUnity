@@ -782,7 +782,7 @@ namespace shared {
 
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY + vhDiffInducedByCrouching;
                 if (thatCharacterInNextFrame.JumpStarted) {
-                    // We haven't proceeded with "OnWall" calculation for "thatPlayerInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
+                    // We haven't proceeded with "OnWall" calculation for "thatCharacterInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
                     if (currCharacterDownsync.OnWall && InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
                         // logger.LogInfo("rdfId=" + currRenderFrame.Id + ", wall jump started for " + stringifyPlayer(currCharacterDownsync));
                         if (0 < currCharacterDownsync.VelX * currCharacterDownsync.OnWallNormX) {
@@ -951,7 +951,12 @@ namespace shared {
                                     var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                                     if (clicked) {
                                         var consumableConfig = consumableConfigs[v4.ConfigFromTiled.ConsumableSpeciesId];
-                                        if (MpRefillSmall.SpeciesId == consumableConfig.SpeciesId || MpRefillMiddle.SpeciesId == consumableConfig.SpeciesId) {
+                                        if (HpRefillSmall.SpeciesId == consumableConfig.SpeciesId || HpRefillMiddle.SpeciesId == consumableConfig.SpeciesId) {  
+                                            thatCharacterInNextFrame.Hp += consumableConfig.RefillDelta;
+                                            if (thatCharacterInNextFrame.Hp > chConfig.Hp) {
+                                                thatCharacterInNextFrame.Hp = chConfig.Hp;
+                                            }
+                                        } else if (MpRefillSmall.SpeciesId == consumableConfig.SpeciesId || MpRefillMiddle.SpeciesId == consumableConfig.SpeciesId) {
                                             thatCharacterInNextFrame.Mp += consumableConfig.RefillDelta;
                                             if (thatCharacterInNextFrame.Mp > chConfig.Mp) {
                                                 thatCharacterInNextFrame.Mp = chConfig.Mp;
@@ -1120,6 +1125,10 @@ namespace shared {
                     thatCharacterInNextFrame.InAir = false;
                     thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
                     thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
+                    if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
+                        thatCharacterInNextFrame.CharacterState = LayDown1;
+                        thatCharacterInNextFrame.FramesToRecover = MAX_INT;
+                    }
                     if (null != primaryTrap) {
                         List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[primaryTrap.TrapLocalId];
                         for (int j = 0; j < colliderAttrs.Count; j++) {
@@ -1141,32 +1150,34 @@ namespace shared {
                             thatCharacterInNextFrame.CharacterState = LayDown1;
                             thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                         } else {
-                            switch (currCharacterDownsync.CharacterState) {
-                                case BlownUp1:
-                                case LayDown1:
-                                case InAirIdle1NoJump:
-                                case InAirIdle1ByJump:
-                                case InAirIdle1ByWallJump:
-                                case InAirAtk1:
-                                case InAirAtked1:
-                                case OnWallIdle1:
-                                case Sliding:
-                                case CrouchIdle1:
-                                case CrouchAtk1:
-                                case CrouchAtked1:
-                                    // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatPlayerInNextFrame" here!
-                                    int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
-                                    var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
-                                    var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                                    effPushbacks[i].Y -= halfColliderChDiff;
-                                    /*
-                                       if (0 == currCharacterDownsync.SpeciesId) {
-                                           logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
-                                       }
-                                     */
-                                    break;
+                            if (currCharacterDownsync.CharacterState != thatCharacterInNextFrame.CharacterState) {
+                                switch (currCharacterDownsync.CharacterState) {
+                                    case BlownUp1:
+                                    case LayDown1:
+                                    case InAirIdle1NoJump:
+                                    case InAirIdle1ByJump:
+                                    case InAirIdle1ByWallJump:
+                                    case InAirAtk1:
+                                    case InAirAtked1:
+                                    case OnWallIdle1:
+                                    case Sliding:
+                                    case CrouchIdle1:
+                                    case CrouchAtk1:
+                                    case CrouchAtked1:
+                                        // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
+                                        int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                        var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                        var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                        effPushbacks[i].Y -= halfColliderChDiff;
+                                        /*
+                                           if (0 == currCharacterDownsync.SpeciesId) {
+                                               logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                           }
+                                         */
+                                        break;
+                                }
                             }
-                            if (InAirAtk1 == currCharacterDownsync.CharacterState) {
+                            if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
                                 thatCharacterInNextFrame.FramesToRecover = 0;
                             }
                         }
@@ -1688,15 +1699,8 @@ namespace shared {
                    }
                  */
                 // Update "CharacterState"
-                /*
-                TODO: Implement transition into "Crouching CharacterStates"
-                - CharacterState.CrouchIdle1
-                - CharacterState.CrouchWalking
-                - CharacterState.CrouchAtk1 
-                - CharacterState.CrouchAtked1
-                by inspecting field "CharacterDownsync.Crouching", where "CharacterDownsync.Crouching" is set during "calcHardPushbacksNormsForCharacter(......)" by checking collision with a special type of "Trap" where "Trap.IsCompletelyStatic && Trap.PushToCrouchIfOnTop".
-                */
-                if (thatCharacterInNextFrame.InAir) {
+                if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
+                } else if (thatCharacterInNextFrame.InAir) {
                     /*
                        if (0 == currCharacterDownsync.SpeciesId && false == currCharacterDownsync.InAir) {
                        logger.LogInfo(String.Format("Rdf.id={0}, chState={1}, framesInChState={6}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: transitted to InAir", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VelX, currCharacterDownsync.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, currCharacterDownsync.FramesInChState));
@@ -2181,6 +2185,7 @@ namespace shared {
                 if (0 >= (fulfilledEvtSubscriptionSetMask & (1ul << (src.SubscriptionId - 1)))) continue; // Subscription not fulfilled
                 var dst = nextRenderFrameNpcs[i];
                 dst.SubscriptionId = MAGIC_EVTSUB_ID_NONE;
+                dst.FramesToRecover = 0;
             }
 
             _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);

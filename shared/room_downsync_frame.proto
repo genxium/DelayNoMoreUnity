@@ -46,8 +46,9 @@ enum CharacterState {
 	Atk5 = 1028;
 
 	InAirAtk1 = 2048;
-	WalkingAtk1 = 2049;
-	WalkingAtk4 = 2050;
+	InAirAtk2 = 2049;
+	WalkingAtk1 = 2050;
+	WalkingAtk4 = 2051;
 
 	OnWallAtk1 = 3072; 
 }

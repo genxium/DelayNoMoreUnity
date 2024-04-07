@@ -3,12 +3,26 @@
  <image source="pickable.png" width="512" height="867"/>
  <tile id="145">
   <properties>
+   <property name="consumableSpeciesId" value="3"/>
+   <property name="pickupType" value="Immediate"/>
+   <property name="takesGravity" value="1"/>
+  </properties>
+ </tile>
+ <tile id="146">
+  <properties>
    <property name="consumableSpeciesId" value="1"/>
    <property name="pickupType" value="Immediate"/>
    <property name="takesGravity" value="1"/>
   </properties>
  </tile>
  <tile id="309">
+  <properties>
+   <property name="consumableSpeciesId" value="4"/>
+   <property name="pickupType" value="Immediate"/>
+   <property name="takesGravity" value="1"/>
+  </properties>
+ </tile>
+ <tile id="310">
   <properties>
    <property name="consumableSpeciesId" value="2"/>
    <property name="pickupType" value="Immediate"/>

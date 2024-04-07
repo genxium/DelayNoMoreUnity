@@ -569,7 +569,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             speciesKvPq.Put(lookupKey, npcAnimHolder);
 
             // Add teamRibbon and inplaceHpBar
-            if (!invinsibleSet.Contains(currNpcDownsync.CharacterState)) {
+            if (CharacterState.Dying != currNpcDownsync.CharacterState) {
                 showTeamRibbonAndInplaceHpBar(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
             }
 
