@@ -43,7 +43,7 @@ public class OfflineMapController : AbstractMapController {
         int[] speciesIdList = new int[roomCapacity];
         speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
         var (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, battleDurationSecondsVal) = mockStartRdf(speciesIdList);
-        battleDurationFrames = battleDurationSecondsVal * fps;
+        battleDurationFrames = battleDurationSecondsVal * BATTLE_DYNAMICS_FPS;
         refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref  completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
         applyRoomDownsyncFrameDynamics(startRdf, null);
         cameraTrack(startRdf, null);

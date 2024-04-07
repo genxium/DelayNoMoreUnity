@@ -269,7 +269,7 @@ namespace shared {
             DirX = 2,
             DirY = 0,
             Hardness = 4,
-            ExplosionFrames = 5,
+            ExplosionFrames = 10,
             BType = BulletType.Fireball,
             ExplosionSpeciesId = 4,
             CharacterEmitSfxName = "Fireball8",
@@ -1017,7 +1017,6 @@ namespace shared {
                             RecoveryFrames = 30,
                             RecoveryFramesOnBlock = 60,
                             RecoveryFramesOnHit = 60,
-                            MpDelta = 1500,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Atk2
                             }

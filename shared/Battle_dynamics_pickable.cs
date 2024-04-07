@@ -16,7 +16,7 @@ namespace shared {
 
                 int remainingLifetimeRdfCount = src.RemainingLifetimeRdfCount - 1;
                 var srcConfigFromTile = src.ConfigFromTiled;
-                AssignToPickable(src.PickableLocalId, src.VirtualGridX, src.VirtualGridY, src.VelY, remainingLifetimeRdfCount, src.RemainingRecurQuota, src.PkState, src.FramesInPkState + 1, srcConfigFromTile.InitVirtualGridX, srcConfigFromTile.InitVirtualGridY, srcConfigFromTile.TakesGravity, srcConfigFromTile.FirstShowRdfId, srcConfigFromTile.RecurQuota, srcConfigFromTile.RecurIntervalRdfCount, srcConfigFromTile.LifetimeRdfCountPerOccurrence, srcConfigFromTile.PickupType, srcConfigFromTile.StockQuotaPerOccurrence, srcConfigFromTile.SubscriptionId, srcConfigFromTile.ConsumableSpeciesId, srcConfigFromTile.BuffSpeciesId, dst);
+                AssignToPickable(src.PickableLocalId, src.VirtualGridX, src.VirtualGridY, src.VelY, remainingLifetimeRdfCount, src.RemainingRecurQuota, src.PkState, src.FramesInPkState + 1, src.PickedByJoinIndex, srcConfigFromTile.InitVirtualGridX, srcConfigFromTile.InitVirtualGridY, srcConfigFromTile.TakesGravity, srcConfigFromTile.FirstShowRdfId, srcConfigFromTile.RecurQuota, srcConfigFromTile.RecurIntervalRdfCount, srcConfigFromTile.LifetimeRdfCountPerOccurrence, srcConfigFromTile.PickupType, srcConfigFromTile.StockQuotaPerOccurrence, srcConfigFromTile.SubscriptionId, srcConfigFromTile.ConsumableSpeciesId, srcConfigFromTile.BuffSpeciesId, dst);
 
                 if (!IsPickableAlive(dst, currRenderFrame.Id)) {
                     continue;

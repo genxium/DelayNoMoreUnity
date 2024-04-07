@@ -148,8 +148,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
     protected bool isOnlineMode;
 
-    protected int fps = 60;
-
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
@@ -571,7 +569,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             speciesKvPq.Put(lookupKey, npcAnimHolder);
 
             // Add teamRibbon and inplaceHpBar
-            showTeamRibbonAndInplaceHpBar(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
+            if (!invinsibleSet.Contains(currNpcDownsync.CharacterState)) {
+                showTeamRibbonAndInplaceHpBar(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
+            }
 
             // Add character vfx
             if (currNpcDownsync.NewBirth) {
@@ -1376,7 +1376,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.SpeciesId = speciesIdList[i];
             var chConfig = characters[playerInRdf.SpeciesId];
             playerInRdf.Hp = chConfig.Hp;
-            playerInRdf.MaxHp = chConfig.Hp;
+            playerInRdf.Mp = chConfig.Mp;
             playerInRdf.Speed = chConfig.Speed;
             playerInRdf.OmitGravity = chConfig.OmitGravity;
             playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
@@ -1949,8 +1949,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.VelY = 0;
             playerInRdf.InAir = true;
             playerInRdf.OnWall = false;
-            playerInRdf.Mp = 60*fps; // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty
-            playerInRdf.MaxMp = 60*fps;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
 
             if (SPECIES_NONE_CH == speciesIdList[i]) continue;
@@ -1959,7 +1957,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.SpeciesId = speciesIdList[i];
             var chConfig = Battle.characters[playerInRdf.SpeciesId];
             playerInRdf.Hp = chConfig.Hp;
-            playerInRdf.MaxHp = chConfig.Hp;
+            playerInRdf.Mp = chConfig.Mp; 
             playerInRdf.Speed = chConfig.Speed;
             playerInRdf.OmitGravity = chConfig.OmitGravity;
             playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
@@ -2000,9 +1998,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.InAir = true;
             npcInRdf.OnWall = false;
             npcInRdf.Hp = chConfig.Hp;
-            npcInRdf.MaxHp = chConfig.Hp;
-            npcInRdf.Mp = 1000;
-            npcInRdf.MaxMp = 1000;
+            npcInRdf.Mp = chConfig.Mp;
             npcInRdf.SpeciesId = characterSpeciesId;
             npcInRdf.BulletTeamId = teamId;
             npcInRdf.ChCollisionTeamId = teamId;
@@ -2403,8 +2399,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (null == hpBar) {
             throw new ArgumentNullException(String.Format("No available hpBar node for lookupKey={0}", lookupKey));
         }
+        var chConfig = characters[currCharacterDownsync.SpeciesId];
         hpBar.score = rdfId;
-        hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);
+        hpBar.updateHp((float)currCharacterDownsync.Hp / chConfig.Hp, (float)currCharacterDownsync.Mp / chConfig.Mp);
         newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + halfBoxCh + inplaceHpBarOffset.y, inplaceHpBarZ);
         hpBar.gameObject.transform.position = newPosHolder;
         cachedHpBars.Put(lookupKey, hpBar);

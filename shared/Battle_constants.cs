@@ -3,6 +3,7 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public const int BATTLE_DYNAMICS_FPS = 60;
         public const int DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD = 10000; // in milliseconds
 
         // Deliberately NOT using enum for "room states" to make use of "C# CompareAndExchange" 
@@ -42,7 +43,7 @@ namespace shared {
         public const int DOWNSYNC_MSG_WS_CLOSED = -99;
         public const int DOWNSYNC_MSG_WS_OPEN = -100;
 
-        public const int MAGIC_JOIN_INDEX_INVALID = -2;
+        public const int MAGIC_JOIN_INDEX_INVALID = 0;
         public const int MAGIC_JOIN_INDEX_DEFAULT = -1;
         public const int MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL = 0;
         public const int MAGIC_QUOTA_INFINITE = -1;

@@ -7,6 +7,7 @@ namespace shared {
         public string SpeciesName;
 
         public int Hp;
+        public int Mp;
 
         public int InAirIdleFrameIdxTurningPoint;
         public int InAirIdleFrameIdxTurnedCycle;

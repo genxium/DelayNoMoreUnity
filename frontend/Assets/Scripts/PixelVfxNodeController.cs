@@ -1,13 +1,10 @@
 using UnityEngine;
 using shared;
 using System.Collections.Generic;
-using Unity.Mathematics;
 
 public class PixelVfxNodeController : MonoBehaviour {
 
     public int score;
-    private static float radToAngle = 180f / math.PI;
-    private Vector3 zAxis = new Vector3 (0f, 0f, 1f);
     public Dictionary<string, AnimationClip> lookUpTable;
 
     // Start is called before the first frame update

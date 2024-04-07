@@ -181,19 +181,31 @@ namespace shared {
                 }
         );
 
-        public static ConsumableConfig MpRefillSmall = new ConsumableConfig {
+        public static ConsumableConfig HpRefillSmall = new ConsumableConfig {
             SpeciesId = 1,
+            RefillDelta = 50,
+        };
+
+        public static ConsumableConfig HpRefillMiddle = new ConsumableConfig {
+            SpeciesId = 2,
+            RefillDelta = 80,
+        };
+
+        public static ConsumableConfig MpRefillSmall = new ConsumableConfig {
+            SpeciesId = 3,
             RefillDelta = 800,
         };
 
         public static ConsumableConfig MpRefillMiddle = new ConsumableConfig {
-            SpeciesId = 2,
+            SpeciesId = 4,
             RefillDelta = 1600,
         };
 
         public static ImmutableDictionary<int, ConsumableConfig> consumableConfigs = ImmutableDictionary.Create<int, ConsumableConfig>().AddRange(
                 new[]
                 {
+                    new KeyValuePair<int, ConsumableConfig>(HpRefillSmall.SpeciesId, HpRefillSmall),
+                    new KeyValuePair<int, ConsumableConfig>(HpRefillMiddle.SpeciesId, HpRefillMiddle),
                     new KeyValuePair<int, ConsumableConfig>(MpRefillSmall.SpeciesId, MpRefillSmall),
                     new KeyValuePair<int, ConsumableConfig>(MpRefillMiddle.SpeciesId, MpRefillMiddle),
                 }

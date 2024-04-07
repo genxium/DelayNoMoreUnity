@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
@@ -141,8 +141,8 @@ TextureImporter:
       name: Healing10
       rect:
         serializedVersion: 2
-        x: 220
-        y: 115
+        x: 308
+        y: 71
         width: 33
         height: 33
       alignment: 9
@@ -162,8 +162,8 @@ TextureImporter:
       name: Healing11
       rect:
         serializedVersion: 2
-        x: 161
-        y: 1
+        x: 295
+        y: 138
         width: 35
         height: 34
       alignment: 9
@@ -183,8 +183,8 @@ TextureImporter:
       name: Healing12
       rect:
         serializedVersion: 2
-        x: 125
-        y: 0
+        x: 262
+        y: 172
         width: 36
         height: 35
       alignment: 9
@@ -204,7 +204,7 @@ TextureImporter:
       name: Healing13
       rect:
         serializedVersion: 2
-        x: 196
+        x: 198
         y: 0
         width: 38
         height: 37
@@ -225,8 +225,8 @@ TextureImporter:
       name: Healing14
       rect:
         serializedVersion: 2
-        x: 234
-        y: 0
+        x: 220
+        y: 110
         width: 39
         height: 38
       alignment: 9
@@ -246,8 +246,8 @@ TextureImporter:
       name: Healing15
       rect:
         serializedVersion: 2
-        x: 220
-        y: 208
+        x: 275
+        y: 428
         width: 40
         height: 41
       alignment: 9
@@ -267,8 +267,8 @@ TextureImporter:
       name: Healing16
       rect:
         serializedVersion: 2
-        x: 226
-        y: 418
+        x: 243
+        y: 319
         width: 42
         height: 42
       alignment: 9
@@ -288,8 +288,8 @@ TextureImporter:
       name: Healing17
       rect:
         serializedVersion: 2
-        x: 224
-        y: 362
+        x: 271
+        y: 469
         width: 42
         height: 43
       alignment: 9
@@ -582,8 +582,8 @@ TextureImporter:
       name: Healing3
       rect:
         serializedVersion: 2
-        x: 243
-        y: 304
+        x: 252
+        y: 90
         width: 21
         height: 20
       alignment: 9
@@ -729,8 +729,8 @@ TextureImporter:
       name: Healing9
       rect:
         serializedVersion: 2
-        x: 279
-        y: 321
+        x: 350
+        y: 10
         width: 31
         height: 31
       alignment: 9
@@ -750,8 +750,8 @@ TextureImporter:
       name: MpHealing1
       rect:
         serializedVersion: 2
-        x: 265
-        y: 83
+        x: 318
+        y: 39
         width: 32
         height: 32
       alignment: 9
@@ -771,8 +771,8 @@ TextureImporter:
       name: MpHealing10
       rect:
         serializedVersion: 2
-        x: 227
-        y: 470
+        x: 266
+        y: 375
         width: 41
         height: 42
       alignment: 9
@@ -792,8 +792,8 @@ TextureImporter:
       name: MpHealing11
       rect:
         serializedVersion: 2
-        x: 218
-        y: 148
+        x: 224
+        y: 361
         width: 42
         height: 44
       alignment: 0
@@ -981,8 +981,8 @@ TextureImporter:
       name: MpHealing2
       rect:
         serializedVersion: 2
-        x: 265
-        y: 51
+        x: 341
+        y: 73
         width: 32
         height: 32
       alignment: 9
@@ -1212,8 +1212,8 @@ TextureImporter:
       name: MpHealing3
       rect:
         serializedVersion: 2
-        x: 273
-        y: 19
+        x: 318
+        y: 7
         width: 32
         height: 32
       alignment: 9
@@ -1254,8 +1254,8 @@ TextureImporter:
       name: MpHealing4
       rect:
         serializedVersion: 2
-        x: 279
-        y: 352
+        x: 350
+        y: 41
         width: 32
         height: 32
       alignment: 9
@@ -1275,8 +1275,8 @@ TextureImporter:
       name: MpHealing5
       rect:
         serializedVersion: 2
-        x: 253
-        y: 115
+        x: 328
+        y: 105
         width: 32
         height: 33
       alignment: 9
@@ -1296,8 +1296,8 @@ TextureImporter:
       name: MpHealing6
       rect:
         serializedVersion: 2
-        x: 266
-        y: 384
+        x: 295
+        y: 104
         width: 33
         height: 34
       alignment: 9
@@ -1317,8 +1317,8 @@ TextureImporter:
       name: MpHealing7
       rect:
         serializedVersion: 2
-        x: 259
-        y: 268
+        x: 283
+        y: 18
         width: 35
         height: 36
       alignment: 9
@@ -1338,8 +1338,8 @@ TextureImporter:
       name: MpHealing8
       rect:
         serializedVersion: 2
-        x: 243
-        y: 324
+        x: 259
+        y: 110
         width: 36
         height: 38
       alignment: 0
@@ -1359,8 +1359,8 @@ TextureImporter:
       name: MpHealing9
       rect:
         serializedVersion: 2
-        x: 221
-        y: 262
+        x: 313
+        y: 472
         width: 38
         height: 40
       alignment: 0
@@ -1372,6 +1372,279 @@ TextureImporter:
       bones: []
       spriteID: c28ea6dc9e0a6fb49b6d68b41eb03d26
       internalID: 412810281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSting1
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 10
+        width: 57
+        height: 5
+      alignment: 9
+      pivot: {x: 0.5263158, y: 0.9}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12beaf87c74cffe4797709584333fc46
+      internalID: -319092554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSting2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 53
+        height: 13
+      alignment: 9
+      pivot: {x: 0.33962265, y: 0.65384614}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe81604a4b37a894c9890e810a97ff2c
+      internalID: -1244152597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSting3
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 0
+        width: 39
+        height: 17
+      alignment: 9
+      pivot: {x: -0.051282052, y: 0.61764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf3df3bd34340d44695710f8b9ee1020
+      internalID: -1678561462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSting4
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 89
+        width: 32
+        height: 21
+      alignment: 9
+      pivot: {x: -0.34375, y: 0.5952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc0624e2f6aae294fa3fa43c88eac563
+      internalID: -1803611573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_0
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 302
+        width: 33
+        height: 17
+      alignment: 9
+      pivot: {x: -0.060606062, y: 1.4411764}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b08995101e0a94c478aab902829133c4
+      internalID: -278149643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_1
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 0
+        width: 49
+        height: 35
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.7}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd49e2a97f10fb149b7cd951547471d1
+      internalID: 1457933766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_2
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 0
+        width: 47
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5106383, y: 0.6447368}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6df826930e774f48b7050c2fe3dc8b8
+      internalID: 1590554272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_3
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 260
+        width: 47
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5531915, y: 0.5833333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d82a038b9b669c34a872d375220a277c
+      internalID: -1852003152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_4
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 207
+        width: 48
+        height: 42
+      alignment: 9
+      pivot: {x: 0.6041667, y: 0.5833333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a5be64227e671c499898f9f391601df
+      internalID: 501339452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_5
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 417
+        width: 49
+        height: 43
+      alignment: 9
+      pivot: {x: 0.6530612, y: 0.5697674}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03eb51aeea71d11449e75687691e63d4
+      internalID: -891670724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_6
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 469
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.72727275, y: 0.5697674}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88dabca751e9cd746b563a992cd6dff3
+      internalID: -1737145503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_7
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 148
+        width: 44
+        height: 44
+      alignment: 9
+      pivot: {x: 0.72727275, y: 0.5568182}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cccd78f910c6cea4d9a0fbdd462fb7a7
+      internalID: -407140816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmokeNDust1_8
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 54
+        width: 43
+        height: 36
+      alignment: 9
+      pivot: {x: 0.74418604, y: 0.45833334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de2ab4326c7d2114db36d653fdc3ec06
+      internalID: -1100825607
       vertices: []
       indices: 
       edges: []
@@ -1390,13 +1663,16 @@ TextureImporter:
       Healing11: 477746404
       MpHealing4: -1315276256
       MpHealing8: -1339346381
+      SmokeNDust1_0: -278149643
       MpHealing15: -1078047616
       MpHealing22: 531057629
       MpHealing25: 1202536468
       MpHealing5: 1143837035
       MpHealing12: 1491954981
       MpHealing7: -201539635
+      SmokeNDust1_5: -891670724
       MpHealing27: -48132008
+      SmokeNDust1_8: -1100825607
       Healing12: -935069122
       Healing13: 1014022301
       Healing29: 2092329215
@@ -1416,6 +1692,9 @@ TextureImporter:
       Healing27: -1270767646
       MpHealing10: -1113153711
       Healing30: 2087091093
+      SmallSting3: -1678561462
+      SmokeNDust1_6: -1737145503
+      SmokeNDust1_3: -1852003152
       Healing19: 1702021716
       Healing2: 348530338
       Healing10: 1392055197
@@ -1425,17 +1704,24 @@ TextureImporter:
       Healing22: 1548976253
       MpHealing14: -1913498954
       MpHealing6: 393066881
+      SmallSting4: -1803611573
       Healing24: -597750067
       Healing6: -594218635
       MpHealing21: -51611048
       Healing14: 707227863
       Healing5: 639554736
+      SmokeNDust1_2: 1590554272
       Healing25: -1521585612
+      SmokeNDust1_7: -407140816
+      SmokeNDust1_1: 1457933766
+      SmallSting2: -1244152597
       Healing7: -1479525558
+      SmokeNDust1_4: 501339452
       MpHealing26: -2021101849
       MpHealing1: -2021778633
       Healing8: 1447350045
       Healing16: -1947975033
+      SmallSting1: -319092554
       MpHealing11: 909296400
       MpHealing17: -1276171248
       MpHealing19: 2102415031

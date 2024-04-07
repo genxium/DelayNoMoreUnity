@@ -106,7 +106,7 @@ namespace shared {
             dst.Speed = chConfig.Speed;
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, int maxHp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, int maxMp, ulong collisionMask, bool omitGravity, bool omitSoftPushback, bool repelSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, int publishingEvtSubIdUponKilled, ulong publishingEvtMaskUponKilled, int subscriptionId, bool jumpHolding, int remainingAirJumpQuota, int remainingAirDashQuota, int killedToDropConsumableSpeciesId, int killedToDropBuffSpeciesId, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, ulong collisionMask, bool omitGravity, bool omitSoftPushback, bool repelSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, int publishingEvtSubIdUponKilled, ulong publishingEvtMaskUponKilled, int subscriptionId, bool jumpHolding, int btnBHoldingRdfCount, int remainingAirJumpQuota, int remainingAirDashQuota, int killedToDropConsumableSpeciesId, int killedToDropBuffSpeciesId, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -125,7 +125,6 @@ namespace shared {
             dst.CharacterState = characterState;
             dst.JoinIndex = joinIndex;
             dst.Hp = hp;
-            dst.MaxHp = maxHp;
             dst.InAir = inAir;
             dst.OnWall = onWall;
             dst.OnWallNormX = onWallNormX;
@@ -148,7 +147,6 @@ namespace shared {
             dst.BeatenCnt = beatenCnt;
 
             dst.Mp = mp;
-            dst.MaxMp = maxMp;
 
             dst.CollisionTypeMask = collisionMask;
 
@@ -171,6 +169,7 @@ namespace shared {
             dst.SubscriptionId = subscriptionId;
         
             dst.JumpHolding = jumpHolding;
+            dst.BtnBHoldingRdfCount = btnBHoldingRdfCount;
 
             dst.RemainingAirJumpQuota = remainingAirJumpQuota;
             dst.RemainingAirDashQuota = remainingAirDashQuota;
@@ -346,7 +345,7 @@ namespace shared {
             dst.BuffSpeciesId = buffSpeciesId;
         }
 
-        public static void AssignToPickable(int pickableLocalId, int virtualGridX, int virtualGridY, int velY, int remainingLifetimeRdfCount, int remainingRecurQuota, PickableState pkState, int framesInPkState, int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, int recurIntervalRdfCount, int lifetimeRdfCountPerOccurrence, PickupType pkType, int stockQuotaPerOccurrence, int subscriptionId, int consumableSpeciesId, int buffSpeciesId, Pickable dst) {
+        public static void AssignToPickable(int pickableLocalId, int virtualGridX, int virtualGridY, int velY, int remainingLifetimeRdfCount, int remainingRecurQuota, PickableState pkState, int framesInPkState, int pickedByJoinIndex, int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, int recurIntervalRdfCount, int lifetimeRdfCountPerOccurrence, PickupType pkType, int stockQuotaPerOccurrence, int subscriptionId, int consumableSpeciesId, int buffSpeciesId, Pickable dst) {
             dst.PickableLocalId = pickableLocalId;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
@@ -356,6 +355,7 @@ namespace shared {
             dst.RemainingRecurQuota = remainingRecurQuota; 
             dst.PkState = pkState;
             dst.FramesInPkState = framesInPkState;
+            dst.PickedByJoinIndex = pickedByJoinIndex;
 
             AssignToPickableConfigFromTile(initVirtualGridX, initVirtualGridY, takesGravity, firstShowRdfId, initRecurQuota, recurIntervalRdfCount, lifetimeRdfCountPerOccurrence, pkType, stockQuotaPerOccurrence, subscriptionId, consumableSpeciesId, buffSpeciesId, dst.ConfigFromTiled);
         }
@@ -369,7 +369,7 @@ namespace shared {
                     ConsumableSpeciesId = TERMINATING_CONSUMABLE_SPECIES_ID,
                 },
                 PkState = PickableState.Pidle,
-                FramesInPkState = 0,
+                PickedByJoinIndex = MAGIC_JOIN_INDEX_INVALID,
             };
 
             return single;
@@ -475,14 +475,14 @@ namespace shared {
 
             for (int i = 0; i < roomCapacity; i++) {
                 var srcCh = src.PlayersArr[i];
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHolding, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, dst.PlayersArr[i]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHolding, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, dst.PlayersArr[i]);
             }
 
             int npcCnt = 0;
             while (npcCnt < src.NpcsArr.Count) {
                 var srcCh = src.NpcsArr[npcCnt];
                 if (TERMINATING_PLAYER_ID == srcCh.Id) break;
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.MaxHp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.MaxMp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHolding, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, dst.NpcsArr[npcCnt]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.CollisionTypeMask, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHolding, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, dst.NpcsArr[npcCnt]);
                 npcCnt++;
             }
             dst.NpcsArr[npcCnt].Id = TERMINATING_PLAYER_ID;

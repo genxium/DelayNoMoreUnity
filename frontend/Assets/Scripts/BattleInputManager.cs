@@ -39,14 +39,10 @@ public class BattleInputManager : MonoBehaviour {
     public Sprite joystickIdle, joystickLeft, joystickRight, joystickUp, joystickDown, joystickDownLeft, joystickDownRight, joystickUpLeft, joystickUpRight; 
 
     void Start() {
-        if (enablePlatformSpecificHiding && !Application.isMobilePlatform) {
-            joystick.gameObject.SetActive(false);
-            btnA.gameObject.SetActive(false); // if "chConfig.UseInventoryBtnB", it'll be later enabled in MapController
-            btnB.gameObject.SetActive(false);
-        }
         joystickInitPos = joystick.transform.position;
         joystickKeyboardMoveRadius = 0.5f*joystick.GetComponent<OnScreenStick>().movementRange;
         joystickMoveEps = 0.1f;
+        reset();
     }
 
     // [WARNING] "continuousDx", "continuousDy" and "eps" are already scaled into [0, 1]
@@ -251,6 +247,11 @@ public class BattleInputManager : MonoBehaviour {
         realtimeBtnDLevel = 0;
         cachedBtnDLevel = 0;
         btnDEdgeTriggerLock = false;
+        if (enablePlatformSpecificHiding && !Application.isMobilePlatform) {
+            joystick.gameObject.SetActive(false);
+            btnA.gameObject.SetActive(false); // if "chConfig.UseInventoryBtnB", it'll be later enabled in MapController
+            btnB.gameObject.SetActive(false);
+        }
     }
 
     private void _triggerEdgeBtnA(bool rising) {

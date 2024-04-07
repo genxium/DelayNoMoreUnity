@@ -93,9 +93,9 @@ message CharacterDownsync {
 	int32 beatenCnt = 16;
 
 	int32 hp = 17;
-	int32 maxHp = 18;
-	int32 mp = 19;
-	int32 maxMp = 20;
+	int32 mp = 18;
+
+    int32 btnBHoldingRdfCount = 19;
 
 	CharacterState characterState = 22;
 	int32 framesInChState = 23; // number of frames elapsed in the current character state   
@@ -347,6 +347,9 @@ message BulletConfig {
     int32 defaultHardPushbackBounceQuota = 43;
     float hardPushbackBounceNormFactor = 44; // For attenuation
     float hardPushbackBounceSheerFactor = 45; // For attenuation
+
+    bool isPixelatedActiveVfx = 46;
+    bool isPixelatedExplostionVfx = 47;
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
@@ -689,6 +692,7 @@ message BuffConfig {
     repeated int32 associatedDebuffs = 1024;   
 
     int32 characterVfxSpeciesId = 2048;
+    bool isPixelatedVfxOnCharacter = 2049;
 }
 
 message Buff {
@@ -712,6 +716,8 @@ enum ConsumableType {
 message ConsumableConfig {
     int32 speciesId = 1; 
     int32 refillDelta = 2;
+    int32 vfxIdOnPicker = 3;
+    bool isPixelatedVfxOnPicker = 4;
 };
 
 enum InventorySlotStockType {
@@ -826,4 +832,5 @@ message Pickable {
     int32 velY = 7;
     PickableState pkState = 8;    
     int32 framesInPkState = 9;    
+    int32 pickedByJoinIndex = 10;
 }

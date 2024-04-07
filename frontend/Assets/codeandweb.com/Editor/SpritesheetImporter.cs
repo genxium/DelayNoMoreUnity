@@ -10,6 +10,10 @@
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_2023_1_OR_NEWER
+using System.Linq;
+#endif
+
 // Note: TexturePacker Importer with Unity 2021.2 (or newer) requires the "Sprite 2D" package,
 //       please make sure that it is part of your Unity project. You can install it using
 //       Unity's package manager.
@@ -40,6 +44,17 @@ namespace TexturePackerImporter
             }
         }
 
+#if UNITY_2023_1_OR_NEWER
+        static List<string> texturesToReimport = new List<string>();
+        static void reimport()
+        {
+            foreach (string str in texturesToReimport)
+            {
+                AssetDatabase.ImportAsset(str, ImportAssetOptions.ForceUpdate);
+            }
+            texturesToReimport.Clear();
+        }
+#endif
 
 #if UNITY_2021_2_OR_NEWER
         private static void updateSprites(TextureImporter importer, SheetInfo sheet)
@@ -55,6 +70,19 @@ namespace TexturePackerImporter
             spriteNameFileIdDataProvider.SetNameFileIdPairs(ids);
             dataProvider.Apply();
             EditorUtility.SetDirty(importer);
+
+#if UNITY_2023_1_OR_NEWER
+            // workaround for bug IN-59357
+            if (!oldIds.Any())
+            {
+                Dbg.Log("delayed reimport: " + importer.assetPath);
+                texturesToReimport.Add(importer.assetPath);
+                if (texturesToReimport.Count() == 1)
+                {
+                    EditorApplication.delayCall += reimport;
+                }
+            }
+#endif
         }
 
 

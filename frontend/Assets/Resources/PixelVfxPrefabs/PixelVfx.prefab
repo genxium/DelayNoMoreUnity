@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2186353342994325327}
   - component: {fileID: 6062873986988419954}
   m_Layer: 0
-  m_Name: Fireball
+  m_Name: PixelVfx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 306415997
   m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1494758721, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
+  m_Sprite: {fileID: -1186634723, guid: b7ec5e4e647001c4ba13c8f6fa111509, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -96,7 +96,7 @@ Animator:
   m_GameObject: {fileID: 2186353342994325362}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f46dce53bace3444797ed6b055e6ab9f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 37bc6d4c130f9554fb36bd0a523339a0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
