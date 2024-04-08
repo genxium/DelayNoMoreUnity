@@ -366,19 +366,19 @@ namespace shared {
         };
 
         private static BulletConfig PurpleArrowRainBullet1 = new BulletConfig(PurpleArrowBullet)
-                                                                .SetSpeed((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))    
+                                                                .SetSpeed((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                                                                 .SetHitboxOffsets((int)(22 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                                                                 .SetSimultaneousMultiHitCnt(2u)
-                                                                .SetDir(+2, +1)     
+                                                                .SetDir(+2, +1)
                                                                 .SetTakesGravity(true)
                                                                 .SetRotateAlongVelocity(true);
         private static BulletConfig PurpleArrowRainBullet2 = new BulletConfig(PurpleArrowRainBullet1)
-                                                                .SetSpeed((int)(13 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))    
+                                                                .SetSpeed((int)(13 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                                                                 .SetSimultaneousMultiHitCnt(1u)
                                                                 .SetDir(+1, +1)
                                                                 .SetHitboxOffsets((int)(20 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
         private static BulletConfig PurpleArrowRainBullet3 = new BulletConfig(PurpleArrowRainBullet1)
-                                                                .SetSpeed((int)(15 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))    
+                                                                .SetSpeed((int)(15 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                                                                 .SetSimultaneousMultiHitCnt(0u)
                                                                 .SetDir(+1, +2)
                                                                 .SetHitboxOffsets((int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));

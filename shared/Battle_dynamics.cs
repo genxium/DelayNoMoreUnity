@@ -155,9 +155,9 @@ namespace shared {
             int patternId = PATTERN_ID_NO_OP;
             var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia));
             if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
-                if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && Dashing != currCharacterDownsync.CharacterState) {
+                if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState)) {
                     patternId = PATTERN_DOWN_A;
-                } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && Sliding != currCharacterDownsync.CharacterState) {
+                } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState)) {
                     patternId = PATTERN_DOWN_A;
                 } else if (canJumpWithinInertia) {
                     if (currCharacterDownsync.PrimarilyOnSlippableHardPushback && (0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
@@ -388,6 +388,7 @@ namespace shared {
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed);
                 Skill? skillConfig = null;
                 if (usedSkill) {
+                    thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
                     skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
                     if (Dashing == skillConfig.BoundChState && currCharacterDownsync.InAir) {              
@@ -403,6 +404,7 @@ namespace shared {
                         continue; // Don't allow movement if skill is used
                     }
                 }
+                thatCharacterInNextFrame.BtnBHoldingRdfCount = (PATTERN_HOLD_B == patternId ? currCharacterDownsync.BtnBHoldingRdfCount+1: 0);
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
                 _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, skillConfig, logger);
                 _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
@@ -1067,6 +1069,7 @@ namespace shared {
 
                         normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
                         if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
+                            /*
                             if (                
                                 Atk1         == v1.CharacterState ||
                                 Atk2         == v1.CharacterState ||
@@ -1083,6 +1086,8 @@ namespace shared {
                             } else {
                                 landedOnGravityPushback = true;
                             }
+                            */
+                            landedOnGravityPushback = true;
                         }
 
                         shapeOverlappedOtherChCnt++;
@@ -1150,32 +1155,17 @@ namespace shared {
                             thatCharacterInNextFrame.CharacterState = LayDown1;
                             thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
                         } else {
-                            if (currCharacterDownsync.CharacterState != thatCharacterInNextFrame.CharacterState) {
-                                switch (currCharacterDownsync.CharacterState) {
-                                    case BlownUp1:
-                                    case LayDown1:
-                                    case InAirIdle1NoJump:
-                                    case InAirIdle1ByJump:
-                                    case InAirIdle1ByWallJump:
-                                    case InAirAtk1:
-                                    case InAirAtked1:
-                                    case OnWallIdle1:
-                                    case Sliding:
-                                    case CrouchIdle1:
-                                    case CrouchAtk1:
-                                    case CrouchAtked1:
-                                        // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
-                                        int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
-                                        var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
-                                        var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                                        effPushbacks[i].Y -= halfColliderChDiff;
-                                        /*
-                                           if (0 == currCharacterDownsync.SpeciesId) {
-                                               logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
-                                           }
-                                         */
-                                        break;
-                                }
+                            if (shrinkedSizeSet.Contains(currCharacterDownsync.CharacterState) && !shrinkedSizeSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
+                                int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                effPushbacks[i].Y -= halfColliderChDiff;
+                                /*
+                                    if (1 == currCharacterDownsync.JoinIndex) {
+                                        logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                    }
+                                    */
                             }
                             if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
                                 thatCharacterInNextFrame.FramesToRecover = 0;
@@ -1882,15 +1872,14 @@ namespace shared {
             }
         }
 
-        private static void _leftShiftDeadNpcs(int rdfId, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<EvtSubscription> nextRdfEvtSubsArr, ref int pickableLocalIdCounter, RepeatedField<Pickable> nextRenderFramePickables, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, ref int nextNpcI, ILoggerBridge logger) {
+        private static void _leftShiftDeadNpcs(int rdfId, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<EvtSubscription> nextRdfEvtSubsArr, ref int pickableLocalIdCounter, RepeatedField<Pickable> nextRenderFramePickables, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, ref int nextNpcI, ref int pickableCnt, ILoggerBridge logger) {
             isRemapNeeded = false;
             int aliveSlotI = 0, candidateI = 0;
-            int pseudoPickableCnt = 0;
             while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id) {
                 if (isNpcJustDead(nextRenderFrameNpcs[candidateI])) {
                     var candidate = nextRenderFrameNpcs[candidateI];
                     if (TERMINATING_CONSUMABLE_SPECIES_ID != candidate.KilledToDropConsumableSpeciesId || TERMINATING_BUFF_SPECIES_ID != candidate.KilledToDropBuffSpeciesId) { 
-                        addNewPickableToNextFrame(rdfId, candidate.VirtualGridX, candidate.VirtualGridY, MAX_INT, 0, true, MAX_INT, MAX_INT, PickupType.Immediate, 1, nextRenderFramePickables, candidate.KilledToDropConsumableSpeciesId, candidate.KilledToDropBuffSpeciesId, ref pickableLocalIdCounter, ref pseudoPickableCnt);
+                        addNewPickableToNextFrame(rdfId, candidate.VirtualGridX, candidate.VirtualGridY, MAX_INT, 0, true, MAX_INT, MAX_INT, PickupType.Immediate, 1, nextRenderFramePickables, candidate.KilledToDropConsumableSpeciesId, candidate.KilledToDropBuffSpeciesId, ref pickableLocalIdCounter, ref pickableCnt);
                     }
                 }
                 while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id && isNpcDeadToDisappear(nextRenderFrameNpcs[candidateI])) {
@@ -2198,7 +2187,7 @@ namespace shared {
 
             bool isRemapNeeded = false;
 
-            _leftShiftDeadNpcs(currRenderFrame.Id, roomCapacity, nextRenderFrameNpcs, nextEvtSubs, ref nextRenderFramePickableLocalIdCounter, nextRenderFramePickables, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, joinIndexRemap, out isRemapNeeded, ref nextNpcI, logger);
+            _leftShiftDeadNpcs(currRenderFrame.Id, roomCapacity, nextRenderFrameNpcs, nextEvtSubs, ref nextRenderFramePickableLocalIdCounter, nextRenderFramePickables, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, joinIndexRemap, out isRemapNeeded, ref nextNpcI, ref pickableCnt, logger);
 
             if (isRemapNeeded) {
                 remapBulletOffenderJoinIndex(roomCapacity, nextNpcI, nextRenderFrameBullets, joinIndexRemap);

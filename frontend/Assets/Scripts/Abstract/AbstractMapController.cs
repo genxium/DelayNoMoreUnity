@@ -2036,6 +2036,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (pickable, wx, wy) = pickableList[i];
             startRdf.Pickables[i] = pickable;
         }
+        startRdf.PickableLocalIdCounter = pickableLocalId;
 
         for (int i = 0; i < evtSubList.Count; i++) {
             startRdf.EvtSubsArr[i] = evtSubList[i];

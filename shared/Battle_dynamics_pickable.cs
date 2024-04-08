@@ -43,6 +43,9 @@ namespace shared {
                 dst.VirtualGridY = newVy;
                 dst.VelY = dstVelY;    
             }
+
+            // Explicitly specify termination of nextRenderFramePickables
+            nextRenderFramePickables[pickableCnt].PickableLocalId = TERMINATING_PICKABLE_LOCAL_ID;
         }
     }
 }

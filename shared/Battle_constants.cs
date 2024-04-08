@@ -268,5 +268,21 @@ namespace shared {
             GetUp1,
             Dying
         };
+
+        public static HashSet<CharacterState> shrinkedSizeSet = new HashSet<CharacterState>() {
+            BlownUp1,
+            LayDown1,
+            InAirIdle1NoJump,
+            InAirIdle1ByJump,
+            InAirIdle1ByWallJump,
+            InAirAtk1,
+            InAirAtk2,
+            InAirAtked1,
+            OnWallIdle1,
+            Sliding,
+            CrouchIdle1,
+            CrouchAtk1,
+            CrouchAtked1,
+        };
     }
 }
