@@ -965,7 +965,8 @@ namespace shared {
                                             }
                                         }
                                         v4.PkState = PickableState.Pconsumed;
-                                        v4.RemainingLifetimeRdfCount = DEFAULT_PICKABLE_DISAPPEARING_ANIM_FRAMES; /// [WARNING] Prohibit concurrent pick-up, the character with smaller join index will win in case of a tie.
+                                        v4.FramesInPkState = 0;
+                                        v4.RemainingLifetimeRdfCount = DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES; /// [WARNING] Prohibit concurrent pick-up, the character with smaller join index will win in case of a tie.
                                         v4.PickedByJoinIndex = currCharacterDownsync.JoinIndex;
                                     }
                                 }

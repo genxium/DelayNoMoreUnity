@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2186353342994325325}
   - component: {fileID: 2186353342994325324}
   - component: {fileID: 2186353342994325327}
-  - component: {fileID: 6062873986988419954}
+  - component: {fileID: 3584003609196980634}
   m_Layer: 0
   m_Name: PixelVfx
   m_TagString: Untagged
@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9048bfd5a721aaa41881c661d33a510a, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,7 +106,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &6062873986988419954
+--- !u!114 &3584003609196980634
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2186353342994325362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bf47ebba10393a4487abaed7b77a932, type: 3}
+  m_Script: {fileID: 11500000, guid: 6bf58b7b76d60f94395f879498d2d5ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0

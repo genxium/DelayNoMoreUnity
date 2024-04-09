@@ -36,6 +36,7 @@ public class OfflineMapController : AbstractMapController {
         resetCurrentMatch(levelName);
         preallocateVfxNodes();
         preallocateSfxNodes();
+        preallocatePixelVfxNodes();
         preallocateNpcNodes();
         selfPlayerInfo.JoinIndex = 1;
 

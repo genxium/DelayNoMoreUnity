@@ -40,6 +40,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public GameObject errStackLogPanelPrefab;
     public GameObject teamRibbonPrefab;
     public GameObject sfxSourcePrefab;
+    public GameObject pixelVfxNodePrefab;
     protected GameObject errStackLogPanelObj;
     protected GameObject underlyingMap;
     public Canvas canvas;
@@ -102,6 +103,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Dictionary<int, GameObject> vfxSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
+    protected KvPriorityQueue<string, PixelVfxNodeController> cachedPixelVfxNodes;
     protected KvPriorityQueue<string, SFXSource> cachedSfxNodes;
     public AudioSource bgmSource;
     public abstract void onCharacterSelectGoAction(int speciesId);
@@ -142,6 +144,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
     protected KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
     protected KvPriorityQueue<string, SFXSource>.ValScore sfxNodeScore = (x) => x.score;
+    protected KvPriorityQueue<string, PixelVfxNodeController>.ValScore pixelVfxNodeScore = (x) => x.score;
 
     public BattleInputManager iptmgr;
 
@@ -424,6 +427,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                 newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, vfxAnimHolder.gameObject.transform.position.z);
                 vfxAnimHolder.gameObject.transform.position = newPosHolder;
             }
+        }
+
+        // Put all pixel-vfx nodes to infinitely far first
+        for (int i = cachedPixelVfxNodes.vals.StFrameId; i < cachedPixelVfxNodes.vals.EdFrameId; i++) {
+            var (res, holder) = cachedPixelVfxNodes.vals.GetByFrameId(i);
+            if (!res || null == holder) throw new ArgumentNullException(String.Format("There's no pixelVfxHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedPixelVfxNodes.vals.StFrameId, cachedPixelVfxNodes.vals.EdFrameId));
+
+            newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, holder.gameObject.transform.position.z);
+            holder.gameObject.transform.position = newPosHolder;
         }
 
         float selfPlayerWx = 0f, selfPlayerWy = 0f;
@@ -723,34 +735,92 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
 
-            string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
+            if (PickableState.Pidle == pickable.PkState) {
+                string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
 
-            if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
-                animName = String.Format("Consumable{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
-            } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
-                animName = String.Format("Buff{0}", pickable.ConfigFromTiled.BuffSpeciesId);
-            }
-
-            if (null != animName) {
-                var pickableAnimHolder = cachedPickables.PopAny(lookupKey);
-                if (null == pickableAnimHolder) {
-                    pickableAnimHolder = cachedPickables.Pop();
-                    //Debug.Log(String.Format("@rdf.Id={0}, using a new pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
-                } else {
-                    //Debug.Log(String.Format("@rdf.Id={0}, using a cached pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                    animName = String.Format("Consumable{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
+                } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
+                    animName = String.Format("Buff{0}", pickable.ConfigFromTiled.BuffSpeciesId);
                 }
 
-                if (null != pickableAnimHolder && null != pickableAnimHolder.lookUpTable) {
-                    if (pickableAnimHolder.lookUpTable.ContainsKey(animName)) {
-                        pickableAnimHolder.updateAnim(animName);
-                        newPosHolder.Set(wx, wy, pickableAnimHolder.gameObject.transform.position.z);
-                        pickableAnimHolder.gameObject.transform.position = newPosHolder;
+                if (null != animName) {
+                    var pickableAnimHolder = cachedPickables.PopAny(lookupKey);
+                    if (null == pickableAnimHolder) {
+                        pickableAnimHolder = cachedPickables.Pop();
+                        //Debug.Log(String.Format("@rdf.Id={0}, using a new pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                    } else {
+                        //Debug.Log(String.Format("@rdf.Id={0}, using a cached pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
                     }
-                    pickableAnimHolder.score = rdf.Id;
-                    cachedPickables.Put(lookupKey, pickableAnimHolder);
+
+                    if (null != pickableAnimHolder && null != pickableAnimHolder.lookUpTable) {
+                        if (pickableAnimHolder.lookUpTable.ContainsKey(animName)) {
+                            pickableAnimHolder.updateAnim(animName);
+                            newPosHolder.Set(wx, wy, pickableAnimHolder.gameObject.transform.position.z);
+                            pickableAnimHolder.gameObject.transform.position = newPosHolder;
+                        }
+                        pickableAnimHolder.score = rdf.Id;
+                        cachedPickables.Put(lookupKey, pickableAnimHolder);
+                    }
+                }
+            } else if (PickableState.Pconsumed == pickable.PkState) {
+                string vfxLookupKey = "pk-" + pickable.PickableLocalId.ToString(), vfxAnimName = null;
+
+                if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                    if (HpRefillSmall.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId || HpRefillMiddle.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                        vfxAnimName = "Healing1";
+                    } else if (MpRefillSmall.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId || MpRefillMiddle.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                        vfxAnimName = "MpHealing1";
+                    }
+                } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
+                    // To be implemented, deliberately left blanck
+                }
+
+                if (null != vfxAnimName) {
+                    var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
+                    if (null == pixelVfxHolder) {
+                        pixelVfxHolder = cachedPixelVfxNodes.Pop();
+                        //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                    } else {
+                        //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                    }
+
+                    if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
+                        if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
+                            pixelVfxHolder.updateAnim(vfxAnimName, pickable.FramesInPkState, 0, false, rdf);
+                            var playerObj = playerGameObjs[pickable.PickedByJoinIndex-1]; // Guaranteed to be bound to player controlled characters
+                            newPosHolder.Set(playerObj.transform.position.x, playerObj.transform.position.y, pixelVfxHolder.gameObject.transform.position.z);
+                            pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                        }
+                        pixelVfxHolder.score = rdf.Id;
+                        cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+                    }
                 }
             }
         }
+    }
+
+    protected void preallocatePixelVfxNodes() {
+        Debug.Log("preallocatePixelVfxNodes begins");
+        if (null != cachedPixelVfxNodes) {
+            while (0 < cachedPixelVfxNodes.Cnt()) {
+                var g = cachedPixelVfxNodes.Pop();
+                if (null != g) {
+                    Destroy(g.gameObject);
+                }
+            }
+        }
+        int pixelVfxNodeCacheCapacity = 64;
+        cachedPixelVfxNodes = new KvPriorityQueue<string, PixelVfxNodeController>(pixelVfxNodeCacheCapacity, pixelVfxNodeScore);
+        for (int i = 0; i < pixelVfxNodeCacheCapacity; i++) {
+            GameObject newPixelVfxNode = Instantiate(pixelVfxNodePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
+            PixelVfxNodeController newPixelVfxSource = newPixelVfxNode.GetComponent<PixelVfxNodeController>();
+            newPixelVfxSource.score = -1;
+            var initLookupKey = i.ToString();
+            cachedPixelVfxNodes.Put(initLookupKey, newPixelVfxSource);
+        }
+
+        Debug.Log("preallocatePixelVfxNodes ends");
     }
 
     protected void preallocateSfxNodes() {

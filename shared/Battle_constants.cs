@@ -163,6 +163,7 @@ namespace shared {
         public static int DEFAULT_PICKABLE_HITBOX_SIZE_X = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PICKABLE_HITBOX_SIZE_Y = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PICKABLE_DISAPPEARING_ANIM_FRAMES = 10;
+        public static int DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES = 30;
         public static int DEFAULT_PICKABLE_RISING_VEL_Y_VIRTUAL_GRID = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
 
         /*

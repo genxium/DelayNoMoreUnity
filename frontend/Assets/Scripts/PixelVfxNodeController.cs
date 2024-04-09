@@ -16,7 +16,7 @@ public class PixelVfxNodeController : MonoBehaviour {
         }
     }
 
-    public void updateAnim(string newAnimName, int frameIdxInAnim, int immediateDirX, bool spontaneousLooping, RoomDownsyncFrame rdf, int immediateVelX, int immediateVelY) {
+    public void updateAnim(string newAnimName, int frameIdxInAnim, int immediateDirX, bool spontaneousLooping, RoomDownsyncFrame rdf) {
         var animator = gameObject.GetComponent<Animator>();
         var spr = gameObject.GetComponent<SpriteRenderer>();
         

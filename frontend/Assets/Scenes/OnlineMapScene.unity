@@ -2216,6 +2216,7 @@ MonoBehaviour:
   errStackLogPanelPrefab: {fileID: 8411099102924968189, guid: e6ed24770a15248459edcefb9fad6256, type: 3}
   teamRibbonPrefab: {fileID: 764080390846769356, guid: 4ed940d7fecafa345a394af6e218fba0, type: 3}
   sfxSourcePrefab: {fileID: 7574081736914354599, guid: 7eed82879a8460e4c814eec5a7a1c3a6, type: 3}
+  pixelVfxNodePrefab: {fileID: 2186353342994325362, guid: 1527f61f7a209e6468525991f9294092, type: 3}
   canvas: {fileID: 1021584740}
   linePrefab: {fileID: 2499660631804018007, guid: 3e5fd3b3183f18b46b94639947583dc6, type: 3}
   characterSelectPanel: {fileID: 1405172217}

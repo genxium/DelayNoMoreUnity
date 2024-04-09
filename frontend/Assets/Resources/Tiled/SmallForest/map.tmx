@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="398">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="399">
  <properties>
   <property name="battleDurationSeconds" value="100"/>
   <property name="levelId" value="1"/>
@@ -286,6 +286,7 @@
     <property name="lifetimeRdfCountPerOccurrence" value="65535"/>
    </properties>
   </object>
+  <object id="398" gid="1194" x="242" y="981" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="336" x="81.333" y="988">

@@ -52,6 +52,7 @@ public class OnlineMapController : AbstractMapController {
                     resetCurrentMatch("Forest");
                     preallocateVfxNodes();
                     preallocateSfxNodes();
+                    preallocatePixelVfxNodes();
                     preallocateNpcNodes();
 
                     var tempSpeciesIdList = new int[roomCapacity];
