@@ -3,6 +3,7 @@ using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        public const int BATTLE_DYNAMICS_FPS = 60;
         public const int DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD = 10000; // in milliseconds
 
         // Deliberately NOT using enum for "room states" to make use of "C# CompareAndExchange" 
@@ -42,7 +43,7 @@ namespace shared {
         public const int DOWNSYNC_MSG_WS_CLOSED = -99;
         public const int DOWNSYNC_MSG_WS_OPEN = -100;
 
-        public const int MAGIC_JOIN_INDEX_INVALID = -2;
+        public const int MAGIC_JOIN_INDEX_INVALID = 0;
         public const int MAGIC_JOIN_INDEX_DEFAULT = -1;
         public const int MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL = 0;
         public const int MAGIC_QUOTA_INFINITE = -1;
@@ -77,7 +78,7 @@ namespace shared {
         public static ulong TRIGGER_MASK_BY_CYCLIC_TIMER = (1 << 2);
         public static ulong TRIGGER_MASK_BY_SUBSCRIPTION = (1 << 3);
 
-        public static int MAGIC_EVTSUB_ID_NONE = 0;
+        public static int MAGIC_EVTSUB_ID_NONE = 0; // Default for proto int32 to save space in "CharacterDownsync.subscriptionId"
         public static int MAGIC_EVTSUB_ID_WAVER = 1;
         public static int MAGIC_EVTSUB_ID_WAVE_EXHAUST = 2;
         public static int MAGIC_EVTSUB_ID_STORYPOINT = 3;
@@ -161,6 +162,10 @@ namespace shared {
         
         public static int DEFAULT_PICKABLE_HITBOX_SIZE_X = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PICKABLE_HITBOX_SIZE_Y = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PICKABLE_DISAPPEARING_ANIM_FRAMES = 10;
+        public static int DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES = 30;
+        public static int DEFAULT_PICKABLE_RISING_VEL_Y_VIRTUAL_GRID = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!
@@ -200,11 +205,12 @@ namespace shared {
         public static int TERMINATING_BULLET_TEAM_ID = (-1028);
         public static int TERMINATING_TRAP_ID = (-1029);
         public static int TERMINATING_TRIGGER_ID = (-1030);
-        public static int TERMINATING_BUFF_SPECIES_ID = (-1031);
-        public static int TERMINATING_DEBUFF_SPECIES_ID = (-1032);
-        public static int TERMINATING_EVTSUB_ID = (-1033);
-        public static int TERMINATING_CONSUMABLE_SPECIES_ID = (-1034);
         public static int TERMINATING_PICKABLE_LOCAL_ID = (-1035);
+
+        public static int TERMINATING_BUFF_SPECIES_ID = 0; // Default for proto int32 to save space in "CharacterDownsync.killedToDropBuffSpeciesId"
+        public static int TERMINATING_DEBUFF_SPECIES_ID = (-1032);
+        public static int TERMINATING_EVTSUB_ID = MAGIC_EVTSUB_ID_NONE;
+        public static int TERMINATING_CONSUMABLE_SPECIES_ID = 0; // Default for proto int32 to save space in "CharacterDownsync.killedToDropConsumableSpeciesId"
 
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
 
@@ -262,6 +268,22 @@ namespace shared {
             LayDown1,
             GetUp1,
             Dying
+        };
+
+        public static HashSet<CharacterState> shrinkedSizeSet = new HashSet<CharacterState>() {
+            BlownUp1,
+            LayDown1,
+            InAirIdle1NoJump,
+            InAirIdle1ByJump,
+            InAirIdle1ByWallJump,
+            InAirAtk1,
+            InAirAtk2,
+            InAirAtked1,
+            OnWallIdle1,
+            Sliding,
+            CrouchIdle1,
+            CrouchAtk1,
+            CrouchAtked1,
         };
     }
 }

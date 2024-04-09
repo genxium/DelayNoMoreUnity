@@ -1134,6 +1134,7 @@ MonoBehaviour:
   - {fileID: 1536172879, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: 1106039805, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: 590662967, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  - {fileID: 623420632, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   inventoryBtnBSprite: {fileID: 0}
   regularBtnBSprite: {fileID: 0}
 --- !u!1 &6132405460575147013

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="33" nextobjectid="437">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="33" nextobjectid="438">
  <properties>
   <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="2"/>
-  <property name="npcPreallocCapDict" value="4098:2;1:2;3:1;4097:4"/>
+  <property name="npcPreallocCapDict" value="4098:2;3:2"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
@@ -53,7 +53,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" name="Player1St" x="220" y="1946">
+  <object id="135" name="Player1St" x="137" y="1938">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -86,7 +86,7 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="430" name="PSwitch-2" gid="11" x="748" y="1830" width="24" height="24">
+  <object id="430" name="PSwitch-2" gid="11" x="748" y="1790" width="24" height="24">
    <properties>
     <property name="bulletTeamId" value="1024"/>
     <property name="delayedFrames" value="10"/>
@@ -97,7 +97,7 @@
     <property name="trackingIdList" value="2"/>
    </properties>
   </object>
-  <object id="431" name="PSwitch-1" gid="11" x="248" y="1830" width="24" height="24">
+  <object id="431" name="PSwitch-1" gid="11" x="248" y="1790" width="24" height="24">
    <properties>
     <property name="bulletTeamId" value="1024"/>
     <property name="delayedFrames" value="10"/>
@@ -111,15 +111,15 @@
   <object id="434" name="BossDoorL" gid="1046" x="352" y="1936" width="32" height="32">
    <properties>
     <property name="bulletTeamId" value="3"/>
-    <property name="characterSpawnerTimeSeq" value="1:4097,4097,4097;2:1,1;3:3;4:1,3,3"/>
+    <property name="characterSpawnerTimeSeq" value="1:3"/>
     <property name="delayedFrames" value="5"/>
-    <property name="initVelX" value="-2"/>
+    <property name="initVelX" value="-1"/>
     <property name="initVelY" value="0"/>
     <property name="publishingEvtMaskUponExhaust" value="4"/>
     <property name="publishingToEvtSubIdUponExhaust" value="2"/>
-    <property name="quota" value="2"/>
+    <property name="quota" value="1"/>
     <property name="recoveryFrames" value="300"/>
-    <property name="subCycleQuota" value="3"/>
+    <property name="subCycleQuota" value="1"/>
     <property name="subCycleTriggerFrames" value="70"/>
     <property name="subscriptionId" value="1"/>
    </properties>
@@ -148,6 +148,7 @@
   <object id="372" name="Goblin" x="128" y="1832">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="2"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4098"/>
@@ -159,6 +160,7 @@
   <object id="373" name="Goblin" x="853" y="1832">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4098"/>
@@ -253,12 +255,12 @@
    </properties>
   </object>
   <object id="406" name="SlopeR" x="944" y="1936">
-   <polyline points="0,0 -240,96 -240,96 0,96"/>
+   <polyline points="0,0 -240,96 0,96"/>
   </object>
   <object id="407" name="TerraceR" x="944" y="1936" width="48" height="96"/>
   <object id="408" name="TerraceL" x="32" y="1936" width="48" height="96"/>
   <object id="409" name="SlopeL" x="80" y="1936">
-   <polyline points="0,96 240,96 240,96 0,0"/>
+   <polyline points="0,96 240,96 0,0"/>
   </object>
   <object id="428" name="Ground" x="520" y="2016" width="520" height="64">
    <properties>

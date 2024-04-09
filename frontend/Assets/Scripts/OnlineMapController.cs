@@ -52,6 +52,7 @@ public class OnlineMapController : AbstractMapController {
                     resetCurrentMatch("Forest");
                     preallocateVfxNodes();
                     preallocateSfxNodes();
+                    preallocatePixelVfxNodes();
                     preallocateNpcNodes();
 
                     var tempSpeciesIdList = new int[roomCapacity];
@@ -61,7 +62,7 @@ public class OnlineMapController : AbstractMapController {
                     tempSpeciesIdList[selfPlayerInfo.JoinIndex - 1] = WsSessionManager.Instance.GetSpeciesId();
                     var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, battleDurationSeconds) = mockStartRdf(tempSpeciesIdList);
 
-                    battleDurationFrames = battleDurationSeconds * fps;
+                    battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
                     renderBuffer.Put(thatStartRdf);
                     
                     refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);

@@ -28,6 +28,9 @@ enum CharacterState {
 
 	Dashing = 12;
 	Sliding = 13;
+   
+    Dimmed = 14; // Pre-activated state for evtsub-based NPC 
+    TransformingInto = 15; // When at this state, the character has already completed transform, i.e. in new speciesId
 
 	OnWallIdle1 = 128; 
     
@@ -43,8 +46,9 @@ enum CharacterState {
 	Atk5 = 1028;
 
 	InAirAtk1 = 2048;
-	WalkingAtk1 = 2049;
-	WalkingAtk4 = 2050;
+	InAirAtk2 = 2049;
+	WalkingAtk1 = 2050;
+	WalkingAtk4 = 2051;
 
 	OnWallAtk1 = 3072; 
 }
@@ -60,6 +64,12 @@ enum TrapState {
 enum TriggerState {
 	TReady = 0;
 	TCoolingDown = 1;
+}
+
+enum PickableState {
+	PIdle = 0;
+	PDisappearing = 1;
+	PConsumed = 2;
 }
  
 message CharacterDownsync {
@@ -84,9 +94,9 @@ message CharacterDownsync {
 	int32 beatenCnt = 16;
 
 	int32 hp = 17;
-	int32 maxHp = 18;
-	int32 mp = 19;
-	int32 maxMp = 20;
+	int32 mp = 18;
+
+    int32 btnBHoldingRdfCount = 19;
 
 	CharacterState characterState = 22;
 	int32 framesInChState = 23; // number of frames elapsed in the current character state   
@@ -129,6 +139,11 @@ message CharacterDownsync {
     int32 subscriptionId = 50; 
 
     bool jumpHolding = 51;
+    int32 remainingAirJumpQuota = 52;
+    int32 remainingAirDashQuota = 53;
+
+    int32 killedToDropConsumableSpeciesId = 54;
+	int32 killedToDropBuffSpeciesId = 55;
 
 	string name = 997;
 	string displayName = 998;
@@ -268,6 +283,7 @@ message VfxConfig {
     VfxDurationType durationType = 3;
 	bool onCharacter = 4;
 	bool onBullet = 5;
+    bool usePixelatedVer = 6;
 }
 
 message BulletConfig {
@@ -329,6 +345,13 @@ message BulletConfig {
     bool remainUponHit = 41; 
 	bool rotatesAlongVelocity = 42;
 
+    int32 defaultHardPushbackBounceQuota = 43;
+    float hardPushbackBounceNormFactor = 44; // For attenuation
+    float hardPushbackBounceSheerFactor = 45; // For attenuation
+
+    bool isPixelatedActiveVfx = 46;
+    bool isPixelatedExplostionVfx = 47;
+
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
 
@@ -356,6 +379,7 @@ message Bullet {
 	BulletBattleAttr battleAttr = 3;
 	BulletConfig config = 4;
 	int32 repeatQuotaLeft = 5;
+    int32 remainingHardPushbackBounceQuota = 6;
 
 	int32 virtualGridX = 999;
 	int32 virtualGridY = 1000;
@@ -669,6 +693,7 @@ message BuffConfig {
     repeated int32 associatedDebuffs = 1024;   
 
     int32 characterVfxSpeciesId = 2048;
+    bool isPixelatedVfxOnCharacter = 2049;
 }
 
 message Buff {
@@ -692,6 +717,8 @@ enum ConsumableType {
 message ConsumableConfig {
     int32 speciesId = 1; 
     int32 refillDelta = 2;
+    int32 vfxIdOnPicker = 3;
+    bool isPixelatedVfxOnPicker = 4;
 };
 
 enum InventorySlotStockType {
@@ -792,8 +819,8 @@ message PickableConfigFromTiled {
     int32 stockQuotaPerOccurrence = 9; // Only meaningful when "pickupType == PutIntoInventory"
     int32 subscriptionId = 10;
 
-    int32 buffSpeciesId = 1024;
-    int32 consumableSpeciesId = 1025; 
+    int32 consumableSpeciesId = 1024; 
+    int32 buffSpeciesId = 1025;
 }
 
 message Pickable {
@@ -804,4 +831,7 @@ message Pickable {
     int32 remainingLifetimeRdfCount = 5; 
     int32 remainingRecurQuota = 6;
     int32 velY = 7;
+    PickableState pkState = 8;    
+    int32 framesInPkState = 9;    
+    int32 pickedByJoinIndex = 10;
 }

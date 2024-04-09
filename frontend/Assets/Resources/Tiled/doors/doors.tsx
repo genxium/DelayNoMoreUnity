@@ -15,7 +15,7 @@
   </properties>
   <image width="96" height="64" source="GreenGate-0.png"/>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="10" width="96" height="54">
+   <object id="1" x="0" y="20" width="96" height="44.5663">
     <properties>
      <property name="providesHardPushback" value="1"/>
     </properties>

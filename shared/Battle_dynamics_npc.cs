@@ -17,9 +17,7 @@ namespace shared {
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (FireSwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_SKELEARCHER:
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(PurpleArrowBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX), yfac * PurpleArrowBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
-                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((PurpleArrowBullet.HitboxSizeX), (PurpleArrowBullet.HitboxSizeY));
-                    break;
+                    return (0 < colliderDy && absColliderDy > 0.3f * (bCollider.H-aCollider.H));
                 default:
                     return false;
             }
@@ -103,7 +101,7 @@ namespace shared {
                 if (invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
 
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                 if (!overlapped) {
                     continue;
                 }
@@ -137,6 +135,10 @@ namespace shared {
             return (0 >= currCharacterDownsync.Hp && 0 >= currCharacterDownsync.FramesToRecover);
         }
 
+        public static bool isNpcJustDead(CharacterDownsync currCharacterDownsync) {
+            return (0 >= currCharacterDownsync.Hp && DYING_FRAMES_TO_RECOVER == currCharacterDownsync.FramesToRecover);
+        }
+
         private static void findHorizontallyClosestPatrolCueCollider(CharacterDownsync currCharacterDownsync, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out PatrolCue? res2) {
             res1 = null;
             res2 = null;
@@ -166,7 +168,7 @@ namespace shared {
                 }
 
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, ref overlapResult);
+                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                 if (!overlapped) {
                     continue;
                 }
@@ -382,6 +384,15 @@ namespace shared {
                 Skill? skillConfig = null;
                 if (usedSkill) {
                     skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
+                    if (CharacterState.Dashing == skillConfig.BoundChState && currCharacterDownsync.InAir) {              
+                        thatCharacterInNextFrame.RemainingAirDashQuota -= 1;
+                        if (!chConfig.IsolatedAirJumpAndDashQuota) {
+                            thatCharacterInNextFrame.RemainingAirJumpQuota -= 1;
+                            if (0 > thatCharacterInNextFrame.RemainingAirJumpQuota) {
+                                thatCharacterInNextFrame.RemainingAirJumpQuota = 0;
+                            }
+                        }
+                    }
                     continue; // Don't allow movement if skill is used
                 }
 

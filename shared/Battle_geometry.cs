@@ -1,8 +1,19 @@
 ﻿using System;
+using System.Threading;
 using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
+        private static SatResult tmpResultHolder = new SatResult {
+            OverlapMag = 0,
+            OverlapX = 0,
+            OverlapY = 0,
+            AContainedInB = false,
+            BContainedInA = false,
+            AxisX = 0,
+            AxisY = 0    
+        };
+
         public static void roundToRectilinearDir(ref float normX, ref float normY) {
             if (0 == normX) {
                 if (0 > normY) {
@@ -19,7 +30,7 @@ namespace shared {
             }
         }
 
-        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, ref SatResult overlapResult) {
+        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, bool prefersAOnBShapeTopEdges, ref SatResult overlapResult) {
             float origX = a.X, origY = a.Y;
             try {
                 a.SetPosition(origX + oldDx, origY + oldDy);
@@ -31,7 +42,7 @@ namespace shared {
                 overlapResult.AxisX = 0;
                 overlapResult.AxisY = 0;
 
-                bool overlapped = isPolygonPairOverlapped(a, b, onlyOnBShapeEdges, ref overlapResult);
+                bool overlapped = isPolygonPairOverlapped(a, b, onlyOnBShapeEdges, prefersAOnBShapeTopEdges, ref overlapResult);
                 if (true == overlapped) {
                     float pushbackX = overlapResult.OverlapMag * overlapResult.OverlapX;
                     float pushbackY = overlapResult.OverlapMag * overlapResult.OverlapY;
@@ -110,7 +121,7 @@ namespace shared {
 
                 ConvexPolygon bShape = bCollider.Shape;
 
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult);
 
                 if (!overlapped) {
                     continue;
@@ -244,7 +255,7 @@ namespace shared {
                         break;
                     case TrapColliderAttr v5:
                         var trap = currRenderFrame.TrapsArr[v5.TrapLocalId];
-                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed == trap.TrapState);
+                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
                         break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
@@ -257,7 +268,7 @@ namespace shared {
                 }
                 ConvexPolygon bShape = bCollider.Shape;
 
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult);
 
                 if (!overlapped) {
                     continue;
@@ -315,7 +326,7 @@ namespace shared {
                         break;
                     case TrapColliderAttr v5:
                         var trap = currRenderFrame.TrapsArr[v5.TrapLocalId];
-                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed == trap.TrapState);
+                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
                         break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
@@ -332,10 +343,14 @@ namespace shared {
                 }
                 ConvexPolygon bShape = bCollider.Shape;
 
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, false, ref overlapResult);
 
                 if (!overlapped) {
                     continue;
+                }
+
+                if (isAnActualBarrier) {
+                    hitsAnActualBarrier = true;
                 }
 
                 // Same polarity
@@ -427,7 +442,8 @@ namespace shared {
             return x;
         }
 
-        public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, ref SatResult result) {
+        private static float TOO_FAR_FOR_PUSHBACK_MAGNITUDE = 64.0f; // Roughly the height of a character
+        public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, bool onlyOnBShapeEdges, bool prefersAOnBShapeTopEdges, ref SatResult result) {
             int aCnt = a.Points.Cnt;
             int bCnt = b.Points.Cnt;
             // Single point case
@@ -438,6 +454,7 @@ namespace shared {
                 return null != aPoint && null != bPoint && aPoint.X == bPoint.X && aPoint.Y == bPoint.Y;
             }
 
+            bool foundNonOverwhelmingOverlap = false;
             if (1 < aCnt && !onlyOnBShapeEdges) {
                 // Deliberately using "Points" instead of "SATAxes" to avoid unnecessary heap memory alloc
                 for (int i = 0; i < aCnt; i++) {
@@ -460,10 +477,15 @@ namespace shared {
                     if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
                         return false;
                     }
+                    if (result.OverlapMag < TOO_FAR_FOR_PUSHBACK_MAGNITUDE) {
+                        foundNonOverwhelmingOverlap = true;
+                    }
                 }
             }
 
+            bool alreadyGotPreferredAOnBTopResult = false;
             if (1 < bCnt) {
+                tmpResultHolder.reset(); // [WARNING] It's important NOT to reset "tmpResultHolder" on each "i in [0, bCnt)", because inside "isPolygonPairSeparatedByDir(a, b, dx, dy, ref tmpResultHolder)" we rely on the historic value of "tmpResultHolder" to check whether or not we're currently on "shortest path to escape overlap"!
                 for (int i = 0; i < bCnt; i++) {
                     Vector? u = b.GetPointByOffset(i);
                     if (null == u) {
@@ -476,18 +498,41 @@ namespace shared {
                     if (null == v) {
                         throw new ArgumentNullException("Getting a null point v from polygon b!");
                     }
+
                     float dx = (v.Y - u.Y);
                     float dy = -(v.X - u.X);
                     float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
-                    if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
-                        return false;
+                    
+                    if (onlyOnBShapeEdges && prefersAOnBShapeTopEdges) {
+                        if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref tmpResultHolder)) {
+                            return false;
+                        } 
+                        // Overlapped if only axis projection separation were required
+                        if (alreadyGotPreferredAOnBTopResult && u.X == v.X) {
+                            continue;
+                        } else if (tmpResultHolder.OverlapMag < TOO_FAR_FOR_PUSHBACK_MAGNITUDE) {
+                            foundNonOverwhelmingOverlap = true;
+                            tmpResultHolder.cloneInto(ref result);
+                            if (u.X != v.X) {
+                                alreadyGotPreferredAOnBTopResult = true;
+                            }
+                        }
+                    } else {
+                        // Just regular usage -- always pick the last overlapping result 
+                        if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
+                            return false;
+                        }
+                        // Overlapped if only axis projection separation were required
+                        if (result.OverlapMag < TOO_FAR_FOR_PUSHBACK_MAGNITUDE) {
+                            foundNonOverwhelmingOverlap = true;
+                        }
                     }
                 }
             }
 
-            return true;
+            return foundNonOverwhelmingOverlap;
         }
 
         public static bool isPolygonPairSeparatedByDir(ConvexPolygon a, ConvexPolygon b, float axisX, float axisY, ref SatResult result) {
@@ -597,10 +642,9 @@ namespace shared {
                 result.OverlapMag = absoluteOverlap;
                 result.OverlapX = axisX * sign;
                 result.OverlapY = axisY * sign;
+                result.AxisX = axisX;
+                result.AxisY = axisY;
             }
-
-            result.AxisX = axisX;
-            result.AxisY = axisY;
 
             // the specified unit vector (axisX, axisY) doesn't separate "a" and "b", overlap result is generated
             return false;

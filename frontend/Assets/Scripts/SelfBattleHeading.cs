@@ -25,12 +25,12 @@ public class SelfBattleHeading : MonoBehaviour {
             }
         }
         
-        hpBar.SetValueWithoutNotify((float)chd.Hp/chd.MaxHp);
+        hpBar.SetValueWithoutNotify((float)chd.Hp/ newChConfig.Hp);
         if (newChConfig.UseInventoryBtnB) {
             mpBar.gameObject.SetActive(false);
         } else {
             mpBar.gameObject.SetActive(true);
-            mpBar.SetValueWithoutNotify((float)chd.Mp / chd.MaxMp);
+            mpBar.SetValueWithoutNotify((float)chd.Mp / newChConfig.Mp);
         }
 
         if (null != chd.BuffList && 0 < chd.BuffList.Count) {

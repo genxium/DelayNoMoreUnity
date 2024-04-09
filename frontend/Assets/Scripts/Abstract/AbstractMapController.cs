@@ -40,6 +40,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     public GameObject errStackLogPanelPrefab;
     public GameObject teamRibbonPrefab;
     public GameObject sfxSourcePrefab;
+    public GameObject pixelVfxNodePrefab;
     protected GameObject errStackLogPanelObj;
     protected GameObject underlyingMap;
     public Canvas canvas;
@@ -102,6 +103,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Dictionary<int, GameObject> vfxSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
+    protected KvPriorityQueue<string, PixelVfxNodeController> cachedPixelVfxNodes;
     protected KvPriorityQueue<string, SFXSource> cachedSfxNodes;
     public AudioSource bgmSource;
     public abstract void onCharacterSelectGoAction(int speciesId);
@@ -142,13 +144,12 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
     protected KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
     protected KvPriorityQueue<string, SFXSource>.ValScore sfxNodeScore = (x) => x.score;
+    protected KvPriorityQueue<string, PixelVfxNodeController>.ValScore pixelVfxNodeScore = (x) => x.score;
 
     public BattleInputManager iptmgr;
 
     protected int missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
     protected bool isOnlineMode;
-
-    protected int fps = 60;
 
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
@@ -169,9 +170,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         return Resources.Load("Prefabs/Pickable") as GameObject;
     }
 
-
     public ReadyGo readyGoPanel;
     public SettlementPanel settlementPanel;
+
     protected Vector3 newPosHolder = new Vector3();
     protected Vector3 newTlPosHolder = new Vector3(), newTrPosHolder = new Vector3(), newBlPosHolder = new Vector3(), newBrPosHolder = new Vector3();
 
@@ -428,6 +429,15 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
 
+        // Put all pixel-vfx nodes to infinitely far first
+        for (int i = cachedPixelVfxNodes.vals.StFrameId; i < cachedPixelVfxNodes.vals.EdFrameId; i++) {
+            var (res, holder) = cachedPixelVfxNodes.vals.GetByFrameId(i);
+            if (!res || null == holder) throw new ArgumentNullException(String.Format("There's no pixelVfxHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, cachedPixelVfxNodes.vals.StFrameId, cachedPixelVfxNodes.vals.EdFrameId));
+
+            newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, holder.gameObject.transform.position.z);
+            holder.gameObject.transform.position = newPosHolder;
+        }
+
         float selfPlayerWx = 0f, selfPlayerWy = 0f;
 
         for (int k = 0; k < roomCapacity; k++) {
@@ -571,7 +581,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             speciesKvPq.Put(lookupKey, npcAnimHolder);
 
             // Add teamRibbon and inplaceHpBar
-            showTeamRibbonAndInplaceHpBar(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
+            if (CharacterState.Dying != currNpcDownsync.CharacterState) {
+                showTeamRibbonAndInplaceHpBar(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
+            }
 
             // Add character vfx
             if (currNpcDownsync.NewBirth) {
@@ -723,34 +735,92 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
 
-            string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
+            if (PickableState.Pidle == pickable.PkState) {
+                string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
 
-            if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
-                animName = String.Format("Consumable{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
-            } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
-                animName = String.Format("Buff{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
-            }
-
-            if (null != animName) {
-                var pickableAnimHolder = cachedPickables.PopAny(lookupKey);
-                if (null == pickableAnimHolder) {
-                    pickableAnimHolder = cachedPickables.Pop();
-                    //Debug.Log(String.Format("@rdf.Id={0}, using a new pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
-                } else {
-                    //Debug.Log(String.Format("@rdf.Id={0}, using a cached pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                    animName = String.Format("Consumable{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
+                } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
+                    animName = String.Format("Buff{0}", pickable.ConfigFromTiled.BuffSpeciesId);
                 }
 
-                if (null != pickableAnimHolder && null != pickableAnimHolder.lookUpTable) {
-                    if (pickableAnimHolder.lookUpTable.ContainsKey(animName)) {
-                        pickableAnimHolder.updateAnim(animName);
-                        newPosHolder.Set(wx, wy, pickableAnimHolder.gameObject.transform.position.z);
-                        pickableAnimHolder.gameObject.transform.position = newPosHolder;
+                if (null != animName) {
+                    var pickableAnimHolder = cachedPickables.PopAny(lookupKey);
+                    if (null == pickableAnimHolder) {
+                        pickableAnimHolder = cachedPickables.Pop();
+                        //Debug.Log(String.Format("@rdf.Id={0}, using a new pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                    } else {
+                        //Debug.Log(String.Format("@rdf.Id={0}, using a cached pickable node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
                     }
-                    pickableAnimHolder.score = rdf.Id;
-                    cachedPickables.Put(lookupKey, pickableAnimHolder);
+
+                    if (null != pickableAnimHolder && null != pickableAnimHolder.lookUpTable) {
+                        if (pickableAnimHolder.lookUpTable.ContainsKey(animName)) {
+                            pickableAnimHolder.updateAnim(animName);
+                            newPosHolder.Set(wx, wy, pickableAnimHolder.gameObject.transform.position.z);
+                            pickableAnimHolder.gameObject.transform.position = newPosHolder;
+                        }
+                        pickableAnimHolder.score = rdf.Id;
+                        cachedPickables.Put(lookupKey, pickableAnimHolder);
+                    }
+                }
+            } else if (PickableState.Pconsumed == pickable.PkState) {
+                string vfxLookupKey = "pk-" + pickable.PickableLocalId.ToString(), vfxAnimName = null;
+
+                if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                    if (HpRefillSmall.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId || HpRefillMiddle.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                        vfxAnimName = "Healing1";
+                    } else if (MpRefillSmall.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId || MpRefillMiddle.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                        vfxAnimName = "MpHealing1";
+                    }
+                } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
+                    // To be implemented, deliberately left blanck
+                }
+
+                if (null != vfxAnimName) {
+                    var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
+                    if (null == pixelVfxHolder) {
+                        pixelVfxHolder = cachedPixelVfxNodes.Pop();
+                        //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                    } else {
+                        //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                    }
+
+                    if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
+                        if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
+                            pixelVfxHolder.updateAnim(vfxAnimName, pickable.FramesInPkState, 0, false, rdf);
+                            var playerObj = playerGameObjs[pickable.PickedByJoinIndex-1]; // Guaranteed to be bound to player controlled characters
+                            newPosHolder.Set(playerObj.transform.position.x, playerObj.transform.position.y, pixelVfxHolder.gameObject.transform.position.z);
+                            pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                        }
+                        pixelVfxHolder.score = rdf.Id;
+                        cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+                    }
                 }
             }
         }
+    }
+
+    protected void preallocatePixelVfxNodes() {
+        Debug.Log("preallocatePixelVfxNodes begins");
+        if (null != cachedPixelVfxNodes) {
+            while (0 < cachedPixelVfxNodes.Cnt()) {
+                var g = cachedPixelVfxNodes.Pop();
+                if (null != g) {
+                    Destroy(g.gameObject);
+                }
+            }
+        }
+        int pixelVfxNodeCacheCapacity = 64;
+        cachedPixelVfxNodes = new KvPriorityQueue<string, PixelVfxNodeController>(pixelVfxNodeCacheCapacity, pixelVfxNodeScore);
+        for (int i = 0; i < pixelVfxNodeCacheCapacity; i++) {
+            GameObject newPixelVfxNode = Instantiate(pixelVfxNodePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
+            PixelVfxNodeController newPixelVfxSource = newPixelVfxNode.GetComponent<PixelVfxNodeController>();
+            newPixelVfxSource.score = -1;
+            var initLookupKey = i.ToString();
+            cachedPixelVfxNodes.Put(initLookupKey, newPixelVfxSource);
+        }
+
+        Debug.Log("preallocatePixelVfxNodes ends");
     }
 
     protected void preallocateSfxNodes() {
@@ -1080,8 +1150,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        int paddingX = (tileWidth << 3) + (tileWidth << 2);
-        int paddingY = (tileHeight << 3);
+        // TODO: Use dynamic padding if camera zoom in/out is required during battle!
+        int camFovW = (int)(2.0f * Camera.main.orthographicSize * Camera.main.aspect);
+        int camFovH = (int)(2.0f * Camera.main.orthographicSize);
+        int paddingX = (camFovW >> 1);
+        int paddingY = (camFovH >> 1);
         cameraCapMinX = 0 + paddingX;
         cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
 
@@ -1373,7 +1446,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.SpeciesId = speciesIdList[i];
             var chConfig = characters[playerInRdf.SpeciesId];
             playerInRdf.Hp = chConfig.Hp;
-            playerInRdf.MaxHp = chConfig.Hp;
+            playerInRdf.Mp = chConfig.Mp;
             playerInRdf.Speed = chConfig.Speed;
             playerInRdf.OmitGravity = chConfig.OmitGravity;
             playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
@@ -1403,7 +1476,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var serializedTriggerTrackingIdToTrapLocalId = new SerializedTriggerTrackingIdToTrapLocalId();
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         var playerStartingCposList = new List<(Vector, int, int)>();
-        var npcsStartingCposList = new List<(Vector, int, int, int, int, bool, int, ulong, int)>();
+        var npcsStartingCposList = new List<(Vector, int, int, int, int, bool, int, ulong, int, int, int)>();
         var trapList = new List<Trap>();
         var triggerList = new List<(Trigger, float, float)>();
         var pickableList = new List<(Pickable, float, float)>();
@@ -1497,7 +1570,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
                         var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
                         var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
-                        CustomProperty dirX, dirY, speciesId, teamId, isStatic, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId;
+                        CustomProperty dirX, dirY, speciesId, teamId, isStatic, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId;
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
@@ -1506,6 +1579,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("publishingEvtSubIdUponKilled", out publishingEvtSubIdUponKilled);
                         tileProps.TryGetCustomProperty("publishingEvtMaskUponKilled", out publishingEvtMaskUponKilled);
                         tileProps.TryGetCustomProperty("subscriptionId", out subscriptionId);
+                        tileProps.TryGetCustomProperty("killedToDropConsumableSpeciesId", out killedToDropConsumableSpeciesId);
+                        tileProps.TryGetCustomProperty("killedToDropBuffSpeciesId", out killedToDropBuffSpeciesId);
+
                         npcsStartingCposList.Add((
                                                     new Vector(cx, cy),
                                                     null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt(),
@@ -1515,7 +1591,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                                                     null == isStatic || isStatic.IsEmpty ? false : (1 == isStatic.GetValueAsInt()),
                                                     null == publishingEvtSubIdUponKilled || publishingEvtSubIdUponKilled.IsEmpty ? MAGIC_EVTSUB_ID_NONE : publishingEvtSubIdUponKilled.GetValueAsInt(),
                                                     null == publishingEvtMaskUponKilled || publishingEvtMaskUponKilled.IsEmpty ? 0ul : (ulong)publishingEvtMaskUponKilled.GetValueAsInt(),
-                                                    null == subscriptionId || subscriptionId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : subscriptionId.GetValueAsInt()
+                                                    null == subscriptionId || subscriptionId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : subscriptionId.GetValueAsInt(),
+                                                    null == killedToDropConsumableSpeciesId || killedToDropConsumableSpeciesId.IsEmpty ? TERMINATING_CONSUMABLE_SPECIES_ID : killedToDropConsumableSpeciesId.GetValueAsInt(),
+                                                    null == killedToDropBuffSpeciesId || killedToDropBuffSpeciesId.IsEmpty ? TERMINATING_BUFF_SPECIES_ID : killedToDropBuffSpeciesId.GetValueAsInt()
                         ));
                     }
                     break;
@@ -1941,8 +2019,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.VelY = 0;
             playerInRdf.InAir = true;
             playerInRdf.OnWall = false;
-            playerInRdf.Mp = 60*fps; // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty
-            playerInRdf.MaxMp = 60*fps;
             playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
 
             if (SPECIES_NONE_CH == speciesIdList[i]) continue;
@@ -1951,7 +2027,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.SpeciesId = speciesIdList[i];
             var chConfig = Battle.characters[playerInRdf.SpeciesId];
             playerInRdf.Hp = chConfig.Hp;
-            playerInRdf.MaxHp = chConfig.Hp;
+            playerInRdf.Mp = chConfig.Mp; 
             playerInRdf.Speed = chConfig.Speed;
             playerInRdf.OmitGravity = chConfig.OmitGravity;
             playerInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
@@ -1969,7 +2045,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int npcLocalId = 0;
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal, subscriptionId) = npcsStartingCposList[i];
+            var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId) = npcsStartingCposList[i];
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
             var chConfig = Battle.characters[characterSpeciesId];
             var npcInRdf = startRdf.NpcsArr[i];
@@ -1992,9 +2068,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.InAir = true;
             npcInRdf.OnWall = false;
             npcInRdf.Hp = chConfig.Hp;
-            npcInRdf.MaxHp = chConfig.Hp;
-            npcInRdf.Mp = 1000;
-            npcInRdf.MaxMp = 1000;
+            npcInRdf.Mp = chConfig.Mp;
             npcInRdf.SpeciesId = characterSpeciesId;
             npcInRdf.BulletTeamId = teamId;
             npcInRdf.ChCollisionTeamId = teamId;
@@ -2006,6 +2080,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.PublishingEvtSubIdUponKilled = publishingEvtSubIdUponKilledVal;
             npcInRdf.PublishingEvtMaskUponKilled = publishingEvtMaskUponKilledVal;
             npcInRdf.SubscriptionId = subscriptionId;
+            npcInRdf.KilledToDropConsumableSpeciesId = killedToDropConsumableSpeciesId;
+            npcInRdf.KilledToDropBuffSpeciesId = killedToDropBuffSpeciesId;
             startRdf.NpcsArr[i] = npcInRdf;
             npcLocalId++;
         }
@@ -2030,6 +2106,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (pickable, wx, wy) = pickableList[i];
             startRdf.Pickables[i] = pickable;
         }
+        startRdf.PickableLocalIdCounter = pickableLocalId;
 
         for (int i = 0; i < evtSubList.Count; i++) {
             startRdf.EvtSubsArr[i] = evtSubList[i];
@@ -2086,6 +2163,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
         var stepLength = Time.deltaTime * cameraSpeedInWorld;
         if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id || stepLength > camDiffDstHolder.magnitude) {
+            // Immediately teleport
             newPosHolder.Set(dst.x, dst.y, camOldPos.z);
         } else {
             var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
@@ -2180,7 +2258,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             int m = collider.Shape.Points.Cnt;
             line.GetPositions(debugDrawPositionsHolder);
-            for (int i = 0; i < m; i++) {
+            for (int i = 0; i < 4; i++) {
+                int effI = (i >= m ? m - 1 : i);
                 var (_, pi) = collider.Shape.Points.GetByOffset(i);
                 (debugDrawPositionsHolder[i].x, debugDrawPositionsHolder[i].y) = CollisionSpacePositionToWorldPosition(collider.X + pi.X, collider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
             }
@@ -2391,8 +2470,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (null == hpBar) {
             throw new ArgumentNullException(String.Format("No available hpBar node for lookupKey={0}", lookupKey));
         }
+        var chConfig = characters[currCharacterDownsync.SpeciesId];
         hpBar.score = rdfId;
-        hpBar.updateHp((float)currCharacterDownsync.Hp / currCharacterDownsync.MaxHp, (float)currCharacterDownsync.Mp / currCharacterDownsync.MaxMp);
+        hpBar.updateHp((float)currCharacterDownsync.Hp / chConfig.Hp, (float)currCharacterDownsync.Mp / chConfig.Mp);
         newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + halfBoxCh + inplaceHpBarOffset.y, inplaceHpBarZ);
         hpBar.gameObject.transform.position = newPosHolder;
         cachedHpBars.Put(lookupKey, hpBar);

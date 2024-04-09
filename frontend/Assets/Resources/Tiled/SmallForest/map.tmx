@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="398">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="399">
  <properties>
   <property name="battleDurationSeconds" value="100"/>
   <property name="levelId" value="1"/>
@@ -142,7 +142,7 @@
     <property name="speciesId" value="6"/>
    </properties>
   </object>
-  <object id="387" name="StoryPoint2" x="1337" y="37" width="42" height="990">
+  <object id="387" name="StoryPoint2" x="1361" y="37" width="42" height="990">
    <properties>
     <property name="publishingEvtMaskUponExhaust" value="1"/>
     <property name="publishingToEvtSubIdUponExhaust" value="3"/>
@@ -152,7 +152,7 @@
     <property name="storyPointId" value="2"/>
    </properties>
   </object>
-  <object id="386" name="StoryPoint1" x="406" y="36" width="42" height="1018">
+  <object id="386" name="StoryPoint1" x="386" y="36" width="42" height="1018">
    <properties>
     <property name="publishingEvtMaskUponExhaust" value="1"/>
     <property name="publishingToEvtSubIdUponExhaust" value="3"/>
@@ -205,6 +205,7 @@
   <object id="374" name="SwordMan" x="1088" y="972">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="8"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="1"/>
@@ -280,11 +281,12 @@
   </object>
  </objectgroup>
  <objectgroup id="28" name="Pickable">
-  <object id="395" gid="1193" x="1179.03" y="978.72" width="32" height="32">
+  <object id="395" gid="1193" x="1284.03" y="982.72" width="32" height="32">
    <properties>
     <property name="lifetimeRdfCountPerOccurrence" value="65535"/>
    </properties>
   </object>
+  <object id="398" gid="1194" x="242" y="981" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="336" x="81.333" y="988">

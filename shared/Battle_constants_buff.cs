@@ -95,6 +95,24 @@ namespace shared {
             OnBullet = false
         };
 
+        public static VfxConfig VfxHealing = new VfxConfig {
+            SpeciesId = 1,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false, 
+            UsePixelatedVer = true
+        };
+
+        public static VfxConfig VfxMpHealing = new VfxConfig {
+            SpeciesId = 2,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false,
+            UsePixelatedVer = true
+        };
+
         public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
              new[]
              {
@@ -109,6 +127,14 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxSlashExploding.SpeciesId, VfxSlashExploding),
                     new KeyValuePair<int, VfxConfig>(VfxIceLingering.SpeciesId, VfxIceLingering),
                     new KeyValuePair<int, VfxConfig>(VfxXform.SpeciesId, VfxXform),
+             }
+        );
+
+        public static ImmutableDictionary<int, VfxConfig> pixelatedVfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
+             new[]
+             {
+                    new KeyValuePair<int, VfxConfig>(VfxHealing.SpeciesId, VfxHealing),
+                    new KeyValuePair<int, VfxConfig>(VfxMpHealing.SpeciesId, VfxMpHealing),
              }
         );
 
@@ -155,19 +181,31 @@ namespace shared {
                 }
         );
 
-        public static ConsumableConfig MpRefillSmall = new ConsumableConfig {
+        public static ConsumableConfig HpRefillSmall = new ConsumableConfig {
             SpeciesId = 1,
+            RefillDelta = 50,
+        };
+
+        public static ConsumableConfig HpRefillMiddle = new ConsumableConfig {
+            SpeciesId = 2,
+            RefillDelta = 80,
+        };
+
+        public static ConsumableConfig MpRefillSmall = new ConsumableConfig {
+            SpeciesId = 3,
             RefillDelta = 800,
         };
 
         public static ConsumableConfig MpRefillMiddle = new ConsumableConfig {
-            SpeciesId = 2,
+            SpeciesId = 4,
             RefillDelta = 1600,
         };
 
         public static ImmutableDictionary<int, ConsumableConfig> consumableConfigs = ImmutableDictionary.Create<int, ConsumableConfig>().AddRange(
                 new[]
                 {
+                    new KeyValuePair<int, ConsumableConfig>(HpRefillSmall.SpeciesId, HpRefillSmall),
+                    new KeyValuePair<int, ConsumableConfig>(HpRefillMiddle.SpeciesId, HpRefillMiddle),
                     new KeyValuePair<int, ConsumableConfig>(MpRefillSmall.SpeciesId, MpRefillSmall),
                     new KeyValuePair<int, ConsumableConfig>(MpRefillMiddle.SpeciesId, MpRefillMiddle),
                 }
