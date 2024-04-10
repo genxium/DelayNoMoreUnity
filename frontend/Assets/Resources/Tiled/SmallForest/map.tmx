@@ -286,7 +286,6 @@
     <property name="lifetimeRdfCountPerOccurrence" value="65535"/>
    </properties>
   </object>
-  <object id="398" gid="1194" x="242" y="981" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="336" x="81.333" y="988">

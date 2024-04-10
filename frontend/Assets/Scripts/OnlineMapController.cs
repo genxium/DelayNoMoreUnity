@@ -46,11 +46,10 @@ public class OnlineMapController : AbstractMapController {
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
-                    preallocateHolders();
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    //resetCurrentMatch("TwoStepStageDeep");
                     resetCurrentMatch("Forest");
                     calcCameraCaps();
+                    preallocateHolders();
                     preallocateVfxNodes();
                     preallocateSfxNodes();
                     preallocatePixelVfxNodes();

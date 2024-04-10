@@ -1403,6 +1403,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 488205841384086287, guid: 312f0b7846ae67d4dbfad45a21165421, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1901904084}
     - target: {fileID: 961397396876636025, guid: 312f0b7846ae67d4dbfad45a21165421, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2531,6 +2535,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: OnlineMapController, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 8075967950203104779, guid: fb7c8ffb0dfbecb4b9f2ee0b0486bf46, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1901904084}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb7c8ffb0dfbecb4b9f2ee0b0486bf46, type: 3}
 --- !u!114 &2621611814027303518 stripped

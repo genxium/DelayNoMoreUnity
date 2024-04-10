@@ -4,7 +4,7 @@ using shared;
 
 public class PlayerWaitingPanel : MonoBehaviour {
     private int lastParticipantChangeId = Battle.TERMINATING_RENDER_FRAME_ID;
-    public Button backButton;
+    public Image backButton;
     public GameObject playerSlotPrefab;
     public HorizontalLayoutGroup participantSlots;
     private bool inited = false;
@@ -20,11 +20,19 @@ public class PlayerWaitingPanel : MonoBehaviour {
 
     }
 
+    private void hideBackButton() {
+        backButton.transform.localScale = Vector3.zero;
+    }
+
+    private void showBackButton() {
+        backButton.transform.localScale = Vector3.one;
+    }
+
     public void InitPlayerSlots(int roomCapacity) {
-        backButton.gameObject.SetActive(true);
+        showBackButton();
         if (inited) return;
         for (int i = 0; i < roomCapacity; i++) {
-            Instantiate(playerSlotPrefab, new Vector3(0, 0, 0), Quaternion.identity, participantSlots.transform);
+            Instantiate(playerSlotPrefab, Vector3.zero, Quaternion.identity, participantSlots.transform);
         }
         capacity = roomCapacity;
         inited = true;
@@ -38,9 +46,9 @@ public class PlayerWaitingPanel : MonoBehaviour {
         for (int i = 0; i < playerSlots.Length; i++) {
             playerSlots[i].SetAvatar(rdf.PlayersArr[i]);
             if (null != rdf.PlayersArr[i] && Battle.TERMINATING_PLAYER_ID != rdf.PlayersArr[i].Id && 0 < (i & 1)) {
-                playerSlots[i].gameObject.transform.localScale = new Vector3(-1.0f, 1.0f); 
+                playerSlots[i].gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f); 
             } else {
-                playerSlots[i].gameObject.transform.localScale = new Vector3(1.0f, 1.0f);
+                playerSlots[i].gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             }
 
             if (null != rdf.PlayersArr[i] && Battle.TERMINATING_PLAYER_ID != rdf.PlayersArr[i].Id) {
@@ -49,7 +57,7 @@ public class PlayerWaitingPanel : MonoBehaviour {
         }
 
         if (nonEmptyCnt == capacity) {
-            backButton.gameObject.SetActive(false);
+            hideBackButton();
         }
     }
 
