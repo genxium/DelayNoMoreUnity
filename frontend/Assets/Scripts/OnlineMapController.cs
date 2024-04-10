@@ -23,7 +23,7 @@ public class OnlineMapController : AbstractMapController {
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
-            //Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
+            Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
             if (ErrCode.Ok != wsRespHolder.Ret) {
                 var msg = String.Format("Received ws error {0}", wsRespHolder);
                 popupErrStackPanel(msg);
@@ -50,6 +50,7 @@ public class OnlineMapController : AbstractMapController {
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     //resetCurrentMatch("TwoStepStageDeep");
                     resetCurrentMatch("Forest");
+                    calcCameraCaps();
                     preallocateVfxNodes();
                     preallocateSfxNodes();
                     preallocatePixelVfxNodes();
@@ -148,13 +149,13 @@ public class OnlineMapController : AbstractMapController {
                     applyRoomDownsyncFrameDynamics(toPatchStartRdf, null);
                     cameraTrack(toPatchStartRdf, null);
                     var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
-                    Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
-                    readyGoPanel.playReadyAnim();
-
                     networkInfoPanel.gameObject.SetActive(true);
                     playerWaitingPanel.gameObject.SetActive(false);
-                    UdpSessionManager.Instance.PunchBackendUdpTunnel();
-                    UdpSessionManager.Instance.PunchAllPeers();
+                    Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
+                    readyGoPanel.playReadyAnim(() => {
+                        UdpSessionManager.Instance.PunchBackendUdpTunnel();
+                        UdpSessionManager.Instance.PunchAllPeers();
+                    }, null);
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
                   if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {

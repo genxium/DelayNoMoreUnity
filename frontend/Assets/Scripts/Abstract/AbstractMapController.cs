@@ -813,7 +813,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int pixelVfxNodeCacheCapacity = 64;
         cachedPixelVfxNodes = new KvPriorityQueue<string, PixelVfxNodeController>(pixelVfxNodeCacheCapacity, pixelVfxNodeScore);
         for (int i = 0; i < pixelVfxNodeCacheCapacity; i++) {
-            GameObject newPixelVfxNode = Instantiate(pixelVfxNodePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
+            GameObject newPixelVfxNode = Instantiate(pixelVfxNodePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity, underlyingMap.transform);
             PixelVfxNodeController newPixelVfxSource = newPixelVfxNode.GetComponent<PixelVfxNodeController>();
             newPixelVfxSource.score = -1;
             var initLookupKey = i.ToString();
@@ -863,7 +863,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         for (int i = 0; i < sfxNodeCacheCapacity; i++) {
-            GameObject newSfxNode = Instantiate(sfxSourcePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
+            GameObject newSfxNode = Instantiate(sfxSourcePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity, underlyingMap.transform);
             SFXSource newSfxSource = newSfxNode.GetComponent<SFXSource>();
             newSfxSource.score = -1;
             newSfxSource.maxDistanceInWorld = effectivelyInfinitelyFar * 0.25f;
@@ -912,7 +912,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var thePrefab = Resources.Load(prefabPathUnderResources) as GameObject;
             vfxSpeciesPrefabDict[speciesId] = thePrefab;
             for (int i = 0; i < cacheCapacityPerSpeciesId; i++) {
-                GameObject newVfxNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity);
+                GameObject newVfxNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity, underlyingMap.transform);
                 VfxNodeController newVfxNodeController = newVfxNode.GetComponent<VfxNodeController>();
                 newVfxNodeController.score = -1;
                 newVfxNodeController.speciesId = speciesId;
@@ -969,7 +969,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var thePrefab = loadCharacterPrefab(characters[speciesId]);
             npcSpeciesPrefabDict[speciesId] = thePrefab;
             for (int i = 0; i < speciesCapacity; i++) {
-                GameObject newNpcNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, characterZ), Quaternion.identity);
+                GameObject newNpcNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, characterZ), Quaternion.identity, underlyingMap.transform);
                 CharacterAnimController newNpcNodeController = newNpcNode.GetComponent<CharacterAnimController>();
                 newNpcNodeController.score = -1;
 
@@ -1034,7 +1034,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         for (int i = 0; i < fireballHoldersCap; i++) {
             // Fireballs & explosions should be drawn above any character
-            GameObject newFireballNode = Instantiate(fireballPrefab, Vector3.zero, Quaternion.identity);
+            GameObject newFireballNode = Instantiate(fireballPrefab, Vector3.zero, Quaternion.identity, underlyingMap.transform);
             FireballAnimController holder = newFireballNode.GetComponent<FireballAnimController>();
             holder.score = -1;
             string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
@@ -1053,7 +1053,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedPickables = new KvPriorityQueue<string, PickableAnimController>(pickableHoldersCap, cachedPickableScore);
 
         for (int i = 0; i < pickableHoldersCap; i++) {
-            GameObject newPickableNode = Instantiate(pickablePrefab, Vector3.zero, Quaternion.identity);
+            GameObject newPickableNode = Instantiate(pickablePrefab, Vector3.zero, Quaternion.identity, underlyingMap.transform);
             PickableAnimController holder = newPickableNode.GetComponent<PickableAnimController>();
             holder.score = -1;
             string initLookupKey = (-(i + 1)).ToString(); // there's definitely no such "bulletLocalId"
@@ -1072,7 +1072,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedTeamRibbons = new KvPriorityQueue<string, TeamRibbon>(teamRibbonHoldersCap, cachedTeamRibbonScore);
 
         for (int i = 0; i < teamRibbonHoldersCap; i++) {
-            GameObject newTeamRibbonNode = Instantiate(teamRibbonPrefab, Vector3.zero, Quaternion.identity);
+            GameObject newTeamRibbonNode = Instantiate(teamRibbonPrefab, Vector3.zero, Quaternion.identity, underlyingMap.transform);
             TeamRibbon holder = newTeamRibbonNode.GetComponent<TeamRibbon>();
             holder.score = -1;
             string initLookupKey = (-(i + 1)).ToString();
@@ -1091,7 +1091,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedHpBars = new KvPriorityQueue<string, InplaceHpBar>(teamRibbonHoldersCap, cachedHpBarScore);
 
         for (int i = 0; i < hpBarHoldersCap; i++) {
-            GameObject newHpBarNode = Instantiate(inplaceHpBarPrefab, Vector3.zero, Quaternion.identity);
+            GameObject newHpBarNode = Instantiate(inplaceHpBarPrefab, Vector3.zero, Quaternion.identity, underlyingMap.transform);
             InplaceHpBar holder = newHpBarNode.GetComponent<InplaceHpBar>();
             holder.score = -1;
             string initLookupKey = (-(i + 1)).ToString();
@@ -1111,7 +1111,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             cachedLineRenderers = new KvPriorityQueue<string, DebugLine>(lineHoldersCap, cachedLineScore);
             for (int i = 0; i < lineHoldersCap; i++) {
-                GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lineRendererZ), Quaternion.identity);
+                GameObject newLineObj = Instantiate(linePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lineRendererZ), Quaternion.identity, underlyingMap.transform);
                 DebugLine newLine = newLineObj.GetComponent<DebugLine>();
                 newLine.score = -1;
                 newLine.SetWidth(2.0f);
@@ -1119,6 +1119,20 @@ public abstract class AbstractMapController : MonoBehaviour {
                 cachedLineRenderers.Put(initLookupKey, newLine);
             }
         }
+    }
+
+    protected void calcCameraCaps() {
+        int camFovW = (int)(2.0f * Camera.main.orthographicSize * Camera.main.aspect);
+        int camFovH = (int)(2.0f * Camera.main.orthographicSize);
+        int paddingX = (camFovW >> 1);
+        int paddingY = (camFovH >> 1);
+        cameraCapMinX = 0 + paddingX;
+        cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
+
+        cameraCapMinY = -(spaceOffsetY << 1) + paddingY;
+        cameraCapMaxY = 0 - paddingY;
+
+        effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
     }
 
     protected virtual void resetCurrentMatch(string theme) {
@@ -1143,39 +1157,16 @@ public abstract class AbstractMapController : MonoBehaviour {
         triggerGameObjs = new Dictionary<int, GameObject>();
         string path = String.Format("Tiled/{0}/map", theme);
         var underlyingMapPrefab = Resources.Load(path) as GameObject;
-        underlyingMap = GameObject.Instantiate(underlyingMapPrefab);
-
+        underlyingMap = GameObject.Instantiate(underlyingMapPrefab, this.gameObject.transform);
+        
         var superMap = underlyingMap.GetComponent<SuperMap>();
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        // TODO: Use dynamic padding if camera zoom in/out is required during battle!
-        int camFovW = (int)(2.0f * Camera.main.orthographicSize * Camera.main.aspect);
-        int camFovH = (int)(2.0f * Camera.main.orthographicSize);
-        int paddingX = (camFovW >> 1);
-        int paddingY = (camFovH >> 1);
-        cameraCapMinX = 0 + paddingX;
-        cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
-
-        cameraCapMinY = -(spaceOffsetY << 1) + paddingY;
-        cameraCapMaxY = 0 - paddingY;
-
-        effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
-
-        // Reset the preallocated
-        Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
-        Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
-        if (frameLogEnabled) {
-            pushbackFrameLogBuffer.Clear();
-        }
-        residueCollided.Clear();
-        Array.Fill<ulong>(prefabbedInputListHolder, 0);
-
-        resetBattleResult(ref confirmedBattleResult);
         readyGoPanel.resetCountdown();
         settlementPanel.gameObject.SetActive(false);
-
+        
         iptmgr.btnB.GetComponent<InventorySlot>().resumeRegularBtnB();
     }
 
@@ -1396,6 +1387,16 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         bgmSource.Stop();
         battleState = ROOM_STATE_STOPPED;
+        
+        // Reset the preallocated
+        Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
+        Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
+        if (frameLogEnabled) {
+            pushbackFrameLogBuffer.Clear();
+        }
+        residueCollided.Clear();
+        Array.Fill<ulong>(prefabbedInputListHolder, 0);
+        resetBattleResult(ref confirmedBattleResult);
 
         iptmgr.reset();
     }
@@ -2041,6 +2042,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             spawnPlayerNode(joinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
         }
+        Debug.Log("Spawned player nodes");
 
         int npcLocalId = 0;
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
@@ -2095,12 +2097,14 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
             spawnDynamicTrapNode(trap.Config.SpeciesId, wx, wy);
         }
+        Debug.Log("Spawned dynamic trap nodes");
 
         for (int i = 0; i < triggerList.Count; i++) {
             var (trigger, wx, wy) = triggerList[i];
             startRdf.TriggersArr[i] = trigger;
             spawnTriggerNode(trigger.TriggerLocalId, trigger.Config.SpeciesId, wx, wy);
         }
+        Debug.Log("Spawned trigger nodes");
 
         for (int i = 0; i < pickableList.Count; i++) {
             var (pickable, wx, wy) = pickableList[i];

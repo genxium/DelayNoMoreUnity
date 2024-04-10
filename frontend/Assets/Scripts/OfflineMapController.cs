@@ -1,8 +1,8 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using shared;
 using static shared.Battle;
+using System.Threading;
 
 public class OfflineMapController : AbstractMapController {
     
@@ -10,6 +10,10 @@ public class OfflineMapController : AbstractMapController {
     private bool isInStorySettings = false;
     public DialogBoxes dialogBoxes;
     public StoryModeSettings storyModeSettings;
+    private int initSeqNo = 0;
+    private int cachedSelfSpeciesId = SPECIES_NONE_CH;
+    private string cachedLevelName = null;
+    private RoomDownsyncFrame cachedStartRdf = null;
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
     }
@@ -21,6 +25,10 @@ public class OfflineMapController : AbstractMapController {
     protected override void onBattleStopped() {
         base.onBattleStopped();
         characterSelectPanel.gameObject.SetActive(true);
+        initSeqNo = 0;
+        cachedSelfSpeciesId = SPECIES_NONE_CH;
+        cachedLevelName = null;
+        cachedStartRdf = null;
     }
 
     public override void onCharacterSelectGoAction(int speciesId) {
@@ -29,46 +37,9 @@ public class OfflineMapController : AbstractMapController {
 
     public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
         Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}, selectedLevelName={1}", speciesId, levelName));
-        selfPlayerInfo = new CharacterDownsync();
-
-        roomCapacity = 1;
-        preallocateHolders();
-        resetCurrentMatch(levelName);
-        preallocateVfxNodes();
-        preallocateSfxNodes();
-        preallocatePixelVfxNodes();
-        preallocateNpcNodes();
-        selfPlayerInfo.JoinIndex = 1;
-
-        // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
-        int[] speciesIdList = new int[roomCapacity];
-        speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
-        var (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, battleDurationSecondsVal) = mockStartRdf(speciesIdList);
-        battleDurationFrames = battleDurationSecondsVal * BATTLE_DYNAMICS_FPS;
-        refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref  completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
-        applyRoomDownsyncFrameDynamics(startRdf, null);
-        cameraTrack(startRdf, null);
-        var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
-        Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
-        characterSelectPanel.gameObject.SetActive(false);
-        StartCoroutine(delayToStartBattle(startRdf));
-        Debug.Log("Started routine of delayToStartBattle");
-    }
-
-    private IEnumerator delayToStartBattle(RoomDownsyncFrame startRdf) {
-        readyGoPanel.playReadyAnim();
-        Debug.Log("Played READY anim, about to wait for playing GO anim");
-        yield return new WaitForSeconds(1);
-        Debug.Log("Returned from yield, about to play GO anim");
-        readyGoPanel.playGoAnim();
-        Debug.Log("Played GO anim");
-        bgmSource.Play();
-        Debug.Log("Played BGM");
-        // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
-        startRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
-        onRoomDownsyncFrame(startRdf, null);
-        Debug.Log("onRoomDownsyncFrame of startRdf");
-
+        cachedSelfSpeciesId = speciesId;
+        cachedLevelName = levelName;
+        initSeqNo = 1; // To avoid loading "underlyingMap" in this click callback
     }
 
 
@@ -93,9 +64,60 @@ public class OfflineMapController : AbstractMapController {
     // Update is called once per frame
     void Update() {
         try {
+            if (1 == initSeqNo) {
+                selfPlayerInfo = new CharacterDownsync();
+
+                roomCapacity = 1;
+                resetCurrentMatch(cachedLevelName);
+                calcCameraCaps();
+                preallocateHolders();
+                preallocateVfxNodes();
+                preallocateSfxNodes();
+                preallocatePixelVfxNodes();
+                preallocateNpcNodes();
+                selfPlayerInfo.JoinIndex = 1;
+
+                initSeqNo++; // To avoid accessing "gameObject.transform" in the same renderFrame right after "resetCurrentMatch" and the "preallocations"
+            } else if (2 == initSeqNo) {
+                Debug.Log("About to mock start rdf");
+                // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
+                int[] speciesIdList = new int[roomCapacity];
+                speciesIdList[selfPlayerInfo.JoinIndex - 1] = cachedSelfSpeciesId;
+                var (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, battleDurationSecondsVal) = mockStartRdf(speciesIdList);
+                battleDurationFrames = battleDurationSecondsVal * BATTLE_DYNAMICS_FPS;
+                refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
+                cachedStartRdf = startRdf;
+
+                applyRoomDownsyncFrameDynamics(startRdf, null);
+                cameraTrack(startRdf, null);
+                var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
+                Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
+                initSeqNo++;
+            } else if (3 == initSeqNo) {
+                Debug.Log(String.Format("characterSelectPanel about to hide, thread id={0}", Thread.CurrentThread.ManagedThreadId));
+                characterSelectPanel.gameObject.SetActive(false);
+                Debug.Log(String.Format("characterSelectPanel hidden, thread id={0}", Thread.CurrentThread.ManagedThreadId));
+                initSeqNo++;
+            } else if (4 == initSeqNo) {
+                Debug.Log(String.Format("about to ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId));
+                readyGoPanel.playReadyAnim(null, () => {
+                    Debug.Log(String.Format("played ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId));
+                    initSeqNo++;
+                    // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
+                    cachedStartRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
+                    onRoomDownsyncFrame(cachedStartRdf, null);
+                });
+                initSeqNo++;
+            } else if (6 == initSeqNo) {
+                readyGoPanel.playGoAnim();
+                bgmSource.Play();
+                initSeqNo++;
+            }
+
             if (ROOM_STATE_IN_BATTLE != battleState) {
                 return;
             }
+
             if (isInStoryControl) {
                 // TODO: What if dynamics should be updated during story narrative? A simple proposal is to cover all objects with a preset RenderFrame, yet there's a lot to hardcode by this approach. 
                 var (ok, rdf) = renderBuffer.GetByFrameId(playerRdfId);

@@ -1,11 +1,20 @@
 version: 2
 tpsheetFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
+- Assets/Resources/Bullets/Bullets.tpsheet
+- Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.tpsheet
+- Assets/Resources/Characters/SuperKnifeGirl/SuperKnifeGirl.tpsheet
 - Assets/Resources/PixelVfx/PixelVfx.tpsheet
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
+- Assets/Resources/Bullets/Bullets.png
+- Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.png
+- Assets/Resources/Characters/SuperKnifeGirl/SuperKnifeGirl.png
 - Assets/Resources/PixelVfx/PixelVfx.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
+- 
+- 
 - 
 enableDebugOutput: 0

@@ -5,7 +5,7 @@ using System;
 
 public class CharacterSelectPanel : MonoBehaviour {
  
-    public Button GoActionButton; // to toggle interactability
+    public Image GoActionButton; // to toggle interactability
     public ToggleGroup characters;
 
     // Start is called before the first frame update
@@ -18,7 +18,7 @@ public class CharacterSelectPanel : MonoBehaviour {
     }
 
     public void toggleUIInteractability(bool enabled) {
-        GoActionButton.interactable = enabled;
+        GoActionButton.gameObject.SetActive(enabled);
     }
 
     public virtual void OnGoActionClicked(AbstractMapController map) {

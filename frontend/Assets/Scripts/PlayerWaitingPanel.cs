@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using shared;
 
 public class PlayerWaitingPanel : MonoBehaviour {
-    private int lastParticipantChangeId = shared.Battle.TERMINATING_RENDER_FRAME_ID;
+    private int lastParticipantChangeId = Battle.TERMINATING_RENDER_FRAME_ID;
     public Button backButton;
     public GameObject playerSlotPrefab;
     public HorizontalLayoutGroup participantSlots;
@@ -35,7 +35,7 @@ public class PlayerWaitingPanel : MonoBehaviour {
         lastParticipantChangeId = rdf.ParticipantChangeId;
         int nonEmptyCnt = 0;
         var playerSlots = participantSlots.GetComponentsInChildren<ParticipantSlot>();
-        for (int i = 0; i < playerSlots.Length;i++) {
+        for (int i = 0; i < playerSlots.Length; i++) {
             playerSlots[i].SetAvatar(rdf.PlayersArr[i]);
             if (null != rdf.PlayersArr[i] && Battle.TERMINATING_PLAYER_ID != rdf.PlayersArr[i].Id && 0 < (i & 1)) {
                 playerSlots[i].gameObject.transform.localScale = new Vector3(-1.0f, 1.0f); 
