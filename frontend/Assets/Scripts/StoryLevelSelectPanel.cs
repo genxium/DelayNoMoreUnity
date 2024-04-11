@@ -3,8 +3,9 @@ using UnityEngine.UI; // Required when Using UI elements.
 using System;
 using shared;
 
-public class StoryLevelSelectPanel : CharacterSelectPanel {
- 
+public class StoryLevelSelectPanel : MonoBehaviour {
+    public Image GoActionButton; // to toggle interactability
+    public CharacterSelectGroup characterSelectGroup;
     public ToggleGroup levels;
     protected PlayerStoryProgress storyProgress = null;
 
@@ -13,32 +14,26 @@ public class StoryLevelSelectPanel : CharacterSelectPanel {
         storyProgress = Battle.loadStoryProgress(Application.persistentDataPath, "story");
     }
 
-    public override void OnGoActionClicked(AbstractMapController map) {
+    public void toggleUIInteractability(bool enabled) {
+        GoActionButton.gameObject.SetActive(enabled);
+    }
+
+    public void OnGoActionClicked(AbstractMapController map) {
         toggleUIInteractability(false);
         Debug.Log(String.Format("GoAction button clicked with map={0}", map));
         int selectedSpeciesId = Battle.SPECIES_NONE_CH;
-        string selectedLevelName = null;
-        foreach (var toggle in characters.gameObject.GetComponentsInChildren<Toggle>()) {
-            if (null != toggle && toggle.isOn) {
-                Debug.Log(String.Format("Character {0} chosen", toggle.name));
-                switch (toggle.name) {      
-                case "KnifeGirl":
-                    selectedSpeciesId = 0;
-                    break;
-                case "MonkGirl":
-                    selectedSpeciesId = 2;
-                    break;
-                case "GunGirl":
-                    selectedSpeciesId = 4;
-                    break;
-                case "MagSwordGirl":
-                    selectedSpeciesId = 6;
-                    break;
-                }
-
+        switch (characterSelectGroup.getSelectedIdx()) {
+            case 0:
+                selectedSpeciesId = 0;
                 break;
-            }
+            case 1:
+                selectedSpeciesId = 2;
+                break;
+            case 2:
+                selectedSpeciesId = 6;
+                break;
         }
+        string selectedLevelName = null;
         
         foreach (var toggle in levels.gameObject.GetComponentsInChildren<Toggle>()) {
             if (null != toggle && toggle.isOn) {

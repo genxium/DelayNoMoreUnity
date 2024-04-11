@@ -1,0 +1,23 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:2568a1e56100b83f0cd5dbcb23d5310a:6ac43320c32b815394eff7e5d22220fc:9990c6d12f596323d4357a67c07bb578$
+#
+:format=40300
+:texture=ShaperCard.png
+:size=512x512
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+Empty_Card;0;331;128;181; 0.5;0.5; 0;0;0;0
+Empty_Card_Bw;0;150;128;181; 0.5;0.5; 0;0;0;0
+Item_Card;128;331;128;181; 0.5;0.5; 0;0;0;0
+Item_Card_Bw;256;331;128;181; 0.5;0.5; 0;0;0;0
+Spell_Card;384;331;128;181; 0.5;0.5; 0;0;0;0
+Spell_Card_Bw;128;150;128;181; 0.5;0.5; 0;0;0;0
+Spell_Card_No_Text;256;150;128;181; 0.5;0.5; 0;0;0;0
+Spell_Card_No_Text_Bw;384;150;128;181; 0.5;0.5; 0;0;0;0

@@ -3,8 +3,7 @@ using UnityEngine.UI; // Required when Using UI elements.
 using UnityEngine.SceneManagement;
 using System;
 
-public class CharacterSelectPanel : MonoBehaviour {
- 
+public class OnlineArenaCharacterSelectPanel : MonoBehaviour {
     public Image GoActionButton; // to toggle interactability
     public ToggleGroup characters;
 
