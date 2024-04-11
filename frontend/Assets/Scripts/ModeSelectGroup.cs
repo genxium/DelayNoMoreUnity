@@ -1,9 +1,11 @@
 using shared;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 
-public class ModeSelect : AbstractSingleSelectGroup {
+public class ModeSelectGroup : AbstractSingleSelectGroup {
     private AllSettings allSettingsPanel;
     // Start is called before the first frame update
     void Start() {
@@ -79,6 +81,17 @@ public class ModeSelect : AbstractSingleSelectGroup {
         }
     }
 
+    public override void OnBtnConfirm(InputAction.CallbackContext context) {
+        bool rising = context.ReadValueAsButton();
+        if (rising) {
+            ConfirmSelection();
+        }
+    }
+
+    public override void OnBtnCancel(InputAction.CallbackContext context) {
+        throw new System.NotImplementedException();
+    }
+
     public override void onCellSelected(int newSelectedIdx) {
         if (newSelectedIdx == selectedIdx) {
             ConfirmSelection();
@@ -89,4 +102,18 @@ public class ModeSelect : AbstractSingleSelectGroup {
         }
     }
 
+    public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
+        var kctrl = (KeyControl)context.control;
+        if (null == kctrl || !kctrl.wasReleasedThisFrame) return;
+        switch (kctrl.keyCode) {
+            case Key.W:
+            case Key.UpArrow:
+                MoveSelection(-1);
+                break;
+            case Key.S:
+            case Key.DownArrow:
+                MoveSelection(+1);
+                break;
+        }
+    }
 }

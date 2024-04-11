@@ -183,7 +183,6 @@ public class OnlineMapController : AbstractMapController {
     }
 
     public override void onCharacterSelectGoAction(int speciesId) {
-        characterSelectPanel.GoActionButton.gameObject.SetActive(false);
         Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
         WsSessionManager.Instance.SetSpeciesId(speciesId);
 
@@ -211,7 +210,7 @@ public class OnlineMapController : AbstractMapController {
         //_ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
 
         Debug.LogWarning(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
-        characterSelectPanel.gameObject.SetActive(false);
+        characterSelectPanel.SetActive(false);
     }
 
     public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
@@ -241,8 +240,7 @@ public class OnlineMapController : AbstractMapController {
         // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
         onBattleStopped();
         playerWaitingPanel.gameObject.SetActive(false);
-        characterSelectPanel.gameObject.SetActive(true);
-        characterSelectPanel.GoActionButton.gameObject.SetActive(true);
+        characterSelectPanel.SetActive(true);
         cleanupNetworkSessions(); // Make sure that all resources are properly deallocated
     }
 

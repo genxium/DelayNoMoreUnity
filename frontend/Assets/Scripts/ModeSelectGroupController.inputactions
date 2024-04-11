@@ -1,8 +1,8 @@
 {
-    "name": "LoginPageUIController",
+    "name": "ModeSelectGroupController",
     "maps": [
         {
-            "name": "LoginPage",
+            "name": "ModeSelectGroup",
             "id": "80809b31-59b8-4e12-b167-c46c50bd1fa6",
             "actions": [
                 {

@@ -3,7 +3,7 @@ using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
 
 public class CharacterSelectGroup : AbstractSingleSelectGroup {
-
+    
     // Start is called before the first frame update
     void Start() {
 
@@ -14,7 +14,8 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
 
     }
 
-    public void OnMoveByKeyboard(InputAction.CallbackContext context) {
+    public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
+        if (!enabled) return;
         var kctrl = (KeyControl)context.control;
         if (null == kctrl || !kctrl.wasReleasedThisFrame) return;
         switch (kctrl.keyCode) {
@@ -29,35 +30,36 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
         }
     }
 
-    public void OnBtnConfirm(InputAction.CallbackContext context) {
+    public override void OnBtnConfirm(InputAction.CallbackContext context) {
+        if (!enabled) return;
         bool rising = context.ReadValueAsButton();
         if (rising) {
-            ConfirmSelection();
+            if (null != postConfirmedCallback) {
+                postConfirmedCallback(selectedIdx);
+            }
         }
     }
 
-    public void OnBtnCancel(InputAction.CallbackContext context) {
+    public override void OnBtnCancel(InputAction.CallbackContext context) {
+        if (!enabled) return;
         bool rising = context.ReadValueAsButton();
         if (rising) {
-            // TODO: defocus self
+            if (null != postCancelledCallback) {
+                postCancelledCallback();
+            }
+            enabled = false;
         }
-    }
-
-    public void ConfirmSelection() {
-        
     }
 
     public override void onCellSelected(int newSelectedIdx) {
         if (newSelectedIdx == selectedIdx) {
-            ConfirmSelection();
+            if (null != postConfirmedCallback) {
+                postConfirmedCallback(selectedIdx);
+            }
         } else {
             cells[selectedIdx].setSelected(false);
             cells[newSelectedIdx].setSelected(true);
             selectedIdx = newSelectedIdx;
         }
-    }
-
-    public int getSelectedIdx() {
-        return selectedIdx;
     }
 }

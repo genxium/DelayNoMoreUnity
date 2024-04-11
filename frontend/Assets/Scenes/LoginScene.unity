@@ -144,7 +144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5639207819612963277, guid: 13e2ed5ffe1b98546aab67bd7a6005c5, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5639207819612963277, guid: 13e2ed5ffe1b98546aab67bd7a6005c5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1049,7 +1049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd01d1f14be24bd3bf721410dba1321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &1313002750
+--- !u!1001 &1905051965
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1076,26 +1076,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2190025021612165750, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2190025021612165750, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2190025021612165750, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2190025021612165750, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2190025021612165750, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3996213055086682637, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1118,7 +1098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5060847227167037580, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
       propertyPath: m_Name
-      value: ModeSelect
+      value: ModeSelectGroup
       objectReference: {fileID: 0}
     - target: {fileID: 5060847227167037581, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
       propertyPath: m_Pivot.x
@@ -1130,7 +1110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5060847227167037581, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5060847227167037581, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1204,26 +1184,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5818981355110252720, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5818981355110252720, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5818981355110252720, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5818981355110252720, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5818981355110252720, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6699497431459335774, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1244,22 +1204,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7500168210569740152, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-      propertyPath: doubleClickToConfirm
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2467190742468568172, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
---- !u!224 &1313002751 stripped
+--- !u!224 &1905051966 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5060847227167037581, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-  m_PrefabInstance: {fileID: 1313002750}
+  m_PrefabInstance: {fileID: 1905051965}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1323356800 stripped
+--- !u!114 &1905051967 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7500168210569740152, guid: c99cea18cb30c5b4cb052035ecc29044, type: 3}
-  m_PrefabInstance: {fileID: 1313002750}
+  m_PrefabInstance: {fileID: 1905051965}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -1280,7 +1235,6 @@ GameObject:
   - component: {fileID: 2113727048}
   - component: {fileID: 2113727047}
   - component: {fileID: 2113727051}
-  - component: {fileID: 2113727052}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1362,8 +1316,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 614987925}
-  - {fileID: 1313002751}
   - {fileID: 10470723}
+  - {fileID: 1905051966}
   - {fileID: 499555202}
   - {fileID: 1255409294}
   - {fileID: 1099806945}
@@ -1388,69 +1342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loginStatusBarController: {fileID: 10470724}
-  modeSelect: {fileID: 1323356800}
+  modeSelectGroup: {fileID: 1905051967}
   captchaLoginForm: {fileID: 1255409295}
   allSettingsPanel: {fileID: 499555203}
   appVersion: {fileID: 1099806946}
---- !u!114 &2113727052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2113727046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 79ecaa0d74769d04fa8bc76258200c20, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2113727051}
-        m_TargetAssemblyTypeName: LoginPageController, Assembly-CSharp
-        m_MethodName: OnMoveByKeyboard
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: ac981bae-0bf5-4bc7-b88d-8ac79b09798a
-    m_ActionName: LoginPage/MoveByKeyboard[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2113727051}
-        m_TargetAssemblyTypeName: LoginPageController, Assembly-CSharp
-        m_MethodName: OnBtnConfirm
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 70ebbb12-de00-4ab7-9222-c8e659cf93d6
-    m_ActionName: LoginPage/BtnConfirm[/Keyboard/space,/Keyboard/enter]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: LoginPage
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}

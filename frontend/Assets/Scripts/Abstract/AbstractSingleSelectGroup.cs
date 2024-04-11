@@ -1,7 +1,16 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class AbstractSingleSelectGroup : MonoBehaviour {
+public abstract class AbstractSingleSelectGroup : MonoBehaviour {
+    public delegate void PostCancelledCallbackT();
+    public PostCancelledCallbackT postCancelledCallback;
+
+    public delegate void PostConfirmedCallbackT(int theSelectedIdx);
+    public PostConfirmedCallbackT postConfirmedCallback;
+
     protected int selectedIdx = 0;
+    protected bool enabled = false;
+
     public AbstractSingleSelectCell[] cells = null;
 
     // Start is called before the first frame update
@@ -13,6 +22,11 @@ public class AbstractSingleSelectGroup : MonoBehaviour {
     void Update() {
 
     }
+
+    public abstract void OnMoveByKeyboard(InputAction.CallbackContext context);
+    public abstract void OnBtnConfirm(InputAction.CallbackContext context);
+
+    public abstract void OnBtnCancel(InputAction.CallbackContext context);
 
     public virtual void onCellSelected(int newSelectedIdx) {
         cells[selectedIdx].setSelected(false);
@@ -26,9 +40,10 @@ public class AbstractSingleSelectGroup : MonoBehaviour {
         onCellSelected(newSelectedIdx);
     }
 
-    public void toggleUIInteractability(bool val) {
+    public virtual void toggleUIInteractability(bool val) {
         foreach (var cell in cells) {
             cell.toggleUIInteractability(val);
         }
+        enabled = val;
     }
 }

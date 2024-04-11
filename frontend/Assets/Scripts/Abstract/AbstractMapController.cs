@@ -98,7 +98,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected List<shared.Collider> completelyStaticTrapColliders;
 
-    public OnlineArenaCharacterSelectPanel characterSelectPanel;
+    public GameObject characterSelectPanel;
 
     protected Dictionary<int, GameObject> vfxSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")

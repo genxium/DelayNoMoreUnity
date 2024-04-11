@@ -24,7 +24,7 @@ public class OfflineMapController : AbstractMapController {
 
     protected override void onBattleStopped() {
         base.onBattleStopped();
-        characterSelectPanel.gameObject.SetActive(true);
+        characterSelectPanel.SetActive(true);
         initSeqNo = 0;
         cachedSelfSpeciesId = SPECIES_NONE_CH;
         cachedLevelName = null;
@@ -95,7 +95,7 @@ public class OfflineMapController : AbstractMapController {
                 initSeqNo++;
             } else if (3 == initSeqNo) {
                 Debug.Log(String.Format("characterSelectPanel about to hide, thread id={0}", Thread.CurrentThread.ManagedThreadId));
-                characterSelectPanel.gameObject.SetActive(false);
+                characterSelectPanel.SetActive(false);
                 Debug.Log(String.Format("characterSelectPanel hidden, thread id={0}", Thread.CurrentThread.ManagedThreadId));
                 initSeqNo++;
             } else if (4 == initSeqNo) {

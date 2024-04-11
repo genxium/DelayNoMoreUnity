@@ -20,16 +20,16 @@ public class PlayerWaitingPanel : MonoBehaviour {
 
     }
 
-    private void hideBackButton() {
-        backButton.transform.localScale = Vector3.zero;
-    }
-
-    private void showBackButton() {
-        backButton.transform.localScale = Vector3.one;
+    private void toggleBackButton(bool val) {
+        if (val) {
+            backButton.transform.localScale = Vector3.one;
+        } else {
+            backButton.transform.localScale = Vector3.zero;
+        }
     }
 
     public void InitPlayerSlots(int roomCapacity) {
-        showBackButton();
+        toggleBackButton(true);
         if (inited) return;
         for (int i = 0; i < roomCapacity; i++) {
             Instantiate(playerSlotPrefab, Vector3.zero, Quaternion.identity, participantSlots.transform);
@@ -57,7 +57,7 @@ public class PlayerWaitingPanel : MonoBehaviour {
         }
 
         if (nonEmptyCnt == capacity) {
-            hideBackButton();
+            toggleBackButton(false);
         }
     }
 
