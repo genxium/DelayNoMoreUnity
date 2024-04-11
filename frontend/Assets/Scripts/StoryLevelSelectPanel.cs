@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI; // Required when Using UI elements.
 using UnityEngine.SceneManagement;
 using shared;
-
+using System;
 public class StoryLevelSelectPanel : MonoBehaviour {
     private int selectionPhase = 0;
     private int selectedLevelIdx = -1;
@@ -65,31 +65,35 @@ public class StoryLevelSelectPanel : MonoBehaviour {
     }
 
     public void allConfirmed(int selectedCharacterIdx) {
-        toggleUIInteractability(false);
-        int selectedSpeciesId = Battle.SPECIES_NONE_CH;
-        switch (selectedCharacterIdx) {
-            case 0:
-                selectedSpeciesId = 0;
-                break;
-            case 1:
-                selectedSpeciesId = 2;
-                break;
-            case 2:
-                selectedSpeciesId = 6;
-                break;
-        }
-        string selectedLevelName = null;
-        switch (selectedLevelIdx) {
-            case 0:
-                selectedLevelName = "SmallForest";
-                break;
-            case 1:
-                selectedLevelName = "ArrowPalace";
-                break;
-        }
+        try {
+            characterSelectGroup.toggleUIInteractability(false);
+            backButton.gameObject.SetActive(false);
+            int selectedSpeciesId = Battle.SPECIES_NONE_CH;
+            switch (selectedCharacterIdx) {
+                case 0:
+                    selectedSpeciesId = 0;
+                    break;
+                case 1:
+                    selectedSpeciesId = 2;
+                    break;
+                case 2:
+                    selectedSpeciesId = 6;
+                    break;
+            }
+            string selectedLevelName = null;
+            switch (selectedLevelIdx) {
+                case 0:
+                    selectedLevelName = "SmallForest";
+                    break;
+                case 1:
+                    selectedLevelName = "ArrowPalace";
+                    break;
+            }
 
-        map.onCharacterAndLevelSelectGoAction(selectedSpeciesId, selectedLevelName);
-        
-        toggleUIInteractability(true);
+            map.onCharacterAndLevelSelectGoAction(selectedSpeciesId, selectedLevelName);
+        } catch (Exception ex) {
+            Debug.LogError(ex);
+            reset();
+        }
     }
 }
