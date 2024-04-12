@@ -9,7 +9,7 @@ public abstract class AbstractSingleSelectGroup : MonoBehaviour {
     public PostConfirmedCallbackT postConfirmedCallback;
 
     protected int selectedIdx = 0;
-    protected bool enabled = false;
+    protected bool currentSelectGroupEnabled = false;
 
     public AbstractSingleSelectCell[] cells = null;
 
@@ -34,6 +34,6 @@ public abstract class AbstractSingleSelectGroup : MonoBehaviour {
         foreach (var cell in cells) {
             cell.toggleUIInteractability(val);
         }
-        enabled = val;
+        currentSelectGroupEnabled = val;
     }
 }

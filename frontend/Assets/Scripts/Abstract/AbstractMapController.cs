@@ -1427,6 +1427,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void enableBattleInput(bool yesOrNo) {
         iptmgr.enable(yesOrNo);
+        iptmgr.gameObject.SetActive(yesOrNo);
     }
 
     protected string ArrToString(int[] speciesIdList) {

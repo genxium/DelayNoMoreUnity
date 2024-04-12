@@ -1,10 +1,11 @@
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
+using UnityEngine;
 
 public class CharacterSelectGroup : AbstractSingleSelectGroup {
    
     public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
-        if (!enabled) return;
+        if (!currentSelectGroupEnabled) return;
         var kctrl = (KeyControl)context.control;
         if (null == kctrl || !kctrl.wasReleasedThisFrame) return;
         switch (kctrl.keyCode) {
@@ -20,21 +21,24 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
     }
 
     public override void OnBtnConfirm(InputAction.CallbackContext context) {
-        if (!enabled) return;
+        if (!currentSelectGroupEnabled) return;
         bool rising = context.ReadValueAsButton();
-        if (rising) {
+        if (rising && InputActionPhase.Performed == context.phase) {
+            Debug.Log("CharacterSelectGroup OnBtnConfirm");
+            toggleUIInteractability(false);
             confirmSelection();
         }
     }
 
     public override void OnBtnCancel(InputAction.CallbackContext context) {
-        if (!enabled) return;
+        if (!currentSelectGroupEnabled) return;
         bool rising = context.ReadValueAsButton();
-        if (rising) {
+        if (rising && InputActionPhase.Performed == context.phase) {
+            Debug.Log("CharacterSelectGroup OnBtnConfirm");
             if (null != postCancelledCallback) {
                 postCancelledCallback();
             }
-            enabled = false;
+            toggleUIInteractability(false);
         }
     }
 

@@ -481,9 +481,9 @@ public class OnlineMapController : AbstractMapController {
     }
 
     protected void OnDestroy() {
-        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
+        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1, about to clean up network sessions"));
         cleanupNetworkSessions();  
-        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
+        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2, cleaned network sessions"));
     }
 
     void OnApplicationQuit() {

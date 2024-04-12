@@ -1,9 +1,10 @@
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
+using UnityEngine;
 
 public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
     public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
-        if (!enabled) return;
+        if (!currentSelectGroupEnabled) return;
         var kctrl = (KeyControl)context.control;
         if (null == kctrl || !kctrl.wasReleasedThisFrame) return;
         switch (kctrl.keyCode) {
@@ -19,21 +20,24 @@ public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
     }
 
     public override void OnBtnConfirm(InputAction.CallbackContext context) {
-        if (!enabled) return;
+        if (!currentSelectGroupEnabled) return;
         bool rising = context.ReadValueAsButton();
-        if (rising) {
+        if (rising && InputActionPhase.Performed == context.phase) {
+            Debug.Log("StoryLevelSelectGroup OnBtnConfirm");
+            toggleUIInteractability(false);
             confirmSelection();
         }
     }
 
     public override void OnBtnCancel(InputAction.CallbackContext context) {
-        if (!enabled) return;
+        if (!currentSelectGroupEnabled) return;
         bool rising = context.ReadValueAsButton();
-        if (rising) {
+        if (rising && InputActionPhase.Performed == context.phase) {
+            toggleUIInteractability(false);
+            Debug.Log("StoryLevelSelectGroup OnBtnConfirm");
             if (null != postCancelledCallback) {
                 postCancelledCallback();
             }
-            enabled = false;
         }
     }
 

@@ -27,7 +27,7 @@ public class ReadyGo : MonoBehaviour {
     public void playReadyAnim(TweenCallback onStart, TweenCallback onComplete) {
         var sequence = DOTween.Sequence();
         sequence.Append(ready.gameObject.transform.DOScale(2.5f * Vector3.one, 0.7f));
-        sequence.AppendInterval(1.0f);
+        sequence.AppendInterval(0.4f);
         if (null != onStart) {
             sequence.OnStart(onStart);
         }

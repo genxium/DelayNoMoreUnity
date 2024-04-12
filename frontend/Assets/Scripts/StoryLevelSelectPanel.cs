@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using shared;
 using System;
 using UnityEngine.InputSystem;
+
 public class StoryLevelSelectPanel : MonoBehaviour {
     private int selectionPhase = 0;
     private int selectedLevelIdx = -1;
@@ -20,12 +21,12 @@ public class StoryLevelSelectPanel : MonoBehaviour {
         storyProgress = Battle.loadStoryProgress(Application.persistentDataPath, "story");
         reset();
     }
-    
+
     public void reset() {
-        levels.gameObject.SetActive(true);
-        levels.toggleUIInteractability(true);
+        Debug.Log("StoryLevelSelectPanel reset");
         levels.postCancelledCallback = OnBackButtonClicked;
         AbstractSingleSelectGroup.PostConfirmedCallbackT levelPostConfirmedCallback = (int selectedIdx) => {
+            Debug.Log("StoryLevelSelectPanel levelPostConfirmedCallback");
             selectedLevelIdx = selectedIdx;
             selectionPhase = 1;
             characterSelectGroup.gameObject.SetActive(true);
@@ -53,10 +54,16 @@ public class StoryLevelSelectPanel : MonoBehaviour {
                 characterSelectGroup.toggleUIInteractability(enabled);
                 backButton.gameObject.SetActive(enabled);
                 break;
+            case 2:
+                levels.toggleUIInteractability(false);
+                characterSelectGroup.toggleUIInteractability(false);
+                backButton.gameObject.SetActive(false);
+                break;
         }
     }
 
     public void OnBackButtonClicked() {
+        Debug.Log("StoryLevelSelectPanel OnBackButtonClicked at selectionPhase=" + selectionPhase);
         if (0 < selectionPhase) {
             reset();
         } else {
@@ -65,6 +72,7 @@ public class StoryLevelSelectPanel : MonoBehaviour {
     }
 
     public void allConfirmed(int selectedSpeciesId) {
+        Debug.Log("StoryLevelSelectPanel allConfirmed at selectedSpeciesId=" + selectedSpeciesId);
         try {
             characterSelectGroup.toggleUIInteractability(false);
             backButton.gameObject.SetActive(false);
@@ -77,7 +85,12 @@ public class StoryLevelSelectPanel : MonoBehaviour {
                     selectedLevelName = "ArrowPalace";
                     break;
             }
-
+            selectionPhase = 2;
+            toggleUIInteractability(false);
+            characterSelectGroup.postCancelledCallback = null;
+            characterSelectGroup.postConfirmedCallback = null;
+            levels.postCancelledCallback = null;
+            levels.postConfirmedCallback = null;
             map.onCharacterAndLevelSelectGoAction(selectedSpeciesId, selectedLevelName);
         } catch (Exception ex) {
             Debug.LogError(ex);
