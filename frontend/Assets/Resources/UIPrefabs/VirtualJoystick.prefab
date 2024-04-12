@@ -305,6 +305,7 @@ MonoBehaviour:
   joystickDownRight: {fileID: 560130512, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
   joystickUpLeft: {fileID: 427910879, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
   joystickUpRight: {fileID: -1849016475, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
+  map: {fileID: 0}
 --- !u!114 &2102031375399323769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1342,7 +1343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -450, y: 152}
+  m_AnchoredPosition: {x: -360, y: 162}
   m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3824210805115556757

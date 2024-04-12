@@ -360,6 +360,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VirtualJoystick
       objectReference: {fileID: 0}
+    - target: {fileID: 1943233236080968477, guid: 7befed47cae92ce45ae86ba541ae5336, type: 3}
+      propertyPath: map
+      value: 
+      objectReference: {fileID: 1901904084}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7befed47cae92ce45ae86ba541ae5336, type: 3}
 --- !u!224 &489539463 stripped

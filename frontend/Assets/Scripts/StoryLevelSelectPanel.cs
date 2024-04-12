@@ -64,22 +64,10 @@ public class StoryLevelSelectPanel : MonoBehaviour {
         }
     }
 
-    public void allConfirmed(int selectedCharacterIdx) {
+    public void allConfirmed(int selectedSpeciesId) {
         try {
             characterSelectGroup.toggleUIInteractability(false);
             backButton.gameObject.SetActive(false);
-            int selectedSpeciesId = Battle.SPECIES_NONE_CH;
-            switch (selectedCharacterIdx) {
-                case 0:
-                    selectedSpeciesId = 0;
-                    break;
-                case 1:
-                    selectedSpeciesId = 2;
-                    break;
-                case 2:
-                    selectedSpeciesId = 6;
-                    break;
-            }
             string selectedLevelName = null;
             switch (selectedLevelIdx) {
                 case 0:

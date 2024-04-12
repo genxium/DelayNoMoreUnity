@@ -25,6 +25,7 @@ public class OfflineMapController : AbstractMapController {
     protected override void onBattleStopped() {
         base.onBattleStopped();
         characterSelectPanel.SetActive(true);
+        characterSelectPanel.GetComponent<StoryLevelSelectPanel>().reset();
         initSeqNo = 0;
         cachedSelfSpeciesId = SPECIES_NONE_CH;
         cachedLevelName = null;
@@ -169,6 +170,9 @@ public class OfflineMapController : AbstractMapController {
     }
 
     public override void OnSettingsClicked() {
+        if (isInStoryControl || isInStorySettings) return;
+        if (ROOM_STATE_IN_BATTLE != battleState) return;
         storyModeSettings.gameObject.SetActive(true);
+        isInStorySettings = true;
     }
 }
