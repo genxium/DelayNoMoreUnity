@@ -490,4 +490,7 @@ public class OnlineMapController : AbstractMapController {
         Debug.LogWarning(String.Format("OnlineMapController.OnApplicationQuit"));
     }
 
+    public override void OnSettingsClicked() {
+        Debug.Log("Not implemented yet.");
+    }
 }

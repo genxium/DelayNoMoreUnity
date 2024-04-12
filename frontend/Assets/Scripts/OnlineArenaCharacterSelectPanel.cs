@@ -1,14 +1,20 @@
 using UnityEngine;
-using UnityEngine.UI; // Required when Using UI elements.
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 
 public class OnlineArenaCharacterSelectPanel : MonoBehaviour {
-    public Image GoActionButton; // to toggle interactability
-    public ToggleGroup characters;
+    public CharacterSelectGroup characterSelectGroup;
+    public Image backButton;
+    public AbstractMapController map;
 
     // Start is called before the first frame update
     void Start() {
+        reset();
+    }
+
+    private void OnEnable() {
+        reset();
     }
 
     // Update is called once per frame
@@ -17,41 +23,24 @@ public class OnlineArenaCharacterSelectPanel : MonoBehaviour {
     }
 
     public void toggleUIInteractability(bool enabled) {
-        GoActionButton.gameObject.SetActive(enabled);
+        characterSelectGroup.toggleUIInteractability(enabled);
+        backButton.gameObject.SetActive(enabled);
     }
 
-    public virtual void OnGoActionClicked(AbstractMapController map) {
-        toggleUIInteractability(false);
-        Debug.Log(String.Format("GoAction button clicked with map={0}", map));
-        var toggles = characters.gameObject.GetComponentsInChildren<Toggle>();
-        int selectedSpeciesId = 0;
-        foreach (var toggle in toggles) {
-            if (null != toggle && toggle.isOn) {
-                Debug.Log(String.Format("{0} chosen", toggle.name));
-                switch (toggle.name) {      
-                case "KnifeGirl":
-                    selectedSpeciesId = 0;
-                    break;
-                case "MonkGirl":
-                    selectedSpeciesId = 2;
-                    break;
-                case "GunGirl":
-                    selectedSpeciesId = 4;
-                    break;
-                case "MagSwordGirl":
-                    selectedSpeciesId = 6;
-                    break;
-                }
-                break;
-            }
-        }
-        if (null != map) {
-            Debug.Log(String.Format("Extra goAction to be executed with selectedSpeciesId={0}", selectedSpeciesId));
-            map.onCharacterSelectGoAction(selectedSpeciesId);
-        } else {
-            Debug.LogWarning(String.Format("There's no extra goAction to be executed with selectedSpeciesId={0}", selectedSpeciesId));
-        }
+    public void reset() {
+        characterSelectGroup.postCancelledCallback = OnBackButtonClicked;
+        characterSelectGroup.postConfirmedCallback = allConfirmed;
         toggleUIInteractability(true);
+    }
+
+    public void allConfirmed(int selectedSpeciesId) {
+        try {
+            toggleUIInteractability(false);
+            map.onCharacterSelectGoAction(selectedSpeciesId);
+        } catch (Exception ex) {
+            Debug.LogError(ex);
+            reset();
+        }
     }
 
     public void OnBackButtonClicked() {

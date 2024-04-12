@@ -5,23 +5,13 @@ public abstract class AbstractSingleSelectGroup : MonoBehaviour {
     public delegate void PostCancelledCallbackT();
     public PostCancelledCallbackT postCancelledCallback;
 
-    public delegate void PostConfirmedCallbackT(int theSelectedIdx);
+    public delegate void PostConfirmedCallbackT(int val);
     public PostConfirmedCallbackT postConfirmedCallback;
 
     protected int selectedIdx = 0;
     protected bool enabled = false;
 
     public AbstractSingleSelectCell[] cells = null;
-
-    // Start is called before the first frame update
-    void Start() {
-        Debug.Log("AbstractSingleSelectGroup: cells count = " + cells.Length);
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
 
     public abstract void OnMoveByKeyboard(InputAction.CallbackContext context);
     public abstract void OnBtnConfirm(InputAction.CallbackContext context);

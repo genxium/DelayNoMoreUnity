@@ -168,7 +168,7 @@ public class OfflineMapController : AbstractMapController {
         }
     }
 
-    public void OnSettingsClicked() {
+    public override void OnSettingsClicked() {
         storyModeSettings.gameObject.SetActive(true);
     }
 }

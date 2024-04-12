@@ -107,6 +107,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, SFXSource> cachedSfxNodes;
     public AudioSource bgmSource;
     public abstract void onCharacterSelectGoAction(int speciesId);
+    public abstract void OnSettingsClicked();
+
 
     public abstract void onCharacterAndLevelSelectGoAction(int speciesId, string levelName);
 
@@ -157,12 +159,12 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected GameObject loadTrapPrefab(TrapConfig trapConfig) {
-        string path = String.Format("Prefabs/{0}", trapConfig.SpeciesName);
+        string path = String.Format("TrapPrefabs/{0}", trapConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
     }
 
     protected GameObject loadTriggerPrefab(TriggerConfig triggerConfig) {
-        string path = String.Format("Prefabs/{0}", triggerConfig.SpeciesName);
+        string path = String.Format("TriggerPrefabs/{0}", triggerConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
     }
 

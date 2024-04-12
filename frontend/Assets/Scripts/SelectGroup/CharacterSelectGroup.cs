@@ -1,19 +1,8 @@
-using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
 
 public class CharacterSelectGroup : AbstractSingleSelectGroup {
-    
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
+   
     public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
         if (!enabled) return;
         var kctrl = (KeyControl)context.control;
@@ -34,9 +23,7 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
         if (!enabled) return;
         bool rising = context.ReadValueAsButton();
         if (rising) {
-            if (null != postConfirmedCallback) {
-                postConfirmedCallback(selectedIdx);
-            }
+            confirmSelection();
         }
     }
 
@@ -53,13 +40,33 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
 
     public override void onCellSelected(int newSelectedIdx) {
         if (newSelectedIdx == selectedIdx) {
-            if (null != postConfirmedCallback) {
-                postConfirmedCallback(selectedIdx);
-            }
+            confirmSelection();
         } else {
             cells[selectedIdx].setSelected(false);
             cells[newSelectedIdx].setSelected(true);
             selectedIdx = newSelectedIdx;
         }
+    }
+
+    private void confirmSelection() {
+        int selectedSpeciesId = shared.Battle.SPECIES_NONE_CH;
+        switch (selectedIdx) {
+            case 0:
+                selectedSpeciesId = 0;
+                break;
+            case 1:
+                selectedSpeciesId = 2;
+                break;
+            case 2:
+                selectedSpeciesId = 6;
+                break;
+        }
+        if (null != postConfirmedCallback) {
+            postConfirmedCallback(selectedSpeciesId);
+        }
+    }
+
+    public override void toggleUIInteractability(bool val) {
+        base.toggleUIInteractability(val);
     }
 }

@@ -7,21 +7,12 @@ using UnityEngine.SceneManagement;
 
 public class ModeSelectGroup : AbstractSingleSelectGroup {
     private AllSettings allSettingsPanel;
-    // Start is called before the first frame update
-    void Start() {
-        Debug.Log("ModeSelect: cells count = " + cells.Length);
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
 
     public delegate void ParentUIInteractabilityDelegate(bool val);
     public delegate void OnLoginRequiredDelegate(WsSessionManager.OnLoginResult callback);
     private OnLoginRequiredDelegate onLoginRequired = null;
     private ParentUIInteractabilityDelegate parentUIInteractabilityToggle = null;
-
+    
     public void SetAllSettingsPanel(AllSettings theAllSettingsPanel) {
         allSettingsPanel = theAllSettingsPanel;
     }
@@ -115,5 +106,9 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
                 MoveSelection(+1);
                 break;
         }
+    }
+
+    public override void toggleUIInteractability(bool val) {
+        base.toggleUIInteractability(val);
     }
 }

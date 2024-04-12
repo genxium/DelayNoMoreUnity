@@ -3,6 +3,7 @@ using UnityEngine.UI; // Required when Using UI elements.
 using UnityEngine.SceneManagement;
 using shared;
 using System;
+using UnityEngine.InputSystem;
 public class StoryLevelSelectPanel : MonoBehaviour {
     private int selectionPhase = 0;
     private int selectedLevelIdx = -1;
@@ -12,6 +13,7 @@ public class StoryLevelSelectPanel : MonoBehaviour {
     protected PlayerStoryProgress storyProgress = null;
 
     public AbstractMapController map;
+    private PlayerInput sharedPlayerInputInstance;
 
     void Start() {
         // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
@@ -32,12 +34,10 @@ public class StoryLevelSelectPanel : MonoBehaviour {
         levels.postConfirmedCallback = levelPostConfirmedCallback;
         characterSelectGroup.gameObject.SetActive(false);
         characterSelectGroup.postCancelledCallback = OnBackButtonClicked;
-        AbstractSingleSelectGroup.PostConfirmedCallbackT characterPostConfirmedCallback = (int selectedIdx) => {
-            allConfirmed(selectedIdx);
-        };
-        characterSelectGroup.postConfirmedCallback = characterPostConfirmedCallback;
+        characterSelectGroup.postConfirmedCallback = allConfirmed;
         selectionPhase = 0;
         selectedLevelIdx = -1;
+        sharedPlayerInputInstance = levels.GetComponent<PlayerInput>();
         toggleUIInteractability(true);
     }
 

@@ -342,7 +342,7 @@ message BulletConfig {
     int32 hitboxSizeIncX = 39; // Change of hitboxSizeX per frame
     int32 hitboxSizeIncY = 40; // Change of hitboxSizeY per frame
 
-    bool remainUponHit = 41; 
+    bool remainsUponHit = 41; 
 	bool rotatesAlongVelocity = 42;
 
     int32 defaultHardPushbackBounceQuota = 43;

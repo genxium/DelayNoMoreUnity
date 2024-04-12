@@ -1480,7 +1480,7 @@ namespace shared {
                                             DirX = 1,
                                             DirY = 0,
                                             Hardness = 8,
-                                            RemainUponHit = true,
+                                            RemainsUponHit = true,
                                             ExplosionSfxName="Explosion3",
                                             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
                                             }

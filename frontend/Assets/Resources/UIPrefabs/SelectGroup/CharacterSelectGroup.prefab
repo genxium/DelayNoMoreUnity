@@ -110,7 +110,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: ac981bae-0bf5-4bc7-b88d-8ac79b09798a
-    m_ActionName: CharacterSelectPopup/MoveByKeyboard[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow]
+    m_ActionName: CharacterSelectGroup/MoveByKeyboard[/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5930021533887250486}
@@ -126,7 +126,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 70ebbb12-de00-4ab7-9222-c8e659cf93d6
-    m_ActionName: CharacterSelectPopup/BtnConfirm[/Keyboard/space,/Keyboard/enter]
+    m_ActionName: CharacterSelectGroup/BtnConfirm[/Keyboard/space,/Keyboard/enter]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5930021533887250486}
@@ -142,10 +142,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: cfd81c39-bc31-4c5f-bf23-06ce5ff310aa
-    m_ActionName: CharacterSelectPopup/BtnCancel[/Keyboard/escape]
+    m_ActionName: CharacterSelectGroup/BtnCancel[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: CharacterSelectPopup
+  m_DefaultActionMap: CharacterSelectGroup
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &5930021533887250486
@@ -668,6 +668,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3893815114620167347}
   - component: {fileID: 2901881033153245554}
+  - component: {fileID: 1031869682877782069}
   m_Layer: 5
   m_Name: MagSwordGirl
   m_TagString: Untagged
@@ -714,6 +715,35 @@ MonoBehaviour:
   selectedSpr: {fileID: 976895300, guid: 7d1587233b5500945a95505abb2f770a, type: 3}
   unselectedSpr: {fileID: -2083456978, guid: 7d1587233b5500945a95505abb2f770a, type: 3}
   hideUponNullBkg: 0
+--- !u!114 &1031869682877782069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7248003280790787510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5930021533887250486}
+          m_TargetAssemblyTypeName: CharacterSelectGroup, Assembly-CSharp
+          m_MethodName: onCellSelected
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7875988333965753255
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,6 +754,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1374181872186073899}
   - component: {fileID: 1858582303510683808}
+  - component: {fileID: 823835560686412367}
   m_Layer: 5
   m_Name: KnifeGirl
   m_TagString: Untagged
@@ -770,6 +801,35 @@ MonoBehaviour:
   selectedSpr: {fileID: 976895300, guid: 7d1587233b5500945a95505abb2f770a, type: 3}
   unselectedSpr: {fileID: -2083456978, guid: 7d1587233b5500945a95505abb2f770a, type: 3}
   hideUponNullBkg: 0
+--- !u!114 &823835560686412367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875988333965753255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5930021533887250486}
+          m_TargetAssemblyTypeName: CharacterSelectGroup, Assembly-CSharp
+          m_MethodName: onCellSelected
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &8992910399284934049
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,6 +840,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3188434533457790363}
   - component: {fileID: 3211965915377411084}
+  - component: {fileID: 6705252794236331868}
   m_Layer: 5
   m_Name: MonkGirl
   m_TagString: Untagged
@@ -826,3 +887,32 @@ MonoBehaviour:
   selectedSpr: {fileID: 976895300, guid: 7d1587233b5500945a95505abb2f770a, type: 3}
   unselectedSpr: {fileID: -2083456978, guid: 7d1587233b5500945a95505abb2f770a, type: 3}
   hideUponNullBkg: 0
+--- !u!114 &6705252794236331868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8992910399284934049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5930021533887250486}
+          m_TargetAssemblyTypeName: CharacterSelectGroup, Assembly-CSharp
+          m_MethodName: onCellSelected
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
