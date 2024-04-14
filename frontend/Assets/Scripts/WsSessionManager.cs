@@ -76,9 +76,9 @@ public class WsSessionManager {
     }
 
     public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
-        if (null == authToken || shared.Battle.TERMINATING_PLAYER_ID == playerId) {
-            Debug.Log(String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}", authToken, playerId));
-            return;
+        if (null == authToken || Battle.TERMINATING_PLAYER_ID == playerId) {
+            string errMsg = String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}, please go back to LoginPage!", authToken, playerId);
+            throw new Exception(errMsg);
         }
         senderBuffer.Clear();
         recvBuffer.Clear();

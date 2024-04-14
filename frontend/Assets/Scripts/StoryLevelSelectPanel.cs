@@ -22,6 +22,11 @@ public class StoryLevelSelectPanel : MonoBehaviour {
         reset();
     }
 
+    void onEnable() {
+        storyProgress = Battle.loadStoryProgress(Application.persistentDataPath, "story");
+        reset();
+    }
+
     public void reset() {
         Debug.Log("StoryLevelSelectPanel reset");
         levels.postCancelledCallback = OnBackButtonClicked;

@@ -14,6 +14,9 @@ public class OfflineMapController : AbstractMapController {
     private int cachedSelfSpeciesId = SPECIES_NONE_CH;
     private string cachedLevelName = null;
     private RoomDownsyncFrame cachedStartRdf = null;
+
+    public StoryLevelSelectPanel characterSelectPanel;
+
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
     }
@@ -24,8 +27,8 @@ public class OfflineMapController : AbstractMapController {
 
     protected override void onBattleStopped() {
         base.onBattleStopped();
-        characterSelectPanel.SetActive(true);
-        characterSelectPanel.GetComponent<StoryLevelSelectPanel>().reset();
+        characterSelectPanel.gameObject.SetActive(true);
+        characterSelectPanel.reset();
 
         initSeqNo = 0;
         cachedSelfSpeciesId = SPECIES_NONE_CH;
@@ -58,11 +61,11 @@ public class OfflineMapController : AbstractMapController {
             onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
             isInStorySettings = false;
         };
-        StoryModeSettings.SimpleDelegate onCloseCallback = () => {
+        StoryModeSettings.SimpleDelegate onCancelCallback = () => {
             isInStorySettings = false;
             pauseAllAnimatingCharacters(false);
         };
-        storyModeSettings.SetCallbacks(onExitCallback, onCloseCallback);
+        storyModeSettings.SetCallbacks(onExitCallback, onCancelCallback);
     }
 
     // Update is called once per frame
@@ -99,7 +102,7 @@ public class OfflineMapController : AbstractMapController {
                 initSeqNo++;
             } else if (3 == initSeqNo) {
                 Debug.Log(String.Format("characterSelectPanel about to hide, thread id={0}", Thread.CurrentThread.ManagedThreadId));
-                characterSelectPanel.SetActive(false);
+                characterSelectPanel.gameObject.SetActive(false);
                 Debug.Log(String.Format("characterSelectPanel hidden, thread id={0}", Thread.CurrentThread.ManagedThreadId));
                 initSeqNo++;
             } else if (4 == initSeqNo) {

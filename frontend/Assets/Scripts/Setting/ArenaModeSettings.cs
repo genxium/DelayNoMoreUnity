@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class StoryModeSettings : MonoBehaviour {
+public class ArenaModeSettings : MonoBehaviour {
 
-    public SettingsSelectGroup storyModeSettingsSelectGroup;
+    public SettingsSelectGroup arenaModeSettingsSelectGroup;
     public delegate void SimpleDelegate();
 
     SimpleDelegate onExitCallback = null, onCancelCallback = null;
@@ -11,14 +11,14 @@ public class StoryModeSettings : MonoBehaviour {
 
     public void toggleUIInteractability(bool val) {
         currentSelectPanelEnabled = val;
-        storyModeSettingsSelectGroup.toggleUIInteractability(val);
+        arenaModeSettingsSelectGroup.toggleUIInteractability(val);
     }
 
     public void SetCallbacks(SimpleDelegate theExitCallback, SimpleDelegate theCancelCallback) {
         onExitCallback = theExitCallback;
         onCancelCallback = theCancelCallback;
 
-        storyModeSettingsSelectGroup.postConfirmedCallback = (int val) => {
+        arenaModeSettingsSelectGroup.postConfirmedCallback = (int val) => {
             if (0 == val) {
                 OnExit();
             }

@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 2150687945471070731}
   - component: {fileID: 5417096831832379697}
   m_Layer: 5
-  m_Name: StoryModeSettingSelectGroup
+  m_Name: ArenaModeSettingSelectGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -272,7 +272,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: cfd81c39-bc31-4c5f-bf23-06ce5ff310aa
-    m_ActionName: StoryModeSettings/BtnCancel[/Keyboard/escape]
+    m_ActionName: ArenaModeSettings/BtnCancel[/Keyboard/escape]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5417096831832379697}

@@ -20,6 +20,9 @@ public class OnlineMapController : AbstractMapController {
     int timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
 
     public PlayerWaitingPanel playerWaitingPanel;
+    public OnlineArenaCharacterSelectPanel characterSelectPanel;
+
+    public ArenaModeSettings arenaModeSettings;
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
@@ -210,7 +213,7 @@ public class OnlineMapController : AbstractMapController {
         //_ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
 
         Debug.LogWarning(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
-        characterSelectPanel.SetActive(false);
+        characterSelectPanel.gameObject.SetActive(false);
     }
 
     public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
@@ -223,11 +226,20 @@ public class OnlineMapController : AbstractMapController {
 
         selfPlayerInfo = new CharacterDownsync();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = Battle.BATTLE_DYNAMICS_FPS;
         isOnlineMode = true;
         // [WARNING] Keep this property true if you want to use backendDynamics! Read the comments around "shapeOverlappedOtherChCnt" in "shared/Battle_dynamics.cs" for details.
         useOthersForcedDownsyncRenderFrameDict = true;
         enableBattleInput(false);
+
+        ArenaModeSettings.SimpleDelegate onExitCallback = () => {
+            onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
+            enableBattleInput(false);
+        };
+        ArenaModeSettings.SimpleDelegate onCancelCallback = () => {
+            
+        };
+        arenaModeSettings.SetCallbacks(onExitCallback, onCancelCallback);
     }
 
     public void onWsSessionOpen() {
@@ -240,8 +252,13 @@ public class OnlineMapController : AbstractMapController {
         // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
         onBattleStopped();
         playerWaitingPanel.gameObject.SetActive(false);
-        characterSelectPanel.SetActive(true);
         cleanupNetworkSessions(); // Make sure that all resources are properly deallocated
+    }
+
+    protected override void onBattleStopped() {
+        base.onBattleStopped();
+        characterSelectPanel.gameObject.SetActive(true);
+        characterSelectPanel.reset();
     }
 
     private async Task wsSessionTaskAsync() {
@@ -491,6 +508,7 @@ public class OnlineMapController : AbstractMapController {
     }
 
     public override void OnSettingsClicked() {
-        Debug.Log("Not implemented yet.");
-    }
+        if (ROOM_STATE_IN_BATTLE != battleState) return;
+        arenaModeSettings.gameObject.SetActive(true);
+        arenaModeSettings.toggleUIInteractability(true); }
 }

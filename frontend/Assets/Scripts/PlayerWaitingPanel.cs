@@ -1,35 +1,29 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using shared;
 
 public class PlayerWaitingPanel : MonoBehaviour {
     private int lastParticipantChangeId = Battle.TERMINATING_RENDER_FRAME_ID;
-    public Image backButton;
+    public Image cancelButton;
     public GameObject playerSlotPrefab;
     public HorizontalLayoutGroup participantSlots;
     private bool inited = false;
     private int capacity;
+    public OnlineMapController map;
+    private bool currentPanelEnabled = false;
 
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
-    private void toggleBackButton(bool val) {
+    private void toggleUIInteractability(bool val) {
+        currentPanelEnabled = val;
         if (val) {
-            backButton.transform.localScale = Vector3.one;
+            cancelButton.transform.localScale = Vector3.one;
         } else {
-            backButton.transform.localScale = Vector3.zero;
+            cancelButton.transform.localScale = Vector3.zero;
         }
     }
 
     public void InitPlayerSlots(int roomCapacity) {
-        toggleBackButton(true);
+        toggleUIInteractability(true);
         if (inited) return;
         for (int i = 0; i < roomCapacity; i++) {
             Instantiate(playerSlotPrefab, Vector3.zero, Quaternion.identity, participantSlots.transform);
@@ -57,12 +51,21 @@ public class PlayerWaitingPanel : MonoBehaviour {
         }
 
         if (nonEmptyCnt == capacity) {
-            toggleBackButton(false);
+            toggleUIInteractability(false);
         }
     }
 
-    public void OnBackButtonClicked(OnlineMapController map) {
-        Debug.Log("PlayerWaitingPanel.OnBackButtonClicked");
+    public void OnBtnCancel(InputAction.CallbackContext context) {
+        if (!currentPanelEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        if (rising && InputActionPhase.Performed == context.phase) {
+            toggleUIInteractability(false);
+            OnCancel();
+        }
+    }
+
+    public void OnCancel() {
+        Debug.Log("PlayerWaitingPanel.OnCancelButtonClicked");
         map.onWaitingInterrupted();
     }
 }

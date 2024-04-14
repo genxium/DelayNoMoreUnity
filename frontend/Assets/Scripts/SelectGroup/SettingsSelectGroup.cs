@@ -2,7 +2,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine;
 
-public class StoryModeSettingsSelectGroup : AbstractSingleSelectGroup {
+public class SettingsSelectGroup : AbstractSingleSelectGroup {
     public delegate void SimpleDelegate();
 
     public void ConfirmSelection() {

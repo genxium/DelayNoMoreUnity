@@ -98,8 +98,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected List<shared.Collider> completelyStaticTrapColliders;
 
-    public GameObject characterSelectPanel;
-
     protected Dictionary<int, GameObject> vfxSpeciesPrefabDict;
     protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
@@ -1405,6 +1403,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected IEnumerator delayToShowSettlementPanel() {
         if (ROOM_STATE_IN_BATTLE != battleState) {
+            Debug.LogWarning("Why calling delayToShowSettlementPanel during active battle? PlayerRdfId == " + playerRdfId);
             yield return new WaitForSeconds(0);
         } else {
             battleState = ROOM_STATE_IN_SETTLEMENT;
@@ -1412,6 +1411,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 onBattleStopped();
             };
             settlementPanel.gameObject.SetActive(true);
+            settlementPanel.toggleUIInteractability(true);
             // TODO: In versus mode, should differentiate between "winnerJoinIndex == selfPlayerIndex" and otherwise
             if (isBattleResultSet(confirmedBattleResult)) {
                 settlementPanel.PlaySettlementAnim(true);
