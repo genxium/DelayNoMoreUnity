@@ -21,6 +21,12 @@ public class WsSessionManager {
     However a normal "Queue" is used here while it's still considered thread-safe in this particular case (even for multi-core cache, for why multi-core cache could be a source of data contamination in multithread context, see https://app.yinxiang.com/fx/6f48c146-7db8-4a64-bdf0-3c874cd9290d). A "Queue" is in general NOT thread-safe, but when "bool TryDequeue(out T)" is always called in "thread#A" while "void Enqueue(T)" being always called in "thread#B", we're safe, e.g. "thread#A == MainThread && thread#B == WebSocketThread" or viceversa. 
         
     I'm not using "RecvRingBuff" https://github.com/genxium/DelayNoMore/blob/v1.0.14-cc/frontend/build-templates/jsb-link/frameworks/runtime-src/Classes/ring_buff.cpp because WebSocket is supposed to be preserving send/recv order at all time.
+
+    ################################################################################################################################################
+    UPDATE 2024-04-16
+    ################################################################################################################################################
+
+    The normal "Queue" is planned to be changed into an "AsyncQueue" such that I can call "DequeueAsync" without blocking/fault-returning on empty case. All methods of "DequeueAsync" are thread-safe, but I'm not sure whether or not they're lock-free as well. Moreover, I haven't found a way to use https://learn.microsoft.com/en-us/dotnet/api/microsoft.visualstudio.threading.asyncqueue-1?view=visualstudiosdk-2022 yet.
     */
     public Queue<WsReq> senderBuffer;
     public Queue<WsResp> recvBuffer;
@@ -75,7 +81,7 @@ public class WsSessionManager {
         return (Battle.TERMINATING_PLAYER_ID != playerId);
     }
 
-    public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
+    public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource, CancellationTokenSource guiCanProceedSignalSource) {
         if (null == authToken || Battle.TERMINATING_PLAYER_ID == playerId) {
             string errMsg = String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}, please go back to LoginPage!", authToken, playerId);
             throw new Exception(errMsg);
@@ -91,6 +97,7 @@ public class WsSessionManager {
                     Act = Battle.DOWNSYNC_MSG_WS_OPEN
                 };
                 recvBuffer.Enqueue(openMsg);
+                guiCanProceedSignalSource.Cancel();
                 await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
                 Debug.Log(String.Format("Both 'Receive' and 'Send' tasks are ended."));
             } catch (OperationCanceledException ocEx) {
