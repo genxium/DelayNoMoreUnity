@@ -1,19 +1,23 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
 public class SettlementPanel : MonoBehaviour {
     public TMP_Text finished, failed;
     public delegate void PostSettlementCallbackT();
     public PostSettlementCallbackT postSettlementCallback;
+    private bool currentPanelEnabled = false;
+    public Image confirmButton;
 
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
+    public void toggleUIInteractability(bool val) {
+        currentPanelEnabled = val;
+        if (val) {
+            confirmButton.transform.localScale = Vector3.one;
+        } else {
+            confirmButton.transform.localScale = Vector3.zero;
+        }
     }
 
     public void PlaySettlementAnim(bool success) {
@@ -30,7 +34,18 @@ public class SettlementPanel : MonoBehaviour {
         }
     }
 
-    public void OnOkClicked() {
-        postSettlementCallback();
+    public void OnBtnConfirm(InputAction.CallbackContext context) {
+        if (!currentPanelEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        if (rising && InputActionPhase.Performed == context.phase) {
+            toggleUIInteractability(false);
+            OnConfirm();
+        }
+    }
+
+    public void OnConfirm() {
+        if (null != postSettlementCallback) {
+            postSettlementCallback();
+        }
     }
 }

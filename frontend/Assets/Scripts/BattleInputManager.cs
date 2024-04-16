@@ -36,7 +36,9 @@ public class BattleInputManager : MonoBehaviour {
 
     public bool enablePlatformSpecificHiding = false;
     public Image joystickImg;
-    public Sprite joystickIdle, joystickLeft, joystickRight, joystickUp, joystickDown, joystickDownLeft, joystickDownRight, joystickUpLeft, joystickUpRight; 
+    public Sprite joystickIdle, joystickLeft, joystickRight, joystickUp, joystickDown, joystickDownLeft, joystickDownRight, joystickUpLeft, joystickUpRight;
+
+    public AbstractMapController map;
 
     void Start() {
         joystickInitPos = joystick.transform.position;
@@ -142,6 +144,20 @@ public class BattleInputManager : MonoBehaviour {
         bool rising = context.ReadValueAsButton();
         // Debug.Log(String.Format("btnALevel is changed to {0}", btnALevel));
         _triggerEdgeBtnD(rising);
+    }
+
+    public void onBtnCancelInput(InputAction.CallbackContext context) {
+        if (!customEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        if (rising) {
+            attemptToCancelBattle();
+        }
+    }
+
+    public void attemptToCancelBattle() {
+        if (null != map) {
+            map.OnSettingsClicked();
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context) {

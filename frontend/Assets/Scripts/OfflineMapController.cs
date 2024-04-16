@@ -14,6 +14,9 @@ public class OfflineMapController : AbstractMapController {
     private int cachedSelfSpeciesId = SPECIES_NONE_CH;
     private string cachedLevelName = null;
     private RoomDownsyncFrame cachedStartRdf = null;
+
+    public StoryLevelSelectPanel characterSelectPanel;
+
     protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
         throw new NotImplementedException();
     }
@@ -25,6 +28,8 @@ public class OfflineMapController : AbstractMapController {
     protected override void onBattleStopped() {
         base.onBattleStopped();
         characterSelectPanel.gameObject.SetActive(true);
+        characterSelectPanel.reset();
+
         initSeqNo = 0;
         cachedSelfSpeciesId = SPECIES_NONE_CH;
         cachedLevelName = null;
@@ -53,12 +58,14 @@ public class OfflineMapController : AbstractMapController {
         isOnlineMode = false;
 
         StoryModeSettings.SimpleDelegate onExitCallback = () => {
-            onBattleStopped();
-        };
-        StoryModeSettings.SimpleDelegate onCloseCallback = () => {
+            onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
             isInStorySettings = false;
         };
-        storyModeSettings.SetCallbacks(onExitCallback, onCloseCallback);
+        StoryModeSettings.SimpleDelegate onCancelCallback = () => {
+            isInStorySettings = false;
+            pauseAllAnimatingCharacters(false);
+        };
+        storyModeSettings.SetCallbacks(onExitCallback, onCancelCallback);
     }
 
     // Update is called once per frame
@@ -106,6 +113,7 @@ public class OfflineMapController : AbstractMapController {
                     // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_START"
                     cachedStartRdf.Id = DOWNSYNC_MSG_ACT_BATTLE_START;
                     onRoomDownsyncFrame(cachedStartRdf, null);
+                    pauseAllAnimatingCharacters(false);
                 });
                 initSeqNo++;
             } else if (6 == initSeqNo) {
@@ -168,7 +176,12 @@ public class OfflineMapController : AbstractMapController {
         }
     }
 
-    public void OnSettingsClicked() {
+    public override void OnSettingsClicked() {
+        if (isInStoryControl || isInStorySettings) return;
+        if (ROOM_STATE_IN_BATTLE != battleState) return;
+        pauseAllAnimatingCharacters(true);
         storyModeSettings.gameObject.SetActive(true);
+        isInStorySettings = true;
+        storyModeSettings.toggleUIInteractability(true);
     }
 }

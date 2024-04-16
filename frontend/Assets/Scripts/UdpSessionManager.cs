@@ -19,7 +19,15 @@ public class UdpSessionManager {
         }
     }
 
-    // As potentially more threads are accessing "senderBuffer" than that of WsSessionManager, using the actual "ConcurrentQueue" type here.
+    /**
+     As potentially more threads are accessing "senderBuffer" than that of WsSessionManager, using the actual "ConcurrentQueue" type here.
+
+    ################################################################################################################################################
+    UPDATE 2024-04-16
+    ################################################################################################################################################
+
+    The "ConcurrentQueue" is planned to be changed into an "AsyncQueue" such that I can call "DequeueAsync" without blocking/fault-returning on empty case. All methods of "DequeueAsync" are thread-safe, but I'm not sure whether or not they're lock-free as well. Moreover, I haven't found a way to use https://learn.microsoft.com/en-us/dotnet/api/microsoft.visualstudio.threading.asyncqueue-1?view=visualstudiosdk-2022 yet.
+     */
     public ConcurrentQueue<WsReq> senderBuffer;
     public ConcurrentQueue<WsReq> recvBuffer;
     private IPEndPoint[] peerUdpEndPointList;

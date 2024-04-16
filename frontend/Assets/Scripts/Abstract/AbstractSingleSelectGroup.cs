@@ -1,19 +1,22 @@
-using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class AbstractSingleSelectGroup : MonoBehaviour {
+public abstract class AbstractSingleSelectGroup : MonoBehaviour {
+    public delegate void PostCancelledCallbackT();
+    public PostCancelledCallbackT postCancelledCallback;
+
+    public delegate void PostConfirmedCallbackT(int val);
+    public PostConfirmedCallbackT postConfirmedCallback;
+
     protected int selectedIdx = 0;
+    protected bool currentSelectGroupEnabled = false;
+
     public AbstractSingleSelectCell[] cells = null;
 
-    // Start is called before the first frame update
-    void Start() {
-        Debug.Log("AbstractSingleSelectGroup: cells count = " + cells.Length);
-    }
+    public abstract void OnMoveByKeyboard(InputAction.CallbackContext context);
+    public abstract void OnBtnConfirm(InputAction.CallbackContext context);
 
-    // Update is called once per frame
-    void Update() {
-
-    }
+    public abstract void OnBtnCancel(InputAction.CallbackContext context);
 
     public virtual void onCellSelected(int newSelectedIdx) {
         cells[selectedIdx].setSelected(false);
@@ -27,9 +30,10 @@ public class AbstractSingleSelectGroup : MonoBehaviour {
         onCellSelected(newSelectedIdx);
     }
 
-    public void toggleUIInteractability(bool val) {
+    public virtual void toggleUIInteractability(bool val) {
         foreach (var cell in cells) {
             cell.toggleUIInteractability(val);
         }
+        currentSelectGroupEnabled = val;
     }
 }

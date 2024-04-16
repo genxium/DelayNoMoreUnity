@@ -623,7 +623,7 @@ namespace shared {
 
         public static bool IsBulletActive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
-                if (!bullet.Config.RemainUponHit) {
+                if (!bullet.Config.RemainsUponHit) {
                     return false;
                 }
             }
@@ -738,11 +738,9 @@ namespace shared {
                         colliderCnt++;
 
                         collisionSys.AddSingle(newBulletCollider);
-                        if (BulletState.StartUp == src.BlState && !dst.Config.RemainUponHit) {
+                        if (BulletState.StartUp == src.BlState && !dst.Config.RemainsUponHit) {
                             dst.BlState = BulletState.Active;
-                            if (dst.BlState != src.BlState) {
-                                dst.FramesInBlState = 0;
-                            }
+                            dst.FramesInBlState = 0;
                         }
                         (dst.VirtualGridX, dst.VirtualGridY) = (dst.VirtualGridX + dst.VelX, dst.VirtualGridY + dst.VelY);
                     } else {

@@ -20,6 +20,9 @@ public class OnlineMapController : AbstractMapController {
     int timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
 
     public PlayerWaitingPanel playerWaitingPanel;
+    public OnlineArenaCharacterSelectPanel characterSelectPanel;
+
+    public ArenaModeSettings arenaModeSettings;
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
@@ -35,6 +38,7 @@ public class OnlineMapController : AbstractMapController {
                     onWsSessionOpen();
                     break;
                 case DOWNSYNC_MSG_WS_CLOSED:
+                    // [WARNING] "DOWNSYNC_MSG_WS_CLOSED" is only a signal generated locally on the frontend.
                     onWsSessionClosed();
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
@@ -183,7 +187,8 @@ public class OnlineMapController : AbstractMapController {
     }
 
     public override void onCharacterSelectGoAction(int speciesId) {
-        characterSelectPanel.GoActionButton.gameObject.SetActive(false);
+        // [WARNING] Deliberately NOT declaring this method as "async" to make tests related to `<proj-root>/GOROUTINE_TO_ASYNC_TASK.md` more meaningful.
+
         Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
         WsSessionManager.Instance.SetSpeciesId(speciesId);
 
@@ -192,26 +197,60 @@ public class OnlineMapController : AbstractMapController {
 
         wsCancellationTokenSource = new CancellationTokenSource();
         wsCancellationToken = wsCancellationTokenSource.Token;
-        wsTask = Task.Run(async () => {
-            Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
-            await wsSessionTaskAsync();
-
-            Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
-
-            if (null != udpTask) {
-                UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
-            }
-            // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed -> cleanupNetworkSessions" to clean up other network resources!
+        bool guiCanProceedOnFailure = false;
+        var guiCanProceedSignalSource = new CancellationTokenSource(); // by design a new token-source for each "onCharacterSelectGoAction"
+        var guiCanProceedSignal = guiCanProceedSignalSource.Token;
+        
+        Task guiWaitToProceedTask = Task.Run(async () => {
+            guiCanProceedSignal.WaitHandle.WaitOne();
         });
 
-        //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "cleanupNetworkSessions".
+        try {
+            wsTask = Task.Run(async () => {
+                Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] By design switched to another thread other than the MainThread!
+                await wsSessionTaskAsync(guiCanProceedSignalSource);
+                Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
-        //wsSessionActionAsync(); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
-        //_ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
+                // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed -> cleanupNetworkSessions" to clean up other network resources!
+            })
+            .ContinueWith(failedTask => {
+                Debug.LogWarning(String.Format("Failed to start ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
+                guiCanProceedOnFailure = true;
+                wsCancellationTokenSource.Cancel();
+                guiCanProceedSignalSource.Cancel();
+            }, TaskContinuationOptions.OnlyOnFaulted);
 
-        Debug.LogWarning(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
-        characterSelectPanel.gameObject.SetActive(false);
+            if (!guiCanProceedSignal.IsCancellationRequested) {
+                try {
+                    guiWaitToProceedTask.Wait(guiCanProceedSignal);
+                } catch (Exception guiWaitCancelledEx) {
+                    Debug.LogWarning(String.Format("guiWaitToProceedTask was cancelled before proactive awaiting: thread id={0} a.k.a. the MainThread, ex={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitCancelledEx));
+                }
+            }
+            
+            if (!guiCanProceedOnFailure) {
+                Debug.Log(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
+                characterSelectPanel.gameObject.SetActive(false);
+            } else {
+                // [WARNING] returned to MainThread
+                var msg = String.Format("Failed to start ws session#2: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId);
+                popupErrStackPanel(msg);
+                onWsSessionClosed();
+            }
+        } finally {
+            try {
+                guiWaitToProceedTask.Dispose();
+            } catch (ObjectDisposedException guiWaitTaskDisposedEx) {
+                Debug.LogWarning(String.Format("guiWaitToProceedTask was disposed before proactive disposing: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
+            }
+            guiCanProceedSignalSource.Dispose();
+        }
+
+        //wsTask = Task.Run(wsSessionActionAsync(guiCanProceedSignalSource)); // This couldn't make `wsTask.Wait()` synchronous in "cleanupNetworkSessions" -- the behaviour of "async void (a.k.a. C# Action)" is different from "async Task (a.k.a. C# Task)" in a few subtleties, e.g. "an async method that returns void can't be awaited", see https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/async-return-types#void-return-type for more information.
+
+        //wsSessionActionAsync(guiCanProceedSignalSource); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
+        //_ = wsSessionTaskAsync(guiCanProceedSignalSource); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
     }
 
     public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
@@ -224,11 +263,20 @@ public class OnlineMapController : AbstractMapController {
 
         selfPlayerInfo = new CharacterDownsync();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = Battle.BATTLE_DYNAMICS_FPS;
         isOnlineMode = true;
         // [WARNING] Keep this property true if you want to use backendDynamics! Read the comments around "shapeOverlappedOtherChCnt" in "shared/Battle_dynamics.cs" for details.
         useOthersForcedDownsyncRenderFrameDict = true;
         enableBattleInput(false);
+
+        ArenaModeSettings.SimpleDelegate onExitCallback = () => {
+            onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
+            enableBattleInput(false);
+        };
+        ArenaModeSettings.SimpleDelegate onCancelCallback = () => {
+            
+        };
+        arenaModeSettings.SetCallbacks(onExitCallback, onCancelCallback);
     }
 
     public void onWsSessionOpen() {
@@ -241,22 +289,26 @@ public class OnlineMapController : AbstractMapController {
         // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
         onBattleStopped();
         playerWaitingPanel.gameObject.SetActive(false);
-        characterSelectPanel.gameObject.SetActive(true);
-        characterSelectPanel.GoActionButton.gameObject.SetActive(true);
         cleanupNetworkSessions(); // Make sure that all resources are properly deallocated
     }
 
-    private async Task wsSessionTaskAsync() {
+    protected override void onBattleStopped() {
+        base.onBattleStopped();
+        characterSelectPanel.gameObject.SetActive(true);
+        characterSelectPanel.reset();
+    }
+
+    private async Task wsSessionTaskAsync(CancellationTokenSource guiCanProceedSignalSource) {
         Debug.LogWarning(String.Format("In ws session TASK but before first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
         string wsEndpoint = Env.Instance.getWsEndpoint();
-        await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
+        await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource, guiCanProceedSignalSource);
         Debug.LogWarning(String.Format("In ws session TASK and after first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
     }
 
-    private async void wsSessionActionAsync() {
+    private async void wsSessionActionAsync(CancellationTokenSource guiCanProceedSignalSource) {
         Debug.LogWarning(String.Format("In ws session ACTION but before first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
         string wsEndpoint = Env.Instance.getWsEndpoint();
-        await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource);
+        await WsSessionManager.Instance.ConnectWsAsync(wsEndpoint, wsCancellationToken, wsCancellationTokenSource, guiCanProceedSignalSource);
         Debug.LogWarning(String.Format("In ws session ACTION and after first await: thread id={0}.", Thread.CurrentThread.ManagedThreadId));
     }
 
@@ -461,35 +513,54 @@ public class OnlineMapController : AbstractMapController {
             }
         }
 
-        if (null != wsTask) {
+        if (null != wsTask && (TaskStatus.Canceled != wsTask.Status && TaskStatus.Faulted != wsTask.Status)) {
             try {
                 wsTask.Wait();
-                wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
-                Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask disposed"));
-            } catch (ObjectDisposedException ex) {
-                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already disposed: {0}", ex));
+            } catch (Exception ex) {
+                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already cancelled: {0}", ex));
+            } finally {
+                try {
+                    wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+                } catch (ObjectDisposedException ex) {
+                    Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already disposed: {0}", ex));
+                } finally {
+                    Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask disposed"));
+                }
             }
         }
 
         if (null != udpTask) {
-            try {
-                udpTask.Wait();
-                udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
-                Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask disposed"));
-            } catch (ObjectDisposedException ex) {
-                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask is already disposed: {0}", ex));
+            UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
+            if (TaskStatus.Canceled != udpTask.Status && TaskStatus.Faulted != udpTask.Status) {
+                try {
+                    udpTask.Wait();
+                } catch (Exception ex) {
+                    Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask is already cancelled: {0}", ex));
+                } finally {
+                    try {
+                        udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+                    } catch (ObjectDisposedException ex) {
+                        Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask is already disposed: {0}", ex));
+                    } finally {
+                        Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask disposed"));
+                    }
+                }
             }
         }
     }
 
     protected void OnDestroy() {
-        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1"));
+        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#1, about to clean up network sessions"));
         cleanupNetworkSessions();  
-        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2"));
+        Debug.LogWarning(String.Format("OnlineMapController.OnDestroy#2, cleaned network sessions"));
     }
 
     void OnApplicationQuit() {
         Debug.LogWarning(String.Format("OnlineMapController.OnApplicationQuit"));
     }
 
+    public override void OnSettingsClicked() {
+        if (ROOM_STATE_IN_BATTLE != battleState) return;
+        arenaModeSettings.gameObject.SetActive(true);
+        arenaModeSettings.toggleUIInteractability(true); }
 }

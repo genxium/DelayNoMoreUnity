@@ -3,39 +3,61 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI; // Required when Using UI elements.
 using UnityEngine.Networking;
+using UnityEngine.InputSystem;
 using System.Collections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using shared;
 
 public class CaptchaLoginFormController : MonoBehaviour {
+    private bool currentPanelEnabled = true;
 
     // UI bindings are done in the Editor, the field bindings here are used for enabling/disabling in script.
     public TMP_InputField UnameInput;
 	public TMP_InputField CaptchaInput;
-	public Button GetCaptchaButton;
+    
+    // TODO: Find a way to implement free-text input and focus-change all by keyboard operations 
+	public Button GetCaptchaButton; 
 	public Button LoginActionButton;
-    public Button CloseButton;
     private WsSessionManager.OnLoginResult onLoginResultCallback = null;
+
+    public Image CancelButton;
 
     public void SetOnLoginResultCallback(WsSessionManager.OnLoginResult newOnLoginResultCallback) {
         onLoginResultCallback = newOnLoginResultCallback;
     }
+
     public void ClearOnLoginResultCallback() {
         onLoginResultCallback = null;
     }
 
-    public void OnClose() {
+    public void OnBtnCancel(InputAction.CallbackContext context) {
+        if (!currentPanelEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        if (rising && InputActionPhase.Performed == context.phase) {
+            toggleUIInteractability(false);
+            OnCancel();
+        }
+    }
+
+    public void OnCancel() {
         ClearOnLoginResultCallback();
         gameObject.SetActive(false);
+        toggleUIInteractability(true);
     }
 
     public void toggleUIInteractability(bool enabled) {
+        currentPanelEnabled = enabled;
+
         UnameInput.interactable = enabled;
         CaptchaInput.interactable = enabled;
         GetCaptchaButton.interactable = enabled;
         LoginActionButton.interactable = enabled;
-        CloseButton.interactable = enabled;
+        if (enabled) {
+            CancelButton.gameObject.transform.localScale = Vector3.one;
+        } else {    
+            CancelButton.gameObject.transform.localScale = Vector3.zero;
+        }
     }
 
     public void OnGetCaptchaButtonClicked() {

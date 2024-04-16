@@ -1,0 +1,34 @@
+{
+    "name": "PlayerWaitingPanel",
+    "maps": [
+        {
+            "name": "PlayerWaitingPanel",
+            "id": "80809b31-59b8-4e12-b167-c46c50bd1fa6",
+            "actions": [
+                {
+                    "name": "BtnCancel",
+                    "type": "Button",
+                    "id": "cfd81c39-bc31-4c5f-bf23-06ce5ff310aa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5461db0a-118f-41d3-a2d1-739122ee38d2",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BtnCancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
