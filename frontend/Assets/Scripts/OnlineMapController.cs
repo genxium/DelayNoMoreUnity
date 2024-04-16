@@ -5,6 +5,7 @@ using static shared.Battle;
 using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf.Collections;
+using UnityEditor.Build;
 
 public class OnlineMapController : AbstractMapController {
     Task wsTask, udpTask;
@@ -38,6 +39,7 @@ public class OnlineMapController : AbstractMapController {
                     onWsSessionOpen();
                     break;
                 case DOWNSYNC_MSG_WS_CLOSED:
+                    // [WARNING] "DOWNSYNC_MSG_WS_CLOSED" is only a signal generated locally on the frontend.
                     onWsSessionClosed();
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO:
@@ -194,26 +196,31 @@ public class OnlineMapController : AbstractMapController {
 
         wsCancellationTokenSource = new CancellationTokenSource();
         wsCancellationToken = wsCancellationTokenSource.Token;
+
+        bool synchronousFailedSignal = false;
         wsTask = Task.Run(async () => {
-            Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
-
+            Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] By design switched to another thread other than the MainThread!
             await wsSessionTaskAsync();
-
             Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
-            if (null != udpTask) {
-                UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
-            }
             // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed -> cleanupNetworkSessions" to clean up other network resources!
-        });
-
-        //wsTask = Task.Run(wsSessionActionAsync); // This doesn't make "await wsTask" synchronous in "cleanupNetworkSessions".
+        }).ContinueWith(failedTask => {
+            synchronousFailedSignal = true;
+            Debug.LogWarning(String.Format("Failed to start ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
+        }, TaskContinuationOptions.OnlyOnFaulted);
+;
+        //wsTask = Task.Run(wsSessionActionAsync); // This couldn't make `wsTask.Wait()` synchronous in "cleanupNetworkSessions" -- the behaviour of "async void (a.k.a. C# Action)" is different from "async Task (a.k.a. C# Task)" in a few subtleties, e.g. "an async method that returns void can't be awaited", see https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/async-return-types#void-return-type for more information.
 
         //wsSessionActionAsync(); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
         //_ = wsSessionTaskAsync(); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
 
-        Debug.LogWarning(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
-        characterSelectPanel.gameObject.SetActive(false);
+        if (!synchronousFailedSignal) {
+            Debug.Log(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
+            characterSelectPanel.gameObject.SetActive(false);
+        } else {
+            Debug.LogWarning(String.Format("Failed to start ws session#2: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] returned to MainThread
+            onWsSessionClosed();
+        }
     }
 
     public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
@@ -476,7 +483,7 @@ public class OnlineMapController : AbstractMapController {
             }
         }
 
-        if (null != wsTask) {
+        if (null != wsTask && (TaskStatus.Canceled != wsTask.Status && TaskStatus.Faulted != wsTask.Status)) {
             try {
                 wsTask.Wait();
                 wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
@@ -487,12 +494,15 @@ public class OnlineMapController : AbstractMapController {
         }
 
         if (null != udpTask) {
-            try {
-                udpTask.Wait();
-                udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
-                Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask disposed"));
-            } catch (ObjectDisposedException ex) {
-                Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask is already disposed: {0}", ex));
+            UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
+            if (TaskStatus.Canceled != udpTask.Status && TaskStatus.Faulted != udpTask.Status) {
+                try {
+                    udpTask.Wait();
+                    udpTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+                    Debug.Log(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask disposed"));
+                } catch (ObjectDisposedException ex) {
+                    Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask is already disposed: {0}", ex));
+                }
             }
         }
     }
