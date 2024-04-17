@@ -26,7 +26,7 @@ public class OnlineMapController : AbstractMapController {
 
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
-            Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
+            // Debug.Log(String.Format("Handling wsResp in main thread: {0}", wsRespHolder));
             if (ErrCode.Ok != wsRespHolder.Ret) {
                 var msg = String.Format("Received ws error {0}", wsRespHolder);
                 popupErrStackPanel(msg);

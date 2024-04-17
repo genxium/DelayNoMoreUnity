@@ -1243,7 +1243,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
         int rdfId = pbRdf.Id;
-        bool shouldForceDumping1 = (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId);
+        bool shouldForceDumping1 = (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId || useOthersForcedDownsyncRenderFrameDict);
         bool shouldForceDumping2 = (rdfId >= playerRdfId + renderFrameIdLagTolerance);
         bool shouldForceResync = pbRdf.ShouldForceResync;
         ulong selfJoinIndexMask = ((ulong)1 << (selfPlayerInfo.JoinIndex - 1));
@@ -1285,7 +1285,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict! received rdfId={0} & now inputBuffer: {1}, renderBuffer: {2}; downsynced rdf={3}", rdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat(), stringifyRdf(pbRdf)));
                     }
                 } else if (null != accompaniedInputFrameDownsyncBatch) {
-                    Debug.Log(String.Format("On battle resynced! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}; now inputBuffer:{5}, renderBuffer:{6}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
+                    Debug.Log(String.Format("On battle resynced useOthersForcedDownsyncRenderFrameDict={7}! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}; now inputBuffer:{5}, renderBuffer:{6}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat(), useOthersForcedDownsyncRenderFrameDict));
                 }
             }
 
