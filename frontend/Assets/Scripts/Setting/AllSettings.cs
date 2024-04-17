@@ -1,11 +1,45 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class AllSettings : MonoBehaviour {
     public LoginStatusBarController loginStatusBarController;
-    public Button logoutButton;
     private LoginStatusBarController sameSceneLoginStatusBar;
-    public void OnClose() {
+    protected bool currentSelectPanelEnabled = false;
+    public SettingsSelectGroup allSettingsSelectGroup;
+    public delegate void SimpleDelegate();
+    public Image cancelBtn;
+
+    public void SetCallbacks() {
+        allSettingsSelectGroup.postConfirmedCallback = (int val) => {
+            if (0 == val) {
+                onLogoutClicked();
+            }
+        };
+
+        toggleUIInteractability(true);
+    }
+
+    public void toggleUIInteractability(bool val) {
+        currentSelectPanelEnabled = val;
+        allSettingsSelectGroup.toggleUIInteractability(val);
+        if (val) {
+            cancelBtn.gameObject.transform.localScale = Vector3.one;
+        } else {
+            cancelBtn.gameObject.transform.localScale = Vector3.zero;
+        }
+    }
+
+    public void OnBtnCancel(InputAction.CallbackContext context) {
+        if (!currentSelectPanelEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        if (rising && InputActionPhase.Performed == context.phase) {
+            toggleUIInteractability(false);
+            OnCancel();
+        }
+    }
+
+    public void OnCancel() {
         gameObject.SetActive(false);
     }
 
@@ -14,9 +48,9 @@ public class AllSettings : MonoBehaviour {
     }
 
     public void onLogoutClicked() {
+        if (!currentSelectPanelEnabled) return;
         // TODO: Actually send a "/Auth/Logout" request to clear on backend as well.
         WsSessionManager.Instance.ClearCredentials();
-        logoutButton.gameObject.SetActive(false);
         loginStatusBarController.SetLoggedInData(null);
         if (null != sameSceneLoginStatusBar) {
             sameSceneLoginStatusBar.SetLoggedInData(null);
@@ -24,7 +58,6 @@ public class AllSettings : MonoBehaviour {
     }
 
     private void Start() {
-        logoutButton.gameObject.SetActive(WsSessionManager.Instance.IsPossiblyLoggedIn());
         loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
         if (null != sameSceneLoginStatusBar) {
             sameSceneLoginStatusBar.SetLoggedInData(WsSessionManager.Instance.GetUname());
@@ -32,7 +65,6 @@ public class AllSettings : MonoBehaviour {
     }
 
     private void Awake() {
-        logoutButton.gameObject.SetActive(WsSessionManager.Instance.IsPossiblyLoggedIn());
         loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
         if (null != sameSceneLoginStatusBar) {
             sameSceneLoginStatusBar.SetLoggedInData(WsSessionManager.Instance.GetUname());

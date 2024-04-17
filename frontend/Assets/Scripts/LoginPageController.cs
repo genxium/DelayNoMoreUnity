@@ -24,6 +24,8 @@ public class LoginPageController : MonoBehaviour {
         allSettingsPanel.SetSameSceneLoginStatusBar(loginStatusBarController);
         loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
         appVersion.text = Application.version;
+
+        allSettingsPanel.SetCallbacks();
     }
 
     private void Awake() {
@@ -32,5 +34,6 @@ public class LoginPageController : MonoBehaviour {
 
     void toggleUIInteractability(bool enabled) {
         modeSelectGroup.toggleUIInteractability(enabled);
+        allSettingsPanel.toggleUIInteractability(enabled);
     }
 }

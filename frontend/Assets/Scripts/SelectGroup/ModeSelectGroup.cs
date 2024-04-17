@@ -54,6 +54,7 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
 
     private void enterAllSettings() {
         allSettingsPanel.gameObject.SetActive(true);
+        allSettingsPanel.toggleUIInteractability(true);
     }
 
     private WsSessionManager.OnLoginResult onLoggedInPerAdhocRequirement = (int retCode, string? uname, int? playerId, string? authToken) => {
