@@ -10,6 +10,7 @@ using Google.Protobuf;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
@@ -26,9 +27,34 @@ public class WsSessionManager {
     UPDATE 2024-04-16
     ################################################################################################################################################
 
-    The normal "Queue" is planned to be changed into an "AsyncQueue" such that I can call "DequeueAsync" without blocking/fault-returning on empty case. All methods of "DequeueAsync" are thread-safe, but I'm not sure whether or not they're lock-free as well. Moreover, I haven't found a way to use https://learn.microsoft.com/en-us/dotnet/api/microsoft.visualstudio.threading.asyncqueue-1?view=visualstudiosdk-2022 yet.
+    The normal "Queue" is planned to be changed into an "AsyncQueue" such that I can call "DequeueAsync" without spurious breaking when empty. All methods of "DequeueAsync" are thread-safe, but I'm not sure whether or not they're lock-free as well. Moreover, I haven't found a way to use https://learn.microsoft.com/en-us/dotnet/api/microsoft.visualstudio.threading.asyncqueue-1?view=visualstudiosdk-2022 yet.
+
+    Fairly speaking, the current
+
+    ```
+    while (wsSession is still open && not cancelled) { 
+        while (senderBuffer.TryDequeue(out toSendObj)) {
+            ...
+            // process "toSendObj"
+            ...
+        }
+        // having spurious breaking when empty here would just continue to another loop
+    }
+    ```
+
+    implementation is immune to spurious breaking when empty too, but quite inefficient in CPU usage.
+
+    ################################################################################################################################################
+    UPDATE 2024-04-17
+    ################################################################################################################################################
+
+    The normal "Queue" of "senderBuffer" is changed into an "BlockingCollection" whose default underlying data structure is "ConcurrentQueue". The "recvBuffer" is left untouched because
+    - its "TryDequeue" is only called by "OnlineMapController.pollAndHandleWsRecvBuffer" which wouldn't cause spurious breaking when empty (i.e. upon transient empty "recvBuffer", it's OK to poll in the next render frame), and
+    - its "Enqueue" is driven by "wsSession.ReceiveAsync" which is cancellable.
+
+    To my understanding, "BlockingCollection.TryTake(out dst, timeout, cancellationToken)" is equivalent to "dst = AsyncQueue.DequeueAsync(cancellationToken).Result", at least for my use case.
     */
-    public Queue<WsReq> senderBuffer;
+    public BlockingCollection<WsReq> senderBuffer;
     public Queue<WsResp> recvBuffer;
     private string uname;
     private string authToken; // cached for auto-login (TODO: link "save/load" of this value with persistent storage)
@@ -50,7 +76,7 @@ public class WsSessionManager {
 
     private WsSessionManager() {
         ClearCredentials();
-        senderBuffer = new Queue<WsReq>();
+        senderBuffer = new BlockingCollection<WsReq>();
         recvBuffer = new Queue<WsResp>();
     }
 
@@ -86,7 +112,7 @@ public class WsSessionManager {
             string errMsg = String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}, please go back to LoginPage!", authToken, playerId);
             throw new Exception(errMsg);
         }
-        senderBuffer.Clear();
+        while (senderBuffer.TryTake(out _)) { }
         recvBuffer.Clear();
         string fullUrl = wsEndpoint + String.Format("?authToken={0}&playerId={1}&speciesId={2}", authToken, playerId, speciesId);
         using (ClientWebSocket ws = new ClientWebSocket()) {
@@ -99,7 +125,7 @@ public class WsSessionManager {
                 recvBuffer.Enqueue(openMsg);
                 guiCanProceedSignalSource.Cancel();
                 await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
-                Debug.Log(String.Format("Both 'Receive' and 'Send' tasks are ended."));
+                Debug.Log(String.Format("Both WebSocket 'Receive' and 'Send' tasks are ended."));
             } catch (OperationCanceledException ocEx) {
                 Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
             } catch (Exception ex) {
@@ -122,16 +148,12 @@ public class WsSessionManager {
 
     private async Task Send(ClientWebSocket ws, CancellationToken cancellationToken) {
         Debug.Log(String.Format("Starts 'Send' loop, ws.State={0}", ws.State));
-        WsReq toSendObj;
         try {
-            while (WebSocketState.Open == ws.State) {
-                while (senderBuffer.TryDequeue(out toSendObj)) {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    //Debug.Log("Ws session send: before");
-                    await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
-                    //Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
-                }
-                cancellationToken.ThrowIfCancellationRequested();
+            while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
+                WsReq toSendObj = senderBuffer.Take(cancellationToken);
+                //Debug.Log("Ws session send: before");
+                await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
+                //Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
             }
         } catch (OperationCanceledException ocEx) {
             Debug.LogWarning(String.Format("WsSession is cancelled for 'Send'; ocEx.Message={0}", ocEx.Message));

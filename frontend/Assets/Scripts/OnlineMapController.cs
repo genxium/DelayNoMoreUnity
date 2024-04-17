@@ -88,7 +88,7 @@ public class OnlineMapController : AbstractMapController {
                     reqData.SerializedCompletelyStaticTraps.AddRange(serializedCompletelyStaticTraps);
                     reqData.SerializedStaticTriggers.AddRange(serializedStaticTriggers);
 
-                    WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
+                    WsSessionManager.Instance.senderBuffer.Add(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
 
                     var initialPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
@@ -415,8 +415,8 @@ public class OnlineMapController : AbstractMapController {
         };
         reqData.InputFrameUpsyncBatch.AddRange(inputFrameUpsyncBatch);
 
-        WsSessionManager.Instance.senderBuffer.Enqueue(reqData);
-        UdpSessionManager.Instance.senderBuffer.Enqueue(reqData);
+        WsSessionManager.Instance.senderBuffer.Add(reqData);
+        UdpSessionManager.Instance.senderBuffer.Add(reqData);
         lastUpsyncInputFrameId = latestLocalInputFrameId;
     }
 
