@@ -217,11 +217,15 @@ public class OnlineMapController : AbstractMapController {
             .ContinueWith(failedTask => {
                 Debug.LogWarning(String.Format("Failed to start ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
                 guiCanProceedOnFailure = true;
-                wsCancellationTokenSource.Cancel();
-                guiCanProceedSignalSource.Cancel();
+                if (!wsCancellationToken.IsCancellationRequested) {
+                    wsCancellationTokenSource.Cancel();
+                }
+                if (!guiCanProceedSignal.IsCancellationRequested) {
+                    guiCanProceedSignalSource.Cancel();
+                }
             }, TaskContinuationOptions.OnlyOnFaulted);
 
-            if (!guiCanProceedSignal.IsCancellationRequested) {
+            if (!guiCanProceedSignal.IsCancellationRequested && (TaskStatus.Canceled != guiWaitToProceedTask.Status && TaskStatus.Faulted != guiWaitToProceedTask.Status)) {
                 try {
                     guiWaitToProceedTask.Wait(guiCanProceedSignal);
                 } catch (Exception guiWaitCancelledEx) {

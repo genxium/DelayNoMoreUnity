@@ -55,6 +55,7 @@ public class WsSessionManager {
     To my understanding, "BlockingCollection.TryTake(out dst, timeout, cancellationToken)" is equivalent to "dst = AsyncQueue.DequeueAsync(cancellationToken).Result", at least for my use case.
     */
     public BlockingCollection<WsReq> senderBuffer;
+    private int sendBufferReadTimeoutMillis = 512; 
     public Queue<WsResp> recvBuffer;
     private string uname;
     private string authToken; // cached for auto-login (TODO: link "save/load" of this value with persistent storage)
@@ -112,7 +113,7 @@ public class WsSessionManager {
             string errMsg = String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}, please go back to LoginPage!", authToken, playerId);
             throw new Exception(errMsg);
         }
-        while (senderBuffer.TryTake(out _)) { }
+        while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, cancellationToken)) { }
         recvBuffer.Clear();
         string fullUrl = wsEndpoint + String.Format("?authToken={0}&playerId={1}&speciesId={2}", authToken, playerId, speciesId);
         using (ClientWebSocket ws = new ClientWebSocket()) {
@@ -141,6 +142,14 @@ public class WsSessionManager {
                     Act = Battle.DOWNSYNC_MSG_WS_CLOSED
                 };
                 recvBuffer.Enqueue(closeMsg);
+
+                if (!cancellationToken.IsCancellationRequested) {
+                    try {
+                        cancellationTokenSource.Cancel();
+                    } catch (Exception ex) {
+                        Debug.LogErrorFormat("Error cancelling ws session token source as a safe wrapping while it was checked not cancelled by far: {0}", ex);
+                    }
+                }
                 Debug.LogWarning(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
             }
         }
@@ -148,12 +157,14 @@ public class WsSessionManager {
 
     private async Task Send(ClientWebSocket ws, CancellationToken cancellationToken) {
         Debug.Log(String.Format("Starts 'Send' loop, ws.State={0}", ws.State));
+        WsReq toSendObj;
         try {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
-                WsReq toSendObj = senderBuffer.Take(cancellationToken);
-                //Debug.Log("Ws session send: before");
-                await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
-                //Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
+                if (senderBuffer.TryTake(out toSendObj, sendBufferReadTimeoutMillis, cancellationToken)) {
+                    //Debug.Log("Ws session send: before");
+                    await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
+                    //Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
+                }
             }
         } catch (OperationCanceledException ocEx) {
             Debug.LogWarning(String.Format("WsSession is cancelled for 'Send'; ocEx.Message={0}", ocEx.Message));

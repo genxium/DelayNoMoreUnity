@@ -34,6 +34,7 @@ public class UdpSessionManager {
     private long[] peerUdpEndPointPunched;
     private UdpClient udpSession;
     private WsReq serverHolePuncher, peerHolePuncher;
+    private int sendBufferReadTimeoutMillis = 512;
 
     private UdpSessionManager() {
         senderBuffer = new BlockingCollection<WsReq>();
@@ -44,7 +45,7 @@ public class UdpSessionManager {
         Debug.Log(String.Format("openUdpSession#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
         serverHolePuncher = theServerHolePuncher;
         peerHolePuncher = thePeerHolePuncher;
-        while (senderBuffer.TryTake(out _)) { }
+        while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, wsSessionCancellationToken)) { }
         recvBuffer.Clear();
 
         peerUdpEndPointList = new IPEndPoint[roomCapacity + 1];
@@ -66,37 +67,39 @@ public class UdpSessionManager {
     private async Task Send(UdpClient udpSession, int roomCapacity, int selfJoinIndex, CancellationToken wsSessionCancellationToken) {
         // TODO: Make this method thread-safe for "this.peerUdpAddrList"
         Debug.Log(String.Format("Starts udpSession 'Send' loop, now senderBuffer={0}", senderBuffer.Count));
+        WsReq toSendObj;
         try {
             while (!wsSessionCancellationToken.IsCancellationRequested) {
-                WsReq toSendObj = senderBuffer.Take(wsSessionCancellationToken);
-                var toSendBuffer = toSendObj.ToByteArray();
-                if (toSendObj.Act == serverHolePuncher.Act) {
-                    if (null == peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]) continue;
-                    await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
-                } else if (toSendObj.Act == peerHolePuncher.Act) {
-                    for (int i = 1; i <= roomCapacity; i++) {
-                        if (i == selfJoinIndex) continue;
-                        if (null == peerUdpEndPointList[i]) continue;
-                        // [WARNING] Deliberately keep sending even if "1 == Interlocked.Read(ref peerUdpEndPointPunched[i])"
-                        // Debug.Log(String.Format("udpSession sending holePuncher to joinIndex={0}, endPoint={1}", i, peerUdpEndPointList[i]));
-                        await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[i]);
-                    }
-                } else {
-                    int successPeerCnt = 0;
-                    for (int i = 1; i <= roomCapacity; i++) {
-                        if (i == selfJoinIndex) continue;
-                        if (null == peerUdpEndPointList[i]) continue;
-                        if (0 == Interlocked.Read(ref peerUdpEndPointPunched[i])) continue;
-                        // Debug.Log(String.Format("udpSession sending {0} to punched peer {1}", toSendObj, peerUdpEndPointList[i]));
-                        await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[i]);
-                        if (1 == Interlocked.Read(ref peerUdpEndPointPunched[i])) {
-                            successPeerCnt++;
-                        }
-                    }
-
-                    if (successPeerCnt + 1 < roomCapacity) {
-                        // Debug.Log(String.Format("udpSession sending {0} to UdpTunnel {1}", toSendObj, peerUdpEndPointList[shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]));
+                if (senderBuffer.TryTake(out toSendObj, sendBufferReadTimeoutMillis, wsSessionCancellationToken)) {
+                    var toSendBuffer = toSendObj.ToByteArray();
+                    if (toSendObj.Act == serverHolePuncher.Act) {
+                        if (null == peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]) continue;
                         await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
+                    } else if (toSendObj.Act == peerHolePuncher.Act) {
+                        for (int i = 1; i <= roomCapacity; i++) {
+                            if (i == selfJoinIndex) continue;
+                            if (null == peerUdpEndPointList[i]) continue;
+                            // [WARNING] Deliberately keep sending even if "1 == Interlocked.Read(ref peerUdpEndPointPunched[i])"
+                            // Debug.Log(String.Format("udpSession sending holePuncher to joinIndex={0}, endPoint={1}", i, peerUdpEndPointList[i]));
+                            await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[i]);
+                        }
+                    } else {
+                        int successPeerCnt = 0;
+                        for (int i = 1; i <= roomCapacity; i++) {
+                            if (i == selfJoinIndex) continue;
+                            if (null == peerUdpEndPointList[i]) continue;
+                            if (0 == Interlocked.Read(ref peerUdpEndPointPunched[i])) continue;
+                            // Debug.Log(String.Format("udpSession sending {0} to punched peer {1}", toSendObj, peerUdpEndPointList[i]));
+                            await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[i]);
+                            if (1 == Interlocked.Read(ref peerUdpEndPointPunched[i])) {
+                                successPeerCnt++;
+                            }
+                        }
+
+                        if (successPeerCnt + 1 < roomCapacity) {
+                            // Debug.Log(String.Format("udpSession sending {0} to UdpTunnel {1}", toSendObj, peerUdpEndPointList[shared.Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]));
+                            await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
+                        }
                     }
                 }
             }
