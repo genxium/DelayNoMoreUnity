@@ -1,5 +1,7 @@
 # Latest tag change notes
-v1.3.5 new features
+v1.3.6 new features
+- Fixes for force-resync
+- Fixes for a few `cancel-and-rejoin` cases in online arena
 - Refactored UI for better login flow and inventory-btnB feature 
 
 v1.3.4 new features
