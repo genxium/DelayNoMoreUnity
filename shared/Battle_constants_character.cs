@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 namespace shared {
     public partial class Battle {
         public const int SPECIES_NONE_CH = -1;
-        public const int SPECIES_KNIFEGIRL = 0;
+        public const int SPECIES_BLADEGIRL = 0;
         public const int SPECIES_SWORDMAN = 1;
         public const int SPECIES_MONKGIRL = 2;
         public const int SPECIES_FIRESWORDMAN = 3;
@@ -27,9 +27,9 @@ namespace shared {
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
                 new[]
                 {
-                    new KeyValuePair<int, CharacterConfig>(SPECIES_KNIFEGIRL, new CharacterConfig {
-                        SpeciesId = SPECIES_KNIFEGIRL,
-                        SpeciesName = "KnifeGirl",
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_BLADEGIRL, new CharacterConfig {
+                        SpeciesId = SPECIES_BLADEGIRL,
+                        SpeciesName = "BladeGirl",
                         Hp = 200,
                         Mp = 60*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty 
                         InAirIdleFrameIdxTurningPoint = 11,
@@ -52,32 +52,22 @@ namespace shared {
                         VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeY = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        HasTurnAroundAnim = true,
+                        HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
-                        InitInventorySlots = new List<InventorySlot> {
-                            new InventorySlot {
-                                StockType = InventorySlotStockType.TimedIv,
-                                Quota = 1,
-                                FramesToRecover = 0,
-                                DefaultQuota = 1,
-                                DefaultFramesToRecover = 1800,
-                                BuffSpeciesId = XformToSuperKnifeGirl.SpeciesId,
-                                SkillId = NO_SKILL,
-                            }
-                        }, 
-                        DefaultAirDashQuota = 5, // Virtually unlimited
+                        DefaultAirDashQuota = 1,
+                        DefaultAirJumpQuota = 1
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_SWORDMAN, new CharacterConfig {

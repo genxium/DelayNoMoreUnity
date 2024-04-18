@@ -232,6 +232,7 @@ namespace shared {
             InAirIdle1ByJump,
             InAirIdle1ByWallJump,
             InAirAtk1,
+            InAirAtk2,
             InAirAtked1,
             BlownUp1,
             OnWallIdle1,

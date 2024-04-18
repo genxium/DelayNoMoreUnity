@@ -18,19 +18,20 @@ enum CharacterState {
 	Atked1 = 3;
 	InAirIdle1NoJump = 4;
 	InAirIdle1ByJump = 5;
-	InAirIdle1ByWallJump = 6;
-	InAirAtked1 = 7;
+	InAirIdle2ByJump = 6;
+	InAirIdle1ByWallJump = 7;
+	InAirAtked1 = 8;
 
-	BlownUp1 = 8;
-	LayDown1 = 9;
-	GetUp1 = 10;
-	Dying = 11;
+	BlownUp1 = 9;
+	LayDown1 = 10;
+	GetUp1 = 11;
+	Dying = 12;
 
-	Dashing = 12;
-	Sliding = 13;
+	Dashing = 13;
+	Sliding = 14;
    
-    Dimmed = 14; // Pre-activated state for evtsub-based NPC 
-    TransformingInto = 15; // When at this state, the character has already completed transform, i.e. in new speciesId
+    Dimmed = 15; // Pre-activated state for evtsub-based NPC 
+    TransformingInto = 16; // When at this state, the character has already completed transform, i.e. in new speciesId
 
 	OnWallIdle1 = 128; 
     
