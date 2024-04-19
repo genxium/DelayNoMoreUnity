@@ -442,6 +442,7 @@ namespace shared {
                         thatCharacterInNextFrame.CharacterState = InAirIdle2ByJump;
                         thatCharacterInNextFrame.JumpStarted = true;
                         thatCharacterInNextFrame.JumpHolding = true; // For continuity
+                        thatCharacterInNextFrame.RemainingAirJumpQuota = currCharacterDownsync.RemainingAirJumpQuota - 1; 
                         if (!chConfig.IsolatedAirJumpAndDashQuota) {
                             thatCharacterInNextFrame.RemainingAirDashQuota -= 1;
                             if (0 > thatCharacterInNextFrame.RemainingAirDashQuota) {
