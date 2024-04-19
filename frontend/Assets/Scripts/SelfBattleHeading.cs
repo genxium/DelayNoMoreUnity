@@ -26,7 +26,7 @@ public class SelfBattleHeading : MonoBehaviour {
         }
         
         hpBar.SetValueWithoutNotify((float)chd.Hp/ newChConfig.Hp);
-        if (newChConfig.UseInventoryBtnB) {
+        if (0 >= newChConfig.Mp) {
             mpBar.gameObject.SetActive(false);
         } else {
             mpBar.gameObject.SetActive(true);
