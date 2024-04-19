@@ -95,7 +95,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638490503401700725
+  platformSettingsDirtyTick: 638491091005982436
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -126,11 +126,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 617
+      x: 178
+      y: 295
       width: 40
       height: 37
-    spriteID: 53c6f7d2abe2a7c42b78d81560dc49f9
+    spriteID: 288e147f675c80747b9554d3cc624387
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -138,7 +138,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 617}
+    uvTransform: {x: 178, y: 295}
   - name: BladeGirl_Frame_1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -146,11 +146,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 662
+      x: 178
+      y: 340
       width: 40
       height: 37
-    spriteID: c99d57998286b3249a00be3fe5e1c590
+    spriteID: 2f3b1e92888fddb459326b9256abe0ad
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -158,7 +158,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 662}
+    uvTransform: {x: 178, y: 340}
   - name: BladeGirl_Frame_2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -166,11 +166,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 571
+      x: 178
+      y: 249
       width: 39
       height: 38
-    spriteID: 82b81a2b6f29b3f4292f27b9fafa4d74
+    spriteID: 95dae6b1553b88a4580a23c1bc71d996
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -178,7 +178,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 571}
+    uvTransform: {x: 178, y: 249}
   - name: BladeGirl_Frame_3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -186,11 +186,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 977
+      x: 178
+      y: 111
       width: 40
       height: 38
-    spriteID: d2cde32e1c361c14db821266cfb1ae16
+    spriteID: 6048c837f7bcfcf4cbda6fae08dd3c3e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -198,7 +198,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 977}
+    uvTransform: {x: 178, y: 111}
   - name: BladeGirl_Frame_4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -206,11 +206,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 255
+      x: 178
+      y: 157
       width: 40
       height: 38
-    spriteID: 266d1a96d435e3e4ebb51cc161df12a7
+    spriteID: 912bc652c6bd1c545be336e72ee69a89
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -218,7 +218,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 255}
+    uvTransform: {x: 178, y: 157}
   - name: BladeGirl_Frame_5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -226,11 +226,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 301
+      x: 178
+      y: 203
       width: 40
       height: 38
-    spriteID: 01a2ff37b2717e64f9315680aa5ba4dd
+    spriteID: ded3dffba2708d24db03be38709a7160
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -238,7 +238,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 301}
+    uvTransform: {x: 178, y: 203}
   - name: BladeGirl_Frame_6
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -246,11 +246,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 707
+      x: 178
+      y: 385
       width: 40
       height: 37
-    spriteID: 79bdbc55546887848be300fc44393bb4
+    spriteID: acbb66b49c7d34d45b5c31e483feab57
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -258,7 +258,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 707}
+    uvTransform: {x: 178, y: 385}
   - name: BladeGirl_Frame_7
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -266,11 +266,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 366
+      x: 178
+      y: 790
       width: 39
       height: 37
-    spriteID: fca63620bb2eb51459ca155c0984cf09
+    spriteID: c18c485c75db9924898dcba2e74d05ae
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -278,7 +278,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 366}
+    uvTransform: {x: 178, y: 790}
   - name: BladeGirl_Frame_8
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -286,11 +286,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 139
-      y: 490
+      x: 327
+      y: 529
       width: 31
       height: 35
-    spriteID: a1737a83d96c81e4aae9643fd7ba58ba
+    spriteID: 647a799948896414d86a4e1728029d8a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -298,7 +298,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 139, y: 490}
+    uvTransform: {x: 327, y: 529}
   - name: BladeGirl_Frame_9
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -306,11 +306,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 977
+      x: 327
+      y: 872
       width: 33
       height: 31
-    spriteID: 38a5d2347ef388d478e8009ae619e54f
+    spriteID: d52c21478f12fd44ca7e5737fcc2b974
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -318,7 +318,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 977}
+    uvTransform: {x: 327, y: 872}
   - name: BladeGirl_Frame_10
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -326,11 +326,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 887
+      x: 327
+      y: 408
       width: 33
       height: 33
-    spriteID: 42169dd571a551a42aed3e23875c3934
+    spriteID: 51b73cd94ed88374d845ab3f0adef706
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -338,7 +338,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 887}
+    uvTransform: {x: 327, y: 408}
   - name: BladeGirl_Frame_11
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -346,11 +346,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 49
-      y: 727
+      x: 327
+      y: 738
       width: 29
       height: 36
-    spriteID: 583f47886fd06e74a8a4f35163b87144
+    spriteID: a82fe02a91de0bf4ebaa9fce8c18411c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -358,7 +358,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 49, y: 727}
+    uvTransform: {x: 327, y: 738}
   - name: BladeGirl_Frame_12
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -366,11 +366,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 772
+      x: 326
+      y: 41
       width: 37
       height: 35
-    spriteID: 112b62fdcc7e86f4c817183fe21fff1f
+    spriteID: cacb26c1c6617664b9bc1fcb36ade372
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -378,7 +378,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 772}
+    uvTransform: {x: 326, y: 41}
   - name: BladeGirl_Frame_13
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -386,11 +386,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 983
+      x: 327
+      y: 572
       width: 35
       height: 31
-    spriteID: 855385667a3edf643ba53afc44779407
+    spriteID: 6efff7ab1260e5546be0c516c3317f71
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -398,7 +398,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 983}
+    uvTransform: {x: 327, y: 572}
   - name: BladeGirl_Frame_14
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -406,11 +406,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 49
-      y: 827
+      x: 327
+      y: 911
       width: 31
       height: 33
-    spriteID: ab39fd18dd1c08942b1a7252abe13af6
+    spriteID: 42f68901955b38749a4af32901f6d8d9
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -418,7 +418,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 49, y: 827}
+    uvTransform: {x: 327, y: 911}
   - name: BladeGirl_Frame_15
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -426,11 +426,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 49
-      y: 777
+      x: 327
+      y: 782
       width: 29
       height: 36
-    spriteID: b8891e22a2ae12e4f8d873659fda8a5f
+    spriteID: 0ac0d6adb78e2324faff8fccf4857852
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -438,7 +438,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 49, y: 777}
+    uvTransform: {x: 327, y: 782}
   - name: BladeGirl_Frame_16
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -446,11 +446,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 452
+      x: 275
+      y: 493
       width: 40
       height: 34
-    spriteID: 1c49faf56106d994498b7b1291d9a0d4
+    spriteID: e38fe05abe5d8714eb2ed65e69a4a569
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -458,7 +458,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 452}
+    uvTransform: {x: 275, y: 493}
   - name: BladeGirl_Frame_17
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -466,11 +466,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 410
+      x: 275
+      y: 451
       width: 41
       height: 34
-    spriteID: 858c909401c1fd843a5ceed1cad60630
+    spriteID: 85e7b5cc66c5fd3478dd3d0d51b528ae
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -478,7 +478,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 410}
+    uvTransform: {x: 275, y: 451}
   - name: BladeGirl_Frame_18
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -486,11 +486,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 494
+      x: 275
+      y: 535
       width: 40
       height: 34
-    spriteID: c056b6b109ac6c646b6df911dff7b563
+    spriteID: 39f1dbd7a856bf7479550affa29b8c9a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -498,7 +498,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 494}
+    uvTransform: {x: 275, y: 535}
   - name: BladeGirl_Frame_19
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -506,11 +506,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 536
+      x: 275
+      y: 577
       width: 40
       height: 34
-    spriteID: ab646f2847ba2dc48a9def642d54aa6b
+    spriteID: 9a8f8218899065a449e9d07080240d62
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -518,7 +518,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 536}
+    uvTransform: {x: 275, y: 577}
   - name: BladeGirl_Frame_20
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -526,11 +526,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 683
+      x: 88
+      y: 978
       width: 36
       height: 37
-    spriteID: 6c8b4ac1aca9b424f80f95dfa43e295b
+    spriteID: b61a0a089549e3f4aac4ab9c86fe7e19
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -538,7 +538,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 683}
+    uvTransform: {x: 88, y: 978}
   - name: BladeGirl_Frame_21
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -546,11 +546,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 727
+      x: 88
+      y: 394
       width: 37
       height: 42
-    spriteID: 6c5f6eca6b1259740858af7ed7dbf83a
+    spriteID: a0470f25dfabbd74e91fc31fa8afcfc0
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -558,7 +558,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 727}
+    uvTransform: {x: 88, y: 394}
   - name: BladeGirl_Frame_22
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -566,11 +566,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 777
+      x: 88
+      y: 444
       width: 37
       height: 42
-    spriteID: 6d5deba0b657c9640b6034b79656eb21
+    spriteID: f5f23cfcb3c78fe458d82e1121cec023
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -578,7 +578,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 777}
+    uvTransform: {x: 88, y: 444}
   - name: BladeGirl_Frame_23
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -587,10 +587,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 88
-      y: 347
+      y: 694
       width: 37
       height: 41
-    spriteID: 8efc4b22bbf928a4fa2b26804c92eb05
+    spriteID: bda19a91cb822df41a66f7378ea4e1e4
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -598,7 +598,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 347}
+    uvTransform: {x: 88, y: 694}
   - name: BladeGirl_Frame_24
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -606,11 +606,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 827
+      x: 88
+      y: 494
       width: 37
       height: 42
-    spriteID: fbf44aa9c5e02d74c93f13e2cd82cc79
+    spriteID: 337d05e45c9457148a91f4d61ecf20b8
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -618,7 +618,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 827}
+    uvTransform: {x: 88, y: 494}
   - name: BladeGirl_Frame_25
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -626,11 +626,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 752
+      x: 178
+      y: 430
       width: 40
       height: 37
-    spriteID: 91b7ff320e94c5c4b926a31c685a0dc8
+    spriteID: 609218d5019a23548a2b1644bbdb04ca
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -638,7 +638,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 752}
+    uvTransform: {x: 178, y: 430}
   - name: BladeGirl_Frame_26
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -646,11 +646,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 629
+      x: 88
+      y: 296
       width: 43
       height: 38
-    spriteID: c558331a31ef3e5468cdfcd44265e2e9
+    spriteID: 5d24e77f789c2c04f964aff44544cd0e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -658,7 +658,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 629}
+    uvTransform: {x: 88, y: 296}
   - name: BladeGirl_Frame_27
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -670,7 +670,7 @@ ScriptedImporter:
       y: 4
       width: 89
       height: 54
-    spriteID: 7bc228c4acb752a44bd90424398fa1b6
+    spriteID: 06ea0d7b17eaced488ba7a11c151c818
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -687,10 +687,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 360
+      y: 508
       width: 70
       height: 51
-    spriteID: ec6c476aff8414e448f504afc05b6306
+    spriteID: 3b4150bd7eab68848bb41833d2833275
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -698,7 +698,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 360}
+    uvTransform: {x: 4, y: 508}
   - name: BladeGirl_Frame_29
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -706,11 +706,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 533
+      x: 275
+      y: 84
       width: 50
       height: 30
-    spriteID: 6fe2f8e6f2989bf4c89d8ab0843f5bc2
+    spriteID: b6680ff79df805b41ab3abec82d1e670
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -718,7 +718,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 533}
+    uvTransform: {x: 275, y: 84}
   - name: BladeGirl_Frame_30
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -730,7 +730,7 @@ ScriptedImporter:
       y: 675
       width: 26
       height: 44
-    spriteID: d1b4ce4534cc0a24cae3077cceee0ea4
+    spriteID: df7766c987a4eff41b47ffb5115f8130
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -747,10 +747,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 167
+      y: 249
       width: 74
       height: 54
-    spriteID: b43ebb9915e1c8343a7300ea5f774c4c
+    spriteID: 7cd4ca38b4439b3489093abc47e3c80d
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -758,7 +758,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 167}
+    uvTransform: {x: 4, y: 249}
   - name: BladeGirl_Frame_32
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -770,7 +770,7 @@ ScriptedImporter:
       y: 72
       width: 79
       height: 48
-    spriteID: 6a3765a2c8e7636438b18de34c6b0621
+    spriteID: b51d90761f2b1274fb47c2d4b14a162b
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -787,10 +787,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 327
-      y: 161
+      y: 242
       width: 36
       height: 31
-    spriteID: 8c1d8c51d60cbfe44944f728ac505d80
+    spriteID: d2eba9cf34f5cb4498cc6cb77b66bab3
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -798,7 +798,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 327, y: 161}
+    uvTransform: {x: 327, y: 242}
   - name: BladeGirl_Frame_34
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -806,11 +806,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 52
-      y: 977
+      x: 327
+      y: 826
       width: 27
       height: 38
-    spriteID: 767ce7ed37094a24f96192640a347a73
+    spriteID: 697b35c1cff24364893cbeb4d8406418
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -818,7 +818,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 52, y: 977}
+    uvTransform: {x: 327, y: 826}
   - name: BladeGirl_Frame_35
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -826,11 +826,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 675
+      x: 88
+      y: 342
       width: 37
       height: 44
-    spriteID: c43f788e3e586734ab810a1bc889b9d9
+    spriteID: c0ffaaf157475124d8a94eed42f88003
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -838,7 +838,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 675}
+    uvTransform: {x: 88, y: 342}
   - name: BladeGirl_Frame_36
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -847,10 +847,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 49
-      y: 463
+      y: 611
       width: 29
       height: 46
-    spriteID: 0e27c06d509636f4b9e23848816cd25e
+    spriteID: 40c495aee85703143927a97023ebedee
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -858,7 +858,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 49, y: 463}
+    uvTransform: {x: 49, y: 611}
   - name: BladeGirl_Frame_37
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -870,7 +870,7 @@ ScriptedImporter:
       y: 4
       width: 82
       height: 60
-    spriteID: b664a18175f1a764581cf00eb50bdeb6
+    spriteID: f4128aba12af3eb4b95376010172f6a5
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -890,7 +890,7 @@ ScriptedImporter:
       y: 66
       width: 84
       height: 37
-    spriteID: 53ea1e1d187de4f43a2048121758ff9c
+    spriteID: a93063cce92d2a142baed8b5823dcaab
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -907,10 +907,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 41
+      y: 122
       width: 49
       height: 30
-    spriteID: 921d48e46a7a0b745aeef4ff424089f9
+    spriteID: 4168102109bbca24d914b391ab70dcfb
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -918,7 +918,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 41}
+    uvTransform: {x: 275, y: 122}
   - name: BladeGirl_Frame_40
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -927,10 +927,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 327
-      y: 243
+      y: 324
       width: 38
       height: 29
-    spriteID: 111c3ff425c73704ea04d9953629ceb6
+    spriteID: 84f5501eb53701049b05105b2305248b
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -938,7 +938,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 327, y: 243}
+    uvTransform: {x: 327, y: 324}
   - name: BladeGirl_Frame_41
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -947,10 +947,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 327
-      y: 202
+      y: 283
       width: 36
       height: 31
-    spriteID: 5a6ef0d418da62348b5237659471eb5d
+    spriteID: afb273d395fb7be4ba5eebfafa3c6b7e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -958,7 +958,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 327, y: 202}
+    uvTransform: {x: 327, y: 283}
   - name: BladeGirl_Frame_42
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -967,10 +967,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 79
+      y: 160
       width: 44
       height: 33
-    spriteID: 1c0bbd1006fd5f546be50bbc1675854d
+    spriteID: c9f87b731e48dec48a7cfc765b549126
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -978,7 +978,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 79}
+    uvTransform: {x: 275, y: 160}
   - name: BladeGirl_Frame_43
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -986,11 +986,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 411
+      x: 178
+      y: 835
       width: 39
       height: 37
-    spriteID: 94a9a82e394eeba40a9e340aaa4e2fa9
+    spriteID: dda4def50f33bff4a8a5e64c86c44506
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -998,7 +998,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 411}
+    uvTransform: {x: 178, y: 835}
   - name: BladeGirl_Frame_44
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1006,11 +1006,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 797
+      x: 178
+      y: 475
       width: 40
       height: 37
-    spriteID: 4b1c5f55f4d7e3e47a98d52de538beb0
+    spriteID: 587ac33b7eeb4a64390249f6d4ce69d0
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1018,7 +1018,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 797}
+    uvTransform: {x: 178, y: 475}
   - name: BladeGirl_Frame_45
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1026,11 +1026,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 592
+      x: 88
+      y: 887
       width: 37
       height: 37
-    spriteID: dfc6936447bbc424c920a4493a5096fa
+    spriteID: 43a0dbe7dae90fd4b9a84e5202e2653f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1038,7 +1038,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 592}
+    uvTransform: {x: 88, y: 887}
   - name: BladeGirl_Frame_46
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1046,11 +1046,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 617
+      x: 275
+      y: 784
       width: 34
       height: 37
-    spriteID: 0fa1c66177aefbb4d9597539ef480c4e
+    spriteID: cdb6fac94c86af94eb9b785c706cd84f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1058,7 +1058,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 617}
+    uvTransform: {x: 275, y: 784}
   - name: BladeGirl_Frame_47
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1066,11 +1066,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 815
+      x: 45
+      y: 945
       width: 35
       height: 37
-    spriteID: 092a3aa43393a714487e0d3f01241732
+    spriteID: b1655dcad279183449a56c14f7238ef6
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1078,7 +1078,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 815}
+    uvTransform: {x: 45, y: 945}
   - name: BladeGirl_Frame_48
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1087,10 +1087,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 373
-      y: 146
+      y: 109
       width: 46
       height: 25
-    spriteID: f27193925eb2c3a46be78b22aa558216
+    spriteID: 5b769d9a9042e414bb96d8780a4c1aa3
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1098,7 +1098,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 373, y: 146}
+    uvTransform: {x: 373, y: 109}
   - name: BladeGirl_Frame_49
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1107,10 +1107,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 373
-      y: 111
+      y: 74
       width: 45
       height: 27
-    spriteID: c68279e2266963f4cac508561c94c65d
+    spriteID: 2b98aa2b766739e4b8b0edfb6f9b887d
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1118,7 +1118,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 373, y: 111}
+    uvTransform: {x: 373, y: 74}
   - name: BladeGirl_Frame_50
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1127,10 +1127,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 373
-      y: 76
+      y: 39
       width: 47
       height: 27
-    spriteID: 35af8cd6110aebb4192f103aa1621f3f
+    spriteID: f4fa5144a50fef0459493a5eac890913
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1138,7 +1138,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 373, y: 76}
+    uvTransform: {x: 373, y: 39}
   - name: BladeGirl_Frame_51
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1150,7 +1150,7 @@ ScriptedImporter:
       y: 4
       width: 48
       height: 27
-    spriteID: ee551108190d64c42817d44541703cf9
+    spriteID: 89ac00d275ea4ef45ad56212d4111008
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1167,10 +1167,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 373
-      y: 210
+      y: 173
       width: 47
       height: 22
-    spriteID: 10db6813af213ff48a95ee4c105a402e
+    spriteID: f2ae85f06e92c0b47a9a76b8fe624f47
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1178,7 +1178,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 373, y: 210}
+    uvTransform: {x: 373, y: 173}
   - name: BladeGirl_Frame_53
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1190,7 +1190,7 @@ ScriptedImporter:
       y: 35
       width: 52
       height: 12
-    spriteID: 7f8bbd2980f2e224b806ec20d2b0ac34
+    spriteID: 631cf4be66c76bb489fe8e45f892ce3b
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1210,7 +1210,7 @@ ScriptedImporter:
       y: 55
       width: 51
       height: 11
-    spriteID: db4c89526a8710746969efa776546ab5
+    spriteID: e19765e15702933418928663feaaede5
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1226,11 +1226,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 842
+      x: 178
+      y: 520
       width: 40
       height: 37
-    spriteID: 956744773cc685b4d83ec2583d2f342c
+    spriteID: 5923b3fc706585c40a30efc62213bf6a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1238,7 +1238,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 842}
+    uvTransform: {x: 178, y: 520}
   - name: BladeGirl_Frame_56
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1246,11 +1246,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 902
+      x: 327
+      y: 365
       width: 35
       height: 35
-    spriteID: a2324d28b8b3ff0428b47dde562b3280
+    spriteID: 61d9951a05b2e1b40b0da09f6ed70cbc
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1258,7 +1258,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 902}
+    uvTransform: {x: 327, y: 365}
   - name: BladeGirl_Frame_57
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1266,11 +1266,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 301
+      x: 327
+      y: 695
       width: 30
       height: 35
-    spriteID: eddea3282a3b2e44d86348cc986717cc
+    spriteID: 36135bf613e788e48af1e811b744af11
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1278,7 +1278,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 301}
+    uvTransform: {x: 327, y: 695}
   - name: BladeGirl_Frame_58
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1287,10 +1287,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 728
+      y: 703
       width: 37
       height: 36
-    spriteID: a8a9ac45c09210e4da8586d601dc22ed
+    spriteID: df182b7b9f8c47f4eaf1a50a67ae8912
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1298,7 +1298,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 728}
+    uvTransform: {x: 275, y: 703}
   - name: BladeGirl_Frame_59
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1306,11 +1306,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 887
+      x: 178
+      y: 565
       width: 40
       height: 37
-    spriteID: 2c88db8f564ce8b4d86120fb4a801c6c
+    spriteID: 01154a947c4c15f449cae45013294229
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1318,7 +1318,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 887}
+    uvTransform: {x: 178, y: 565}
   - name: BladeGirl_Frame_60
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1326,11 +1326,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 856
+      x: 133
+      y: 484
       width: 26
       height: 32
-    spriteID: 9a51954498e918d49b94c308c65bd98b
+    spriteID: bdda408964b2d814283823e08760b772
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1338,7 +1338,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 856}
+    uvTransform: {x: 133, y: 484}
   - name: BladeGirl_Frame_61
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1346,11 +1346,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 936
+      x: 4
+      y: 991
       width: 32
       height: 25
-    spriteID: 56cc25a760edd49418e5625390951cf8
+    spriteID: 58cb1a770a85d9a4c8f72ffa0a4db37a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1358,7 +1358,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 936}
+    uvTransform: {x: 4, y: 991}
   - name: BladeGirl_Frame_62
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1366,11 +1366,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 896
+      x: 133
+      y: 524
       width: 26
       height: 32
-    spriteID: 4f18ed735ac8683479df56da3c6cc9d4
+    spriteID: 8bc0c9295de966a439b0ba24a8ec271a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1378,7 +1378,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 896}
+    uvTransform: {x: 133, y: 524}
   - name: BladeGirl_Frame_63
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1386,11 +1386,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 932
+      x: 178
+      y: 610
       width: 40
       height: 37
-    spriteID: fd0d4a964e06a6e4a933ae0ec128d8cd
+    spriteID: 55a798b794044c543b12d6b4f01ab746
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1398,7 +1398,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 932}
+    uvTransform: {x: 178, y: 610}
   - name: BladeGirl_Frame_64
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1406,11 +1406,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 588
+      x: 88
+      y: 255
       width: 50
       height: 33
-    spriteID: 6ea6ecb945949b04a9523e27fedf6d7b
+    spriteID: 4066d61f003340840aca8792e0e17f6b
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1418,7 +1418,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 588}
+    uvTransform: {x: 88, y: 255}
   - name: BladeGirl_Frame_65
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1427,10 +1427,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 120
+      y: 201
       width: 44
       height: 33
-    spriteID: efd817d02e7f62d4da4af76f487f14f0
+    spriteID: d08c114609d6386408f28cf7399289b6
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1438,7 +1438,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 120}
+    uvTransform: {x: 275, y: 201}
   - name: BladeGirl_Frame_66
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1447,10 +1447,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 161
+      y: 242
       width: 44
       height: 33
-    spriteID: 258a393236b224c42b2a1db6a6b4d7d6
+    spriteID: 09a012a6bfe01e74b9c1e32b26095499
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1458,7 +1458,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 161}
+    uvTransform: {x: 275, y: 242}
   - name: BladeGirl_Frame_67
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1467,10 +1467,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 202
+      y: 283
       width: 44
       height: 33
-    spriteID: 0796c77a39dd4ec46886bc17e2e3c2da
+    spriteID: 70e993ad38e066d4a871ec3e5ca9a673
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1478,7 +1478,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 202}
+    uvTransform: {x: 275, y: 283}
   - name: BladeGirl_Frame_68
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1487,10 +1487,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 243
+      y: 324
       width: 44
       height: 33
-    spriteID: f3c26ae9a57faca458d76b9e388e57d5
+    spriteID: d3f0028247d9aea4ca89a5cf9585c429
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1498,7 +1498,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 243}
+    uvTransform: {x: 275, y: 324}
   - name: BladeGirl_Frame_69
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1506,11 +1506,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 373
-      y: 39
+      x: 275
+      y: 747
       width: 44
       height: 29
-    spriteID: 880183deaedc1bb4bbd111b50848e613
+    spriteID: d4287befc5e22834e97b823228c3e30d
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1518,7 +1518,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 373, y: 39}
+    uvTransform: {x: 275, y: 747}
   - name: BladeGirl_Frame_70
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1526,11 +1526,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 662
+      x: 275
+      y: 961
       width: 43
       height: 29
-    spriteID: 9fcd29c384696334693e345d26110d87
+    spriteID: 2588f44bb6e4819498b2f64ef7a0db79
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1538,7 +1538,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 662}
+    uvTransform: {x: 275, y: 961}
   - name: BladeGirl_Frame_71
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1546,11 +1546,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 699
+      x: 226
+      y: 156
       width: 40
       height: 31
-    spriteID: 60df591800df68d4494567e3abbf3f4c
+    spriteID: d6dc4c4b8309fcc40a6da25fdb61242a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1558,7 +1558,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 699}
+    uvTransform: {x: 226, y: 156}
   - name: BladeGirl_Frame_72
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1566,11 +1566,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 137
-      y: 396
+      x: 4
+      y: 861
       width: 33
       height: 34
-    spriteID: 5de93049c1313ad418dc40368075aa96
+    spriteID: 29ed7cbc870fb414bb5d40a443e8aade
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1578,7 +1578,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 137, y: 396}
+    uvTransform: {x: 4, y: 861}
   - name: BladeGirl_Frame_73
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1587,10 +1587,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 284
+      y: 365
       width: 44
       height: 33
-    spriteID: 082949b6acd98a84ba7c3b633848ffda
+    spriteID: 7ce7dba8be6c8a442b7e19a8b2612b16
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1598,28 +1598,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 284}
+    uvTransform: {x: 275, y: 365}
   - name: BladeGirl_Frame_74
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 275
-      y: 325
-      width: 44
-      height: 33
-    spriteID: 9b5b487b9affcf1438537af621e75fdc
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 275, y: 325}
-  - name: BladeGirl_Frame_75
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -1630,7 +1610,7 @@ ScriptedImporter:
       y: 4
       width: 90
       height: 29
-    spriteID: 60fa3a9fcbd2642419ef77a2a0dfe18d
+    spriteID: 4575eec5a7c3d7444ba5b25ffc284677
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1639,7 +1619,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 275, y: 4}
-  - name: BladeGirl_Frame_76
+  - name: BladeGirl_Frame_75
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -1650,7 +1630,7 @@ ScriptedImporter:
       y: 215
       width: 82
       height: 32
-    spriteID: 52cc5d0cc5b52c94f9769812b6009b9c
+    spriteID: 2975ba27e672bd942a2648c33eb880eb
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1659,7 +1639,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 88, y: 215}
-  - name: BladeGirl_Frame_77
+  - name: BladeGirl_Frame_76
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -1670,7 +1650,7 @@ ScriptedImporter:
       y: 128
       width: 79
       height: 36
-    spriteID: 1d6bf7ddc6fd81342866e036d1d726d7
+    spriteID: 378c559e9a4cbb147beb62966647f91f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1679,7 +1659,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 88, y: 128}
-  - name: BladeGirl_Frame_78
+  - name: BladeGirl_Frame_77
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -1690,7 +1670,7 @@ ScriptedImporter:
       y: 172
       width: 79
       height: 35
-    spriteID: 22ae144eb29689d47abc040633755eb3
+    spriteID: a152a1de9eceebc49b0fd2dd89c4c077
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1699,7 +1679,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 88, y: 172}
-  - name: BladeGirl_Frame_79
+  - name: BladeGirl_Frame_78
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -1707,10 +1687,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 419
+      y: 567
       width: 75
       height: 36
-    spriteID: d53aacad53b1a5643a21dd3cf8b22730
+    spriteID: 4803fef253d5d5e47a4c2fd35f0bf821
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1718,7 +1698,27 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 419}
+    uvTransform: {x: 4, y: 567}
+  - name: BladeGirl_Frame_79
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 275
+      y: 829
+      width: 37
+      height: 34
+    spriteID: 07a4317671a2f464f9a8cfa0fb1179c8
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 275, y: 829}
   - name: BladeGirl_Frame_80
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1727,10 +1727,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 860
-      width: 37
-      height: 34
-    spriteID: 85e2f2e8842a7f34ebe13ed4190bcd2b
+      y: 41
+      width: 43
+      height: 35
+    spriteID: b53baa1d0400ae040b4e8e0318ed4374
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1738,7 +1738,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 860}
+    uvTransform: {x: 275, y: 41}
   - name: BladeGirl_Frame_81
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1746,11 +1746,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 490
-      width: 43
-      height: 35
-    spriteID: 098d773c830608f43a936f54299a1c35
+      x: 178
+      y: 655
+      width: 40
+      height: 37
+    spriteID: 96849dece42ccde4c8acb2c99d4fef4d
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1758,7 +1758,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 490}
+    uvTransform: {x: 178, y: 655}
   - name: BladeGirl_Frame_82
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1766,31 +1766,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 977
-      width: 40
-      height: 37
-    spriteID: a77fef1ef75c3d14d96bd30f6a3fe44e
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 88, y: 977}
-  - name: BladeGirl_Frame_83
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
       x: 178
-      y: 111
+      y: 700
       width: 40
       height: 37
-    spriteID: bc206f8603b5395429bc0464bc28b262
+    spriteID: 3667ef737f373dc45a1eeca3afbb5515
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1798,8 +1778,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 178, y: 111}
-  - name: BladeGirl_Frame_84
+    uvTransform: {x: 178, y: 700}
+  - name: BladeGirl_Frame_83
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -1810,7 +1790,7 @@ ScriptedImporter:
       y: 4
       width: 49
       height: 23
-    spriteID: 2d1bca5b38df0924dac835a08f904b0d
+    spriteID: e2f53ea5bb7a8a04dac958cf7d883d4f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1819,7 +1799,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 429, y: 4}
-  - name: BladeGirl_Frame_85
+  - name: BladeGirl_Frame_84
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -1827,10 +1807,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 373
-      y: 179
+      y: 142
       width: 47
       height: 23
-    spriteID: 9a5c3847b06668746b2ca2ac23cbecdf
+    spriteID: 21aaaec57298a534cade32df34ad5759
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1838,7 +1818,27 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 373, y: 179}
+    uvTransform: {x: 373, y: 142}
+  - name: BladeGirl_Frame_85
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 226
+      y: 195
+      width: 39
+      height: 30
+    spriteID: 9a1abed541388cb4cbe3a92a5886d560
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 226, y: 195}
   - name: BladeGirl_Frame_86
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1846,11 +1846,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 945
-      width: 39
+      x: 327
+      y: 160
+      width: 38
       height: 30
-    spriteID: e35a70661e3197f4db9ca3bffafe666a
+    spriteID: e102f870111b64e40a8dee06692fd92e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1858,7 +1858,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 945}
+    uvTransform: {x: 327, y: 160}
   - name: BladeGirl_Frame_87
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1866,11 +1866,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 327
-      y: 79
-      width: 38
-      height: 30
-    spriteID: 705e9cf563a20b34f9e922ac0fa35acf
+      x: 139
+      y: 296
+      width: 31
+      height: 36
+    spriteID: 0a6acb1f37e27de458bff1891e180980
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1878,7 +1878,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 327, y: 79}
+    uvTransform: {x: 139, y: 296}
   - name: BladeGirl_Frame_88
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1886,11 +1886,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 752
+      x: 4
+      y: 903
       width: 31
       height: 36
-    spriteID: 9b3b108096aa5934d8e3c8525f3f7c19
+    spriteID: 98994320717a7f14aac0801d74d57b43
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1898,7 +1898,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 752}
+    uvTransform: {x: 4, y: 903}
   - name: BladeGirl_Frame_89
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1906,11 +1906,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 797
+      x: 4
+      y: 947
       width: 31
       height: 36
-    spriteID: 17519364ec4f6f74c95b6f27d9760c1e
+    spriteID: 4627cbabcc49694488256d48ff9953fa
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1918,7 +1918,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 797}
+    uvTransform: {x: 4, y: 947}
   - name: BladeGirl_Frame_90
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1926,11 +1926,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 842
-      width: 31
+      x: 327
+      y: 611
+      width: 30
       height: 36
-    spriteID: 521f832e77a1b16429d88694fb5a843d
+    spriteID: 715ec55038c7e4b48bacb3ab342788b5
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1938,7 +1938,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 842}
+    uvTransform: {x: 327, y: 611}
   - name: BladeGirl_Frame_91
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1946,11 +1946,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 932
-      width: 30
-      height: 36
-    spriteID: 40744afc5eb52224db154848ae69d56c
+      x: 275
+      y: 871
+      width: 34
+      height: 37
+    spriteID: d945848292bc7574cbd5371225f6cb68
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1958,7 +1958,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 932}
+    uvTransform: {x: 275, y: 871}
   - name: BladeGirl_Frame_92
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1966,11 +1966,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 662
+      x: 275
+      y: 916
       width: 34
       height: 37
-    spriteID: da12070b7c76aea4eb4a07830b4b1739
+    spriteID: cbc5ceab64dc75546b3537cc062daadc
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1978,7 +1978,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 662}
+    uvTransform: {x: 275, y: 916}
   - name: BladeGirl_Frame_93
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1986,11 +1986,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 707
-      width: 34
-      height: 37
-    spriteID: f777c822b131a0c4eaf8c6b8372af517
+      x: 45
+      y: 899
+      width: 35
+      height: 38
+    spriteID: 120515028bec90c45aa4a1979bf36ccf
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -1998,7 +1998,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 707}
+    uvTransform: {x: 45, y: 899}
   - name: BladeGirl_Frame_94
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2006,11 +2006,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 135
-      y: 571
-      width: 35
+      x: 178
+      y: 969
+      width: 37
       height: 38
-    spriteID: cbf81ac81921ed740b190e4f29dcfe0e
+    spriteID: d853494520759354f85a65c532ea3caa
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2018,7 +2018,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 135, y: 571}
+    uvTransform: {x: 178, y: 969}
   - name: BladeGirl_Frame_95
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2026,11 +2026,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 133
-      y: 441
-      width: 37
-      height: 38
-    spriteID: a606825a194b99c40b651d039023fcff
+      x: 178
+      y: 880
+      width: 39
+      height: 37
+    spriteID: 357b2cc11a68baa4aaa4ea16d1c02be6
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2038,7 +2038,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 133, y: 441}
+    uvTransform: {x: 178, y: 880}
   - name: BladeGirl_Frame_96
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2047,10 +2047,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 456
-      width: 39
+      y: 406
+      width: 38
       height: 37
-    spriteID: 65e69b6afa27f9e4b8dcebb983bd45b7
+    spriteID: 5082a9178343bd04ea390718c67be381
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2058,7 +2058,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 456}
+    uvTransform: {x: 275, y: 406}
   - name: BladeGirl_Frame_97
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2066,11 +2066,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 501
-      width: 38
-      height: 37
-    spriteID: 444a0b648000bbb4b84ce946d1a571d0
+      x: 88
+      y: 841
+      width: 37
+      height: 38
+    spriteID: 6f73188d31b39874585a41f162b9bfb0
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2078,7 +2078,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 501}
+    uvTransform: {x: 88, y: 841}
   - name: BladeGirl_Frame_98
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2086,11 +2086,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 275
-      y: 546
-      width: 37
+      x: 88
+      y: 932
+      width: 36
       height: 38
-    spriteID: 9d7c8b4f642105e47a499ab2db4e57e9
+    spriteID: 73fa31fbc2112d9498c8c5a19d198ef6
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2098,7 +2098,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 546}
+    uvTransform: {x: 88, y: 932}
   - name: BladeGirl_Frame_99
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2107,10 +2107,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 275
-      y: 637
-      width: 36
-      height: 38
-    spriteID: 09840f6bb8f197140bef9f70a6604e93
+      y: 619
+      width: 40
+      height: 34
+    spriteID: f706df801499f2d4ca5d0b8935de7962
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2118,7 +2118,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 275, y: 637}
+    uvTransform: {x: 275, y: 619}
   - name: BladeGirl_Frame_100
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2126,11 +2126,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 578
-      width: 40
-      height: 34
-    spriteID: 61bcf43ef0a61c34c8b49eda4c5191ec
+      x: 327
+      y: 952
+      width: 31
+      height: 33
+    spriteID: f858fe2010d9eb440a2cc3eddc89271e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2138,7 +2138,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 578}
+    uvTransform: {x: 327, y: 952}
   - name: BladeGirl_Frame_101
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2146,11 +2146,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 49
-      y: 877
-      width: 31
-      height: 33
-    spriteID: 5259a97d3ca92eb42951e12c786b80e2
+      x: 4
+      y: 168
+      width: 76
+      height: 73
+    spriteID: 66f3a4ee251808b4091dca4065a61c85
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2158,7 +2158,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 49, y: 877}
+    uvTransform: {x: 4, y: 168}
   - name: BladeGirl_Frame_102
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2167,10 +2167,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 86
-      width: 76
-      height: 73
-    spriteID: 470ec1dc30b861f439fbac4210609757
+      y: 311
+      width: 70
+      height: 57
+    spriteID: d5913d8132b117943be7d347f426e711
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2178,7 +2178,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 86}
+    uvTransform: {x: 4, y: 311}
   - name: BladeGirl_Frame_103
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2187,10 +2187,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 229
-      width: 70
-      height: 57
-    spriteID: 52b0a69085f1e9947b20bb0bbd9b3c53
+      y: 611
+      width: 37
+      height: 56
+    spriteID: 080650a6875e85142aec89abcc13863e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2198,7 +2198,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 229}
+    uvTransform: {x: 4, y: 611}
   - name: BladeGirl_Frame_104
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2206,31 +2206,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 463
-      width: 37
-      height: 56
-    spriteID: 67fefb0e2f1e4264e909ecb8791b79e2
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 463}
-  - name: BladeGirl_Frame_105
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 322
-      y: 774
+      x: 133
+      y: 384
       width: 22
       height: 42
-    spriteID: 781ec8db6482cfa42b23d88efc53596e
+    spriteID: 821083bb417d2b04a9416c0895a2b6f9
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2238,8 +2218,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 774}
-  - name: BladeGirl_Frame_106
+    uvTransform: {x: 133, y: 384}
+  - name: BladeGirl_Frame_105
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -2250,7 +2230,7 @@ ScriptedImporter:
       y: 4
       width: 76
       height: 74
-    spriteID: 3c2c3ff102721d14a85a0e4538416f80
+    spriteID: 5d0441400332235418cc7ef6ea5d506a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2259,6 +2239,26 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: BladeGirl_Frame_106
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 376
+      width: 67
+      height: 58
+    spriteID: 442522e96f64cc841ba89b20dccee798
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 376}
   - name: BladeGirl_Frame_107
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2267,10 +2267,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 294
-      width: 67
-      height: 58
-    spriteID: 14bcae5890abc364b95c5f92e30c82b9
+      y: 739
+      width: 33
+      height: 53
+    spriteID: cb71a46d9b9eb4a4e926babee962e927
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2278,7 +2278,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 294}
+    uvTransform: {x: 4, y: 739}
   - name: BladeGirl_Frame_108
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2286,11 +2286,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 527
-      width: 33
-      height: 53
-    spriteID: 769bc3e15875fe14e92f80fc2f1ea270
+      x: 45
+      y: 739
+      width: 34
+      height: 47
+    spriteID: 1953580ec0ec62d4d8b0498b26b49872
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2298,7 +2298,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 527}
+    uvTransform: {x: 45, y: 739}
   - name: BladeGirl_Frame_109
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2306,11 +2306,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 45
-      y: 527
-      width: 34
-      height: 47
-    spriteID: 558757fff1317f84e8c5d41a864e17d7
+      x: 88
+      y: 544
+      width: 37
+      height: 42
+    spriteID: 5ddd5f72921123c4d9590993fd7495f5
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2318,7 +2318,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 45, y: 527}
+    uvTransform: {x: 88, y: 544}
   - name: BladeGirl_Frame_110
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2327,10 +2327,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 877
+      y: 675
       width: 37
-      height: 42
-    spriteID: 7f62680924b3ea84c9f06b16cb88c11a
+      height: 56
+    spriteID: a370e83fb0ed8824884dea931f7b6653
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2338,7 +2338,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 877}
+    uvTransform: {x: 4, y: 675}
   - name: BladeGirl_Frame_111
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2346,11 +2346,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 927
-      width: 37
+      x: 133
+      y: 434
+      width: 22
       height: 42
-    spriteID: 8539ac3f8e341ee47b77d61bc09398d8
+    spriteID: d1e11ed886e10f14c861d301a3b4d46c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2358,7 +2358,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 927}
+    uvTransform: {x: 133, y: 434}
   - name: BladeGirl_Frame_112
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2366,11 +2366,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 396
-      width: 41
-      height: 37
-    spriteID: bd3accdc09dd0b045b6472d48ddf97b1
+      x: 4
+      y: 86
+      width: 76
+      height: 74
+    spriteID: d1066eda3d3e33344a34a5bf6c806727
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2378,7 +2378,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 396}
+    uvTransform: {x: 4, y: 86}
   - name: BladeGirl_Frame_113
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2386,11 +2386,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 332
-      y: 41
-      width: 30
-      height: 28
-    spriteID: 7576c963567b551479293c4e57ca2bdc
+      x: 4
+      y: 442
+      width: 67
+      height: 58
+    spriteID: 914c28bc6c3e6ea43b621a8786bc680d
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2398,7 +2398,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 332, y: 41}
+    uvTransform: {x: 4, y: 442}
   - name: BladeGirl_Frame_114
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2406,11 +2406,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 824
-      width: 36
-      height: 24
-    spriteID: ceb96e2bfcc90bb46b5d391a3daab83e
+      x: 4
+      y: 800
+      width: 33
+      height: 53
+    spriteID: 781fd88ddaddaf248baf0a86b6ffe095
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2418,7 +2418,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 824}
+    uvTransform: {x: 4, y: 800}
   - name: BladeGirl_Frame_115
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2426,11 +2426,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 738
+      x: 45
+      y: 794
       width: 34
-      height: 28
-    spriteID: 25a597dc382d4474aa66b6dd79d97486
+      height: 47
+    spriteID: 3baaa4a11477c2e46818aa139d47a106
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2438,7 +2438,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 738}
+    uvTransform: {x: 45, y: 794}
   - name: BladeGirl_Frame_116
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2446,11 +2446,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 49
-      y: 927
-      width: 29
-      height: 34
-    spriteID: 4754c5c4776be014699c82f69eba5665
+      x: 88
+      y: 594
+      width: 37
+      height: 42
+    spriteID: 69b7274b9ed5a474db64e37828f323d9
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2458,7 +2458,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 49, y: 927}
+    uvTransform: {x: 88, y: 594}
   - name: BladeGirl_Frame_117
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2466,11 +2466,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 620
-      width: 40
-      height: 34
-    spriteID: ce205720e0cefaf42b47cafd5d9ccaaf
+      x: 88
+      y: 644
+      width: 37
+      height: 42
+    spriteID: e71cb68524ead4246904f9572c2e08ec
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2478,7 +2478,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 620}
+    uvTransform: {x: 88, y: 644}
   - name: BladeGirl_Frame_118
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2486,11 +2486,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 178
-      y: 156
-      width: 40
+      x: 226
+      y: 111
+      width: 41
       height: 37
-    spriteID: 0f9eb11f09475bc4f8368bf93ba9825e
+    spriteID: 6ea2f42da0bcd4243844273fe3b57d5c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2498,7 +2498,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 178, y: 156}
+    uvTransform: {x: 226, y: 111}
   - name: BladeGirl_Frame_119
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2506,11 +2506,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 322
-      y: 366
-      width: 40
-      height: 36
-    spriteID: f2d30e2553a5f4149bf7a6967e2b1aae
+      x: 333
+      y: 84
+      width: 30
+      height: 28
+    spriteID: 317a3085b25ec684da50679d2c4042c3
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2518,7 +2518,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 322, y: 366}
+    uvTransform: {x: 333, y: 84}
   - name: BladeGirl_Frame_120
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2526,11 +2526,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 178
-      y: 201
-      width: 35
-      height: 42
-    spriteID: c4441c17a2e06c545935b9ec293ad109
+      x: 327
+      y: 993
+      width: 36
+      height: 24
+    spriteID: 9c53b1e4f75e8874e961b5d9d5bcdff4
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2538,7 +2538,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 178, y: 201}
+    uvTransform: {x: 327, y: 993}
   - name: BladeGirl_Frame_121
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2546,11 +2546,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 133
-      y: 347
-      width: 37
-      height: 41
-    spriteID: 0a5867fce61da87418306d372294f801
+      x: 45
+      y: 990
+      width: 34
+      height: 28
+    spriteID: 165d9dbe19cbc2649a45b3248162396c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2558,7 +2558,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 133, y: 347}
+    uvTransform: {x: 45, y: 990}
   - name: BladeGirl_Frame_122
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2566,11 +2566,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 441
-      width: 37
-      height: 41
-    spriteID: 6b23054d50694914086a5e7fc37a20d4
+      x: 133
+      y: 342
+      width: 29
+      height: 34
+    spriteID: 97c90ce269021c34ea3c9ae759d0e2a6
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2578,7 +2578,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 441}
+    uvTransform: {x: 133, y: 342}
   - name: BladeGirl_Frame_123
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2586,11 +2586,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 136
-      y: 255
-      width: 33
-      height: 32
-    spriteID: bebf6b24263d6a9478e7a0679caa9d1c
+      x: 275
+      y: 661
+      width: 40
+      height: 34
+    spriteID: 11d9a9356d075f9408807d8e22c7d1c6
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2598,7 +2598,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 136, y: 255}
+    uvTransform: {x: 275, y: 661}
   - name: BladeGirl_Frame_124
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2606,11 +2606,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 327
-      y: 120
-      width: 35
-      height: 32
-    spriteID: 4ccaccf0560b4ae42bf211c1e78d89c7
+      x: 178
+      y: 745
+      width: 40
+      height: 37
+    spriteID: bdecfdc031556f147930f40cfa790bfd
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2618,7 +2618,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 327, y: 120}
+    uvTransform: {x: 178, y: 745}
   - name: BladeGirl_Frame_125
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2626,11 +2626,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 327
-      y: 284
-      width: 34
-      height: 32
-    spriteID: b8cd6712b4fd00244ae5b889c22007ed
+      x: 178
+      y: 925
+      width: 40
+      height: 36
+    spriteID: de74d82a7ebf72d4895ef3a304f02f73
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2638,7 +2638,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 327, y: 284}
+    uvTransform: {x: 178, y: 925}
   - name: BladeGirl_Frame_126
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2646,11 +2646,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 327
-      y: 325
-      width: 34
-      height: 32
-    spriteID: 44249e88728eeae49bfd5d960e2a5e69
+      x: 45
+      y: 849
+      width: 35
+      height: 42
+    spriteID: 5c87dcfa08856c44eb038f3e57666ac5
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2658,7 +2658,127 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 327, y: 325}
+    uvTransform: {x: 45, y: 849}
+  - name: BladeGirl_Frame_127
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 88
+      y: 743
+      width: 37
+      height: 41
+    spriteID: c016fe865d41acb4a96655ec07b3a9c6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 88, y: 743}
+  - name: BladeGirl_Frame_128
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 88
+      y: 792
+      width: 37
+      height: 41
+    spriteID: 99a96a121af4cae4983125f82248d076
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 88, y: 792}
+  - name: BladeGirl_Frame_129
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 327
+      y: 655
+      width: 33
+      height: 32
+    spriteID: cd157a34fe8fd1c4480995ffca92c313
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 327, y: 655}
+  - name: BladeGirl_Frame_130
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 327
+      y: 201
+      width: 35
+      height: 32
+    spriteID: e1af0f496fc019448a208442b358aa2d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 327, y: 201}
+  - name: BladeGirl_Frame_131
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 327
+      y: 449
+      width: 34
+      height: 32
+    spriteID: ab2705f150ed8174a8ea96fcc9b7611f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 327, y: 449}
+  - name: BladeGirl_Frame_132
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 327
+      y: 489
+      width: 34
+      height: 32
+    spriteID: e60905595d01c2643823a3dd4532bd68
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 327, y: 489}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -2676,7 +2796,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: 53c6f7d2abe2a7c42b78d81560dc49f9
+      spriteId: 288e147f675c80747b9554d3cc624387
     - name: BladeGirl_Frame_1
       frameIndex: 1
       additiveSortOrder: 0
@@ -2685,7 +2805,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: c99d57998286b3249a00be3fe5e1c590
+      spriteId: 2f3b1e92888fddb459326b9256abe0ad
     - name: BladeGirl_Frame_2
       frameIndex: 2
       additiveSortOrder: 0
@@ -2694,7 +2814,7 @@ ScriptedImporter:
         y: 0
         width: 39
         height: 38
-      spriteId: 82b81a2b6f29b3f4292f27b9fafa4d74
+      spriteId: 95dae6b1553b88a4580a23c1bc71d996
     - name: BladeGirl_Frame_3
       frameIndex: 3
       additiveSortOrder: 0
@@ -2703,7 +2823,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 38
-      spriteId: d2cde32e1c361c14db821266cfb1ae16
+      spriteId: 6048c837f7bcfcf4cbda6fae08dd3c3e
     - name: BladeGirl_Frame_4
       frameIndex: 4
       additiveSortOrder: 0
@@ -2712,7 +2832,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 38
-      spriteId: 266d1a96d435e3e4ebb51cc161df12a7
+      spriteId: 912bc652c6bd1c545be336e72ee69a89
     - name: BladeGirl_Frame_5
       frameIndex: 5
       additiveSortOrder: 0
@@ -2721,7 +2841,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 38
-      spriteId: 01a2ff37b2717e64f9315680aa5ba4dd
+      spriteId: ded3dffba2708d24db03be38709a7160
     - name: BladeGirl_Frame_6
       frameIndex: 6
       additiveSortOrder: 0
@@ -2730,7 +2850,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: 79bdbc55546887848be300fc44393bb4
+      spriteId: acbb66b49c7d34d45b5c31e483feab57
     - name: BladeGirl_Frame_7
       frameIndex: 7
       additiveSortOrder: 0
@@ -2739,7 +2859,7 @@ ScriptedImporter:
         y: 0
         width: 39
         height: 37
-      spriteId: fca63620bb2eb51459ca155c0984cf09
+      spriteId: c18c485c75db9924898dcba2e74d05ae
     - name: BladeGirl_Frame_8
       frameIndex: 8
       additiveSortOrder: 0
@@ -2748,7 +2868,7 @@ ScriptedImporter:
         y: 0
         width: 31
         height: 35
-      spriteId: a1737a83d96c81e4aae9643fd7ba58ba
+      spriteId: 647a799948896414d86a4e1728029d8a
     - name: BladeGirl_Frame_9
       frameIndex: 9
       additiveSortOrder: 0
@@ -2757,7 +2877,7 @@ ScriptedImporter:
         y: 3
         width: 33
         height: 31
-      spriteId: 38a5d2347ef388d478e8009ae619e54f
+      spriteId: d52c21478f12fd44ca7e5737fcc2b974
     - name: BladeGirl_Frame_10
       frameIndex: 10
       additiveSortOrder: 0
@@ -2766,7 +2886,7 @@ ScriptedImporter:
         y: 0
         width: 33
         height: 33
-      spriteId: 42169dd571a551a42aed3e23875c3934
+      spriteId: 51b73cd94ed88374d845ab3f0adef706
     - name: BladeGirl_Frame_11
       frameIndex: 11
       additiveSortOrder: 0
@@ -2775,7 +2895,7 @@ ScriptedImporter:
         y: 0
         width: 29
         height: 36
-      spriteId: 583f47886fd06e74a8a4f35163b87144
+      spriteId: a82fe02a91de0bf4ebaa9fce8c18411c
     - name: BladeGirl_Frame_12
       frameIndex: 12
       additiveSortOrder: 0
@@ -2784,7 +2904,7 @@ ScriptedImporter:
         y: 0
         width: 37
         height: 35
-      spriteId: 112b62fdcc7e86f4c817183fe21fff1f
+      spriteId: cacb26c1c6617664b9bc1fcb36ade372
     - name: BladeGirl_Frame_13
       frameIndex: 13
       additiveSortOrder: 0
@@ -2793,7 +2913,7 @@ ScriptedImporter:
         y: 3
         width: 35
         height: 31
-      spriteId: 855385667a3edf643ba53afc44779407
+      spriteId: 6efff7ab1260e5546be0c516c3317f71
     - name: BladeGirl_Frame_14
       frameIndex: 14
       additiveSortOrder: 0
@@ -2802,7 +2922,7 @@ ScriptedImporter:
         y: 0
         width: 31
         height: 33
-      spriteId: ab39fd18dd1c08942b1a7252abe13af6
+      spriteId: 42f68901955b38749a4af32901f6d8d9
     - name: BladeGirl_Frame_15
       frameIndex: 15
       additiveSortOrder: 0
@@ -2811,7 +2931,7 @@ ScriptedImporter:
         y: 0
         width: 29
         height: 36
-      spriteId: b8891e22a2ae12e4f8d873659fda8a5f
+      spriteId: 0ac0d6adb78e2324faff8fccf4857852
     - name: BladeGirl_Frame_16
       frameIndex: 16
       additiveSortOrder: 0
@@ -2820,7 +2940,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 34
-      spriteId: 1c49faf56106d994498b7b1291d9a0d4
+      spriteId: e38fe05abe5d8714eb2ed65e69a4a569
     - name: BladeGirl_Frame_17
       frameIndex: 17
       additiveSortOrder: 0
@@ -2829,7 +2949,7 @@ ScriptedImporter:
         y: 0
         width: 41
         height: 34
-      spriteId: 858c909401c1fd843a5ceed1cad60630
+      spriteId: 85e7b5cc66c5fd3478dd3d0d51b528ae
     - name: BladeGirl_Frame_18
       frameIndex: 18
       additiveSortOrder: 0
@@ -2838,7 +2958,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 34
-      spriteId: c056b6b109ac6c646b6df911dff7b563
+      spriteId: 39f1dbd7a856bf7479550affa29b8c9a
     - name: BladeGirl_Frame_19
       frameIndex: 19
       additiveSortOrder: 0
@@ -2847,7 +2967,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 34
-      spriteId: ab646f2847ba2dc48a9def642d54aa6b
+      spriteId: 9a8f8218899065a449e9d07080240d62
     - name: BladeGirl_Frame_20
       frameIndex: 20
       additiveSortOrder: 0
@@ -2856,7 +2976,7 @@ ScriptedImporter:
         y: 0
         width: 36
         height: 37
-      spriteId: 6c8b4ac1aca9b424f80f95dfa43e295b
+      spriteId: b61a0a089549e3f4aac4ab9c86fe7e19
     - name: BladeGirl_Frame_21
       frameIndex: 21
       additiveSortOrder: 0
@@ -2865,7 +2985,7 @@ ScriptedImporter:
         y: 0
         width: 37
         height: 42
-      spriteId: 6c5f6eca6b1259740858af7ed7dbf83a
+      spriteId: a0470f25dfabbd74e91fc31fa8afcfc0
     - name: BladeGirl_Frame_22
       frameIndex: 22
       additiveSortOrder: 0
@@ -2874,7 +2994,7 @@ ScriptedImporter:
         y: 0
         width: 37
         height: 42
-      spriteId: 6d5deba0b657c9640b6034b79656eb21
+      spriteId: f5f23cfcb3c78fe458d82e1121cec023
     - name: BladeGirl_Frame_23
       frameIndex: 23
       additiveSortOrder: 0
@@ -2883,7 +3003,7 @@ ScriptedImporter:
         y: 0
         width: 37
         height: 41
-      spriteId: 8efc4b22bbf928a4fa2b26804c92eb05
+      spriteId: bda19a91cb822df41a66f7378ea4e1e4
     - name: BladeGirl_Frame_24
       frameIndex: 24
       additiveSortOrder: 0
@@ -2892,7 +3012,7 @@ ScriptedImporter:
         y: 0
         width: 37
         height: 42
-      spriteId: fbf44aa9c5e02d74c93f13e2cd82cc79
+      spriteId: 337d05e45c9457148a91f4d61ecf20b8
     - name: BladeGirl_Frame_25
       frameIndex: 25
       additiveSortOrder: 0
@@ -2901,7 +3021,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: 91b7ff320e94c5c4b926a31c685a0dc8
+      spriteId: 609218d5019a23548a2b1644bbdb04ca
     - name: BladeGirl_Frame_26
       frameIndex: 26
       additiveSortOrder: 0
@@ -2910,7 +3030,7 @@ ScriptedImporter:
         y: 0
         width: 43
         height: 38
-      spriteId: c558331a31ef3e5468cdfcd44265e2e9
+      spriteId: 5d24e77f789c2c04f964aff44544cd0e
     - name: BladeGirl_Frame_27
       frameIndex: 27
       additiveSortOrder: 0
@@ -2919,7 +3039,7 @@ ScriptedImporter:
         y: 0
         width: 89
         height: 54
-      spriteId: 7bc228c4acb752a44bd90424398fa1b6
+      spriteId: 06ea0d7b17eaced488ba7a11c151c818
     - name: BladeGirl_Frame_28
       frameIndex: 28
       additiveSortOrder: 0
@@ -2928,7 +3048,7 @@ ScriptedImporter:
         y: 0
         width: 70
         height: 51
-      spriteId: ec6c476aff8414e448f504afc05b6306
+      spriteId: 3b4150bd7eab68848bb41833d2833275
     - name: BladeGirl_Frame_29
       frameIndex: 29
       additiveSortOrder: 0
@@ -2937,7 +3057,7 @@ ScriptedImporter:
         y: 0
         width: 50
         height: 30
-      spriteId: 6fe2f8e6f2989bf4c89d8ab0843f5bc2
+      spriteId: b6680ff79df805b41ab3abec82d1e670
     - name: BladeGirl_Frame_30
       frameIndex: 30
       additiveSortOrder: 0
@@ -2946,7 +3066,7 @@ ScriptedImporter:
         y: 0
         width: 26
         height: 44
-      spriteId: d1b4ce4534cc0a24cae3077cceee0ea4
+      spriteId: df7766c987a4eff41b47ffb5115f8130
     - name: BladeGirl_Frame_31
       frameIndex: 31
       additiveSortOrder: 0
@@ -2955,7 +3075,7 @@ ScriptedImporter:
         y: 0
         width: 74
         height: 54
-      spriteId: b43ebb9915e1c8343a7300ea5f774c4c
+      spriteId: 7cd4ca38b4439b3489093abc47e3c80d
     - name: BladeGirl_Frame_32
       frameIndex: 32
       additiveSortOrder: 0
@@ -2964,7 +3084,7 @@ ScriptedImporter:
         y: 0
         width: 79
         height: 48
-      spriteId: 6a3765a2c8e7636438b18de34c6b0621
+      spriteId: b51d90761f2b1274fb47c2d4b14a162b
     - name: BladeGirl_Frame_33
       frameIndex: 33
       additiveSortOrder: 0
@@ -2973,7 +3093,7 @@ ScriptedImporter:
         y: 0
         width: 36
         height: 31
-      spriteId: 8c1d8c51d60cbfe44944f728ac505d80
+      spriteId: d2eba9cf34f5cb4498cc6cb77b66bab3
     - name: BladeGirl_Frame_34
       frameIndex: 34
       additiveSortOrder: 0
@@ -2982,7 +3102,7 @@ ScriptedImporter:
         y: 0
         width: 27
         height: 38
-      spriteId: 767ce7ed37094a24f96192640a347a73
+      spriteId: 697b35c1cff24364893cbeb4d8406418
     - name: BladeGirl_Frame_35
       frameIndex: 35
       additiveSortOrder: 0
@@ -2991,7 +3111,7 @@ ScriptedImporter:
         y: 0
         width: 37
         height: 44
-      spriteId: c43f788e3e586734ab810a1bc889b9d9
+      spriteId: c0ffaaf157475124d8a94eed42f88003
     - name: BladeGirl_Frame_36
       frameIndex: 36
       additiveSortOrder: 0
@@ -3000,7 +3120,7 @@ ScriptedImporter:
         y: 0
         width: 29
         height: 46
-      spriteId: 0e27c06d509636f4b9e23848816cd25e
+      spriteId: 40c495aee85703143927a97023ebedee
     - name: BladeGirl_Frame_37
       frameIndex: 37
       additiveSortOrder: 0
@@ -3009,7 +3129,7 @@ ScriptedImporter:
         y: 0
         width: 82
         height: 60
-      spriteId: b664a18175f1a764581cf00eb50bdeb6
+      spriteId: f4128aba12af3eb4b95376010172f6a5
     - name: BladeGirl_Frame_38
       frameIndex: 38
       additiveSortOrder: 0
@@ -3018,7 +3138,7 @@ ScriptedImporter:
         y: 0
         width: 84
         height: 37
-      spriteId: 53ea1e1d187de4f43a2048121758ff9c
+      spriteId: a93063cce92d2a142baed8b5823dcaab
     - name: BladeGirl_Frame_39
       frameIndex: 39
       additiveSortOrder: 0
@@ -3027,7 +3147,7 @@ ScriptedImporter:
         y: 0
         width: 49
         height: 30
-      spriteId: 921d48e46a7a0b745aeef4ff424089f9
+      spriteId: 4168102109bbca24d914b391ab70dcfb
     - name: BladeGirl_Frame_40
       frameIndex: 40
       additiveSortOrder: 0
@@ -3036,7 +3156,7 @@ ScriptedImporter:
         y: 0
         width: 38
         height: 29
-      spriteId: 111c3ff425c73704ea04d9953629ceb6
+      spriteId: 84f5501eb53701049b05105b2305248b
     - name: BladeGirl_Frame_41
       frameIndex: 41
       additiveSortOrder: 0
@@ -3045,7 +3165,7 @@ ScriptedImporter:
         y: 0
         width: 36
         height: 31
-      spriteId: 5a6ef0d418da62348b5237659471eb5d
+      spriteId: afb273d395fb7be4ba5eebfafa3c6b7e
     - name: BladeGirl_Frame_42
       frameIndex: 42
       additiveSortOrder: 0
@@ -3054,7 +3174,7 @@ ScriptedImporter:
         y: 0
         width: 44
         height: 33
-      spriteId: 1c0bbd1006fd5f546be50bbc1675854d
+      spriteId: c9f87b731e48dec48a7cfc765b549126
     - name: BladeGirl_Frame_43
       frameIndex: 43
       additiveSortOrder: 0
@@ -3063,7 +3183,7 @@ ScriptedImporter:
         y: 0
         width: 39
         height: 37
-      spriteId: 94a9a82e394eeba40a9e340aaa4e2fa9
+      spriteId: dda4def50f33bff4a8a5e64c86c44506
     - name: BladeGirl_Frame_44
       frameIndex: 44
       additiveSortOrder: 0
@@ -3072,7 +3192,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: 4b1c5f55f4d7e3e47a98d52de538beb0
+      spriteId: 587ac33b7eeb4a64390249f6d4ce69d0
     - name: BladeGirl_Frame_45
       frameIndex: 45
       additiveSortOrder: 0
@@ -3081,7 +3201,7 @@ ScriptedImporter:
         y: 0
         width: 37
         height: 37
-      spriteId: dfc6936447bbc424c920a4493a5096fa
+      spriteId: 43a0dbe7dae90fd4b9a84e5202e2653f
     - name: BladeGirl_Frame_46
       frameIndex: 46
       additiveSortOrder: 0
@@ -3090,7 +3210,7 @@ ScriptedImporter:
         y: 0
         width: 34
         height: 37
-      spriteId: 0fa1c66177aefbb4d9597539ef480c4e
+      spriteId: cdb6fac94c86af94eb9b785c706cd84f
     - name: BladeGirl_Frame_47
       frameIndex: 47
       additiveSortOrder: 0
@@ -3099,7 +3219,7 @@ ScriptedImporter:
         y: 0
         width: 35
         height: 37
-      spriteId: 092a3aa43393a714487e0d3f01241732
+      spriteId: b1655dcad279183449a56c14f7238ef6
     - name: BladeGirl_Frame_48
       frameIndex: 48
       additiveSortOrder: 0
@@ -3108,7 +3228,7 @@ ScriptedImporter:
         y: 0
         width: 46
         height: 25
-      spriteId: f27193925eb2c3a46be78b22aa558216
+      spriteId: 5b769d9a9042e414bb96d8780a4c1aa3
     - name: BladeGirl_Frame_49
       frameIndex: 49
       additiveSortOrder: 0
@@ -3117,7 +3237,7 @@ ScriptedImporter:
         y: 0
         width: 45
         height: 27
-      spriteId: c68279e2266963f4cac508561c94c65d
+      spriteId: 2b98aa2b766739e4b8b0edfb6f9b887d
     - name: BladeGirl_Frame_50
       frameIndex: 50
       additiveSortOrder: 0
@@ -3126,7 +3246,7 @@ ScriptedImporter:
         y: 0
         width: 47
         height: 27
-      spriteId: 35af8cd6110aebb4192f103aa1621f3f
+      spriteId: f4fa5144a50fef0459493a5eac890913
     - name: BladeGirl_Frame_51
       frameIndex: 51
       additiveSortOrder: 0
@@ -3135,7 +3255,7 @@ ScriptedImporter:
         y: 0
         width: 48
         height: 27
-      spriteId: ee551108190d64c42817d44541703cf9
+      spriteId: 89ac00d275ea4ef45ad56212d4111008
     - name: BladeGirl_Frame_52
       frameIndex: 52
       additiveSortOrder: 0
@@ -3144,7 +3264,7 @@ ScriptedImporter:
         y: 0
         width: 47
         height: 22
-      spriteId: 10db6813af213ff48a95ee4c105a402e
+      spriteId: f2ae85f06e92c0b47a9a76b8fe624f47
     - name: BladeGirl_Frame_53
       frameIndex: 53
       additiveSortOrder: 0
@@ -3153,7 +3273,7 @@ ScriptedImporter:
         y: 0
         width: 52
         height: 12
-      spriteId: 7f8bbd2980f2e224b806ec20d2b0ac34
+      spriteId: 631cf4be66c76bb489fe8e45f892ce3b
     - name: BladeGirl_Frame_54
       frameIndex: 54
       additiveSortOrder: 0
@@ -3162,7 +3282,7 @@ ScriptedImporter:
         y: 0
         width: 51
         height: 11
-      spriteId: db4c89526a8710746969efa776546ab5
+      spriteId: e19765e15702933418928663feaaede5
     - name: BladeGirl_Frame_55
       frameIndex: 55
       additiveSortOrder: 0
@@ -3171,7 +3291,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: 956744773cc685b4d83ec2583d2f342c
+      spriteId: 5923b3fc706585c40a30efc62213bf6a
     - name: BladeGirl_Frame_56
       frameIndex: 56
       additiveSortOrder: 0
@@ -3180,7 +3300,7 @@ ScriptedImporter:
         y: 0
         width: 35
         height: 35
-      spriteId: a2324d28b8b3ff0428b47dde562b3280
+      spriteId: 61d9951a05b2e1b40b0da09f6ed70cbc
     - name: BladeGirl_Frame_57
       frameIndex: 57
       additiveSortOrder: 0
@@ -3189,7 +3309,7 @@ ScriptedImporter:
         y: 0
         width: 30
         height: 35
-      spriteId: eddea3282a3b2e44d86348cc986717cc
+      spriteId: 36135bf613e788e48af1e811b744af11
     - name: BladeGirl_Frame_58
       frameIndex: 58
       additiveSortOrder: 0
@@ -3198,7 +3318,7 @@ ScriptedImporter:
         y: 0
         width: 37
         height: 36
-      spriteId: a8a9ac45c09210e4da8586d601dc22ed
+      spriteId: df182b7b9f8c47f4eaf1a50a67ae8912
     - name: BladeGirl_Frame_59
       frameIndex: 59
       additiveSortOrder: 0
@@ -3207,7 +3327,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: 2c88db8f564ce8b4d86120fb4a801c6c
+      spriteId: 01154a947c4c15f449cae45013294229
     - name: BladeGirl_Frame_60
       frameIndex: 60
       additiveSortOrder: 0
@@ -3216,7 +3336,7 @@ ScriptedImporter:
         y: 0
         width: 26
         height: 32
-      spriteId: 9a51954498e918d49b94c308c65bd98b
+      spriteId: bdda408964b2d814283823e08760b772
     - name: BladeGirl_Frame_61
       frameIndex: 61
       additiveSortOrder: 0
@@ -3225,7 +3345,7 @@ ScriptedImporter:
         y: 0
         width: 32
         height: 25
-      spriteId: 56cc25a760edd49418e5625390951cf8
+      spriteId: 58cb1a770a85d9a4c8f72ffa0a4db37a
     - name: BladeGirl_Frame_62
       frameIndex: 62
       additiveSortOrder: 0
@@ -3234,7 +3354,7 @@ ScriptedImporter:
         y: 0
         width: 26
         height: 32
-      spriteId: 4f18ed735ac8683479df56da3c6cc9d4
+      spriteId: 8bc0c9295de966a439b0ba24a8ec271a
     - name: BladeGirl_Frame_63
       frameIndex: 63
       additiveSortOrder: 0
@@ -3243,7 +3363,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: fd0d4a964e06a6e4a933ae0ec128d8cd
+      spriteId: 55a798b794044c543b12d6b4f01ab746
     - name: BladeGirl_Frame_64
       frameIndex: 64
       additiveSortOrder: 0
@@ -3252,7 +3372,7 @@ ScriptedImporter:
         y: 0
         width: 50
         height: 33
-      spriteId: 6ea6ecb945949b04a9523e27fedf6d7b
+      spriteId: 4066d61f003340840aca8792e0e17f6b
     - name: BladeGirl_Frame_65
       frameIndex: 65
       additiveSortOrder: 0
@@ -3261,7 +3381,7 @@ ScriptedImporter:
         y: 0
         width: 44
         height: 33
-      spriteId: efd817d02e7f62d4da4af76f487f14f0
+      spriteId: d08c114609d6386408f28cf7399289b6
     - name: BladeGirl_Frame_66
       frameIndex: 66
       additiveSortOrder: 0
@@ -3270,7 +3390,7 @@ ScriptedImporter:
         y: 0
         width: 44
         height: 33
-      spriteId: 258a393236b224c42b2a1db6a6b4d7d6
+      spriteId: 09a012a6bfe01e74b9c1e32b26095499
     - name: BladeGirl_Frame_67
       frameIndex: 67
       additiveSortOrder: 0
@@ -3279,7 +3399,7 @@ ScriptedImporter:
         y: 0
         width: 44
         height: 33
-      spriteId: 0796c77a39dd4ec46886bc17e2e3c2da
+      spriteId: 70e993ad38e066d4a871ec3e5ca9a673
     - name: BladeGirl_Frame_68
       frameIndex: 68
       additiveSortOrder: 0
@@ -3288,7 +3408,7 @@ ScriptedImporter:
         y: 0
         width: 44
         height: 33
-      spriteId: f3c26ae9a57faca458d76b9e388e57d5
+      spriteId: d3f0028247d9aea4ca89a5cf9585c429
     - name: BladeGirl_Frame_69
       frameIndex: 69
       additiveSortOrder: 0
@@ -3297,7 +3417,7 @@ ScriptedImporter:
         y: 0
         width: 44
         height: 29
-      spriteId: 880183deaedc1bb4bbd111b50848e613
+      spriteId: d4287befc5e22834e97b823228c3e30d
     - name: BladeGirl_Frame_70
       frameIndex: 70
       additiveSortOrder: 0
@@ -3306,7 +3426,7 @@ ScriptedImporter:
         y: 0
         width: 43
         height: 29
-      spriteId: 9fcd29c384696334693e345d26110d87
+      spriteId: 2588f44bb6e4819498b2f64ef7a0db79
     - name: BladeGirl_Frame_71
       frameIndex: 71
       additiveSortOrder: 0
@@ -3315,7 +3435,7 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 31
-      spriteId: 60df591800df68d4494567e3abbf3f4c
+      spriteId: d6dc4c4b8309fcc40a6da25fdb61242a
     - name: BladeGirl_Frame_72
       frameIndex: 72
       additiveSortOrder: 0
@@ -3324,7 +3444,7 @@ ScriptedImporter:
         y: 0
         width: 33
         height: 34
-      spriteId: 5de93049c1313ad418dc40368075aa96
+      spriteId: 29ed7cbc870fb414bb5d40a443e8aade
     - name: BladeGirl_Frame_73
       frameIndex: 73
       additiveSortOrder: 0
@@ -3333,34 +3453,34 @@ ScriptedImporter:
         y: 0
         width: 44
         height: 33
-      spriteId: 082949b6acd98a84ba7c3b633848ffda
+      spriteId: 7ce7dba8be6c8a442b7e19a8b2612b16
     - name: BladeGirl_Frame_74
       frameIndex: 74
-      additiveSortOrder: 0
-      cellRect:
-        x: 10
-        y: 0
-        width: 44
-        height: 33
-      spriteId: 9b5b487b9affcf1438537af621e75fdc
-    - name: BladeGirl_Frame_75
-      frameIndex: 75
       additiveSortOrder: 0
       cellRect:
         x: 11
         y: 0
         width: 90
         height: 29
-      spriteId: 60fa3a9fcbd2642419ef77a2a0dfe18d
-    - name: BladeGirl_Frame_76
-      frameIndex: 76
+      spriteId: 4575eec5a7c3d7444ba5b25ffc284677
+    - name: BladeGirl_Frame_75
+      frameIndex: 75
       additiveSortOrder: 0
       cellRect:
         x: 21
         y: 0
         width: 82
         height: 32
-      spriteId: 52cc5d0cc5b52c94f9769812b6009b9c
+      spriteId: 2975ba27e672bd942a2648c33eb880eb
+    - name: BladeGirl_Frame_76
+      frameIndex: 76
+      additiveSortOrder: 0
+      cellRect:
+        x: 23
+        y: 0
+        width: 79
+        height: 36
+      spriteId: 378c559e9a4cbb147beb62966647f91f
     - name: BladeGirl_Frame_77
       frameIndex: 77
       additiveSortOrder: 0
@@ -3368,44 +3488,44 @@ ScriptedImporter:
         x: 23
         y: 0
         width: 79
-        height: 36
-      spriteId: 1d6bf7ddc6fd81342866e036d1d726d7
+        height: 35
+      spriteId: a152a1de9eceebc49b0fd2dd89c4c077
     - name: BladeGirl_Frame_78
       frameIndex: 78
-      additiveSortOrder: 0
-      cellRect:
-        x: 23
-        y: 0
-        width: 79
-        height: 35
-      spriteId: 22ae144eb29689d47abc040633755eb3
-    - name: BladeGirl_Frame_79
-      frameIndex: 79
       additiveSortOrder: 0
       cellRect:
         x: 18
         y: 0
         width: 75
         height: 36
-      spriteId: d53aacad53b1a5643a21dd3cf8b22730
-    - name: BladeGirl_Frame_80
-      frameIndex: 80
+      spriteId: 4803fef253d5d5e47a4c2fd35f0bf821
+    - name: BladeGirl_Frame_79
+      frameIndex: 79
       additiveSortOrder: 0
       cellRect:
         x: 5
         y: 0
         width: 37
         height: 34
-      spriteId: 85e2f2e8842a7f34ebe13ed4190bcd2b
-    - name: BladeGirl_Frame_81
-      frameIndex: 81
+      spriteId: 07a4317671a2f464f9a8cfa0fb1179c8
+    - name: BladeGirl_Frame_80
+      frameIndex: 80
       additiveSortOrder: 0
       cellRect:
         x: 2
         y: 0
         width: 43
         height: 35
-      spriteId: 098d773c830608f43a936f54299a1c35
+      spriteId: b53baa1d0400ae040b4e8e0318ed4374
+    - name: BladeGirl_Frame_81
+      frameIndex: 81
+      additiveSortOrder: 0
+      cellRect:
+        x: 12
+        y: 0
+        width: 40
+        height: 37
+      spriteId: 96849dece42ccde4c8acb2c99d4fef4d
     - name: BladeGirl_Frame_82
       frameIndex: 82
       additiveSortOrder: 0
@@ -3414,52 +3534,52 @@ ScriptedImporter:
         y: 0
         width: 40
         height: 37
-      spriteId: a77fef1ef75c3d14d96bd30f6a3fe44e
+      spriteId: 3667ef737f373dc45a1eeca3afbb5515
     - name: BladeGirl_Frame_83
       frameIndex: 83
-      additiveSortOrder: 0
-      cellRect:
-        x: 12
-        y: 0
-        width: 40
-        height: 37
-      spriteId: bc206f8603b5395429bc0464bc28b262
-    - name: BladeGirl_Frame_84
-      frameIndex: 84
       additiveSortOrder: 0
       cellRect:
         x: 4
         y: 0
         width: 49
         height: 23
-      spriteId: 2d1bca5b38df0924dac835a08f904b0d
-    - name: BladeGirl_Frame_85
-      frameIndex: 85
+      spriteId: e2f53ea5bb7a8a04dac958cf7d883d4f
+    - name: BladeGirl_Frame_84
+      frameIndex: 84
       additiveSortOrder: 0
       cellRect:
         x: 4
         y: 0
         width: 47
         height: 23
-      spriteId: 9a5c3847b06668746b2ca2ac23cbecdf
-    - name: BladeGirl_Frame_86
-      frameIndex: 86
+      spriteId: 21aaaec57298a534cade32df34ad5759
+    - name: BladeGirl_Frame_85
+      frameIndex: 85
       additiveSortOrder: 0
       cellRect:
         x: 7
         y: 0
         width: 39
         height: 30
-      spriteId: e35a70661e3197f4db9ca3bffafe666a
-    - name: BladeGirl_Frame_87
-      frameIndex: 87
+      spriteId: 9a1abed541388cb4cbe3a92a5886d560
+    - name: BladeGirl_Frame_86
+      frameIndex: 86
       additiveSortOrder: 0
       cellRect:
         x: 10
         y: 0
         width: 38
         height: 30
-      spriteId: 705e9cf563a20b34f9e922ac0fa35acf
+      spriteId: e102f870111b64e40a8dee06692fd92e
+    - name: BladeGirl_Frame_87
+      frameIndex: 87
+      additiveSortOrder: 0
+      cellRect:
+        x: 26
+        y: 0
+        width: 31
+        height: 36
+      spriteId: 0a6acb1f37e27de458bff1891e180980
     - name: BladeGirl_Frame_88
       frameIndex: 88
       additiveSortOrder: 0
@@ -3468,7 +3588,7 @@ ScriptedImporter:
         y: 0
         width: 31
         height: 36
-      spriteId: 9b3b108096aa5934d8e3c8525f3f7c19
+      spriteId: 98994320717a7f14aac0801d74d57b43
     - name: BladeGirl_Frame_89
       frameIndex: 89
       additiveSortOrder: 0
@@ -3477,25 +3597,25 @@ ScriptedImporter:
         y: 0
         width: 31
         height: 36
-      spriteId: 17519364ec4f6f74c95b6f27d9760c1e
+      spriteId: 4627cbabcc49694488256d48ff9953fa
     - name: BladeGirl_Frame_90
       frameIndex: 90
       additiveSortOrder: 0
       cellRect:
         x: 26
         y: 0
-        width: 31
+        width: 30
         height: 36
-      spriteId: 521f832e77a1b16429d88694fb5a843d
+      spriteId: 715ec55038c7e4b48bacb3ab342788b5
     - name: BladeGirl_Frame_91
       frameIndex: 91
       additiveSortOrder: 0
       cellRect:
-        x: 26
+        x: 15
         y: 0
-        width: 30
-        height: 36
-      spriteId: 40744afc5eb52224db154848ae69d56c
+        width: 34
+        height: 37
+      spriteId: d945848292bc7574cbd5371225f6cb68
     - name: BladeGirl_Frame_92
       frameIndex: 92
       additiveSortOrder: 0
@@ -3504,313 +3624,367 @@ ScriptedImporter:
         y: 0
         width: 34
         height: 37
-      spriteId: da12070b7c76aea4eb4a07830b4b1739
+      spriteId: cbc5ceab64dc75546b3537cc062daadc
     - name: BladeGirl_Frame_93
       frameIndex: 93
       additiveSortOrder: 0
       cellRect:
         x: 15
         y: 0
-        width: 34
-        height: 37
-      spriteId: f777c822b131a0c4eaf8c6b8372af517
+        width: 35
+        height: 38
+      spriteId: 120515028bec90c45aa4a1979bf36ccf
     - name: BladeGirl_Frame_94
       frameIndex: 94
       additiveSortOrder: 0
       cellRect:
         x: 15
         y: 0
-        width: 35
+        width: 37
         height: 38
-      spriteId: cbf81ac81921ed740b190e4f29dcfe0e
+      spriteId: d853494520759354f85a65c532ea3caa
     - name: BladeGirl_Frame_95
       frameIndex: 95
       additiveSortOrder: 0
       cellRect:
         x: 15
         y: 0
-        width: 37
-        height: 38
-      spriteId: a606825a194b99c40b651d039023fcff
+        width: 39
+        height: 37
+      spriteId: 357b2cc11a68baa4aaa4ea16d1c02be6
     - name: BladeGirl_Frame_96
       frameIndex: 96
       additiveSortOrder: 0
       cellRect:
         x: 15
         y: 0
-        width: 39
+        width: 38
         height: 37
-      spriteId: 65e69b6afa27f9e4b8dcebb983bd45b7
+      spriteId: 5082a9178343bd04ea390718c67be381
     - name: BladeGirl_Frame_97
       frameIndex: 97
       additiveSortOrder: 0
       cellRect:
         x: 15
         y: 0
-        width: 38
-        height: 37
-      spriteId: 444a0b648000bbb4b84ce946d1a571d0
+        width: 37
+        height: 38
+      spriteId: 6f73188d31b39874585a41f162b9bfb0
     - name: BladeGirl_Frame_98
       frameIndex: 98
       additiveSortOrder: 0
       cellRect:
         x: 15
         y: 0
-        width: 37
-        height: 38
-      spriteId: 9d7c8b4f642105e47a499ab2db4e57e9
-    - name: BladeGirl_Frame_99
-      frameIndex: 99
-      additiveSortOrder: 0
-      cellRect:
-        x: 15
-        y: 0
         width: 36
         height: 38
-      spriteId: 09840f6bb8f197140bef9f70a6604e93
-    - name: BladeGirl_Frame_100
-      frameIndex: 100
+      spriteId: 73fa31fbc2112d9498c8c5a19d198ef6
+    - name: BladeGirl_Frame_99
+      frameIndex: 99
       additiveSortOrder: 0
       cellRect:
         x: 18
         y: 31
         width: 40
         height: 34
-      spriteId: 61bcf43ef0a61c34c8b49eda4c5191ec
-    - name: BladeGirl_Frame_101
-      frameIndex: 101
+      spriteId: f706df801499f2d4ca5d0b8935de7962
+    - name: BladeGirl_Frame_100
+      frameIndex: 100
       additiveSortOrder: 0
       cellRect:
         x: 17
         y: 32
         width: 31
         height: 33
-      spriteId: 5259a97d3ca92eb42951e12c786b80e2
-    - name: BladeGirl_Frame_102
-      frameIndex: 102
+      spriteId: f858fe2010d9eb440a2cc3eddc89271e
+    - name: BladeGirl_Frame_101
+      frameIndex: 101
       additiveSortOrder: 0
       cellRect:
         x: 9
         y: 15
         width: 76
         height: 73
-      spriteId: 470ec1dc30b861f439fbac4210609757
-    - name: BladeGirl_Frame_103
-      frameIndex: 103
+      spriteId: 66f3a4ee251808b4091dca4065a61c85
+    - name: BladeGirl_Frame_102
+      frameIndex: 102
       additiveSortOrder: 0
       cellRect:
         x: 10
         y: 31
         width: 70
         height: 57
-      spriteId: 52b0a69085f1e9947b20bb0bbd9b3c53
-    - name: BladeGirl_Frame_104
-      frameIndex: 104
+      spriteId: d5913d8132b117943be7d347f426e711
+    - name: BladeGirl_Frame_103
+      frameIndex: 103
       additiveSortOrder: 0
       cellRect:
         x: 14
         y: 28
         width: 37
         height: 56
-      spriteId: 67fefb0e2f1e4264e909ecb8791b79e2
-    - name: BladeGirl_Frame_105
-      frameIndex: 105
+      spriteId: 080650a6875e85142aec89abcc13863e
+    - name: BladeGirl_Frame_104
+      frameIndex: 104
       additiveSortOrder: 0
       cellRect:
         x: 24
         y: 25
         width: 22
         height: 42
-      spriteId: 781ec8db6482cfa42b23d88efc53596e
-    - name: BladeGirl_Frame_106
-      frameIndex: 106
+      spriteId: 821083bb417d2b04a9416c0895a2b6f9
+    - name: BladeGirl_Frame_105
+      frameIndex: 105
       additiveSortOrder: 0
       cellRect:
         x: 9
         y: 14
         width: 76
         height: 74
-      spriteId: 3c2c3ff102721d14a85a0e4538416f80
-    - name: BladeGirl_Frame_107
-      frameIndex: 107
+      spriteId: 5d0441400332235418cc7ef6ea5d506a
+    - name: BladeGirl_Frame_106
+      frameIndex: 106
       additiveSortOrder: 0
       cellRect:
         x: 11
         y: 30
         width: 67
         height: 58
-      spriteId: 14bcae5890abc364b95c5f92e30c82b9
-    - name: BladeGirl_Frame_108
-      frameIndex: 108
+      spriteId: 442522e96f64cc841ba89b20dccee798
+    - name: BladeGirl_Frame_107
+      frameIndex: 107
       additiveSortOrder: 0
       cellRect:
         x: 11
         y: 30
         width: 33
         height: 53
-      spriteId: 769bc3e15875fe14e92f80fc2f1ea270
-    - name: BladeGirl_Frame_109
-      frameIndex: 109
+      spriteId: cb71a46d9b9eb4a4e926babee962e927
+    - name: BladeGirl_Frame_108
+      frameIndex: 108
       additiveSortOrder: 0
       cellRect:
         x: 9
         y: 31
         width: 34
         height: 47
-      spriteId: 558757fff1317f84e8c5d41a864e17d7
-    - name: BladeGirl_Frame_110
-      frameIndex: 110
+      spriteId: 1953580ec0ec62d4d8b0498b26b49872
+    - name: BladeGirl_Frame_109
+      frameIndex: 109
       additiveSortOrder: 0
       cellRect:
         x: 12
         y: 31
         width: 37
         height: 42
-      spriteId: 7f62680924b3ea84c9f06b16cb88c11a
+      spriteId: 5ddd5f72921123c4d9590993fd7495f5
+    - name: BladeGirl_Frame_110
+      frameIndex: 110
+      additiveSortOrder: 0
+      cellRect:
+        x: 14
+        y: 28
+        width: 37
+        height: 56
+      spriteId: a370e83fb0ed8824884dea931f7b6653
     - name: BladeGirl_Frame_111
       frameIndex: 111
+      additiveSortOrder: 0
+      cellRect:
+        x: 24
+        y: 25
+        width: 22
+        height: 42
+      spriteId: d1e11ed886e10f14c861d301a3b4d46c
+    - name: BladeGirl_Frame_112
+      frameIndex: 112
+      additiveSortOrder: 0
+      cellRect:
+        x: 9
+        y: 14
+        width: 76
+        height: 74
+      spriteId: d1066eda3d3e33344a34a5bf6c806727
+    - name: BladeGirl_Frame_113
+      frameIndex: 113
+      additiveSortOrder: 0
+      cellRect:
+        x: 11
+        y: 30
+        width: 67
+        height: 58
+      spriteId: 914c28bc6c3e6ea43b621a8786bc680d
+    - name: BladeGirl_Frame_114
+      frameIndex: 114
+      additiveSortOrder: 0
+      cellRect:
+        x: 11
+        y: 30
+        width: 33
+        height: 53
+      spriteId: 781fd88ddaddaf248baf0a86b6ffe095
+    - name: BladeGirl_Frame_115
+      frameIndex: 115
+      additiveSortOrder: 0
+      cellRect:
+        x: 9
+        y: 31
+        width: 34
+        height: 47
+      spriteId: 3baaa4a11477c2e46818aa139d47a106
+    - name: BladeGirl_Frame_116
+      frameIndex: 116
+      additiveSortOrder: 0
+      cellRect:
+        x: 12
+        y: 31
+        width: 37
+        height: 42
+      spriteId: 69b7274b9ed5a474db64e37828f323d9
+    - name: BladeGirl_Frame_117
+      frameIndex: 117
       additiveSortOrder: 0
       cellRect:
         x: 12
         y: 0
         width: 37
         height: 42
-      spriteId: 8539ac3f8e341ee47b77d61bc09398d8
-    - name: BladeGirl_Frame_112
-      frameIndex: 112
+      spriteId: e71cb68524ead4246904f9572c2e08ec
+    - name: BladeGirl_Frame_118
+      frameIndex: 118
       additiveSortOrder: 0
       cellRect:
         x: 10
         y: 0
         width: 41
         height: 37
-      spriteId: bd3accdc09dd0b045b6472d48ddf97b1
-    - name: BladeGirl_Frame_113
-      frameIndex: 113
+      spriteId: 6ea2f42da0bcd4243844273fe3b57d5c
+    - name: BladeGirl_Frame_119
+      frameIndex: 119
       additiveSortOrder: 0
       cellRect:
         x: 20
         y: 1
         width: 30
         height: 28
-      spriteId: 7576c963567b551479293c4e57ca2bdc
-    - name: BladeGirl_Frame_114
-      frameIndex: 114
+      spriteId: 317a3085b25ec684da50679d2c4042c3
+    - name: BladeGirl_Frame_120
+      frameIndex: 120
       additiveSortOrder: 0
       cellRect:
         x: 8
         y: 2
         width: 36
         height: 24
-      spriteId: ceb96e2bfcc90bb46b5d391a3daab83e
-    - name: BladeGirl_Frame_115
-      frameIndex: 115
+      spriteId: 9c53b1e4f75e8874e961b5d9d5bcdff4
+    - name: BladeGirl_Frame_121
+      frameIndex: 121
       additiveSortOrder: 0
       cellRect:
         x: 5
         y: 1
         width: 34
         height: 28
-      spriteId: 25a597dc382d4474aa66b6dd79d97486
-    - name: BladeGirl_Frame_116
-      frameIndex: 116
+      spriteId: 165d9dbe19cbc2649a45b3248162396c
+    - name: BladeGirl_Frame_122
+      frameIndex: 122
       additiveSortOrder: 0
       cellRect:
         x: 11
         y: 1
         width: 29
         height: 34
-      spriteId: 4754c5c4776be014699c82f69eba5665
-    - name: BladeGirl_Frame_117
-      frameIndex: 117
+      spriteId: 97c90ce269021c34ea3c9ae759d0e2a6
+    - name: BladeGirl_Frame_123
+      frameIndex: 123
       additiveSortOrder: 0
       cellRect:
         x: 18
         y: 0
         width: 40
         height: 34
-      spriteId: ce205720e0cefaf42b47cafd5d9ccaaf
-    - name: BladeGirl_Frame_118
-      frameIndex: 118
+      spriteId: 11d9a9356d075f9408807d8e22c7d1c6
+    - name: BladeGirl_Frame_124
+      frameIndex: 124
       additiveSortOrder: 0
       cellRect:
         x: 12
         y: 0
         width: 40
         height: 37
-      spriteId: 0f9eb11f09475bc4f8368bf93ba9825e
-    - name: BladeGirl_Frame_119
-      frameIndex: 119
+      spriteId: bdecfdc031556f147930f40cfa790bfd
+    - name: BladeGirl_Frame_125
+      frameIndex: 125
       additiveSortOrder: 0
       cellRect:
         x: 12
         y: 0
         width: 40
         height: 36
-      spriteId: f2d30e2553a5f4149bf7a6967e2b1aae
-    - name: BladeGirl_Frame_120
-      frameIndex: 120
+      spriteId: de74d82a7ebf72d4895ef3a304f02f73
+    - name: BladeGirl_Frame_126
+      frameIndex: 126
       additiveSortOrder: 0
       cellRect:
         x: 16
         y: 0
         width: 35
         height: 42
-      spriteId: c4441c17a2e06c545935b9ec293ad109
-    - name: BladeGirl_Frame_121
-      frameIndex: 121
+      spriteId: 5c87dcfa08856c44eb038f3e57666ac5
+    - name: BladeGirl_Frame_127
+      frameIndex: 127
       additiveSortOrder: 0
       cellRect:
         x: 15
         y: 0
         width: 37
         height: 41
-      spriteId: 0a5867fce61da87418306d372294f801
-    - name: BladeGirl_Frame_122
-      frameIndex: 122
+      spriteId: c016fe865d41acb4a96655ec07b3a9c6
+    - name: BladeGirl_Frame_128
+      frameIndex: 128
       additiveSortOrder: 0
       cellRect:
         x: 15
         y: 0
         width: 37
         height: 41
-      spriteId: 6b23054d50694914086a5e7fc37a20d4
-    - name: BladeGirl_Frame_123
-      frameIndex: 123
+      spriteId: 99a96a121af4cae4983125f82248d076
+    - name: BladeGirl_Frame_129
+      frameIndex: 129
       additiveSortOrder: 0
       cellRect:
         x: 19
         y: 0
         width: 33
         height: 32
-      spriteId: bebf6b24263d6a9478e7a0679caa9d1c
-    - name: BladeGirl_Frame_124
-      frameIndex: 124
+      spriteId: cd157a34fe8fd1c4480995ffca92c313
+    - name: BladeGirl_Frame_130
+      frameIndex: 130
       additiveSortOrder: 0
       cellRect:
         x: 17
         y: 0
         width: 35
         height: 32
-      spriteId: 4ccaccf0560b4ae42bf211c1e78d89c7
-    - name: BladeGirl_Frame_125
-      frameIndex: 125
+      spriteId: e1af0f496fc019448a208442b358aa2d
+    - name: BladeGirl_Frame_131
+      frameIndex: 131
       additiveSortOrder: 0
       cellRect:
         x: 18
         y: 0
         width: 34
         height: 32
-      spriteId: b8cd6712b4fd00244ae5b889c22007ed
-    - name: BladeGirl_Frame_126
-      frameIndex: 126
+      spriteId: ab2705f150ed8174a8ea96fcc9b7611f
+    - name: BladeGirl_Frame_132
+      frameIndex: 132
       additiveSortOrder: 0
       cellRect:
         x: 18
         y: 0
         width: 34
         height: 32
-      spriteId: 44249e88728eeae49bfd5d960e2a5e69
+      spriteId: e60905595d01c2643823a3dd4532bd68
     linkedCells: []
     parentIndex: -1
   platformSettings:

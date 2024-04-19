@@ -67,7 +67,18 @@ namespace shared {
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         DefaultAirDashQuota = 1,
-                        DefaultAirJumpQuota = 1
+                        DefaultAirJumpQuota = 1,
+                        InitInventorySlots = new List<InventorySlot> {
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.TimedMagazineIv,
+                                Quota = 1,
+                                FramesToRecover = 0,
+                                DefaultQuota = 1,
+                                DefaultFramesToRecover = 15*BATTLE_DYNAMICS_FPS,
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = 4, // TODO: Remove this hardcoded "skillId"!
+                            }
+                        }
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_SWORDMAN, new CharacterConfig {
@@ -370,7 +381,7 @@ namespace shared {
                         SpeciesId = SPECIES_MAGSWORDGIRL,
                         SpeciesName = "MagSwordGirl",
                         Hp = 120,
-                        Mp = 60*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty 
+                        Mp = 30*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 30 seconds to refill Mp from empty 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -400,9 +411,10 @@ namespace shared {
                         SlidingEnabled = true,
                         CrouchingEnabled = true,
                         ProactiveJumpStartupFrames = 2,
+                        UseInventoryBtnB = true,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
-                        DefaultAirDashQuota = 1, // Her air dash is an attack, thus should be quite limited
+                        DefaultAirDashQuota = 3, // Her air dash is an attack, thus should be quite limited
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,
@@ -413,6 +425,23 @@ namespace shared {
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = 21, // TODO: Remove this hardcoded "skillId"!
                             },
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.DummyIv,
+                                Quota = 0,
+                                FramesToRecover = 0,
+                                DefaultQuota = 0,
+                                DefaultFramesToRecover = MAX_INT, 
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                            },
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.TimedMagazineIv,
+                                Quota = 36,
+                                FramesToRecover = 0,
+                                DefaultQuota = 36,
+                                DefaultFramesToRecover = 45, 
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = INVENTORY_BTN_B_SKILL,
+                            }
                         }
                     }),
 

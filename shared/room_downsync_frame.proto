@@ -45,6 +45,7 @@ enum CharacterState {
 	Atk3 = 1026;
 	Atk4 = 1027;
 	Atk5 = 1028;
+	Atk6 = 1029;
 
 	InAirAtk1 = 2048;
 	InAirAtk2 = 2049;
