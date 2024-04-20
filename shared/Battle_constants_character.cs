@@ -34,9 +34,9 @@ namespace shared {
                         Mp = 60*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
-                        LayDownFrames = 16,
-                        LayDownFramesToRecover = 16,
-                        GetUpInvinsibleFrames = 10,
+                        LayDownFrames = 46,
+                        LayDownFramesToRecover = 46,
+                        GetUpInvinsibleFrames = 30,
                         GetUpFramesToRecover = 27,
                         Speed = (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -68,6 +68,7 @@ namespace shared {
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         DefaultAirDashQuota = 1,
                         DefaultAirJumpQuota = 1,
+                        UseIsolatedAvatar = true,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,

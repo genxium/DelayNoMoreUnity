@@ -114,10 +114,11 @@ public class DialogBoxes : MonoBehaviour {
                 speciesIdInAvatar = rdf.PlayersArr[line.NarratorJoinIndex - 1].SpeciesId;
             }
 
-            string speciesName = Battle.characters[speciesIdInAvatar].SpeciesName;
+            var chConfig = Battle.characters[speciesIdInAvatar];
+            string speciesName = chConfig.SpeciesName;
             string spriteSheetPath = String.Format("Characters/{0}/{0}", speciesName, speciesName);
             var sprites = Resources.LoadAll<Sprite>(spriteSheetPath);
-            if (null == sprites) {
+            if (null == sprites || chConfig.UseIsolatedAvatar) {
                 var sprite = Resources.Load<Sprite>(String.Format("Characters/{0}/Avatar_1", speciesName));
                 if (null != sprite) {
                     if (line.DownOrNot) {
