@@ -648,9 +648,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1124494534, guid: 0abc45ebae47fae48be0eaf9e10357cc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6b4e756dfe7f4cd4f942932d215d0715, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -756,7 +756,7 @@ GameObject:
   - component: {fileID: 1858582303510683808}
   - component: {fileID: 823835560686412367}
   m_Layer: 5
-  m_Name: KnifeGirl
+  m_Name: BladeGirl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -5,15 +5,17 @@ using System.Collections;
 using System.Collections.Immutable;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class DialogBoxes : MonoBehaviour {
     public GameObject dialogUp, dialogDown;
     public Image avatarDown, avatarUp;
     public TMP_Text textDown, textUp;
-    public Button nextBtn; // to toggle interactability
     protected int stepCnt = 0;
     protected int renderingStepCnt = 0;
+    protected bool currentSelectPanelEnabled = false;
+    public Image nextBtn, cancelBtn; // to toggle interactability
 
     // Start is called before the first frame update
     void Start() {
@@ -31,8 +33,43 @@ public class DialogBoxes : MonoBehaviour {
     }
 
     public virtual void OnNextBtnClicked() {
-        Debug.Log(String.Format("Next button clicked, now stepCnt = " + stepCnt));
         stepCnt++;
+    }
+
+    public void toggleUIInteractability(bool val) {
+        currentSelectPanelEnabled = val;
+        if (null != nextBtn) {
+            if (val) {
+                nextBtn.gameObject.transform.localScale = Vector3.one;
+            } else {
+                nextBtn.gameObject.transform.localScale = Vector3.zero;
+            }
+        }
+        if (null != cancelBtn) {
+            if (val) {
+                cancelBtn.gameObject.transform.localScale = Vector3.one;
+            } else {
+                cancelBtn.gameObject.transform.localScale = Vector3.zero;
+            }
+        }
+    }
+
+    public void OnBtnCancel(InputAction.CallbackContext context) {
+        throw new NotImplementedException();
+    }
+
+    public void OnBtnConfirm(InputAction.CallbackContext context) {
+        if (!currentSelectPanelEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        if (rising && InputActionPhase.Performed == context.phase) {
+            toggleUIInteractability(false);
+            IncrementStep();
+        }
+    }
+
+    public void IncrementStep() {
+        stepCnt++;
+        Debug.Log(String.Format("IncrementStep executed, now stepCnt = " + stepCnt));
     }
 
     public bool renderStoryPoint(RoomDownsyncFrame rdf, int levelId, int storyPointId) {
@@ -41,16 +78,15 @@ public class DialogBoxes : MonoBehaviour {
         if (stepCnt >= storyPoint.Length) {
             dialogUp.SetActive(false);
             dialogDown.SetActive(false);
-            nextBtn.gameObject.SetActive(false);
+            toggleUIInteractability(false);
             return false;
         } else {
             if (renderingStepCnt < stepCnt) {
                 dialogUp.SetActive(false);
                 dialogDown.SetActive(false);
-                nextBtn.gameObject.SetActive(false);
+                toggleUIInteractability(false);
                 ImmutableArray<StoryPointDialogLine> storyPointStep = storyPoint[stepCnt];
                 StartCoroutine(renderStoryPointStep(rdf, storyPointStep));
-                renderingStepCnt = stepCnt;
             }
             
             return true;
@@ -78,23 +114,33 @@ public class DialogBoxes : MonoBehaviour {
                 speciesIdInAvatar = rdf.PlayersArr[line.NarratorJoinIndex - 1].SpeciesId;
             }
 
-            string speciesName = Battle.characters[speciesIdInAvatar].SpeciesName;
+            var chConfig = Battle.characters[speciesIdInAvatar];
+            string speciesName = chConfig.SpeciesName;
             string spriteSheetPath = String.Format("Characters/{0}/{0}", speciesName, speciesName);
             var sprites = Resources.LoadAll<Sprite>(spriteSheetPath);
-            foreach (Sprite sprite in sprites) {
-                if ("Avatar_1".Equals(sprite.name)) {
+            if (null == sprites || chConfig.UseIsolatedAvatar) {
+                var sprite = Resources.Load<Sprite>(String.Format("Characters/{0}/Avatar_1", speciesName));
+                if (null != sprite) {
                     if (line.DownOrNot) {
                         avatarDown.sprite = sprite;
                     } else {
                         avatarUp.sprite = sprite;
                     }
-                    break;
+                }
+            } else {
+                foreach (Sprite sprite in sprites) {
+                    if ("Avatar_1".Equals(sprite.name)) {
+                        if (line.DownOrNot) {
+                            avatarDown.sprite = sprite;
+                        } else {
+                            avatarUp.sprite = sprite;
+                        }
+                        break;
+                    }
                 }
             }
         }
-        nextBtn.gameObject.SetActive(true);
-        DOTween.Sequence()
-            .Append(nextBtn.transform.DOScale(0.3f * Vector3.one, 0.25f))
-            .Append(nextBtn.transform.DOScale(1.0f * Vector3.one, 0.25f));
+        renderingStepCnt = stepCnt;
+        toggleUIInteractability(true);
     }
 }

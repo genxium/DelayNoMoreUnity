@@ -37,6 +37,9 @@ public class InventorySlot : MonoBehaviour {
         } else if (21 == slot.SkillId) {
             content.color = Color.white;
             content.sprite = buffConfigSprites[3]; // TODO: Remove this nonsense hardcoded index! 
+        } else if (4 == slot.SkillId) {
+            content.color = Color.white;
+            content.sprite = buffConfigSprites[4]; // TODO: Remove this nonsense hardcoded index! 
         }
 
         switch (slot.StockType) {

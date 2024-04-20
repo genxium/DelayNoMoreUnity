@@ -10,6 +10,11 @@ public class SelfBattleHeading : MonoBehaviour {
     public Slider mpBar;
     public BuffActiveCountDown buffActiveCountDown;
 
+    public void reset() {
+        speciesId = -1;
+        avatar.sprite = null;
+    }
+
     public void SetCharacter(CharacterDownsync chd) {
         var newChConfig = Battle.characters[chd.SpeciesId];
         if (chd.SpeciesId != speciesId) {
@@ -17,16 +22,23 @@ public class SelfBattleHeading : MonoBehaviour {
             string speciesName = newChConfig.SpeciesName;
             string spriteSheetPath = String.Format("Characters/{0}/{0}", speciesName, speciesName);
             var sprites = Resources.LoadAll<Sprite>(spriteSheetPath);
-            foreach (Sprite sprite in sprites) {
-                if ("Avatar_1".Equals(sprite.name)) {
+            if (null == sprites || newChConfig.UseIsolatedAvatar) {
+                var sprite = Resources.Load<Sprite>(String.Format("Characters/{0}/Avatar_1", speciesName));
+                if (null != sprite) {
                     avatar.sprite = sprite;
-                    break;
+                }
+            } else {
+                foreach (Sprite sprite in sprites) {
+                    if ("Avatar_1".Equals(sprite.name)) {
+                        avatar.sprite = sprite;
+                        break;
+                    }
                 }
             }
         }
         
         hpBar.SetValueWithoutNotify((float)chd.Hp/ newChConfig.Hp);
-        if (newChConfig.UseInventoryBtnB) {
+        if (0 >= newChConfig.Mp) {
             mpBar.gameObject.SetActive(false);
         } else {
             mpBar.gameObject.SetActive(true);

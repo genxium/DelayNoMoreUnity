@@ -146,7 +146,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -142517125, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -170,7 +170,7 @@ MonoBehaviour:
   cooldownMask: {fileID: 7380059971915718088}
   content: {fileID: 388711276216919262}
   buffConfigSprites: []
-  inventoryBtnBSprite: {fileID: 712359020, guid: 8b7494579604a3640bd335cf0f75600a, type: 3}
+  inventoryBtnBSprite: {fileID: -490851406, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
   regularBtnBSprite: {fileID: -217861898, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
 --- !u!1 &143196051212310507
 GameObject:
@@ -516,7 +516,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 1536172879, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1112,7 +1112,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -142517125, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1153,6 +1153,7 @@ MonoBehaviour:
   - {fileID: 1106039805, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: 590662967, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: 623420632, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  - {fileID: -1054876607, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   inventoryBtnBSprite: {fileID: 0}
   regularBtnBSprite: {fileID: 0}
 --- !u!1 &6132405460575147013
@@ -1299,7 +1300,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -217861898, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

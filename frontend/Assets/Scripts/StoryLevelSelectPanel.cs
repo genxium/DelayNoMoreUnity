@@ -22,7 +22,7 @@ public class StoryLevelSelectPanel : MonoBehaviour {
         reset();
     }
 
-    void onEnable() {
+    void OnEnable() {
         storyProgress = Battle.loadStoryProgress(Application.persistentDataPath, "story");
         reset();
     }
@@ -72,6 +72,7 @@ public class StoryLevelSelectPanel : MonoBehaviour {
         if (0 < selectionPhase) {
             reset();
         } else {
+            toggleUIInteractability(false);
             SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
         }
     }

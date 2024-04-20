@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 namespace shared {
     public partial class Battle {
         public const int SPECIES_NONE_CH = -1;
-        public const int SPECIES_KNIFEGIRL = 0;
+        public const int SPECIES_BLADEGIRL = 0;
         public const int SPECIES_SWORDMAN = 1;
         public const int SPECIES_MONKGIRL = 2;
         public const int SPECIES_FIRESWORDMAN = 3;
@@ -27,16 +27,16 @@ namespace shared {
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
                 new[]
                 {
-                    new KeyValuePair<int, CharacterConfig>(SPECIES_KNIFEGIRL, new CharacterConfig {
-                        SpeciesId = SPECIES_KNIFEGIRL,
-                        SpeciesName = "KnifeGirl",
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_BLADEGIRL, new CharacterConfig {
+                        SpeciesId = SPECIES_BLADEGIRL,
+                        SpeciesName = "BladeGirl",
                         Hp = 200,
                         Mp = 60*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
-                        LayDownFrames = 16,
-                        LayDownFramesToRecover = 16,
-                        GetUpInvinsibleFrames = 10,
+                        LayDownFrames = 46,
+                        LayDownFramesToRecover = 46,
+                        GetUpInvinsibleFrames = 30,
                         GetUpFramesToRecover = 27,
                         Speed = (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -52,32 +52,34 @@ namespace shared {
                         VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeY = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        HasTurnAroundAnim = true,
+                        HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 2,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        DefaultAirDashQuota = 1,
+                        DefaultAirJumpQuota = 1,
+                        UseIsolatedAvatar = true,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
-                                StockType = InventorySlotStockType.TimedIv,
+                                StockType = InventorySlotStockType.TimedMagazineIv,
                                 Quota = 1,
                                 FramesToRecover = 0,
                                 DefaultQuota = 1,
-                                DefaultFramesToRecover = 1800,
-                                BuffSpeciesId = XformToSuperKnifeGirl.SpeciesId,
-                                SkillId = NO_SKILL,
+                                DefaultFramesToRecover = 15*BATTLE_DYNAMICS_FPS,
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = 4, // TODO: Remove this hardcoded "skillId"!
                             }
-                        }, 
-                        DefaultAirDashQuota = 5, // Virtually unlimited
+                        }
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_SWORDMAN, new CharacterConfig {
@@ -380,7 +382,7 @@ namespace shared {
                         SpeciesId = SPECIES_MAGSWORDGIRL,
                         SpeciesName = "MagSwordGirl",
                         Hp = 120,
-                        Mp = 60*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty 
+                        Mp = 30*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 30 seconds to refill Mp from empty 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -410,9 +412,10 @@ namespace shared {
                         SlidingEnabled = true,
                         CrouchingEnabled = true,
                         ProactiveJumpStartupFrames = 2,
+                        UseInventoryBtnB = true,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
-                        DefaultAirDashQuota = 1, // Her air dash is an attack, thus should be quite limited
+                        DefaultAirDashQuota = 3, // Her air dash is an attack, thus should be quite limited
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,
@@ -423,6 +426,23 @@ namespace shared {
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = 21, // TODO: Remove this hardcoded "skillId"!
                             },
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.DummyIv,
+                                Quota = 0,
+                                FramesToRecover = 0,
+                                DefaultQuota = 0,
+                                DefaultFramesToRecover = MAX_INT, 
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                            },
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.TimedMagazineIv,
+                                Quota = 36,
+                                FramesToRecover = 0,
+                                DefaultQuota = 36,
+                                DefaultFramesToRecover = 45, 
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = INVENTORY_BTN_B_SKILL,
+                            }
                         }
                     }),
 

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.shared.delaynomore": "file:../../shared/UnityPackageOutput",
+    "com.unity.2d.aseprite": "1.1.3",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.adaptiveperformance": "4.0.1",

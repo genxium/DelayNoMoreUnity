@@ -13,6 +13,10 @@ public class OnlineArenaCharacterSelectPanel : MonoBehaviour {
         reset();
     }
 
+    private void OnEnable() {
+        reset();
+    }
+
     public void toggleUIInteractability(bool enabled) {
         characterSelectGroup.toggleUIInteractability(enabled);
         backButton.gameObject.SetActive(enabled);
@@ -35,6 +39,7 @@ public class OnlineArenaCharacterSelectPanel : MonoBehaviour {
     }
 
     public void OnBackButtonClicked() {
+        toggleUIInteractability(false);
         SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 }

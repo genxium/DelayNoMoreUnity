@@ -451,7 +451,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
             var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
 
-            var playerGameObj = playerGameObjs[k];
+            var playerGameObj = playerGameObjs[k]; 
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
 
             if (chAnimCtrl.speciesId != currCharacterDownsync.SpeciesId) {
@@ -1164,6 +1164,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
+        selfBattleHeading.reset();
         readyGoPanel.resetCountdown();
         settlementPanel.gameObject.SetActive(false);
         

@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class CharacterSelectGroup : AbstractSingleSelectGroup {
-   
+
     public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
         if (!currentSelectGroupEnabled) return;
         var kctrl = (KeyControl)context.control;
