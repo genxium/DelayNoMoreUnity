@@ -34,7 +34,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1NFNwzAUQNEk8hJdoPwChQKl0HW6DTBJyxDswhi8qEStLIoifkKcc6SryI4i6/kjVQUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDPZaqqq+g6WqTy17mb2LuNltFdKn+du4+9h2gVPaby17l17D1Fz9Emlb/OzZIkTbOp/wNhirbN+XcX9aFSfNSHTn32+G7s99DN/dP8feaa18fGdA/53H+dP9fdxX91bu7f5n+J/8DrAL01w57fzt8+d9F+gN6/5x/q/K4vTTvFSQ==
+   eJzt1NttwjAUgOGk8hIs0L5C6YVbYR22oZ0EOkR36Rg9CEUgC1DEAxTn+6RfkR1FyvGDqwoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKCdfqqqQfQcDVP569xL7L1Gb9F7Kn+dG8XeOJpE01T+OjeLvY9oHi1S+etcL0lSN+v6HQhdtHw4/e6p3lWKn3rXod8W3937OTRzH5u/zVyP9b57Ood87kvnzzVn8V+dmvvc/Ku4Bz6v3Fd299ziH7bzb5/raHPlvrP5b/EPTX/bBsLB
   </data>
  </layer>
  <layer id="29" name="Ground" width="64" height="128">
@@ -42,7 +42,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztm8tNw0AQhnddARUAN7qI3QMPAWdAnMOjAuCMUgNQCVAEBzhxpwLMWMoqw8qYyLYU0Pev9CuKolj+dmZnZsfrsgghNIKN1xjCm6mE8n8a+8S4KzB/Y/vaPqn8dRQ/3f8ncH56/Kfzk/2/kv3x+Y/MX6r+xcc/uv+T47/yH9v/6fs/uv0reP7X/kf89PxH5yf7P33/R7c/vf7T/o/t//T6l85fR7b/0+s/evynn39R/JP/0/t/dH5y/qef/6PXP4p/7PVP73/R+5/0+o9e/2j9s9e/8r/4yfFf+x/FP7L/K/6z7a/3H9jxj97/oL//Qa9/9PyXbX/Vv2z/1/lHrX9y/qfvf+j2V/3L5qeff1X8Y9uf3v9R/49tf3r9T3/+Sz//Q9//0/O/+l+Kf2T/p8c/+v5Pz38V/8jrn85PX/90fnr8o/f/6f0P+vpX/mPzq/8nfnL8V/9T/k+2P3390+O/4h+7/qOff/D1/759P3C6LX7XXxnL3KtnO4zyf+V/2Z/+/pf3/1OnXdPegDl5id+1qmuksW0sOxljvv95Dwtd2PdL03SEuVjVSMwNw5npPGPM6/+tuNBaEaqkNBf/ZR4Sd2L2LJ4xr//9bx9O+TzMRpqLI7v2selkoG975mkLt2fJ+X3//yf+fB7G8okru+a16WYAf5et2xj62L9LaR76jDv7/73pYQB/l63b9OSU4t+GaTNjWJY/qc94nN/H8wD+Ife5Pmf/ArT3ZgI=
+   eJztm8tNw0AQhnddARUAN7qI3QMPAWdAnHlVAJwRNQCd0AQHOHGnAsxYYpRhFUziRErQ96/0K7KiRP52Zmdmx+u6Sil1go3XnNKbqYbyfxr7yLgbMH9n+9Y+qfxtFj/d/0dwfnr8p/OT/b+R/fH5j8xfq/7Fxz+6/5Pjv/If2//p+z+6/Rt4/tf+R/z0/EfnJ/s/ff9Htz+9/tP+j+3/9PqXzt9mtv/T6z96/Keff1H8k//T+390fnL+p5//o9c/in/s9U/vf9H7n/T6j17/aP2z17/yv/jJ8V/7H8U/sv8r/rPtr/cf2PGP3v+gv/9Br3/0/Jdtf9W/bP/X+Uetf3L+p+9/6PZX/cvmp59/Vfxj25/e/1H/j21/ev1Pf/5LP/9D3//T87/6X4p/ZP+nxz/6/k/PfxX/yOufzk9f/3R+evyj9//p/Q/6+lf+Y/Or/yd+cvxX/1P+T7Y/ff3T47/iH7v+o59/iPX/vl0fBN1Vf2tVxjT3GtkOs/xf+V/2p7//Ff3/NGjXtDfHnLzkn1rWf/jYNpadgrHc/7ynsS7t+sp0toC5WNZw5o7h3HRRMJb1/1Yea61Kjcvn4r/Mg3M7c2SJjGX9H7/7CCrn4X4F52KSrf2+I0vJH/v/v/GX87AInziy/zsOOhm4vvtsPYlhiP375PMw67i2394E3Q7k77P1JD0HefzbMG0WDNPyu2YdD/abx6Cngfzz3Of6N/sXDx1m1A==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -210,7 +210,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="422" name="Escape" x="488" y="2024" width="32" height="16">
+  <object id="422" name="Escape" x="472" y="2026" width="64" height="32">
    <properties>
     <property name="collisionTypeMask" value="4"/>
     <property name="providesEscape" value="1"/>
@@ -239,7 +239,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="358" name="Ground" x="-32" y="2016" width="520" height="64">
+  <object id="358" name="Ground" x="-32" y="2016" width="504" height="64">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -262,7 +262,7 @@
   <object id="409" name="SlopeL" x="80" y="1936">
    <polyline points="0,96 240,96 0,0"/>
   </object>
-  <object id="428" name="Ground" x="520" y="2016" width="520" height="64">
+  <object id="428" name="Ground" x="536" y="2016" width="504" height="64">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

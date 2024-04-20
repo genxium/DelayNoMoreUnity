@@ -1397,8 +1397,8 @@ namespace shared {
                                             DebuffConfig associatedDebuffConfig = debuffConfigs[buffConfig.AssociatedDebuffs[q]];
                                             if (null == associatedDebuffConfig || TERMINATING_BUFF_SPECIES_ID == associatedDebuffConfig.SpeciesId) break;
                                             switch (associatedDebuffConfig.Type) {
-                                                case DebuffType.ColdSpeedDown:
                                                 case DebuffType.FrozenPositionLocked:
+                                                    if (BulletType.Melee == bulletNextFrame.Config.BType) break; // Forbid melee attacks to use freezing buff, otherwise it'd be too unbalanced. 
                                                     // Overwrite existing debuff for now
                                                     int debuffArrIdx = associatedDebuffConfig.ArrIdx;
                                                     AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, atkedCharacterInNextFrame.DebuffList[debuffArrIdx]);
@@ -1408,6 +1408,7 @@ namespace shared {
                                                     } else {
                                                         atkedCharacterInNextFrame.CharacterState = Atked1;
                                                     }
+                                                    atkedCharacterInNextFrame.VelX = 0;
                                                     switch (associatedDebuffConfig.StockType) {
                                                         case BuffStockType.Timed:
                                                             atkedCharacterInNextFrame.FramesToRecover = associatedDebuffConfig.Stock;

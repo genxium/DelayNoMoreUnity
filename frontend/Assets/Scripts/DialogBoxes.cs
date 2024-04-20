@@ -117,14 +117,25 @@ public class DialogBoxes : MonoBehaviour {
             string speciesName = Battle.characters[speciesIdInAvatar].SpeciesName;
             string spriteSheetPath = String.Format("Characters/{0}/{0}", speciesName, speciesName);
             var sprites = Resources.LoadAll<Sprite>(spriteSheetPath);
-            foreach (Sprite sprite in sprites) {
-                if ("Avatar_1".Equals(sprite.name)) {
+            if (null == sprites) {
+                var sprite = Resources.Load<Sprite>(String.Format("Characters/{0}/Avatar_1", speciesName));
+                if (null != sprite) {
                     if (line.DownOrNot) {
                         avatarDown.sprite = sprite;
                     } else {
                         avatarUp.sprite = sprite;
                     }
-                    break;
+                }
+            } else {
+                foreach (Sprite sprite in sprites) {
+                    if ("Avatar_1".Equals(sprite.name)) {
+                        if (line.DownOrNot) {
+                            avatarDown.sprite = sprite;
+                        } else {
+                            avatarUp.sprite = sprite;
+                        }
+                        break;
+                    }
                 }
             }
         }
