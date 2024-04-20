@@ -31,7 +31,7 @@ namespace shared {
                         SpeciesId = SPECIES_BLADEGIRL,
                         SpeciesName = "BladeGirl",
                         Hp = 200,
-                        Mp = 60*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 60 seconds to refill Mp from empty 
+                        Mp = 0,  
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 46,
@@ -439,7 +439,7 @@ namespace shared {
                                 Quota = 36,
                                 FramesToRecover = 0,
                                 DefaultQuota = 36,
-                                DefaultFramesToRecover = 45, 
+                                DefaultFramesToRecover = 4*BATTLE_DYNAMICS_FPS, 
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = INVENTORY_BTN_B_SKILL,
                             }

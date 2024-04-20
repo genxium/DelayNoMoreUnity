@@ -604,7 +604,7 @@ namespace shared {
                             RecoveryFrames = 79,
                             RecoveryFramesOnBlock = 79,
                             RecoveryFramesOnHit = 79,
-                            MpDelta = 900,
+                            MpDelta = 0,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Atk4
                             }
@@ -804,13 +804,13 @@ namespace shared {
                                 CharacterEmitSfxName="SlashEmitSpd1",
                                 ExplosionSfxName="Melee_Explosion1",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }.UpsertCancelTransit(1, 7)
+                                }.UpsertCancelTransit(PATTERN_B, 7)
                 )),
 
                     new KeyValuePair<int, Skill>(7, new Skill{
-                            RecoveryFrames = 30,
-                            RecoveryFramesOnBlock = 30,
-                            RecoveryFramesOnHit = 30,
+                            RecoveryFrames = 15,
+                            RecoveryFramesOnBlock = 15,
+                            RecoveryFramesOnHit = 15,
                             MpDelta = 0,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Atk2
@@ -818,19 +818,18 @@ namespace shared {
                             .AddHit(
                                 new BulletConfig {
                                 StartupFrames = 6,
-                                ActiveFrames = 20,
-                                HitStunFrames = MAX_INT,
+                                ActiveFrames = 9,
+                                HitStunFrames = 10,
                                 BlockStunFrames = 9,
-                                Damage = 19,
+                                Damage = 12,
                                 PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = (int)(2.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = NO_LOCK_VEL,
                                 HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                BlowUp = true,
                                 SpeciesId = 3,
                                 ExplosionFrames = 20,
                                 BType = BulletType.Melee,
@@ -840,7 +839,7 @@ namespace shared {
                                 CharacterEmitSfxName="SlashEmitSpd3",
                                 ExplosionSfxName="Melee_Explosion3",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }
+                            }.UpsertCancelTransit(PATTERN_B, 8)
                 )),
 
                     new KeyValuePair<int, Skill>(8, new Skill{
@@ -997,23 +996,39 @@ namespace shared {
                                             RecoveryFrames = 10,
                                             RecoveryFramesOnBlock = 10,
                                             RecoveryFramesOnHit = 10,
-                                            MpDelta = 60,
                                             TriggerType = SkillTriggerType.RisingEdge,
                                             BoundChState = Dashing
                                             }
                                             .AddHit(
                                                 new BulletConfig {
                                                 StartupFrames = 3,
+                                                StartupInvinsibleFrames = 2,
+                                                ActiveFrames = 4,
                                                 PushbackVelX = NO_LOCK_VEL,
                                                 PushbackVelY = NO_LOCK_VEL,
                                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                                 SelfLockVelY = 0,
                                                 DelaySelfVelToActive = true,
+                                                OmitSoftPushback = true,
                                                 BType = BulletType.Melee,
                                                 ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                                                 }
-                                                )),
+                                            )
+                                            .AddHit(
+                                                new BulletConfig {
+                                                StartupFrames = 8,
+                                                ActiveFrames = 2,
+                                                PushbackVelX = NO_LOCK_VEL,
+                                                PushbackVelY = NO_LOCK_VEL,
+                                                SelfLockVelX = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                                SelfLockVelY = 0,
+                                                DelaySelfVelToActive = true,
+                                                BType = BulletType.Melee,
+                                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                                                }
+                                            )
+                                    ),
 
                                                     new KeyValuePair<int, Skill>(12, new Skill{
                                                             RecoveryFrames = 55,
@@ -2069,7 +2084,6 @@ namespace shared {
                             RecoveryFrames = 60,
                             RecoveryFramesOnBlock = 60,
                             RecoveryFramesOnHit = 60,
-                            MpDelta = 0,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = InAirAtk2
                             }

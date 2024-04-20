@@ -45,6 +45,7 @@ public class OfflineMapController : AbstractMapController {
         cachedSelfSpeciesId = speciesId;
         cachedLevelName = levelName;
         initSeqNo = 1; // To avoid loading "underlyingMap" in this click callback
+        enableBattleInput(false);
     }
 
 
@@ -117,6 +118,7 @@ public class OfflineMapController : AbstractMapController {
                 });
                 initSeqNo++;
             } else if (6 == initSeqNo) {
+                enableBattleInput(true);
                 readyGoPanel.playGoAnim();
                 bgmSource.Play();
                 initSeqNo++;
