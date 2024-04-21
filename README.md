@@ -1,6 +1,7 @@
 # Latest tag change notes
 v1.3.8 new features
 - Added quota limited air-jump and air-dash dynamics
+- Fixes for NPC jumping.
 - Fixes for force-resync
 - Fixes for a few `cancel-and-rejoin` cases in online arena
 - Refactored UI for better login flow and inventory-btnB feature 

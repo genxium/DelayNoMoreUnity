@@ -804,7 +804,9 @@ namespace shared {
                 }
 
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY + vhDiffInducedByCrouching;
-                if (thatCharacterInNextFrame.JumpStarted) {
+
+                bool jumpStarted = (i < roomCapacity ? thatCharacterInNextFrame.JumpStarted : currCharacterDownsync.JumpStarted); // [WARNING] Due to the current ordering of "_processPlayerInputs -> _moveAndInsertCharacterColliders -> _processNpcInputs", I have no better choice of deciding "jumpStarted" besides this ugly way for now
+                if (jumpStarted) {
                     // We haven't proceeded with "OnWall" calculation for "thatCharacterInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
                     if (currCharacterDownsync.OnWall && InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
                         // logger.LogInfo("rdfId=" + currRenderFrame.Id + ", wall jump started for " + stringifyPlayer(currCharacterDownsync));

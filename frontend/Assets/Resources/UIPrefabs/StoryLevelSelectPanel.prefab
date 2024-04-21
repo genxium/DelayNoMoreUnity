@@ -199,15 +199,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backButton: {fileID: 6381073653263501449}
-  sharedInputInstance:
-    m_Name: Shared Input Instance
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: c45f996d-0a26-40ca-95d1-4b996cfb576b
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
   characterSelectGroup: {fileID: 8772443722590315615}
   levels: {fileID: 4657394933665364072}
   map: {fileID: 0}
@@ -237,6 +228,30 @@ PrefabInstance:
     - target: {fileID: 1374181872186073899, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1535747772627267281, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1535747772627267281, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1535747772627267281, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1535747772627267281, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1535747772627267281, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4508816285941773029, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5845746955146440088, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -336,6 +351,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6465685096858498292, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7612581621359339587, guid: 2518e1b1cacd1d443a95f059a2421bdc, type: 3}
+      propertyPath: m_Spacing
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

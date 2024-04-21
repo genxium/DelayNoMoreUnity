@@ -90,6 +90,9 @@ public class StoryLevelSelectPanel : MonoBehaviour {
                 case 1:
                     selectedLevelName = "ArrowPalace";
                     break;
+                case 2:
+                    selectedLevelName = "Forest";
+                    break;
             }
             selectionPhase = 2;
             toggleUIInteractability(false);
