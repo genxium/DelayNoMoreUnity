@@ -131,11 +131,17 @@ public class WsSessionManager {
                 Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
             } catch (Exception ex) {
                 Debug.LogWarning(String.Format("WsSession is stopped by exception; ex={0}", ex));
-                var exMsg = new WsResp { 
-                    Ret = ErrCode.UnknownError,
-                    ErrMsg = ex.Message
-                };
-                recvBuffer.Enqueue(exMsg);
+                // [WARNING] Edge case here, if by far we haven't signaled "guiCanProceedSignalSource", it means that the "characterSelectPanel" is still awaiting this signal to either proceed to battle or prompt an error message.  
+                if (!guiCanProceedSignalSource.IsCancellationRequested) {
+                    string errMsg = String.Format("ConnectWs failed before battle starts, authToken={0}, playerId={1}, please go back to LoginPage!", authToken, playerId);
+                    throw new Exception(errMsg);
+                } else {
+                    var exMsg = new WsResp { 
+                        Ret = ErrCode.UnknownError,
+                        ErrMsg = ex.Message
+                    };
+                    recvBuffer.Enqueue(exMsg);
+                }
             } finally {
                 var closeMsg = new WsResp {
                     Ret = ErrCode.Ok,

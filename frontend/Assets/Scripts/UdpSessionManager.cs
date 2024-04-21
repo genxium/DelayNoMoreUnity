@@ -124,7 +124,7 @@ public class UdpSessionManager {
         Debug.Log(String.Format("Starts udpSession 'Receive' loop"));
         try {
             while (!wsSessionCancellationToken.IsCancellationRequested) {
-                var recvResult = await udpSession.ReceiveAsync(); // by experiment, "udpSession.Close()" would unblock it
+                var recvResult = await udpSession.ReceiveAsync(); // by experiment, "udpSession.Close()" would unblock it even at the absence of a cancellation token!
                 WsReq req = WsReq.Parser.ParseFrom(recvResult.Buffer);
                 switch (req.Act) {
                     case Battle.UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR:

@@ -225,6 +225,7 @@ public class OnlineMapController : AbstractMapController {
                 }
             }, TaskContinuationOptions.OnlyOnFaulted);
 
+            // [WARNING] returned to MainThread
             if (!guiCanProceedSignal.IsCancellationRequested && (TaskStatus.Canceled != guiWaitToProceedTask.Status && TaskStatus.Faulted != guiWaitToProceedTask.Status)) {
                 try {
                     guiWaitToProceedTask.Wait(guiCanProceedSignal);
@@ -237,7 +238,6 @@ public class OnlineMapController : AbstractMapController {
                 Debug.Log(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
                 characterSelectPanel.gameObject.SetActive(false);
             } else {
-                // [WARNING] returned to MainThread
                 var msg = String.Format("Failed to start ws session#2: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId);
                 popupErrStackPanel(msg);
                 onWsSessionClosed();

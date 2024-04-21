@@ -418,7 +418,7 @@
    </properties>
    <point/>
   </object>
-  <object id="206" x="1224" y="670">
+  <object id="206" x="1218" y="670">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -458,7 +458,7 @@
    </properties>
    <point/>
   </object>
-  <object id="249" x="839.5" y="687">
+  <object id="249" x="845.5" y="687">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -466,7 +466,7 @@
    </properties>
    <point/>
   </object>
-  <object id="269" x="857.5" y="669.5">
+  <object id="269" x="861.5" y="669.5">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -482,7 +482,7 @@
    </properties>
    <point/>
   </object>
-  <object id="271" x="902" y="672">
+  <object id="271" x="899" y="672">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -490,7 +490,7 @@
    </properties>
    <point/>
   </object>
-  <object id="272" x="923" y="672">
+  <object id="272" x="926" y="672">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -514,7 +514,7 @@
    </properties>
    <point/>
   </object>
-  <object id="275" x="1156" y="674">
+  <object id="275" x="1154" y="674">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -522,7 +522,7 @@
    </properties>
    <point/>
   </object>
-  <object id="276" x="1180" y="674">
+  <object id="276" x="1182" y="674">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -538,7 +538,7 @@
    </properties>
    <point/>
   </object>
-  <object id="278" x="1240" y="686">
+  <object id="278" x="1235" y="686">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>

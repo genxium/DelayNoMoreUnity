@@ -238,11 +238,11 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 9137634800617550534}
           m_TargetAssemblyTypeName: PlayerWaitingPanel, Assembly-CSharp
-          m_MethodName: OnBackButtonClicked
-          m_Mode: 2
+          m_MethodName: OnCancel
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: OnlineMapController, Assembly-CSharp
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -308,6 +308,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
-  m_ChildScaleWidth: 1
-  m_ChildScaleHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
   m_ReverseArrangement: 0

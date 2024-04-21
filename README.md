@@ -1,9 +1,8 @@
 # Latest tag change notes
-v1.3.7 new features
+v1.3.8 new features
 - Added quota limited air-jump and air-dash dynamics
 - Fixes for force-resync
 - Fixes for a few `cancel-and-rejoin` cases in online arena
-    - Known issue#1: when trying to start/join consecutive online battles, UI might freeze at character selection panel (fix in progress)
 - Refactored UI for better login flow and inventory-btnB feature 
 
 v1.3.4 new features
