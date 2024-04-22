@@ -537,7 +537,7 @@ message TriggerConfigFromTiled {
 }
 
 message TriggerColliderAttr {
-	int32 triggerLocalId = 1; // ref-back upon collision, most (actually by now ALL) triggers are static, we use this "TriggerColliderAttr,triggerLocalId" to save the need of dynamically inserting and deleting colliders of each trigger while still being able to be rollback-compatible for "trigger.framesToFire & trigger.framesToRecover"!
+	int32 triggerLocalId = 1; // ref-back upon collision, most (actually by now ALL) triggers are static, we use this "TriggerColliderAttr.triggerLocalId" to save the need of dynamically inserting and deleting colliders of each trigger while still being able to be rollback-compatible for "trigger.framesToFire & trigger.framesToRecover"!
 }
 
 message Trigger {
@@ -778,17 +778,17 @@ message SerializableConvexPolygon {
 }
 
 message SerializedCompletelyStaticPatrolCueCollider {
-    PatrolCue attr = 1;
+    PatrolCue attr = 1; // "collisionTypeMask" is contained here
     SerializableConvexPolygon polygon = 2;
 }
 
 message SerializedCompletelyStaticTrapCollider {
-    TrapColliderAttr attr = 1;
+    TrapColliderAttr attr = 1; // "collisionTypeMask" is contained here
     SerializableConvexPolygon polygon = 2;
 }
 
 message SerializedCompletelyStaticTriggerCollider {
-    TriggerColliderAttr attr = 1;
+    TriggerColliderAttr attr = 1; // "collisionTypeMask" can be derived from here
     SerializableConvexPolygon polygon = 2;
 }
 

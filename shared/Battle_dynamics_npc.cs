@@ -71,7 +71,7 @@ namespace shared {
             res2 = null;
 
             // [WARNING] Finding only the closest non-self character to react to for avoiding any randomness. 
-            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
             if (!collided) return;
 
             float minAbsColliderDx = MAX_FLOAT32;
@@ -144,7 +144,7 @@ namespace shared {
             res2 = null;
 
             // [WARNING] Finding only the closest patrol cue to react to for avoiding any randomness. 
-            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
             if (!collided) return;
 
             float minAbsColliderDx = MAX_FLOAT32;
@@ -227,7 +227,7 @@ namespace shared {
                 calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
 
                 var visionCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
+                UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_VISION_INDEX_PREFIX);
                 collisionSys.AddSingle(visionCollider);
 
                 Collider? bCollider;

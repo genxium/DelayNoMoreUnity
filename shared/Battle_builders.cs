@@ -31,7 +31,7 @@ namespace shared {
                 }
             }
 
-            return new Collider(srcPolygon.X + spaceOffsetX, srcPolygon.Y + spaceOffsetY, w, h, srcPolygon, aMaxTouchingCellsCnt, data);
+            return new Collider(srcPolygon.X + spaceOffsetX, srcPolygon.Y + spaceOffsetY, w, h, srcPolygon, aMaxTouchingCellsCnt, data, 0UL);
         }
 
         public static ConvexPolygon NewRectPolygon(float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding) {
@@ -46,7 +46,7 @@ namespace shared {
             });
         }
 
-        public static void UpdateRectCollider(Collider collider, float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data) {
+        public static void UpdateRectCollider(Collider collider, float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data, ulong mask) {
             var (blX, blY) = PolygonColliderCtrToBL(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, spaceOffsetX, spaceOffsetY);
 
             float effW = leftPadding + w + rightPadding;
@@ -55,6 +55,7 @@ namespace shared {
             collider.Shape.UpdateAsRectangle(0, 0, effW, effH);
 
             collider.Data = data;
+            collider.Mask = mask;
         }
 
         public static bool UpdateWaveNpcKilledEvtSub(ulong publishingEvtMaskUponKilled, EvtSubscription nextExhaustEvtSub, ref ulong fulfilledEvtSubscriptionSetMask) {
@@ -698,6 +699,7 @@ namespace shared {
                 serializedPolygon.Points.CopyTo(points, 0);
                 var barrierPolygon = new ConvexPolygon(serializedPolygon.AnchorX, serializedPolygon.AnchorY, points);
                 var barrierCollider = NewConvexPolygonCollider(barrierPolygon, 0, 0, maxTouchingCellsCnt, null);
+                barrierCollider.Mask = COLLISION_BARRIER_INDEX_PREFIX;
                 staticColliders[staticCollidersCnt++] = barrierCollider;
             }
 
@@ -707,6 +709,7 @@ namespace shared {
                 s.Polygon.Points.CopyTo(points, 0);
                 var cuePolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
                 var cueCollider = NewConvexPolygonCollider(cuePolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
+                cueCollider.Mask = s.Attr.CollisionTypeMask;
                 staticColliders[staticCollidersCnt++] = cueCollider;
             }
 
@@ -717,6 +720,7 @@ namespace shared {
                 s.Polygon.Points.CopyTo(points, 0);
                 var trapPolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
                 var trapCollider = NewConvexPolygonCollider(trapPolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
+                trapCollider.Mask = s.Attr.CollisionTypeMask;
                 staticColliders[staticCollidersCnt++] = trapCollider;
                 completelyStaticTrapColliders.Add(trapCollider);
             }
@@ -727,6 +731,9 @@ namespace shared {
                 s.Polygon.Points.CopyTo(points, 0);
                 var triggerPolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
                 var triggerCollider = NewConvexPolygonCollider(triggerPolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
+                var trigger = startRdf.TriggersArr[s.Attr.TriggerLocalId];
+                var triggerConfig = trigger.Config;
+                triggerCollider.Mask = triggerConfig.TriggerMask;
                 staticColliders[staticCollidersCnt++] = triggerCollider;
             }
 

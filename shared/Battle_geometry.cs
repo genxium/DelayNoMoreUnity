@@ -70,7 +70,7 @@ namespace shared {
             float primaryOverlapMag = float.MinValue;
             bool primaryIsWall = true; // Initialized to "true" to be updated even if there's only 1 vertical wall 
             residueCollided.Clear();
-            bool collided = aCollider.CheckAllWithHolder(virtualGripToWall, 0, collision);
+            bool collided = aCollider.CheckAllWithHolder(virtualGripToWall, 0, collision, COLLIDABLE_PAIRS);
             if (!collided) {
 				//logger.LogInfo(String.Format("No collision object."));
                 return retCnt;
@@ -231,7 +231,7 @@ namespace shared {
             int retCnt = 0;
             primaryOverlapIndex = -1;
             float primaryOverlapMag = float.MinValue;
-            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
             if (!collided) {
                 //logger.LogInfo(String.Format("No collision object."));
                 return retCnt;
@@ -302,7 +302,7 @@ namespace shared {
             primaryOverlapIndex = -1;
             float primaryOverlapMag = float.MinValue;
             residueCollided.Clear();
-            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
             if (!collided) {
                 //logger.LogInfo(String.Format("No collision object."));
                 return retCnt;

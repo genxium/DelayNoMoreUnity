@@ -21,7 +21,7 @@ namespace shared {
                     effPushbacks[colliderCnt].Y = 0;
                     float boxCx, boxCy, boxCw, boxCh;
                     calcTrapBoxInCollisionSpace(colliderAttr, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
-                    UpdateRectCollider(trapCollider, boxCx, boxCy, boxCw, boxCh, 0, 0, 0, 0, 0, 0, colliderAttr); 
+                    UpdateRectCollider(trapCollider, boxCx, boxCy, boxCw, boxCh, 0, 0, 0, 0, 0, 0, colliderAttr, colliderAttr.CollisionTypeMask); 
                     colliderCnt++;
 
                     // Add to collision system
@@ -140,7 +140,7 @@ namespace shared {
                     continue;
                 }
                 
-                bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+                bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
                 if (!collided) continue;
 
                 while (true) {
