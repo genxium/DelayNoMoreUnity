@@ -158,12 +158,11 @@ message CharacterDownsync {
     // Kindly note that "collisionTypeMask" is NOT GRANULAR ENOUGH for inter-character collision configuration, e.g. same team omission, thus we'd still need the fields "bulletTeamId" and "chCollisionTeamId" here
 	int32 bulletTeamId = 1027;
 	int32 chCollisionTeamId = 1028;
-	uint64 collisionTypeMask = 1029;
 
-    repeated Buff buffList = 1030; 
-    repeated Debuff debuffList = 1031; 
+    repeated Buff buffList = 1029; 
+    repeated Debuff debuffList = 1030; 
 
-	Inventory inventory = 1032;
+	Inventory inventory = 1031;
 }
 
 message InputFrameDecoded {
@@ -227,7 +226,7 @@ message PatrolCue {
 	uint64 fdCaptureFrames = 8;
 	uint64 fuCaptureFrames = 9;
 
-	uint64 collisionTypeMask = 1029;
+	uint64 collisionTypeMask = 1029; // [COLLISION_NPC_PATROL_CUE_INDEX_PREFIX, COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX]
 }
 
 message VisionBox {
@@ -783,7 +782,7 @@ message SerializedCompletelyStaticPatrolCueCollider {
 }
 
 message SerializedCompletelyStaticTrapCollider {
-    TrapColliderAttr attr = 1; // "collisionTypeMask" is contained here
+    TrapColliderAttr attr = 1; // "TrapColliderAttr.collisionTypeMask" is a little peculiar, it can be a composite of different COLLISION_*_INDEX_PREFIX, thus often NOT taken care of by the COLLIDABLE_PAIRS set 
     SerializableConvexPolygon polygon = 2;
 }
 

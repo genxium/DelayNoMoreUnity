@@ -90,10 +90,6 @@ namespace shared {
                     continue;
                 }
 
-                if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
-                    continue;
-                }
-
                 if (v3.JoinIndex == currCharacterDownsync.JoinIndex || v3.BulletTeamId == currCharacterDownsync.BulletTeamId) {
                     continue;
                 }
@@ -160,10 +156,6 @@ namespace shared {
                 PatrolCue? v3 = bCollider.Data as PatrolCue;
                 if (null == v3) {
                     // Only check shape collision (which is relatively expensive) if it's PatrolCue 
-                    continue;
-                }
-
-                if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
                     continue;
                 }
 

@@ -68,27 +68,15 @@ namespace shared {
                         break;
                     }
                     // [WARNING] "bCollider" from "residueCollided" has NOT been checked by shape collision! 
-                    bool maskMatched = true, isBarrier = false, isAnotherCharacter = false, isBullet = false, isPatrolCue = false;
+                    bool isBarrier = false, isAnotherCharacter = false, isBullet = false, isPatrolCue = false;
                     switch (bCollider.Data) {
                         case CharacterDownsync v1:
-                            if (!COLLIDABLE_PAIRS.Contains(v1.CollisionTypeMask | colliderAttr.CollisionTypeMask)) {
-                                maskMatched = false;
-                                break;
-                            }
                             isAnotherCharacter = true;
                             break;
                         case Bullet v2:
-                            if (!COLLIDABLE_PAIRS.Contains(v2.Config.CollisionTypeMask | colliderAttr.CollisionTypeMask)) {
-                                maskMatched = false;
-                                break;
-                            }
                             isBullet = true;
                             break;
                         case PatrolCue v3:
-                            if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | colliderAttr.CollisionTypeMask)) {
-                                maskMatched = false;
-                                break;
-                            }
                             isPatrolCue = true;
                             break;
                         case TrapColliderAttr v4:
@@ -98,9 +86,6 @@ namespace shared {
                             // By default it's a regular barrier, even if data is nil
                             isBarrier = true;
                             break;
-                    }
-                    if (false == maskMatched) {
-                        continue;
                     }
                     if (isBullet || isBarrier) {
                         continue;

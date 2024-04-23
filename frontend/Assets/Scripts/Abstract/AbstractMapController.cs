@@ -2032,7 +2032,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             playerInRdf.VelY = 0;
             playerInRdf.InAir = true;
             playerInRdf.OnWall = false;
-            playerInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
 
             if (SPECIES_NONE_CH == speciesIdList[i]) continue;
 
@@ -2086,7 +2085,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.SpeciesId = characterSpeciesId;
             npcInRdf.BulletTeamId = teamId;
             npcInRdf.ChCollisionTeamId = teamId;
-            npcInRdf.CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX;
             npcInRdf.WaivingSpontaneousPatrol = isStatic;
             npcInRdf.OmitGravity = chConfig.OmitGravity;
             npcInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
