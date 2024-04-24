@@ -1288,6 +1288,7 @@ namespace shared {
 
                 bool exploded = false;
                 bool explodedOnAnotherCharacter = false;
+                bool explodedOnAnotherHarderBullet = false;
 
                 var bulletShape = bulletCollider.Shape;
                 int j = bulletNextFrame.BattleAttr.OffenderJoinIndex - 1;
@@ -1428,7 +1429,8 @@ namespace shared {
                                 break;
                             }
                             if (bulletNextFrame.BattleAttr.TeamId == v4.BattleAttr.TeamId) continue;
-                            if (bulletNextFrame.Config.Hardness > v4.Config.Hardness) continue; 
+                            if (bulletNextFrame.Config.Hardness > v4.Config.Hardness) continue;
+                            if (bulletNextFrame.Config.Hardness < v4.Config.Hardness) explodedOnAnotherHarderBullet = true;
                             exploded = true;
                             break;
                         case TrapColliderAttr v5:
@@ -1450,7 +1452,7 @@ namespace shared {
                 }
 
                 bool inTheMiddleOfMultihitTransition = false;
-                if (MultiHitType.None != bulletNextFrame.Config.MhType) {
+                if (MultiHitType.None != bulletNextFrame.Config.MhType && false == explodedOnAnotherHarderBullet) {
                     if (bulletNextFrame.BattleAttr.ActiveSkillHit + 1 < skillConfig.Hits.Count) {
                         inTheMiddleOfMultihitTransition = true;
                     }

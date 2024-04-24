@@ -330,6 +330,7 @@ namespace shared {
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName = "Explosion2",
             MhType = MultiHitType.FromPrevHitActual,
+            MhVanishOnMeleeHit = true,
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
         };
 

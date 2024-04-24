@@ -353,6 +353,8 @@ message BulletConfig {
     bool isPixelatedActiveVfx = 46;
     bool isPixelatedExplostionVfx = 47;
 
+	bool mhVanishOnMeleeHit = 48;
+
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
 
