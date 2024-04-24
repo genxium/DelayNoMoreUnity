@@ -507,19 +507,14 @@ public abstract class AbstractMapController : MonoBehaviour {
                 showTeamRibbonAndInplaceHpBar(rdf.Id, currCharacterDownsync, wx, wy, halfBoxCw, halfBoxCh, "pl-" + currCharacterDownsync.JoinIndex);
             }
 
-            if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
-                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, currCharacterDownsync.CharacterState, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
-            } else {
-                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, currCharacterDownsync.CharacterState, prevCharacterDownsync, false, chConfig);
-            }
+
+            chAnimCtrl.updateCharacterAnim(currCharacterDownsync, currCharacterDownsync.CharacterState, prevCharacterDownsync, false, chConfig);
 
             // Add character vfx
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
-            if (SPECIES_GUNGIRL == chConfig.SpeciesId) {
-                playCharacterDamagedVfx(currCharacterDownsync, chConfig, prevCharacterDownsync, chAnimCtrl.upperPart.gameObject, chAnimCtrl);
-            } else {
-                playCharacterDamagedVfx(currCharacterDownsync, chConfig, prevCharacterDownsync, playerGameObj, chAnimCtrl);
-            }
+            
+            playCharacterDamagedVfx(currCharacterDownsync, chConfig, prevCharacterDownsync, playerGameObj, chAnimCtrl);
+            
             playCharacterSfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id);
         }
@@ -2510,11 +2505,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             if (!noOpSet.Contains(overwriteChState)) {
                                 overwriteChState = CharacterState.Atked1;
                             }
-                            if (SPECIES_GUNGIRL == currCharacterDownsync.SpeciesId) {
-                                chAnimCtrl.updateTwoPartsCharacterAnim(currCharacterDownsync, overwriteChState, prevCharacterDownsync, false, chConfig, effectivelyInfinitelyFar);
-                            } else {
-                                chAnimCtrl.updateCharacterAnim(currCharacterDownsync, overwriteChState, prevCharacterDownsync, false, chConfig);
-                            }
+                            chAnimCtrl.updateCharacterAnim(currCharacterDownsync, overwriteChState, prevCharacterDownsync, false, chConfig);
                         }
                         break;
                 }

@@ -4,7 +4,7 @@ tpsheetFileNames:
 - Assets/Resources/Bullets/Bullets.tpsheet
 - Assets/Resources/Characters/BladeGirl/BladeGirl.tpsheet
 - Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.tpsheet
-- Assets/Resources/Characters/SuperKnifeGirl/SuperKnifeGirl.tpsheet
+- Assets/Resources/Characters/WitchGirl/WitchGirl.tpsheet
 - Assets/Resources/PixelVfx/PixelVfx.tpsheet
 - Assets/Resources/UI/Controller.tpsheet
 - Assets/Resources/UI/ShaperCard.tpsheet
@@ -13,7 +13,7 @@ textureFileNames:
 - Assets/Resources/Bullets/Bullets.png
 - Assets/Resources/Characters/BladeGirl/BladeGirl.png
 - Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.png
-- Assets/Resources/Characters/SuperKnifeGirl/SuperKnifeGirl.png
+- Assets/Resources/Characters/WitchGirl/WitchGirl.png
 - Assets/Resources/PixelVfx/PixelVfx.png
 - Assets/Resources/UI/Controller.png
 - Assets/Resources/UI/ShaperCard.png

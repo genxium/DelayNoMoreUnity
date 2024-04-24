@@ -165,11 +165,12 @@ namespace shared {
             CharacterVfxSpeciesId = VfxIceLingering.SpeciesId
         }.AddAssociatedDebuff(ShortFrozen);
 
+        // [WARNING] The following buff is deprecated for now.
         public static BuffConfig XformToSuperKnifeGirl = new BuffConfig {
             SpeciesId = 2,
             StockType = BuffStockType.Timed,
             Stock = 900,
-            XformChSpeciesId = SPECIES_SUPERKNIFEGIRL,  
+            XformChSpeciesId = SPECIES_NONE_CH,  
             CharacterVfxSpeciesId = VfxXform.SpeciesId // TODO: Use another spell launch vfx
         };
 

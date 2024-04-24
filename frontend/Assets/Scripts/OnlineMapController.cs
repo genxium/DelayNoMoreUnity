@@ -246,7 +246,7 @@ public class OnlineMapController : AbstractMapController {
             try {
                 guiWaitToProceedTask.Dispose();
             } catch (ObjectDisposedException guiWaitTaskDisposedEx) {
-                Debug.LogWarning(String.Format("guiWaitToProceedTask was disposed before proactive disposing: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
+                Debug.LogWarning(String.Format("guiWaitToProceedTask was disposed before proactive disposing: thread id={0} a.k.a. the MainThread: {1}", Thread.CurrentThread.ManagedThreadId, guiWaitTaskDisposedEx));
             }
             guiCanProceedSignalSource.Dispose();
         }

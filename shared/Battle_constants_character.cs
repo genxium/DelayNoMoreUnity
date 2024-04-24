@@ -6,10 +6,8 @@ namespace shared {
         public const int SPECIES_NONE_CH = -1;
         public const int SPECIES_BLADEGIRL = 0;
         public const int SPECIES_SWORDMAN = 1;
-        public const int SPECIES_MONKGIRL = 2;
+        public const int SPECIES_WITCHGIRL = 2;
         public const int SPECIES_FIRESWORDMAN = 3;
-        public const int SPECIES_GUNGIRL = 4;
-        public const int SPECIES_SUPERKNIFEGIRL = 5;
         public const int SPECIES_MAGSWORDGIRL = 6;
 
         public const int SPECIES_BULLWARRIOR = 4096;
@@ -91,10 +89,10 @@ namespace shared {
                         Mp = 60*BATTLE_DYNAMICS_FPS, 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
-                        LayDownFrames = 16,
-                        LayDownFramesToRecover = 16,
-                        GetUpInvinsibleFrames = 10,
-                        GetUpFramesToRecover = 27,
+                        LayDownFrames = 17,
+                        LayDownFramesToRecover = 17,
+                        GetUpInvinsibleFrames = 16,
+                        GetUpFramesToRecover = 14,
                         Speed = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         JumpingInitVelY = (int)(7.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -119,15 +117,15 @@ namespace shared {
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),
 
-                    new KeyValuePair<int, CharacterConfig>(SPECIES_MONKGIRL, new CharacterConfig {
-                        SpeciesId = SPECIES_MONKGIRL,
-                        SpeciesName = "MonkGirl",
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_WITCHGIRL, new CharacterConfig {
+                        SpeciesId = SPECIES_WITCHGIRL,
+                        SpeciesName = "WitchGirl",
                         Hp = 230,
-                        Mp = 60*BATTLE_DYNAMICS_FPS, 
+                        Mp = 120*BATTLE_DYNAMICS_FPS, 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
-                        LayDownFrames = 16,
-                        LayDownFramesToRecover = 16,
+                        LayDownFrames = 23,
+                        LayDownFramesToRecover = 23,
                         GetUpInvinsibleFrames = 10,
                         GetUpFramesToRecover = 27,
                         Speed = (int)(1.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -135,40 +133,27 @@ namespace shared {
                         JumpingInitVelY = (int)(8.8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 8,
                         DashingEnabled = true,
-                        OnWallEnabled = true,
-                        WallJumpingFramesToRecover = 8,
-                        WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetX = (int)(19.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(130.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultAirDashQuota = 1,
+                        SlidingEnabled = true,
+                        OnWallEnabled = false,
+                        VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeX = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeY = (int)(46.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        ShrinkedSizeX = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        ShrinkedSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeX = (int)(46.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeX = (int)(46.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeY = (int)(28.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 1,
+                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // [WARNING] Being too "wide" can make "CrouchIdle1" bouncing on slopes!
+                        DefaultSizeY = (int)(32.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 3,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = true,
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
-                        InitInventorySlots = new List<InventorySlot> {
-                            new InventorySlot {
-                                StockType = InventorySlotStockType.TimedIv,
-                                Quota = 1,
-                                FramesToRecover = 0,
-                                DefaultQuota = 1,
-                                DefaultFramesToRecover = 720,
-                                BuffSpeciesId = ShortFreezer.SpeciesId,
-                                SkillId = NO_SKILL,
-                            }
-                        }
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_FIRESWORDMAN, new CharacterConfig {
@@ -274,43 +259,6 @@ namespace shared {
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 4,
-                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
-                    }),
-
-                    new KeyValuePair<int, CharacterConfig>(SPECIES_SUPERKNIFEGIRL, new CharacterConfig {
-                        SpeciesId = SPECIES_SUPERKNIFEGIRL,
-                        SpeciesName = "SuperKnifeGirl",
-                        Hp = 200,
-                        Mp = 60*BATTLE_DYNAMICS_FPS, 
-                        InAirIdleFrameIdxTurningPoint = 11,
-                        InAirIdleFrameIdxTurnedCycle = 1,
-                        LayDownFrames = 16,
-                        LayDownFramesToRecover = 16,
-                        GetUpInvinsibleFrames = 10,
-                        GetUpFramesToRecover = 27,
-                        Speed = (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        JumpingInitVelY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        InertiaFramesToRecover = 8,
-                        DashingEnabled = true,
-                        OnWallEnabled = false,
-                        VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeY = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeX = (int)(48.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 2,
-                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        HasTurnAroundAnim = true,
-                        ProactiveJumpStartupFrames = 3,
-                        Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),
 

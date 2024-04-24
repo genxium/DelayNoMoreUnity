@@ -1847,9 +1847,6 @@ namespace shared {
                     } else if ((WalkingAtk1 == thatCharacterInNextFrame.CharacterState && Atk1 == thatCharacterInNextFrame.CharacterState) || (WalkingAtk4 == thatCharacterInNextFrame.CharacterState && Atk4 == thatCharacterInNextFrame.CharacterState)) {
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.FramesInChState + 1;
                         thatCharacterInNextFrame.LowerPartFramesInChState = 0;
-                    } else if (SPECIES_GUNGIRL == thatCharacterInNextFrame.SpeciesId && (Atk1 == thatCharacterInNextFrame.CharacterState || Atk4 == thatCharacterInNextFrame.CharacterState)) {
-                        thatCharacterInNextFrame.FramesInChState = 0;
-                        thatCharacterInNextFrame.LowerPartFramesInChState = 0;
                     } else {
                         thatCharacterInNextFrame.FramesInChState = 0;
                         thatCharacterInNextFrame.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE; // not showing isolated lower part in other ChStates
