@@ -123,7 +123,7 @@ message CharacterDownsync {
 	bool onSlope = 37;
 
 	int32 frictionVelX = 38; // Mostly from a dynamic trap
-    bool forcedCrouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+    bool forcedCrouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "forcedCrouching (prev -> curr)"
         
 	bool slipJumpTriggered = 40;
 	bool primarilyOnSlippableHardPushback = 41; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"

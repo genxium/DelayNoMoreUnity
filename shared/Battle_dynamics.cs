@@ -625,7 +625,10 @@ namespace shared {
                             thatCharacterInNextFrame.CharacterState = WalkingAtk4;
                         }
                     } else if (CrouchIdle1 == thatCharacterInNextFrame.CharacterState) {
-                        thatCharacterInNextFrame.CharacterState = CrouchAtk1;
+                        if (chConfig.CrouchingAtkEnabled) {     
+                            // TODO: Is it necessary to check "chConfig.CrouchingAtkEnabled" here?
+                            thatCharacterInNextFrame.CharacterState = CrouchAtk1;
+                        }
                     } else if (null != skillConfig) {
                         thatCharacterInNextFrame.CharacterState = skillConfig.BoundChState;
                     }
@@ -1145,7 +1148,7 @@ namespace shared {
                 }
 
                 /*
-                if (!landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
+                if (1 == currCharacterDownsync.JoinIndex && !landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
                     logger.LogInfo(String.Format("Rdf.Id={0}, character vx={1},vy={7} slipped with aShape={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, touchCells=\n{6}", currRenderFrame.Id, currCharacterDownsync.VirtualGridX, aShape.ToString(false), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), aCollider.TouchingCellsStaticColliderStr(), currCharacterDownsync.VirtualGridY));
                 }
                 */
@@ -1791,7 +1794,11 @@ namespace shared {
                                     break;
                                 case Atk1:
                                 case Atk2:
-                                    thatCharacterInNextFrame.CharacterState = CrouchAtk1;
+                                    if (chConfig.CrouchingAtkEnabled) {
+                                        thatCharacterInNextFrame.CharacterState = CrouchAtk1;
+                                    } else {
+                                        thatCharacterInNextFrame.CharacterState = CrouchIdle1;
+                                    }
                                     break;
                                 case Atked1:
                                 case InAirAtked1:
