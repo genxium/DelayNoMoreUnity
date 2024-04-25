@@ -697,7 +697,7 @@ namespace shared {
             }
         }
 
-        private static void _insertBulletColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> currRenderFrameBullets, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, ref int colliderCnt, CollisionSpace collisionSys, ref int bulletCnt, ILoggerBridge logger) {
+        private static void _insertBulletColliders(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> currRenderFrameBullets, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, ref int colliderCnt, CollisionSpace collisionSys, ref int bulletCnt, Vector[] effPushbacks, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrameBullets.Count; i++) {
                 var src = currRenderFrameBullets[i];
                 if (TERMINATING_BULLET_LOCAL_ID == src.BattleAttr.BulletLocalId) break;
@@ -744,6 +744,8 @@ namespace shared {
                         var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX, src.Config.HitboxSizeY);
                         var newBulletCollider = dynamicRectangleColliders[colliderCnt];
                         UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst, dst.Config.CollisionTypeMask);
+                        effPushbacks[colliderCnt].X = 0;
+                        effPushbacks[colliderCnt].Y = 0;
                         colliderCnt++;
 
                         collisionSys.AddSingle(newBulletCollider);
@@ -754,6 +756,7 @@ namespace shared {
                             dst.FramesInBlState = 0;
                         }
                     }
+                    
                     bulletCnt++;
                 } else if (BulletType.Fireball == src.Config.BType) {
                     if (IsBulletActive(dst, currRenderFrame.Id)) {
@@ -761,6 +764,8 @@ namespace shared {
                         var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX + src.Config.HitboxSizeIncX*src.FramesInBlState, src.Config.HitboxSizeY + src.Config.HitboxSizeIncY*src.FramesInBlState);
                         var newBulletCollider = dynamicRectangleColliders[colliderCnt];
                         UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst, dst.Config.CollisionTypeMask);
+                        effPushbacks[colliderCnt].X = 0;
+                        effPushbacks[colliderCnt].Y = 0;
                         colliderCnt++;
 
                         collisionSys.AddSingle(newBulletCollider);
@@ -1272,7 +1277,7 @@ namespace shared {
             }
         }
 
-        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, int iSt, int iEd, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ref int bulletLocalIdCounter, ref int bulletCnt, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
+        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, Collision collision, Collider[] dynamicRectangleColliders, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, FrameRingBuffer<Collider> residueCollided, ref SatResult primaryOverlapResult, int iSt, int iEd, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ref int bulletLocalIdCounter, ref int bulletCnt, EvtSubscription waveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
             // [WARNING] Bullet collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
             // Check bullet-anything collisions
             for (int i = iSt; i < iEd; i++) {
@@ -1283,22 +1288,36 @@ namespace shared {
                     logger.LogWarn(String.Format("dynamicRectangleColliders[i:{0}] is not having bullet type! iSt={1}, iEd={2}", i, iSt, iEd));
                     continue;
                 }
-                bool collided = bulletCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
-                if (!collided) continue;
+                var bulletShape = bulletCollider.Shape;
+                int primaryHardOverlapIndex;
+                int hardPushbackCnt = calcHardPushbacksNormsForBullet(currRenderFrame, bulletNextFrame, bulletCollider, bulletShape, hardPushbackNormsArr[i], residueCollided, collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, logger);
 
                 bool exploded = false;
                 bool explodedOnAnotherCharacter = false;
                 bool explodedOnAnotherHarderBullet = false;
 
-                var bulletShape = bulletCollider.Shape;
                 int j = bulletNextFrame.BattleAttr.OffenderJoinIndex - 1;
                 var offender = (j < roomCapacity ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
                 var offenderNextFrame = (j < roomCapacity ? nextRenderFramePlayers[j] : nextRenderFrameNpcs[j - roomCapacity]);
+                var bulletConfig = bulletNextFrame.Config;
                 int effDirX = (BulletType.Melee == bulletNextFrame.Config.BType ? offender.DirX : bulletNextFrame.DirX);
                 int xfac = (0 < effDirX ? 1 : -1);
                 var skillConfig = skills[bulletNextFrame.BattleAttr.SkillId];
+                if (0 < hardPushbackCnt) {
+                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
+
+                    if (BulletType.GroundWave == bulletConfig.BType) {
+                        if (SNAP_INTO_PLATFORM_THRESHOLD < Math.Abs(bulletNextFrame.VelY)) {
+                            bulletNextFrame.VelY = 0;
+                        }
+                    } else {
+                        // [WARNING] If the bullet "collisionTypeMask" is barrier penetrating, it'd not have reached "0 < hardPushbackCnt".
+                        exploded = true;
+                    }
+                }
+
                 while (true) {
-                    var (ok, bCollider) = collision.PopFirstContactedCollider();
+                    var (ok, bCollider) = residueCollided.Pop();
                     if (false == ok || null == bCollider) {
                         break;
                     }
@@ -1307,9 +1326,6 @@ namespace shared {
                     if (!overlapped) continue;
 
                     switch (bCollider.Data) {
-                        case PatrolCue v0:
-                        case Pickable v1:
-                            break;
                         case TriggerColliderAttr atkedTriggerColliderAttr:
                             var atkedTrigger = currRenderFrame.TriggersArr[atkedTriggerColliderAttr.TriggerLocalId];
                             var triggerConfig = atkedTrigger.Config;
@@ -1433,19 +1449,7 @@ namespace shared {
                             if (bulletNextFrame.Config.Hardness < v4.Config.Hardness) explodedOnAnotherHarderBullet = true;
                             exploded = true;
                             break;
-                        case TrapColliderAttr v5:
-                            if (!v5.ProvidesHardPushback) {
-                                break;
-                            }
-                            if (!COLLIDABLE_PAIRS.Contains(bulletNextFrame.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
-                                break;
-                            }
-                            exploded = true;
-                            break;
                         default:
-                            if (!COLLIDABLE_PAIRS.Contains(bulletNextFrame.Config.CollisionTypeMask | COLLISION_BARRIER_INDEX_PREFIX)) {
-                                break;
-                            }
                             exploded = true;
                             break;
                     }
@@ -2189,7 +2193,7 @@ namespace shared {
             
             int bulletColliderCntOffset = colliderCnt;
             _insertFromEmissionDerivedBullets(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
-            _insertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, logger);
+            _insertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, effPushbacks, logger);
 
             int pickableColliderCntOffset = colliderCnt;
             _moveAndInsertPickableColliders(currRenderFrame, roomCapacity, nextRenderFramePickables, collisionSys, dynamicRectangleColliders, effPushbacks, ref colliderCnt, ref pickableCnt, logger);
@@ -2200,7 +2204,7 @@ namespace shared {
             EvtSubscription currRdfWaveNpcKilledEvtSub = currRenderFrame.EvtSubsArr[MAGIC_EVTSUB_ID_WAVER - 1];
             EvtSubscription nextRdfWaveNpcKilledEvtSub = nextEvtSubs[MAGIC_EVTSUB_ID_WAVER - 1];
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, bulletColliderCntOffset, pickableColliderCntOffset, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, residueCollided, ref primaryOverlapResult, bulletColliderCntOffset, pickableColliderCntOffset, triggerTrackingIdToTrapLocalId, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, nextRdfWaveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
         
             _calcPickableMovementPushbacks(currRenderFrame, roomCapacity, nextRenderFramePickables, ref overlapResult, ref primaryOverlapResult, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, pickableColliderCntOffset, colliderCnt, logger);
             

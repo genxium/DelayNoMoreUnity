@@ -645,11 +645,11 @@ namespace shared {
             lastIndividuallyConfirmedInputList = new ulong[roomCapacity];
             Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
 
-            effPushbacks = new Vector[roomCapacity + preallocNpcCapacity + preallocTrapCapacity];
+            effPushbacks = new Vector[roomCapacity + preallocBulletCapacity + preallocNpcCapacity + preallocTrapCapacity];
             for (int i = 0; i < effPushbacks.Length; i++) {
                 effPushbacks[i] = new Vector(0, 0);
             }
-            hardPushbackNormsArr = new Vector[roomCapacity + preallocNpcCapacity + preallocTrapCapacity][];
+            hardPushbackNormsArr = new Vector[roomCapacity + preallocBulletCapacity + preallocNpcCapacity + preallocTrapCapacity][];
             for (int i = 0; i < hardPushbackNormsArr.Length; i++) {
                 int cap = 5;
                 hardPushbackNormsArr[i] = new Vector[cap];
