@@ -27,7 +27,8 @@ namespace shared {
         public bool DashingEnabled;
         public bool SlidingEnabled;
         public bool OnWallEnabled;
-        public bool CrouchingEnabled;
+        public bool CrouchingEnabled; // Considering that a character might be forced to crouch, "CrouchAtked1" is a MUST if "true == CrouchingEnabled"
+        public bool CrouchingAtkEnabled; 
         public int WallJumpingFramesToRecover;
         public int WallJumpingInitVelX;
         public int WallJumpingInitVelY;

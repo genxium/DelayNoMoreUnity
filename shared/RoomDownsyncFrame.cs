@@ -24,7 +24,7 @@ namespace shared {
     static RoomDownsyncFrameReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chlyb29tX2Rvd25zeW5jX2ZyYW1lLnByb3RvEgZzaGFyZWQi3AwKEUNoYXJh",
+            "Chlyb29tX2Rvd25zeW5jX2ZyYW1lLnByb3RvEgZzaGFyZWQiwAwKEUNoYXJh",
             "Y3RlckRvd25zeW5jEgoKAmlkGAEgASgFEhQKDHZpcnR1YWxHcmlkWBgCIAEo",
             "BRIUCgx2aXJ0dWFsR3JpZFkYAyABKAUSDAoEZGlyWBgEIAEoBRIMCgRkaXJZ",
             "GAUgASgFEgwKBHZlbFgYBiABKAUSDAoEdmVsWRgHIAEoBRINCgVzcGVlZBgI",
@@ -58,77 +58,77 @@ namespace shared {
             "GOcHIAEoCRIWCg1hY3RpdmVTa2lsbElkGIAIIAEoBRIXCg5hY3RpdmVTa2ls",
             "bEhpdBiBCCABKAUSGQoQZnJhbWVzSW52aW5zaWJsZRiCCCABKAUSFQoMYnVs",
             "bGV0VGVhbUlkGIMIIAEoBRIaChFjaENvbGxpc2lvblRlYW1JZBiECCABKAUS",
-            "GgoRY29sbGlzaW9uVHlwZU1hc2sYhQggASgEEh8KCGJ1ZmZMaXN0GIYIIAMo",
-            "CzIMLnNoYXJlZC5CdWZmEiMKCmRlYnVmZkxpc3QYhwggAygLMg4uc2hhcmVk",
-            "LkRlYnVmZhIlCglpbnZlbnRvcnkYiAggASgLMhEuc2hhcmVkLkludmVudG9y",
-            "eSJ3ChFJbnB1dEZyYW1lRGVjb2RlZBIKCgJkeBgBIAEoBRIKCgJkeRgCIAEo",
-            "BRIRCglidG5BTGV2ZWwYAyABKAUSEQoJYnRuQkxldmVsGAQgASgFEhEKCWJ0",
-            "bkNMZXZlbBgFIAEoBRIRCglidG5ETGV2ZWwYBiABKAUiTAoQSW5wdXRGcmFt",
-            "ZVVwc3luYxIUCgxpbnB1dEZyYW1lSWQYASABKAUSDwoHZW5jb2RlZBgCIAEo",
-            "BBIRCglqb2luSW5kZXgYAyABKAUiVAoSSW5wdXRGcmFtZURvd25zeW5jEhQK",
-            "DGlucHV0RnJhbWVJZBgBIAEoBRIRCglpbnB1dExpc3QYAiADKAQSFQoNY29u",
-            "ZmlybWVkTGlzdBgDIAEoBCLABgoFV3NSZXESEAoIcGxheWVySWQYASABKAUS",
-            "CwoDYWN0GAIgASgFEhEKCWpvaW5JbmRleBgDIAEoBRIVCg1hY2tpbmdGcmFt",
-            "ZUlkGAQgASgFEhoKEmFja2luZ0lucHV0RnJhbWVJZBgFIAEoBRIPCgdhdXRo",
-            "S2V5GAYgASgFEjcKFWlucHV0RnJhbWVVcHN5bmNCYXRjaBgHIAMoCzIYLnNo",
-            "YXJlZC5JbnB1dEZyYW1lVXBzeW5jEjAKDXNlbGZQYXJzZWRSZGYYCCABKAsy",
-            "GS5zaGFyZWQuUm9vbURvd25zeW5jRnJhbWUSRAoZc2VyaWFsaXplZEJhcnJp",
-            "ZXJQb2x5Z29ucxgJIAMoCzIhLnNoYXJlZC5TZXJpYWxpemFibGVDb252ZXhQ",
-            "b2x5Z29uElcKGnNlcmlhbGl6ZWRTdGF0aWNQYXRyb2xDdWVzGAogAygLMjMu",
-            "c2hhcmVkLlNlcmlhbGl6ZWRDb21wbGV0ZWx5U3RhdGljUGF0cm9sQ3VlQ29s",
-            "bGlkZXISVwofc2VyaWFsaXplZENvbXBsZXRlbHlTdGF0aWNUcmFwcxgLIAMo",
-            "CzIuLnNoYXJlZC5TZXJpYWxpemVkQ29tcGxldGVseVN0YXRpY1RyYXBDb2xs",
-            "aWRlchJTChhzZXJpYWxpemVkU3RhdGljVHJpZ2dlcnMYDCADKAsyMS5zaGFy",
-            "ZWQuU2VyaWFsaXplZENvbXBsZXRlbHlTdGF0aWNUcmlnZ2VyQ29sbGlkZXIS",
-            "Wgokc2VyaWFsaXplZFRyYXBMb2NhbElkVG9Db2xsaWRlckF0dHJzGA0gASgL",
-            "Miwuc2hhcmVkLlNlcmlhbGl6ZWRUcmFwTG9jYWxJZFRvQ29sbGlkZXJBdHRy",
-            "cxJiCihzZXJpYWxpemVkVHJpZ2dlclRyYWNraW5nSWRUb1RyYXBMb2NhbElk",
-            "GA4gASgLMjAuc2hhcmVkLlNlcmlhbGl6ZWRUcmlnZ2VyVHJhY2tpbmdJZFRv",
-            "VHJhcExvY2FsSWQSFAoMc3BhY2VPZmZzZXRYGA8gASgFEhQKDHNwYWNlT2Zm",
-            "c2V0WRgQIAEoBRIdChViYXR0bGVEdXJhdGlvblNlY29uZHMYESABKAUiuQEK",
-            "E0lucHV0QnVmZmVyU25hcHNob3QSGAoQcmVmUmVuZGVyRnJhbWVJZBgBIAEo",
-            "BRIXCg91bmNvbmZpcm1lZE1hc2sYAiABKAQSPQoZdG9TZW5kSW5wdXRGcmFt",
-            "ZURvd25zeW5jcxgDIAMoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93bnN5bmMS",
-            "GQoRc2hvdWxkRm9yY2VSZXN5bmMYBCABKAgSFQoNcGVlckpvaW5JbmRleBgF",
-            "IAEoBSLTAQoJUGF0cm9sQ3VlEgoKAmlkGAEgASgFEg0KBWZsQWN0GAIgASgE",
-            "Eg0KBWZyQWN0GAMgASgEEhcKD2ZsQ2FwdHVyZUZyYW1lcxgEIAEoBBIXCg9m",
-            "ckNhcHR1cmVGcmFtZXMYBSABKAQSDQoFZmRBY3QYBiABKAQSDQoFZnVBY3QY",
-            "ByABKAQSFwoPZmRDYXB0dXJlRnJhbWVzGAggASgEEhcKD2Z1Q2FwdHVyZUZy",
-            "YW1lcxgJIAEoBBIaChFjb2xsaXNpb25UeXBlTWFzaxiFCCABKAQiVAoJVmlz",
-            "aW9uQm94EhMKC2JvdHRvbUxlZnRYGAEgASgFEhMKC2JvdHRvbUxlZnRZGAIg",
-            "ASgFEg0KBXdpZHRoGAMgASgFEg4KBmhlaWdodBgEIAEoBSK4AQoJVmZ4Q29u",
-            "ZmlnEhEKCXNwZWNpZXNJZBgBIAEoBRIpCgptb3Rpb25UeXBlGAIgASgOMhUu",
-            "c2hhcmVkLlZmeE1vdGlvblR5cGUSLQoMZHVyYXRpb25UeXBlGAMgASgOMhcu",
-            "c2hhcmVkLlZmeER1cmF0aW9uVHlwZRITCgtvbkNoYXJhY3RlchgEIAEoCBIQ",
-            "CghvbkJ1bGxldBgFIAEoCBIXCg91c2VQaXhlbGF0ZWRWZXIYBiABKAgitwsK",
-            "DEJ1bGxldENvbmZpZxIVCg1zdGFydHVwRnJhbWVzGAEgASgFEhoKEmNhbmNl",
-            "bGxhYmxlU3RGcmFtZRgCIAEoBRIaChJjYW5jZWxsYWJsZUVkRnJhbWUYAyAB",
-            "KAUSFAoMYWN0aXZlRnJhbWVzGAQgASgFEhUKDWhpdFN0dW5GcmFtZXMYBSAB",
-            "KAUSFwoPYmxvY2tTdHVuRnJhbWVzGAYgASgFEhQKDHB1c2hiYWNrVmVsWBgH",
-            "IAEoBRIUCgxwdXNoYmFja1ZlbFkYCCABKAUSDgoGZGFtYWdlGAkgASgFEhQK",
-            "DHNlbGZMb2NrVmVsWBgKIAEoBRIUCgxzZWxmTG9ja1ZlbFkYCyABKAUSFQoN",
-            "aGl0Ym94T2Zmc2V0WBgMIAEoBRIVCg1oaXRib3hPZmZzZXRZGA0gASgFEhMK",
-            "C2hpdGJveFNpemVYGA4gASgFEhMKC2hpdGJveFNpemVZGA8gASgFEg4KBmJs",
-            "b3dVcBgQIAEoCBIRCglzcGVjaWVzSWQYESABKAUSFwoPZXhwbG9zaW9uRnJh",
-            "bWVzGBIgASgFEiEKBWJUeXBlGBMgASgOMhIuc2hhcmVkLkJ1bGxldFR5cGUS",
-            "JAoGbWhUeXBlGBQgASgOMhQuc2hhcmVkLk11bHRpSGl0VHlwZRIfChdzaW11",
-            "bHRhbmVvdXNNdWx0aUhpdENudBgVIAEoDRINCgVzcGVlZBgWIAEoBRIMCgRk",
-            "aXJYGBcgASgFEgwKBGRpclkYGCABKAUSPgoNY2FuY2VsVHJhbnNpdBgZIAMo",
-            "CzInLnNoYXJlZC5CdWxsZXRDb25maWcuQ2FuY2VsVHJhbnNpdEVudHJ5EhMK",
-            "C3JlcGVhdFF1b3RhGBogASgFEhoKEmFjdGl2ZVZmeFNwZWNpZXNJZBgbIAEo",
-            "BRIdChVleHBsb3Npb25WZnhTcGVjaWVzSWQYHCABKAUSFQoNYWxsb3dzV2Fs",
-            "a2luZxgdIAEoCBIXCg9hbGxvd3NDcm91Y2hpbmcYHiABKAgSEAoIaGFyZG5l",
-            "c3MYHyABKAUSHwoXc3RhcnR1cEludmluc2libGVGcmFtZXMYICABKAUSGwoT",
-            "aGl0SW52aW5zaWJsZUZyYW1lcxghIAEoBRIaChJleHBsb3Npb25TcGVjaWVz",
-            "SWQYIiABKAUSEgoKcGVycEFjY01hZxgjIAEoBRIcChRkZWxheVNlbGZWZWxU",
-            "b0FjdGl2ZRgkIAEoCBIVCg1zcGVlZElmTm90SGl0GCUgASgFEhgKEG9taXRT",
-            "b2Z0UHVzaGJhY2sYJiABKAgSFgoOaGl0Ym94U2l6ZUluY1gYJyABKAUSFgoO",
-            "aGl0Ym94U2l6ZUluY1kYKCABKAUSFgoOcmVtYWluc1Vwb25IaXQYKSABKAgS",
-            "HAoUcm90YXRlc0Fsb25nVmVsb2NpdHkYKiABKAgSJgoeZGVmYXVsdEhhcmRQ",
-            "dXNoYmFja0JvdW5jZVF1b3RhGCsgASgFEiQKHGhhcmRQdXNoYmFja0JvdW5j",
-            "ZU5vcm1GYWN0b3IYLCABKAISJQodaGFyZFB1c2hiYWNrQm91bmNlU2hlZXJG",
-            "YWN0b3IYLSABKAISHAoUaXNQaXhlbGF0ZWRBY3RpdmVWZngYLiABKAgSIAoY",
-            "aXNQaXhlbGF0ZWRFeHBsb3N0aW9uVmZ4GC8gASgIEhoKEWNvbGxpc2lvblR5",
+            "HwoIYnVmZkxpc3QYhQggAygLMgwuc2hhcmVkLkJ1ZmYSIwoKZGVidWZmTGlz",
+            "dBiGCCADKAsyDi5zaGFyZWQuRGVidWZmEiUKCWludmVudG9yeRiHCCABKAsy",
+            "ES5zaGFyZWQuSW52ZW50b3J5IncKEUlucHV0RnJhbWVEZWNvZGVkEgoKAmR4",
+            "GAEgASgFEgoKAmR5GAIgASgFEhEKCWJ0bkFMZXZlbBgDIAEoBRIRCglidG5C",
+            "TGV2ZWwYBCABKAUSEQoJYnRuQ0xldmVsGAUgASgFEhEKCWJ0bkRMZXZlbBgG",
+            "IAEoBSJMChBJbnB1dEZyYW1lVXBzeW5jEhQKDGlucHV0RnJhbWVJZBgBIAEo",
+            "BRIPCgdlbmNvZGVkGAIgASgEEhEKCWpvaW5JbmRleBgDIAEoBSJUChJJbnB1",
+            "dEZyYW1lRG93bnN5bmMSFAoMaW5wdXRGcmFtZUlkGAEgASgFEhEKCWlucHV0",
+            "TGlzdBgCIAMoBBIVCg1jb25maXJtZWRMaXN0GAMgASgEIsAGCgVXc1JlcRIQ",
+            "CghwbGF5ZXJJZBgBIAEoBRILCgNhY3QYAiABKAUSEQoJam9pbkluZGV4GAMg",
+            "ASgFEhUKDWFja2luZ0ZyYW1lSWQYBCABKAUSGgoSYWNraW5nSW5wdXRGcmFt",
+            "ZUlkGAUgASgFEg8KB2F1dGhLZXkYBiABKAUSNwoVaW5wdXRGcmFtZVVwc3lu",
+            "Y0JhdGNoGAcgAygLMhguc2hhcmVkLklucHV0RnJhbWVVcHN5bmMSMAoNc2Vs",
+            "ZlBhcnNlZFJkZhgIIAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRJE",
+            "ChlzZXJpYWxpemVkQmFycmllclBvbHlnb25zGAkgAygLMiEuc2hhcmVkLlNl",
+            "cmlhbGl6YWJsZUNvbnZleFBvbHlnb24SVwoac2VyaWFsaXplZFN0YXRpY1Bh",
+            "dHJvbEN1ZXMYCiADKAsyMy5zaGFyZWQuU2VyaWFsaXplZENvbXBsZXRlbHlT",
+            "dGF0aWNQYXRyb2xDdWVDb2xsaWRlchJXCh9zZXJpYWxpemVkQ29tcGxldGVs",
+            "eVN0YXRpY1RyYXBzGAsgAygLMi4uc2hhcmVkLlNlcmlhbGl6ZWRDb21wbGV0",
+            "ZWx5U3RhdGljVHJhcENvbGxpZGVyElMKGHNlcmlhbGl6ZWRTdGF0aWNUcmln",
+            "Z2VycxgMIAMoCzIxLnNoYXJlZC5TZXJpYWxpemVkQ29tcGxldGVseVN0YXRp",
+            "Y1RyaWdnZXJDb2xsaWRlchJaCiRzZXJpYWxpemVkVHJhcExvY2FsSWRUb0Nv",
+            "bGxpZGVyQXR0cnMYDSABKAsyLC5zaGFyZWQuU2VyaWFsaXplZFRyYXBMb2Nh",
+            "bElkVG9Db2xsaWRlckF0dHJzEmIKKHNlcmlhbGl6ZWRUcmlnZ2VyVHJhY2tp",
+            "bmdJZFRvVHJhcExvY2FsSWQYDiABKAsyMC5zaGFyZWQuU2VyaWFsaXplZFRy",
+            "aWdnZXJUcmFja2luZ0lkVG9UcmFwTG9jYWxJZBIUCgxzcGFjZU9mZnNldFgY",
+            "DyABKAUSFAoMc3BhY2VPZmZzZXRZGBAgASgFEh0KFWJhdHRsZUR1cmF0aW9u",
+            "U2Vjb25kcxgRIAEoBSK5AQoTSW5wdXRCdWZmZXJTbmFwc2hvdBIYChByZWZS",
+            "ZW5kZXJGcmFtZUlkGAEgASgFEhcKD3VuY29uZmlybWVkTWFzaxgCIAEoBBI9",
+            "Chl0b1NlbmRJbnB1dEZyYW1lRG93bnN5bmNzGAMgAygLMhouc2hhcmVkLklu",
+            "cHV0RnJhbWVEb3duc3luYxIZChFzaG91bGRGb3JjZVJlc3luYxgEIAEoCBIV",
+            "Cg1wZWVySm9pbkluZGV4GAUgASgFItMBCglQYXRyb2xDdWUSCgoCaWQYASAB",
+            "KAUSDQoFZmxBY3QYAiABKAQSDQoFZnJBY3QYAyABKAQSFwoPZmxDYXB0dXJl",
+            "RnJhbWVzGAQgASgEEhcKD2ZyQ2FwdHVyZUZyYW1lcxgFIAEoBBINCgVmZEFj",
+            "dBgGIAEoBBINCgVmdUFjdBgHIAEoBBIXCg9mZENhcHR1cmVGcmFtZXMYCCAB",
+            "KAQSFwoPZnVDYXB0dXJlRnJhbWVzGAkgASgEEhoKEWNvbGxpc2lvblR5cGVN",
+            "YXNrGIUIIAEoBCJUCglWaXNpb25Cb3gSEwoLYm90dG9tTGVmdFgYASABKAUS",
+            "EwoLYm90dG9tTGVmdFkYAiABKAUSDQoFd2lkdGgYAyABKAUSDgoGaGVpZ2h0",
+            "GAQgASgFIrgBCglWZnhDb25maWcSEQoJc3BlY2llc0lkGAEgASgFEikKCm1v",
+            "dGlvblR5cGUYAiABKA4yFS5zaGFyZWQuVmZ4TW90aW9uVHlwZRItCgxkdXJh",
+            "dGlvblR5cGUYAyABKA4yFy5zaGFyZWQuVmZ4RHVyYXRpb25UeXBlEhMKC29u",
+            "Q2hhcmFjdGVyGAQgASgIEhAKCG9uQnVsbGV0GAUgASgIEhcKD3VzZVBpeGVs",
+            "YXRlZFZlchgGIAEoCCLTCwoMQnVsbGV0Q29uZmlnEhUKDXN0YXJ0dXBGcmFt",
+            "ZXMYASABKAUSGgoSY2FuY2VsbGFibGVTdEZyYW1lGAIgASgFEhoKEmNhbmNl",
+            "bGxhYmxlRWRGcmFtZRgDIAEoBRIUCgxhY3RpdmVGcmFtZXMYBCABKAUSFQoN",
+            "aGl0U3R1bkZyYW1lcxgFIAEoBRIXCg9ibG9ja1N0dW5GcmFtZXMYBiABKAUS",
+            "FAoMcHVzaGJhY2tWZWxYGAcgASgFEhQKDHB1c2hiYWNrVmVsWRgIIAEoBRIO",
+            "CgZkYW1hZ2UYCSABKAUSFAoMc2VsZkxvY2tWZWxYGAogASgFEhQKDHNlbGZM",
+            "b2NrVmVsWRgLIAEoBRIVCg1oaXRib3hPZmZzZXRYGAwgASgFEhUKDWhpdGJv",
+            "eE9mZnNldFkYDSABKAUSEwoLaGl0Ym94U2l6ZVgYDiABKAUSEwoLaGl0Ym94",
+            "U2l6ZVkYDyABKAUSDgoGYmxvd1VwGBAgASgIEhEKCXNwZWNpZXNJZBgRIAEo",
+            "BRIXCg9leHBsb3Npb25GcmFtZXMYEiABKAUSIQoFYlR5cGUYEyABKA4yEi5z",
+            "aGFyZWQuQnVsbGV0VHlwZRIkCgZtaFR5cGUYFCABKA4yFC5zaGFyZWQuTXVs",
+            "dGlIaXRUeXBlEh8KF3NpbXVsdGFuZW91c011bHRpSGl0Q250GBUgASgNEg0K",
+            "BXNwZWVkGBYgASgFEgwKBGRpclgYFyABKAUSDAoEZGlyWRgYIAEoBRI+Cg1j",
+            "YW5jZWxUcmFuc2l0GBkgAygLMicuc2hhcmVkLkJ1bGxldENvbmZpZy5DYW5j",
+            "ZWxUcmFuc2l0RW50cnkSEwoLcmVwZWF0UXVvdGEYGiABKAUSGgoSYWN0aXZl",
+            "VmZ4U3BlY2llc0lkGBsgASgFEh0KFWV4cGxvc2lvblZmeFNwZWNpZXNJZBgc",
+            "IAEoBRIVCg1hbGxvd3NXYWxraW5nGB0gASgIEhcKD2FsbG93c0Nyb3VjaGlu",
+            "ZxgeIAEoCBIQCghoYXJkbmVzcxgfIAEoBRIfChdzdGFydHVwSW52aW5zaWJs",
+            "ZUZyYW1lcxggIAEoBRIbChNoaXRJbnZpbnNpYmxlRnJhbWVzGCEgASgFEhoK",
+            "EmV4cGxvc2lvblNwZWNpZXNJZBgiIAEoBRISCgpwZXJwQWNjTWFnGCMgASgF",
+            "EhwKFGRlbGF5U2VsZlZlbFRvQWN0aXZlGCQgASgIEhUKDXNwZWVkSWZOb3RI",
+            "aXQYJSABKAUSGAoQb21pdFNvZnRQdXNoYmFjaxgmIAEoCBIWCg5oaXRib3hT",
+            "aXplSW5jWBgnIAEoBRIWCg5oaXRib3hTaXplSW5jWRgoIAEoBRIWCg5yZW1h",
+            "aW5zVXBvbkhpdBgpIAEoCBIcChRyb3RhdGVzQWxvbmdWZWxvY2l0eRgqIAEo",
+            "CBImCh5kZWZhdWx0SGFyZFB1c2hiYWNrQm91bmNlUXVvdGEYKyABKAUSJAoc",
+            "aGFyZFB1c2hiYWNrQm91bmNlTm9ybUZhY3RvchgsIAEoAhIlCh1oYXJkUHVz",
+            "aGJhY2tCb3VuY2VTaGVlckZhY3RvchgtIAEoAhIcChRpc1BpeGVsYXRlZEFj",
+            "dGl2ZVZmeBguIAEoCBIgChhpc1BpeGVsYXRlZEV4cGxvc3Rpb25WZngYLyAB",
+            "KAgSGgoSbWhWYW5pc2hPbk1lbGVlSGl0GDAgASgIEhoKEWNvbGxpc2lvblR5",
             "cGVNYXNrGIUIIAEoBBIVCgx0YWtlc0dyYXZpdHkYhgggASgIEh0KFGNoYXJh",
             "Y3RlckVtaXRTZnhOYW1lGIAQIAEoCRIcChNmaXJlYmFsbEVtaXRTZnhOYW1l",
             "GIEQIAEoCRIZChBleHBsb3Npb25TZnhOYW1lGIIQIAEoCRIWCg1hY3RpdmVT",
@@ -306,43 +306,44 @@ namespace shared {
             "ASgFEgwKBHZlbFkYByABKAUSJgoHcGtTdGF0ZRgIIAEoDjIVLnNoYXJlZC5Q",
             "aWNrYWJsZVN0YXRlEhcKD2ZyYW1lc0luUGtTdGF0ZRgJIAEoBRIZChFwaWNr",
             "ZWRCeUpvaW5JbmRleBgKIAEoBSo1CgtCdWxsZXRTdGF0ZRILCgdTdGFydFVw",
-            "EAASCgoGQWN0aXZlEAESDQoJRXhwbG9kaW5nEAIqiAQKDkNoYXJhY3RlclN0",
+            "EAASCgoGQWN0aXZlEAESDQoJRXhwbG9kaW5nEAIqpAQKDkNoYXJhY3RlclN0",
             "YXRlEgkKBUlkbGUxEAASCwoHV2Fsa2luZxABEg4KClR1cm5Bcm91bmQQAhIK",
             "CgZBdGtlZDEQAxIUChBJbkFpcklkbGUxTm9KdW1wEAQSFAoQSW5BaXJJZGxl",
             "MUJ5SnVtcBAFEhQKEEluQWlySWRsZTJCeUp1bXAQBhIYChRJbkFpcklkbGUx",
             "QnlXYWxsSnVtcBAHEg8KC0luQWlyQXRrZWQxEAgSDAoIQmxvd25VcDEQCRIM",
             "CghMYXlEb3duMRAKEgoKBkdldFVwMRALEgkKBUR5aW5nEAwSCwoHRGFzaGlu",
             "ZxANEgsKB1NsaWRpbmcQDhIKCgZEaW1tZWQQDxIUChBUcmFuc2Zvcm1pbmdJ",
-            "bnRvEBASEAoLT25XYWxsSWRsZTEQgAESEAoLQ3JvdWNoSWRsZTEQgAISDwoK",
-            "Q3JvdWNoQXRrMRCBAhISCg1Dcm91Y2hXYWxraW5nEIICEhEKDENyb3VjaEF0",
-            "a2VkMRCDAhIJCgRBdGsxEIAIEgkKBEF0azIQgQgSCQoEQXRrMxCCCBIJCgRB",
-            "dGs0EIMIEgkKBEF0azUQhAgSDgoJSW5BaXJBdGsxEIAQEg4KCUluQWlyQXRr",
-            "MhCBEBIQCgtXYWxraW5nQXRrMRCCEBIQCgtXYWxraW5nQXRrNBCDEBIPCgpP",
-            "bldhbGxBdGsxEIAYKkwKCVRyYXBTdGF0ZRIJCgVUSWRsZRAAEgwKCFRXYWxr",
-            "aW5nEAESCQoFVEF0azEQAhILCgdUQXRrZWQxEAMSDgoKVERlc3Ryb3llZBAE",
-            "KiwKDFRyaWdnZXJTdGF0ZRIKCgZUUmVhZHkQABIQCgxUQ29vbGluZ0Rvd24Q",
-            "ASo8Cg1QaWNrYWJsZVN0YXRlEgkKBVBJZGxlEAASEQoNUERpc2FwcGVhcmlu",
-            "ZxABEg0KCVBDb25zdW1lZBACKjcKCkJ1bGxldFR5cGUSEAoMVW5kZXRlcm1p",
-            "bmVkEAASCQoFTWVsZWUQARIMCghGaXJlYmFsbBACKogBCgxNdWx0aUhpdFR5",
-            "cGUSCAoETm9uZRAAEhAKDEZyb21FbWlzc2lvbhABEhYKEkZyb21GaXJzdEhp",
-            "dEFjdHVhbBACEhYKEkZyb21GaXJzdEhpdEFueXdheRADEhUKEUZyb21QcmV2",
-            "SGl0QWN0dWFsEAQSFQoRRnJvbVByZXZIaXRBbnl3YXkQBSozChBTa2lsbFRy",
-            "aWdnZXJUeXBlEg4KClJpc2luZ0VkZ2UQABIPCgtGYWxsaW5nRWRnZRABKiwK",
-            "D1ZmeER1cmF0aW9uVHlwZRIKCgZPbmVPZmYQABINCglSZXBlYXRpbmcQASo3",
-            "Cg1WZnhNb3Rpb25UeXBlEgwKCE5vTW90aW9uEAASCwoHRHJvcHBlZBABEgsK",
-            "B1RyYWNpbmcQAioxCg1CdWZmU3RvY2tUeXBlEgoKBk5vbmVCZhAAEgkKBVRp",
-            "bWVkEAESCQoFUXVvdGEQAipxCgpEZWJ1ZmZUeXBlEgsKB05vbmVEYmYQABIR",
-            "Cg1TcGVlZERvd25Pbmx5EAESEQoNQ29sZFNwZWVkRG93bhACEhYKElBvc2l0",
-            "aW9uTG9ja2VkT25seRADEhgKFEZyb3plblBvc2l0aW9uTG9ja2VkEAQqNgoO",
-            "Q29uc3VtYWJsZVR5cGUSDAoITm9uZUNzbWIQABIKCgZSZWZpbGwQARIKCgZE",
-            "YmZSY3YQAipgChZJbnZlbnRvcnlTbG90U3RvY2tUeXBlEgoKBk5vbmVJdhAA",
-            "EgsKB0R1bW15SXYQARILCgdUaW1lZEl2EAISCwoHUXVvdGFJdhADEhMKD1Rp",
-            "bWVkTWFnYXppbmVJdhAEKjEKClBpY2t1cFR5cGUSDQoJSW1tZWRpYXRlEAAS",
-            "FAoQUHV0SW50b0ludmVudG9yeRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
+            "bnRvEBASDwoLQmFja0Rhc2hpbmcQERIQCgtPbldhbGxJZGxlMRCAARIQCgtD",
+            "cm91Y2hJZGxlMRCAAhIPCgpDcm91Y2hBdGsxEIECEhIKDUNyb3VjaFdhbGtp",
+            "bmcQggISEQoMQ3JvdWNoQXRrZWQxEIMCEgkKBEF0azEQgAgSCQoEQXRrMhCB",
+            "CBIJCgRBdGszEIIIEgkKBEF0azQQgwgSCQoEQXRrNRCECBIJCgRBdGs2EIUI",
+            "Eg4KCUluQWlyQXRrMRCAEBIOCglJbkFpckF0azIQgRASEAoLV2Fsa2luZ0F0",
+            "azEQghASEAoLV2Fsa2luZ0F0azQQgxASDwoKT25XYWxsQXRrMRCAGCpMCglU",
+            "cmFwU3RhdGUSCQoFVElkbGUQABIMCghUV2Fsa2luZxABEgkKBVRBdGsxEAIS",
+            "CwoHVEF0a2VkMRADEg4KClREZXN0cm95ZWQQBCosCgxUcmlnZ2VyU3RhdGUS",
+            "CgoGVFJlYWR5EAASEAoMVENvb2xpbmdEb3duEAEqPAoNUGlja2FibGVTdGF0",
+            "ZRIJCgVQSWRsZRAAEhEKDVBEaXNhcHBlYXJpbmcQARINCglQQ29uc3VtZWQQ",
+            "Aio3CgpCdWxsZXRUeXBlEhAKDFVuZGV0ZXJtaW5lZBAAEgkKBU1lbGVlEAES",
+            "DAoIRmlyZWJhbGwQAiqIAQoMTXVsdGlIaXRUeXBlEggKBE5vbmUQABIQCgxG",
+            "cm9tRW1pc3Npb24QARIWChJGcm9tRmlyc3RIaXRBY3R1YWwQAhIWChJGcm9t",
+            "Rmlyc3RIaXRBbnl3YXkQAxIVChFGcm9tUHJldkhpdEFjdHVhbBAEEhUKEUZy",
+            "b21QcmV2SGl0QW55d2F5EAUqMwoQU2tpbGxUcmlnZ2VyVHlwZRIOCgpSaXNp",
+            "bmdFZGdlEAASDwoLRmFsbGluZ0VkZ2UQASosCg9WZnhEdXJhdGlvblR5cGUS",
+            "CgoGT25lT2ZmEAASDQoJUmVwZWF0aW5nEAEqNwoNVmZ4TW90aW9uVHlwZRIM",
+            "CghOb01vdGlvbhAAEgsKB0Ryb3BwZWQQARILCgdUcmFjaW5nEAIqMQoNQnVm",
+            "ZlN0b2NrVHlwZRIKCgZOb25lQmYQABIJCgVUaW1lZBABEgkKBVF1b3RhEAIq",
+            "cQoKRGVidWZmVHlwZRILCgdOb25lRGJmEAASEQoNU3BlZWREb3duT25seRAB",
+            "EhEKDUNvbGRTcGVlZERvd24QAhIWChJQb3NpdGlvbkxvY2tlZE9ubHkQAxIY",
+            "ChRGcm96ZW5Qb3NpdGlvbkxvY2tlZBAEKjYKDkNvbnN1bWFibGVUeXBlEgwK",
+            "CE5vbmVDc21iEAASCgoGUmVmaWxsEAESCgoGRGJmUmN2EAIqYAoWSW52ZW50",
+            "b3J5U2xvdFN0b2NrVHlwZRIKCgZOb25lSXYQABILCgdEdW1teUl2EAESCwoH",
+            "VGltZWRJdhACEgsKB1F1b3RhSXYQAxITCg9UaW1lZE1hZ2F6aW5lSXYQBCox",
+            "CgpQaWNrdXBUeXBlEg0KCUltbWVkaWF0ZRAAEhQKEFB1dEludG9JbnZlbnRv",
+            "cnkQAUIJqgIGc2hhcmVkYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.PickableState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.ConsumableType), typeof(global::shared.InventorySlotStockType), typeof(global::shared.PickupType), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "FramesCapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "Mp", "BtnBHoldingRdfCount", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitSoftPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "FrictionVelX", "ForcedCrouching", "SlipJumpTriggered", "PrimarilyOnSlippableHardPushback", "PrevWasCrouching", "NewBirth", "LowerPartFramesInChState", "JumpStarted", "FramesToStartJump", "RepelSoftPushback", "PublishingEvtMaskUponKilled", "PublishingEvtSubIdUponKilled", "SubscriptionId", "JumpHolding", "RemainingAirJumpQuota", "RemainingAirDashQuota", "KilledToDropConsumableSpeciesId", "KilledToDropBuffSpeciesId", "Name", "DisplayName", "Avatar", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "CollisionTypeMask", "BuffList", "DebuffList", "Inventory" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "FramesCapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "Mp", "BtnBHoldingRdfCount", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitSoftPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "FrictionVelX", "ForcedCrouching", "SlipJumpTriggered", "PrimarilyOnSlippableHardPushback", "PrevWasCrouching", "NewBirth", "LowerPartFramesInChState", "JumpStarted", "FramesToStartJump", "RepelSoftPushback", "PublishingEvtMaskUponKilled", "PublishingEvtSubIdUponKilled", "SubscriptionId", "JumpHolding", "RemainingAirJumpQuota", "RemainingAirDashQuota", "KilledToDropConsumableSpeciesId", "KilledToDropBuffSpeciesId", "Name", "DisplayName", "Avatar", "ActiveSkillId", "ActiveSkillHit", "FramesInvinsible", "BulletTeamId", "ChCollisionTeamId", "BuffList", "DebuffList", "Inventory" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel", "BtnCLevel", "BtnDLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDownsync), global::shared.InputFrameDownsync.Parser, new[]{ "InputFrameId", "InputList", "ConfirmedList" }, null, null, null, null),
@@ -351,7 +352,7 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PatrolCue), global::shared.PatrolCue.Parser, new[]{ "Id", "FlAct", "FrAct", "FlCaptureFrames", "FrCaptureFrames", "FdAct", "FuAct", "FdCaptureFrames", "FuCaptureFrames", "CollisionTypeMask" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.VisionBox), global::shared.VisionBox.Parser, new[]{ "BottomLeftX", "BottomLeftY", "Width", "Height" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.VfxConfig), global::shared.VfxConfig.Parser, new[]{ "SpeciesId", "MotionType", "DurationType", "OnCharacter", "OnBullet", "UsePixelatedVer" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "MhType", "SimultaneousMultiHitCnt", "Speed", "DirX", "DirY", "CancelTransit", "RepeatQuota", "ActiveVfxSpeciesId", "ExplosionVfxSpeciesId", "AllowsWalking", "AllowsCrouching", "Hardness", "StartupInvinsibleFrames", "HitInvinsibleFrames", "ExplosionSpeciesId", "PerpAccMag", "DelaySelfVelToActive", "SpeedIfNotHit", "OmitSoftPushback", "HitboxSizeIncX", "HitboxSizeIncY", "RemainsUponHit", "RotatesAlongVelocity", "DefaultHardPushbackBounceQuota", "HardPushbackBounceNormFactor", "HardPushbackBounceSheerFactor", "IsPixelatedActiveVfx", "IsPixelatedExplostionVfx", "CollisionTypeMask", "TakesGravity", "CharacterEmitSfxName", "FireballEmitSfxName", "ExplosionSfxName", "ActiveSfxName" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletConfig), global::shared.BulletConfig.Parser, new[]{ "StartupFrames", "CancellableStFrame", "CancellableEdFrame", "ActiveFrames", "HitStunFrames", "BlockStunFrames", "PushbackVelX", "PushbackVelY", "Damage", "SelfLockVelX", "SelfLockVelY", "HitboxOffsetX", "HitboxOffsetY", "HitboxSizeX", "HitboxSizeY", "BlowUp", "SpeciesId", "ExplosionFrames", "BType", "MhType", "SimultaneousMultiHitCnt", "Speed", "DirX", "DirY", "CancelTransit", "RepeatQuota", "ActiveVfxSpeciesId", "ExplosionVfxSpeciesId", "AllowsWalking", "AllowsCrouching", "Hardness", "StartupInvinsibleFrames", "HitInvinsibleFrames", "ExplosionSpeciesId", "PerpAccMag", "DelaySelfVelToActive", "SpeedIfNotHit", "OmitSoftPushback", "HitboxSizeIncX", "HitboxSizeIncY", "RemainsUponHit", "RotatesAlongVelocity", "DefaultHardPushbackBounceQuota", "HardPushbackBounceNormFactor", "HardPushbackBounceSheerFactor", "IsPixelatedActiveVfx", "IsPixelatedExplostionVfx", "MhVanishOnMeleeHit", "CollisionTypeMask", "TakesGravity", "CharacterEmitSfxName", "FireballEmitSfxName", "ExplosionSfxName", "ActiveSfxName" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BulletBattleAttr), global::shared.BulletBattleAttr.Parser, new[]{ "BulletLocalId", "OriginatedRenderFrameId", "OffenderJoinIndex", "TeamId", "ActiveSkillHit", "SkillId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Bullet), global::shared.Bullet.Parser, new[]{ "BlState", "FramesInBlState", "BattleAttr", "Config", "RepeatQuotaLeft", "RemainingHardPushbackBounceQuota", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.TrapConfig), global::shared.TrapConfig.Parser, new[]{ "SpeciesId", "ExplosionSpeciesId", "ExplosionFrames", "BlowUp", "Damage", "HitStunFrames", "HitInvinsibleFrames", "Destroyable", "Hardness", "DestroyUponTriggered", "SpeciesName" }, null, null, null, null),
@@ -427,6 +428,7 @@ namespace shared {
     /// When at this state, the character has already completed transform, i.e. in new speciesId
     /// </summary>
     [pbr::OriginalName("TransformingInto")] TransformingInto = 16,
+    [pbr::OriginalName("BackDashing")] BackDashing = 17,
     [pbr::OriginalName("OnWallIdle1")] OnWallIdle1 = 128,
     [pbr::OriginalName("CrouchIdle1")] CrouchIdle1 = 256,
     [pbr::OriginalName("CrouchAtk1")] CrouchAtk1 = 257,
@@ -437,6 +439,7 @@ namespace shared {
     [pbr::OriginalName("Atk3")] Atk3 = 1026,
     [pbr::OriginalName("Atk4")] Atk4 = 1027,
     [pbr::OriginalName("Atk5")] Atk5 = 1028,
+    [pbr::OriginalName("Atk6")] Atk6 = 1029,
     [pbr::OriginalName("InAirAtk1")] InAirAtk1 = 2048,
     [pbr::OriginalName("InAirAtk2")] InAirAtk2 = 2049,
     [pbr::OriginalName("WalkingAtk1")] WalkingAtk1 = 2050,
@@ -648,7 +651,6 @@ namespace shared {
       framesInvinsible_ = other.framesInvinsible_;
       bulletTeamId_ = other.bulletTeamId_;
       chCollisionTeamId_ = other.chCollisionTeamId_;
-      collisionTypeMask_ = other.collisionTypeMask_;
       buffList_ = other.buffList_.Clone();
       debuffList_ = other.debuffList_.Clone();
       inventory_ = other.inventory_ != null ? other.inventory_.Clone() : null;
@@ -1118,7 +1120,7 @@ namespace shared {
     public const int ForcedCrouchingFieldNumber = 39;
     private bool forcedCrouching_;
     /// <summary>
-    /// like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+    /// like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "forcedCrouching (prev -> curr)"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1423,22 +1425,10 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "collisionTypeMask" field.</summary>
-    public const int CollisionTypeMaskFieldNumber = 1029;
-    private ulong collisionTypeMask_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ulong CollisionTypeMask {
-      get { return collisionTypeMask_; }
-      set {
-        collisionTypeMask_ = value;
-      }
-    }
-
     /// <summary>Field number for the "buffList" field.</summary>
-    public const int BuffListFieldNumber = 1030;
+    public const int BuffListFieldNumber = 1029;
     private static readonly pb::FieldCodec<global::shared.Buff> _repeated_buffList_codec
-        = pb::FieldCodec.ForMessage(8242, global::shared.Buff.Parser);
+        = pb::FieldCodec.ForMessage(8234, global::shared.Buff.Parser);
     private readonly pbc::RepeatedField<global::shared.Buff> buffList_ = new pbc::RepeatedField<global::shared.Buff>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1447,9 +1437,9 @@ namespace shared {
     }
 
     /// <summary>Field number for the "debuffList" field.</summary>
-    public const int DebuffListFieldNumber = 1031;
+    public const int DebuffListFieldNumber = 1030;
     private static readonly pb::FieldCodec<global::shared.Debuff> _repeated_debuffList_codec
-        = pb::FieldCodec.ForMessage(8250, global::shared.Debuff.Parser);
+        = pb::FieldCodec.ForMessage(8242, global::shared.Debuff.Parser);
     private readonly pbc::RepeatedField<global::shared.Debuff> debuffList_ = new pbc::RepeatedField<global::shared.Debuff>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1458,7 +1448,7 @@ namespace shared {
     }
 
     /// <summary>Field number for the "inventory" field.</summary>
-    public const int InventoryFieldNumber = 1032;
+    public const int InventoryFieldNumber = 1031;
     private global::shared.Inventory inventory_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1545,7 +1535,6 @@ namespace shared {
       if (FramesInvinsible != other.FramesInvinsible) return false;
       if (BulletTeamId != other.BulletTeamId) return false;
       if (ChCollisionTeamId != other.ChCollisionTeamId) return false;
-      if (CollisionTypeMask != other.CollisionTypeMask) return false;
       if(!buffList_.Equals(other.buffList_)) return false;
       if(!debuffList_.Equals(other.debuffList_)) return false;
       if (!object.Equals(Inventory, other.Inventory)) return false;
@@ -1617,7 +1606,6 @@ namespace shared {
       if (FramesInvinsible != 0) hash ^= FramesInvinsible.GetHashCode();
       if (BulletTeamId != 0) hash ^= BulletTeamId.GetHashCode();
       if (ChCollisionTeamId != 0) hash ^= ChCollisionTeamId.GetHashCode();
-      if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
       hash ^= buffList_.GetHashCode();
       hash ^= debuffList_.GetHashCode();
       if (inventory_ != null) hash ^= Inventory.GetHashCode();
@@ -1883,14 +1871,10 @@ namespace shared {
         output.WriteRawTag(160, 64);
         output.WriteInt32(ChCollisionTeamId);
       }
-      if (CollisionTypeMask != 0UL) {
-        output.WriteRawTag(168, 64);
-        output.WriteUInt64(CollisionTypeMask);
-      }
       buffList_.WriteTo(output, _repeated_buffList_codec);
       debuffList_.WriteTo(output, _repeated_debuffList_codec);
       if (inventory_ != null) {
-        output.WriteRawTag(194, 64);
+        output.WriteRawTag(186, 64);
         output.WriteMessage(Inventory);
       }
       if (_unknownFields != null) {
@@ -2147,14 +2131,10 @@ namespace shared {
         output.WriteRawTag(160, 64);
         output.WriteInt32(ChCollisionTeamId);
       }
-      if (CollisionTypeMask != 0UL) {
-        output.WriteRawTag(168, 64);
-        output.WriteUInt64(CollisionTypeMask);
-      }
       buffList_.WriteTo(ref output, _repeated_buffList_codec);
       debuffList_.WriteTo(ref output, _repeated_debuffList_codec);
       if (inventory_ != null) {
-        output.WriteRawTag(194, 64);
+        output.WriteRawTag(186, 64);
         output.WriteMessage(Inventory);
       }
       if (_unknownFields != null) {
@@ -2349,9 +2329,6 @@ namespace shared {
       }
       if (ChCollisionTeamId != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(ChCollisionTeamId);
-      }
-      if (CollisionTypeMask != 0UL) {
-        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CollisionTypeMask);
       }
       size += buffList_.CalculateSize(_repeated_buffList_codec);
       size += debuffList_.CalculateSize(_repeated_debuffList_codec);
@@ -2552,9 +2529,6 @@ namespace shared {
       }
       if (other.ChCollisionTeamId != 0) {
         ChCollisionTeamId = other.ChCollisionTeamId;
-      }
-      if (other.CollisionTypeMask != 0UL) {
-        CollisionTypeMask = other.CollisionTypeMask;
       }
       buffList_.Add(other.buffList_);
       debuffList_.Add(other.debuffList_);
@@ -2823,19 +2797,15 @@ namespace shared {
             ChCollisionTeamId = input.ReadInt32();
             break;
           }
-          case 8232: {
-            CollisionTypeMask = input.ReadUInt64();
-            break;
-          }
-          case 8242: {
+          case 8234: {
             buffList_.AddEntriesFrom(input, _repeated_buffList_codec);
             break;
           }
-          case 8250: {
+          case 8242: {
             debuffList_.AddEntriesFrom(input, _repeated_debuffList_codec);
             break;
           }
-          case 8258: {
+          case 8250: {
             if (inventory_ == null) {
               Inventory = new global::shared.Inventory();
             }
@@ -3101,19 +3071,15 @@ namespace shared {
             ChCollisionTeamId = input.ReadInt32();
             break;
           }
-          case 8232: {
-            CollisionTypeMask = input.ReadUInt64();
-            break;
-          }
-          case 8242: {
+          case 8234: {
             buffList_.AddEntriesFrom(ref input, _repeated_buffList_codec);
             break;
           }
-          case 8250: {
+          case 8242: {
             debuffList_.AddEntriesFrom(ref input, _repeated_debuffList_codec);
             break;
           }
-          case 8258: {
+          case 8250: {
             if (inventory_ == null) {
               Inventory = new global::shared.Inventory();
             }
@@ -5279,6 +5245,9 @@ namespace shared {
     /// <summary>Field number for the "collisionTypeMask" field.</summary>
     public const int CollisionTypeMaskFieldNumber = 1029;
     private ulong collisionTypeMask_;
+    /// <summary>
+    /// [COLLISION_NPC_PATROL_CUE_INDEX_PREFIX, COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX]
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ulong CollisionTypeMask {
@@ -6395,6 +6364,7 @@ namespace shared {
       hardPushbackBounceSheerFactor_ = other.hardPushbackBounceSheerFactor_;
       isPixelatedActiveVfx_ = other.isPixelatedActiveVfx_;
       isPixelatedExplostionVfx_ = other.isPixelatedExplostionVfx_;
+      mhVanishOnMeleeHit_ = other.mhVanishOnMeleeHit_;
       collisionTypeMask_ = other.collisionTypeMask_;
       takesGravity_ = other.takesGravity_;
       characterEmitSfxName_ = other.characterEmitSfxName_;
@@ -7021,6 +6991,18 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "mhVanishOnMeleeHit" field.</summary>
+    public const int MhVanishOnMeleeHitFieldNumber = 48;
+    private bool mhVanishOnMeleeHit_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool MhVanishOnMeleeHit {
+      get { return mhVanishOnMeleeHit_; }
+      set {
+        mhVanishOnMeleeHit_ = value;
+      }
+    }
+
     /// <summary>Field number for the "collisionTypeMask" field.</summary>
     public const int CollisionTypeMaskFieldNumber = 1029;
     private ulong collisionTypeMask_;
@@ -7161,6 +7143,7 @@ namespace shared {
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(HardPushbackBounceSheerFactor, other.HardPushbackBounceSheerFactor)) return false;
       if (IsPixelatedActiveVfx != other.IsPixelatedActiveVfx) return false;
       if (IsPixelatedExplostionVfx != other.IsPixelatedExplostionVfx) return false;
+      if (MhVanishOnMeleeHit != other.MhVanishOnMeleeHit) return false;
       if (CollisionTypeMask != other.CollisionTypeMask) return false;
       if (TakesGravity != other.TakesGravity) return false;
       if (CharacterEmitSfxName != other.CharacterEmitSfxName) return false;
@@ -7221,6 +7204,7 @@ namespace shared {
       if (HardPushbackBounceSheerFactor != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(HardPushbackBounceSheerFactor);
       if (IsPixelatedActiveVfx != false) hash ^= IsPixelatedActiveVfx.GetHashCode();
       if (IsPixelatedExplostionVfx != false) hash ^= IsPixelatedExplostionVfx.GetHashCode();
+      if (MhVanishOnMeleeHit != false) hash ^= MhVanishOnMeleeHit.GetHashCode();
       if (CollisionTypeMask != 0UL) hash ^= CollisionTypeMask.GetHashCode();
       if (TakesGravity != false) hash ^= TakesGravity.GetHashCode();
       if (CharacterEmitSfxName.Length != 0) hash ^= CharacterEmitSfxName.GetHashCode();
@@ -7429,6 +7413,10 @@ namespace shared {
       if (IsPixelatedExplostionVfx != false) {
         output.WriteRawTag(248, 2);
         output.WriteBool(IsPixelatedExplostionVfx);
+      }
+      if (MhVanishOnMeleeHit != false) {
+        output.WriteRawTag(128, 3);
+        output.WriteBool(MhVanishOnMeleeHit);
       }
       if (CollisionTypeMask != 0UL) {
         output.WriteRawTag(168, 64);
@@ -7649,6 +7637,10 @@ namespace shared {
         output.WriteRawTag(248, 2);
         output.WriteBool(IsPixelatedExplostionVfx);
       }
+      if (MhVanishOnMeleeHit != false) {
+        output.WriteRawTag(128, 3);
+        output.WriteBool(MhVanishOnMeleeHit);
+      }
       if (CollisionTypeMask != 0UL) {
         output.WriteRawTag(168, 64);
         output.WriteUInt64(CollisionTypeMask);
@@ -7822,6 +7814,9 @@ namespace shared {
       if (IsPixelatedExplostionVfx != false) {
         size += 2 + 1;
       }
+      if (MhVanishOnMeleeHit != false) {
+        size += 2 + 1;
+      }
       if (CollisionTypeMask != 0UL) {
         size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CollisionTypeMask);
       }
@@ -7990,6 +7985,9 @@ namespace shared {
       }
       if (other.IsPixelatedExplostionVfx != false) {
         IsPixelatedExplostionVfx = other.IsPixelatedExplostionVfx;
+      }
+      if (other.MhVanishOnMeleeHit != false) {
+        MhVanishOnMeleeHit = other.MhVanishOnMeleeHit;
       }
       if (other.CollisionTypeMask != 0UL) {
         CollisionTypeMask = other.CollisionTypeMask;
@@ -8210,6 +8208,10 @@ namespace shared {
           }
           case 376: {
             IsPixelatedExplostionVfx = input.ReadBool();
+            break;
+          }
+          case 384: {
+            MhVanishOnMeleeHit = input.ReadBool();
             break;
           }
           case 8232: {
@@ -8437,6 +8439,10 @@ namespace shared {
           }
           case 376: {
             IsPixelatedExplostionVfx = input.ReadBool();
+            break;
+          }
+          case 384: {
+            MhVanishOnMeleeHit = input.ReadBool();
             break;
           }
           case 8232: {
@@ -13386,7 +13392,7 @@ namespace shared {
     public const int TriggerLocalIdFieldNumber = 1;
     private int triggerLocalId_;
     /// <summary>
-    /// ref-back upon collision, most (actually by now ALL) triggers are static, we use this "TriggerColliderAttr,triggerLocalId" to save the need of dynamically inserting and deleting colliders of each trigger while still being able to be rollback-compatible for "trigger.framesToFire &amp; trigger.framesToRecover"!
+    /// ref-back upon collision, most (actually by now ALL) triggers are static, we use this "TriggerColliderAttr.triggerLocalId" to save the need of dynamically inserting and deleting colliders of each trigger while still being able to be rollback-compatible for "trigger.framesToFire &amp; trigger.framesToRecover"!
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -20934,6 +20940,9 @@ namespace shared {
     /// <summary>Field number for the "attr" field.</summary>
     public const int AttrFieldNumber = 1;
     private global::shared.PatrolCue attr_;
+    /// <summary>
+    /// "collisionTypeMask" is contained here
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::shared.PatrolCue Attr {
@@ -21178,6 +21187,9 @@ namespace shared {
     /// <summary>Field number for the "attr" field.</summary>
     public const int AttrFieldNumber = 1;
     private global::shared.TrapColliderAttr attr_;
+    /// <summary>
+    /// "TrapColliderAttr.collisionTypeMask" is a little peculiar, it can be a composite of different COLLISION_*_INDEX_PREFIX, thus often NOT taken care of by the COLLIDABLE_PAIRS set 
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::shared.TrapColliderAttr Attr {
@@ -21422,6 +21434,9 @@ namespace shared {
     /// <summary>Field number for the "attr" field.</summary>
     public const int AttrFieldNumber = 1;
     private global::shared.TriggerColliderAttr attr_;
+    /// <summary>
+    /// "collisionTypeMask" can be derived from here
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::shared.TriggerColliderAttr Attr {

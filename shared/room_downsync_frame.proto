@@ -33,6 +33,8 @@ enum CharacterState {
     Dimmed = 15; // Pre-activated state for evtsub-based NPC 
     TransformingInto = 16; // When at this state, the character has already completed transform, i.e. in new speciesId
 
+	BackDashing = 17;
+
 	OnWallIdle1 = 128; 
     
 	CrouchIdle1 = 256; 
@@ -123,7 +125,7 @@ message CharacterDownsync {
 	bool onSlope = 37;
 
 	int32 frictionVelX = 38; // Mostly from a dynamic trap
-    bool forcedCrouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "onWall (prev -> curr)"
+    bool forcedCrouching = 39; // like "inAir", it’s by design a standalone field only inferred by the collision result of "Step" instead of "characterState", because we need check the transition for "characterState" from this field, i.e. "forcedCrouching (prev -> curr)"
         
 	bool slipJumpTriggered = 40;
 	bool primarilyOnSlippableHardPushback = 41; // like "inAir", it’s by design a standalone field only inferred by the calc result of "Battle.Step" instead of "characterState"
@@ -158,12 +160,11 @@ message CharacterDownsync {
     // Kindly note that "collisionTypeMask" is NOT GRANULAR ENOUGH for inter-character collision configuration, e.g. same team omission, thus we'd still need the fields "bulletTeamId" and "chCollisionTeamId" here
 	int32 bulletTeamId = 1027;
 	int32 chCollisionTeamId = 1028;
-	uint64 collisionTypeMask = 1029;
 
-    repeated Buff buffList = 1030; 
-    repeated Debuff debuffList = 1031; 
+    repeated Buff buffList = 1029; 
+    repeated Debuff debuffList = 1030; 
 
-	Inventory inventory = 1032;
+	Inventory inventory = 1031;
 }
 
 message InputFrameDecoded {
@@ -227,7 +228,7 @@ message PatrolCue {
 	uint64 fdCaptureFrames = 8;
 	uint64 fuCaptureFrames = 9;
 
-	uint64 collisionTypeMask = 1029;
+	uint64 collisionTypeMask = 1029; // [COLLISION_NPC_PATROL_CUE_INDEX_PREFIX, COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX]
 }
 
 message VisionBox {
@@ -353,6 +354,8 @@ message BulletConfig {
 
     bool isPixelatedActiveVfx = 46;
     bool isPixelatedExplostionVfx = 47;
+
+	bool mhVanishOnMeleeHit = 48;
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb
@@ -537,7 +540,7 @@ message TriggerConfigFromTiled {
 }
 
 message TriggerColliderAttr {
-	int32 triggerLocalId = 1; // ref-back upon collision, most (actually by now ALL) triggers are static, we use this "TriggerColliderAttr,triggerLocalId" to save the need of dynamically inserting and deleting colliders of each trigger while still being able to be rollback-compatible for "trigger.framesToFire & trigger.framesToRecover"!
+	int32 triggerLocalId = 1; // ref-back upon collision, most (actually by now ALL) triggers are static, we use this "TriggerColliderAttr.triggerLocalId" to save the need of dynamically inserting and deleting colliders of each trigger while still being able to be rollback-compatible for "trigger.framesToFire & trigger.framesToRecover"!
 }
 
 message Trigger {
@@ -778,17 +781,17 @@ message SerializableConvexPolygon {
 }
 
 message SerializedCompletelyStaticPatrolCueCollider {
-    PatrolCue attr = 1;
+    PatrolCue attr = 1; // "collisionTypeMask" is contained here
     SerializableConvexPolygon polygon = 2;
 }
 
 message SerializedCompletelyStaticTrapCollider {
-    TrapColliderAttr attr = 1;
+    TrapColliderAttr attr = 1; // "TrapColliderAttr.collisionTypeMask" is a little peculiar, it can be a composite of different COLLISION_*_INDEX_PREFIX, thus often NOT taken care of by the COLLIDABLE_PAIRS set 
     SerializableConvexPolygon polygon = 2;
 }
 
 message SerializedCompletelyStaticTriggerCollider {
-    TriggerColliderAttr attr = 1;
+    TriggerColliderAttr attr = 1; // "collisionTypeMask" can be derived from here
     SerializableConvexPolygon polygon = 2;
 }
 

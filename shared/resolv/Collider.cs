@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Collections.Generic;
 
 namespace shared {
     public class Collider {
@@ -7,11 +8,12 @@ namespace shared {
         public int maxTouchingCellsCnt;
         public FrameRingBuffer<CollisionCell> TouchingCells; // An array of Cells the Collider is touching
         public ConvexPolygon Shape;
+        public ulong Mask;
         public object? Data;                     // A pointer to a user-definable object
 
         public CollisionSpace? Space;           // Reference to the Space the Collider exists within
 
-        public Collider(float x, float y, float w, float h, ConvexPolygon shape, int aMaxTouchingCellsCnt, object? data) {
+        public Collider(float x, float y, float w, float h, ConvexPolygon shape, int aMaxTouchingCellsCnt, object? data, ulong mask) {
             X = x;
             Y = y;
             W = w;
@@ -20,6 +22,7 @@ namespace shared {
             Shape = shape;
             Data = data;
             Space = null;
+            Mask = mask;
         }
 
         public (int, int, int, int) BoundsToSpace(float dx, float dy) {
@@ -31,7 +34,7 @@ namespace shared {
             return (cx, cy, ex, ey);
         }
 
-        public bool CheckAllWithHolder(float dx, float dy, Collision cc) {
+        public bool CheckAllWithHolder(float dx, float dy, Collision cc, HashSet<ulong>? collidablePairs) {
             if (null == Space) {
                 return false;
             }
@@ -68,6 +71,12 @@ namespace shared {
                         // We only want cells that have objects other than the checking object, or that aren't on the ignore list.
                         if (o == this) {
                             continue;
+                        }
+
+                        if (null != collidablePairs) {
+                            if (!collidablePairs.Contains(this.Mask | o.Mask)) {
+                               continue; 
+                            }
                         }
 
                         if (cc.HasSeen(o)) {

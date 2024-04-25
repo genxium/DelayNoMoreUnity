@@ -572,9 +572,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -459663160, guid: 084f7e92f4c3df14990c714a43a4d494, type: 3}
+  m_Sprite: {fileID: 382720658, guid: 796f8dd83011a00418e1532c0da95a21, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -842,7 +842,7 @@ GameObject:
   - component: {fileID: 3211965915377411084}
   - component: {fileID: 6705252794236331868}
   m_Layer: 5
-  m_Name: MonkGirl
+  m_Name: WitchGirl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

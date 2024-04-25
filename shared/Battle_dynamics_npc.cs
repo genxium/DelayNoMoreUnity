@@ -71,7 +71,7 @@ namespace shared {
             res2 = null;
 
             // [WARNING] Finding only the closest non-self character to react to for avoiding any randomness. 
-            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
             if (!collided) return;
 
             float minAbsColliderDx = MAX_FLOAT32;
@@ -87,10 +87,6 @@ namespace shared {
                 CharacterDownsync? v3 = bCollider.Data as CharacterDownsync;
                 if (null == v3) {
                     // Only check shape collision (which is relatively expensive) if it's CharacterDownsync 
-                    continue;
-                }
-
-                if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
                     continue;
                 }
 
@@ -144,7 +140,7 @@ namespace shared {
             res2 = null;
 
             // [WARNING] Finding only the closest patrol cue to react to for avoiding any randomness. 
-            bool collided = aCollider.CheckAllWithHolder(0, 0, collision);
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
             if (!collided) return;
 
             float minAbsColliderDx = MAX_FLOAT32;
@@ -160,10 +156,6 @@ namespace shared {
                 PatrolCue? v3 = bCollider.Data as PatrolCue;
                 if (null == v3) {
                     // Only check shape collision (which is relatively expensive) if it's PatrolCue 
-                    continue;
-                }
-
-                if (!COLLIDABLE_PAIRS.Contains(v3.CollisionTypeMask | currCharacterDownsync.CollisionTypeMask)) {
                     continue;
                 }
 
@@ -227,7 +219,7 @@ namespace shared {
                 calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
 
                 var visionCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync);
+                UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_VISION_INDEX_PREFIX);
                 collisionSys.AddSingle(visionCollider);
 
                 Collider? bCollider;
