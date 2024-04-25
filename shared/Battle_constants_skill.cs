@@ -425,85 +425,28 @@ namespace shared {
             AddHit(BladeGirlDragonPunchPrimerBullet);
 
         public static BulletConfig WitchGirlFireballBulletHit1 = new BulletConfig {
-            StartupFrames = 24,
+            StartupFrames = 15,
             ActiveFrames = 600,
             HitStunFrames = 12,
             BlockStunFrames = 9,
-            Damage = 4,
+            Damage = 25,
             PushbackVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetX = (int)(12f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(9f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 2,
             Speed = (int)(3*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             DirX = 1,
             DirY = 0,
-            MhVanishOnMeleeHit = true,
             Hardness = 5,
             ExplosionFrames = 25,
             BType = BulletType.Fireball,
             CharacterEmitSfxName="SlashEmitSpd1",
             ExplosionSfxName="Explosion2",
-            MhType = MultiHitType.FromPrevHitActual,
-            CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
-        };
-
-        public static BulletConfig WitchGirlFireballBulletHit2 = new BulletConfig {
-            StartupFrames = 4,
-            ActiveFrames = 600,
-            HitStunFrames = 18,
-            BlockStunFrames = 9,
-            Damage = 8,
-            PushbackVelX = (int)(4.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = NO_LOCK_VEL,
-            SelfLockVelX = NO_LOCK_VEL,
-            SelfLockVelY = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SpeciesId = 2,
-            Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            DirX = 1,
-            DirY = 0,
-            MhVanishOnMeleeHit = true,
-            Hardness = 6,
-            ExplosionFrames = 25,
-            BType = BulletType.Fireball,
-            FireballEmitSfxName="Explosion1",
-            ExplosionSfxName="Explosion2",
-            MhType = MultiHitType.FromPrevHitActual,
-            CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
-        };
-
-        public static BulletConfig WitchGirlFireballBulletHit3 = new BulletConfig {
-            StartupFrames = 4,
-            ActiveFrames = 600,
-            HitStunFrames = 20,
-            BlockStunFrames = 9,
-            Damage = 16,
-            PushbackVelX = (int)(4.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = NO_LOCK_VEL,
-            SelfLockVelX = NO_LOCK_VEL,
-            SelfLockVelY = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SpeciesId = 2,
-            Speed = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            DirX = 1,
-            DirY = 0,
-            MhVanishOnMeleeHit = true,
-            Hardness = 7,
-            ExplosionFrames = 25,
-            FireballEmitSfxName="Explosion1",
-            ExplosionSfxName="Explosion2",
-            BType = BulletType.Fireball,
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
         };
 
@@ -997,8 +940,6 @@ namespace shared {
                             BoundChState = Atk1
                             }
                             .AddHit(WitchGirlFireballBulletHit1)
-                            .AddHit(WitchGirlFireballBulletHit2)
-                            .AddHit(WitchGirlFireballBulletHit3)
                     ),
 
                     new KeyValuePair<int, Skill>(10, new Skill{
@@ -1007,7 +948,7 @@ namespace shared {
                             RecoveryFramesOnHit = 15,
                             MpDelta = 60,
                             TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Sliding
+                            BoundChState = BackDashing
                     }
                     .AddHit(
                         new BulletConfig {
@@ -1340,16 +1281,14 @@ namespace shared {
                                 )),
 
                     new KeyValuePair<int, Skill>(25, new Skill{
-                            RecoveryFrames = 51,
-                            RecoveryFramesOnBlock = 51,
-                            RecoveryFramesOnHit = 51,
-                            MpDelta = 550,
+                            RecoveryFrames = 32,
+                            RecoveryFramesOnBlock = 32,
+                            RecoveryFramesOnHit = 32,
+                            MpDelta = 350,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = InAirAtk1
                             }
                             .AddHit(WitchGirlFireballBulletHit1)
-                            .AddHit(WitchGirlFireballBulletHit2)
-                            .AddHit(WitchGirlFireballBulletHit3)
                     ),
 
                     new KeyValuePair<int, Skill>(26, new Skill{
