@@ -1,4 +1,8 @@
 # Latest tag change notes
+v1.3.9-alpha new features
+- Replaced MonkGirl by new character WitchGirl
+- Added new bullet type GroundWave
+
 v1.3.8 new features
 - Added quota limited air-jump and air-dash dynamics
 - Fixes for NPC jumping.
