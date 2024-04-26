@@ -227,6 +227,81 @@ namespace shared {
             return retCnt;
         }
 
+        public static int calcHardPushbacksNormsForBullet(RoomDownsyncFrame currRenderFrame, Bullet bullet, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, FrameRingBuffer<Collider> residueCollided, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, ILoggerBridge logger) {
+            // [WARNING] There's no plan for a GroundWave bullet to take "FrictionVelX" from a moving trap, thus no need for using "primaryTrap".
+            int retCnt = 0;
+            primaryOverlapIndex = -1;
+            float primaryOverlapMag = float.MinValue;
+            residueCollided.Clear();
+            bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
+            if (!collided) {
+                //logger.LogInfo(String.Format("No collision object."));
+                return retCnt;
+            }
+
+            while (true) {
+                var (exists, bCollider) = collision.PopFirstContactedCollider();
+
+                if (!exists || null == bCollider) {
+                    break;
+                }
+                bool isAnotherHardPushbackTrap = false;
+                bool isAnActualBarrier = false;
+
+                switch (bCollider.Data) {
+                    case Pickable v0:
+                    case CharacterDownsync v1:
+                    case Bullet v2:
+                    case PatrolCue v3:
+                    case TriggerColliderAttr v4:
+                        break;
+                    case TrapColliderAttr v5:
+                        var trap = currRenderFrame.TrapsArr[v5.TrapLocalId];
+                        isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
+                        break;
+                    default:
+                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
+                        isAnActualBarrier = true;
+                        break;
+                }
+
+                if (!isAnotherHardPushbackTrap && !isAnActualBarrier) {
+                    if (residueCollided.Cnt >= residueCollided.N) {
+                        throw new ArgumentException(String.Format("residueCollided is already full! residueCollided.Cnt={0}, residueCollided.N={1}: trying to insert collider.Shape={4}, collider.Data={5}", residueCollided.Cnt, residueCollided.N, bCollider.Shape, bCollider.Data));
+                    }
+                    residueCollided.Put(bCollider);
+                    continue;
+                }
+                ConvexPolygon bShape = bCollider.Shape;
+
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult);
+
+                if (!overlapped) {
+                    continue;
+                }
+
+                // Same polarity
+                if (overlapResult.OverlapMag > primaryOverlapMag) {
+                    primaryOverlapIndex = retCnt;
+                    primaryOverlapMag = overlapResult.OverlapMag;
+                    overlapResult.cloneInto(ref primaryOverlapResult);
+                } else {
+                    if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                        primaryOverlapIndex = retCnt;
+                        primaryOverlapMag = overlapResult.OverlapMag;
+                        overlapResult.cloneInto(ref primaryOverlapResult);
+                    }
+                }
+
+                hardPushbacks[retCnt].X = pushbackX;
+                hardPushbacks[retCnt].Y = pushbackY;
+
+                retCnt++;
+            }
+
+            return retCnt;
+        }
+
         public static int calcHardPushbacksNormsForPickable(RoomDownsyncFrame currRenderFrame, Pickable pickable, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, ILoggerBridge logger) {
             int retCnt = 0;
             primaryOverlapIndex = -1;

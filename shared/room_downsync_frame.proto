@@ -243,6 +243,10 @@ enum BulletType {
 	Undetermined = 0;
 	Melee = 1;
 	Fireball = 2;
+	GroundWave = 3;
+    MissileLinear = 4;
+    MissileQuadraticBezier = 5; // by default using "(ed-st)" rotated around "z-axis at st" toward upper y-axis and length 0.25*|ed-st| as an intermediate relay 
+
 }
 
 enum MultiHitType {
@@ -356,9 +360,10 @@ message BulletConfig {
     bool isPixelatedExplostionVfx = 47;
 
 	bool mhVanishOnMeleeHit = 48;
+    int32 downSlopePrimerVelY = 49;
 
 	uint64 collisionTypeMask = 1029;
-    bool takesGravity = 1030; // e.g. a bomb
+    bool takesGravity = 1030; // e.g. a bomb, a ground-wave
 
 	// Sfx configs
 	string characterEmitSfxName = 2048;
@@ -385,6 +390,7 @@ message Bullet {
 	BulletConfig config = 4;
 	int32 repeatQuotaLeft = 5;
     int32 remainingHardPushbackBounceQuota = 6;
+    int32 targetCharacterJoinIndex = 7; // [WARNING] Assignment to this field MUST BE order-insensitive w.r.t. collider traversal order!
 
 	int32 virtualGridX = 999;
 	int32 virtualGridY = 1000;

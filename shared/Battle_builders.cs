@@ -269,7 +269,7 @@ namespace shared {
             };
         }
 
-        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, Bullet dst) {
+        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, int targetCharacterJoinIndex, Bullet dst) {
             dst.BlState = blState;
             dst.FramesInBlState = framesInBlState;
             dst.Config = staticBulletConfig;
@@ -290,6 +290,7 @@ namespace shared {
 
             dst.RepeatQuotaLeft = repeatQuotaLeft;
             dst.RemainingHardPushbackBounceQuota = remainingHardPushbackBounceQuota;
+            dst.TargetCharacterJoinIndex = targetCharacterJoinIndex;
         }
 
         public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, bool capturedByPatrolCue, int framesInPatrolCue, bool waivingSpontaneousPatrol, int waivingPatrolCueId, Trap dst) {
@@ -498,7 +499,7 @@ namespace shared {
                         srcBullet.VirtualGridX, srcBullet.VirtualGridY,
                         srcBullet.DirX, srcBullet.DirY,
                         srcBullet.VelX, srcBullet.VelY,
-                        srcBullet.BattleAttr.ActiveSkillHit, srcBullet.BattleAttr.SkillId, srcBullet.Config, srcBullet.RepeatQuotaLeft, srcBullet.RemainingHardPushbackBounceQuota,
+                        srcBullet.BattleAttr.ActiveSkillHit, srcBullet.BattleAttr.SkillId, srcBullet.Config, srcBullet.RepeatQuotaLeft, srcBullet.RemainingHardPushbackBounceQuota, srcBullet.TargetCharacterJoinIndex,
                         dst.Bullets[bulletCnt]);
                  bulletCnt++;
             }
@@ -645,11 +646,11 @@ namespace shared {
             lastIndividuallyConfirmedInputList = new ulong[roomCapacity];
             Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
 
-            effPushbacks = new Vector[roomCapacity + preallocNpcCapacity + preallocTrapCapacity];
+            effPushbacks = new Vector[roomCapacity + preallocBulletCapacity + preallocNpcCapacity + preallocTrapCapacity];
             for (int i = 0; i < effPushbacks.Length; i++) {
                 effPushbacks[i] = new Vector(0, 0);
             }
-            hardPushbackNormsArr = new Vector[roomCapacity + preallocNpcCapacity + preallocTrapCapacity][];
+            hardPushbackNormsArr = new Vector[roomCapacity + preallocBulletCapacity + preallocNpcCapacity + preallocTrapCapacity][];
             for (int i = 0; i < hardPushbackNormsArr.Length; i++) {
                 int cap = 5;
                 hardPushbackNormsArr[i] = new Vector[cap];
@@ -781,6 +782,11 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetSpeedIfNotHit(int val) {
+            this.SpeedIfNotHit = val;
+            return this;
+        }
+
         public BulletConfig SetDir(int dirX, int dirY) {
             this.DirX = dirX;
             this.DirY = dirY;
@@ -811,6 +817,11 @@ namespace shared {
 
         public BulletConfig SetRotateAlongVelocity(bool yesOrNo) {
             RotatesAlongVelocity = yesOrNo;
+            return this;
+        }
+
+        public BulletConfig SetMhType(MultiHitType mhType) {
+            MhType = mhType; 
             return this;
         }
 
