@@ -1885,6 +1885,25 @@ namespace shared {
                 }
             }
 
+            for (int i = bulletColliderCntOffset; i < trapColliderCntOffset; i++) {
+                var aCollider = dynamicRectangleColliders[i];
+                Bullet? bulletNextFrame = aCollider.Data as Bullet;
+                if (null == bulletNextFrame) {
+                    throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where bulletColliderCntOffset=" + bulletColliderCntOffset + ", trapColliderCntOffset=" + trapColliderCntOffset);
+                }
+    
+                var bulletConfig = bulletNextFrame.Config;
+                if (BulletType.GroundWave != bulletConfig.BType) {
+                    continue;
+                }
+
+                // Update "virtual grid position"
+                int nextColliderAttrVx, nextColliderAttrVy;
+                (nextColliderAttrVx, nextColliderAttrVy) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
+                bulletNextFrame.VirtualGridX = nextColliderAttrVx;
+                bulletNextFrame.VirtualGridY = nextColliderAttrVy;
+            }
+
             for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
                 var aCollider = dynamicRectangleColliders[i];
                 TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;

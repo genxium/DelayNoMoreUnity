@@ -781,6 +781,11 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetSpeedIfNotHit(int val) {
+            this.SpeedIfNotHit = val;
+            return this;
+        }
+
         public BulletConfig SetDir(int dirX, int dirY) {
             this.DirX = dirX;
             this.DirY = dirY;
@@ -811,6 +816,11 @@ namespace shared {
 
         public BulletConfig SetRotateAlongVelocity(bool yesOrNo) {
             RotatesAlongVelocity = yesOrNo;
+            return this;
+        }
+
+        public BulletConfig SetMhType(MultiHitType mhType) {
+            MhType = mhType; 
             return this;
         }
 

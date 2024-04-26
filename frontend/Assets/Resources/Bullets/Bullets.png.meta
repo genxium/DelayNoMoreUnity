@@ -132,8 +132,8 @@ TextureImporter:
       name: Explosion1_1
       rect:
         serializedVersion: 2
-        x: 904
-        y: 724
+        x: 70
+        y: 649
         width: 23
         height: 13
       alignment: 9
@@ -195,8 +195,8 @@ TextureImporter:
       name: Explosion1_4
       rect:
         serializedVersion: 2
-        x: 78
-        y: 662
+        x: 995
+        y: 380
         width: 29
         height: 27
       alignment: 9
@@ -258,8 +258,8 @@ TextureImporter:
       name: Fireball1_1
       rect:
         serializedVersion: 2
-        x: 486
-        y: 406
+        x: 995
+        y: 353
         width: 29
         height: 27
       alignment: 0
@@ -279,8 +279,8 @@ TextureImporter:
       name: Fireball1_10
       rect:
         serializedVersion: 2
-        x: 784
-        y: 413
+        x: 366
+        y: 430
         width: 52
         height: 23
       alignment: 0
@@ -300,8 +300,8 @@ TextureImporter:
       name: Fireball1_11
       rect:
         serializedVersion: 2
-        x: 956
-        y: 336
+        x: 885
+        y: 436
         width: 40
         height: 15
       alignment: 0
@@ -342,8 +342,8 @@ TextureImporter:
       name: Fireball1_13
       rect:
         serializedVersion: 2
-        x: 809
-        y: 454
+        x: 267
+        y: 452
         width: 53
         height: 19
       alignment: 0
@@ -384,8 +384,8 @@ TextureImporter:
       name: Fireball1_15
       rect:
         serializedVersion: 2
-        x: 956
-        y: 351
+        x: 885
+        y: 451
         width: 40
         height: 17
       alignment: 0
@@ -405,8 +405,8 @@ TextureImporter:
       name: Fireball1_16
       rect:
         serializedVersion: 2
-        x: 731
-        y: 427
+        x: 366
+        y: 453
         width: 53
         height: 16
       alignment: 0
@@ -447,8 +447,8 @@ TextureImporter:
       name: Fireball1_18
       rect:
         serializedVersion: 2
-        x: 950
-        y: 469
+        x: 366
+        y: 488
         width: 53
         height: 23
       alignment: 0
@@ -468,8 +468,8 @@ TextureImporter:
       name: Fireball1_19
       rect:
         serializedVersion: 2
-        x: 956
-        y: 322
+        x: 885
+        y: 422
         width: 40
         height: 14
       alignment: 0
@@ -489,8 +489,8 @@ TextureImporter:
       name: Fireball1_2
       rect:
         serializedVersion: 2
-        x: 836
-        y: 404
+        x: 472
+        y: 450
         width: 49
         height: 23
       alignment: 0
@@ -552,8 +552,8 @@ TextureImporter:
       name: Fireball1_3
       rect:
         serializedVersion: 2
-        x: 956
-        y: 351
+        x: 885
+        y: 451
         width: 40
         height: 17
       alignment: 0
@@ -573,8 +573,8 @@ TextureImporter:
       name: Fireball1_4
       rect:
         serializedVersion: 2
-        x: 837
-        y: 427
+        x: 366
+        y: 414
         width: 51
         height: 16
       alignment: 0
@@ -594,8 +594,8 @@ TextureImporter:
       name: Fireball1_5
       rect:
         serializedVersion: 2
-        x: 784
-        y: 436
+        x: 419
+        y: 455
         width: 53
         height: 18
       alignment: 0
@@ -615,8 +615,8 @@ TextureImporter:
       name: Fireball1_6
       rect:
         serializedVersion: 2
-        x: 889
-        y: 460
+        x: 267
+        y: 471
         width: 53
         height: 20
       alignment: 0
@@ -636,8 +636,8 @@ TextureImporter:
       name: Fireball1_7
       rect:
         serializedVersion: 2
-        x: 956
-        y: 322
+        x: 885
+        y: 422
         width: 40
         height: 14
       alignment: 0
@@ -657,8 +657,8 @@ TextureImporter:
       name: Fireball1_8
       rect:
         serializedVersion: 2
-        x: 942
-        y: 455
+        x: 267
+        y: 438
         width: 53
         height: 14
       alignment: 0
@@ -678,8 +678,8 @@ TextureImporter:
       name: Fireball1_9
       rect:
         serializedVersion: 2
-        x: 731
-        y: 443
+        x: 366
+        y: 469
         width: 53
         height: 19
       alignment: 0
@@ -699,8 +699,8 @@ TextureImporter:
       name: Melee_Explosion1_1
       rect:
         serializedVersion: 2
-        x: 871
-        y: 347
+        x: 125
+        y: 372
         width: 43
         height: 43
       alignment: 9
@@ -720,8 +720,8 @@ TextureImporter:
       name: Melee_Explosion1_10
       rect:
         serializedVersion: 2
-        x: 940
-        y: 420
+        x: 320
+        y: 456
         width: 46
         height: 35
       alignment: 9
@@ -741,8 +741,8 @@ TextureImporter:
       name: Melee_Explosion1_2
       rect:
         serializedVersion: 2
-        x: 931
-        y: 383
+        x: 241
+        y: 401
         width: 44
         height: 37
       alignment: 9
@@ -804,8 +804,8 @@ TextureImporter:
       name: Melee_Explosion1_5
       rect:
         serializedVersion: 2
-        x: 273
-        y: 363
+        x: 203
+        y: 450
         width: 64
         height: 55
       alignment: 9
@@ -825,8 +825,8 @@ TextureImporter:
       name: Melee_Explosion1_6
       rect:
         serializedVersion: 2
-        x: 889
-        y: 480
+        x: 0
+        y: 347
         width: 61
         height: 48
       alignment: 9
@@ -846,8 +846,8 @@ TextureImporter:
       name: Melee_Explosion1_7
       rect:
         serializedVersion: 2
-        x: 337
-        y: 359
+        x: 64
+        y: 391
         width: 61
         height: 55
       alignment: 9
@@ -867,8 +867,8 @@ TextureImporter:
       name: Melee_Explosion1_8
       rect:
         serializedVersion: 2
-        x: 985
-        y: 564
+        x: 885
+        y: 388
         width: 39
         height: 34
       alignment: 9
@@ -888,8 +888,8 @@ TextureImporter:
       name: Melee_Explosion1_9
       rect:
         serializedVersion: 2
-        x: 778
-        y: 373
+        x: 417
+        y: 379
         width: 47
         height: 40
       alignment: 9
@@ -909,8 +909,8 @@ TextureImporter:
       name: Melee_Explosion2_1
       rect:
         serializedVersion: 2
-        x: 862
-        y: 443
+        x: 902
+        y: 613
         width: 26
         height: 30
       alignment: 9
@@ -951,8 +951,8 @@ TextureImporter:
       name: Melee_Explosion2_2
       rect:
         serializedVersion: 2
-        x: 985
-        y: 528
+        x: 889
+        y: 521
         width: 36
         height: 36
       alignment: 9
@@ -993,8 +993,8 @@ TextureImporter:
       name: Melee_Explosion2_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 453
+        x: 140
+        y: 587
         width: 69
         height: 40
       alignment: 9
@@ -1077,8 +1077,8 @@ TextureImporter:
       name: Melee_Explosion2_8
       rect:
         serializedVersion: 2
-        x: 904
-        y: 673
+        x: 1003
+        y: 477
         width: 16
         height: 24
       alignment: 9
@@ -1287,8 +1287,8 @@ TextureImporter:
       name: Melee_Explosion3_8
       rect:
         serializedVersion: 2
-        x: 225
-        y: 539
+        x: 132
+        y: 415
         width: 63
         height: 68
       alignment: 9
@@ -1308,8 +1308,8 @@ TextureImporter:
       name: Melee_Explosion3_9
       rect:
         serializedVersion: 2
-        x: 78
-        y: 575
+        x: 924
+        y: 333
         width: 71
         height: 74
       alignment: 9
@@ -1330,7 +1330,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 742
-        y: 954
+        y: 947
         width: 8
         height: 8
       alignment: 9
@@ -1434,8 +1434,8 @@ TextureImporter:
       name: Fireball4_1
       rect:
         serializedVersion: 2
-        x: 904
-        y: 715
+        x: 1003
+        y: 519
         width: 17
         height: 9
       alignment: 9
@@ -1455,8 +1455,8 @@ TextureImporter:
       name: Fireball4_2
       rect:
         serializedVersion: 2
-        x: 904
-        y: 706
+        x: 1003
+        y: 510
         width: 17
         height: 9
       alignment: 9
@@ -1476,8 +1476,8 @@ TextureImporter:
       name: Fireball4_3
       rect:
         serializedVersion: 2
-        x: 904
-        y: 697
+        x: 1003
+        y: 501
         width: 17
         height: 9
       alignment: 9
@@ -1602,8 +1602,8 @@ TextureImporter:
       name: Fireball9_1
       rect:
         serializedVersion: 2
-        x: 356
-        y: 470
+        x: 277
+        y: 491
         width: 66
         height: 77
       alignment: 9
@@ -1644,8 +1644,8 @@ TextureImporter:
       name: Fireball9_11
       rect:
         serializedVersion: 2
-        x: 422
-        y: 403
+        x: 68
+        y: 446
         width: 64
         height: 70
       alignment: 9
@@ -1665,8 +1665,8 @@ TextureImporter:
       name: Fireball9_12
       rect:
         serializedVersion: 2
-        x: 0
-        y: 610
+        x: 925
+        y: 449
         width: 78
         height: 79
       alignment: 9
@@ -1686,8 +1686,8 @@ TextureImporter:
       name: Fireball9_13
       rect:
         serializedVersion: 2
-        x: 356
-        y: 470
+        x: 277
+        y: 491
         width: 66
         height: 77
       alignment: 9
@@ -1707,8 +1707,8 @@ TextureImporter:
       name: Fireball9_14
       rect:
         serializedVersion: 2
-        x: 218
-        y: 461
+        x: 0
+        y: 527
         width: 68
         height: 78
       alignment: 9
@@ -1728,8 +1728,8 @@ TextureImporter:
       name: Fireball9_15
       rect:
         serializedVersion: 2
-        x: 140
-        y: 448
+        x: 0
+        y: 451
         width: 68
         height: 76
       alignment: 9
@@ -1770,8 +1770,8 @@ TextureImporter:
       name: Fireball9_17
       rect:
         serializedVersion: 2
-        x: 422
-        y: 403
+        x: 68
+        y: 446
         width: 64
         height: 70
       alignment: 9
@@ -1791,8 +1791,8 @@ TextureImporter:
       name: Fireball9_18
       rect:
         serializedVersion: 2
-        x: 0
-        y: 610
+        x: 925
+        y: 449
         width: 78
         height: 79
       alignment: 9
@@ -1812,8 +1812,8 @@ TextureImporter:
       name: Fireball9_2
       rect:
         serializedVersion: 2
-        x: 218
-        y: 461
+        x: 0
+        y: 527
         width: 68
         height: 78
       alignment: 9
@@ -1833,8 +1833,8 @@ TextureImporter:
       name: Fireball9_3
       rect:
         serializedVersion: 2
-        x: 140
-        y: 448
+        x: 0
+        y: 451
         width: 68
         height: 76
       alignment: 9
@@ -1875,8 +1875,8 @@ TextureImporter:
       name: Fireball9_5
       rect:
         serializedVersion: 2
-        x: 422
-        y: 403
+        x: 68
+        y: 446
         width: 64
         height: 70
       alignment: 9
@@ -1896,8 +1896,8 @@ TextureImporter:
       name: Fireball9_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 610
+        x: 925
+        y: 449
         width: 78
         height: 79
       alignment: 9
@@ -1917,8 +1917,8 @@ TextureImporter:
       name: Fireball9_7
       rect:
         serializedVersion: 2
-        x: 356
-        y: 470
+        x: 277
+        y: 491
         width: 66
         height: 77
       alignment: 9
@@ -1938,8 +1938,8 @@ TextureImporter:
       name: Fireball9_8
       rect:
         serializedVersion: 2
-        x: 218
-        y: 461
+        x: 0
+        y: 527
         width: 68
         height: 78
       alignment: 9
@@ -1959,8 +1959,8 @@ TextureImporter:
       name: Fireball9_9
       rect:
         serializedVersion: 2
-        x: 140
-        y: 448
+        x: 0
+        y: 451
         width: 68
         height: 76
       alignment: 9
@@ -2085,8 +2085,8 @@ TextureImporter:
       name: Explosion9_6
       rect:
         serializedVersion: 2
-        x: 825
-        y: 370
+        x: 61
+        y: 376
         width: 43
         height: 15
       alignment: 9
@@ -2106,8 +2106,8 @@ TextureImporter:
       name: Explosion9_7
       rect:
         serializedVersion: 2
-        x: 486
-        y: 438
+        x: 889
+        y: 468
         width: 33
         height: 13
       alignment: 9
@@ -2127,8 +2127,8 @@ TextureImporter:
       name: Fireball11
       rect:
         serializedVersion: 2
-        x: 486
-        y: 433
+        x: 70
+        y: 684
         width: 33
         height: 5
       alignment: 9
@@ -2148,8 +2148,8 @@ TextureImporter:
       name: Explosion11_1
       rect:
         serializedVersion: 2
-        x: 975
-        y: 368
+        x: 195
+        y: 379
         width: 43
         height: 52
       alignment: 0
@@ -2232,12 +2232,12 @@ TextureImporter:
       name: Explosion13_1
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 995
+        y: 334
+        width: 28
+        height: 19
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.84210527}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2253,12 +2253,12 @@ TextureImporter:
       name: Explosion13_10
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 904
+        y: 664
+        width: 24
+        height: 21
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.33333334}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2274,12 +2274,12 @@ TextureImporter:
       name: Explosion13_11
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 904
+        y: 643
+        width: 24
+        height: 21
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.2857143}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2295,12 +2295,12 @@ TextureImporter:
       name: Explosion13_12
       rect:
         serializedVersion: 2
-        x: 486
-        y: 451
-        width: 35
-        height: 22
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 902
+        y: 557
+        width: 24
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2857143}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2316,12 +2316,12 @@ TextureImporter:
       name: Explosion13_13
       rect:
         serializedVersion: 2
-        x: 231
-        y: 674
-        width: 57
-        height: 34
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 70
+        y: 662
+        width: 23
+        height: 22
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.27272728}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2337,12 +2337,12 @@ TextureImporter:
       name: Explosion13_14
       rect:
         serializedVersion: 2
-        x: 653
-        y: 837
-        width: 86
-        height: 83
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 343
+        y: 508
+        width: 23
+        height: 22
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.27272728}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2358,12 +2358,12 @@ TextureImporter:
       name: Explosion13_15
       rect:
         serializedVersion: 2
-        x: 370
-        y: 588
-        width: 73
-        height: 85
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 902
+        y: 578
+        width: 25
+        height: 21
+      alignment: 9
+      pivot: {x: 0.44, y: 0.23809524}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2379,12 +2379,12 @@ TextureImporter:
       name: Explosion13_16
       rect:
         serializedVersion: 2
-        x: 736
-        y: 639
-        width: 83
-        height: 95
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 742
+        y: 955
+        width: 10
+        height: 7
+      alignment: 9
+      pivot: {x: -0.5, y: -0.5714286}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2400,12 +2400,12 @@ TextureImporter:
       name: Explosion13_17
       rect:
         serializedVersion: 2
-        x: 928
-        y: 686
-        width: 83
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 290
+        y: 910
+        width: 5
+        height: 5
+      alignment: 9
+      pivot: {x: -1.6, y: -1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2421,12 +2421,12 @@ TextureImporter:
       name: Explosion13_18
       rect:
         serializedVersion: 2
-        x: 821
-        y: 647
-        width: 83
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 5.3333335, y: -4.3333335}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2439,36 +2439,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion13_19
-      rect:
-        serializedVersion: 2
-        x: 653
-        y: 642
-        width: 83
-        height: 105
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bf716a0af14025147869bce7de5cdd94
-      internalID: -1088690538
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Explosion13_2
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 995
+        y: 334
+        width: 28
+        height: 19
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.84210527}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2481,225 +2460,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion13_20
-      rect:
-        serializedVersion: 2
-        x: 920
-        y: 598
-        width: 83
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b5d54ca36a161c34aa3d3e3ab32733d6
-      internalID: -86716744
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_21
-      rect:
-        serializedVersion: 2
-        x: 521
-        y: 429
-        width: 78
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 64851445dd2249b42ad0ebac63a25620
-      internalID: -560697945
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_22
-      rect:
-        serializedVersion: 2
-        x: 811
-        y: 473
-        width: 78
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8ab2c802d6405774a9dea7c3ec778d48
-      internalID: 887684913
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_23
-      rect:
-        serializedVersion: 2
-        x: 811
-        y: 473
-        width: 78
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8d2f51314a317064bb11973c66da6f6d
-      internalID: 2011894477
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_24
-      rect:
-        serializedVersion: 2
-        x: 811
-        y: 473
-        width: 78
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8d4766e321637f24ab3eb8002643fa43
-      internalID: 1693275418
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_25
-      rect:
-        serializedVersion: 2
-        x: 733
-        y: 550
-        width: 78
-        height: 89
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 01802a034d9f1354496ec53f4262e250
-      internalID: -236697852
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_26
-      rect:
-        serializedVersion: 2
-        x: 731
-        y: 462
-        width: 78
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f5142653d3589bc4ab56d4ad89b47a72
-      internalID: 1327321508
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_27
-      rect:
-        serializedVersion: 2
-        x: 731
-        y: 462
-        width: 78
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5d2f493f4cb85a642bb235016cbcd406
-      internalID: 1144967681
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_28
-      rect:
-        serializedVersion: 2
-        x: 442
-        y: 473
-        width: 79
-        height: 89
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3a8c1f7928e2d554186524335a129e3a
-      internalID: 398058533
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_29
-      rect:
-        serializedVersion: 2
-        x: 653
-        y: 407
-        width: 78
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e905eab84360f9a478b2ada93ffa36f2
-      internalID: -1784133414
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Explosion13_3
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 343
+        y: 530
+        width: 24
+        height: 18
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.8888889}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2712,225 +2481,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion13_30
-      rect:
-        serializedVersion: 2
-        x: 653
-        y: 407
-        width: 78
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cff6b3bb022a08c43b7533e1b7bc34e2
-      internalID: -1713380616
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_31
-      rect:
-        serializedVersion: 2
-        x: 653
-        y: 495
-        width: 78
-        height: 89
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 115c12ad0b672b344a8e0c5dac179019
-      internalID: -1159961597
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_32
-      rect:
-        serializedVersion: 2
-        x: 524
-        y: 610
-        width: 80
-        height: 86
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b6bde5e58c1348d45af84eef2780d587
-      internalID: 382999092
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_33
-      rect:
-        serializedVersion: 2
-        x: 443
-        y: 562
-        width: 80
-        height: 78
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ca143f201a110864794c7498274a6a71
-      internalID: 1501836516
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_34
-      rect:
-        serializedVersion: 2
-        x: 902
-        y: 528
-        width: 83
-        height: 70
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 12aa7138ec948c64183ea9bf6c059b59
-      internalID: 16409096
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_35
-      rect:
-        serializedVersion: 2
-        x: 149
-        y: 721
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 906ae1984425eb84c88a8338b7248dd0
-      internalID: 1397357254
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_36
-      rect:
-        serializedVersion: 2
-        x: 529
-        y: 785
-        width: 84
-        height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7d50671e562227e4b9d2453fe413fc8f
-      internalID: -1990025081
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_37
-      rect:
-        serializedVersion: 2
-        x: 443
-        y: 732
-        width: 84
-        height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 17b912d0f2ddb50488d2e5e40a07a522
-      internalID: -205915558
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_38
-      rect:
-        serializedVersion: 2
-        x: 653
-        y: 747
-        width: 84
-        height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0063e85828f0bb54eb48f01715bc2403
-      internalID: -1630152059
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_39
-      rect:
-        serializedVersion: 2
-        x: 527
-        y: 696
-        width: 84
-        height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7f9d9325bbdc83c41871a7d4a761b74b
-      internalID: 824725319
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Explosion13_4
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 904
+        y: 711
+        width: 24
+        height: 26
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.61538464}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2943,183 +2502,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion13_40
-      rect:
-        serializedVersion: 2
-        x: 825
-        y: 743
-        width: 84
-        height: 44
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c695db5c577abdd4b88dbce0b2adb4c2
-      internalID: -152998579
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_41
-      rect:
-        serializedVersion: 2
-        x: 527
-        y: 740
-        width: 84
-        height: 45
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: efdb1a269eb207c46b241e985c9383b8
-      internalID: 1632290868
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_42
-      rect:
-        serializedVersion: 2
-        x: 290
-        y: 756
-        width: 84
-        height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5abaff5e48d2e3747a2dae0a7483f7ca
-      internalID: -212738551
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_43
-      rect:
-        serializedVersion: 2
-        x: 443
-        y: 776
-        width: 84
-        height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5026686853fb7064b91be1869718c297
-      internalID: 1784539402
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_44
-      rect:
-        serializedVersion: 2
-        x: 653
-        y: 791
-        width: 84
-        height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d34e8e1add2bf4148a77d2e38a3bff4c
-      internalID: 723134596
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_45
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 493
-        width: 70
-        height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0463c444ba79e4c40ae7e75ad56532a1
-      internalID: -1382132898
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_46
-      rect:
-        serializedVersion: 2
-        x: 148
-        y: 524
-        width: 70
-        height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6dc7356038219714da63022fdc8b734e
-      internalID: -435054519
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_47
-      rect:
-        serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
-      alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 09ef1b83dc31edb4aa573f564bea39a1
-      internalID: -802540157
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Explosion13_5
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 904
+        y: 685
+        width: 24
+        height: 26
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.5769231}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3135,12 +2526,12 @@ TextureImporter:
       name: Explosion13_6
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 995
+        y: 314
+        width: 24
+        height: 20
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3156,12 +2547,12 @@ TextureImporter:
       name: Explosion13_7
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 343
+        y: 548
+        width: 24
+        height: 20
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3177,12 +2568,12 @@ TextureImporter:
       name: Explosion13_8
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 997
+        y: 428
+        width: 24
+        height: 21
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.33333334}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3198,12 +2589,12 @@ TextureImporter:
       name: Explosion13_9
       rect:
         serializedVersion: 2
-        x: 290
-        y: 912
-        width: 3
-        height: 3
+        x: 997
+        y: 407
+        width: 24
+        height: 21
       alignment: 9
-      pivot: {x: 0.16666667, y: 0.8333333}
+      pivot: {x: 0.5, y: 0.33333334}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3282,8 +2673,8 @@ TextureImporter:
       name: Explosion14_12
       rect:
         serializedVersion: 2
-        x: 0
-        y: 393
+        x: 138
+        y: 527
         width: 67
         height: 60
       alignment: 0
@@ -3304,7 +2695,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 290
-        y: 912
+        y: 907
         width: 3
         height: 3
       alignment: 9
@@ -3429,8 +2820,8 @@ TextureImporter:
       name: Explosion14_6
       rect:
         serializedVersion: 2
-        x: 286
-        y: 418
+        x: 205
+        y: 505
         width: 66
         height: 59
       alignment: 0
@@ -3471,8 +2862,8 @@ TextureImporter:
       name: Explosion14_8
       rect:
         serializedVersion: 2
-        x: 352
-        y: 414
+        x: 0
+        y: 395
         width: 64
         height: 56
       alignment: 0
@@ -3492,8 +2883,8 @@ TextureImporter:
       name: Explosion14_9
       rect:
         serializedVersion: 2
-        x: 149
-        y: 566
+        x: 731
+        y: 401
         width: 76
         height: 61
       alignment: 0
@@ -3597,8 +2988,8 @@ TextureImporter:
       name: Fireball12_13
       rect:
         serializedVersion: 2
-        x: 0
-        y: 535
+        x: 809
+        y: 398
         width: 76
         height: 75
       alignment: 0
@@ -3723,8 +3114,8 @@ TextureImporter:
       name: Fireball12_19
       rect:
         serializedVersion: 2
-        x: 208
-        y: 417
+        x: 138
+        y: 483
         width: 65
         height: 44
       alignment: 0
@@ -3744,8 +3135,8 @@ TextureImporter:
       name: Fireball12_2
       rect:
         serializedVersion: 2
-        x: 888
-        y: 424
+        x: 419
+        y: 419
         width: 52
         height: 36
       alignment: 0
@@ -3765,8 +3156,8 @@ TextureImporter:
       name: Fireball12_3
       rect:
         serializedVersion: 2
-        x: 885
-        y: 390
+        x: 320
+        y: 422
         width: 46
         height: 34
       alignment: 0
@@ -3807,8 +3198,8 @@ TextureImporter:
       name: Fireball12_5
       rect:
         serializedVersion: 2
-        x: 731
-        y: 381
+        x: 471
+        y: 404
         width: 47
         height: 46
       alignment: 0
@@ -3828,8 +3219,8 @@ TextureImporter:
       name: Fireball12_6
       rect:
         serializedVersion: 2
-        x: 288
-        y: 477
+        x: 70
+        y: 516
         width: 68
         height: 91
       alignment: 0
@@ -3933,8 +3324,8 @@ TextureImporter:
       name: Fireball14_10
       rect:
         serializedVersion: 2
-        x: 950
-        y: 492
+        x: 367
+        y: 511
         width: 61
         height: 36
       alignment: 0
@@ -3954,8 +3345,8 @@ TextureImporter:
       name: Fireball14_11
       rect:
         serializedVersion: 2
-        x: 76
-        y: 533
+        x: 925
+        y: 407
         width: 72
         height: 42
       alignment: 0
@@ -4059,8 +3450,8 @@ TextureImporter:
       name: Fireball14_5
       rect:
         serializedVersion: 2
-        x: 69
-        y: 448
+        x: 209
+        y: 564
         width: 68
         height: 43
       alignment: 0
@@ -4164,8 +3555,8 @@ TextureImporter:
       name: Explosion2_1
       rect:
         serializedVersion: 2
-        x: 70
-        y: 491
+        x: 0
+        y: 647
         width: 70
         height: 42
       alignment: 0
@@ -4185,8 +3576,8 @@ TextureImporter:
       name: Explosion2_2
       rect:
         serializedVersion: 2
-        x: 914
-        y: 332
+        x: 61
+        y: 325
         width: 42
         height: 51
       alignment: 0
@@ -4311,12 +3702,12 @@ TextureImporter:
       name: Fireball2_1
       rect:
         serializedVersion: 2
-        x: 995
-        y: 455
+        x: 902
+        y: 599
         width: 26
         height: 14
       alignment: 9
-      pivot: {x: 0.61538464, y: 0.35714287}
+      pivot: {x: 0.615385, y: 0.357143}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4332,12 +3723,12 @@ TextureImporter:
       name: Fireball2_2
       rect:
         serializedVersion: 2
-        x: 986
-        y: 437
+        x: 889
+        y: 503
         width: 36
         height: 18
       alignment: 9
-      pivot: {x: 0.6944444, y: 0.38888887}
+      pivot: {x: 0.694444, y: 0.388889}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4353,12 +3744,12 @@ TextureImporter:
       name: Fireball2_3
       rect:
         serializedVersion: 2
-        x: 825
-        y: 385
+        x: 195
+        y: 431
         width: 46
         height: 19
       alignment: 9
-      pivot: {x: 0.76086956, y: 0.39473683}
+      pivot: {x: 0.76087, y: 0.394737}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4379,7 +3770,7 @@ TextureImporter:
         width: 49
         height: 24
       alignment: 9
-      pivot: {x: 0.8061224, y: 0.45833334}
+      pivot: {x: 0.806122, y: 0.458333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4387,6 +3778,993 @@ TextureImporter:
       bones: []
       spriteID: 85b340a076817724b9e8b8b89e5bea55
       internalID: -164622847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_1
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56844f96622226642b41b574169552d6
+      internalID: 401441076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_10
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b5f1e8322165d241b09a49e6068be6f
+      internalID: 533778812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_11
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36d48f9afbd3a434987c884be8ef749f
+      internalID: -255062765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_12
+      rect:
+        serializedVersion: 2
+        x: 889
+        y: 481
+        width: 35
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0d53ee80774f194c8341d6156160c1b
+      internalID: 1666505215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_13
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 674
+        width: 57
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10b62bda2d94e104191c571923bcf512
+      internalID: -1037378840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_14
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 837
+        width: 86
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0196037f532c45c4ebc8734bd12c6234
+      internalID: -1225000306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_15
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 588
+        width: 73
+        height: 85
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a29aeee6439d1594487d2ed8ff01097b
+      internalID: -1858967507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_16
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 639
+        width: 83
+        height: 95
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c56109f26437e40419bac2a66aab02ee
+      internalID: 823716593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_17
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 686
+        width: 83
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5b018e0cdf95db47bb252c86f643243
+      internalID: -1239034409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_18
+      rect:
+        serializedVersion: 2
+        x: 821
+        y: 647
+        width: 83
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b29cec789ed49a45a9390afa627d795
+      internalID: 1747038463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_19
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 642
+        width: 83
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf3a36740c080c8498c5d5fdf149974d
+      internalID: 955486094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_2
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4274ee7d71ff8b74d828a9b2648c2765
+      internalID: 1020695460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_20
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 598
+        width: 83
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8764d21ded0a39c4684995f70930b620
+      internalID: 2048390776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_21
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 429
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7622c42be852d2b44897d3e47f311909
+      internalID: -508215226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_22
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 473
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ab0ed8566cfea042aac309cfe0d20c8
+      internalID: -945405584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_23
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 473
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a77382c24f5cde448ae4fb21b53ad958
+      internalID: 2093516853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_24
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 473
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a14cc33a10556714580a2cd6e1aec8f8
+      internalID: -665766764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_25
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 550
+        width: 78
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f1470fd019d120478820d2c983a4351
+      internalID: 837561556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_26
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 462
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28388e807ee066a408c460abd2aee805
+      internalID: -456453336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_27
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 462
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ad34f2582cda5142ad041aba6c4b11e
+      internalID: -1429750288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_28
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 473
+        width: 79
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 797a0d4f526926c4586b00e3460a5d42
+      internalID: 1755365747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_29
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 407
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f8b5e6d1fd79d2429d23edfa0e80c54
+      internalID: -1402373885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_3
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd98beeb209eccc45b5eccd9926e85b2
+      internalID: 1136226465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_30
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 407
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6af1409c1e99994981aa5493bdbbc66
+      internalID: 1248037136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_31
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 495
+        width: 78
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a754ad3b5dcc9e949ae6d7906b96de11
+      internalID: -1509113380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_32
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 610
+        width: 80
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edccb3af3197609428d9996d1d02b83c
+      internalID: -528474778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_33
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 562
+        width: 80
+        height: 78
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 953bad665a410a6449a7f5fa15791ec1
+      internalID: -193701515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_34
+      rect:
+        serializedVersion: 2
+        x: 927
+        y: 528
+        width: 83
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4f9b79e524577d4fa8f09f18915f09f
+      internalID: -1388560171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_35
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 721
+        width: 83
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c695dc41ed107a4286d9368afd5f0d0
+      internalID: -2120170020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_36
+      rect:
+        serializedVersion: 2
+        x: 529
+        y: 785
+        width: 84
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c86b8cc5336071d4e95cc3f4e5520864
+      internalID: 84903047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_37
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 732
+        width: 84
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3b3a39f09c9f5040afa4035bd94bb69
+      internalID: -4876727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_38
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 747
+        width: 84
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d76f170c80a1fe9488eb956b8fc81d4e
+      internalID: 1031031529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_39
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 696
+        width: 84
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5f4eabdedce8be45b9d191313d617be
+      internalID: -1635840540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_4
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5762d4b274c4144384d52e73010227f
+      internalID: 1231092693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_40
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 743
+        width: 84
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0afac8afd3a3523478aeda77e916d883
+      internalID: 1361869816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_41
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 740
+        width: 84
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0aa0f803ad1a3f441969b439b5542a24
+      internalID: 153034524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_42
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 756
+        width: 84
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd0374dea5fa09345aae0e803d5faecb
+      internalID: 1826503657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_43
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 776
+        width: 84
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3341c63cfc3bf6d438e1e9d363cfbd51
+      internalID: -267627895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_44
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 791
+        width: 84
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fef6eedf03a56984fb85db79d02d5538
+      internalID: 2078263205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_45
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 607
+        width: 70
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6866b39bfba0af84aa06016c4a15759f
+      internalID: 597929359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_46
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 605
+        width: 70
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f182eb0e62feee46be6be216febaf94
+      internalID: -1683966981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_47
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c6bdc51aaef01d44a3e1ac519a3e24f
+      internalID: 1094124692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_5
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7271c8a8c03993448e33c719f782cbf
+      internalID: 819056009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_6
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59b3e093c14662a4381e7a4422531eb5
+      internalID: -1381810304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_7
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 422410b53c51e4b46b5f351cab4ab812
+      internalID: 1257849411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_8
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 726718c0659337c479b8ff479848d741
+      internalID: 577620047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball13_9
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 907
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 0.16666667, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6da4acf2f9510d4496ed1fe68cd25aa
+      internalID: 212922281
       vertices: []
       indices: 
       edges: []
@@ -4405,104 +4783,120 @@ TextureImporter:
       name: _Emission
     nameFileIdTable:
       Explosion13_17: 761487871
-      Explosion13_26: 1327321508
       Fireball1_4: -141374179
-      Explosion13_24: 1693275418
       Fireball9_1: -2079282212
-      Explosion13_42: -212738551
       Melee_Explosion2_8: -938025735
+      Fireball13_21: -508215226
+      Fireball13_10: 533778812
+      Fireball13_41: 153034524
       Fireball1_5: 818549913
-      Explosion13_23: 2011894477
+      Fireball13_27: -1429750288
+      Fireball13_15: -1858967507
       Melee_Explosion1_9: -1987410908
+      Fireball13_42: 1826503657
+      Fireball13_35: -2120170020
       Explosion14_9: -804940754
       Explosion11_1: 1358209367
+      Fireball13_29: -1402373885
+      Fireball13_31: -1509113380
       Melee_Explosion3_6: 704432873
       Fireball1_3: -662272213
       Fireball9_16: -1971200743
-      Explosion13_22: 887684913
       Melee_Explosion1_10: -596240767
-      Explosion13_29: -1784133414
       Melee_Explosion2_10: 1202431096
-      Explosion13_36: -1990025081
       Explosion1_4: 485683991
       Explosion14_6: -671453521
+      Fireball13_20: 2048390776
       Explosion9_4: -429476254
       Fireball1_12: -1929799976
-      Melee_Explosion1_6: -807874708
+      Fireball13_45: 597929359
       Fireball12_1: -1157574223
-      Explosion13_30: -1713380616
+      Melee_Explosion1_6: -807874708
       Fireball1_16: -1004688329
+      Fireball13_33: -193701515
       Fireball14_6: -766548896
       Fireball9_18: -425003476
       Melee_Explosion2_7: 1647646328
-      Fireball4_3: 99896642
+      Fireball13_30: 1248037136
+      Fireball13_3: 1136226465
       Fireball12_19: -2010126221
       Fireball1_7: 221732102
       Fireball12_13: 1520641387
-      Fireball14_2: 1695494627
+      Fireball13_1: 401441076
       Fireball1_17: 1670429698
+      Fireball14_2: 1695494627
       Melee_Explosion1_1: -325828612
       Fireball12_18: -487863486
+      Fireball13_46: -1683966981
+      Fireball13_36: 84903047
       Fireball4_2: 2043752195
+      Fireball13_4: 1231092693
       Fireball9_13: -214389283
       Fireball14_7: 1980939431
       Explosion4_1: -1754849813
       Fireball14_10: 1486299161
-      Explosion13_25: -236697852
+      Fireball4_3: 99896642
+      Fireball13_5: 819056009
       Explosion13_11: -960184109
       Fireball9_3: -1387824173
-      Explosion13_34: 16409096
       Melee_Explosion3_1: -1369261093
+      Fireball13_44: 2078263205
       Fireball2_3: 338352539
+      Fireball13_6: -1381810304
       Explosion14_11: 1806579713
       Explosion13_18: -1985576093
-      Explosion13_40: -152998579
       Fireball14_8: -1796180976
-      Explosion13_38: -1630152059
       Explosion14_13: 1096379271
       Explosion11_3: -317826321
       Explosion13_4: -168004738
-      Explosion13_35: 1397357254
       Fireball1_20: -801450582
+      Melee_Explosion3_7: 37660503
+      Fireball13_23: 2093516853
       Fireball9_6: -2110331926
       Fireball9_17: 1161856800
       Explosion13_13: -1643605479
       Fireball12_8: -890008954
-      Melee_Explosion3_7: 37660503
       Explosion11_4: -1669615496
       Explosion2_5: -1852441942
       Explosion11_2: -1664267348
       Fireball8_2: 1697342348
+      Fireball13_32: -528474778
       Explosion2_2: 439425997
+      Fireball13_14: -1225000306
       Explosion13_6: 1548035876
       Fireball1_21: -1319175797
       Fireball1_19: 1749626727
       Fireball14_11: 995002380
       Fireball12_10: 961783719
       Explosion2_1: 803801714
+      Fireball13_16: 823716593
       Fireball8_1: 2054725036
       Melee_Explosion3_9: -1728414299
+      Fireball13_26: -456453336
+      Fireball13_28: 1755365747
       Fireball14_4: 1596042596
       Melee_Explosion2_4: -2023783723
-      Explosion13_27: 1144967681
       Explosion13_14: -694456131
       Explosion13_9: -165679423
       Melee_Explosion2_2: -1255246896
       Explosion14_12: -1084695752
+      Fireball13_18: 1747038463
       Fireball1_6: -696867652
-      Fireball9_15: -807554668
+      Fireball13_13: -1037378840
       Fireball1_9: 465368038
       Explosion14_7: -1652437278
-      Explosion13_37: -205915558
-      Melee_Explosion3_5: 120229628
+      Fireball13_22: -945405584
+      Fireball13_8: 577620047
+      Fireball13_7: 1257849411
       Explosion9_3: -872492168
-      Explosion13_44: 723134596
       Fireball2_4: -164622847
+      Fireball13_34: -1388560171
+      Fireball13_25: 837561556
       Explosion2_6: 134200757
       Fireball1_18: -1385414088
+      Fireball9_15: -807554668
       Explosion1_1: 1445283079
       Fireball1_15: -202152581
-      Explosion13_21: -560697945
       Explosion2_7: -1049233666
       Explosion1_5: -940836103
       Fireball1_11: -2125533998
@@ -4511,39 +4905,39 @@ TextureImporter:
       Fireball9_4: 1175705637
       Fireball9_7: -195692231
       Fireball12_16: 1733503290
+      Fireball13_39: -1635840540
       Melee_Explosion3_10: 195520218
+      Melee_Explosion3_5: 120229628
       Melee_Explosion2_9: -1738818221
       Explosion9_1: -1380590932
-      Explosion13_47: -802540157
       Explosion14_5: -1712899234
-      Explosion13_41: 1632290868
       Fireball4_4: 618355439
       Melee_Explosion1_5: 590951446
-      Explosion13_19: -1088690538
-      Explosion13_45: -1382132898
       Explosion13_3: -672746494
+      Fireball13_40: 1361869816
+      Fireball13_43: -267627895
       Fireball9_8: -1051802938
-      Explosion13_31: -1159961597
+      Fireball13_37: -4876727
       Fireball11: -1130929247
       Fireball9_9: -1165743828
       Explosion1_3: -1199116736
-      Explosion13_20: -86716744
       Fireball12_12: -864136747
       Explosion9_6: -1474369593
       Explosion13_10: -669531434
       Fireball4_0: 1019380666
       Explosion9_5: 1873159062
       Fireball1_13: 267162617
+      Fireball13_38: 1031031529
       Explosion4_3: 1977146685
       Fireball1_2: -490851406
       Explosion9_2: -183399873
       Explosion14_10: 208296716
+      Fireball13_19: 955486094
       Melee_Explosion3_3: -1130075929
       Explosion13_7: -551709478
       Fireball1_1: 1291863840
       Explosion13_8: -1467100775
       Fireball12_4: -349750011
-      Explosion13_33: 1501836516
       Fireball9_11: -385867571
       Explosion13_15: 1232974723
       Fireball14_9: -448287066
@@ -4554,13 +4948,15 @@ TextureImporter:
       Fireball12_11: 1973004774
       Explosion4_4: 529722540
       Fireball12_3: -1750781724
+      Fireball13_2: 1020695460
       Fireball9_14: -914568872
       Melee_Explosion3_8: 1948037694
       Fireball12_2: 1246845998
       Fireball14_12: -1633857794
       Melee_Explosion1_3: -2101203525
       Fireball2_2: -1622055635
-      Explosion13_46: -435054519
+      Fireball13_47: 1094124692
+      Fireball13_9: 212922281
       Explosion14_3: 1992526958
       Explosion13_5: -655333396
       Fireball9_2: -543475494
@@ -4579,27 +4975,27 @@ TextureImporter:
       Fireball9_10: -1593138871
       Fireball14_5: -1174755815
       Fireball1_8: -247331661
-      Explosion13_39: 824725319
       Fireball12_9: 25189585
+      Fireball13_12: 1666505215
       Melee_Explosion2_3: 393482435
       Explosion9_7: -243831281
+      Fireball13_17: -1239034409
       Fireball9_5: -1221526928
-      Melee_Explosion2_6: 355132717
       Explosion1_6: 1345464918
       Explosion14_14: 139430040
-      Explosion13_43: 1784539402
-      Explosion13_32: 382999092
+      Melee_Explosion2_6: 355132717
       Melee_Explosion2_5: 212860427
-      Explosion13_2: 891777805
       Melee_Explosion3_4: 95040027
+      Explosion13_2: 891777805
       Melee_Explosion1_7: -820952490
-      Explosion13_28: 398058533
+      Fireball13_11: -255062765
       Melee_Explosion1_2: -1743005281
       Explosion2_4: 1383091059
       Melee_Explosion3_2: 285241249
       Fireball1_14: -1534297531
-      Fireball14_3: -622228842
+      Fireball13_24: -665766764
       Fireball4_1: -1840552404
+      Fireball14_3: -622228842
       Fireball9_12: 777939055
       Explosion14_1: -175082311
       Explosion14_4: 1855295939
