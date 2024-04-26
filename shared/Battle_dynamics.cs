@@ -642,6 +642,8 @@ namespace shared {
                     return (BulletState.Exploding == bullet.BlState && bullet.FramesInBlState < bullet.Config.ExplosionFrames);
                 case BulletType.Fireball:
                     return (BulletState.Exploding == bullet.BlState);
+                case BulletType.GroundWave:
+                    return (BulletState.Exploding == bullet.BlState);
                 default:
                     return false;
             }
@@ -758,7 +760,7 @@ namespace shared {
                     }
                     
                     bulletCnt++;
-                } else if (BulletType.Fireball == src.Config.BType) {
+                } else if (BulletType.Fireball == src.Config.BType || BulletType.GroundWave == src.Config.BType) {
                     if (IsBulletActive(dst, currRenderFrame.Id)) {
                         var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(src.VirtualGridX, src.VirtualGridY);
                         var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX + src.Config.HitboxSizeIncX*src.FramesInBlState, src.Config.HitboxSizeY + src.Config.HitboxSizeIncY*src.FramesInBlState);
@@ -1471,7 +1473,7 @@ namespace shared {
                             // When hitting a barrier, don't play explosion anim
                             bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
                         }
-                    } else if (BulletType.Fireball == bulletNextFrame.Config.BType) {
+                    } else if (BulletType.Fireball == bulletNextFrame.Config.BType || BulletType.GroundWave == bulletNextFrame.Config.BType) {
                         if (BulletState.Exploding != bulletNextFrame.BlState) {
                             bulletNextFrame.BlState = BulletState.Exploding;
                             bulletNextFrame.FramesInBlState = 0;
@@ -1490,7 +1492,7 @@ namespace shared {
                         // Nothing to do
                     }
                 } else {
-                    if (BulletType.Fireball == bulletNextFrame.Config.BType && SPEED_NOT_HIT_NOT_SPECIFIED != bulletNextFrame.Config.SpeedIfNotHit && bulletNextFrame.Config.Speed != bulletNextFrame.Config.SpeedIfNotHit) {
+                    if ((BulletType.Fireball == bulletNextFrame.Config.BType || BulletType.GroundWave == bulletNextFrame.Config.BType) && SPEED_NOT_HIT_NOT_SPECIFIED != bulletNextFrame.Config.SpeedIfNotHit && bulletNextFrame.Config.Speed != bulletNextFrame.Config.SpeedIfNotHit) {
                         var bulletDirMagSq = bulletNextFrame.Config.DirX * bulletNextFrame.Config.DirX + bulletNextFrame.Config.DirY * bulletNextFrame.Config.DirY;
                         var invBulletDirMag = InvSqrt32(bulletDirMagSq);
                         var bulletSpeedXfac = xfac * invBulletDirMag * bulletNextFrame.Config.DirX;

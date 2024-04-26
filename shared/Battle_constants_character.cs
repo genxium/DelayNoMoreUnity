@@ -133,7 +133,6 @@ namespace shared {
                         JumpingInitVelY = (int)(8.8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 8,
                         DashingEnabled = true,
-                        DefaultAirDashQuota = 1,
                         SlidingEnabled = true,
                         OnWallEnabled = false,
                         VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -154,6 +153,8 @@ namespace shared {
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        DefaultAirDashQuota = 1,
+                        DefaultAirJumpQuota = 0,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,
