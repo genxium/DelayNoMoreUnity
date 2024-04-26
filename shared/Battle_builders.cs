@@ -269,7 +269,7 @@ namespace shared {
             };
         }
 
-        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, Bullet dst) {
+        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, int targetCharacterJoinIndex, Bullet dst) {
             dst.BlState = blState;
             dst.FramesInBlState = framesInBlState;
             dst.Config = staticBulletConfig;
@@ -290,6 +290,7 @@ namespace shared {
 
             dst.RepeatQuotaLeft = repeatQuotaLeft;
             dst.RemainingHardPushbackBounceQuota = remainingHardPushbackBounceQuota;
+            dst.TargetCharacterJoinIndex = targetCharacterJoinIndex;
         }
 
         public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, bool capturedByPatrolCue, int framesInPatrolCue, bool waivingSpontaneousPatrol, int waivingPatrolCueId, Trap dst) {
@@ -498,7 +499,7 @@ namespace shared {
                         srcBullet.VirtualGridX, srcBullet.VirtualGridY,
                         srcBullet.DirX, srcBullet.DirY,
                         srcBullet.VelX, srcBullet.VelY,
-                        srcBullet.BattleAttr.ActiveSkillHit, srcBullet.BattleAttr.SkillId, srcBullet.Config, srcBullet.RepeatQuotaLeft, srcBullet.RemainingHardPushbackBounceQuota,
+                        srcBullet.BattleAttr.ActiveSkillHit, srcBullet.BattleAttr.SkillId, srcBullet.Config, srcBullet.RepeatQuotaLeft, srcBullet.RemainingHardPushbackBounceQuota, srcBullet.TargetCharacterJoinIndex,
                         dst.Bullets[bulletCnt]);
                  bulletCnt++;
             }

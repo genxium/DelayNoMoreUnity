@@ -654,6 +654,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     }
                     break;
                 case BulletType.Fireball:
+                case BulletType.GroundWave:
                     if (IsBulletActive(bullet, rdf.Id) || isInPrevHitTriggeredMultiHitSubsequence || isExploding) {
                         animName = isExploding ? String.Format("Explosion{0}", explosionSpeciesId) : String.Format("Fireball{0}", bullet.Config.SpeciesId);
                         spontaneousLooping = !isExploding;

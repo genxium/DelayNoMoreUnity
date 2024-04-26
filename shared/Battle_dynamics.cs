@@ -206,7 +206,7 @@ namespace shared {
             return (0 == trigger.FramesToRecover && 0 < trigger.Quota);
         }
 
-        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed) {
+        private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed, ILoggerBridge logger) {
             bool skillUsed = false;
             if (PATTERN_ID_NO_OP == patternId || PATTERN_ID_UNABLE_TO_OP == patternId) {
                 return false;
@@ -238,7 +238,7 @@ namespace shared {
                 var pivotBulletConfig = skillConfig.Hits[activeSkillHit];
                 for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt + 1; i++) {
                     thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
-                    if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null)) break;
+                    if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, logger)) break;
                     activeSkillHit++;
                 }
 
@@ -265,8 +265,13 @@ namespace shared {
             }
 
             int slotIdx = -1;
-            if (PATTERN_INVENTORY_SLOT_C == patternId || PATTERN_INVENTORY_SLOT_D == patternId) {
-                slotIdx = (PATTERN_INVENTORY_SLOT_C == patternId ? 0 : 1); 
+            if (PATTERN_INVENTORY_SLOT_C == patternId) {
+                if (SPECIES_MAGSWORDGIRL != currCharacterDownsync.SpeciesId && currCharacterDownsync.InAir) {
+                    return false;
+                }
+                slotIdx = 0;
+            } else if (PATTERN_INVENTORY_SLOT_D == patternId) {
+                slotIdx = 1; 
             } else if (chConfig.UseInventoryBtnB && (PATTERN_B == patternId || PATTERN_DOWN_B == patternId || PATTERN_UP_B == patternId)) {
                 slotIdx = 2;
             } else {
@@ -385,7 +390,7 @@ namespace shared {
                 thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
                 thatCharacterInNextFrame.JumpHolding = jumpHolding;
 
-                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed);
+                bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, logger);
                 Skill? skillConfig = null;
                 if (usedSkill) {
                     thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
@@ -688,7 +693,7 @@ namespace shared {
                     if (offenderNextFrame.ActiveSkillHit < skillConfig.Hits.Count) {
                         // No need to worry about Mp consumption here, it was already paid at "0 == offenderNextFrame.ActiveSkillHit" in "_useSkill"
                         int xfac = (0 < offenderNextFrame.DirX ? 1 : -1);
-                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, null)) {
+                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, null, logger)) {
                             var bulletConfig = skillConfig.Hits[offenderNextFrame.ActiveSkillHit];
                             if (offenderNextFrame.FramesInvinsible < bulletConfig.StartupInvinsibleFrames) {
                                 offenderNextFrame.FramesInvinsible = bulletConfig.StartupInvinsibleFrames;
@@ -720,6 +725,7 @@ namespace shared {
                         src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId, src.Config,
                         src.Config.RepeatQuota, 
                         src.Config.DefaultHardPushbackBounceQuota,
+                        src.TargetCharacterJoinIndex,
                         dst);
 
                 int j = dst.BattleAttr.OffenderJoinIndex - 1;
@@ -762,7 +768,8 @@ namespace shared {
                     bulletCnt++;
                 } else if (BulletType.Fireball == src.Config.BType || BulletType.GroundWave == src.Config.BType) {
                     if (IsBulletActive(dst, currRenderFrame.Id)) {
-                        var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(src.VirtualGridX, src.VirtualGridY);
+                        var (proposedNewVx, proposedNewVy) = (src.VirtualGridX + src.VelX, src.VirtualGridY + src.VelY);
+                        var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(proposedNewVx, proposedNewVy);
                         var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX + src.Config.HitboxSizeIncX*src.FramesInBlState, src.Config.HitboxSizeY + src.Config.HitboxSizeIncY*src.FramesInBlState);
                         var newBulletCollider = dynamicRectangleColliders[colliderCnt];
                         UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst, dst.Config.CollisionTypeMask);
@@ -775,7 +782,7 @@ namespace shared {
                             dst.BlState = BulletState.Active;
                             dst.FramesInBlState = 0;
                         }
-                        (dst.VirtualGridX, dst.VirtualGridY) = (dst.VirtualGridX + dst.VelX, dst.VirtualGridY + dst.VelY);
+                        (dst.VirtualGridX, dst.VirtualGridY) = (proposedNewVx, proposedNewVy);
                     } else {
                         if (noOpSet.Contains(offender.CharacterState)) {
                             // If a fireball is not yet active but the offender got attacked, remove it
@@ -959,7 +966,7 @@ namespace shared {
                 if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
                     landedOnGravityPushback = true;
                     /*
-                       if (0 == currCharacterDownsync.SpeciesId) {
+                       if (1 == currCharacterDownsync.JoinIndex) {
                        logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
                        }
                      */
@@ -1306,11 +1313,25 @@ namespace shared {
                 int xfac = (0 < effDirX ? 1 : -1);
                 var skillConfig = skills[bulletNextFrame.BattleAttr.SkillId];
                 if (0 < hardPushbackCnt) {
-                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
-
                     if (BulletType.GroundWave == bulletConfig.BType) {
-                        if (SNAP_INTO_PLATFORM_THRESHOLD < Math.Abs(bulletNextFrame.VelY)) {
-                            bulletNextFrame.VelY = 0;
+                        processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
+                        float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);
+                        if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
+                            // [WARNING] i.e. landedOnGravityPushback = true
+                            bool onSlope = (0 != primaryOverlapResult.OverlapY && 0 != primaryOverlapResult.OverlapX);
+                            // Kindly remind that (primaryOverlapResult.OverlapX, primaryOverlapResult.OverlapY) points INTO the slope :) 
+                            float projectedVel = (bulletNextFrame.VelX * primaryOverlapResult.OverlapX + bulletNextFrame.VelY * primaryOverlapResult.OverlapY); // This value is actually in VirtualGrid unit, but converted to float, thus it'd be eventually rounded 
+                            bool goingDown = (onSlope && bulletNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
+                            if (goingDown) {
+                                float newVelXApprox = bulletNextFrame.VelX - primaryOverlapResult.OverlapX * projectedVel;
+                                float newVelYApprox = bulletNextFrame.VelY - primaryOverlapResult.OverlapY * projectedVel;
+                                bulletNextFrame.VelX = (int)Math.Floor(newVelXApprox);
+                                bulletNextFrame.VelY = (int)Math.Floor(newVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
+                            }
+                        } else {
+                            // [WARNING] This is the definition of a GroundWave!
+                            exploded = true;
+                            explodedOnAnotherHarderBullet = true;
                         }
                     } else {
                         // [WARNING] If the bullet "collisionTypeMask" is barrier penetrating, it'd not have reached "0 < hardPushbackCnt".
@@ -1480,7 +1501,7 @@ namespace shared {
                         }
                         if (inTheMiddleOfMultihitTransition) {
                             bool dummyHasLockVel = false;
-                            if (addNewBulletToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame)) {
+                            if (addNewBulletToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, logger)) {
                                 var targetNewBullet = nextRenderFrameBullets[bulletCnt-1];
                                 if (offenderNextFrame.FramesInvinsible < targetNewBullet.Config.StartupInvinsibleFrames) {
                                     offenderNextFrame.FramesInvinsible = targetNewBullet.Config.StartupInvinsibleFrames;
@@ -1887,25 +1908,6 @@ namespace shared {
                 }
             }
 
-            for (int i = bulletColliderCntOffset; i < trapColliderCntOffset; i++) {
-                var aCollider = dynamicRectangleColliders[i];
-                Bullet? bulletNextFrame = aCollider.Data as Bullet;
-                if (null == bulletNextFrame) {
-                    throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where bulletColliderCntOffset=" + bulletColliderCntOffset + ", trapColliderCntOffset=" + trapColliderCntOffset);
-                }
-    
-                var bulletConfig = bulletNextFrame.Config;
-                if (BulletType.GroundWave != bulletConfig.BType) {
-                    continue;
-                }
-
-                // Update "virtual grid position"
-                int nextColliderAttrVx, nextColliderAttrVy;
-                (nextColliderAttrVx, nextColliderAttrVy) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
-                bulletNextFrame.VirtualGridX = nextColliderAttrVx;
-                bulletNextFrame.VirtualGridY = nextColliderAttrVy;
-            }
-
             for (int i = trapColliderCntOffset; i < bulletColliderCntOffset; i++) {
                 var aCollider = dynamicRectangleColliders[i];
                 TrapColliderAttr? colliderAttr = aCollider.Data as TrapColliderAttr;
@@ -1923,6 +1925,25 @@ namespace shared {
                 }
                 trapInNextRenderFrame.VirtualGridX = nextColliderAttrVx - colliderAttr.HitboxOffsetX;
                 trapInNextRenderFrame.VirtualGridY = nextColliderAttrVy - colliderAttr.HitboxOffsetY;
+            }
+
+            for (int i = bulletColliderCntOffset; i < pickableColliderCntOffset; i++) {
+                var aCollider = dynamicRectangleColliders[i];
+                Bullet? bulletNextFrame = aCollider.Data as Bullet;
+                if (null == bulletNextFrame) {
+                    throw new ArgumentNullException("Data field shouldn't be null for dynamicRectangleColliders[i=" + i + "], where bulletColliderCntOffset=" + bulletColliderCntOffset + ", trapColliderCntOffset=" + trapColliderCntOffset);
+                }
+
+                var bulletConfig = bulletNextFrame.Config;
+                if (BulletType.GroundWave != bulletConfig.BType) {
+                    continue;
+                }
+
+                // Update "virtual grid position"
+                int nextColliderAttrVx, nextColliderAttrVy;
+                (nextColliderAttrVx, nextColliderAttrVy) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
+                bulletNextFrame.VirtualGridX = nextColliderAttrVx;
+                bulletNextFrame.VirtualGridY = nextColliderAttrVy;
             }
 
             for (int i = pickableColliderCntOffset; i < colliderCnt; i++) {
@@ -2340,7 +2361,7 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet) {
+        protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, ILoggerBridge logger) {
             if (activeSkillHit >= skillConfig.Hits.Count) return false;
             var bulletConfig = skillConfig.Hits[activeSkillHit];
             var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
@@ -2349,6 +2370,10 @@ namespace shared {
             var bulletSpeedYfac = invBulletDirMag * bulletConfig.DirY;
             int newVirtualX = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevHitBullet.VirtualGridX;
             int newVirtualY = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY : referencePrevHitBullet.VirtualGridY;
+            int groundWaveVelY = bulletConfig.DownSlopePrimerVelY;
+            if (BulletType.GroundWave == bulletConfig.BType) {
+                logger.LogInfo("At originatedRdfId=" + originatedRdfId + ", joinIndex=" + currCharacterDownsync.JoinIndex + " casted a GroundWave at activeSkillHit=" + activeSkillHit);
+            }
 
             AssignToBullet(
                     bulletLocalIdCounter,
@@ -2359,8 +2384,8 @@ namespace shared {
                     newVirtualX, 
                     newVirtualY, 
                     xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
-                    (int)(bulletSpeedXfac * bulletConfig.Speed), (int)(bulletSpeedYfac * bulletConfig.Speed), // velocity
-                    activeSkillHit, activeSkillId, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota,
+                    (int)(bulletSpeedXfac * bulletConfig.Speed), (int)(bulletSpeedYfac * bulletConfig.Speed) + groundWaveVelY, // velocity
+                    activeSkillHit, activeSkillId, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
                     nextRenderFrameBullets[bulletCnt]);
 
             bulletLocalIdCounter++;

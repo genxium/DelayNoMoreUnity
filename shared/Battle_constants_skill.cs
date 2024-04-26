@@ -352,9 +352,9 @@ namespace shared {
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
             HitboxOffsetX = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(-8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(52 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 13,
             ExplosionFrames = 25,
             Speed = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -362,6 +362,7 @@ namespace shared {
             DirX = 1,
             DirY = 0,
             Hardness = 5,
+            DownSlopePrimerVelY = (int)(-1.6f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // A bullet is generally faster than a character, make sure that the downslope speed is large enough!
             BType = BulletType.GroundWave,
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName = "Explosion2",
@@ -374,9 +375,9 @@ namespace shared {
         private static BulletConfig IcePillarEnderBullet = new BulletConfig(IcePillarRepeatingBullet).SetStartupFrames(9).SetMhType(MultiHitType.None).SetSpeedIfNotHit(0).SetSpeed(SlashNovaRepeatingBullet.SpeedIfNotHit);
 
         private static Skill IcePillarSkill = new Skill {
-            RecoveryFrames = 30,
-            RecoveryFramesOnBlock = 60,
-            RecoveryFramesOnHit = 60,
+            RecoveryFrames = 80,
+            RecoveryFramesOnBlock = 80,
+            RecoveryFramesOnHit = 80,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk5
         }

@@ -360,6 +360,7 @@ message BulletConfig {
     bool isPixelatedExplostionVfx = 47;
 
 	bool mhVanishOnMeleeHit = 48;
+    int32 downSlopePrimerVelY = 49;
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave
