@@ -242,7 +242,7 @@
     <property name="triggerTrackingId" value="3"/>
    </properties>
   </object>
-  <object id="340" x="560" y="304" width="64" height="16">
+  <object id="340" x="568" y="304" width="64" height="16">
    <properties>
     <property name="collisionTypeMask" value="5"/>
     <property name="forcesCrouching" value="1"/>
@@ -394,7 +394,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="338" x="560" y="288" width="80" height="16"/>
+  <object id="338" x="560" y="288" width="80" height="24"/>
   <object id="339" x="624" y="288" width="16" height="64"/>
  </objectgroup>
  <objectgroup id="15" name="Pickable">

@@ -405,6 +405,11 @@ namespace shared {
                             }
                         }
                     }
+                    if (isCrouching(currCharacterDownsync.CharacterState) && Atk1 == thatCharacterInNextFrame.CharacterState) {
+                        if (chConfig.CrouchingAtkEnabled) {
+                            thatCharacterInNextFrame.CharacterState = CrouchAtk1;
+                        }
+                    }
                     if (!skillConfig.Hits[0].AllowsWalking) {
                         continue; // Don't allow movement if skill is used
                     }
@@ -617,7 +622,7 @@ namespace shared {
                 /*
                  * [WARNING]
                  * 
-                 * A dirty fix here just for GunGirl "Atk1 -> WalkingAtk1" transition.
+                 * A dirty fix here just for "Atk1 -> WalkingAtk1" transition.
                  * 
                  * In this case "thatCharacterInNextFrame.FramesToRecover" is already set by the skill in use, and transition to "TurnAround" should NOT be supported!
                  */

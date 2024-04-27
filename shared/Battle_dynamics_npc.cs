@@ -394,6 +394,11 @@ namespace shared {
                             }
                         }
                     }
+                    if (isCrouching(currCharacterDownsync.CharacterState) && CharacterState.Atk1 == thatCharacterInNextFrame.CharacterState) {
+                        if (chConfig.CrouchingAtkEnabled) {
+                            thatCharacterInNextFrame.CharacterState = CharacterState.CrouchAtk1;
+                        }
+                    }
                     continue; // Don't allow movement if skill is used
                 }
 

@@ -1891,6 +1891,10 @@ namespace shared {
                                     return 1;
                                 }
                             } else {
+                                // [WARNING] Combo in crouching is prohibited for this character.
+                                if (isCrouching(currCharacterDownsync.CharacterState)) {
+                                    return NO_SKILL;
+                                }
                                 // [WARNING] Combo in air is possible for this character!
                                 // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
                                 if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return NO_SKILL;
