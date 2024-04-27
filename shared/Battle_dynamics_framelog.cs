@@ -34,14 +34,25 @@ namespace shared {
             return String.Join('|', slotsSb);
         }
 
+        public static string stringifyBulletImmuneRecords(RepeatedField<BulletImmuneRecord> records) {
+            if (null == records) return "";
+            var recordsSb = new List<String>();
+            for (int k = 0; k < records.Count; k++) {
+                var record = records[k];
+                if (TERMINATING_BULLET_LOCAL_ID == record.BulletLocalId) break;
+                recordsSb.Add(String.Format("{bid:{0},lfc:{1}}", record.BulletLocalId, record.RemainingLifetimeRdfCount));
+            }
+            return String.Join('|', recordsSb);
+        }
+
         public static string stringifyPlayer(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fc:{11},fi:{12},jt:{13},fri:{14},dx:{15},dy:{16},ct:{17},sjt:{18},oshp:{19},js:{20},fsj:{21},iv:[{22}]", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump, stringifyInventory(pd.Inventory));
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fc:{11},fi:{12},jt:{13},fri:{14},dx:{15},dy:{16},ct:{17},sjt:{18},oshp:{19},js:{20},fsj:{21},iv:[{22}],bir:{23}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump, stringifyInventory(pd.Inventory), stringifyBulletImmuneRecords(pd.BulletImmuneRecords));
         }
 
         public static string stringifyNpc(CharacterDownsync pd) {
             if (null == pd) return "";
-            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fc:{11},fi:{12},jt:{13},fri:{14},frp:{15},wpc:{16},wsp:{17},cp:{18},dx:{19},dy:{20},ct:{21},sjt:{22},oshp:{23},js:{24},fsj:{25}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump);
+            return String.Format("j:{0},x:{1},y:{2},vx:{3},fvx:{4},vy:{5},fr:{6},air:{7},wl:{8},sl:{9},{10},fc:{11},fi:{12},jt:{13},fri:{14},frp:{15},wpc:{16},wsp:{17},cp:{18},dx:{19},dy:{20},ct:{21},sjt:{22},oshp:{23},js:{24},fsj:{25},bir:{26}", pd.JoinIndex, pd.VirtualGridX, pd.VirtualGridY, pd.VelX, pd.FrictionVelX, pd.VelY, pd.FramesToRecover, pd.InAir, pd.OnWall, pd.OnSlope, pd.CharacterState, pd.FramesInChState, pd.FramesCapturedByInertia, pd.JumpTriggered, pd.FramesInvinsible, pd.FramesInPatrolCue, pd.WaivingPatrolCueId, pd.WaivingSpontaneousPatrol, pd.CapturedByPatrolCue, pd.DirX, pd.DirY, pd.ChCollisionTeamId, pd.SlipJumpTriggered, pd.PrimarilyOnSlippableHardPushback, pd.JumpStarted, pd.FramesToStartJump, stringifyBulletImmuneRecords(pd.BulletImmuneRecords));
         }
 
         public static string stringifyTrap(Trap tr) {

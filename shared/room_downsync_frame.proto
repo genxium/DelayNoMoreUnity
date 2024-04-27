@@ -48,6 +48,8 @@ enum CharacterState {
 	Atk4 = 1027;
 	Atk5 = 1028;
 	Atk6 = 1029;
+	Atk6_Charging = 1030;
+	Atk6_ChargeRelease = 1031;
 
 	InAirAtk1 = 2048;
 	InAirAtk2 = 2049;
@@ -165,6 +167,8 @@ message CharacterDownsync {
     repeated Debuff debuffList = 1030; 
 
 	Inventory inventory = 1031;
+
+    repeated BulletImmuneRecord bulletImmuneRecords = 1032;
 }
 
 message InputFrameDecoded {
@@ -718,6 +722,11 @@ message Debuff {
     int32 speciesId = 1; // A redundancy of "debuffConfig" for easy termination detection 
     int32 stock = 2;
 }
+
+message BulletImmuneRecord {
+    int32 bulletLocalId = 1;
+    int32 remainingLifetimeRdfCount = 2;
+} 
 
 enum ConsumableType {
     NoneCsmb = 0;

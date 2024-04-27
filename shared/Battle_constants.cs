@@ -184,6 +184,7 @@ namespace shared {
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY = 3;
+        public static int DEFAULT_PER_CHARACTER_IMMUNE_BULLET_RECORD_CAPACITY = 3;
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.62f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
