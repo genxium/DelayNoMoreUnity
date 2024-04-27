@@ -369,6 +369,8 @@ message BulletConfig {
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave
 
+    BuffConfig buffConfig = 1031;
+
 	// Sfx configs
 	string characterEmitSfxName = 2048;
 	string fireballEmitSfxName = 2049;

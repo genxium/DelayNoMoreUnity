@@ -265,6 +265,9 @@ namespace shared {
                     var cand = prevBulletImmuneRecords[prevCnt++];
                     if (TERMINATING_BULLET_LOCAL_ID == cand.BulletLocalId) break;
                     if (isRdfFrameElapsing) {
+                        if (0 >= cand.RemainingLifetimeRdfCount) {
+                            continue;
+                        }
                         int newRemainingLifetimeRdfCount = cand.RemainingLifetimeRdfCount - 1;
                         if (0 > newRemainingLifetimeRdfCount) newRemainingLifetimeRdfCount = 0;
                         AssignToBulletImmuneRecord(cand.BulletLocalId, newRemainingLifetimeRdfCount, dst.BulletImmuneRecords[newCnt]);
@@ -855,6 +858,11 @@ namespace shared {
 
         public BulletConfig SetMhType(MultiHitType mhType) {
             MhType = mhType; 
+            return this;
+        }
+
+        public BulletConfig SetRemainsUponHit(bool val) {
+            RemainsUponHit = val; 
             return this;
         }
 

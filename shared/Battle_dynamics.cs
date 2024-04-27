@@ -661,9 +661,7 @@ namespace shared {
 
         public static bool IsBulletActive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
-                if (!bullet.Config.RemainsUponHit) {
-                    return false;
-                }
+                return false;
             }
             return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames < currRenderFrameId) && (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
         }
@@ -783,7 +781,7 @@ namespace shared {
                         colliderCnt++;
 
                         collisionSys.AddSingle(newBulletCollider);
-                        if (BulletState.StartUp == src.BlState && !dst.Config.RemainsUponHit) {
+                        if (BulletState.StartUp == src.BlState) {
                             dst.BlState = BulletState.Active;
                             dst.FramesInBlState = 0;
                         }
@@ -1372,6 +1370,24 @@ namespace shared {
                             if (bulletNextFrame.BattleAttr.TeamId == atkedCharacterInCurrFrame.BulletTeamId) continue;
                             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) continue;
                             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) continue;
+                            int immuneRcdI = 0;
+                            bool shouldBeImmune = false;
+                            if (bulletConfig.RemainsUponHit) {
+                                while (immuneRcdI < atkedCharacterInCurrFrame.BulletImmuneRecords.Count) {    
+                                    var candidate = atkedCharacterInCurrFrame.BulletImmuneRecords[immuneRcdI];
+                                    if (TERMINATING_BULLET_LOCAL_ID == candidate.BulletLocalId) break; 
+                                    if (candidate.BulletLocalId == bulletNextFrame.BattleAttr.BulletLocalId) {
+                                        shouldBeImmune = true;
+                                        break;
+                                    }
+                                    immuneRcdI++;
+                                }
+                            }
+                            if (shouldBeImmune) {
+                                logger.LogInfo("joinIndex = " + atkedCharacterInCurrFrame.JoinIndex + " is immune to bulletLocalId= " + bulletNextFrame.BattleAttr.BulletLocalId + " at rdfId=" + currRenderFrame.Id);
+                                break;
+                            }
+                            
                             exploded = true;
                             explodedOnAnotherCharacter = true;
 
@@ -1382,6 +1398,17 @@ namespace shared {
                             //logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], atkedCharacterInCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, atkedCharacterInCurrFrame));
                             int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
                             var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
+                            if (bulletConfig.RemainsUponHit) {
+                                // [WARNING] Strictly speaking, I should re-traverse "atkedCharacterInNextFrame.BulletImmuneRecords" to determine "nextImmuneRcdI", but whatever...
+                                int nextImmuneRcdI = immuneRcdI; 
+                                if (nextImmuneRcdI == atkedCharacterInNextFrame.BulletImmuneRecords.Count) {
+                                    nextImmuneRcdI = 0;
+                                    logger.LogWarn("Replacing the first immune record of joinIndex = " + atkedCharacterInNextFrame.JoinIndex + " due to overflow!");
+                                } 
+                                AssignToBulletImmuneRecord(bulletNextFrame.BattleAttr.BulletLocalId, (bulletConfig.HitStunFrames << 2), atkedCharacterInNextFrame.BulletImmuneRecords[nextImmuneRcdI]);
+
+                                logger.LogInfo("joinIndex = " + atkedCharacterInCurrFrame.JoinIndex + " JUST BECOMES immune to bulletLocalId= " + bulletNextFrame.BattleAttr.BulletLocalId + " for rdfCount=" + bulletConfig.HitStunFrames + " at rdfId=" + currRenderFrame.Id);
+                            }
                             CharacterState oldNextCharacterState = atkedCharacterInNextFrame.CharacterState;
                             atkedCharacterInNextFrame.Hp -= bulletNextFrame.Config.Damage;
                             atkedCharacterInNextFrame.FramesCapturedByInertia = 0; // Being attacked breaks movement inertia.
@@ -1432,7 +1459,35 @@ namespace shared {
                                     atkedCharacterInNextFrame.FramesInvinsible = bulletNextFrame.Config.HitInvinsibleFrames;
                                 }
 
-                                if (null != offender.BuffList) {
+                                if (null != bulletConfig.BuffConfig) {
+                                    BuffConfig buffConfig = bulletConfig.BuffConfig;
+                                    if (null != buffConfig.AssociatedDebuffs) {
+                                        for (int q = 0; q < buffConfig.AssociatedDebuffs.Count; q++) {
+                                            DebuffConfig associatedDebuffConfig = debuffConfigs[buffConfig.AssociatedDebuffs[q]];
+                                            if (null == associatedDebuffConfig || TERMINATING_BUFF_SPECIES_ID == associatedDebuffConfig.SpeciesId) break;
+                                            switch (associatedDebuffConfig.Type) {
+                                                case DebuffType.FrozenPositionLocked:
+                                                    if (BulletType.Melee == bulletNextFrame.Config.BType) break; // Forbid melee attacks to use freezing buff, otherwise it'd be too unbalanced. 
+                                                    // Overwrite existing debuff for now
+                                                    int debuffArrIdx = associatedDebuffConfig.ArrIdx;
+                                                    AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, atkedCharacterInNextFrame.DebuffList[debuffArrIdx]);
+                                                    // The following transition is deterministic because we checked "atkedCharacterInNextFrame.DebuffList" before transiting into BlownUp1.
+                                                    if (isCrouching(atkedCharacterInNextFrame.CharacterState)) {
+                                                        atkedCharacterInNextFrame.CharacterState = CrouchAtked1;
+                                                    } else {
+                                                        atkedCharacterInNextFrame.CharacterState = Atked1;
+                                                    }
+                                                    atkedCharacterInNextFrame.VelX = 0;
+                                                    switch (associatedDebuffConfig.StockType) {
+                                                        case BuffStockType.Timed:
+                                                            atkedCharacterInNextFrame.FramesToRecover = associatedDebuffConfig.Stock;
+                                                            break;
+                                                    }
+                                                    break;
+                                            }
+                                        }
+                                    }  
+                                } else if (null != offender.BuffList) {
                                     for (int w = 0; w < offender.BuffList.Count; w++) {
                                         Buff buff = offender.BuffList[w];
                                         if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;   
@@ -1500,9 +1555,11 @@ namespace shared {
                             bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
                         }
                     } else if (BulletType.Fireball == bulletNextFrame.Config.BType || BulletType.GroundWave == bulletNextFrame.Config.BType) {
-                        if (BulletState.Exploding != bulletNextFrame.BlState) {
-                            bulletNextFrame.BlState = BulletState.Exploding;
-                            bulletNextFrame.FramesInBlState = 0;
+                        if (!bulletConfig.RemainsUponHit) {
+                            if (BulletState.Exploding != bulletNextFrame.BlState) {
+                                bulletNextFrame.BlState = BulletState.Exploding;
+                                bulletNextFrame.FramesInBlState = 0;
+                            }
                         }
                         if (inTheMiddleOfMultihitTransition) {
                             bool dummyHasLockVel = false;
