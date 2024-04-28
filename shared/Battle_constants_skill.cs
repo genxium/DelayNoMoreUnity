@@ -341,24 +341,24 @@ namespace shared {
             NO_LOCK_VEL
         );
 
-        private static BulletConfig IcePillarRepeatingBullet = new BulletConfig {
-            StartupFrames = 12,
-            ActiveFrames = 600,
-            HitStunFrames = 14,
-            BlockStunFrames = 9,
-            Damage = 2,
+        private static BulletConfig IcePillarStarterBullet = new BulletConfig {
+            StartupFrames = 35,
+            ActiveFrames = 500,
+            HitStunFrames = 10,
+            BlockStunFrames = 60,
+            Damage = 5,
             PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = NO_LOCK_VEL,
+            PushbackVelY = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
             HitboxOffsetX = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(-8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(-8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // [WARNING] Such that it can start on slope!
             HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(52 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SpeciesId = 13,
+            SpeciesId = 3,
+            ExplosionSpeciesId = 13,
             ExplosionFrames = 25,
-            Speed = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SpeedIfNotHit = (int)(3 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            Speed = (int)(3 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             DirX = 1,
             DirY = 0,
             Hardness = 5,
@@ -368,12 +368,34 @@ namespace shared {
             ExplosionSfxName = "Explosion2",
             MhType = MultiHitType.FromPrevHitActual,
             MhVanishOnMeleeHit = false, // Makes it more powerful on ground than the SlashNova
-            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
+            RemainsUponHit = true,
+            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX, 
+            BuffConfig = ShortFreezer,
+        };
+
+        private static BulletConfig IcePillarRepeatingBullet = new BulletConfig {
+            StartupFrames = 0,
+            ActiveFrames = 60,
+            HitStunFrames = 60,
+            BlockStunFrames = 60,
+            Damage = 30,
+            // No pushbacks
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(52 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 13,
+            ExplosionFrames = 25,
+            Speed = 0,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Explosion2",
+            CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX
         };
             
-        private static BulletConfig IcePillarStarterBullet = new BulletConfig(IcePillarRepeatingBullet).SetStartupFrames(35).SetSpeed(IcePillarRepeatingBullet.SpeedIfNotHit); 
-        private static BulletConfig IcePillarEnderBullet = new BulletConfig(IcePillarRepeatingBullet).SetStartupFrames(9).SetMhType(MultiHitType.None).SetSpeedIfNotHit(0).SetSpeed(SlashNovaRepeatingBullet.SpeedIfNotHit);
-
         private static Skill IcePillarSkill = new Skill {
             RecoveryFrames = 80,
             RecoveryFramesOnBlock = 80,
@@ -382,24 +404,7 @@ namespace shared {
             BoundChState = Atk5
         }
         .AddHit(IcePillarStarterBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarRepeatingBullet)
-        .AddHit(IcePillarEnderBullet);
+        .AddHit(IcePillarRepeatingBullet);
 
         private static BulletConfig PistolBulletGround = new BulletConfig(PistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);
         private static BulletConfig MagicPistolBulletGround = new BulletConfig(MagicPistolBulletAir).SetAllowsWalking(true).SetAllowsCrouching(true);

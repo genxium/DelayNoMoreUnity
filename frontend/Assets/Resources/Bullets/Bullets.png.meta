@@ -132,8 +132,8 @@ TextureImporter:
       name: Explosion1_1
       rect:
         serializedVersion: 2
-        x: 70
-        y: 649
+        x: 692
+        y: 683
         width: 23
         height: 13
       alignment: 9
@@ -153,8 +153,8 @@ TextureImporter:
       name: Explosion1_2
       rect:
         serializedVersion: 2
-        x: 631
-        y: 888
+        x: 596
+        y: 860
         width: 21
         height: 21
       alignment: 9
@@ -174,8 +174,8 @@ TextureImporter:
       name: Explosion1_3
       rect:
         serializedVersion: 2
-        x: 918
-        y: 886
+        x: 126
+        y: 826
         width: 13
         height: 14
       alignment: 9
@@ -195,8 +195,8 @@ TextureImporter:
       name: Explosion1_4
       rect:
         serializedVersion: 2
-        x: 995
-        y: 380
+        x: 447
+        y: 735
         width: 29
         height: 27
       alignment: 9
@@ -216,8 +216,8 @@ TextureImporter:
       name: Explosion1_5
       rect:
         serializedVersion: 2
-        x: 119
-        y: 802
+        x: 147
+        y: 825
         width: 31
         height: 29
       alignment: 9
@@ -237,8 +237,8 @@ TextureImporter:
       name: Explosion1_6
       rect:
         serializedVersion: 2
-        x: 119
-        y: 770
+        x: 447
+        y: 762
         width: 30
         height: 32
       alignment: 9
@@ -258,8 +258,8 @@ TextureImporter:
       name: Fireball1_1
       rect:
         serializedVersion: 2
-        x: 995
-        y: 353
+        x: 447
+        y: 708
         width: 29
         height: 27
       alignment: 0
@@ -279,8 +279,8 @@ TextureImporter:
       name: Fireball1_10
       rect:
         serializedVersion: 2
-        x: 366
-        y: 430
+        x: 126
+        y: 766
         width: 52
         height: 23
       alignment: 0
@@ -300,8 +300,8 @@ TextureImporter:
       name: Fireball1_11
       rect:
         serializedVersion: 2
-        x: 885
-        y: 436
+        x: 402
+        y: 545
         width: 40
         height: 15
       alignment: 0
@@ -321,8 +321,8 @@ TextureImporter:
       name: Fireball1_12
       rect:
         serializedVersion: 2
-        x: 599
-        y: 429
+        x: 0
+        y: 1
         width: 54
         height: 16
       alignment: 0
@@ -342,8 +342,8 @@ TextureImporter:
       name: Fireball1_13
       rect:
         serializedVersion: 2
-        x: 267
-        y: 452
+        x: 107
+        y: 0
         width: 53
         height: 19
       alignment: 0
@@ -363,8 +363,8 @@ TextureImporter:
       name: Fireball1_14
       rect:
         serializedVersion: 2
-        x: 599
-        y: 445
+        x: 78
+        y: 113
         width: 54
         height: 24
       alignment: 0
@@ -384,8 +384,8 @@ TextureImporter:
       name: Fireball1_15
       rect:
         serializedVersion: 2
-        x: 885
-        y: 451
+        x: 402
+        y: 560
         width: 40
         height: 17
       alignment: 0
@@ -405,8 +405,8 @@ TextureImporter:
       name: Fireball1_16
       rect:
         serializedVersion: 2
-        x: 366
-        y: 453
+        x: 54
+        y: 1
         width: 53
         height: 16
       alignment: 0
@@ -426,8 +426,8 @@ TextureImporter:
       name: Fireball1_17
       rect:
         serializedVersion: 2
-        x: 602
-        y: 509
+        x: 372
+        y: 9
         width: 51
         height: 20
       alignment: 0
@@ -447,8 +447,8 @@ TextureImporter:
       name: Fireball1_18
       rect:
         serializedVersion: 2
-        x: 366
-        y: 488
+        x: 160
+        y: 1
         width: 53
         height: 23
       alignment: 0
@@ -468,8 +468,8 @@ TextureImporter:
       name: Fireball1_19
       rect:
         serializedVersion: 2
-        x: 885
-        y: 422
+        x: 402
+        y: 531
         width: 40
         height: 14
       alignment: 0
@@ -489,8 +489,8 @@ TextureImporter:
       name: Fireball1_2
       rect:
         serializedVersion: 2
-        x: 472
-        y: 450
+        x: 213
+        y: 1
         width: 49
         height: 23
       alignment: 0
@@ -510,8 +510,8 @@ TextureImporter:
       name: Fireball1_20
       rect:
         serializedVersion: 2
-        x: 443
-        y: 993
+        x: 835
+        y: 711
         width: 108
         height: 31
       alignment: 9
@@ -531,8 +531,8 @@ TextureImporter:
       name: Fireball1_21
       rect:
         serializedVersion: 2
-        x: 443
-        y: 956
+        x: 829
+        y: 674
         width: 102
         height: 37
       alignment: 9
@@ -552,8 +552,8 @@ TextureImporter:
       name: Fireball1_3
       rect:
         serializedVersion: 2
-        x: 885
-        y: 451
+        x: 402
+        y: 560
         width: 40
         height: 17
       alignment: 0
@@ -573,8 +573,8 @@ TextureImporter:
       name: Fireball1_4
       rect:
         serializedVersion: 2
-        x: 366
-        y: 414
+        x: 719
+        y: 216
         width: 51
         height: 16
       alignment: 0
@@ -594,8 +594,8 @@ TextureImporter:
       name: Fireball1_5
       rect:
         serializedVersion: 2
-        x: 419
-        y: 455
+        x: 476
+        y: 13
         width: 53
         height: 18
       alignment: 0
@@ -615,8 +615,8 @@ TextureImporter:
       name: Fireball1_6
       rect:
         serializedVersion: 2
-        x: 267
-        y: 471
+        x: 319
+        y: 9
         width: 53
         height: 20
       alignment: 0
@@ -636,8 +636,8 @@ TextureImporter:
       name: Fireball1_7
       rect:
         serializedVersion: 2
-        x: 885
-        y: 422
+        x: 402
+        y: 531
         width: 40
         height: 14
       alignment: 0
@@ -657,8 +657,8 @@ TextureImporter:
       name: Fireball1_8
       rect:
         serializedVersion: 2
-        x: 267
-        y: 438
+        x: 770
+        y: 218
         width: 53
         height: 14
       alignment: 0
@@ -678,8 +678,8 @@ TextureImporter:
       name: Fireball1_9
       rect:
         serializedVersion: 2
-        x: 366
-        y: 469
+        x: 423
+        y: 11
         width: 53
         height: 19
       alignment: 0
@@ -699,8 +699,8 @@ TextureImporter:
       name: Melee_Explosion1_1
       rect:
         serializedVersion: 2
-        x: 125
-        y: 372
+        x: 611
+        y: 395
         width: 43
         height: 43
       alignment: 9
@@ -720,8 +720,8 @@ TextureImporter:
       name: Melee_Explosion1_10
       rect:
         serializedVersion: 2
-        x: 320
-        y: 456
+        x: 977
+        y: 903
         width: 46
         height: 35
       alignment: 9
@@ -741,8 +741,8 @@ TextureImporter:
       name: Melee_Explosion1_2
       rect:
         serializedVersion: 2
-        x: 241
-        y: 401
+        x: 607
+        y: 290
         width: 44
         height: 37
       alignment: 9
@@ -762,8 +762,8 @@ TextureImporter:
       name: Melee_Explosion1_3
       rect:
         serializedVersion: 2
-        x: 599
-        y: 469
+        x: 968
+        y: 817
         width: 54
         height: 40
       alignment: 9
@@ -783,8 +783,8 @@ TextureImporter:
       name: Melee_Explosion1_4
       rect:
         serializedVersion: 2
-        x: 231
-        y: 607
+        x: 968
+        y: 857
         width: 54
         height: 46
       alignment: 9
@@ -804,8 +804,8 @@ TextureImporter:
       name: Melee_Explosion1_5
       rect:
         serializedVersion: 2
-        x: 203
-        y: 450
+        x: 949
+        y: 215
         width: 64
         height: 55
       alignment: 9
@@ -825,8 +825,8 @@ TextureImporter:
       name: Melee_Explosion1_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 347
+        x: 115
+        y: 503
         width: 61
         height: 48
       alignment: 9
@@ -846,8 +846,8 @@ TextureImporter:
       name: Melee_Explosion1_7
       rect:
         serializedVersion: 2
-        x: 64
-        y: 391
+        x: 115
+        y: 551
         width: 61
         height: 55
       alignment: 9
@@ -867,8 +867,8 @@ TextureImporter:
       name: Melee_Explosion1_8
       rect:
         serializedVersion: 2
-        x: 885
-        y: 388
+        x: 616
+        y: 541
         width: 39
         height: 34
       alignment: 9
@@ -888,8 +888,8 @@ TextureImporter:
       name: Melee_Explosion1_9
       rect:
         serializedVersion: 2
-        x: 417
-        y: 379
+        x: 977
+        y: 938
         width: 47
         height: 40
       alignment: 9
@@ -909,8 +909,8 @@ TextureImporter:
       name: Melee_Explosion2_1
       rect:
         serializedVersion: 2
-        x: 902
-        y: 613
+        x: 304
+        y: 860
         width: 26
         height: 30
       alignment: 9
@@ -930,8 +930,8 @@ TextureImporter:
       name: Melee_Explosion2_10
       rect:
         serializedVersion: 2
-        x: 529
-        y: 869
+        x: 596
+        y: 806
         width: 15
         height: 9
       alignment: 9
@@ -951,8 +951,8 @@ TextureImporter:
       name: Melee_Explosion2_2
       rect:
         serializedVersion: 2
-        x: 889
-        y: 521
+        x: 691
+        y: 626
         width: 36
         height: 36
       alignment: 9
@@ -972,8 +972,8 @@ TextureImporter:
       name: Melee_Explosion2_3
       rect:
         serializedVersion: 2
-        x: 602
-        y: 565
+        x: 126
+        y: 722
         width: 51
         height: 44
       alignment: 9
@@ -993,8 +993,8 @@ TextureImporter:
       name: Melee_Explosion2_4
       rect:
         serializedVersion: 2
-        x: 140
-        y: 587
+        x: 599
+        y: 5
         width: 69
         height: 40
       alignment: 9
@@ -1014,8 +1014,8 @@ TextureImporter:
       name: Melee_Explosion2_5
       rect:
         serializedVersion: 2
-        x: 288
-        y: 658
+        x: 251
+        y: 246
         width: 82
         height: 34
       alignment: 9
@@ -1035,8 +1035,8 @@ TextureImporter:
       name: Melee_Explosion2_6
       rect:
         serializedVersion: 2
-        x: 529
-        y: 832
+        x: 175
+        y: 474
         width: 86
         height: 28
       alignment: 9
@@ -1056,8 +1056,8 @@ TextureImporter:
       name: Melee_Explosion2_7
       rect:
         serializedVersion: 2
-        x: 830
-        y: 872
+        x: 903
+        y: 492
         width: 88
         height: 28
       alignment: 9
@@ -1077,8 +1077,8 @@ TextureImporter:
       name: Melee_Explosion2_8
       rect:
         serializedVersion: 2
-        x: 1003
-        y: 477
+        x: 596
+        y: 827
         width: 16
         height: 24
       alignment: 9
@@ -1098,8 +1098,8 @@ TextureImporter:
       name: Melee_Explosion2_9
       rect:
         serializedVersion: 2
-        x: 529
-        y: 878
+        x: 596
+        y: 815
         width: 15
         height: 12
       alignment: 9
@@ -1119,8 +1119,8 @@ TextureImporter:
       name: Melee_Explosion3_1
       rect:
         serializedVersion: 2
-        x: 551
-        y: 930
+        x: 727
+        y: 647
         width: 102
         height: 94
       alignment: 9
@@ -1140,8 +1140,8 @@ TextureImporter:
       name: Melee_Explosion3_10
       rect:
         serializedVersion: 2
-        x: 611
-        y: 689
+        x: 607
+        y: 207
         width: 42
         height: 83
       alignment: 9
@@ -1161,8 +1161,8 @@ TextureImporter:
       name: Melee_Explosion3_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 775
+        x: 477
+        y: 766
         width: 119
         height: 115
       alignment: 9
@@ -1182,7 +1182,7 @@ TextureImporter:
       name: Melee_Explosion3_3
       rect:
         serializedVersion: 2
-        x: 0
+        x: 181
         y: 890
         width: 150
         height: 134
@@ -1203,7 +1203,7 @@ TextureImporter:
       name: Melee_Explosion3_4
       rect:
         serializedVersion: 2
-        x: 297
+        x: 331
         y: 904
         width: 146
         height: 120
@@ -1224,8 +1224,8 @@ TextureImporter:
       name: Melee_Explosion3_5
       rect:
         serializedVersion: 2
-        x: 150
-        y: 790
+        x: 477
+        y: 881
         width: 140
         height: 143
       alignment: 9
@@ -1245,8 +1245,8 @@ TextureImporter:
       name: Melee_Explosion3_6
       rect:
         serializedVersion: 2
-        x: 150
-        y: 933
+        x: 0
+        y: 840
         width: 147
         height: 91
       alignment: 9
@@ -1266,8 +1266,8 @@ TextureImporter:
       name: Melee_Explosion3_7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 689
+        x: 835
+        y: 742
         width: 108
         height: 86
       alignment: 9
@@ -1287,8 +1287,8 @@ TextureImporter:
       name: Melee_Explosion3_8
       rect:
         serializedVersion: 2
-        x: 132
-        y: 415
+        x: 657
+        y: 51
         width: 63
         height: 68
       alignment: 9
@@ -1308,8 +1308,8 @@ TextureImporter:
       name: Melee_Explosion3_9
       rect:
         serializedVersion: 2
-        x: 924
-        y: 333
+        x: 653
+        y: 296
         width: 71
         height: 74
       alignment: 9
@@ -1329,8 +1329,8 @@ TextureImporter:
       name: Explosion4_1
       rect:
         serializedVersion: 2
-        x: 742
-        y: 947
+        x: 139
+        y: 832
         width: 8
         height: 8
       alignment: 9
@@ -1350,8 +1350,8 @@ TextureImporter:
       name: Explosion4_2
       rect:
         serializedVersion: 2
-        x: 830
-        y: 903
+        x: 592
+        y: 749
         width: 11
         height: 11
       alignment: 9
@@ -1371,8 +1371,8 @@ TextureImporter:
       name: Explosion4_3
       rect:
         serializedVersion: 2
-        x: 918
-        y: 873
+        x: 596
+        y: 793
         width: 13
         height: 13
       alignment: 9
@@ -1392,8 +1392,8 @@ TextureImporter:
       name: Explosion4_4
       rect:
         serializedVersion: 2
-        x: 918
-        y: 860
+        x: 596
+        y: 780
         width: 13
         height: 13
       alignment: 9
@@ -1413,8 +1413,8 @@ TextureImporter:
       name: Fireball4_0
       rect:
         serializedVersion: 2
-        x: 909
-        y: 778
+        x: 457
+        y: 853
         width: 19
         height: 9
       alignment: 9
@@ -1434,8 +1434,8 @@ TextureImporter:
       name: Fireball4_1
       rect:
         serializedVersion: 2
-        x: 1003
-        y: 519
+        x: 457
+        y: 803
         width: 17
         height: 9
       alignment: 9
@@ -1455,8 +1455,8 @@ TextureImporter:
       name: Fireball4_2
       rect:
         serializedVersion: 2
-        x: 1003
-        y: 510
+        x: 457
+        y: 794
         width: 17
         height: 9
       alignment: 9
@@ -1476,8 +1476,8 @@ TextureImporter:
       name: Fireball4_3
       rect:
         serializedVersion: 2
-        x: 1003
-        y: 501
+        x: 596
+        y: 851
         width: 17
         height: 9
       alignment: 9
@@ -1497,8 +1497,8 @@ TextureImporter:
       name: Fireball4_4
       rect:
         serializedVersion: 2
-        x: 830
-        y: 914
+        x: 596
+        y: 771
         width: 12
         height: 9
       alignment: 9
@@ -1518,8 +1518,8 @@ TextureImporter:
       name: Fireball8_1
       rect:
         serializedVersion: 2
-        x: 290
-        y: 927
+        x: 139
+        y: 826
         width: 6
         height: 6
       alignment: 9
@@ -1539,8 +1539,8 @@ TextureImporter:
       name: Fireball8_2
       rect:
         serializedVersion: 2
-        x: 290
-        y: 921
+        x: 120
+        y: 729
         width: 6
         height: 6
       alignment: 9
@@ -1560,8 +1560,8 @@ TextureImporter:
       name: Fireball8_3
       rect:
         serializedVersion: 2
-        x: 290
-        y: 915
+        x: 120
+        y: 723
         width: 6
         height: 6
       alignment: 9
@@ -1581,8 +1581,8 @@ TextureImporter:
       name: Fireball8_4
       rect:
         serializedVersion: 2
-        x: 290
-        y: 921
+        x: 120
+        y: 729
         width: 6
         height: 6
       alignment: 9
@@ -1602,8 +1602,8 @@ TextureImporter:
       name: Fireball9_1
       rect:
         serializedVersion: 2
-        x: 277
-        y: 491
+        x: 448
+        y: 31
         width: 66
         height: 77
       alignment: 9
@@ -1623,8 +1623,8 @@ TextureImporter:
       name: Fireball9_10
       rect:
         serializedVersion: 2
-        x: 376
-        y: 743
+        x: 590
+        y: 45
         width: 67
         height: 74
       alignment: 9
@@ -1644,8 +1644,8 @@ TextureImporter:
       name: Fireball9_11
       rect:
         serializedVersion: 2
-        x: 68
-        y: 446
+        x: 377
+        y: 409
         width: 64
         height: 70
       alignment: 9
@@ -1665,8 +1665,8 @@ TextureImporter:
       name: Fireball9_12
       rect:
         serializedVersion: 2
-        x: 925
-        y: 449
+        x: 302
+        y: 29
         width: 78
         height: 79
       alignment: 9
@@ -1686,8 +1686,8 @@ TextureImporter:
       name: Fireball9_13
       rect:
         serializedVersion: 2
-        x: 277
-        y: 491
+        x: 448
+        y: 31
         width: 66
         height: 77
       alignment: 9
@@ -1707,8 +1707,8 @@ TextureImporter:
       name: Fireball9_14
       rect:
         serializedVersion: 2
-        x: 0
-        y: 527
+        x: 380
+        y: 30
         width: 68
         height: 78
       alignment: 9
@@ -1728,8 +1728,8 @@ TextureImporter:
       name: Fireball9_15
       rect:
         serializedVersion: 2
-        x: 0
-        y: 451
+        x: 491
+        y: 117
         width: 68
         height: 76
       alignment: 9
@@ -1749,8 +1749,8 @@ TextureImporter:
       name: Fireball9_16
       rect:
         serializedVersion: 2
-        x: 376
-        y: 743
+        x: 590
+        y: 45
         width: 67
         height: 74
       alignment: 9
@@ -1770,8 +1770,8 @@ TextureImporter:
       name: Fireball9_17
       rect:
         serializedVersion: 2
-        x: 68
-        y: 446
+        x: 377
+        y: 409
         width: 64
         height: 70
       alignment: 9
@@ -1791,8 +1791,8 @@ TextureImporter:
       name: Fireball9_18
       rect:
         serializedVersion: 2
-        x: 925
-        y: 449
+        x: 302
+        y: 29
         width: 78
         height: 79
       alignment: 9
@@ -1812,8 +1812,8 @@ TextureImporter:
       name: Fireball9_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 527
+        x: 380
+        y: 30
         width: 68
         height: 78
       alignment: 9
@@ -1833,8 +1833,8 @@ TextureImporter:
       name: Fireball9_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 451
+        x: 491
+        y: 117
         width: 68
         height: 76
       alignment: 9
@@ -1854,8 +1854,8 @@ TextureImporter:
       name: Fireball9_4
       rect:
         serializedVersion: 2
-        x: 376
-        y: 743
+        x: 590
+        y: 45
         width: 67
         height: 74
       alignment: 9
@@ -1875,8 +1875,8 @@ TextureImporter:
       name: Fireball9_5
       rect:
         serializedVersion: 2
-        x: 68
-        y: 446
+        x: 377
+        y: 409
         width: 64
         height: 70
       alignment: 9
@@ -1896,8 +1896,8 @@ TextureImporter:
       name: Fireball9_6
       rect:
         serializedVersion: 2
-        x: 925
-        y: 449
+        x: 302
+        y: 29
         width: 78
         height: 79
       alignment: 9
@@ -1917,8 +1917,8 @@ TextureImporter:
       name: Fireball9_7
       rect:
         serializedVersion: 2
-        x: 277
-        y: 491
+        x: 448
+        y: 31
         width: 66
         height: 77
       alignment: 9
@@ -1938,8 +1938,8 @@ TextureImporter:
       name: Fireball9_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 527
+        x: 380
+        y: 30
         width: 68
         height: 78
       alignment: 9
@@ -1959,8 +1959,8 @@ TextureImporter:
       name: Fireball9_9
       rect:
         serializedVersion: 2
-        x: 0
-        y: 451
+        x: 491
+        y: 117
         width: 68
         height: 76
       alignment: 9
@@ -1980,8 +1980,8 @@ TextureImporter:
       name: Explosion9_1
       rect:
         serializedVersion: 2
-        x: 909
-        y: 737
+        x: 457
+        y: 812
         width: 17
         height: 23
       alignment: 9
@@ -2001,8 +2001,8 @@ TextureImporter:
       name: Explosion9_2
       rect:
         serializedVersion: 2
-        x: 909
-        y: 760
+        x: 457
+        y: 835
         width: 18
         height: 18
       alignment: 9
@@ -2022,8 +2022,8 @@ TextureImporter:
       name: Explosion9_3
       rect:
         serializedVersion: 2
-        x: 613
-        y: 772
+        x: 402
+        y: 577
         width: 40
         height: 26
       alignment: 9
@@ -2043,8 +2043,8 @@ TextureImporter:
       name: Explosion9_4
       rect:
         serializedVersion: 2
-        x: 232
-        y: 766
+        x: 120
+        y: 698
         width: 58
         height: 24
       alignment: 9
@@ -2064,8 +2064,8 @@ TextureImporter:
       name: Explosion9_5
       rect:
         serializedVersion: 2
-        x: 231
-        y: 653
+        x: 262
+        y: 5
         width: 57
         height: 21
       alignment: 9
@@ -2085,8 +2085,8 @@ TextureImporter:
       name: Explosion9_6
       rect:
         serializedVersion: 2
-        x: 61
-        y: 376
+        x: 611
+        y: 380
         width: 43
         height: 15
       alignment: 9
@@ -2106,8 +2106,8 @@ TextureImporter:
       name: Explosion9_7
       rect:
         serializedVersion: 2
-        x: 889
-        y: 468
+        x: 147
+        y: 918
         width: 33
         height: 13
       alignment: 9
@@ -2127,8 +2127,8 @@ TextureImporter:
       name: Fireball11
       rect:
         serializedVersion: 2
-        x: 70
-        y: 684
+        x: 147
+        y: 913
         width: 33
         height: 5
       alignment: 9
@@ -2148,8 +2148,8 @@ TextureImporter:
       name: Explosion11_1
       rect:
         serializedVersion: 2
-        x: 195
-        y: 379
+        x: 611
+        y: 438
         width: 43
         height: 52
       alignment: 0
@@ -2169,8 +2169,8 @@ TextureImporter:
       name: Explosion11_2
       rect:
         serializedVersion: 2
-        x: 108
-        y: 764
+        x: 596
+        y: 760
         width: 11
         height: 11
       alignment: 9
@@ -2190,8 +2190,8 @@ TextureImporter:
       name: Explosion11_3
       rect:
         serializedVersion: 2
-        x: 631
-        y: 846
+        x: 457
+        y: 862
         width: 20
         height: 42
       alignment: 9
@@ -2211,8 +2211,8 @@ TextureImporter:
       name: Explosion11_4
       rect:
         serializedVersion: 2
-        x: 615
-        y: 798
+        x: 616
+        y: 493
         width: 38
         height: 48
       alignment: 9
@@ -2232,8 +2232,8 @@ TextureImporter:
       name: Explosion13_1
       rect:
         serializedVersion: 2
-        x: 995
-        y: 334
+        x: 447
+        y: 689
         width: 28
         height: 19
       alignment: 9
@@ -2253,8 +2253,8 @@ TextureImporter:
       name: Explosion13_10
       rect:
         serializedVersion: 2
-        x: 904
-        y: 664
+        x: 303
+        y: 752
         width: 24
         height: 21
       alignment: 9
@@ -2274,8 +2274,8 @@ TextureImporter:
       name: Explosion13_11
       rect:
         serializedVersion: 2
-        x: 904
-        y: 643
+        x: 303
+        y: 731
         width: 24
         height: 21
       alignment: 9
@@ -2295,8 +2295,8 @@ TextureImporter:
       name: Explosion13_12
       rect:
         serializedVersion: 2
-        x: 902
-        y: 557
+        x: 303
+        y: 710
         width: 24
         height: 21
       alignment: 9
@@ -2316,8 +2316,8 @@ TextureImporter:
       name: Explosion13_13
       rect:
         serializedVersion: 2
-        x: 70
-        y: 662
+        x: 692
+        y: 718
         width: 23
         height: 22
       alignment: 9
@@ -2337,8 +2337,8 @@ TextureImporter:
       name: Explosion13_14
       rect:
         serializedVersion: 2
-        x: 343
-        y: 508
+        x: 692
+        y: 696
         width: 23
         height: 22
       alignment: 9
@@ -2358,8 +2358,8 @@ TextureImporter:
       name: Explosion13_15
       rect:
         serializedVersion: 2
-        x: 902
-        y: 578
+        x: 304
+        y: 825
         width: 25
         height: 21
       alignment: 9
@@ -2379,8 +2379,8 @@ TextureImporter:
       name: Explosion13_16
       rect:
         serializedVersion: 2
-        x: 742
-        y: 955
+        x: 592
+        y: 742
         width: 10
         height: 7
       alignment: 9
@@ -2400,8 +2400,8 @@ TextureImporter:
       name: Explosion13_17
       rect:
         serializedVersion: 2
-        x: 290
-        y: 910
+        x: 612
+        y: 846
         width: 5
         height: 5
       alignment: 9
@@ -2421,8 +2421,8 @@ TextureImporter:
       name: Explosion13_18
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -2442,8 +2442,8 @@ TextureImporter:
       name: Explosion13_2
       rect:
         serializedVersion: 2
-        x: 995
-        y: 334
+        x: 447
+        y: 689
         width: 28
         height: 19
       alignment: 9
@@ -2463,8 +2463,8 @@ TextureImporter:
       name: Explosion13_3
       rect:
         serializedVersion: 2
-        x: 343
-        y: 530
+        x: 292
+        y: 588
         width: 24
         height: 18
       alignment: 9
@@ -2484,8 +2484,8 @@ TextureImporter:
       name: Explosion13_4
       rect:
         serializedVersion: 2
-        x: 904
-        y: 711
+        x: 304
+        y: 799
         width: 24
         height: 26
       alignment: 9
@@ -2505,8 +2505,8 @@ TextureImporter:
       name: Explosion13_5
       rect:
         serializedVersion: 2
-        x: 904
-        y: 685
+        x: 304
+        y: 773
         width: 24
         height: 26
       alignment: 9
@@ -2526,8 +2526,8 @@ TextureImporter:
       name: Explosion13_6
       rect:
         serializedVersion: 2
-        x: 995
-        y: 314
+        x: 292
+        y: 626
         width: 24
         height: 20
       alignment: 9
@@ -2547,8 +2547,8 @@ TextureImporter:
       name: Explosion13_7
       rect:
         serializedVersion: 2
-        x: 343
-        y: 548
+        x: 292
+        y: 606
         width: 24
         height: 20
       alignment: 9
@@ -2568,8 +2568,8 @@ TextureImporter:
       name: Explosion13_8
       rect:
         serializedVersion: 2
-        x: 997
-        y: 428
+        x: 303
+        y: 689
         width: 24
         height: 21
       alignment: 9
@@ -2589,8 +2589,8 @@ TextureImporter:
       name: Explosion13_9
       rect:
         serializedVersion: 2
-        x: 997
-        y: 407
+        x: 303
+        y: 668
         width: 24
         height: 21
       alignment: 9
@@ -2610,8 +2610,8 @@ TextureImporter:
       name: Explosion14_1
       rect:
         serializedVersion: 2
-        x: 931
-        y: 878
+        x: 907
+        y: 520
         width: 89
         height: 59
       alignment: 0
@@ -2631,8 +2631,8 @@ TextureImporter:
       name: Explosion14_10
       rect:
         serializedVersion: 2
-        x: 653
-        y: 962
+        x: 592
+        y: 617
         width: 99
         height: 62
       alignment: 0
@@ -2652,8 +2652,8 @@ TextureImporter:
       name: Explosion14_11
       rect:
         serializedVersion: 2
-        x: 290
-        y: 843
+        x: 592
+        y: 679
         width: 100
         height: 61
       alignment: 0
@@ -2673,8 +2673,8 @@ TextureImporter:
       name: Explosion14_12
       rect:
         serializedVersion: 2
-        x: 138
-        y: 527
+        x: 823
+        y: 181
         width: 67
         height: 60
       alignment: 0
@@ -2694,8 +2694,8 @@ TextureImporter:
       name: Explosion14_13
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -2715,8 +2715,8 @@ TextureImporter:
       name: Explosion14_14
       rect:
         serializedVersion: 2
-        x: 232
-        y: 708
+        x: 120
+        y: 640
         width: 57
         height: 58
       alignment: 0
@@ -2736,8 +2736,8 @@ TextureImporter:
       name: Explosion14_2
       rect:
         serializedVersion: 2
-        x: 443
-        y: 823
+        x: 291
+        y: 456
         width: 86
         height: 67
       alignment: 0
@@ -2757,8 +2757,8 @@ TextureImporter:
       name: Explosion14_3
       rect:
         serializedVersion: 2
-        x: 544
-        y: 860
+        x: 727
+        y: 433
         width: 87
         height: 70
       alignment: 0
@@ -2778,8 +2778,8 @@ TextureImporter:
       name: Explosion14_4
       rect:
         serializedVersion: 2
-        x: 846
-        y: 967
+        x: 727
+        y: 590
         width: 90
         height: 57
       alignment: 0
@@ -2799,8 +2799,8 @@ TextureImporter:
       name: Explosion14_5
       rect:
         serializedVersion: 2
-        x: 752
-        y: 968
+        x: 930
+        y: 579
         width: 94
         height: 56
       alignment: 0
@@ -2820,8 +2820,8 @@ TextureImporter:
       name: Explosion14_6
       rect:
         serializedVersion: 2
-        x: 205
-        y: 505
+        x: 883
+        y: 243
         width: 66
         height: 59
       alignment: 0
@@ -2841,8 +2841,8 @@ TextureImporter:
       name: Explosion14_7
       rect:
         serializedVersion: 2
-        x: 390
-        y: 851
+        x: 823
+        y: 128
         width: 53
         height: 53
       alignment: 0
@@ -2862,8 +2862,8 @@ TextureImporter:
       name: Explosion14_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 395
+        x: 949
+        y: 270
         width: 64
         height: 56
       alignment: 0
@@ -2883,8 +2883,8 @@ TextureImporter:
       name: Explosion14_9
       rect:
         serializedVersion: 2
-        x: 731
-        y: 401
+        x: 807
+        y: 241
         width: 76
         height: 61
       alignment: 0
@@ -2904,8 +2904,8 @@ TextureImporter:
       name: Fireball12_1
       rect:
         serializedVersion: 2
-        x: 602
-        y: 529
+        x: 181
+        y: 114
         width: 51
         height: 36
       alignment: 0
@@ -2925,8 +2925,8 @@ TextureImporter:
       name: Fireball12_10
       rect:
         serializedVersion: 2
-        x: 523
-        y: 517
+        x: 251
+        y: 153
         width: 79
         height: 93
       alignment: 0
@@ -2946,8 +2946,8 @@ TextureImporter:
       name: Fireball12_11
       rect:
         serializedVersion: 2
-        x: 931
-        y: 782
+        x: 442
+        y: 514
         width: 87
         height: 96
       alignment: 0
@@ -2967,8 +2967,8 @@ TextureImporter:
       name: Fireball12_12
       rect:
         serializedVersion: 2
-        x: 288
-        y: 568
+        x: 943
+        y: 635
         width: 81
         height: 90
       alignment: 0
@@ -2988,8 +2988,8 @@ TextureImporter:
       name: Fireball12_13
       rect:
         serializedVersion: 2
-        x: 809
-        y: 398
+        x: 514
+        y: 42
         width: 76
         height: 75
       alignment: 0
@@ -3009,8 +3009,8 @@ TextureImporter:
       name: Fireball12_14
       rect:
         serializedVersion: 2
-        x: 739
-        y: 775
+        x: 316
+        y: 523
         width: 86
         height: 80
       alignment: 0
@@ -3030,8 +3030,8 @@ TextureImporter:
       name: Fireball12_15
       rect:
         serializedVersion: 2
-        x: 830
-        y: 787
+        x: 529
+        y: 490
         width: 87
         height: 85
       alignment: 0
@@ -3051,8 +3051,8 @@ TextureImporter:
       name: Fireball12_16
       rect:
         serializedVersion: 2
-        x: 936
-        y: 937
+        x: 727
+        y: 503
         width: 88
         height: 87
       alignment: 0
@@ -3072,8 +3072,8 @@ TextureImporter:
       name: Fireball12_17
       rect:
         serializedVersion: 2
-        x: 742
-        y: 855
+        x: 815
+        y: 495
         width: 88
         height: 68
       alignment: 0
@@ -3093,8 +3093,8 @@ TextureImporter:
       name: Fireball12_18
       rect:
         serializedVersion: 2
-        x: 842
-        y: 900
+        x: 477
+        y: 610
         width: 89
         height: 67
       alignment: 0
@@ -3114,8 +3114,8 @@ TextureImporter:
       name: Fireball12_19
       rect:
         serializedVersion: 2
-        x: 138
-        y: 483
+        x: 377
+        y: 479
         width: 65
         height: 44
       alignment: 0
@@ -3135,8 +3135,8 @@ TextureImporter:
       name: Fireball12_2
       rect:
         serializedVersion: 2
-        x: 419
-        y: 419
+        x: 126
+        y: 789
         width: 52
         height: 36
       alignment: 0
@@ -3156,8 +3156,8 @@ TextureImporter:
       name: Fireball12_3
       rect:
         serializedVersion: 2
-        x: 320
-        y: 422
+        x: 607
+        y: 346
         width: 46
         height: 34
       alignment: 0
@@ -3177,8 +3177,8 @@ TextureImporter:
       name: Fireball12_4
       rect:
         serializedVersion: 2
-        x: 390
-        y: 817
+        x: 232
+        y: 116
         width: 53
         height: 34
       alignment: 0
@@ -3198,8 +3198,8 @@ TextureImporter:
       name: Fireball12_5
       rect:
         serializedVersion: 2
-        x: 471
-        y: 404
+        x: 977
+        y: 978
         width: 47
         height: 46
       alignment: 0
@@ -3219,8 +3219,8 @@ TextureImporter:
       name: Fireball12_6
       rect:
         serializedVersion: 2
-        x: 70
-        y: 516
+        x: 0
+        y: 17
         width: 68
         height: 91
       alignment: 0
@@ -3240,8 +3240,8 @@ TextureImporter:
       name: Fireball12_7
       rect:
         serializedVersion: 2
-        x: 819
-        y: 561
+        x: 168
+        y: 239
         width: 83
         height: 86
       alignment: 0
@@ -3261,8 +3261,8 @@ TextureImporter:
       name: Fireball12_8
       rect:
         serializedVersion: 2
-        x: 149
-        y: 627
+        x: 427
+        y: 274
         width: 82
         height: 94
       alignment: 0
@@ -3282,8 +3282,8 @@ TextureImporter:
       name: Fireball12_9
       rect:
         serializedVersion: 2
-        x: 443
-        y: 640
+        x: 943
+        y: 725
         width: 81
         height: 92
       alignment: 0
@@ -3303,8 +3303,8 @@ TextureImporter:
       name: Fireball14_1
       rect:
         serializedVersion: 2
-        x: 371
-        y: 673
+        x: 655
+        y: 538
         width: 72
         height: 70
       alignment: 0
@@ -3324,8 +3324,8 @@ TextureImporter:
       name: Fireball14_10
       rect:
         serializedVersion: 2
-        x: 367
-        y: 511
+        x: 114
+        y: 467
         width: 61
         height: 36
       alignment: 0
@@ -3345,8 +3345,8 @@ TextureImporter:
       name: Fireball14_11
       rect:
         serializedVersion: 2
-        x: 925
-        y: 407
+        x: 654
+        y: 370
         width: 72
         height: 42
       alignment: 0
@@ -3366,8 +3366,8 @@ TextureImporter:
       name: Fireball14_12
       rect:
         serializedVersion: 2
-        x: 653
-        y: 584
+        x: 333
+        y: 192
         width: 80
         height: 58
       alignment: 0
@@ -3387,8 +3387,8 @@ TextureImporter:
       name: Fireball14_2
       rect:
         serializedVersion: 2
-        x: 289
-        y: 692
+        x: 335
+        y: 250
         width: 82
         height: 64
       alignment: 0
@@ -3408,8 +3408,8 @@ TextureImporter:
       name: Fireball14_3
       rect:
         serializedVersion: 2
-        x: 443
-        y: 890
+        x: 829
+        y: 608
         width: 101
         height: 66
       alignment: 0
@@ -3429,8 +3429,8 @@ TextureImporter:
       name: Fireball14_4
       rect:
         serializedVersion: 2
-        x: 752
-        y: 923
+        x: 817
+        y: 563
         width: 90
         height: 45
       alignment: 0
@@ -3450,8 +3450,8 @@ TextureImporter:
       name: Fireball14_5
       rect:
         serializedVersion: 2
-        x: 209
-        y: 564
+        x: 302
+        y: 110
         width: 68
         height: 43
       alignment: 0
@@ -3471,8 +3471,8 @@ TextureImporter:
       name: Fireball14_6
       rect:
         serializedVersion: 2
-        x: 290
-        y: 802
+        x: 442
+        y: 473
         width: 86
         height: 41
       alignment: 0
@@ -3492,8 +3492,8 @@ TextureImporter:
       name: Fireball14_7
       rect:
         serializedVersion: 2
-        x: 369
-        y: 547
+        x: 654
+        y: 412
         width: 73
         height: 41
       alignment: 0
@@ -3513,8 +3513,8 @@ TextureImporter:
       name: Fireball14_8
       rect:
         serializedVersion: 2
-        x: 737
-        y: 734
+        x: 0
+        y: 266
         width: 84
         height: 41
       alignment: 0
@@ -3534,8 +3534,8 @@ TextureImporter:
       name: Fireball14_9
       rect:
         serializedVersion: 2
-        x: 653
-        y: 920
+        x: 566
+        y: 575
         width: 89
         height: 42
       alignment: 0
@@ -3555,8 +3555,8 @@ TextureImporter:
       name: Explosion2_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 647
+        x: 651
+        y: 254
         width: 70
         height: 42
       alignment: 0
@@ -3576,8 +3576,8 @@ TextureImporter:
       name: Explosion2_2
       rect:
         serializedVersion: 2
-        x: 61
-        y: 325
+        x: 370
+        y: 141
         width: 42
         height: 51
       alignment: 0
@@ -3597,8 +3597,8 @@ TextureImporter:
       name: Explosion2_3
       rect:
         serializedVersion: 2
-        x: 604
-        y: 633
+        x: 890
+        y: 187
         width: 49
         height: 56
       alignment: 0
@@ -3618,8 +3618,8 @@ TextureImporter:
       name: Explosion2_4
       rect:
         serializedVersion: 2
-        x: 108
-        y: 649
+        x: 980
+        y: 158
         width: 41
         height: 57
       alignment: 0
@@ -3639,8 +3639,8 @@ TextureImporter:
       name: Explosion2_5
       rect:
         serializedVersion: 2
-        x: 108
-        y: 706
+        x: 939
+        y: 157
         width: 41
         height: 58
       alignment: 0
@@ -3660,8 +3660,8 @@ TextureImporter:
       name: Explosion2_6
       rect:
         serializedVersion: 2
-        x: 119
-        y: 831
+        x: 147
+        y: 854
         width: 31
         height: 59
       alignment: 0
@@ -3681,8 +3681,8 @@ TextureImporter:
       name: Explosion2_7
       rect:
         serializedVersion: 2
-        x: 631
-        y: 909
+        x: 692
+        y: 662
         width: 22
         height: 21
       alignment: 0
@@ -3702,8 +3702,8 @@ TextureImporter:
       name: Fireball2_1
       rect:
         serializedVersion: 2
-        x: 902
-        y: 599
+        x: 304
+        y: 846
         width: 26
         height: 14
       alignment: 9
@@ -3723,8 +3723,8 @@ TextureImporter:
       name: Fireball2_2
       rect:
         serializedVersion: 2
-        x: 889
-        y: 503
+        x: 691
+        y: 608
         width: 36
         height: 18
       alignment: 9
@@ -3744,8 +3744,8 @@ TextureImporter:
       name: Fireball2_3
       rect:
         serializedVersion: 2
-        x: 195
-        y: 431
+        x: 607
+        y: 327
         width: 46
         height: 19
       alignment: 9
@@ -3765,8 +3765,8 @@ TextureImporter:
       name: Fireball2_4
       rect:
         serializedVersion: 2
-        x: 604
-        y: 609
+        x: 132
+        y: 113
         width: 49
         height: 24
       alignment: 9
@@ -3786,8 +3786,8 @@ TextureImporter:
       name: Fireball13_1
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -3807,8 +3807,8 @@ TextureImporter:
       name: Fireball13_10
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -3828,8 +3828,8 @@ TextureImporter:
       name: Fireball13_11
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -3849,12 +3849,12 @@ TextureImporter:
       name: Fireball13_12
       rect:
         serializedVersion: 2
-        x: 889
-        y: 481
+        x: 442
+        y: 667
         width: 35
         height: 22
       alignment: 9
-      pivot: {x: 0.5, y: 2.1818182}
+      pivot: {x: 0.5, y: 2.18182}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3870,12 +3870,12 @@ TextureImporter:
       name: Fireball13_13
       rect:
         serializedVersion: 2
-        x: 231
-        y: 674
+        x: 120
+        y: 606
         width: 57
         height: 34
       alignment: 9
-      pivot: {x: 0.5, y: 1.4117647}
+      pivot: {x: 0.5, y: 1.411765}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3891,12 +3891,12 @@ TextureImporter:
       name: Fireball13_14
       rect:
         serializedVersion: 2
-        x: 653
-        y: 837
+        x: 900
+        y: 409
         width: 86
         height: 83
       alignment: 9
-      pivot: {x: 0.5, y: 0.57831323}
+      pivot: {x: 0.5, y: 0.578313}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3912,12 +3912,12 @@ TextureImporter:
       name: Fireball13_15
       rect:
         serializedVersion: 2
-        x: 370
-        y: 588
+        x: 654
+        y: 453
         width: 73
         height: 85
       alignment: 9
-      pivot: {x: 0.5, y: 0.5647059}
+      pivot: {x: 0.5, y: 0.564706}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3933,12 +3933,12 @@ TextureImporter:
       name: Fireball13_16
       rect:
         serializedVersion: 2
-        x: 736
-        y: 639
+        x: 344
+        y: 314
         width: 83
         height: 95
       alignment: 9
-      pivot: {x: 0.5, y: 0.50526315}
+      pivot: {x: 0.5, y: 0.505263}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3954,8 +3954,8 @@ TextureImporter:
       name: Fireball13_17
       rect:
         serializedVersion: 2
-        x: 928
-        y: 686
+        x: 810
+        y: 302
         width: 83
         height: 96
       alignment: 0
@@ -3975,8 +3975,8 @@ TextureImporter:
       name: Fireball13_18
       rect:
         serializedVersion: 2
-        x: 821
-        y: 647
+        x: 724
+        y: 232
         width: 83
         height: 96
       alignment: 0
@@ -3996,12 +3996,12 @@ TextureImporter:
       name: Fireball13_19
       rect:
         serializedVersion: 2
-        x: 653
-        y: 642
+        x: 727
+        y: 328
         width: 83
         height: 105
       alignment: 9
-      pivot: {x: 0.5, y: 0.45714286}
+      pivot: {x: 0.5, y: 0.457143}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4017,8 +4017,8 @@ TextureImporter:
       name: Fireball13_2
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4038,12 +4038,12 @@ TextureImporter:
       name: Fireball13_20
       rect:
         serializedVersion: 2
-        x: 928
-        y: 598
+        x: 252
+        y: 280
         width: 83
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4059,12 +4059,12 @@ TextureImporter:
       name: Fireball13_21
       rect:
         serializedVersion: 2
-        x: 521
-        y: 429
+        x: 224
+        y: 26
         width: 78
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4080,12 +4080,12 @@ TextureImporter:
       name: Fireball13_22
       rect:
         serializedVersion: 2
-        x: 811
-        y: 473
+        x: 413
+        y: 108
         width: 78
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4101,12 +4101,12 @@ TextureImporter:
       name: Fireball13_23
       rect:
         serializedVersion: 2
-        x: 811
-        y: 473
+        x: 413
+        y: 108
         width: 78
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4122,12 +4122,12 @@ TextureImporter:
       name: Fireball13_24
       rect:
         serializedVersion: 2
-        x: 811
-        y: 473
+        x: 413
+        y: 108
         width: 78
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4143,12 +4143,12 @@ TextureImporter:
       name: Fireball13_25
       rect:
         serializedVersion: 2
-        x: 733
-        y: 550
+        x: 0
+        y: 108
         width: 78
         height: 89
       alignment: 9
-      pivot: {x: 0.5, y: 0.53932583}
+      pivot: {x: 0.5, y: 0.539326}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4164,12 +4164,12 @@ TextureImporter:
       name: Fireball13_26
       rect:
         serializedVersion: 2
-        x: 731
-        y: 462
+        x: 589
+        y: 119
         width: 78
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4185,12 +4185,12 @@ TextureImporter:
       name: Fireball13_27
       rect:
         serializedVersion: 2
-        x: 731
-        y: 462
+        x: 589
+        y: 119
         width: 78
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4206,12 +4206,12 @@ TextureImporter:
       name: Fireball13_28
       rect:
         serializedVersion: 2
-        x: 442
-        y: 473
+        x: 167
+        y: 150
         width: 79
         height: 89
       alignment: 9
-      pivot: {x: 0.5, y: 0.53932583}
+      pivot: {x: 0.5, y: 0.539326}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4227,12 +4227,12 @@ TextureImporter:
       name: Fireball13_29
       rect:
         serializedVersion: 2
-        x: 653
-        y: 407
+        x: 667
+        y: 124
         width: 78
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4248,8 +4248,8 @@ TextureImporter:
       name: Fireball13_3
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4269,12 +4269,12 @@ TextureImporter:
       name: Fireball13_30
       rect:
         serializedVersion: 2
-        x: 653
-        y: 407
+        x: 667
+        y: 124
         width: 78
         height: 88
       alignment: 9
-      pivot: {x: 0.5, y: 0.54545456}
+      pivot: {x: 0.5, y: 0.545455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4290,12 +4290,12 @@ TextureImporter:
       name: Fireball13_31
       rect:
         serializedVersion: 2
-        x: 653
-        y: 495
+        x: 68
+        y: 19
         width: 78
         height: 89
       alignment: 9
-      pivot: {x: 0.5, y: 0.53932583}
+      pivot: {x: 0.5, y: 0.539326}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4311,12 +4311,12 @@ TextureImporter:
       name: Fireball13_32
       rect:
         serializedVersion: 2
-        x: 524
-        y: 610
+        x: 509
+        y: 193
         width: 80
         height: 86
       alignment: 9
-      pivot: {x: 0.5, y: 0.5581395}
+      pivot: {x: 0.5, y: 0.55814}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4332,12 +4332,12 @@ TextureImporter:
       name: Fireball13_33
       rect:
         serializedVersion: 2
-        x: 443
-        y: 562
+        x: 417
+        y: 196
         width: 80
         height: 78
       alignment: 9
-      pivot: {x: 0.5, y: 0.61538464}
+      pivot: {x: 0.5, y: 0.615385}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4353,12 +4353,12 @@ TextureImporter:
       name: Fireball13_34
       rect:
         serializedVersion: 2
-        x: 927
-        y: 528
+        x: 84
+        y: 226
         width: 83
         height: 70
       alignment: 9
-      pivot: {x: 0.5, y: 0.6857143}
+      pivot: {x: 0.5, y: 0.685714}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4374,12 +4374,12 @@ TextureImporter:
       name: Fireball13_35
       rect:
         serializedVersion: 2
-        x: 149
-        y: 721
+        x: 0
+        y: 197
         width: 83
         height: 69
       alignment: 9
-      pivot: {x: 0.5, y: 0.6956522}
+      pivot: {x: 0.5, y: 0.695652}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4395,8 +4395,8 @@ TextureImporter:
       name: Fireball13_36
       rect:
         serializedVersion: 2
-        x: 529
-        y: 785
+        x: 0
+        y: 398
         width: 84
         height: 47
       alignment: 9
@@ -4416,8 +4416,8 @@ TextureImporter:
       name: Fireball13_37
       rect:
         serializedVersion: 2
-        x: 443
-        y: 732
+        x: 260
+        y: 412
         width: 84
         height: 44
       alignment: 9
@@ -4437,8 +4437,8 @@ TextureImporter:
       name: Fireball13_38
       rect:
         serializedVersion: 2
-        x: 653
-        y: 747
+        x: 260
+        y: 368
         width: 84
         height: 44
       alignment: 9
@@ -4458,8 +4458,8 @@ TextureImporter:
       name: Fireball13_39
       rect:
         serializedVersion: 2
-        x: 527
-        y: 696
+        x: 168
+        y: 325
         width: 84
         height: 44
       alignment: 9
@@ -4479,8 +4479,8 @@ TextureImporter:
       name: Fireball13_4
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4500,8 +4500,8 @@ TextureImporter:
       name: Fireball13_40
       rect:
         serializedVersion: 2
-        x: 825
-        y: 743
+        x: 84
+        y: 296
         width: 84
         height: 44
       alignment: 9
@@ -4521,8 +4521,8 @@ TextureImporter:
       name: Fireball13_41
       rect:
         serializedVersion: 2
-        x: 527
-        y: 740
+        x: 0
+        y: 307
         width: 84
         height: 45
       alignment: 9
@@ -4542,8 +4542,8 @@ TextureImporter:
       name: Fireball13_42
       rect:
         serializedVersion: 2
-        x: 290
-        y: 756
+        x: 0
+        y: 352
         width: 84
         height: 46
       alignment: 9
@@ -4563,8 +4563,8 @@ TextureImporter:
       name: Fireball13_43
       rect:
         serializedVersion: 2
-        x: 443
-        y: 776
+        x: 84
+        y: 386
         width: 84
         height: 47
       alignment: 9
@@ -4584,8 +4584,8 @@ TextureImporter:
       name: Fireball13_44
       rect:
         serializedVersion: 2
-        x: 653
-        y: 791
+        x: 84
+        y: 340
         width: 84
         height: 46
       alignment: 9
@@ -4605,12 +4605,12 @@ TextureImporter:
       name: Fireball13_45
       rect:
         serializedVersion: 2
-        x: 70
-        y: 607
+        x: 649
+        y: 212
         width: 70
         height: 42
       alignment: 9
-      pivot: {x: 0.5, y: 1.1428572}
+      pivot: {x: 0.5, y: 1.142857}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4626,12 +4626,12 @@ TextureImporter:
       name: Fireball13_46
       rect:
         serializedVersion: 2
-        x: 0
-        y: 605
+        x: 529
+        y: 0
         width: 70
         height: 42
       alignment: 9
-      pivot: {x: 0.5, y: 1.1428572}
+      pivot: {x: 0.5, y: 1.142857}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4647,8 +4647,8 @@ TextureImporter:
       name: Fireball13_47
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4668,8 +4668,8 @@ TextureImporter:
       name: Fireball13_5
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4689,8 +4689,8 @@ TextureImporter:
       name: Fireball13_6
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4710,8 +4710,8 @@ TextureImporter:
       name: Fireball13_7
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4731,8 +4731,8 @@ TextureImporter:
       name: Fireball13_8
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4752,8 +4752,8 @@ TextureImporter:
       name: Fireball13_9
       rect:
         serializedVersion: 2
-        x: 290
-        y: 907
+        x: 178
+        y: 910
         width: 3
         height: 3
       alignment: 9
@@ -4765,6 +4765,825 @@ TextureImporter:
       bones: []
       spriteID: d6da4acf2f9510d4496ed1fe68cd25aa
       internalID: 212922281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_1
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 646
+        width: 35
+        height: 22
+      alignment: 9
+      pivot: {x: 0.5428571, y: 2.5454545}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c323be37667aa447ab5138f81fe3708
+      internalID: -964201804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_10
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 26
+        width: 78
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5128205, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c50ed126eb7b7bf4da50cce37ff4c78f
+      internalID: 151945452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_11
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 108
+        width: 78
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5128205, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d008050a40a7e0a409fea4c4db22a88e
+      internalID: -640381768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_12
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 108
+        width: 78
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5128205, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d67e6a28fb8f028409c18262bac9a0fa
+      internalID: -112376963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_13
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 108
+        width: 78
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5128205, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78a75f3400604d14192079d6fafbfc3d
+      internalID: -565639271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_14
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 24
+        width: 78
+        height: 89
+      alignment: 9
+      pivot: {x: 0.5128205, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 883343ecc530eb64bad5cb5c22f15716
+      internalID: 1513238241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_15
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 36
+        width: 78
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5128205, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cc8381aeb5de284fad5f557bf947340
+      internalID: -324910094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_16
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 128
+        width: 78
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5128205, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25a1c80320e0f45468e3d34cee519715
+      internalID: -1242256680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_17
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 137
+        width: 79
+        height: 89
+      alignment: 9
+      pivot: {x: 0.51898736, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50da75a48a7e843459611be28aab6e66
+      internalID: -1388078872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_18
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 40
+        width: 78
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5128205, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea7473072a6a7d74484b6f7a3c0e4385
+      internalID: 707996963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 445
+        width: 114
+        height: 94
+      alignment: 9
+      pivot: {x: 0.50877196, y: 0.59574467}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f12cbb5fd7ed79145b5dd1f44afd5099
+      internalID: 452389603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_2
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 433
+        width: 57
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5263158, y: 1.6470588}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 376a9127844e90a4cb4cf80b78f5b4ee
+      internalID: -306564892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_20
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 692
+        width: 119
+        height: 106
+      alignment: 9
+      pivot: {x: 0.512605, y: 0.5283019}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ee3d1527d9d395429c613cd4733d865
+      internalID: -126130148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_21
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 918
+        width: 120
+        height: 106
+      alignment: 9
+      pivot: {x: 0.5083333, y: 0.5283019}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c06dff0fe08d784d9c3589fbfa0e2fb
+      internalID: 1189730973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_22
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 628
+        width: 120
+        height: 107
+      alignment: 9
+      pivot: {x: 0.5083333, y: 0.5233645}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49dca482b72b65d478ff0983a959cdbc
+      internalID: 383653886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_23
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 918
+        width: 120
+        height: 106
+      alignment: 9
+      pivot: {x: 0.5083333, y: 0.5283019}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41930011bd8b84d428bb90d048ec6850
+      internalID: -732623591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_24
+      rect:
+        serializedVersion: 2
+        x: 857
+        y: 918
+        width: 120
+        height: 106
+      alignment: 9
+      pivot: {x: 0.5083333, y: 0.5283019}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fedc597bf1e8df44b0aa38726b936be
+      internalID: -1930227754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_25
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 829
+        width: 120
+        height: 89
+      alignment: 9
+      pivot: {x: 0.5083333, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6f7606dcc8756948867245f4fac49ad
+      internalID: 2061391154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_26
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 740
+        width: 115
+        height: 89
+      alignment: 9
+      pivot: {x: 0.51304346, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8171326c9543a040be72dfdcb165eac
+      internalID: -1463775028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_27
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 677
+        width: 115
+        height: 89
+      alignment: 9
+      pivot: {x: 0.51304346, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af40488d97de2944c9a7f1b3a8138be3
+      internalID: -1627877571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_28
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 603
+        width: 115
+        height: 89
+      alignment: 9
+      pivot: {x: 0.51304346, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85a1532607036b94f83cfe23cc96cb34
+      internalID: 2055030519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_29
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 591
+        width: 115
+        height: 89
+      alignment: 9
+      pivot: {x: 0.51304346, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b7bf21284498e84bad678a2eb77e2d3
+      internalID: 176225903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_3
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 326
+        width: 86
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5116279, y: 0.6746988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 926341e95ac91cf4fa7663edd0593e6b
+      internalID: -1547797282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_30
+      rect:
+        serializedVersion: 2
+        x: 853
+        y: 828
+        width: 115
+        height: 90
+      alignment: 9
+      pivot: {x: 0.51304346, y: 0.62222224}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2653bc9fba6621a418fb90268baa89b6
+      internalID: 2117242324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_31
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 539
+        width: 115
+        height: 89
+      alignment: 9
+      pivot: {x: 0.51304346, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d88f46be13ef494a80c31eb1b3e9f53
+      internalID: -1718566135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_32
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 502
+        width: 115
+        height: 89
+      alignment: 9
+      pivot: {x: 0.51304346, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec82bf749fb30744d93de9cc18eaf86d
+      internalID: 1314319687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_33
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 829
+        width: 116
+        height: 89
+      alignment: 9
+      pivot: {x: 0.5086207, y: 0.62921345}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8ef626e6e942c7468eb1610dea39e51
+      internalID: 666009587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_34
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 741
+        width: 108
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6336b4b5f24c78419131a7e46716f3b
+      internalID: -2057700771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 931
+        width: 181
+        height: 93
+      alignment: 9
+      pivot: {x: 0.5, y: 0.60215056}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cec27aaec46e8147a4ce346cf744466
+      internalID: 1443629058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_36
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 680
+        width: 125
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90008b62e1637b3449f574984129acd5
+      internalID: 1220164395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_37
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 785
+        width: 126
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b459b8a0a6241046b3dfb2e26c1f847
+      internalID: -306504328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_38
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 798
+        width: 126
+        height: 106
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5283019}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a4292ce290ff354fb6f7f2bfad5e358
+      internalID: 849455902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_39
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 735
+        width: 126
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52fa7d84571d57f4ca727e947176b305
+      internalID: 309461151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_4
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 398
+        width: 86
+        height: 97
+      alignment: 9
+      pivot: {x: 0.5116279, y: 0.57731956}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e86cb603c7d8c584d9a3accd500735f8
+      internalID: -2066526634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_5
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 369
+        width: 85
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5176471, y: 0.5333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f30e7a1800fdec54c9e09b660073bf43
+      internalID: -212462321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_6
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 384
+        width: 83
+        height: 106
+      alignment: 9
+      pivot: {x: 0.5180723, y: 0.5283019}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbdf6429697559146afae079522dd3fa
+      internalID: 410743922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_7
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 368
+        width: 83
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5180723, y: 0.5333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cfd42918cb660043838b655266aa13e
+      internalID: -183565566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_8
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 279
+        width: 83
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5180723, y: 0.5333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25e03c1b3881f4942882e8a2c8689882
+      internalID: 883205031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fireball3_9
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 280
+        width: 83
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5180723, y: 0.6363636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 089b0c1c88370ad4a92aae2b1ae3da1d
+      internalID: 1445452779
       vertices: []
       indices: 
       edges: []
@@ -4784,6 +5603,9 @@ TextureImporter:
     nameFileIdTable:
       Explosion13_17: 761487871
       Fireball1_4: -141374179
+      Fireball3_2: -306564892
+      Fireball3_28: 2055030519
+      Fireball3_14: 1513238241
       Fireball9_1: -2079282212
       Melee_Explosion2_8: -938025735
       Fireball13_21: -508215226
@@ -4791,6 +5613,7 @@ TextureImporter:
       Fireball13_41: 153034524
       Fireball1_5: 818549913
       Fireball13_27: -1429750288
+      Fireball3_30: 2117242324
       Fireball13_15: -1858967507
       Melee_Explosion1_9: -1987410908
       Fireball13_42: 1826503657
@@ -4804,6 +5627,7 @@ TextureImporter:
       Fireball9_16: -1971200743
       Melee_Explosion1_10: -596240767
       Melee_Explosion2_10: 1202431096
+      Fireball3_20: -126130148
       Explosion1_4: 485683991
       Explosion14_6: -671453521
       Fireball13_20: 2048390776
@@ -4812,12 +5636,15 @@ TextureImporter:
       Fireball13_45: 597929359
       Fireball12_1: -1157574223
       Melee_Explosion1_6: -807874708
+      Fireball3_38: 849455902
       Fireball1_16: -1004688329
+      Fireball3_13: -565639271
       Fireball13_33: -193701515
       Fireball14_6: -766548896
-      Fireball9_18: -425003476
+      Fireball3_21: 1189730973
       Melee_Explosion2_7: 1647646328
       Fireball13_30: 1248037136
+      Fireball9_18: -425003476
       Fireball13_3: 1136226465
       Fireball12_19: -2010126221
       Fireball1_7: 221732102
@@ -4825,11 +5652,13 @@ TextureImporter:
       Fireball13_1: 401441076
       Fireball1_17: 1670429698
       Fireball14_2: 1695494627
-      Melee_Explosion1_1: -325828612
+      Fireball3_7: -183565566
       Fireball12_18: -487863486
       Fireball13_46: -1683966981
       Fireball13_36: 84903047
       Fireball4_2: 2043752195
+      Fireball3_8: 883205031
+      Melee_Explosion1_1: -325828612
       Fireball13_4: 1231092693
       Fireball9_13: -214389283
       Fireball14_7: 1980939431
@@ -4837,13 +5666,16 @@ TextureImporter:
       Fireball14_10: 1486299161
       Fireball4_3: 99896642
       Fireball13_5: 819056009
+      Fireball3_39: 309461151
       Explosion13_11: -960184109
       Fireball9_3: -1387824173
       Melee_Explosion3_1: -1369261093
+      Fireball3_25: 2061391154
       Fireball13_44: 2078263205
       Fireball2_3: 338352539
       Fireball13_6: -1381810304
       Explosion14_11: 1806579713
+      Fireball3_16: -1242256680
       Explosion13_18: -1985576093
       Fireball14_8: -1796180976
       Explosion14_13: 1096379271
@@ -4855,7 +5687,9 @@ TextureImporter:
       Fireball9_6: -2110331926
       Fireball9_17: 1161856800
       Explosion13_13: -1643605479
+      Fireball3_36: 1220164395
       Fireball12_8: -890008954
+      Fireball3_19: 452389603
       Explosion11_4: -1669615496
       Explosion2_5: -1852441942
       Explosion11_2: -1664267348
@@ -4878,6 +5712,7 @@ TextureImporter:
       Melee_Explosion2_4: -2023783723
       Explosion13_14: -694456131
       Explosion13_9: -165679423
+      Fireball3_34: -2057700771
       Melee_Explosion2_2: -1255246896
       Explosion14_12: -1084695752
       Fireball13_18: 1747038463
@@ -4894,6 +5729,8 @@ TextureImporter:
       Fireball13_25: 837561556
       Explosion2_6: 134200757
       Fireball1_18: -1385414088
+      Fireball3_17: -1388078872
+      Fireball3_1: -964201804
       Fireball9_15: -807554668
       Explosion1_1: 1445283079
       Fireball1_15: -202152581
@@ -4902,6 +5739,9 @@ TextureImporter:
       Fireball1_11: -2125533998
       Fireball12_5: 59520706
       Fireball12_15: 416321311
+      Fireball3_12: -112376963
+      Fireball3_5: -212462321
+      Fireball3_33: 666009587
       Fireball9_4: 1175705637
       Fireball9_7: -195692231
       Fireball12_16: 1733503290
@@ -4912,12 +5752,15 @@ TextureImporter:
       Explosion9_1: -1380590932
       Explosion14_5: -1712899234
       Fireball4_4: 618355439
+      Fireball3_3: -1547797282
+      Fireball3_22: 383653886
       Melee_Explosion1_5: 590951446
       Explosion13_3: -672746494
       Fireball13_40: 1361869816
       Fireball13_43: -267627895
       Fireball9_8: -1051802938
       Fireball13_37: -4876727
+      Fireball3_4: -2066526634
       Fireball11: -1130929247
       Fireball9_9: -1165743828
       Explosion1_3: -1199116736
@@ -4933,12 +5776,14 @@ TextureImporter:
       Explosion9_2: -183399873
       Explosion14_10: 208296716
       Fireball13_19: 955486094
+      Fireball3_18: 707996963
       Melee_Explosion3_3: -1130075929
       Explosion13_7: -551709478
       Fireball1_1: 1291863840
       Explosion13_8: -1467100775
       Fireball12_4: -349750011
       Fireball9_11: -385867571
+      Fireball3_9: 1445452779
       Explosion13_15: 1232974723
       Fireball14_9: -448287066
       Fireball8_4: 1313562959
@@ -4946,15 +5791,21 @@ TextureImporter:
       Fireball12_14: 979649091
       Fireball12_7: 1465331085
       Fireball12_11: 1973004774
+      Fireball3_27: -1627877571
       Explosion4_4: 529722540
+      Fireball3_15: -324910094
       Fireball12_3: -1750781724
+      Fireball3_11: -640381768
+      Fireball3_35: 1443629058
       Fireball13_2: 1020695460
       Fireball9_14: -914568872
+      Fireball3_31: -1718566135
       Melee_Explosion3_8: 1948037694
       Fireball12_2: 1246845998
       Fireball14_12: -1633857794
       Melee_Explosion1_3: -2101203525
       Fireball2_2: -1622055635
+      Fireball3_10: 151945452
       Fireball13_47: 1094124692
       Fireball13_9: 212922281
       Explosion14_3: 1992526958
@@ -4963,9 +5814,11 @@ TextureImporter:
       Melee_Explosion1_8: 1264066452
       Explosion14_2: -453117291
       Explosion4_2: 404126875
+      Fireball3_23: -732623591
       Explosion14_8: -1229350950
       Explosion13_16: -1287932577
       Fireball12_6: -2038707632
+      Fireball3_29: 176225903
       Melee_Explosion2_1: 751107008
       Explosion2_3: 24875455
       Melee_Explosion1_4: -273035828
@@ -4973,11 +5826,13 @@ TextureImporter:
       Fireball14_1: 1533774503
       Fireball12_17: -1490204567
       Fireball9_10: -1593138871
+      Fireball3_6: 410743922
       Fireball14_5: -1174755815
       Fireball1_8: -247331661
       Fireball12_9: 25189585
       Fireball13_12: 1666505215
       Melee_Explosion2_3: 393482435
+      Fireball3_32: 1314319687
       Explosion9_7: -243831281
       Fireball13_17: -1239034409
       Fireball9_5: -1221526928
@@ -4987,15 +5842,18 @@ TextureImporter:
       Melee_Explosion2_5: 212860427
       Melee_Explosion3_4: 95040027
       Explosion13_2: 891777805
+      Fireball3_24: -1930227754
       Melee_Explosion1_7: -820952490
       Fireball13_11: -255062765
       Melee_Explosion1_2: -1743005281
       Explosion2_4: 1383091059
-      Melee_Explosion3_2: 285241249
+      Fireball3_26: -1463775028
       Fireball1_14: -1534297531
+      Melee_Explosion3_2: 285241249
       Fireball13_24: -665766764
-      Fireball4_1: -1840552404
       Fireball14_3: -622228842
+      Fireball4_1: -1840552404
+      Fireball3_37: -306504328
       Fireball9_12: 777939055
       Explosion14_1: -175082311
       Explosion14_4: 1855295939

@@ -7,6 +7,7 @@ namespace shared {
         public static RepeatedField<Buff> defaultTemplateBuffList = new RepeatedField<Buff>(); 
         public static RepeatedField<Debuff> defaultTemplateDebuffList = new RepeatedField<Debuff>(); 
         public static Inventory defaultTemplateInventory = new Inventory(); 
+        public static RepeatedField<BulletImmuneRecord> defaultTemplateBulletImmuneRecords = new RepeatedField<BulletImmuneRecord>(); 
 
         public static Collider NewConvexPolygonCollider(ConvexPolygon srcPolygon, float spaceOffsetX, float spaceOffsetY, int aMaxTouchingCellsCnt, object? data) {
             if (null == srcPolygon) throw new ArgumentNullException("Null srcPolygon is not allowed in `NewConvexPolygonCollider`");
@@ -97,6 +98,11 @@ namespace shared {
             dst.SkillId = skillId;
         }
 
+        public static void AssignToBulletImmuneRecord(int bulletLocalId, int remainingLifetimeRdfCount, BulletImmuneRecord dst) {
+            dst.BulletLocalId = bulletLocalId; 
+            dst.RemainingLifetimeRdfCount = remainingLifetimeRdfCount; 
+        }
+
         public static void AssignToCharacterDownsyncFromCharacterConfig(CharacterConfig chConfig, CharacterDownsync dst) {
             dst.SpeciesId = chConfig.SpeciesId;
             dst.OmitGravity = chConfig.OmitGravity;
@@ -107,7 +113,7 @@ namespace shared {
             dst.Speed = chConfig.Speed;
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, bool omitGravity, bool omitSoftPushback, bool repelSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, int publishingEvtSubIdUponKilled, ulong publishingEvtMaskUponKilled, int subscriptionId, bool jumpHolding, int btnBHoldingRdfCount, int remainingAirJumpQuota, int remainingAirDashQuota, int killedToDropConsumableSpeciesId, int killedToDropBuffSpeciesId, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, bool omitGravity, bool omitSoftPushback, bool repelSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, int publishingEvtSubIdUponKilled, ulong publishingEvtMaskUponKilled, int subscriptionId, bool jumpHolding, int btnBHoldingRdfCount, int remainingAirJumpQuota, int remainingAirDashQuota, int killedToDropConsumableSpeciesId, int killedToDropBuffSpeciesId, RepeatedField<BulletImmuneRecord> prevBulletImmuneRecords, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -176,6 +182,7 @@ namespace shared {
             dst.KilledToDropConsumableSpeciesId = killedToDropConsumableSpeciesId;
             dst.KilledToDropBuffSpeciesId = killedToDropBuffSpeciesId;
 
+            // [WARNING] When "defaultTemplateBuffList" is passed in, it's equivalent to just TERMINATING at the very beginning.
             int newBuffCnt = 0, prevBuffI = 0; 
             while (prevBuffI < prevBuffList.Count) {
                 var cand = prevBuffList[prevBuffI++];
@@ -200,6 +207,7 @@ namespace shared {
                 AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, dst.BuffList[newBuffCnt]);
             }
 
+            // [WARNING] When "defaultTemplateDebuffList" is passed in, it's equivalent to just TERMINATING at the very beginning.
             int newDebuffCnt = 0, prevDebuffI = 0; 
             while (prevDebuffI < prevDebuffList.Count) {
                 var cand = prevDebuffList[prevDebuffI++];
@@ -225,6 +233,7 @@ namespace shared {
             }
 
             if (null != prevInventory) {
+                // [WARNING] When "defaultTemplateInventory" is passed in, it's equivalent to just TERMINATING at the very beginning.
                 int newInventoryCnt = 0, prevInventoryI = 0;
                 while (prevInventoryI < prevInventory.Slots.Count) {
                     var cand = prevInventory.Slots[prevInventoryI++];
@@ -247,6 +256,27 @@ namespace shared {
                     ++newInventoryCnt;
                 }
                 if (newInventoryCnt < dst.Inventory.Slots.Count) dst.Inventory.Slots[newInventoryCnt].StockType = InventorySlotStockType.NoneIv;
+            }
+
+            if (null != prevBulletImmuneRecords) {
+                // [WARNING] When "defaultTemplateBulletImmuneRecords" is passed in, it's equivalent to just TERMINATING at the very beginning.
+                int newCnt = 0, prevCnt = 0;
+                while (prevCnt < prevBulletImmuneRecords.Count) {
+                    var cand = prevBulletImmuneRecords[prevCnt++];
+                    if (TERMINATING_BULLET_LOCAL_ID == cand.BulletLocalId) break;
+                    if (isRdfFrameElapsing) {
+                        if (0 >= cand.RemainingLifetimeRdfCount) {
+                            continue;
+                        }
+                        int newRemainingLifetimeRdfCount = cand.RemainingLifetimeRdfCount - 1;
+                        if (0 > newRemainingLifetimeRdfCount) newRemainingLifetimeRdfCount = 0;
+                        AssignToBulletImmuneRecord(cand.BulletLocalId, newRemainingLifetimeRdfCount, dst.BulletImmuneRecords[newCnt]);
+                    } else {
+                        AssignToBulletImmuneRecord(cand.BulletLocalId, cand.RemainingLifetimeRdfCount, dst.BulletImmuneRecords[newCnt]);
+                    }
+                    ++newCnt;
+                }
+                if (newCnt < dst.BulletImmuneRecords.Count) dst.BulletImmuneRecords[newCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
             }
         }
 
@@ -375,7 +405,7 @@ namespace shared {
             return single;
         }
 
-        public static CharacterDownsync NewPreallocatedCharacterDownsync(int buffCapacity, int debuffCapacity, int inventoryCapacity) {
+        public static CharacterDownsync NewPreallocatedCharacterDownsync(int buffCapacity, int debuffCapacity, int inventoryCapacity, int bulletImmuneRecordCapacity) {
             var single = new CharacterDownsync();
             single.Id = TERMINATING_PLAYER_ID;
             single.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE;
@@ -401,6 +431,12 @@ namespace shared {
                     single.Inventory.Slots.Add(singleSlot);
                 }
             }
+            for (int i = 0; i < bulletImmuneRecordCapacity; i++) {
+                var singleRecord = new BulletImmuneRecord {
+                    BulletLocalId = TERMINATING_BULLET_LOCAL_ID,
+                };
+                single.BulletImmuneRecords.Add(singleRecord);
+            }
             
             return single;
         }
@@ -411,12 +447,12 @@ namespace shared {
             ret.BulletLocalIdCounter = 0;
 
             for (int i = 0; i < roomCapacity; i++) {
-                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY);
+                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, DEFAULT_PER_CHARACTER_INVENTORY_CAPACITY, DEFAULT_PER_CHARACTER_IMMUNE_BULLET_RECORD_CAPACITY);
                 ret.PlayersArr.Add(single);
             }
 
             for (int i = 0; i < preallocNpcCount; i++) {
-                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, 0);
+                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, 0, DEFAULT_PER_CHARACTER_IMMUNE_BULLET_RECORD_CAPACITY);
                 ret.NpcsArr.Add(single);
             }
 
@@ -474,14 +510,14 @@ namespace shared {
 
             for (int i = 0; i < roomCapacity; i++) {
                 var srcCh = src.PlayersArr[i];
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHolding, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, dst.PlayersArr[i]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHolding, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.BulletImmuneRecords, dst.PlayersArr[i]);
             }
 
             int npcCnt = 0;
             while (npcCnt < src.NpcsArr.Count) {
                 var srcCh = src.NpcsArr[npcCnt];
                 if (TERMINATING_PLAYER_ID == srcCh.Id) break;
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHolding, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, dst.NpcsArr[npcCnt]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHolding, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.BulletImmuneRecords, dst.NpcsArr[npcCnt]);
                 npcCnt++;
             }
             dst.NpcsArr[npcCnt].Id = TERMINATING_PLAYER_ID;
@@ -822,6 +858,11 @@ namespace shared {
 
         public BulletConfig SetMhType(MultiHitType mhType) {
             MhType = mhType; 
+            return this;
+        }
+
+        public BulletConfig SetRemainsUponHit(bool val) {
+            RemainsUponHit = val; 
             return this;
         }
 
