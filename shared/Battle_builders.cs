@@ -434,6 +434,7 @@ namespace shared {
             for (int i = 0; i < bulletImmuneRecordCapacity; i++) {
                 var singleRecord = new BulletImmuneRecord {
                     BulletLocalId = TERMINATING_BULLET_LOCAL_ID,
+                    RemainingLifetimeRdfCount = 0,
                 };
                 single.BulletImmuneRecords.Add(singleRecord);
             }

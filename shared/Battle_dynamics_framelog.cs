@@ -39,8 +39,12 @@ namespace shared {
             var recordsSb = new List<String>();
             for (int k = 0; k < records.Count; k++) {
                 var record = records[k];
+                if (null == record) break;
                 if (TERMINATING_BULLET_LOCAL_ID == record.BulletLocalId) break;
-                recordsSb.Add(String.Format("{bid:{0},lfc:{1}}", record.BulletLocalId, record.RemainingLifetimeRdfCount));
+                try {
+                    recordsSb.Add(String.Format("{bid:{0},lfc:{1}}", record.BulletLocalId, record.RemainingLifetimeRdfCount));
+                } catch (Exception _) {
+                }
             }
             return String.Join('|', recordsSb);
         }
