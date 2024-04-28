@@ -255,12 +255,10 @@
    </properties>
   </object>
   <object id="406" name="SlopeR" x="944" y="1936">
-   <polyline points="0,0 -240,96 0,96"/>
+   <polyline points="-240,96 50,96 50,0 0,0"/>
   </object>
-  <object id="407" name="TerraceR" x="944" y="1936" width="48" height="96"/>
-  <object id="408" name="TerraceL" x="32" y="1936" width="48" height="96"/>
   <object id="409" name="SlopeL" x="80" y="1936">
-   <polyline points="0,96 240,96 0,0"/>
+   <polyline points="-50,96 240,96 0,0 -50,0"/>
   </object>
   <object id="428" name="Ground" x="536" y="2016" width="504" height="64">
    <properties>

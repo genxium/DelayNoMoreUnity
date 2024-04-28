@@ -210,6 +210,8 @@ namespace shared {
 
         public static int SP_ATK_LOOKUP_FRAMES = 5;
         public static float SNAP_INTO_PLATFORM_OVERLAP = 0.1f;
+        public static float GROUNDWAVE_SNAP_INTO_PLATFORM_OVERLAP = 0.8f;
+
         public static float SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE = 8.0f; // Currently only supports rectilinear rectangle shape; kindly note that "8.0f" is half the minimum height in any feasible map of this game!
         public static int SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL = (int)(SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); 
         public static int SLIP_JUMP_CHARACTER_DROP_VIRTUAL = (SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL << 1) + (SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL >> 1); 

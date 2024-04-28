@@ -167,7 +167,7 @@ namespace shared {
                 float normAlignmentWithHorizon1 = (overlapResult.OverlapX * +1f);
                 float normAlignmentWithHorizon2 = (overlapResult.OverlapX * -1f);
                 bool isWall = (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1 || VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2);
-                // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the horizontal edge is chosen as primary!
+                // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the HORIZONTAL edge is chosen as primary!
                 if (!isWall && primaryIsWall) {
                     // Initial non-wall transition
                     primaryOverlapIndex = retCnt;
@@ -232,6 +232,8 @@ namespace shared {
             int retCnt = 0;
             primaryOverlapIndex = -1;
             float primaryOverlapMag = float.MinValue;
+            bool primaryIsWall = false; // [WARNING] OPPOSITE preference w.r.t. "calcHardPushbacksNormsForCharacter" here! 
+            float primaryNonWallTop = -MAX_FLOAT32, primaryWallTop = -MAX_FLOAT32;
             residueCollided.Clear();
             bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
             if (!collided) {
@@ -245,9 +247,9 @@ namespace shared {
                 if (!exists || null == bCollider) {
                     break;
                 }
-                bool isAnotherHardPushbackTrap = false;
+                bool isAnotherHardPushbackTrap = false; 
                 bool isAnActualBarrier = false;
-
+                bool providesSlipJump = false;
                 switch (bCollider.Data) {
                     case Pickable v0:
                     case CharacterDownsync v1:
@@ -258,6 +260,7 @@ namespace shared {
                     case TrapColliderAttr v5:
                         var trap = currRenderFrame.TrapsArr[v5.TrapLocalId];
                         isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
+                        providesSlipJump = v5.ProvidesSlipJump;
                         break;
                     default:
                         // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
@@ -280,17 +283,48 @@ namespace shared {
                     continue;
                 }
 
-                // Same polarity
-                if (overlapResult.OverlapMag > primaryOverlapMag) {
+                float normAlignmentWithHorizon1 = (overlapResult.OverlapX * +1f);
+                float normAlignmentWithHorizon2 = (overlapResult.OverlapX * -1f);
+                float normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
+                bool isAlongForwardPropagation = (0 <= bullet.VelX * (bCollider.X-aCollider.X)); // [WARNING] Character handles this (equivalently) outside of "calcHardPushbacksNormsForCharacter", but for bullets I temporarily found it more convenient handling here, there might be some room for enhancement. 
+                bool isSqueezer = (-SNAP_INTO_PLATFORM_THRESHOLD > normAlignmentWithGravity);
+                if (isSqueezer && providesSlipJump) {
+                    continue;
+                }
+                bool isWall = !providesSlipJump && (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1 || VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2); // [WARNING] Deliberately excluding "providesSlipJump" traps for easier handling of intermittent flat terrains as well as better player intuition!
+                float barrierTop = bCollider.Y + bCollider.H;
+                // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the VERTICAL edge is chosen as primary!
+                if (isWall && !primaryIsWall) {
+                    if (!isAlongForwardPropagation) {
+                        continue;
+                    }
+                    if (primaryNonWallTop > barrierTop) {
+                        // If primary non-wall is traversed before wall
+                        continue;
+                    } 
+                    // Initial wall transition
                     primaryOverlapIndex = retCnt;
                     primaryOverlapMag = overlapResult.OverlapMag;
                     overlapResult.cloneInto(ref primaryOverlapResult);
+                    primaryIsWall = isWall;
+                    primaryWallTop = barrierTop;
+                } else if (!isWall && primaryIsWall && barrierTop < primaryWallTop) {
+                    // Just skip, once the bullet is checked to collide with a wall, any parasitic non-wall collision would be ignored...
                 } else {
-                    if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                    // Same polarity
+                    if (overlapResult.OverlapMag > primaryOverlapMag) {
                         primaryOverlapIndex = retCnt;
                         primaryOverlapMag = overlapResult.OverlapMag;
                         overlapResult.cloneInto(ref primaryOverlapResult);
+                    } else {
+                        if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                            primaryOverlapIndex = retCnt;
+                            primaryOverlapMag = overlapResult.OverlapMag;
+                            overlapResult.cloneInto(ref primaryOverlapResult);
+                        }
                     }
+
+                    primaryNonWallTop = barrierTop;
                 }
 
                 hardPushbacks[retCnt].X = pushbackX;

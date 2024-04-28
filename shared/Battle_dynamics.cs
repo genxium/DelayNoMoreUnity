@@ -679,7 +679,7 @@ namespace shared {
                 var src = currRenderFrameBullets[i];
                 if (TERMINATING_BULLET_LOCAL_ID == src.BattleAttr.BulletLocalId) break;
                 int j = src.BattleAttr.OffenderJoinIndex - 1;
-                if (j >= roomCapacity && j >= npcCnt) {
+                if (j - roomCapacity >= currRenderFrame.NpcsArr.Count) {
                     // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "BattleAttr.OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
                     continue;
                 }
@@ -775,7 +775,8 @@ namespace shared {
                         var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(proposedNewVx, proposedNewVy);
                         var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(src.Config.HitboxSizeX + src.Config.HitboxSizeIncX*src.FramesInBlState, src.Config.HitboxSizeY + src.Config.HitboxSizeIncY*src.FramesInBlState);
                         var newBulletCollider = dynamicRectangleColliders[colliderCnt];
-                        UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst, dst.Config.CollisionTypeMask);
+                        float overlap = (BulletType.GroundWave == src.Config.BType ? GROUNDWAVE_SNAP_INTO_PLATFORM_OVERLAP : SNAP_INTO_PLATFORM_OVERLAP);
+                        UpdateRectCollider(newBulletCollider, bulletCx, bulletCy, hitboxSizeCx, hitboxSizeCy, overlap, overlap, overlap, overlap, 0, 0, dst, dst.Config.CollisionTypeMask);
                         effPushbacks[colliderCnt].X = 0;
                         effPushbacks[colliderCnt].Y = 0;
                         colliderCnt++;
@@ -945,6 +946,7 @@ namespace shared {
                 thatCharacterInNextFrame.OnSlope = (!thatCharacterInNextFrame.OnWall && 0 != primaryOverlapResult.OverlapY && 0 != primaryOverlapResult.OverlapX);
                 // Kindly remind that (primaryOverlapResult.OverlapX, primaryOverlapResult.OverlapY) points INTO the slope :) 
                 float projectedVel = (thatCharacterInNextFrame.VelX * primaryOverlapResult.OverlapX + thatCharacterInNextFrame.VelY * primaryOverlapResult.OverlapY); // This value is actually in VirtualGrid unit, but converted to float, thus it'd be eventually rounded 
+                // [WARNING] The condition "0 > projectedVel" is just to prevent character from unintended sliding on slope due to "CharacterConfig.DownSlopePrimerVelY" -- it's NOT applicable for bullets!
                 bool goingDown = (thatCharacterInNextFrame.OnSlope && !currCharacterDownsync.JumpStarted && thatCharacterInNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
                 if (goingDown) {
                     /*
@@ -1317,20 +1319,17 @@ namespace shared {
                 var skillConfig = skills[bulletNextFrame.BattleAttr.SkillId];
                 if (0 < hardPushbackCnt) {
                     if (BulletType.GroundWave == bulletConfig.BType) {
-                        processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
-                        float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);
+                        effPushbacks[i].X += (primaryOverlapResult.OverlapMag - GROUNDWAVE_SNAP_INTO_PLATFORM_OVERLAP) * primaryOverlapResult.OverlapX;
+                        effPushbacks[i].Y += (primaryOverlapResult.OverlapMag - GROUNDWAVE_SNAP_INTO_PLATFORM_OVERLAP) * primaryOverlapResult.OverlapY;
+                        float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f); // [WARNING] "calcHardPushbacksNormsForBullet" takes wall for a higher priority than flat ground!  
                         if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
                             // [WARNING] i.e. landedOnGravityPushback = true
-                            bool onSlope = (0 != primaryOverlapResult.OverlapY && 0 != primaryOverlapResult.OverlapX);
                             // Kindly remind that (primaryOverlapResult.OverlapX, primaryOverlapResult.OverlapY) points INTO the slope :) 
                             float projectedVel = (bulletNextFrame.VelX * primaryOverlapResult.OverlapX + bulletNextFrame.VelY * primaryOverlapResult.OverlapY); // This value is actually in VirtualGrid unit, but converted to float, thus it'd be eventually rounded 
-                            bool goingDown = (onSlope && bulletNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
-                            if (goingDown) {
-                                float newVelXApprox = bulletNextFrame.VelX - primaryOverlapResult.OverlapX * projectedVel;
-                                float newVelYApprox = bulletNextFrame.VelY - primaryOverlapResult.OverlapY * projectedVel;
-                                bulletNextFrame.VelX = (int)Math.Floor(newVelXApprox);
-                                bulletNextFrame.VelY = (int)Math.Floor(newVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
-                            }
+                            float newVelXApprox = bulletNextFrame.VelX - primaryOverlapResult.OverlapX * projectedVel;
+                            float newVelYApprox = bulletNextFrame.VelY - primaryOverlapResult.OverlapY * projectedVel;
+                            bulletNextFrame.VelX = (int)Math.Floor(newVelXApprox);
+                            bulletNextFrame.VelY = (int)Math.Floor(newVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
                         } else {
                             // [WARNING] This is the definition of a GroundWave!
                             exploded = true;
@@ -1339,6 +1338,12 @@ namespace shared {
                     } else {
                         // [WARNING] If the bullet "collisionTypeMask" is barrier penetrating, it'd not have reached "0 < hardPushbackCnt".
                         exploded = true;
+                    }
+                } else {
+                    if (BulletType.GroundWave == bulletConfig.BType) {
+                        // [WARNING] This is the definition of a GroundWave!
+                        exploded = true;
+                        explodedOnAnotherHarderBullet = true;
                     }
                 }
 
@@ -1555,7 +1560,7 @@ namespace shared {
                             bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
                         }
                     } else if (BulletType.Fireball == bulletNextFrame.Config.BType || BulletType.GroundWave == bulletNextFrame.Config.BType) {
-                        if (!bulletConfig.RemainsUponHit) {
+                        if (!bulletConfig.RemainsUponHit || explodedOnAnotherHarderBullet) {
                             if (BulletState.Exploding != bulletNextFrame.BlState) {
                                 bulletNextFrame.BlState = BulletState.Exploding;
                                 bulletNextFrame.FramesInBlState = 0;
@@ -1914,6 +1919,7 @@ namespace shared {
                         case InAirIdle2ByJump:
                         case InAirIdle1ByWallJump:
                             bool hasBeenOnWallChState = (OnWallIdle1 == currCharacterDownsync.CharacterState);
+                            // [WARNING] "MAGIC_FRAMES_TO_BE_ON_WALL" allows "InAirIdle1ByWallJump" to leave the current wall within a reasonable count of renderFrames, instead of always forcing "InAirIdle1ByWallJump" to immediately stick back to the wall!
                             bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
                             if (!isInJumpStartup(thatCharacterInNextFrame) && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame) && (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState)) {
                                 thatCharacterInNextFrame.CharacterState = OnWallIdle1;
