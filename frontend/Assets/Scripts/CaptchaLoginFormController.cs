@@ -20,11 +20,15 @@ public class CaptchaLoginFormController : MonoBehaviour {
 	public Button GetCaptchaButton; 
 	public Button LoginActionButton;
     private WsSessionManager.OnLoginResult onLoginResultCallback = null;
+    public delegate void SimpleDelegate();
+    SimpleDelegate postCancelledCb = null;
 
     public Image CancelButton;
 
-    public void SetOnLoginResultCallback(WsSessionManager.OnLoginResult newOnLoginResultCallback) {
+    public void SetOnLoginResultCallback(WsSessionManager.OnLoginResult newOnLoginResultCallback, SimpleDelegate thePostPostCancelledCb) {
         onLoginResultCallback = newOnLoginResultCallback;
+        postCancelledCb = thePostPostCancelledCb;
+        toggleUIInteractability(true);
     }
 
     public void ClearOnLoginResultCallback() {
@@ -43,7 +47,9 @@ public class CaptchaLoginFormController : MonoBehaviour {
     public void OnCancel() {
         ClearOnLoginResultCallback();
         gameObject.SetActive(false);
-        toggleUIInteractability(true);
+        if (null != postCancelledCb) {
+            postCancelledCb();
+        }
     }
 
     public void toggleUIInteractability(bool enabled) {

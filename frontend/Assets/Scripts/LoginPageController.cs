@@ -9,8 +9,11 @@ public class LoginPageController : MonoBehaviour {
     public TMP_Text appVersion;
 
     private void Start() {
+        CaptchaLoginFormController.SimpleDelegate captchaLoginFormPostCancelledCb = () => {
+            reset();
+        };
         ModeSelectGroup.OnLoginRequiredDelegate onArenaLoginRequired = (WsSessionManager.OnLoginResult newOnLoginResultCallback) => {
-            captchaLoginForm.SetOnLoginResultCallback(newOnLoginResultCallback);
+            captchaLoginForm.SetOnLoginResultCallback(newOnLoginResultCallback, captchaLoginFormPostCancelledCb);
             captchaLoginForm.gameObject.SetActive(true);
         };
         modeSelectGroup.SetOnLoginRequired(onArenaLoginRequired);
@@ -25,11 +28,19 @@ public class LoginPageController : MonoBehaviour {
         loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
         appVersion.text = Application.version;
 
-        allSettingsPanel.SetCallbacks();
+        AllSettings.SimpleDelegate allSettingsPostCancelledCb = () => {
+            reset();
+        };
+        allSettingsPanel.SetCallbacks(allSettingsPostCancelledCb);
+    }
+
+    private void reset() {
+        loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
+        toggleUIInteractability(true);
     }
 
     private void Awake() {
-        loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
+        reset();
     }
 
     void toggleUIInteractability(bool enabled) {

@@ -1,6 +1,4 @@
 using shared;
-using System.Collections;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
@@ -26,13 +24,14 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
     }
 
     public void ConfirmSelection() {
+        if (!currentSelectGroupEnabled) return;
         parentUIInteractabilityToggle(false);
         switch (selectedIdx) {
             case 0:
                 enterStoryMode();
             break;
             case 1:
-                TryEnteringOnlineArena();
+                tryEnteringOnlineArena();
             break;
             case 2:
                 enterAllSettings();
@@ -40,12 +39,6 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
             default:
             break;
         }
-        StartCoroutine(delayToShowParentUI());
-    }
-
-    protected IEnumerator delayToShowParentUI() {
-        yield return new WaitForSeconds(1);
-        parentUIInteractabilityToggle(true);
     }
 
     private void enterStoryMode() {
@@ -65,7 +58,7 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
         SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
     };
 
-    public void TryEnteringOnlineArena() {
+    public void tryEnteringOnlineArena() {
         if (WsSessionManager.Instance.IsPossiblyLoggedIn()) {
             SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
         } else {
@@ -85,6 +78,7 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
     }
 
     public override void onCellSelected(int newSelectedIdx) {
+        if (!currentSelectGroupEnabled) return;
         if (newSelectedIdx == selectedIdx) {
             ConfirmSelection();
         } else {
@@ -95,6 +89,7 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
     }
 
     public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
+        if (!currentSelectGroupEnabled) return;
         var kctrl = (KeyControl)context.control;
         if (null == kctrl || !kctrl.wasReleasedThisFrame) return;
         switch (kctrl.keyCode) {
