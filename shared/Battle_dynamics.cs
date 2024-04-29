@@ -295,7 +295,7 @@ namespace shared {
                     targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
                     if (0 == targetSlotNext.Quota) {
                         targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
-                        logger.LogInfo(String.Format("At rdfId={0}, player joinIndex={1} starts reloading inventoryBtnB", rdfId, currCharacterDownsync.JoinIndex));
+                        //logger.LogInfo(String.Format("At rdfId={0}, player joinIndex={1} starts reloading inventoryBtnB", rdfId, currCharacterDownsync.JoinIndex));
                     }
                     slotUsed = true;
                 }
@@ -950,7 +950,7 @@ namespace shared {
                 bool goingDown = (thatCharacterInNextFrame.OnSlope && !currCharacterDownsync.JumpStarted && thatCharacterInNextFrame.VelY <= 0 && 0 > projectedVel); // We don't care about going up, it's already working...  
                 if (goingDown) {
                     /*
-                       if (2 == currCharacterDownsync.SpeciesId) {
+                       if (1 == currCharacterDownsync.JoinIndex) {
                        logger.LogInfo(String.Format("Rdf.id={0} BEFOER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
                        }
                      */
@@ -959,7 +959,7 @@ namespace shared {
                     thatCharacterInNextFrame.VelX = (int)Math.Floor(newVelXApprox);
                     thatCharacterInNextFrame.VelY = (int)Math.Floor(newVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
                     /*
-                       if (2 == currCharacterDownsync.SpeciesId) {
+                       if (1 == currCharacterDownsync.JoinIndex) {
                        logger.LogInfo(String.Format("Rdf.id={0} AFTER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
                        }
                      */
@@ -984,7 +984,7 @@ namespace shared {
                     int origResidueCollidedSt = residueCollided.StFrameId, origResidueCollidedEd = residueCollided.EdFrameId; 
                     float primarySoftOverlapMagSquared = float.MinValue, primarySoftPushbackX = float.MinValue, primarySoftPushbackY = float.MinValue;
                     /*
-                       if (0 == currCharacterDownsync.SpeciesId) {
+                       if (1 == currCharacterDownsync.JoinIndex) {
                        logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
                        }
                      */
@@ -1389,7 +1389,7 @@ namespace shared {
                                 }
                             }
                             if (shouldBeImmune) {
-                                logger.LogInfo("joinIndex = " + atkedCharacterInCurrFrame.JoinIndex + " is immune to bulletLocalId= " + bulletNextFrame.BattleAttr.BulletLocalId + " at rdfId=" + currRenderFrame.Id);
+                                //logger.LogInfo("joinIndex = " + atkedCharacterInCurrFrame.JoinIndex + " is immune to bulletLocalId= " + bulletNextFrame.BattleAttr.BulletLocalId + " at rdfId=" + currRenderFrame.Id);
                                 break;
                             }
                             
@@ -1408,11 +1408,11 @@ namespace shared {
                                 int nextImmuneRcdI = immuneRcdI; 
                                 if (nextImmuneRcdI == atkedCharacterInNextFrame.BulletImmuneRecords.Count) {
                                     nextImmuneRcdI = 0;
-                                    logger.LogWarn("Replacing the first immune record of joinIndex = " + atkedCharacterInNextFrame.JoinIndex + " due to overflow!");
+                                    //logger.LogWarn("Replacing the first immune record of joinIndex = " + atkedCharacterInNextFrame.JoinIndex + " due to overflow!");
                                 } 
-                                AssignToBulletImmuneRecord(bulletNextFrame.BattleAttr.BulletLocalId, (bulletConfig.HitStunFrames << 2), atkedCharacterInNextFrame.BulletImmuneRecords[nextImmuneRcdI]);
+                                AssignToBulletImmuneRecord(bulletNextFrame.BattleAttr.BulletLocalId, (bulletConfig.HitStunFrames << 3), atkedCharacterInNextFrame.BulletImmuneRecords[nextImmuneRcdI]);
 
-                                logger.LogInfo("joinIndex = " + atkedCharacterInCurrFrame.JoinIndex + " JUST BECOMES immune to bulletLocalId= " + bulletNextFrame.BattleAttr.BulletLocalId + " for rdfCount=" + bulletConfig.HitStunFrames + " at rdfId=" + currRenderFrame.Id);
+                                //logger.LogInfo("joinIndex = " + atkedCharacterInCurrFrame.JoinIndex + " JUST BECOMES immune to bulletLocalId= " + bulletNextFrame.BattleAttr.BulletLocalId + " for rdfCount=" + bulletConfig.HitStunFrames + " at rdfId=" + currRenderFrame.Id);
                             }
                             CharacterState oldNextCharacterState = atkedCharacterInNextFrame.CharacterState;
                             atkedCharacterInNextFrame.Hp -= bulletNextFrame.Config.Damage;
@@ -2455,9 +2455,11 @@ namespace shared {
             int newVirtualX = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevHitBullet.VirtualGridX;
             int newVirtualY = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY : referencePrevHitBullet.VirtualGridY;
             int groundWaveVelY = bulletConfig.DownSlopePrimerVelY;
+            /*
             if (BulletType.GroundWave == bulletConfig.BType) {
                 logger.LogInfo("At originatedRdfId=" + originatedRdfId + ", joinIndex=" + currCharacterDownsync.JoinIndex + " casted a GroundWave at activeSkillHit=" + activeSkillHit);
             }
+            */
 
             AssignToBullet(
                     bulletLocalIdCounter,

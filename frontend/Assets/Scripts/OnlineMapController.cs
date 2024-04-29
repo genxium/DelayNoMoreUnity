@@ -240,6 +240,7 @@ public class OnlineMapController : AbstractMapController {
             } else {
                 var msg = String.Format("Failed to start ws session#2: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId);
                 popupErrStackPanel(msg);
+                WsSessionManager.Instance.ClearCredentials();
                 onWsSessionClosed();
             }
         } finally {

@@ -1,9 +1,8 @@
-using UnityEngine;
 using shared;
-using static shared.CharacterState;
 using System;
 using System.Collections.Generic;
-using Story;
+using UnityEngine;
+using static shared.CharacterState;
 
 public class CharacterAnimController : MonoBehaviour {
     public int score;

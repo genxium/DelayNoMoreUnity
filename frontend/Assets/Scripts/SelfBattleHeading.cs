@@ -40,6 +40,7 @@ public class SelfBattleHeading : MonoBehaviour {
         hpBar.SetValueWithoutNotify((float)chd.Hp/ newChConfig.Hp);
         if (0 >= newChConfig.Mp) {
             mpBar.gameObject.SetActive(false);
+            mpBar.SetValueWithoutNotify(0);
         } else {
             mpBar.gameObject.SetActive(true);
             mpBar.SetValueWithoutNotify((float)chd.Mp / newChConfig.Mp);

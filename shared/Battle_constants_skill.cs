@@ -344,7 +344,7 @@ namespace shared {
         private static BulletConfig IcePillarStarterBullet = new BulletConfig {
             StartupFrames = 35,
             ActiveFrames = 500,
-            HitStunFrames = 10,
+            HitStunFrames = 20,
             BlockStunFrames = 60,
             Damage = 5,
             PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -550,9 +550,10 @@ namespace shared {
                 new[]
                 {
                 new KeyValuePair<int, Skill>(1, new Skill {
-                        RecoveryFrames = 23,
-                        RecoveryFramesOnBlock = 23,
-                        RecoveryFramesOnHit = 23,
+                        // [WARNING] The relationship between "RecoveryFrames", "StartupFrames", "HitStunFrames" and "PushbackVelX" makes sure that a MeleeBullet is counterable!
+                        RecoveryFrames = 26,
+                        RecoveryFramesOnBlock = 26,
+                        RecoveryFramesOnHit = 26,
                         MpDelta = 0,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk1
@@ -574,7 +575,7 @@ namespace shared {
                             HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             CancellableStFrame = 8,
-                            CancellableEdFrame = 22,
+                            CancellableEdFrame = 26,
                             SpeciesId = 2,
                             ExplosionSpeciesId = 2,
                             ExplosionFrames = 25,
@@ -601,7 +602,7 @@ namespace shared {
                                 StartupFrames = 3,
                                 StartupInvinsibleFrames = 2,
                                 ActiveFrames = 13,
-                                HitStunFrames = 28,
+                                HitStunFrames = 22,
                                 BlockStunFrames = 9,
                                 Damage = 8,
                                 PushbackVelX = 0,
@@ -613,7 +614,7 @@ namespace shared {
                                 HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 CancellableStFrame = 8,
-                                CancellableEdFrame = 18,
+                                CancellableEdFrame = 24,
                                 SpeciesId = 2,
                                 ExplosionSpeciesId = 2,
                                 ExplosionFrames = 25,
