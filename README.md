@@ -1,5 +1,5 @@
 # Latest tag change notes
-v1.3.9 new features
+v1.4.0 new features
 - Replaced MonkGirl by new character WitchGirl
 - Added new bullet type GroundWave
 - Added bullet immune memory mechanism for enhanced "RemainsUponHit" behaviour
