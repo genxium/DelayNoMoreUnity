@@ -165,6 +165,8 @@ public class OnlineMapController : AbstractMapController {
                     Debug.LogWarning(String.Format("Got empty inputFrameDownsyncBatch upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
                     return;
                   }
+                  readyGoPanel.hideReady();
+                  readyGoPanel.hideGo();
                   onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                   break;
                 default:

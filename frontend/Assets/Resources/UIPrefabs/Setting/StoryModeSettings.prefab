@@ -241,6 +241,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: cfd81c39-bc31-4c5f-bf23-06ce5ff310aa
     m_ActionName: StoryModeSettings/BtnCancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bf153ded-206c-4dd1-97c7-a3225ecf1c70
+    m_ActionName: Settings/BtnConfirm[/Keyboard/enter,/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dd41b011-9d21-4485-8fb2-7b5877f6abfc
+    m_ActionName: Settings/MoveByKeyboard[/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Settings
@@ -392,7 +400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4683141607386128944, guid: b0db3f6ee35a5b643b3092705d96d692, type: 3}
       propertyPath: m_Pivot.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4683141607386128944, guid: b0db3f6ee35a5b643b3092705d96d692, type: 3}
       propertyPath: m_RootOrder
@@ -404,7 +412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4683141607386128944, guid: b0db3f6ee35a5b643b3092705d96d692, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4683141607386128944, guid: b0db3f6ee35a5b643b3092705d96d692, type: 3}
       propertyPath: m_AnchorMin.x
@@ -412,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4683141607386128944, guid: b0db3f6ee35a5b643b3092705d96d692, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4683141607386128944, guid: b0db3f6ee35a5b643b3092705d96d692, type: 3}
       propertyPath: m_SizeDelta.x

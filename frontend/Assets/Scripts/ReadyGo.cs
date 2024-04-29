@@ -17,10 +17,11 @@ public class ReadyGo : MonoBehaviour {
 
     }
 
-    void hideReady() {
+    public void hideReady() {
         ready.gameObject.transform.localScale = Vector3.zero;
     }
-    void hideGo() {
+
+    public void hideGo() {
         go.gameObject.transform.localScale = Vector3.zero;
     }
 
