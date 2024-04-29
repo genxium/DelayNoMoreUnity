@@ -291,24 +291,29 @@ namespace shared {
                 if (isSqueezer && providesSlipJump) {
                     continue;
                 }
-                bool isWall = !providesSlipJump && (VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon1 || VERTICAL_PLATFORM_THRESHOLD < normAlignmentWithHorizon2); // [WARNING] Deliberately excluding "providesSlipJump" traps for easier handling of intermittent flat terrains as well as better player intuition!
+                /*
+                 [WARNING] Deliberately excluding "providesSlipJump" traps for easier handling of intermittent flat terrains as well as better player intuition!
+
+                The "isWall" criteria here is deliberately made different from character counterpart!
+                 */
+                bool isWall = !providesSlipJump && (SNAP_INTO_PLATFORM_THRESHOLD >= normAlignmentWithGravity);
                 float barrierTop = bCollider.Y + bCollider.H;
                 // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the VERTICAL edge is chosen as primary!
                 if (isWall && !primaryIsWall) {
                     if (!isAlongForwardPropagation) {
                         continue;
                     }
-                    if (primaryNonWallTop > barrierTop) {
+                    if (primaryNonWallTop >= barrierTop /* barrierTop is wall-top now*/) {
                         // If primary non-wall is traversed before wall
                         continue;
-                    } 
+                    }
                     // Initial wall transition
                     primaryOverlapIndex = retCnt;
                     primaryOverlapMag = overlapResult.OverlapMag;
                     overlapResult.cloneInto(ref primaryOverlapResult);
                     primaryIsWall = isWall;
                     primaryWallTop = barrierTop;
-                } else if (!isWall && primaryIsWall && barrierTop < primaryWallTop) {
+                } else if (!isWall && primaryIsWall && barrierTop /* barrierTop is non-wall-top now */ < primaryWallTop) {
                     // Just skip, once the bullet is checked to collide with a wall, any parasitic non-wall collision would be ignored...
                 } else {
                     // Same polarity
