@@ -33,9 +33,10 @@ public class Room {
 
     int renderFrameId;
     int curDynamicsRenderFrameId;
+    int lastForceResyncedRdfId;
     int nstDelayFrames;
 
-    private int fps = 60;
+    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 10*BATTLE_DYNAMICS_FPS;
 
     Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex
@@ -149,9 +150,10 @@ public class Room {
         capacity = roomCapacity;
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
+        lastForceResyncedRdfId = 0;
         frameLogEnabled = true;
         int durationSeconds = 60;
-        battleDurationFrames = durationSeconds * fps;
+        battleDurationFrames = durationSeconds * BATTLE_DYNAMICS_FPS;
         estimatedMillisPerFrame = 17; // ceiling "1/fps ~= 16.66667" to dilute the framerate on server 
         stageName = "Dungeon";
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
@@ -354,7 +356,7 @@ public class Room {
         if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
             return false;
         }
-        battleDurationFrames = battleDurationSeconds * fps;
+        battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
         bool shouldTryToStartBattle = true;
         var targetPlayerBattleState = Interlocked.Read(ref targetPlayer.BattleState);
         _logger.LogInformation("OnPlayerBattleColliderAcked-before: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
@@ -451,6 +453,8 @@ public class Room {
 
         // Initialize the "collisionSys" as well as "RenderFrameBuffer"
         curDynamicsRenderFrameId = 0;
+
+        lastForceResyncedRdfId = 0;
 
         Interlocked.Exchange(ref state, ROOM_STATE_PREPARE);
 
@@ -563,7 +567,7 @@ public class Room {
 
             effectivePlayerCount = 0; // guaranteed to succeed at the end of "dismiss"
             participantChangeId = 0;
-            battleDurationFrames = 10 * fps;
+            battleDurationFrames = 10 * BATTLE_DYNAMICS_FPS;
         } finally {
             joinerLock.ReleaseMutex();
         }
@@ -1275,7 +1279,23 @@ public class Room {
         ulong allConfirmedMask = ((1ul << totPlayerCnt) - 1);
         ulong unconfirmedMask = 0;
         // As "lastAllConfirmedInputFrameId" can be advanced by UDP but "latestPlayerUpsyncedInputFrameId" could only be advanced by ws session, when the following condition is met we know that the slow ticker is really in trouble!
-        if (latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance + 1)) {
+        if (renderFrameId - lastForceResyncedRdfId > FORCE_RESYNC_INTERVAL_THRESHOLD) {
+            // Type#3 forceResync regularly
+            int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
+            for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {
+                var (res1, foo) = inputBuffer.GetByFrameId(j);
+                if (!res1 || null == foo) {
+                    throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.ToString()));
+                }
+                unconfirmedMask |= (allConfirmedMask ^ foo.ConfirmedList);
+                foo.ConfirmedList = allConfirmedMask;
+                onInputFrameDownsyncAllConfirmed(foo, -1);
+            }
+            if (0 < unconfirmedMask) {
+                _logger.LogInformation(String.Format("[type#3 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, InputFrameUpsyncDelayTolerance:{6}, unconfirmedMask={7}, lastForceResyncedRdfId={8}; there's a slow ticker suspect, forcing all-confirmation", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance, unconfirmedMask, lastForceResyncedRdfId));
+                lastForceResyncedRdfId = renderFrameId;
+            }
+        } else if (latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance + 1)) {
             // Type#1 check whether there's a significantly slow ticker among players
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
             for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {
@@ -1288,7 +1308,8 @@ public class Room {
                 onInputFrameDownsyncAllConfirmed(foo, -1);
             }
             if (0 < unconfirmedMask) {
-                _logger.LogInformation(String.Format("[type#1 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, InputFrameUpsyncDelayTolerance:{6}, unconfirmedMask={7}; there's a slow ticker suspect, forcing all-confirmation", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance, unconfirmedMask));
+                _logger.LogInformation(String.Format("[type#1 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, InputFrameUpsyncDelayTolerance:{6}, unconfirmedMask={7}, lastForceResyncedRdfId={8}; there's a slow ticker suspect, forcing all-confirmation", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance, unconfirmedMask, lastForceResyncedRdfId));
+                lastForceResyncedRdfId = renderFrameId;
             }
         } else {
             // Type#2 helps resolve the edge case when all players are disconnected temporarily
@@ -1303,6 +1324,7 @@ public class Room {
             if (shouldForceResync) {
                 //Logger.Warn(fmt.Sprintf("[type#2 forceConfirmation] For roomId=%d@renderFrameId=%d, curDynamicsRenderFrameId=%d, LatestPlayerUpsyncedInputFrameId:%d, LastAllConfirmedInputFrameId:%d; there's at least one reconnected player, forcing all-confirmation", pR.Id, pR.RenderFrameId, pR.CurDynamicsRenderFrameId, pR.LatestPlayerUpsyncedInputFrameId, pR.LastAllConfirmedInputFrameId))
                 unconfirmedMask = allConfirmedMask;
+                lastForceResyncedRdfId = renderFrameId;
             }
         }
 

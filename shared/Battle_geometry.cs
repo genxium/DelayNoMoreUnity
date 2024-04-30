@@ -283,20 +283,19 @@ namespace shared {
                     continue;
                 }
 
-                float normAlignmentWithHorizon1 = (overlapResult.OverlapX * +1f);
-                float normAlignmentWithHorizon2 = (overlapResult.OverlapX * -1f);
                 float normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
                 bool isAlongForwardPropagation = (0 <= bullet.VelX * (bCollider.X-aCollider.X)); // [WARNING] Character handles this (equivalently) outside of "calcHardPushbacksNormsForCharacter", but for bullets I temporarily found it more convenient handling here, there might be some room for enhancement. 
                 bool isSqueezer = (-SNAP_INTO_PLATFORM_THRESHOLD > normAlignmentWithGravity);
-                if (isSqueezer && providesSlipJump) {
-                    continue;
-                }
                 /*
                  [WARNING] Deliberately excluding "providesSlipJump" traps for easier handling of intermittent flat terrains as well as better player intuition!
 
                 The "isWall" criteria here is deliberately made different from character counterpart!
                  */
-                bool isWall = !providesSlipJump && (SNAP_INTO_PLATFORM_THRESHOLD >= normAlignmentWithGravity);
+                bool isWall = (SNAP_INTO_PLATFORM_THRESHOLD >= normAlignmentWithGravity);
+                if ((isSqueezer || isWall) && providesSlipJump) {
+                    continue;
+                }
+                
                 float barrierTop = bCollider.Y + bCollider.H;
                 // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the VERTICAL edge is chosen as primary!
                 if (isWall && !primaryIsWall) {
@@ -328,8 +327,13 @@ namespace shared {
                             overlapResult.cloneInto(ref primaryOverlapResult);
                         }
                     }
-
-                    primaryNonWallTop = barrierTop;
+                    
+                    primaryIsWall = isWall;
+                    if (isWall) {
+                        primaryWallTop = barrierTop;
+                    } else {            
+                        primaryNonWallTop = barrierTop;
+                    }
                 }
 
                 hardPushbacks[retCnt].X = pushbackX;
