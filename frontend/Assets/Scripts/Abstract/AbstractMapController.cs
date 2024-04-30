@@ -1275,15 +1275,18 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (pbRdf.ShouldForceResync) {
             if (notSelfUnconfirmed) {
                 if (null != accompaniedInputFrameDownsyncBatch) {
-                    Debug.Log(String.Format("On battle resynced for another player! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false)));
+                    Debug.Log(String.Format("On battle resynced for another player#1! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false)));
                 } else {
-                    Debug.Log(String.Format("On battle resynced for another player! received rdfId={0} & no accompaniedInputFrameDownsyncBatch; downsynced rdf={1}", rdfId, stringifyRdf(pbRdf)));
+                    Debug.Log(String.Format("On battle resynced for another player#2! received rdfId={0} & no accompaniedInputFrameDownsyncBatch; downsynced rdf={1}", rdfId, stringifyRdf(pbRdf)));
                 }
             } else {
-                if (null != accompaniedInputFrameDownsyncBatch) {
-                    Debug.Log(String.Format("On battle resynced for self! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false)));
-                } else {
-                    Debug.Log(String.Format("On battle resynced for self! received rdfId={0} & no accompaniedInputFrameDownsyncBatch; downsynced rdf={1}", rdfId, stringifyRdf(pbRdf)));
+                // self-unconfirmed
+                if (!usingOthersForcedDownsyncRenderFrameDict) {
+                    if (null != accompaniedInputFrameDownsyncBatch) {
+                        Debug.Log(String.Format("On battle resynced for self#1! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false)));
+                    } else {
+                        Debug.Log(String.Format("On battle resynced for self#2! received rdfId={0} & no accompaniedInputFrameDownsyncBatch; downsynced rdf={1}", rdfId, stringifyRdf(pbRdf)));
+                    }
                 }
             }
         }
@@ -1295,11 +1298,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             } else {
                 if (null == accompaniedInputFrameDownsyncBatch) {
                     if (usingOthersForcedDownsyncRenderFrameDict) {
-                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict! received rdfId={0} & now inputBuffer: {1}, renderBuffer: {2}; downsynced rdf={3}", rdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat(), stringifyRdf(pbRdf)));
+                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict#1! received rdfId={0} & now inputBuffer: {1}, renderBuffer: {2}; downsynced rdf={3}", rdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat(), stringifyRdf(pbRdf)));
                     }
                 } else {
                     if (usingOthersForcedDownsyncRenderFrameDict) {
-                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}; now inputBuffer:{5}, renderBuffer:{6}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
+                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict#2! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}; now inputBuffer:{5}, renderBuffer:{6}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
                     }
                 }
             }
