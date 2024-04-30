@@ -679,7 +679,7 @@ namespace shared {
                 var src = currRenderFrameBullets[i];
                 if (TERMINATING_BULLET_LOCAL_ID == src.BattleAttr.BulletLocalId) break;
                 int j = src.BattleAttr.OffenderJoinIndex - 1;
-                if ((0 > j) || (j < roomCapacity && j >= currRenderFrame.PlayersArr.Count) || (j >= roomCapacity && j-roomCapacity >= currRenderFrame.NpcsArr.Count)) {
+                if (0 > j || j >= roomCapacity+npcCnt) {
                     // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "BattleAttr.OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
                     continue;
                 }
@@ -732,7 +732,7 @@ namespace shared {
                         dst);
 
                 int j = dst.BattleAttr.OffenderJoinIndex - 1;
-                if (j >= roomCapacity+npcCnt) {
+                if (0 > j || j >= roomCapacity+npcCnt) {
                     // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "BattleAttr.OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
                     continue;
                 }
