@@ -679,7 +679,7 @@ namespace shared {
                 var src = currRenderFrameBullets[i];
                 if (TERMINATING_BULLET_LOCAL_ID == src.BattleAttr.BulletLocalId) break;
                 int j = src.BattleAttr.OffenderJoinIndex - 1;
-                if (j - roomCapacity >= currRenderFrame.NpcsArr.Count) {
+                if ((0 > j) || (j < roomCapacity && j >= currRenderFrame.PlayersArr.Count) || (j >= roomCapacity && j-roomCapacity >= currRenderFrame.NpcsArr.Count)) {
                     // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "BattleAttr.OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
                     continue;
                 }
@@ -2036,6 +2036,7 @@ namespace shared {
                 if (isNpcJustDead(nextRenderFrameNpcs[candidateI])) {
                     var candidate = nextRenderFrameNpcs[candidateI];
                     justDeadJoinIndices.Add(candidate.JoinIndex);
+                    isRemapNeeded = true;
                     if (TERMINATING_CONSUMABLE_SPECIES_ID != candidate.KilledToDropConsumableSpeciesId || TERMINATING_BUFF_SPECIES_ID != candidate.KilledToDropBuffSpeciesId) { 
                         addNewPickableToNextFrame(rdfId, candidate.VirtualGridX, candidate.VirtualGridY, MAX_INT, 0, true, MAX_INT, MAX_INT, PickupType.Immediate, 1, nextRenderFramePickables, candidate.KilledToDropConsumableSpeciesId, candidate.KilledToDropBuffSpeciesId, ref pickableLocalIdCounter, ref pickableCnt);
                     }
