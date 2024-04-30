@@ -1291,6 +1291,11 @@ public class Room {
                 onInputFrameDownsyncAllConfirmed(foo, -1);
             }
             _logger.LogInformation(String.Format("[type#3 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId));
+            /*
+            [WARNING] Only "type#1" will delay "conditional graphical update" from the force-resync snapshot for non-self-unconfirmed players, both "type#2" and "type#3" might have immediate impact on the "ACTIVE NORMAL TICKER"s, e.g. abrupt & inconsistent graphical update.  
+
+            However, experiments show that for type#3 "curDynamicsRenderFrameId" is NEVER TOO ADVANCED compared to "OnlineMapController.playerRdfId", possibly due to the absence of any SLOW TICKER (including disconnected) -- hence when executing "OnlineMap.onRoomDownsyncFrame", the force-resync snapshot would only get "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet", i.e. only effectively trigger "OnlineMapController.onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch) -> _handleIncorrectlyRenderedPrediction(...)" -- thus relatively smooth graphical updates. 
+            */
             unconfirmedMask = allConfirmedMask;
             lastForceResyncedRdfId = renderFrameId;
         } else if (latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance + 1)) {

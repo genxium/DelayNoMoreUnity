@@ -1273,19 +1273,20 @@ public abstract class AbstractMapController : MonoBehaviour {
         } 
         
         if (pbRdf.ShouldForceResync) {
+            bool isRingBuffConsecutiveSet = (RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet);
             if (notSelfUnconfirmed) {
                 if (null != accompaniedInputFrameDownsyncBatch) {
-                    Debug.Log(String.Format("On battle resynced for another player#1! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false)));
+                    Debug.Log(String.Format("On battle resynced for another player#1! @playerRdfId={6}, renderBuffer=[{7}], inputBuffer=[{8}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}] & isRingBuffConsecutiveSet={3}; downsynced rdf={4}, accompaniedInputFrameDownsyncBatch={5}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
                 } else {
-                    Debug.Log(String.Format("On battle resynced for another player#2! received rdfId={0} & no accompaniedInputFrameDownsyncBatch; downsynced rdf={1}", rdfId, stringifyRdf(pbRdf)));
+                    Debug.Log(String.Format("On battle resynced for another player#2! @playerRdfId={3}, renderBuffer=[{4}], inputBuffer=[{5}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1}; downsynced rdf={2}", rdfId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
                 }
             } else {
                 // self-unconfirmed
                 if (!usingOthersForcedDownsyncRenderFrameDict) {
                     if (null != accompaniedInputFrameDownsyncBatch) {
-                        Debug.Log(String.Format("On battle resynced for self#1! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false)));
+                        Debug.Log(String.Format("On battle resynced for self#1! @playerRdfId={6}, renderBuffer=[{7}], inputBuffer=[{8}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}] & isRingBuffConsecutiveSet={3}; downsynced rdf={4}, accompaniedInputFrameDownsyncBatch={5}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
                     } else {
-                        Debug.Log(String.Format("On battle resynced for self#2! received rdfId={0} & no accompaniedInputFrameDownsyncBatch; downsynced rdf={1}", rdfId, stringifyRdf(pbRdf)));
+                        Debug.Log(String.Format("On battle resynced for self#2! @playerRdfId={3}, renderBuffer=[{4}], inputBuffer=[{5}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1}; downsynced rdf={2}", rdfId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
                     }
                 }
             }
@@ -1298,11 +1299,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             } else {
                 if (null == accompaniedInputFrameDownsyncBatch) {
                     if (usingOthersForcedDownsyncRenderFrameDict) {
-                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict#1! received rdfId={0} & now inputBuffer: {1}, renderBuffer: {2}; downsynced rdf={3}", rdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat(), stringifyRdf(pbRdf)));
+                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict#1! @playerRdfId={0}, renderBuffer=[{1}], inputBuffer=[{2}]; downsynced rdf={3}", playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), stringifyRdf(pbRdf)));
                     }
                 } else {
                     if (usingOthersForcedDownsyncRenderFrameDict) {
-                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict#2! received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}; now inputBuffer:{5}, renderBuffer:{6}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
+                        Debug.Log(String.Format("On battle resynced from othersForcedDownsyncRenderFrameDict#2! @playerRdfId={5}, renderBuffer=[{6}], inputBuffer=[{7}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
                     }
                 }
             }
