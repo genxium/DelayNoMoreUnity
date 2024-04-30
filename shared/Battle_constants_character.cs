@@ -151,7 +151,7 @@ namespace shared {
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = true,
                         ProactiveJumpStartupFrames = 3,
-                        Hardness = 5,
+                        Hardness = 4, // Thus when hit by MagicPistolBullet she needs FramesToRecover!
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         DefaultAirDashQuota = 1,
                         DefaultAirJumpQuota = 0,
