@@ -36,7 +36,7 @@ public class Room {
     int lastForceResyncedRdfId;
     int nstDelayFrames;
 
-    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 16*BATTLE_DYNAMICS_FPS;
+    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 8*BATTLE_DYNAMICS_FPS;
 
     Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex
@@ -1287,14 +1287,12 @@ public class Room {
                 if (!res1 || null == foo) {
                     throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.ToString()));
                 }
-                unconfirmedMask |= (allConfirmedMask ^ foo.ConfirmedList);
                 foo.ConfirmedList = allConfirmedMask;
                 onInputFrameDownsyncAllConfirmed(foo, -1);
             }
-            if (0 < unconfirmedMask) {
-                _logger.LogInformation(String.Format("[type#3 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, InputFrameUpsyncDelayTolerance:{6}, unconfirmedMask={7}, lastForceResyncedRdfId={8}; there's a slow ticker suspect, forcing all-confirmation", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance, unconfirmedMask, lastForceResyncedRdfId));
-                lastForceResyncedRdfId = renderFrameId;
-            }
+            _logger.LogInformation(String.Format("[type#3 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId));
+            unconfirmedMask = allConfirmedMask;
+            lastForceResyncedRdfId = renderFrameId;
         } else if (latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance + 1)) {
             // Type#1 check whether there's a significantly slow ticker among players
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
@@ -1322,7 +1320,16 @@ public class Room {
                 }
             }
             if (shouldForceResync) {
-                //Logger.Warn(fmt.Sprintf("[type#2 forceConfirmation] For roomId=%d@renderFrameId=%d, curDynamicsRenderFrameId=%d, LatestPlayerUpsyncedInputFrameId:%d, LastAllConfirmedInputFrameId:%d; there's at least one reconnected player, forcing all-confirmation", pR.Id, pR.RenderFrameId, pR.CurDynamicsRenderFrameId, pR.LatestPlayerUpsyncedInputFrameId, pR.LastAllConfirmedInputFrameId))
+                int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
+                for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {
+                    var (res1, foo) = inputBuffer.GetByFrameId(j);
+                    if (!res1 || null == foo) {
+                        throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.ToString()));
+                    }
+                    foo.ConfirmedList = allConfirmedMask;
+                    onInputFrameDownsyncAllConfirmed(foo, -1);
+                }
+                _logger.LogInformation(String.Format("[type#2 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId));
                 unconfirmedMask = allConfirmedMask;
                 lastForceResyncedRdfId = renderFrameId;
             }
