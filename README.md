@@ -1,8 +1,9 @@
 # Latest tag change notes
-v1.4.1 new features
+v1.4.2 new features
 - Replaced MonkGirl by new character WitchGirl
 - Added new bullet type GroundWave
 - Added bullet immune memory mechanism for enhanced "RemainsUponHit" behaviour
+- Fixes for rdf history correction
 
 v1.3.8 new features
 - Added quota limited air-jump and air-dash dynamics
