@@ -762,6 +762,10 @@ public class Room {
         ulong allConfirmedMask = (1UL << capacity) - 1;
 
         for (int inputFrameId = inputFrameId1; inputFrameId < inputBuffer.EdFrameId; inputFrameId++) {
+            // See comments for the traversal above.
+            if (inputFrameId < inputBuffer.StFrameId) {
+                continue;
+            }
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId);
             if (false == res1 || null == inputFrameDownsync) {
                 throw new ArgumentException(String.Format("inputFrameId={0} doesn't exist for roomId={1}: lastAllConfirmedInputFrameId={2}, inputFrameId1={3}, inputBuffer.StFrameId={4}, inputBuffer.EdFrameId={5}", inputFrameId, id, lastAllConfirmedInputFrameId, inputFrameId1, inputBuffer.StFrameId, inputBuffer.EdFrameId));

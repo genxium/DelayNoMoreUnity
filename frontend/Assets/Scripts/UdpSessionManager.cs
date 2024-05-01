@@ -174,26 +174,26 @@ public class UdpSessionManager {
         }
     }
 
-    public void PunchAllPeers() {
+    public void PunchAllPeers(CancellationToken cancellationToken) {
         _ = Task.Run(async () => {
             int c = 10;
             while (0 <= Interlocked.Decrement(ref c)) {
                 Debug.Log(String.Format("Enqueues peerHolePuncher c={0}", c));
                 senderBuffer.Add(peerHolePuncher);
-                await Task.Delay(1000 + c * 50);
+                await Task.Delay(1000 + c * 50, cancellationToken);
             }
-        });
+        }, cancellationToken);
     }
 
-    public void PunchBackendUdpTunnel() {
+    public void PunchBackendUdpTunnel(CancellationToken cancellationToken) {
         // Will trigger DOWNSYNC_MSG_ACT_PEER_UDP_ADDR for all players, including itself
         _ = Task.Run(async () => {
             int c = 10;
             while (0 <= Interlocked.Decrement(ref c)) {
                 Debug.Log(String.Format("Enqueues serverHolePuncher c={0}", c));
                 senderBuffer.Add(serverHolePuncher);
-                await Task.Delay(1000 + c * 50);
+                await Task.Delay(1000 + c * 50, cancellationToken);
             }
-        });
+        }, cancellationToken);
     }
 }

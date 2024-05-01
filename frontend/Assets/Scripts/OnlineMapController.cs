@@ -156,8 +156,8 @@ public class OnlineMapController : AbstractMapController {
                     playerWaitingPanel.gameObject.SetActive(false);
                     Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
                     readyGoPanel.playReadyAnim(() => {
-                        UdpSessionManager.Instance.PunchBackendUdpTunnel();
-                        UdpSessionManager.Instance.PunchAllPeers();
+                        UdpSessionManager.Instance.PunchBackendUdpTunnel(wsCancellationToken);
+                        UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
                     }, null);
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
@@ -192,6 +192,8 @@ public class OnlineMapController : AbstractMapController {
     public override void onCharacterSelectGoAction(int speciesId) {
         // [WARNING] Deliberately NOT declaring this method as "async" to make tests related to `<proj-root>/GOROUTINE_TO_ASYNC_TASK.md` more meaningful.
 
+        battleState = ROOM_STATE_IDLE;
+
         Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
         WsSessionManager.Instance.SetSpeciesId(speciesId);
 
@@ -207,7 +209,7 @@ public class OnlineMapController : AbstractMapController {
         
         Task guiWaitToProceedTask = Task.Run(async () => {
             guiCanProceedSignal.WaitHandle.WaitOne();
-        });
+        }, guiCanProceedSignal);
 
         try {
             wsTask = Task.Run(async () => {
@@ -216,7 +218,7 @@ public class OnlineMapController : AbstractMapController {
                 Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
                 // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message, thus triggering "onWsSessionClosed -> cleanupNetworkSessions" to clean up other network resources!
-            })
+            }, wsCancellationToken)
             .ContinueWith(failedTask => {
                 Debug.LogWarning(String.Format("Failed to start ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
                 guiCanProceedOnFailure = true;
@@ -278,8 +280,11 @@ public class OnlineMapController : AbstractMapController {
         enableBattleInput(false);
 
         ArenaModeSettings.SimpleDelegate onExitCallback = () => {
-            onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
             enableBattleInput(false);
+            if (frameLogEnabled) {
+                wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, pushbackFrameLogBuffer, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
+            }
+            onWsSessionClosed(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
         };
         ArenaModeSettings.SimpleDelegate onCancelCallback = () => {
             
@@ -334,6 +339,10 @@ public class OnlineMapController : AbstractMapController {
     // Update is called once per frame
     void Update() {
         try {
+            if (ROOM_STATE_STOPPED == battleState) {
+                // For proactive exit
+                return;
+            }
             pollAndHandleWsRecvBuffer();
             pollAndHandleUdpRecvBuffer();
             if (ROOM_STATE_IN_BATTLE != battleState) {
