@@ -1279,7 +1279,7 @@ public class Room {
         ulong allConfirmedMask = ((1ul << totPlayerCnt) - 1);
         ulong unconfirmedMask = 0;
         // As "lastAllConfirmedInputFrameId" can be advanced by UDP but "latestPlayerUpsyncedInputFrameId" could only be advanced by ws session, when the following condition is met we know that the slow ticker is really in trouble!
-        if (renderFrameId - lastForceResyncedRdfId > FORCE_RESYNC_INTERVAL_THRESHOLD || renderFrameId == battleDurationFrames - FORCE_RESYNC_INTERVAL_THRESHOLD) {
+        if (0 < latestPlayerUpsyncedInputFrameId && 0 < curDynamicsRenderFrameId && (renderFrameId - lastForceResyncedRdfId > FORCE_RESYNC_INTERVAL_THRESHOLD || renderFrameId == battleDurationFrames - FORCE_RESYNC_INTERVAL_THRESHOLD)) {
             // Type#3 forceResync regularly
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
             for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {
