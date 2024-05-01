@@ -1311,7 +1311,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                     is as follows:
                     - when we're having a "history update", it's implied that the local calculation of "renderBuffer" for "(rdfId-1) => rdfId" was incorrect w.r.t. backend dynamics, so we can only re-chase from "rdfId", i.e. neither (rdfId-1) nor (rdfId+1);
-                    - as of the framelogs, updating "chaserRenderFrameId" would only impact "rollbackAndChase(...)" which only updates "rdfIdToActuallyUsedInput" - yet no correction to input history as aforementioned, and "renderBuffer" would only be wrapped up at the end.
+                    - as of the framelogs, updating "chaserRenderFrameId" would only impact "rollbackAndChase(...)" which only updates "rdfIdToActuallyUsedInput" -- yet no correction to input history as aforementioned, and "renderBuffer" would only be wrapped up at the end;
+                    - but what about "!EqualRdfs(...) && chaserRenderFrameId < rdfId", in such case we don't update "chaserRenderFrameId" yet there's still a chance that by "rollbackAndChase(...)" we go through the same local calculation errors AGAIN and overwrite "renderBuffer" with a "wrong & new frame at rdfId" -- it's just inevitable for now, a "chaserRenderFrameId < rdfId" was most possibly set by "_handleIncorrectlyRenderedPrediction(...)" which certainly is more important -- and I can only bet that future errors sourcing from such case will be captured and corrected by "!EqualRdfs(...) && futureChaserRenderFrameId > futureRdfId".   
                 */
                 if (null == accompaniedInputFrameDownsyncBatch) {
                     if (usingOthersForcedDownsyncRenderFrameDict) {
