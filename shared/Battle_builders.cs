@@ -563,6 +563,7 @@ namespace shared {
 
         public static bool EqualRdfs(RoomDownsyncFrame lhs, RoomDownsyncFrame rhs, int roomCapacity) {
             // [WARNING] Deliberately ignoring backend-only fields, e.g. "backendUnconfirmedMask", "shouldForceResync", or "participantChangeId". 
+            // [WARNING] Though some new attributes like "buff/debuff/bulletImmuneRecord" are not added here, those fields being out-of-sync will soon cause inequality in the already tracking fields. 
             if (lhs.Id != rhs.Id) return false;
             if (lhs.BulletLocalIdCounter != rhs.BulletLocalIdCounter) return false;
             if (lhs.NpcLocalIdCounter != rhs.NpcLocalIdCounter) return false;
