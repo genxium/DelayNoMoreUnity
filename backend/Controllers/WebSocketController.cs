@@ -134,6 +134,7 @@ public class WebSocketController : ControllerBase {
 
                                 var res1 = await room.OnPlayerBattleColliderAcked(playerId, pReq.SelfParsedRdf, pReq.SerializedBarrierPolygons, pReq.SerializedStaticPatrolCues, pReq.SerializedCompletelyStaticTraps, pReq.SerializedStaticTriggers, pReq.SerializedTrapLocalIdToColliderAttrs, pReq.SerializedTriggerTrackingIdToTrapLocalId, pReq.SpaceOffsetX, pReq.SpaceOffsetY, pReq.BattleDurationSeconds);
                                 if (!res1) {
+                                    _logger.LogWarning("About to cancel session for [ roomId={0}, playerId={1} ] due to failure of OnPlayerBattleColliderAcked", room.id, playerId);
                                     if (!cancellationToken.IsCancellationRequested) {
                                         cancellationTokenSource.Cancel();
                                     }
