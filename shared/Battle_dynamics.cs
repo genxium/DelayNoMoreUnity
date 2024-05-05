@@ -1724,8 +1724,10 @@ namespace shared {
                     }
                 } else if (mainCycleFulfilled) {
                     if (0 < currTrigger.Quota) {
-                        triggerInNextFrame.State = TriggerState.TcoolingDown;
-                        triggerInNextFrame.FramesInState = 0;
+                        if (!(TimedDoor1.SpeciesId == currTrigger.Config.SpeciesId || WaveTimedDoor1.SpeciesId == currTrigger.Config.SpeciesId)) {
+                            triggerInNextFrame.State = TriggerState.TcoolingDown;
+                            triggerInNextFrame.FramesInState = 0;
+                        }
 
                         triggerInNextFrame.Quota = currTrigger.Quota - 1;
                         triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
