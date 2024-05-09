@@ -295,6 +295,7 @@ message VfxConfig {
 	bool onCharacter = 4;
 	bool onBullet = 5;
     bool usePixelatedVer = 6;
+    string name = 7;
 }
 
 message BulletConfig {
@@ -840,6 +841,7 @@ message PickableConfigFromTiled {
     PickupType pickupType = 8;
     int32 stockQuotaPerOccurrence = 9; // Only meaningful when "pickupType == PutIntoInventory"
     int32 subscriptionId = 10;
+    int32 vfxSpeciesId = 11; // Always use pixelated vfx
 
     int32 consumableSpeciesId = 1024; 
     int32 buffSpeciesId = 1025;

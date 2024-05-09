@@ -2,6 +2,7 @@ version: 2
 tpsheetFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
 - Assets/Resources/Bullets/Bullets.tpsheet
+- Assets/Resources/Characters/Bat/Bat.tpsheet
 - Assets/Resources/Characters/BladeGirl/BladeGirl.tpsheet
 - Assets/Resources/Characters/Goblin/Goblin.tpsheet
 - Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.tpsheet
@@ -12,6 +13,7 @@ tpsheetFileNames:
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 - Assets/Resources/Bullets/Bullets.png
+- Assets/Resources/Characters/Bat/Bat.png
 - Assets/Resources/Characters/BladeGirl/BladeGirl.png
 - Assets/Resources/Characters/Goblin/Goblin.png
 - Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.png
@@ -21,6 +23,7 @@ textureFileNames:
 - Assets/Resources/UI/ShaperCard.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 - 

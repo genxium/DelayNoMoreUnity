@@ -56,6 +56,7 @@ namespace shared {
         public int DyingSizeY;
 
         // Collision masks
+        public bool AntiGravityWhenIdle;
         public bool OmitGravity;
         public bool OmitSoftPushback;
         public bool RepelSoftPushback;

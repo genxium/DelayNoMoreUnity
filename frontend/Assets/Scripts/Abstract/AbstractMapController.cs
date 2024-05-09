@@ -732,16 +732,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
 
-            if (PickableState.Pidle == pickable.PkState) {
-                string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
-
-                if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+            // By now only "consumable" is available
+            if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                var consumableConfig = consumableConfigs[pickable.ConfigFromTiled.ConsumableSpeciesId];
+                if (PickableState.Pidle == pickable.PkState) {
+                    string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
                     animName = String.Format("Consumable{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
-                } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
-                    animName = String.Format("Buff{0}", pickable.ConfigFromTiled.BuffSpeciesId);
-                }
-
-                if (null != animName) {
                     var pickableAnimHolder = cachedPickables.PopAny(lookupKey);
                     if (null == pickableAnimHolder) {
                         pickableAnimHolder = cachedPickables.Pop();
@@ -759,38 +755,29 @@ public abstract class AbstractMapController : MonoBehaviour {
                         pickableAnimHolder.score = rdf.Id;
                         cachedPickables.Put(lookupKey, pickableAnimHolder);
                     }
-                }
-            } else if (PickableState.Pconsumed == pickable.PkState) {
-                string vfxLookupKey = "pk-" + pickable.PickableLocalId.ToString(), vfxAnimName = null;
-
-                if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
-                    if (HpRefillSmall.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId || HpRefillMiddle.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId) {
-                        vfxAnimName = "Healing1";
-                    } else if (MpRefillSmall.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId || MpRefillMiddle.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId) {
-                        vfxAnimName = "MpHealing1";
-                    }
-                } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
-                    // To be implemented, deliberately left blanck
-                }
-
-                if (null != vfxAnimName) {
-                    var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
-                    if (null == pixelVfxHolder) {
-                        pixelVfxHolder = cachedPixelVfxNodes.Pop();
-                        //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
-                    } else {
-                        //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
-                    }
-
-                    if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
-                        if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
-                            pixelVfxHolder.updateAnim(vfxAnimName, pickable.FramesInPkState, 0, false, rdf);
-                            var playerObj = playerGameObjs[pickable.PickedByJoinIndex-1]; // Guaranteed to be bound to player controlled characters
-                            newPosHolder.Set(playerObj.transform.position.x, playerObj.transform.position.y, pixelVfxHolder.gameObject.transform.position.z);
-                            pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                } else if (PickableState.Pconsumed == pickable.PkState) {
+                    string vfxLookupKey = "pk-" + pickable.PickableLocalId.ToString();
+                    if (NO_VFX_ID != consumableConfig.VfxIdOnPicker) {
+                        var vfxConfig = pixelatedVfxDict[consumableConfig.VfxIdOnPicker];
+                        string vfxAnimName = vfxConfig.Name;
+                        var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
+                        if (null == pixelVfxHolder) {
+                            pixelVfxHolder = cachedPixelVfxNodes.Pop();
+                            //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                        } else {
+                            //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
                         }
-                        pixelVfxHolder.score = rdf.Id;
-                        cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+
+                        if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
+                            if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
+                                pixelVfxHolder.updateAnim(vfxAnimName, pickable.FramesInPkState, 0, false, rdf.Id);
+                                var playerObj = playerGameObjs[pickable.PickedByJoinIndex-1]; // Guaranteed to be bound to player controlled characters
+                                newPosHolder.Set(playerObj.transform.position.x, playerObj.transform.position.y, pixelVfxHolder.gameObject.transform.position.z);
+                                pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                            }
+                            pixelVfxHolder.score = rdf.Id;
+                            cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+                        }
                     }
                 }
             }
@@ -2856,43 +2843,43 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public bool playBulletVfx(Bullet bullet, bool isExploding, float wx, float wy, int rdfId) {
-        int vfxSpeciesId = isExploding ? bullet.Config.ExplosionVfxSpeciesId : bullet.Config.ActiveVfxSpeciesId;
+        var bulletConfig = bullet.Config;
+        int vfxSpeciesId = isExploding ? bulletConfig.ExplosionVfxSpeciesId : bulletConfig.ActiveVfxSpeciesId;
         if (!isExploding && !IsBulletActive(bullet, rdfId)) return false;
         newPosHolder.Set(wx, wy, fireballZ);
         if (NO_VFX_ID == vfxSpeciesId || !isGameObjPositionWithinCamera(newPosHolder)) return false;
-        var vfxConfig = vfxDict[vfxSpeciesId];
+        // For convenience, bullet vfx is only pixelated from now on
+        if (isExploding && !bulletConfig.IsPixelatedExplostionVfx) {
+            return false;
+        }
+        if (!isExploding && !bulletConfig.IsPixelatedActiveVfx) {
+            return false;
+        }
+        var vfxConfig = pixelatedVfxDict[vfxSpeciesId];
         if (!vfxConfig.OnBullet) return false;
-        var speciesKvPq = cachedVfxNodes[vfxSpeciesId];
-        string vfxLookupKey = "bl-" + bullet.BattleAttr.BulletLocalId.ToString();
-        var vfxAnimHolder = speciesKvPq.PopAny(vfxLookupKey);
-        if (null == vfxAnimHolder) {
-            vfxAnimHolder = speciesKvPq.Pop();
-            //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdfId, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
-        } else {
-            //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdfId, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
-        }
 
-        if (null == vfxAnimHolder) {
-            throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for vfxLookupKey={0}", vfxLookupKey));
-        }
-        // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet! 
+        string vfxLookupKey = "bl-" + bullet.BattleAttr.BulletLocalId.ToString(), vfxAnimName = vfxConfig.Name;
+        if (null != vfxAnimName) {
+            var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
+            if (null == pixelVfxHolder) {
+                pixelVfxHolder = cachedPixelVfxNodes.Pop();
+                //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, wx, wy));
+            } else {
+                //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, wx, wy));
+            }
 
-        bool isInitialFrame = (0 == bullet.FramesInBlState);
-        if (vfxConfig.MotionType == VfxMotionType.Tracing) {
-            newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-            vfxAnimHolder.gameObject.transform.position = newPosHolder;
-        } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
-            newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-            vfxAnimHolder.gameObject.transform.position = newPosHolder;
+            if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
+                if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
+                    pixelVfxHolder.updateAnim(vfxAnimName, bullet.FramesInBlState, 0, false, rdfId);
+                    var playerObj = playerGameObjs[bullet.BattleAttr.OffenderJoinIndex-1]; // Guaranteed to be bound to player controlled characters
+                    newPosHolder.Set(playerObj.transform.position.x, playerObj.transform.position.y, pixelVfxHolder.gameObject.transform.position.z);
+                    pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                }
+                pixelVfxHolder.score = rdfId;
+                cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+            }
         }
-
-        if (isInitialFrame) {
-            // Regardless of "vfxConfig.DurationType" 
-            vfxAnimHolder.attachedPs.Play();
-        }
-
-        vfxAnimHolder.score = rdfId;
-        speciesKvPq.Put(vfxLookupKey, vfxAnimHolder);
+        
         return true;
     }
 

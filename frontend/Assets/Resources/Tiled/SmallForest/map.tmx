@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="399">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="36" nextobjectid="399">
  <properties>
   <property name="battleDurationSeconds" value="100"/>
   <property name="levelId" value="1"/>
@@ -17,7 +17,7 @@
  <tileset firstgid="1528" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
  <tileset firstgid="1544" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
  <tileset firstgid="1560" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
- <layer id="32" name="Background" width="128" height="64">
+ <layer id="32" name="Background" width="128" height="64" parallaxx="0.2">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
@@ -30,7 +30,7 @@
    eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYgAAAAQ==
   </data>
  </layer>
- <layer id="33" name="Background2" width="128" height="64">
+ <layer id="33" name="Background2" width="128" height="64" parallaxx="0.6">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
@@ -38,7 +38,7 @@
    eJztyckNwjAARFFfTBf031LCJpYQhSXUwLiFHK33pK85TCkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbDHUUsZ0SMd0Sud0qb7ev+aavaV7eqQpPdNcfb1/zZJ9pXf6pG9a06/6ev+a/U6SJEmSJElSr/0BDzMIXg==
   </data>
  </layer>
- <layer id="35" name="Background3" width="128" height="64">
+ <layer id="35" name="Background3" width="128" height="64" parallaxx="0.5">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>

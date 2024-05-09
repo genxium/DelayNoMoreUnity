@@ -101,7 +101,8 @@ namespace shared {
             DurationType = VfxDurationType.OneOff,
             OnCharacter = true,
             OnBullet = false, 
-            UsePixelatedVer = true
+            UsePixelatedVer = true,
+            Name = "Healing1" 
         };
 
         public static VfxConfig VfxMpHealing = new VfxConfig {
@@ -110,7 +111,28 @@ namespace shared {
             DurationType = VfxDurationType.OneOff,
             OnCharacter = true,
             OnBullet = false,
-            UsePixelatedVer = true
+            UsePixelatedVer = true,
+            Name = "MpHealing1"
+        };
+
+        public static VfxConfig VfxSmokeNDust1 = new VfxConfig {
+            SpeciesId = 3,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false,
+            UsePixelatedVer = true,
+            Name = "SmokeNDust1"
+        };
+
+        public static VfxConfig VfxSmallSting = new VfxConfig {
+            SpeciesId = 4,
+            MotionType = VfxMotionType.Tracing,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true,
+            UsePixelatedVer = true,
+            Name = "SmallSting"
         };
 
         public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
@@ -135,6 +157,8 @@ namespace shared {
              {
                     new KeyValuePair<int, VfxConfig>(VfxHealing.SpeciesId, VfxHealing),
                     new KeyValuePair<int, VfxConfig>(VfxMpHealing.SpeciesId, VfxMpHealing),
+                    new KeyValuePair<int, VfxConfig>(VfxSmokeNDust1.SpeciesId, VfxSmokeNDust1),
+                    new KeyValuePair<int, VfxConfig>(VfxSmallSting.SpeciesId, VfxSmallSting),
              }
         );
 
@@ -185,21 +209,29 @@ namespace shared {
         public static ConsumableConfig HpRefillSmall = new ConsumableConfig {
             SpeciesId = 1,
             RefillDelta = 50,
+            VfxIdOnPicker = VfxHealing.SpeciesId,
+            IsPixelatedVfxOnPicker = true
         };
 
         public static ConsumableConfig HpRefillMiddle = new ConsumableConfig {
             SpeciesId = 2,
             RefillDelta = 80,
+            VfxIdOnPicker = VfxHealing.SpeciesId,
+            IsPixelatedVfxOnPicker = true
         };
 
         public static ConsumableConfig MpRefillSmall = new ConsumableConfig {
             SpeciesId = 3,
             RefillDelta = 800,
+            VfxIdOnPicker = VfxMpHealing.SpeciesId,
+            IsPixelatedVfxOnPicker = true
         };
 
         public static ConsumableConfig MpRefillMiddle = new ConsumableConfig {
             SpeciesId = 4,
             RefillDelta = 1600,
+            VfxIdOnPicker = VfxMpHealing.SpeciesId,
+            IsPixelatedVfxOnPicker = true
         };
 
         public static ImmutableDictionary<int, ConsumableConfig> consumableConfigs = ImmutableDictionary.Create<int, ConsumableConfig>().AddRange(

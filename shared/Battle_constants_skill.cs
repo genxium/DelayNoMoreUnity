@@ -1195,7 +1195,8 @@ namespace shared {
                                     DelaySelfVelToActive = true,
                                     OmitSoftPushback = true,
                                     BType = BulletType.Melee,
-                                    ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
+                                    ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+                                    IsPixelatedActiveVfx = true,
                                     CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                                     }
                                 )

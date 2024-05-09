@@ -1435,7 +1435,8 @@ namespace shared {
                                     atkedCharacterInNextFrame.VelY = pushbackVelY;
                                 }
 
-                                bool shouldOmitStun = ((0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
+                                // [WARNING] Gravity omitting characters shouldn't take a "blow up".
+                                bool shouldOmitStun = (atkedCharacterInNextFrame.OmitGravity || atkedCharacterConfig.OmitGravity || (0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
                                 if (false == shouldOmitStun) {
                                     var existingDebuff = atkedCharacterInNextFrame.DebuffList[DEBUFF_ARR_IDX_FROZEN];
                                     bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == debuffConfigs[existingDebuff.SpeciesId].Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination

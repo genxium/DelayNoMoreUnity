@@ -1,0 +1,37 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:f0f0e8b270d4df60f13063932073418c:192dab0de9c1f1d9ce29c472f36f5c0d:babeba01b3ac764cf7de8a5e7ec715ff$
+#
+:format=40300
+:texture=Bat.png
+:size=32x64
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+AntiIdle1_0;0;2;8;11; 0.5;0.5; 0;0;0;0
+Atk1_0;13;30;12;9; 0.5;0.5; 0;0;0;0
+Atk1_1;0;13;10;11; 0.5;0.5; 0;0;0;0
+Atk1_2;23;19;9;11; 0.5;0.5; 0;0;0;0
+Atk1_3;0;51;13;6; 0.5;0.5; 0;0;0;0
+Atk1_4;13;51;13;6; 0.5;0.5; 0;0;0;0
+Atk1_5;0;45;13;6; 0.5;0.5; 0;0;0;0
+Atked1_0;13;30;12;9; 0.5;0.5; 0;0;0;0
+Atked1_1;0;24;12;9; 0.5;0.5; 0;0;0;0
+Atked1_2;12;20;11;10; 0.5;0.5; 0;0;0;0
+Atked1_3;0;57;13;7; 0.5;0.5; 0;0;0;0
+Dying_0;13;30;12;9; 0.5;0.5; 0;0;0;0
+Dying_1;0;24;12;9; 0.5;0.5; 0;0;0;0
+Dying_2;13;45;13;6; 0.5;0.5; 0;0;0;0
+Dying_3;0;39;13;6; 0.5;0.5; 0;0;0;0
+Dying_4;13;39;13;6; 0.5;0.5; 0;0;0;0
+Dying_5;13;57;13;7; 0.5;0.5; 0;0;0;0
+Dying_6;0;33;13;6; 0.5;0.5; 0;0;0;0
+Walking_0;13;30;12;9; 0.5;0.5; 0;0;0;0
+Walking_1;0;45;13;6; 0.5;0.5; 0;0;0;0
+Walking_2;10;10;10;10; 0.5;0.5; 0;0;0;0
+Walking_3;0;57;13;7; 0.5;0.5; 0;0;0;0
