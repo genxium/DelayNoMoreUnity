@@ -1190,13 +1190,14 @@ namespace shared {
                                     ActiveFrames = 4,
                                     PushbackVelX = NO_LOCK_VEL,
                                     PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                    SelfLockVelX = (int)(4.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                     SelfLockVelY = NO_LOCK_VEL,
                                     DelaySelfVelToActive = true,
                                     OmitSoftPushback = true,
                                     BType = BulletType.Melee,
                                     ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
                                     IsPixelatedActiveVfx = true,
+                                    MhType = MultiHitType.FromEmission,
                                     CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                                     }
                                 )
@@ -1206,9 +1207,11 @@ namespace shared {
                                     ActiveFrames = 13,
                                     PushbackVelX = NO_LOCK_VEL,
                                     PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                    SelfLockVelX = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                     SelfLockVelY = NO_LOCK_VEL,
                                     BType = BulletType.Melee,
+                                    ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+                                    IsPixelatedActiveVfx = true,
                                     CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                                     }
                                 )

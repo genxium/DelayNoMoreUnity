@@ -386,6 +386,7 @@ message BulletBattleAttr {
 	int32 teamId = 4;
 	int32 activeSkillHit = 5; // for the convenience of selecting the correct next bullet for multihit fireball (where the offender's "activeSkillHit" might've already been reset)
 	int32 skillId = 6; // for the convenience of selecting the correct next bullet for multihit fireball (where the offender's "activeSkillId" might've already been reset); also for reverse lookup in multihit transition, in the most extreme case, a same "BulletConfig" instance is to be shared across different "Skill"s, thus we put "skillId" in "BulletBattleAttr" instead.
+
 }
 
 message Bullet {
@@ -405,6 +406,9 @@ message Bullet {
 	int32 dirY = 1002;
 	int32 velX = 1003;
 	int32 velY = 1004;
+
+	int32 originatedVirtualGridX = 1005;
+	int32 originatedVirtualGridY = 1006;
 }
 
 message TrapConfig {

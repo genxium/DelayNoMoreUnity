@@ -299,7 +299,7 @@ namespace shared {
             };
         }
 
-        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, int targetCharacterJoinIndex, Bullet dst) {
+        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int origVx, int origVy, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, int targetCharacterJoinIndex, Bullet dst) {
             dst.BlState = blState;
             dst.FramesInBlState = framesInBlState;
             dst.Config = staticBulletConfig;
@@ -311,6 +311,8 @@ namespace shared {
             dst.BattleAttr.ActiveSkillHit = activeSkillHit;
             dst.BattleAttr.SkillId = skillId;
 
+            dst.OriginatedVirtualGridX = origVx;
+            dst.OriginatedVirtualGridY = origVy;
             dst.VirtualGridX = vx;
             dst.VirtualGridY = vy;
             dst.DirX = dirX;
@@ -533,6 +535,7 @@ namespace shared {
                         srcBullet.BattleAttr.OffenderJoinIndex,
                         srcBullet.BattleAttr.TeamId,
                         srcBullet.BlState, srcBullet.FramesInBlState,
+                        srcBullet.OriginatedVirtualGridX, srcBullet.OriginatedVirtualGridY,
                         srcBullet.VirtualGridX, srcBullet.VirtualGridY,
                         srcBullet.DirX, srcBullet.DirY,
                         srcBullet.VelX, srcBullet.VelY,

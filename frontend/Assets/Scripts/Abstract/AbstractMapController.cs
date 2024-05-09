@@ -8,6 +8,7 @@ using DG.Tweening;
 using Google.Protobuf.Collections;
 using static shared.Battle;
 using static Story.StoryConstants;
+using UnityEngine.UIElements;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int levelId = LEVEL_NONE;
@@ -692,7 +693,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             playBulletSfx(bullet, isExploding, wx, wy, rdf.Id, distanceAttenuationZ);
-            playBulletVfx(bullet, isExploding, wx, wy, rdf.Id);
+            playBulletVfx(bullet, isExploding, wx, wy, rdf);
         }
 
         for (int k = 0; k < rdf.TriggersArr.Count; k++) {
@@ -2701,71 +2702,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             speciesKvPq.Put(lookupKey, vfxAnimHolder);
         }
 
-        // Bullet Vfx
-        {
-            if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
-            var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
-            if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit >= currSkillConfig.Hits.Count) {
-                return false;
-            }
-            var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
-            if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) {
-                return false;
-            }
-
-            var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
-            if (!vfxConfig.OnCharacter) return false;
-            // The outer "if" is less costly than calculating viewport point.
-            // if the current position is within camera FOV
-            var speciesKvPq = cachedVfxNodes[currBulletConfig.ActiveVfxSpeciesId];
-            string lookupKey = "ch-" + currCharacterDownsync.JoinIndex.ToString();
-            var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
-            if (null == vfxAnimHolder) {
-                vfxAnimHolder = speciesKvPq.Pop();
-                //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-            } else {
-                //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-            }
-
-            if (null == vfxAnimHolder) {
-                throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
-            }
-
-            bool isInitialFrame = (currBulletConfig.StartupFrames == currCharacterDownsync.FramesInChState);
-            // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet!
-
-            if (vfxConfig.MotionType == VfxMotionType.Tracing) {
-                newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-                vfxAnimHolder.gameObject.transform.position = newPosHolder;
-            } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
-                if (VfxDashingActive.SpeciesId == currBulletConfig.ActiveVfxSpeciesId) {
-                    // Special offset for Dashing
-                    newPosHolder.Set(wx, wy - .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, vfxAnimHolder.gameObject.transform.position.z);
-                } else {
-                    newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-                }
-                vfxAnimHolder.gameObject.transform.position = newPosHolder;
-            }
-
-            if (isInitialFrame) {
-                // Regardless of "vfxConfig.DurationType" 
-                if (0 > currCharacterDownsync.DirX) {
-                    vfxAnimHolder.attachedPsr.flip = new Vector3(-1, 0);
-                } else {
-                    vfxAnimHolder.attachedPsr.flip = new Vector3(1, 0);
-                }
-                if (0 < currCharacterDownsync.ActiveSkillHit && !vfxAnimHolder.attachedPs.isPlaying) {
-                    // For a multi-hit bullet with vfx, we might need this to prevent duplicate triggers
-                    vfxAnimHolder.attachedPs.Play();
-                } else {
-                    vfxAnimHolder.attachedPs.Stop();
-                    vfxAnimHolder.attachedPs.Play();
-                }
-            }
-            vfxAnimHolder.score = rdfId;
-            speciesKvPq.Put(lookupKey, vfxAnimHolder);
-        }
-
         return true;
     }
 
@@ -2842,12 +2778,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         return true;
     }
 
-    public bool playBulletVfx(Bullet bullet, bool isExploding, float wx, float wy, int rdfId) {
+    public bool playBulletVfx(Bullet bullet, bool isExploding, float wx, float wy, RoomDownsyncFrame rdf) {
         var bulletConfig = bullet.Config;
         int vfxSpeciesId = isExploding ? bulletConfig.ExplosionVfxSpeciesId : bulletConfig.ActiveVfxSpeciesId;
-        if (!isExploding && !IsBulletActive(bullet, rdfId)) return false;
-        newPosHolder.Set(wx, wy, fireballZ);
-        if (NO_VFX_ID == vfxSpeciesId || !isGameObjPositionWithinCamera(newPosHolder)) return false;
+
+        if (NO_VFX_ID == vfxSpeciesId) return false;
         // For convenience, bullet vfx is only pixelated from now on
         if (isExploding && !bulletConfig.IsPixelatedExplostionVfx) {
             return false;
@@ -2856,10 +2791,44 @@ public abstract class AbstractMapController : MonoBehaviour {
             return false;
         }
         var vfxConfig = pixelatedVfxDict[vfxSpeciesId];
-        if (!vfxConfig.OnBullet) return false;
+        var vfxAnimName = vfxConfig.Name;
+        string vfxLookupKey = null;
+        int framesInState = MAX_INT;
+        int dirX = 0;
+        newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ);
+        if (vfxConfig.OnBullet) {
+            if (!isExploding && !IsBulletActive(bullet, rdf.Id)) return false;
+            vfxLookupKey = "bl-" + bullet.BattleAttr.BulletLocalId.ToString();
+            framesInState = bullet.FramesInBlState;
+            dirX = bullet.DirX;
+            if (VfxMotionType.Tracing == vfxConfig.MotionType) {
+                newPosHolder.Set(wx, wy, fireballZ);
+            } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
+                var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(vfxWx, vfxWy, fireballZ);
+            }
+        } else if (vfxConfig.OnCharacter) {
+            vfxLookupKey = "ch-bl-" + bullet.BattleAttr.BulletLocalId.ToString();
+            var ch = (roomCapacity >= bullet.BattleAttr.OffenderJoinIndex ? rdf.PlayersArr[bullet.BattleAttr.OffenderJoinIndex - 1] : rdf.NpcsArr[bullet.BattleAttr.OffenderJoinIndex - roomCapacity - 1]);
+            framesInState = ch.FramesInChState;
+            dirX = ch.DirX;
+            if (VfxMotionType.Tracing == vfxConfig.MotionType) {
+                var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(ch.VirtualGridX, ch.VirtualGridY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(vfxWx, vfxWy, fireballZ);
+            } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
+                var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(vfxWx, vfxWy, fireballZ);
+            }
+        }
 
-        string vfxLookupKey = "bl-" + bullet.BattleAttr.BulletLocalId.ToString(), vfxAnimName = vfxConfig.Name;
-        if (null != vfxAnimName) {
+        if (!isGameObjPositionWithinCamera(newPosHolder)) {
+            return false;
+        }
+
+        if (null != vfxLookupKey) {
             var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
             if (null == pixelVfxHolder) {
                 pixelVfxHolder = cachedPixelVfxNodes.Pop();
@@ -2870,12 +2839,10 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
                 if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
-                    pixelVfxHolder.updateAnim(vfxAnimName, bullet.FramesInBlState, 0, false, rdfId);
-                    var playerObj = playerGameObjs[bullet.BattleAttr.OffenderJoinIndex-1]; // Guaranteed to be bound to player controlled characters
-                    newPosHolder.Set(playerObj.transform.position.x, playerObj.transform.position.y, pixelVfxHolder.gameObject.transform.position.z);
+                    pixelVfxHolder.updateAnim(vfxAnimName, framesInState, dirX, false, rdf.Id);
                     pixelVfxHolder.gameObject.transform.position = newPosHolder;
                 }
-                pixelVfxHolder.score = rdfId;
+                pixelVfxHolder.score = rdf.Id;
                 cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
             }
         }

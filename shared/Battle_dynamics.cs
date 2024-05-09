@@ -238,7 +238,7 @@ namespace shared {
                 var pivotBulletConfig = skillConfig.Hits[activeSkillHit];
                 for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt + 1; i++) {
                     thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
-                    if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, logger)) break;
+                    if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, null, logger)) break;
                     activeSkillHit++;
                 }
 
@@ -696,7 +696,7 @@ namespace shared {
                     if (offenderNextFrame.ActiveSkillHit < skillConfig.Hits.Count) {
                         // No need to worry about Mp consumption here, it was already paid at "0 == offenderNextFrame.ActiveSkillHit" in "_useSkill"
                         int xfac = (0 < offenderNextFrame.DirX ? 1 : -1);
-                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, null, logger)) {
+                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, null, src, logger)) {
                             var bulletConfig = skillConfig.Hits[offenderNextFrame.ActiveSkillHit];
                             if (offenderNextFrame.FramesInvinsible < bulletConfig.StartupInvinsibleFrames) {
                                 offenderNextFrame.FramesInvinsible = bulletConfig.StartupInvinsibleFrames;
@@ -722,6 +722,7 @@ namespace shared {
                         src.BattleAttr.OffenderJoinIndex,
                         src.BattleAttr.TeamId,
                         src.BlState, src.FramesInBlState + 1,
+                        src.OriginatedVirtualGridX, src.OriginatedVirtualGridY,
                         src.VirtualGridX, src.VirtualGridY, // virtual grid position
                         src.DirX, src.DirY, // dir
                         src.VelX, dstVelY, // velocity
@@ -1569,7 +1570,7 @@ namespace shared {
                         }
                         if (inTheMiddleOfMultihitTransition) {
                             bool dummyHasLockVel = false;
-                            if (addNewBulletToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, logger)) {
+                            if (addNewBulletToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, null, logger)) {
                                 var targetNewBullet = nextRenderFrameBullets[bulletCnt-1];
                                 if (offenderNextFrame.FramesInvinsible < targetNewBullet.Config.StartupInvinsibleFrames) {
                                     offenderNextFrame.FramesInvinsible = targetNewBullet.Config.StartupInvinsibleFrames;
@@ -2449,13 +2450,15 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, ILoggerBridge logger) {
+        protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, Bullet? referencePrevEmissionBullet, ILoggerBridge logger) {
             if (activeSkillHit >= skillConfig.Hits.Count) return false;
             var bulletConfig = skillConfig.Hits[activeSkillHit];
             var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
             var invBulletDirMag = InvSqrt32(bulletDirMagSq);
             var bulletSpeedXfac = xfac * invBulletDirMag * bulletConfig.DirX;
             var bulletSpeedYfac = invBulletDirMag * bulletConfig.DirY;
+            int newOriginatedVirtualX = null == referencePrevEmissionBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevEmissionBullet.OriginatedVirtualGridX;
+            int newOriginatedVirtualY = null == referencePrevEmissionBullet ? currCharacterDownsync.VirtualGridY + xfac * bulletConfig.HitboxOffsetY : referencePrevEmissionBullet.OriginatedVirtualGridY;
             int newVirtualX = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevHitBullet.VirtualGridX;
             int newVirtualY = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY : referencePrevHitBullet.VirtualGridY;
             int groundWaveVelY = bulletConfig.DownSlopePrimerVelY;
@@ -2471,6 +2474,8 @@ namespace shared {
                     currCharacterDownsync.JoinIndex,
                     currCharacterDownsync.BulletTeamId,
                     BulletState.StartUp, 0,
+                    newOriginatedVirtualX,
+                    newOriginatedVirtualY,
                     newVirtualX, 
                     newVirtualY, 
                     xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
