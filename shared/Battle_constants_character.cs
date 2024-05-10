@@ -13,6 +13,7 @@ namespace shared {
         public const int SPECIES_BULLWARRIOR = 4096;
         public const int SPECIES_GOBLIN = 4097;
         public const int SPECIES_SKELEARCHER = 4098;
+        public const int SPECIES_BAT = 4099;
 
         public const float DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE = -4.5f; 
         public const int DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); 
@@ -378,6 +379,36 @@ namespace shared {
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                    }),
+
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_BAT, new CharacterConfig {
+                        SpeciesId = SPECIES_BAT,
+                        SpeciesName = "Bat",
+                        Hp = 30,
+                        Mp = 0,
+                        InAirIdleFrameIdxTurningPoint = 1,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        Speed = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 8,
+                        VisionOffsetX = (int)(4.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        CollisionTypeMask = COLLISION_FLYING_CHARACTER_INDEX_PREFIX,
+                        HasTurnAroundAnim = false,
+                        ProactiveJumpStartupFrames = 3,
+                        Hardness = 4,
+                        AntiGravityWhenIdle = true, 
+                        OmitGravity = true,
+                        OmitSoftPushback = true,
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,  
+                        MaxAscendingVelY = -DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID
                     }),
             });
     }

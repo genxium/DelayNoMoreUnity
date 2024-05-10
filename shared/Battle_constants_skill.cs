@@ -15,6 +15,43 @@ namespace shared {
         public const int PATTERN_INVENTORY_SLOT_C = 1024;
         public const int PATTERN_INVENTORY_SLOT_D = 1025;
 
+        public static BulletConfig BatMelee1PrimerBullet = new BulletConfig {
+            StartupFrames = 2,
+            ActiveFrames = 5,
+            HitStunFrames = 1,
+            HitInvinsibleFrames = 1,
+            BlockStunFrames = 1,
+            Damage = 5,
+            PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = 0,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = 0,
+            HitboxSizeX = (int)(28 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            CharacterEmitSfxName = "SlashEmitSpd2",
+            ExplosionSfxName = "Melee_Explosion2",
+            ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
+            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+        };
+
+        public static Skill BatMelee1PrimerSkill = new Skill {
+            RecoveryFrames = 8,
+            RecoveryFramesOnBlock = 8,
+            RecoveryFramesOnHit = 5,
+            MpDelta = 0,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }
+            .AddHit(BatMelee1PrimerBullet);
+
         public static BulletConfig SwordManMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 12,
             ActiveFrames = 16,
@@ -1884,6 +1921,7 @@ namespace shared {
                     ),
 
                 new KeyValuePair<int, Skill>(259, BladeGirlDragonPunchSkill),
+                new KeyValuePair<int, Skill>(260, BatMelee1PrimerSkill),
                 }
         );
 

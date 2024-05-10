@@ -1657,8 +1657,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform patrolCueChild in child) {
                         var tileObj = patrolCueChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = patrolCueChild.gameObject.GetComponent<SuperCustomProperties>();
-
+                        
                         var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        if (0 != tileObj.m_Width) {
+                            var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f);
+                            (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                        }
 
                         CustomProperty id, flAct, frAct, flCaptureFrames, frCaptureFrames, fdAct, fuAct, fdCaptureFrames, fuCaptureFrames, collisionTypeMask;
                         tileProps.TryGetCustomProperty("id", out id);
@@ -1687,7 +1691,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                             FuCaptureFrames = (null == fuCaptureFrames || fuCaptureFrames.IsEmpty) ? 0 : (ulong)fuCaptureFrames.GetValueAsInt(),
                             CollisionTypeMask = collisionTypeMaskVal
                         };
-                        var srcPolygon = NewRectPolygon(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0);
+
+                        float cueWidth = (0 == tileObj.m_Width ? 2 * defaultPatrolCueRadius : tileObj.m_Width);
+                        float cueHeight = (0 == tileObj.m_Height ? 2 * defaultPatrolCueRadius : tileObj.m_Height);
+
+                        var srcPolygon = NewRectPolygon(patrolCueCx, patrolCueCy, cueWidth, cueHeight, 0, 0, 0, 0);
                         serializedStaticPatrolCues.Add(new SerializedCompletelyStaticPatrolCueCollider {
                             Polygon = srcPolygon.Serialize(),
                             Attr = newPatrolCue,
@@ -2115,7 +2123,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.RevivalDirX = dirX;
             npcInRdf.RevivalDirY = dirY;
             npcInRdf.Speed = chConfig.Speed;
-            npcInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
+            npcInRdf.CharacterState = (chConfig.AntiGravityWhenIdle && 0 != dirX) ? CharacterState.Walking : CharacterState.InAirIdle1NoJump;
             npcInRdf.FramesToRecover = 0;
             npcInRdf.DirX = dirX;
             npcInRdf.DirY = dirY;

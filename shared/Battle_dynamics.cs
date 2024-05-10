@@ -324,6 +324,14 @@ namespace shared {
                 logger.LogInfo("_applyGravity: rdfId=" + rdfId + ", " + stringifyPlayer(currCharacterDownsync));
             }
             */
+            if ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) {
+                thatCharacterInNextFrame.VelX += GRAVITY_X;
+                thatCharacterInNextFrame.VelY -= GRAVITY_Y;
+                if (thatCharacterInNextFrame.VelY > chConfig.MaxAscendingVelY) {
+                    thatCharacterInNextFrame.VelY = chConfig.MaxAscendingVelY;
+                }
+                return;
+            }
             if (currCharacterDownsync.OmitGravity) {
                 return;
             }
@@ -941,6 +949,7 @@ namespace shared {
 
                 bool landedOnGravityPushback = false;
                 float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);
+                float normAlignmentWithAntiGravity = (primaryOverlapResult.OverlapY * +1f);
                 // Hold wall alignments of the primaryOverlapResult of hardPushbacks first, it'd be used later 
                 float normAlignmentWithHorizon1 = (primaryOverlapResult.OverlapX * +1f);
                 float normAlignmentWithHorizon2 = (primaryOverlapResult.OverlapX * -1f);
@@ -969,15 +978,29 @@ namespace shared {
                     thatCharacterInNextFrame.VelY = 0;
                 }
 
-                if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
-                    landedOnGravityPushback = true;
-                    /*
-                       if (1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
-                       }
-                     */
+                if (!chConfig.OmitGravity && !currCharacterDownsync.OmitGravity) {
+                    if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
+                        landedOnGravityPushback = true;
+                        /*
+                           if (1 == currCharacterDownsync.JoinIndex) {
+                           logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                           }
+                         */
+                    }
+                } else if ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) {
+                    if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithAntiGravity) {
+                        landedOnGravityPushback = true;
+                        /*
+                           if (1 == currCharacterDownsync.JoinIndex) {
+                           logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                           }
+                         */
+                    }
                 }
     
+                /*
+                [WARNING] There's not much concern about "softPushbacks" on (currCharacterDownsync.OmitGravity || chConfig.OmitGravity), by far they're mutually exclusive. 
+                */
                 bool shouldOmitSoftPushbackForSelf = (currCharacterDownsync.RepelSoftPushback || chOmittingSoftPushback(currCharacterDownsync));
                 if (softPushbackEnabled && Dying != currCharacterDownsync.CharacterState && false == shouldOmitSoftPushbackForSelf) {
                     int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
@@ -1174,98 +1197,145 @@ namespace shared {
                 */
 
                 if (landedOnGravityPushback) {
-                    thatCharacterInNextFrame.InAir = false;
-                    thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
-                    thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
-                    if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
-                        thatCharacterInNextFrame.CharacterState = LayDown1;
-                        thatCharacterInNextFrame.FramesToRecover = MAX_INT;
-                    }
-                    if (null != primaryTrap) {
-                        List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[primaryTrap.TrapLocalId];
-                        for (int j = 0; j < colliderAttrs.Count; j++) {
-                            var colliderAttr = colliderAttrs[j];
-                            if (colliderAttr.ProvidesSlipJump) {
-                                thatCharacterInNextFrame.PrimarilyOnSlippableHardPushback = true;
-                                break;
-                            }
-                        }
-                    }
-                    bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
-                    if (fallStopping) {
-                        thatCharacterInNextFrame.VelX = 0;
-                        thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
-                        if (Dying == thatCharacterInNextFrame.CharacterState) {
-                            // No update needed for Dying
-                        } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
-                            thatCharacterInNextFrame.VelY = 0;
+                    if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
+                        thatCharacterInNextFrame.InAir = false;
+                        thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
+                        thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
+                        if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
                             thatCharacterInNextFrame.CharacterState = LayDown1;
-                            thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
-                        } else if (InAirIdle2ByJump == thatCharacterInNextFrame.CharacterState) {
-                            thatCharacterInNextFrame.VelY = 0;
-                            thatCharacterInNextFrame.CharacterState = Idle1;
-                        } else {
-                            // [WARNING] Deliberately left blank, it's well understood that there're other possibilities and they're later handled by "_processEffPushbacks", the handling here is just for helping edge cases!
+                            thatCharacterInNextFrame.FramesToRecover = MAX_INT;
                         }
-
-                        if (shrinkedSizeSet.Contains(currCharacterDownsync.CharacterState) && !shrinkedSizeSet.Contains(thatCharacterInNextFrame.CharacterState)) {
-                            // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
-                            int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
-                            var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
-                            var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                            effPushbacks[i].Y -= halfColliderChDiff;
-                            /*
-                            if (1 == currCharacterDownsync.JoinIndex) {
-                                logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                        if (null != primaryTrap) {
+                            List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[primaryTrap.TrapLocalId];
+                            for (int j = 0; j < colliderAttrs.Count; j++) {
+                                var colliderAttr = colliderAttrs[j];
+                                if (colliderAttr.ProvidesSlipJump) {
+                                    thatCharacterInNextFrame.PrimarilyOnSlippableHardPushback = true;
+                                    break;
+                                }
                             }
-                            */
                         }
-
-                        if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
-                            thatCharacterInNextFrame.FramesToRecover = 0;
-                        }
-                    } else {
-                        // landedOnGravityPushback not fallStopping, could be in LayDown or GetUp or Dying
-                        if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                        bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
+                        if (fallStopping) {
+                            thatCharacterInNextFrame.VelX = 0;
+                            thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 // No update needed for Dying
                             } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
-                                thatCharacterInNextFrame.VelX = 0;
                                 thatCharacterInNextFrame.VelY = 0;
                                 thatCharacterInNextFrame.CharacterState = LayDown1;
                                 thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
-                            } else if (LayDown1 == thatCharacterInNextFrame.CharacterState) {
-                                if (0 == thatCharacterInNextFrame.FramesToRecover) {
-                                    thatCharacterInNextFrame.CharacterState = GetUp1;
-                                    thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
-                                }
-                            } else if (GetUp1 == thatCharacterInNextFrame.CharacterState) {
-                                if (0 == thatCharacterInNextFrame.FramesToRecover) {
-                                    thatCharacterInNextFrame.CharacterState = Idle1;
-                                    thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
-
-                                    int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
-                                    var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.LayDownSizeY + extraSafeGapToPreventBouncing)) >> 1);
-                                    var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                                    effPushbacks[i].Y -= halfColliderChDiff;
-                                }
-                            } else if (0 >= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
-                                // [WARNING] Covers 2 situations:
-                                // 1. Walking up to a flat ground then walk back down, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY";
-                                // 2. Dashing down to a flat ground then walk back up. 
-                                thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
+                            } else if (InAirIdle2ByJump == thatCharacterInNextFrame.CharacterState) {
+                                thatCharacterInNextFrame.VelY = 0;
+                                thatCharacterInNextFrame.CharacterState = Idle1;
+                            } else {
+                                // [WARNING] Deliberately left blank, it's well understood that there're other possibilities and they're later handled by "_processEffPushbacks", the handling here is just for helping edge cases!
                             }
+
+                            if (shrinkedSizeSet.Contains(currCharacterDownsync.CharacterState) && !shrinkedSizeSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
+                                int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                effPushbacks[i].Y -= halfColliderChDiff;
+                                /*
+                                if (1 == currCharacterDownsync.JoinIndex) {
+                                    logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                }
+                                */
+                            }
+
+                            if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.FramesToRecover = 0;
+                            }
+                        } else {
+                            // landedOnGravityPushback not fallStopping, could be in LayDown or GetUp or Dying
+                            if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                if (Dying == thatCharacterInNextFrame.CharacterState) {
+                                    // No update needed for Dying
+                                } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
+                                    thatCharacterInNextFrame.VelX = 0;
+                                    thatCharacterInNextFrame.VelY = 0;
+                                    thatCharacterInNextFrame.CharacterState = LayDown1;
+                                    thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
+                                } else if (LayDown1 == thatCharacterInNextFrame.CharacterState) {
+                                    if (0 == thatCharacterInNextFrame.FramesToRecover) {
+                                        thatCharacterInNextFrame.CharacterState = GetUp1;
+                                        thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
+                                    }
+                                } else if (GetUp1 == thatCharacterInNextFrame.CharacterState) {
+                                    if (0 == thatCharacterInNextFrame.FramesToRecover) {
+                                        thatCharacterInNextFrame.CharacterState = Idle1;
+                                        thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
+
+                                        int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                        var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.LayDownSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                        var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                        effPushbacks[i].Y -= halfColliderChDiff;
+                                    }
+                                } else if (0 >= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
+                                    // [WARNING] Covers 2 situations:
+                                    // 1. Walking up to a flat ground then walk back down, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY";
+                                    // 2. Dashing down to a flat ground then walk back up. 
+                                    thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
+                                }
+                            }
+                            /*
+                               if (1 == currCharacterDownsync.JoinIndex) {
+                               logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                               }
+                             */
                         }
-                        /*
-                           if (0 == currCharacterDownsync.SpeciesId) {
-                           logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
-                           }
-                         */
+                    } else if (chConfig.AntiGravityWhenIdle) {
+                        thatCharacterInNextFrame.InAir = false;
+                        bool fallStopping = (currCharacterDownsync.InAir && 0 <= currCharacterDownsync.VelY);
+                        if (fallStopping) {
+                            thatCharacterInNextFrame.VelX = 0;
+                            thatCharacterInNextFrame.VelY = 0;
+                            if (Dying == thatCharacterInNextFrame.CharacterState) {
+                                // No update needed for Dying
+                            } else {
+                                // [WARNING] Deliberately left blank, it's well understood that there're other possibilities and they're later handled by "_processEffPushbacks", the handling here is just for helping edge cases!
+                            }
+
+                            if (shrinkedSizeSet.Contains(currCharacterDownsync.CharacterState) && !shrinkedSizeSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
+                                int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                effPushbacks[i].Y -= halfColliderChDiff;
+                                /*
+                                if (1 == currCharacterDownsync.JoinIndex) {
+                                    logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                }
+                                */
+                            }
+
+                            if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.FramesToRecover = 0;
+                            }
+                        } else {
+                            // landedOnGravityPushback not fallStopping, could only be Dying
+                            if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                if (Dying == thatCharacterInNextFrame.CharacterState) {
+                                    // No update needed for Dying
+                                } else if (0 <= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
+                                    thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
+                                }
+                            }
+                            /*
+                               if (1 == currCharacterDownsync.JoinIndex) {
+                               logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                               }
+                             */
+                        }
                     }
                 }
 
                 if (chConfig.OnWallEnabled) {
-
+                    /*
+                    [WARNING] There's not much concern about "wall dynamics" on (currCharacterDownsync.OmitGravity || chConfig.OmitGravity), by far they're mutually exclusive. 
+                    */
                     if (null == primaryTrap || (null != primaryTrap && !primaryTrap.ConfigFromTiled.ProhibitsWallGrabbing)) {
 
                         if (thatCharacterInNextFrame.InAir) {
@@ -1836,6 +1906,10 @@ namespace shared {
                             case Idle1:
                             case Walking:
                             case TurnAround:
+                                if (Walking == oldNextCharacterState && (thatCharacterInNextFrame.OmitGravity || chConfig.OmitGravity)) {
+                                    // [WARNING] Flying characters shall be able to walk in air.
+                                    break;
+                                }
                                 if ((currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
                                     thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
                                 } else if ((!currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByJump == currCharacterDownsync.CharacterState) {

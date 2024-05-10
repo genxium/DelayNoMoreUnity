@@ -34,6 +34,7 @@ namespace shared {
         public int WallJumpingInitVelY;
         public int WallSlidingVelY;
         public int MinFallingVelY;
+        public int MaxAscendingVelY;
 
         public bool UseInventoryBtnB;
 

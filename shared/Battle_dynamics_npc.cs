@@ -48,6 +48,10 @@ namespace shared {
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(PurpleArrowBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * PurpleArrowBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((PurpleArrowBullet.HitboxSizeX >> 2), (PurpleArrowBullet.HitboxSizeY >> 2));
                     break;
+                case SPECIES_BAT:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(BatMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * BatMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BatMelee1PrimerBullet.HitboxSizeX >> 1), (BatMelee1PrimerBullet.HitboxSizeY >> 1));
+                    break;
                 default:
                     return false;
             }
@@ -213,48 +217,60 @@ namespace shared {
             bool hasVisionReaction = false;
             bool hasEnemyBehindMe = false;
             var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
-            if (!currCharacterDownsync.InAir) {
-                // TODO: There's no InAir vision reaction yet.
-                float visionCx, visionCy, visionCw, visionCh;
-                calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
 
-                var visionCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_VISION_INDEX_PREFIX);
-                collisionSys.AddSingle(visionCollider);
+            float visionCx, visionCy, visionCw, visionCh;
+            calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
 
-                Collider? bCollider;
-                CharacterDownsync? v3;
-                findHorizontallyClosestCharacterCollider(currCharacterDownsync, visionCollider, collision, ref overlapResult, out bCollider, out v3);
+            var visionCollider = dynamicRectangleColliders[colliderCnt];
+            UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_VISION_INDEX_PREFIX);
+            collisionSys.AddSingle(visionCollider);
 
-                if (null != bCollider && null != v3) {
-                    var colliderDx = (bCollider.X - aCollider.X);
-                    var colliderDy = (bCollider.Y - aCollider.Y);
-                    if (0 > (colliderDx * currCharacterDownsync.DirX)) {
-                        hasEnemyBehindMe = true;
-                    } else {
-                        var atkedChConfig = characters[v3.SpeciesId];
-                        float absColliderDx = Math.Abs(colliderDx), absColliderDy = Math.Abs(colliderDy);
-                        // Opponent is in front of me
-                        if (frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, colliderDy, absColliderDy, atkedChConfig)) {
-                            // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
-                            patternId = PATTERN_UP_B;
-                            hasVisionReaction = true;
-                        } else if (frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, colliderDy, absColliderDy, atkedChConfig)) {
-                            patternId = PATTERN_B;
-                            hasVisionReaction = true;
-                        } else if (frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, colliderDx, colliderDy, atkedChConfig)) {
-                            patternId = PATTERN_DOWN_B;
-                            hasVisionReaction = true;
-                        }
+            Collider? bCollider;
+            CharacterDownsync? v3;
+            findHorizontallyClosestCharacterCollider(currCharacterDownsync, visionCollider, collision, ref overlapResult, out bCollider, out v3);
+
+            float bColliderDx = 0f, bColliderDy = 0f;
+            if (null != bCollider && null != v3) {
+                bColliderDx = (bCollider.X - aCollider.X);
+                bColliderDy = (bCollider.Y - aCollider.Y);
+                if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) {
+                    hasEnemyBehindMe = true; 
+                } else if (0 > (bColliderDx * currCharacterDownsync.DirX)) {
+                    hasEnemyBehindMe = true;
+                } else {
+                    var atkedChConfig = characters[v3.SpeciesId];
+                    float absColliderDx = Math.Abs(bColliderDx), absColliderDy = Math.Abs(bColliderDy);
+                    // Opponent is in front of me
+                    if (frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig)) {
+                        // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
+                        patternId = PATTERN_UP_B;
+                        hasVisionReaction = true;
+                    } else if (frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig)) {
+                        patternId = PATTERN_B;
+                        hasVisionReaction = true;
+                    } else if (frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, bColliderDx, bColliderDy, atkedChConfig)) {
+                        patternId = PATTERN_DOWN_B;
+                        hasVisionReaction = true;
                     }
                 }
-
-                collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
-                visionCollider.Data = null;
             }
 
+            collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
+            visionCollider.Data = null;
+
             if (!hasVisionReaction && hasEnemyBehindMe) {
-                effectiveDx = -effectiveDx;
+                if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) { 
+                    var magSqr = bColliderDx * bColliderDx + bColliderDy * bColliderDy;
+                    var invMag = InvSqrt32(magSqr);
+                    var mag = magSqr * invMag;
+
+                    float normX = bColliderDx*invMag, normY = bColliderDy*invMag;
+                    var (effDx, effDy, _) = DiscretizeDirection(normX, normY);
+                    effectiveDx = effDx;
+                    effectiveDy = effDy;
+                } else {
+                    effectiveDx = -effectiveDx;
+                }
                 hasVisionReaction = true;
             }
 
@@ -267,16 +283,16 @@ namespace shared {
             } else if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
                 bool hasPatrolCueReaction = false;
                 // [WARNING] The field "CharacterDownsync.FramesInPatrolCue" would also be re-purposed as "patrol cue collision waiving frames" by the logic here.
-                Collider? bCollider;
-                PatrolCue? v3;
-                findHorizontallyClosestPatrolCueCollider(currCharacterDownsync, aCollider, collision, ref overlapResult, out bCollider, out v3); 
+                Collider? pCollider;
+                PatrolCue? v4;
+                findHorizontallyClosestPatrolCueCollider(currCharacterDownsync, aCollider, collision, ref overlapResult, out pCollider, out v4); 
                 
-                if (null != bCollider && null != v3) {
+                if (null != pCollider && null != v4) {
                     bool prevCapturedByPatrolCue = currCharacterDownsync.CapturedByPatrolCue;
 
                     // By now we're sure that it should react to the PatrolCue
-                    var colliderDx = (aCollider.X - bCollider.X);
-                    var colliderDy = (aCollider.Y - bCollider.Y);
+                    var colliderDx = (aCollider.X - pCollider.X);
+                    var colliderDy = (aCollider.Y - pCollider.Y);
                     bool fr = 0 < colliderDx && (0 > currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX));
                     bool fl = 0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX));
                     bool fu = 0 < colliderDy && (0 > currCharacterDownsync.VelY || (0 == currCharacterDownsync.VelY && 0 > currCharacterDownsync.DirY));
@@ -288,42 +304,42 @@ namespace shared {
 
                     int targetFramesInPatrolCue = 0;
                     if (fr) {
-                        targetFramesInPatrolCue = (int)v3.FrCaptureFrames;
-                        DecodeInput(v3.FrAct, decodedInputHolder);
-                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                        targetFramesInPatrolCue = (int)v4.FrCaptureFrames;
+                        DecodeInput(v4.FrAct, decodedInputHolder);
+                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4)); 
                     } else if (fl) {
-                        targetFramesInPatrolCue = (int)v3.FlCaptureFrames;
-                        DecodeInput(v3.FlAct, decodedInputHolder);
-                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3));
+                        targetFramesInPatrolCue = (int)v4.FlCaptureFrames;
+                        DecodeInput(v4.FlAct, decodedInputHolder);
+                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4));
                     } else if (fu) {
-                        targetFramesInPatrolCue = (int)v3.FuCaptureFrames;
-                        DecodeInput(v3.FuAct, decodedInputHolder);
-                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the top", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                        targetFramesInPatrolCue = (int)v4.FuCaptureFrames;
+                        DecodeInput(v4.FuAct, decodedInputHolder);
+                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the top", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4)); 
                     } else if (fd) {
-                        targetFramesInPatrolCue = (int)v3.FdCaptureFrames;
-                        DecodeInput(v3.FdAct, decodedInputHolder);
-                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the bottom", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                        targetFramesInPatrolCue = (int)v4.FdCaptureFrames;
+                        DecodeInput(v4.FdAct, decodedInputHolder);
+                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the bottom", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4)); 
                     } else {
-                        logger.LogWarn(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3, currCharacterDownsync.DirX));
+                        logger.LogWarn(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4, currCharacterDownsync.DirX));
                     }
 
-                    bool shouldWaivePatrolCueReaction = (false == prevCapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue && v3.Id == currCharacterDownsync.WaivingPatrolCueId && (0 == decodedInputHolder.BtnALevel && 0 == decodedInputHolder.BtnBLevel)); // Don't waive if the cue contains an action button (i.e. BtnA or BtnB)
+                    bool shouldWaivePatrolCueReaction = (false == prevCapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue && v4.Id == currCharacterDownsync.WaivingPatrolCueId && (0 == decodedInputHolder.BtnALevel && 0 == decodedInputHolder.BtnBLevel)); // Don't waive if the cue contains an action button (i.e. BtnA or BtnB)
 
                     do {
                         if (shouldWaivePatrolCueReaction) {
                             // [WARNING] It's difficult to move this "early return" block to be before the "shape overlap check" like that of the traps, because we need data from "decodedInputHolder". 
-                            // logger.LogInfo(String.Format("rdf.Id={0}, Npc joinIndex={1}, speciesId={2} is waived for patrolCueId={3} because it has (prevCapturedByPatrolCue={4}, framesInPatrolCue={5}, waivingPatrolCueId={6}).", currRenderFrame.Id, currCharacterDownsync.JoinIndex, currCharacterDownsync.SpeciesId, v3.Id, prevCapturedByPatrolCue, currCharacterDownsync.FramesInPatrolCue, currCharacterDownsync.WaivingPatrolCueId));
+                            // logger.LogInfo(String.Format("rdf.Id={0}, Npc joinIndex={1}, speciesId={2} is waived for patrolCueId={3} because it has (prevCapturedByPatrolCue={4}, framesInPatrolCue={5}, waivingPatrolCueId={6}).", currRenderFrame.Id, currCharacterDownsync.JoinIndex, currCharacterDownsync.SpeciesId, v4.Id, prevCapturedByPatrolCue, currCharacterDownsync.FramesInPatrolCue, currCharacterDownsync.WaivingPatrolCueId));
                             break;
                         }
 
-                        bool shouldBreakPatrolCueCapture = ((true == prevCapturedByPatrolCue) && (currCharacterDownsync.WaivingPatrolCueId == v3.Id) && (0 == currCharacterDownsync.FramesInPatrolCue));
+                        bool shouldBreakPatrolCueCapture = ((true == prevCapturedByPatrolCue) && (currCharacterDownsync.WaivingPatrolCueId == v4.Id) && (0 == currCharacterDownsync.FramesInPatrolCue));
 
                         bool shouldEnterCapturedPeriod = ((false == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (0 < targetFramesInPatrolCue));
 
                         if (shouldEnterCapturedPeriod) {
                             thatCharacterInNextFrame.CapturedByPatrolCue = true;
                             thatCharacterInNextFrame.FramesInPatrolCue = targetFramesInPatrolCue;
-                            thatCharacterInNextFrame.WaivingPatrolCueId = v3.Id;
+                            thatCharacterInNextFrame.WaivingPatrolCueId = v4.Id;
                             effectiveDx = 0;
                             effectiveDy = 0;
                             jumpedOrNot = false;
@@ -333,7 +349,7 @@ namespace shared {
                             break;
                         }
 
-                        bool isReallyCaptured = ((true == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (v3.Id == currCharacterDownsync.WaivingPatrolCueId) && (0 < currCharacterDownsync.FramesInPatrolCue));
+                        bool isReallyCaptured = ((true == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (v4.Id == currCharacterDownsync.WaivingPatrolCueId) && (0 < currCharacterDownsync.FramesInPatrolCue));
                         if (isReallyCaptured) {
                             effectiveDx = 0;
                             effectiveDy = 0;
@@ -350,7 +366,7 @@ namespace shared {
                             hasPatrolCueReaction = true;
                             thatCharacterInNextFrame.CapturedByPatrolCue = false;
                             thatCharacterInNextFrame.FramesInPatrolCue = DEFAULT_PATROL_CUE_WAIVING_FRAMES; // re-purposed
-                            thatCharacterInNextFrame.WaivingPatrolCueId = v3.Id;
+                            thatCharacterInNextFrame.WaivingPatrolCueId = v4.Id;
                         }
                     } while (false);
                 }
