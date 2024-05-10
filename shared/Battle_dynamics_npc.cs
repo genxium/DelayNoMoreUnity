@@ -49,6 +49,7 @@ namespace shared {
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((PurpleArrowBullet.HitboxSizeX >> 2), (PurpleArrowBullet.HitboxSizeY >> 2));
                     break;
                 case SPECIES_BAT:
+                case SPECIES_FIREBAT:
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(BatMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * BatMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BatMelee1PrimerBullet.HitboxSizeX >> 1), (BatMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
@@ -215,7 +216,8 @@ namespace shared {
             } 
 
             bool hasVisionReaction = false;
-            bool hasEnemyBehindMe = false;
+            bool shouldFollowOpponent = false;
+            bool shouldFlee = false;
             var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
 
             float visionCx, visionCy, visionCw, visionCh;
@@ -242,19 +244,23 @@ namespace shared {
                     patternId = PATTERN_UP_B;
                     hasVisionReaction = true;
                 } else if (frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig)) {
-                    patternId = PATTERN_B;
-                    hasVisionReaction = true;
+                    if ((SPECIES_FIREBAT == currCharacterDownsync.SpeciesId  || SPECIES_BAT == currCharacterDownsync.SpeciesId) && currCharacterDownsync.Mp < BatMelee1PrimerSkill.MpDelta) {
+                        shouldFlee = true;
+                    } else {
+                        patternId = PATTERN_B;
+                        hasVisionReaction = true;
+                    }
                 } else if (frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, bColliderDx, bColliderDy, atkedChConfig)) {
                     patternId = PATTERN_DOWN_B;
                     hasVisionReaction = true;
                 }
                 
-                if (!hasVisionReaction) {
+                if (!hasVisionReaction && !shouldFlee) {
                     if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) {
                         // For flying characters, as long as there's opponent in vision, always try to follow.
-                        hasEnemyBehindMe = true;
+                        shouldFollowOpponent = true;
                     } else if (0 > bColliderDx * currCharacterDownsync.DirX) {
-                        hasEnemyBehindMe = true;
+                        shouldFollowOpponent = true;
                     }
                 }
             }
@@ -262,12 +268,16 @@ namespace shared {
             collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
             visionCollider.Data = null;
 
-            if (!hasVisionReaction && hasEnemyBehindMe) {
+            if (!hasVisionReaction && (shouldFollowOpponent || shouldFlee)) {
                 if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) { 
                     var magSqr = bColliderDx * bColliderDx + bColliderDy * bColliderDy;
                     var invMag = InvSqrt32(magSqr);
 
                     float normX = bColliderDx*invMag, normY = bColliderDy*invMag;
+                    if (shouldFlee) {
+                        normX = -normX;
+                        normY = -normY;
+                    }
                     var (effDx, effDy, _) = DiscretizeDirection(normX, normY);
                     effectiveDx = effDx;
                     effectiveDy = effDy;
@@ -419,6 +429,12 @@ namespace shared {
                         }
                     }
                     continue; // Don't allow movement if skill is used
+                } else {
+                    if (PATTERN_ID_NO_OP != patternId && PATTERN_ID_UNABLE_TO_OP != patternId && (PATTERN_DOWN_B == patternId || PATTERN_UP_B == patternId || PATTERN_B == patternId)) {
+                        if (chConfig.AntiGravityWhenIdle) {
+                            thatCharacterInNextFrame.CharacterState = CharacterState.InAirIdle1NoJump;
+                        }
+                    }
                 }
 
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);

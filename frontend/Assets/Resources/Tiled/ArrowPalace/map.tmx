@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="33" nextobjectid="444">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="33" nextobjectid="446">
  <properties>
   <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="2"/>
-  <property name="npcPreallocCapDict" value="4098:2;3:2;4099:4"/>
+  <property name="npcPreallocCapDict" value="4098:2;3:2;4099:3;4100:2"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
@@ -190,6 +190,22 @@
    <properties>
     <property name="dirX" value="0"/>
     <property name="speciesId" value="4099"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="444" name="FireBat" x="405" y="1827">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="4100"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="445" name="FireBat" x="603" y="1827">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="speciesId" value="4100"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>

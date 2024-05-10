@@ -4,16 +4,16 @@
 # To import these sprites into your Unity project, download "TexturePackerImporter":
 # https://www.codeandweb.com/texturepacker/unity
 #
-# $TexturePacker:SmartUpdate:08b5b9d1980b4e41b8c7672bf712408b:6f349cff7637f164979b1ff798ce7f79:babeba01b3ac764cf7de8a5e7ec715ff$
+# $TexturePacker:SmartUpdate:61dfa82e73b0bbaa43e2af214b86175c:6d1eff1e339c5fb659f26b4c23ed6843:c6c3fe8b5bf0e3e58cc45e1a9121aab4$
 #
 :format=40300
-:texture=Bat.png
+:texture=FireBat.png
 :size=64x64
 :pivotpoints=enabled
 :borders=disabled
 :alphahandling=ClearTransparentPixels
 
-AntiIdle1_0;0;12;8;11; 0.5;0.5; 0;0;0;0
+AntiIdle_0;0;12;8;11; 0.5;0.5; 0;0;0;0
 Atk1_0;45;37;14;11; 0.5;0.7727272727272727; 0;0;0;0
 Atk1_1;0;23;12;13; 0.6666666666666666;0.5769230769230769; 0;0;0;0
 Atk1_2;12;22;11;13; 0.7272727272727273;0.5; 0;0;0;0

@@ -43,9 +43,10 @@ namespace shared {
         };
 
         public static Skill BatMelee1PrimerSkill = new Skill {
-            RecoveryFrames = 20,
-            RecoveryFramesOnBlock = 20,
-            RecoveryFramesOnHit = 20,
+            RecoveryFrames = 60,
+            RecoveryFramesOnBlock = 60,
+            RecoveryFramesOnHit = 60,
+            MpDelta = 800,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk1
         }
@@ -2163,6 +2164,19 @@ namespace shared {
                             return NO_SKILL;
                     }
                 case SPECIES_BAT:
+                    switch (patternId) {
+                        case PATTERN_B:
+                        case PATTERN_DOWN_B:
+                        case PATTERN_UP_B:
+                            if (!notRecovered) {
+                                return 260;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        default:
+                            return NO_SKILL;
+                    }
+                case SPECIES_FIREBAT:
                     switch (patternId) {
                         case PATTERN_B:
                         case PATTERN_DOWN_B:

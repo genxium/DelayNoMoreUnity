@@ -1072,9 +1072,6 @@ namespace shared {
                     }
                 }
     
-                /*
-                [WARNING] There's not much concern about "softPushbacks" on (currCharacterDownsync.OmitGravity || chConfig.OmitGravity), by far they're mutually exclusive. 
-                */
                 bool shouldOmitSoftPushbackForSelf = (currCharacterDownsync.RepelSoftPushback || chOmittingSoftPushback(currCharacterDownsync));
                 if (softPushbackEnabled && Dying != currCharacterDownsync.CharacterState && false == shouldOmitSoftPushbackForSelf) {
                     int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
@@ -1231,7 +1228,14 @@ namespace shared {
                                 landedOnGravityPushback = true;
                             }
                             */
-                            landedOnGravityPushback = true;
+                            if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
+                                // [WARNING] Flying character doesn't land on softPushbacks even if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithAntiGravity)!
+                                landedOnGravityPushback = true;
+                                if (v1.OmitGravity && v1.RepelSoftPushback) {
+                                    // To avoid the need for keeping track of another "frictionVelX"
+                                    thatCharacterInNextFrame.VelY += chConfig.JumpingInitVelY;
+                                }
+                            }
                         }
 
                         shapeOverlappedOtherChCnt++;

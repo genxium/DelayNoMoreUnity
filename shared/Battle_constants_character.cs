@@ -14,6 +14,7 @@ namespace shared {
         public const int SPECIES_GOBLIN = 4097;
         public const int SPECIES_SKELEARCHER = 4098;
         public const int SPECIES_BAT = 4099;
+        public const int SPECIES_FIREBAT = 4100;
 
         public const float DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE = -4.5f; 
         public const int DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID = (int)(DEFAULT_MIN_FALLING_VEL_Y_COLLISION_SPACE*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO); 
@@ -385,14 +386,14 @@ namespace shared {
                         SpeciesId = SPECIES_BAT,
                         SpeciesName = "Bat",
                         Hp = 30,
-                        Mp = 0,
+                        Mp = 10*BATTLE_DYNAMICS_FPS,
                         InAirIdleFrameIdxTurningPoint = 1,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         Speed = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 8,
-                        VisionOffsetX = (int)(4.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(10.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(25.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(5.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(20.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -404,8 +405,38 @@ namespace shared {
                         Hardness = 4,
                         AntiGravityWhenIdle = true, 
                         OmitGravity = true,
-                        OmitSoftPushback = true,
+                        MpRegenRate = 1,
+                        RepelSoftPushback = true, // [WARNING] To avoid "bouncing landing on flying character", don't forget to set either "RepelSoftPushback" or "OmitSoftPushback" here!
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,  
+                        MaxAscendingVelY = -DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID
+                    }),
+
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_FIREBAT, new CharacterConfig {
+                        SpeciesId = SPECIES_FIREBAT,
+                        SpeciesName = "FireBat",
+                        Hp = 10,
+                        Mp = 10*BATTLE_DYNAMICS_FPS,
+                        InAirIdleFrameIdxTurningPoint = 1,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        Speed = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 8,
+                        VisionOffsetX = (int)(4.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeX = (int)(25.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(25.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(25.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(25.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        CollisionTypeMask = (COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_FLYING_CHARACTER_INDEX_PREFIX),
+                        HasTurnAroundAnim = false,
+                        Hardness = 4,
+                        AntiGravityWhenIdle = true,
+                        OmitGravity = true,
+                        MpRegenRate = 1,
+                        OmitSoftPushback = true, // [WARNING] To avoid "bouncing landing on flying character", don't forget to set either "RepelSoftPushback" or "OmitSoftPushback" here!
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         MaxAscendingVelY = -DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID
                     }),
             });
