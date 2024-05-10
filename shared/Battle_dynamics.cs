@@ -654,6 +654,80 @@ namespace shared {
             }
         }
 
+        public static void _processInertiaFlying(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
+            bool currFreeFromInertia = (0 == currCharacterDownsync.FramesCapturedByInertia);
+            bool currBreakingFromInertia = (1 == currCharacterDownsync.FramesCapturedByInertia);
+          
+            bool withInertiaBreakingState = (thatCharacterInNextFrame.JumpTriggered || (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState));
+            bool alignedWithInertia = true;
+            bool exactTurningAround = false;
+            bool stoppingFromWalking = false;
+            if ((0 != effDx && 0 == thatCharacterInNextFrame.VelX) || (0 != effDy && 0 == thatCharacterInNextFrame.VelY)) {
+                alignedWithInertia = false;
+            } else if ((0 == effDx && 0 != thatCharacterInNextFrame.VelX) || (0 == effDy && 0 != thatCharacterInNextFrame.VelY)) {
+                alignedWithInertia = false;
+                stoppingFromWalking = true;
+            } else if ((0 > effDx * thatCharacterInNextFrame.VelX) || (0 > effDy * thatCharacterInNextFrame.VelY)) {
+                alignedWithInertia = false;
+                exactTurningAround = true;
+            }
+
+            if (0 == currCharacterDownsync.FramesToRecover || (WalkingAtk1 == currCharacterDownsync.CharacterState || WalkingAtk4 == currCharacterDownsync.CharacterState)) {
+                thatCharacterInNextFrame.CharacterState = Walking; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Walking" as a default action
+                
+                if (shouldIgnoreInertia) {
+                    thatCharacterInNextFrame.FramesCapturedByInertia = 0;
+                    if (0 != effDx || 0 != effDy) {
+                        thatCharacterInNextFrame.DirX = effDx;
+                        thatCharacterInNextFrame.DirY = effDy;
+                        int xfac = 0 > effDx ? -1 : +1;
+                        int yfac = 0 > effDy ? -1 : +1;
+                        thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                        thatCharacterInNextFrame.VelX = yfac * currCharacterDownsync.Speed;
+                    } else {
+                        thatCharacterInNextFrame.VelX = 0;
+                        thatCharacterInNextFrame.VelY = 0;
+                    }
+                } else {
+                    if (alignedWithInertia || withInertiaBreakingState || currBreakingFromInertia) {
+                        if (!alignedWithInertia) {
+                            // Should reset "FramesCapturedByInertia" in this case!
+                            thatCharacterInNextFrame.FramesCapturedByInertia = 0;
+                        }
+
+                        if (0 != effDx) {
+                            int xfac = 0 > effDx ? -1 : +1;
+                            int yfac = 0 > effDy ? -1 : +1;
+                            thatCharacterInNextFrame.DirX = effDx;
+                            thatCharacterInNextFrame.DirY = effDy;
+                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                            thatCharacterInNextFrame.VelX = yfac * currCharacterDownsync.Speed;
+                        } else {
+                            thatCharacterInNextFrame.VelX = 0;
+                            thatCharacterInNextFrame.VelY = 0;
+                        }
+                    } else if (currFreeFromInertia) {
+                        if (exactTurningAround) {
+                            // logger.LogInfo(stringifyPlayer(currCharacterDownsync) + " is turning around at rdfId=" + rdfId);
+                            thatCharacterInNextFrame.CharacterState = (chConfig.HasTurnAroundAnim && !currCharacterDownsync.InAir) ? TurnAround : Walking;
+                            thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
+                            if (chConfig.InertiaFramesToRecover > thatCharacterInNextFrame.FramesToRecover) {
+                                // [WARNING] Deliberately not setting "thatCharacterInNextFrame.FramesToRecover" if not turning around to allow using skills!
+                                thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover - 1); // To favor animation playing and prevent skill use when turning-around
+                            }
+                        } else if (stoppingFromWalking) {
+                            thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
+                        } else {
+                            thatCharacterInNextFrame.FramesCapturedByInertia = (chConfig.InertiaFramesToRecover >> 3);
+                        }
+                    } else {
+                        // [WARNING] Not free from inertia, just set proper next chState
+                        thatCharacterInNextFrame.CharacterState = Walking;
+                    }
+                }
+            }
+        }
+
         public static bool IsBulletExploding(Bullet bullet) {
             switch (bullet.Config.BType) {
                 case BulletType.Melee:
@@ -895,7 +969,7 @@ namespace shared {
                 float boxCx, boxCy, boxCw, boxCh;
                 calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
                 Collider characterCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(characterCollider, boxCx, boxCy, boxCw, boxCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_CHARACTER_INDEX_PREFIX); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "characterCollider.Y" would be a multiple of 1.0
+                UpdateRectCollider(characterCollider, boxCx, boxCy, boxCw, boxCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, chConfig.CollisionTypeMask); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "characterCollider.Y" would be a multiple of 1.0
                 colliderCnt++;
 
                 // Add to collision system

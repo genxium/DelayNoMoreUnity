@@ -2163,6 +2163,19 @@ namespace shared {
                         default:
                             return NO_SKILL;
                     }
+                case SPECIES_BAT:
+                    switch (patternId) {
+                        case PATTERN_B:
+                        case PATTERN_DOWN_B:
+                        case PATTERN_UP_B:
+                            if (!notRecovered) {
+                                return 260;
+                            } else {
+                                return NO_SKILL;
+                            }
+                        default:
+                            return NO_SKILL;
+                    }
                 default:
                     return NO_SKILL;
             }

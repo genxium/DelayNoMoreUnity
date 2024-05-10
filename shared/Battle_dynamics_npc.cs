@@ -262,7 +262,6 @@ namespace shared {
                 if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) { 
                     var magSqr = bColliderDx * bColliderDx + bColliderDy * bColliderDy;
                     var invMag = InvSqrt32(magSqr);
-                    var mag = magSqr * invMag;
 
                     float normX = bColliderDx*invMag, normY = bColliderDy*invMag;
                     var (effDx, effDy, _) = DiscretizeDirection(normX, normY);
@@ -419,7 +418,11 @@ namespace shared {
                 }
 
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
-                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, skillConfig, logger);
+                if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
+                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, skillConfig, logger);
+                } else {
+                    _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, skillConfig, logger);
+                }
                 _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
             }
         }
