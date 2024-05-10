@@ -302,21 +302,29 @@
   <object id="442" name="FlyingCue" x="160" y="1680" width="8" height="380">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="0"/>
     <property name="flAct" value="3"/>
     <property name="flCaptureFrames" value="0"/>
     <property name="frAct" value="3"/>
     <property name="frCaptureFrames" value="0"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="0"/>
     <property name="id" value="1"/>
    </properties>
   </object>
   <object id="443" name="FlyingCue" x="824" y="1680" width="8" height="380">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
-    <property name="flAct" value="3"/>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="0"/>
+    <property name="flAct" value="4"/>
     <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="3"/>
+    <property name="frAct" value="4"/>
     <property name="frCaptureFrames" value="0"/>
-    <property name="id" value="1"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="0"/>
+    <property name="id" value="2"/>
    </properties>
   </object>
  </objectgroup>

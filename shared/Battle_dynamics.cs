@@ -683,7 +683,7 @@ namespace shared {
                         int xfac = 0 > effDx ? -1 : +1;
                         int yfac = 0 > effDy ? -1 : +1;
                         thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                        thatCharacterInNextFrame.VelX = yfac * currCharacterDownsync.Speed;
+                        thatCharacterInNextFrame.VelY = yfac * currCharacterDownsync.Speed;
                     } else {
                         thatCharacterInNextFrame.VelX = 0;
                         thatCharacterInNextFrame.VelY = 0;

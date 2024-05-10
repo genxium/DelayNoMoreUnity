@@ -233,24 +233,29 @@ namespace shared {
             if (null != bCollider && null != v3) {
                 bColliderDx = (bCollider.X - aCollider.X);
                 bColliderDy = (bCollider.Y - aCollider.Y);
-                if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) {
-                    hasEnemyBehindMe = true; 
-                } else if (0 > (bColliderDx * currCharacterDownsync.DirX)) {
-                    hasEnemyBehindMe = true;
-                } else {
-                    var atkedChConfig = characters[v3.SpeciesId];
-                    float absColliderDx = Math.Abs(bColliderDx), absColliderDy = Math.Abs(bColliderDy);
-                    // Opponent is in front of me
-                    if (frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig)) {
-                        // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
-                        patternId = PATTERN_UP_B;
-                        hasVisionReaction = true;
-                    } else if (frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig)) {
-                        patternId = PATTERN_B;
-                        hasVisionReaction = true;
-                    } else if (frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, bColliderDx, bColliderDy, atkedChConfig)) {
-                        patternId = PATTERN_DOWN_B;
-                        hasVisionReaction = true;
+            
+                var atkedChConfig = characters[v3.SpeciesId];
+                float absColliderDx = Math.Abs(bColliderDx), absColliderDy = Math.Abs(bColliderDy);
+                // Opponent is in front of me
+                if (frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig)) {
+                    // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
+                    patternId = PATTERN_UP_B;
+                    hasVisionReaction = true;
+                } else if (frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig)) {
+                    patternId = PATTERN_B;
+                    hasVisionReaction = true;
+                } else if (frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, bColliderDx, bColliderDy, atkedChConfig)) {
+                    patternId = PATTERN_DOWN_B;
+                    hasVisionReaction = true;
+                }
+                
+                if (!hasVisionReaction) {
+                    if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) {
+                        // For flying characters, as long as there's opponent in vision, always try to follow.
+                        hasEnemyBehindMe = true;
+                    } else if (0 > bColliderDx * currCharacterDownsync.DirX) {
+                        hasEnemyBehindMe = true;
+
                     }
                 }
             }

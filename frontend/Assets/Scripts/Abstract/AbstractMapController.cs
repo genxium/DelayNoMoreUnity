@@ -127,6 +127,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float lineRendererZ = +5;
     protected float triggerZ = 0;
     protected float characterZ = 0;
+    protected float flyingCharacterZ = -1;
     protected float inplaceHpBarZ = +10;
     protected float fireballZ = -5;
     protected float footstepAttenuationZ = 200.0f;
@@ -570,7 +571,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             var npcGameObj = npcAnimHolder.gameObject;
-            newPosHolder.Set(wx, wy, characterZ);
+            newPosHolder.Set(wx, wy, (!currNpcDownsync.OmitGravity && !chConfig.OmitGravity) ? characterZ : flyingCharacterZ);
             npcGameObj.transform.position = newPosHolder;
 
             npcAnimHolder.updateCharacterAnim(currNpcDownsync, currNpcDownsync.CharacterState, prevNpcDownsync, false, chConfig);
