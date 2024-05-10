@@ -43,10 +43,9 @@ namespace shared {
         };
 
         public static Skill BatMelee1PrimerSkill = new Skill {
-            RecoveryFrames = 8,
-            RecoveryFramesOnBlock = 8,
-            RecoveryFramesOnHit = 5,
-            MpDelta = 0,
+            RecoveryFrames = 20,
+            RecoveryFramesOnBlock = 20,
+            RecoveryFramesOnHit = 20,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk1
         }

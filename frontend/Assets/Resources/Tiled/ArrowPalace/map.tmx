@@ -186,7 +186,7 @@
    </properties>
    <point/>
   </object>
-  <object id="441" name="Bat" x="511" y="1851">
+  <object id="441" name="Bat" x="511" y="1778">
    <properties>
     <property name="dirX" value="0"/>
     <property name="speciesId" value="4099"/>

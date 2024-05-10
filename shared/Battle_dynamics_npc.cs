@@ -255,7 +255,6 @@ namespace shared {
                         hasEnemyBehindMe = true;
                     } else if (0 > bColliderDx * currCharacterDownsync.DirX) {
                         hasEnemyBehindMe = true;
-
                     }
                 }
             }

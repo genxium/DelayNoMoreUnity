@@ -672,7 +672,7 @@ namespace shared {
                 exactTurningAround = true;
             }
 
-            if (0 == currCharacterDownsync.FramesToRecover || (WalkingAtk1 == currCharacterDownsync.CharacterState || WalkingAtk4 == currCharacterDownsync.CharacterState)) {
+            if (0 == currCharacterDownsync.FramesToRecover) {
                 thatCharacterInNextFrame.CharacterState = Walking; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Walking" as a default action
                 
                 if (shouldIgnoreInertia) {
@@ -680,8 +680,8 @@ namespace shared {
                     if (0 != effDx || 0 != effDy) {
                         thatCharacterInNextFrame.DirX = effDx;
                         thatCharacterInNextFrame.DirY = effDy;
-                        int xfac = 0 > effDx ? -1 : +1;
-                        int yfac = 0 > effDy ? -1 : +1;
+                        int xfac = 0 == effDx ? 0 : 0 > effDx ? -1 : +1;
+                        int yfac = 0 == effDy ? 0 : 0 > effDy ? -1 : +1;
                         thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                         thatCharacterInNextFrame.VelY = yfac * currCharacterDownsync.Speed;
                     } else {
@@ -695,9 +695,9 @@ namespace shared {
                             thatCharacterInNextFrame.FramesCapturedByInertia = 0;
                         }
 
-                        if (0 != effDx) {
-                            int xfac = 0 > effDx ? -1 : +1;
-                            int yfac = 0 > effDy ? -1 : +1;
+                        if (0 != effDx || 0 != effDy) {
+                            int xfac = 0 == effDx ? 0 : 0 > effDx ? -1 : +1;
+                            int yfac = 0 == effDy ? 0 : 0 > effDy ? -1 : +1;
                             thatCharacterInNextFrame.DirX = effDx;
                             thatCharacterInNextFrame.DirY = effDy;
                             thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
