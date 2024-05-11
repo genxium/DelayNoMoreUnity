@@ -46,7 +46,7 @@ namespace shared {
             RecoveryFrames = 60,
             RecoveryFramesOnBlock = 60,
             RecoveryFramesOnHit = 60,
-            MpDelta = 800,
+            MpDelta = 300,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk1
         }
@@ -78,6 +78,16 @@ namespace shared {
             ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
+        
+        public static Skill SwordManMelee1PrimerSkill = new Skill{
+            RecoveryFrames = 50,
+                           RecoveryFramesOnBlock = 30,
+                           RecoveryFramesOnHit = 30,
+                           MpDelta = 0,
+                           TriggerType = SkillTriggerType.RisingEdge,
+                           BoundChState = Atk1
+        }
+        .AddHit(SwordManMelee1PrimerBullet);
 
         public static BulletConfig SwordManDragonPunchPrimerBullet = new BulletConfig {
             StartupFrames = 13,
@@ -107,6 +117,15 @@ namespace shared {
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
+        public static Skill SwordManDragonPunchPrimerSkill = new Skill{
+            RecoveryFrames = 55,
+                           RecoveryFramesOnBlock = 28,
+                           RecoveryFramesOnHit = 28,
+                           TriggerType = SkillTriggerType.RisingEdge,
+                           BoundChState = Atk2
+        }
+        .AddHit(SwordManDragonPunchPrimerBullet);
+
         public static BulletConfig FireSwordManMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 12,
             ActiveFrames = 16,
@@ -133,6 +152,15 @@ namespace shared {
             ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
+
+        public static Skill FireSwordManMelee1PrimerSkill = new Skill{
+            RecoveryFrames = 50,
+                           RecoveryFramesOnBlock = 30,
+                           RecoveryFramesOnHit = 30,
+                           TriggerType = SkillTriggerType.RisingEdge,
+                           BoundChState = Atk1
+        }
+        .AddHit(FireSwordManMelee1PrimerBullet);
 
         public static BulletConfig FireSwordManDragonPunchPrimerBullet = new BulletConfig {
             StartupFrames = 13,
@@ -162,6 +190,15 @@ namespace shared {
             DelaySelfVelToActive = true,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
+
+        public static Skill FireSwordManDragonPunchPrimerSkill = new Skill{
+            RecoveryFrames = 55,
+                           RecoveryFramesOnBlock = 28,
+                           RecoveryFramesOnHit = 28,
+                           TriggerType = SkillTriggerType.RisingEdge,
+                           BoundChState = Atk2
+        }
+        .AddHit(FireSwordManDragonPunchPrimerBullet);
 
         public static Skill FireSwordManFireballSkill = new Skill {
             RecoveryFrames = 60,
@@ -230,6 +267,40 @@ namespace shared {
             ExplosionSfxName = "Melee_Explosion2",
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
+
+        public static Skill BullWarriorMelee1PrimarySkill = new Skill {
+            RecoveryFrames = 110,
+                           RecoveryFramesOnBlock = 110,
+                           RecoveryFramesOnHit = 110,
+                           TriggerType = SkillTriggerType.RisingEdge,
+                           BoundChState = Atk1
+        }
+        .AddHit(BullWarriorMelee1PrimaryBullet)
+            .AddHit(
+                    new BulletConfig {
+                    StartupFrames = 17,
+                    ActiveFrames = 19,
+                    HitStunFrames = 10,
+                    HitInvinsibleFrames = 16,
+                    BlockStunFrames = 9,
+                    Damage = 25,
+                    PushbackVelX = (int)(2f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    PushbackVelY = (int)(-8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelX = NO_LOCK_VEL,
+                    SelfLockVelY = NO_LOCK_VEL,
+                    HitboxOffsetX = (int)(64*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeX = (int)(100*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeY = (int)(100*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    BlowUp = false,
+                    SpeciesId = 3,
+                    ExplosionFrames = 25,
+                    BType = BulletType.Melee,
+                    DirX = 1,
+                    Hardness = 6,
+                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                    }
+        );
 
         public static BulletConfig BullWarriorFireballPivotBullet = new BulletConfig {
             StartupFrames = 33,
@@ -473,6 +544,16 @@ namespace shared {
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
+        public static Skill PurpleArrowPrimarySkill = new Skill{
+            RecoveryFrames = 100,
+                           RecoveryFramesOnBlock = 10,
+                           RecoveryFramesOnHit = 10,
+                           MpDelta = 120,
+                           TriggerType = SkillTriggerType.RisingEdge,
+                           BoundChState = Atk1
+        }
+        .AddHit(PurpleArrowBullet); 
+
         private static BulletConfig PurpleArrowRainBullet1 = new BulletConfig(PurpleArrowBullet)
                                                                 .SetSpeed((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                                                                 .SetHitboxOffsets((int)(22 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
@@ -490,6 +571,18 @@ namespace shared {
                                                                 .SetSimultaneousMultiHitCnt(0u)
                                                                 .SetDir(+1, +2)
                                                                 .SetHitboxOffsets((int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
+
+        public static Skill PurpleArrowRainSkill = new Skill{
+            RecoveryFrames = 100,
+                           RecoveryFramesOnBlock = 10,
+                           RecoveryFramesOnHit = 10,
+                           MpDelta = 180,
+                           TriggerType = SkillTriggerType.RisingEdge,
+                           BoundChState = Atk2
+        }
+        .AddHit(PurpleArrowRainBullet1)
+            .AddHit(PurpleArrowRainBullet2)
+            .AddHit(PurpleArrowRainBullet3);
 
         public static BulletConfig BladeGirlDragonPunchPrimerBullet = new BulletConfig {
             StartupFrames = 4,
@@ -582,6 +675,15 @@ namespace shared {
             ExplosionSfxName = "Melee_Explosion1",
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
+
+        public static Skill GoblinMelee1PrimerSkill = new Skill{
+            RecoveryFrames = 90,
+                           RecoveryFramesOnBlock = 80,
+                           RecoveryFramesOnHit = 70,
+                           TriggerType = SkillTriggerType.RisingEdge,
+                           BoundChState = Atk1
+        }
+        .AddHit(GoblinMelee1PrimerBullet);
 
         public static ImmutableDictionary<int, Skill> skills = ImmutableDictionary.Create<int, Skill>().AddRange(
                 new[]
@@ -916,17 +1018,7 @@ namespace shared {
                     }
                 )),
 
-                    new KeyValuePair<int, Skill>(5, new Skill{
-                            RecoveryFrames = 50,
-                            RecoveryFramesOnBlock = 30,
-                            RecoveryFramesOnHit = 30,
-                            MpDelta = 0,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk1
-                            }
-                            .AddHit(
-                                SwordManMelee1PrimerBullet
-                                )),
+                    new KeyValuePair<int, Skill>(5, SwordManMelee1PrimerSkill),
 
                     new KeyValuePair<int, Skill>(6, new Skill{
                             RecoveryFrames = 32,
@@ -1111,83 +1203,17 @@ namespace shared {
                                     )
                             ),
 
-                                                    new KeyValuePair<int, Skill>(12, new Skill{
-                                                            RecoveryFrames = 55,
-                                                            RecoveryFramesOnBlock = 28,
-                                                            RecoveryFramesOnHit = 28,
-                                                            MpDelta = 0,
-                                                            TriggerType = SkillTriggerType.RisingEdge,
-                                                            BoundChState = Atk2
-                                                            }
-                                                            .AddHit(
-                                                                SwordManDragonPunchPrimerBullet
-                                                                )),
+                                                    new KeyValuePair<int, Skill>(12, SwordManDragonPunchPrimerSkill),
 
                                                     new KeyValuePair<int, Skill>(13, FireSwordManFireballSkill),
 
-                                                    new KeyValuePair<int, Skill>(14, new Skill{
-                                                            RecoveryFrames = 110,
-                                                            RecoveryFramesOnBlock = 110,
-                                                            RecoveryFramesOnHit = 110,
-                                                            MpDelta = 0,
-                                                            TriggerType = SkillTriggerType.RisingEdge,
-                                                            BoundChState = Atk1
-                                                            }
-                                                            .AddHit(
-                                                                BullWarriorMelee1PrimaryBullet
-                                                                )
-                                                            .AddHit(
-                                                                new BulletConfig {
-                                                                StartupFrames = 17,
-                                                                ActiveFrames = 19,
-                                                                HitStunFrames = 10,
-                                                                HitInvinsibleFrames = 16,
-                                                                BlockStunFrames = 9,
-                                                                Damage = 25,
-                                                                PushbackVelX = (int)(2f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                                                PushbackVelY = (int)(-8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                                                SelfLockVelX = NO_LOCK_VEL,
-                                                                SelfLockVelY = NO_LOCK_VEL,
-                                                                HitboxOffsetX = (int)(64*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                                                HitboxSizeX = (int)(100*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                                                HitboxSizeY = (int)(100*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                                                BlowUp = false,
-                                                                SpeciesId = 3,
-                                                                ExplosionFrames = 25,
-                                                                BType = BulletType.Melee,
-                                                                DirX = 1,
-                                                                Hardness = 6,
-                                                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                                                }
-                )
-                    ),
+                                                    new KeyValuePair<int, Skill>(14, BullWarriorMelee1PrimarySkill),
 
                     new KeyValuePair<int, Skill>(15, BullWarriorFireballSkill),
 
-                    new KeyValuePair<int, Skill>(16, new Skill{
-                            RecoveryFrames = 50,
-                            RecoveryFramesOnBlock = 30,
-                            RecoveryFramesOnHit = 30,
-                            MpDelta = 0,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk1
-                            }
-                            .AddHit(
-                                FireSwordManMelee1PrimerBullet
-                                )),
+                    new KeyValuePair<int, Skill>(16, FireSwordManMelee1PrimerSkill),
 
-                    new KeyValuePair<int, Skill>(17, new Skill{
-                            RecoveryFrames = 55,
-                            RecoveryFramesOnBlock = 28,
-                            RecoveryFramesOnHit = 28,
-                            MpDelta = 0,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk2
-                            }
-                            .AddHit(
-                                FireSwordManDragonPunchPrimerBullet
-                                )),
+                    new KeyValuePair<int, Skill>(17, FireSwordManDragonPunchPrimerSkill),
 
                     new KeyValuePair<int, Skill>(18, new Skill{
                             RecoveryFrames = 12,
@@ -1282,16 +1308,7 @@ namespace shared {
                             .AddHit(SlashNovaEnderBullet)
                     ),
 
-                            new KeyValuePair<int, Skill>(22, new Skill{
-                                    RecoveryFrames = 90,
-                                    RecoveryFramesOnBlock = 80,
-                                    RecoveryFramesOnHit = 70,
-                                    MpDelta = 0,
-                                    TriggerType = SkillTriggerType.RisingEdge,
-                                    BoundChState = Atk1
-                                    }
-                                    .AddHit(GoblinMelee1PrimerBullet)
-                                    ),
+                            new KeyValuePair<int, Skill>(22, GoblinMelee1PrimerSkill),
 
                             new KeyValuePair<int, Skill>(23, new Skill {
                                     RecoveryFrames = 27,
@@ -1466,37 +1483,9 @@ namespace shared {
                                     )
                                 ),
 
-                        new KeyValuePair<int, Skill>(31, new Skill{
-                                RecoveryFrames = 100,
-                                RecoveryFramesOnBlock = 10,
-                                RecoveryFramesOnHit = 10,
-                                MpDelta = 120,
-                                TriggerType = SkillTriggerType.RisingEdge,
-                                BoundChState = Atk1
-                                }
-                                .AddHit(
-                                    PurpleArrowBullet
-                                    )
-                                ),
+                        new KeyValuePair<int, Skill>(31, PurpleArrowPrimarySkill),
 
-                        new KeyValuePair<int, Skill>(32, new Skill{
-                                RecoveryFrames = 100,
-                                RecoveryFramesOnBlock = 10,
-                                RecoveryFramesOnHit = 10,
-                                MpDelta = 180,
-                                TriggerType = SkillTriggerType.RisingEdge,
-                                BoundChState = Atk2
-                                }
-                                .AddHit(
-                                    PurpleArrowRainBullet1
-                                    )
-                                .AddHit(
-                                    PurpleArrowRainBullet2
-                                    )
-                                .AddHit(
-                                    PurpleArrowRainBullet3
-                                    )
-                                ),
+                        new KeyValuePair<int, Skill>(32, PurpleArrowRainSkill),
 
                             new KeyValuePair<int, Skill>(33, new Skill{
                                     RecoveryFrames = 18,

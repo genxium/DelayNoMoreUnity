@@ -332,7 +332,7 @@ namespace shared {
                 }
                 return;
             }
-            if (currCharacterDownsync.OmitGravity) {
+            if ((currCharacterDownsync.OmitGravity || chConfig.OmitGravity) && !(Dying == currCharacterDownsync.CharacterState)) {
                 return;
             }
             if (!currCharacterDownsync.InAir) {
@@ -673,7 +673,7 @@ namespace shared {
             }
 
             if (0 == currCharacterDownsync.FramesToRecover) {
-                thatCharacterInNextFrame.CharacterState = Walking; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to "Walking" as a default action
+                thatCharacterInNextFrame.CharacterState = Walking; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to a default action
                 
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0;
@@ -685,8 +685,11 @@ namespace shared {
                         thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                         thatCharacterInNextFrame.VelY = yfac * currCharacterDownsync.Speed;
                     } else {
+                        // 0 == effDx && 0 == effDy
                         thatCharacterInNextFrame.VelX = 0;
-                        thatCharacterInNextFrame.VelY = 0;
+                        if (chConfig.AntiGravityWhenIdle) {
+                            thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
+                        }
                     }
                 } else {
                     if (alignedWithInertia || withInertiaBreakingState || currBreakingFromInertia) {
@@ -703,8 +706,11 @@ namespace shared {
                             thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                             thatCharacterInNextFrame.VelX = yfac * currCharacterDownsync.Speed;
                         } else {
+                            // 0 == effDx && 0 == effDy
                             thatCharacterInNextFrame.VelX = 0;
-                            thatCharacterInNextFrame.VelY = 0;
+                            if (chConfig.AntiGravityWhenIdle) {
+                                thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
+                            }
                         }
                     } else if (currFreeFromInertia) {
                         if (exactTurningAround) {
@@ -1231,7 +1237,7 @@ namespace shared {
                             if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
                                 // [WARNING] Flying character doesn't land on softPushbacks even if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithAntiGravity)!
                                 landedOnGravityPushback = true;
-                                if (v1.OmitGravity && v1.RepelSoftPushback) {
+                                if (v1.OmitGravity && v1.RepelSoftPushback && 0 > thatCharacterInNextFrame.VelY) {
                                     // To avoid the need for keeping track of another "frictionVelX"
                                     thatCharacterInNextFrame.VelY += chConfig.JumpingInitVelY;
                                 }
@@ -1570,7 +1576,13 @@ namespace shared {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
                                 // If "atkedCharacterInCurrFrame" took multiple bullets in the same renderFrame, where a bullet in the middle of the set made it DYING, then all consecutive bullets would just take it into this small block again!
                                 atkedCharacterInNextFrame.Hp = 0;
-                                atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
+                                atkedCharacterInNextFrame.VelX = 0; 
+                                var atkedChConfig = characters[atkedCharacterInNextFrame.SpeciesId];
+                                if (atkedChConfig.OmitGravity || atkedCharacterInNextFrame.OmitGravity) {
+                                    atkedCharacterInNextFrame.VelY = 0;
+                                } else {
+                                    // otherwise no need to change "VelY"
+                                }
                                 atkedCharacterInNextFrame.CharacterState = Dying;
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
                             } else {

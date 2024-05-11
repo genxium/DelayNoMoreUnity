@@ -58,6 +58,8 @@ namespace shared {
 
         // Collision masks
         public bool AntiGravityWhenIdle;
+        public int AntiGravityFramesLingering;
+
         public bool OmitGravity;
         public bool OmitSoftPushback;
         public bool RepelSoftPushback;
