@@ -3,7 +3,7 @@
  <properties>
   <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="2"/>
-  <property name="npcPreallocCapDict" value="4098:2;3:2;4099:3;4100:2"/>
+  <property name="npcPreallocCapDict" value="4098:2;3:2;4099:4;4100:4"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
@@ -87,7 +87,7 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="430" name="PSwitch-2" gid="11" x="748" y="1790" width="24" height="24">
+  <object id="430" name="PSwitch-2" gid="11" x="720" y="1800" width="24" height="24">
    <properties>
     <property name="bulletTeamId" value="1024"/>
     <property name="delayedFrames" value="10"/>
@@ -98,7 +98,7 @@
     <property name="trackingIdList" value="2"/>
    </properties>
   </object>
-  <object id="431" name="PSwitch-1" gid="11" x="248" y="1790" width="24" height="24">
+  <object id="431" name="PSwitch-1" gid="11" x="280" y="1800" width="24" height="24">
    <properties>
     <property name="bulletTeamId" value="1024"/>
     <property name="delayedFrames" value="10"/>
@@ -186,10 +186,10 @@
    </properties>
    <point/>
   </object>
-  <object id="441" name="Bat" x="511" y="1936">
+  <object id="441" name="FireBat" x="512" y="1770">
    <properties>
     <property name="dirX" value="0"/>
-    <property name="speciesId" value="4099"/>
+    <property name="speciesId" value="4100"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>

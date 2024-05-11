@@ -253,7 +253,7 @@ namespace shared {
             int effectiveDy = currCharacterDownsync.DirY;
             if (CharacterState.InAirIdle1ByJump == currCharacterDownsync.CharacterState || CharacterState.InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || CharacterState.InAirIdle2ByJump == currCharacterDownsync.CharacterState) {
                 jumpHolding = true;
-            } 
+            }
 
             int visionReaction = OPPONENT_REACTION_UNKNOWN;
             var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
@@ -314,7 +314,7 @@ namespace shared {
                         if (opponentBehindMe) {
                             normX = -normX;
                         }
-                        var (effDx, effDy, _) = DiscretizeDirection(normX, normY);
+                        var (effDx, effDy, _) = DiscretizeDirection(normX, normY, mustHaveNonZeroX: true);
                         effectiveDx = effDx;
                         effectiveDy = effDy;
                     } else {
@@ -343,7 +343,7 @@ namespace shared {
             visionCollider.Data = null;
 
             if (OPPONENT_REACTION_UNKNOWN != visionReaction && PATTERN_ID_NO_OP != patternId) {
-                // [WARNING] Even if there were no vision reation, if "PATTERN_ID_NO_OP == patternId", we still expect the NPC to make use of patrol cues to jump or turn around!
+                // [WARNING] Even if there were no vision reaction, if "PATTERN_ID_NO_OP == patternId", we still expect the NPC to make use of patrol cues to jump or turn around!
                 jumpHolding = false;
                 thatCharacterInNextFrame.CapturedByPatrolCue = false;
                 thatCharacterInNextFrame.FramesInPatrolCue = 0;
@@ -439,8 +439,16 @@ namespace shared {
                     } while (false);
                 }
 
-                if (OPPONENT_REACTION_UNKNOWN == visionReaction && false == hasPatrolCueReaction && (currCharacterDownsync.WaivingSpontaneousPatrol || MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId)) {
-                    return (PATTERN_ID_UNABLE_TO_OP, false, false, false, 0, 0);
+                if (OPPONENT_REACTION_UNKNOWN == visionReaction && false == hasPatrolCueReaction) {
+                    if (currCharacterDownsync.WaivingSpontaneousPatrol) {
+                        return (PATTERN_ID_UNABLE_TO_OP, false, false, false, 0, 0);
+                    }
+                    if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
+                        return (PATTERN_ID_NO_OP, false, false, false, 0, 0);
+                    }
+                    if (chConfig.AntiGravityWhenIdle && (Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState)) {
+                        return (PATTERN_ID_NO_OP, false, false, false, 0, 0);
+                    }
                 }
             }
 
@@ -492,8 +500,9 @@ namespace shared {
                 } else {
                     _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, skillConfig, logger);
                     if (PATTERN_ID_UNABLE_TO_OP != patternId && chConfig.AntiGravityWhenIdle && Walking == thatCharacterInNextFrame.CharacterState && chConfig.AntiGravityFramesLingering < thatCharacterInNextFrame.FramesInChState) {
-                        thatCharacterInNextFrame.CharacterState = CharacterState.InAirIdle1NoJump;
+                        thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
                         thatCharacterInNextFrame.FramesInChState = 0;
+                        thatCharacterInNextFrame.VelX = 0;
                     }
                 }
             }
@@ -506,9 +515,14 @@ namespace shared {
                 return;
             }
 
-            int xfac = (0 < characterDownsync.DirX ? 1 : -1);
-            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * chConfig.VisionOffsetX, characterDownsync.VirtualGridY + chConfig.VisionOffsetY);
-            (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.VisionSizeX, chConfig.VisionSizeY);
+            if ((Idle1 == characterDownsync.CharacterState || InAirIdle1NoJump == characterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) {
+                (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX, characterDownsync.VirtualGridY + (chConfig.VisionOffsetY << 1));
+                (boxCw, boxCh) = VirtualGridToPolygonColliderCtr((chConfig.VisionSizeY << 1), (chConfig.VisionSizeX << 1));
+            } else {
+                int xfac = (0 < characterDownsync.DirX ? 1 : -1);
+                (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * chConfig.VisionOffsetX, characterDownsync.VirtualGridY + chConfig.VisionOffsetY);
+                (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.VisionSizeX, chConfig.VisionSizeY);
+            }
         }
     }
 }

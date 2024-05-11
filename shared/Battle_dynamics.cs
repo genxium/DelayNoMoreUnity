@@ -673,7 +673,7 @@ namespace shared {
             }
 
             if (0 == currCharacterDownsync.FramesToRecover) {
-                thatCharacterInNextFrame.CharacterState = Walking; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to a default action
+                thatCharacterInNextFrame.CharacterState = ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) ? currCharacterDownsync.CharacterState : Walking; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to a default action
                 
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0;
@@ -684,6 +684,7 @@ namespace shared {
                         int yfac = 0 == effDy ? 0 : 0 > effDy ? -1 : +1;
                         thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                         thatCharacterInNextFrame.VelY = yfac * currCharacterDownsync.Speed;
+                        thatCharacterInNextFrame.CharacterState = Walking;
                     } else {
                         // 0 == effDx && 0 == effDy
                         thatCharacterInNextFrame.VelX = 0;
@@ -705,6 +706,7 @@ namespace shared {
                             thatCharacterInNextFrame.DirY = effDy;
                             thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
                             thatCharacterInNextFrame.VelX = yfac * currCharacterDownsync.Speed;
+                            thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
                             // 0 == effDx && 0 == effDy
                             thatCharacterInNextFrame.VelX = 0;

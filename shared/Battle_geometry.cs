@@ -838,7 +838,7 @@ namespace shared {
         }
 
         // [WARNING] "continuousDx", "continuousDy" and "eps" are already scaled into [0, 1]
-        public static (int, int, int) DiscretizeDirection(float continuousDx, float continuousDy, float eps = 0.1f) {
+        public static (int, int, int) DiscretizeDirection(float continuousDx, float continuousDy, float eps = 0.1f, bool mustHaveNonZeroX = false) {
             int dx = 0, dy = 0, encodedIdx = 0;
             float absContinuousDx = Math.Abs(continuousDx);
             float absContinuousDy = Math.Abs(continuousDy);
@@ -869,6 +869,39 @@ namespace shared {
                     encodedIdx = 2;
                 } else {
                     // else stays at "encodedIdx == 0" 
+                }
+
+                if (mustHaveNonZeroX) {
+                    if (0 == continuousDx) {
+                        if (0 < dy) {
+                            dx = +1;
+                        } else {
+                            dx = -1;
+                        }
+                    } else if (0 < continuousDx) {
+                        dx = +1;
+                    } else {
+                        dx = -1;
+                    }
+
+                    if (0 < dx) {
+                        if (0 < dy) {
+                            dy = +1;
+                            encodedIdx = 5;
+                        } else {
+                            dy = -1;
+                            encodedIdx = 7;
+                        }
+                    } else {
+                        dx = -1;
+                        if (0 < dy) {
+                            dy = +1;
+                            encodedIdx = 8;
+                        } else {
+                            dy = -1;
+                            encodedIdx = 6;
+                        }
+                    }
                 }
             } else if (eps < absContinuousDx && eps < absContinuousDy) {
                 if (0 < continuousDx) {
