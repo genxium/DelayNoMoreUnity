@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="62" nextobjectid="451">
+ <properties>
+  <property name="MatchInOrder" value="true"/>
+  <property name="battleDurationSeconds" value="120"/>
+  <property name="levelId" value="2"/>
+  <property name="npcPreallocCapDict" value="4098:2;3:2;4099:4;4100:4"/>
+ </properties>
+ <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
+ <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
+ <tileset firstgid="12" source="../shared_comps/forest16.tsx"/>
+ <tileset firstgid="1036" source="../decoration/trees.tsx"/>
+ <tileset firstgid="1039" source="../doors/doors.tsx"/>
+ <tileset firstgid="1048" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
+ <tileset firstgid="1056" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
+ <tileset firstgid="1072" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
+ <tileset firstgid="1088" source="../shared_comps/tiles0.tsx"/>
+ <tileset firstgid="1152" source="../shared_comps/deep_cave16.tsx"/>
+ <objectgroup id="1" name="PlayerStartingPos">
+  <object id="135" name="Player1St" x="160" y="896">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="teamId" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <layer id="33" name="setGround" width="64" height="128" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt2MsNgCAQQEEPNmFi/3VagB8UBVd3JtkjhscF4jAAAAAAAAAAAAAAAAAAAADRTWN57q6/+s153J6IavuPzuBL/S3oz93fkrOFfO7c00/e7b338eZkbtcfqx9Y23sPl97HNWsiqu0HAAAAjmX+53C2/QstNfTn7gcA+rny7nhiouzjzcncrj9WPwAAAADwXwsDckrl
+  </data>
+ </layer>
+ <objectgroup id="19" name="EvtSubscription">
+  <object id="411" name="StoryPointSub" x="603.212" y="21.2121">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="412" name="WaveExhaust" x="347.212" y="21.2121">
+   <properties>
+    <property name="demandedEvtMask" value="7"/>
+    <property name="id" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="413" name="WaveTrigger" x="421.212" y="21.2121">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="27" name="Decoration"/>
+ <objectgroup id="13" name="TriggerPos">
+  <object id="450" name="BossDoorR" gid="1046" x="688" y="1120" width="32" height="32">
+   <properties>
+    <property name="bulletTeamId" value="3"/>
+    <property name="characterSpawnerTimeSeq" value="1:4096"/>
+    <property name="delayedFrames" value="5"/>
+    <property name="initVelX" value="-1"/>
+    <property name="initVelY" value="0"/>
+    <property name="publishingEvtMaskUponExhaust" value="4"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="2"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="300"/>
+    <property name="subCycleQuota" value="1"/>
+    <property name="subCycleTriggerFrames" value="70"/>
+    <property name="subscriptionId" value="1"/>
+   </properties>
+  </object>
+  <object id="434" name="BossDoorL" gid="1046" x="288" y="1118" width="32" height="32">
+   <properties>
+    <property name="bulletTeamId" value="3"/>
+    <property name="characterSpawnerTimeSeq" value="1:4096"/>
+    <property name="delayedFrames" value="5"/>
+    <property name="initVelX" value="-1"/>
+    <property name="initVelY" value="0"/>
+    <property name="publishingEvtMaskUponExhaust" value="4"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="2"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="300"/>
+    <property name="subCycleQuota" value="1"/>
+    <property name="subCycleTriggerFrames" value="70"/>
+    <property name="subscriptionId" value="1"/>
+   </properties>
+  </object>
+  <object id="416" name="WaveExhaustTrigger" x="480" y="864">
+   <properties>
+    <property name="delayedFrames" value="10"/>
+    <property name="recoveryFrames" value="61857"/>
+    <property name="speciesId" value="7"/>
+    <property name="subscriptionId" value="2"/>
+    <property name="trackingIdList" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="NpcStartingPos">
+  <object id="372" name="SkeleArcher" x="184" y="1584">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="publishingEvtMaskUponKilled" value="2"/>
+    <property name="publishingEvtSubIdUponKilled" value="2"/>
+    <property name="speciesId" value="4098"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="373" name="SkeleArcher" x="842" y="1014">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="2"/>
+    <property name="speciesId" value="4098"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="439" name="Bat" x="336" y="1408">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="speciesId" value="4099"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="440" name="Bat" x="640" y="1408">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="4099"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="441" name="FireBat" x="512" y="1904">
+   <properties>
+    <property name="dirX" value="0"/>
+    <property name="speciesId" value="4100"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="444" name="FireBat" x="405" y="1827">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="4100"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="445" name="FireBat" x="603" y="1827">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="speciesId" value="4100"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="TrapStartingPos">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <object id="352" name="SlippperySide1" x="-32" y="0" width="64" height="2048">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="prohibitsWallGrabbing" value="1"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="400" name="SlippperySide2" x="990" y="1" width="64" height="2048">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="prohibitsWallGrabbing" value="1"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="404" name="SlipJumpPlatform" x="32" y="960" width="64" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="405" name="SlipJumpPlatform" x="928" y="1472" width="64" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="446" gid="1044" x="448" y="1728" width="96" height="64"/>
+  <object id="449" gid="1044" x="448" y="1168" width="96" height="64"/>
+ </objectgroup>
+ <objectgroup id="2" name="Barrier">
+  <properties>
+   <property name="type" value="barrier_and_shelter"/>
+  </properties>
+  <object id="114" name="Ceiling" x="-32" y="-32" width="1056" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="358" name="MidPlatformL" x="-32" y="1664" width="480" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="401" name="Platform" x="784" y="1472" width="144" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="403" name="Platform" x="96" y="960" width="144" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="406" name="SlopeR" x="944" y="1024">
+   <polyline points="-240,96 50,96 50,0 0,0"/>
+  </object>
+  <object id="409" name="SlopeL" x="80" y="1568">
+   <polyline points="-50,96 240,96 0,0 -50,0"/>
+  </object>
+  <object id="428" name="MidPlatformR" x="544" y="1664" width="480" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="438" name="Platform" x="32" y="1728" width="960" height="16">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="447" name="MidPlatformL" x="-32" y="1120" width="480" height="48">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="448" name="MidPlatformR" x="544" y="1120" width="480" height="48">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="PatrolCue"/>
+ <layer id="42" name="Background" width="64" height="128">
+  <data encoding="base64" compression="zlib">
+   eJzt2slKw1AYBtBbaXEAJ9Q67X2A4l58C/WJ3akbH8C149K2gjc0gRA01KpJ2pwDH81UyH+HJLQJAQAAAAAAAAAAAAAAAAAAmuegE8JhmqNO3WdTvYtY82WaqxbWDwAAAABtdtwL4WROstGru7VYNI/dEJ5inmNecssPheVs32u37jP+W/exnnHMapxbo3R5GLMc11d6k+3DdH+y/lGo/2zKuXve0Ll7n9Y6ytWdZFzYnrXFWqGO9SnqStro9Jvjbjoh3M6Quz/6L+c91+dZP6/m2mCUtkM2Dor9P423ku9sLoWwNUO2l2avOW8n1rUbc92dpJ+uZ9uSz36avZj9H47jsr5vg7K+XxRl18BF7/s2j+8m1F7X+w1NqD1R5fsNZy2a10VN6e+6VH0fK95T6n5+HlR4Dl+NtUEDfgOoqg2a/Mw0+OdxOW/XmWJ7/DbzVDsAAAAAAABQjU/NgFCZ
+  </data>
+ </layer>
+ <layer id="61" name="Ground" width="64" height="128">
+  <data encoding="base64" compression="zlib">
+   eJzt2rtKxEAYBtAU8QkEfV21F3sRBWsvjaitt9Zbq1grKth6A8dO4pjMQhKzmXPgazYkzD/F8m1miwIAAAAAAAAAAAAAAAAAAIbvpiyK25rclfX3L4TrSxPmNOSs4bl9uQ/reKjJY8M6l8P1lQlzFXJd89yncO25kpeB7FfVXljX/oQ5CDmsmec1XHuv5HOg83ch9/lnZ4pirpL5mXaefRT28biSk4z29jzMelHJZUbzQ44Wy/6yUfN9stnjOn5mrcdshWxH9mAnfLbb81r+K+uR+VcHsK5c54eYWB9O6cdN901Lp4714ZR+3HTftHTq1N/sAAAA0JexvHOIne+nnPeP4Z3D9+xv5e/z7VzOu2Nn+znNHzvbj6Wt834AIF9NfbvN1P1XN6X7d5GUztlWPv7Yg9TuP4bE+ntq9+8iKZ27zcT6e2r37yIAAAAAwHh9AYFq4G8=
+  </data>
+ </layer>
+</map>
