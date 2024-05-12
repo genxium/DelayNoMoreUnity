@@ -1708,7 +1708,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId, prohibitsWallGrabbing;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId, prohibitsWallGrabbing, locked, unlockSubscriptionId;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
@@ -1721,6 +1721,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("speed", out speed);
                         tileProps.TryGetCustomProperty("triggerTrackingId", out triggerTrackingId);
                         tileProps.TryGetCustomProperty("prohibitsWallGrabbing", out prohibitsWallGrabbing);
+                        tileProps.TryGetCustomProperty("locked", out locked);
+                        tileProps.TryGetCustomProperty("unlockSubscriptionId", out unlockSubscriptionId);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // Not checking null or empty for this property because it shouldn't be, and in case it comes empty anyway, this automatically throws an error 
                         bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
@@ -1744,6 +1746,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int trapVelX = (int)(trapSpeedXfac * speedVal);
                         int trapVelY = (int)(trapSpeedYfac * speedVal);
 
+                        bool lockedVal = (null != locked && !locked.IsEmpty && 1 == locked.GetValueAsInt()) ? true : false;
+                        int unlockSubscriptionIdVal = (null == unlockSubscriptionId || unlockSubscriptionId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : unlockSubscriptionId.GetValueAsInt());
+
                         TrapConfig trapConfig = trapConfigs[speciesIdVal];
                         TrapConfigFromTiled trapConfigFromTiled = new TrapConfigFromTiled {
                             SpeciesId = speciesIdVal,
@@ -1751,7 +1756,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Speed = speedVal,
                             DirX = dirXVal,
                             DirY = dirYVal,
-                            ProhibitsWallGrabbing = prohibitsWallGrabbingVal
+                            ProhibitsWallGrabbing = prohibitsWallGrabbingVal,
+                            UnlockSubscriptionId = unlockSubscriptionIdVal, 
                         };
 
                         tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
@@ -1775,7 +1781,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 VelX = trapVelX,
                                 VelY = trapVelY,
                                 TriggerTrackingId = triggerTrackingIdVal,
-                                IsCompletelyStatic = true
+                                IsCompletelyStatic = true,
+                                Locked = lockedVal,
                             };
 
                             TrapColliderAttr colliderAttr = new TrapColliderAttr {
@@ -1822,7 +1829,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 VelX = trapVelX,
                                 VelY = trapVelY,
                                 TriggerTrackingId = triggerTrackingIdVal,
-                                IsCompletelyStatic = false
+                                IsCompletelyStatic = false, 
+                                Locked = lockedVal,
                             };
                             if (null != tileObj.m_SuperTile && null != tileObj.m_SuperTile.m_CollisionObjects) {
                                 var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
@@ -1879,7 +1887,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform triggerChild in child) {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, publishingToEvtSubIdUponExhaust, publishingEvtMaskUponExhaust, subscriptionId, storyPointId;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, publishingToEvtSubIdUponExhaust, publishingEvtMaskUponExhaust, subscriptionId, storyPointId, locked, unlockSubscriptionId, supplementDemandedEvtMask;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
@@ -1896,6 +1904,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("publishingEvtMaskUponExhaust", out publishingEvtMaskUponExhaust);
                         tileProps.TryGetCustomProperty("subscriptionId", out subscriptionId);
                         tileProps.TryGetCustomProperty("storyPointId", out storyPointId);
+                        tileProps.TryGetCustomProperty("locked", out locked);
+                        tileProps.TryGetCustomProperty("unlockSubscriptionId", out unlockSubscriptionId);
+                        tileProps.TryGetCustomProperty("supplementDemandedEvtMask", out supplementDemandedEvtMask);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
@@ -1913,6 +1924,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                         ulong publishingEvtMaskUponExhaustVal = (null != publishingEvtMaskUponExhaust && !publishingEvtMaskUponExhaust.IsEmpty ? (ulong)publishingEvtMaskUponExhaust.GetValueAsInt() : 0ul);
                         int subscriptionIdVal = (null != subscriptionId && !subscriptionId.IsEmpty ? subscriptionId.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
                         int storyPointIdVal = (null != storyPointId && !storyPointId.IsEmpty ? storyPointId.GetValueAsInt() : STORY_POINT_NONE);
+
+                        bool lockedVal = (null != locked && !locked.IsEmpty && 1 == locked.GetValueAsInt()) ? true : false;
+                        int unlockSubscriptionIdVal = (null == unlockSubscriptionId || unlockSubscriptionId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : unlockSubscriptionId.GetValueAsInt());
+                        ulong supplementDemandedEvtMaskVal = (null != supplementDemandedEvtMask && !supplementDemandedEvtMask.IsEmpty ? (ulong)supplementDemandedEvtMask.GetValueAsInt() : 0ul);
 
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
@@ -1942,7 +1957,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 PublishingEvtMaskUponExhaust = publishingEvtMaskUponExhaustVal,
                                 SubscriptionId = subscriptionIdVal,
                                 StoryPointId = storyPointIdVal,
+                                UnlockSubscriptionId = unlockSubscriptionIdVal,
+                                SupplementDemandedEvtMask = supplementDemandedEvtMaskVal,
                             },
+                            Locked = lockedVal,
                         };
 
                         string[] trackingIdListStrParts = trackingIdListStr.Split(',');

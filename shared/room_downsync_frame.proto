@@ -450,6 +450,8 @@ message TrapConfigFromTiled {
 	bool prohibitsWallGrabbing = 6;
 
     int32 subscriptionId = 7;
+
+    int32 unlockSubscriptionId = 8;
 }
 
 message TrapColliderAttr {
@@ -494,6 +496,8 @@ message Trap {
 	bool waivingSpontaneousPatrol = 10;
 
     int32 triggerTrackingId = 11;
+
+    bool locked = 12;
 
 	int32 virtualGridX = 999; 
 	int32 virtualGridY = 1000;
@@ -554,6 +558,10 @@ message TriggerConfigFromTiled {
     int32 quotaCap = 14;
 
 	int32 storyPointId = 15;
+
+    int32 unlockSubscriptionId = 16;
+
+	uint64 supplementDemandedEvtMask = 17;
 }
 
 message TriggerColliderAttr {
@@ -577,6 +585,8 @@ message Trigger {
 
 	int32 virtualGridX = 11;
 	int32 virtualGridY = 12;
+
+    bool locked = 13;
 }
 
 message PeerUdpAddr {

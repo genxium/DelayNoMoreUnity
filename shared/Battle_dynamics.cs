@@ -203,7 +203,7 @@ namespace shared {
         }
 
         public static bool isTriggerClickable(Trigger trigger) {
-            return (0 == trigger.FramesToRecover && 0 < trigger.Quota);
+            return (0 == trigger.FramesToRecover && 0 < trigger.Quota && !trigger.Locked);
         }
 
         private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed, ILoggerBridge logger) {
@@ -1828,7 +1828,7 @@ namespace shared {
             }
         }
 
-        public static void fireTriggerTrackingTraps(Trigger triggerInNextFrame, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RoomDownsyncFrame nextRenderFrame, RepeatedField<Trap> nextRenderFrameTraps) {
+        public static void fireTriggerTrackingTraps(int rdfId, Trigger triggerInNextFrame, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ulong fulfilledEvtSubscriptionSetMask, RoomDownsyncFrame nextRenderFrame, RepeatedField<Trap> nextRenderFrameTraps, ILoggerBridge logger) {
 
             triggerInNextFrame.FramesToFire = MAX_INT;
             var configFromTiled = triggerInNextFrame.ConfigFromTiled;
@@ -1838,20 +1838,30 @@ namespace shared {
                 if (triggerTrackingIdToTrapLocalId.ContainsKey(trackingId)) {
                     int trapLocalId = triggerTrackingIdToTrapLocalId[trackingId];
                     var trapInNextFrame = nextRenderFrameTraps[trapLocalId];
-                    if (trapInNextFrame.Config.DestroyUponTriggered) {
-                        trapInNextFrame.TrapState = TrapState.Tdestroyed;
-                        trapInNextFrame.FramesInTrapState = 0;
+                    if (trapInNextFrame.Locked) {
+                        ulong unlockEvtSubMask = (1ul << (trapInNextFrame.ConfigFromTiled.UnlockSubscriptionId - 1));
+                        if (0 < (unlockEvtSubMask & fulfilledEvtSubscriptionSetMask)) {
+                            trapInNextFrame.Locked = false;
+                            logger.LogInfo(String.Format("@rdfId={0}, trap local id = {1} is unlocked by trigger local id = {2} AND unlockSubscriptId={3} fulfilled", rdfId, trapInNextFrame.TrapLocalId, triggerInNextFrame.TriggerLocalId, trapInNextFrame.ConfigFromTiled.UnlockSubscriptionId));
+                        } else {
+                            logger.LogWarn(String.Format("@rdfId={0}, LOCKED trap local id = {1} is NOT fired by trigger local id = {2}", rdfId, trapInNextFrame.TrapLocalId, triggerInNextFrame.TriggerLocalId));
+                        }
                     } else {
-                        trapInNextFrame.DirX = configFromTiled.InitVelX;
-                        trapInNextFrame.DirY = configFromTiled.InitVelY;
-                        trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
-                        var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
-                        var invDirMag = InvSqrt32(dirMagSq);
-                        var speedXfac = invDirMag * configFromTiled.InitVelX;
-                        var speedYfac = invDirMag * configFromTiled.InitVelY;
-                        var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
-                        trapInNextFrame.VelX = (int)(speedXfac * speedVal);
-                        trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                        if (trapInNextFrame.Config.DestroyUponTriggered) {
+                            trapInNextFrame.TrapState = TrapState.Tdestroyed;
+                            trapInNextFrame.FramesInTrapState = 0;
+                        } else {
+                            trapInNextFrame.DirX = configFromTiled.InitVelX;
+                            trapInNextFrame.DirY = configFromTiled.InitVelY;
+                            trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
+                            var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
+                            var invDirMag = InvSqrt32(dirMagSq);
+                            var speedXfac = invDirMag * configFromTiled.InitVelX;
+                            var speedYfac = invDirMag * configFromTiled.InitVelY;
+                            var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
+                            trapInNextFrame.VelX = (int)(speedXfac * speedVal);
+                            trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                        }
                     }
                 }
             }
@@ -1859,10 +1869,10 @@ namespace shared {
 
         private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<EvtSubscription> nextRenderFrameEvtSubs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription currRdfWaveNpcKilledEvtSub, EvtSubscription nextRdfWaveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ref int justTriggeredStoryPointId, ILoggerBridge logger) {
             if (0 < ((ulong)MAGIC_EVTSUB_ID_WAVER & fulfilledEvtSubscriptionSetMask)) {
-                logger.LogInfo("wave inducer is fulfilled");
+                logger.LogInfo(String.Format("@rdfId={0}, wave inducer is fulfilled", currRenderFrame.Id));
             }
             if (0 < ((ulong)MAGIC_EVTSUB_ID_WAVE_EXHAUST & fulfilledEvtSubscriptionSetMask)) {
-                logger.LogInfo("wave exhaust is fulfilled");
+                logger.LogInfo(String.Format("@rdfId={0}, wave exhaust is fulfilled", currRenderFrame.Id));
             }
             
             int nextWaveNpcCnt = 0;
@@ -1872,7 +1882,15 @@ namespace shared {
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
 
                 // [WARNING] The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
-                bool mainCycleFulfilled = (
+                if (triggerInNextFrame.Locked) {
+                    ulong unlockEvtSubMask = (1ul << (triggerInNextFrame.ConfigFromTiled.UnlockSubscriptionId - 1));
+                    if (0 < (unlockEvtSubMask & fulfilledEvtSubscriptionSetMask)) {
+                        triggerInNextFrame.Locked = false;
+                        logger.LogInfo(String.Format("@rdfId={0}, trigger local id = {1} is unlocked by unlockSubscriptId={2} fulfilled", currRenderFrame.Id, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.ConfigFromTiled.UnlockSubscriptionId));
+                    }
+                }
+
+                bool mainCycleFulfilled = !triggerInNextFrame.Locked && (
                     (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask && (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (currTrigger.ConfigFromTiled.SubscriptionId - 1))))) // TODO: Make TRIGGER_MASK_BY_SUBSCRIPTION respect "currTrigger.FramesToRecover" too
                     ||
                     ((TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) && (0 == currTrigger.FramesToRecover))
@@ -1884,7 +1902,7 @@ namespace shared {
                     if (TimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId || WaveTimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId) {
                         fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
                     } else {
-                        fireTriggerTrackingTraps(triggerInNextFrame, triggerTrackingIdToTrapLocalId, nextRenderFrame, nextRenderFrameTraps);
+                        fireTriggerTrackingTraps(currRenderFrame.Id, triggerInNextFrame, triggerTrackingIdToTrapLocalId, fulfilledEvtSubscriptionSetMask, nextRenderFrame, nextRenderFrameTraps, logger);
                     }
                 } else if (mainCycleFulfilled) {
                     if (0 < currTrigger.Quota) {
@@ -1909,14 +1927,15 @@ namespace shared {
                             }
 
                             if (null != nextRenderFrameEvtSubs && 0 < triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrameEvtSubs.Count) {
-                                var nextExhaustEvtSub = nextRenderFrameEvtSubs[triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust - 1];
-                                nextExhaustEvtSub.FulfilledEvtMask |= triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
-                                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
-                                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id - 1));
-                                    nextExhaustEvtSub.DemandedEvtMask = (MAGIC_EVTSUB_ID_STORYPOINT == nextExhaustEvtSub.Id ? nextExhaustEvtSub.DemandedEvtMask : EVTSUB_NO_DEMAND_MASK);
-                                    nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
-                                    justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
+                                var targetEvtSubNextRdf = nextRenderFrameEvtSubs[triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust - 1];
+                                if (MAGIC_EVTSUB_ID_WAVER == triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && EVTSUB_NO_DEMAND_MASK == targetEvtSubNextRdf.DemandedEvtMask && EVTSUB_NO_DEMAND_MASK == targetEvtSubNextRdf.FulfilledEvtMask) {
+                                    // [WARNING] In this case, revive the waver first
+                                    var waveExhaustEvtSub = nextRenderFrameEvtSubs[MAGIC_EVTSUB_ID_WAVE_EXHAUST-1];
+                                    waveExhaustEvtSub.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.SupplementDemandedEvtMask;
+                                    targetEvtSubNextRdf.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
+                                    logger.LogInfo(String.Format("@rdfId={0}, revived waveExhaustEvtSub.DemandedEvtMask = {1}", currRenderFrame.Id, waveExhaustEvtSub.DemandedEvtMask));
                                 }
+                                targetEvtSubNextRdf.FulfilledEvtMask |= triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
                             }
                         }
                     } else {
@@ -1939,7 +1958,6 @@ namespace shared {
                 fulfilledEvtSubscriptionSetMask |= (1ul << (nextRdfWaveNpcKilledEvtSub.Id - 1));
                 nextRdfWaveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
                 nextRdfWaveNpcKilledEvtSub.FulfilledEvtMask = 0;
-                justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextRdfWaveNpcKilledEvtSub.Id;
             }
         }
 
@@ -2441,7 +2459,7 @@ namespace shared {
                 if (framesInPatrolCue < 0) {
                     framesInPatrolCue = 0;
                 }
-                AssignToTrap(src.TrapLocalId, src.Config, src.ConfigFromTiled, src.TrapState, framesInTrapState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, src.IsCompletelyStatic, src.CapturedByPatrolCue, framesInPatrolCue, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, nextRenderFrameTraps[k]);
+                AssignToTrap(src.TrapLocalId, src.Config, src.ConfigFromTiled, src.TrapState, framesInTrapState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, src.IsCompletelyStatic, src.CapturedByPatrolCue, framesInPatrolCue, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.Locked, nextRenderFrameTraps[k]);
                 k++;
             }
             nextRenderFrameTraps[k].TrapLocalId = TERMINATING_TRAP_ID;
@@ -2458,7 +2476,7 @@ namespace shared {
                     framesToRecover = 0;
                 }
                 int framesInState = src.FramesInState + 1;
-                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.VirtualGridX, src.VirtualGridY, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
+                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.VirtualGridX, src.VirtualGridY, src.Locked, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
                 l++;
             }
             nextRenderFrameTriggers[l].TriggerLocalId = TERMINATING_TRIGGER_ID;

@@ -356,7 +356,7 @@ namespace shared {
                         LayDownFramesToRecover = 16,
                         GetUpInvinsibleFrames = 10,
                         GetUpFramesToRecover = 27,
-                        Speed = (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        Speed = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         JumpingInitVelY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 8,
@@ -369,7 +369,7 @@ namespace shared {
                         DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(30.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // [WARNING] "DefaultSizeY-ShrinkedSizeY" MUST be sufficiently large such that the character wouldn't land immediately after "jumpStarted"!
                         LayDownSizeX = (int)(30.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(30.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),

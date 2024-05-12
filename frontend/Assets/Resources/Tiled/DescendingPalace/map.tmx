@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="96" tilewidth="16" tileheight="16" infinite="0" nextlayerid="67" nextobjectid="487">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="96" tilewidth="16" tileheight="16" infinite="0" nextlayerid="67" nextobjectid="500">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="120"/>
@@ -63,6 +63,19 @@
   </object>
  </objectgroup>
  <objectgroup id="19" name="EvtSubscription">
+  <object id="488" name="Floor2Unlocker" x="512" y="736">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="499" name="StoryPoint" x="522" y="746">
+   <properties>
+    <property name="id" value="3"/>
+   </properties>
+   <point/>
+  </object>
   <object id="467" name="WaveExhaust" x="480" y="416">
    <properties>
     <property name="demandedEvtMask" value="7"/>
@@ -70,7 +83,7 @@
    </properties>
    <point/>
   </object>
-  <object id="468" name="WaveTrigger" x="474" y="569">
+  <object id="468" name="WaveTrigger" x="480" y="288">
    <properties>
     <property name="demandedEvtMask" value="1"/>
     <property name="id" value="1"/>
@@ -80,7 +93,63 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="450" name="BossDoorR" gid="1046" x="656" y="608" width="32" height="32">
+  <object id="491" name="Floor2DoorR" gid="1046" x="656" y="960" width="32" height="32">
+   <properties>
+    <property name="bulletTeamId" value="3"/>
+    <property name="characterSpawnerTimeSeq" value="1:1"/>
+    <property name="delayedFrames" value="5"/>
+    <property name="initVelX" value="-1"/>
+    <property name="initVelY" value="0"/>
+    <property name="locked" value="1"/>
+    <property name="publishingEvtMaskUponExhaust" value="2"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="2"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="300"/>
+    <property name="subCycleQuota" value="1"/>
+    <property name="subCycleTriggerFrames" value="70"/>
+    <property name="subscriptionId" value="1"/>
+    <property name="unlockSubscriptionId" value="4"/>
+   </properties>
+  </object>
+  <object id="492" name="Floor2DoorL" gid="1046" x="352" y="1152" width="32" height="32">
+   <properties>
+    <property name="bulletTeamId" value="3"/>
+    <property name="characterSpawnerTimeSeq" value="1:4097;2:4097,4097"/>
+    <property name="delayedFrames" value="5"/>
+    <property name="initVelX" value="+1"/>
+    <property name="initVelY" value="0"/>
+    <property name="locked" value="1"/>
+    <property name="publishingEvtMaskUponExhaust" value="4"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="2"/>
+    <property name="quota" value="2"/>
+    <property name="recoveryFrames" value="300"/>
+    <property name="subCycleQuota" value="2"/>
+    <property name="subCycleTriggerFrames" value="70"/>
+    <property name="subscriptionId" value="1"/>
+    <property name="unlockSubscriptionId" value="4"/>
+   </properties>
+  </object>
+  <object id="490" name="Floor2WaveInducer" x="32" y="736" width="960" height="32">
+   <properties>
+    <property name="publishingEvtMaskUponExhaust" value="1"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="1"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65544"/>
+    <property name="speciesId" value="6"/>
+    <property name="supplementDemandedEvtMask" value="7"/>
+   </properties>
+  </object>
+  <object id="487" name="Floor2Entry" x="32" y="656" width="960" height="32">
+   <properties>
+    <property name="publishingEvtMaskUponExhaust" value="1"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="4"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="6"/>
+    <property name="trackingIdList" value="2"/>
+   </properties>
+  </object>
+  <object id="450" name="Floor1DoorR" gid="1046" x="656" y="608" width="32" height="32">
    <properties>
     <property name="bulletTeamId" value="3"/>
     <property name="characterSpawnerTimeSeq" value="1:1"/>
@@ -96,7 +165,7 @@
     <property name="subscriptionId" value="1"/>
    </properties>
   </object>
-  <object id="434" name="BossDoorL" gid="1046" x="144" y="608" width="32" height="32">
+  <object id="434" name="Floor1DoorL" gid="1046" x="144" y="608" width="32" height="32">
    <properties>
     <property name="bulletTeamId" value="3"/>
     <property name="characterSpawnerTimeSeq" value="1:4097;2:4097,4097"/>
@@ -105,7 +174,7 @@
     <property name="initVelY" value="0"/>
     <property name="publishingEvtMaskUponExhaust" value="4"/>
     <property name="publishingToEvtSubIdUponExhaust" value="2"/>
-    <property name="quota" value="2"/>
+    <property name="quota" value="1"/>
     <property name="recoveryFrames" value="300"/>
     <property name="subCycleQuota" value="2"/>
     <property name="subCycleTriggerFrames" value="70"/>
@@ -118,7 +187,7 @@
     <property name="recoveryFrames" value="61857"/>
     <property name="speciesId" value="7"/>
     <property name="subscriptionId" value="2"/>
-    <property name="trackingIdList" value="1"/>
+    <property name="trackingIdList" value="1,2"/>
    </properties>
    <point/>
   </object>
@@ -126,7 +195,7 @@
    <properties>
     <property name="publishingEvtMaskUponExhaust" value="1"/>
     <property name="publishingToEvtSubIdUponExhaust" value="1"/>
-    <property name="quota" value="1"/>
+    <property name="quota" value="2"/>
     <property name="recoveryFrames" value="65535"/>
     <property name="speciesId" value="6"/>
    </properties>
@@ -137,7 +206,7 @@
    <properties>
     <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
-    <property name="publishingEvtMaskUponKilled" value="2"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4098"/>
     <property name="static" value="1"/>
@@ -145,7 +214,7 @@
    </properties>
    <point/>
   </object>
-  <object id="373" name="SkeleArcher" x="832" y="544">
+  <object id="373" name="SkeleArcher" x="928" y="512">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
@@ -160,6 +229,7 @@
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speciesId" value="4099"/>
+    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -168,30 +238,34 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="4099"/>
+    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
   </object>
-  <object id="441" name="FireBat" x="512" y="1392">
+  <object id="441" name="FireBat" x="752" y="1120">
    <properties>
     <property name="dirX" value="0"/>
     <property name="speciesId" value="4100"/>
+    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
   </object>
-  <object id="444" name="FireBat" x="405" y="1315">
+  <object id="444" name="FireBat" x="240" y="848">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="speciesId" value="4100"/>
+    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
   </object>
-  <object id="445" name="FireBat" x="603" y="1315">
+  <object id="445" name="FireBat" x="800" y="848">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="speciesId" value="4100"/>
+    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -237,9 +311,11 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="446" gid="1044" x="448" y="1216" width="96" height="64">
+  <object id="446" gid="1044" x="448" y="1198" width="96" height="64">
    <properties>
+    <property name="locked" value="1"/>
     <property name="triggerTrackingId" value="2"/>
+    <property name="unlockSubscriptionId" value="4"/>
    </properties>
   </object>
   <object id="465" gid="1041" x="448" y="656" width="96" height="64">
@@ -315,14 +391,58 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="463" x="32" y="528" width="96" height="16"/>
+  <object id="463" name="Platform" x="32" y="528" width="96" height="16"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
+  <object id="496" name="Floor2R" x="976" y="1152">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="60"/>
+    <property name="id" value="15"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="494" name="Floor2Jumper2" x="528" y="1160">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="4"/>
+    <property name="id" value="14"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="495" name="Floor2Jumper1" x="464" y="1160">
+   <properties>
+    <property name="flAct" value="3"/>
+    <property name="frAct" value="20"/>
+    <property name="id" value="13"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="498" name="Floor2L" x="48" y="1056">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="60"/>
+    <property name="id" value="12"/>
+   </properties>
+   <point/>
+  </object>
   <object id="486" name="Floor1Jumper3" x="720" y="608">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="4"/>
-    <property name="id" value="9"/>
+    <property name="id" value="11"/>
    </properties>
    <point/>
   </object>
@@ -330,7 +450,7 @@
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="4"/>
-    <property name="id" value="9"/>
+    <property name="id" value="10"/>
    </properties>
    <point/>
   </object>
@@ -338,11 +458,11 @@
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="20"/>
-    <property name="id" value="8"/>
+    <property name="id" value="9"/>
    </properties>
    <point/>
   </object>
-  <object id="470" name="Floor23FlyingCueR" x="832" y="656" width="8" height="864">
+  <object id="470" name="Floor23FlyingCueR" x="832" y="656" width="8" height="496">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="4"/>
@@ -353,10 +473,10 @@
     <property name="frCaptureFrames" value="0"/>
     <property name="fuAct" value="4"/>
     <property name="fuCaptureFrames" value="0"/>
-    <property name="id" value="7"/>
+    <property name="id" value="8"/>
    </properties>
   </object>
-  <object id="469" name="Floor23FlyingCueL" x="192" y="656" width="8" height="864">
+  <object id="469" name="Floor23FlyingCueL" x="192" y="656" width="8" height="496">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="3"/>
@@ -367,19 +487,19 @@
     <property name="frCaptureFrames" value="0"/>
     <property name="fuAct" value="3"/>
     <property name="fuCaptureFrames" value="0"/>
-    <property name="id" value="6"/>
+    <property name="id" value="7"/>
    </properties>
   </object>
-  <object id="471" name="Floor3FlyingCue" x="32" y="1440" width="960" height="8">
+  <object id="489" name="Floor2FlyingCue" x="32" y="656" width="960" height="8">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="5"/>
+    <property name="fdAct" value="2"/>
     <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="5"/>
+    <property name="flAct" value="7"/>
     <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="8"/>
+    <property name="frAct" value="6"/>
     <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="8"/>
+    <property name="fuAct" value="2"/>
     <property name="fuCaptureFrames" value="0"/>
     <property name="id" value="5"/>
    </properties>
