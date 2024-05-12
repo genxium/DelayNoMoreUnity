@@ -573,7 +573,7 @@ GameObject:
   - component: {fileID: 5796022302684014943}
   - component: {fileID: 5255282112963723734}
   m_Layer: 5
-  m_Name: Forest
+  m_Name: DescendingPalace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

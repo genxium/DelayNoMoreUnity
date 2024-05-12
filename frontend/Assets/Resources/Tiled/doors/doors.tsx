@@ -29,6 +29,11 @@
   <image width="96" height="64" source="PinkGate-0.png"/>
  </tile>
  <tile id="5">
+  <properties>
+   <property name="collisionTypeMask" value="5"/>
+   <property name="providesHardPushback" value="1"/>
+   <property name="speciesId" value="9"/>
+  </properties>
   <image width="96" height="64" source="RedGate-0.png"/>
  </tile>
  <tile id="6">
