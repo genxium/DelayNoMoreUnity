@@ -1933,12 +1933,14 @@ namespace shared {
                                     var waveExhaustEvtSub = nextRenderFrameEvtSubs[MAGIC_EVTSUB_ID_WAVE_EXHAUST-1];
                                     waveExhaustEvtSub.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.SupplementDemandedEvtMask;
                                     targetEvtSubNextRdf.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
-                                    logger.LogInfo(String.Format("@rdfId={0}, revived waveExhaustEvtSub.DemandedEvtMask = {1}", currRenderFrame.Id, waveExhaustEvtSub.DemandedEvtMask));
+                                    logger.LogInfo(String.Format("@rdfId={0}, revived MAGIC_EVTSUB_ID_WAVE_EXHAUST with waveExhaustEvtSub.DemandedEvtMask = {1}", currRenderFrame.Id, waveExhaustEvtSub.DemandedEvtMask));
                                 }
                                 targetEvtSubNextRdf.FulfilledEvtMask |= triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
                             }
                         }
-                    } else {
+                    } else if (0 == currTrigger.Quota) {
+                        // [WARNING] Exclude MAGIC_QUOTA_INFINITE and MAGIC_QUOTA_EXHAUSTED here! 
+                        logger.LogInfo(String.Format("@rdfId={0}, about to exhaust trigger local id = {1}, publishing evtMask = {2} to evtsubId = {3}: meanwhile fulfilledEvtSubscriptionSetMask = {4}", currRenderFrame.Id, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust, triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust, fulfilledEvtSubscriptionSetMask));
                         handleTriggerExhausted(triggerInNextFrame, nextRenderFrame, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt);
                     }
                 } else if (0 == currTrigger.FramesToRecover) {
@@ -1958,6 +1960,7 @@ namespace shared {
                 fulfilledEvtSubscriptionSetMask |= (1ul << (nextRdfWaveNpcKilledEvtSub.Id - 1));
                 nextRdfWaveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
                 nextRdfWaveNpcKilledEvtSub.FulfilledEvtMask = 0;
+                logger.LogInfo(String.Format("@rdfId={0}, re-purposed MAGIC_EVTSUB_ID_WAVER for spawning subCycle (nextWaveNpcCnt={1} over all door of current wave) with DemandedEvtMask = {2}", currRenderFrame.Id, nextWaveNpcCnt, nextRdfWaveNpcKilledEvtSub.DemandedEvtMask));
             }
         }
 
@@ -2739,6 +2742,7 @@ namespace shared {
 
         private static void handleTriggerExhausted(Trigger triggerInNextFrame, RoomDownsyncFrame nextRenderFrame, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt) {
 
+            triggerInNextFrame.Quota = MAGIC_QUOTA_EXHAUSTED;
             triggerInNextFrame.State = TriggerState.Tready;
             triggerInNextFrame.FramesToFire = MAX_INT;
             triggerInNextFrame.FramesToRecover = MAX_INT;

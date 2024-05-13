@@ -184,6 +184,7 @@
   <object id="416" name="WaveExhaustTrigger" x="480" y="352">
    <properties>
     <property name="delayedFrames" value="10"/>
+    <property name="quota" value="2"/>
     <property name="recoveryFrames" value="61857"/>
     <property name="speciesId" value="7"/>
     <property name="subscriptionId" value="2"/>

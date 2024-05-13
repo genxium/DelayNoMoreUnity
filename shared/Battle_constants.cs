@@ -47,6 +47,7 @@ namespace shared {
         public const int MAGIC_JOIN_INDEX_DEFAULT = -1;
         public const int MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL = 0;
         public const int MAGIC_QUOTA_INFINITE = -1;
+        public const int MAGIC_QUOTA_EXHAUSTED = -2;
 
         public const int MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED = -1;
         public const int MAGIC_LAST_SENT_INPUT_FRAME_ID_READDED = -2;
