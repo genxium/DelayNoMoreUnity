@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="96" tilewidth="16" tileheight="16" infinite="0" nextlayerid="67" nextobjectid="500">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="96" tilewidth="16" tileheight="16" infinite="0" nextlayerid="67" nextobjectid="507">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="3"/>
-  <property name="npcPreallocCapDict" value="1:4;4097:4;4098:2;3:2;4099:4;4100:4"/>
+  <property name="missionEvtSubId" value="6"/>
+  <property name="npcPreallocCapDict" value="1:4;4097:4;4098:2;3:2;4099:4;4100:4;4096:1"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="10" source="../triggers/switch/triggers_switch.tsx"/>
@@ -63,6 +64,20 @@
   </object>
  </objectgroup>
  <objectgroup id="19" name="EvtSubscription">
+  <object id="505" name="Victory" x="496" y="1392">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="6"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="501" name="Floor5Unlocker" x="496" y="1264">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="5"/>
+   </properties>
+   <point/>
+  </object>
   <object id="488" name="Floor2Unlocker" x="512" y="736">
    <properties>
     <property name="demandedEvtMask" value="1"/>
@@ -70,7 +85,7 @@
    </properties>
    <point/>
   </object>
-  <object id="499" name="StoryPoint" x="522" y="746">
+  <object id="499" name="StoryPoint" x="480" y="224">
    <properties>
     <property name="id" value="3"/>
    </properties>
@@ -201,6 +216,15 @@
     <property name="speciesId" value="6"/>
    </properties>
   </object>
+  <object id="502" name="Floor2Entry" x="0" y="1232" width="1024" height="32">
+   <properties>
+    <property name="publishingEvtMaskUponExhaust" value="1"/>
+    <property name="publishingToEvtSubIdUponExhaust" value="5"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="6"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
   <object id="372" name="SkeleArcher" x="184" y="1072">
@@ -267,6 +291,17 @@
     <property name="dirX" value="+2"/>
     <property name="speciesId" value="4100"/>
     <property name="subscriptionId" value="4"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="500" name="DemonFireSlime" x="763" y="1445">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="speciesId" value="4096"/>
+    <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -395,6 +430,34 @@
   <object id="463" name="Platform" x="32" y="528" width="96" height="16"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
+  <object id="504" name="Floor3R" x="976" y="1504">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="10"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="10"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="10"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="10"/>
+    <property name="id" value="17"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="503" name="Floor3L" x="48" y="1504">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="10"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="10"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="10"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="10"/>
+    <property name="id" value="16"/>
+   </properties>
+   <point/>
+  </object>
   <object id="496" name="Floor2R" x="976" y="1152">
    <properties>
     <property name="fdAct" value="4"/>

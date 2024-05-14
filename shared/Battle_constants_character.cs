@@ -10,7 +10,7 @@ namespace shared {
         public const int SPECIES_FIRESWORDMAN = 3;
         public const int SPECIES_MAGSWORDGIRL = 6;
 
-        public const int SPECIES_BULLWARRIOR = 4096;
+        public const int SPECIES_DEMON_FIRE_SLIME = 4096;
         public const int SPECIES_GOBLIN = 4097;
         public const int SPECIES_SKELEARCHER = 4098;
         public const int SPECIES_BAT = 4099;
@@ -205,38 +205,38 @@ namespace shared {
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),
 
-                    new KeyValuePair<int, CharacterConfig>(SPECIES_BULLWARRIOR, new CharacterConfig {
-                        SpeciesId = SPECIES_BULLWARRIOR,
-                        SpeciesName = "BullWarrior",
-                        Hp = 500,
+                    new KeyValuePair<int, CharacterConfig>(SPECIES_DEMON_FIRE_SLIME, new CharacterConfig {
+                        SpeciesId = SPECIES_DEMON_FIRE_SLIME,
+                        SpeciesName = "DemonFireSlime",
+                        Hp = 380,
                         Mp = 60*BATTLE_DYNAMICS_FPS,
                         RepelSoftPushback = true,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
-                        LayDownFrames = 16,
-                        LayDownFramesToRecover = 30,
-                        GetUpInvinsibleFrames = 10,
+                        LayDownFrames = 25,
+                        LayDownFramesToRecover = 25,
+                        GetUpInvinsibleFrames = 20,
                         GetUpFramesToRecover = 27,
                         Speed = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         JumpingInitVelY = (int)(8.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 8,
                         VisionOffsetX = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(300 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(160 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(20 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(250 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(120 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeX = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DefaultSizeY = (int)(130 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DefaultSizeY = (int)(100 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        ShrinkedSizeY = (int)(80 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeX = (int)(140 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        LayDownSizeY = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(60 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(100 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        DyingSizeY = (int)(80 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 3,
+                        DyingSizeY = (int)(100 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                        HasTurnAroundAnim = true,
-                        ProactiveJumpStartupFrames = 3,
+                        HasTurnAroundAnim = false,
+                        ProactiveJumpStartupFrames = 16,
                         Hardness = 8,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
                     }),

@@ -60,10 +60,10 @@ namespace shared {
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * FireSwordManMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManMelee1PrimerBullet.HitboxSizeX >> 1), (FireSwordManMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
-                case SPECIES_BULLWARRIOR:
-                    if (currCharacterDownsync.Mp < BullWarriorMelee1PrimarySkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(BullWarriorMelee1PrimaryBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * BullWarriorMelee1PrimaryBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
-                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BullWarriorMelee1PrimaryBullet.HitboxSizeX >> 1), (BullWarriorMelee1PrimaryBullet.HitboxSizeY >> 1));
+                case SPECIES_DEMON_FIRE_SLIME:
+                    if (currCharacterDownsync.Mp < DemonFireSlimeMelee1PrimarySkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((DemonFireSlimeMelee1PrimaryBullet.HitboxSizeX >> 1), (DemonFireSlimeMelee1PrimaryBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_GOBLIN:
                     if (currCharacterDownsync.Mp < GoblinMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
@@ -99,8 +99,8 @@ namespace shared {
                 case SPECIES_FIRESWORDMAN:
                     if (currCharacterDownsync.Mp < FireSwordManFireballSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
                     break;
-                case SPECIES_BULLWARRIOR:
-                    if (currCharacterDownsync.Mp < BullWarriorFireballSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
+                case SPECIES_DEMON_FIRE_SLIME:
+                    if (currCharacterDownsync.Mp < DemonFireSlimeFireballSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
                     break;
                 case SPECIES_SKELEARCHER:
                     if (currCharacterDownsync.Mp < PurpleArrowRainSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;

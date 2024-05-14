@@ -874,6 +874,16 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetIsPixelatedActiveVfx(bool val) {
+            IsPixelatedActiveVfx = val;
+            return this;
+        }
+            
+        public BulletConfig SetActiveVfxSpeciesId(int val) {
+            ActiveVfxSpeciesId = val;
+            return this;
+        }
+
         public bool isEmissionInducedMultiHit() {
             return (MultiHitType.FromEmission == MhType);
         }

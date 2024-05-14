@@ -129,10 +129,20 @@ namespace shared {
             SpeciesId = 4,
             MotionType = VfxMotionType.Tracing,
             DurationType = VfxDurationType.OneOff,
-            OnCharacter = false,
-            OnBullet = true,
+            OnCharacter = true,
+            OnBullet = false,
             UsePixelatedVer = true,
             Name = "SmallSting"
+        };
+
+        public static VfxConfig VfxMovingTornado = new VfxConfig {
+            SpeciesId = 5,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false,
+            UsePixelatedVer = true,
+            Name = "MovingTornado"
         };
 
         public static ImmutableDictionary<int, VfxConfig> vfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
@@ -159,6 +169,7 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxMpHealing.SpeciesId, VfxMpHealing),
                     new KeyValuePair<int, VfxConfig>(VfxSmokeNDust1.SpeciesId, VfxSmokeNDust1),
                     new KeyValuePair<int, VfxConfig>(VfxSmallSting.SpeciesId, VfxSmallSting),
+                    new KeyValuePair<int, VfxConfig>(VfxMovingTornado.SpeciesId, VfxMovingTornado),
              }
         );
 

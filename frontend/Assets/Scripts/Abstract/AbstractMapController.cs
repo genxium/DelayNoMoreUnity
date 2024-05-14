@@ -2838,6 +2838,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         } else if (vfxConfig.OnCharacter) {
             vfxLookupKey = "ch-bl-" + bullet.BattleAttr.BulletLocalId.ToString();
             var ch = (roomCapacity >= bullet.BattleAttr.OffenderJoinIndex ? rdf.PlayersArr[bullet.BattleAttr.OffenderJoinIndex - 1] : rdf.NpcsArr[bullet.BattleAttr.OffenderJoinIndex - roomCapacity - 1]);
+            if (ch.ActiveSkillId != bullet.BattleAttr.SkillId) return false;
             framesInState = ch.FramesInChState;
             dirX = ch.DirX;
             if (VfxMotionType.Tracing == vfxConfig.MotionType) {

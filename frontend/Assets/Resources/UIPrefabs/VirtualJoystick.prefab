@@ -170,7 +170,7 @@ MonoBehaviour:
   cooldownMask: {fileID: 7380059971915718088}
   content: {fileID: 388711276216919262}
   buffConfigSprites: []
-  inventoryBtnBSprite: {fileID: -490851406, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
+  inventoryBtnBSprite: {fileID: -1243900490, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
   regularBtnBSprite: {fileID: -217861898, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
 --- !u!1 &143196051212310507
 GameObject:
