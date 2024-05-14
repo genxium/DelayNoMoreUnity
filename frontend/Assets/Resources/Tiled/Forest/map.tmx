@@ -37,7 +37,7 @@
    </properties>
    <point/>
   </object>
-  <object id="135" x="488" y="304">
+  <object id="135" x="786.667" y="402">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -407,13 +407,13 @@
   <object id="339" x="624" y="288" width="16" height="64"/>
  </objectgroup>
  <objectgroup id="15" name="Pickable">
-  <object id="358" gid="1376" x="713.333" y="445.333" width="32" height="32"/>
-  <object id="359" gid="1376" x="716" y="558" width="32" height="32"/>
+  <object id="358" gid="1376" x="713.333" y="439.333" width="32" height="32"/>
+  <object id="359" gid="1376" x="716" y="552" width="32" height="32"/>
   <object id="360" gid="1540" x="728" y="688" width="32" height="32"/>
   <object id="361" gid="1540" x="909.333" y="471.333" width="32" height="32"/>
   <object id="362" gid="1539" x="982" y="286" width="32" height="32"/>
   <object id="363" gid="1375" x="828" y="553.334" width="32" height="32"/>
-  <object id="364" gid="1375" x="824.667" y="444" width="32" height="32"/>
+  <object id="364" gid="1375" x="824.667" y="438" width="32" height="32"/>
   <object id="365" gid="1539" x="564.667" y="683.333" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">

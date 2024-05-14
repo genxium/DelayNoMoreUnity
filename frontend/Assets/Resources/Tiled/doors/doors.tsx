@@ -15,7 +15,7 @@
   </properties>
   <image width="96" height="64" source="GreenGate-0.png"/>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="20" width="96" height="44.5663">
+   <object id="1" x="0" y="20" width="96" height="44">
     <properties>
      <property name="providesHardPushback" value="1"/>
     </properties>
@@ -29,7 +29,19 @@
   <image width="96" height="64" source="PinkGate-0.png"/>
  </tile>
  <tile id="5">
+  <properties>
+   <property name="collisionTypeMask" value="5"/>
+   <property name="providesHardPushback" value="1"/>
+   <property name="speciesId" value="9"/>
+  </properties>
   <image width="96" height="64" source="RedGate-0.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="20" width="96" height="44">
+    <properties>
+     <property name="providesHardPushback" value="1"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="6">
   <properties>

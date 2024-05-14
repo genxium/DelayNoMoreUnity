@@ -1,69 +1,114 @@
 using System;
 using Google.Protobuf.Collections;
+using static shared.CharacterState;
 
 namespace shared {
     public partial class Battle {
-        private static bool frontOpponentReachableByDragonPunch(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float absColliderDx, float colliderDy, float absColliderDy, CharacterConfig opponentChConfig) {
+        private static int OPPONENT_REACTION_UNKNOWN = 0;
+        private static int OPPONENT_REACTION_USE_MELEE = 1;
+        private static int OPPONENT_REACTION_USE_DRAGONPUNCH = 1;
+        private static int OPPONENT_REACTION_USE_FIREBALL = 3;
+        private static int OPPONENT_REACTION_FOLLOW = 4;
+        //private static int OPPONENT_REACTION_FOLLOW_ASAP = 5;
+        private static int OPPONENT_REACTION_NOT_ENOUGH_MP = 6;
+        private static int OPPONENT_REACTION_FLEE = 7;
+        //private static int OPPONENT_REACTION_FLEE_ASAP = 8;
+
+        private static int frontOpponentReachableByDragonPunch(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float absColliderDx, float colliderDy, float absColliderDy, CharacterConfig opponentChConfig) {
             int yfac = (0 < colliderDy ? 1 : -1);
             float boxCx, boxCy, boxCwHalf, boxChHalf;
+            bool closeEnough = false;
             // No need to calculate the exact bounding box of opponent based on ChState, this is just an estimation.
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_SWORDMAN:
+                    if (currCharacterDownsync.Mp < SwordManDragonPunchPrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(SwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * SwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (SwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
+                    closeEnough = (boxCx + boxCwHalf >= 0.5f*absColliderDx) && (0.1f*aCollider.H < colliderDy && boxCy + boxChHalf > 0.2f*colliderDy); 
                     break;
                 case SPECIES_FIRESWORDMAN:
+                    if (currCharacterDownsync.Mp < FireSwordManDragonPunchPrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * FireSwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (FireSwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
+                    closeEnough = (boxCx + boxCwHalf >= 0.5f*absColliderDx) && (0.1f*aCollider.H < colliderDy && boxCy + boxChHalf > 0.2f*colliderDy); 
                     break;
                 case SPECIES_SKELEARCHER:
-                    return (0 < colliderDy && absColliderDy > 0.3f * (bCollider.H-aCollider.H));
+                    if (currCharacterDownsync.Mp < PurpleArrowRainSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
+                    closeEnough = (0 < colliderDy && absColliderDy > 0.3f * (bCollider.H-aCollider.H));
+                    break;
                 default:
-                    return false;
+                    return OPPONENT_REACTION_UNKNOWN;
             }
-            return (boxCx + boxCwHalf >= 0.5f*absColliderDx) && (0.1f*aCollider.H < colliderDy && boxCy + boxChHalf > 0.2f*colliderDy);
+            if (closeEnough) {
+                return OPPONENT_REACTION_USE_DRAGONPUNCH;
+            } else {
+                return OPPONENT_REACTION_FOLLOW;
+            }
         }
 
-        private static bool frontOpponentReachableByMelee1(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float absColliderDx, float colliderDy, float absColliderDy, CharacterConfig opponentChConfig) {
+        private static int frontOpponentReachableByMelee1(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float absColliderDx, float colliderDy, float absColliderDy, CharacterConfig opponentChConfig) {
             int yfac = (0 < colliderDy ? 1 : -1);
             float boxCx, boxCy, boxCwHalf, boxChHalf;
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_SWORDMAN:
+                    if (currCharacterDownsync.Mp < SwordManMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(SwordManMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * SwordManMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SwordManMelee1PrimerBullet.HitboxSizeX >> 1), (SwordManMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_FIRESWORDMAN:
+                    if (currCharacterDownsync.Mp < FireSwordManMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * FireSwordManMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManMelee1PrimerBullet.HitboxSizeX >> 1), (FireSwordManMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
-                case SPECIES_BULLWARRIOR:
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(BullWarriorMelee1PrimaryBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * BullWarriorMelee1PrimaryBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
-                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BullWarriorMelee1PrimaryBullet.HitboxSizeX >> 1), (BullWarriorMelee1PrimaryBullet.HitboxSizeY >> 1));
+                case SPECIES_DEMON_FIRE_SLIME:
+                    if (currCharacterDownsync.Mp < DemonFireSlimeMelee1PrimarySkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((DemonFireSlimeMelee1PrimaryBullet.HitboxSizeX >> 1), (DemonFireSlimeMelee1PrimaryBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_GOBLIN:
+                    if (currCharacterDownsync.Mp < GoblinMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(GoblinMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * GoblinMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((GoblinMelee1PrimerBullet.HitboxSizeX >> 1), (GoblinMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_SKELEARCHER:
+                    if (currCharacterDownsync.Mp < PurpleArrowPrimarySkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(PurpleArrowBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * PurpleArrowBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((PurpleArrowBullet.HitboxSizeX >> 2), (PurpleArrowBullet.HitboxSizeY >> 2));
                     break;
+                case SPECIES_BAT:
+                case SPECIES_FIREBAT:
+                    if (currCharacterDownsync.Mp < BatMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(BatMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * BatMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BatMelee1PrimerBullet.HitboxSizeX >> 1), (BatMelee1PrimerBullet.HitboxSizeY >> 1));
+                    break;
                 default:
-                    return false;
+                    return OPPONENT_REACTION_UNKNOWN;
             }
-            return (boxCx + boxCwHalf >= absColliderDx) && (boxCy + boxChHalf >= absColliderDy);
+            // By now must have enough MP for the corresponding skill
+            bool closeEnough = (boxCx + boxCwHalf >= absColliderDx) && (boxCy + boxChHalf >= absColliderDy);
+            if (closeEnough) {
+                return OPPONENT_REACTION_USE_MELEE;
+            } else {
+                return OPPONENT_REACTION_FOLLOW;
+            }
         }
 
-        private static bool frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, CharacterConfig opponentChConfig) {
+        private static int frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, CharacterConfig opponentChConfig) {
+            // Whenever there's an opponent in vision, it's deemed already close enough for fireball
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_FIRESWORDMAN:
-                    return currCharacterDownsync.Mp >= FireSwordManFireballSkill.MpDelta;
-                case SPECIES_BULLWARRIOR:
-                    return currCharacterDownsync.Mp >= BullWarriorFireballSkill.MpDelta;
+                    if (currCharacterDownsync.Mp < FireSwordManFireballSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
+                    break;
+                case SPECIES_DEMON_FIRE_SLIME:
+                    if (currCharacterDownsync.Mp < DemonFireSlimeFireballSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
+                    break;
                 case SPECIES_SKELEARCHER:
-                    return currCharacterDownsync.Mp >= BullWarriorFireballSkill.MpDelta;
+                    if (currCharacterDownsync.Mp < PurpleArrowRainSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
+                    break;
+                default:
+                    return OPPONENT_REACTION_UNKNOWN;
             }
-            return false;
+            return OPPONENT_REACTION_USE_FIREBALL;
         }
 
         private static void findHorizontallyClosestCharacterCollider(CharacterDownsync currCharacterDownsync, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res2) {
@@ -208,58 +253,97 @@ namespace shared {
             int effectiveDy = currCharacterDownsync.DirY;
             if (CharacterState.InAirIdle1ByJump == currCharacterDownsync.CharacterState || CharacterState.InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || CharacterState.InAirIdle2ByJump == currCharacterDownsync.CharacterState) {
                 jumpHolding = true;
-            } 
+            }
 
-            bool hasVisionReaction = false;
-            bool hasEnemyBehindMe = false;
+            int visionReaction = OPPONENT_REACTION_UNKNOWN;
             var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
-            if (!currCharacterDownsync.InAir) {
-                // TODO: There's no InAir vision reaction yet.
-                float visionCx, visionCy, visionCw, visionCh;
-                calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
 
-                var visionCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_VISION_INDEX_PREFIX);
-                collisionSys.AddSingle(visionCollider);
+            float visionCx, visionCy, visionCw, visionCh;
+            calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
 
-                Collider? bCollider;
-                CharacterDownsync? v3;
-                findHorizontallyClosestCharacterCollider(currCharacterDownsync, visionCollider, collision, ref overlapResult, out bCollider, out v3);
+            var visionCollider = dynamicRectangleColliders[colliderCnt];
+            UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_VISION_INDEX_PREFIX);
+            collisionSys.AddSingle(visionCollider);
 
-                if (null != bCollider && null != v3) {
-                    var colliderDx = (bCollider.X - aCollider.X);
-                    var colliderDy = (bCollider.Y - aCollider.Y);
-                    if (0 > (colliderDx * currCharacterDownsync.DirX)) {
-                        hasEnemyBehindMe = true;
+            Collider? bCollider;
+            CharacterDownsync? v3;
+            findHorizontallyClosestCharacterCollider(currCharacterDownsync, visionCollider, collision, ref overlapResult, out bCollider, out v3);
+
+            float bColliderDx = 0f, bColliderDy = 0f;
+            if (null != bCollider && null != v3) {
+                bColliderDx = (bCollider.X - aCollider.X);
+                bColliderDy = (bCollider.Y - aCollider.Y);
+            
+                var atkedChConfig = characters[v3.SpeciesId];
+                float absColliderDx = Math.Abs(bColliderDx), absColliderDy = Math.Abs(bColliderDy);
+
+                bool opponentBehindMe = (0 > (bColliderDx * currCharacterDownsync.DirX)); 
+                if (!opponentBehindMe) {
+                    // Opponent is in front of me
+                    int s1 = frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back. 
+                    int s2 = frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig);
+                    int s3 = frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, bColliderDx, bColliderDy, atkedChConfig); 
+                    if (OPPONENT_REACTION_NOT_ENOUGH_MP == s1 && OPPONENT_REACTION_NOT_ENOUGH_MP == s2 && OPPONENT_REACTION_NOT_ENOUGH_MP == s3) {
+                        visionReaction = OPPONENT_REACTION_FLEE;   
+                    } else if (OPPONENT_REACTION_USE_DRAGONPUNCH == s1) {
+                        patternId = PATTERN_UP_B;
+                        visionReaction = s1;
+                    } else if (OPPONENT_REACTION_USE_MELEE == s2) {
+                        patternId = PATTERN_B;
+                        visionReaction = s2;
+                    } else if (OPPONENT_REACTION_USE_FIREBALL == s3) {
+                        patternId = PATTERN_DOWN_B;
+                        visionReaction = s3;
                     } else {
-                        var atkedChConfig = characters[v3.SpeciesId];
-                        float absColliderDx = Math.Abs(colliderDx), absColliderDy = Math.Abs(colliderDy);
-                        // Opponent is in front of me
-                        if (frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, colliderDy, absColliderDy, atkedChConfig)) {
-                            // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
-                            patternId = PATTERN_UP_B;
-                            hasVisionReaction = true;
-                        } else if (frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, colliderDy, absColliderDy, atkedChConfig)) {
-                            patternId = PATTERN_B;
-                            hasVisionReaction = true;
-                        } else if (frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, colliderDx, colliderDy, atkedChConfig)) {
-                            patternId = PATTERN_DOWN_B;
-                            hasVisionReaction = true;
-                        }
+                        visionReaction = OPPONENT_REACTION_FOLLOW;
+                    }
+                } else {
+                    // Opponent is behind me
+                    bool farEnough = (absColliderDx > 0.5f*(aCollider.W+bCollider.W)); // To avoid bouncing turn-arounds
+                    if (farEnough) {
+                        visionReaction = OPPONENT_REACTION_FOLLOW;
                     }
                 }
 
-                collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
-                visionCollider.Data = null;
+                if (OPPONENT_REACTION_FOLLOW == visionReaction) {
+                    if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) { 
+                        var magSqr = bColliderDx * bColliderDx + bColliderDy * bColliderDy;
+                        var invMag = InvSqrt32(magSqr);
+
+                        float normX = bColliderDx*invMag, normY = bColliderDy*invMag;
+                        if (opponentBehindMe) {
+                            normX = -normX;
+                        }
+                        var (effDx, effDy, _) = DiscretizeDirection(normX, normY, mustHaveNonZeroX: true);
+                        effectiveDx = effDx;
+                        effectiveDy = effDy;
+                    } else {
+                        if (opponentBehindMe) {
+                            effectiveDx = -effectiveDx;
+                        }
+                    }
+                } else if (OPPONENT_REACTION_FLEE == visionReaction) {
+                    if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) { 
+                        var magSqr = bColliderDx * bColliderDx + bColliderDy * bColliderDy;
+                        var invMag = InvSqrt32(magSqr);
+
+                        float normX = -bColliderDx*invMag, normY = -bColliderDy*invMag;
+                        var (effDx, effDy, _) = DiscretizeDirection(normX, normY);
+                        effectiveDx = effDx;
+                        effectiveDy = effDy;
+                    } else {
+                        if (opponentBehindMe) {
+                            // DO NOTHING, just continue walking
+                        }
+                    }
+                }
             }
 
-            if (!hasVisionReaction && hasEnemyBehindMe) {
-                effectiveDx = -effectiveDx;
-                hasVisionReaction = true;
-            }
+            collisionSys.RemoveSingle(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
+            visionCollider.Data = null;
 
-            if (hasVisionReaction && PATTERN_ID_NO_OP != patternId) {
-                // [WARNING] Even if "hasVisionReaction", if "PATTERN_ID_NO_OP == patternId", we still expect the NPC to make use of patrol cues to jump or turn around!
+            if (OPPONENT_REACTION_UNKNOWN != visionReaction && PATTERN_ID_NO_OP != patternId) {
+                // [WARNING] Even if there were no vision reaction, if "PATTERN_ID_NO_OP == patternId", we still expect the NPC to make use of patrol cues to jump or turn around!
                 jumpHolding = false;
                 thatCharacterInNextFrame.CapturedByPatrolCue = false;
                 thatCharacterInNextFrame.FramesInPatrolCue = 0;
@@ -267,16 +351,16 @@ namespace shared {
             } else if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
                 bool hasPatrolCueReaction = false;
                 // [WARNING] The field "CharacterDownsync.FramesInPatrolCue" would also be re-purposed as "patrol cue collision waiving frames" by the logic here.
-                Collider? bCollider;
-                PatrolCue? v3;
-                findHorizontallyClosestPatrolCueCollider(currCharacterDownsync, aCollider, collision, ref overlapResult, out bCollider, out v3); 
+                Collider? pCollider;
+                PatrolCue? v4;
+                findHorizontallyClosestPatrolCueCollider(currCharacterDownsync, aCollider, collision, ref overlapResult, out pCollider, out v4); 
                 
-                if (null != bCollider && null != v3) {
+                if (null != pCollider && null != v4) {
                     bool prevCapturedByPatrolCue = currCharacterDownsync.CapturedByPatrolCue;
 
                     // By now we're sure that it should react to the PatrolCue
-                    var colliderDx = (aCollider.X - bCollider.X);
-                    var colliderDy = (aCollider.Y - bCollider.Y);
+                    var colliderDx = (aCollider.X - pCollider.X);
+                    var colliderDy = (aCollider.Y - pCollider.Y);
                     bool fr = 0 < colliderDx && (0 > currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX));
                     bool fl = 0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX));
                     bool fu = 0 < colliderDy && (0 > currCharacterDownsync.VelY || (0 == currCharacterDownsync.VelY && 0 > currCharacterDownsync.DirY));
@@ -288,42 +372,42 @@ namespace shared {
 
                     int targetFramesInPatrolCue = 0;
                     if (fr) {
-                        targetFramesInPatrolCue = (int)v3.FrCaptureFrames;
-                        DecodeInput(v3.FrAct, decodedInputHolder);
-                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                        targetFramesInPatrolCue = (int)v4.FrCaptureFrames;
+                        DecodeInput(v4.FrAct, decodedInputHolder);
+                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4)); 
                     } else if (fl) {
-                        targetFramesInPatrolCue = (int)v3.FlCaptureFrames;
-                        DecodeInput(v3.FlAct, decodedInputHolder);
-                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3));
+                        targetFramesInPatrolCue = (int)v4.FlCaptureFrames;
+                        DecodeInput(v4.FlAct, decodedInputHolder);
+                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4));
                     } else if (fu) {
-                        targetFramesInPatrolCue = (int)v3.FuCaptureFrames;
-                        DecodeInput(v3.FuAct, decodedInputHolder);
-                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the top", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                        targetFramesInPatrolCue = (int)v4.FuCaptureFrames;
+                        DecodeInput(v4.FuAct, decodedInputHolder);
+                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the top", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4)); 
                     } else if (fd) {
-                        targetFramesInPatrolCue = (int)v3.FdCaptureFrames;
-                        DecodeInput(v3.FdAct, decodedInputHolder);
-                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the bottom", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3)); 
+                        targetFramesInPatrolCue = (int)v4.FdCaptureFrames;
+                        DecodeInput(v4.FdAct, decodedInputHolder);
+                        //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the bottom", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4)); 
                     } else {
-                        logger.LogWarn(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, v3, currCharacterDownsync.DirX));
+                        //logger.LogWarn(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, v4, currCharacterDownsync.DirX));
                     }
 
-                    bool shouldWaivePatrolCueReaction = (false == prevCapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue && v3.Id == currCharacterDownsync.WaivingPatrolCueId && (0 == decodedInputHolder.BtnALevel && 0 == decodedInputHolder.BtnBLevel)); // Don't waive if the cue contains an action button (i.e. BtnA or BtnB)
+                    bool shouldWaivePatrolCueReaction = (false == prevCapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue && v4.Id == currCharacterDownsync.WaivingPatrolCueId && (0 == decodedInputHolder.BtnALevel && 0 == decodedInputHolder.BtnBLevel)); // Don't waive if the cue contains an action button (i.e. BtnA or BtnB)
 
                     do {
                         if (shouldWaivePatrolCueReaction) {
                             // [WARNING] It's difficult to move this "early return" block to be before the "shape overlap check" like that of the traps, because we need data from "decodedInputHolder". 
-                            // logger.LogInfo(String.Format("rdf.Id={0}, Npc joinIndex={1}, speciesId={2} is waived for patrolCueId={3} because it has (prevCapturedByPatrolCue={4}, framesInPatrolCue={5}, waivingPatrolCueId={6}).", currRenderFrame.Id, currCharacterDownsync.JoinIndex, currCharacterDownsync.SpeciesId, v3.Id, prevCapturedByPatrolCue, currCharacterDownsync.FramesInPatrolCue, currCharacterDownsync.WaivingPatrolCueId));
+                            // logger.LogInfo(String.Format("rdf.Id={0}, Npc joinIndex={1}, speciesId={2} is waived for patrolCueId={3} because it has (prevCapturedByPatrolCue={4}, framesInPatrolCue={5}, waivingPatrolCueId={6}).", currRenderFrame.Id, currCharacterDownsync.JoinIndex, currCharacterDownsync.SpeciesId, v4.Id, prevCapturedByPatrolCue, currCharacterDownsync.FramesInPatrolCue, currCharacterDownsync.WaivingPatrolCueId));
                             break;
                         }
 
-                        bool shouldBreakPatrolCueCapture = ((true == prevCapturedByPatrolCue) && (currCharacterDownsync.WaivingPatrolCueId == v3.Id) && (0 == currCharacterDownsync.FramesInPatrolCue));
+                        bool shouldBreakPatrolCueCapture = ((true == prevCapturedByPatrolCue) && (currCharacterDownsync.WaivingPatrolCueId == v4.Id) && (0 == currCharacterDownsync.FramesInPatrolCue));
 
                         bool shouldEnterCapturedPeriod = ((false == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (0 < targetFramesInPatrolCue));
 
                         if (shouldEnterCapturedPeriod) {
                             thatCharacterInNextFrame.CapturedByPatrolCue = true;
                             thatCharacterInNextFrame.FramesInPatrolCue = targetFramesInPatrolCue;
-                            thatCharacterInNextFrame.WaivingPatrolCueId = v3.Id;
+                            thatCharacterInNextFrame.WaivingPatrolCueId = v4.Id;
                             effectiveDx = 0;
                             effectiveDy = 0;
                             jumpedOrNot = false;
@@ -333,7 +417,7 @@ namespace shared {
                             break;
                         }
 
-                        bool isReallyCaptured = ((true == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (v3.Id == currCharacterDownsync.WaivingPatrolCueId) && (0 < currCharacterDownsync.FramesInPatrolCue));
+                        bool isReallyCaptured = ((true == prevCapturedByPatrolCue) && (false == shouldBreakPatrolCueCapture) && (v4.Id == currCharacterDownsync.WaivingPatrolCueId) && (0 < currCharacterDownsync.FramesInPatrolCue));
                         if (isReallyCaptured) {
                             effectiveDx = 0;
                             effectiveDy = 0;
@@ -350,13 +434,21 @@ namespace shared {
                             hasPatrolCueReaction = true;
                             thatCharacterInNextFrame.CapturedByPatrolCue = false;
                             thatCharacterInNextFrame.FramesInPatrolCue = DEFAULT_PATROL_CUE_WAIVING_FRAMES; // re-purposed
-                            thatCharacterInNextFrame.WaivingPatrolCueId = v3.Id;
+                            thatCharacterInNextFrame.WaivingPatrolCueId = v4.Id;
                         }
                     } while (false);
                 }
 
-                if (false == hasVisionReaction && false == hasPatrolCueReaction && (currCharacterDownsync.WaivingSpontaneousPatrol || MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId)) {
-                    return (PATTERN_ID_UNABLE_TO_OP, false, false, false, 0, 0);
+                if (OPPONENT_REACTION_UNKNOWN == visionReaction && false == hasPatrolCueReaction) {
+                    if (currCharacterDownsync.WaivingSpontaneousPatrol) {
+                        return (PATTERN_ID_UNABLE_TO_OP, false, false, false, 0, 0);
+                    }
+                    if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
+                        return (PATTERN_ID_NO_OP, false, false, false, 0, 0);
+                    }
+                    if (chConfig.AntiGravityWhenIdle && (Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState)) {
+                        return (PATTERN_ID_NO_OP, false, false, false, 0, 0);
+                    }
                 }
             }
 
@@ -400,11 +492,19 @@ namespace shared {
                         }
                     }
                     continue; // Don't allow movement if skill is used
-                }
-
+                } 
+                    
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
-                _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, skillConfig, logger);
-                _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
+                if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
+                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, skillConfig, logger);
+                } else {
+                    _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, true, skillConfig, logger);
+                    if (PATTERN_ID_UNABLE_TO_OP != patternId && chConfig.AntiGravityWhenIdle && Walking == thatCharacterInNextFrame.CharacterState && chConfig.AntiGravityFramesLingering < thatCharacterInNextFrame.FramesInChState) {
+                        thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
+                        thatCharacterInNextFrame.FramesInChState = 0;
+                        thatCharacterInNextFrame.VelX = 0;
+                    }
+                }
             }
         }
 
@@ -415,9 +515,14 @@ namespace shared {
                 return;
             }
 
-            int xfac = (0 < characterDownsync.DirX ? 1 : -1);
-            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * chConfig.VisionOffsetX, characterDownsync.VirtualGridY + chConfig.VisionOffsetY);
-            (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.VisionSizeX, chConfig.VisionSizeY);
+            if ((Idle1 == characterDownsync.CharacterState || InAirIdle1NoJump == characterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) {
+                (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX, characterDownsync.VirtualGridY + (chConfig.VisionOffsetY << 1));
+                (boxCw, boxCh) = VirtualGridToPolygonColliderCtr((chConfig.VisionSizeY << 1), (chConfig.VisionSizeX << 1));
+            } else {
+                int xfac = (0 < characterDownsync.DirX ? 1 : -1);
+                (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(characterDownsync.VirtualGridX + xfac * chConfig.VisionOffsetX, characterDownsync.VirtualGridY + chConfig.VisionOffsetY);
+                (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(chConfig.VisionSizeX, chConfig.VisionSizeY);
+            }
         }
     }
 }

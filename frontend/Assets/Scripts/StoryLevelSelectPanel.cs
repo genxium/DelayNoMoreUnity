@@ -3,18 +3,17 @@ using UnityEngine.UI; // Required when Using UI elements.
 using UnityEngine.SceneManagement;
 using shared;
 using System;
-using UnityEngine.InputSystem;
 
 public class StoryLevelSelectPanel : MonoBehaviour {
     private int selectionPhase = 0;
     private int selectedLevelIdx = -1;
+    private string selectedLevelName = null;
     public Image backButton;
     public CharacterSelectGroup characterSelectGroup;
     public StoryLevelSelectGroup levels;
     protected PlayerStoryProgress storyProgress = null;
 
     public AbstractMapController map;
-    private PlayerInput sharedPlayerInputInstance;
 
     void Start() {
         // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
@@ -30,20 +29,21 @@ public class StoryLevelSelectPanel : MonoBehaviour {
     public void reset() {
         Debug.Log("StoryLevelSelectPanel reset");
         levels.postCancelledCallback = OnBackButtonClicked;
-        AbstractSingleSelectGroup.PostConfirmedCallbackT levelPostConfirmedCallback = (int selectedIdx) => {
+        StoryLevelSelectGroup.StoryLevelPostConfirmedCallbackT levelPostConfirmedCallback = (int selectedIdx, string selectedName) => {
             Debug.Log("StoryLevelSelectPanel levelPostConfirmedCallback");
             selectedLevelIdx = selectedIdx;
+            selectedLevelName = selectedName; 
             selectionPhase = 1;
             characterSelectGroup.gameObject.SetActive(true);
             toggleUIInteractability(true);
         };
-        levels.postConfirmedCallback = levelPostConfirmedCallback;
+        levels.levelPostConfirmedCallback = levelPostConfirmedCallback;
         characterSelectGroup.gameObject.SetActive(false);
         characterSelectGroup.postCancelledCallback = OnBackButtonClicked;
         characterSelectGroup.postConfirmedCallback = allConfirmed;
         selectionPhase = 0;
         selectedLevelIdx = -1;
-        sharedPlayerInputInstance = levels.GetComponent<PlayerInput>();
+        selectedLevelName = null;
         toggleUIInteractability(true);
     }
 
@@ -82,24 +82,12 @@ public class StoryLevelSelectPanel : MonoBehaviour {
         try {
             characterSelectGroup.toggleUIInteractability(false);
             backButton.gameObject.SetActive(false);
-            string selectedLevelName = null;
-            switch (selectedLevelIdx) {
-                case 0:
-                    selectedLevelName = "SmallForest";
-                    break;
-                case 1:
-                    selectedLevelName = "ArrowPalace";
-                    break;
-                case 2:
-                    selectedLevelName = "Forest";
-                    break;
-            }
             selectionPhase = 2;
             toggleUIInteractability(false);
             characterSelectGroup.postCancelledCallback = null;
             characterSelectGroup.postConfirmedCallback = null;
             levels.postCancelledCallback = null;
-            levels.postConfirmedCallback = null;
+            levels.levelPostConfirmedCallback = null;
             map.onCharacterAndLevelSelectGoAction(selectedSpeciesId, selectedLevelName);
         } catch (Exception ex) {
             Debug.LogError(ex);

@@ -9,6 +9,7 @@ enum BulletState {
 	StartUp = 0;
 	Active = 1;
 	Exploding = 2;
+	Vanishing = 3;
 }
 
 enum CharacterState {
@@ -295,6 +296,7 @@ message VfxConfig {
 	bool onCharacter = 4;
 	bool onBullet = 5;
     bool usePixelatedVer = 6;
+    string name = 7;
 }
 
 message BulletConfig {
@@ -366,6 +368,9 @@ message BulletConfig {
 	bool mhVanishOnMeleeHit = 48;
     int32 downSlopePrimerVelY = 49;
 
+    bool mhUsesUpdatesOriginPos = 50; // Default is false, multihit bullets will inherit (originatedVirtualGridX, originatedVirtualGridY) from the previous bullet
+    bool usesBeamRendering = 51; // If true, rendering of the bullet will respect (originatedVirtualGridX, originatedVirtualGridY) -> (virtualGridX, virtualGridY)
+
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave
 
@@ -385,6 +390,7 @@ message BulletBattleAttr {
 	int32 teamId = 4;
 	int32 activeSkillHit = 5; // for the convenience of selecting the correct next bullet for multihit fireball (where the offender's "activeSkillHit" might've already been reset)
 	int32 skillId = 6; // for the convenience of selecting the correct next bullet for multihit fireball (where the offender's "activeSkillId" might've already been reset); also for reverse lookup in multihit transition, in the most extreme case, a same "BulletConfig" instance is to be shared across different "Skill"s, thus we put "skillId" in "BulletBattleAttr" instead.
+
 }
 
 message Bullet {
@@ -404,6 +410,9 @@ message Bullet {
 	int32 dirY = 1002;
 	int32 velX = 1003;
 	int32 velY = 1004;
+
+	int32 originatedVirtualGridX = 1005;
+	int32 originatedVirtualGridY = 1006;
 }
 
 message TrapConfig {
@@ -445,6 +454,8 @@ message TrapConfigFromTiled {
 	bool prohibitsWallGrabbing = 6;
 
     int32 subscriptionId = 7;
+
+    int32 unlockSubscriptionId = 8;
 }
 
 message TrapColliderAttr {
@@ -489,6 +500,8 @@ message Trap {
 	bool waivingSpontaneousPatrol = 10;
 
     int32 triggerTrackingId = 11;
+
+    bool locked = 12;
 
 	int32 virtualGridX = 999; 
 	int32 virtualGridY = 1000;
@@ -549,6 +562,10 @@ message TriggerConfigFromTiled {
     int32 quotaCap = 14;
 
 	int32 storyPointId = 15;
+
+    int32 unlockSubscriptionId = 16;
+
+	uint64 supplementDemandedEvtMask = 17;
 }
 
 message TriggerColliderAttr {
@@ -572,6 +589,8 @@ message Trigger {
 
 	int32 virtualGridX = 11;
 	int32 virtualGridY = 12;
+
+    bool locked = 13;
 }
 
 message PeerUdpAddr {
@@ -840,6 +859,7 @@ message PickableConfigFromTiled {
     PickupType pickupType = 8;
     int32 stockQuotaPerOccurrence = 9; // Only meaningful when "pickupType == PutIntoInventory"
     int32 subscriptionId = 10;
+    int32 vfxSpeciesId = 11; // Always use pixelated vfx
 
     int32 consumableSpeciesId = 1024; 
     int32 buffSpeciesId = 1025;

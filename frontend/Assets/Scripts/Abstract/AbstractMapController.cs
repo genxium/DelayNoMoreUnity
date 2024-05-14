@@ -8,6 +8,7 @@ using DG.Tweening;
 using Google.Protobuf.Collections;
 using static shared.Battle;
 using static Story.StoryConstants;
+using UnityEngine.UIElements;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int levelId = LEVEL_NONE;
@@ -126,6 +127,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float lineRendererZ = +5;
     protected float triggerZ = 0;
     protected float characterZ = 0;
+    protected float flyingCharacterZ = -1;
     protected float inplaceHpBarZ = +10;
     protected float fireballZ = -5;
     protected float footstepAttenuationZ = 200.0f;
@@ -569,7 +571,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             var npcGameObj = npcAnimHolder.gameObject;
-            newPosHolder.Set(wx, wy, characterZ);
+            newPosHolder.Set(wx, wy, (!currNpcDownsync.OmitGravity && !chConfig.OmitGravity) ? characterZ : flyingCharacterZ);
             npcGameObj.transform.position = newPosHolder;
 
             npcAnimHolder.updateCharacterAnim(currNpcDownsync, currNpcDownsync.CharacterState, prevNpcDownsync, false, chConfig);
@@ -692,7 +694,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             playBulletSfx(bullet, isExploding, wx, wy, rdf.Id, distanceAttenuationZ);
-            playBulletVfx(bullet, isExploding, wx, wy, rdf.Id);
+            playBulletVfx(bullet, isExploding, wx, wy, rdf);
         }
 
         for (int k = 0; k < rdf.TriggersArr.Count; k++) {
@@ -732,16 +734,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
 
-            if (PickableState.Pidle == pickable.PkState) {
-                string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
-
-                if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+            // By now only "consumable" is available
+            if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
+                var consumableConfig = consumableConfigs[pickable.ConfigFromTiled.ConsumableSpeciesId];
+                if (PickableState.Pidle == pickable.PkState) {
+                    string lookupKey = pickable.PickableLocalId.ToString(), animName = null;
                     animName = String.Format("Consumable{0}", pickable.ConfigFromTiled.ConsumableSpeciesId);
-                } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
-                    animName = String.Format("Buff{0}", pickable.ConfigFromTiled.BuffSpeciesId);
-                }
-
-                if (null != animName) {
                     var pickableAnimHolder = cachedPickables.PopAny(lookupKey);
                     if (null == pickableAnimHolder) {
                         pickableAnimHolder = cachedPickables.Pop();
@@ -759,38 +757,29 @@ public abstract class AbstractMapController : MonoBehaviour {
                         pickableAnimHolder.score = rdf.Id;
                         cachedPickables.Put(lookupKey, pickableAnimHolder);
                     }
-                }
-            } else if (PickableState.Pconsumed == pickable.PkState) {
-                string vfxLookupKey = "pk-" + pickable.PickableLocalId.ToString(), vfxAnimName = null;
-
-                if (TERMINATING_CONSUMABLE_SPECIES_ID != pickable.ConfigFromTiled.ConsumableSpeciesId) {
-                    if (HpRefillSmall.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId || HpRefillMiddle.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId) {
-                        vfxAnimName = "Healing1";
-                    } else if (MpRefillSmall.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId || MpRefillMiddle.SpeciesId == pickable.ConfigFromTiled.ConsumableSpeciesId) {
-                        vfxAnimName = "MpHealing1";
-                    }
-                } else if (TERMINATING_BUFF_SPECIES_ID != pickable.ConfigFromTiled.BuffSpeciesId) {
-                    // To be implemented, deliberately left blanck
-                }
-
-                if (null != vfxAnimName) {
-                    var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
-                    if (null == pixelVfxHolder) {
-                        pixelVfxHolder = cachedPixelVfxNodes.Pop();
-                        //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
-                    } else {
-                        //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
-                    }
-
-                    if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
-                        if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
-                            pixelVfxHolder.updateAnim(vfxAnimName, pickable.FramesInPkState, 0, false, rdf);
-                            var playerObj = playerGameObjs[pickable.PickedByJoinIndex-1]; // Guaranteed to be bound to player controlled characters
-                            newPosHolder.Set(playerObj.transform.position.x, playerObj.transform.position.y, pixelVfxHolder.gameObject.transform.position.z);
-                            pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                } else if (PickableState.Pconsumed == pickable.PkState) {
+                    string vfxLookupKey = "pk-" + pickable.PickableLocalId.ToString();
+                    if (NO_VFX_ID != consumableConfig.VfxIdOnPicker) {
+                        var vfxConfig = pixelatedVfxDict[consumableConfig.VfxIdOnPicker];
+                        string vfxAnimName = vfxConfig.Name;
+                        var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
+                        if (null == pixelVfxHolder) {
+                            pixelVfxHolder = cachedPixelVfxNodes.Pop();
+                            //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
+                        } else {
+                            //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for pickableLocalId={1} at wpos=({2}, {3})", rdf.Id, pickable.PickableLocalId, wx, wy));
                         }
-                        pixelVfxHolder.score = rdf.Id;
-                        cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+
+                        if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
+                            if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
+                                pixelVfxHolder.updateAnim(vfxAnimName, pickable.FramesInPkState, 0, false, rdf.Id);
+                                var playerObj = playerGameObjs[pickable.PickedByJoinIndex-1]; // Guaranteed to be bound to player controlled characters
+                                newPosHolder.Set(playerObj.transform.position.x, playerObj.transform.position.y, pixelVfxHolder.gameObject.transform.position.z);
+                                pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                            }
+                            pixelVfxHolder.score = rdf.Id;
+                            cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+                        }
                     }
                 }
             }
@@ -1669,8 +1658,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform patrolCueChild in child) {
                         var tileObj = patrolCueChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = patrolCueChild.gameObject.GetComponent<SuperCustomProperties>();
-
+                        
                         var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        if (0 != tileObj.m_Width) {
+                            var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f);
+                            (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                        }
 
                         CustomProperty id, flAct, frAct, flCaptureFrames, frCaptureFrames, fdAct, fuAct, fdCaptureFrames, fuCaptureFrames, collisionTypeMask;
                         tileProps.TryGetCustomProperty("id", out id);
@@ -1699,7 +1692,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                             FuCaptureFrames = (null == fuCaptureFrames || fuCaptureFrames.IsEmpty) ? 0 : (ulong)fuCaptureFrames.GetValueAsInt(),
                             CollisionTypeMask = collisionTypeMaskVal
                         };
-                        var srcPolygon = NewRectPolygon(patrolCueCx, patrolCueCy, 2 * defaultPatrolCueRadius, 2 * defaultPatrolCueRadius, 0, 0, 0, 0);
+
+                        float cueWidth = (0 == tileObj.m_Width ? 2 * defaultPatrolCueRadius : tileObj.m_Width);
+                        float cueHeight = (0 == tileObj.m_Height ? 2 * defaultPatrolCueRadius : tileObj.m_Height);
+
+                        var srcPolygon = NewRectPolygon(patrolCueCx, patrolCueCy, cueWidth, cueHeight, 0, 0, 0, 0);
                         serializedStaticPatrolCues.Add(new SerializedCompletelyStaticPatrolCueCollider {
                             Polygon = srcPolygon.Serialize(),
                             Attr = newPatrolCue,
@@ -1711,7 +1708,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId, prohibitsWallGrabbing;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId, prohibitsWallGrabbing, locked, unlockSubscriptionId;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
@@ -1724,6 +1721,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("speed", out speed);
                         tileProps.TryGetCustomProperty("triggerTrackingId", out triggerTrackingId);
                         tileProps.TryGetCustomProperty("prohibitsWallGrabbing", out prohibitsWallGrabbing);
+                        tileProps.TryGetCustomProperty("locked", out locked);
+                        tileProps.TryGetCustomProperty("unlockSubscriptionId", out unlockSubscriptionId);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // Not checking null or empty for this property because it shouldn't be, and in case it comes empty anyway, this automatically throws an error 
                         bool providesHardPushbackVal = (null != providesHardPushback && !providesHardPushback.IsEmpty && 1 == providesHardPushback.GetValueAsInt()) ? true : false;
@@ -1747,6 +1746,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int trapVelX = (int)(trapSpeedXfac * speedVal);
                         int trapVelY = (int)(trapSpeedYfac * speedVal);
 
+                        bool lockedVal = (null != locked && !locked.IsEmpty && 1 == locked.GetValueAsInt()) ? true : false;
+                        int unlockSubscriptionIdVal = (null == unlockSubscriptionId || unlockSubscriptionId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : unlockSubscriptionId.GetValueAsInt());
+
                         TrapConfig trapConfig = trapConfigs[speciesIdVal];
                         TrapConfigFromTiled trapConfigFromTiled = new TrapConfigFromTiled {
                             SpeciesId = speciesIdVal,
@@ -1754,7 +1756,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Speed = speedVal,
                             DirX = dirXVal,
                             DirY = dirYVal,
-                            ProhibitsWallGrabbing = prohibitsWallGrabbingVal
+                            ProhibitsWallGrabbing = prohibitsWallGrabbingVal,
+                            UnlockSubscriptionId = unlockSubscriptionIdVal, 
                         };
 
                         tileProps.TryGetCustomProperty("collisionTypeMask", out collisionTypeMask);
@@ -1778,7 +1781,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 VelX = trapVelX,
                                 VelY = trapVelY,
                                 TriggerTrackingId = triggerTrackingIdVal,
-                                IsCompletelyStatic = true
+                                IsCompletelyStatic = true,
+                                Locked = lockedVal,
                             };
 
                             TrapColliderAttr colliderAttr = new TrapColliderAttr {
@@ -1825,7 +1829,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 VelX = trapVelX,
                                 VelY = trapVelY,
                                 TriggerTrackingId = triggerTrackingIdVal,
-                                IsCompletelyStatic = false
+                                IsCompletelyStatic = false, 
+                                Locked = lockedVal,
                             };
                             if (null != tileObj.m_SuperTile && null != tileObj.m_SuperTile.m_CollisionObjects) {
                                 var collisionObjs = tileObj.m_SuperTile.m_CollisionObjects;
@@ -1882,7 +1887,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform triggerChild in child) {
                         var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
                         var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
-                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, publishingToEvtSubIdUponExhaust, publishingEvtMaskUponExhaust, subscriptionId, storyPointId;
+                        CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, publishingToEvtSubIdUponExhaust, publishingEvtMaskUponExhaust, subscriptionId, storyPointId, locked, unlockSubscriptionId, supplementDemandedEvtMask;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
                         tileProps.TryGetCustomProperty("delayedFrames", out delayedFrames);
@@ -1899,6 +1904,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("publishingEvtMaskUponExhaust", out publishingEvtMaskUponExhaust);
                         tileProps.TryGetCustomProperty("subscriptionId", out subscriptionId);
                         tileProps.TryGetCustomProperty("storyPointId", out storyPointId);
+                        tileProps.TryGetCustomProperty("locked", out locked);
+                        tileProps.TryGetCustomProperty("unlockSubscriptionId", out unlockSubscriptionId);
+                        tileProps.TryGetCustomProperty("supplementDemandedEvtMask", out supplementDemandedEvtMask);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
@@ -1916,6 +1924,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                         ulong publishingEvtMaskUponExhaustVal = (null != publishingEvtMaskUponExhaust && !publishingEvtMaskUponExhaust.IsEmpty ? (ulong)publishingEvtMaskUponExhaust.GetValueAsInt() : 0ul);
                         int subscriptionIdVal = (null != subscriptionId && !subscriptionId.IsEmpty ? subscriptionId.GetValueAsInt() : MAGIC_EVTSUB_ID_NONE);
                         int storyPointIdVal = (null != storyPointId && !storyPointId.IsEmpty ? storyPointId.GetValueAsInt() : STORY_POINT_NONE);
+
+                        bool lockedVal = (null != locked && !locked.IsEmpty && 1 == locked.GetValueAsInt()) ? true : false;
+                        int unlockSubscriptionIdVal = (null == unlockSubscriptionId || unlockSubscriptionId.IsEmpty ? MAGIC_EVTSUB_ID_NONE : unlockSubscriptionId.GetValueAsInt());
+                        ulong supplementDemandedEvtMaskVal = (null != supplementDemandedEvtMask && !supplementDemandedEvtMask.IsEmpty ? (ulong)supplementDemandedEvtMask.GetValueAsInt() : 0ul);
 
                         var triggerConfig = triggerConfigs[speciesIdVal];
                         var trigger = new Trigger {
@@ -1945,7 +1957,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 PublishingEvtMaskUponExhaust = publishingEvtMaskUponExhaustVal,
                                 SubscriptionId = subscriptionIdVal,
                                 StoryPointId = storyPointIdVal,
+                                UnlockSubscriptionId = unlockSubscriptionIdVal,
+                                SupplementDemandedEvtMask = supplementDemandedEvtMaskVal,
                             },
+                            Locked = lockedVal,
                         };
 
                         string[] trackingIdListStrParts = trackingIdListStr.Split(',');
@@ -2127,7 +2142,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.RevivalDirX = dirX;
             npcInRdf.RevivalDirY = dirY;
             npcInRdf.Speed = chConfig.Speed;
-            npcInRdf.CharacterState = CharacterState.InAirIdle1NoJump;
+            npcInRdf.CharacterState = (chConfig.AntiGravityWhenIdle && 0 != dirX) ? CharacterState.Walking : CharacterState.InAirIdle1NoJump;
             npcInRdf.FramesToRecover = 0;
             npcInRdf.DirX = dirX;
             npcInRdf.DirY = dirY;
@@ -2714,71 +2729,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             speciesKvPq.Put(lookupKey, vfxAnimHolder);
         }
 
-        // Bullet Vfx
-        {
-            if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return false;
-            var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
-            if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currCharacterDownsync.ActiveSkillHit >= currSkillConfig.Hits.Count) {
-                return false;
-            }
-            var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
-            if (null == currBulletConfig || NO_VFX_ID == currBulletConfig.ActiveVfxSpeciesId) {
-                return false;
-            }
-
-            var vfxConfig = vfxDict[currBulletConfig.ActiveVfxSpeciesId];
-            if (!vfxConfig.OnCharacter) return false;
-            // The outer "if" is less costly than calculating viewport point.
-            // if the current position is within camera FOV
-            var speciesKvPq = cachedVfxNodes[currBulletConfig.ActiveVfxSpeciesId];
-            string lookupKey = "ch-" + currCharacterDownsync.JoinIndex.ToString();
-            var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
-            if (null == vfxAnimHolder) {
-                vfxAnimHolder = speciesKvPq.Pop();
-                //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-            } else {
-                //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for chJoinIndex={1} at wpos=({2}, {3})", rdfId, currCharacterDownsync.JoinIndex, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-            }
-
-            if (null == vfxAnimHolder) {
-                throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
-            }
-
-            bool isInitialFrame = (currBulletConfig.StartupFrames == currCharacterDownsync.FramesInChState);
-            // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet!
-
-            if (vfxConfig.MotionType == VfxMotionType.Tracing) {
-                newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-                vfxAnimHolder.gameObject.transform.position = newPosHolder;
-            } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
-                if (VfxDashingActive.SpeciesId == currBulletConfig.ActiveVfxSpeciesId) {
-                    // Special offset for Dashing
-                    newPosHolder.Set(wx, wy - .5f * chConfig.DefaultSizeY * VIRTUAL_GRID_TO_COLLISION_SPACE_RATIO, vfxAnimHolder.gameObject.transform.position.z);
-                } else {
-                    newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-                }
-                vfxAnimHolder.gameObject.transform.position = newPosHolder;
-            }
-
-            if (isInitialFrame) {
-                // Regardless of "vfxConfig.DurationType" 
-                if (0 > currCharacterDownsync.DirX) {
-                    vfxAnimHolder.attachedPsr.flip = new Vector3(-1, 0);
-                } else {
-                    vfxAnimHolder.attachedPsr.flip = new Vector3(1, 0);
-                }
-                if (0 < currCharacterDownsync.ActiveSkillHit && !vfxAnimHolder.attachedPs.isPlaying) {
-                    // For a multi-hit bullet with vfx, we might need this to prevent duplicate triggers
-                    vfxAnimHolder.attachedPs.Play();
-                } else {
-                    vfxAnimHolder.attachedPs.Stop();
-                    vfxAnimHolder.attachedPs.Play();
-                }
-            }
-            vfxAnimHolder.score = rdfId;
-            speciesKvPq.Put(lookupKey, vfxAnimHolder);
-        }
-
         return true;
     }
 
@@ -2855,44 +2805,76 @@ public abstract class AbstractMapController : MonoBehaviour {
         return true;
     }
 
-    public bool playBulletVfx(Bullet bullet, bool isExploding, float wx, float wy, int rdfId) {
-        int vfxSpeciesId = isExploding ? bullet.Config.ExplosionVfxSpeciesId : bullet.Config.ActiveVfxSpeciesId;
-        if (!isExploding && !IsBulletActive(bullet, rdfId)) return false;
-        newPosHolder.Set(wx, wy, fireballZ);
-        if (NO_VFX_ID == vfxSpeciesId || !isGameObjPositionWithinCamera(newPosHolder)) return false;
-        var vfxConfig = vfxDict[vfxSpeciesId];
-        if (!vfxConfig.OnBullet) return false;
-        var speciesKvPq = cachedVfxNodes[vfxSpeciesId];
-        string vfxLookupKey = "bl-" + bullet.BattleAttr.BulletLocalId.ToString();
-        var vfxAnimHolder = speciesKvPq.PopAny(vfxLookupKey);
-        if (null == vfxAnimHolder) {
-            vfxAnimHolder = speciesKvPq.Pop();
-            //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdfId, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
-        } else {
-            //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdfId, bullet.BattleAttr.BulletLocalId, bullet.VirtualGridX, bullet.VirtualGridY));
+    public bool playBulletVfx(Bullet bullet, bool isExploding, float wx, float wy, RoomDownsyncFrame rdf) {
+        var bulletConfig = bullet.Config;
+        int vfxSpeciesId = isExploding ? bulletConfig.ExplosionVfxSpeciesId : bulletConfig.ActiveVfxSpeciesId;
+
+        if (NO_VFX_ID == vfxSpeciesId) return false;
+        // For convenience, bullet vfx is only pixelated from now on
+        if (isExploding && !bulletConfig.IsPixelatedExplostionVfx) {
+            return false;
+        }
+        if (!isExploding && !bulletConfig.IsPixelatedActiveVfx) {
+            return false;
+        }
+        var vfxConfig = pixelatedVfxDict[vfxSpeciesId];
+        var vfxAnimName = vfxConfig.Name;
+        string vfxLookupKey = null;
+        int framesInState = MAX_INT;
+        int dirX = 0;
+        newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ);
+        if (vfxConfig.OnBullet) {
+            if (!isExploding && !IsBulletActive(bullet, rdf.Id)) return false;
+            vfxLookupKey = "bl-" + bullet.BattleAttr.BulletLocalId.ToString();
+            framesInState = bullet.FramesInBlState;
+            dirX = bullet.DirX;
+            if (VfxMotionType.Tracing == vfxConfig.MotionType) {
+                newPosHolder.Set(wx, wy, fireballZ);
+            } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
+                var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(vfxWx, vfxWy, fireballZ);
+            }
+        } else if (vfxConfig.OnCharacter) {
+            vfxLookupKey = "ch-bl-" + bullet.BattleAttr.BulletLocalId.ToString();
+            var ch = (roomCapacity >= bullet.BattleAttr.OffenderJoinIndex ? rdf.PlayersArr[bullet.BattleAttr.OffenderJoinIndex - 1] : rdf.NpcsArr[bullet.BattleAttr.OffenderJoinIndex - roomCapacity - 1]);
+            if (ch.ActiveSkillId != bullet.BattleAttr.SkillId) return false;
+            framesInState = ch.FramesInChState;
+            dirX = ch.DirX;
+            if (VfxMotionType.Tracing == vfxConfig.MotionType) {
+                var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(ch.VirtualGridX, ch.VirtualGridY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(vfxWx, vfxWy, fireballZ);
+            } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
+                var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(vfxWx, vfxWy, fireballZ);
+            }
         }
 
-        if (null == vfxAnimHolder) {
-            throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for vfxLookupKey={0}", vfxLookupKey));
-        }
-        // [WARNING] If any new Vfx couldn't be visible regardless of how big/small the z-index is set, review "Inspector > ParticleSystem > Renderer", make sure that "Sorting Layer Id" is set to a same value as that of a bullet! 
-
-        bool isInitialFrame = (0 == bullet.FramesInBlState);
-        if (vfxConfig.MotionType == VfxMotionType.Tracing) {
-            newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-            vfxAnimHolder.gameObject.transform.position = newPosHolder;
-        } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
-            newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-            vfxAnimHolder.gameObject.transform.position = newPosHolder;
+        if (!isGameObjPositionWithinCamera(newPosHolder)) {
+            return false;
         }
 
-        if (isInitialFrame) {
-            // Regardless of "vfxConfig.DurationType" 
-            vfxAnimHolder.attachedPs.Play();
-        }
+        if (null != vfxLookupKey) {
+            var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
+            if (null == pixelVfxHolder) {
+                pixelVfxHolder = cachedPixelVfxNodes.Pop();
+                //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, wx, wy));
+            } else {
+                //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for bulletLocalId={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, wx, wy));
+            }
 
-        vfxAnimHolder.score = rdfId;
-        speciesKvPq.Put(vfxLookupKey, vfxAnimHolder);
+            if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
+                if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
+                    pixelVfxHolder.updateAnim(vfxAnimName, framesInState, dirX, false, rdf.Id);
+                    pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                }
+                pixelVfxHolder.score = rdf.Id;
+                cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+            }
+        }
+        
         return true;
     }
 

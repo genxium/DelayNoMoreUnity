@@ -34,6 +34,7 @@ namespace shared {
         public int WallJumpingInitVelY;
         public int WallSlidingVelY;
         public int MinFallingVelY;
+        public int MaxAscendingVelY;
 
         public bool UseInventoryBtnB;
 
@@ -56,6 +57,9 @@ namespace shared {
         public int DyingSizeY;
 
         // Collision masks
+        public bool AntiGravityWhenIdle;
+        public int AntiGravityFramesLingering;
+
         public bool OmitGravity;
         public bool OmitSoftPushback;
         public bool RepelSoftPushback;

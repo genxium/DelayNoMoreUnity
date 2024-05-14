@@ -78,6 +78,13 @@ namespace shared {
             DestroyUponTriggered = true,
         };
 
+        public static TrapConfig RedGate = new TrapConfig {
+            SpeciesId = 9,
+            Destroyable = true,
+            SpeciesName = "RedGate",
+            DestroyUponTriggered = true,
+        };
+
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
                 new[]
                 {
@@ -88,6 +95,7 @@ namespace shared {
                     new KeyValuePair<int, TrapConfig>(SawSmall.SpeciesId, SawSmall),
                     new KeyValuePair<int, TrapConfig>(SawBig.SpeciesId, SawBig),
                     new KeyValuePair<int, TrapConfig>(GreenGate.SpeciesId, GreenGate),
+                    new KeyValuePair<int, TrapConfig>(RedGate.SpeciesId, RedGate),
                 }
         );
     }

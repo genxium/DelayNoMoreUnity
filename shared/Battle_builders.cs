@@ -299,7 +299,7 @@ namespace shared {
             };
         }
 
-        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, int targetCharacterJoinIndex, Bullet dst) {
+        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int origVx, int origVy, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, int targetCharacterJoinIndex, Bullet dst) {
             dst.BlState = blState;
             dst.FramesInBlState = framesInBlState;
             dst.Config = staticBulletConfig;
@@ -311,6 +311,8 @@ namespace shared {
             dst.BattleAttr.ActiveSkillHit = activeSkillHit;
             dst.BattleAttr.SkillId = skillId;
 
+            dst.OriginatedVirtualGridX = origVx;
+            dst.OriginatedVirtualGridY = origVy;
             dst.VirtualGridX = vx;
             dst.VirtualGridY = vy;
             dst.DirX = dirX;
@@ -323,7 +325,7 @@ namespace shared {
             dst.TargetCharacterJoinIndex = targetCharacterJoinIndex;
         }
 
-        public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, bool capturedByPatrolCue, int framesInPatrolCue, bool waivingSpontaneousPatrol, int waivingPatrolCueId, Trap dst) {
+        public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, bool capturedByPatrolCue, int framesInPatrolCue, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool locked, Trap dst) {
             dst.TrapLocalId = trapLocalId;
             dst.Config = config;
             dst.ConfigFromTiled = configFromTiled;
@@ -343,9 +345,11 @@ namespace shared {
             dst.FramesInPatrolCue = framesInPatrolCue;
             dst.WaivingSpontaneousPatrol = waivingSpontaneousPatrol;
             dst.WaivingPatrolCueId = waivingPatrolCueId;
+            
+            dst.Locked = locked;
         }
 
-        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, int virtualGridX, int virtualGridY, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
+        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, int virtualGridX, int virtualGridY, bool locked, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
             dst.TriggerLocalId = triggerLocalId;
             dst.FramesToFire = framesToFire;
             dst.FramesToRecover = framesToRecover;
@@ -358,6 +362,7 @@ namespace shared {
             dst.ConfigFromTiled = configFromTiled;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
+            dst.Locked = locked;
         }
 
         public static void AssignToPickableConfigFromTile(int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, int recurIntervalRdfCount, int lifetimeRdfCountPerOccurrence, PickupType pkType, int stockQuotaPerOccurrence, int subscriptionId, int consumableSpeciesId, int buffSpeciesId, PickableConfigFromTiled dst) {
@@ -533,6 +538,7 @@ namespace shared {
                         srcBullet.BattleAttr.OffenderJoinIndex,
                         srcBullet.BattleAttr.TeamId,
                         srcBullet.BlState, srcBullet.FramesInBlState,
+                        srcBullet.OriginatedVirtualGridX, srcBullet.OriginatedVirtualGridY,
                         srcBullet.VirtualGridX, srcBullet.VirtualGridY,
                         srcBullet.DirX, srcBullet.DirY,
                         srcBullet.VelX, srcBullet.VelY,
@@ -546,7 +552,7 @@ namespace shared {
             while (trapCnt < src.TrapsArr.Count) {
                 var srcTrap = src.TrapsArr[trapCnt];
                 if (TERMINATING_TRAP_ID == srcTrap.TrapLocalId) break;
-                AssignToTrap(srcTrap.TrapLocalId, srcTrap.Config, srcTrap.ConfigFromTiled, srcTrap.TrapState, srcTrap.FramesInTrapState, srcTrap.VirtualGridX, srcTrap.VirtualGridY, srcTrap.DirX, srcTrap.DirY, srcTrap.VelX, srcTrap.VelY, srcTrap.IsCompletelyStatic, srcTrap.CapturedByPatrolCue, srcTrap.FramesInPatrolCue, srcTrap.WaivingSpontaneousPatrol, srcTrap.WaivingPatrolCueId, dst.TrapsArr[trapCnt]);
+                AssignToTrap(srcTrap.TrapLocalId, srcTrap.Config, srcTrap.ConfigFromTiled, srcTrap.TrapState, srcTrap.FramesInTrapState, srcTrap.VirtualGridX, srcTrap.VirtualGridY, srcTrap.DirX, srcTrap.DirY, srcTrap.VelX, srcTrap.VelY, srcTrap.IsCompletelyStatic, srcTrap.CapturedByPatrolCue, srcTrap.FramesInPatrolCue, srcTrap.WaivingSpontaneousPatrol, srcTrap.WaivingPatrolCueId, srcTrap.Locked, dst.TrapsArr[trapCnt]);
                 trapCnt++;
             }
             dst.TrapsArr[trapCnt].TrapLocalId = TERMINATING_TRAP_ID;
@@ -555,7 +561,7 @@ namespace shared {
             while (triggerCnt < src.TriggersArr.Count) {
                 var srcTrigger = src.TriggersArr[triggerCnt];
                 if (TERMINATING_TRIGGER_ID == srcTrigger.TriggerLocalId) break;
-                AssignToTrigger(srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.Config, srcTrigger.ConfigFromTiled, dst.TriggersArr[triggerCnt]);
+                AssignToTrigger(srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.Locked, srcTrigger.Config, srcTrigger.ConfigFromTiled, dst.TriggersArr[triggerCnt]);
                 triggerCnt++;
             }
             dst.TriggersArr[triggerCnt].TriggerLocalId = TERMINATING_TRIGGER_ID;
@@ -865,6 +871,16 @@ namespace shared {
 
         public BulletConfig SetRemainsUponHit(bool val) {
             RemainsUponHit = val; 
+            return this;
+        }
+
+        public BulletConfig SetIsPixelatedActiveVfx(bool val) {
+            IsPixelatedActiveVfx = val;
+            return this;
+        }
+            
+        public BulletConfig SetActiveVfxSpeciesId(int val) {
+            ActiveVfxSpeciesId = val;
             return this;
         }
 

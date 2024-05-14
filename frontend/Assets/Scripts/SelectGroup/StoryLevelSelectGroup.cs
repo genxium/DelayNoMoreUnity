@@ -3,6 +3,11 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
+    public delegate void StoryLevelPostConfirmedCallbackT(int idx, string name);
+    public StoryLevelPostConfirmedCallbackT levelPostConfirmedCallback;
+
+    protected string selectedName = null;
+
     public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
         if (!currentSelectGroupEnabled) return;
         var kctrl = (KeyControl)context.control;
@@ -48,12 +53,13 @@ public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
             cells[selectedIdx].setSelected(false);
             cells[newSelectedIdx].setSelected(true);
             selectedIdx = newSelectedIdx;
+            selectedName = cells[newSelectedIdx].name;
         }
     }
 
     private void confirmSelection() {
-        if (null != postConfirmedCallback) {
-            postConfirmedCallback(selectedIdx);
+        if (null != levelPostConfirmedCallback) {
+            levelPostConfirmedCallback(selectedIdx, selectedName);
         }
     }
 

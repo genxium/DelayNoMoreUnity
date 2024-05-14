@@ -47,6 +47,7 @@ namespace shared {
         public const int MAGIC_JOIN_INDEX_DEFAULT = -1;
         public const int MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL = 0;
         public const int MAGIC_QUOTA_INFINITE = -1;
+        public const int MAGIC_QUOTA_EXHAUSTED = -2;
 
         public const int MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED = -1;
         public const int MAGIC_LAST_SENT_INPUT_FRAME_ID_READDED = -2;
@@ -166,6 +167,7 @@ namespace shared {
         
             // Pickable
             COLLISION_PICKABLE_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
+            COLLISION_PICKABLE_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
             COLLISION_PICKABLE_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
         };
 
@@ -178,8 +180,8 @@ namespace shared {
         public static int DEFAULT_PREALLOC_NPC_CAPACITY = 32;
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
-        public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 8;
-        public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 8;
+        public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 16;
+        public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 16;
         public static int DEFAULT_PREALLOC_PICKABLE_CAPACITY = 16;
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 1;
@@ -196,8 +198,8 @@ namespace shared {
 
         public static int INVALID_FRAMES_IN_CH_STATE = -1;
         
-        public static int DEFAULT_PICKABLE_HITBOX_SIZE_X = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
-        public static int DEFAULT_PICKABLE_HITBOX_SIZE_Y = (int)(25 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PICKABLE_HITBOX_SIZE_X = (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PICKABLE_HITBOX_SIZE_Y = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PICKABLE_DISAPPEARING_ANIM_FRAMES = 10;
         public static int DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES = 30;
         public static int DEFAULT_PICKABLE_RISING_VEL_Y_VIRTUAL_GRID = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);

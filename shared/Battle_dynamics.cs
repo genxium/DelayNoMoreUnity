@@ -203,7 +203,7 @@ namespace shared {
         }
 
         public static bool isTriggerClickable(Trigger trigger) {
-            return (0 == trigger.FramesToRecover && 0 < trigger.Quota);
+            return (0 == trigger.FramesToRecover && 0 < trigger.Quota && !trigger.Locked);
         }
 
         private static bool _useSkill(int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed, ILoggerBridge logger) {
@@ -238,7 +238,7 @@ namespace shared {
                 var pivotBulletConfig = skillConfig.Hits[activeSkillHit];
                 for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt + 1; i++) {
                     thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
-                    if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, logger)) break;
+                    if (!addNewBulletToNextFrame(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, null, logger)) break;
                     activeSkillHit++;
                 }
 
@@ -324,7 +324,15 @@ namespace shared {
                 logger.LogInfo("_applyGravity: rdfId=" + rdfId + ", " + stringifyPlayer(currCharacterDownsync));
             }
             */
-            if (currCharacterDownsync.OmitGravity) {
+            if ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) {
+                thatCharacterInNextFrame.VelX += GRAVITY_X;
+                thatCharacterInNextFrame.VelY -= GRAVITY_Y;
+                if (thatCharacterInNextFrame.VelY > chConfig.MaxAscendingVelY) {
+                    thatCharacterInNextFrame.VelY = chConfig.MaxAscendingVelY;
+                }
+                return;
+            }
+            if ((currCharacterDownsync.OmitGravity || chConfig.OmitGravity) && !(Dying == currCharacterDownsync.CharacterState)) {
                 return;
             }
             if (!currCharacterDownsync.InAir) {
@@ -646,6 +654,88 @@ namespace shared {
             }
         }
 
+        public static void _processInertiaFlying(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
+            bool currFreeFromInertia = (0 == currCharacterDownsync.FramesCapturedByInertia);
+            bool currBreakingFromInertia = (1 == currCharacterDownsync.FramesCapturedByInertia);
+          
+            bool withInertiaBreakingState = (thatCharacterInNextFrame.JumpTriggered || (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState));
+            bool alignedWithInertia = true;
+            bool exactTurningAround = false;
+            bool stoppingFromWalking = false;
+            if ((0 != effDx && 0 == thatCharacterInNextFrame.VelX) || (0 != effDy && 0 == thatCharacterInNextFrame.VelY)) {
+                alignedWithInertia = false;
+            } else if ((0 == effDx && 0 != thatCharacterInNextFrame.VelX) || (0 == effDy && 0 != thatCharacterInNextFrame.VelY)) {
+                alignedWithInertia = false;
+                stoppingFromWalking = true;
+            } else if ((0 > effDx * thatCharacterInNextFrame.VelX) || (0 > effDy * thatCharacterInNextFrame.VelY)) {
+                alignedWithInertia = false;
+                exactTurningAround = true;
+            }
+
+            if (0 == currCharacterDownsync.FramesToRecover) {
+                thatCharacterInNextFrame.CharacterState = ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) ? currCharacterDownsync.CharacterState : Walking; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to a default action
+                
+                if (shouldIgnoreInertia) {
+                    thatCharacterInNextFrame.FramesCapturedByInertia = 0;
+                    if (0 != effDx || 0 != effDy) {
+                        thatCharacterInNextFrame.DirX = effDx;
+                        thatCharacterInNextFrame.DirY = effDy;
+                        int xfac = 0 == effDx ? 0 : 0 > effDx ? -1 : +1;
+                        int yfac = 0 == effDy ? 0 : 0 > effDy ? -1 : +1;
+                        thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                        thatCharacterInNextFrame.VelY = yfac * currCharacterDownsync.Speed;
+                        thatCharacterInNextFrame.CharacterState = Walking;
+                    } else {
+                        // 0 == effDx && 0 == effDy
+                        thatCharacterInNextFrame.VelX = 0;
+                        if (chConfig.AntiGravityWhenIdle) {
+                            thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
+                        }
+                    }
+                } else {
+                    if (alignedWithInertia || withInertiaBreakingState || currBreakingFromInertia) {
+                        if (!alignedWithInertia) {
+                            // Should reset "FramesCapturedByInertia" in this case!
+                            thatCharacterInNextFrame.FramesCapturedByInertia = 0;
+                        }
+
+                        if (0 != effDx || 0 != effDy) {
+                            int xfac = 0 == effDx ? 0 : 0 > effDx ? -1 : +1;
+                            int yfac = 0 == effDy ? 0 : 0 > effDy ? -1 : +1;
+                            thatCharacterInNextFrame.DirX = effDx;
+                            thatCharacterInNextFrame.DirY = effDy;
+                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                            thatCharacterInNextFrame.VelX = yfac * currCharacterDownsync.Speed;
+                            thatCharacterInNextFrame.CharacterState = Walking;
+                        } else {
+                            // 0 == effDx && 0 == effDy
+                            thatCharacterInNextFrame.VelX = 0;
+                            if (chConfig.AntiGravityWhenIdle) {
+                                thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
+                            }
+                        }
+                    } else if (currFreeFromInertia) {
+                        if (exactTurningAround) {
+                            // logger.LogInfo(stringifyPlayer(currCharacterDownsync) + " is turning around at rdfId=" + rdfId);
+                            thatCharacterInNextFrame.CharacterState = (chConfig.HasTurnAroundAnim && !currCharacterDownsync.InAir) ? TurnAround : Walking;
+                            thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
+                            if (chConfig.InertiaFramesToRecover > thatCharacterInNextFrame.FramesToRecover) {
+                                // [WARNING] Deliberately not setting "thatCharacterInNextFrame.FramesToRecover" if not turning around to allow using skills!
+                                thatCharacterInNextFrame.FramesToRecover = (chConfig.InertiaFramesToRecover - 1); // To favor animation playing and prevent skill use when turning-around
+                            }
+                        } else if (stoppingFromWalking) {
+                            thatCharacterInNextFrame.FramesCapturedByInertia = chConfig.InertiaFramesToRecover;
+                        } else {
+                            thatCharacterInNextFrame.FramesCapturedByInertia = (chConfig.InertiaFramesToRecover >> 3);
+                        }
+                    } else {
+                        // [WARNING] Not free from inertia, just set proper next chState
+                        thatCharacterInNextFrame.CharacterState = Walking;
+                    }
+                }
+            }
+        }
+
         public static bool IsBulletExploding(Bullet bullet) {
             switch (bullet.Config.BType) {
                 case BulletType.Melee:
@@ -696,7 +786,7 @@ namespace shared {
                     if (offenderNextFrame.ActiveSkillHit < skillConfig.Hits.Count) {
                         // No need to worry about Mp consumption here, it was already paid at "0 == offenderNextFrame.ActiveSkillHit" in "_useSkill"
                         int xfac = (0 < offenderNextFrame.DirX ? 1 : -1);
-                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, null, logger)) {
+                        if (addNewBulletToNextFrame(src.BattleAttr.OriginatedRenderFrameId, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, offenderNextFrame.ActiveSkillHit, src.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, null, src, logger)) {
                             var bulletConfig = skillConfig.Hits[offenderNextFrame.ActiveSkillHit];
                             if (offenderNextFrame.FramesInvinsible < bulletConfig.StartupInvinsibleFrames) {
                                 offenderNextFrame.FramesInvinsible = bulletConfig.StartupInvinsibleFrames;
@@ -722,6 +812,7 @@ namespace shared {
                         src.BattleAttr.OffenderJoinIndex,
                         src.BattleAttr.TeamId,
                         src.BlState, src.FramesInBlState + 1,
+                        src.OriginatedVirtualGridX, src.OriginatedVirtualGridY,
                         src.VirtualGridX, src.VirtualGridY, // virtual grid position
                         src.DirX, src.DirY, // dir
                         src.VelX, dstVelY, // velocity
@@ -886,7 +977,7 @@ namespace shared {
                 float boxCx, boxCy, boxCw, boxCh;
                 calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
                 Collider characterCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(characterCollider, boxCx, boxCy, boxCw, boxCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_CHARACTER_INDEX_PREFIX); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "characterCollider.Y" would be a multiple of 1.0
+                UpdateRectCollider(characterCollider, boxCx, boxCy, boxCw, boxCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, chConfig.CollisionTypeMask); // the coords of all barrier boundaries are multiples of tileWidth(i.e. 16), by adding snapping y-padding when "landedOnGravityPushback" all "characterCollider.Y" would be a multiple of 1.0
                 colliderCnt++;
 
                 // Add to collision system
@@ -940,6 +1031,7 @@ namespace shared {
 
                 bool landedOnGravityPushback = false;
                 float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);
+                float normAlignmentWithAntiGravity = (primaryOverlapResult.OverlapY * +1f);
                 // Hold wall alignments of the primaryOverlapResult of hardPushbacks first, it'd be used later 
                 float normAlignmentWithHorizon1 = (primaryOverlapResult.OverlapX * +1f);
                 float normAlignmentWithHorizon2 = (primaryOverlapResult.OverlapX * -1f);
@@ -968,13 +1060,24 @@ namespace shared {
                     thatCharacterInNextFrame.VelY = 0;
                 }
 
-                if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
-                    landedOnGravityPushback = true;
-                    /*
-                       if (1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
-                       }
-                     */
+                if (!chConfig.OmitGravity && !currCharacterDownsync.OmitGravity) {
+                    if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
+                        landedOnGravityPushback = true;
+                        /*
+                           if (1 == currCharacterDownsync.JoinIndex) {
+                           logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                           }
+                         */
+                    }
+                } else if ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) {
+                    if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithAntiGravity) {
+                        landedOnGravityPushback = true;
+                        /*
+                           if (1 == currCharacterDownsync.JoinIndex) {
+                           logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                           }
+                         */
+                    }
                 }
     
                 bool shouldOmitSoftPushbackForSelf = (currCharacterDownsync.RepelSoftPushback || chOmittingSoftPushback(currCharacterDownsync));
@@ -1133,7 +1236,14 @@ namespace shared {
                                 landedOnGravityPushback = true;
                             }
                             */
-                            landedOnGravityPushback = true;
+                            if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
+                                // [WARNING] Flying character doesn't land on softPushbacks even if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithAntiGravity)!
+                                landedOnGravityPushback = true;
+                                if (v1.OmitGravity && v1.RepelSoftPushback && 0 > thatCharacterInNextFrame.VelY) {
+                                    // To avoid the need for keeping track of another "frictionVelX"
+                                    thatCharacterInNextFrame.VelY += chConfig.JumpingInitVelY;
+                                }
+                            }
                         }
 
                         shapeOverlappedOtherChCnt++;
@@ -1173,98 +1283,145 @@ namespace shared {
                 */
 
                 if (landedOnGravityPushback) {
-                    thatCharacterInNextFrame.InAir = false;
-                    thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
-                    thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
-                    if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
-                        thatCharacterInNextFrame.CharacterState = LayDown1;
-                        thatCharacterInNextFrame.FramesToRecover = MAX_INT;
-                    }
-                    if (null != primaryTrap) {
-                        List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[primaryTrap.TrapLocalId];
-                        for (int j = 0; j < colliderAttrs.Count; j++) {
-                            var colliderAttr = colliderAttrs[j];
-                            if (colliderAttr.ProvidesSlipJump) {
-                                thatCharacterInNextFrame.PrimarilyOnSlippableHardPushback = true;
-                                break;
-                            }
-                        }
-                    }
-                    bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
-                    if (fallStopping) {
-                        thatCharacterInNextFrame.VelX = 0;
-                        thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
-                        if (Dying == thatCharacterInNextFrame.CharacterState) {
-                            // No update needed for Dying
-                        } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
-                            thatCharacterInNextFrame.VelY = 0;
+                    if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
+                        thatCharacterInNextFrame.InAir = false;
+                        thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
+                        thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
+                        if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
                             thatCharacterInNextFrame.CharacterState = LayDown1;
-                            thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
-                        } else if (InAirIdle2ByJump == thatCharacterInNextFrame.CharacterState) {
-                            thatCharacterInNextFrame.VelY = 0;
-                            thatCharacterInNextFrame.CharacterState = Idle1;
-                        } else {
-                            // [WARNING] Deliberately left blank, it's well understood that there're other possibilities and they're later handled by "_processEffPushbacks", the handling here is just for helping edge cases!
+                            thatCharacterInNextFrame.FramesToRecover = MAX_INT;
                         }
-
-                        if (shrinkedSizeSet.Contains(currCharacterDownsync.CharacterState) && !shrinkedSizeSet.Contains(thatCharacterInNextFrame.CharacterState)) {
-                            // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
-                            int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
-                            var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
-                            var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                            effPushbacks[i].Y -= halfColliderChDiff;
-                            /*
-                            if (1 == currCharacterDownsync.JoinIndex) {
-                                logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                        if (null != primaryTrap) {
+                            List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[primaryTrap.TrapLocalId];
+                            for (int j = 0; j < colliderAttrs.Count; j++) {
+                                var colliderAttr = colliderAttrs[j];
+                                if (colliderAttr.ProvidesSlipJump) {
+                                    thatCharacterInNextFrame.PrimarilyOnSlippableHardPushback = true;
+                                    break;
+                                }
                             }
-                            */
                         }
-
-                        if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
-                            thatCharacterInNextFrame.FramesToRecover = 0;
-                        }
-                    } else {
-                        // landedOnGravityPushback not fallStopping, could be in LayDown or GetUp or Dying
-                        if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                        bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY);
+                        if (fallStopping) {
+                            thatCharacterInNextFrame.VelX = 0;
+                            thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 // No update needed for Dying
                             } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
-                                thatCharacterInNextFrame.VelX = 0;
                                 thatCharacterInNextFrame.VelY = 0;
                                 thatCharacterInNextFrame.CharacterState = LayDown1;
                                 thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
-                            } else if (LayDown1 == thatCharacterInNextFrame.CharacterState) {
-                                if (0 == thatCharacterInNextFrame.FramesToRecover) {
-                                    thatCharacterInNextFrame.CharacterState = GetUp1;
-                                    thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
-                                }
-                            } else if (GetUp1 == thatCharacterInNextFrame.CharacterState) {
-                                if (0 == thatCharacterInNextFrame.FramesToRecover) {
-                                    thatCharacterInNextFrame.CharacterState = Idle1;
-                                    thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
-
-                                    int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
-                                    var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.LayDownSizeY + extraSafeGapToPreventBouncing)) >> 1);
-                                    var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                                    effPushbacks[i].Y -= halfColliderChDiff;
-                                }
-                            } else if (0 >= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
-                                // [WARNING] Covers 2 situations:
-                                // 1. Walking up to a flat ground then walk back down, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY";
-                                // 2. Dashing down to a flat ground then walk back up. 
-                                thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
+                            } else if (InAirIdle2ByJump == thatCharacterInNextFrame.CharacterState) {
+                                thatCharacterInNextFrame.VelY = 0;
+                                thatCharacterInNextFrame.CharacterState = Idle1;
+                            } else {
+                                // [WARNING] Deliberately left blank, it's well understood that there're other possibilities and they're later handled by "_processEffPushbacks", the handling here is just for helping edge cases!
                             }
+
+                            if (shrinkedSizeSet.Contains(currCharacterDownsync.CharacterState) && !shrinkedSizeSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
+                                int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                effPushbacks[i].Y -= halfColliderChDiff;
+                                /*
+                                if (1 == currCharacterDownsync.JoinIndex) {
+                                    logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                }
+                                */
+                            }
+
+                            if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.FramesToRecover = 0;
+                            }
+                        } else {
+                            // landedOnGravityPushback not fallStopping, could be in LayDown or GetUp or Dying
+                            if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                if (Dying == thatCharacterInNextFrame.CharacterState) {
+                                    // No update needed for Dying
+                                } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
+                                    thatCharacterInNextFrame.VelX = 0;
+                                    thatCharacterInNextFrame.VelY = 0;
+                                    thatCharacterInNextFrame.CharacterState = LayDown1;
+                                    thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
+                                } else if (LayDown1 == thatCharacterInNextFrame.CharacterState) {
+                                    if (0 == thatCharacterInNextFrame.FramesToRecover) {
+                                        thatCharacterInNextFrame.CharacterState = GetUp1;
+                                        thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
+                                    }
+                                } else if (GetUp1 == thatCharacterInNextFrame.CharacterState) {
+                                    if (0 == thatCharacterInNextFrame.FramesToRecover) {
+                                        thatCharacterInNextFrame.CharacterState = Idle1;
+                                        thatCharacterInNextFrame.FramesInvinsible = chConfig.GetUpInvinsibleFrames;
+
+                                        int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                        var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.LayDownSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                        var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                        effPushbacks[i].Y -= halfColliderChDiff;
+                                    }
+                                } else if (0 >= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
+                                    // [WARNING] Covers 2 situations:
+                                    // 1. Walking up to a flat ground then walk back down, note that it could occur after a jump on the slope, thus should recover "DownSlopePrimerVelY";
+                                    // 2. Dashing down to a flat ground then walk back up. 
+                                    thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
+                                }
+                            }
+                            /*
+                               if (1 == currCharacterDownsync.JoinIndex) {
+                               logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                               }
+                             */
                         }
-                        /*
-                           if (0 == currCharacterDownsync.SpeciesId) {
-                           logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
-                           }
-                         */
+                    } else if (chConfig.AntiGravityWhenIdle) {
+                        thatCharacterInNextFrame.InAir = false;
+                        bool fallStopping = (currCharacterDownsync.InAir && 0 <= currCharacterDownsync.VelY);
+                        if (fallStopping) {
+                            thatCharacterInNextFrame.VelX = 0;
+                            thatCharacterInNextFrame.VelY = 0;
+                            if (Dying == thatCharacterInNextFrame.CharacterState) {
+                                // No update needed for Dying
+                            } else {
+                                // [WARNING] Deliberately left blank, it's well understood that there're other possibilities and they're later handled by "_processEffPushbacks", the handling here is just for helping edge cases!
+                            }
+
+                            if (shrinkedSizeSet.Contains(currCharacterDownsync.CharacterState) && !shrinkedSizeSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                // [WARNING] To prevent bouncing due to abrupt change of collider shape, it's important that we check "currCharacterDownsync" instead of "thatCharacterInNextFrame" here!
+                                int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
+                                var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
+                                var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
+                                effPushbacks[i].Y -= halfColliderChDiff;
+                                /*
+                                if (1 == currCharacterDownsync.JoinIndex) {
+                                    logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                }
+                                */
+                            }
+
+                            if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
+                                thatCharacterInNextFrame.FramesToRecover = 0;
+                            }
+                        } else {
+                            // landedOnGravityPushback not fallStopping, could only be Dying
+                            if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
+                                if (Dying == thatCharacterInNextFrame.CharacterState) {
+                                    // No update needed for Dying
+                                } else if (0 <= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
+                                    thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
+                                }
+                            }
+                            /*
+                               if (1 == currCharacterDownsync.JoinIndex) {
+                               logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                               }
+                             */
+                        }
                     }
                 }
 
                 if (chConfig.OnWallEnabled) {
-
+                    /*
+                    [WARNING] There's not much concern about "wall dynamics" on (currCharacterDownsync.OmitGravity || chConfig.OmitGravity), by far they're mutually exclusive. 
+                    */
                     if (null == primaryTrap || (null != primaryTrap && !primaryTrap.ConfigFromTiled.ProhibitsWallGrabbing)) {
 
                         if (thatCharacterInNextFrame.InAir) {
@@ -1421,7 +1578,13 @@ namespace shared {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
                                 // If "atkedCharacterInCurrFrame" took multiple bullets in the same renderFrame, where a bullet in the middle of the set made it DYING, then all consecutive bullets would just take it into this small block again!
                                 atkedCharacterInNextFrame.Hp = 0;
-                                atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
+                                atkedCharacterInNextFrame.VelX = 0; 
+                                var atkedChConfig = characters[atkedCharacterInNextFrame.SpeciesId];
+                                if (atkedChConfig.OmitGravity || atkedCharacterInNextFrame.OmitGravity) {
+                                    atkedCharacterInNextFrame.VelY = 0;
+                                } else {
+                                    // otherwise no need to change "VelY"
+                                }
                                 atkedCharacterInNextFrame.CharacterState = Dying;
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
                             } else {
@@ -1435,7 +1598,8 @@ namespace shared {
                                     atkedCharacterInNextFrame.VelY = pushbackVelY;
                                 }
 
-                                bool shouldOmitStun = ((0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
+                                // [WARNING] Gravity omitting characters shouldn't take a "blow up".
+                                bool shouldOmitStun = (atkedCharacterInNextFrame.OmitGravity || atkedCharacterConfig.OmitGravity || (0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
                                 if (false == shouldOmitStun) {
                                     var existingDebuff = atkedCharacterInNextFrame.DebuffList[DEBUFF_ARR_IDX_FROZEN];
                                     bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == debuffConfigs[existingDebuff.SpeciesId].Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
@@ -1568,7 +1732,7 @@ namespace shared {
                         }
                         if (inTheMiddleOfMultihitTransition) {
                             bool dummyHasLockVel = false;
-                            if (addNewBulletToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, logger)) {
+                            if (addNewBulletToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, null, logger)) {
                                 var targetNewBullet = nextRenderFrameBullets[bulletCnt-1];
                                 if (offenderNextFrame.FramesInvinsible < targetNewBullet.Config.StartupInvinsibleFrames) {
                                     offenderNextFrame.FramesInvinsible = targetNewBullet.Config.StartupInvinsibleFrames;
@@ -1664,7 +1828,7 @@ namespace shared {
             }
         }
 
-        public static void fireTriggerTrackingTraps(Trigger triggerInNextFrame, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RoomDownsyncFrame nextRenderFrame, RepeatedField<Trap> nextRenderFrameTraps) {
+        public static void fireTriggerTrackingTraps(int rdfId, Trigger triggerInNextFrame, Dictionary<int, int> triggerTrackingIdToTrapLocalId, ulong fulfilledEvtSubscriptionSetMask, RoomDownsyncFrame nextRenderFrame, RepeatedField<Trap> nextRenderFrameTraps, ILoggerBridge logger) {
 
             triggerInNextFrame.FramesToFire = MAX_INT;
             var configFromTiled = triggerInNextFrame.ConfigFromTiled;
@@ -1674,20 +1838,30 @@ namespace shared {
                 if (triggerTrackingIdToTrapLocalId.ContainsKey(trackingId)) {
                     int trapLocalId = triggerTrackingIdToTrapLocalId[trackingId];
                     var trapInNextFrame = nextRenderFrameTraps[trapLocalId];
-                    if (trapInNextFrame.Config.DestroyUponTriggered) {
-                        trapInNextFrame.TrapState = TrapState.Tdestroyed;
-                        trapInNextFrame.FramesInTrapState = 0;
+                    if (trapInNextFrame.Locked) {
+                        ulong unlockEvtSubMask = (1ul << (trapInNextFrame.ConfigFromTiled.UnlockSubscriptionId - 1));
+                        if (0 < (unlockEvtSubMask & fulfilledEvtSubscriptionSetMask)) {
+                            trapInNextFrame.Locked = false;
+                            logger.LogInfo(String.Format("@rdfId={0}, trap local id = {1} is unlocked by trigger local id = {2} AND unlockSubscriptId={3} fulfilled", rdfId, trapInNextFrame.TrapLocalId, triggerInNextFrame.TriggerLocalId, trapInNextFrame.ConfigFromTiled.UnlockSubscriptionId));
+                        } else {
+                            logger.LogWarn(String.Format("@rdfId={0}, LOCKED trap local id = {1} is NOT fired by trigger local id = {2}", rdfId, trapInNextFrame.TrapLocalId, triggerInNextFrame.TriggerLocalId));
+                        }
                     } else {
-                        trapInNextFrame.DirX = configFromTiled.InitVelX;
-                        trapInNextFrame.DirY = configFromTiled.InitVelY;
-                        trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
-                        var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
-                        var invDirMag = InvSqrt32(dirMagSq);
-                        var speedXfac = invDirMag * configFromTiled.InitVelX;
-                        var speedYfac = invDirMag * configFromTiled.InitVelY;
-                        var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
-                        trapInNextFrame.VelX = (int)(speedXfac * speedVal);
-                        trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                        if (trapInNextFrame.Config.DestroyUponTriggered) {
+                            trapInNextFrame.TrapState = TrapState.Tdestroyed;
+                            trapInNextFrame.FramesInTrapState = 0;
+                        } else {
+                            trapInNextFrame.DirX = configFromTiled.InitVelX;
+                            trapInNextFrame.DirY = configFromTiled.InitVelY;
+                            trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
+                            var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
+                            var invDirMag = InvSqrt32(dirMagSq);
+                            var speedXfac = invDirMag * configFromTiled.InitVelX;
+                            var speedYfac = invDirMag * configFromTiled.InitVelY;
+                            var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
+                            trapInNextFrame.VelX = (int)(speedXfac * speedVal);
+                            trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                        }
                     }
                 }
             }
@@ -1695,10 +1869,10 @@ namespace shared {
 
         private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<EvtSubscription> nextRenderFrameEvtSubs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> triggerTrackingIdToTrapLocalId, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, ref ulong nextWaveNpcKilledEvtMaskCounter, EvtSubscription currRdfWaveNpcKilledEvtSub, EvtSubscription nextRdfWaveNpcKilledEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ref int justTriggeredStoryPointId, ILoggerBridge logger) {
             if (0 < ((ulong)MAGIC_EVTSUB_ID_WAVER & fulfilledEvtSubscriptionSetMask)) {
-                logger.LogInfo("wave inducer is fulfilled");
+                logger.LogInfo(String.Format("@rdfId={0}, wave inducer is fulfilled", currRenderFrame.Id));
             }
             if (0 < ((ulong)MAGIC_EVTSUB_ID_WAVE_EXHAUST & fulfilledEvtSubscriptionSetMask)) {
-                logger.LogInfo("wave exhaust is fulfilled");
+                logger.LogInfo(String.Format("@rdfId={0}, wave exhaust is fulfilled", currRenderFrame.Id));
             }
             
             int nextWaveNpcCnt = 0;
@@ -1708,7 +1882,15 @@ namespace shared {
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
 
                 // [WARNING] The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
-                bool mainCycleFulfilled = (
+                if (triggerInNextFrame.Locked) {
+                    ulong unlockEvtSubMask = (1ul << (triggerInNextFrame.ConfigFromTiled.UnlockSubscriptionId - 1));
+                    if (0 < (unlockEvtSubMask & fulfilledEvtSubscriptionSetMask)) {
+                        triggerInNextFrame.Locked = false;
+                        logger.LogInfo(String.Format("@rdfId={0}, trigger local id = {1} is unlocked by unlockSubscriptId={2} fulfilled", currRenderFrame.Id, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.ConfigFromTiled.UnlockSubscriptionId));
+                    }
+                }
+
+                bool mainCycleFulfilled = !triggerInNextFrame.Locked && (
                     (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask && (0 < (fulfilledEvtSubscriptionSetMask & (1ul << (currTrigger.ConfigFromTiled.SubscriptionId - 1))))) // TODO: Make TRIGGER_MASK_BY_SUBSCRIPTION respect "currTrigger.FramesToRecover" too
                     ||
                     ((TRIGGER_MASK_BY_CYCLIC_TIMER == currTrigger.Config.TriggerMask) && (0 == currTrigger.FramesToRecover))
@@ -1720,12 +1902,14 @@ namespace shared {
                     if (TimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId || WaveTimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId) {
                         fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, ref nextWaveNpcKilledEvtMaskCounter);
                     } else {
-                        fireTriggerTrackingTraps(triggerInNextFrame, triggerTrackingIdToTrapLocalId, nextRenderFrame, nextRenderFrameTraps);
+                        fireTriggerTrackingTraps(currRenderFrame.Id, triggerInNextFrame, triggerTrackingIdToTrapLocalId, fulfilledEvtSubscriptionSetMask, nextRenderFrame, nextRenderFrameTraps, logger);
                     }
                 } else if (mainCycleFulfilled) {
                     if (0 < currTrigger.Quota) {
-                        triggerInNextFrame.State = TriggerState.TcoolingDown;
-                        triggerInNextFrame.FramesInState = 0;
+                        if (!(TimedDoor1.SpeciesId == currTrigger.Config.SpeciesId || WaveTimedDoor1.SpeciesId == currTrigger.Config.SpeciesId)) {
+                            triggerInNextFrame.State = TriggerState.TcoolingDown;
+                            triggerInNextFrame.FramesInState = 0;
+                        }
 
                         triggerInNextFrame.Quota = currTrigger.Quota - 1;
                         triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
@@ -1743,17 +1927,20 @@ namespace shared {
                             }
 
                             if (null != nextRenderFrameEvtSubs && 0 < triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrameEvtSubs.Count) {
-                                var nextExhaustEvtSub = nextRenderFrameEvtSubs[triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust - 1];
-                                nextExhaustEvtSub.FulfilledEvtMask |= triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
-                                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
-                                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id - 1));
-                                    nextExhaustEvtSub.DemandedEvtMask = (MAGIC_EVTSUB_ID_STORYPOINT == nextExhaustEvtSub.Id ? nextExhaustEvtSub.DemandedEvtMask : EVTSUB_NO_DEMAND_MASK);
-                                    nextExhaustEvtSub.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
-                                    justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextExhaustEvtSub.Id;
+                                var targetEvtSubNextRdf = nextRenderFrameEvtSubs[triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust - 1];
+                                if (MAGIC_EVTSUB_ID_WAVER == triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && EVTSUB_NO_DEMAND_MASK == targetEvtSubNextRdf.DemandedEvtMask && EVTSUB_NO_DEMAND_MASK == targetEvtSubNextRdf.FulfilledEvtMask) {
+                                    // [WARNING] In this case, revive the waver first
+                                    var waveExhaustEvtSub = nextRenderFrameEvtSubs[MAGIC_EVTSUB_ID_WAVE_EXHAUST-1];
+                                    waveExhaustEvtSub.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.SupplementDemandedEvtMask;
+                                    targetEvtSubNextRdf.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
+                                    logger.LogInfo(String.Format("@rdfId={0}, revived MAGIC_EVTSUB_ID_WAVE_EXHAUST with waveExhaustEvtSub.DemandedEvtMask = {1}", currRenderFrame.Id, waveExhaustEvtSub.DemandedEvtMask));
                                 }
+                                targetEvtSubNextRdf.FulfilledEvtMask |= triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
                             }
                         }
-                    } else {
+                    } else if (0 == currTrigger.Quota) {
+                        // [WARNING] Exclude MAGIC_QUOTA_INFINITE and MAGIC_QUOTA_EXHAUSTED here! 
+                        logger.LogInfo(String.Format("@rdfId={0}, about to exhaust trigger local id = {1}, publishing evtMask = {2} to evtsubId = {3}: meanwhile fulfilledEvtSubscriptionSetMask = {4}", currRenderFrame.Id, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust, triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust, fulfilledEvtSubscriptionSetMask));
                         handleTriggerExhausted(triggerInNextFrame, nextRenderFrame, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt);
                     }
                 } else if (0 == currTrigger.FramesToRecover) {
@@ -1773,7 +1960,7 @@ namespace shared {
                 fulfilledEvtSubscriptionSetMask |= (1ul << (nextRdfWaveNpcKilledEvtSub.Id - 1));
                 nextRdfWaveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
                 nextRdfWaveNpcKilledEvtSub.FulfilledEvtMask = 0;
-                justFulfilledEvtSubArr[justFulfilledEvtSubCnt++] = nextRdfWaveNpcKilledEvtSub.Id;
+                logger.LogInfo(String.Format("@rdfId={0}, re-purposed MAGIC_EVTSUB_ID_WAVER for spawning subCycle (nextWaveNpcCnt={1} over all door of current wave) with DemandedEvtMask = {2}", currRenderFrame.Id, nextWaveNpcCnt, nextRdfWaveNpcKilledEvtSub.DemandedEvtMask));
             }
         }
 
@@ -1832,6 +2019,10 @@ namespace shared {
                             case Idle1:
                             case Walking:
                             case TurnAround:
+                                if (Walking == oldNextCharacterState && (thatCharacterInNextFrame.OmitGravity || chConfig.OmitGravity)) {
+                                    // [WARNING] Flying characters shall be able to walk in air.
+                                    break;
+                                }
                                 if ((currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
                                     thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
                                 } else if ((!currCharacterDownsync.OnWall && currCharacterDownsync.JumpTriggered) || InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
@@ -2271,7 +2462,7 @@ namespace shared {
                 if (framesInPatrolCue < 0) {
                     framesInPatrolCue = 0;
                 }
-                AssignToTrap(src.TrapLocalId, src.Config, src.ConfigFromTiled, src.TrapState, framesInTrapState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, src.IsCompletelyStatic, src.CapturedByPatrolCue, framesInPatrolCue, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, nextRenderFrameTraps[k]);
+                AssignToTrap(src.TrapLocalId, src.Config, src.ConfigFromTiled, src.TrapState, framesInTrapState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.VelY, src.IsCompletelyStatic, src.CapturedByPatrolCue, framesInPatrolCue, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.Locked, nextRenderFrameTraps[k]);
                 k++;
             }
             nextRenderFrameTraps[k].TrapLocalId = TERMINATING_TRAP_ID;
@@ -2288,7 +2479,7 @@ namespace shared {
                     framesToRecover = 0;
                 }
                 int framesInState = src.FramesInState + 1;
-                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.VirtualGridX, src.VirtualGridY, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
+                AssignToTrigger(src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.VirtualGridX, src.VirtualGridY, src.Locked, src.Config, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
                 l++;
             }
             nextRenderFrameTriggers[l].TriggerLocalId = TERMINATING_TRIGGER_ID;
@@ -2446,13 +2637,15 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, ILoggerBridge logger) {
+        protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, Bullet? referencePrevEmissionBullet, ILoggerBridge logger) {
             if (activeSkillHit >= skillConfig.Hits.Count) return false;
             var bulletConfig = skillConfig.Hits[activeSkillHit];
             var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
             var invBulletDirMag = InvSqrt32(bulletDirMagSq);
             var bulletSpeedXfac = xfac * invBulletDirMag * bulletConfig.DirX;
             var bulletSpeedYfac = invBulletDirMag * bulletConfig.DirY;
+            int newOriginatedVirtualX = null == referencePrevEmissionBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevEmissionBullet.OriginatedVirtualGridX;
+            int newOriginatedVirtualY = null == referencePrevEmissionBullet ? currCharacterDownsync.VirtualGridY + xfac * bulletConfig.HitboxOffsetY : referencePrevEmissionBullet.OriginatedVirtualGridY;
             int newVirtualX = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevHitBullet.VirtualGridX;
             int newVirtualY = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY : referencePrevHitBullet.VirtualGridY;
             int groundWaveVelY = bulletConfig.DownSlopePrimerVelY;
@@ -2468,6 +2661,8 @@ namespace shared {
                     currCharacterDownsync.JoinIndex,
                     currCharacterDownsync.BulletTeamId,
                     BulletState.StartUp, 0,
+                    newOriginatedVirtualX,
+                    newOriginatedVirtualY,
                     newVirtualX, 
                     newVirtualY, 
                     xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
@@ -2547,6 +2742,7 @@ namespace shared {
 
         private static void handleTriggerExhausted(Trigger triggerInNextFrame, RoomDownsyncFrame nextRenderFrame, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt) {
 
+            triggerInNextFrame.Quota = MAGIC_QUOTA_EXHAUSTED;
             triggerInNextFrame.State = TriggerState.Tready;
             triggerInNextFrame.FramesToFire = MAX_INT;
             triggerInNextFrame.FramesToRecover = MAX_INT;

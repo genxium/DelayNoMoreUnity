@@ -2,7 +2,11 @@ version: 2
 tpsheetFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
 - Assets/Resources/Bullets/Bullets.tpsheet
+- Assets/Resources/Characters/Bat/Bat.tpsheet
 - Assets/Resources/Characters/BladeGirl/BladeGirl.tpsheet
+- Assets/Resources/Characters/BoarWarrior/BoarWarrior.tpsheet
+- Assets/Resources/Characters/DemonFireSlime/DemonFireSlime.tpsheet
+- Assets/Resources/Characters/FireBat/FireBat.tpsheet
 - Assets/Resources/Characters/Goblin/Goblin.tpsheet
 - Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.tpsheet
 - Assets/Resources/Characters/WitchGirl/WitchGirl.tpsheet
@@ -12,7 +16,11 @@ tpsheetFileNames:
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 - Assets/Resources/Bullets/Bullets.png
+- Assets/Resources/Characters/Bat/Bat.png
 - Assets/Resources/Characters/BladeGirl/BladeGirl.png
+- Assets/Resources/Characters/BoarWarrior/BoarWarrior.png
+- Assets/Resources/Characters/DemonFireSlime/DemonFireSlime.png
+- Assets/Resources/Characters/FireBat/FireBat.png
 - Assets/Resources/Characters/Goblin/Goblin.png
 - Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.png
 - Assets/Resources/Characters/WitchGirl/WitchGirl.png
@@ -21,6 +29,10 @@ textureFileNames:
 - Assets/Resources/UI/ShaperCard.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
+- 
+- 
+- 
 - 
 - 
 - 

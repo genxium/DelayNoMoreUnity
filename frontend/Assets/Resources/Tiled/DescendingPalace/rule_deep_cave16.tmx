@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="1">
+ <properties>
+  <property name="AutomappingRadius" value="3"/>
+  <property name="DeleteTiles" value="yes"/>
+ </properties>
+ <tileset firstgid="1" source=":/automap-tiles.tsx"/>
+ <tileset firstgid="6" source="../shared_comps/deep_cave16.tsx"/>
+ <tileset firstgid="201" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
+ <layer id="13" name="input1_setGround" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztVUEOwyAMyyX/6vuR+NM0DVY3iglRpYpp+JJCiePiVCnygbZYRI6+Lufe932PwveOzvGO2p4j9FrReTjn6kOO2doZaHxkSTDdRa73yDwvkOP5jXft9QXm2/peHaZLhfvtcUBfP4bRv7IimF6r2e6xb8p868gvrzfQR9sHlu9u/Yh7RuOsBoyZvMij1VFbVGddYS8zf0zekdQxPB/pQ449f04w3VWu98g8r5Dj+R3NH8y39b06TJcK99vjsH39BPb8ydVmfnm9gT7aPrB8d+tH3DMaZzVgzOT9+vzZ2PhnvACmBE05
+  </data>
+ </layer>
+ <layer id="12" name="output1_Ground" width="32" height="32" opacity="0.48">
+  <data encoding="base64" compression="zlib">
+   eJztlUtLQzEQhWchKoIPEBHUgoiCax8bW9362lrrVnGtWMWtV12La1H/qxM4occxuSZQfNB8MJyZYW4mt5neLMlnmuQvQpcpdybfswXdSaj1jCTWXZI/DB3L6DOojEby42oT8CfVpuCvmLrVmrVbJj6FnlNuJvLsnNo8/AW1Bvw1tXX4G2qb9EzsXTwX0KuaPRZ6hP5HQzCpyR2oHZoajSvNVzn9p6GzlOO59PB8OjpqJ6ZG46qT2T/0vXJzGXr/BsXb8vUb59Zqys+QckZ/nXsTv5F/B32k3F7Cmi/Q94x9XCfWtcnvQm8z+gwqsXN7lt45uXN7gm9/067EeTXxLnSfcm0JY2fEz84D7cH1rqjmpmYvjiPoMeXK/RMndF4p9Ov+CZ0Xz6WH59PRr/unZVQCvXkPnt++fwqFwv/mA2kbJkQ=
+  </data>
+ </layer>
+</map>
