@@ -9,6 +9,7 @@ enum BulletState {
 	StartUp = 0;
 	Active = 1;
 	Exploding = 2;
+	Vanishing = 3;
 }
 
 enum CharacterState {
@@ -366,6 +367,9 @@ message BulletConfig {
 
 	bool mhVanishOnMeleeHit = 48;
     int32 downSlopePrimerVelY = 49;
+
+    bool mhUsesUpdatesOriginPos = 50; // Default is false, multihit bullets will inherit (originatedVirtualGridX, originatedVirtualGridY) from the previous bullet
+    bool usesBeamRendering = 51; // If true, rendering of the bullet will respect (originatedVirtualGridX, originatedVirtualGridY) -> (virtualGridX, virtualGridY)
 
 	uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave
