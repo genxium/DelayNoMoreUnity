@@ -1,4 +1,7 @@
 # Latest tag change notes
+v1.5.0 new features
+- Updated existing levels and characters.
+
 v1.4.3 new features
 - Replaced MonkGirl by new character WitchGirl
 - Added new bullet type GroundWave
