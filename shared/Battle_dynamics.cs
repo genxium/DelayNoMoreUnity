@@ -157,7 +157,7 @@ namespace shared {
             if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
                 if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState && BackDashing != currCharacterDownsync.CharacterState)) {
                     patternId = PATTERN_DOWN_A;
-                } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState || BackDashing != currCharacterDownsync.CharacterState)) {
+                } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState && BackDashing != currCharacterDownsync.CharacterState)) {
                     patternId = PATTERN_DOWN_A;
                 } else if (canJumpWithinInertia) {
                     if (currCharacterDownsync.PrimarilyOnSlippableHardPushback && (0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
