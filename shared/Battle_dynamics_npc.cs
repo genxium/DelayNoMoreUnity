@@ -14,27 +14,38 @@ namespace shared {
         private static int OPPONENT_REACTION_FLEE = 7;
         //private static int OPPONENT_REACTION_FLEE_ASAP = 8;
 
-        private static int frontOpponentReachableByDragonPunch(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float absColliderDx, float colliderDy, float absColliderDy, CharacterConfig opponentChConfig) {
-            int yfac = (0 < colliderDy ? 1 : -1);
+        private static int frontOpponentReachableByDragonPunch(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float colliderDx, float absColliderDx, float colliderDy, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop) {
+            int xfac = (0 < colliderDx ? 1 : -1);
             float boxCx, boxCy, boxCwHalf, boxChHalf;
             bool closeEnough = false;
-            // No need to calculate the exact bounding box of opponent based on ChState, this is just an estimation.
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_SWORDMAN:
                     if (currCharacterDownsync.Mp < SwordManDragonPunchPrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(SwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * SwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * SwordManDragonPunchPrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + SwordManDragonPunchPrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (SwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
-                    closeEnough = (boxCx + boxCwHalf >= 0.5f*absColliderDx) && (0.1f*aCollider.H < colliderDy && boxCy + boxChHalf > 0.2f*colliderDy); 
+                    if (0.1f*aCollider.H < colliderDy) {
+                        if (0 <= colliderDx) {
+                            closeEnough = (boxCx + boxCwHalf > opponentBoxLeft) && (boxCy + boxChHalf > opponentBoxBottom); 
+                        } else {
+                            closeEnough = (boxCx - boxCwHalf < opponentBoxRight) && (boxCy + boxChHalf > opponentBoxBottom); 
+                        }
+                    } // Don't use DragonPunch otherwise
                     break;
                 case SPECIES_FIRESWORDMAN:
                     if (currCharacterDownsync.Mp < FireSwordManDragonPunchPrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManDragonPunchPrimerBullet.HitboxOffsetX + (opponentChConfig.ShrinkedSizeX >> 1), yfac * FireSwordManDragonPunchPrimerBullet.HitboxOffsetY + (opponentChConfig.ShrinkedSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * FireSwordManDragonPunchPrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + FireSwordManDragonPunchPrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManDragonPunchPrimerBullet.HitboxSizeX >> 1), (FireSwordManDragonPunchPrimerBullet.HitboxSizeY >> 1));
-                    closeEnough = (boxCx + boxCwHalf >= 0.5f*absColliderDx) && (0.1f*aCollider.H < colliderDy && boxCy + boxChHalf > 0.2f*colliderDy); 
+                    if (0.1f*aCollider.H < colliderDy) {
+                        if (0 <= colliderDx) {
+                            closeEnough = (boxCx + boxCwHalf > opponentBoxLeft) && (boxCy + boxChHalf > opponentBoxBottom); 
+                        } else {
+                            closeEnough = (boxCx - boxCwHalf < opponentBoxRight) && (boxCy + boxChHalf > opponentBoxBottom); 
+                        }
+                    } // Don't use DragonPunch otherwise
                     break;
                 case SPECIES_SKELEARCHER:
                     if (currCharacterDownsync.Mp < PurpleArrowRainSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    closeEnough = (0 < colliderDy && absColliderDy > 0.3f * (bCollider.H-aCollider.H));
+                    closeEnough = (0 < colliderDy && absColliderDy > 0.3f * (bCollider.H-aCollider.H)); // A special case
                     break;
                 default:
                     return OPPONENT_REACTION_UNKNOWN;
@@ -46,46 +57,59 @@ namespace shared {
             }
         }
 
-        private static int frontOpponentReachableByMelee1(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float absColliderDx, float colliderDy, float absColliderDy, CharacterConfig opponentChConfig) {
-            int yfac = (0 < colliderDy ? 1 : -1);
+        private static int frontOpponentReachableByMelee1(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float colliderDx, float absColliderDx, float colliderDy, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop) {
+            int xfac = (0 < colliderDx ? 1 : -1);
             float boxCx, boxCy, boxCwHalf, boxChHalf;
+            bool closeEnough;
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_SWORDMAN:
                     if (currCharacterDownsync.Mp < SwordManMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(SwordManMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * SwordManMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * SwordManMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + SwordManMelee1PrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SwordManMelee1PrimerBullet.HitboxSizeX >> 1), (SwordManMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_FIRESWORDMAN:
                     if (currCharacterDownsync.Mp < FireSwordManMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(FireSwordManMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * FireSwordManMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * FireSwordManMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + FireSwordManMelee1PrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManMelee1PrimerBullet.HitboxSizeX >> 1), (FireSwordManMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_DEMON_FIRE_SLIME:
                     if (currCharacterDownsync.Mp < DemonFireSlimeMelee1PrimarySkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((DemonFireSlimeMelee1PrimaryBullet.HitboxSizeX >> 1), (DemonFireSlimeMelee1PrimaryBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_GOBLIN:
                     if (currCharacterDownsync.Mp < GoblinMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(GoblinMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * GoblinMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * GoblinMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + GoblinMelee1PrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((GoblinMelee1PrimerBullet.HitboxSizeX >> 1), (GoblinMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_SKELEARCHER:
                     if (currCharacterDownsync.Mp < PurpleArrowPrimarySkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(PurpleArrowBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * PurpleArrowBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * PurpleArrowBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + PurpleArrowBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((PurpleArrowBullet.HitboxSizeX >> 2), (PurpleArrowBullet.HitboxSizeY >> 2));
                     break;
                 case SPECIES_BAT:
                 case SPECIES_FIREBAT:
                     if (currCharacterDownsync.Mp < BatMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(BatMelee1PrimerBullet.HitboxOffsetX + (opponentChConfig.DefaultSizeX >> 1), yfac * BatMelee1PrimerBullet.HitboxOffsetY + (opponentChConfig.DefaultSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * BatMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + BatMelee1PrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BatMelee1PrimerBullet.HitboxSizeX >> 1), (BatMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
                 default:
                     return OPPONENT_REACTION_UNKNOWN;
             }
-            // By now must have enough MP for the corresponding skill
-            bool closeEnough = (boxCx + boxCwHalf >= absColliderDx) && (boxCy + boxChHalf >= absColliderDy);
+ 
+            if (0 <= colliderDx) {
+                if (0 <= colliderDy) {
+                    closeEnough = (boxCx + boxCwHalf > opponentBoxLeft) && (boxCy + boxChHalf > opponentBoxBottom); 
+                } else {
+                    closeEnough = (boxCx + boxCwHalf > opponentBoxLeft) && (boxCy - boxChHalf < opponentBoxTop); 
+                }
+            } else {
+                if (0 <= colliderDy) {
+                    closeEnough = (boxCx - boxCwHalf < opponentBoxRight) && (boxCy + boxChHalf > opponentBoxBottom); 
+                } else {
+                    closeEnough = (boxCx - boxCwHalf < opponentBoxRight) && (boxCy - boxChHalf < opponentBoxTop); 
+                }
+            }
             if (closeEnough) {
                 return OPPONENT_REACTION_USE_MELEE;
             } else {
@@ -93,22 +117,44 @@ namespace shared {
             }
         }
 
-        private static int frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, CharacterConfig opponentChConfig) {
+        private static int frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop) {
             // Whenever there's an opponent in vision, it's deemed already close enough for fireball
+            int xfac = (0 < colliderDx ? 1 : -1);
+            float boxCx, boxCy, boxCwHalf, boxChHalf;
+            bool closeEnough = false;
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_FIRESWORDMAN:
                     if (currCharacterDownsync.Mp < FireSwordManFireballSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac*FireSwordManFireballPrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + FireSwordManFireballPrimerBullet.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManFireballPrimerBullet.HitboxSizeX >> 1), (FireSwordManFireballPrimerBullet.HitboxSizeY >> 1));
+                    if (0 <= colliderDy) {
+                        closeEnough = (boxCy + boxChHalf > opponentBoxBottom); 
+                    } else {
+                        closeEnough = (boxCy - boxChHalf < opponentBoxTop); 
+                    }
                     break;
                 case SPECIES_DEMON_FIRE_SLIME:
                     if (currCharacterDownsync.Mp < DemonFireSlimeFireballSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac*DemonFireSlimeFireballPivotBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + DemonFireSlimeFireballPivotBullet.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((DemonFireSlimeFireballPivotBullet.HitboxSizeX >> 1), (DemonFireSlimeFireballPivotBullet.HitboxSizeY >> 1));
+                    if (0 <= colliderDy) {
+                        closeEnough = (boxCy + boxChHalf > opponentBoxBottom);
+                    } else {
+                        closeEnough = (boxCy - boxChHalf < opponentBoxTop);
+                    }
                     break;
                 case SPECIES_SKELEARCHER:
                     if (currCharacterDownsync.Mp < PurpleArrowRainSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
+                    // A special case
                     break;
                 default:
                     return OPPONENT_REACTION_UNKNOWN;
             }
-            return OPPONENT_REACTION_USE_FIREBALL;
+            if (closeEnough) {
+                return OPPONENT_REACTION_USE_FIREBALL;
+            } else {
+                return OPPONENT_REACTION_FOLLOW;
+            }
         }
 
         private static void findHorizontallyClosestCharacterCollider(CharacterDownsync currCharacterDownsync, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res2) {
@@ -280,9 +326,12 @@ namespace shared {
                 bool opponentBehindMe = (0 > (bColliderDx * currCharacterDownsync.DirX)); 
                 if (!opponentBehindMe) {
                     // Opponent is in front of me
-                    int s1 = frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back. 
-                    int s2 = frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, absColliderDx, bColliderDy, absColliderDy, atkedChConfig);
-                    int s3 = frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, bColliderDx, bColliderDy, atkedChConfig); 
+                    float opponentBoxCx, opponentBoxCy, opponentBoxCw, opppnentBoxCh;
+                    calcCharacterBoundingBoxInCollisionSpace(v3, atkedChConfig, v3.VirtualGridX, v3.VirtualGridY, out opponentBoxCx, out opponentBoxCy, out opponentBoxCw, out opppnentBoxCh);
+                    float opponentBoxLeft = opponentBoxCx-0.5f*opponentBoxCw, opponentBoxRight = opponentBoxCx+0.5f*opponentBoxCw, opponentBoxBottom = opponentBoxCy-0.5f*opppnentBoxCh, opponentBoxTop = opponentBoxCy+0.5f*opppnentBoxCh; 
+                    int s1 = frontOpponentReachableByDragonPunch(currCharacterDownsync, aCollider, bCollider, bColliderDx, absColliderDx, bColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back. 
+                    int s2 = frontOpponentReachableByMelee1(currCharacterDownsync, aCollider, bCollider, bColliderDx, absColliderDx, bColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
+                    int s3 = frontOpponentReachableByFireball(currCharacterDownsync, aCollider, bCollider, bColliderDx, bColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop); 
                     if (OPPONENT_REACTION_NOT_ENOUGH_MP == s1 && OPPONENT_REACTION_NOT_ENOUGH_MP == s2 && OPPONENT_REACTION_NOT_ENOUGH_MP == s3) {
                         visionReaction = OPPONENT_REACTION_FLEE;   
                     } else if (OPPONENT_REACTION_USE_DRAGONPUNCH == s1) {

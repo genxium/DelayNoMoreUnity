@@ -643,7 +643,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var prevHitBulletConfig = (0 < bullet.BattleAttr.ActiveSkillHit ? skillConfig.Hits[bullet.BattleAttr.ActiveSkillHit - 1] : null); // TODO: Make this compatible with simultaneous bullets after a "FromPrevHitXxx" bullet!
             bool isInPrevHitTriggeredMultiHitSubsequence = (null != prevHitBulletConfig && (MultiHitType.FromPrevHitActual == prevHitBulletConfig.MhType || MultiHitType.FromPrevHitAnyway == prevHitBulletConfig.MhType));
 
-            string lookupKey = bullet.BattleAttr.BulletLocalId.ToString(), animName = null;
+            string lookupKey = "bl-" + bullet.BattleAttr.BulletLocalId.ToString(), animName = null;
             bool spontaneousLooping = false;
 
             int explosionSpeciesId = bullet.Config.ExplosionSpeciesId;

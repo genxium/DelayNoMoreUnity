@@ -155,9 +155,9 @@ namespace shared {
             int patternId = PATTERN_ID_NO_OP;
             var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia));
             if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
-                if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState)) {
+                if (chConfig.DashingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState && BackDashing != currCharacterDownsync.CharacterState)) {
                     patternId = PATTERN_DOWN_A;
-                } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState)) {
+                } else if (chConfig.SlidingEnabled && 0 > decodedInputHolder.Dy && (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState || BackDashing != currCharacterDownsync.CharacterState)) {
                     patternId = PATTERN_DOWN_A;
                 } else if (canJumpWithinInertia) {
                     if (currCharacterDownsync.PrimarilyOnSlippableHardPushback && (0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
@@ -1018,13 +1018,13 @@ namespace shared {
                 if (0 < hardPushbackCnt) {
                     /*
                     if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("Rdf.Id={6}, before processing hardpushbacks with chState={3}, vx={6}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
+                       logger.LogInfo(String.Format("Rdf.Id={6}, before processing hardpushbacks with chState={3}, vx={7}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
                     }
                     */
                     processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
                     /*
                     if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("Rdf.Id={6}, after processing hardpushbacks with chState={3}, vx={6}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
+                       logger.LogInfo(String.Format("Rdf.Id={6}, after processing hardpushbacks with chState={3}, vx={7}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
                     }
                     */
                 }
@@ -1716,12 +1716,14 @@ namespace shared {
 
                 if (exploded) {
                     if (BulletType.Melee == bulletNextFrame.Config.BType) {
-                        bulletNextFrame.BlState = BulletState.Exploding;
-                        if (explodedOnAnotherCharacter) {
-                            bulletNextFrame.FramesInBlState = 0;
-                        } else {
-                            // When hitting a barrier, don't play explosion anim
-                            bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
+                        if (!bulletConfig.RemainsUponHit) {
+                            bulletNextFrame.BlState = BulletState.Exploding;
+                            if (explodedOnAnotherCharacter) {
+                                bulletNextFrame.FramesInBlState = 0;
+                            } else {
+                                // When hitting a barrier, don't play explosion anim
+                                bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
+                            }
                         }
                     } else if (BulletType.Fireball == bulletNextFrame.Config.BType || BulletType.GroundWave == bulletNextFrame.Config.BType) {
                         if (!bulletConfig.RemainsUponHit || explodedOnAnotherHarderBullet) {

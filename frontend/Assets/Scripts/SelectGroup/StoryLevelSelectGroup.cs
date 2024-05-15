@@ -58,6 +58,7 @@ public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
     }
 
     private void confirmSelection() {
+        selectedName = cells[selectedIdx].name;
         if (null != levelPostConfirmedCallback) {
             levelPostConfirmedCallback(selectedIdx, selectedName);
         }

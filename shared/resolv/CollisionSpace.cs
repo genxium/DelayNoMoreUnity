@@ -12,9 +12,9 @@ namespace shared {
             int cellCntW = spaceWidth / cellWidth;
             int cellCntH = spaceHeight / cellHeight;
 
-            Cells = new CollisionCell[cellCntH, cellCntW];
-            for (int y = 0; y < cellCntH; y++) {
-                for (int x = 0; x < cellCntW; x++) {
+            Cells = new CollisionCell[cellCntH+1, cellCntW+1];
+            for (int y = 0; y <= cellCntH; y++) {
+                for (int x = 0; x <= cellCntW; x++) {
                     Cells[y, x] = new CollisionCell(x, y);
                 }
             }
@@ -35,7 +35,7 @@ namespace shared {
         }
 
         public CollisionCell? GetCell(int x, int y) {
-            if (y >= 0 && y < Cells.GetLength(0) && x >= 0 && x < Cells.GetLength(1)) {
+            if (0 <= y && y < Cells.GetLength(0) && 0 <= x && x < Cells.GetLength(1)) {
                 return Cells[y, x];
             }
             return null;

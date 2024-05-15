@@ -197,6 +197,38 @@ namespace shared {
         }
         .AddHit(FireSwordManDragonPunchPrimerBullet);
 
+        public static BulletConfig FireSwordManFireballPrimerBullet = new BulletConfig {
+                StartupFrames = 21,
+                ActiveFrames = 360,
+                HitStunFrames = 3,
+                HitInvinsibleFrames = 8,
+                BlockStunFrames = 3,
+                Damage = 11,
+                PushbackVelX = (int)(.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                PushbackVelY = NO_LOCK_VEL,
+                SelfLockVelX = NO_LOCK_VEL,
+                SelfLockVelY = NO_LOCK_VEL,
+                HitboxOffsetX = (int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxOffsetY = (int)(9 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeX = (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                CancellableStFrame = 0,
+                CancellableEdFrame = 0,
+                BlowUp = false,
+                SpeciesId = 4,
+                Speed = (int)(4.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                DirX = 1,
+                DirY = 0,
+                ExplosionFrames = 20,
+                Hardness = 4,
+                BType = BulletType.Fireball,
+                CharacterEmitSfxName = "FlameEmit1",
+                ExplosionSfxName = "Explosion4",
+                ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
+                ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
+                CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
         public static Skill FireSwordManFireballSkill = new Skill {
             RecoveryFrames = 60,
             RecoveryFramesOnBlock = 30,
@@ -205,42 +237,10 @@ namespace shared {
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk4
         }
-        .AddHit(
-                new BulletConfig {
-                    StartupFrames = 21,
-                    ActiveFrames = 360,
-                    HitStunFrames = 3,
-                    HitInvinsibleFrames = 8,
-                    BlockStunFrames = 3,
-                    Damage = 11,
-                    PushbackVelX = (int)(.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    PushbackVelY = NO_LOCK_VEL,
-                    SelfLockVelX = NO_LOCK_VEL,
-                    SelfLockVelY = NO_LOCK_VEL,
-                    HitboxOffsetX = (int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxOffsetY = (int)(9 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxSizeX = (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxSizeY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    CancellableStFrame = 0,
-                    CancellableEdFrame = 0,
-                    BlowUp = false,
-                    SpeciesId = 4,
-                    Speed = (int)(4.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    DirX = 1,
-                    DirY = 0,
-                    ExplosionFrames = 20,
-                    Hardness = 4,
-                    BType = BulletType.Fireball,
-                    CharacterEmitSfxName = "FlameEmit1",
-                    ExplosionSfxName = "Explosion4",
-                    ActiveVfxSpeciesId = VfxFirePointLightActive.SpeciesId,
-                    ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
-                    CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-                }
-        );
+        .AddHit(FireSwordManFireballPrimerBullet);
 
         public static BulletConfig DemonFireSlimeMelee1PrimaryBullet = new BulletConfig {
-            StartupFrames = 18,
+            StartupFrames = 40,
             ActiveFrames = 9,
             HitStunFrames = 9,
             BlockStunFrames = 3,
@@ -266,17 +266,17 @@ namespace shared {
         };
 
         public static Skill DemonFireSlimeMelee1PrimarySkill = new Skill {
-            RecoveryFrames = 50,
-            RecoveryFramesOnBlock = 50,
-            RecoveryFramesOnHit = 50,
+            RecoveryFrames = 110,
+            RecoveryFramesOnBlock = 110,
+            RecoveryFramesOnHit = 110,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk1
         }
         .AddHit(DemonFireSlimeMelee1PrimaryBullet)
             .AddHit(
                     new BulletConfig {
-                    StartupFrames = 17,
-                    ActiveFrames = 19,
+                    StartupFrames = 50,
+                    ActiveFrames = 45,
                     HitStunFrames = 10,
                     HitInvinsibleFrames = 16,
                     BlockStunFrames = 9,
@@ -801,6 +801,7 @@ namespace shared {
                                 CharacterEmitSfxName = "SlashEmitSpd3",
                                 ExplosionSfxName="Melee_Explosion2",
                                 ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
+                                RemainsUponHit = true,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                                 }
@@ -828,6 +829,7 @@ namespace shared {
                             DirY = 0,
                             Hardness = 7,
                             ExplosionSfxName="Melee_Explosion2",
+                            RemainsUponHit = true,
                             MhType = MultiHitType.FromEmission,
                             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -854,6 +856,7 @@ namespace shared {
                             DirX = 1,
                             DirY = 0,
                             Hardness = 7,
+                            RemainsUponHit = true,
                             ExplosionSfxName="Melee_Explosion2",
                             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -895,6 +898,7 @@ namespace shared {
                                 CharacterEmitSfxName="SlashEmitSpd3",
                                 ExplosionSfxName="Melee_Explosion2",
                                 MhType = MultiHitType.FromEmission,
+                                RemainsUponHit = true,
                                 ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                                 IsPixelatedActiveVfx = true,
                                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -926,6 +930,7 @@ namespace shared {
                     CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
+                    RemainsUponHit = true,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                     IsPixelatedActiveVfx = true,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -957,6 +962,7 @@ namespace shared {
                     CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
+                    RemainsUponHit = true,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                     IsPixelatedActiveVfx = true,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -989,6 +995,7 @@ namespace shared {
                     CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
+                    RemainsUponHit = true,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                     IsPixelatedActiveVfx = true,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -1021,6 +1028,7 @@ namespace shared {
                     CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
+                    RemainsUponHit = true,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                     IsPixelatedActiveVfx = true,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
