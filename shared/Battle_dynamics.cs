@@ -1717,13 +1717,17 @@ namespace shared {
                 if (exploded) {
                     if (BulletType.Melee == bulletNextFrame.Config.BType) {
                         if (!bulletConfig.RemainsUponHit) {
-                            bulletNextFrame.BlState = BulletState.Exploding;
-                            if (explodedOnAnotherCharacter) {
-                                bulletNextFrame.FramesInBlState = 0;
-                            } else {
-                                // When hitting a barrier, don't play explosion anim
-                                bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
+                            if (BulletState.Exploding != bulletNextFrame.BlState) {
+                                bulletNextFrame.BlState = BulletState.Exploding;
+                                if (explodedOnAnotherCharacter) {
+                                    bulletNextFrame.FramesInBlState = 0;
+                                } else {    
+                                    // When hitting a barrier, don't play explosion anim
+                                    bulletNextFrame.FramesInBlState = bulletNextFrame.Config.ExplosionFrames + 1;
+                                }
                             }
+                        } else {
+                            addNewBulletExplosionToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
                         }
                     } else if (BulletType.Fireball == bulletNextFrame.Config.BType || BulletType.GroundWave == bulletNextFrame.Config.BType) {
                         if (!bulletConfig.RemainsUponHit || explodedOnAnotherHarderBullet) {
@@ -1731,6 +1735,9 @@ namespace shared {
                                 bulletNextFrame.BlState = BulletState.Exploding;
                                 bulletNextFrame.FramesInBlState = 0;
                             }
+                        } else {
+                            // bulletConfig.RemainsUponHit && !explodedOnAnotherHarderBullet
+                            addNewBulletExplosionToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
                         }
                         if (inTheMiddleOfMultihitTransition) {
                             bool dummyHasLockVel = false;
@@ -2635,6 +2642,42 @@ namespace shared {
 
             // Explicitly specify termination of nextRenderFramePickables
             nextRenderFramePickables[pickableCnt].PickableLocalId = TERMINATING_PICKABLE_LOCAL_ID;
+
+            return true;
+        }
+
+        protected static bool addNewBulletExplosionToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, Bullet referencePrevHitBullet, ILoggerBridge logger) {
+            if (activeSkillHit >= skillConfig.Hits.Count) return false;
+            var bulletConfig = skillConfig.Hits[activeSkillHit];
+            var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
+            var invBulletDirMag = InvSqrt32(bulletDirMagSq);
+            var bulletSpeedXfac = xfac * invBulletDirMag * bulletConfig.DirX;
+            var bulletSpeedYfac = invBulletDirMag * bulletConfig.DirY;
+            int newOriginatedVirtualX = referencePrevHitBullet.OriginatedVirtualGridX;
+            int newOriginatedVirtualY = referencePrevHitBullet.OriginatedVirtualGridY;
+            int newVirtualX = referencePrevHitBullet.VirtualGridX;
+            int newVirtualY = referencePrevHitBullet.VirtualGridY;
+
+            AssignToBullet(
+                    bulletLocalIdCounter,
+                    originatedRdfId,
+                    currCharacterDownsync.JoinIndex,
+                    currCharacterDownsync.BulletTeamId,
+                    BulletState.Exploding, 0,
+                    newOriginatedVirtualX,
+                    newOriginatedVirtualY,
+                    newVirtualX, 
+                    newVirtualY, 
+                    xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
+                    0, 0, // velocity
+                    activeSkillHit, activeSkillId, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
+                    nextRenderFrameBullets[bulletCnt]);
+
+            bulletLocalIdCounter++;
+            bulletCnt++;
+
+            // Explicitly specify termination of nextRenderFrameBullets
+            nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
 
             return true;
         }

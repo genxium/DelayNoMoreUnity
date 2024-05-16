@@ -404,8 +404,8 @@ namespace shared {
             Hardness = 4,
             ExplosionFrames = 15,
             BType = BulletType.Fireball,
-            CharacterEmitSfxName = "SlashEmitSpd1",
-            ExplosionSfxName = "Explosion2",
+            CharacterEmitSfxName = "Fireball8",
+            ExplosionSfxName = "Explosion8",
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
