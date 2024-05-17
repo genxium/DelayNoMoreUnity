@@ -66,6 +66,7 @@ namespace shared {
         public ulong CollisionTypeMask;
 
         public bool HasTurnAroundAnim;
+        public bool HasDimmedAnim;
 
         public int Hardness;
 

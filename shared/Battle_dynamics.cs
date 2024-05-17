@@ -1288,7 +1288,11 @@ namespace shared {
                         thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
                         thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
                         if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
-                            thatCharacterInNextFrame.CharacterState = LayDown1;
+                            if (chConfig.HasDimmedAnim) {
+                                thatCharacterInNextFrame.CharacterState = Dimmed;
+                            } else {
+                                thatCharacterInNextFrame.CharacterState = LayDown1;
+                            }
                             thatCharacterInNextFrame.FramesToRecover = MAX_INT;
                         }
                         if (null != primaryTrap) {
@@ -2546,8 +2550,15 @@ namespace shared {
                 if (MAGIC_EVTSUB_ID_NONE == src.SubscriptionId) continue; // No subscription or already triggered
                 if (0 >= (fulfilledEvtSubscriptionSetMask & (1ul << (src.SubscriptionId - 1)))) continue; // Subscription not fulfilled
                 var dst = nextRenderFrameNpcs[i];
+                var chConfig = characters[dst.SpeciesId];
                 dst.SubscriptionId = MAGIC_EVTSUB_ID_NONE;
-                dst.FramesToRecover = 0;
+                if (chConfig.HasDimmedAnim) {
+                    dst.CharacterState = LayDown1;
+                    dst.FramesToRecover = chConfig.LayDownFrames;
+                } else {
+                    dst.CharacterState = GetUp1;
+                    dst.FramesToRecover = chConfig.GetUpFramesToRecover;
+                }
             }
 
             _calcDynamicTrapMovementCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, decodedInputHolder, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, residueCollided, logger);

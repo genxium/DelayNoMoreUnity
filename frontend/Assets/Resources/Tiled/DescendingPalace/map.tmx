@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="157" nextobjectid="530">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="160" nextobjectid="530">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="120"/>
@@ -41,9 +41,9 @@
    eJztmkEOgzAMBDnkE5FQ///MioMPVCWEEGy3OyP5RAuZjdVYFbUsS6XkSw388cdf091QzoD+13U3WhncnRmyzyFPPzf7LEb/a2fA7//efS3f659R3PdP6H/8M/zPErWeDBlErwd/bX9VlDNQ74Ez96N5+Gw+HvlOFK0MRv1/Bfpf191QzoD+13U3smXgeeZm6/9e91lnbib3DW//jUwZRO5/Bn9vlN0N5Qzof113QzkD+l/X3agXZo5ZdYT3OqIKf/wz+quBP/74448//vhHr8Yf/PHHf8y/5x2y1r1Hr82E/e/3f5V9Xf3ME9fuwv7jjz/+lHa9AW+dgf4=
   </data>
  </layer>
- <layer id="156" name="Ground" width="64" height="70">
+ <layer id="159" name="Ground" width="64" height="70">
   <data encoding="base64" compression="zlib">
-   eJztm8tu00AUhgcxXrDiUolu51HyKHkU0z2gbquqjbop927KnUWAVlU29KKITari0A0IkFgFEEXiN+lIgzHjsWIfTz3nSL+s2I18vsnf4zNje1kKsQzdCkS3oTunzKYeBqJH0OMM+woUWiwxP/Mzv7gORZFIvkuRNJ0TVUykUOcjoRbBviFFN1R+sCf3wC/B/y0gfrAqMCuwJ//z/wj7Dy06KqgZMY4vlNQWtE1Qi1z8/wHHPlr0qSDPdFxvltQ+dEDIX6f/N097rTJK+7InBPwu/m9zcP3/1/8vMRavMnrd0r7I9P86GDEWyRtsdzPaayk/vK7geXUXfBcj0UOt7zWdE3Vo7kvY4vfvjQIaA7Aqza23k4D4df0Du7oMdtSCXtp3XKtZq5Z6skZwfi2wxnLKrq5M/w+Sd9h/o0al/R3qrbifMwYPptfhWs9v5gHWGMxdsCvKtc+n0LMc/ufY94Iwj+waKOXaY95ayxJhDtk1UO5/uf/Nm//l9cMu/XHR93zoqV3mf3n9sEt/XPQ9H3pqF/+7ztnPYvD6H69/cP1n/7fF/2Wvub76fyxF/wtysulrBddcH/0/QI4XItH/ia1Nvyq45vro/2PkcSJp+H30/1wkxFUHzUezn8tH/1OGj/6nDB/9Txnsf/Y/+5/9b97/nATEb97/LOq3q1Re767jM3EuWkX9ZpWy9a4/iHMxhb5b7ATEP5gyx/oz5p2d95BL/z2LbL27a/9fhcDaHxtzrSHYt6HCwtGSAGt/aPDD+51RQPUfrN0dg7+KOfVZC7PeMH/T2dAH8zM/8zM/8zN/WX70T4Xvwuh7crZnZMoeqzJm4c++G5P3Loy+J2d7RqbssSqD/e/Ov3Hub5X9mzqOzRr8+zO/Mf8PLgYG/1DSvHfpS4A1fmvwj+WfNbFG1p+bUMp6bPCfSNEZG5/bLvNZk9/Y7gJj
+   eJztm01P1EAYx8fQngFN5DofxY+yH6VwF+KVENhwUZGXiy+gHlZeQrgAmo2XNVDhAgESTotGTfw3yyRDrdNptn06dJ4n+adJh02f3+yfp89Mt3OBEHPQC0/0Elq6Zdb1xhO9hd6l2Och32KW+Zmf+cVTKAxF/CMQcd05UUU/EHIkFPIZ2NcC0fKVH+zxMvgD8N94xA9WCWYJ9vh//u/h/DeDjnJqRoTxqYLahnYIapGN/88wdm7QRU6eybzOFNRn6Ashf5X+f33baxVR0petE/Db+L/JwfX/X/9/wlxsprTV0L5I9/9zMGIu4n0cD1I6bCg/vC7hefkKfKOhaKPWt+vOiToU9xiO+P7bPY/mAKxScatj3yN+Vf/ALsfBjlrQTvqOyYq1YKgniwTXVwJrFAzY5cPB/0F8jPPTFSrp71BvxUrGHKwO7sOVXl/PA6wRmFtgl5R7nxvQ+wz+Dzj3kTCP9B4o5d5j1l7LLGEO6T1Q7n+5/81a/2X1wzb9cd7nXOipbdZ/Wf2wTX+c9zkXemob/9uu2e9j8P4f739w/Wf/N8X/Re+5rvr/GuuSK+Rk0nUJ91wX/Z+w/4Z+IVeT/pRwz3XR/+CKvhPxu+j/R6EQjy00EQ5/LRf9Txku+p8yXPQ/ZbD/2f/sf/a//vyz7xG//vwzr98uU1m9u4pL4lyU8vrNMmXqXX8S51KHXOXHuuPJCWTTfw8jU+9u2/+XIbB2wNxR/F2w70C5haMhAdZOV+PfBXvPo/oP1tauxl/Gmvq+hV5vmL/ubOiD+Zmf+Zmf+Zm/KD/6p9x3YdQzOdNvZIqOlRnD8Kffjcl6F0Y9kzP9RqboWJnB/rfnX3twV0X/poqxYYO/f+bX1v/exZ7G3w1o3rt0JcAafb27/5fsidWy/1yHEtZTjd9n/QXIIALe
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="70">
@@ -55,7 +55,7 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="135" name="Player1St" x="80" y="144">
+  <object id="135" name="Player1St" x="144" y="144">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -108,7 +108,7 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="502" name="Floor3Entry" x="0" y="800" width="1024" height="32">
+  <object id="502" name="Floor3Entry" x="0" y="1024" width="1024" height="32">
    <properties>
     <property name="publishingEvtMaskUponExhaust" value="1"/>
     <property name="publishingToEvtSubIdUponExhaust" value="5"/>
@@ -295,7 +295,7 @@
    </properties>
    <point/>
   </object>
-  <object id="500" name="DemonFireSlime" x="763" y="1013">
+  <object id="500" name="DemonFireSlime" x="752" y="1072">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
@@ -428,7 +428,7 @@
    </properties>
   </object>
   <object id="451" name="SmallSlopeR" x="689.585" y="528">
-   <polyline points="-145.993,32 30.4152,32 30.4152,0 0,0"/>
+   <polyline points="-145.993,32 30.4152,32 30.4152,0 -129.585,0"/>
   </object>
   <object id="452" name="MidPlatformR" x="544" y="554" width="176" height="38">
    <properties>
