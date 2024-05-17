@@ -1,5 +1,5 @@
 # Latest tag change notes
-v1.5.1 new features
+v1.5.2 new features
 - Updated existing levels and characters.
 
 v1.4.3 new features
