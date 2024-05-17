@@ -1567,13 +1567,17 @@ namespace shared {
                             if (bulletConfig.RemainsUponHit) {
                                 // [WARNING] Strictly speaking, I should re-traverse "atkedCharacterInNextFrame.BulletImmuneRecords" to determine "nextImmuneRcdI", but whatever...
                                 int nextImmuneRcdI = immuneRcdI; 
+                                int terminatingImmuneRcdI = nextImmuneRcdI+1;
                                 if (nextImmuneRcdI == atkedCharacterInNextFrame.BulletImmuneRecords.Count) {
                                     nextImmuneRcdI = 0;
+                                    terminatingImmuneRcdI = atkedCharacterInNextFrame.BulletImmuneRecords.Count; // [WARNING] DON'T update termination in this case! 
                                     //logger.LogWarn("Replacing the first immune record of joinIndex = " + atkedCharacterInNextFrame.JoinIndex + " due to overflow!");
                                 } 
-                                AssignToBulletImmuneRecord(bulletNextFrame.BattleAttr.BulletLocalId, (bulletConfig.HitStunFrames << 3), atkedCharacterInNextFrame.BulletImmuneRecords[nextImmuneRcdI]);
+                                AssignToBulletImmuneRecord(bulletNextFrame.BattleAttr.BulletLocalId, MAX_INT <= bulletConfig.HitStunFrames ? MAX_INT : (bulletConfig.HitStunFrames << 3), atkedCharacterInNextFrame.BulletImmuneRecords[nextImmuneRcdI]);
 
                                 //logger.LogInfo("joinIndex = " + atkedCharacterInCurrFrame.JoinIndex + " JUST BECOMES immune to bulletLocalId= " + bulletNextFrame.BattleAttr.BulletLocalId + " for rdfCount=" + bulletConfig.HitStunFrames + " at rdfId=" + currRenderFrame.Id);
+ 
+                                if (terminatingImmuneRcdI < atkedCharacterInNextFrame.BulletImmuneRecords.Count) atkedCharacterInNextFrame.BulletImmuneRecords[terminatingImmuneRcdI].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
                             }
                             CharacterState oldNextCharacterState = atkedCharacterInNextFrame.CharacterState;
                             atkedCharacterInNextFrame.Hp -= bulletNextFrame.Config.Damage;
@@ -1731,7 +1735,9 @@ namespace shared {
                                 }
                             }
                         } else {
-                            addNewBulletExplosionToNextFrame(currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
+                            if (explodedOnAnotherCharacter) {
+                                addNewBulletExplosionToNextFrame(currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
+                            }
                         }
                     } else if (BulletType.Fireball == bulletNextFrame.Config.BType || BulletType.GroundWave == bulletNextFrame.Config.BType) {
                         if (!bulletConfig.RemainsUponHit || explodedOnAnotherHarderBullet) {
