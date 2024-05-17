@@ -120,8 +120,8 @@ TextureImporter:
       name: Bulleted-List
       rect:
         serializedVersion: 2
-        x: 64
-        y: 104
+        x: 30
+        y: 136
         width: 14
         height: 14
       alignment: 0
@@ -141,8 +141,8 @@ TextureImporter:
       name: Chevron-Arrow-Down
       rect:
         serializedVersion: 2
-        x: 93
-        y: 77
+        x: 0
+        y: 127
         width: 14
         height: 9
       alignment: 0
@@ -163,7 +163,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 119
-        y: 71
+        y: 200
         width: 9
         height: 14
       alignment: 0
@@ -183,8 +183,8 @@ TextureImporter:
       name: Chevron-Arrow-Right
       rect:
         serializedVersion: 2
-        x: 104
-        y: 57
+        x: 83
+        y: 198
         width: 9
         height: 14
       alignment: 0
@@ -204,8 +204,8 @@ TextureImporter:
       name: Chevron-Arrow-Up
       rect:
         serializedVersion: 2
-        x: 78
-        y: 71
+        x: 14
+        y: 127
         width: 14
         height: 9
       alignment: 0
@@ -225,8 +225,8 @@ TextureImporter:
       name: Exit
       rect:
         serializedVersion: 2
-        x: 64
-        y: 55
+        x: 80
+        y: 170
         width: 12
         height: 14
       alignment: 0
@@ -246,8 +246,8 @@ TextureImporter:
       name: Game-Controller
       rect:
         serializedVersion: 2
-        x: 64
-        y: 69
+        x: 28
+        y: 129
         width: 14
         height: 7
       alignment: 0
@@ -267,8 +267,8 @@ TextureImporter:
       name: gamepad-blue
       rect:
         serializedVersion: 2
-        x: 17
-        y: 48
+        x: 109
+        y: 181
         width: 16
         height: 16
       alignment: 0
@@ -288,8 +288,8 @@ TextureImporter:
       name: gamepad-green
       rect:
         serializedVersion: 2
-        x: 0
-        y: 15
+        x: 92
+        y: 177
         width: 16
         height: 16
       alignment: 0
@@ -309,8 +309,8 @@ TextureImporter:
       name: gamepad-red
       rect:
         serializedVersion: 2
-        x: 16
-        y: 15
+        x: 108
+        y: 165
         width: 16
         height: 16
       alignment: 0
@@ -330,8 +330,8 @@ TextureImporter:
       name: gamepad-yellow
       rect:
         serializedVersion: 2
-        x: 19
-        y: 32
+        x: 32
+        y: 194
         width: 16
         height: 16
       alignment: 0
@@ -351,8 +351,8 @@ TextureImporter:
       name: Grid
       rect:
         serializedVersion: 2
-        x: 64
-        y: 90
+        x: 44
+        y: 136
         width: 14
         height: 14
       alignment: 0
@@ -372,8 +372,8 @@ TextureImporter:
       name: Heart
       rect:
         serializedVersion: 2
-        x: 108
-        y: 85
+        x: 86
+        y: 120
         width: 14
         height: 11
       alignment: 0
@@ -393,8 +393,8 @@ TextureImporter:
       name: Home
       rect:
         serializedVersion: 2
-        x: 64
-        y: 76
+        x: 58
+        y: 136
         width: 14
         height: 14
       alignment: 0
@@ -414,8 +414,8 @@ TextureImporter:
       name: Info
       rect:
         serializedVersion: 2
-        x: 103
-        y: 102
+        x: 120
+        y: 119
         width: 6
         height: 14
       alignment: 0
@@ -435,8 +435,8 @@ TextureImporter:
       name: joystick-down
       rect:
         serializedVersion: 2
-        x: 32
-        y: 112
+        x: 92
+        y: 161
         width: 16
         height: 16
       alignment: 0
@@ -456,8 +456,8 @@ TextureImporter:
       name: joystick-idle
       rect:
         serializedVersion: 2
-        x: 32
-        y: 96
+        x: 108
+        y: 149
         width: 16
         height: 16
       alignment: 0
@@ -478,7 +478,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 80
+        y: 178
         width: 16
         height: 16
       alignment: 0
@@ -498,8 +498,8 @@ TextureImporter:
       name: joystick-right
       rect:
         serializedVersion: 2
-        x: 32
-        y: 64
+        x: 48
+        y: 178
         width: 16
         height: 16
       alignment: 0
@@ -519,8 +519,8 @@ TextureImporter:
       name: joystick-up
       rect:
         serializedVersion: 2
-        x: 48
-        y: 16
+        x: 108
+        y: 133
         width: 16
         height: 16
       alignment: 0
@@ -540,10 +540,10 @@ TextureImporter:
       name: keyboard-A
       rect:
         serializedVersion: 2
-        x: 48
-        y: 0
+        x: 0
+        y: 178
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -561,10 +561,10 @@ TextureImporter:
       name: keyboard-B
       rect:
         serializedVersion: 2
-        x: 63
-        y: 0
+        x: 15
+        y: 178
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -582,10 +582,10 @@ TextureImporter:
       name: keyboard-D
       rect:
         serializedVersion: 2
-        x: 110
-        y: 112
+        x: 15
+        y: 164
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -603,10 +603,10 @@ TextureImporter:
       name: keyboard-down
       rect:
         serializedVersion: 2
-        x: 78
-        y: 80
+        x: 90
+        y: 131
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -624,10 +624,10 @@ TextureImporter:
       name: keyboard-H
       rect:
         serializedVersion: 2
-        x: 49
-        y: 102
+        x: 30
+        y: 164
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -645,10 +645,10 @@ TextureImporter:
       name: keyboard-J
       rect:
         serializedVersion: 2
-        x: 109
-        y: 96
+        x: 45
+        y: 164
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -666,10 +666,10 @@ TextureImporter:
       name: keyboard-left
       rect:
         serializedVersion: 2
-        x: 49
-        y: 70
+        x: 105
+        y: 119
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -687,10 +687,10 @@ TextureImporter:
       name: keyboard-N
       rect:
         serializedVersion: 2
-        x: 78
-        y: 96
+        x: 45
+        y: 150
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -708,10 +708,10 @@ TextureImporter:
       name: keyboard-right
       rect:
         serializedVersion: 2
-        x: 49
-        y: 50
+        x: 0
+        y: 136
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -729,10 +729,10 @@ TextureImporter:
       name: keyboard-S
       rect:
         serializedVersion: 2
-        x: 49
-        y: 86
+        x: 60
+        y: 150
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -750,10 +750,10 @@ TextureImporter:
       name: keyboard-up
       rect:
         serializedVersion: 2
-        x: 51
-        y: 34
+        x: 15
+        y: 136
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -771,10 +771,10 @@ TextureImporter:
       name: keyboard-W
       rect:
         serializedVersion: 2
-        x: 93
-        y: 86
+        x: 75
+        y: 142
         width: 15
-        height: 16
+        height: 14
       alignment: 9
       pivot: {x: 0.53333336, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -792,8 +792,8 @@ TextureImporter:
       name: Lock-Closed
       rect:
         serializedVersion: 2
-        x: 66
-        y: 41
+        x: 80
+        y: 156
         width: 12
         height: 14
       alignment: 0
@@ -813,8 +813,8 @@ TextureImporter:
       name: Lock-Open
       rect:
         serializedVersion: 2
-        x: 76
-        y: 55
+        x: 56
+        y: 122
         width: 12
         height: 14
       alignment: 0
@@ -834,8 +834,8 @@ TextureImporter:
       name: Music-0
       rect:
         serializedVersion: 2
-        x: 107
-        y: 71
+        x: 42
+        y: 118
         width: 12
         height: 14
       alignment: 0
@@ -855,8 +855,8 @@ TextureImporter:
       name: Music-1
       rect:
         serializedVersion: 2
-        x: 88
-        y: 50
+        x: 109
+        y: 197
         width: 8
         height: 13
       alignment: 0
@@ -876,8 +876,8 @@ TextureImporter:
       name: Question-Mark
       rect:
         serializedVersion: 2
-        x: 113
-        y: 57
+        x: 83
+        y: 184
         width: 9
         height: 14
       alignment: 0
@@ -897,8 +897,8 @@ TextureImporter:
       name: Redo
       rect:
         serializedVersion: 2
-        x: 92
-        y: 63
+        x: 28
+        y: 115
         width: 12
         height: 14
       alignment: 0
@@ -918,8 +918,8 @@ TextureImporter:
       name: Star
       rect:
         serializedVersion: 2
-        x: 64
-        y: 20
+        x: 72
+        y: 128
         width: 14
         height: 14
       alignment: 0
@@ -939,8 +939,8 @@ TextureImporter:
       name: Three-Dots-Horizontal
       rect:
         serializedVersion: 2
-        x: 48
-        y: 66
+        x: 42
+        y: 132
         width: 14
         height: 4
       alignment: 0
@@ -961,7 +961,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 124
-        y: 98
+        y: 167
         width: 4
         height: 14
       alignment: 0
@@ -981,8 +981,8 @@ TextureImporter:
       name: joystick-down-left
       rect:
         serializedVersion: 2
-        x: 32
-        y: 16
+        x: 48
+        y: 194
         width: 16
         height: 16
       alignment: 0
@@ -1002,8 +1002,8 @@ TextureImporter:
       name: joystick-down-right
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
+        x: 64
+        y: 180
         width: 16
         height: 16
       alignment: 0
@@ -1023,8 +1023,8 @@ TextureImporter:
       name: joystick-up-left
       rect:
         serializedVersion: 2
-        x: 33
-        y: 48
+        x: 64
+        y: 164
         width: 16
         height: 16
       alignment: 0
@@ -1044,8 +1044,8 @@ TextureImporter:
       name: joystick-up-right
       rect:
         serializedVersion: 2
-        x: 35
-        y: 32
+        x: 92
+        y: 145
         width: 16
         height: 16
       alignment: 0
@@ -1065,8 +1065,8 @@ TextureImporter:
       name: UI_Flat_Checkmark_Large
       rect:
         serializedVersion: 2
-        x: 0
-        y: 31
+        x: 64
+        y: 196
         width: 19
         height: 16
       alignment: 9
@@ -1086,8 +1086,8 @@ TextureImporter:
       name: UI_Flat_Cross_Large
       rect:
         serializedVersion: 2
-        x: 0
-        y: 47
+        x: 92
+        y: 193
         width: 17
         height: 17
       alignment: 9
@@ -1107,8 +1107,8 @@ TextureImporter:
       name: UI_Flat_Fillbar_01_Flat_trim
       rect:
         serializedVersion: 2
-        x: 48
-        y: 118
+        x: 96
+        y: 214
         width: 30
         height: 10
       alignment: 0
@@ -1128,8 +1128,8 @@ TextureImporter:
       name: UI_Flat_Fillbar_02_Block
       rect:
         serializedVersion: 2
-        x: 78
-        y: 112
+        x: 94
+        y: 210
         width: 25
         height: 4
       alignment: 0
@@ -1149,8 +1149,8 @@ TextureImporter:
       name: UI_Flat_Fillbar_02_Flat
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1
+        x: 32
+        y: 210
         width: 32
         height: 14
       alignment: 0
@@ -1170,8 +1170,8 @@ TextureImporter:
       name: UI_Flat_Fillbar_03_Flat_trim
       rect:
         serializedVersion: 2
-        x: 78
-        y: 116
+        x: 64
+        y: 212
         width: 30
         height: 10
       alignment: 0
@@ -1191,8 +1191,8 @@ TextureImporter:
       name: UI_Flat_Filler_01
       rect:
         serializedVersion: 2
-        x: 78
-        y: 126
+        x: 64
+        y: 222
         width: 32
         height: 2
       alignment: 0
@@ -1213,7 +1213,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -1233,8 +1233,8 @@ TextureImporter:
       name: UI_Flat_Select_02a2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
+        x: 32
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -1246,6 +1246,153 @@ TextureImporter:
       bones: []
       spriteID: 1fbad91d100ef234f9a83c4d74dfafe4
       internalID: 515173168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon-big-slash
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bdd6af8b5030864983ae699f9cbf4a4
+      internalID: -1588261596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon-jump
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2083ac743af6f654e947a30981275ff1
+      internalID: -1880355161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon-slash
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c84023721cc79294194775a4b9f78576
+      internalID: 1726023315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard-C
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 164
+        width: 15
+        height: 14
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 905fd2c824f8e774084afe5c59305a09
+      internalID: 2002076634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard-K
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 150
+        width: 15
+        height: 14
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55d1d35571dd3324d9dea55605365181
+      internalID: 1787260839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard-L
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 150
+        width: 15
+        height: 14
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8e39453a59b3b24fb60dfb07cd764dc
+      internalID: -2106291620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard-M
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 150
+        width: 15
+        height: 14
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 138ff75e710e69f4b8c7048c01e5b841
+      internalID: -202377787
       vertices: []
       indices: 
       edges: []
@@ -1267,6 +1414,7 @@ TextureImporter:
       keyboard-N: 323923059
       Heart: 1649203395
       keyboard-A: 871178311
+      icon-jump: -1880355161
       UI_Flat_Fillbar_01_Flat_trim: -1884782171
       Lock-Closed: -1223269851
       Music-0: 1784056560
@@ -1274,20 +1422,24 @@ TextureImporter:
       Chevron-Arrow-Down: -420274597
       joystick-right: 493349078
       joystick-up-left: 427910879
-      keyboard-up: -1264366312
+      keyboard-K: 1787260839
       Music-1: 1558521130
+      keyboard-up: -1264366312
       gamepad-green: -365428235
       gamepad-blue: -763629369
       gamepad-yellow: -1932270553
       UI_Flat_Select_02a2: 515173168
       keyboard-S: 434906276
       Lock-Open: -1008822571
+      keyboard-M: -202377787
       joystick-up-right: -1849016475
       Star: -668699686
+      keyboard-L: -2106291620
       joystick-idle: -97564264
       keyboard-right: 2083205123
       keyboard-down: 1256495127
       Info: 939117367
+      icon-big-slash: -1588261596
       keyboard-H: -107201805
       Bulleted-List: 46363594
       Three-Dots-Horizontal: -694022162
@@ -1299,12 +1451,14 @@ TextureImporter:
       UI_Flat_Fillbar_02_Flat: 916252457
       Redo: 2078603196
       Home: -254464559
-      keyboard-left: 1209086038
+      keyboard-C: 2002076634
       keyboard-J: 1250625542
       Chevron-Arrow-Right: -1839191377
+      keyboard-left: 1209086038
       Question-Mark: 92648016
       UI_Flat_Fillbar_02_Block: -1661728241
       Grid: 1069224224
+      icon-slash: 1726023315
       UI_Flat_Cross_Large: 1398387094
       Game-Controller: 2047918971
       gamepad-red: -217861898
