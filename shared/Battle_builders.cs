@@ -59,8 +59,9 @@ namespace shared {
             collider.Mask = mask;
         }
 
-        public static bool UpdateWaveNpcKilledEvtSub(ulong publishingEvtMaskUponKilled, EvtSubscription nextExhaustEvtSub, ref ulong fulfilledEvtSubscriptionSetMask) {
+        public static bool UpdateWaveNpcKilledEvtSub(int rdfId, ulong publishingEvtMaskUponKilled, EvtSubscription nextExhaustEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
             if (EVTSUB_NO_DEMAND_MASK != nextExhaustEvtSub.DemandedEvtMask) {
+                logger.LogInfo(String.Format("@rdfId={0}, publishing evtmask={1} to evtsub={2} by npc killed", rdfId, publishingEvtMaskUponKilled, nextExhaustEvtSub));
                 nextExhaustEvtSub.FulfilledEvtMask |= publishingEvtMaskUponKilled;
                 if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
                     fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id-1));

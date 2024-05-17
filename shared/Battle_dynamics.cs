@@ -1731,7 +1731,7 @@ namespace shared {
                                 }
                             }
                         } else {
-                            addNewBulletExplosionToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
+                            addNewBulletExplosionToNextFrame(currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
                         }
                     } else if (BulletType.Fireball == bulletNextFrame.Config.BType || BulletType.GroundWave == bulletNextFrame.Config.BType) {
                         if (!bulletConfig.RemainsUponHit || explodedOnAnotherHarderBullet) {
@@ -1741,7 +1741,7 @@ namespace shared {
                             }
                         } else {
                             // bulletConfig.RemainsUponHit && !explodedOnAnotherHarderBullet
-                            addNewBulletExplosionToNextFrame(currRenderFrame.Id, offender, offenderNextFrame, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.BattleAttr.ActiveSkillHit+1, bulletNextFrame.BattleAttr.SkillId, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
+                            addNewBulletExplosionToNextFrame(currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
                         }
                         if (inTheMiddleOfMultihitTransition) {
                             bool dummyHasLockVel = false;
@@ -1940,21 +1940,40 @@ namespace shared {
                             }
 
                             if (null != nextRenderFrameEvtSubs && 0 < triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrameEvtSubs.Count) {
-                                var targetEvtSubNextRdf = nextRenderFrameEvtSubs[triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust - 1];
-                                if (MAGIC_EVTSUB_ID_WAVER == triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust && EVTSUB_NO_DEMAND_MASK == targetEvtSubNextRdf.DemandedEvtMask && EVTSUB_NO_DEMAND_MASK == targetEvtSubNextRdf.FulfilledEvtMask) {
-                                    // [WARNING] In this case, revive the waver first
-                                    var waveExhaustEvtSub = nextRenderFrameEvtSubs[MAGIC_EVTSUB_ID_WAVE_EXHAUST-1];
-                                    waveExhaustEvtSub.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.SupplementDemandedEvtMask;
-                                    targetEvtSubNextRdf.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
-                                    logger.LogInfo(String.Format("@rdfId={0}, revived MAGIC_EVTSUB_ID_WAVE_EXHAUST with waveExhaustEvtSub.DemandedEvtMask = {1}", currRenderFrame.Id, waveExhaustEvtSub.DemandedEvtMask));
+                                int targetEvtSubId = triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust;
+                                var targetEvtSubNextRdf = nextRenderFrameEvtSubs[targetEvtSubId - 1];
+                                if (EVTSUB_NO_DEMAND_MASK == targetEvtSubNextRdf.DemandedEvtMask && EVTSUB_NO_DEMAND_MASK == targetEvtSubNextRdf.FulfilledEvtMask) {
+                                    if (EVTSUB_NO_DEMAND_MASK < triggerInNextFrame.ConfigFromTiled.SupplementDemandedEvtMask) {
+                                        // Revival
+                                        if (MAGIC_EVTSUB_ID_WAVER == targetEvtSubId) {
+                                            targetEvtSubNextRdf.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.SupplementDemandedEvtMask;
+                                            logger.LogInfo(String.Format("@rdfId={0}, revived MAGIC_EVTSUB_ID_WAVER with targetEvtSubNextRdf.DemandedEvtMask = {1}", currRenderFrame.Id, targetEvtSubNextRdf.DemandedEvtMask));
+                                        } else if (MAGIC_EVTSUB_ID_WAVE_EXHAUST == targetEvtSubId) {
+                                            targetEvtSubNextRdf.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.SupplementDemandedEvtMask;
+                                            logger.LogInfo(String.Format("@rdfId={0}, revived MAGIC_EVTSUB_ID_WAVE_EXHAUST with targetEvtSubNextRdf.DemandedEvtMask = {1}", currRenderFrame.Id, targetEvtSubNextRdf.DemandedEvtMask));
+                                        } else if (MAGIC_EVTSUB_ID_STORYPOINT == targetEvtSubId) {
+                                            targetEvtSubNextRdf.DemandedEvtMask = triggerInNextFrame.ConfigFromTiled.SupplementDemandedEvtMask;
+                                            logger.LogInfo(String.Format("@rdfId={0}, revived MAGIC_EVTSUB_ID_STORYPOINT with targetEvtSubNextRdf.DemandedEvtMask = {1}", currRenderFrame.Id, targetEvtSubNextRdf.DemandedEvtMask));
+                                        }
+                                    } else {
+                                        logger.LogWarn(String.Format("@rdfId={0}, you triggered a dead evtsub {1} without supplementDemandedEvtMask", currRenderFrame.Id, targetEvtSubNextRdf));
+                                    }
                                 }
-                                targetEvtSubNextRdf.FulfilledEvtMask |= triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
+                                
+                                if (EVTSUB_NO_DEMAND_MASK < triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust) {
+                                    // Try to fulfill it (even just after revival, e.g. in the case of StoryPoint)
+                                    targetEvtSubNextRdf.FulfilledEvtMask |= triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust;
+                                    logger.LogInfo(String.Format("@rdfId={0}, updated evtsub fulfillment {1}", currRenderFrame.Id, targetEvtSubNextRdf));
+                                }
                             }
                         }
-                    } else if (0 == currTrigger.Quota) {
-                        // [WARNING] Exclude MAGIC_QUOTA_INFINITE and MAGIC_QUOTA_EXHAUSTED here! 
+                    } else if (
+                        0 == currTrigger.Quota // [WARNING] Exclude MAGIC_QUOTA_INFINITE and MAGIC_QUOTA_EXHAUSTED here! 
+                        &&
+                        WaveTimedDoor1.SpeciesId == currTrigger.Config.SpeciesId // [WARNING] The fields "Publishing*UponExhaust" are badly named, actually I only want "WaveTimedDoor1" to be able to publish upon exhaust for now.
+                        ) {
                         logger.LogInfo(String.Format("@rdfId={0}, about to exhaust trigger local id = {1}, publishing evtMask = {2} to evtsubId = {3}: meanwhile fulfilledEvtSubscriptionSetMask = {4}", currRenderFrame.Id, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust, triggerInNextFrame.ConfigFromTiled.PublishingToEvtSubIdUponExhaust, fulfilledEvtSubscriptionSetMask));
-                        handleTriggerExhausted(triggerInNextFrame, nextRenderFrame, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt);
+                        handleTriggerExhausted(currRenderFrame.Id, triggerInNextFrame, nextRenderFrame, ref fulfilledEvtSubscriptionSetMask, justFulfilledEvtSubArr, ref justFulfilledEvtSubCnt, logger);
                     }
                 } else if (0 == currTrigger.FramesToRecover) {
                     // replenish upon mainCycle ends, but "false == mainCycleFulfilled"
@@ -1973,7 +1992,10 @@ namespace shared {
                 fulfilledEvtSubscriptionSetMask |= (1ul << (nextRdfWaveNpcKilledEvtSub.Id - 1));
                 nextRdfWaveNpcKilledEvtSub.DemandedEvtMask = ((1ul << nextWaveNpcCnt) - 1);
                 nextRdfWaveNpcKilledEvtSub.FulfilledEvtMask = 0;
-                logger.LogInfo(String.Format("@rdfId={0}, re-purposed MAGIC_EVTSUB_ID_WAVER for spawning subCycle (nextWaveNpcCnt={1} over all door of current wave) with DemandedEvtMask = {2}", currRenderFrame.Id, nextWaveNpcCnt, nextRdfWaveNpcKilledEvtSub.DemandedEvtMask));
+
+                if (0 < nextWaveNpcCnt) {
+                    logger.LogInfo(String.Format("@rdfId={0}, re-purposed MAGIC_EVTSUB_ID_WAVER for spawning subCycle (nextWaveNpcCnt={1} over all door of current wave) with DemandedEvtMask = {2}", currRenderFrame.Id, nextWaveNpcCnt, nextRdfWaveNpcKilledEvtSub.DemandedEvtMask));
+                }
             }
         }
 
@@ -2248,9 +2270,9 @@ namespace shared {
                 while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id && isNpcDeadToDisappear(nextRenderFrameNpcs[candidateI])) {
                     var candidate = nextRenderFrameNpcs[candidateI];
                     if (MAGIC_EVTSUB_ID_NONE != candidate.PublishingEvtSubIdUponKilled) {
-                        UpdateWaveNpcKilledEvtSub(candidate.PublishingEvtMaskUponKilled, nextRdfEvtSubsArr[candidate.PublishingEvtSubIdUponKilled-1], ref fulfilledEvtSubscriptionSetMask);
+                        UpdateWaveNpcKilledEvtSub(rdfId, candidate.PublishingEvtMaskUponKilled, nextRdfEvtSubsArr[candidate.PublishingEvtSubIdUponKilled-1], ref fulfilledEvtSubscriptionSetMask, logger);
                     } else {
-                        UpdateWaveNpcKilledEvtSub(candidate.PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask);
+                        UpdateWaveNpcKilledEvtSub(rdfId, candidate.PublishingEvtMaskUponKilled, waveNpcKilledEvtSub, ref fulfilledEvtSubscriptionSetMask, logger);
                     }
 
                     candidateI++;
@@ -2458,6 +2480,7 @@ namespace shared {
                 ulong nextDemandedEvtMask = src.DemandedEvtMask;
                 ulong nextFulfilledEvtMask = src.FulfilledEvtMask;
                 if (EVTSUB_NO_DEMAND_MASK != nextDemandedEvtMask && nextFulfilledEvtMask == nextDemandedEvtMask) {
+                    logger.LogInfo(String.Format("@rdfId={0}, evtSub {1} is fulfilled", currRenderFrameId, src));
                     nextDemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
                     nextFulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
                     fulfilledEvtSubscriptionSetMask |= (1ul << (src.Id - 1));
@@ -2657,31 +2680,25 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewBulletExplosionToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, Bullet referencePrevHitBullet, ILoggerBridge logger) {
-            if (activeSkillHit >= skillConfig.Hits.Count) return false;
-            var bulletConfig = skillConfig.Hits[activeSkillHit];
-            var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
-            var invBulletDirMag = InvSqrt32(bulletDirMagSq);
-            var bulletSpeedXfac = xfac * invBulletDirMag * bulletConfig.DirX;
-            var bulletSpeedYfac = invBulletDirMag * bulletConfig.DirY;
-            int newOriginatedVirtualX = referencePrevHitBullet.OriginatedVirtualGridX;
-            int newOriginatedVirtualY = referencePrevHitBullet.OriginatedVirtualGridY;
-            int newVirtualX = referencePrevHitBullet.VirtualGridX;
-            int newVirtualY = referencePrevHitBullet.VirtualGridY;
+        protected static bool addNewBulletExplosionToNextFrame(int originatedRdfId, BulletConfig bulletConfig, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, Bullet referenceBullet, ILoggerBridge logger) {
+            int newOriginatedVirtualX = referenceBullet.OriginatedVirtualGridX;
+            int newOriginatedVirtualY = referenceBullet.OriginatedVirtualGridY;
+            int newVirtualX = referenceBullet.VirtualGridX;
+            int newVirtualY = referenceBullet.VirtualGridY;
 
             AssignToBullet(
                     bulletLocalIdCounter,
                     originatedRdfId,
-                    currCharacterDownsync.JoinIndex,
-                    currCharacterDownsync.BulletTeamId,
+                    referenceBullet.BattleAttr.OffenderJoinIndex,
+                    referenceBullet.BattleAttr.TeamId,
                     BulletState.Exploding, 0,
                     newOriginatedVirtualX,
                     newOriginatedVirtualY,
                     newVirtualX, 
-                    newVirtualY, 
-                    xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
+                    newVirtualY,
+                    referenceBullet.DirX, referenceBullet.DirY, // dir
                     0, 0, // velocity
-                    activeSkillHit, activeSkillId, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
+                    referenceBullet.BattleAttr.ActiveSkillHit, referenceBullet.BattleAttr.SkillId, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
                     nextRenderFrameBullets[bulletCnt]);
 
             bulletLocalIdCounter++;
@@ -2796,7 +2813,7 @@ namespace shared {
             return false;
         }
 
-        private static void handleTriggerExhausted(Trigger triggerInNextFrame, RoomDownsyncFrame nextRenderFrame, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt) {
+        private static void handleTriggerExhausted(int rdfId, Trigger triggerInNextFrame, RoomDownsyncFrame nextRenderFrame, ref ulong fulfilledEvtSubscriptionSetMask, int[] justFulfilledEvtSubArr, ref int justFulfilledEvtSubCnt, ILoggerBridge logger) {
 
             triggerInNextFrame.Quota = MAGIC_QUOTA_EXHAUSTED;
             triggerInNextFrame.State = TriggerState.Tready;
@@ -2806,6 +2823,8 @@ namespace shared {
 
             if (MAGIC_EVTSUB_ID_NONE != configFromTiled.PublishingToEvtSubIdUponExhaust && (0 <= configFromTiled.PublishingToEvtSubIdUponExhaust && configFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrame.EvtSubsArr.Count)) {
                 var nextExhaustEvtSub = nextRenderFrame.EvtSubsArr[configFromTiled.PublishingToEvtSubIdUponExhaust - 1];
+                logger.LogInfo(String.Format("@rdfId={0}, publishing to nextExhaustEvtSub={3} from trigger local id = {1}, publishing evtMask = {2}", rdfId, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust, nextExhaustEvtSub));
+
                 nextExhaustEvtSub.FulfilledEvtMask |= configFromTiled.PublishingEvtMaskUponExhaust;
                 // [WARNING] DON'T check fulfillment or update "fulfilledEvtSubscriptionSetMask" here, leave it to the next "Step(...)" and we'll be more clear on that "fulfilledEvtSubscriptionSetMask obtained during assignment" only impacts "_calcTriggerReactions" within the same "Step(...)"
             }

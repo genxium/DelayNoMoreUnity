@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="160" nextobjectid="530">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="160" nextobjectid="531">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="120"/>
@@ -159,6 +159,15 @@
     <property name="publishingToEvtSubIdUponExhaust" value="1"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65544"/>
+    <property name="speciesId" value="6"/>
+    <property name="supplementDemandedEvtMask" value="1"/>
+   </properties>
+  </object>
+  <object id="530" name="Floor2WaveExhaustReviver" x="32" y="407" width="960" height="32">
+   <properties>
+    <property name="publishingToEvtSubIdUponExhaust" value="2"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65542"/>
     <property name="speciesId" value="6"/>
     <property name="supplementDemandedEvtMask" value="7"/>
    </properties>
