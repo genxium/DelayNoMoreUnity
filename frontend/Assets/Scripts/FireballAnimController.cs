@@ -25,15 +25,15 @@ public class FireballAnimController : MonoBehaviour {
         
         if (bulletConfig.RotatesAlongVelocity && 0 != immediateVelX) {
             // Rotate before flipping
-            spr.transform.localRotation = Quaternion.AngleAxis(math.atan((immediateVelY)/(math.PI*immediateVelX))*radToAngle, zAxis);
+            spr.transform.localRotation = Quaternion.AngleAxis(math.atan2(immediateVelY, immediateVelX)*radToAngle, zAxis);
+            spr.flipX = false;
         } else {
             spr.transform.localRotation = Quaternion.AngleAxis(0, zAxis);
-        }
-
-        if (0 > immediateDirX) {
-            spr.flipX = true;
-        } else if (0 < immediateDirX) {
-            spr.flipX = false;
+            if (0 > immediateDirX) {
+                spr.flipX = true;
+            } else if (0 < immediateDirX) {
+                spr.flipX = false;
+            }
         }
 
         int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time

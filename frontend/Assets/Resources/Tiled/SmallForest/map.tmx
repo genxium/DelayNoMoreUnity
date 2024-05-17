@@ -43,7 +43,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt0tFOwjAUBuDdsICCzKnw/m/ljfIqniU2aWqHdQQ1+n3Jn3U9J11p6ToAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlnpefZx7ibnXyKlS++pa5n/vPAAAAPD3rfuu20RuIreRbWQXuYvs++X1daV26bcm24a+NC5/X8u4XK9lTy3neK7nWneQ6nNnPxnieR8ZIw+Rx8hT5BA59svrQ6V26bfS3Gd9aVzuoWVcrtey55ZzPNdzrTvIz63W8xOG9z2lMzn280n9kzF7zqXsH2e+k975fkPDvecp77P8H9TqeWr3nr//d29HDC1M
+   eJzt0e1KwzAUBuD+sUydOut0939X/lFvxVPYgRLTNt0QRJ4HXpolJx9Lug4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAS73f/Oz7iL7PyFdlbOta+v9uPwAAAPD/7fquu43cRe4j+8hD5DHy1F8+vquMXbvXaN9Ql+3y/7W0y/VaztRyj0s1v/UGOT5396OX+B4jr5G3yClyiDxHhr4+nn1LtYfK2Nq6rfuu1WW7PENLu1yv5cyjtbqlmmvvpeXeajWjnH9aSM4fzjmev1vfLe8g183955L1o2HynUtZP8zsk79Zvv9p8t2m97313ab9W/bN+dN3znZtfO6M5b503TfCYzKv
   </data>
  </layer>
  <layer id="18" name="Ground2" width="128" height="64">
@@ -150,6 +150,7 @@
     <property name="recoveryFrames" value="65535"/>
     <property name="speciesId" value="5"/>
     <property name="storyPointId" value="2"/>
+    <property name="supplementDemandedEvtMask" value="1"/>
    </properties>
   </object>
   <object id="386" name="StoryPoint1" x="386" y="36" width="42" height="1018">

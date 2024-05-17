@@ -2143,6 +2143,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.RevivalDirY = dirY;
             npcInRdf.Speed = chConfig.Speed;
             npcInRdf.CharacterState = (chConfig.AntiGravityWhenIdle && 0 != dirX) ? CharacterState.Walking : CharacterState.InAirIdle1NoJump;
+            if (MAGIC_EVTSUB_ID_NONE != subscriptionId && chConfig.HasDimmedAnim) {
+                npcInRdf.CharacterState = CharacterState.Dimmed;
+            }
             npcInRdf.FramesToRecover = 0;
             npcInRdf.DirX = dirX;
             npcInRdf.DirY = dirY;

@@ -236,6 +236,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
+                        HasDimmedAnim = true,
                         ProactiveJumpStartupFrames = 16,
                         Hardness = 8,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
