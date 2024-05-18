@@ -265,6 +265,8 @@ namespace shared {
                 nextTrap.CapturedByPatrolCue = true;
                 nextTrap.FramesInPatrolCue = targetFramesInPatrolCue;
                 nextTrap.WaivingPatrolCueId = patrolCue.Id;
+                nextTrap.DirX = decodedInputHolder.Dx;
+                nextTrap.DirY = decodedInputHolder.Dy;
                 nextTrap.VelX = 0;
                 nextTrap.VelY = 0;
                 return;

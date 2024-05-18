@@ -941,7 +941,7 @@ namespace shared {
                     }
                 } else if (!currCharacterDownsync.InAir && currCharacterDownsync.PrimarilyOnSlippableHardPushback && currCharacterDownsync.SlipJumpTriggered) {
                     // [WARNING] By now "slipJump" is deliberately implemented without any startup frame, because I haven't prepared proper animations for it :(
-                    newVy -= SLIP_JUMP_CHARACTER_DROP_VIRTUAL;
+                    newVy -= chConfig.SlipJumpCharacterDropVirtual;
                 } 
 
                 if (i < roomCapacity && 0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
@@ -1276,11 +1276,9 @@ namespace shared {
                     //logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));                         
                 }
 
-                /*
                 if (1 == currCharacterDownsync.JoinIndex && !landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
                     logger.LogInfo(String.Format("Rdf.Id={0}, character vx={1},vy={7} slipped with aShape={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, touchCells=\n{6}", currRenderFrame.Id, currCharacterDownsync.VirtualGridX, aShape.ToString(false), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), aCollider.TouchingCellsStaticColliderStr(), currCharacterDownsync.VirtualGridY));
                 }
-                */
 
                 if (landedOnGravityPushback) {
                     if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
@@ -1827,7 +1825,7 @@ namespace shared {
                 var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList;
                 if (0 < spawnerSpeciesIdList.Count) {
                     int idx = currTrigger.ConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
-                    if (TRIGGER_MASK_BY_SUBSCRIPTION == currTrigger.Config.TriggerMask && (idx < 0 || idx >= spawnerSpeciesIdList.Count)) return;
+                    if (idx < 0 || idx >= spawnerSpeciesIdList.Count) return;
                     if (idx < 0) idx = 0;
                     if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;
                     ulong candNextWaveNpcKilledEvtMaskCounter = (0 == nextWaveNpcKilledEvtMaskCounter ? 1 : (nextWaveNpcKilledEvtMaskCounter << 1));
@@ -1870,16 +1868,26 @@ namespace shared {
                             trapInNextFrame.TrapState = TrapState.Tdestroyed;
                             trapInNextFrame.FramesInTrapState = 0;
                         } else {
-                            trapInNextFrame.DirX = configFromTiled.InitVelX;
-                            trapInNextFrame.DirY = configFromTiled.InitVelY;
-                            trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
-                            var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
-                            var invDirMag = InvSqrt32(dirMagSq);
-                            var speedXfac = invDirMag * configFromTiled.InitVelX;
-                            var speedYfac = invDirMag * configFromTiled.InitVelY;
-                            var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
-                            trapInNextFrame.VelX = (int)(speedXfac * speedVal);
-                            trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                            if (trapInNextFrame.CapturedByPatrolCue) {
+                                trapInNextFrame.CapturedByPatrolCue = false; // [WARNING] Important to help this trap escape its currently capturing PatrolCue!
+                                var dirMagSq =  trapInNextFrame.DirX*trapInNextFrame.DirX + trapInNextFrame.DirY*trapInNextFrame.DirY;
+                                var invDirMag = InvSqrt32(dirMagSq);
+                                var speedXfac = invDirMag * trapInNextFrame.DirX;
+                                var speedYfac = invDirMag * trapInNextFrame.DirY;
+                                var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
+                                trapInNextFrame.VelX = (int)(speedXfac * speedVal);
+                                trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                            } else {
+                                trapInNextFrame.DirX = configFromTiled.InitVelX;
+                                trapInNextFrame.DirY = configFromTiled.InitVelY;
+                                var dirMagSq = configFromTiled.InitVelX * configFromTiled.InitVelX + configFromTiled.InitVelY * configFromTiled.InitVelY;
+                                var invDirMag = InvSqrt32(dirMagSq);
+                                var speedXfac = invDirMag * configFromTiled.InitVelX;
+                                var speedYfac = invDirMag * configFromTiled.InitVelY;
+                                var speedVal = trapInNextFrame.ConfigFromTiled.Speed;
+                                trapInNextFrame.VelX = (int)(speedXfac * speedVal);
+                                trapInNextFrame.VelY = (int)(speedYfac * speedVal);
+                            }
                         }
                     }
                 }
@@ -1934,7 +1942,7 @@ namespace shared {
                         triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
                         triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;
                         if (
-                            (TimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId || WaveTimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId)
+                            WaveTimedDoor1.SpeciesId == currTrigger.ConfigFromTiled.SpeciesId
                             &&
                             currTrigger.ConfigFromTiled.SubscriptionId == nextRdfWaveNpcKilledEvtSub.Id
                         ) {

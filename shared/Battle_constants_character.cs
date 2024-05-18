@@ -68,6 +68,9 @@ namespace shared {
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
+                        SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
+                        SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                         DefaultAirDashQuota = 1,
                         DefaultAirJumpQuota = 1,
                         UseIsolatedAvatar = true,
@@ -97,7 +100,7 @@ namespace shared {
                         GetUpFramesToRecover = 14,
                         Speed = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        JumpingInitVelY = (int)(7.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 8,
                         VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -116,7 +119,10 @@ namespace shared {
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 4,
-                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,  
+                        SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
+                        SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
+                        SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_WITCHGIRL, new CharacterConfig {
@@ -155,6 +161,9 @@ namespace shared {
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 4, // Thus when hit by MagicPistolBullet she needs FramesToRecover!
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
+                        SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
+                        SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                         DefaultAirDashQuota = 1,
                         DefaultAirJumpQuota = 0,
                         InitInventorySlots = new List<InventorySlot> {
@@ -183,7 +192,7 @@ namespace shared {
                         GetUpFramesToRecover = 27,
                         Speed = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        JumpingInitVelY = (int)(7.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 8,
                         VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -202,7 +211,10 @@ namespace shared {
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 4,
-                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
+                        SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
+                        SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_DEMON_FIRE_SLIME, new CharacterConfig {
@@ -228,7 +240,7 @@ namespace shared {
                         DefaultSizeX = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DefaultSizeY = (int)(90 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         ShrinkedSizeX = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        ShrinkedSizeY = (int)(60 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeX = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         LayDownSizeY = (int)(90 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(50 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -239,7 +251,10 @@ namespace shared {
                         HasDimmedAnim = true,
                         ProactiveJumpStartupFrames = 16,
                         Hardness = 8,
-                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,   
+                        SlipJumpThresHoldBelowTopFace = (SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE * 2.0f),
+                        SlipJumpThresHoldBelowTopFaceV = (SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL << 1),
+                        SlipJumpCharacterDropVirtual = (SLIP_JUMP_CHARACTER_DROP_VIRTUAL << 1),
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_GOBLIN, new CharacterConfig {
@@ -274,7 +289,10 @@ namespace shared {
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 4,
-                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID  
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,  
+                        SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
+                        SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
+                        SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_MAGSWORDGIRL, new CharacterConfig {
@@ -315,6 +333,9 @@ namespace shared {
                         UseInventoryBtnB = true,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
+                        SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
+                        SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                         DefaultAirDashQuota = 3, // Her air dash is an attack, thus should be quite limited
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
@@ -381,6 +402,9 @@ namespace shared {
                         ProactiveJumpStartupFrames = 3,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
+                        SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
+                        SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                     }),
 
                     new KeyValuePair<int, CharacterConfig>(SPECIES_BAT, new CharacterConfig {

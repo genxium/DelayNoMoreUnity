@@ -86,6 +86,7 @@ namespace shared {
                     break;
                 }
                 int trapLocalId = TERMINATING_TRAP_ID;
+                bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
                 bool isBarrier = false;
                 bool onTrap = false;
                 bool providesSlipJump = false;
@@ -100,10 +101,16 @@ namespace shared {
                         break;
                     case TrapColliderAttr v4:
                         trapLocalId = v4.TrapLocalId;
-                        providesSlipJump = v4.ProvidesSlipJump;
-                        forcesCrouching = v4.ForcesCrouching;
+                        providesSlipJump = (v4.ProvidesSlipJump && !isCharacterFlying);
+                        forcesCrouching = (v4.ForcesCrouching && !isCharacterFlying); // Obviously you cannot crouch when flying...
                         var trap = currRenderFrame.TrapsArr[trapLocalId];
-                        onTrap = (v4.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
+                        /*
+                        [WARNING]
+
+                        It's a bit tricky here, as currently "v4.ProvidesSlipJump" implies "v4.ProvidesHardPushback", but we want flying characters to be able to freely fly across "v4.ProvidesSlipJump & v4.ProvidesHardPushback" yet not "!v4.ProvidesSlipJump & v4.ProvidesHardPushback".
+                        */
+                        bool specialFlyingPass = (isCharacterFlying && v4.ProvidesSlipJump);
+                        onTrap = (v4.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState && !specialFlyingPass); 
                         isBarrier = onTrap;
                         break;
                     case TriggerColliderAttr v5:
@@ -155,14 +162,14 @@ namespace shared {
                     /*
                     Only provides hardPushbacks when 
                     - the character is not uprising, and
-                    - the "bottom of the character" is higher than "top of the barrier rectangle - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE". 
+                    - the "bottom of the character" is higher than "top of the barrier rectangle - chConfig.SlipJumpThresHoldBelowTopFace". 
                     */
                     if (0 < currCharacterDownsync.VelY) {
                         continue;
                     }
                     float characterBottom = aCollider.Y;
                     float barrierTop = bCollider.Y + bCollider.H;
-                    if (characterBottom < (barrierTop - SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE)) {
+                    if (characterBottom < (barrierTop - chConfig.SlipJumpThresHoldBelowTopFace)) {
                         continue;
                     }
                 }

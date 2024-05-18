@@ -97,7 +97,7 @@ public class OfflineMapController : AbstractMapController {
                 cachedStartRdf = startRdf;
 
                 applyRoomDownsyncFrameDynamics(startRdf, null);
-                cameraTrack(startRdf, null);
+                cameraTrack(startRdf, null, false);
                 var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
                 Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
                 initSeqNo++;

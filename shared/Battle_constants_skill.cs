@@ -276,7 +276,63 @@ namespace shared {
         }
         .AddHit(DemonFireSlimeMelee1PrimaryBullet);
 
-        public static BulletConfig DemonFireSlimeFireballPivotBullet = new BulletConfig {
+        private static BulletConfig FireTornadoStarterBullet = new BulletConfig {
+            StartupFrames = 25,
+            ActiveFrames = 480,
+            HitStunFrames = 25,
+            BlockStunFrames = 60,
+            Damage = 20,
+            PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(-8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // [WARNING] Such that it can start on slope!
+            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(80 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 12,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 25,
+            Speed = (int)(3 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            DownSlopePrimerVelY = (int)(-1.6f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // A bullet is generally faster than a character, make sure that the downslope speed is large enough!
+            BType = BulletType.GroundWave,
+            CharacterEmitSfxName = "FlameEmit1",
+            ExplosionSfxName = "Explosion4",
+            MhType = MultiHitType.FromPrevHitActual,
+            MhVanishOnMeleeHit = false, // Makes it more powerful on ground than the SlashNova
+            RemainsUponHit = true,
+            CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX, 
+        };
+
+        private static BulletConfig FireTornadoRepeatingBullet = new BulletConfig {
+            StartupFrames = 0,
+            ActiveFrames = 60,
+            HitStunFrames = 60,
+            BlockStunFrames = 60,
+            Damage = 30,
+            // No pushbacks
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            HitboxOffsetY = (int)(-8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(80 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 22,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 25,
+            Speed = 0,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Explosion4",
+            CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX
+        };
+
+        public static BulletConfig DemonFireSlimeFireballWeakBullet = new BulletConfig {
             StartupFrames = 25,
             ActiveFrames = 360,
             HitStunFrames = 25,
@@ -300,10 +356,13 @@ namespace shared {
             FireballEmitSfxName = "FlameEmit1",
             ExplosionSfxName = "Explosion4",
             ExplosionVfxSpeciesId = VfxFireExplodingBig.SpeciesId,
-            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX,
             SimultaneousMultiHitCnt = 2
         };
 
+        public static BulletConfig DemonFireSlimeFireballPivotBullet = FireTornadoStarterBullet;
+
+        /*
         public static Skill DemonFireSlimeFireballSkill = new Skill {
             RecoveryFrames = 90,
             RecoveryFramesOnBlock = 90,
@@ -312,9 +371,7 @@ namespace shared {
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk2
         }
-        .AddHit(
-                DemonFireSlimeFireballPivotBullet
-               )
+        .AddHit(DemonFireSlimeFireballPivotBullet)
             .AddHit(
                     new BulletConfig(DemonFireSlimeFireballPivotBullet)
                     .SetDir(1, -1)
@@ -331,6 +388,18 @@ namespace shared {
                     .SetPushbacks((int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(+0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                     .SetSimultaneousMultiHitCnt(0u)
                    );
+        */
+
+        public static Skill DemonFireSlimeFireballSkill = new Skill {
+            RecoveryFrames = 90,
+            RecoveryFramesOnBlock = 90,
+            RecoveryFramesOnHit = 90,
+            MpDelta = 800,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk2
+        }
+        .AddHit(DemonFireSlimeFireballPivotBullet)
+        .AddHit(FireTornadoRepeatingBullet);
 
         private static BulletConfig PistolBulletAir = new BulletConfig {
             StartupFrames = 2,
@@ -2108,7 +2177,7 @@ namespace shared {
                 case SPECIES_DEMON_FIRE_SLIME:
                     switch (patternId) {
                         case PATTERN_B:
-                            if (!notRecovered && !currCharacterDownsync.InAir) {
+                            if (!notRecovered) {
                                 return 14;
                             } else {
                                 return NO_SKILL;

@@ -2,7 +2,7 @@
 <tileset version="1.10" tiledversion="1.10.2" name="Forest16" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
  <image source="forest16.png" width="512" height="512"/>
  <wangsets>
-  <wangset name="Terrains" type="corner" tile="-1">
+  <wangset name="CornerSet" type="corner" tile="-1">
    <wangcolor name="Dark Dirt" color="#ff0000" tile="100" probability="1"/>
    <wangcolor name="Red Dirt" color="#00ff00" tile="103" probability="1"/>
    <wangcolor name="Black Dirt" color="#0000ff" tile="106" probability="1"/>

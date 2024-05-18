@@ -80,5 +80,9 @@ namespace shared {
         public bool UseIsolatedAvatar;
 
         public List<InventorySlot> InitInventorySlots;
+
+        public float SlipJumpThresHoldBelowTopFace; 
+        public int SlipJumpThresHoldBelowTopFaceV;
+        public int SlipJumpCharacterDropVirtual; 
     }
 }

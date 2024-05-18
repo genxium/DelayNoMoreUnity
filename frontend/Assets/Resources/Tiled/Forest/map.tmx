@@ -588,7 +588,7 @@
    </properties>
    <point/>
   </object>
-  <object id="331" x="996" y="356">
+  <object id="331" name="SawCue1" x="996" y="356">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
@@ -599,7 +599,7 @@
    </properties>
    <point/>
   </object>
-  <object id="332" x="996" y="592">
+  <object id="332" name="SawCue2" x="996" y="592">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="3"/>
@@ -614,7 +614,7 @@
    </properties>
    <point/>
   </object>
-  <object id="333" x="1148" y="240">
+  <object id="333" name="SawCue4" x="1148" y="240">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
@@ -625,7 +625,7 @@
    </properties>
    <point/>
   </object>
-  <object id="334" x="1148" y="592">
+  <object id="334" name="SawCue3" x="1148" y="592">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="4"/>

@@ -395,11 +395,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
-        if (isBattleResultSet(confirmedBattleResult)) {
-            StartCoroutine(delayToShowSettlementPanel());
-            return;
-        }
-
         // Put teamRibbons and hpBars to infinitely far first
         for (int i = cachedTeamRibbons.vals.StFrameId; i < cachedTeamRibbons.vals.EdFrameId; i++) {
             var (res, teamRibbon) = cachedTeamRibbons.vals.GetByFrameId(i);
@@ -878,16 +873,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         int cacheCapacityPerSpeciesId = 4;
         string[] allVfxPrefabNames = new string[] {
             "1_Dashing_Active",
-            "2_Fire_Exploding_Big",
-            "3_Ice_Exploding_Big",
-            "4_Fire_Slash_Active",
-            "5_Slash_Active",
-            "6_Spike_Slash_Exploding",
-            "7_Fire_PointLight_Active",
-            "8_Pistol_Bullet_Exploding",
-            "9_Slash_Exploding",
-            "10_Ice_Lingering",
-            "11_Xform"
         };
 
         foreach (string name in allVfxPrefabNames) {
@@ -1382,10 +1367,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         if (battleResultIsSet) {
-            var (ok1, currRdf) = renderBuffer.GetByFrameId(playerRdfId - 1);
+            var (ok1, currRdf) = renderBuffer.GetByFrameId(playerRdfId);
             if (ok1 && null != currRdf) {
-                cameraTrack(currRdf, null);
+                cameraTrack(currRdf, null, true);
             }
+
+            Debug.Log(String.Format("@playerRdfId={0}, #1 confirmedBattleResult={1}, about to show settlement early!", playerRdfId, confirmedBattleResult));
+            StartCoroutine(delayToShowSettlementPanel());
             return;
         }
 
@@ -1409,7 +1397,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
-        cameraTrack(rdf, prevRdf);
+        cameraTrack(rdf, prevRdf, false);
 
         bool battleResultIsSetAgain = isBattleResultSet(confirmedBattleResult);
         if (!battleResultIsSetAgain) {
@@ -1435,6 +1423,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected virtual void onBattleStopped() {
         if (ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState) {
+            Debug.LogWarning(String.Format("@playerRdfId={0}, unable to stop battle due to invalid state transition; now battleState={1}", playerRdfId, battleState));
             return;
         }
         playerRdfId = 0;
@@ -2227,9 +2216,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         posHolder.Set(newX, newY, newZ);
     }
 
-    protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
+    protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf, bool battleResultIsSet) {
         if (null == selfPlayerInfo) return;
-        int targetJoinIndex = isBattleResultSet(confirmedBattleResult) ? confirmedBattleResult.WinnerJoinIndex : selfPlayerInfo.JoinIndex;
+        int targetJoinIndex = battleResultIsSet ? confirmedBattleResult.WinnerJoinIndex : selfPlayerInfo.JoinIndex;
 
         var playerGameObj = playerGameObjs[targetJoinIndex - 1];
         var playerCharacterDownsync = rdf.PlayersArr[targetJoinIndex - 1];
@@ -2239,7 +2228,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var cameraSpeedInWorld = camSpeedHolder.magnitude * 100;
 
         var prevPlayerCharacterDownsync = (null == prevRdf || null == prevRdf.PlayersArr) ? null : prevRdf.PlayersArr[targetJoinIndex - 1];
-        if ((null != prevPlayerCharacterDownsync && CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState) || isBattleResultSet(confirmedBattleResult)) {
+        if ((null != prevPlayerCharacterDownsync && CharacterState.Dying == prevPlayerCharacterDownsync.CharacterState) || battleResultIsSet) {
             cameraSpeedInWorld *= 200;
         }
 

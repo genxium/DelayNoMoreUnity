@@ -51,7 +51,7 @@ public class OnlineMapController : AbstractMapController {
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
-                    resetCurrentMatch("Forest");
+                    resetCurrentMatch("ForestVersus");
                     calcCameraCaps();
                     preallocateHolders();
                     preallocateVfxNodes();
@@ -150,7 +150,7 @@ public class OnlineMapController : AbstractMapController {
                     var (ok2, toPatchStartRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
                     patchStartRdf(toPatchStartRdf, speciesIdList);
                     applyRoomDownsyncFrameDynamics(toPatchStartRdf, null);
-                    cameraTrack(toPatchStartRdf, null);
+                    cameraTrack(toPatchStartRdf, null, false);
                     var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
                     networkInfoPanel.gameObject.SetActive(true);
                     playerWaitingPanel.gameObject.SetActive(false);
@@ -341,6 +341,11 @@ public class OnlineMapController : AbstractMapController {
         try {
             if (ROOM_STATE_STOPPED == battleState) {
                 // For proactive exit
+                return;
+            }
+
+            if (ROOM_STATE_IN_SETTLEMENT == battleState) {
+                // For settlement 
                 return;
             }
             pollAndHandleWsRecvBuffer();
