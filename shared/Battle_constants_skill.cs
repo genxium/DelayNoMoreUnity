@@ -1578,8 +1578,6 @@ namespace shared {
                                         BType = BulletType.Melee,
                                         Hardness = 5,
                                         OmitSoftPushback = true,
-                                        IsPixelatedActiveVfx = true,
-                                        ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                         CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                                         }
                                 )),

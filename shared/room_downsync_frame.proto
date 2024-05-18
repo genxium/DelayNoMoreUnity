@@ -152,6 +152,8 @@ message CharacterDownsync {
     int32 killedToDropConsumableSpeciesId = 54;
 	int32 killedToDropBuffSpeciesId = 55;
 
+	int32 frictionVelY = 56; // Mostly from a dynamic trap
+
 	string name = 997;
 	string displayName = 998;
 	string avatar = 999;
