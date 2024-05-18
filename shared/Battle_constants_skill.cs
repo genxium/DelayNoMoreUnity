@@ -656,6 +656,7 @@ namespace shared {
             BType = BulletType.Melee,
             CharacterEmitSfxName = "SlashEmitSpd3",
             ExplosionSfxName = "Melee_Explosion2",
+            RemainsUponHit = true,
             DelaySelfVelToActive = true,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
@@ -1505,7 +1506,7 @@ namespace shared {
                                 PushbackVelX = NO_LOCK_VEL,
                                 PushbackVelY = NO_LOCK_VEL,
                                 SelfLockVelX = (int)(6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = 0,
+                                SelfLockVelY = (int)(-0.6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1563,10 +1564,10 @@ namespace shared {
                                     }
                                     .AddHit(
                                         new BulletConfig {
-                                        StartupFrames = 5,
+                                        StartupFrames = 3,
                                         PushbackVelX = NO_LOCK_VEL,
                                         PushbackVelY = NO_LOCK_VEL,
-                                        SelfLockVelX = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                        SelfLockVelX = (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                         SelfLockVelY = 0,
                                         DelaySelfVelToActive = true,
                                         SpeciesId = 1,
@@ -1576,10 +1577,12 @@ namespace shared {
                                         HitboxSizeY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                         BType = BulletType.Melee,
                                         Hardness = 5,
+                                        OmitSoftPushback = true,
+                                        IsPixelatedActiveVfx = true,
                                         ActiveVfxSpeciesId = VfxDashingActive.SpeciesId,
                                         CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                                         }
-                                        )),
+                                )),
 
                             new KeyValuePair<int, Skill>(34, new Skill {
                                     RecoveryFrames = 28,

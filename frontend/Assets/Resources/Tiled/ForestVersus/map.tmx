@@ -134,8 +134,6 @@
   <object id="372" name="SkeleArcher" x="128" y="624">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="killedToDropConsumableSpeciesId" value="1"/>
-    <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4098"/>
     <property name="static" value="1"/>
@@ -147,8 +145,6 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
-    <property name="publishingEvtMaskUponKilled" value="1"/>
-    <property name="publishingEvtSubIdUponKilled" value="2"/>
     <property name="speciesId" value="4098"/>
     <property name="static" value="1"/>
     <property name="teamId" value="3"/>
@@ -160,7 +156,6 @@
     <property name="dirX" value="0"/>
     <property name="killedToDropConsumableSpeciesId" value="2"/>
     <property name="speciesId" value="4099"/>
-    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -170,7 +165,6 @@
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="speciesId" value="4099"/>
-    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -189,7 +183,6 @@
     <property name="dirX" value="0"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="speciesId" value="4100"/>
-    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -199,7 +192,6 @@
     <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="speciesId" value="4100"/>
-    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>

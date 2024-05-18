@@ -307,7 +307,7 @@ namespace shared {
                         GetUpInvinsibleFrames = 10,
                         GetUpFramesToRecover = 30,
                         DashingEnabled = true,
-                        Speed = (int)(1.6f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        Speed = (int)(1.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         JumpingInitVelY = (int)(8.9 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 8,
@@ -357,10 +357,10 @@ namespace shared {
                             },
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,
-                                Quota = 36,
+                                Quota = 64,
                                 FramesToRecover = 0,
-                                DefaultQuota = 36,
-                                DefaultFramesToRecover = 4*BATTLE_DYNAMICS_FPS, 
+                                DefaultQuota = 64,
+                                DefaultFramesToRecover = 3*BATTLE_DYNAMICS_FPS, 
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = INVENTORY_BTN_B_SKILL,
                             }
