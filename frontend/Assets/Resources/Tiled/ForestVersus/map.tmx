@@ -173,7 +173,6 @@
    <properties>
     <property name="dirX" value="0"/>
     <property name="speciesId" value="4100"/>
-    <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
