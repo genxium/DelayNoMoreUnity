@@ -956,7 +956,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void preallocateHolders() {
         preallocateStepHolders(
             roomCapacity,
-            1024,
+            768,
             preallocNpcCapacity,
             preallocBulletCapacity,
             preallocTrapCapacity,

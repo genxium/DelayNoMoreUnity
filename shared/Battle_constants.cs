@@ -178,7 +178,7 @@ namespace shared {
 
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PREALLOC_NPC_CAPACITY = 32;
-        public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 64;
+        public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 96;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 16;
         public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 16;
@@ -203,6 +203,7 @@ namespace shared {
         public static int DEFAULT_PICKABLE_DISAPPEARING_ANIM_FRAMES = 10;
         public static int DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES = 30;
         public static int DEFAULT_PICKABLE_RISING_VEL_Y_VIRTUAL_GRID = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int DEFAULT_PICKABLE_NONCOLLIDING_FRAMES = (DEFAULT_PICKABLE_RISING_VEL_Y_VIRTUAL_GRID << 1)/GRAVITY_Y_JUMP_HOLDING;
 
         /*
 		   [WARNING]

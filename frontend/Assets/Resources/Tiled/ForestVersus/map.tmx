@@ -86,10 +86,10 @@
   </object>
  </objectgroup>
  <objectgroup id="13" name="TriggerPos">
-  <object id="547" gid="2147484995" x="1120" y="320" width="16" height="32">
+  <object id="547" name="TimedDoorR-1" gid="2147484995" x="1120" y="320" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="2"/>
-    <property name="characterSpawnerTimeSeq" value="1200:4097,1;1800:1,4098;3600:3,4098,4098;5000:4096"/>
+    <property name="characterSpawnerTimeSeq" value="1200:4097,1;1800:1,4098;3600:3,4098;5000:4096"/>
     <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="-2"/>
     <property name="initVelY" value="0"/>
@@ -110,10 +110,10 @@
     <property name="trackingIdList" value="2,3"/>
    </properties>
   </object>
-  <object id="563" gid="1347" x="176" y="320" width="16" height="32">
+  <object id="563" name="TimedDoorL-1" gid="1347" x="176" y="320" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="1"/>
-    <property name="characterSpawnerTimeSeq" value="1200:4097,1;1800:1,4098;3600:3,4098,4098;5000:4096"/>
+    <property name="characterSpawnerTimeSeq" value="1200:4097,1;1800:1,4098;3600:3,4098;5000:4096"/>
     <property name="delayedFrames" value="120"/>
     <property name="initVelX" value="+2"/>
     <property name="initVelY" value="0"/>

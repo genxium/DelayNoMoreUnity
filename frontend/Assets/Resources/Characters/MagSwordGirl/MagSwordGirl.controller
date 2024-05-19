@@ -170,6 +170,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 7355747284101810158}
     m_Position: {x: 860, y: 1170, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 5996059668853394854}
+    m_Position: {x: 895, y: 1235, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -431,6 +434,32 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: aaa9d443039cb6c4eb104f96f7f4a4f6, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &5996059668853394854
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Atk3
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: f42b6ca4d3b9dc34cb0c52e33d579dc4, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

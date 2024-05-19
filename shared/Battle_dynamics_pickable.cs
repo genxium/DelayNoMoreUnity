@@ -29,23 +29,28 @@ namespace shared {
                 if (dstVelY < DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID) {
                     dstVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID;
                 }
-                var (cx, cy) = VirtualGridToPolygonColliderCtr(newVx, newVy);
-                var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(DEFAULT_PICKABLE_HITBOX_SIZE_X, DEFAULT_PICKABLE_HITBOX_SIZE_Y);
-                var newCollider = dynamicRectangleColliders[colliderCnt];
-                UpdateRectCollider(newCollider, cx, cy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst, COLLISION_PICKABLE_INDEX_PREFIX);
+                
+                if (dst.FramesInPkState >= DEFAULT_PICKABLE_NONCOLLIDING_FRAMES) {
+                    var (cx, cy) = VirtualGridToPolygonColliderCtr(newVx, newVy);
+                    var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(DEFAULT_PICKABLE_HITBOX_SIZE_X, DEFAULT_PICKABLE_HITBOX_SIZE_Y);
+                    var newCollider = dynamicRectangleColliders[colliderCnt];
+                    UpdateRectCollider(newCollider, cx, cy, hitboxSizeCx, hitboxSizeCy, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, dst, COLLISION_PICKABLE_INDEX_PREFIX);
 
+                    collisionSys.AddSingle(newCollider);
+                } 
+                
+                // [WARNING] Always initialize "effPushbacks[colliderCnt]" and increment "colliderCnt" for convenient index alignment!  
                 effPushbacks[colliderCnt].X = 0;
                 effPushbacks[colliderCnt].Y = 0;
                 colliderCnt++;
 
-                collisionSys.AddSingle(newCollider);
                 dst.VirtualGridX = newVx;
                 dst.VirtualGridY = newVy;
                 dst.VelY = dstVelY;    
             }
 
             // Explicitly specify termination of nextRenderFramePickables
-            nextRenderFramePickables[pickableCnt].PickableLocalId = TERMINATING_PICKABLE_LOCAL_ID;
+            if (pickableCnt < nextRenderFramePickables.Count) nextRenderFramePickables[pickableCnt].PickableLocalId = TERMINATING_PICKABLE_LOCAL_ID;
         }
     }
 }

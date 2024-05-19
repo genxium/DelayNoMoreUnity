@@ -281,7 +281,7 @@ namespace shared {
             ActiveFrames = 480,
             HitStunFrames = 25,
             BlockStunFrames = 60,
-            Damage = 20,
+            Damage = 30,
             PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = NO_LOCK_VEL,
@@ -312,15 +312,15 @@ namespace shared {
             ActiveFrames = 60,
             HitStunFrames = 60,
             BlockStunFrames = 60,
-            Damage = 30,
-            // No pushbacks
+            Damage = 15,
+            PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
-            HitboxOffsetY = (int)(-8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(80 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 22,
-            ExplosionSpeciesId = 2,
+            ExplosionSpeciesId = 15,
             ExplosionFrames = 25,
             Speed = 0,
             DirX = 1,
@@ -482,14 +482,11 @@ namespace shared {
             ExplosionSfxName = "Explosion2",
             MhType = MultiHitType.FromPrevHitActual,
             MhVanishOnMeleeHit = true,
-            ActiveVfxSpeciesId = VfxMovingTornado.SpeciesId,
-            IsPixelatedActiveVfx = true,
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
         };
 
-        private static BulletConfig SlashNovaStarterBullet = new BulletConfig(SlashNovaRepeatingBullet).SetHitboxOffsets((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).SetStartupFrames(10).SetSpeed(SlashNovaRepeatingBullet.SpeedIfNotHit)
-        //.SetActiveVfxSpeciesId(VfxMovingTornado.SpeciesId).SetIsPixelatedActiveVfx(true)
-        ;
+        private static BulletConfig SlashNovaStarterBullet = new BulletConfig(SlashNovaRepeatingBullet).SetStartupFrames(18).SetHitboxOffsets((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).SetSpeed(SlashNovaRepeatingBullet.SpeedIfNotHit)
+        .SetActiveVfxSpeciesId(VfxMovingTornado.SpeciesId).SetIsPixelatedActiveVfx(true);
 
         private static BulletConfig SlashNovaEnderBullet = new BulletConfig(SlashNovaRepeatingBullet).SetStartupFrames(9).SetMhType(MultiHitType.None).SetSpeedIfNotHit(0).SetSpeed(SlashNovaRepeatingBullet.SpeedIfNotHit).SetPushbacks(
             (int)(0.3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // The last hit has some pushback 
@@ -1353,7 +1350,7 @@ namespace shared {
                             RecoveryFramesOnBlock = 60,
                             RecoveryFramesOnHit = 60,
                             TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk2
+                            BoundChState = Atk3
                             }
                             .AddHit(SlashNovaStarterBullet)
                             .AddHit(SlashNovaRepeatingBullet)
@@ -1565,19 +1562,18 @@ namespace shared {
                                     .AddHit(
                                         new BulletConfig {
                                         StartupFrames = 3,
+                                        ActiveFrames = 15,
                                         PushbackVelX = NO_LOCK_VEL,
                                         PushbackVelY = NO_LOCK_VEL,
                                         SelfLockVelX = (int)(5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                         SelfLockVelY = 0,
                                         DelaySelfVelToActive = true,
                                         SpeciesId = 1,
-                                        HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                        HitboxOffsetY = (int)(-12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                        HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                        HitboxSizeY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                         BType = BulletType.Melee,
                                         Hardness = 5,
                                         OmitSoftPushback = true,
+                                        ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+                                        IsPixelatedActiveVfx = true,
                                         CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                                         }
                                 )),
