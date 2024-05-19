@@ -237,8 +237,8 @@ namespace shared {
             return retCnt;
         }
 
-        public static int calcHardPushbacksNormsForBullet(RoomDownsyncFrame currRenderFrame, Bullet bullet, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, FrameRingBuffer<Collider> residueCollided, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, ILoggerBridge logger) {
-            // [WARNING] There's no plan for a GroundWave bullet to take "FrictionVelX" from a moving trap, thus no need for using "primaryTrap".
+        public static int calcHardPushbacksNormsForBullet(RoomDownsyncFrame currRenderFrame, Bullet bullet, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, FrameRingBuffer<Collider> residueCollided, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, ILoggerBridge logger) {
+            primaryTrap = null;
             int retCnt = 0;
             primaryOverlapIndex = -1;
             float primaryOverlapMag = float.MinValue;
@@ -257,6 +257,7 @@ namespace shared {
                 if (!exists || null == bCollider) {
                     break;
                 }
+                int trapLocalId = TERMINATING_TRAP_ID;
                 bool isAnotherHardPushbackTrap = false; 
                 bool isAnActualBarrier = false;
                 bool providesSlipJump = false;
@@ -268,6 +269,7 @@ namespace shared {
                     case TriggerColliderAttr v4:
                         break;
                     case TrapColliderAttr v5:
+                        trapLocalId = v5.TrapLocalId;
                         var trap = currRenderFrame.TrapsArr[v5.TrapLocalId];
                         isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdestroyed != trap.TrapState);
                         providesSlipJump = v5.ProvidesSlipJump;
@@ -322,6 +324,11 @@ namespace shared {
                     overlapResult.cloneInto(ref primaryOverlapResult);
                     primaryIsWall = isWall;
                     primaryWallTop = barrierTop;
+                    if (isAnotherHardPushbackTrap) {
+                        primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
+                    } else {
+                        primaryTrap = null;
+                    }
                 } else if (!isWall && primaryIsWall && barrierTop /* barrierTop is non-wall-top now */ < primaryWallTop) {
                     // Just skip, once the bullet is checked to collide with a wall, any parasitic non-wall collision would be ignored...
                 } else {
@@ -343,6 +350,12 @@ namespace shared {
                         primaryWallTop = barrierTop;
                     } else {            
                         primaryNonWallTop = barrierTop;
+                    }
+
+                    if (isAnotherHardPushbackTrap) {
+                        primaryTrap = currRenderFrame.TrapsArr[trapLocalId];
+                    } else {
+                        primaryTrap = null;
                     }
                 }
 

@@ -756,6 +756,15 @@ namespace shared {
             return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames < currRenderFrameId) && (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
         }
 
+        public static bool IsBulletJustActive(Bullet bullet, int currRenderFrameId) {
+            // [WARNING] Practically a bullet might propagate for a few render frames before hitting its visually "VertMovingTrapLocalIdUponActive"!
+            int visualBufferRdfCnt = 3; 
+            if (BulletState.Active == bullet.BlState) {
+                return visualBufferRdfCnt >= bullet.FramesInBlState;
+            }
+            return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames < currRenderFrameId && currRenderFrameId <= bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + visualBufferRdfCnt);
+        }
+
         public static bool IsBulletAlive(Bullet bullet, int currRenderFrameId) {
             if (BulletState.Exploding == bullet.BlState) {
                 return bullet.FramesInBlState < bullet.Config.ExplosionFrames;
@@ -816,7 +825,7 @@ namespace shared {
                         src.VirtualGridX, src.VirtualGridY, // virtual grid position
                         src.DirX, src.DirY, // dir
                         src.VelX, dstVelY, // velocity
-                        src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId, src.Config,
+                        src.BattleAttr.ActiveSkillHit, src.BattleAttr.SkillId, src.BattleAttr.VertMovingTrapLocalIdUponActive, src.Config,
                         src.Config.RepeatQuota, 
                         src.Config.DefaultHardPushbackBounceQuota,
                         src.TargetCharacterJoinIndex,
@@ -1473,7 +1482,8 @@ namespace shared {
                 }
                 var bulletShape = bulletCollider.Shape;
                 int primaryHardOverlapIndex;
-                int hardPushbackCnt = calcHardPushbacksNormsForBullet(currRenderFrame, bulletNextFrame, bulletCollider, bulletShape, hardPushbackNormsArr[i], residueCollided, collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, logger);
+                Trap? primaryTrap;
+                int hardPushbackCnt = calcHardPushbacksNormsForBullet(currRenderFrame, bulletNextFrame, bulletCollider, bulletShape, hardPushbackNormsArr[i], residueCollided, collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, logger);
 
                 bool exploded = false;
                 bool explodedOnAnotherCharacter = false;
@@ -1504,6 +1514,32 @@ namespace shared {
                             exploded = true;
                             explodedOnAnotherHarderBullet = true;
                         }
+                    } else if (BulletType.Fireball == bulletConfig.BType) {
+                        if (null != primaryTrap) {
+                            bool bulletJustBecameActive = IsBulletJustActive(bulletNextFrame, currRenderFrame.Id + 1);
+                            bool bulletIsStillActive = IsBulletActive(bulletNextFrame, currRenderFrame.Id + 1);
+                            if (bulletJustBecameActive) {
+                                float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);  
+                                bool landedOnGravityPushback = (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity); 
+                                if (landedOnGravityPushback && 0 < primaryTrap.VelY && primaryTrap.VelY == offenderNextFrame.FrictionVelY) {
+                                    bulletNextFrame.BattleAttr.VertMovingTrapLocalIdUponActive = primaryTrap.TrapLocalId;
+                                    effPushbacks[i].X += primaryOverlapResult.OverlapMag * primaryOverlapResult.OverlapX;
+                                    effPushbacks[i].Y += primaryOverlapResult.OverlapMag * primaryOverlapResult.OverlapY;
+                                    logger.LogInfo(String.Format("@rdf.Id={0}, bulletLocalId={1} marks VertMovingTrapLocalIdUponActive={2}", currRenderFrame.Id, bulletNextFrame.BattleAttr.BulletLocalId, primaryTrap.TrapLocalId));
+                                } else {
+                                    exploded = true;
+                                }
+                            } else if (bulletIsStillActive && primaryTrap.TrapLocalId == bulletNextFrame.BattleAttr.VertMovingTrapLocalIdUponActive) {
+                                // [WARNING] Neither "landedOnGravityPushback" nor "primaryTrap.VelY" matters in this case! Once remembered this bullet will pass thru this specific "VertMovingTrapLocalIdUponActive" from all sides! 
+                                effPushbacks[i].X += primaryOverlapResult.OverlapMag * primaryOverlapResult.OverlapX;
+                                effPushbacks[i].Y += primaryOverlapResult.OverlapMag * primaryOverlapResult.OverlapY;
+                                logger.LogInfo(String.Format("@rdf.Id={0}, bulletLocalId={1} rides on VertMovingTrapLocalIdUponActive={2}", currRenderFrame.Id, bulletNextFrame.BattleAttr.BulletLocalId, primaryTrap.TrapLocalId));
+                            } else {
+                                exploded = true;
+                            }
+                        } else {
+                            exploded = true;
+                        } 
                     } else {
                         // [WARNING] If the bullet "collisionTypeMask" is barrier penetrating, it'd not have reached "0 < hardPushbackCnt".
                         exploded = true;
@@ -2722,7 +2758,7 @@ namespace shared {
                     newVirtualY,
                     referenceBullet.DirX, referenceBullet.DirY, // dir
                     0, 0, // velocity
-                    referenceBullet.BattleAttr.ActiveSkillHit, referenceBullet.BattleAttr.SkillId, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
+                    referenceBullet.BattleAttr.ActiveSkillHit, referenceBullet.BattleAttr.SkillId, referenceBullet.BattleAttr.VertMovingTrapLocalIdUponActive, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
                     nextRenderFrameBullets[bulletCnt]);
 
             bulletLocalIdCounter++;
@@ -2764,7 +2800,7 @@ namespace shared {
                     newVirtualY, 
                     xfac * bulletConfig.DirX, bulletConfig.DirY, // dir
                     (int)(bulletSpeedXfac * bulletConfig.Speed), (int)(bulletSpeedYfac * bulletConfig.Speed) + groundWaveVelY, // velocity
-                    activeSkillHit, activeSkillId, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
+                    activeSkillHit, activeSkillId, TERMINATING_TRAP_ID, bulletConfig, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
                     nextRenderFrameBullets[bulletCnt]);
 
             bulletLocalIdCounter++;

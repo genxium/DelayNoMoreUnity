@@ -393,6 +393,7 @@ message BulletBattleAttr {
 	int32 activeSkillHit = 5; // for the convenience of selecting the correct next bullet for multihit fireball (where the offender's "activeSkillHit" might've already been reset)
 	int32 skillId = 6; // for the convenience of selecting the correct next bullet for multihit fireball (where the offender's "activeSkillId" might've already been reset); also for reverse lookup in multihit transition, in the most extreme case, a same "BulletConfig" instance is to be shared across different "Skill"s, thus we put "skillId" in "BulletBattleAttr" instead.
 
+    int32 vertMovingTrapLocalIdUponActive = 7; // [WARNING] Currently we can use "trapLocalId" to directly access "RoomDownsyncFrame.trapsArr" just like "joinIndex" in "calcHardPushbacksNormsForCharacter" -- because memory in "RoomDownsyncFrame.trapsArr" is never truely reused when a trap is destroyed -- yet this approach should be avoided whenever possible; kindly note that even "joinIndex" can be reused for "RoomDownsyncFrame.npcsArr" by carefully tuning "_leftShiftDeadNpcs(...)"  
 }
 
 message Bullet {
