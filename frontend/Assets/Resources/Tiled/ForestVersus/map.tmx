@@ -504,7 +504,7 @@
    </properties>
    <point/>
   </object>
-  <object id="533" name="SpikePlatformCue1Top" x="496" y="432">
+  <object id="533" name="SpikePlatformCue1Top" x="496" y="384">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
@@ -534,7 +534,7 @@
    </properties>
    <point/>
   </object>
-  <object id="536" name="SpikePlatformCue2Top" x="848" y="432">
+  <object id="536" name="SpikePlatformCue2Top" x="848" y="384">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="2"/>
