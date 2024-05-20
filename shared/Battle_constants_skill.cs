@@ -278,7 +278,7 @@ namespace shared {
 
         private static BulletConfig FireTornadoStarterBullet = new BulletConfig {
             StartupFrames = 25,
-            ActiveFrames = 480,
+            ActiveFrames = 240,
             HitStunFrames = 25,
             BlockStunFrames = 60,
             Damage = 30,
@@ -288,8 +288,8 @@ namespace shared {
             SelfLockVelY = NO_LOCK_VEL,
             HitboxOffsetX = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(-8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // [WARNING] Such that it can start on slope!
-            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(80 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(60 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 12,
             ExplosionSpeciesId = 2,
             ExplosionFrames = 25,
@@ -313,7 +313,7 @@ namespace shared {
             HitStunFrames = 60,
             BlockStunFrames = 60,
             Damage = 15,
-            PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelX = (int)(4f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
