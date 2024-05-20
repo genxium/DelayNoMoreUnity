@@ -62,7 +62,7 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
                 selectedSpeciesId = 2;
                 break;
             case 2:
-                selectedSpeciesId = 4096;
+                selectedSpeciesId = 6;
                 break;
         }
         if (null != postConfirmedCallback) {

@@ -735,7 +735,7 @@ GameObject:
   - component: {fileID: 1858582303510683808}
   - component: {fileID: 4611869433445917409}
   m_Layer: 5
-  m_Name: ForestVersus
+  m_Name: SmallForest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
