@@ -1180,6 +1180,7 @@ public class Room {
                 if (null != batch && 0 < batch.Count) {
                     var peerJoinIndex = pReq.JoinIndex;
                     // Broadcast to every other player in the same room/battle
+                    // TODO: Can I apply some early filters ("inputFrameId" v.s. "lastAllConfirmedInputFrameId" or "inputBuffer.StFrameId" or "inputBuffer.EdFrameId") here like those at the very beginning of "markConfirmationIfApplicable(...)"?
                     foreach (var (otherPlayerId, otherPlayer) in players) {
                         if (otherPlayerId == playerId) {
                             continue;
