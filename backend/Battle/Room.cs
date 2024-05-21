@@ -1299,7 +1299,7 @@ public class Room {
                     throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.ToString()));
                 }
                 foo.ConfirmedList = allConfirmedMask;
-                onInputFrameDownsyncAllConfirmed(foo, -1);
+                onInputFrameDownsyncAllConfirmed(foo, INVALID_DEFAULT_PLAYER_ID);
             }
             _logger.LogInformation(String.Format("[type#3 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId));
             /*
@@ -1319,7 +1319,7 @@ public class Room {
                 }
                 unconfirmedMask |= (allConfirmedMask ^ foo.ConfirmedList);
                 foo.ConfirmedList = allConfirmedMask;
-                onInputFrameDownsyncAllConfirmed(foo, -1);
+                onInputFrameDownsyncAllConfirmed(foo, INVALID_DEFAULT_PLAYER_ID);
             }
             if (0 < unconfirmedMask) {
                 _logger.LogInformation(String.Format("[type#1 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, InputFrameUpsyncDelayTolerance:{6}, unconfirmedMask={7}, lastForceResyncedRdfId={8}; there's a slow ticker suspect, forcing all-confirmation", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance, unconfirmedMask, lastForceResyncedRdfId));
@@ -1343,7 +1343,7 @@ public class Room {
                         throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.ToString()));
                     }
                     foo.ConfirmedList = allConfirmedMask;
-                    onInputFrameDownsyncAllConfirmed(foo, -1);
+                    onInputFrameDownsyncAllConfirmed(foo, INVALID_DEFAULT_PLAYER_ID);
                 }
                 _logger.LogInformation(String.Format("[type#2 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId));
                 unconfirmedMask = allConfirmedMask;
