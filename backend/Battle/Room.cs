@@ -1013,7 +1013,7 @@ public class Room {
         var resp = new WsResp {
             Ret = ErrCode.Ok,
             Act = ((backendDynamicsEnabled && refRenderFrame.ShouldForceResync) ? DOWNSYNC_MSG_ACT_FORCED_RESYNC : DOWNSYNC_MSG_ACT_INPUT_BATCH),
-            Rdf = (backendDynamicsEnabled ? refRenderFrame : null),
+            Rdf = ((backendDynamicsEnabled && refRenderFrame.ShouldForceResync) ? refRenderFrame : null),
             PeerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
         };
         if (null != inputBufferSnapshot.ToSendInputFrameDownsyncs) {
@@ -1110,7 +1110,9 @@ public class Room {
             await sendBytesSafelyAsync(playerId, player, content);
             
             if (shouldResync) {
-                _logger.LogInformation(String.Format("[resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState));
+                _logger.LogInformation(String.Format("[resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
+            } else {
+                _logger.LogInformation(String.Format("[ipt-sync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
             }
         } else {
             await sendBytesSafelyAsync(playerId, player, content);

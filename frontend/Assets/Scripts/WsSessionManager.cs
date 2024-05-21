@@ -14,7 +14,7 @@ using System.Collections.Concurrent;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
-    private const int receiveChunkSize = 16384; // The "RoomDownsyncFrame" would be 1900+ bytes.
+    private const int receiveChunkSize = 32768; // The "RoomDownsyncFrame" would be 24K+ bytes.
 
     /**
     I'm aware of that "C# ConcurrentQueue" is lock-free, thus safe to be accessed from the MainThread during "Update()" without introducing significant graphic lags. Reference https://devblogs.microsoft.com/pfxteam/faq-are-all-of-the-new-concurrent-collections-lock-free/.
@@ -200,6 +200,9 @@ public class WsSessionManager {
                 } else {
                     try {
                         WsResp resp = WsResp.Parser.ParseFrom(byteBuff, 0, result.Count);
+                        if (ErrCode.Ok != resp.Ret) {
+                            Debug.LogWarning(String.Format("@playerRdfId={0}, unexpected Ret={1}, b64 content={2}", playerId, resp.Ret, Convert.ToBase64String(byteBuff, 0, result.Count)));
+                        }
                         recvBuffer.Enqueue(resp);
                     } catch (Exception pbEx) {
                         Debug.LogWarning(String.Format("Protobuf parser exception is caught for 'Receive'; ex.Message={0}", pbEx.Message));
