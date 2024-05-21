@@ -1003,6 +1003,9 @@ public class Room {
         if (!ok1 || null == refRenderFrame) {
             throw new ArgumentNullException(String.Format("allocBytesFromInputBufferSnapshot-Required refRenderFrameId={0} for (roomId={1}, renderFrameId={2}) doesn't exist! inputBuffer={3}, renderBuffer={4}", inputBufferSnapshot.RefRenderFrameId, id, renderFrameId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
         }
+        if (refRenderFrame.Id != inputBufferSnapshot.RefRenderFrameId) {
+            throw new ArgumentException(String.Format("allocBytesFromInputBufferSnapshot-Required refRenderFrameId={0} for (roomId={1}, renderFrameId={2}) but got refRenderFrame.Id={5}! inputBuffer={3}, renderBuffer={4}", inputBufferSnapshot.RefRenderFrameId, id, renderFrameId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat(), refRenderFrame.Id));
+        }
 
         refRenderFrame.ShouldForceResync = inputBufferSnapshot.ShouldForceResync;
         refRenderFrame.BackendUnconfirmedMask = inputBufferSnapshot.UnconfirmedMask;
