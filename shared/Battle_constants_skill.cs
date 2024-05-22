@@ -309,8 +309,8 @@ namespace shared {
 
         private static BulletConfig FireTornadoRepeatingBullet = new BulletConfig {
             StartupFrames = 0,
-            ActiveFrames = 60,
-            HitStunFrames = 60,
+            ActiveFrames = 30,
+            HitStunFrames = MAX_INT,
             BlockStunFrames = 60,
             Damage = 15,
             PushbackVelX = (int)(4f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -329,6 +329,7 @@ namespace shared {
             BType = BulletType.Fireball,
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName = "Explosion4",
+            BlowUp = true,
             CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX
         };
 
@@ -391,10 +392,10 @@ namespace shared {
         */
 
         public static Skill DemonFireSlimeFireballSkill = new Skill {
-            RecoveryFrames = 90,
-            RecoveryFramesOnBlock = 90,
-            RecoveryFramesOnHit = 90,
-            MpDelta = 800,
+            RecoveryFrames = 120,
+            RecoveryFramesOnBlock = 120,
+            RecoveryFramesOnHit = 120,
+            MpDelta = 1200,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk2
         }
