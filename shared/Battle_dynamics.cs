@@ -753,7 +753,7 @@ namespace shared {
             if (BulletState.Exploding == bullet.BlState) {
                 return false;
             }
-            return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames < currRenderFrameId) && (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
+            return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames < currRenderFrameId) && (currRenderFrameId < bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames);
         }
 
         public static bool IsBulletJustActive(Bullet bullet, int currRenderFrameId) {
@@ -769,7 +769,7 @@ namespace shared {
             if (BulletState.Exploding == bullet.BlState) {
                 return bullet.FramesInBlState < bullet.Config.ExplosionFrames;
             }
-            return (bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames > currRenderFrameId);
+            return (currRenderFrameId < bullet.BattleAttr.OriginatedRenderFrameId + bullet.Config.StartupFrames + bullet.Config.ActiveFrames);
         }
 
         private static void _insertFromEmissionDerivedBullets(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> currRenderFrameBullets, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
@@ -1532,6 +1532,7 @@ namespace shared {
                                     logger.LogInfo(String.Format("@rdf.Id={0}, bulletLocalId={1} marks VertMovingTrapLocalIdUponActive={2}", currRenderFrame.Id, bulletNextFrame.BattleAttr.BulletLocalId, primaryTrap.TrapLocalId));
                                 } else {
                                     exploded = true;
+                                    explodedOnAnotherHarderBullet = true;
                                 }
                             } else if (bulletIsStillActive && primaryTrap.TrapLocalId == bulletNextFrame.BattleAttr.VertMovingTrapLocalIdUponActive) {
                                 // [WARNING] Neither "landedOnGravityPushback" nor "primaryTrap.VelY" matters in this case! Once remembered this bullet will pass thru this specific "VertMovingTrapLocalIdUponActive" from all sides! 
@@ -1540,9 +1541,11 @@ namespace shared {
                                 logger.LogInfo(String.Format("@rdf.Id={0}, bulletLocalId={1} rides on VertMovingTrapLocalIdUponActive={2}", currRenderFrame.Id, bulletNextFrame.BattleAttr.BulletLocalId, primaryTrap.TrapLocalId));
                             } else {
                                 exploded = true;
+                                explodedOnAnotherHarderBullet = true;
                             }
                         } else {
                             exploded = true;
+                            explodedOnAnotherHarderBullet = true;
                         } 
                     } else {
                         // [WARNING] If the bullet "collisionTypeMask" is barrier penetrating, it'd not have reached "0 < hardPushbackCnt".
@@ -1752,10 +1755,28 @@ namespace shared {
                             if (!COLLIDABLE_PAIRS.Contains(bulletNextFrame.Config.CollisionTypeMask | v4.Config.CollisionTypeMask)) {
                                 break;
                             }
-                            if (bulletNextFrame.BattleAttr.TeamId == v4.BattleAttr.TeamId) continue;
-                            if (bulletNextFrame.Config.Hardness > v4.Config.Hardness) continue;
-                            if (bulletNextFrame.Config.Hardness < v4.Config.Hardness) explodedOnAnotherHarderBullet = true;
-                            exploded = true;
+                            if (bulletNextFrame.BattleAttr.TeamId == v4.BattleAttr.TeamId) break;
+                            if (bulletNextFrame.Config.Hardness > v4.Config.Hardness) break;
+                            if (bulletNextFrame.Config.Hardness < v4.Config.Hardness) {
+                                exploded = true;
+                                explodedOnAnotherHarderBullet = true;
+                                break;
+                            }
+                            if (bulletNextFrame.Config.Hardness == v4.Config.Hardness) {
+                                // Same hardness, whether or not "bulletNextFrame" explodes depends on a few extra factors
+                                if (bulletNextFrame.Config.RemainsUponHit && v4.Config.RemainsUponHit) {
+                                    // e.g. FireTornadoStarterBullet v.s. IcePillarStarterBullet, special annihilation
+                                    exploded = true; 
+                                    explodedOnAnotherHarderBullet = true;
+                                } else if (!bulletNextFrame.Config.RemainsUponHit && v4.Config.RemainsUponHit) {
+                                    // "v4" wouldn't explode
+                                    exploded = true; 
+                                    explodedOnAnotherHarderBullet = true;
+                                } else {
+                                    // bulletNextFrame.Config.RemainsUponHit && !v4.Config.RemainsUponHit, let "v4" play its own explosion alone
+                                    exploded = false; 
+                                }
+                            }
                             break;
                         default:
                             exploded = true;
@@ -1764,7 +1785,7 @@ namespace shared {
                 }
 
                 bool inTheMiddleOfMultihitTransition = false;
-                if (MultiHitType.None != bulletNextFrame.Config.MhType && false == explodedOnAnotherHarderBullet) {
+                if (MultiHitType.None != bulletNextFrame.Config.MhType && !explodedOnAnotherHarderBullet) {
                     if (bulletNextFrame.BattleAttr.ActiveSkillHit + 1 < skillConfig.Hits.Count) {
                         inTheMiddleOfMultihitTransition = true;
                     }
@@ -1783,6 +1804,7 @@ namespace shared {
                                 }
                             }
                         } else {
+                            // Melee bullet && exploded && RemainsUponHit
                             if (explodedOnAnotherCharacter) {
                                 addNewBulletExplosionToNextFrame(currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
                             }
@@ -1795,7 +1817,15 @@ namespace shared {
                             }
                         } else {
                             // bulletConfig.RemainsUponHit && !explodedOnAnotherHarderBullet
-                            addNewBulletExplosionToNextFrame(currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
+                            if (explodedOnAnotherCharacter) {
+                                addNewBulletExplosionToNextFrame(currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, logger);
+                            } else {
+                                // When hitting a barrier, it's THE END for a (Fireball | GroundWave) even with "bulletConfig.RemainsUponHit"
+                                if (BulletState.Exploding != bulletNextFrame.BlState) {
+                                    bulletNextFrame.BlState = BulletState.Exploding;
+                                    bulletNextFrame.FramesInBlState = 0;
+                                }
+                            }
                         }
                         if (inTheMiddleOfMultihitTransition) {
                             bool dummyHasLockVel = false;
