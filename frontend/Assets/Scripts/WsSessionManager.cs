@@ -14,7 +14,6 @@ using System.Collections.Concurrent;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
-    private const int receiveChunkSize = 32768; // The "RoomDownsyncFrame" would be 24K+ bytes.
 
     /**
     I'm aware of that "C# ConcurrentQueue" is lock-free, thus safe to be accessed from the MainThread during "Update()" without introducing significant graphic lags. Reference https://devblogs.microsoft.com/pfxteam/faq-are-all-of-the-new-concurrent-collections-lock-free/.
@@ -168,7 +167,11 @@ public class WsSessionManager {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
                 if (senderBuffer.TryTake(out toSendObj, sendBufferReadTimeoutMillis, cancellationToken)) {
                     //Debug.Log("Ws session send: before");
-                    await ws.SendAsync(new ArraySegment<byte>(toSendObj.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
+                    var content = new ArraySegment<byte>(toSendObj.ToByteArray());
+                    if (Battle.BACKEND_WS_RECV_BYTELENGTH < content.Count) {
+                        Debug.LogWarning(String.Format("[content too big!] contentByteLength={0} > BACKEND_WS_RECV_BYTELENGTH={1}", content, Battle.BACKEND_WS_RECV_BYTELENGTH));
+                    }
+                    await ws.SendAsync(content, WebSocketMessageType.Binary, true, cancellationToken);
                     //Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
                 }
             }
@@ -183,11 +186,12 @@ public class WsSessionManager {
 
     private async Task Receive(ClientWebSocket ws, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
         Debug.Log(String.Format("Starts 'Receive' loop, ws.State={0}, cancellationToken.IsCancellationRequested={1}", ws.State, cancellationToken.IsCancellationRequested));
-        byte[] byteBuff = new byte[receiveChunkSize];
+        byte[] byteBuff = new byte[Battle.FRONTEND_WS_RECV_BYTELENGTH];
+        var arrSegBytes = new ArraySegment<byte>(byteBuff);
         try {
             while (WebSocketState.Open == ws.State) {
                 //Debug.Log("Ws session recv: before");
-                var result = await ws.ReceiveAsync(new ArraySegment<byte>(byteBuff), cancellationToken);
+                var result = await ws.ReceiveAsync(arrSegBytes, cancellationToken);
                 //Debug.Log("Ws session recv: after");
                 if (WebSocketMessageType.Close == result.MessageType) {
                     Debug.Log(String.Format("WsSession is asked by remote to close in 'Receive'"));

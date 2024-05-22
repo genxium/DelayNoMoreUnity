@@ -114,12 +114,11 @@ public class WebSocketController : ControllerBase {
                 _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1} ]: {2}", room.id, playerId, initWsResp);
                 await session.SendAsync(new ArraySegment<byte>(initWsResp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationToken);
                 
-                const int receiveChunkSize = 21845;
-                var buffer = new byte[receiveChunkSize];
+                var recvBuffer = new byte[shared.Battle.BACKEND_WS_RECV_BYTELENGTH];
+                var arrSegBytes = new ArraySegment<byte>(recvBuffer); 
                 while (!cancellationToken.IsCancellationRequested) {
                     try {
-                        var receiveResult = await session.ReceiveAsync(
-                        new ArraySegment<byte>(buffer), cancellationToken);
+                        var receiveResult = await session.ReceiveAsync(arrSegBytes, cancellationToken);
 
                         if (receiveResult.CloseStatus.HasValue) {
                             _logger.LogWarning("Player proactively requests close of session for [ roomId={0}, playerId={1} ]", room.id, playerId);
@@ -128,7 +127,7 @@ public class WebSocketController : ControllerBase {
                             break;
                         }
 
-                        WsReq pReq = WsReq.Parser.ParseFrom(buffer, 0, receiveResult.Count);
+                        WsReq pReq = WsReq.Parser.ParseFrom(recvBuffer, 0, receiveResult.Count);
                         switch (pReq.Act) {
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK:
 

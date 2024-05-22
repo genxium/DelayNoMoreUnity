@@ -178,7 +178,7 @@ namespace shared {
 
         public static int DEFAULT_PLAYER_RADIUS = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PREALLOC_NPC_CAPACITY = 32;
-        public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 96;
+        public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 72;
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 24;
         public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 16;
         public static int DEFAULT_PREALLOC_EVTSUB_CAPACITY = 16;
@@ -254,6 +254,9 @@ namespace shared {
         public static int TERMINATING_CONSUMABLE_SPECIES_ID = 0; // Default for proto int32 to save space in "CharacterDownsync.killedToDropConsumableSpeciesId"
 
         public static int DEFAULT_BULLET_TEAM_ID = (1028);
+
+        public static int FRONTEND_WS_RECV_BYTELENGTH = 18432; // Expirically enough and not too big to have a graphic smoothness impact when receiving
+        public static int BACKEND_WS_RECV_BYTELENGTH = 21845; // Slightly larger than FRONTEND_WS_RECV_BYTELENGTH because it has to receive some initial collider information
 
         // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.
         public static int[,] DIRECTION_DECODER = new int[,] {

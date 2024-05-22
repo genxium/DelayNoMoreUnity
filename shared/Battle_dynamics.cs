@@ -1261,6 +1261,8 @@ namespace shared {
                                 if (v1.OmitGravity && v1.RepelSoftPushback && 0 > thatCharacterInNextFrame.VelY) {
                                     // To avoid the need for keeping track of another "frictionVelX"
                                     thatCharacterInNextFrame.VelY += chConfig.JumpingInitVelY;
+                                } else if (0 < v1.FrictionVelY && thatCharacterInNextFrame.FrictionVelY < v1.FrictionVelY) {
+                                    thatCharacterInNextFrame.FrictionVelY = v1.FrictionVelY;
                                 }
                             }
                         }
@@ -1841,7 +1843,9 @@ namespace shared {
                 if (0 < hardPushbackCnt) {
                     processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
 
-                    if (SNAP_INTO_PLATFORM_THRESHOLD < Math.Abs(pickableNextFrame.VelY)) {
+                    float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);  
+                    bool landedOnGravityPushback = (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity); 
+                    if (landedOnGravityPushback) {
                         pickableNextFrame.VelY = 0;
                     }
                 }
