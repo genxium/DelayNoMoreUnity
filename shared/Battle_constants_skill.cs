@@ -278,7 +278,7 @@ namespace shared {
 
         private static BulletConfig FireTornadoStarterBullet = new BulletConfig {
             StartupFrames = 25,
-            ActiveFrames = 240,
+            ActiveFrames = 192,
             HitStunFrames = 25,
             BlockStunFrames = 60,
             Damage = 30,
@@ -496,8 +496,8 @@ namespace shared {
 
         private static BulletConfig IcePillarStarterBullet = new BulletConfig {
             StartupFrames = 35,
-            ActiveFrames = 500,
-            HitStunFrames = 20,
+            ActiveFrames = 480,
+            HitStunFrames = 65,
             BlockStunFrames = 60,
             Damage = 5,
             PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -528,9 +528,9 @@ namespace shared {
 
         private static BulletConfig IcePillarRepeatingBullet = new BulletConfig {
             StartupFrames = 0,
-            ActiveFrames = 60,
-            HitStunFrames = 60,
-            BlockStunFrames = 60,
+            ActiveFrames = 30,
+            HitStunFrames = 30,
+            BlockStunFrames = 30,
             Damage = 30,
             // No pushbacks
             SelfLockVelX = NO_LOCK_VEL,
@@ -831,8 +831,8 @@ namespace shared {
                                 PushbackVelY = (int)(-1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelY = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(14*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 BlowUp = false,
@@ -846,7 +846,6 @@ namespace shared {
                                 CharacterEmitSfxName = "SlashEmitSpd3",
                                 ExplosionSfxName="Melee_Explosion2",
                                 ExplosionVfxSpeciesId = VfxSlashExploding.SpeciesId,
-                                RemainsUponHit = true,
                                 MhType = MultiHitType.FromEmission,
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                                 }
@@ -863,7 +862,7 @@ namespace shared {
                             SelfLockVelX = 0,
                             SelfLockVelY = NO_LOCK_VEL,
                             HitboxOffsetX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             HitboxSizeX = (int)(64*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             SpeciesId = 2,
@@ -874,7 +873,6 @@ namespace shared {
                             DirY = 0,
                             Hardness = 7,
                             ExplosionSfxName="Melee_Explosion2",
-                            RemainsUponHit = true,
                             MhType = MultiHitType.FromEmission,
                             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                             }
@@ -890,8 +888,8 @@ namespace shared {
                             PushbackVelY = (int)(-1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             SelfLockVelX = NO_LOCK_VEL,
                             SelfLockVelY = NO_LOCK_VEL,
-                            HitboxOffsetX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxOffsetX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                            HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             HitboxSizeX = (int)(64*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                             SpeciesId = 2,
@@ -943,7 +941,6 @@ namespace shared {
                                 CharacterEmitSfxName="SlashEmitSpd3",
                                 ExplosionSfxName="Melee_Explosion2",
                                 MhType = MultiHitType.FromEmission,
-                                RemainsUponHit = true,
                                 ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                                 IsPixelatedActiveVfx = true,
                                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -975,7 +972,6 @@ namespace shared {
                     CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
-                    RemainsUponHit = true,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                     IsPixelatedActiveVfx = true,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -1007,7 +1003,6 @@ namespace shared {
                     CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
-                    RemainsUponHit = true,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                     IsPixelatedActiveVfx = true,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -1040,7 +1035,6 @@ namespace shared {
                     CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
-                    RemainsUponHit = true,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                     IsPixelatedActiveVfx = true,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -1073,7 +1067,6 @@ namespace shared {
                     CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
-                    RemainsUponHit = true,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
                     IsPixelatedActiveVfx = true,
                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -1957,7 +1950,7 @@ namespace shared {
                                 PushbackVelX = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 PushbackVelY = (int)(0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 SelfLockVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = NO_LOCK_VEL,
+                                SelfLockVelY = (int)(0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                                 HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1968,6 +1961,7 @@ namespace shared {
                                 DirX = 1,
                                 DirY = 0,
                                 Hardness = 6,
+                                RemainsUponHit = true,
                                 CharacterEmitSfxName = "SlashEmitSpd3",
                                 ExplosionSfxName="Melee_Explosion2",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
