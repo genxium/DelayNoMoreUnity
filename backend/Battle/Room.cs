@@ -10,6 +10,7 @@ using Google.Protobuf.Collections;
 namespace backend.Battle;
 public class Room {
 
+    private TimeSpan DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT = TimeSpan.FromMilliseconds(5000);
     private int renderBufferSize = 512;
     public int id;
     public int capacity;
@@ -1060,7 +1061,7 @@ public class Room {
             return;
         }
 
-        await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+        await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
     }
 
     private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, Pbc.RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, int act, int playerId, Player player, int peerJoinIndex) {
@@ -1098,9 +1099,10 @@ public class Room {
         }
 
         try {
-            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
         } catch (Exception ex) {
             _logger.LogError(ex, "Exception occurred during sendSafelyAsync to (roomId: {0}, playerId: {1})", id, playerId);
+            clearPlayerNetworkSession(playerId);
         }
     }
 
@@ -1136,6 +1138,7 @@ public class Room {
             }
         } catch (Exception ex) {
             _logger.LogError(ex, "Exception occurred during downsyncToSinglePlayerAsync to (roomId: {0}, playerId: {1})", id, playerId);
+            clearPlayerNetworkSession(playerId);
         }
     }
 
