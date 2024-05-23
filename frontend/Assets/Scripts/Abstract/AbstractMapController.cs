@@ -1113,7 +1113,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         justTriggeredStoryId = STORY_POINT_NONE;
         playerRdfId = 0;
         renderFrameIdLagTolerance = 4;
-        inputFrameDownsyncIdLagTolerance = 3;
+        inputFrameDownsyncIdLagTolerance = 75;
         chaserRenderFrameId = -1;
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;

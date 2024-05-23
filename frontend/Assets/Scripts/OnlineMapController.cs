@@ -355,7 +355,7 @@ public class OnlineMapController : AbstractMapController {
             }
 
             int noDelayInputFrameId = ConvertToNoDelayInputFrameId(playerRdfId);
-            if (noDelayInputFrameId - lastAllConfirmedInputFrameId > inputFrameDownsyncIdLagTolerance) {
+            if (0 <= lastAllConfirmedInputFrameId && noDelayInputFrameId - lastAllConfirmedInputFrameId > inputFrameDownsyncIdLagTolerance) {
                 var msg = String.Format("@playerRdfId={0}, noDelayInputFrameId={1}, lastAllConfirmedInputFrameId={2}, inputFrameDownsyncIdLagTolerance={3}: unstable ws session detected, please try another battle :)", playerRdfId, noDelayInputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsyncIdLagTolerance);
                 popupErrStackPanel(msg);
                 onWsSessionClosed();
