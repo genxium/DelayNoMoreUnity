@@ -1,11 +1,12 @@
 # Latest tag change notes
-v1.5.8 new features
+v1.5.9 new features
 - Updated existing levels and characters.
 - Tuned assets for DemonFireSlime.
 - Fixed fireball Y-axis inertia.
 - Accounted UDP upsyncs into `Room.inputBuffer` on `backend`.
 - Enhanced `backend` handling of `inputBufferSnapshot` serialization on both thread-safety and efficiency.
 - Fixed pickable stuck at upper platform.
+- Enhanced handling of halted ws session.
 
 v1.4.3 new features
 - Replaced MonkGirl by new character WitchGirl
