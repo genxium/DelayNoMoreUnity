@@ -1096,7 +1096,12 @@ public class Room {
         if (null != toSendInputFrameDownsyncs) {
             resp.InputFrameDownsyncBatch.AddRange(toSendInputFrameDownsyncs);
         }
-        await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+
+        try {
+            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Exception occurred during sendSafelyAsync to (roomId: {0}, playerId: {1})", id, playerId);
+        }
     }
 
     private async Task downsyncToSinglePlayerAsync(int playerId, Player player, ArraySegment<byte> content, int refRenderFrameId, bool shouldResync, int toSendInputFrameIdSt, int toSendInputFrameIdEd) {
@@ -1118,15 +1123,19 @@ public class Room {
             1. when player with a slower frontend clock lags significantly behind and thus wouldn't get its inputUpsync recognized due to faster "forceConfirmation"
             2. reconnection
         */ 
-        await sendBytesSafelyAsync(playerId, player, content);
+        try {
+            await sendBytesSafelyAsync(playerId, player, content);
 
-        player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
+            player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
-        if (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState) {
-            if (backendDynamicsEnabled && shouldResync) {
-                _logger.LogInformation(String.Format("[readded-resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
+            if (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState) {
+                if (backendDynamicsEnabled && shouldResync) {
+                    _logger.LogInformation(String.Format("[readded-resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
+                }
+                Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
             }
-            Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Exception occurred during downsyncToSinglePlayerAsync to (roomId: {0}, playerId: {1})", id, playerId);
         }
     }
 

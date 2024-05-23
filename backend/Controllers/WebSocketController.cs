@@ -165,9 +165,10 @@ public class WebSocketController : ControllerBase {
             } catch (Exception ex) {
                 _logger.LogError(ex, "Session got an exception");
             } finally {
+                _logger.LogInformation("Ending HandleNewPlayerPrimarySession in state={0} for [ roomId={1}, playerId={2}]", session.State, roomId, playerId);
                 // [WARNING] Checking session.State here is possibly not thread-safe, but it's not a big concern for now
                 if (WebSocketState.Aborted != session.State && WebSocketState.Closed != session.State) {
-                    _logger.LogWarning("About to explicitly close websocket session in state={3} for [ roomId={0}, playerId={1}]", roomId, playerId, session.State);
+                    _logger.LogWarning("About to explicitly close websocket session in state={0} for [ roomId={1}, playerId={2}]", session.State, roomId, playerId);
                     await session.CloseAsync(
                     closeCode,
                     closeReason,
