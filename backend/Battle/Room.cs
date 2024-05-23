@@ -689,9 +689,16 @@ public class Room {
             return;
         }
 
-        PlayerSessionAckWatchdog? watchdog;
-        if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
-            watchdog.Kick();
+        if (false == fromUDP) {
+            /*
+             [WARNING]
+            
+             When an Android client changes network AP from 4g to Wi-Fi, the "ws backend session" held by this C# WebSocket service could no longer send/receive packets to/from that Android client (HOWEVER, there's NO automatic close callback invoked for that "ws backend session"), therefore we only kick the watchdog upon ws session rx/tx for better sensitivity.
+             */
+            PlayerSessionAckWatchdog? watchdog;
+            if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
+                watchdog.Kick();
+            }
         }
 
         // I've been seeking a totally lock-free approach for this whole operation for a long time, but still it's safer to keep using "mutex inputBufferLock"... 
