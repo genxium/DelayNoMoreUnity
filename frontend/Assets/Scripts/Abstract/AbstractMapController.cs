@@ -226,14 +226,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                 // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here, we just have to assign "prefabbedInputList[(joinIndex-1)]" specifically and copy all others
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
             } else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
+                // TODO: prefab "jump holding" from "lastIndividuallyConfirmedInputFrameId[k]"?
                 prefabbedInputList[k] = lastIndividuallyConfirmedInputList[k];
                 // Don't predict "btnA & btnB"!
-                prefabbedInputList[k] = (prefabbedInputList[k] & 15);
+                prefabbedInputList[k] = (prefabbedInputList[k] & 15UL);
             } else if (null != previousInputFrameDownsync) {
+                // TODO: prefab "jump holding" from "previousInputFrameDownsync.InputList[k]"?
                 // When "self.lastIndividuallyConfirmedInputFrameId[k] > inputFrameId", don't use it to predict a historical input!
                 prefabbedInputList[k] = previousInputFrameDownsync.InputList[k];
                 // Don't predict "btnA & btnB"!
-                prefabbedInputList[k] = (prefabbedInputList[k] & 15);
+                prefabbedInputList[k] = (prefabbedInputList[k] & 15UL);
             }
         }
 
