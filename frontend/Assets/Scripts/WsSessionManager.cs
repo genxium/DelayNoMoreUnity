@@ -54,7 +54,7 @@ public class WsSessionManager {
     To my understanding, "BlockingCollection.TryTake(out dst, timeout, cancellationToken)" is equivalent to "dst = AsyncQueue.DequeueAsync(cancellationToken).Result", at least for my use case.
     */
     public BlockingCollection<WsReq> senderBuffer;
-    private int sendBufferReadTimeoutMillis = 512; 
+    private int sendBufferReadTimeoutMillis = 512;
     public Queue<WsResp> recvBuffer;
     private string uname;
     private string authToken; // cached for auto-login (TODO: link "save/load" of this value with persistent storage)
@@ -191,6 +191,7 @@ public class WsSessionManager {
         try {
             while (WebSocketState.Open == ws.State) {
                 //Debug.Log("Ws session recv: before");
+                // FIXME: Without a "read timeout" parameter, it's unable to detect slow or halted ws session here!
                 var result = await ws.ReceiveAsync(arrSegBytes, cancellationToken);
                 //Debug.Log("Ws session recv: after");
                 if (WebSocketMessageType.Close == result.MessageType) {

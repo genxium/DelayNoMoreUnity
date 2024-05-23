@@ -29,6 +29,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected int playerRdfId; // After battle started, always increments monotonically (even upon reconnection)
     protected int renderFrameIdLagTolerance;
+    protected int inputFrameDownsyncIdLagTolerance;
     protected int lastAllConfirmedInputFrameId;
     protected int lastUpsyncInputFrameId;
 
@@ -226,16 +227,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                 // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here, we just have to assign "prefabbedInputList[(joinIndex-1)]" specifically and copy all others
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
             } else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
-                // TODO: prefab "jump holding" from "lastIndividuallyConfirmedInputFrameId[k]"?
-                prefabbedInputList[k] = lastIndividuallyConfirmedInputList[k];
-                // Don't predict "btnA & btnB"!
-                prefabbedInputList[k] = (prefabbedInputList[k] & 15UL);
+                // Don't predict "btnB" -- yet predicting "btnA" for better "jump holding" consistency
+                prefabbedInputList[k] = (lastIndividuallyConfirmedInputList[k] & 31UL);
             } else if (null != previousInputFrameDownsync) {
-                // TODO: prefab "jump holding" from "previousInputFrameDownsync.InputList[k]"?
                 // When "self.lastIndividuallyConfirmedInputFrameId[k] > inputFrameId", don't use it to predict a historical input!
-                prefabbedInputList[k] = previousInputFrameDownsync.InputList[k];
-                // Don't predict "btnA & btnB"!
-                prefabbedInputList[k] = (prefabbedInputList[k] & 15UL);
+                // Don't predict "btnB" -- yet predicting "btnA" for better "jump holding" consistency
+                prefabbedInputList[k] = (previousInputFrameDownsync.InputList[k] & 31UL);
             }
         }
 
@@ -1116,6 +1113,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         justTriggeredStoryId = STORY_POINT_NONE;
         playerRdfId = 0;
         renderFrameIdLagTolerance = 4;
+        inputFrameDownsyncIdLagTolerance = 3;
         chaserRenderFrameId = -1;
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;

@@ -353,6 +353,14 @@ public class OnlineMapController : AbstractMapController {
             if (ROOM_STATE_IN_BATTLE != battleState) {
                 return;
             }
+
+            int noDelayInputFrameId = ConvertToNoDelayInputFrameId(playerRdfId);
+            if (noDelayInputFrameId - lastAllConfirmedInputFrameId > inputFrameDownsyncIdLagTolerance) {
+                var msg = String.Format("@playerRdfId={0}, noDelayInputFrameId={1}, lastAllConfirmedInputFrameId={2}, inputFrameDownsyncIdLagTolerance={3}: unstable ws session detected, please try another battle :)", playerRdfId, noDelayInputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsyncIdLagTolerance);
+                popupErrStackPanel(msg);
+                onWsSessionClosed();
+                return;
+            }
             // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
             chaseRolledbackRdfs();
             if (localTimerEnded) {
