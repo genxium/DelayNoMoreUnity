@@ -717,16 +717,16 @@ public class Room {
             var clientInputFrameId = inputFrameUpsync.InputFrameId;
             if (clientInputFrameId < inputBuffer.StFrameId) {
                 // The updates to "inputBuffer.StFrameId" is monotonically increasing, thus if "clientInputFrameId < inputBuffer.StFrameId" at any moment of time, it is obsolete in the future.
-                _logger.LogDebug("Omitting obsolete inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
+                _logger.LogInformation("Omitting obsolete inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
                 continue;
             }
             if (clientInputFrameId < player.LastConsecutiveRecvInputFrameId) {
                 // [WARNING] It's important for correctness that we use "player.LastConsecutiveRecvInputFrameId" instead of "lastIndividuallyConfirmedInputFrameId[player.JoinIndex-1]" here!
-                _logger.LogInformation("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}, playerLastConsecutiveRecvInputFrameId={5}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat(), player.LastConsecutiveRecvInputFrameId);
+                //_logger.LogInformation("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}, playerLastConsecutiveRecvInputFrameId={5}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat(), player.LastConsecutiveRecvInputFrameId);
                 continue;
             }
             if (clientInputFrameId < lastAllConfirmedInputFrameId) {
-                _logger.LogInformation("Omitting obsolete inputFrameUpsync#3: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
+                //_logger.LogInformation("Omitting obsolete inputFrameUpsync#3: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
                 continue;
             }
             if (clientInputFrameId > inputBuffer.EdFrameId) {
@@ -782,14 +782,16 @@ public class Room {
                     var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
                     var thatPlayerJoinMask = (1UL << (thatPlayer.CharacterDownsync.JoinIndex - 1));
                     bool isSlowTicker = (0 == (inputFrameDownsync.ConfirmedList & thatPlayerJoinMask));
-                    bool isActiveSlowTicker = (isSlowTicker && thatPlayerBattleState == PLAYER_BATTLE_STATE_ACTIVE);
+                    bool isActiveSlowTicker = (isSlowTicker && PLAYER_BATTLE_STATE_ACTIVE == thatPlayerBattleState);
                     if (isActiveSlowTicker) {
                         shouldBreakConfirmation = true; // Could be an `ACTIVE SLOW TICKER` here, but no action needed for now
                         break;
                     }
+                    /*
                     if (isSlowTicker) {
                         _logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.CharacterDownsync.Id, thatPlayer.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
                     }
+                    */
                 }
             }
 
@@ -1193,6 +1195,12 @@ public class Room {
 
                 if (null == player) {
                     _logger.LogWarning("In `battleUdpTunnel`, player for (roomId: {0}, playerId: {1}) doesn't exist!", id, playerId);
+                    continue;
+                }
+
+                var thatPlayerBattleState = Interlocked.Read(ref player.BattleState);
+                if (PLAYER_BATTLE_STATE_ACTIVE != thatPlayerBattleState) {
+                    //_logger.LogWarning("In `battleUdpTunnel`, player for (roomId: {0}, playerId: {1}) is {2}, rejecting its UDP upsync!", id, playerId, thatPlayerBattleState);
                     continue;
                 }
 
