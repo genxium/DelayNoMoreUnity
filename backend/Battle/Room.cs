@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
 using Google.Protobuf.Collections;
+using System.Threading;
 
 namespace backend.Battle;
 public class Room {
@@ -1061,7 +1062,12 @@ public class Room {
             return;
         }
 
-        await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+        try {
+            await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Exception occurred during downsyncToSinglePlayerAsync to (roomId: {0}, playerId: {1})", id, playerId);
+            if (!cancellationTokenSource.IsCancellationRequested) cancellationTokenSource.Cancel();
+        }
     }
 
     private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, Pbc.RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, int act, int playerId, Player player, int peerJoinIndex) {
@@ -1102,7 +1108,7 @@ public class Room {
             await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
         } catch (Exception ex) {
             _logger.LogError(ex, "Exception occurred during sendSafelyAsync to (roomId: {0}, playerId: {1})", id, playerId);
-            clearPlayerNetworkSession(playerId);
+            if (!cancellationTokenSource.IsCancellationRequested) cancellationTokenSource.Cancel();
         }
     }
 
@@ -1125,20 +1131,16 @@ public class Room {
             1. when player with a slower frontend clock lags significantly behind and thus wouldn't get its inputUpsync recognized due to faster "forceConfirmation"
             2. reconnection
         */ 
-        try {
-            await sendBytesSafelyAsync(playerId, player, content);
+        
+        await sendBytesSafelyAsync(playerId, player, content);
 
-            player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
+        player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
-            if (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState) {
-                if (backendDynamicsEnabled && shouldResync) {
-                    _logger.LogInformation(String.Format("[readded-resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
-                }
-                Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
+        if (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState) {
+            if (backendDynamicsEnabled && shouldResync) {
+                _logger.LogInformation(String.Format("[readded-resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
             }
-        } catch (Exception ex) {
-            _logger.LogError(ex, "Exception occurred during downsyncToSinglePlayerAsync to (roomId: {0}, playerId: {1})", id, playerId);
-            clearPlayerNetworkSession(playerId);
+            Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
         }
     }
 
