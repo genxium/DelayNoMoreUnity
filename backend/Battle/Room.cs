@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
 using Google.Protobuf.Collections;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace backend.Battle;
 public class Room {
@@ -975,10 +974,9 @@ public class Room {
 
         ArraySegment<byte> content = allocBytesFromInputBufferSnapshot(inputBufferSnapshot); // [WARNING] To avoid thread-safety issues when accessing "renderBuffer.GetByFrameId(...)" as well as to reduce memory redundancy
         int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
-        ulong unconfirmedMask = inputBufferSnapshot.UnconfirmedMask;
         bool shouldResync = inputBufferSnapshot.ShouldForceResync;
-        var toSendInputFrameIdSt = inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
-        var toSendInputFrameIdEd = inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
+        var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
+        var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
 
         if (FRONTEND_WS_RECV_BYTELENGTH < content.Count) {
             _logger.LogWarning(String.Format("[content too big!] refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6} > FRONTEND_WS_RECV_BYTELENGTH={7}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count, FRONTEND_WS_RECV_BYTELENGTH));
@@ -1006,7 +1004,7 @@ public class Room {
             }
 
             // Method "downsyncToAllPlayers" is called very frequently during active battle, thus deliberately NOT using the "Task.WhenAll(tList)" approach to save garbage collection workload.
-            _ = downsyncToSinglePlayerAsync(player.CharacterDownsync.Id, player, content, refRenderFrameId, unconfirmedMask, shouldResync, toSendInputFrameIdSt, toSendInputFrameIdEd); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+            _ = downsyncToSinglePlayerAsync(player.CharacterDownsync.Id, player, content, refRenderFrameId, shouldResync, toSendInputFrameIdSt, toSendInputFrameIdEd); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
         }
     }
 
@@ -1101,8 +1099,7 @@ public class Room {
         await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
     }
 
-    private async Task downsyncToSinglePlayerAsync(int playerId, Player player, ArraySegment<byte> content, int refRenderFrameId, ulong unconfirmedMask, bool shouldResync, int toSendInputFrameIdSt, int toSendInputFrameIdEd) {
-        int playerJoinIndexInBooleanArr = player.CharacterDownsync.JoinIndex - 1;
+    private async Task downsyncToSinglePlayerAsync(int playerId, Player player, ArraySegment<byte> content, int refRenderFrameId, bool shouldResync, int toSendInputFrameIdSt, int toSendInputFrameIdEd) {
         var playerBattleState = Interlocked.Read(ref player.BattleState);
 
         switch (playerBattleState) {

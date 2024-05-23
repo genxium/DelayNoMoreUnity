@@ -40,19 +40,21 @@ public class WebSocketController : ControllerBase {
     private async Task HandleNewPlayerPrimarySession(WebSocket session, int playerId, int speciesId) {
 
         using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource()) {
+
             CancellationToken cancellationToken = cancellationTokenSource.Token;
             WebSocketCloseStatus closeCode = WebSocketCloseStatus.Empty;
             string? closeReason = null;
 
             int addPlayerToRoomResult = ErrCode.UnknownError;
             Player player = new Player(new CharacterDownsync());
-
+            int roomId = -1;
             try {
                 var room = _roomManager.Pop();
                 if (null == room) {
                     _logger.LogWarning("No available room [ playerId={0} ]", playerId);
                     return;
                 }
+                roomId = room.id;
                 addPlayerToRoomResult = room.AddPlayerIfPossible(player, playerId, speciesId, session, cancellationTokenSource);
                 if (ErrCode.Ok != addPlayerToRoomResult) {
                     _logger.LogWarning("Failed to add player to room [ roomId={0}, playerId={1}, result={2} ]", room.id, playerId, addPlayerToRoomResult);
@@ -164,7 +166,8 @@ public class WebSocketController : ControllerBase {
                 _logger.LogError(ex, "Session got an exception");
             } finally {
                 // [WARNING] Checking session.State here is possibly not thread-safe, but it's not a big concern for now
-                if (WebSocketState.Aborted != session.State) {
+                if (WebSocketState.Aborted != session.State && WebSocketState.Closed != session.State) {
+                    _logger.LogWarning("About to explicitly close websocket session in state={3} for [ roomId={0}, playerId={1}]", roomId, playerId, session.State);
                     await session.CloseAsync(
                     closeCode,
                     closeReason,
