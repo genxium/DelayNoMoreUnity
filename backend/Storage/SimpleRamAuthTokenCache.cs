@@ -16,7 +16,7 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
             SizeLimit = 2048
         });
     private readonly MemoryCacheEntryOptions _cacheEntryOptions = new MemoryCacheEntryOptions()
-        .SetSlidingExpiration(TimeSpan.FromMinutes(2))
+        .SetSlidingExpiration(TimeSpan.FromMinutes(30))
         .SetSize(1); // Always use size=1 for AuthToken
 
     public SimpleRamAuthTokenCache(ILogger<SimpleRamAuthTokenCache> logger, IWebHostEnvironment environment, IServiceScopeFactory scopeFactory) {

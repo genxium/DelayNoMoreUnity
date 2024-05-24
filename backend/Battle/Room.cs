@@ -67,7 +67,10 @@ public class Room {
     Dictionary<int, WebSocket> playerDownsyncSessionDict;
     Dictionary<int, CancellationTokenSource> playerSignalToCloseDict;
     Dictionary<int, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>> playerWsDownsyncQueDict;
-    int localPlayerWsDownsyncQueReadTimeoutMillis = 800; // [WARNING] By reaching "clearPlayerNetworkSession(playerId)", no more elements will be enqueing "playerWsDownsyncQueDict[playerId]", yet the "playerSignalToCloseDict[playerId]" could've already been cancelled -- hence if the queue has been empty for several hundred milliseconds, we see it as truely empty. 
+    
+    int localPlayerWsDownsyncQueBattleReadTimeoutMillis = 2000; 
+
+    int localPlayerWsDownsyncQueClearingReadTimeoutMillis = 800; // [WARNING] By reaching "clearPlayerNetworkSession(playerId)", no more elements will be enqueing "playerWsDownsyncQueDict[playerId]", yet the "playerSignalToCloseDict[playerId]" could've already been cancelled -- hence if the queue has been empty for several hundred milliseconds, we see it as truly empty. 
     Dictionary<int, PlayerSessionAckWatchdog> playerActiveWatchdogDict;
     public long state;
     int effectivePlayerCount;
@@ -334,7 +337,7 @@ public class Room {
 
             if (playerWsDownsyncQueDict.ContainsKey(playerId)) {
                 var genOrderPreservedMsgs = playerWsDownsyncQueDict[playerId]; 
-                while (genOrderPreservedMsgs.TryTake(out _, localPlayerWsDownsyncQueReadTimeoutMillis)) { }
+                while (genOrderPreservedMsgs.TryTake(out _, localPlayerWsDownsyncQueClearingReadTimeoutMillis)) { }
                 playerWsDownsyncQueDict.Remove(playerId);
             }
 
@@ -482,7 +485,8 @@ public class Room {
         _logger.LogInformation("Started downsyncToSinglePlayerAsyncLoop for (roomId: {0}, playerId: {1})", id, playerId);
         try {
             while (WebSocketState.Open == wsSession.State && !cancellationTokenSource.IsCancellationRequested) {
-                if (genOrderPreservedMsgs.TryTake(out (ArraySegment<byte> content, InputBufferSnapshot inputBufferSnapshot) msg, localPlayerWsDownsyncQueReadTimeoutMillis, cancellationTokenSource.Token)) {
+                // [WARNING] If "TryTake" timed out while reading, it simply returns false and enters another round of reading.
+                if (genOrderPreservedMsgs.TryTake(out (ArraySegment<byte> content, InputBufferSnapshot inputBufferSnapshot) msg, localPlayerWsDownsyncQueBattleReadTimeoutMillis, cancellationTokenSource.Token)) {
                     var inputBufferSnapshot = msg.inputBufferSnapshot;
                     var content = msg.content;
                     int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
@@ -531,10 +535,12 @@ public class Room {
                     }
                 }
             }
-            _logger.LogInformation("Ended downsyncToSinglePlayerAsyncLoop for (roomId: {0}, playerId: {1})", id, playerId);
+        } catch (OperationCanceledException cEx) {
+            _logger.LogWarning("downsyncToSinglePlayerAsyncLoop cancelled for (roomId: {0}, playerId: {1})", id, playerId);
         } catch (Exception ex) {
             _logger.LogError(ex, "Exception occurred during downsyncToSinglePlayerAsyncLoop to (roomId: {0}, playerId: {1})", id, playerId);
         } finally {
+            _logger.LogInformation("Ended downsyncToSinglePlayerAsyncLoop for (roomId: {0}, playerId: {1})", id, playerId);
             if (!cancellationTokenSource.IsCancellationRequested) cancellationTokenSource.Cancel();
         }
     }
