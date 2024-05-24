@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
 using Google.Protobuf.Collections;
-using System.Threading;
 using System.Collections.Concurrent;
 
 namespace backend.Battle;
@@ -186,6 +185,7 @@ public class Room {
         playerActiveWatchdogDict = new Dictionary<int, PlayerSessionAckWatchdog>();
         playerDownsyncSessionDict = new Dictionary<int, WebSocket>();
         playerSignalToCloseDict = new Dictionary<int, CancellationTokenSource>();
+        playerWsDownsyncQueDict = new Dictionary<int, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>>();
 
         lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
         latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
@@ -246,7 +246,7 @@ public class Room {
             newWatchdog.Stop();
             playerActiveWatchdogDict[playerId] = newWatchdog;
 
-            var newGenOrderPreservedMsgs = BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>();
+            var newGenOrderPreservedMsgs = new BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>();
             playerWsDownsyncQueDict[playerId] = newGenOrderPreservedMsgs;
 
             effectivePlayerCount++;
@@ -327,17 +327,16 @@ public class Room {
                 }
                 playerActiveWatchdogDict.Remove(playerId);
             }
-
             
             if (playerSignalToCloseDict.ContainsKey(playerId)) {
                 playerSignalToCloseDict.Remove(playerId);
             }
 
             if (playerWsDownsyncQueDict.ContainsKey(playerId)) {
-                var (genOrderPreservedMsgs, inputBufferSnapshot) = playerWsDownsyncQueDict[playerId]; 
+                var genOrderPreservedMsgs = playerWsDownsyncQueDict[playerId]; 
                 while (genOrderPreservedMsgs.TryTake(out _, localPlayerWsDownsyncQueReadTimeoutMillis)) { }
                 playerWsDownsyncQueDict.Remove(playerId);
-            } 
+            }
 
             playerDownsyncSessionDict.Remove(playerId);
             _logger.LogInformation("clearPlayerNetworkSession finished: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
@@ -448,7 +447,9 @@ public class Room {
                     }
                 }
                 if (true == allAcked) {
-                    for (int i = 0; i < roomCapacity; i++) {
+                    foreach (var (thatPlayerId, thatPlayer) in players) {
+                        // Not checking "playerBattleState" again here
+                        _ = Task.Run(async () => await downsyncToSinglePlayerAsyncLoop(thatPlayerId, thatPlayer));
                     }
                     int gracePreReadyPeriodMillis = 1000;
                     await Task.Delay(gracePreReadyPeriodMillis);
@@ -478,12 +479,63 @@ public class Room {
             return;
         }
 
-        while (WebSocketState.Open == wsSession.State && !cancellationTokenSource.IsCancellationRequested) {
-            ArraySegment<byte> content;
-            InputBufferSnapshot inputBufferSnapshot;
-            if (genOrderPreservedMsgs.TryTake(out (content, inputBufferSnapshot), localPlayerWsDownsyncQueReadTimeoutMillis, cancellationTokenSource.Token)) {
-                await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+        _logger.LogInformation("Started downsyncToSinglePlayerAsyncLoop for (roomId: {0}, playerId: {1})", id, playerId);
+        try {
+            while (WebSocketState.Open == wsSession.State && !cancellationTokenSource.IsCancellationRequested) {
+                if (genOrderPreservedMsgs.TryTake(out (ArraySegment<byte> content, InputBufferSnapshot inputBufferSnapshot) msg, localPlayerWsDownsyncQueReadTimeoutMillis, cancellationTokenSource.Token)) {
+                    var inputBufferSnapshot = msg.inputBufferSnapshot;
+                    var content = msg.content;
+                    int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
+                    bool shouldResync = inputBufferSnapshot.ShouldForceResync;
+                    var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
+                    var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
+
+                    /*
+                    [WARNING] 
+
+                    Reasons behind putting this "downsyncToSinglePlayerAsync" under a "Task.Run(...)" as follows.
+
+                    - When "downsyncToAllPlayers" is invoked by "OnBattleCmdReceived(...)" which is in turn very frequently called even upon UDP reception, we want it to be "as I/O non-blokcing as possible" -- that said, the need for "downsyncToAllPlayers" to **preserve the order of generation of "inputBufferSnapshot" for sending** still exists -- creating a somewhat dilemma. 
+
+                    - The ideal behaviour for me in this case is a "wsSession.PutToSendLater(...)" which executes synchronously in the current calling thread, thus returns immediately without "yielding at I/O awaiting". However "wsSession.SendAsync" returns an "async Task" -- certainly not the ideal form, i.e. "wsSession.SendAsync" respects "TCP flow control" to wait for corresponding ACKs when invocation rate is too high, which puts a significant "function return rate limit" of it ("yielding at I/O awaiting" is NOT a "return").  
+                    */
+                    var playerBattleState = Interlocked.Read(ref player.BattleState);
+
+                    switch (playerBattleState) {
+                        case PLAYER_BATTLE_STATE_DISCONNECTED:
+                        case PLAYER_BATTLE_STATE_LOST:
+                        case PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME:
+                        case PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL:
+                        case PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK:
+                        case PLAYER_BATTLE_STATE_READDED_PENDING_BATTLE_COLLIDER_ACK:
+                            // There're two additional conditions for early return here compared to "sendSafelyAsync", because "downsyncToSinglePlayerAsync" is dedicated for active players in active battle!
+                            return;
+                    }
+
+                    /*
+                        Resync helps
+                        1. when player with a slower frontend clock lags significantly behind and thus wouldn't get its inputUpsync recognized due to faster "forceConfirmation"
+                        2. reconnection
+                    */
+
+                    // [WARNING] Preserving generated order (of inputBufferSnapshot) while sending per player by simply "awaiting" the "wsSession.SendAsync(...)" calls
+                    await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+
+                    player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
+
+                    if (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState) {
+                        if (backendDynamicsEnabled && shouldResync) {
+                            _logger.LogInformation(String.Format("[readded-resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
+                        }
+                        Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
+                    }
+                }
             }
+            _logger.LogInformation("Ended downsyncToSinglePlayerAsyncLoop for (roomId: {0}, playerId: {1})", id, playerId);
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Exception occurred during downsyncToSinglePlayerAsyncLoop to (roomId: {0}, playerId: {1})", id, playerId);
+        } finally {
+            if (!cancellationTokenSource.IsCancellationRequested) cancellationTokenSource.Cancel();
         }
     }
 
@@ -508,7 +560,7 @@ public class Room {
             playersArr[joinIndex - 1] = player;
         }
 
-        _logger.LogWarning("Battle state transitted to ROOM_STATE_PREPARE for roomId={0}", id);
+        _logger.LogWarning("Battle state transited to ROOM_STATE_PREPARE for roomId={0}", id);
 
         var battleReadyToStartFrame = new RoomDownsyncFrame {
             Id = DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START
@@ -1001,13 +1053,17 @@ public class Room {
     }
 
     private void downsyncToAllPlayers(InputBufferSnapshot? inputBufferSnapshot) {
+        /*
+        [WARNING] 
+        
+        This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
+        */
+
         if (null == inputBufferSnapshot) {
             _logger.LogWarning("inputBufferSnapshot is null when calling downsyncToAllPlayers for (roomId: {0})", id);
             return;
         }
-        /*
-        [WARNING] This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
-        */
+        
         if (true == backendDynamicsEnabled) {
             /*
             [WARNING] The comment of this part in Golang version is obsolete. The field "ForceAllResyncOnAnyActiveSlowTicker" is always true, and setting "ShouldForceResync = true" here is only going to impact unconfirmed players on frontend, i.e. there's a filter on frontend to ignore "nonSelfForceConfirmation". 
@@ -1027,7 +1083,6 @@ public class Room {
 
         ArraySegment<byte> content = allocBytesFromInputBufferSnapshot(inputBufferSnapshot); // [WARNING] To avoid thread-safety issues when accessing "renderBuffer.GetByFrameId(...)" as well as to reduce memory redundancy
         int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
-        bool shouldResync = inputBufferSnapshot.ShouldForceResync;
         var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
         var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
 
@@ -1035,15 +1090,7 @@ public class Room {
             _logger.LogWarning(String.Format("[content too big!] refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6} > FRONTEND_WS_RECV_BYTELENGTH={7}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count, FRONTEND_WS_RECV_BYTELENGTH));
         }
 
-        /*
-        if (backendDynamicsEnabled && shouldResync) {
-            _logger.LogInformation(String.Format("[resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count));
-        } else {
-            _logger.LogInformation(String.Format("[ipt-sync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count));
-        }
-        */
-
-        foreach (var player in playersArr) {
+        foreach (var (playerId, player) in players) {
             var playerBattleState = Interlocked.Read(ref player.BattleState);
 
             switch (playerBattleState) {
@@ -1057,14 +1104,22 @@ public class Room {
             }
 
             // Method "downsyncToAllPlayers" is called very frequently during active battle, thus deliberately tweaked websocket downsync sending for better throughput.
-            BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>? genOrderPreservedMsgs;
-            if (!playerWsDownsyncQueDict.TryGetValue(playerId, out genOrderPreservedMsgs)) {
-                _logger.LogWarning("genOrderPreservedMsgs for (roomId: {0}, playerId: {1}) doesn't exist! #3", id, playerId);
+            BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>? playerWsDownsyncQue;
+            if (!playerWsDownsyncQueDict.TryGetValue(player.CharacterDownsync.Id, out playerWsDownsyncQue)) {
+                _logger.LogWarning("playerWsDownsyncQue for (roomId: {0}, playerId: {1}) doesn't exist! #3", id, playerId);
                 return;
             }
 
-            genOrderPreservedMsgs.Add(content, inputBufferSnapshot);
+            playerWsDownsyncQue.Add((content, inputBufferSnapshot));
         }
+
+        /*
+        if (backendDynamicsEnabled && shouldResync) {
+            _logger.LogInformation(String.Format("[resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count));
+        } else {
+            _logger.LogInformation(String.Format("[ipt-sync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count));
+        }
+        */
     }
 
     private ArraySegment<byte> allocBytesFromInputBufferSnapshot(InputBufferSnapshot inputBufferSnapshot) {
@@ -1093,41 +1148,6 @@ public class Room {
         }
 
         return new ArraySegment<byte>(resp.ToByteArray());
-    }
-
-    private async Task sendBytesSafelyAsync(int playerId, Player player, ArraySegment<byte> content) {
-        var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected/OnPlayerLost" from other threads
-
-        // [WARNING] DON'T try to send any message to an inactive player!
-        switch (thatPlayerBattleState) {
-            case PLAYER_BATTLE_STATE_DISCONNECTED:
-            case PLAYER_BATTLE_STATE_LOST:
-            case PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME:
-            case PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL:
-                return;
-        }
-
-        WebSocket? wsSession;
-        CancellationTokenSource? cancellationTokenSource;
-        if (!playerDownsyncSessionDict.TryGetValue(playerId, out wsSession)) {
-            _logger.LogWarning("sendBytesSafelyAsync-Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #1", id, playerId);
-            return;
-        }
-
-        if (!playerSignalToCloseDict.TryGetValue(playerId, out cancellationTokenSource)) {
-            _logger.LogWarning("sendBytesSafelyAsync-Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #2", id, playerId);
-            return;
-        }
-
-        try {
-            if (WebSocketState.Open != wsSession.State) {
-              throw new ArgumentException(String.Format("sendBytesSafelyAsync-Invalid websocket session state for (roomId: {0}, playerId: {1}): wsSession.State={2}", id, playerId, wsSession.State)); 
-            }
-            await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
-        } catch (Exception ex) {
-            _logger.LogError(ex, "Exception occurred during downsyncToSinglePlayerAsync to (roomId: {0}, playerId: {1})", id, playerId);
-            if (!cancellationTokenSource.IsCancellationRequested) cancellationTokenSource.Cancel();
-        }
     }
 
     private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, Pbc.RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, int act, int playerId, Player player, int peerJoinIndex) {
@@ -1172,47 +1192,6 @@ public class Room {
         } catch (Exception ex) {
             _logger.LogError(ex, "Exception occurred during sendSafelyAsync to (roomId: {0}, playerId: {1})", id, playerId);
             if (!cancellationTokenSource.IsCancellationRequested) cancellationTokenSource.Cancel();
-        }
-    }
-
-    private async Task downsyncToSinglePlayerAsync(int playerId, Player player, ArraySegment<byte> content, int refRenderFrameId, bool shouldResync, int toSendInputFrameIdSt, int toSendInputFrameIdEd) {
-        /*
-        [WARNING] 
-            
-        Reasons behind putting this "downsyncToSinglePlayerAsync" under a "Task.Run(...)" as follows.
-
-        - When "downsyncToAllPlayers" is invoked by "OnBattleCmdReceived(...)" which is in turn very frequently called even upon UDP reception, we want it to be "as I/O non-blokcing as possible" -- that said, the need for "downsyncToAllPlayers" to **preserve the order of generation of "inputBufferSnapshot" for sending** still exists -- creating a somewhat dilemma. 
-
-        - The ideal behaviour for me in this case is a "wsSession.PutToSendLater(...)" which executes synchronously in the current calling thread, thus returns immediately without "yielding at I/O awaiting". However "wsSession.SendAsync" returns an "async Task" -- certainly not the ideal form, i.e. "wsSession.SendAsync" respects "TCP flow control" to wait for corresponding ACKs when invocation rate is too high, which puts a significant "function return rate limit" of it ("yielding at I/O awaiting" is NOT a "return").  
-        */
-        var playerBattleState = Interlocked.Read(ref player.BattleState);
-
-        switch (playerBattleState) {
-            case PLAYER_BATTLE_STATE_DISCONNECTED:
-            case PLAYER_BATTLE_STATE_LOST:
-            case PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME:
-            case PLAYER_BATTLE_STATE_EXPELLED_IN_DISMISSAL:
-            case PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK:
-            case PLAYER_BATTLE_STATE_READDED_PENDING_BATTLE_COLLIDER_ACK:
-                // There're two additional conditions for early return here compared to "sendSafelyAsync", because "downsyncToSinglePlayerAsync" is dedicated for active players in active battle!
-                return;
-        }
-
-        /*
-            Resync helps
-            1. when player with a slower frontend clock lags significantly behind and thus wouldn't get its inputUpsync recognized due to faster "forceConfirmation"
-            2. reconnection
-        */ 
-        
-        await sendBytesSafelyAsync(playerId, player, content);
-
-        player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
-
-        if (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState) {
-            if (backendDynamicsEnabled && shouldResync) {
-                _logger.LogInformation(String.Format("[readded-resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
-            }
-            Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
         }
     }
 
@@ -1358,9 +1337,7 @@ public class Room {
             2. We should initialize the "battleUdpTunnel" before sending ANY "BattleColliderInfo".
             3. The following weird init of "battleUdpTask" makes it "synchronously awaitable" in "dismiss()".
             */
-            battleUdpTask = Task.Run(async () => {
-                await startBattleUdpTunnelAsyncTask();
-            });
+            battleUdpTask = Task.Run(startBattleUdpTunnelAsyncTask);
         }
     }
 
