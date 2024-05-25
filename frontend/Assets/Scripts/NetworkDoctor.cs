@@ -44,6 +44,7 @@ public class NetworkDoctor {
 
     private int inputFrameIdFront;
     private int inputRateThreshold;
+    private int recvRateThreshold;
     private FrameRingBuffer<QEle> sendingQ;
     private FrameRingBuffer<QEle> inputFrameDownsyncQ;
     private FrameRingBuffer<QEle> peerInputFrameUpsyncQ;
@@ -56,7 +57,8 @@ public class NetworkDoctor {
         immediateRollbackFrames = 0;
         lockedStepsCnt = 0;
         udpPunchedCnt = 0;
-        inputRateThreshold = Battle.ConvertToNoDelayInputFrameId(59);
+        inputRateThreshold = Battle.ConvertToNoDelayInputFrameId(Battle.BATTLE_DYNAMICS_FPS);
+        recvRateThreshold = Battle.ConvertToNoDelayInputFrameId(Battle.BATTLE_DYNAMICS_FPS);
 
         sendingQ.Clear();
         inputFrameDownsyncQ.Clear();
@@ -154,7 +156,7 @@ public class NetworkDoctor {
         var (sendingFps, srvDownsyncFps, peerUpsyncFps) = Stats();
 		bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
 		// An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
-		bool recvFpsNormal = (srvDownsyncFps >= inputRateThreshold || peerUpsyncFps >= inputRateThreshold * (roomCapacity - 1));
+		bool recvFpsNormal = (srvDownsyncFps >= recvRateThreshold);
 		if (sendingFpsNormal && recvFpsNormal) {
 			int minInputFrameIdFront = Battle.MAX_INT;
 			for (int k = 0; k < roomCapacity; ++k) {

@@ -73,8 +73,9 @@ namespace shared {
             return true;
         }
 
-        public static bool UpdateInputFrameInPlaceUponDynamics(int inputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
+        public static bool UpdateInputFrameInPlaceUponDynamics(FrameRingBuffer<InputFrameDownsync> inputBuffer, int inputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
             bool hasInputFrameUpdatedOnDynamics = false;
+            var (_, prevInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId-1);
             for (int i = 0; i < roomCapacity; i++) {
                 if ((i + 1) == toExcludeJoinIndex) {
                     // On frontend, a "self input" is only confirmed by websocket downsync, which is quite late and might get the "self input" incorrectly overwritten if not excluded here
@@ -89,7 +90,13 @@ namespace shared {
                     // Already confirmed, no need to predict.
                     continue;
                 }
-                ulong newVal = (lastIndividuallyConfirmedInputList[i] & 15);
+
+                // lastIndividuallyConfirmedInputFrameId[i] < inputFrameId
+                ulong newVal = (lastIndividuallyConfirmedInputList[i] & 15UL);
+                if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL) && JUMP_HOLDING_INPUT_FRAME_ID_GAP > inputFrameId-lastIndividuallyConfirmedInputFrameId[i]) {
+                    newVal = (lastIndividuallyConfirmedInputList[i] & 31UL); 
+                }
+
                 if (newVal != inputList[i]) {
                     inputList[i] = newVal;
                     hasInputFrameUpdatedOnDynamics = true;

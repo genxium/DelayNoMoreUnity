@@ -191,6 +191,9 @@ namespace shared {
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.62f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int GRAVITY_Y_JUMP_HOLDING = -(int)(0.42f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+
+        public static int JUMP_HOLDING_INPUT_FRAME_ID_GAP = 4; // A regular "JumpingInitVelY" is 7.5, while "GRAVITY_Y_JUMP_HOLDING" per frame is -0.42, therefore if the player is jumping from ground to ground of the same horizon, the in-air time should be 17.857 render frames, converting to 4.46 input frames.
+
         public static int INPUT_DELAY_FRAMES = 2; // in the count of render frames
         public static int DEFAULT_PATROL_CUE_WAIVING_FRAMES = 150; // in the count of render frames, should be big enough for any NPC to move across the largest patrol cue
         public static int NO_PATROL_CUE_ID = -1;

@@ -21,6 +21,9 @@ public class NetworkDoctorInfo: MonoBehaviour {
     public TMP_Text udpPunchedCntTitle;
     public TMP_Text udpPunchedCntValue;
 
+    public TMP_Text ifdLeadingFrontTitle;
+    public TMP_Text ifdLeadingFrontValue;
+
     // Start is called before the first frame update
     void Start() {
 

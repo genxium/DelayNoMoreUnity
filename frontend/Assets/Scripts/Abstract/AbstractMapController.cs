@@ -228,7 +228,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
             } else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
                 // Don't predict "btnB" -- yet predicting "btnA" for better "jump holding" consistency
-                prefabbedInputList[k] = (lastIndividuallyConfirmedInputList[k] & 31UL);
+                if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 16UL) && JUMP_HOLDING_INPUT_FRAME_ID_GAP > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
+                    prefabbedInputList[k] = (lastIndividuallyConfirmedInputList[k] & 31UL);
+                } else {
+                    prefabbedInputList[k] = (lastIndividuallyConfirmedInputList[k] & 15UL);
+                }
             } else if (null != previousInputFrameDownsync) {
                 // When "self.lastIndividuallyConfirmedInputFrameId[k] > inputFrameId", don't use it to predict a historical input!
                 // Don't predict "btnB" -- yet predicting "btnA" for better "jump holding" consistency
@@ -283,7 +287,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool allowUpdateInputFrameInPlaceUponDynamics = (!isChasing);
             if (allowUpdateInputFrameInPlaceUponDynamics) {
-                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(j, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex);
+                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(inputBuffer, j, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex);
                 if (hasInputBeenMutated) {
                     int ii = ConvertToFirstUsedRenderFrameId(j);
                     if (ii < i) {

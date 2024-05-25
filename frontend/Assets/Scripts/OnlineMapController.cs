@@ -420,7 +420,7 @@ public class OnlineMapController : AbstractMapController {
             batchInputFrameIdEdClosed = inputBuffer.EdFrameId-1;
         }
 
-        NetworkDoctor.Instance.LogInputFrameIdFront(latestLocalInputFrameId);
+        NetworkDoctor.Instance.LogInputFrameIdFront(ConvertToDelayedInputFrameId(playerRdfId));
         NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
 
         for (var i = batchInputFrameIdSt; i <= batchInputFrameIdEdClosed; i++) {

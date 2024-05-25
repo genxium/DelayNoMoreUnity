@@ -944,6 +944,7 @@ public class Room {
          */
         //_logger.LogInformation("getOrPrefabInputFrameDownsync#1 for roomId={0}, inputFrameId={1}", id, inputFrameId);
         var (res1, currInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId);
+        var (_, prevInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId-1);
         //_logger.LogInformation("getOrPrefabInputFrameDownsync#2 for roomId={0}, inputFrameId={1}: res1={2}", id, inputFrameId, res1);
 
         if (false == res1 || null == currInputFrameDownsync) {
@@ -973,7 +974,11 @@ public class Room {
                 for (int i = 0; i < capacity; i++) {
                     // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
                     // Don't predict "btnB"!
-                    ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & 31UL));
+                    if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL) && JUMP_HOLDING_INPUT_FRAME_ID_GAP > gapInputFrameId - lastIndividuallyConfirmedInputFrameId[i]) {
+                        ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & 31UL));
+                    } else {
+                        ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & 15UL));
+                    }
                 }
                 ifdHolder.ConfirmedList = 0;
                 currInputFrameDownsync = ifdHolder; // make sure that we return a pointer inside the inputBuffer for later writing

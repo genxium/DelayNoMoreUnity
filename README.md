@@ -1,4 +1,8 @@
 # Latest tag change notes
+v1.6.0 new features
+- Improved frontend lockstep handling.
+- Improved backend downsync nonblocking handling.
+
 v1.5.9 new features
 - Updated existing levels and characters.
 - Tuned assets for DemonFireSlime.
