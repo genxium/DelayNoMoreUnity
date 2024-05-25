@@ -19,7 +19,7 @@ public class PlayerSessionAckWatchdog {
             }
             var cancellationTokenSource = (CancellationTokenSource)s;
             if (null == cancellationTokenSource) return;
-            if (cancellationTokenSource.Token.IsCancellationRequested) return;
+            if (cancellationTokenSource.IsCancellationRequested) return;
             cancellationTokenSource.Cancel();
         }), aCancellationTokenSource, aInterval, Timeout.Infinite);
     }

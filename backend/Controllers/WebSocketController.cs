@@ -26,8 +26,9 @@ public class WebSocketController : ControllerBase {
             _logger.LogInformation("Got a websocket connection request#1 [ authToken={0}, playerId={1} ]", authToken, playerId);
             if (_tokenCache.ValidateToken(authToken, playerId)) {
                 _logger.LogInformation("Got a websocket connection request#2 Validated successfully [ authToken={0}, playerId={1}, speciesId={2} ]", authToken, playerId, speciesId);
-                using var session = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                await HandleNewPlayerPrimarySession(session, playerId, speciesId);
+                using (var session = await HttpContext.WebSockets.AcceptWebSocketAsync()) {
+                    await HandleNewPlayerPrimarySession(session, playerId, speciesId);
+                }
             } else {
                 _logger.LogWarning("Got a websocket connection request#2 Failed validation [ authToken={0}, playerId={1} ]", authToken, playerId);
                 HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -48,14 +49,15 @@ public class WebSocketController : ControllerBase {
             int addPlayerToRoomResult = ErrCode.UnknownError;
             Player player = new Player(new CharacterDownsync());
             int roomId = -1;
+            Room? room = null;
             try {
-                var room = _roomManager.Pop();
+                room = _roomManager.Pop();
                 if (null == room) {
                     _logger.LogWarning("No available room [ playerId={0} ]", playerId);
                     return;
                 }
                 roomId = room.id;
-                addPlayerToRoomResult = room.AddPlayerIfPossible(player, playerId, speciesId, session, cancellationTokenSource);
+                addPlayerToRoomResult = room.AddPlayerIfPossible(player, playerId, speciesId, session, cancellationTokenSource, cancellationToken);
                 if (ErrCode.Ok != addPlayerToRoomResult) {
                     _logger.LogWarning("Failed to add player to room [ roomId={0}, playerId={1}, result={2} ]", room.id, playerId, addPlayerToRoomResult);
                     _roomManager.Push(room.calRoomScore(), room);
@@ -158,14 +160,13 @@ public class WebSocketController : ControllerBase {
                         break;
                     }
                 }
-
-                if (ErrCode.Ok == addPlayerToRoomResult) {
-                    room.OnPlayerDisconnected(playerId);
-                }
             } catch (Exception ex) {
                 _logger.LogError(ex, "Session got an exception");
             } finally {
                 _logger.LogInformation("Ending HandleNewPlayerPrimarySession in state={0} for [ roomId={1}, playerId={2}]", session.State, roomId, playerId);
+                if (ErrCode.Ok == addPlayerToRoomResult && null != room) {
+                    room.OnPlayerDisconnected(playerId);
+                }
                 // [WARNING] Checking session.State here is possibly not thread-safe, but it's not a big concern for now
                 if (WebSocketState.Aborted != session.State && WebSocketState.Closed != session.State) {
                     _logger.LogWarning("About to explicitly close websocket session in state={0} for [ roomId={1}, playerId={2}]", session.State, roomId, playerId);

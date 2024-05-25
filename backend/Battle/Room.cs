@@ -46,28 +46,6 @@ public class Room {
 
     ILoggerBridge loggerBridge;
 
-    /**
-		 * The following `CharacterDownsyncSessionDict` is NOT individually put
-		 * under `type Player struct` for a reason.
-		 *
-		 * Upon each connection establishment, a new instance `player Player` is created for the given `playerId`.
-
-		 * To be specific, if
-		 *   - that `playerId == 42` accidentally reconnects in just several milliseconds after a passive disconnection, e.g. due to bad wireless signal strength, and
-		 *   - that `type Player struct` contains a `DownsyncSession` field
-		 *
-		 * , then we might have to
-		 *   - clean up `previousPlayerInstance.DownsyncSession`
-		 *   - initialize `currentPlayerInstance.DownsyncSession`
-		 *
-		 * to avoid chaotic flaws.
-	     *
-	     * Moreover, during the invocation of `PlayerSignalToCloseDict`, the `Player` instance is supposed to be deallocated (though not synchronously).
-	*/
-    Dictionary<int, WebSocket> playerDownsyncSessionDict;
-    Dictionary<int, CancellationTokenSource> playerSignalToCloseDict;
-    Dictionary<int, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>> playerWsDownsyncQueDict;
-    
     int localPlayerWsDownsyncQueBattleReadTimeoutMillis = 2000; 
 
     int localPlayerWsDownsyncQueClearingReadTimeoutMillis = 800; // [WARNING] By reaching "clearPlayerNetworkSession(playerId)", no more elements will be enqueing "playerWsDownsyncQueDict[playerId]", yet the "playerSignalToCloseDict[playerId]" could've already been cancelled -- hence if the queue has been empty for several hundred milliseconds, we see it as truly empty. 
@@ -107,9 +85,6 @@ public class Room {
     protected HashSet<int> justDeadJoinIndices;
     protected List<Collider> completelyStaticTrapColliders;
 
-    Mutex inputBufferLock;         // Guards [*renderBuffer*, inputBuffer, latestPlayerUpsyncedInputFrameId, lastAllConfirmedInputFrameId, lastAllConfirmedInputList, lastAllConfirmedInputFrameIdWithChange, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, player.LastConsecutiveRecvInputFrameId]
-
-    Mutex joinerLock;         // Guards [AddPlayerIfPossible, ReAddPlayerIfPossible, OnPlayerDisconnected, dismiss]
     int lastAllConfirmedInputFrameId;
     int lastAllConfirmedInputFrameIdWithChange;
     int latestPlayerUpsyncedInputFrameId;
@@ -118,16 +93,47 @@ public class Room {
 
     bool backendDynamicsEnabled;
 
-    Mutex battleUdpTunnelLock;
-    Task? battleUdpTask;
     public PeerUdpAddr? battleUdpTunnelAddr;
     public RoomDownsyncFrame? peerUdpAddrBroadcastRdf;
-    UdpClient? battleUdpTunnel;
-    CancellationTokenSource battleUdpTunnelCancellationTokenSource;
-
+    
     IRoomManager _roomManager;
     ILoggerFactory _loggerFactory;
     ILogger<Room> _logger;
+
+    //////////////////////////////Battle lifecycle disposables////////////////////////////////// 
+    Task? battleMainLoopTask;
+    Task? battleUdpTask;
+    UdpClient? battleUdpTunnel;
+    CancellationTokenSource? battleUdpTunnelCancellationTokenSource;
+
+    /**
+     * The following `CharacterDownsyncSessionDict` is NOT individually put
+     * under `type Player struct` for a reason.
+     *
+     * Upon each connection establishment, a new instance `player Player` is created for the given `playerId`.
+
+     * To be specific, if
+     *   - that `playerId == 42` accidentally reconnects in just several milliseconds after a passive disconnection, e.g. due to bad wireless signal strength, and
+     *   - that `type Player struct` contains a `DownsyncSession` field
+     *
+     * , then we might have to
+     *   - clean up `previousPlayerInstance.DownsyncSession`
+     *   - initialize `currentPlayerInstance.DownsyncSession`
+     *
+     * to avoid chaotic flaws.
+     *
+     * Moreover, during the invocation of `PlayerSignalToCloseDict`, the `Player` instance is supposed to be deallocated (though not synchronously).
+*/
+    Dictionary<int, WebSocket> playerDownsyncSessionDict;
+    Dictionary<int, (CancellationTokenSource, CancellationToken)> playerSignalToCloseDict;
+    Dictionary<int, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>> playerWsDownsyncQueDict;
+    Dictionary<int, Task> playerDownsyncLoopDict;
+    //////////////////////////////Battle lifecycle disposables////////////////////////////////// 
+
+    //////////////////////////////Room lifecycle disposables////////////////////////////////// 
+    Mutex joinerLock;         // Guards [AddPlayerIfPossible, ReAddPlayerIfPossible, OnPlayerDisconnected, dismiss]
+    Mutex inputBufferLock;         // Guards [*renderBuffer*, inputBuffer, latestPlayerUpsyncedInputFrameId, lastAllConfirmedInputFrameId, lastAllConfirmedInputList, lastAllConfirmedInputFrameIdWithChange, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, player.LastConsecutiveRecvInputFrameId]
+    //////////////////////////////Room lifecycle disposables////////////////////////////////// 
 
     public class RoomLoggerBridge : ILoggerBridge {
         private ILogger<Room> _intLogger;
@@ -187,8 +193,9 @@ public class Room {
 
         playerActiveWatchdogDict = new Dictionary<int, PlayerSessionAckWatchdog>();
         playerDownsyncSessionDict = new Dictionary<int, WebSocket>();
-        playerSignalToCloseDict = new Dictionary<int, CancellationTokenSource>();
+        playerSignalToCloseDict = new Dictionary<int, (CancellationTokenSource, CancellationToken)>();
         playerWsDownsyncQueDict = new Dictionary<int, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>>();
+        playerDownsyncLoopDict = new Dictionary<int, Task>();
 
         lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
         latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
@@ -198,12 +205,10 @@ public class Room {
         lastIndividuallyConfirmedInputFrameId = new int[capacity];
         lastIndividuallyConfirmedInputList = new ulong[capacity];
 
+        loggerBridge = new RoomLoggerBridge(_logger);
+
         joinerLock = new Mutex();
         inputBufferLock = new Mutex();
-        battleUdpTunnelLock = new Mutex();
-        battleUdpTunnelCancellationTokenSource = new CancellationTokenSource();
-
-        loggerBridge = new RoomLoggerBridge(_logger);
 
         lazyInitBattleUdpTunnel();
     }
@@ -216,7 +221,7 @@ public class Room {
         return ((inputBuffer.N - 1) << 1);
     }
 
-    public int AddPlayerIfPossible(Player pPlayerFromDbInit, int playerId, int speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer) {
+    public int AddPlayerIfPossible(Player pPlayerFromDbInit, int playerId, int speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer, CancellationToken signalToCloseConnOfThisPlayerToken) {
         joinerLock.WaitOne();
         try {
             long nowRoomState = Interlocked.Read(ref state); 
@@ -243,7 +248,7 @@ public class Room {
             players[playerId] = pPlayerFromDbInit;
 
             playerDownsyncSessionDict[playerId] = session;
-            playerSignalToCloseDict[playerId] = signalToCloseConnOfThisPlayer;
+            playerSignalToCloseDict[playerId] = (signalToCloseConnOfThisPlayer, signalToCloseConnOfThisPlayerToken);
 
             var newWatchdog = new PlayerSessionAckWatchdog(10000, signalToCloseConnOfThisPlayer, String.Format("[ RoomId={0}, PlayerId={1} ] session watchdog ticked.", id, playerId), _loggerFactory);
             newWatchdog.Stop();
@@ -321,7 +326,7 @@ public class Room {
         }
     }
 
-    private void clearPlayerNetworkSession(int playerId) {
+    private async void clearPlayerNetworkSession(int playerId) {
         if (playerDownsyncSessionDict.ContainsKey(playerId)) {
             // [WARNING] No need to close "pR.CharacterDownsyncChanDict[playerId]" immediately!
             if (playerActiveWatchdogDict.ContainsKey(playerId)) {
@@ -332,16 +337,40 @@ public class Room {
             }
             
             if (playerSignalToCloseDict.ContainsKey(playerId)) {
+                var (cancellationTokenSource, _) = playerSignalToCloseDict[playerId];
+                /*
+                 [WARNING]
+
+                 "clearPlayerNetworkSession" will only be called by 
+                - OnPlayerDisconnected(...) which will only be called by "WebSocketController.HandleNewPlayerPrimarySession" after proactive close received or cancelled on the same signal
+                - DismissBattleAsync()
+
+                thus calling "cancellationTokenSource.Cancel()" here would NOT by any chance interrupt this function itself.
+                 */
+                if (!cancellationTokenSource.IsCancellationRequested) {
+                    cancellationTokenSource.Cancel();
+                }
                 playerSignalToCloseDict.Remove(playerId);
+                // [WARNING] Disposal of each "playerSignalToClose" is automatically managed in "WebSocketController"
             }
 
             if (playerWsDownsyncQueDict.ContainsKey(playerId)) {
                 var genOrderPreservedMsgs = playerWsDownsyncQueDict[playerId]; 
                 while (genOrderPreservedMsgs.TryTake(out _, localPlayerWsDownsyncQueClearingReadTimeoutMillis)) { }
+                genOrderPreservedMsgs.Dispose();
                 playerWsDownsyncQueDict.Remove(playerId);
             }
 
+            if (playerDownsyncLoopDict.ContainsKey(playerId)) {
+                var downsyncLoop = playerDownsyncLoopDict[playerId];
+                await downsyncLoop;
+                downsyncLoop.Dispose();
+                playerDownsyncLoopDict.Remove(playerId);
+            }
+
             playerDownsyncSessionDict.Remove(playerId);
+            // [WARNING] Disposal of each "wsSession" is automatically managed in "WebSocketController"
+
             _logger.LogInformation("clearPlayerNetworkSession finished: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
         }
     }
@@ -450,13 +479,19 @@ public class Room {
                     }
                 }
                 if (true == allAcked) {
+                    if (null != battleMainLoopTask) {
+                        _logger.LogInformation("About to wait and dispose previous `battleMainLoopTask` for roomId={0}, targetPlayerId={1} for starting a new battle", id, targetPlayerId);
+                        await battleMainLoopTask;
+                        battleMainLoopTask.Dispose();
+                    }
                     foreach (var (thatPlayerId, thatPlayer) in players) {
                         // Not checking "playerBattleState" again here
-                        _ = Task.Run(async () => await downsyncToSinglePlayerAsyncLoop(thatPlayerId, thatPlayer));
+                        var t = Task.Run(async () => await downsyncToSinglePlayerAsyncLoop(thatPlayerId, thatPlayer));
+                        playerDownsyncLoopDict[thatPlayerId] = t;
                     }
                     int gracePreReadyPeriodMillis = 1000;
                     await Task.Delay(gracePreReadyPeriodMillis);
-                    await startBattleAsync(); // WON'T run if the battle state is not in WAITING.
+                    startBattleAsync(); // WON'T run if the battle state is not in WAITING.
                 }
             }
         }
@@ -465,14 +500,13 @@ public class Room {
 
     private async Task downsyncToSinglePlayerAsyncLoop(int playerId, Player player) {
         WebSocket? wsSession;
-        CancellationTokenSource? cancellationTokenSource;
         BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>? genOrderPreservedMsgs;
         if (!playerDownsyncSessionDict.TryGetValue(playerId, out wsSession)) {
             _logger.LogWarning("Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #1", id, playerId);
             return;
         }
 
-        if (!playerSignalToCloseDict.TryGetValue(playerId, out cancellationTokenSource)) {
+        if (!playerSignalToCloseDict.TryGetValue(playerId, out (CancellationTokenSource c1, CancellationToken c2) cancellationSignal)) {
             _logger.LogWarning("Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #2", id, playerId);
             return;
         }
@@ -484,9 +518,9 @@ public class Room {
 
         _logger.LogInformation("Started downsyncToSinglePlayerAsyncLoop for (roomId: {0}, playerId: {1})", id, playerId);
         try {
-            while (WebSocketState.Open == wsSession.State && !cancellationTokenSource.IsCancellationRequested) {
+            while (WebSocketState.Open == wsSession.State && !cancellationSignal.c1.IsCancellationRequested) {
                 // [WARNING] If "TryTake" timed out while reading, it simply returns false and enters another round of reading.
-                if (genOrderPreservedMsgs.TryTake(out (ArraySegment<byte> content, InputBufferSnapshot inputBufferSnapshot) msg, localPlayerWsDownsyncQueBattleReadTimeoutMillis, cancellationTokenSource.Token)) {
+                if (genOrderPreservedMsgs.TryTake(out (ArraySegment<byte> content, InputBufferSnapshot inputBufferSnapshot) msg, localPlayerWsDownsyncQueBattleReadTimeoutMillis, cancellationSignal.c2)) {
                     var inputBufferSnapshot = msg.inputBufferSnapshot;
                     var content = msg.content;
                     int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
@@ -499,9 +533,9 @@ public class Room {
 
                     Reasons behind putting this "downsyncToSinglePlayerAsync" under a "Task.Run(...)" as follows.
 
-                    - When "downsyncToAllPlayers" is invoked by "OnBattleCmdReceived(...)" which is in turn very frequently called even upon UDP reception, we want it to be "as I/O non-blokcing as possible" -- that said, the need for "downsyncToAllPlayers" to **preserve the order of generation of "inputBufferSnapshot" for sending** still exists -- creating a somewhat dilemma. 
+                    - When "downsyncToAllPlayers" is invoked by "OnBattleCmdReceived(...)" which is in turn very frequently called **even upon UDP reception**, we want it to be "as I/O non-blocking as possible" -- that said, the need for "downsyncToAllPlayers" to **preserve the order of generation of "inputBufferSnapshot" for sending** still exists -- creating a somewhat dilemma. 
 
-                    - The ideal behaviour for me in this case is a "wsSession.PutToSendLater(...)" which executes synchronously in the current calling thread, thus returns immediately without "yielding at I/O awaiting". However "wsSession.SendAsync" returns an "async Task" -- certainly not the ideal form, i.e. "wsSession.SendAsync" respects "TCP flow control" to wait for corresponding ACKs when invocation rate is too high, which puts a significant "function return rate limit" of it ("yielding at I/O awaiting" is NOT a "return").  
+                    - The ideal behavior for me in this case is a "wsSession.PutToSendLater(...)" which executes synchronously in the current calling thread, thus returns immediately without "yielding at I/O awaiting". However "wsSession.SendAsync" returns an "async Task" -- certainly not the ideal form, i.e. "wsSession.SendAsync" respects "TCP flow control" to wait for corresponding ACKs when invocation rate is too high, which puts a significant "function return rate limit" of it ("yielding at I/O awaiting" is NOT a "return").  
                     */
                     var playerBattleState = Interlocked.Read(ref player.BattleState);
 
@@ -523,7 +557,7 @@ public class Room {
                     */
 
                     // [WARNING] Preserving generated order (of inputBufferSnapshot) while sending per player by simply "awaiting" the "wsSession.SendAsync(...)" calls
-                    await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+                    await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
 
                     player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
@@ -536,16 +570,15 @@ public class Room {
                 }
             }
         } catch (OperationCanceledException cEx) {
-            _logger.LogWarning("downsyncToSinglePlayerAsyncLoop cancelled for (roomId: {0}, playerId: {1})", id, playerId);
+            _logger.LogWarning("downsyncToSinglePlayerAsyncLoop cancelled for (roomId: {0}, playerId: {1}). cEx={2}", id, playerId, cEx.Message);
         } catch (Exception ex) {
             _logger.LogError(ex, "Exception occurred during downsyncToSinglePlayerAsyncLoop to (roomId: {0}, playerId: {1})", id, playerId);
         } finally {
             _logger.LogInformation("Ended downsyncToSinglePlayerAsyncLoop for (roomId: {0}, playerId: {1})", id, playerId);
-            if (!cancellationTokenSource.IsCancellationRequested) cancellationTokenSource.Cancel();
         }
     }
 
-    private async Task startBattleAsync() {
+    private async void startBattleAsync() {
         var nowRoomState = Interlocked.Read(ref state);
         if (ROOM_STATE_WAITING != nowRoomState) {
             _logger.LogWarning("[StartBattle] Battle not started due to not being WAITING: roomId={0}, roomState={1}", id, state);
@@ -580,7 +613,6 @@ public class Room {
             tList.Add(sendSafelyAsync(battleReadyToStartFrame, null, DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
         }
         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
-
         await Task.Delay(1500);
 
         /**
@@ -588,7 +620,7 @@ public class Room {
 
           Moreover, I'm deliberately NOT AWAITING here, because the execution of "OnPlayerBattleColliderAcked -> startBattleAsync" should continue without the result of "battleMainLoopActionAsync"!
 		 */
-        _ = Task.Run(battleMainLoopActionAsync);
+        battleMainLoopTask = Task.Run(battleMainLoopAsync);
     }
 
     public async Task SettleBattleAsync() {
@@ -598,13 +630,6 @@ public class Room {
         }
 
         Interlocked.Exchange(ref state, ROOM_STATE_IN_SETTLEMENT);
-
-        battleUdpTunnelLock.WaitOne();
-        if (null != battleUdpTunnel) {
-            _logger.LogInformation("Cancelling `battleUdpTunnel` for: roomId={0} during settlement", id);
-            battleUdpTunnelCancellationTokenSource.Cancel();
-        }
-        battleUdpTunnelLock.ReleaseMutex();
 
         _logger.LogInformation("Stopping the `battleMainLoop` for: roomId={0}", id);
         var assembledFrame = new RoomDownsyncFrame {
@@ -618,21 +643,10 @@ public class Room {
         }
         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
 
-        foreach (var item in playerActiveWatchdogDict) {
-            if (null == item.Value) continue;
-            item.Value.Stop();
-        }
-
-        foreach (var (_, cancellationTokenSource) in playerSignalToCloseDict) {
-            if (!cancellationTokenSource.IsCancellationRequested) {
-                cancellationTokenSource.Cancel(); // Would trigger "OnPlayerDisconnected -> clearPlayerNetworkSession" to remove entries in "[playerActiveWatchdogDict, playerDownsyncSessionDict, playerSignalToCloseDict, players]"  
-            }
-        }
-
         _logger.LogInformation("The room is in settlement: roomId={0}", id);
     }
 
-    private async Task dismiss() {
+    private async Task DismissBattleAsync() {
         joinerLock.WaitOne();
         try {
             var nowRoomState = Interlocked.Read(ref state);
@@ -675,19 +689,29 @@ public class Room {
             joinerLock.ReleaseMutex();
         }
 
-        // [WARNING] Awaiting would change synchronization context, thus called after "joinerLock.ReleaseMutex()".
         if (null != battleUdpTask) {
-            _logger.LogInformation("Dismissing before battleUdpTask completion: roomId={0}", id);
+            if (null != battleUdpTunnelCancellationTokenSource) {
+                if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
+                    _logger.LogInformation("Cancelling `battleUdpTask` for: roomId={0} during dismissal", id);
+                    battleUdpTunnelCancellationTokenSource.Cancel();
+                } else {
+                    _logger.LogInformation("`battleUdpTask` for: roomId={0} is already cancelled during dismissal", id);
+                }
+                battleUdpTunnelCancellationTokenSource.Dispose();
+            } else {
+                _logger.LogWarning("`battleUdpTask` for: roomId={0} is not null but `battleUdpTunnelCancellationTokenSource` is null during dismissal!", id);
+            }
+            battleUdpTunnelCancellationTokenSource = null;
             await battleUdpTask;
-            // backend of this project targets ".NET 7.0", hence no need to call "Task.Dispose()" explicitly, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+            battleUdpTask.Dispose();
             battleUdpTask = null;
-            _logger.LogInformation("Dismissing after battleUdpTask completion: roomId={0}", id);
+            _logger.LogWarning("`battleUdpTask` for: roomId={0} fully disposed during dismissal!", id);
         }
 
         lazyInitBattleUdpTunnel();
     }
 
-    private async void battleMainLoopActionAsync() {
+    private async Task battleMainLoopAsync() {
         try {
             var nowRoomState = Interlocked.Read(ref this.state);
             if (ROOM_STATE_PREPARE != nowRoomState) {
@@ -749,12 +773,14 @@ public class Room {
 
                 await Task.Delay(toSleepMillis);
             }
+
+            _logger.LogInformation("Times up, will settle `battleMainLoopActionAsync` for roomId={0} @renderFrameId={1}", id, renderFrameId);
         } catch (Exception ex) {
             _logger.LogError(ex, "Error running battleMainLoopActionAsync for roomId={0}", id);
         } finally {
             await SettleBattleAsync();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is settled@renderFrameId={1}", id, renderFrameId);
-            await dismiss();
+            await DismissBattleAsync();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is dismissed@renderFrameId={1}", id, renderFrameId);
             Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
             _roomManager.Push(calRoomScore(), this);
@@ -1174,13 +1200,12 @@ public class Room {
         }
 
         WebSocket? wsSession;
-        CancellationTokenSource? cancellationTokenSource;
         if (!playerDownsyncSessionDict.TryGetValue(playerId, out wsSession)) {
             _logger.LogWarning("Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #1", id, playerId);
             return;
         }
 
-        if (!playerSignalToCloseDict.TryGetValue(playerId, out cancellationTokenSource)) {
+        if (!playerSignalToCloseDict.TryGetValue(playerId, out (CancellationTokenSource c1, CancellationToken c2) cancellationSignal)) {
             _logger.LogWarning("Ws session for (roomId: {0}, playerId: {1}) doesn't exist! #2", id, playerId);
             return;
         }
@@ -1199,16 +1224,16 @@ public class Room {
             if (WebSocketState.Open != wsSession.State) {
               throw new ArgumentException(String.Format("sendSafelyAsync-Invalid websocket session state for (roomId: {0}, playerId: {1}): wsSession.State={2}", id, playerId, wsSession.State)); 
             }
-            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationTokenSource.Token).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
         } catch (Exception ex) {
             _logger.LogError(ex, "Exception occurred during sendSafelyAsync to (roomId: {0}, playerId: {1})", id, playerId);
-            if (!cancellationTokenSource.IsCancellationRequested) cancellationTokenSource.Cancel();
+            if (!cancellationSignal.c1.IsCancellationRequested) cancellationSignal.c1.Cancel();
         }
     }
 
     private async Task startBattleUdpTunnelAsyncTask() {
         _logger.LogInformation("`battleUdpTunnel` starting for roomId={0}", id);
-        battleUdpTunnelLock.WaitOne();
+
         try {
             battleUdpTunnel = new UdpClient(port: 0);
             if (null != battleUdpTunnel && null != battleUdpTunnel.Client.LocalEndPoint) {
@@ -1222,14 +1247,14 @@ public class Room {
         } catch (Exception ex) {
             _logger.LogError(ex, "Error creating udp client for roomId={0}", id);
             return;
-        } finally {
-            battleUdpTunnelLock.ReleaseMutex();
         }
 
         if (null == battleUdpTunnel) {
             _logger.LogWarning("`battleUdpTunnel` failed to start#1 for roomId={0}", id);
             return;
         }
+
+        battleUdpTunnelCancellationTokenSource = new CancellationTokenSource();
 
         UdpClient nonNullBattleUdpTunnel = battleUdpTunnel;
 
@@ -1253,7 +1278,7 @@ public class Room {
 
             _logger.LogInformation("`battleUdpTunnel` started for roomId={0} @ now peerUdpAddrBroadcastRdf={1}", id, peerUdpAddrBroadcastRdf);
 
-            while (!battleUdpTunnelCancellationToken.IsCancellationRequested) {
+            while (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
                 var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);
                 WsReq pReq = WsReq.Parser.ParseFrom(recvResult.Buffer);
                 // _logger.LogInformation("`battleUdpTunnel` received for roomId={0}: pReq={1}", id, pReq);
@@ -1318,23 +1343,17 @@ public class Room {
         } catch (Exception ex) {
             _logger.LogError(ex, "`battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
         } finally {
-            battleUdpTunnelLock.WaitOne();
             try {
                 _logger.LogInformation("Closing `battleUdpTunnel` for roomId={0}", id);
-                if (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
-                    battleUdpTunnelCancellationTokenSource.Cancel();
-                }
-                battleUdpTunnelCancellationTokenSource.Dispose();
-                battleUdpTunnelCancellationTokenSource = new CancellationTokenSource();
                 battleUdpTunnel.Close();
+                _logger.LogInformation("Closed `battleUdpTunnel` for roomId={0}, now disposing battleUdpTunnel", id);
+                battleUdpTunnel.Dispose();
+                _logger.LogInformation("Disposed `battleUdpTunnel` for roomId={0}", id);
                 battleUdpTunnel = null;
                 battleUdpTunnelAddr = null;
                 peerUdpAddrBroadcastRdf = null;
-                _logger.LogInformation("Closed `battleUdpTunnel` for roomId={0}", id);
             } catch (Exception ex) {
                 _logger.LogError(ex, "Closing of `battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
-            } finally {
-                battleUdpTunnelLock.ReleaseMutex();
             }
         }
 
@@ -1343,6 +1362,7 @@ public class Room {
 
     private void lazyInitBattleUdpTunnel() {
         if (null == battleUdpTask) {
+            _logger.LogInformation("lazyInitBattleUdpTunnel for (roomId={0})", id);
             /*
             1. At the end of "startBattleUdpTunnelAsyncTask" we would set "battleUdpTunnel = null" for the already closed tunnel after every battle.
             2. We should initialize the "battleUdpTunnel" before sending ANY "BattleColliderInfo".
@@ -1491,7 +1511,5 @@ public class Room {
     ~Room() {
         joinerLock.Dispose();
         inputBufferLock.Dispose();
-        battleUdpTunnelLock.Dispose();
-        battleUdpTunnelCancellationTokenSource.Dispose();
     }
 }
