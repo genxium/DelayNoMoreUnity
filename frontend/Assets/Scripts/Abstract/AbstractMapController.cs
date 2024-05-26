@@ -80,6 +80,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected bool softPushbackEnabled;
     protected shared.Collider[] dynamicRectangleColliders;
     protected shared.Collider[] staticColliders;
+    protected int staticCollidersCnt;
+
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
 
@@ -2287,7 +2289,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         // Draw static colliders
         int lineIndex = 0;
-        foreach (var collider in staticColliders) {
+        for (int s = 0; s < staticCollidersCnt; s++) {
+            var collider = staticColliders[s];
             if (null == collider) {
                 break;
             }

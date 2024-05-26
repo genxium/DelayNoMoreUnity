@@ -53,6 +53,10 @@ namespace shared {
             }
         }
 
+        public void unregisterAll() {
+            Colliders.Clear();
+        }
+
         public bool Occupied() {
             return (0 < Colliders.Cnt);
         }

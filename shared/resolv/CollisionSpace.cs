@@ -40,6 +40,7 @@ namespace shared {
             }
             return null;
         }
+
         public void AddSingle(Collider collider) {
             /*
                [WARNING] 
@@ -77,6 +78,12 @@ namespace shared {
             }
 
             collider.Space = null;
+        }
+    
+        public void RemoveAll() {
+            foreach (var cell in Cells) {
+                cell.unregisterAll();
+            }
         }
     }
 }

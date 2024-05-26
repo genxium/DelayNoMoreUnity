@@ -647,8 +647,6 @@ message RoomDownsyncFrame {
 	int32 participantChangeId = 1029;
 
 	int32 pickableLocalIdCounter = 1030;
-
-	repeated PeerUdpAddr peerUdpAddrList = 2048;
 }
 
 message WsResp {
@@ -658,7 +656,9 @@ message WsResp {
 	repeated InputFrameDownsync inputFrameDownsyncBatch = 4;
 	BattleColliderInfo bciFrame = 5;
 	int32 peerJoinIndex = 6;
-	string errMsg = 7;
+	repeated PeerUdpAddr peerUdpAddrList = 7;
+
+	string errMsg = 2048;
 }
 
 message Skill {

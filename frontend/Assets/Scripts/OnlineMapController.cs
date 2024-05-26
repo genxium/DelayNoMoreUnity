@@ -69,7 +69,7 @@ public class OnlineMapController : AbstractMapController {
                     battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
                     renderBuffer.Put(thatStartRdf);
                     
-                    refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
+                    refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out int staticCollidersCnt, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
 
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
@@ -91,7 +91,7 @@ public class OnlineMapController : AbstractMapController {
                     WsSessionManager.Instance.senderBuffer.Add(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
 
-                    var initialPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
+                    var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
                     udpTask = Task.Run(async () => {
                         var serverHolePuncher = new WsReq {
                             PlayerId = selfPlayerInfo.Id,
@@ -133,7 +133,7 @@ public class OnlineMapController : AbstractMapController {
                     onInputFrameDownsyncBatch(wsRespHolder.InputFrameDownsyncBatch);
                     break;
                 case DOWNSYNC_MSG_ACT_PEER_UDP_ADDR:
-                    var newPeerUdpAddrList = wsRespHolder.Rdf.PeerUdpAddrList;
+                    var newPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread, newPeerUdpAddrList: {0}", newPeerUdpAddrList));
                     UdpSessionManager.Instance.UpdatePeerAddr(roomCapacity, selfPlayerInfo.JoinIndex, newPeerUdpAddrList);
                     break;

@@ -907,6 +907,7 @@ namespace shared {
             }
 
             // Explicitly specify termination of nextRenderFrameBullets
+            //if (bulletCnt < nextRenderFrameBullets.Count) nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
             nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
         }
 

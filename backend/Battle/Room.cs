@@ -12,7 +12,7 @@ namespace backend.Battle;
 public class Room {
 
     private TimeSpan DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT = TimeSpan.FromMilliseconds(5000);
-    private int renderBufferSize = 512;
+    private int renderBufferSize = 128;
     public int id;
     public int capacity;
     public int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
@@ -74,6 +74,7 @@ public class Room {
     protected bool softPushbackEnabled;
     protected Collider[] dynamicRectangleColliders;
     protected Collider[] staticColliders;
+    protected int staticCollidersCnt;
     protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected CollisionSpace collisionSys;
     protected int maxTouchingCellsCnt;
@@ -94,7 +95,7 @@ public class Room {
     bool backendDynamicsEnabled;
 
     public PeerUdpAddr? battleUdpTunnelAddr;
-    public RoomDownsyncFrame? peerUdpAddrBroadcastRdf;
+    public RepeatedField<PeerUdpAddr>? peerUdpAddrList;
     
     IRoomManager _roomManager;
     ILoggerFactory _loggerFactory;
@@ -209,8 +210,6 @@ public class Room {
 
         joinerLock = new Mutex();
         inputBufferLock = new Mutex();
-
-        lazyInitBattleUdpTunnel();
     }
 
     public bool IsFull() {
@@ -261,6 +260,11 @@ public class Room {
 
             if (1 == effectivePlayerCount) {
                 Interlocked.Exchange(ref state, ROOM_STATE_WAITING);
+                // [WARNING] Each player starts hole-punching after receiving "DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO".
+                if (null == battleUdpTask && initUdpClient()) {
+                    _logger.LogInformation("starting `battleUdpTask` for (roomId={0})", id);
+                    battleUdpTask = Task.Run(startBattleUdpTunnelAsyncTask);
+                }
             }
 
             for (int i = 0; i < capacity; i++) {
@@ -429,7 +433,7 @@ public class Room {
                     if (thatPlayerId == targetPlayerId || (PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK == thatPlayerBattleState || PLAYER_BATTLE_STATE_ACTIVE == thatPlayerBattleState)) {
                         _logger.LogInformation("OnPlayerBattleColliderAcked-sending DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
 
-                        tList.Add(sendSafelyAsync(playerAckedFrame, null, DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED, thatPlayerId, thatPlayer, MAGIC_JOIN_INDEX_DEFAULT));
+                        tList.Add(sendSafelyAsync(playerAckedFrame, null, null, DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED, thatPlayerId, thatPlayer, MAGIC_JOIN_INDEX_DEFAULT));
                     }
                 }
                 await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
@@ -444,14 +448,20 @@ public class Room {
         try {
             joinerLock.WaitOne();
             if (0 >= renderBuffer.Cnt) {
-                preallocateStepHolders(capacity, renderBufferSize, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out residueCollided, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out dynamicRectangleColliders, out staticColliders, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
+                if (null == battleMainLoopTask) {
+                    preallocateStepHolders(capacity, renderBufferSize, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out residueCollided, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out dynamicRectangleColliders, out staticColliders, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
+                    _logger.LogInformation("OnPlayerBattleColliderAcked-post-preallocateStepHolders: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+                } else {
+                    provisionStepHolders(capacity, out justFulfilledEvtSubCnt, renderBuffer, pushbackFrameLogBuffer, inputBuffer, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, effPushbacks, hardPushbackNormsArr, softPushbacks, confirmedBattleResult);
+                    _logger.LogInformation("OnPlayerBattleColliderAcked-post-provisionStepHolders: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+                }
 
                 renderBuffer.Put(selfParsedRdf);
                 _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: Initialized renderBuffer by incoming startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}; now renderBuffer: {6}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, renderBuffer.toSimpleStat());
 
                 //_logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync details: roomId={0}, selfParsedRdf={1}, serializedBarrierPolygons={2}", id, selfParsedRdf, serializedBarrierPolygons);
 
-                refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
+                refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
             } else {
                 var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
                 if (!ok1 || null == startRdf) {
@@ -610,7 +620,7 @@ public class Room {
 
         var tList = new List<Task>();
         foreach (var (playerId, player) in players) {
-            tList.Add(sendSafelyAsync(battleReadyToStartFrame, null, DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
+            tList.Add(sendSafelyAsync(battleReadyToStartFrame, null, null,DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
         }
         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
         await Task.Delay(1500);
@@ -639,7 +649,7 @@ public class Room {
         var tList = new List<Task>();
         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
         foreach (var (playerId, player) in players) {
-            tList.Add(sendSafelyAsync(assembledFrame, null, DOWNSYNC_MSG_ACT_BATTLE_STOPPED, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
+            tList.Add(sendSafelyAsync(assembledFrame, null, null, DOWNSYNC_MSG_ACT_BATTLE_STOPPED, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
         }
         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
 
@@ -685,6 +695,8 @@ public class Room {
             effectivePlayerCount = 0; // guaranteed to succeed at the end of "dismiss"
             participantChangeId = 0;
             battleDurationFrames = 10 * BATTLE_DYNAMICS_FPS;
+
+            joinIndexRemap = new Dictionary<int, int>();
         } finally {
             joinerLock.ReleaseMutex();
         }
@@ -707,8 +719,6 @@ public class Room {
             battleUdpTask = null;
             _logger.LogWarning("`battleUdpTask` for: roomId={0} fully disposed during dismissal!", id);
         }
-
-        lazyInitBattleUdpTunnel();
     }
 
     private async Task battleMainLoopAsync() {
@@ -751,7 +761,7 @@ public class Room {
                         // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
                         
                         foreach (var (playerId, player) in players) {
-                            tList.Add(sendSafelyAsync(startRdf, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
+                            tList.Add(sendSafelyAsync(startRdf, null, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
                         }
                         await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
                         _logger.LogInformation("In `battleMainLoop` for roomId={0} sent out startRdf with {1} bytes", id, startRdf.ToByteArray().Length);
@@ -1083,9 +1093,9 @@ public class Room {
     }
 
     public void broadcastPeerUdpAddrList(int forJoinIndex) {
-        _logger.LogInformation("`broadcastPeerUdpAddrList` for roomId={0}, forJoinIndex={1}, now peerUdpAddrBroadcastRdf={2}", id, forJoinIndex, peerUdpAddrBroadcastRdf);
+        _logger.LogInformation("`broadcastPeerUdpAddrList` for roomId={0}, forJoinIndex={1}, now peerUdpAddrList={2}", id, forJoinIndex, peerUdpAddrList);
         foreach (var (playerId, player) in players) {
-            _ = sendSafelyAsync(peerUdpAddrBroadcastRdf, null, DOWNSYNC_MSG_ACT_PEER_UDP_ADDR, playerId, player, forJoinIndex); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.   
+            _ = sendSafelyAsync(null, null, peerUdpAddrList, DOWNSYNC_MSG_ACT_PEER_UDP_ADDR, playerId, player, forJoinIndex); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.   
         }
     }
 
@@ -1187,7 +1197,7 @@ public class Room {
         return new ArraySegment<byte>(resp.ToByteArray());
     }
 
-    private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, Pbc.RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, int act, int playerId, Player player, int peerJoinIndex) {
+    private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, RepeatedField<PeerUdpAddr>? peerUdpAddrList, int act, int playerId, Player player, int peerJoinIndex) {
         var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected/OnPlayerLost" from other threads
 
         // [WARNING] DON'T try to send any message to an inactive player!
@@ -1216,6 +1226,9 @@ public class Room {
             Rdf = roomDownsyncFrame,
             PeerJoinIndex = peerJoinIndex
         };
+        if (null != peerUdpAddrList) {
+            resp.PeerUdpAddrList.AddRange(peerUdpAddrList);
+        }
         if (null != toSendInputFrameDownsyncs) {
             resp.InputFrameDownsyncBatch.AddRange(toSendInputFrameDownsyncs);
         }
@@ -1231,9 +1244,8 @@ public class Room {
         }
     }
 
-    private async Task startBattleUdpTunnelAsyncTask() {
-        _logger.LogInformation("`battleUdpTunnel` starting for roomId={0}", id);
-
+    private bool initUdpClient() {
+        bool success = true;
         try {
             battleUdpTunnel = new UdpClient(port: 0);
             if (null != battleUdpTunnel && null != battleUdpTunnel.Client.LocalEndPoint) {
@@ -1241,42 +1253,59 @@ public class Room {
                 battleUdpTunnelAddr = new PeerUdpAddr {
                     Port = tunnelIpEndpoint.Port
                 };
-            } else {
-                battleUdpTunnelAddr = null;
+                success = true;
             }
         } catch (Exception ex) {
             _logger.LogError(ex, "Error creating udp client for roomId={0}", id);
-            return;
+            success = false;
         }
 
+        if (!success) {
+            _logger.LogWarning("Disposing `battleUdpTunnel` early for roomId={0} due to non-success of initUdpClient", id);
+            if (null != battleUdpTunnelAddr) {
+                battleUdpTunnelAddr = null;
+            } 
+            if (null != battleUdpTunnel) {
+                battleUdpTunnel.Close();
+                battleUdpTunnel.Dispose();
+            }
+            _logger.LogWarning("Disposed `battleUdpTunnel` early for roomId={0} due to non-success of initUdpClient", id);
+        }
+        return true;
+    }
+
+    private async Task startBattleUdpTunnelAsyncTask() {
         if (null == battleUdpTunnel) {
-            _logger.LogWarning("`battleUdpTunnel` failed to start#1 for roomId={0}", id);
+            _logger.LogWarning("Returning `startBattleUdpTunnelAsyncTask` early#1 for roomId={0} due to null `battleUdpTunnel`", id);
             return;
         }
 
-        battleUdpTunnelCancellationTokenSource = new CancellationTokenSource();
+        if (null == battleUdpTunnelAddr) {
+            _logger.LogWarning("Returning `startBattleUdpTunnelAsyncTask` early#2 for roomId={0} due to null `battleUdpTunnelAddr`", id);
+            return;
+        }
 
-        UdpClient nonNullBattleUdpTunnel = battleUdpTunnel;
+        _logger.LogInformation("`battleUdpTask` starting for roomId={0}", id);
 
+        battleUdpTunnelCancellationTokenSource = new CancellationTokenSource(); // [WARNING] Will be disposed along with "battleUdpTask".
         CancellationToken battleUdpTunnelCancellationToken = battleUdpTunnelCancellationTokenSource.Token;
         try {
             if (null == battleUdpTunnelAddr) {
                 // The "finally" block would help close "battleUdpTunnel".
-                _logger.LogWarning("`battleUdpTunnel` failed to start#2 for roomId={0}", id);
+                _logger.LogWarning("`battleUdpTask` failed to start#2 for roomId={0}: unable to obtain `battleUdpTunnelAddr`", id);
                 return;
             }
 
             // initialize "peerUdpAddrBroadcastRdf" 
-            peerUdpAddrBroadcastRdf = new RoomDownsyncFrame();
-            peerUdpAddrBroadcastRdf.PeerUdpAddrList.Add(new Pbc.RepeatedField<PeerUdpAddr> {
+            peerUdpAddrList = new RepeatedField<PeerUdpAddr> {
                 battleUdpTunnelAddr // i.e. "MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == 0"
-            });
+            };
             for (int i = 0; i < capacity; i++) {
                 // Prefill with invalid addrs
-                peerUdpAddrBroadcastRdf.PeerUdpAddrList.Add(new PeerUdpAddr { });
+                peerUdpAddrList.Add(new PeerUdpAddr { });
             }
 
-            _logger.LogInformation("`battleUdpTunnel` started for roomId={0} @ now peerUdpAddrBroadcastRdf={1}", id, peerUdpAddrBroadcastRdf);
+            _logger.LogInformation("`battleUdpTask` started for roomId={0} @ now peerUdpAddrList={1}", id, peerUdpAddrList);
 
             while (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
                 var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);
@@ -1292,7 +1321,7 @@ public class Room {
                 }
 
                 if (null == player) {
-                    _logger.LogWarning("In `battleUdpTunnel`, player for (roomId: {0}, playerId: {1}) doesn't exist!", id, playerId);
+                    _logger.LogWarning("In `battleUdpTask`, player for (roomId: {0}, playerId: {1}) doesn't exist!", id, playerId);
                     continue;
                 }
 
@@ -1304,11 +1333,11 @@ public class Room {
 
                 if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL == pReq.Act && null == player.BattleUdpTunnelAddr) {
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
-                    peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.CharacterDownsync.JoinIndex] = new PeerUdpAddr {
+                    peerUdpAddrList[player.CharacterDownsync.JoinIndex] = new PeerUdpAddr {
                         Ip = recvResult.RemoteEndPoint.Address.ToString(),
                         Port = recvResult.RemoteEndPoint.Port
                     };
-                    _logger.LogInformation("`battleUdpTunnel` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrBroadcastRdf.PeerUdpAddrList[player.CharacterDownsync.JoinIndex]);
+                    _logger.LogInformation("`battleUdpTask` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrList[player.CharacterDownsync.JoinIndex]);
                     // Need broadcast to all, including the current "pReq.PlayerId", to favor p2p holepunching
                     broadcastPeerUdpAddrList(player.CharacterDownsync.JoinIndex);
 
@@ -1328,7 +1357,7 @@ public class Room {
                         if (null == otherPlayer.BattleUdpTunnelAddr) {
                             continue;
                         }
-                        _ = nonNullBattleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), otherPlayer.BattleUdpTunnelAddr); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+                        _ = battleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), otherPlayer.BattleUdpTunnelAddr); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
                     }
                     OnBattleCmdReceived(pReq, playerId, true);
                     /*
@@ -1337,11 +1366,11 @@ public class Room {
                 }
             }
         } catch (OperationCanceledException ocEx) {
-            _logger.LogWarning("`battleUdpTunnel` is interrupted by OperationCanceledException for roomId={0}, ocEx.Message={1}", id, ocEx.Message);
+            _logger.LogWarning("`battleUdpTask` is interrupted by OperationCanceledException for roomId={0}, ocEx.Message={1}", id, ocEx.Message);
         } catch (ObjectDisposedException ex) {
-            _logger.LogWarning("`battleUdpTunnel` is interrupted by ObjectDisposedException for roomId={0}, ex.Message={1}", id, ex.Message);
+            _logger.LogWarning("`battleUdpTask` is interrupted by ObjectDisposedException for roomId={0}, ex.Message={1}", id, ex.Message);
         } catch (Exception ex) {
-            _logger.LogError(ex, "`battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
+            _logger.LogError(ex, "`battleUdpTask` is interrupted by unexpected exception for roomId={0}", id);
         } finally {
             try {
                 _logger.LogInformation("Closing `battleUdpTunnel` for roomId={0}", id);
@@ -1351,25 +1380,13 @@ public class Room {
                 _logger.LogInformation("Disposed `battleUdpTunnel` for roomId={0}", id);
                 battleUdpTunnel = null;
                 battleUdpTunnelAddr = null;
-                peerUdpAddrBroadcastRdf = null;
+                peerUdpAddrList = null;
             } catch (Exception ex) {
                 _logger.LogError(ex, "Closing of `battleUdpTunnel` is interrupted by unexpected exception for roomId={0}", id);
             }
         }
 
-        _logger.LogInformation("`battleUdpTunnel` stopped for (roomId={0})@renderFrameId={1}", id, renderFrameId);
-    }
-
-    private void lazyInitBattleUdpTunnel() {
-        if (null == battleUdpTask) {
-            _logger.LogInformation("lazyInitBattleUdpTunnel for (roomId={0})", id);
-            /*
-            1. At the end of "startBattleUdpTunnelAsyncTask" we would set "battleUdpTunnel = null" for the already closed tunnel after every battle.
-            2. We should initialize the "battleUdpTunnel" before sending ANY "BattleColliderInfo".
-            3. The following weird init of "battleUdpTask" makes it "synchronously awaitable" in "dismiss()".
-            */
-            battleUdpTask = Task.Run(startBattleUdpTunnelAsyncTask);
-        }
+        _logger.LogInformation("`battleUdpTask` stopped for (roomId={0})@renderFrameId={1}", id, renderFrameId);
     }
 
     private void doBattleMainLoopPerTickBackendDynamicsWithProperLocking(int prevRenderFrameId, ref ulong dynamicsDuration) {

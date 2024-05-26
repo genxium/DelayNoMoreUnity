@@ -217,7 +217,7 @@ namespace shared {
             "dHkYCiABKAUSGwoTcHJlYWxsb2NOcGNDYXBhY2l0eRgLIAEoBRIeChZwcmVh",
             "bGxvY0J1bGxldENhcGFjaXR5GAwgASgFEi0KD2JhdHRsZVVkcFR1bm5lbBiA",
             "CCABKAsyEy5zaGFyZWQuUGVlclVkcEFkZHISGAoPZnJhbWVMb2dFbmFibGVk",
-            "GIEIIAEoCCLuBAoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQYASABKAUSLQoK",
+            "GIEIIAEoCCK/BAoRUm9vbURvd25zeW5jRnJhbWUSCgoCaWQYASABKAUSLQoK",
             "cGxheWVyc0FychgCIAMoCzIZLnNoYXJlZC5DaGFyYWN0ZXJEb3duc3luYxIW",
             "Cg5jb3VudGRvd25OYW5vcxgDIAEoAxIfCgdidWxsZXRzGAQgAygLMg4uc2hh",
             "cmVkLkJ1bGxldBIqCgducGNzQXJyGAUgAygLMhkuc2hhcmVkLkNoYXJhY3Rl",
@@ -230,12 +230,12 @@ namespace shared {
             "SWRMaXN0GIIIIAMoBRIdChRidWxsZXRMb2NhbElkQ291bnRlchiDCCABKAUS",
             "GgoRbnBjTG9jYWxJZENvdW50ZXIYhAggASgFEhwKE3BhcnRpY2lwYW50Q2hh",
             "bmdlSWQYhQggASgFEh8KFnBpY2thYmxlTG9jYWxJZENvdW50ZXIYhgggASgF",
-            "Ei0KD3BlZXJVZHBBZGRyTGlzdBiAECADKAsyEy5zaGFyZWQuUGVlclVkcEFk",
-            "ZHIi3AEKBldzUmVzcBILCgNyZXQYASABKAUSCwoDYWN0GAIgASgFEiYKA3Jk",
-            "ZhgDIAEoCzIZLnNoYXJlZC5Sb29tRG93bnN5bmNGcmFtZRI7ChdpbnB1dEZy",
-            "YW1lRG93bnN5bmNCYXRjaBgEIAMoCzIaLnNoYXJlZC5JbnB1dEZyYW1lRG93",
-            "bnN5bmMSLAoIYmNpRnJhbWUYBSABKAsyGi5zaGFyZWQuQmF0dGxlQ29sbGlk",
-            "ZXJJbmZvEhUKDXBlZXJKb2luSW5kZXgYBiABKAUSDgoGZXJyTXNnGAcgASgJ",
+            "IosCCgZXc1Jlc3ASCwoDcmV0GAEgASgFEgsKA2FjdBgCIAEoBRImCgNyZGYY",
+            "AyABKAsyGS5zaGFyZWQuUm9vbURvd25zeW5jRnJhbWUSOwoXaW5wdXRGcmFt",
+            "ZURvd25zeW5jQmF0Y2gYBCADKAsyGi5zaGFyZWQuSW5wdXRGcmFtZURvd25z",
+            "eW5jEiwKCGJjaUZyYW1lGAUgASgLMhouc2hhcmVkLkJhdHRsZUNvbGxpZGVy",
+            "SW5mbxIVCg1wZWVySm9pbkluZGV4GAYgASgFEiwKD3BlZXJVZHBBZGRyTGlz",
+            "dBgHIAMoCzITLnNoYXJlZC5QZWVyVWRwQWRkchIPCgZlcnJNc2cYgBAgASgJ",
             "IoUCCgVTa2lsbBIVCg1iYXR0bGVMb2NhbElkGAEgASgFEhYKDnJlY292ZXJ5",
             "RnJhbWVzGAIgASgFEh0KFXJlY292ZXJ5RnJhbWVzT25CbG9jaxgDIAEoBRIb",
             "ChNyZWNvdmVyeUZyYW1lc09uSGl0GAQgASgFEi0KC3RyaWdnZXJUeXBlGAUg",
@@ -383,8 +383,8 @@ namespace shared {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Trigger), global::shared.Trigger.Parser, new[]{ "TriggerLocalId", "FramesToFire", "FramesToRecover", "Quota", "BulletTeamId", "Config", "ConfigFromTiled", "SubCycleQuotaLeft", "State", "FramesInState", "VirtualGridX", "VirtualGridY", "Locked" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.PeerUdpAddr), global::shared.PeerUdpAddr.Parser, new[]{ "Ip", "Port", "AuthKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleColliderInfo), global::shared.BattleColliderInfo.Parser, new[]{ "StageName", "BoundRoomId", "BattleDurationFrames", "InputFrameUpsyncDelayTolerance", "MaxChasingRenderFramesPerUpdate", "RollbackEstimatedDtMillis", "RollbackEstimatedDtNanos", "RenderBufferSize", "CollisionMinStep", "BoundRoomCapacity", "PreallocNpcCapacity", "PreallocBulletCapacity", "BattleUdpTunnel", "FrameLogEnabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "TriggersArr", "EvtSubsArr", "WaveNpcKilledEvtMaskCounter", "Pickables", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "NpcLocalIdCounter", "ParticipantChangeId", "PickableLocalIdCounter", "PeerUdpAddrList" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex", "ErrMsg" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.RoomDownsyncFrame), global::shared.RoomDownsyncFrame.Parser, new[]{ "Id", "PlayersArr", "CountdownNanos", "Bullets", "NpcsArr", "TrapsArr", "TriggersArr", "EvtSubsArr", "WaveNpcKilledEvtMaskCounter", "Pickables", "BackendUnconfirmedMask", "ShouldForceResync", "SpeciesIdList", "BulletLocalIdCounter", "NpcLocalIdCounter", "ParticipantChangeId", "PickableLocalIdCounter" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::shared.WsResp), global::shared.WsResp.Parser, new[]{ "Ret", "Act", "Rdf", "InputFrameDownsyncBatch", "BciFrame", "PeerJoinIndex", "PeerUdpAddrList", "ErrMsg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.Skill), global::shared.Skill.Parser, new[]{ "BattleLocalId", "RecoveryFrames", "RecoveryFramesOnBlock", "RecoveryFramesOnHit", "TriggerType", "BoundChState", "MpDelta", "Hits" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.FrameLog), global::shared.FrameLog.Parser, new[]{ "Rdf", "ActuallyUsedIdf" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.BattleResult), global::shared.BattleResult.Parser, new[]{ "WinnerJoinIndex" }, null, null, null, null),
@@ -15789,7 +15789,6 @@ namespace shared {
       npcLocalIdCounter_ = other.npcLocalIdCounter_;
       participantChangeId_ = other.participantChangeId_;
       pickableLocalIdCounter_ = other.pickableLocalIdCounter_;
-      peerUdpAddrList_ = other.peerUdpAddrList_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -15998,17 +15997,6 @@ namespace shared {
       }
     }
 
-    /// <summary>Field number for the "peerUdpAddrList" field.</summary>
-    public const int PeerUdpAddrListFieldNumber = 2048;
-    private static readonly pb::FieldCodec<global::shared.PeerUdpAddr> _repeated_peerUdpAddrList_codec
-        = pb::FieldCodec.ForMessage(16386, global::shared.PeerUdpAddr.Parser);
-    private readonly pbc::RepeatedField<global::shared.PeerUdpAddr> peerUdpAddrList_ = new pbc::RepeatedField<global::shared.PeerUdpAddr>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::shared.PeerUdpAddr> PeerUdpAddrList {
-      get { return peerUdpAddrList_; }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -16041,7 +16029,6 @@ namespace shared {
       if (NpcLocalIdCounter != other.NpcLocalIdCounter) return false;
       if (ParticipantChangeId != other.ParticipantChangeId) return false;
       if (PickableLocalIdCounter != other.PickableLocalIdCounter) return false;
-      if(!peerUdpAddrList_.Equals(other.peerUdpAddrList_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -16066,7 +16053,6 @@ namespace shared {
       if (NpcLocalIdCounter != 0) hash ^= NpcLocalIdCounter.GetHashCode();
       if (ParticipantChangeId != 0) hash ^= ParticipantChangeId.GetHashCode();
       if (PickableLocalIdCounter != 0) hash ^= PickableLocalIdCounter.GetHashCode();
-      hash ^= peerUdpAddrList_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -16129,7 +16115,6 @@ namespace shared {
         output.WriteRawTag(176, 64);
         output.WriteInt32(PickableLocalIdCounter);
       }
-      peerUdpAddrList_.WriteTo(output, _repeated_peerUdpAddrList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -16184,7 +16169,6 @@ namespace shared {
         output.WriteRawTag(176, 64);
         output.WriteInt32(PickableLocalIdCounter);
       }
-      peerUdpAddrList_.WriteTo(ref output, _repeated_peerUdpAddrList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -16230,7 +16214,6 @@ namespace shared {
       if (PickableLocalIdCounter != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(PickableLocalIdCounter);
       }
-      size += peerUdpAddrList_.CalculateSize(_repeated_peerUdpAddrList_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -16278,7 +16261,6 @@ namespace shared {
       if (other.PickableLocalIdCounter != 0) {
         PickableLocalIdCounter = other.PickableLocalIdCounter;
       }
-      peerUdpAddrList_.Add(other.peerUdpAddrList_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -16361,10 +16343,6 @@ namespace shared {
           }
           case 8240: {
             PickableLocalIdCounter = input.ReadInt32();
-            break;
-          }
-          case 16386: {
-            peerUdpAddrList_.AddEntriesFrom(input, _repeated_peerUdpAddrList_codec);
             break;
           }
         }
@@ -16451,10 +16429,6 @@ namespace shared {
             PickableLocalIdCounter = input.ReadInt32();
             break;
           }
-          case 16386: {
-            peerUdpAddrList_.AddEntriesFrom(ref input, _repeated_peerUdpAddrList_codec);
-            break;
-          }
         }
       }
     }
@@ -16502,6 +16476,7 @@ namespace shared {
       inputFrameDownsyncBatch_ = other.inputFrameDownsyncBatch_.Clone();
       bciFrame_ = other.bciFrame_ != null ? other.bciFrame_.Clone() : null;
       peerJoinIndex_ = other.peerJoinIndex_;
+      peerUdpAddrList_ = other.peerUdpAddrList_.Clone();
       errMsg_ = other.errMsg_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -16583,8 +16558,19 @@ namespace shared {
       }
     }
 
+    /// <summary>Field number for the "peerUdpAddrList" field.</summary>
+    public const int PeerUdpAddrListFieldNumber = 7;
+    private static readonly pb::FieldCodec<global::shared.PeerUdpAddr> _repeated_peerUdpAddrList_codec
+        = pb::FieldCodec.ForMessage(58, global::shared.PeerUdpAddr.Parser);
+    private readonly pbc::RepeatedField<global::shared.PeerUdpAddr> peerUdpAddrList_ = new pbc::RepeatedField<global::shared.PeerUdpAddr>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::shared.PeerUdpAddr> PeerUdpAddrList {
+      get { return peerUdpAddrList_; }
+    }
+
     /// <summary>Field number for the "errMsg" field.</summary>
-    public const int ErrMsgFieldNumber = 7;
+    public const int ErrMsgFieldNumber = 2048;
     private string errMsg_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -16616,6 +16602,7 @@ namespace shared {
       if(!inputFrameDownsyncBatch_.Equals(other.inputFrameDownsyncBatch_)) return false;
       if (!object.Equals(BciFrame, other.BciFrame)) return false;
       if (PeerJoinIndex != other.PeerJoinIndex) return false;
+      if(!peerUdpAddrList_.Equals(other.peerUdpAddrList_)) return false;
       if (ErrMsg != other.ErrMsg) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -16630,6 +16617,7 @@ namespace shared {
       hash ^= inputFrameDownsyncBatch_.GetHashCode();
       if (bciFrame_ != null) hash ^= BciFrame.GetHashCode();
       if (PeerJoinIndex != 0) hash ^= PeerJoinIndex.GetHashCode();
+      hash ^= peerUdpAddrList_.GetHashCode();
       if (ErrMsg.Length != 0) hash ^= ErrMsg.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -16670,8 +16658,9 @@ namespace shared {
         output.WriteRawTag(48);
         output.WriteInt32(PeerJoinIndex);
       }
+      peerUdpAddrList_.WriteTo(output, _repeated_peerUdpAddrList_codec);
       if (ErrMsg.Length != 0) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(130, 128, 1);
         output.WriteString(ErrMsg);
       }
       if (_unknownFields != null) {
@@ -16705,8 +16694,9 @@ namespace shared {
         output.WriteRawTag(48);
         output.WriteInt32(PeerJoinIndex);
       }
+      peerUdpAddrList_.WriteTo(ref output, _repeated_peerUdpAddrList_codec);
       if (ErrMsg.Length != 0) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(130, 128, 1);
         output.WriteString(ErrMsg);
       }
       if (_unknownFields != null) {
@@ -16735,8 +16725,9 @@ namespace shared {
       if (PeerJoinIndex != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PeerJoinIndex);
       }
+      size += peerUdpAddrList_.CalculateSize(_repeated_peerUdpAddrList_codec);
       if (ErrMsg.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(ErrMsg);
+        size += 3 + pb::CodedOutputStream.ComputeStringSize(ErrMsg);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -16772,6 +16763,7 @@ namespace shared {
       if (other.PeerJoinIndex != 0) {
         PeerJoinIndex = other.PeerJoinIndex;
       }
+      peerUdpAddrList_.Add(other.peerUdpAddrList_);
       if (other.ErrMsg.Length != 0) {
         ErrMsg = other.ErrMsg;
       }
@@ -16821,6 +16813,10 @@ namespace shared {
             break;
           }
           case 58: {
+            peerUdpAddrList_.AddEntriesFrom(input, _repeated_peerUdpAddrList_codec);
+            break;
+          }
+          case 16386: {
             ErrMsg = input.ReadString();
             break;
           }
@@ -16870,6 +16866,10 @@ namespace shared {
             break;
           }
           case 58: {
+            peerUdpAddrList_.AddEntriesFrom(ref input, _repeated_peerUdpAddrList_codec);
+            break;
+          }
+          case 16386: {
             ErrMsg = input.ReadString();
             break;
           }

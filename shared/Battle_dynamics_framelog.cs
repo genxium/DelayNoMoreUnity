@@ -6,12 +6,6 @@ using Google.Protobuf.Collections;
 
 namespace shared {
     public partial class Battle {
-        public static void trimRdfInPlace(RoomDownsyncFrame rdf) {
-            // Removed bullets with TERMINATING_ID
-            while (null != rdf.Bullets && 0 < rdf.Bullets.Count && TERMINATING_BULLET_LOCAL_ID == rdf.Bullets[rdf.Bullets.Count - 1].BattleAttr.BulletLocalId) {
-                rdf.Bullets.RemoveAt(rdf.Bullets.Count - 1);
-            }
-        }
 
         public static void trimIfdInPlace(InputFrameDownsync ifd) {
             // Removed bullets with TERMINATING_ID
@@ -150,8 +144,7 @@ namespace shared {
                         throw new ArgumentNullException(String.Format("wrapUpFrameLogs#1 rdf for i={0} doesn't exist! renderBuffer:{1}", i, renderBuffer.StFrameId, renderBuffer.toSimpleStat()));
                     }
 
-                    trimRdfInPlace(rdf);
-                    InputFrameDownsync ifd;
+                    InputFrameDownsync? ifd;
                     if (!rdfIdToActuallyUsedInput.TryGetValue(i, out ifd)) {
                         if (i + 1 == renderBuffer.EdFrameId) {
                             // It's OK that "InputFrameDownsync for the latest RoomDownsyncFrame" HASN'T BEEN USED YET. 
@@ -159,7 +152,13 @@ namespace shared {
                             break;
                         }
                         var j = ConvertToDelayedInputFrameId(i);
-                        throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 ifd for i={0}, j={1} doesn't exist! renderBuffer:{2}, inputBuffer:{3}", i, j, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
+                        if (j >= inputBuffer.EdFrameId) {
+                            break;
+                        }
+                        (_, ifd) = inputBuffer.GetByFrameId(j);
+                        if (null == ifd) {
+                            throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 ifd for i={0}, j={1} doesn't exist! renderBuffer:{2}, inputBuffer:{3}", i, j, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
+                        }
                     }
                     if (trimConfirmedList) {
                         trimIfdInPlace(ifd);
@@ -173,6 +172,9 @@ namespace shared {
                 }
 
                 for (int i = renderBuffer.StFrameId; i < renderBuffer.EdFrameId; i++) {
+                    if (i >= pushbackFrameLogBuffer.EdFrameId) {
+                        break;
+                    }
                     var (ok2, rdfPfl) = pushbackFrameLogBuffer.GetByFrameId(i);
                     if ((!ok2 || null == rdfPfl) && i+1 < renderBuffer.EdFrameId) {
                         throw new ArgumentNullException(String.Format("wrapUpFrameLogs#2 rdfPfl for i={0} doesn't exist! renderBuffer:{1}, pushbackFrameLogBuffer:{2}", i, renderBuffer.toSimpleStat(), pushbackFrameLogBuffer.toSimpleStat()));

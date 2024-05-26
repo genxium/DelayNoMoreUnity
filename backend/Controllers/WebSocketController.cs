@@ -110,9 +110,9 @@ public class WebSocketController : ControllerBase {
                     PeerJoinIndex = player.CharacterDownsync.JoinIndex
                 };
 
-                if (null != room.peerUdpAddrBroadcastRdf) {
+                if (null != room.peerUdpAddrList) {
                     // Make sure that the added player can send a holepuncher to the backend `battleUdpTunnelAddr`, thus trigger "room.broadcastPeerUdpAddrList" for all players in the same battle
-                    initWsResp.Rdf = room.peerUdpAddrBroadcastRdf; 
+                    initWsResp.PeerUdpAddrList.AddRange(room.peerUdpAddrList); 
                 } 
 
                 _logger.LogInformation("Sending bciFrame for [ roomId={0}, playerId={1} ]: {2}", room.id, playerId, initWsResp);
