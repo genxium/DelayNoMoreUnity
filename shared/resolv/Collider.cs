@@ -132,9 +132,7 @@ namespace shared {
         public void clearTouchingCellsAndData() {
             Space = null;
             Data = null;
-            while (null != TouchingCells && 0 < TouchingCells.Cnt) {
-                TouchingCells.Pop();
-            }
+            TouchingCells = new FrameRingBuffer<CollisionCell>(0); // To dereference existing Cells
         }
     }	
 }

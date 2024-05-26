@@ -9,7 +9,7 @@ namespace shared {
         public int St;        // read index, closed index
         public int N;
         public int Cnt;       // the count of valid elements in the buffer, used mainly to distinguish what "st == ed" means for "Pop" and "Get" methods
-        protected T[] Eles;
+        public T[] Eles;
         public RingBuffer(int n) {
             Cnt = St = Ed = 0;
             N = n;

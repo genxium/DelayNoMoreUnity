@@ -8,7 +8,6 @@ using DG.Tweening;
 using Google.Protobuf.Collections;
 using static shared.Battle;
 using static Story.StoryConstants;
-using UnityEngine.UIElements;
 
 public abstract class AbstractMapController : MonoBehaviour {
     protected int levelId = LEVEL_NONE;
@@ -394,7 +393,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             
             TODO: Instead of printing, add frameLog for (currRenderFrameId, rolledBackInputFrameDownsyncId, rolledBackToRenderFrameId)!
              */
-            Debug.Log(String.Format("@playerRdfId={5}, mismatched input for rendered history detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP, playerRdfId));
+            /*
+            if (fromUDP) {
+                Debug.Log(String.Format("@playerRdfId={5}, mismatched input for rendered history detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP, playerRdfId));
+            }
+            */
         }
         NetworkDoctor.Instance.LogRollbackFrames(rollbackFrames);
     }
@@ -970,7 +973,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             preallocPickableCapacity,
             out justFulfilledEvtSubCnt,
             out justFulfilledEvtSubArr,
-            out residueCollided,
             out renderBuffer,
             out pushbackFrameLogBuffer,
             out inputBuffer,
@@ -979,8 +981,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             out effPushbacks,
             out hardPushbackNormsArr,
             out softPushbacks,
-            out dynamicRectangleColliders,
-            out staticColliders,
             out decodedInputHolder,
             out prevDecodedInputHolder,
             out confirmedBattleResult,

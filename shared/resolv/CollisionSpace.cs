@@ -84,6 +84,7 @@ namespace shared {
             foreach (var cell in Cells) {
                 cell.unregisterAll();
             }
+            Cells = new CollisionCell[0, 0];
         }
     }
 }

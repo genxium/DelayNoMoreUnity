@@ -652,7 +652,7 @@ namespace shared {
             // TBD
         }
 
-        public static void preallocateStepHolders(int roomCapacity, int renderBufferSize, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocEvtSubCapacity, int preallocPickableCount, out int justFulfilledEvtSubCnt, out int[] justFulfilledEvtSubArr, out FrameRingBuffer<Collider> residueCollided, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out Collider[] dynamicRectangleColliders, out Collider[] staticColliders, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
+        public static void preallocateStepHolders(int roomCapacity, int renderBufferSize, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocEvtSubCapacity, int preallocPickableCount, out int justFulfilledEvtSubCnt, out int[] justFulfilledEvtSubArr, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
             /*
             [WARNING] 
 
@@ -664,9 +664,6 @@ namespace shared {
 
             justFulfilledEvtSubCnt = 0;
             justFulfilledEvtSubArr = new int[16]; // TODO: Remove this hardcoded capacity 
-
-            int residueCollidedCap = 256;
-            residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap); // Would be cleared each time it's used in a collision
 
             renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
             for (int i = 0; i < renderBufferSize; i++) {
@@ -719,11 +716,6 @@ namespace shared {
 
             softPushbackEnabled = true;
 
-            int dynamicRectangleCollidersCap = 192;
-            dynamicRectangleColliders = new Collider[dynamicRectangleCollidersCap];
-
-            staticColliders = new Collider[128];
-
             decodedInputHolder = new InputFrameDecoded();
 
             prevDecodedInputHolder = new InputFrameDecoded();
@@ -768,16 +760,28 @@ namespace shared {
             confirmedBattleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
         }
 
-        public static void clearColliders(ref CollisionSpace collisionSys, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, ref Collision collisionHolder, ref List<Collider> completelyStaticTrapColliders) {
+        public static void clearColliders(ref CollisionSpace collisionSys, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, ref Collision collisionHolder, ref List<Collider> completelyStaticTrapColliders, ref FrameRingBuffer<Collider> residueCollided) {
             if (null != collisionSys) {
                 // [WARNING] Explicitly cutting potential cyclic referencing among [CollisionSpace, Cell, Collider, Protoc generated CharacterDownsync/Bullet/XxxColliderAttr/...]. The "Protoc generated CharacterDownsync/Bullet/XxxColliderAttr/..." instances would NOT have any reference to "CollisionSpace/Cell/Collider", hence a unidirectional cleanup should be possible.
                 collisionSys.RemoveAll();
             }
 
-            for (int i = 0; i < staticColliders.Length; i++) {
-                var c = staticColliders[i];
-                if (null == c) continue;
-                c.clearTouchingCellsAndData();
+            if (null != dynamicRectangleColliders) {
+                for (int i = 0; i < dynamicRectangleColliders.Length; i++) {
+                    var c = dynamicRectangleColliders[i];
+                    if (null == c) continue;
+                    c.clearTouchingCellsAndData();
+                }
+                dynamicRectangleColliders = new Collider[0]; // dereferencing existing "Colliders"
+            }
+
+            if (null != staticColliders) {
+                for (int i = 0; i < staticColliders.Length; i++) {
+                    var c = staticColliders[i];
+                    if (null == c) continue;
+                    c.clearTouchingCellsAndData();
+                }
+                staticColliders = new Collider[0]; // dereferencing existing "Colliders"
             }
 
             if (null != completelyStaticTrapColliders) {
@@ -786,15 +790,22 @@ namespace shared {
                     if (null == c) continue;
                     c.clearTouchingCellsAndData();
                 }
+                completelyStaticTrapColliders = new List<Collider>(); // dereferencing existing "Colliders"
             }
 
-            if (null != collisionHolder) {
-                collisionHolder.ClearDeep();
+            if (null != residueCollided) {
+                for (int i = 0; i < residueCollided.Eles.Length; i++) {
+                    var c = residueCollided.Eles[i];
+                    if (null == c) continue;
+                    c.clearTouchingCellsAndData();
+                }  
+                residueCollided = new FrameRingBuffer<shared.Collider>(0); // dereferencing existing "Colliders"
             }
+
+            collisionHolder.ClearDeep();
         }
 
-        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerTrackingIdToTrapLocalId) {
-            clearColliders(ref collisionSys, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders);
+        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref FrameRingBuffer<Collider> residueCollided, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerTrackingIdToTrapLocalId) {
             /*
             [WARNING] 
     
@@ -807,9 +818,13 @@ namespace shared {
             int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
             collisionSys = new CollisionSpace(spaceOffsetX << 1, spaceOffsetY << 1, cellWidth, cellHeight); // spaceOffsetX, spaceOffsetY might change for each map, so not reusing memory here due to similar reason given above for "Collider"
 
-            if (null == collisionHolder) {
-                collisionHolder = new Collision();
-            }
+            collisionHolder = new Collision();
+
+            int residueCollidedCap = 256;
+            residueCollided = new FrameRingBuffer<shared.Collider>(residueCollidedCap); // Would be cleared each time it's used in a collision
+
+            int dynamicRectangleCollidersCap = 192;
+            dynamicRectangleColliders = new Collider[dynamicRectangleCollidersCap];
 
             maxTouchingCellsCnt = (((spaceOffsetX << 1) + cellWidth) / cellWidth) * (((spaceOffsetY << 1) + cellHeight) / cellHeight) + 1;
             for (int i = 0; i < dynamicRectangleColliders.Length; i++) {
@@ -817,6 +832,7 @@ namespace shared {
                 dynamicRectangleColliders[i] = NewConvexPolygonCollider(srcPolygon, 0, 0, maxTouchingCellsCnt, null);
             }
 
+            staticColliders = new Collider[128];
             staticCollidersCnt = 0;
             for (int i = 0; i < serializedBarrierPolygons.Count; i++) {
                 var serializedPolygon = serializedBarrierPolygons[i];

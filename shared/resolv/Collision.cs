@@ -43,7 +43,8 @@ namespace shared {
                 if (ok && null != c) {
                     c.clearTouchingCellsAndData();
                 }
-            } 
+            }
+            ContactedColliders = new FrameRingBuffer<Collider>(0); // dereferencing existing "Colliders"
         }
     }
 }

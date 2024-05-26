@@ -35,10 +35,7 @@ namespace shared {
                 var record = records[k];
                 if (null == record) break;
                 if (TERMINATING_BULLET_LOCAL_ID == record.BulletLocalId) break;
-                try {
-                    recordsSb.Add(String.Format("{bid:{0},lfc:{1}}", record.BulletLocalId, record.RemainingLifetimeRdfCount));
-                } catch (Exception _) {
-                }
+                recordsSb.Add(String.Format("{bid:{0},lfc:{1}}", record.BulletLocalId, record.RemainingLifetimeRdfCount));
             }
             return String.Join('|', recordsSb);
         }

@@ -63,29 +63,32 @@ public class Room {
     protected FrameRingBuffer<RoomDownsyncFrame> renderBuffer;
     protected FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer;
     protected FrameRingBuffer<InputFrameDownsync> inputBuffer;
-    protected FrameRingBuffer<Collider> residueCollided;
 
     protected RoomDownsyncFrame historyRdfHolder;
-    protected Collision collisionHolder;
     protected SatResult overlapResult, primaryOverlapResult;
     protected Dictionary<int, BattleResult> unconfirmedBattleResult;
     protected BattleResult confirmedBattleResult;
     protected Vector[] effPushbacks, softPushbacks;
     protected Vector[][] hardPushbackNormsArr;
     protected bool softPushbackEnabled;
+
+    //////////////////////////////Collider related fields////////////////////////////////// 
+    protected Collision collisionHolder;
+    protected FrameRingBuffer<Collider> residueCollided;
     protected Collider[] dynamicRectangleColliders;
     protected Collider[] staticColliders;
     protected int staticCollidersCnt;
-    protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
+    protected List<Collider> completelyStaticTrapColliders;
     protected CollisionSpace collisionSys;
     protected int maxTouchingCellsCnt;
+    //////////////////////////////Collider related fields////////////////////////////////// 
 
+    protected InputFrameDecoded decodedInputHolder, prevDecodedInputHolder;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
     protected Dictionary<int, int> triggerTrackingIdToTrapLocalId;
     protected Dictionary<int, int> joinIndexRemap;
     protected HashSet<int> justDeadJoinIndices;
-    protected List<Collider> completelyStaticTrapColliders;
 
     int lastAllConfirmedInputFrameId;
     int lastAllConfirmedInputFrameIdWithChange;
@@ -182,14 +185,21 @@ public class Room {
         triggerTrackingIdToTrapLocalId = new Dictionary<int, int>();
         joinIndexRemap = new Dictionary<int, int>();
         justDeadJoinIndices = new HashSet<int>();
-        completelyStaticTrapColliders = new List<Collider>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
         historyRdfHolder = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity);
 
-        collisionSys = new CollisionSpace(1, 1, 1, 1); // Will be reset in "refreshCollider" anyway
-        collisionHolder = new Collision();
-        preallocateStepHolders(capacity, renderBufferSize, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out residueCollided, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out dynamicRectangleColliders, out staticColliders, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
+        // Preallocate battle dynamic fields other than "Collider related" ones
+        preallocateStepHolders(capacity, renderBufferSize, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
 
+        // "Collider related" fields Will be reset in "refreshCollider" anyway
+        dynamicRectangleColliders = new Collider[0];
+        staticColliders = new Collider[0];
+        completelyStaticTrapColliders = new List<Collider>();
+        collisionSys = new CollisionSpace(1, 1, 1, 1); 
+        collisionHolder = new Collision();
+        residueCollided = new FrameRingBuffer<Collider>(0);
+        
+        // Preallocate network management fields
         players = new Dictionary<int, Player>();
         playersArr = new Player[capacity];
 
@@ -456,7 +466,7 @@ public class Room {
 
                 //_logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync details: roomId={0}, selfParsedRdf={1}, serializedBarrierPolygons={2}", id, selfParsedRdf, serializedBarrierPolygons);
 
-                refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
+                refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
 
                 _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: Initialized renderBuffer by incoming startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}, staticCollidersCnt={6}; now renderBuffer: {7}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, staticCollidersCnt, renderBuffer.toSimpleStat());
             } else {
@@ -678,7 +688,6 @@ public class Room {
             playersArr = new Player[capacity];
 
             rdfIdToActuallyUsedInput.Clear();
-            collisionHolder.Clear();
             renderBuffer.Clear();
             inputBuffer.Clear();
 
@@ -717,7 +726,7 @@ public class Room {
             _logger.LogInformation("`battleUdpTask` for: roomId={0} fully disposed during dismissal!", id);
         }
 
-        clearColliders(ref collisionSys, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders);
+        clearColliders(ref collisionSys, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders, ref residueCollided);
         _logger.LogWarning("`Colliders` cleared for: roomId={0} fully disposed during dismissal!", id);
     }
 
@@ -1359,7 +1368,7 @@ public class Room {
                         }
                         _ = battleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), otherPlayer.BattleUdpTunnelAddr); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
                     }
-                    // OnBattleCmdReceived(pReq, playerId, true);
+                    OnBattleCmdReceived(pReq, playerId, true);
                     /*
                     [WARNING] Different from frontend concerns, it's actually safe to update "ifd.ConfirmedList" (where "ifd" belongs to the "inputBuffer") by an UDP inputFrameUpsync, as long as all updates to "ifd.ConfirmedList" and "room.lastAllConfirmedInputFrameId" are guarded by "inputBufferLock" -- hence in Golang version, both "markConfirmationIfApplicable" and "forceConfirmationIfApplicable" are guarded by "inputBufferLock".
                     */
