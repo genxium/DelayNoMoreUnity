@@ -7,6 +7,7 @@ using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
 using Google.Protobuf.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace backend.Battle;
 public class Room {
@@ -713,8 +714,11 @@ public class Room {
             await battleUdpTask;
             battleUdpTask.Dispose();
             battleUdpTask = null;
-            _logger.LogWarning("`battleUdpTask` for: roomId={0} fully disposed during dismissal!", id);
+            _logger.LogInformation("`battleUdpTask` for: roomId={0} fully disposed during dismissal!", id);
         }
+
+        clearColliders(ref collisionSys, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders);
+        _logger.LogWarning("`Colliders` cleared for: roomId={0} fully disposed during dismissal!", id);
     }
 
     private async Task battleMainLoopAsync() {
@@ -1327,7 +1331,7 @@ public class Room {
                     continue;
                 }
 
-                if (shared.Battle.UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL == pReq.Act && null == player.BattleUdpTunnelAddr) {
+                if (UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL == pReq.Act && null == player.BattleUdpTunnelAddr) {
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
                     peerUdpAddrList[player.CharacterDownsync.JoinIndex] = new PeerUdpAddr {
                         Ip = recvResult.RemoteEndPoint.Address.ToString(),
@@ -1355,7 +1359,7 @@ public class Room {
                         }
                         _ = battleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), otherPlayer.BattleUdpTunnelAddr); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
                     }
-                    OnBattleCmdReceived(pReq, playerId, true);
+                    // OnBattleCmdReceived(pReq, playerId, true);
                     /*
                     [WARNING] Different from frontend concerns, it's actually safe to update "ifd.ConfirmedList" (where "ifd" belongs to the "inputBuffer") by an UDP inputFrameUpsync, as long as all updates to "ifd.ConfirmedList" and "room.lastAllConfirmedInputFrameId" are guarded by "inputBufferLock" -- hence in Golang version, both "markConfirmationIfApplicable" and "forceConfirmationIfApplicable" are guarded by "inputBufferLock".
                     */

@@ -768,7 +768,33 @@ namespace shared {
             confirmedBattleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
         }
 
+        public static void clearColliders(ref CollisionSpace collisionSys, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, ref Collision collisionHolder, ref List<Collider> completelyStaticTrapColliders) {
+            if (null != collisionSys) {
+                // [WARNING] Explicitly cutting potential cyclic referencing among [CollisionSpace, Cell, Collider, Protoc generated CharacterDownsync/Bullet/XxxColliderAttr/...]. The "Protoc generated CharacterDownsync/Bullet/XxxColliderAttr/..." instances would NOT have any reference to "CollisionSpace/Cell/Collider", hence a unidirectional cleanup should be possible.
+                collisionSys.RemoveAll();
+            }
+
+            for (int i = 0; i < staticColliders.Length; i++) {
+                var c = staticColliders[i];
+                if (null == c) continue;
+                c.clearTouchingCellsAndData();
+            }
+
+            if (null != completelyStaticTrapColliders) {
+                for (int i = 0; i < completelyStaticTrapColliders.Count; i++) {
+                    var c = completelyStaticTrapColliders[i];
+                    if (null == c) continue;
+                    c.clearTouchingCellsAndData();
+                }
+            }
+
+            if (null != collisionHolder) {
+                collisionHolder.ClearDeep();
+            }
+        }
+
         public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerTrackingIdToTrapLocalId) {
+            clearColliders(ref collisionSys, ref dynamicRectangleColliders, ref staticColliders, ref collisionHolder, ref completelyStaticTrapColliders);
             /*
             [WARNING] 
     
@@ -779,29 +805,9 @@ namespace shared {
 
             int cellWidth = 64;
             int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
-            if (null != collisionSys) {
-                // [WARNING] Explicitly cutting potential cyclic referencing among [CollisionSpace, Cell, Collider, Protoc generated CharacterDownsync/Bullet/XxxColliderAttr/...]. The "Protoc generated CharacterDownsync/Bullet/XxxColliderAttr/..." instances would NOT have any reference to "CollisionSpace/Cell/Collider", hence a unidirectional cleanup should be possible.
-                collisionSys.RemoveAll(); 
-            }
             collisionSys = new CollisionSpace(spaceOffsetX << 1, spaceOffsetY << 1, cellWidth, cellHeight); // spaceOffsetX, spaceOffsetY might change for each map, so not reusing memory here due to similar reason given above for "Collider"
 
-            for (int i = 0; i < staticColliders.Length; i++) {
-                var c = staticColliders[i];
-                if (null == c) continue;
-                c.clearTouchingCellsAndData();
-            } 
-
-            if (null != completelyStaticTrapColliders) {
-                for (int i = 0; i < completelyStaticTrapColliders.Count; i++) {
-                    var c = completelyStaticTrapColliders[i];
-                    if (null == c) continue;
-                    c.clearTouchingCellsAndData();
-                } 
-            }
-
-            if (null != collisionHolder) {
-                collisionHolder.ClearDeep();
-            } else {
+            if (null == collisionHolder) {
                 collisionHolder = new Collision();
             }
 
