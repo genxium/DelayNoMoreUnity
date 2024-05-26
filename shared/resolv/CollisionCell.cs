@@ -54,7 +54,12 @@ namespace shared {
         }
 
         public void unregisterAll() {
-            Colliders.Clear();
+            while (0 < Colliders.Cnt) {
+                var (ok, collider) = Colliders.Pop();
+                if (ok && null != collider) {
+                    collider.clearTouchingCellsAndData();
+                }
+            }
         }
 
         public bool Occupied() {

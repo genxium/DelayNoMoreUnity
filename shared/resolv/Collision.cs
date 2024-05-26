@@ -31,5 +31,19 @@ namespace shared {
             checkingCollider = null; 
             ContactedColliders.Clear();
         }
+
+        public void ClearDeep() {
+            dx = dy = 0;
+            if (null != checkingCollider) {
+                checkingCollider.clearTouchingCellsAndData();
+            }
+            checkingCollider = null; 
+            while (0 < ContactedColliders.Cnt) {
+                var (ok, c) = ContactedColliders.Pop(); 
+                if (ok && null != c) {
+                    c.clearTouchingCellsAndData();
+                }
+            } 
+        }
     }
 }

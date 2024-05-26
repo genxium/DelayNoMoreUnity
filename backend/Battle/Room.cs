@@ -12,7 +12,7 @@ namespace backend.Battle;
 public class Room {
 
     private TimeSpan DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT = TimeSpan.FromMilliseconds(5000);
-    private int renderBufferSize = 128;
+    private int renderBufferSize = 96;
     public int id;
     public int capacity;
     public int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
@@ -448,20 +448,16 @@ public class Room {
         try {
             joinerLock.WaitOne();
             if (0 >= renderBuffer.Cnt) {
-                if (null == battleMainLoopTask) {
-                    preallocateStepHolders(capacity, renderBufferSize, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out residueCollided, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out dynamicRectangleColliders, out staticColliders, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
-                    _logger.LogInformation("OnPlayerBattleColliderAcked-post-preallocateStepHolders: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
-                } else {
-                    provisionStepHolders(capacity, out justFulfilledEvtSubCnt, renderBuffer, pushbackFrameLogBuffer, inputBuffer, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, effPushbacks, hardPushbackNormsArr, softPushbacks, confirmedBattleResult);
+                provisionStepHolders(capacity, out justFulfilledEvtSubCnt, renderBuffer, pushbackFrameLogBuffer, inputBuffer, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, effPushbacks, hardPushbackNormsArr, softPushbacks, confirmedBattleResult);
                     _logger.LogInformation("OnPlayerBattleColliderAcked-post-provisionStepHolders: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
-                }
-
+                
                 renderBuffer.Put(selfParsedRdf);
-                _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: Initialized renderBuffer by incoming startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}; now renderBuffer: {6}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, renderBuffer.toSimpleStat());
 
                 //_logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync details: roomId={0}, selfParsedRdf={1}, serializedBarrierPolygons={2}", id, selfParsedRdf, serializedBarrierPolygons);
 
                 refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
+
+                _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: Initialized renderBuffer by incoming startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}, staticCollidersCnt={6}; now renderBuffer: {7}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, staticCollidersCnt, renderBuffer.toSimpleStat());
             } else {
                 var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
                 if (!ok1 || null == startRdf) {

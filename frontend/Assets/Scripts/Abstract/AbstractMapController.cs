@@ -1579,7 +1579,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                             var srcPolygon = NewRectPolygon(rectCx, rectCy, barrierTileObj.m_Width, barrierTileObj.m_Height, 0, 0, 0, 0);
                             serializedBarrierPolygons.Add(srcPolygon.Serialize());
                         } else {
-                            // TODO: Sort the points by CounterClockwise order here!
                             var points = inMapCollider.points;
                             List<float> points2 = new List<float>();
                             foreach (var point in points) {

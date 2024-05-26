@@ -907,8 +907,7 @@ namespace shared {
             }
 
             // Explicitly specify termination of nextRenderFrameBullets
-            //if (bulletCnt < nextRenderFrameBullets.Count) nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
-            nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+            if (bulletCnt < nextRenderFrameBullets.Count) nextRenderFrameBullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
         }
 
         public static bool isStaticCrouching(CharacterState state) {
@@ -2490,15 +2489,16 @@ namespace shared {
             // [WARNING] On backend this function MUST BE called while "InputsBufferLock" is locked!
             var nextRenderFramePlayers = candidate.PlayersArr;
             var nextRenderFrameNpcs = candidate.NpcsArr;
+            int nextRenderFrameNpcLocalIdCounter = currRenderFrame.NpcLocalIdCounter;
             var nextRenderFrameBullets = candidate.Bullets;
             int nextRenderFrameBulletLocalIdCounter = currRenderFrame.BulletLocalIdCounter;
-            int nextRenderFrameNpcLocalIdCounter = currRenderFrame.NpcLocalIdCounter;
-            int nextRenderFramePickableLocalIdCounter = currRenderFrame.PickableLocalIdCounter;
             var nextRenderFrameTraps = candidate.TrapsArr;
             var nextRenderFrameTriggers = candidate.TriggersArr;
             var nextRenderFramePickables = candidate.Pickables; 
+            int nextRenderFramePickableLocalIdCounter = currRenderFrame.PickableLocalIdCounter;
             var nextEvtSubs = candidate.EvtSubsArr; 
             // Make a copy first
+            // [WARNING] For "nextRenderFrameBullets" and "nextRenderFramePickables", their "copy from currRenderFrame" operations are embedded into "_insertBulletColliders(...)" and "_moveAndInsertPickableColliders" respectively.
             for (int i = 0; i < roomCapacity; i++) {
                 var src = currRenderFrame.PlayersArr[i];
                 var chConfig = characters[src.SpeciesId];

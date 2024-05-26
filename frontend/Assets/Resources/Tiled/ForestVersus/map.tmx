@@ -2,7 +2,7 @@
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="193" nextobjectid="571">
  <properties>
   <property name="MatchInOrder" value="true"/>
-  <property name="battleDurationSeconds" value="8"/>
+  <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="1"/>
   <property name="npcPreallocCapDict" value="1:4;3:2;4097:4;4098:6;4099:4;4100:4;4096:2"/>
  </properties>

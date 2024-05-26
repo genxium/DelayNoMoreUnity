@@ -128,5 +128,13 @@ namespace shared {
 
             return sb.ToString();
         }
+
+        public void clearTouchingCellsAndData() {
+            Space = null;
+            Data = null;
+            while (null != TouchingCells && 0 < TouchingCells.Cnt) {
+                TouchingCells.Pop();
+            }
+        }
     }	
 }

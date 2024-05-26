@@ -67,6 +67,18 @@ namespace shared {
                 if (0 > crossProd) {
                     return +1;
                 }
+                if (dy1 < dy2) {
+                    return -1;
+                } 
+                if (dy1 > dy2) {
+                    return +1;
+                }
+                if (dx1 < dx2) {
+                    return -1;
+                }
+                if (dx1 > dx2) {
+                    return +1;
+                }
                 return 0;
             });
             X = x + anchorOffsetX;
