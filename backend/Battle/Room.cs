@@ -574,7 +574,7 @@ public class Room {
                     */
 
                     // [WARNING] Preserving generated order (of inputBufferSnapshot) while sending per player by simply "awaiting" the "wsSession.SendAsync(...)" calls
-                    await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+                    await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationSignal.c2);
 
                     player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
