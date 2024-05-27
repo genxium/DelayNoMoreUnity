@@ -41,21 +41,25 @@ public class UdpSessionManager {
         recvBuffer = new ConcurrentQueue<WsReq>();
     }
 
-    public async Task OpenUdpSession(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> initialPeerAddrList, WsReq theServerHolePuncher, WsReq thePeerHolePuncher, CancellationToken wsSessionCancellationToken) {
-        Debug.Log(String.Format("openUdpSession#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
+    public void ResetUdpClient(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> initialPeerAddrList, WsReq theServerHolePuncher, WsReq thePeerHolePuncher, CancellationToken wsSessionCancellationToken) {
+        Debug.Log(String.Format("ResetUdpClient#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
         serverHolePuncher = theServerHolePuncher;
         peerHolePuncher = thePeerHolePuncher;
         while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, wsSessionCancellationToken)) { }
         recvBuffer.Clear();
+        Debug.Log(String.Format("ResetUdpClient#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
 
         peerUdpEndPointList = new IPEndPoint[roomCapacity + 1];
         peerUdpEndPointPunched = new long[roomCapacity + 1];
         UpdatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
+    }
 
+    public async Task OpenUdpSession(int roomCapacity, int selfJoinIndex, CancellationToken wsSessionCancellationToken) {
         try {
+            Debug.Log(String.Format("OpenUdpSession#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
             udpSession = new UdpClient(port: 0);
             // [WARNING] UdpClient class in .NET Standard 2.1 doesn't support CancellationToken yet! See https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient?view=netstandard-2.1 for more information. The cancellationToken here is still used to keep in pace with the WebSocket session, i.e. is WebSocket Session is closed, then UdpSession should be closed too.
-            Debug.Log(String.Format("openUdpSession#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
+            Debug.Log(String.Format("OpenUdpSession#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
             UdpSessionManager.Instance.PunchBackendUdpTunnel(wsSessionCancellationToken); // [WARNING] After clearing of "senderBuffer"
             await Task.WhenAll(Receive(udpSession, roomCapacity, wsSessionCancellationToken), Send(udpSession, roomCapacity, selfJoinIndex, wsSessionCancellationToken));
             Debug.Log("Both UdpSession 'Receive' and 'Send' tasks are ended.");

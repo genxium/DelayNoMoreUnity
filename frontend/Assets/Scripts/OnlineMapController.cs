@@ -52,23 +52,6 @@ public class OnlineMapController : AbstractMapController {
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
                     
-                    var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
-                    udpTask = Task.Run(async () => {
-                        var serverHolePuncher = new WsReq {
-                            PlayerId = selfPlayerInfo.Id,
-                            Act = UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
-                            JoinIndex = selfPlayerInfo.JoinIndex,
-                            AuthKey = clientAuthKey
-                        };
-                        var peerHolePuncher = new WsReq {
-                            PlayerId = selfPlayerInfo.Id,
-                            Act = UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
-                            JoinIndex = selfPlayerInfo.JoinIndex,
-                            AuthKey = clientAuthKey
-                        };
-                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, wsCancellationToken);
-                    });
-
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     resetCurrentMatch("ForestVersus");
                     calcCameraCaps();
@@ -105,6 +88,24 @@ public class OnlineMapController : AbstractMapController {
 
                     WsSessionManager.Instance.senderBuffer.Add(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
+
+                    var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
+                    var serverHolePuncher = new WsReq {
+                        PlayerId = selfPlayerInfo.Id,
+                        Act = UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
+                        JoinIndex = selfPlayerInfo.JoinIndex,
+                        AuthKey = clientAuthKey
+                    };
+                    var peerHolePuncher = new WsReq {
+                        PlayerId = selfPlayerInfo.Id,
+                        Act = UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
+                        JoinIndex = selfPlayerInfo.JoinIndex,
+                        AuthKey = clientAuthKey
+                    };
+                    UdpSessionManager.Instance.ResetUdpClient(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, wsCancellationToken);
+                    udpTask = Task.Run(async () => {
+                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, wsCancellationToken);
+                    });
 
                     preallocateFrontendOnlyHolders();
                     preallocateSfxNodes();
