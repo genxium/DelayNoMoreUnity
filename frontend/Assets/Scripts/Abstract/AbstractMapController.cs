@@ -961,10 +961,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         Debug.Log("preallocateNpcNodes ends");
     }
 
-    protected void preallocateHolders() {
+    protected void preallocateBattleDynamicsHolder() {
         preallocateStepHolders(
             roomCapacity,
-            768,
+            512,
             preallocNpcCapacity,
             preallocBulletCapacity,
             preallocTrapCapacity,
@@ -992,9 +992,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         justDeadNpcIndices = new HashSet<int>();
         othersForcedDownsyncRenderFrameDict = new Dictionary<int, RoomDownsyncFrame>();
         missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
+    }
 
+    protected void preallocateFrontendOnlyHolders() {
         //---------------------------------------------FRONTEND USE ONLY SEPERARTION---------------------------------------------
-
         prefabbedInputListHolder = new ulong[roomCapacity];
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
 

@@ -53,12 +53,8 @@ public class OnlineMapController : AbstractMapController {
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     resetCurrentMatch("ForestVersus");
                     calcCameraCaps();
-                    preallocateHolders();
-                    preallocateVfxNodes();
-                    preallocateSfxNodes();
-                    preallocatePixelVfxNodes();
-                    preallocateNpcNodes();
-
+                    preallocateBattleDynamicsHolder();
+                    
                     var tempSpeciesIdList = new int[roomCapacity];
                     for (int i = 0; i < roomCapacity; i++) {
                         tempSpeciesIdList[i] = SPECIES_NONE_CH;
@@ -108,6 +104,12 @@ public class OnlineMapController : AbstractMapController {
                         await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, wsCancellationToken);
                     });
 
+                    preallocateFrontendOnlyHolders();
+                    preallocateVfxNodes();
+                    preallocateSfxNodes();
+                    preallocatePixelVfxNodes();
+                    preallocateNpcNodes();
+
                     break;
                 case DOWNSYNC_MSG_ACT_PLAYER_ADDED_AND_ACKED:
                     playerWaitingPanel.OnParticipantChange(wsRespHolder.Rdf);
@@ -156,8 +158,7 @@ public class OnlineMapController : AbstractMapController {
                     networkInfoPanel.gameObject.SetActive(true);
                     playerWaitingPanel.gameObject.SetActive(false);
                     Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
-                    readyGoPanel.playReadyAnim(() => {
-                    }, null);
+                    readyGoPanel.playReadyAnim(() => {}, null);
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
                   if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {

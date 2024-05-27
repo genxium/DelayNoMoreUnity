@@ -78,7 +78,8 @@ public class OfflineMapController : AbstractMapController {
                 roomCapacity = 1;
                 resetCurrentMatch(cachedLevelName);
                 calcCameraCaps();
-                preallocateHolders();
+                preallocateBattleDynamicsHolder();
+                preallocateFrontendOnlyHolders();
                 preallocateVfxNodes();
                 preallocateSfxNodes();
                 preallocatePixelVfxNodes();
