@@ -73,6 +73,8 @@ public class OfflineMapController : AbstractMapController {
     void Update() {
         try {
             if (1 == initSeqNo) {
+                initSeqNo++;
+            } else if (2 == initSeqNo) {
                 selfPlayerInfo = new CharacterDownsync();
 
                 roomCapacity = 1;
@@ -82,7 +84,7 @@ public class OfflineMapController : AbstractMapController {
                 selfPlayerInfo.JoinIndex = 1;
 
                 initSeqNo++; // To avoid accessing "gameObject.transform" in the same renderFrame right after "resetCurrentMatch" and the "preallocations"
-            } else if (2 == initSeqNo) {
+            } else if (3 == initSeqNo) {
                 preallocateFrontendOnlyHolders();
                 preallocateSfxNodes();
                 preallocatePixelVfxNodes();
@@ -103,12 +105,12 @@ public class OfflineMapController : AbstractMapController {
                 var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
                 Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
                 initSeqNo++;
-            } else if (3 == initSeqNo) {
+            } else if (4 == initSeqNo) {
                 Debug.Log(String.Format("characterSelectPanel about to hide, thread id={0}", Thread.CurrentThread.ManagedThreadId));
                 characterSelectPanel.gameObject.SetActive(false);
                 Debug.Log(String.Format("characterSelectPanel hidden, thread id={0}", Thread.CurrentThread.ManagedThreadId));
                 initSeqNo++;
-            } else if (4 == initSeqNo) {
+            } else if (5 == initSeqNo) {
                 Debug.Log(String.Format("about to ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId));
                 readyGoPanel.playReadyAnim(null, () => {
                     Debug.Log(String.Format("played ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId));
@@ -119,7 +121,7 @@ public class OfflineMapController : AbstractMapController {
                     pauseAllAnimatingCharacters(false);
                 });
                 initSeqNo++;
-            } else if (6 == initSeqNo) {
+            } else if (7 == initSeqNo) {
                 enableBattleInput(true);
                 readyGoPanel.playGoAnim();
                 bgmSource.Play();

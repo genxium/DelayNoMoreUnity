@@ -1058,6 +1058,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected virtual void resetCurrentMatch(string theme) {
+        if (null != underlyingMap) {
+            Destroy(underlyingMap);
+        }
         Debug.Log(String.Format("resetCurrentMatch with roomCapacity={0}", roomCapacity));
         battleState = ROOM_STATE_IMPOSSIBLE;
         levelId = LEVEL_NONE;
@@ -1072,16 +1075,13 @@ public abstract class AbstractMapController : MonoBehaviour {
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
 
-        if (null != underlyingMap) {
-            Destroy(underlyingMap);
-        }
         playerGameObjs = new GameObject[roomCapacity];
         dynamicTrapGameObjs = new List<GameObject>();
         triggerGameObjs = new Dictionary<int, GameObject>();
         string path = String.Format("Tiled/{0}/map", theme);
         var underlyingMapPrefab = Resources.Load(path) as GameObject;
         underlyingMap = GameObject.Instantiate(underlyingMapPrefab, this.gameObject.transform);
-        
+
         var superMap = underlyingMap.GetComponent<SuperMap>();
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
@@ -1090,7 +1090,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         selfBattleHeading.reset();
         readyGoPanel.resetCountdown();
         settlementPanel.gameObject.SetActive(false);
-        
+
         iptmgr.btnB.GetComponent<InventorySlot>().resumeRegularBtnB();
     }
 

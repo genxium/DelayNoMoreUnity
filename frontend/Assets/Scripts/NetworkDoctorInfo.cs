@@ -12,6 +12,9 @@ public class NetworkDoctorInfo: MonoBehaviour {
     public TMP_Text peerUpsyncFpsTitle;
     public TMP_Text peerUpsyncFpsValue;
 
+    public TMP_Text ifdLagTitle;
+    public TMP_Text ifdLagValue;
+
     public TMP_Text stepsLockedTitle;
     public TMP_Text stepsLockedValue;
 
@@ -20,9 +23,6 @@ public class NetworkDoctorInfo: MonoBehaviour {
 
     public TMP_Text udpPunchedCntTitle;
     public TMP_Text udpPunchedCntValue;
-
-    public TMP_Text ifdLeadingFrontTitle;
-    public TMP_Text ifdLeadingFrontValue;
 
     // Start is called before the first frame update
     void Start() {
@@ -34,10 +34,11 @@ public class NetworkDoctorInfo: MonoBehaviour {
 
     }
 
-    public void SetValues(int sendingFps, int srvDownsyncFps, int peerUpsyncFps, int stepsLocked, int rollbackFrames, long udpPunchedCnt) {
-        sendingFpsValue.text = sendingFps.ToString();
-        srvDownsyncFpsValue.text = srvDownsyncFps.ToString();
-        peerUpsyncFpsValue.text = peerUpsyncFps.ToString();
+    public void SetValues(float sendingFps, float srvDownsyncFps, float peerUpsyncFps, int ifdLag, int stepsLocked, int rollbackFrames, long udpPunchedCnt) {
+        sendingFpsValue.text = sendingFps.ToString("0.0");
+        srvDownsyncFpsValue.text = srvDownsyncFps.ToString("0.0");
+        peerUpsyncFpsValue.text = peerUpsyncFps.ToString("0.0");
+        ifdLagValue.text = ifdLag.ToString();
         stepsLockedValue.text = stepsLocked.ToString();
         rollbackFramesValue.text = rollbackFrames.ToString();
         udpPunchedCntValue.text = udpPunchedCnt.ToString();

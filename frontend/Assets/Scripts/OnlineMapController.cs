@@ -51,6 +51,24 @@ public class OnlineMapController : AbstractMapController {
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
+                    
+                    var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
+                    udpTask = Task.Run(async () => {
+                        var serverHolePuncher = new WsReq {
+                            PlayerId = selfPlayerInfo.Id,
+                            Act = UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
+                            JoinIndex = selfPlayerInfo.JoinIndex,
+                            AuthKey = clientAuthKey
+                        };
+                        var peerHolePuncher = new WsReq {
+                            PlayerId = selfPlayerInfo.Id,
+                            Act = UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
+                            JoinIndex = selfPlayerInfo.JoinIndex,
+                            AuthKey = clientAuthKey
+                        };
+                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, wsCancellationToken);
+                    });
+
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     resetCurrentMatch("ForestVersus");
                     calcCameraCaps();
@@ -87,24 +105,6 @@ public class OnlineMapController : AbstractMapController {
 
                     WsSessionManager.Instance.senderBuffer.Add(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
-
-                    // [WARNING] Due to a known bug in Unity 2021.3 (https://issuetracker.unity3d.com/issues/rendererupdatemanager-dot-updateall-must-be-called-first-error-is-thrown-when-entering-the-play-mode), I have to start "udpTask" strictly before the following preallocations, otherwise the error would interrupt "UdpSessionManager.Instance.OpenUdpSession" between log points "openUdpSession#1" and "openUdpSession#2".
-                    var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
-                    udpTask = Task.Run(async () => {
-                        var serverHolePuncher = new WsReq {
-                            PlayerId = selfPlayerInfo.Id,
-                            Act = UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
-                            JoinIndex = selfPlayerInfo.JoinIndex,
-                            AuthKey = clientAuthKey
-                        };
-                        var peerHolePuncher = new WsReq {
-                            PlayerId = selfPlayerInfo.Id,
-                            Act = UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
-                            JoinIndex = selfPlayerInfo.JoinIndex,
-                            AuthKey = clientAuthKey
-                        };
-                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, wsCancellationToken);
-                    });
 
                     preallocateFrontendOnlyHolders();
                     preallocateSfxNodes();
@@ -387,9 +387,9 @@ public class OnlineMapController : AbstractMapController {
                 localTimerEnded = true;
             } else {
                 readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
-                var (tooFastOrNot, _, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
+                var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, renderFrameIdLagTolerance);
                 shouldLockStep = tooFastOrNot;
-                networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
+                networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
             }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {

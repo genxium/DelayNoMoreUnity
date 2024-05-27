@@ -51,10 +51,15 @@ namespace SuperTiled2Unity
         {
             // This is a hack so that Unity does not falsely report prefab instance differences from our importer map
             // Look for where renderer.detectChunkCullingBounds is set to Manual in the importer code which is the other part of this hack
-            foreach (var renderer in GetComponentsInChildren<TilemapRenderer>())
-            {
-                renderer.detectChunkCullingBounds = TilemapRenderer.DetectChunkCullingBounds.Auto;
+            /*
+            // [WARNING] This "hack" triggers a known bug in Unity 2021.3 (https://issuetracker.unity3d.com/issues/rendererupdatemanager-dot-updateall-must-be-called-first-error-is-thrown-when-entering-the-play-mode) which randomly interrupts my async tasks, experiments show that I can just disable this hack.
+
+            foreach (var renderer in GetComponentsInChildren<TilemapRenderer>()) {
+                if (TilemapRenderer.DetectChunkCullingBounds.Manual == renderer.detectChunkCullingBounds) {
+                    renderer.detectChunkCullingBounds = TilemapRenderer.DetectChunkCullingBounds.Auto;
+                }
             }
+            */
         }
 
         public Vector3Int TiledIndexToGridCell(int index, int offset_x, int offset_y, int stride)
