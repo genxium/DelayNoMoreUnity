@@ -682,7 +682,9 @@ namespace shared {
                 pushbackFrameLogBuffer = new FrameRingBuffer<RdfPushbackFrameLog>(1);
             }
 
-            int inputBufferSize = (renderBufferSize >> 1) + 1;
+            // [WARNING] An "inputBufferSize" too small would make backend "Room.OnBattleCmdReceived" trigger "clientInputFrameId < inputBuffer.StFrameId (a.k.a. obsolete inputFrameUpsync#1)" too frequently!
+            bool renderBufferSizeTooSmall = (128 >= renderBufferSize);
+            int inputBufferSize = renderBufferSizeTooSmall ? renderBufferSize : (renderBufferSize >> 1) + 1;
             inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
             for (int i = 0; i < inputBufferSize; i++) {
                 inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));

@@ -7,7 +7,6 @@ using Google.Protobuf;
 using Pbc = Google.Protobuf.Collections;
 using Google.Protobuf.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace backend.Battle;
 public class Room {

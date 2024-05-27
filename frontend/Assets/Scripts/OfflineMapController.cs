@@ -79,16 +79,17 @@ public class OfflineMapController : AbstractMapController {
                 resetCurrentMatch(cachedLevelName);
                 calcCameraCaps();
                 preallocateBattleDynamicsHolder();
-                preallocateFrontendOnlyHolders();
-                preallocateVfxNodes();
-                preallocateSfxNodes();
-                preallocatePixelVfxNodes();
-                preallocateNpcNodes();
                 selfPlayerInfo.JoinIndex = 1;
 
                 initSeqNo++; // To avoid accessing "gameObject.transform" in the same renderFrame right after "resetCurrentMatch" and the "preallocations"
             } else if (2 == initSeqNo) {
+                preallocateFrontendOnlyHolders();
+                preallocateSfxNodes();
+                preallocatePixelVfxNodes();
+                preallocateNpcNodes();
+
                 Debug.Log("About to mock start rdf");
+
                 // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
                 int[] speciesIdList = new int[roomCapacity];
                 speciesIdList[selfPlayerInfo.JoinIndex - 1] = cachedSelfSpeciesId;

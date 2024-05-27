@@ -103,7 +103,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected List<shared.Collider> completelyStaticTrapColliders;
 
     protected Dictionary<int, GameObject> vfxSpeciesPrefabDict;
-    protected Dictionary<int, KvPriorityQueue<string, VfxNodeController>> cachedVfxNodes; // first layer key is the speciesId, second layer key is the "entityType+entityLocalId" of either a character (i.e. "ch-<joinIndex>") or a bullet (i.e. "bl-<bulletLocalId>")
 
     protected KvPriorityQueue<string, PixelVfxNodeController> cachedPixelVfxNodes;
     protected KvPriorityQueue<string, SFXSource> cachedSfxNodes;
@@ -147,7 +146,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, FireballAnimController>.ValScore cachedFireballScore = (x) => x.score;
     protected KvPriorityQueue<string, PickableAnimController>.ValScore cachedPickableScore = (x) => x.score;
     protected KvPriorityQueue<string, DebugLine>.ValScore cachedLineScore = (x) => x.score;
-    protected KvPriorityQueue<string, VfxNodeController>.ValScore vfxNodeScore = (x) => x.score;
     protected KvPriorityQueue<string, SFXSource>.ValScore sfxNodeScore = (x) => x.score;
     protected KvPriorityQueue<string, PixelVfxNodeController>.ValScore pixelVfxNodeScore = (x) => x.score;
 
@@ -418,21 +416,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, inplaceHpBarZ);
             hpBar.gameObject.transform.position = newPosHolder;
-        }
-
-        // Put "Tracing" vfxNodes to infinitely far first
-        foreach (var entry in cachedVfxNodes) {
-            var speciesId = entry.Key;
-            var vfxConfig = vfxDict[speciesId];
-            if (VfxMotionType.Tracing != vfxConfig.MotionType) continue;
-            var speciesKvPq = entry.Value;
-            for (int i = speciesKvPq.vals.StFrameId; i < speciesKvPq.vals.EdFrameId; i++) {
-                var (res, vfxAnimHolder) = speciesKvPq.vals.GetByFrameId(i);
-                if (!res || null == vfxAnimHolder) throw new ArgumentNullException(String.Format("There's no vfxAnimHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, speciesKvPq.vals.StFrameId, speciesKvPq.vals.EdFrameId));
-
-                newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, vfxAnimHolder.gameObject.transform.position.z);
-                vfxAnimHolder.gameObject.transform.position = newPosHolder;
-            }
         }
 
         // Put all pixel-vfx nodes to infinitely far first
@@ -862,45 +845,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         Debug.Log("preallocateSfxNodes ends");
-    }
-
-    protected void preallocateVfxNodes() {
-        Debug.Log("preallocateVfxNodes begins");
-        if (null != cachedVfxNodes) {
-            foreach (var (_, v) in cachedVfxNodes) {
-                while (0 < v.Cnt()) {
-                    var g = v.Pop();
-                    if (null != g) {
-                        Destroy(g.gameObject);
-                    }
-                }
-            }
-        }
-        cachedVfxNodes = new Dictionary<int, KvPriorityQueue<string, VfxNodeController>>();
-        vfxSpeciesPrefabDict = new Dictionary<int, GameObject>();
-        int cacheCapacityPerSpeciesId = 4;
-        string[] allVfxPrefabNames = new string[] {
-            "1_Dashing_Active",
-        };
-
-        foreach (string name in allVfxPrefabNames) {
-            string speciesIdStr = name.Split("_")[0];
-            int speciesId = speciesIdStr.ToInt();
-            var cachedVfxNodesOfThisSpecies = new KvPriorityQueue<string, VfxNodeController>(cacheCapacityPerSpeciesId, vfxNodeScore);
-            string prefabPathUnderResources = "VfxPrefabs/" + name;
-            var thePrefab = Resources.Load(prefabPathUnderResources) as GameObject;
-            vfxSpeciesPrefabDict[speciesId] = thePrefab;
-            for (int i = 0; i < cacheCapacityPerSpeciesId; i++) {
-                GameObject newVfxNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ), Quaternion.identity, underlyingMap.transform);
-                VfxNodeController newVfxNodeController = newVfxNode.GetComponent<VfxNodeController>();
-                newVfxNodeController.score = -1;
-                newVfxNodeController.speciesId = speciesId;
-                var initLookupKey = i.ToString();
-                cachedVfxNodesOfThisSpecies.Put(initLookupKey, newVfxNodeController);
-            }
-            cachedVfxNodes[speciesId] = cachedVfxNodesOfThisSpecies;
-        }
-        Debug.Log("preallocateVfxNodes ends");
     }
 
     protected void preallocateNpcNodes() {
@@ -2687,47 +2631,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, float wx, float wy, int rdfId) {
-        // Buff Vfx
-        for (int i = 0; i < currCharacterDownsync.BuffList.Count; i++) {
-            var buff = currCharacterDownsync.BuffList[i];
-            if (TERMINATING_BUFF_SPECIES_ID == buff.SpeciesId) break;
-            var buffConfig = buffConfigs[buff.SpeciesId];
-            if (NO_VFX_ID == buffConfig.CharacterVfxSpeciesId) continue;
-            if (BuffStockType.Timed == buffConfig.StockType && 0 >= buff.Stock) continue;
-            var vfxConfig = vfxDict[buffConfig.CharacterVfxSpeciesId];
-            if (!vfxConfig.OnCharacter) continue;
-            var speciesKvPq = cachedVfxNodes[buffConfig.CharacterVfxSpeciesId];
-            string lookupKey = "ch-buff-" + currCharacterDownsync.JoinIndex.ToString() + "-" + i;
-            var vfxAnimHolder = speciesKvPq.PopAny(lookupKey);
-            if (null == vfxAnimHolder) {
-                vfxAnimHolder = speciesKvPq.Pop();
-                //Debug.Log(String.Format("@rdfId={0} using a new vfxAnimHolder for rendering for lookupKey={1} at wpos=({2}, {3})", rdfId, lookupKey, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-            } else {
-                //Debug.Log(String.Format("@rdfId={0} using a cached vfxAnimHolder for rendering for lookupKey={1} at wpos=({2}, {3})", rdfId, lookupKey, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
-            }
-
-            if (null == vfxAnimHolder) {
-                throw new ArgumentNullException(String.Format("No available vfxAnimHolder node for lookupKey={0}", lookupKey));
-            }
-
-            bool isInitialFrame = (buff.Stock == buffConfig.Stock);
-
-            if (vfxConfig.MotionType == VfxMotionType.Tracing) {
-                newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-                vfxAnimHolder.gameObject.transform.position = newPosHolder;
-            } else if (vfxConfig.MotionType == VfxMotionType.Dropped && isInitialFrame) {
-                newPosHolder.Set(wx, wy, vfxAnimHolder.gameObject.transform.position.z);
-                vfxAnimHolder.gameObject.transform.position = newPosHolder;
-            }
-
-            if (isInitialFrame) {
-                vfxAnimHolder.attachedPs.Stop();
-                vfxAnimHolder.attachedPs.Play();
-            }
-            vfxAnimHolder.score = rdfId;
-            speciesKvPq.Put(lookupKey, vfxAnimHolder);
-        }
-
         return true;
     }
 

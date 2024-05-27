@@ -5,6 +5,7 @@ using static shared.Battle;
 using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf.Collections;
+using System.Collections.Concurrent;
 
 public class OnlineMapController : AbstractMapController {
     Task wsTask, udpTask;
@@ -87,6 +88,7 @@ public class OnlineMapController : AbstractMapController {
                     WsSessionManager.Instance.senderBuffer.Add(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
 
+                    // [WARNING] Due to a known bug in Unity 2021.3 (https://issuetracker.unity3d.com/issues/rendererupdatemanager-dot-updateall-must-be-called-first-error-is-thrown-when-entering-the-play-mode), I have to start "udpTask" strictly before the following preallocations, otherwise the error would interrupt "UdpSessionManager.Instance.OpenUdpSession" between log points "openUdpSession#1" and "openUdpSession#2".
                     var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
                     udpTask = Task.Run(async () => {
                         var serverHolePuncher = new WsReq {
@@ -105,7 +107,6 @@ public class OnlineMapController : AbstractMapController {
                     });
 
                     preallocateFrontendOnlyHolders();
-                    preallocateVfxNodes();
                     preallocateSfxNodes();
                     preallocatePixelVfxNodes();
                     preallocateNpcNodes();
@@ -210,10 +211,10 @@ public class OnlineMapController : AbstractMapController {
         bool guiCanProceedOnFailure = false;
         var guiCanProceedSignalSource = new CancellationTokenSource(); // by design a new token-source for each "onCharacterSelectGoAction"
         var guiCanProceedSignal = guiCanProceedSignalSource.Token;
-        
+        var pseudoQ = new BlockingCollection<int>();
         Task guiWaitToProceedTask = Task.Run(async () => {
-            guiCanProceedSignal.WaitHandle.WaitOne();
-        }, guiCanProceedSignal);
+            await Task.Delay(int.MaxValue, guiCanProceedSignal);
+        });
 
         try {
             wsTask = Task.Run(async () => {
