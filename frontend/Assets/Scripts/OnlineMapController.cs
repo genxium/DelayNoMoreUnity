@@ -136,6 +136,7 @@ public class OnlineMapController : AbstractMapController {
                     var newPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread, newPeerUdpAddrList: {0}", newPeerUdpAddrList));
                     UdpSessionManager.Instance.UpdatePeerAddr(roomCapacity, selfPlayerInfo.JoinIndex, newPeerUdpAddrList);
+                    UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START:
                     /*
@@ -156,8 +157,6 @@ public class OnlineMapController : AbstractMapController {
                     playerWaitingPanel.gameObject.SetActive(false);
                     Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
                     readyGoPanel.playReadyAnim(() => {
-                        UdpSessionManager.Instance.PunchBackendUdpTunnel(wsCancellationToken);
-                        UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
                     }, null);
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:

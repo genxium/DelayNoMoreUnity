@@ -1334,12 +1334,6 @@ public class Room {
                     continue;
                 }
 
-                var thatPlayerBattleState = Interlocked.Read(ref player.BattleState);
-                if (PLAYER_BATTLE_STATE_ACTIVE != thatPlayerBattleState) {
-                    //_logger.LogWarning("In `battleUdpTunnel`, player for (roomId: {0}, playerId: {1}) is {2}, rejecting its UDP upsync!", id, playerId, thatPlayerBattleState);
-                    continue;
-                }
-
                 if (UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL == pReq.Act && null == player.BattleUdpTunnelAddr) {
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
                     peerUdpAddrList[player.CharacterDownsync.JoinIndex] = new PeerUdpAddr {
@@ -1351,6 +1345,12 @@ public class Room {
                     broadcastPeerUdpAddrList(player.CharacterDownsync.JoinIndex);
 
                     // [WARNING] Don't forward "holepunching to server" to other players
+                    continue;
+                }
+
+                var thatPlayerBattleState = Interlocked.Read(ref player.BattleState);
+                if (PLAYER_BATTLE_STATE_ACTIVE != thatPlayerBattleState) {
+                    //_logger.LogWarning("In `battleUdpTunnel`, player for (roomId: {0}, playerId: {1}) is {2}, rejecting its UDP upsync!", id, playerId, thatPlayerBattleState);
                     continue;
                 }
 
@@ -1368,7 +1368,7 @@ public class Room {
                         }
                         _ = battleUdpTunnel.SendAsync(new ReadOnlyMemory<byte>(recvResult.Buffer), otherPlayer.BattleUdpTunnelAddr); // [WARNING] It would not switch immediately to another thread for execution, but would yield CPU upon the blocking I/O operation, thus making the current thread non-blocking. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
                     }
-                    // OnBattleCmdReceived(pReq, playerId, true);
+                    OnBattleCmdReceived(pReq, playerId, true);
                     /*
                     [WARNING] Different from frontend concerns, it's actually safe to update "ifd.ConfirmedList" (where "ifd" belongs to the "inputBuffer") by an UDP inputFrameUpsync, as long as all updates to "ifd.ConfirmedList" and "room.lastAllConfirmedInputFrameId" are guarded by "inputBufferLock" -- hence in Golang version, both "markConfirmationIfApplicable" and "forceConfirmationIfApplicable" are guarded by "inputBufferLock".
                     */

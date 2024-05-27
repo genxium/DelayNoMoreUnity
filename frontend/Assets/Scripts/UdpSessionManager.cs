@@ -56,7 +56,7 @@ public class UdpSessionManager {
             udpSession = new UdpClient(port: 0);
             // [WARNING] UdpClient class in .NET Standard 2.1 doesn't support CancellationToken yet! See https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient?view=netstandard-2.1 for more information. The cancellationToken here is still used to keep in pace with the WebSocket session, i.e. is WebSocket Session is closed, then UdpSession should be closed too.
             Debug.Log(String.Format("openUdpSession#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
-
+            UdpSessionManager.Instance.PunchBackendUdpTunnel(wsSessionCancellationToken); // [WARNING] After clearing of "senderBuffer"
             await Task.WhenAll(Receive(udpSession, roomCapacity, wsSessionCancellationToken), Send(udpSession, roomCapacity, selfJoinIndex, wsSessionCancellationToken));
             Debug.Log("Both UdpSession 'Receive' and 'Send' tasks are ended.");
         } catch (Exception ex) {
@@ -195,5 +195,9 @@ public class UdpSessionManager {
                 await Task.Delay(1000 + c * 50, cancellationToken);
             }
         }, cancellationToken);
+    }
+
+    ~UdpSessionManager() {
+        if (null != senderBuffer) senderBuffer.Dispose();
     }
 }
