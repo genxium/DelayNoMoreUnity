@@ -3,6 +3,7 @@ using Google.Protobuf.Collections;
 using shared;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -49,8 +50,6 @@ public class UdpSessionManager {
         recvBuffer.Clear();
         Debug.Log(String.Format("ResetUdpClient#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
 
-        peerUdpEndPointList = new IPEndPoint[roomCapacity + 1];
-        peerUdpEndPointPunched = new long[roomCapacity + 1];
         UpdatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
     }
 
@@ -84,7 +83,7 @@ public class UdpSessionManager {
                             if (i == selfJoinIndex) continue;
                             if (null == peerUdpEndPointList[i]) continue;
                             // [WARNING] Deliberately keep sending even if "1 == Interlocked.Read(ref peerUdpEndPointPunched[i])"
-                            // Debug.Log(String.Format("udpSession sending holePuncher to joinIndex={0}, endPoint={1}", i, peerUdpEndPointList[i]));
+                            Debug.Log(String.Format("udpSession sending holePuncher to joinIndex={0}, endPoint={1}", i, peerUdpEndPointList[i]));
                             await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[i]);
                         }
                     } else {
@@ -154,9 +153,18 @@ public class UdpSessionManager {
 
     public void UpdatePeerAddr(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> newPeerUdpAddrList) {
         // TODO: Make this method thread-safe for "this.peerUdpAddrList"
+        if (null == peerUdpEndPointList || roomCapacity+1 >= peerUdpEndPointList.Length
+            || null == peerUdpEndPointPunched || roomCapacity + 1 >= peerUdpEndPointPunched.Length) {
+            peerUdpEndPointList = new IPEndPoint[roomCapacity + 1];
+            peerUdpEndPointPunched = new long[roomCapacity + 1];
+        }
         int updatedCnt = 0;
         for (int i = 0; i <= roomCapacity; i++) {
             if (i == selfJoinIndex) continue;
+            if (i > newPeerUdpAddrList.Count) {
+                Debug.LogWarning(String.Format("newPeerUdpAddrList {0} doesn't have i={1} indice; breaking", newPeerUdpAddrList, i));
+                break;
+            }
             if (0 < i && String.IsNullOrEmpty(newPeerUdpAddrList[i].Ip)) continue;
             IPAddress newEndpointIp;
             if (!IPAddress.TryParse(Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == i ? Env.Instance.getHostnameOnly() : newPeerUdpAddrList[i].Ip, out newEndpointIp)) {
@@ -165,7 +173,13 @@ public class UdpSessionManager {
                 throw new FormatException(msg);
             }
             if (null != peerUdpEndPointList[i] && null != newEndpointIp && newEndpointIp.Equals(peerUdpEndPointList[i].Address) && newPeerUdpAddrList[i].Port == peerUdpEndPointList[i].Port) continue;
-            peerUdpEndPointList[i] = new IPEndPoint(newEndpointIp, newPeerUdpAddrList[i].Port);
+            try {
+                peerUdpEndPointList[i] = new IPEndPoint(newEndpointIp, newPeerUdpAddrList[i].Port);
+            } catch (Exception ex) {
+                Debug.LogError(String.Format("Error updating peerUdpEndPointList at i={0} indice with newPeerUdpAddrList={1}; ex={2} breaking", i, newPeerUdpAddrList, ex));
+                break;
+            } 
+            
             updatedCnt++;
         } 
 

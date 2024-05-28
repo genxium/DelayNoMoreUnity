@@ -1261,6 +1261,15 @@ public class Room {
                 battleUdpTunnelAddr = new PeerUdpAddr {
                     Port = tunnelIpEndpoint.Port
                 };
+
+                // initialize "peerUdpAddrBroadcastRdf" 
+                peerUdpAddrList = new RepeatedField<PeerUdpAddr> {
+                battleUdpTunnelAddr // i.e. "MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == 0"
+            };
+                for (int i = 0; i < capacity; i++) {
+                    // Prefill with invalid addrs
+                    peerUdpAddrList.Add(new PeerUdpAddr { });
+                }
                 success = true;
             }
         } catch (Exception ex) {
@@ -1276,6 +1285,7 @@ public class Room {
             if (null != battleUdpTunnel) {
                 battleUdpTunnel.Close();
                 battleUdpTunnel.Dispose();
+                battleUdpTunnel = null;
             }
             _logger.LogWarning("Disposed `battleUdpTunnel` early for roomId={0} due to non-success of initUdpClient", id);
         }
@@ -1302,15 +1312,6 @@ public class Room {
                 // The "finally" block would help close "battleUdpTunnel".
                 _logger.LogWarning("`battleUdpTask` failed to start#2 for roomId={0}: unable to obtain `battleUdpTunnelAddr`", id);
                 return;
-            }
-
-            // initialize "peerUdpAddrBroadcastRdf" 
-            peerUdpAddrList = new RepeatedField<PeerUdpAddr> {
-                battleUdpTunnelAddr // i.e. "MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == 0"
-            };
-            for (int i = 0; i < capacity; i++) {
-                // Prefill with invalid addrs
-                peerUdpAddrList.Add(new PeerUdpAddr { });
             }
 
             _logger.LogInformation("`battleUdpTask` started for roomId={0} @ now peerUdpAddrList={1}", id, peerUdpAddrList);

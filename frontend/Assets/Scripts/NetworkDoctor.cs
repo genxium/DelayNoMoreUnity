@@ -157,7 +157,6 @@ public class NetworkDoctor {
         var (sendingFps, srvDownsyncFps, peerUpsyncFps) = Stats();
 		bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
 		// An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
-		bool recvFpsNormal = (srvDownsyncFps >= recvRateThreshold);
 
         int inputFrameIdFrontLag = 0;
         int minInputFrameIdFront = Battle.MAX_INT;
@@ -166,15 +165,15 @@ public class NetworkDoctor {
             if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
             minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
         }
-        inputFrameIdFrontLag = inputFrameIdFront - minInputFrameIdFront;
 
-        if (sendingFpsNormal && recvFpsNormal) {
+        if (sendingFpsNormal) {
             if ((inputFrameIdFront > minInputFrameIdFront) && inputFrameIdFront > (inputFrameUpsyncDelayTolerance + minInputFrameIdFront)) {
                 // First comparison to avoid integer overflow
 				// Debug.Log(String.Format("Should lock step, inputFrameIdFront={0}, minInputFrameIdFront={1}, inputFrameUpsyncDelayTolerance={2}, sendingFps={3}, srvDownsyncFps={4}, inputRateThreshold={5}", inputFrameIdFront, minInputFrameIdFront, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold));
+                inputFrameIdFrontLag = inputFrameIdFront - minInputFrameIdFront;
 				return (true, inputFrameIdFrontLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
 			}
-		}
+		} 
 
         return (false, inputFrameIdFrontLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
     }
