@@ -158,6 +158,24 @@ public class NetworkDoctor {
 		bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
 		// An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
 
+        long latestRecvMillis = -Battle.MAX_INT;
+        var ed1 = inputFrameDownsyncQ.GetLast(); 
+        if (null != ed1 && ed1.t > latestRecvMillis) {
+            latestRecvMillis = ed1.t;
+        } 
+        var ed2 = peerInputFrameUpsyncQ.GetLast();
+        if (null != ed2 && ed2.t > latestRecvMillis) {
+            latestRecvMillis = ed2.t;
+        } 
+        
+        /* 
+        [WARNING] 
+
+        Equivalent to "(((nowMillis - latestRecvMillis)/millisPerRdf) >> INPUT_SCALE_FRAMES) >= inputFrameUpsyncDelayTolerance" where "millisPerRdf = (1000/BATTLE_DYNAMICS_FPS)" 
+        */
+        long nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        bool latestRecvMillisTooOld = (nowMillis - latestRecvMillis)*Battle.BATTLE_DYNAMICS_FPS >= 1000*(inputFrameUpsyncDelayTolerance << Battle.INPUT_SCALE_FRAMES); 
+
         int inputFrameIdFrontLag = 0;
         int minInputFrameIdFront = Battle.MAX_INT;
         for (int k = 0; k < roomCapacity; ++k) {
@@ -166,14 +184,19 @@ public class NetworkDoctor {
             minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
         }
 
-        if (sendingFpsNormal) {
-            if ((inputFrameIdFront > minInputFrameIdFront) && inputFrameIdFront > (inputFrameUpsyncDelayTolerance + minInputFrameIdFront)) {
-                // First comparison to avoid integer overflow
-				// Debug.Log(String.Format("Should lock step, inputFrameIdFront={0}, minInputFrameIdFront={1}, inputFrameUpsyncDelayTolerance={2}, sendingFps={3}, srvDownsyncFps={4}, inputRateThreshold={5}", inputFrameIdFront, minInputFrameIdFront, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold));
-                inputFrameIdFrontLag = inputFrameIdFront - minInputFrameIdFront;
-				return (true, inputFrameIdFrontLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
-			}
-		} 
+        bool ifdLagSignificant = (inputFrameIdFront > minInputFrameIdFront) && inputFrameIdFront > (inputFrameUpsyncDelayTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
+
+        if (sendingFpsNormal && !latestRecvMillisTooOld && ifdLagSignificant) {
+            /*
+            [WARNING]
+        
+            The bottom line is that we don't apply "lockstep" to a peer who's deemed "slow ticker" on the backend!
+            */
+
+            Debug.Log(String.Format("Should lock step, inputFrameIdFront={0}, minInputFrameIdFront={1}, inputFrameUpsyncDelayTolerance={2}, sendingFps={3}, srvDownsyncFps={4}, inputRateThreshold={5}, latestRecvMillis={6}, nowMillis={7}", inputFrameIdFront, minInputFrameIdFront, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis));
+            inputFrameIdFrontLag = inputFrameIdFront - minInputFrameIdFront;
+            return (true, inputFrameIdFrontLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
+		}
 
         return (false, inputFrameIdFrontLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
     }

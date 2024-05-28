@@ -883,7 +883,11 @@ public class Room {
                 //_logger.LogInformation("Omitting obsolete inputFrameUpsync#3: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
                 continue;
             }
-            if (clientInputFrameId > inputBuffer.EdFrameId) {
+
+            int nextToUseIfdId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId);
+            int advanceGap = (clientInputFrameId > inputBuffer.EdFrameId) ? (clientInputFrameId - inputBuffer.EdFrameId) : 0;  
+            bool tooAdvanced = (0 < advanceGap && inputBuffer.StFrameId + advanceGap >= nextToUseIfdId);
+            if (tooAdvanced) {
                 _logger.LogWarning("Dropping too advanced inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}; is this player cheating?", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
                 continue;
             }
