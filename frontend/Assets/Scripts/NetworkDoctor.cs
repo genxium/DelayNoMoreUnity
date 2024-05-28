@@ -153,7 +153,7 @@ public class NetworkDoctor {
         return (sendingFps, srvDownsyncFps, peerUpsyncFps);
     }
 
-    public (bool, int, float, float, float, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int inputFrameUpsyncDelayTolerance) {
+    public (bool, int, float, float, float, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int renderFrameLagTolerance, int inputFrameUpsyncDelayTolerance) {
         var (sendingFps, srvDownsyncFps, peerUpsyncFps) = Stats();
 		bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
 		// An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
@@ -186,15 +186,17 @@ public class NetworkDoctor {
 
         bool ifdLagSignificant = (inputFrameIdFront > minInputFrameIdFront) && inputFrameIdFront > (inputFrameUpsyncDelayTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
 
-        if (sendingFpsNormal && !latestRecvMillisTooOld && ifdLagSignificant) {
+        if (ifdLagSignificant && sendingFpsNormal && (latestRecvMillisTooOld || immediateRollbackFrames > renderFrameLagTolerance)) {
             /*
             [WARNING]
         
             The bottom line is that we don't apply "lockstep" to a peer who's deemed "slow ticker" on the backend!
             */
 
-            Debug.Log(String.Format("Should lock step, inputFrameIdFront={0}, minInputFrameIdFront={1}, inputFrameUpsyncDelayTolerance={2}, sendingFps={3}, srvDownsyncFps={4}, inputRateThreshold={5}, latestRecvMillis={6}, nowMillis={7}", inputFrameIdFront, minInputFrameIdFront, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis));
+            Debug.Log(String.Format("Should lock step, immediateRollbackFrames={0}, inputFrameIdFront={1}, minInputFrameIdFront={2}, renderFrameLagTolerance={3}, inputFrameUpsyncDelayTolerance={4}, sendingFps={5}, srvDownsyncFps={6}, inputRateThreshold={7}, latestRecvMillis={8}, nowMillis={9}", immediateRollbackFrames, inputFrameIdFront, minInputFrameIdFront, renderFrameLagTolerance, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis));
+
             inputFrameIdFrontLag = inputFrameIdFront - minInputFrameIdFront;
+
             return (true, inputFrameIdFrontLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
 		}
 

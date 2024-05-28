@@ -27,8 +27,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int preallocPickableCapacity = DEFAULT_PREALLOC_PICKABLE_CAPACITY;
 
     protected int playerRdfId; // After battle started, always increments monotonically (even upon reconnection)
-    protected int renderFrameIdLagTolerance;
-    protected int inputFrameDownsyncIdLagTolerance;
     protected int lastAllConfirmedInputFrameId;
     protected int lastUpsyncInputFrameId;
 
@@ -332,6 +330,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             latestRdf = nextRdf;
         }
 
+        NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
+
         return (prevLatestRdf, latestRdf);
     }
 
@@ -358,7 +358,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId) return;
         int renderFrameId1 = ConvertToFirstUsedRenderFrameId(firstPredictedYetIncorrectInputFrameId);
         if (renderFrameId1 >= chaserRenderFrameId) return;
-
+        // By now renderFrameId1 < chaserRenderFrameId, it's pretty impossible that "renderFrameId1 > playerRdfId" but we're still checking.
+        if (renderFrameId1 > playerRdfId) return; // The incorrect prediction is not yet rendered, no visual impact for player.
         /*
 		   A typical case is as follows.
 		   --------------------------------------------------------
@@ -374,30 +375,23 @@ public abstract class AbstractMapController : MonoBehaviour {
         // The actual rollback-and-chase would later be executed in "Update()". 
         chaserRenderFrameId = renderFrameId1;
 
-        int rollbackFrames = (playerRdfId - chaserRenderFrameId);
-        if (0 >= rollbackFrames) {
-            // The incorrect prediction is not yet rendered, no visual impact for player.
-            rollbackFrames = 0;
-        } else {
-            /* 
-            [WARNING] The incorrect prediction was already rendered, there MIGHT BE a visual impact for player.
+        /* 
+        [WARNING] The incorrect prediction was already rendered, there MIGHT BE a visual impact for player.
 
-            However, due to the use of 
-            - `UpdateInputFrameInPlaceUponDynamics`, and  
-            - `processInertiaWalking` 
-            , even if an "inputFrame" for "already rendered renderFrame" was incorrectly predicted, there's still chance that no visual impact is induced. See relevant sections in `README` for details.  
+        However, due to the use of 
+        - `UpdateInputFrameInPlaceUponDynamics`, and  
+        - `processInertiaWalking` 
+        , even if an "inputFrame" for "already rendered renderFrame" was incorrectly predicted, there's still chance that no visual impact is induced. See relevant sections in `README` for details.  
 
-            Printing of this message might induce a performance impact.
+        Printing of this message might induce a performance impact.
             
-            TODO: Instead of printing, add frameLog for (currRenderFrameId, rolledBackInputFrameDownsyncId, rolledBackToRenderFrameId)!
-             */
-            /*
-            if (fromUDP) {
-                Debug.Log(String.Format("@playerRdfId={5}, mismatched input for rendered history detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP, playerRdfId));
-            }
+        TODO: Instead of printing, add frameLog for (currRenderFrameId, rolledBackInputFrameDownsyncId, rolledBackToRenderFrameId)!
             */
+        /*
+        if (fromUDP) {
+            Debug.Log(String.Format("@playerRdfId={5}, mismatched input for rendered history detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, renderFrameId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP, playerRdfId));
         }
-        NetworkDoctor.Instance.LogRollbackFrames(rollbackFrames);
+        */
     }
 
     public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
@@ -1066,8 +1060,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         levelId = LEVEL_NONE;
         justTriggeredStoryId = STORY_POINT_NONE;
         playerRdfId = 0;
-        renderFrameIdLagTolerance = 4;
-        inputFrameDownsyncIdLagTolerance = 75;
         chaserRenderFrameId = -1;
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;
@@ -1168,7 +1160,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         int rdfId = pbRdf.Id;
         bool shouldForceDumping1 = (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId || usingOthersForcedDownsyncRenderFrameDict);
-        bool shouldForceDumping2 = (rdfId >= playerRdfId + renderFrameIdLagTolerance);
+        bool shouldForceDumping2 = (rdfId > playerRdfId);
         bool shouldForceResync = pbRdf.ShouldForceResync;
         ulong selfJoinIndexMask = ((ulong)1 << (selfPlayerInfo.JoinIndex - 1));
         bool notSelfUnconfirmed = (0 == (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
@@ -1285,7 +1277,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (chaserRenderFrameId < renderBuffer.StFrameId) {
                 chaserRenderFrameId = renderBuffer.StFrameId;
             }
-            NetworkDoctor.Instance.LogRollbackFrames(0);
 
             battleState = ROOM_STATE_IN_BATTLE;
         }

@@ -361,8 +361,8 @@ public class OnlineMapController : AbstractMapController {
             }
 
             int noDelayInputFrameId = ConvertToNoDelayInputFrameId(playerRdfId);
-            if (0 <= lastAllConfirmedInputFrameId && noDelayInputFrameId - lastAllConfirmedInputFrameId > inputFrameDownsyncIdLagTolerance) {
-                var msg = String.Format("@playerRdfId={0}, noDelayInputFrameId={1}, lastAllConfirmedInputFrameId={2}, inputFrameDownsyncIdLagTolerance={3}: unstable ws session detected, please try another battle :)", playerRdfId, noDelayInputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsyncIdLagTolerance);
+            if (0 <= lastAllConfirmedInputFrameId && noDelayInputFrameId - lastAllConfirmedInputFrameId > (inputFrameUpsyncDelayTolerance << 2)) {
+                var msg = String.Format("@playerRdfId={0}, noDelayInputFrameId={1}, lastAllConfirmedInputFrameId={2}, inputFrameUpsyncDelayTolerance={3}: unstable ws session detected, please try another battle :)", playerRdfId, noDelayInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance);
                 popupErrStackPanel(msg);
                 onWsSessionClosed();
                 return;
@@ -390,7 +390,7 @@ public class OnlineMapController : AbstractMapController {
                 readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
                 
                 // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
-                var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, (inputFrameUpsyncDelayTolerance >> 1));
+                var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), (inputFrameUpsyncDelayTolerance >> 1));
                 shouldLockStep = tooFastOrNot;
                 networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
             }

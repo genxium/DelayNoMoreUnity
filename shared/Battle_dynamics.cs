@@ -1362,10 +1362,6 @@ namespace shared {
                                 }
                                 */
                             }
-
-                            if (InAirAtk1 == currCharacterDownsync.CharacterState || InAirAtk2 == currCharacterDownsync.CharacterState) {
-                                thatCharacterInNextFrame.FramesToRecover = 0;
-                            }
                         } else {
                             // landedOnGravityPushback not fallStopping, could be in LayDown or GetUp or Dying
                             if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
@@ -1657,7 +1653,7 @@ namespace shared {
                                 // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
                                 var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
                                 bool shouldOmitHitPushback = (atkedCharacterConfig.Hardness > bulletNextFrame.Config.Hardness);   
-                                if (false == shouldOmitHitPushback && BlownUp1 != oldNextCharacterState) {
+                                if (!shouldOmitHitPushback && BlownUp1 != oldNextCharacterState) {
                                     var (pushbackVelX, pushbackVelY) = (xfac * bulletNextFrame.Config.PushbackVelX, bulletNextFrame.Config.PushbackVelY);
                                     // The traversal order of bullets is deterministic, thus the following assignment is deterministic regardless of the order of collision result popping.
                                     atkedCharacterInNextFrame.VelX = pushbackVelX;
@@ -2199,6 +2195,19 @@ namespace shared {
                                 break;
                             case InAirAtked1:
                                 thatCharacterInNextFrame.CharacterState = Atked1;
+                                break;
+                            case InAirAtk1:
+                            case InAirAtk2:
+                                thatCharacterInNextFrame.FramesToRecover = 0;
+                                if (skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) {
+                                    var skillConfig = skills[currCharacterDownsync.ActiveSkillId]; 
+                                    if (0 <= currCharacterDownsync.ActiveSkillHit && currCharacterDownsync.ActiveSkillHit < skillConfig.Hits.Count) {
+                                        var bulletConfig = skillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
+                                        if (bulletConfig.RemainsUponHit) {
+                                            thatCharacterInNextFrame.FramesToRecover = currCharacterDownsync.FramesToRecover - 1;
+                                        }
+                                    }
+                                }
                                 break;
                             default:
                                 thatCharacterInNextFrame.CharacterState = Idle1;
