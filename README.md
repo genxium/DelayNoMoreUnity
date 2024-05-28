@@ -1,5 +1,5 @@
 # Latest tag change notes
-v1.6.0 new features
+v1.6.1 new features
 - Improved frontend lockstep handling.
 - Improved backend downsync nonblocking handling.
 
