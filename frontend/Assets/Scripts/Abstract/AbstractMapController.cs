@@ -31,7 +31,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int lastUpsyncInputFrameId;
 
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= renderFrameId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
-    protected int maxChasingRenderFramesPerUpdate;
+    protected int smallChasingRenderFramesPerUpdate;
+    protected int bigChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
     public GameObject inplaceHpBarPrefab;
     public GameObject fireballPrefab;
@@ -1063,7 +1064,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         chaserRenderFrameId = -1;
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;
-        maxChasingRenderFramesPerUpdate = 5;
+        smallChasingRenderFramesPerUpdate = 2; // [WARNING] When using "smallChasingRenderFramesPerUpdate", we're giving more chance to "lockstep"
+        bigChasingRenderFramesPerUpdate = 4;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
 
@@ -1349,7 +1351,13 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected virtual int chaseRolledbackRdfs() {
         int prevChaserRenderFrameId = chaserRenderFrameId;
-        int nextChaserRenderFrameId = (prevChaserRenderFrameId + maxChasingRenderFramesPerUpdate);
+        int biggestAllConfirmedRdfId = ConvertToLastUsedRenderFrameId(lastAllConfirmedInputFrameId);
+        /*
+        [WARNING] 
+
+        As commented in "onPeerInputFrameUpsync", received UDP packets would NOT advance "lastAllConfirmedInputFrameId", hence when "prevChaserRenderFrameId >= biggestAllConfirmedRdfId" we can chase by "smallChasingRenderFramesPerUpdate" and just hope that the UDP packets are advanced enough to make a good prediction!    
+        */
+        int nextChaserRenderFrameId = (prevChaserRenderFrameId >= biggestAllConfirmedRdfId) ? (prevChaserRenderFrameId + smallChasingRenderFramesPerUpdate) : (prevChaserRenderFrameId + bigChasingRenderFramesPerUpdate);
 
         if (nextChaserRenderFrameId > playerRdfId) {
             nextChaserRenderFrameId = playerRdfId;

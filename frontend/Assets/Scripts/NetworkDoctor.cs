@@ -186,14 +186,18 @@ public class NetworkDoctor {
 
         bool ifdLagSignificant = (inputFrameIdFront > minInputFrameIdFront) && inputFrameIdFront > (inputFrameUpsyncDelayTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
 
-        if (ifdLagSignificant && sendingFpsNormal && (latestRecvMillisTooOld || immediateRollbackFrames > renderFrameLagTolerance)) {
+        if (ifdLagSignificant && sendingFpsNormal && (immediateRollbackFrames > renderFrameLagTolerance)) {
             /*
             [WARNING]
+
+            I'm not quite sure whether or not "latestRecvMillisTooOld" should be taken into consideration when deciding "shouldLockStep", because when "ifdLagSignificant && sendingFpsNormal && true == latestRecvMillisTooOld", we know that during "[latestRecvMillis, nowMillis]" the receiving of both TCP(WebSocket) and UDP packets doesn't do well, yet the peer(s) could still be quite advanced at "noDelayInputFrameId" locally.
+
+            What about "ifdLagSignificant && sendingFpsNormal && false == latestRecvMillisTooOld", is it a good sign to lock step? Maybe.
         
             The bottom line is that we don't apply "lockstep" to a peer who's deemed "slow ticker" on the backend!
             */
 
-            Debug.Log(String.Format("Should lock step, immediateRollbackFrames={0}, inputFrameIdFront={1}, minInputFrameIdFront={2}, renderFrameLagTolerance={3}, inputFrameUpsyncDelayTolerance={4}, sendingFps={5}, srvDownsyncFps={6}, inputRateThreshold={7}, latestRecvMillis={8}, nowMillis={9}", immediateRollbackFrames, inputFrameIdFront, minInputFrameIdFront, renderFrameLagTolerance, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis));
+            Debug.Log(String.Format("Should lock step, immediateRollbackFrames={0}, inputFrameIdFront={1}, minInputFrameIdFront={2}, renderFrameLagTolerance={3}, inputFrameUpsyncDelayTolerance={4}, sendingFps={5}, srvDownsyncFps={6}, inputRateThreshold={7}, latestRecvMillis={8}, nowMillis={9}, latestRecvMillisTooOld={10}", immediateRollbackFrames, inputFrameIdFront, minInputFrameIdFront, renderFrameLagTolerance, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis, latestRecvMillisTooOld));
 
             inputFrameIdFrontLag = inputFrameIdFront - minInputFrameIdFront;
 
