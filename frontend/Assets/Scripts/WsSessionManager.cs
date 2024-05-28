@@ -267,4 +267,8 @@ public class WsSessionManager {
             }
         }
     }
+
+    ~WsSessionManager() {
+        if (null != senderBuffer) senderBuffer.Dispose(); 
+    }
 }

@@ -1303,17 +1303,17 @@ public class Room {
             return;
         }
 
+        if (null == peerUdpAddrList) {
+            // The "finally" block would help close "battleUdpTunnel".
+            _logger.LogWarning("Returning `startBattleUdpTunnelAsyncTask` early#3 for roomId={0} due to null `battleUdpTunnelAddr`", id);
+            return;
+        }
+
         _logger.LogInformation("`battleUdpTask` starting for roomId={0}", id);
 
         battleUdpTunnelCancellationTokenSource = new CancellationTokenSource(); // [WARNING] Will be disposed along with "battleUdpTask".
         CancellationToken battleUdpTunnelCancellationToken = battleUdpTunnelCancellationTokenSource.Token;
         try {
-            if (null == battleUdpTunnelAddr) {
-                // The "finally" block would help close "battleUdpTunnel".
-                _logger.LogWarning("`battleUdpTask` failed to start#2 for roomId={0}: unable to obtain `battleUdpTunnelAddr`", id);
-                return;
-            }
-
             _logger.LogInformation("`battleUdpTask` started for roomId={0} @ now peerUdpAddrList={1}", id, peerUdpAddrList);
 
             while (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
