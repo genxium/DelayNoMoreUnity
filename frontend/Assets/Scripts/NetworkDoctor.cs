@@ -43,7 +43,7 @@ public class NetworkDoctor {
         // Clear by "Reset()", and then use by "DryPut()"
     }
 
-    private int inputFrameIdFront;
+    private int localRequiredIfdId;
     private float inputRateThreshold;
     private float recvRateThreshold;
     private FrameRingBuffer<QEle> sendingQ;
@@ -53,21 +53,34 @@ public class NetworkDoctor {
     int lockedStepsCnt;
     long udpPunchedCnt;
 
+    int lastForceResyncedIfdId;
+    bool exclusivelySelfConfirmedAtLastForceResync;
+    bool exclusivelySelfUnconfirmedAtLastForceResync;
+
     public void Reset() {
-        inputFrameIdFront = 0;
+        localRequiredIfdId = 0;
         immediateRollbackFrames = 0;
         lockedStepsCnt = 0;
         udpPunchedCnt = 0;
         inputRateThreshold = Battle.BATTLE_DYNAMICS_FPS * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
         recvRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-5) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
+        lastForceResyncedIfdId = 0;
+        exclusivelySelfConfirmedAtLastForceResync = false;
+        exclusivelySelfUnconfirmedAtLastForceResync = false;
 
         sendingQ.Clear();
         inputFrameDownsyncQ.Clear();
         peerInputFrameUpsyncQ.Clear();
     }
 
-    public void LogInputFrameIdFront(int val) {
-        inputFrameIdFront = val;
+    public void LogForceResyncedIfdId(int val, bool exclusivelySelfConfirmed, bool exclusivelySelfUnconfirmed) {
+        lastForceResyncedIfdId = val;
+        exclusivelySelfConfirmedAtLastForceResync = exclusivelySelfConfirmed;
+        exclusivelySelfUnconfirmedAtLastForceResync = exclusivelySelfUnconfirmed;
+    }
+
+    public void LogLocalRequiredIfdId(int val) {
+        localRequiredIfdId = val;
     }
 
     public void LogSending(int i, int j) {
@@ -155,6 +168,7 @@ public class NetworkDoctor {
 
     public (bool, int, float, float, float, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int renderFrameLagTolerance, int inputFrameUpsyncDelayTolerance) {
         var (sendingFps, srvDownsyncFps, peerUpsyncFps) = Stats();
+
 		bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
 		// An outstanding lag within the "inputFrameDownsyncQ" will reduce "srvDownsyncFps", HOWEVER, a constant lag wouldn't impact "srvDownsyncFps"! In native platforms we might use PING value might help as a supplement information to confirm that the "selfPlayer" is not lagged within the time accounted by "inputFrameDownsyncQ".  
 
@@ -176,7 +190,7 @@ public class NetworkDoctor {
         long nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         bool latestRecvMillisTooOld = (nowMillis - latestRecvMillis)*Battle.BATTLE_DYNAMICS_FPS >= 1000*(inputFrameUpsyncDelayTolerance << Battle.INPUT_SCALE_FRAMES); 
 
-        int inputFrameIdFrontLag = 0;
+        int ifdIdLag = 0;
         int minInputFrameIdFront = Battle.MAX_INT;
         for (int k = 0; k < roomCapacity; ++k) {
             if (k + 1 == selfJoinIndex) continue; // Don't count self in
@@ -184,9 +198,19 @@ public class NetworkDoctor {
             minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
         }
 
-        bool ifdLagSignificant = (inputFrameIdFront > minInputFrameIdFront) && inputFrameIdFront > (inputFrameUpsyncDelayTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
+        bool ifdLagSignificant = (localRequiredIfdId > minInputFrameIdFront) && localRequiredIfdId > (inputFrameUpsyncDelayTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
 
-        if (ifdLagSignificant && sendingFpsNormal && (immediateRollbackFrames > renderFrameLagTolerance)) {
+        bool recvIfdIdFrontIsFromLastResynced = (minInputFrameIdFront <= lastForceResyncedIfdId);
+        bool lockstepAllowedByLastForceResync = false;
+        if (recvIfdIdFrontIsFromLastResynced) {
+            if (exclusivelySelfConfirmedAtLastForceResync) {
+                lockstepAllowedByLastForceResync = true;
+            } else if (!exclusivelySelfUnconfirmedAtLastForceResync && latestRecvMillisTooOld) {
+                lockstepAllowedByLastForceResync = true;
+            }
+        }
+
+        if (ifdLagSignificant && sendingFpsNormal && lockstepAllowedByLastForceResync && (immediateRollbackFrames > renderFrameLagTolerance)) {
             /*
             [WARNING]
 
@@ -197,13 +221,13 @@ public class NetworkDoctor {
             The bottom line is that we don't apply "lockstep" to a peer who's deemed "slow ticker" on the backend!
             */
 
-            Debug.Log(String.Format("Should lock step, immediateRollbackFrames={0}, inputFrameIdFront={1}, minInputFrameIdFront={2}, renderFrameLagTolerance={3}, inputFrameUpsyncDelayTolerance={4}, sendingFps={5}, srvDownsyncFps={6}, inputRateThreshold={7}, latestRecvMillis={8}, nowMillis={9}, latestRecvMillisTooOld={10}", immediateRollbackFrames, inputFrameIdFront, minInputFrameIdFront, renderFrameLagTolerance, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis, latestRecvMillisTooOld));
+            Debug.Log(String.Format("Should lock step, immediateRollbackFrames={0}, localRequiredIfdId={1}, minInputFrameIdFront={2}, renderFrameLagTolerance={3}, inputFrameUpsyncDelayTolerance={4}, sendingFps={5}, srvDownsyncFps={6}, inputRateThreshold={7}, latestRecvMillis={8}, nowMillis={9}, latestRecvMillisTooOld={10}, lastForceResyncedIfdId={11}, exclusivelySelfConfirmedAtLastForceResync={12}, exclusivelySelfUnconfirmedAtLastForceResync={13}", immediateRollbackFrames, localRequiredIfdId, minInputFrameIdFront, renderFrameLagTolerance, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis, latestRecvMillisTooOld, lastForceResyncedIfdId, exclusivelySelfConfirmedAtLastForceResync));
 
-            inputFrameIdFrontLag = inputFrameIdFront - minInputFrameIdFront;
+            ifdIdLag = localRequiredIfdId - minInputFrameIdFront;
 
-            return (true, inputFrameIdFrontLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
+            return (true, ifdIdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
 		}
 
-        return (false, inputFrameIdFrontLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
+        return (false, ifdIdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
     }
 }

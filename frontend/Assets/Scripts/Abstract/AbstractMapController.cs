@@ -1162,11 +1162,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         int rdfId = pbRdf.Id;
         bool shouldForceDumping1 = (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId || usingOthersForcedDownsyncRenderFrameDict);
-        bool shouldForceDumping2 = (rdfId > playerRdfId);
+        bool shouldForceDumping2 = (rdfId > playerRdfId); // In "OnlineMapController", the call sequence per "Update" is "[pollAndHandleWsRecvBuffer >> onRoomDownsyncFrame] > [doUpdate >> rollbackAndChase(playerRdfId, playerRdfId+1)]", thus using strict inequality here.
         bool shouldForceResync = pbRdf.ShouldForceResync;
         ulong selfJoinIndexMask = ((ulong)1 << (selfPlayerInfo.JoinIndex - 1));
-        bool notSelfUnconfirmed = (0 == (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
-        if (notSelfUnconfirmed) {
+        bool selfUnconfirmed = (0 < (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
+        bool selfConfirmed = !selfUnconfirmed;
+        if (selfConfirmed && shouldForceDumping2) {
             shouldForceDumping2 = false;
             shouldForceResync = false;
             if (useOthersForcedDownsyncRenderFrameDict) {
@@ -1193,7 +1194,13 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         bool isRingBuffConsecutiveSet = (RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet);
         if (pbRdf.ShouldForceResync) {
-            if (notSelfUnconfirmed) {
+            bool exclusivelySelfConfirmedAtLastForceResync = ((0 < pbRdf.BackendUnconfirmedMask) && selfConfirmed);
+            ulong allConfirmedMask = (1UL << roomCapacity) - 1;
+            bool exclusivelySelfUnconfirmedAtLastForceResync = (allConfirmedMask != pbRdf.BackendUnconfirmedMask && selfUnconfirmed);
+            int lastForceResyncedIfdId = lastAllConfirmedInputFrameId; // Because "[onInputFrameDownsyncBatch > _markConfirmationIfApplicable]" is already called
+            NetworkDoctor.Instance.LogForceResyncedIfdId(lastForceResyncedIfdId, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync);
+
+            if (selfUnconfirmed) {
                 if (null == accompaniedInputFrameDownsyncBatch) {
                     //Debug.Log(String.Format("On battle resynced for another player#1! @playerRdfId={3}, renderBuffer=[{4}], inputBuffer=[{5}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1}; downsynced rdf={2}", rdfId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
                     Debug.Log(String.Format("On battle resynced for another player#1! @playerRdfId={2}, renderBuffer=[{3}], inputBuffer=[{4}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1}", rdfId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
@@ -1248,7 +1255,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         }
                     } else {
                         if (oldRdfExists && null != oldRdf && !EqualRdfs(oldRdf, pbRdf, roomCapacity)) {         
-                            Debug.Log(String.Format("On battle resynced history update for self#1! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet));
+                            Debug.Log(String.Format("On battle resynced history update {4}#1! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet, selfUnconfirmed ? "for self" : "from another player"));
                             if (0 > chaserRenderFrameId || chaserRenderFrameId > rdfId) {
                                 chaserRenderFrameId = rdfId;
                             }
@@ -1264,7 +1271,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         }
                     } else {
                         if (oldRdfExists && null != oldRdf && !EqualRdfs(oldRdf, pbRdf, roomCapacity)) {         
-                            Debug.Log(String.Format("On battle resynced history update for self#2! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet));
+                            Debug.Log(String.Format("On battle resynced history update for {4}#2! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet, selfUnconfirmed ? "for self" : "from another player"));
                             if (0 > chaserRenderFrameId || chaserRenderFrameId > rdfId) {
                                 chaserRenderFrameId = rdfId;
                             }
