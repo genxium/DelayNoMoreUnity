@@ -362,7 +362,9 @@ public class OnlineMapController : AbstractMapController {
             }
 
             int noDelayInputFrameId = ConvertToNoDelayInputFrameId(playerRdfId);
-            if (0 <= lastAllConfirmedInputFrameId && noDelayInputFrameId - lastAllConfirmedInputFrameId > (inputFrameUpsyncDelayTolerance << 2)) {
+            int delayedInputFrameId = ConvertToDelayedInputFrameId(playerRdfId);
+            NetworkDoctor.Instance.LogLocalRequiredIfdId(delayedInputFrameId);
+            if (0 <= lastAllConfirmedInputFrameId && delayedInputFrameId - lastAllConfirmedInputFrameId > (inputFrameUpsyncDelayTolerance << 3)) {
                 var msg = String.Format("@playerRdfId={0}, noDelayInputFrameId={1}, lastAllConfirmedInputFrameId={2}, inputFrameUpsyncDelayTolerance={3}: unstable ws session detected, please try another battle :)", playerRdfId, noDelayInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance);
                 popupErrStackPanel(msg);
                 onWsSessionClosed();
@@ -370,6 +372,7 @@ public class OnlineMapController : AbstractMapController {
             }
             // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
             chaseRolledbackRdfs();
+            NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
             if (localTimerEnded) {
                 if (!lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync && 0 < timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync) {
                     // TODO: Popup some GUI hint to tell the player that we're awaiting downsync only, as the local "playerRdfId" is monotonically increasing, there's no way to rewind and change any input from here!
@@ -429,7 +432,6 @@ public class OnlineMapController : AbstractMapController {
             batchInputFrameIdEdClosed = inputBuffer.EdFrameId-1;
         }
 
-        NetworkDoctor.Instance.LogLocalRequiredIfdId(ConvertToDelayedInputFrameId(playerRdfId));
         NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
 
         for (var i = batchInputFrameIdSt; i <= batchInputFrameIdEdClosed; i++) {

@@ -331,8 +331,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             latestRdf = nextRdf;
         }
 
-        NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
-
         return (prevLatestRdf, latestRdf);
     }
 
