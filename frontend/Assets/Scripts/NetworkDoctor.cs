@@ -56,6 +56,7 @@ public class NetworkDoctor {
     int lastForceResyncedIfdId;
     bool exclusivelySelfConfirmedAtLastForceResync;
     bool exclusivelySelfUnconfirmedAtLastForceResync;
+    bool lastForceResyncHasHistoryRdfUpdate;
 
     public void Reset() {
         localRequiredIfdId = 0;
@@ -67,16 +68,23 @@ public class NetworkDoctor {
         lastForceResyncedIfdId = 0;
         exclusivelySelfConfirmedAtLastForceResync = false;
         exclusivelySelfUnconfirmedAtLastForceResync = false;
+        lastForceResyncHasHistoryRdfUpdate = false;
 
         sendingQ.Clear();
         inputFrameDownsyncQ.Clear();
         peerInputFrameUpsyncQ.Clear();
     }
 
-    public void LogForceResyncedIfdId(int val, bool exclusivelySelfConfirmed, bool exclusivelySelfUnconfirmed) {
+    public void LogForceResyncedIfdId(int val, bool exclusivelySelfConfirmed, bool exclusivelySelfUnconfirmed, bool hasHistoryRdfUpdate) {
+        /*
+        [WARNING] 
+        
+        In practice, after UDP contributes to backend inputBuffer confirmation, "type#1 forceConfirmation" is verified to be accurate (i.e. the slow peer appears laggy on the fast peer, while the fast peer appears smooth on the slow peer).
+        */
         lastForceResyncedIfdId = val;
         exclusivelySelfConfirmedAtLastForceResync = exclusivelySelfConfirmed;
         exclusivelySelfUnconfirmedAtLastForceResync = exclusivelySelfUnconfirmed;
+        lastForceResyncHasHistoryRdfUpdate = hasHistoryRdfUpdate;
     }
 
     public void LogLocalRequiredIfdId(int val) {
@@ -211,15 +219,20 @@ public class NetworkDoctor {
             } else if (!exclusivelySelfUnconfirmedAtLastForceResync && latestRecvMillisTooOld) {
                 lockstepAllowedByLastForceResync = true;
             }
+        } else {
+            lockstepAllowedByLastForceResync = true;
         }
 
+        bool rollbackFramesDueToLastForceResync = (recvIfdIdFrontIsFromLastResynced && lastForceResyncHasHistoryRdfUpdate);
 		bool sendingFpsNormal = (sendingFps >= inputRateThreshold) || (recvIfdIdFrontIsFromLastResynced && exclusivelySelfConfirmedAtLastForceResync);
 
-        if (ifdLagSignificant && sendingFpsNormal && lockstepAllowedByLastForceResync && (immediateRollbackFrames > renderFrameLagTolerance)) {
+        if (ifdLagSignificant && sendingFpsNormal && lockstepAllowedByLastForceResync && (immediateRollbackFrames > renderFrameLagTolerance && !rollbackFramesDueToLastForceResync)) {
             /*
             [WARNING]
 
             We shouldn't rely solely on "immediateRollbackFrames > renderFrameLagTolerance" for lockstep decision, because upon "type#X forceConfirmation" if history update occurs, the "immediateRollbackFrames" can surge abruptly while "minInputFrameIdFront" is advanced enough.
+
+            Similarly, "ifdLagSignificant" alone is not enough to assert the need of lockstep, because it could be a slow-ticker's slow network syndrome. 
 
             I'm not quite sure whether or not "latestRecvMillisTooOld" should be taken into consideration when deciding "shouldLockStep", because when "ifdLagSignificant && sendingFpsNormal && true == latestRecvMillisTooOld", we know that during "[latestRecvMillis, nowMillis]" the receiving of both TCP(WebSocket) and UDP packets doesn't do well, yet the peer(s) could still be quite advanced at "noDelayInputFrameId" locally.
 
