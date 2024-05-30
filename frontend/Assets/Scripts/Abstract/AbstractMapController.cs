@@ -1084,7 +1084,7 @@ public abstract class AbstractMapController : MonoBehaviour {
          The current combination is having much better field test results in terms of graphical consistencies.
          */
         smallChasingRenderFramesPerUpdate = 4; // [WARNING] When using "smallChasingRenderFramesPerUpdate", we're giving more chance to "lockstep"
-        bigChasingRenderFramesPerUpdate = 6;
+        bigChasingRenderFramesPerUpdate = 8;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
 

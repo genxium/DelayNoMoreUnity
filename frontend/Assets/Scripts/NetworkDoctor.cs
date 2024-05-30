@@ -61,7 +61,7 @@ public class NetworkDoctor {
     int exclusivelySelfConfirmedLockStepQuota;
     
     // For display on NetworkDoctorInfo panel only
-    public float DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT = 60.0f; // 1 second  
+    public float DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT = 120.0f; // 60.0f == 1 second  
     public float chasedToPlayerRdfIdIndicatorCountdown;
     public float forceResyncImmediatePumpIndicatorCountdown;
     public float forceResyncFutureAppliedIndicatorCountdown;
