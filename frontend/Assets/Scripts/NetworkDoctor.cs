@@ -220,7 +220,7 @@ public class NetworkDoctor {
                 lockstepAllowedByLastForceResync = true;
             }
         } else {
-            if (!exclusivelySelfUnconfirmed || latestRecvMillisTooOld) {
+            if (!exclusivelySelfUnconfirmedAtLastForceResync || latestRecvMillisTooOld) {
                 lockstepAllowedByLastForceResync = true;
             }
         }
