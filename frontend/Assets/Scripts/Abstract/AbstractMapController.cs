@@ -31,6 +31,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int lastUpsyncInputFrameId;
 
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= playerRdfId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
+    protected int chaserRenderFrameIdLowerBound; // Upon force-resync, each peer receives a "ground truth RoomDownsyncFrame" from the backend, which serves as a "lower bound for the chaserRenderFrameId fluctuation"
     protected int smallChasingRenderFramesPerUpdate;
     protected int bigChasingRenderFramesPerUpdate;
     protected int renderBufferSize;
@@ -353,12 +354,22 @@ public abstract class AbstractMapController : MonoBehaviour {
         return newAllConfirmedCnt;
     }
 
-    protected void _handleIncorrectlyRenderedPrediction(int firstPredictedYetIncorrectInputFrameId, bool fromUDP) {
-        if (TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId) return;
-        int playerRdfId1 = ConvertToFirstUsedRenderFrameId(firstPredictedYetIncorrectInputFrameId);
+    protected void _handleIncorrectlyRenderedPrediction(int mismatchedInputFrameId, bool fromUDP) {
+        if (TERMINATING_INPUT_FRAME_ID == mismatchedInputFrameId) return;
+        int playerRdfId1 = ConvertToFirstUsedRenderFrameId(mismatchedInputFrameId);
         if (playerRdfId1 >= chaserRenderFrameId) return;
         // By now playerRdfId1 < chaserRenderFrameId, it's pretty impossible that "playerRdfId1 > playerRdfId" but we're still checking.
         if (playerRdfId1 > playerRdfId) return; // The incorrect prediction is not yet rendered, no visual impact for player.
+        int playerRdfId2 = ConvertToLastUsedRenderFrameId(mismatchedInputFrameId);
+        if (playerRdfId2 < chaserRenderFrameIdLowerBound) {
+            /*
+            [WARNING]
+            
+            There's no need to reset "chaserRenderFrameId" if the impact of this input mismatch couldn't even reach "chaserRenderFrameIdLowerBound".
+            */
+            Debug.Log(String.Format("@playerRdfId={0}, IGNORING mismatchedInputFrameId: {1} whose last used rdfId: {2} is smaller than chaserRenderFrameIdLowerBound: {3}; chaserRenderFrameId={4}, lastAllConfirmedInputFrameId={5}, fromUDP={6}", playerRdfId, mismatchedInputFrameId, playerRdfId2, chaserRenderFrameIdLowerBound, chaserRenderFrameId, lastAllConfirmedInputFrameId, fromUDP));
+            return;
+        }
         /*
 		   A typical case is as follows.
 		   --------------------------------------------------------
@@ -388,7 +399,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             */
         /*
         if (fromUDP) {
-            Debug.Log(String.Format("@playerRdfId={5}, mismatched input for rendered history detected, resetting chaserRenderFrameId: {0}->{1}; firstPredictedYetIncorrectInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, playerRdfId1, firstPredictedYetIncorrectInputFrameId, lastAllConfirmedInputFrameId, fromUDP, playerRdfId));
+            Debug.Log(String.Format("@playerRdfId={5}, mismatched input for rendered history detected, resetting chaserRenderFrameId: {0}->{1}; mismatchedInputFrameId: {2}, lastAllConfirmedInputFrameId={3}, fromUDP={4}", chaserRenderFrameId, playerRdfId1, mismatchedInputFrameId, lastAllConfirmedInputFrameId, fromUDP, playerRdfId));
         }
         */
     }
@@ -1060,6 +1071,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         justTriggeredStoryId = STORY_POINT_NONE;
         playerRdfId = 0;
         chaserRenderFrameId = -1;
+        chaserRenderFrameIdLowerBound = -1;
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;
         smallChasingRenderFramesPerUpdate = 2; // [WARNING] When using "smallChasingRenderFramesPerUpdate", we're giving more chance to "lockstep"
@@ -1112,9 +1124,13 @@ public abstract class AbstractMapController : MonoBehaviour {
             // [WARNING] Now that "inputFrameDownsyncId > self.lastAllConfirmedInputFrameId", we should make an update immediately because unlike its backend counterpart "Room.LastAllConfirmedInputFrameId", the frontend "mapIns.lastAllConfirmedInputFrameId" might inevitably get gaps among discrete values due to "either type#1 or type#2 forceConfirmation" -- and only "onInputFrameDownsyncBatch" can catch this! 
             lastAllConfirmedInputFrameId = inputFrameDownsyncId;
             var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
+            int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameDownsyncId);
+
             if (null != localInputFrame
               &&
               TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId
+              && 
+              playerRdfId2 >= chaserRenderFrameIdLowerBound // [WARNING] Such that "inputFrameDownsyncId" has a meaningful impact.
               &&
               !Battle.EqualInputLists(localInputFrame.InputList, inputFrameDownsync.InputList)
             ) {
@@ -1124,7 +1140,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 &&
                 unconfirmedBattleResult.ContainsKey(inputFrameDownsyncId)
                 ) {
-                // [WARNING] Unconfirmed battle results must be revisited!
+                // [WARNING] Unconfirmed battle results must be revisited! TODO: Regardless of "playerRdfId2 < chaserRenderFrameIdLowerBound"?
                 firstPredictedYetIncorrectInputFrameId = inputFrameDownsyncId;
                 unconfirmedBattleResult.Remove(inputFrameDownsyncId);
             }
@@ -1159,6 +1175,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
         int rdfId = pbRdf.Id;
+        if (rdfId <= chaserRenderFrameIdLowerBound) {
+            Debug.LogWarning(String.Format("No need to handle downsynced rdfId={0} because chaserRenderFrameIdLowerBound={1}! @playerRdfId={2}, chaserRenderFrameId={3}, renderBuffer=[{4}], inputBuffer=[{5}]", rdfId, chaserRenderFrameIdLowerBound, playerRdfId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
+            return;
+        }
+
         bool shouldForceDumping1 = (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId || usingOthersForcedDownsyncRenderFrameDict);
         bool shouldForceDumping2 = (rdfId > playerRdfId); // In "OnlineMapController", the call sequence per "Update" is "[pollAndHandleWsRecvBuffer >> onRoomDownsyncFrame] > [doUpdate >> rollbackAndChase(playerRdfId, playerRdfId+1)]", thus using strict inequality here.
         bool shouldForceResync = pbRdf.ShouldForceResync;
@@ -1186,37 +1207,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         bool isRingBuffConsecutiveSet = (RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet);
-        if (pbRdf.ShouldForceResync) {
-            bool exclusivelySelfConfirmedAtLastForceResync = ((0 < pbRdf.BackendUnconfirmedMask) && selfConfirmed);
-            ulong allConfirmedMask = (1UL << roomCapacity) - 1;
-            bool exclusivelySelfUnconfirmedAtLastForceResync = (allConfirmedMask != pbRdf.BackendUnconfirmedMask && selfUnconfirmed);
-            int lastForceResyncedIfdId = lastAllConfirmedInputFrameId; // Because "[onInputFrameDownsyncBatch > _markConfirmationIfApplicable]" is already called
-            NetworkDoctor.Instance.LogForceResyncedIfdId(lastForceResyncedIfdId, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, isRingBuffConsecutiveSet);
-
-            if (selfConfirmed) {
-                if (null == accompaniedInputFrameDownsyncBatch) {
-                    //Debug.Log(String.Format("On battle resynced for another player#1! @playerRdfId={3}, renderBuffer=[{4}], inputBuffer=[{5}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1}; downsynced rdf={2}", rdfId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
-                    Debug.Log(String.Format("On battle resynced for another player#1! @playerRdfId={2}, renderBuffer=[{3}], inputBuffer=[{4}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1}", rdfId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
-                } else {
-                    //Debug.Log(String.Format("On battle resynced for another player#2! @playerRdfId={6}, renderBuffer=[{7}], inputBuffer=[{8}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}] & isRingBuffConsecutiveSet={3}; downsynced rdf={4}, accompaniedInputFrameDownsyncBatch={5}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
-                    Debug.Log(String.Format("On battle resynced for another player#2! @playerRdfId={4}, renderBuffer=[{5}], inputBuffer=[{6}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}] & isRingBuffConsecutiveSet={3}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
-                }
-            } else {
-                // selfUnconfirmed
-                if (!usingOthersForcedDownsyncRenderFrameDict) {
-                    if (null == accompaniedInputFrameDownsyncBatch) {
-                        //Debug.Log(String.Format("On battle resynced for self#1! @playerRdfId={3}, renderBuffer=[{4}], inputBuffer=[{5}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1}; downsynced rdf={2}", rdfId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
-                        Debug.Log(String.Format("On battle resynced for self#1! @playerRdfId={2}, renderBuffer=[{3}], inputBuffer=[{4}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1};", rdfId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
-                    } else {
-                        //Debug.Log(String.Format("On battle resynced for self#2! @playerRdfId={6}, renderBuffer=[{7}], inputBuffer=[{8}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}] & isRingBuffConsecutiveSet={3}; downsynced rdf={4}, accompaniedInputFrameDownsyncBatch={5}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, isRingBuffConsecutiveSet, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
-                        Debug.Log(String.Format("On battle resynced for self#2! @playerRdfId={4}, renderBuffer=[{5}], inputBuffer=[{6}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}] & isRingBuffConsecutiveSet={3}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
-                    }
-                }
-            }
-        }
+        bool hasRollbackBurst = false;
 
         if (shouldForceDumping1 || shouldForceDumping2 || shouldForceResync) {
-            // In fact, not having "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet" should already imply that "playerRdfId <= rdfId", but here we double check and log the anomaly  
+            /*
+            [WARNING] 
+
+            "selfConfirmed && rdfId > playerRdfId" WOULD NOT IMMEDIATELY enter this block due to the mutation of "shouldForceDumping2" and "shouldForceResync" -- however it'd defer to enter here by "shouldForceDumping1 = usingOthersForcedDownsyncRenderFrameDict".  
+            */
             if (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
                 //Debug.Log(String.Format("On battle started! received rdfId={0}; downsynced rdf={1}", rdfId, stringifyRdf(pbRdf)));
                 Debug.Log(String.Format("On battle started! received rdfId={0}", rdfId));
@@ -1241,33 +1239,53 @@ public abstract class AbstractMapController : MonoBehaviour {
                 if (null == accompaniedInputFrameDownsyncBatch) {
                     if (usingOthersForcedDownsyncRenderFrameDict) {
                         // [WARNING] "!EqualRdfs(oldRdf, pbRdf, roomCapacity)" already checked
-                        //Debug.Log(String.Format("On battle resynced history update from othersForcedDownsyncRenderFrameDict#1! @playerRdfId={0}, chaserRenderFrameId={1}, renderBuffer=[{2}], inputBuffer=[{3}], isRingBuffConsecutiveSet={4}; downsynced rdf={5}", playerRdfId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), isRingBuffConsecutiveSet, stringifyRdf(pbRdf)));
-                        Debug.Log(String.Format("On battle resynced history update from othersForcedDownsyncRenderFrameDict#1! @playerRdfId={0}, chaserRenderFrameId={1}, renderBuffer=[{2}], inputBuffer=[{3}], isRingBuffConsecutiveSet={4}", playerRdfId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), isRingBuffConsecutiveSet));
-                        if (0 > chaserRenderFrameId || chaserRenderFrameId > rdfId) {
-                            chaserRenderFrameId = rdfId;
-                        }
+                        Debug.Log(String.Format("On battle resynced history update from othersForcedDownsyncRenderFrameDict#1! @playerRdfId={0}, chaserRenderFrameId={1}, renderBuffer=[{2}], inputBuffer=[{3}], isRingBuffConsecutiveSet={4}, chaserRenderFrameIdLowerBound={5}", playerRdfId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), isRingBuffConsecutiveSet, chaserRenderFrameIdLowerBound));
+
+                        // [WARNING] It's impossible that "true == usingOthersForcedDownsyncRenderFrameDict && chaserRenderFrameId > rdfId" because "rdfId == playerRdfId+1" in this case -- hence there's no chance of rollback burst and we should update "chaserRenderFrameIdLowerBound" as well.
+                        chaserRenderFrameId = rdfId;
+                        chaserRenderFrameIdLowerBound = rdfId;
                     } else {
+                        // Check for "hasRollbackBurst" 
                         if (oldRdfExists && null != oldRdf && !EqualRdfs(oldRdf, pbRdf, roomCapacity)) {         
-                            Debug.Log(String.Format("On battle resynced history update {4}#1! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet, selfUnconfirmed ? "for self" : "from another player"));
+                            Debug.Log(String.Format("On battle resynced history update {4}#1! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}, chaserRenderFrameIdLowerBound={5}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet, selfUnconfirmed ? "for self" : "from another player", chaserRenderFrameIdLowerBound));
                             if (0 > chaserRenderFrameId || chaserRenderFrameId > rdfId) {
                                 chaserRenderFrameId = rdfId;
+                                hasRollbackBurst = true;
                             }
+                        }
+
+                        // Even if "false == hasRollbackBurst", there's no point keeping "chaserRenderFrameId < rdfId" now because "pbRdf" is a ground truth from backend.
+                        if (chaserRenderFrameId < rdfId) {
+                            chaserRenderFrameId = rdfId;
+                        }
+                        if (chaserRenderFrameIdLowerBound < rdfId) {
+                            chaserRenderFrameIdLowerBound = rdfId;
                         }
                     }
                 } else {
                     if (usingOthersForcedDownsyncRenderFrameDict) {
                         // [WARNING] "!EqualRdfs(oldRdf, pbRdf, roomCapacity)" already checked
-                        //Debug.Log(String.Format("On battle resynced history update from othersForcedDownsyncRenderFrameDict#2! @playerRdfId={5}, chaserRenderFrameId={6}, renderBuffer=[{7}], inputBuffer=[{8}], isRingBuffConsecutiveSet={9}; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]; downsynced rdf={3}, accompaniedInputFrameDownsyncBatch={4}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, stringifyRdf(pbRdf), stringifyIfdBatch(accompaniedInputFrameDownsyncBatch, false), playerRdfId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), isRingBuffConsecutiveSet));
-                        Debug.Log(String.Format("On battle resynced history update from othersForcedDownsyncRenderFrameDict#2! @playerRdfId={3}, chaserRenderFrameId={4}, renderBuffer=[{5}], inputBuffer=[{6}], isRingBuffConsecutiveSet={7}; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, playerRdfId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), isRingBuffConsecutiveSet));
-                        if (0 > chaserRenderFrameId || chaserRenderFrameId > rdfId) {
-                            chaserRenderFrameId = rdfId;
-                        }
+                        Debug.Log(String.Format("On battle resynced history update from othersForcedDownsyncRenderFrameDict#2! @playerRdfId={3}, chaserRenderFrameId={4}, renderBuffer=[{5}], inputBuffer=[{6}], isRingBuffConsecutiveSet={7}, chaserRenderFrameIdLowerBound={8}; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}]", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, playerRdfId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), isRingBuffConsecutiveSet, chaserRenderFrameIdLowerBound));
+
+                        // [WARNING] It's impossible that "true == usingOthersForcedDownsyncRenderFrameDict && chaserRenderFrameId > rdfId" because "rdfId == playerRdfId+1" in this case -- hence there's no chance of rollback burst and we should update "chaserRenderFrameIdLowerBound" as well.
+                        chaserRenderFrameId = rdfId;
+                        chaserRenderFrameIdLowerBound = rdfId;
                     } else {
+                        // Check for "hasRollbackBurst" 
                         if (oldRdfExists && null != oldRdf && !EqualRdfs(oldRdf, pbRdf, roomCapacity)) {         
-                            Debug.Log(String.Format("On battle resynced history update for {4}#2! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet, selfUnconfirmed ? "for self" : "from another player"));
+                            Debug.Log(String.Format("On battle resynced history update for {4}#2! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}, chaserRenderFrameIdLowerBound={5}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet, selfUnconfirmed ? "for self" : "from another player", chaserRenderFrameIdLowerBound));
                             if (0 > chaserRenderFrameId || chaserRenderFrameId > rdfId) {
                                 chaserRenderFrameId = rdfId;
+                                hasRollbackBurst = true;
                             }
+                        }
+
+                        // Even if "false == hasRollbackBurst", there's no point keeping "chaserRenderFrameId < rdfId" now because "pbRdf" is a ground truth from backend.
+                        if (chaserRenderFrameId < rdfId) {
+                            chaserRenderFrameId = rdfId;
+                        }
+                        if (chaserRenderFrameIdLowerBound < rdfId) {
+                            chaserRenderFrameIdLowerBound = rdfId;
                         }
                     }
                 }
@@ -1280,11 +1298,40 @@ public abstract class AbstractMapController : MonoBehaviour {
                 pushbackFrameLogBuffer.EdFrameId = rdfId;
                 // [WARNING] Don't break chasing in other "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet" cases (except for "usingOthersForcedDownsyncRenderFrameDict" and "self-unconfirmed"), otherwise the "unchased" history rdfs & ifds between "[chaserRenderFrameId, rdfId)" can become incorrectly remained in framelog (which is written by rollbackAndChase)! 
                 chaserRenderFrameId = rdfId;
+                chaserRenderFrameIdLowerBound = rdfId;
             }
 
             // [WARNING] Validate and correct "chaserRenderFrameId" at the end of "onRoomDownsyncFrame", it's sometimes necessary when "RING_BUFF_NON_CONSECUTIVE_SET == dumpRenderCacheRet"
             if (chaserRenderFrameId < renderBuffer.StFrameId) {
                 chaserRenderFrameId = renderBuffer.StFrameId;
+            }
+            if (chaserRenderFrameIdLowerBound < renderBuffer.StFrameId) {
+                chaserRenderFrameIdLowerBound = renderBuffer.StFrameId;
+            }
+
+            if (pbRdf.ShouldForceResync) {
+                bool exclusivelySelfConfirmedAtLastForceResync = ((0 < pbRdf.BackendUnconfirmedMask) && selfConfirmed);
+                ulong allConfirmedMask = (1UL << roomCapacity) - 1;
+                bool exclusivelySelfUnconfirmedAtLastForceResync = (allConfirmedMask != pbRdf.BackendUnconfirmedMask && selfUnconfirmed);
+                int lastForceResyncedIfdId = lastAllConfirmedInputFrameId; // Because "[onInputFrameDownsyncBatch > _markConfirmationIfApplicable]" is already called
+                NetworkDoctor.Instance.LogForceResyncedIfdId(lastForceResyncedIfdId, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, hasRollbackBurst);
+
+                if (selfConfirmed) {
+                    if (null == accompaniedInputFrameDownsyncBatch) {
+                        Debug.Log(String.Format("On battle resynced for another player#1! @playerRdfId={2}, renderBuffer=[{3}], inputBuffer=[{4}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1}", rdfId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
+                    } else {
+                        Debug.Log(String.Format("On battle resynced for another player#2! @playerRdfId={4}, renderBuffer=[{5}], inputBuffer=[{6}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}] & isRingBuffConsecutiveSet={3}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
+                    }
+                } else {
+                    // selfUnconfirmed
+                    if (!usingOthersForcedDownsyncRenderFrameDict) {
+                        if (null == accompaniedInputFrameDownsyncBatch) {
+                            Debug.Log(String.Format("On battle resynced for self#1! @playerRdfId={2}, renderBuffer=[{3}], inputBuffer=[{4}]; received rdfId={0} & no accompaniedInputFrameDownsyncBatch & isRingBuffConsecutiveSet={1};", rdfId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
+                        } else {
+                            Debug.Log(String.Format("On battle resynced for self#2! @playerRdfId={4}, renderBuffer=[{5}], inputBuffer=[{6}]; received rdfId={0} & accompaniedInputFrameDownsyncBatch[{1}, ..., {2}] & isRingBuffConsecutiveSet={3}", rdfId, accompaniedInputFrameDownsyncBatch[0].InputFrameId, accompaniedInputFrameDownsyncBatch[accompaniedInputFrameDownsyncBatch.Count - 1].InputFrameId, isRingBuffConsecutiveSet, playerRdfId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat()));
+                        }
+                    }
+                }
             }
 
             battleState = ROOM_STATE_IN_BATTLE;
@@ -1305,7 +1352,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var (delayedInputFrameExists, _) = inputBuffer.GetByFrameId(delayedInputFrameId);
         if (!delayedInputFrameExists) {
             // Possible edge case after resync, kindly note that it's OK to prefab a "future inputFrame" here, because "sendInputFrameUpsyncBatch" would be capped by "noDelayInputFrameId from this.playerRdfId". 
-            Debug.LogWarning(String.Format("@playerRdfId={0}, prefabbing delayedInputFrameId={1} while lastAllConfirmedInputFrameId={2}, inputBuffer:{3}", playerRdfId, delayedInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat()));
+            // Debug.LogWarning(String.Format("@playerRdfId={0}, prefabbing delayedInputFrameId={1} while lastAllConfirmedInputFrameId={2}, inputBuffer:{3}", playerRdfId, delayedInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat()));
             getOrPrefabInputFrameUpsync(delayedInputFrameId, false, prefabbedInputListHolder);
         }
 

@@ -504,8 +504,11 @@ public class OnlineMapController : AbstractMapController {
             bool isPeerEncodedInputUpdated = (existingInputFrame.InputList[peerJoinIndex - 1] != peerEncodedInput);
             existingInputFrame.InputList[peerJoinIndex - 1] = peerEncodedInput;
 
+            int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameId);
             if (
-              TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId
+              (TERMINATING_INPUT_FRAME_ID == firstPredictedYetIncorrectInputFrameId || inputFrameId < firstPredictedYetIncorrectInputFrameId) // [WARNING] Unlike "onInputFrameDownsyncBatch(...)" for TCP, here via UDP we might be traversing out-of-order "InputFrameUpsync"s
+              && 
+              playerRdfId2 >= chaserRenderFrameIdLowerBound // [WARNING] Such that "inputFrameId" has a meaningful impact.
               &&
               isPeerEncodedInputUpdated
             ) {

@@ -56,7 +56,7 @@ public class NetworkDoctor {
     int lastForceResyncedIfdId;
     bool exclusivelySelfConfirmedAtLastForceResync;
     bool exclusivelySelfUnconfirmedAtLastForceResync;
-    bool lastForceResyncHasHistoryRdfUpdate;
+    bool lastForceResyncHasRollbackBurst;
 
     public void Reset() {
         localRequiredIfdId = 0;
@@ -68,14 +68,14 @@ public class NetworkDoctor {
         lastForceResyncedIfdId = 0;
         exclusivelySelfConfirmedAtLastForceResync = false;
         exclusivelySelfUnconfirmedAtLastForceResync = false;
-        lastForceResyncHasHistoryRdfUpdate = false;
+        lastForceResyncHasRollbackBurst = false;
 
         sendingQ.Clear();
         inputFrameDownsyncQ.Clear();
         peerInputFrameUpsyncQ.Clear();
     }
 
-    public void LogForceResyncedIfdId(int val, bool exclusivelySelfConfirmed, bool exclusivelySelfUnconfirmed, bool hasHistoryRdfUpdate) {
+    public void LogForceResyncedIfdId(int val, bool exclusivelySelfConfirmed, bool exclusivelySelfUnconfirmed, bool hasRollbackBurst) {
         /*
         [WARNING] 
         
@@ -84,7 +84,7 @@ public class NetworkDoctor {
         lastForceResyncedIfdId = val;
         exclusivelySelfConfirmedAtLastForceResync = exclusivelySelfConfirmed;
         exclusivelySelfUnconfirmedAtLastForceResync = exclusivelySelfUnconfirmed;
-        lastForceResyncHasHistoryRdfUpdate = hasHistoryRdfUpdate;
+        lastForceResyncHasRollbackBurst = hasRollbackBurst;
     }
 
     public void LogLocalRequiredIfdId(int val) {
@@ -220,13 +220,14 @@ public class NetworkDoctor {
                 lockstepAllowedByLastForceResync = true;
             }
         } else {
-            lockstepAllowedByLastForceResync = true;
+            if (!exclusivelySelfUnconfirmed || latestRecvMillisTooOld) {
+                lockstepAllowedByLastForceResync = true;
+            }
         }
 
-        bool rollbackFramesDueToLastForceResync = (recvIfdIdFrontIsFromLastResynced && lastForceResyncHasHistoryRdfUpdate);
 		bool sendingFpsNormal = (sendingFps >= inputRateThreshold) || (recvIfdIdFrontIsFromLastResynced && exclusivelySelfConfirmedAtLastForceResync);
 
-        if (ifdLagSignificant && sendingFpsNormal && lockstepAllowedByLastForceResync && (immediateRollbackFrames > renderFrameLagTolerance && !rollbackFramesDueToLastForceResync)) {
+        if (ifdLagSignificant && sendingFpsNormal && lockstepAllowedByLastForceResync && (immediateRollbackFrames > renderFrameLagTolerance && !lastForceResyncHasRollbackBurst)) {
             /*
             [WARNING]
 
@@ -241,7 +242,7 @@ public class NetworkDoctor {
             The bottom line is that we don't apply "lockstep" to a peer who's deemed "slow ticker" on the backend!
             */
 
-            Debug.Log(String.Format("Should lock step, immediateRollbackFrames={0}, localRequiredIfdId={1}, minInputFrameIdFront={2}, renderFrameLagTolerance={3}, inputFrameUpsyncDelayTolerance={4}, sendingFps={5}, srvDownsyncFps={6}, inputRateThreshold={7}, latestRecvMillis={8}, nowMillis={9}, latestRecvMillisTooOld={10}, lastForceResyncedIfdId={11}, exclusivelySelfConfirmedAtLastForceResync={12}, exclusivelySelfUnconfirmedAtLastForceResync={13}", immediateRollbackFrames, localRequiredIfdId, minInputFrameIdFront, renderFrameLagTolerance, inputFrameUpsyncDelayTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis, latestRecvMillisTooOld, lastForceResyncedIfdId, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync));
+            Debug.Log(String.Format("Should lock step, localRequiredIfdId={0}, minInputFrameIdFront={1}, lastForceResyncedIfdId={2}, inputFrameUpsyncDelayTolerance={3}; immediateRollbackFrames={4}, renderFrameLagTolerance={5}; sendingFps={6}, srvDownsyncFps={7}, inputRateThreshold={8}, latestRecvMillis={9}, nowMillis={10}, latestRecvMillisTooOld={11}, exclusivelySelfConfirmedAtLastForceResync={12}, exclusivelySelfUnconfirmedAtLastForceResync={13}, lastForceResyncHasRollbackBurst={14}", localRequiredIfdId, minInputFrameIdFront, lastForceResyncedIfdId, inputFrameUpsyncDelayTolerance, immediateRollbackFrames, renderFrameLagTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis, latestRecvMillisTooOld, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, lastForceResyncHasRollbackBurst));
 
             return (true, ifdIdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
 		}
