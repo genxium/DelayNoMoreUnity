@@ -29,6 +29,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int playerRdfId; // After battle started, always increments monotonically (even upon reconnection)
     protected int lastAllConfirmedInputFrameId;
     protected int lastUpsyncInputFrameId;
+    protected int inputFrameUpsyncDelayTolerance;
 
     protected int chaserRenderFrameId; // at any moment, "chaserRenderFrameId <= playerRdfId", but "chaserRenderFrameId" would fluctuate according to "onInputFrameDownsyncBatch"
     protected int chaserRenderFrameIdLowerBound; // Upon force-resync, each peer receives a "ground truth RoomDownsyncFrame" from the backend, which serves as a "lower bound for the chaserRenderFrameId fluctuation"
@@ -271,7 +272,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = playerRdfIdSt; i < playerRdfIdEd; i++) {
             var (ok1, currRdf) = renderBuffer.GetByFrameId(i);
             if (false == ok1 || null == currRdf) {
-                var msg = String.Format("Couldn't find renderFrame for i={0} to rollback, playerRdfId={1}, might've been interruptted by onRoomDownsyncFrame; renderBuffer:{2}", i, playerRdfId, renderBuffer.toSimpleStat());
+                var msg = String.Format("Couldn't find renderFrame for i={0} to rollback, playerRdfId={1}, might've been interrupted by onRoomDownsyncFrame; renderBuffer:{2}", i, playerRdfId, renderBuffer.toSimpleStat());
                 Debug.LogWarning(msg);
                 throw new ArgumentNullException(msg);
             }
@@ -1074,8 +1075,16 @@ public abstract class AbstractMapController : MonoBehaviour {
         chaserRenderFrameIdLowerBound = -1;
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;
-        smallChasingRenderFramesPerUpdate = 2; // [WARNING] When using "smallChasingRenderFramesPerUpdate", we're giving more chance to "lockstep"
-        bigChasingRenderFramesPerUpdate = 4;
+
+        /*
+         [WARNING]
+
+         By observing "NetworkDoctorInfo.XxxIndicator", it's found that "chasedToPlayerRdfIdIndicator" is most often lit, even during obvious graphical inconsistencies. Therefore the combination "smallChasingRenderFramesPerUpdate = 2 && bigChasingRenderFramesPerUpdate = 4" back then was considered too small. 
+        
+         The current combination is having much better field test results in terms of graphical consistencies.
+         */
+        smallChasingRenderFramesPerUpdate = 4; // [WARNING] When using "smallChasingRenderFramesPerUpdate", we're giving more chance to "lockstep"
+        bigChasingRenderFramesPerUpdate = 6;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
 
@@ -1244,6 +1253,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         // [WARNING] It's impossible that "true == usingOthersForcedDownsyncRenderFrameDict && chaserRenderFrameId > rdfId" because "rdfId == playerRdfId+1" in this case -- hence there's no chance of rollback burst and we should update "chaserRenderFrameIdLowerBound" as well.
                         chaserRenderFrameId = rdfId;
                         chaserRenderFrameIdLowerBound = rdfId;
+                        NetworkDoctor.Instance.LogForceResyncFutureApplied();
                     } else {
                         // Check for "hasRollbackBurst" 
                         if (oldRdfExists && null != oldRdf && !EqualRdfs(oldRdf, pbRdf, roomCapacity)) {         
@@ -1261,6 +1271,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         if (chaserRenderFrameIdLowerBound < rdfId) {
                             chaserRenderFrameIdLowerBound = rdfId;
                         }
+
+                        // Kindly note that if "chaserRenderFrameId > rdfId && (!oldRdfExists || EqualRdfs(oldRdf, pbRdf, roomCapacity))", then "chaserRenderFrameId" will remain unchanged
                     }
                 } else {
                     if (usingOthersForcedDownsyncRenderFrameDict) {
@@ -1270,10 +1282,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                         // [WARNING] It's impossible that "true == usingOthersForcedDownsyncRenderFrameDict && chaserRenderFrameId > rdfId" because "rdfId == playerRdfId+1" in this case -- hence there's no chance of rollback burst and we should update "chaserRenderFrameIdLowerBound" as well.
                         chaserRenderFrameId = rdfId;
                         chaserRenderFrameIdLowerBound = rdfId;
+                        NetworkDoctor.Instance.LogForceResyncFutureApplied();
                     } else {
                         // Check for "hasRollbackBurst" 
                         if (oldRdfExists && null != oldRdf && !EqualRdfs(oldRdf, pbRdf, roomCapacity)) {         
-                            Debug.Log(String.Format("On battle resynced history update for {4}#2! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}, chaserRenderFrameIdLowerBound={5}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet, selfUnconfirmed ? "for self" : "from another player", chaserRenderFrameIdLowerBound));
+                            Debug.Log(String.Format("On battle resynced history update {4}#2! @playerRdfId={0}, chaserRenderFrameId={1}; received rdfId={2} & isRingBuffConsecutiveSet={3}, chaserRenderFrameIdLowerBound={5}", playerRdfId, chaserRenderFrameId, rdfId, isRingBuffConsecutiveSet, selfUnconfirmed ? "for self" : "from another player", chaserRenderFrameIdLowerBound));
                             if (0 > chaserRenderFrameId || chaserRenderFrameId > rdfId) {
                                 chaserRenderFrameId = rdfId;
                                 hasRollbackBurst = true;
@@ -1287,12 +1300,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                         if (chaserRenderFrameIdLowerBound < rdfId) {
                             chaserRenderFrameIdLowerBound = rdfId;
                         }
+
+                        // Kindly note that if "chaserRenderFrameId > rdfId && (!oldRdfExists || EqualRdfs(oldRdf, pbRdf, roomCapacity))", then "chaserRenderFrameId" will remain unchanged
                     }
                 }
             }
 
             if (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId || RingBuffer<RoomDownsyncFrame>.RING_BUFF_NON_CONSECUTIVE_SET == dumpRenderCacheRet) {
                 playerRdfId = rdfId; // [WARNING] It's important NOT to re-assign "playerRdfId" when "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet", e.g. when "true == usingOthersForcedDownsyncRenderFrameDict" (on the ACTIVE NORMAL TICKER side).
+                NetworkDoctor.Instance.LogForceResyncImmediatePump();
                 pushbackFrameLogBuffer.Clear();
                 pushbackFrameLogBuffer.StFrameId = rdfId;
                 pushbackFrameLogBuffer.EdFrameId = rdfId;
@@ -1314,7 +1330,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 ulong allConfirmedMask = (1UL << roomCapacity) - 1;
                 bool exclusivelySelfUnconfirmedAtLastForceResync = (allConfirmedMask != pbRdf.BackendUnconfirmedMask && selfUnconfirmed);
                 int lastForceResyncedIfdId = lastAllConfirmedInputFrameId; // Because "[onInputFrameDownsyncBatch > _markConfirmationIfApplicable]" is already called
-                NetworkDoctor.Instance.LogForceResyncedIfdId(lastForceResyncedIfdId, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, hasRollbackBurst);
+                NetworkDoctor.Instance.LogForceResyncedIfdId(lastForceResyncedIfdId, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, hasRollbackBurst, inputFrameUpsyncDelayTolerance);
 
                 if (selfConfirmed) {
                     if (null == accompaniedInputFrameDownsyncBatch) {
@@ -1449,7 +1465,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected IEnumerator delayToShowSettlementPanel() {
         if (ROOM_STATE_IN_BATTLE != battleState) {
-            Debug.LogWarning("Why calling delayToShowSettlementPanel during active battle? PlayerRdfId == " + playerRdfId);
+            Debug.LogWarning("Why calling delayToShowSettlementPanel during active battle? playerRdfId == " + playerRdfId);
             yield return new WaitForSeconds(0);
         } else {
             battleState = ROOM_STATE_IN_SETTLEMENT;

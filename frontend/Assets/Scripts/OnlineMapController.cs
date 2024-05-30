@@ -11,13 +11,12 @@ public class OnlineMapController : AbstractMapController {
     Task wsTask, udpTask;
     CancellationTokenSource wsCancellationTokenSource;
     CancellationToken wsCancellationToken;
-    int inputFrameUpsyncDelayTolerance;
     WsResp wsRespHolder;
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
     bool shouldLockStep = false;
     bool localTimerEnded = false;
-    bool lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = false;
+    bool timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync = false;
     int timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
 
     public PlayerWaitingPanel playerWaitingPanel;
@@ -334,11 +333,14 @@ public class OnlineMapController : AbstractMapController {
 
     protected override int chaseRolledbackRdfs() {
         int nextChaserRenderFrameId = base.chaseRolledbackRdfs();
-        if (nextChaserRenderFrameId == playerRdfId && playerRdfId >= battleDurationFrames) {
-            var (rdfAllConfirmed, _) = isRdfAllConfirmed(playerRdfId, inputBuffer, roomCapacity);
-            if (rdfAllConfirmed) {
-                lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = true;
+        if (nextChaserRenderFrameId == playerRdfId) { 
+            if (playerRdfId >= battleDurationFrames) {
+                var (rdfAllConfirmed, _) = isRdfAllConfirmed(playerRdfId, inputBuffer, roomCapacity);
+                if (rdfAllConfirmed) {
+                    timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync = true;
+                }
             }
+            NetworkDoctor.Instance.LogChasedToPlayerRdfId();
         }
         return nextChaserRenderFrameId;
     }
@@ -374,7 +376,7 @@ public class OnlineMapController : AbstractMapController {
             chaseRolledbackRdfs();
             NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
             if (localTimerEnded) {
-                if (!lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync && 0 < timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync) {
+                if (!timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync && 0 < timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync) {
                     // TODO: Popup some GUI hint to tell the player that we're awaiting downsync only, as the local "playerRdfId" is monotonically increasing, there's no way to rewind and change any input from here!
                     timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync -= 16; // hardcoded for now
                 } else {
@@ -394,7 +396,7 @@ public class OnlineMapController : AbstractMapController {
                 readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
                 
                 // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
-                var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), (inputFrameUpsyncDelayTolerance >> 1)-1);
+                var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), (inputFrameUpsyncDelayTolerance >> 1));
                 shouldLockStep = tooFastOrNot;
                 networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
             }
@@ -536,7 +538,7 @@ public class OnlineMapController : AbstractMapController {
         // Reset lockstep
         shouldLockStep = false;
         localTimerEnded = false;
-        lastRenderFrameDerivedFromAllConfirmedInputFrameDownsync = false;
+        timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync = false;
         timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
         NetworkDoctor.Instance.Reset();
     }
