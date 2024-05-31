@@ -631,30 +631,30 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Idle1_2: 1764909509
-      Walking_3: -486833547
-      Walking_6: -971422181
+      Atk1_1: -1234822307
+      Atk1_2: 1045950689
+      Atk1_3: 1291501956
+      Atk1_4: -1251983993
+      Atked1_1: 1985970012
+      Atked1_2: -2122214624
+      Avatar_1: -1134290200
+      BlownUp_1: -1440466637
+      BlownUp_2: -1604565864
+      GetUp_1: -2050843538
       GetUp_2: 953016190
       Idle1_1: -46125260
-      Avatar_1: -1134290200
+      Idle1_2: 1764909509
+      Idle1_3: 1189180634
       InAirIdle1_1: 854664236
-      LayDown_3: 308639946
-      Atk1_4: -1251983993
-      GetUp_1: -2050843538
-      Atk1_1: -1234822307
-      Walking_1: -1331706478
-      Walking_5: 1804898444
-      Walking_2: -1669055836
-      Atk1_3: 1291501956
-      BlownUp_2: -1604565864
       LayDown_1: -17092738
       LayDown_2: -2139064841
+      LayDown_3: 308639946
+      Walking_1: -1331706478
+      Walking_2: -1669055836
+      Walking_3: -486833547
       Walking_4: -1027293115
-      BlownUp_1: -1440466637
-      Atked1_2: -2122214624
-      Atked1_1: 1985970012
-      Atk1_2: 1045950689
-      Idle1_3: 1189180634
+      Walking_5: 1804898444
+      Walking_6: -971422181
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

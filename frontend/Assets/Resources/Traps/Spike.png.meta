@@ -286,13 +286,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      verticalBlockSteel: -1441180770
       SawBig: -1955166845
       SawSmall: 215900741
-      SpikeblockSteel: -1580238465
       SpikeGroundTrap: -1249704751
-      blockSteel: -2034432290
+      SpikeblockSteel: -1580238465
       SteelspikeUp: -981407666
+      blockSteel: -2034432290
+      verticalBlockSteel: -1441180770
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

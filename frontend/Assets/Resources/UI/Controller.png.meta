@@ -1408,67 +1408,67 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Exit: -451946679
-      joystick-left: 516886332
-      UI_Flat_Checkmark_Large: 2097866177
-      keyboard-N: 323923059
-      Heart: 1649203395
-      keyboard-A: 871178311
-      icon-jump: -1880355161
-      UI_Flat_Fillbar_01_Flat_trim: -1884782171
-      Lock-Closed: -1223269851
-      Music-0: 1784056560
-      UI_Flat_Filler_01: 1485854023
-      Chevron-Arrow-Down: -420274597
-      joystick-right: 493349078
-      joystick-up-left: 427910879
-      keyboard-K: 1787260839
-      Music-1: 1558521130
-      keyboard-up: -1264366312
-      gamepad-green: -365428235
-      gamepad-blue: -763629369
-      gamepad-yellow: -1932270553
-      UI_Flat_Select_02a2: 515173168
-      keyboard-S: 434906276
-      Lock-Open: -1008822571
-      keyboard-M: -202377787
-      joystick-up-right: -1849016475
-      Star: -668699686
-      keyboard-L: -2106291620
-      joystick-idle: -97564264
-      keyboard-right: 2083205123
-      keyboard-down: 1256495127
-      Info: 939117367
-      icon-big-slash: -1588261596
-      keyboard-H: -107201805
       Bulleted-List: 46363594
-      Three-Dots-Horizontal: -694022162
-      UI_Flat_Fillbar_03_Flat_trim: 482903646
+      Chevron-Arrow-Down: -420274597
       Chevron-Arrow-Left: 2133447951
-      joystick-down-right: 560130512
-      joystick-down-left: 823068199
-      joystick-down: -1948927103
-      UI_Flat_Fillbar_02_Flat: 916252457
-      Redo: 2078603196
-      Home: -254464559
-      keyboard-C: 2002076634
-      keyboard-J: 1250625542
       Chevron-Arrow-Right: -1839191377
-      keyboard-left: 1209086038
-      Question-Mark: 92648016
-      UI_Flat_Fillbar_02_Block: -1661728241
-      Grid: 1069224224
-      icon-slash: 1726023315
-      UI_Flat_Cross_Large: 1398387094
-      Game-Controller: 2047918971
-      gamepad-red: -217861898
-      joystick-up: -753133804
-      keyboard-B: 1979175329
       Chevron-Arrow-Up: -1128742794
+      Exit: -451946679
+      Game-Controller: 2047918971
+      Grid: 1069224224
+      Heart: 1649203395
+      Home: -254464559
+      Info: 939117367
+      Lock-Closed: -1223269851
+      Lock-Open: -1008822571
+      Music-0: 1784056560
+      Music-1: 1558521130
+      Question-Mark: 92648016
+      Redo: 2078603196
+      Star: -668699686
+      Three-Dots-Horizontal: -694022162
       Three-Dots-Vertical: 1126819621
+      UI_Flat_Checkmark_Large: 2097866177
+      UI_Flat_Cross_Large: 1398387094
+      UI_Flat_Fillbar_01_Flat_trim: -1884782171
+      UI_Flat_Fillbar_02_Block: -1661728241
+      UI_Flat_Fillbar_02_Flat: 916252457
+      UI_Flat_Fillbar_03_Flat_trim: 482903646
+      UI_Flat_Filler_01: 1485854023
       UI_Flat_Select_02a1: 1096646209
-      keyboard-W: -1186525589
+      UI_Flat_Select_02a2: 515173168
+      gamepad-blue: -763629369
+      gamepad-green: -365428235
+      gamepad-red: -217861898
+      gamepad-yellow: -1932270553
+      icon-big-slash: -1588261596
+      icon-jump: -1880355161
+      icon-slash: 1726023315
+      joystick-down: -1948927103
+      joystick-down-left: 823068199
+      joystick-down-right: 560130512
+      joystick-idle: -97564264
+      joystick-left: 516886332
+      joystick-right: 493349078
+      joystick-up: -753133804
+      joystick-up-left: 427910879
+      joystick-up-right: -1849016475
+      keyboard-A: 871178311
+      keyboard-B: 1979175329
+      keyboard-C: 2002076634
       keyboard-D: -206253091
+      keyboard-H: -107201805
+      keyboard-J: 1250625542
+      keyboard-K: 1787260839
+      keyboard-L: -2106291620
+      keyboard-M: -202377787
+      keyboard-N: 323923059
+      keyboard-S: 434906276
+      keyboard-W: -1186525589
+      keyboard-down: 1256495127
+      keyboard-left: 1209086038
+      keyboard-right: 2083205123
+      keyboard-up: -1264366312
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

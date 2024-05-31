@@ -946,45 +946,45 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      EscapeDoor1-1: 1856943069
-      OliveGate-0: -889658087
-      GreenGate-0: 709232239
-      OliveGate-3: -31967447
-      GrayGate-2: -831601125
       BlueGate-0: 701392083
-      PinkGate-0: 1492480546
+      BlueGate-1: -1369027928
+      BlueGate-13: 1895726394
+      BlueGate-2: -964788725
       EscapeDoor1-0: -1951320717
-      GreenGate-3: 476456931
-      PinkGate-1: 111407900
-      TimedDoor1-4: 184567213
-      RedGate-1: -806079288
-      TimedDoor1-0: 1018736461
-      TimedDoor1-1: 1362925970
-      TimedDoor1-3: 713190724
-      OliveGate-2: 1928315619
-      GrayGate-3: 1891577773
-      PinkGate-2: -2107537735
-      GreenGate-1: -273808825
-      PinkGate-3: -1207234775
-      OliveGate-1: -283181272
+      EscapeDoor1-1: 1856943069
+      EscapeDoor1-2: 2132350701
+      EscapeDoor1-3: -930131169
+      EscapeDoor1-4: 1880388257
       GrayGate-0: -1270389655
       GrayGate-1: 1677201404
-      WaveTimedDoor-2: 1305825011
-      RedGate-0: -1574922409
-      WaveTimedDoor-3: -829934087
-      RedGate-2: -1450084087
+      GrayGate-2: -831601125
+      GrayGate-3: 1891577773
+      GreenGate-0: 709232239
+      GreenGate-1: -273808825
       GreenGate-2: 1452075587
-      BlueGate-13: 1895726394
-      EscapeDoor1-4: 1880388257
-      BlueGate-1: -1369027928
-      WaveTimedDoor-4: -80240103
+      GreenGate-3: 476456931
+      OliveGate-0: -889658087
+      OliveGate-1: -283181272
+      OliveGate-2: 1928315619
+      OliveGate-3: -31967447
+      PinkGate-0: 1492480546
+      PinkGate-1: 111407900
+      PinkGate-2: -2107537735
+      PinkGate-3: -1207234775
+      RedGate-0: -1574922409
+      RedGate-1: -806079288
+      RedGate-2: -1450084087
       RedGate-3: 1952479415
-      EscapeDoor1-2: 2132350701
+      TimedDoor1-0: 1018736461
+      TimedDoor1-1: 1362925970
       TimedDoor1-2: -671575411
-      WaveTimedDoor-1: -343751668
+      TimedDoor1-3: 713190724
+      TimedDoor1-4: 184567213
       WaveTimedDoor-0: -1894346205
-      EscapeDoor1-3: -930131169
-      BlueGate-2: -964788725
+      WaveTimedDoor-1: -343751668
+      WaveTimedDoor-2: 1305825011
+      WaveTimedDoor-3: -829934087
+      WaveTimedDoor-4: -80240103
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

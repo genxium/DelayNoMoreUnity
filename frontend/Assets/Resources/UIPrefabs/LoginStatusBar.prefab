@@ -298,7 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810cda80750c91946b092d7dba7fbe97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loggedInSpr: {fileID: 21300000, guid: 4a231ba0e81e63849a8f985c228e8acd, type: 3}
+  loggedInSpr: {fileID: 2097866177, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
   notLoggedInSpr: {fileID: 92648016, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
   uname: {fileID: 7192573881690383154}
   loggedInIcon: {fileID: 3263341936121093569}

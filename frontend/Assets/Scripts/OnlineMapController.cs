@@ -68,6 +68,25 @@ public class OnlineMapController : AbstractMapController {
                     
                     refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerTrackingIdToTrapLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out int staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerTrackingIdToTrapLocalId);
 
+                    var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
+                    var serverHolePuncher = new WsReq {
+                        PlayerId = selfPlayerInfo.Id,
+                        Act = UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
+                        JoinIndex = selfPlayerInfo.JoinIndex,
+                        AuthKey = clientAuthKey
+                    };
+                    var peerHolePuncher = new WsReq {
+                        PlayerId = selfPlayerInfo.Id,
+                        Act = UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
+                        JoinIndex = selfPlayerInfo.JoinIndex,
+                        AuthKey = clientAuthKey
+                    };
+                    UdpSessionManager.Instance.ResetUdpClient(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, wsCancellationToken);
+                    udpTask = Task.Run(async () => {
+                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, wsCancellationToken);
+                    });
+
+                    // The following "Act=UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK" sets player battle state to PLAYER_BATTLE_STATE_ACTIVE on the backend Room. 
                     var reqData = new WsReq {
                         PlayerId = selfPlayerInfo.Id,
                         Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
@@ -87,24 +106,6 @@ public class OnlineMapController : AbstractMapController {
 
                     WsSessionManager.Instance.senderBuffer.Add(reqData);
                     Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
-
-                    var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
-                    var serverHolePuncher = new WsReq {
-                        PlayerId = selfPlayerInfo.Id,
-                        Act = UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
-                        JoinIndex = selfPlayerInfo.JoinIndex,
-                        AuthKey = clientAuthKey
-                    };
-                    var peerHolePuncher = new WsReq {
-                        PlayerId = selfPlayerInfo.Id,
-                        Act = UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
-                        JoinIndex = selfPlayerInfo.JoinIndex,
-                        AuthKey = clientAuthKey
-                    };
-                    UdpSessionManager.Instance.ResetUdpClient(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, wsCancellationToken);
-                    udpTask = Task.Run(async () => {
-                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, wsCancellationToken);
-                    });
 
                     preallocateFrontendOnlyHolders();
                     preallocateSfxNodes();
@@ -276,7 +277,8 @@ public class OnlineMapController : AbstractMapController {
     void Start() {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
-
+        Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+        Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
         selfPlayerInfo = new CharacterDownsync();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = Battle.BATTLE_DYNAMICS_FPS;
@@ -364,10 +366,10 @@ public class OnlineMapController : AbstractMapController {
             }
 
             int noDelayInputFrameId = ConvertToNoDelayInputFrameId(playerRdfId);
-            int delayedInputFrameId = ConvertToDelayedInputFrameId(playerRdfId);
-            NetworkDoctor.Instance.LogLocalRequiredIfdId(delayedInputFrameId);
-            if (0 <= lastAllConfirmedInputFrameId && delayedInputFrameId - lastAllConfirmedInputFrameId > (inputFrameUpsyncDelayTolerance << 3)) {
-                var msg = String.Format("@playerRdfId={0}, noDelayInputFrameId={1}, lastAllConfirmedInputFrameId={2}, inputFrameUpsyncDelayTolerance={3}: unstable ws session detected, please try another battle :)", playerRdfId, noDelayInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance);
+            int localRequiredIfdId = ConvertToDelayedInputFrameId(playerRdfId);
+            NetworkDoctor.Instance.LogLocalRequiredIfdId(localRequiredIfdId);
+            if (0 <= lastAllConfirmedInputFrameId && localRequiredIfdId - lastAllConfirmedInputFrameId > (inputFrameUpsyncDelayTolerance << 3 + inputFrameUpsyncDelayTolerance << 2)) {
+                var msg = String.Format("@playerRdfId={0}, localRequiredIfdId={1}, lastAllConfirmedInputFrameId={2}, inputFrameUpsyncDelayTolerance={3}: unstable ws session detected, please try another battle :)", playerRdfId, localRequiredIfdId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance);
                 popupErrStackPanel(msg);
                 onWsSessionClosed();
                 return;

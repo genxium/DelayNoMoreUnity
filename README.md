@@ -3,6 +3,7 @@ v1.6.1 new features
 - Improved frontend lockstep handling.
 - Improved backend downsync nonblocking handling.
 - Added use of `chaserRenderFrameIdLowerBound`.
+- Added `potential graphical inconsistency indicators` on `NetworkDoctorInfo` panel.
 
 v1.5.9 new features
 - Updated existing levels and characters.

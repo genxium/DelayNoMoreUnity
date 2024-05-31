@@ -56,6 +56,8 @@ public class OfflineMapController : AbstractMapController {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.targetFrameRate = 60;
+        Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+        Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
         isOnlineMode = false;
 
         StoryModeSettings.SimpleDelegate onExitCallback = () => {

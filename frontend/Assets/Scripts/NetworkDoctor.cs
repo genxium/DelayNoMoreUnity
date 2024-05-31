@@ -61,7 +61,9 @@ public class NetworkDoctor {
     int exclusivelySelfConfirmedLockStepQuota;
     
     // For display on NetworkDoctorInfo panel only
-    public float DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT = 120.0f; // 60.0f == 1 second  
+    public float DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT_1 = 7.0f; // 60.0f == 1 second  
+    public float DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT_2 = 120.0f;   
+    public float DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT_3 = 240.0f;   
     public float chasedToPlayerRdfIdIndicatorCountdown;
     public float forceResyncImmediatePumpIndicatorCountdown;
     public float forceResyncFutureAppliedIndicatorCountdown;
@@ -90,15 +92,16 @@ public class NetworkDoctor {
     }
 
     public void LogChasedToPlayerRdfId() {
-        chasedToPlayerRdfIdIndicatorCountdown = DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT;
+        // At 60 fps, 7 rdf is roughly 7*16.66ms = 116ms, hence if "immediateRollbackFrames" is always small enough relatively to "smallChasingRenderFramesPerUpdate & bigChasingRenderFramesPerUpdate", we should see "chasedToPlayerRdfIdIndicator" always lit. 
+        chasedToPlayerRdfIdIndicatorCountdown = DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT_1;
     }
 
     public void LogForceResyncImmediatePump() {
-        forceResyncImmediatePumpIndicatorCountdown = DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT;
+        forceResyncImmediatePumpIndicatorCountdown = DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT_2;
     }
 
     public void LogForceResyncFutureApplied() {
-        forceResyncFutureAppliedIndicatorCountdown = DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT;
+        forceResyncFutureAppliedIndicatorCountdown = DEFAULT_INDICATOR_COUNTDOWN_RDF_CNT_3;
     }
 
     public void LogForceResyncedIfdId(int val, bool exclusivelySelfConfirmed, bool exclusivelySelfUnconfirmed, bool hasRollbackBurst, int inputFrameUpsyncDelayTolerance) {
