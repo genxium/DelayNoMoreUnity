@@ -1307,7 +1307,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId || RingBuffer<RoomDownsyncFrame>.RING_BUFF_NON_CONSECUTIVE_SET == dumpRenderCacheRet) {
                 playerRdfId = rdfId; // [WARNING] It's important NOT to re-assign "playerRdfId" when "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet", e.g. when "true == usingOthersForcedDownsyncRenderFrameDict" (on the ACTIVE NORMAL TICKER side).
-                NetworkDoctor.Instance.LogForceResyncImmediatePump();
+                NetworkDoctor.Instance.LogForceResyncImmediatePump(); // [WARNING] "selfUnconfirmed" DOESN'T imply "RING_BUFF_NON_CONSECUTIVE_SET == dumpRenderCacheRet" and this is verified in practice by several tens of internet battle tests.
                 pushbackFrameLogBuffer.Clear();
                 pushbackFrameLogBuffer.StFrameId = rdfId;
                 pushbackFrameLogBuffer.EdFrameId = rdfId;

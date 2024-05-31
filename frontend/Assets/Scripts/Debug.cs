@@ -29,14 +29,14 @@ public class Debug : MonoBehaviour {
     }
 
     public static void LogFormat(String format, params object[] objects) {
-        UnityEngine.Debug.LogFormat(format, objects);
+        UnityEngine.Debug.LogFormat("[" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.fff") + "] " + format, objects);
     }
 
     public static void LogWarningFormat(String format, params object[] objects) {
-        UnityEngine.Debug.LogWarningFormat(format, objects);
+        UnityEngine.Debug.LogWarningFormat("[" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.fff") + "] " + format, objects);
     }
 
     public static void LogErrorFormat(String format, params object[] objects) {
-        UnityEngine.Debug.LogErrorFormat(format, objects);
+        UnityEngine.Debug.LogErrorFormat("[" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.fff") + "] " + format, objects);
     }
 }
