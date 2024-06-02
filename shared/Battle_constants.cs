@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using static shared.CharacterState;
 
 namespace shared {
@@ -192,7 +193,6 @@ namespace shared {
         public static int GRAVITY_Y = -(int)(0.62f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int GRAVITY_Y_JUMP_HOLDING = -(int)(0.42f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
 
-        public static int JUMP_HOLDING_INPUT_FRAME_ID_GAP = 4; // A regular "JumpingInitVelY" is 7.5, while "GRAVITY_Y_JUMP_HOLDING" per frame is -0.42, therefore if the player is jumping from ground to ground of the same horizon, the in-air time should be 17.857 render frames, converting to 4.46 input frames.
 
         public static int INPUT_DELAY_FRAMES = 2; // in the count of render frames
         public static int DEFAULT_PATROL_CUE_WAIVING_FRAMES = 150; // in the count of render frames, should be big enough for any NPC to move across the largest patrol cue
@@ -333,5 +333,9 @@ namespace shared {
             CrouchAtk1,
             CrouchAtked1,
         };
+
+        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_1 = 9;  
+        public static int JUMP_HOLDING_IFD_CNT_THRESHOLD_1 = (int)Math.Ceiling((float)JUMP_HOLDING_RDF_CNT_THRESHOLD_1/(1 << INPUT_SCALE_FRAMES)); // i.e. need hold for at least 3 input frames if (INPUT_SCALE_FRAMES == 2)  
+        public static int IN_AIR_JUMP_OR_DASH_GRACE_PERIOD_RDF_CNT = 10;
     }
 }

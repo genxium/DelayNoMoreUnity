@@ -145,7 +145,7 @@ message CharacterDownsync {
 
     int32 subscriptionId = 50; 
 
-    bool jumpHolding = 51;
+    int32 jumpHoldingRdfCnt = 51;
     int32 remainingAirJumpQuota = 52;
     int32 remainingAirDashQuota = 53;
 

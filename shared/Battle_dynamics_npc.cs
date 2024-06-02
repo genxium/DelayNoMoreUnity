@@ -275,30 +275,33 @@ namespace shared {
             }
         }
 
-        private static (int, bool, bool, bool, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
+        private static (int, bool, bool, int, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
             //This function returns (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy)
             
             //return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
 
             if (0 < currCharacterDownsync.FramesToRecover) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, false, 0, 0);
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
             }
 
             bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
             if (interrupted) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, false, 0, 0);
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
             }
 
             int patternId = PATTERN_ID_NO_OP;
             bool jumpedOrNot = false;
             bool slipJumpedOrNot = false;
-            bool jumpHolding = false;
+            int jumpHoldingRdfCnt = (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt ? JUMP_HOLDING_RDF_CNT_THRESHOLD_1 : 0);
 
             // By default keeps the movement aligned with current facing
             int effectiveDx = currCharacterDownsync.DirX;
             int effectiveDy = currCharacterDownsync.DirY;
             if (CharacterState.InAirIdle1ByJump == currCharacterDownsync.CharacterState || CharacterState.InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || CharacterState.InAirIdle2ByJump == currCharacterDownsync.CharacterState) {
-                jumpHolding = true;
+                jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
+                if (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 < jumpHoldingRdfCnt) {
+                    jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1; 
+                }
             }
 
             int visionReaction = OPPONENT_REACTION_UNKNOWN;
@@ -393,7 +396,7 @@ namespace shared {
 
             if (OPPONENT_REACTION_UNKNOWN != visionReaction && PATTERN_ID_NO_OP != patternId) {
                 // [WARNING] Even if there were no vision reaction, if "PATTERN_ID_NO_OP == patternId", we still expect the NPC to make use of patrol cues to jump or turn around!
-                jumpHolding = false;
+                jumpHoldingRdfCnt = 0;
                 thatCharacterInNextFrame.CapturedByPatrolCue = false;
                 thatCharacterInNextFrame.FramesInPatrolCue = 0;
                 thatCharacterInNextFrame.WaivingPatrolCueId = NO_PATROL_CUE_ID;
@@ -460,7 +463,7 @@ namespace shared {
                             effectiveDx = 0;
                             effectiveDy = 0;
                             jumpedOrNot = false;
-                            jumpHolding = false;
+                            jumpHoldingRdfCnt = 0;
                             slipJumpedOrNot = false;
                             hasPatrolCueReaction = true;
                             break;
@@ -471,7 +474,7 @@ namespace shared {
                             effectiveDx = 0;
                             effectiveDy = 0;
                             jumpedOrNot = false;
-                            jumpHolding = false;
+                            jumpHoldingRdfCnt = 0;
                             slipJumpedOrNot = false;
                             hasPatrolCueReaction = true;
                         } else {
@@ -479,7 +482,7 @@ namespace shared {
                             effectiveDy = decodedInputHolder.Dy;
                             slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && (currCharacterDownsync.PrimarilyOnSlippableHardPushback && 0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
                             jumpedOrNot = !slipJumpedOrNot && (0 == currCharacterDownsync.FramesToRecover) && !inAirSet.Contains(currCharacterDownsync.CharacterState) && (0 < decodedInputHolder.BtnALevel);
-                            jumpHolding = !slipJumpedOrNot && (0 == currCharacterDownsync.FramesToRecover) && (0 < decodedInputHolder.BtnALevel);
+                            jumpHoldingRdfCnt = 0;
                             hasPatrolCueReaction = true;
                             thatCharacterInNextFrame.CapturedByPatrolCue = false;
                             thatCharacterInNextFrame.FramesInPatrolCue = DEFAULT_PATROL_CUE_WAIVING_FRAMES; // re-purposed
@@ -490,18 +493,18 @@ namespace shared {
 
                 if (OPPONENT_REACTION_UNKNOWN == visionReaction && false == hasPatrolCueReaction) {
                     if (currCharacterDownsync.WaivingSpontaneousPatrol) {
-                        return (PATTERN_ID_UNABLE_TO_OP, false, false, false, 0, 0);
+                        return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
                     }
                     if (MAGIC_EVTSUB_ID_NONE != currCharacterDownsync.SubscriptionId) {
-                        return (PATTERN_ID_NO_OP, false, false, false, 0, 0);
+                        return (PATTERN_ID_NO_OP, false, false, 0, 0, 0);
                     }
                     if (chConfig.AntiGravityWhenIdle && (Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState)) {
-                        return (PATTERN_ID_NO_OP, false, false, false, 0, 0);
+                        return (PATTERN_ID_NO_OP, false, false, 0, 0, 0);
                     }
                 }
             }
 
-            return (patternId, jumpedOrNot, slipJumpedOrNot, jumpHolding, effectiveDx, effectiveDy);
+            return (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy);
         }
 
         private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, int colliderCnt, Collision collision, CollisionSpace collisionSys, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
@@ -510,7 +513,7 @@ namespace shared {
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHolding, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
 
                 if (PATTERN_ID_UNABLE_TO_OP == patternId && 0 < currCharacterDownsync.FramesToRecover) {
                     _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
@@ -520,7 +523,7 @@ namespace shared {
 
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
                 thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
-                thatCharacterInNextFrame.JumpHolding = jumpHolding;
+                thatCharacterInNextFrame.JumpHoldingRdfCnt = jumpHoldingRdfCnt;
 
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, false, logger);
                 Skill? skillConfig = null;

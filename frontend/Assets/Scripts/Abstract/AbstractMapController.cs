@@ -228,15 +228,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
             } else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
                 // Don't predict "btnB" -- yet predicting "btnA" for better "jump holding" consistency
-                if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 16UL) && JUMP_HOLDING_INPUT_FRAME_ID_GAP > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
+                if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
                     prefabbedInputList[k] = (lastIndividuallyConfirmedInputList[k] & 31UL);
                 } else {
                     prefabbedInputList[k] = (lastIndividuallyConfirmedInputList[k] & 15UL);
                 }
             } else if (null != previousInputFrameDownsync) {
                 // When "self.lastIndividuallyConfirmedInputFrameId[k] > inputFrameId", don't use it to predict a historical input!
-                // Don't predict "btnB" -- yet predicting "btnA" for better "jump holding" consistency
-                prefabbedInputList[k] = (previousInputFrameDownsync.InputList[k] & 31UL);
+                // Don't predict jump holding in this case.
+                prefabbedInputList[k] = (previousInputFrameDownsync.InputList[k] & 15UL);
             }
         }
 
