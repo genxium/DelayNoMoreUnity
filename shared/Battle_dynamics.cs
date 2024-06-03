@@ -176,19 +176,16 @@ namespace shared {
                     }
                 }
             } else if (decodedInputHolder.BtnALevel == prevDecodedInputHolder.BtnALevel && 0 < decodedInputHolder.BtnALevel) {
-                //logger.LogInfo("@rdfId=" + currRenderFrame.Id + ", about to hold jumping at jumpHoldingRdfCnt=" + jumpHoldingRdfCnt + ", while currCharacterDownsync.JumpHoldingRdfCnt = " + currCharacterDownsync.JumpHoldingRdfCnt);
+                //logger.LogInfo("@rdfId=" + currRenderFrame.Id + ", about to hold jumping at jumpHoldingRdfCnt=" + jumpHoldingRdfCnt + ", while currCharacterDownsync.ChState=" + currCharacterDownsync.CharacterState + ", currCharacterDownsync.JumpHoldingRdfCnt = " + currCharacterDownsync.JumpHoldingRdfCnt);
                 if (0 < currCharacterDownsync.JumpHoldingRdfCnt && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState)) {
                     // [WARNING] Only proactive jumping support jump holding.
                     jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt+1;
                     if (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 < jumpHoldingRdfCnt) {
                         jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1;
                     }
-                } /*else {
-                    logger.LogInfo("@rdfId=" + currRenderFrame.Id + ", failed hold jumping while currCharacterDownsync.CharacterState= " + currCharacterDownsync.CharacterState);
-                }*/
+                }
             }
                 
-
             if (PATTERN_ID_NO_OP == patternId) {
                 if (0 < decodedInputHolder.BtnBLevel) {
                     if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
@@ -366,7 +363,7 @@ namespace shared {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
             } else {
                 thatCharacterInNextFrame.VelX += GRAVITY_X;
-                thatCharacterInNextFrame.VelY += JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt ? GRAVITY_Y_JUMP_HOLDING : (GRAVITY_Y);
+                thatCharacterInNextFrame.VelY += JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt ? GRAVITY_Y_JUMP_HOLDING : GRAVITY_Y;
                 if (thatCharacterInNextFrame.VelY < chConfig.MinFallingVelY) {
                     thatCharacterInNextFrame.VelY = chConfig.MinFallingVelY;
                 }

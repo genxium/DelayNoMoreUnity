@@ -113,7 +113,7 @@ public class OfflineMapController : AbstractMapController {
                 Debug.Log(String.Format("characterSelectPanel hidden, thread id={0}", Thread.CurrentThread.ManagedThreadId));
                 initSeqNo++;
             } else if (5 == initSeqNo) {
-                Debug.Log(String.Format("about to ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId));
+                Debug.Log(String.Format("about to play ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId));
                 readyGoPanel.playReadyAnim(null, () => {
                     Debug.Log(String.Format("played ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId));
                     initSeqNo++;
