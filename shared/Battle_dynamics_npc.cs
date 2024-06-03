@@ -292,17 +292,20 @@ namespace shared {
             int patternId = PATTERN_ID_NO_OP;
             bool jumpedOrNot = false;
             bool slipJumpedOrNot = false;
-            int jumpHoldingRdfCnt = (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt ? JUMP_HOLDING_RDF_CNT_THRESHOLD_1 : 0);
+            //int jumpHoldingRdfCnt = (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt ? JUMP_HOLDING_RDF_CNT_THRESHOLD_1 : 0);
+            int jumpHoldingRdfCnt = 0;
 
             // By default keeps the movement aligned with current facing
             int effectiveDx = currCharacterDownsync.DirX;
             int effectiveDy = currCharacterDownsync.DirY;
+            /*
             if (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState) {
                 jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
                 if (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 < jumpHoldingRdfCnt) {
                     jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1; 
                 }
             }
+            */
 
             int visionReaction = OPPONENT_REACTION_UNKNOWN;
             var aCollider = dynamicRectangleColliders[currCharacterDownsync.JoinIndex - 1]; // already added to collisionSys
