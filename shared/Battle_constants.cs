@@ -191,7 +191,7 @@ namespace shared {
 
         public static int GRAVITY_X = 0;
         public static int GRAVITY_Y = -(int)(0.62f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
-        public static int GRAVITY_Y_JUMP_HOLDING = -(int)(0.42f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int GRAVITY_Y_JUMP_HOLDING = -(int)(0.39f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
 
 
         public static int INPUT_DELAY_FRAMES = 2; // in the count of render frames
@@ -334,8 +334,9 @@ namespace shared {
             CrouchAtked1,
         };
 
-        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_1 = 9;  
+        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_1 = 10;  
         public static int JUMP_HOLDING_IFD_CNT_THRESHOLD_1 = (int)Math.Ceiling((float)JUMP_HOLDING_RDF_CNT_THRESHOLD_1/(1 << INPUT_SCALE_FRAMES)); // i.e. need hold for at least 3 input frames if (INPUT_SCALE_FRAMES == 2)  
-        public static int IN_AIR_JUMP_OR_DASH_GRACE_PERIOD_RDF_CNT = 10;
+        public static int IN_AIR_DASH_GRACE_PERIOD_RDF_CNT = 8;
+        public static int IN_AIR_JUMP_GRACE_PERIOD_RDF_CNT = 16;
     }
 }

@@ -969,7 +969,6 @@ namespace shared {
                     Hardness = 6,
                     ExplosionFrames = 30,
                     BType = BulletType.Melee,
-                    CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
@@ -1000,7 +999,6 @@ namespace shared {
                     Hardness = 6,
                     ExplosionFrames = 30,
                     BType = BulletType.Melee,
-                    CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
@@ -1032,7 +1030,6 @@ namespace shared {
                     ExplosionFrames = 30,
                     BType = BulletType.Melee,
                     OmitSoftPushback = true,
-                    CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
@@ -1064,7 +1061,6 @@ namespace shared {
                     ExplosionFrames = 30,
                     BType = BulletType.Melee,
                     OmitSoftPushback = true,
-                    CharacterEmitSfxName="SlashEmitSpd3",
                     ExplosionSfxName="Melee_Explosion2",
                     MhType = MultiHitType.FromEmission,
                     ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
@@ -2020,7 +2016,7 @@ namespace shared {
                                 return currBulletConfig.CancelTransit[patternId];
                             }
                         case PATTERN_DOWN_A:
-                            if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota) {
+                            if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                                 // Air-dash is allowed for this speciesId
                                 return 11;
@@ -2155,7 +2151,7 @@ namespace shared {
                             if (!currCharacterDownsync.InAir) {
                                 // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                                 return 33;
-                            } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota) {
+                            } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                                 // Air-dash is allowed for this speciesId
                                 return 28;

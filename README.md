@@ -1,4 +1,7 @@
 # Latest tag change notes
+v1.6.2 new features
+- Enhanced jump holding mechanics for easier netcode prediction.
+
 v1.6.1 new features
 - Improved frontend lockstep handling.
 - Improved backend downsync nonblocking handling.

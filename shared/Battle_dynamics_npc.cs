@@ -297,7 +297,7 @@ namespace shared {
             // By default keeps the movement aligned with current facing
             int effectiveDx = currCharacterDownsync.DirX;
             int effectiveDy = currCharacterDownsync.DirY;
-            if (CharacterState.InAirIdle1ByJump == currCharacterDownsync.CharacterState || CharacterState.InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || CharacterState.InAirIdle2ByJump == currCharacterDownsync.CharacterState) {
+            if (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState) {
                 jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
                 if (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 < jumpHoldingRdfCnt) {
                     jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1; 
@@ -528,8 +528,10 @@ namespace shared {
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, false, logger);
                 Skill? skillConfig = null;
                 if (usedSkill) {
+                    thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+                    thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
                     skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
-                    if (CharacterState.Dashing == skillConfig.BoundChState && currCharacterDownsync.InAir) {              
+                    if (Dashing == skillConfig.BoundChState && currCharacterDownsync.InAir) {              
                         thatCharacterInNextFrame.RemainingAirDashQuota -= 1;
                         if (!chConfig.IsolatedAirJumpAndDashQuota) {
                             thatCharacterInNextFrame.RemainingAirJumpQuota -= 1;
