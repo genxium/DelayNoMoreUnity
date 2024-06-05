@@ -257,18 +257,20 @@ public class OnlineMapController : AbstractMapController {
             }
         } finally {
             try {
-                if (!guiCanProceedSignal.IsCancellationRequested && (TaskStatus.Canceled != guiWaitToProceedTask.Status && TaskStatus.Faulted != guiWaitToProceedTask.Status)) {
-                    try {
-                        guiWaitToProceedTask.Wait(guiCanProceedSignal);
-                    } catch (Exception guiWaitCancelledEx) {
-                        Debug.LogWarning(String.Format("guiWaitToProceedTask was cancelled before proactive awaiting#2: thread id={0} a.k.a. the MainThread, ex={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitCancelledEx));
-                    }
+                if (!guiCanProceedSignal.IsCancellationRequested) {
+                    guiCanProceedSignalSource.Cancel();
                 }
-
-                guiWaitToProceedTask.Dispose();
-            } catch (ObjectDisposedException guiWaitTaskDisposedEx) {
-                Debug.LogWarning(String.Format("guiWaitToProceedTask was disposed before proactive disposing: thread id={0} a.k.a. the MainThread: {1}", Thread.CurrentThread.ManagedThreadId, guiWaitTaskDisposedEx));
+                guiWaitToProceedTask.Wait();
+            } catch (Exception guiWaitEx) {
+                Debug.LogWarning(String.Format("guiWaitToProceedTask was cancelled before proactive awaiting#2: thread id={0} a.k.a. the MainThread, ex={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitEx));
+            } finally {
+                try {
+                    guiWaitToProceedTask.Dispose();
+                } catch (Exception guiWaitTaskDisposedEx) {
+                    Debug.LogWarning(String.Format("guiWaitToProceedTask couldn't be disposed: thread id={0} a.k.a. the MainThread: {1}", Thread.CurrentThread.ManagedThreadId, guiWaitTaskDisposedEx));
+                }
             }
+
             guiCanProceedSignalSource.Dispose();
         }
 

@@ -5,7 +5,7 @@ v1.6.3 new features
 - Added use of `chaserRenderFrameIdLowerBound`.
 - Added `potential graphical inconsistency indicators` on `NetworkDoctorInfo` panel.
 - Enhanced jump holding mechanics for easier netcode prediction.
-- Applied jump startup for slipping and air-jump.
+- Applied jump startup for slipping and air-jump, such that `input delay = 2 frames i.e. ~32ms` has fast graphical response (i.e. startup animation) but slow collision system response (i.e. after startup frames).
 
 v1.5.9 new features
 - Updated existing levels and characters.
