@@ -948,6 +948,17 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetSelfLockVel(int x, int y) {
+            this.SelfLockVelX = x;
+            this.SelfLockVelY = y;
+            return this;
+        }
+
+        public BulletConfig SetDamage(int val) {
+            this.Damage = val;
+            return this;
+        }
+
         public BulletConfig SetPushbacks(int pushbackVelX, int pushbackVelY) {
             this.PushbackVelX = pushbackVelX;
             this.PushbackVelY = pushbackVelY;

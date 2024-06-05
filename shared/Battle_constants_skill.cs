@@ -678,8 +678,8 @@ namespace shared {
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetX = (int)(28f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 2,
@@ -693,6 +693,8 @@ namespace shared {
             ExplosionSfxName="Explosion4",
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
         };
+
+        public static BulletConfig WitchGirlFireballBulletAirHit1 = new BulletConfig(WitchGirlFireballBulletHit1).SetDamage(20).SetSelfLockVel(NO_LOCK_VEL, (int)(5.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
 
         public static BulletConfig GoblinMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 63,
@@ -1451,7 +1453,7 @@ namespace shared {
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = InAirAtk1
                             }
-                            .AddHit(WitchGirlFireballBulletHit1)
+                            .AddHit(WitchGirlFireballBulletAirHit1)
                     ),
 
                     new KeyValuePair<int, Skill>(26, new Skill{

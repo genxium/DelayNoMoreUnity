@@ -857,7 +857,6 @@ namespace shared {
                 if (BulletType.Melee == dst.Config.BType) {
                     if (noOpSet.Contains(offender.CharacterState)) {
                         // If a melee is alive but the offender got attacked, remove it even if it's active
-                        dst.BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
                         continue;
                     }
                     if (IsBulletActive(dst, currRenderFrame.Id)) {
@@ -898,11 +897,9 @@ namespace shared {
                             dst.FramesInBlState = 0;
                         }
                         (dst.VirtualGridX, dst.VirtualGridY) = (proposedNewVx, proposedNewVy);
-                    } else {
-                        if (noOpSet.Contains(offender.CharacterState)) {
-                            // If a fireball is not yet active but the offender got attacked, remove it
-                            continue;
-                        }
+                    } else if (MultiHitType.None == dst.Config.MhType && noOpSet.Contains(offender.CharacterState)) {
+                        // If a fireball is not yet active but the offender got attacked, remove it
+                        continue;
                     }
                     bulletCnt++;
                 } else {
