@@ -175,12 +175,14 @@ namespace shared {
                 atkedCharacterInNextFrame.Hp = 0;
                 atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
                 atkedCharacterInNextFrame.CharacterState = Dying;
-                atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER; 
+                atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
+                resetJumpStartupOrHolding(atkedCharacterInNextFrame, true);
             } else {
                 var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
                 bool shouldOmitHitPushback = (atkedCharacterConfig.Hardness > trapConfig.Hardness);   
                 bool shouldOmitStun = ((0 >= trapConfig.HitStunFrames) || (shouldOmitHitPushback));
                 if (false == shouldOmitStun) {
+                    resetJumpStartupOrHolding(atkedCharacterInNextFrame, true);
                     if (trapConfig.BlowUp) {
                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
                     } else if (BlownUp1 != atkedCharacterInNextFrame.CharacterState) {

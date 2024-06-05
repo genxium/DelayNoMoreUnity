@@ -404,7 +404,7 @@ namespace shared {
                 }
 
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
-                thatCharacterInNextFrame.SlipJumpTriggered = slipJumpedOrNot;
+                thatCharacterInNextFrame.SlipJumpTriggered |= slipJumpedOrNot;
                 thatCharacterInNextFrame.JumpHoldingRdfCnt = jumpHoldingRdfCnt;
 
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, logger);
@@ -412,7 +412,7 @@ namespace shared {
                 if (usedSkill) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
                     thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
-                    thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+                    resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
                     skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
                     if (Dashing == skillConfig.BoundChState && currCharacterDownsync.InAir) {              
                         thatCharacterInNextFrame.RemainingAirDashQuota -= 1;
@@ -457,7 +457,9 @@ namespace shared {
                 return;
             }
 
-            if (thatCharacterInNextFrame.JumpTriggered) {
+            if (isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
+                thatCharacterInNextFrame.JumpStarted = true;
+            } else if ((thatCharacterInNextFrame.JumpTriggered || thatCharacterInNextFrame.SlipJumpTriggered) && (!currCharacterDownsync.JumpStarted && !thatCharacterInNextFrame.JumpStarted)) {
                 // [WARNING] This assignment blocks a lot of CharacterState transition logic, including "_processInertiaWalking"!
                 if (currCharacterDownsync.OnWall) {
                     thatCharacterInNextFrame.FramesToStartJump = (chConfig.ProactiveJumpStartupFrames >> 1);
@@ -465,10 +467,10 @@ namespace shared {
                     thatCharacterInNextFrame.VelY = 0;
                     thatCharacterInNextFrame.JumpHoldingRdfCnt = 1; // For continuity
                 } else if (currCharacterDownsync.InAir) {
-                    if (IN_AIR_JUMP_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState && 0 < currCharacterDownsync.RemainingAirJumpQuota) {
-                        thatCharacterInNextFrame.FramesToStartJump = 0;
+                    if (0 < currCharacterDownsync.RemainingAirJumpQuota) {
+                        thatCharacterInNextFrame.FramesToStartJump = IN_AIR_JUMP_GRACE_PERIOD_RDF_CNT;
                         thatCharacterInNextFrame.CharacterState = InAirIdle2ByJump;
-                        thatCharacterInNextFrame.JumpStarted = true;
+                        thatCharacterInNextFrame.VelY = 0;
                         thatCharacterInNextFrame.JumpHoldingRdfCnt = 1; // For continuity
                         thatCharacterInNextFrame.RemainingAirJumpQuota = currCharacterDownsync.RemainingAirJumpQuota - 1; 
                         if (!chConfig.IsolatedAirJumpAndDashQuota) {
@@ -479,12 +481,11 @@ namespace shared {
                         }
                     }
                 } else {
+                    // [WARNING] Including "SlipJumpTriggered" here
                     thatCharacterInNextFrame.FramesToStartJump = chConfig.ProactiveJumpStartupFrames;
                     thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                     thatCharacterInNextFrame.JumpHoldingRdfCnt = 1; // For continuity
                 }
-            } else if (isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame)) {
-                thatCharacterInNextFrame.JumpStarted = true;
             }
         }
     
@@ -937,7 +938,8 @@ namespace shared {
                 int effFrictionVelY = (0 < currCharacterDownsync.FrictionVelY ? currCharacterDownsync.FrictionVelY : 0);
                 int newVx = currCharacterDownsync.VirtualGridX + currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, newVy = currCharacterDownsync.VirtualGridY + currCharacterDownsync.VelY + effFrictionVelY + vhDiffInducedByCrouching;
 
-                bool jumpStarted = (i < roomCapacity ? thatCharacterInNextFrame.JumpStarted : currCharacterDownsync.JumpStarted); // [WARNING] Due to the current ordering of "_processPlayerInputs -> _moveAndInsertCharacterColliders -> _processNpcInputs", I have no better choice of deciding "jumpStarted" besides this ugly way for now
+                // [WARNING] Due to the current ordering of "_processPlayerInputs -> _moveAndInsertCharacterColliders -> _processNpcInputs", I have no better choice of deciding "jumpStarted" besides this ugly way for now
+                bool jumpStarted = (i < roomCapacity ? thatCharacterInNextFrame.JumpStarted : currCharacterDownsync.JumpStarted); 
                 if (jumpStarted) {
                     // We haven't proceeded with "OnWall" calculation for "thatCharacterInNextFrame", thus use "currCharacterDownsync.OnWall" for checking
                     if (currCharacterDownsync.OnWall && InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
@@ -952,17 +954,18 @@ namespace shared {
                         thatCharacterInNextFrame.VelY = (chConfig.WallJumpingInitVelY);
                         thatCharacterInNextFrame.FramesToRecover = chConfig.WallJumpingFramesToRecover;
                         thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
-                    } else if (InAirIdle2ByJump == thatCharacterInNextFrame.CharacterState) {
-                        thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY;
+                    } else if (currCharacterDownsync.InAir && InAirIdle2ByJump == thatCharacterInNextFrame.CharacterState) {
+                        thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY + effFrictionVelY;
                         thatCharacterInNextFrame.CharacterState = InAirIdle2ByJump;
+                    } else if (currCharacterDownsync.SlipJumpTriggered) {
+                        newVy -= chConfig.SlipJumpCharacterDropVirtual;
                     } else {
                         thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY + effFrictionVelY;
                         thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                     }
-                } else if (!currCharacterDownsync.InAir && currCharacterDownsync.PrimarilyOnSlippableHardPushback && currCharacterDownsync.SlipJumpTriggered) {
-                    // [WARNING] By now "slipJump" is deliberately implemented without any startup frame, because I haven't prepared proper animations for it :(
-                    newVy -= chConfig.SlipJumpCharacterDropVirtual;
-                } 
+
+                    resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
+                }
 
                 if (i < roomCapacity && 0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
                     // Revive player-controlled character from Dying
@@ -1340,7 +1343,7 @@ namespace shared {
                         if (fallStopping) {
                             thatCharacterInNextFrame.VelX = 0;
                             thatCharacterInNextFrame.VelY = (thatCharacterInNextFrame.OnSlope ? 0 : chConfig.DownSlopePrimerVelY);
-                            thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+                            resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 // No update needed for Dying
                             } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
@@ -1411,7 +1414,7 @@ namespace shared {
                         if (fallStopping) {
                             thatCharacterInNextFrame.VelX = 0;
                             thatCharacterInNextFrame.VelY = 0;
-                            thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+                            resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 // No update needed for Dying
                             } else {
@@ -1453,7 +1456,6 @@ namespace shared {
                     [WARNING] There's not much concern about "wall dynamics" on (currCharacterDownsync.OmitGravity || chConfig.OmitGravity), by far they're mutually exclusive. 
                     */
                     if (null == primaryTrap || (null != primaryTrap && !primaryTrap.ConfigFromTiled.ProhibitsWallGrabbing)) {
-
                         if (thatCharacterInNextFrame.InAir) {
                             // [WARNING] Grabbing to wall MUST BE based on "InAir", otherwise we would get gravity reduction from ground up incorrectly!
                             if (!noOpSet.Contains(currCharacterDownsync.CharacterState)) {
@@ -1651,6 +1653,7 @@ namespace shared {
                                 }
                                 atkedCharacterInNextFrame.CharacterState = Dying;
                                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
+                                resetJumpStartupOrHolding(atkedCharacterInNextFrame, true);
                             } else {
                                 // [WARNING] Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
                                 var atkedCharacterConfig = characters[atkedCharacterInNextFrame.SpeciesId];
@@ -1665,6 +1668,7 @@ namespace shared {
                                 // [WARNING] Gravity omitting characters shouldn't take a "blow up".
                                 bool shouldOmitStun = (atkedCharacterInNextFrame.OmitGravity || atkedCharacterConfig.OmitGravity || (0 >= bulletNextFrame.Config.HitStunFrames) || shouldOmitHitPushback);
                                 if (false == shouldOmitStun) {
+                                    resetJumpStartupOrHolding(atkedCharacterInNextFrame, true);
                                     var existingDebuff = atkedCharacterInNextFrame.DebuffList[DEBUFF_ARR_IDX_FROZEN];
                                     bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == debuffConfigs[existingDebuff.SpeciesId].Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
                                     CharacterState newNextCharacterState = Atked1;
@@ -1686,7 +1690,6 @@ namespace shared {
                                         }
                                     }
                                     atkedCharacterInNextFrame.CharacterState = newNextCharacterState;
-                                    atkedCharacterInNextFrame.JumpHoldingRdfCnt = 0;
                                 }
 
                                 if (atkedCharacterInNextFrame.FramesInvinsible < bulletNextFrame.Config.HitInvinsibleFrames) {
@@ -1712,7 +1715,7 @@ namespace shared {
                                                         atkedCharacterInNextFrame.CharacterState = Atked1;
                                                     }
                                                     atkedCharacterInNextFrame.VelX = 0;
-                                                    atkedCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+                                                    resetJumpStartupOrHolding(atkedCharacterInNextFrame, true); 
                                                     switch (associatedDebuffConfig.StockType) {
                                                         case BuffStockType.Timed:
                                                             atkedCharacterInNextFrame.FramesToRecover = associatedDebuffConfig.Stock;
@@ -1746,7 +1749,7 @@ namespace shared {
                                                         atkedCharacterInNextFrame.CharacterState = Atked1;
                                                     }
                                                     atkedCharacterInNextFrame.VelX = 0;
-                                                    atkedCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+                                                    resetJumpStartupOrHolding(atkedCharacterInNextFrame, true); 
                                                     switch (associatedDebuffConfig.StockType) {
                                                         case BuffStockType.Timed:
                                                             atkedCharacterInNextFrame.FramesToRecover = associatedDebuffConfig.Stock;
@@ -2116,6 +2119,7 @@ namespace shared {
                     thatCharacterInNextFrame.VelX = 0;
                     thatCharacterInNextFrame.CharacterState = Dying;
                     thatCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
+                    resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
                 }
             }
 
@@ -2267,6 +2271,12 @@ namespace shared {
                                 thatCharacterInNextFrame.CharacterState = OnWallIdle1;
                             }
                             break;
+                    }
+
+                    if (!currCharacterDownsync.OnWall) {
+                        // [WARNING] Transition of "OnWall: false -> true" should also help reset these quotas!
+                        thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
+                        thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
                     }
                 }
 
@@ -2542,7 +2552,7 @@ namespace shared {
                     framesToStartJump = 0;
                 } 
                 var dst = nextRenderFramePlayers[i];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.BulletImmuneRecords, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.BulletImmuneRecords, dst);
                 _resetVelocityOnRecovered(src, dst);
             }
 
@@ -2577,7 +2587,7 @@ namespace shared {
                     framesToStartJump = 0;
                 } 
                 var dst = nextRenderFrameNpcs[currNpcI];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, false, false, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.BulletImmuneRecords, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, lowerPartFramesInChState, false, framesToStartJump, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.BulletImmuneRecords, dst);
                 _resetVelocityOnRecovered(src, dst);
                 currNpcI++;
             }
@@ -2892,14 +2902,21 @@ namespace shared {
         }
         
         public static bool isInJumpStartup(CharacterDownsync cd) { 
-            // [WARNING] There's no jump startup concept for InAirIdle2ByJump
-            return (InAirIdle1ByJump == cd.CharacterState || InAirIdle1ByWallJump == cd.CharacterState) && (0 < cd.FramesToStartJump);
-        } 
+            return (InAirIdle1ByJump == cd.CharacterState || InAirIdle1ByWallJump == cd.CharacterState || InAirIdle2ByJump == cd.CharacterState) && (0 < cd.FramesToStartJump);
+        }
 
         public static bool isJumpStartupJustEnded(CharacterDownsync currCd, CharacterDownsync nextCd) {
-            // [WARNING] There's no jump startup concept for InAirIdle2ByJump
-            return ((InAirIdle1ByJump == currCd.CharacterState && InAirIdle1ByJump == nextCd.CharacterState) || (InAirIdle1ByWallJump == currCd.CharacterState && InAirIdle1ByWallJump == nextCd.CharacterState)) && (1 == currCd.FramesToStartJump) && (0 == nextCd.FramesToStartJump);
+            return ((InAirIdle1ByJump == currCd.CharacterState && InAirIdle1ByJump == nextCd.CharacterState) || (InAirIdle1ByWallJump == currCd.CharacterState && InAirIdle1ByWallJump == nextCd.CharacterState) || (InAirIdle2ByJump == currCd.CharacterState && InAirIdle2ByJump == nextCd.CharacterState)) && (1 == currCd.FramesToStartJump) && (0 == nextCd.FramesToStartJump);
         } 
+
+        public static void resetJumpStartupOrHolding(CharacterDownsync cd, bool resetHoldingRdfCnt) {
+            cd.JumpStarted = false;
+            cd.JumpTriggered = false;
+            cd.SlipJumpTriggered = false;
+            if (resetHoldingRdfCnt) {
+                cd.JumpHoldingRdfCnt = 0;
+            }
+        }
 
         public static bool isAllConfirmed(ulong confirmedList, int roomCapacity) {
             return (confirmedList+1 == (1UL << roomCapacity));

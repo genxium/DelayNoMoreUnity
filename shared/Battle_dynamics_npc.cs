@@ -531,8 +531,8 @@ namespace shared {
                 bool usedSkill = _useSkill(patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, false, logger);
                 Skill? skillConfig = null;
                 if (usedSkill) {
-                    thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
                     thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
+                    resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
                     skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
                     if (Dashing == skillConfig.BoundChState && currCharacterDownsync.InAir) {              
                         thatCharacterInNextFrame.RemainingAirDashQuota -= 1;
@@ -549,7 +549,7 @@ namespace shared {
                         }
                     }
                     continue; // Don't allow movement if skill is used
-                } 
+                }
                     
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
                 if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {

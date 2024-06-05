@@ -1,12 +1,11 @@
 # Latest tag change notes
-v1.6.2 new features
-- Enhanced jump holding mechanics for easier netcode prediction.
-
-v1.6.1 new features
+v1.6.3 new features
 - Improved frontend lockstep handling.
 - Improved backend downsync nonblocking handling.
 - Added use of `chaserRenderFrameIdLowerBound`.
 - Added `potential graphical inconsistency indicators` on `NetworkDoctorInfo` panel.
+- Enhanced jump holding mechanics for easier netcode prediction.
+- Applied jump startup for slipping and air-jump.
 
 v1.5.9 new features
 - Updated existing levels and characters.
@@ -29,8 +28,6 @@ v1.3.8 new features
 - Fixes for force-resync
 - Fixes for a few `cancel-and-rejoin` cases in online arena
 - Refactored UI for better login flow and inventory-btnB feature 
-
-v1.3.4 new features
 - Added new NPC character SkeleArcher 
 - Added offline mode evt-triggered dialogs
 - Added hold-to-jump-further dynamics
@@ -41,8 +38,6 @@ v1.3.4 new features
 v1.2.9 new features
 - Fixed ringbuff contamination for pushback framelogging 
 - Fixed resync continuation handling on the ACTIVE NORMAL TICKER side
-
-v1.2.8 new features
 - wave-based triggers (implemented by event mask subscription, configured in Tiled `EvtSub` object layer)
 - character specific inventory & buff (including xform for knifegirl, and bomb for gungirl with different inventory types)
 - backend dynamics (thus recovery reconnection & active slow ticker force resync) 
