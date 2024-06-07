@@ -1,3 +1,56 @@
+# Alternative `lockstep` approach
+- Here's the lockstep approach used in a non-public project and it seems to have a better performance -- by "better" I mean it helps suppress many "(backend) type#1 forceConfirmations" by "(frontend) locksteps", thus less graphical inconsistency.
+  ```c#
+  public class NetworkDoctor {
+  
+    int selfUnconfirmedLockStepSkipQuota;
+  
+    public void Reset() {
+      ...
+      selfUnconfirmedLockStepSkipQuota = 0;
+      ...
+    }
+  
+    public void LogForceResyncedIfdId(int val, bool selfConfirmed, bool selfUnconfirmed, bool exclusivelySelfConfirmed, bool exclusivelySelfUnconfirmed, bool hasRollbackBurst, int inputFrameUpsyncDelayTolerance) {
+      ...
+  
+      if (exclusivelySelfConfirmed) {
+          selfUnconfirmedLockStepSkipQuota = 0;
+      } else if (selfConfirmed) {
+          selfUnconfirmedLockStepSkipQuota = 0;
+      }
+  
+      if (exclusivelySelfUnconfirmed) {
+          selfUnconfirmedLockStepSkipQuota = (inputFrameUpsyncDelayTolerance << Battle.INPUT_SCALE_FRAMES);
+      } else if (selfUnconfirmed) {
+          selfUnconfirmedLockStepSkipQuota = ((inputFrameUpsyncDelayTolerance << Battle.INPUT_SCALE_FRAMES) >> 1);
+      }
+    }
+  
+    public (bool, int, float, float, float, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int rdfLagTolerance, int ifdLagTolerance) {
+      ...
+      if (ifdLagSignificant) {
+        if (0 >= selfUnconfirmedLockStepSkipQuota) {
+            return (true, ifdIdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
+        } else {
+            selfUnconfirmedLockStepSkipQuota -= 1;
+            if (0 > selfUnconfirmedLockStepSkipQuota) {
+                selfUnconfirmedLockStepSkipQuota = 0;
+            }
+        }
+  	  }
+      return (false, ifdIdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
+    }
+  }
+  ```
+  then used like (mind the subtle change `ifdLagTolerance = inputFrameUpsyncDelayTolerance - 1`, in this alternative approach we have to enlarge `ifdLagTolerance` a little to avoid unnecessary locksteps because it's more tempting to lock)
+  ```
+  var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), inputFrameUpsyncDelayTolerance - 1);
+  shouldLockStep = tooFastOrNot;
+  ```
+- It's fine that we decide to lock step ONLY based on `ifdLagSignificant` (even though it could punish the "slow ticker" too), in practice most of the time "normal tickers" encounter large `ifdIdLag` more often, and "slow tickers" will eventually recover due to "type#1 forceConfirmation" -- as long as "locking the slow" isn't induced by a "type#1 forceConfirmation" and doesn't trigger another "type#1 forceConfirmation" as a result too frequently, it's acceptable (hence the use of `selfUnconfirmedLockStepSkipQuota`).
+
+
 # Latest tag change notes
 v1.6.3 new features
 - Improved frontend lockstep handling.
