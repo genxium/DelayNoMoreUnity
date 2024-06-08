@@ -235,20 +235,20 @@ public class NetworkDoctor {
             forceResyncFutureAppliedIndicatorCountdown = 0;
         }
 
+        int minInputFrameIdFront = Battle.MAX_INT;
+        for (int k = 0; k < roomCapacity; ++k) {
+            if (k + 1 == selfJoinIndex) continue; // Don't count self in
+            if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
+            minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
+        }
+
+        int ifdIdLag = (localRequiredIfdId - minInputFrameIdFront);
+        if (0 > ifdIdLag) {
+            ifdIdLag = 0;
+        }
+
         bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
         if (sendingFpsNormal) {
-            int minInputFrameIdFront = Battle.MAX_INT;
-            for (int k = 0; k < roomCapacity; ++k) {
-                if (k + 1 == selfJoinIndex) continue; // Don't count self in
-                if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
-                minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
-            }
-
-            int ifdIdLag = (localRequiredIfdId - minInputFrameIdFront);
-            if (0 > ifdIdLag) {
-                ifdIdLag = 0;
-            }
-
             bool ifdLagSignificant = (localRequiredIfdId > minInputFrameIdFront) && localRequiredIfdId > (ifdLagTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
 
             long latestRecvMillis = -Battle.MAX_INT;
