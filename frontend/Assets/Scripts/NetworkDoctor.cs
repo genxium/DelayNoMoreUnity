@@ -74,7 +74,7 @@ public class NetworkDoctor {
         immediateRollbackFrames = 0;
         lockedStepsCnt = 0;
         udpPunchedCnt = 0;
-        inputRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-0.4f) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
+        inputRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-0.2f) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
         recvRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-5) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
         lastForceResyncedIfdId = 0;
         exclusivelySelfConfirmedAtLastForceResync = false;
