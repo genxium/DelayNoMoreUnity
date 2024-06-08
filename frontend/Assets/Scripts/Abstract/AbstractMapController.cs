@@ -1329,7 +1329,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 ulong allConfirmedMask = (1UL << roomCapacity) - 1;
                 bool exclusivelySelfUnconfirmedAtLastForceResync = (allConfirmedMask != pbRdf.BackendUnconfirmedMask && selfUnconfirmed);
                 int lastForceResyncedIfdId = lastAllConfirmedInputFrameId; // Because "[onInputFrameDownsyncBatch > _markConfirmationIfApplicable]" is already called
-                NetworkDoctor.Instance.LogForceResyncedIfdId(lastForceResyncedIfdId, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, hasRollbackBurst, inputFrameUpsyncDelayTolerance);
+                NetworkDoctor.Instance.LogForceResyncedIfdId(lastForceResyncedIfdId, selfConfirmed, selfUnconfirmed, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, hasRollbackBurst, inputFrameUpsyncDelayTolerance);
 
                 if (selfConfirmed) {
                     if (null == accompaniedInputFrameDownsyncBatch) {

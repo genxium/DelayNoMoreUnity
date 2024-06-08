@@ -23,6 +23,8 @@ namespace shared {
          [WARNING] 
 
          The "SizeY" component of "BlownUp/LayDown/Dying" MUST be smaller or equal to that of "Shrinked", such that when a character is blown up an falled onto a "slip-jump provider", it wouldn't trigger an unexpected slip-jump.
+
+         Reference value for "ProactiveJumpStartupFrames" -- Ibuki in Street Figher IV/V has a pre-jump frame count of 4, according to https://streetfighter.fandom.com/wiki/Jump. I also counted that of Ken in Street Fighter VI by 60fps recording and got the same result.
          */
         public static ImmutableDictionary<int, CharacterConfig> characters = ImmutableDictionary.Create<int, CharacterConfig>().AddRange(
                 new[]
@@ -65,7 +67,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
-                        ProactiveJumpStartupFrames = 5,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
@@ -287,7 +289,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
-                        ProactiveJumpStartupFrames = 5,
+                        ProactiveJumpStartupFrames = 6,
                         Hardness = 4,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,  
                         SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
@@ -329,7 +331,7 @@ namespace shared {
                         SlidingEnabled = true,
                         CrouchingEnabled = true,
                         CrouchingAtkEnabled = true,
-                        ProactiveJumpStartupFrames = 5,
+                        ProactiveJumpStartupFrames = 4,
                         UseInventoryBtnB = true,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
@@ -399,7 +401,7 @@ namespace shared {
                         MpRegenRate = 1,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
-                        ProactiveJumpStartupFrames = 5,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 5,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
