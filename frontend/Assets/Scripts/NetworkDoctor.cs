@@ -285,6 +285,8 @@ public class NetworkDoctor {
 
                  The latest lockstep handling takes reference from `Street Fighter VI` experience, which sometimes locks the "slow ticker" as well due to the possibility that a "slow ticker" is cheating by the so called "lag switch". However, I HAVEN'T found any phenomenon like my "force confirmation" here, i.e. the "red light", so I couldn't just try to imitate its strategy completely.
 
+                 This new handling is considered better than the previous one using "exclusivelySelfConfirmedLockStepQuota", because it helps suppress many "(backend) type#1 forceConfirmations" by "(frontend) locksteps" in field tests, thus less graphical inconsistency.
+
                  It's fine that we decide to lock step ONLY based on "ifdIdLag" (even though it could punish the "slow ticker" too), in practice most of the time "normal tickers" encounter large "ifdIdLag" more often, and "slow tickers" will eventually recover due to "type#1 forceConfirmation" -- as long as "locking the slow" isn't induced by a "type#1 forceConfirmation" and doesn't trigger another "type#1 forceConfirmation" as a result too frequently, it's acceptable (hence the use of "selfUnconfirmedLockStepSkipQuota").
                 
                  NOT every game netcode emphasizes "lockstep" so much, e.g. `KOF XV` doesn't seem to have a tangible lockstep even under terrible network (500ms+ ping) -- even if there was any lockstep applied it was much smaller than the obvious locksteps of `Street Fighter V/VI` under same network condition.
