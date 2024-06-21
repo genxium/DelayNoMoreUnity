@@ -280,10 +280,6 @@ public class OnlineMapController : AbstractMapController {
         //_ = wsSessionTaskAsync(guiCanProceedSignalSource); // [d] no immediate thread switch till AFTER THE FIRST AWAIT
     }
 
-    public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
-        throw new NotImplementedException();
-    }
-
     void Start() {
         Physics.autoSimulation = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
@@ -375,7 +371,6 @@ public class OnlineMapController : AbstractMapController {
                 return;
             }
 
-            int noDelayInputFrameId = ConvertToNoDelayInputFrameId(playerRdfId);
             int localRequiredIfdId = ConvertToDelayedInputFrameId(playerRdfId);
             NetworkDoctor.Instance.LogLocalRequiredIfdId(localRequiredIfdId);
             if (0 <= lastAllConfirmedInputFrameId && localRequiredIfdId - lastAllConfirmedInputFrameId > (inputFrameUpsyncDelayTolerance << 3 + inputFrameUpsyncDelayTolerance << 2)) {
@@ -384,6 +379,27 @@ public class OnlineMapController : AbstractMapController {
                 onWsSessionClosed();
                 return;
             }
+
+            // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
+            var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), inputFrameUpsyncDelayTolerance - 1);
+            shouldLockStep = tooFastOrNot;
+
+            /*
+            if (tooFastOrNot) {
+                // Will resort to lockstep instead.
+                localExtraInputDelayFrames = 0;
+            } else {
+                localExtraInputDelayFrames = (1 < ifdLag ? 3 : 0);
+            }
+             */
+            networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
+
+            if (shouldLockStep) {
+                NetworkDoctor.Instance.LogLockedStepCnt();
+                shouldLockStep = false;
+                return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
+            }
+
             // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
             chaseRolledbackRdfs();
             NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
@@ -396,21 +412,11 @@ public class OnlineMapController : AbstractMapController {
                 }
                 return;
             }
-            if (shouldLockStep) {
-                NetworkDoctor.Instance.LogLockedStepCnt();
-                shouldLockStep = false;
-                return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
-            }
             doUpdate();
             if (playerRdfId >= battleDurationFrames) {
                 localTimerEnded = true;
             } else {
-                readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
-                
-                // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
-                var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), inputFrameUpsyncDelayTolerance - 1);
-                shouldLockStep = tooFastOrNot;
-                networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
+                readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);    
             }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
@@ -621,4 +627,8 @@ public class OnlineMapController : AbstractMapController {
         if (ROOM_STATE_IN_BATTLE != battleState) return;
         arenaModeSettings.gameObject.SetActive(true);
         arenaModeSettings.toggleUIInteractability(true); }
+
+    public override void onCharacterAndLevelSelectGoAction(int speciesId, string levelName) {
+        throw new NotImplementedException();
+    }
 }

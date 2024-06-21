@@ -207,7 +207,7 @@ namespace shared {
         public static int DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES = 30;
         public static int DEFAULT_PICKABLE_RISING_VEL_Y_VIRTUAL_GRID = (int)(8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int DEFAULT_PICKABLE_NONCOLLIDING_FRAMES = (DEFAULT_PICKABLE_RISING_VEL_Y_VIRTUAL_GRID << 1)/GRAVITY_Y_JUMP_HOLDING;
-
+        public static int DEFAULT_FRAMES_TO_SHOW_DAMAGED = (int)(0.4f * BATTLE_DYNAMICS_FPS);
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!

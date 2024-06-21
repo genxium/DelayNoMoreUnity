@@ -153,10 +153,7 @@ message CharacterDownsync {
 	int32 killedToDropBuffSpeciesId = 55;
 
 	int32 frictionVelY = 56; // Mostly from a dynamic trap
-
-	string name = 997;
-	string displayName = 998;
-	string avatar = 999;
+    int32 framesSinceLastDamaged = 57;
 
 	int32 activeSkillId = 1024;
 	int32 activeSkillHit = 1025;
@@ -791,17 +788,47 @@ message PlayerSettings {
     int32 soundVolume = 1;
 }
 
-message PlayerLevelProgress {
-    int32 levelId = 1;
-    int32 highestScore = 2;
-    int32 shortestFinishTimeAtHighestScore = 3;
+message PlayerRegionProgress {
+    int32 regionId = 1;
+    int32 completedLevelCount = 2;
 
-    int32 shortestFinishTime = 4;
-    int32 highestScoreAtShortestFinishTime = 5;
+	// Any region can be in a state of "partially unlocked"
+	map<int32, bool> remainingDependencies = 3;
+}
+
+message PlayerLevelProgress {
+    int32 regionId = 1;
+    int32 levelId = 2;
+
+    int32 highestScore = 3;
+    int32 shortestFinishTimeAtHighestScore = 4;
+    int32 characterSpeciesIdAtHighestScore = 5;
+
+    int32 shortestFinishTime = 6;
+    int32 scoreAtShortestFinishTime = 7;
+    int32 characterSpeciesIdAtShortestFinishTime = 8;
+
+	// Any level can be in a state of "partially unlocked", if a record exists in "PlayerStoryProgress.levelProgressDict" with non-empty "remainingDependencies", then it's locked but visible
+	map<int32, bool> remainingDependencies = 9;
+}
+
+enum PlayerStoryModeSelectView {
+    NONE = 0;
+    REGION = 1;
+    LEVEL = 2;
 }
 
 message PlayerStoryProgress {
-    map<int32, PlayerLevelProgress> levelProgressDict = 1;
+    map<int32, PlayerRegionProgress> regionProgressDict = 1; // Including just unlocked regions with 0 progress
+    map<int32, PlayerLevelProgress> levelProgressDict = 2; // Including just unlocked levels with 0 progress 
+
+    int32 cursorRegionId = 3;
+    int32 cursorLevelId = 4;
+
+    PlayerStoryModeSelectView view = 5;
+    uint64 savedAtGmtMillis = 6;
+    
+    // For config of all regions and levels (including unlock criterions), see "<proj-root>/frontend/Assets/Scripts/StoryConstants.cs"
 }
 
 message StoryPointDialogLine {

@@ -199,6 +199,8 @@ namespace shared {
                     atkedCharacterInNextFrame.VelX = 0;
                     atkedCharacterInNextFrame.VelY = 0;
                 }
+
+                atkedCharacterInNextFrame.FramesSinceLastDamaged = DEFAULT_FRAMES_TO_SHOW_DAMAGED;
                 int oldInvincibleFrames = atkedCharacterInNextFrame.FramesInvinsible;
                 if (trapConfig.HitInvinsibleFrames > oldInvincibleFrames) {
                     atkedCharacterInNextFrame.FramesInvinsible = trapConfig.HitInvinsibleFrames;

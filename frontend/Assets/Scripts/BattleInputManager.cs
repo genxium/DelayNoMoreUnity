@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
 using UnityEngine.InputSystem.OnScreen;
-using DG.Tweening;
 using UnityEngine.InputSystem.Controls;
 using shared;
+using DG.Tweening;
 
 public class BattleInputManager : MonoBehaviour {
     private float joystickX, joystickY;
@@ -43,7 +43,7 @@ public class BattleInputManager : MonoBehaviour {
         joystickInitPos = joystick.transform.position;
         joystickKeyboardMoveRadius = 0.5f*joystick.GetComponent<OnScreenStick>().movementRange;
         joystickMoveEps = 0.1f;
-        reset();
+        ResetSelf();
     }
 
 
@@ -173,10 +173,10 @@ public class BattleInputManager : MonoBehaviour {
 
 	public void enable(bool yesOrNo) {
         customEnabled = yesOrNo;
-        reset(); // reset upon any change of this field!
+        ResetSelf(); // reset upon any change of this field!
 	}
     
-    public void reset() {
+    public void ResetSelf() {
         joystickX = 0;
         joystickY = 0;
         joystickImg.sprite = joystickIdle;

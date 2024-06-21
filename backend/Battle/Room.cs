@@ -174,7 +174,7 @@ public class Room {
         stageName = "Dungeon";
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
         nstDelayFrames = 24;
-        inputFrameUpsyncDelayTolerance = ConvertToNoDelayInputFrameId(nstDelayFrames) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
+        inputFrameUpsyncDelayTolerance = ConvertToDynamicallyGeneratedDelayInputFrameId(nstDelayFrames, 0) - 1; // this value should be strictly smaller than (NstDelayFrames >> InputScaleFrames), otherwise "type#1 forceConfirmation" might become a lag avalanche
         state = ROOM_STATE_IDLE;
         effectivePlayerCount = 0;
         backendDynamicsEnabled = true;
@@ -476,7 +476,7 @@ public class Room {
                 var src = selfParsedRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
                 var dst = startRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
 
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.BulletImmuneRecords, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.ForcedCrouching, src.NewBirth, src.LowerPartFramesInChState, src.JumpStarted, src.FramesToStartJump, src.FramesSinceLastDamaged, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingEvtSubIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscriptionId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.BulletImmuneRecords, dst);
 
             }
         } finally {
@@ -1022,8 +1022,13 @@ public class Room {
                 for (int i = 0; i < capacity; i++) {
                     // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
                     // Don't predict "btnB"!
+                    ulong encodedIdx = (lastIndividuallyConfirmedInputList[i] & 15UL);
                     if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > gapInputFrameId - lastIndividuallyConfirmedInputFrameId[i]) {
-                        ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & 31UL));
+                        ifdHolder.InputList[i] = (lastIndividuallyConfirmedInputList[i] & 31UL);
+                        if (2 == encodedIdx || 5 == encodedIdx || 8 == encodedIdx) {
+                            // Don't predict slip-jump!
+                            ifdHolder.InputList[i] = encodedIdx;
+                        }
                     } else {
                         ifdHolder.InputList[i] = ((lastIndividuallyConfirmedInputList[i] & 15UL));
                     }
@@ -1407,8 +1412,8 @@ public class Room {
         try {
             var (ok, thatRenderFrameId) = ShouldPrefabInputFrameDownsync(prevRenderFrameId, renderFrameId);
             if (ok) {
-                int noDelayInputFrameId = ConvertToNoDelayInputFrameId(thatRenderFrameId);
-                getOrPrefabInputFrameDownsync(noDelayInputFrameId);
+                int toGenerateIfdId = ConvertToDynamicallyGeneratedDelayInputFrameId(thatRenderFrameId, 0);
+                getOrPrefabInputFrameDownsync(toGenerateIfdId);
             }
 
             // Force setting all-confirmed of buffered inputFrames periodically, kindly note that if "backendDynamicsEnabled", what we want to achieve is "recovery upon reconnection", which certainly requires "forceConfirmationIfApplicable" to move "lastAllConfirmedInputFrameId" forward as much as possible

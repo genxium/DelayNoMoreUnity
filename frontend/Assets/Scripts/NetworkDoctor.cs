@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using shared;
-using UnityEngine;
 
 public class NetworkDoctor {
 
@@ -249,7 +248,7 @@ public class NetworkDoctor {
 
         bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
         if (sendingFpsNormal) {
-            bool ifdLagSignificant = (localRequiredIfdId > minInputFrameIdFront) && localRequiredIfdId > (ifdLagTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
+            bool ifdLagSignificant = (localRequiredIfdId >= minInputFrameIdFront) && localRequiredIfdId > (ifdLagTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
 
             long latestRecvMillis = -Battle.MAX_INT;
             var ed1 = inputFrameDownsyncQ.GetLast(); 
@@ -292,7 +291,7 @@ public class NetworkDoctor {
                  NOT every game netcode emphasizes "lockstep" so much, e.g. `KOF XV` doesn't seem to have a tangible lockstep even under terrible network (500ms+ ping) -- even if there was any lockstep applied it was much smaller than the obvious locksteps of `Street Fighter V/VI` under same network condition.
                  */
                 if (0 >= selfUnconfirmedLockStepSkipQuota) {
-                    Debug.Log(String.Format("Should lock step, [localRequiredIfdId={0}, minInputFrameIdFront={1}, lastForceResyncedIfdId={2}, ifdLagTolerance={3}]; [immediateRollbackFrames={4}, rdfLagTolerance={5}]; [sendingFps={6}, srvDownsyncFps={7}, inputRateThreshold={8}]; [latestRecvMillis={9}, nowMillis={10}, latestRecvMillisTooOld={11}]; [exclusivelySelfConfirmedAtLastForceResync={12}, exclusivelySelfUnconfirmedAtLastForceResync={13}, lastForceResyncHasRollbackBurst={14}, exclusivelySelfConfirmedLockStepQuota={15}]", localRequiredIfdId, minInputFrameIdFront, lastForceResyncedIfdId, ifdLagTolerance, immediateRollbackFrames, rdfLagTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis, latestRecvMillisTooOld, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, lastForceResyncHasRollbackBurst, exclusivelySelfConfirmedLockStepQuota));
+                    //Debug.Log(String.Format("Should lock step, [localRequiredIfdId={0}, minInputFrameIdFront={1}, lastForceResyncedIfdId={2}, ifdLagTolerance={3}]; [immediateRollbackFrames={4}, rdfLagTolerance={5}]; [sendingFps={6}, srvDownsyncFps={7}, inputRateThreshold={8}]; [latestRecvMillis={9}, nowMillis={10}, latestRecvMillisTooOld={11}]; [exclusivelySelfConfirmedAtLastForceResync={12}, exclusivelySelfUnconfirmedAtLastForceResync={13}, lastForceResyncHasRollbackBurst={14}, exclusivelySelfConfirmedLockStepQuota={15}]", localRequiredIfdId, minInputFrameIdFront, lastForceResyncedIfdId, ifdLagTolerance, immediateRollbackFrames, rdfLagTolerance, sendingFps, srvDownsyncFps, inputRateThreshold, latestRecvMillis, nowMillis, latestRecvMillisTooOld, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, lastForceResyncHasRollbackBurst, exclusivelySelfConfirmedLockStepQuota));
 
                     return (true, ifdIdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
                 } else {

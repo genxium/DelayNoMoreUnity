@@ -5,6 +5,11 @@ using UnityEngine;
 using static shared.CharacterState;
 
 public class CharacterAnimController : MonoBehaviour {
+    private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
+    private float DAMAGED_FLASH_INTENSITY = 0.4f;
+    
+    private Material material;
+
     public int score;
     public int speciesId = Battle.SPECIES_NONE_CH;
 
@@ -35,6 +40,9 @@ public class CharacterAnimController : MonoBehaviour {
 
     private void lazyInit() {
         if (null != lookUpTable && null != lowerLookUpTable) return;
+        var spr = GetComponent<SpriteRenderer>();
+        material = spr.material;
+
         lookUpTable = new Dictionary<CharacterState, AnimationClip>();
         var animator = getMainAnimator();
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) {
@@ -80,6 +88,14 @@ public class CharacterAnimController : MonoBehaviour {
             }
         }
 
+        float flashIntensity = 0;
+        if (rdfCharacter.FramesSinceLastDamaged >= (Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED >> 1)) {
+           flashIntensity = DAMAGED_FLASH_INTENSITY*(Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED-rdfCharacter.FramesSinceLastDamaged)/ (Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED >> 1); 
+        } else {
+           flashIntensity = DAMAGED_FLASH_INTENSITY*rdfCharacter.FramesSinceLastDamaged/(Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED >> 1); 
+        }
+        material.SetFloat(MATERIAL_REF_FLASH_INTENSITY, flashIntensity);
+
         var newAnimName = newCharacterState.ToString();
         int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
         int targetClipIdx = 0; // We have only 1 frame anim playing at any time
@@ -97,11 +113,9 @@ public class CharacterAnimController : MonoBehaviour {
 
         var targetClip = lookUpTable[newCharacterState];
         var frameIdxInAnim = rdfCharacter.FramesInChState;
-        if (InAirIdle1ByJump == newCharacterState || InAirIdle1ByWallJump == newCharacterState) {
-            frameIdxInAnim = chConfig.InAirIdleFrameIdxTurningPoint + (frameIdxInAnim - chConfig.InAirIdleFrameIdxTurningPoint) % chConfig.InAirIdleFrameIdxTurnedCycle; // TODO: Anyway to avoid using division here?
-        }
         float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
         animator.Play(newAnimName, targetLayer, normalizedFromTime);
+
     }
 
     /*
@@ -168,9 +182,6 @@ public class CharacterAnimController : MonoBehaviour {
 
         var upperTargetClip = lookUpTable[newCharacterState];
         var upperFrameIdxInAnim = rdfCharacter.FramesInChState;
-        if (InAirIdle1ByJump == newCharacterState || InAirIdle1ByWallJump == newCharacterState) {
-            upperFrameIdxInAnim = chConfig.InAirIdleFrameIdxTurningPoint + (upperFrameIdxInAnim - chConfig.InAirIdleFrameIdxTurningPoint) % chConfig.InAirIdleFrameIdxTurnedCycle; // TODO: Anyway to avoid using division here?
-        }
         float upperNormalizedFromTime = (upperFrameIdxInAnim / (upperTargetClip.frameRate * upperTargetClip.length)); // TODO: Anyway to avoid using division here?
         upperPart.Play(upperNewAnimName, targetLayer, upperNormalizedFromTime);
     }

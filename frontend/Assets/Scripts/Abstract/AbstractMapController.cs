@@ -109,10 +109,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<string, SFXSource> cachedSfxNodes;
     public AudioSource bgmSource;
     public abstract void onCharacterSelectGoAction(int speciesId);
-    public abstract void OnSettingsClicked();
-
-
     public abstract void onCharacterAndLevelSelectGoAction(int speciesId, string levelName);
+
+    public abstract void OnSettingsClicked();
 
     protected bool debugDrawingAllocation = false;
     protected bool debugDrawingEnabled = false;
@@ -135,11 +134,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected float footstepAttenuationZ = 200.0f;
 
     private string MATERIAL_REF_THICKNESS = "_Thickness";
-    private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
-    private string MATERIAL_REF_FLASH_COLOR = "_FlashColor";
-    private float DAMAGED_FLASH_INTENSITY = 0.4f;
-    private float DAMAGED_THICKNESS = 1.5f;
-    private float DAMAGED_BLINK_SECONDS_HALF = 0.2f;
 
     protected KvPriorityQueue<string, TeamRibbon>.ValScore cachedTeamRibbonScore = (x) => x.score;
     protected KvPriorityQueue<string, InplaceHpBar>.ValScore cachedHpBarScore = (x) => x.score;
@@ -154,7 +148,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected int missionEvtSubId = MAGIC_EVTSUB_ID_NONE;
     protected bool isOnlineMode;
-
+    protected int localExtraInputDelayFrames = 0;
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
@@ -228,10 +222,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
             } else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
                 // Don't predict "btnB" -- yet predicting "btnA" for better "jump holding" consistency
+                ulong encodedIdx = (lastIndividuallyConfirmedInputList[k] & 15UL);
                 if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
                     prefabbedInputList[k] = (lastIndividuallyConfirmedInputList[k] & 31UL);
+                    if (2 == encodedIdx || 5 == encodedIdx || 8 == encodedIdx) {
+                        // Don't predict slip-jump!
+                        prefabbedInputList[k] = encodedIdx;
+                    }
                 } else {
-                    prefabbedInputList[k] = (lastIndividuallyConfirmedInputList[k] & 15UL);
+                    prefabbedInputList[k] = encodedIdx;
                 }
             } else if (null != previousInputFrameDownsync) {
                 // When "self.lastIndividuallyConfirmedInputFrameId[k] > inputFrameId", don't use it to predict a historical input!
@@ -579,8 +578,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                 var spr = npcGameObj.GetComponent<SpriteRenderer>();
                 var material = spr.material;
                 DOTween.Sequence().Append(
-                    DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))
-                    .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
+                    DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 1.5f, 0.5f))
+                    .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, 0.5f));
             }
             playCharacterDamagedVfx(currNpcDownsync, chConfig, prevNpcDownsync, npcGameObj, npcAnimHolder);
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
@@ -1075,6 +1074,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         chaserRenderFrameIdLowerBound = -1;
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;
+        localExtraInputDelayFrames = 0;
 
         /*
          [WARNING]
@@ -1093,6 +1093,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         triggerGameObjs = new Dictionary<int, GameObject>();
         string path = String.Format("Tiled/{0}/map", theme);
         var underlyingMapPrefab = Resources.Load(path) as GameObject;
+        if (null == underlyingMapPrefab) {
+            Debug.LogErrorFormat("underlyingMapPrefab is null for theme={0}", theme);
+        }
         underlyingMap = GameObject.Instantiate(underlyingMapPrefab, this.gameObject.transform);
 
         var superMap = underlyingMap.GetComponent<SuperMap>();
@@ -1358,10 +1361,10 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     // Update is called once per frame
     protected void doUpdate() {
-        int noDelayInputFrameId = ConvertToNoDelayInputFrameId(playerRdfId);
+        int toGenerateInputFrameId = ConvertToDynamicallyGeneratedDelayInputFrameId(playerRdfId, localExtraInputDelayFrames);
         ulong prevSelfInput = 0, currSelfInput = 0;
         if (ShouldGenerateInputFrameUpsync(playerRdfId)) {
-            (prevSelfInput, currSelfInput) = getOrPrefabInputFrameUpsync(noDelayInputFrameId, true, prefabbedInputListHolder);
+            (prevSelfInput, currSelfInput) = getOrPrefabInputFrameUpsync(toGenerateInputFrameId, true, prefabbedInputListHolder);
         }
         int delayedInputFrameId = ConvertToDelayedInputFrameId(playerRdfId);
         var (delayedInputFrameExists, _) = inputBuffer.GetByFrameId(delayedInputFrameId);
@@ -1373,10 +1376,10 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         bool battleResultIsSet = isBattleResultSet(confirmedBattleResult);
 
-        if (isOnlineMode && (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, noDelayInputFrameId))) {
+        if (isOnlineMode && (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, toGenerateInputFrameId))) {
             // [WARNING] If "true == battleResultIsSet", we MUST IMMEDIATELY flush the local inputs to our peers to favor the formation of all-confirmed inputFrameDownsync asap! 
             // TODO: Does the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
-            sendInputFrameUpsyncBatch(noDelayInputFrameId);
+            sendInputFrameUpsyncBatch(toGenerateInputFrameId);
         }
 
         if (battleResultIsSet) {
@@ -1459,7 +1462,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         Array.Fill<ulong>(prefabbedInputListHolder, 0);
         resetBattleResult(ref confirmedBattleResult);
 
-        iptmgr.reset();
+        iptmgr.ResetSelf();
     }
 
     protected IEnumerator delayToShowSettlementPanel() {
@@ -1560,8 +1563,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             switch (child.gameObject.name) {
                 case "EvtSubscription":
                     foreach (Transform evtSubTsf in child) {
-                        var evtSubTileObj = evtSubTsf.gameObject.GetComponent<SuperObject>();
-                        var tileProps = evtSubTsf.gameObject.gameObject.GetComponent<SuperCustomProperties>();
+                        var evtSubTileObj = evtSubTsf.GetComponent<SuperObject>();
+                        var tileProps = evtSubTsf.GetComponent<SuperCustomProperties>();
                         CustomProperty id, demandedEvtMask;
                         tileProps.TryGetCustomProperty("id", out id);
                         tileProps.TryGetCustomProperty("demandedEvtMask", out demandedEvtMask);
@@ -1573,11 +1576,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         evtSubList.Add(evtSub);
                     }
+                    Destroy(child.gameObject); // Delete the whole "ObjectLayer"
                     break;
                 case "Barrier":
                     foreach (Transform barrierChild in child) {
-                        var barrierTileObj = barrierChild.gameObject.GetComponent<SuperObject>();
-                        var inMapCollider = barrierChild.gameObject.GetComponent<EdgeCollider2D>();
+                        var barrierTileObj = barrierChild.GetComponent<SuperObject>();
+                        var inMapCollider = barrierChild.GetComponent<EdgeCollider2D>();
 
                         if (null == inMapCollider || 0 >= inMapCollider.pointCount) {
                             var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
@@ -1604,10 +1608,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                         }
 
                         // TODO: By now I have to enable the import of all colliders to see the "inMapCollider: EdgeCollider2D" component, then remove unused components here :(
-                        Destroy(barrierChild.gameObject.GetComponent<EdgeCollider2D>());
-                        Destroy(barrierChild.gameObject.GetComponent<BoxCollider2D>());
-                        Destroy(barrierChild.gameObject.GetComponent<SuperColliderComponent>());
+                        Destroy(barrierChild.GetComponent<EdgeCollider2D>());
+                        Destroy(barrierChild.GetComponent<BoxCollider2D>());
+                        Destroy(barrierChild.GetComponent<SuperColliderComponent>());
                     }
+                    Destroy(child.gameObject); // Delete the whole "ObjectLayer"
                     break;
                 case "PlayerStartingPos":
                     int j = 0;
@@ -1628,6 +1633,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         //Debug.Log(String.Format("new playerStartingCposList[i:{0}]=[X:{1}, Y:{2}]", j, cx, cy));
                         j++;
                     }
+                    Destroy(child.gameObject); // Delete the whole "ObjectLayer"
                     break;
                 case "NpcStartingPos":
                     foreach (Transform npcPos in child) {
@@ -1660,11 +1666,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                                                     null == killedToDropBuffSpeciesId || killedToDropBuffSpeciesId.IsEmpty ? TERMINATING_BUFF_SPECIES_ID : killedToDropBuffSpeciesId.GetValueAsInt()
                         ));
                     }
+                    Destroy(child.gameObject); // Delete the whole "ObjectLayer"
                     break;
                 case "PatrolCue":
                     foreach (Transform patrolCueChild in child) {
-                        var tileObj = patrolCueChild.gameObject.GetComponent<SuperObject>();
-                        var tileProps = patrolCueChild.gameObject.GetComponent<SuperCustomProperties>();
+                        var tileObj = patrolCueChild.GetComponent<SuperObject>();
+                        var tileProps = patrolCueChild.GetComponent<SuperCustomProperties>();
                         
                         var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
                         if (0 != tileObj.m_Width) {
@@ -1709,11 +1716,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Attr = newPatrolCue,
                         });
                     }
+                    Destroy(child.gameObject); // Delete the whole "ObjectLayer"
                     break;
                 case "TrapStartingPos":
                     foreach (Transform trapChild in child) {
-                        var tileObj = trapChild.gameObject.GetComponent<SuperObject>();
-                        var tileProps = trapChild.gameObject.GetComponent<SuperCustomProperties>();
+                        var tileObj = trapChild.GetComponent<SuperObject>();
+                        var tileProps = trapChild.GetComponent<SuperCustomProperties>();
 
                         CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, triggerTrackingId, prohibitsWallGrabbing, locked, unlockSubscriptionId;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
@@ -1889,11 +1897,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Destroy(trapChild.gameObject); // [WARNING] It'll be animated by "TrapPrefab" in "applyRoomDownsyncFrame" instead!
                         }
                     }
+                    Destroy(child.gameObject); // Delete the whole "ObjectLayer"
                     break;
                 case "TriggerPos":
                     foreach (Transform triggerChild in child) {
-                        var tileObj = triggerChild.gameObject.GetComponent<SuperObject>();
-                        var tileProps = triggerChild.gameObject.GetComponent<SuperCustomProperties>();
+                        var tileObj = triggerChild.GetComponent<SuperObject>();
+                        var tileProps = triggerChild.GetComponent<SuperCustomProperties>();
                         CustomProperty bulletTeamId, chCollisionTeamId, delayedFrames, initVelX, initVelY, quota, recoveryFrames, speciesId, trackingIdList, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, publishingToEvtSubIdUponExhaust, publishingEvtMaskUponExhaust, subscriptionId, storyPointId, locked, unlockSubscriptionId, supplementDemandedEvtMask;
                         tileProps.TryGetCustomProperty("bulletTeamId", out bulletTeamId);
                         tileProps.TryGetCustomProperty("chCollisionTeamId", out chCollisionTeamId);
@@ -2011,13 +2020,13 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Attr = triggerColliderAttr,
                         });
                         ++triggerLocalId;
-                        Destroy(triggerChild.gameObject); // [WARNING] It'll be animated by "TriggerPrefab" in "applyRoomDownsyncFrame" instead!
                     }
+                    Destroy(child.gameObject); // Delete the whole "ObjectLayer"
                     break;
                 case "Pickable":
                     foreach (Transform pickableChild in child) {
-                        var tileObj = pickableChild.gameObject.GetComponent<SuperObject>();
-                        var tileProps = pickableChild.gameObject.GetComponent<SuperCustomProperties>();
+                        var tileObj = pickableChild.GetComponent<SuperObject>();
+                        var tileProps = pickableChild.GetComponent<SuperCustomProperties>();
                         CustomProperty consumableSpeciesId, pickupType, takesGravity;
                         tileProps.TryGetCustomProperty("consumableSpeciesId", out consumableSpeciesId);
                         tileProps.TryGetCustomProperty("pickupType", out pickupType);
@@ -2062,8 +2071,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         pickableList.Add((pickable, wx, wy));
 
                         ++pickableLocalId;
-                        Destroy(child.gameObject); // [WARNING] It'll be animated by "TriggerPrefab" in "applyRoomDownsyncFrame" instead!
                     }
+                    Destroy(child.gameObject); // Delete the whole "ObjectLayer"
                     break;
                 default:
                     break;
@@ -2594,22 +2603,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 }
             }
         }
-
-        if (
-            null == prevCharacterDownsync
-            || prevCharacterDownsync.Hp <= currCharacterDownsync.Hp
-            || prevCharacterDownsync.Id != currCharacterDownsync.Id // for left-shifted NPCs
-        ) return false;
-
-        // Some characters, and almost all traps wouldn't have an "attacked state", hence showing their damaged animation by shader.
-        /*
-        DOTween.Sequence().Append(
-            DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), DAMAGED_THICKNESS, DAMAGED_BLINK_SECONDS_HALF))
-            .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
-        */
-        DOTween.Sequence().Append(
-            DOTween.To(() => material.GetFloat(MATERIAL_REF_FLASH_INTENSITY), x => material.SetFloat(MATERIAL_REF_FLASH_INTENSITY, x), DAMAGED_FLASH_INTENSITY, DAMAGED_BLINK_SECONDS_HALF))
-            .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_FLASH_INTENSITY), x => material.SetFloat(MATERIAL_REF_FLASH_INTENSITY, x), 0f, DAMAGED_BLINK_SECONDS_HALF));
 
         return true;
     }
