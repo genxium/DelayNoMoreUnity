@@ -389,12 +389,16 @@ public class OnlineMapController : AbstractMapController {
                 // Will resort to lockstep instead.
                 localExtraInputDelayFrames = 0;
             } else {
+                // [WARNING] NOT guaranteed to have a better result than always keeping localExtraInputDelayFrames zero
                 localExtraInputDelayFrames = (1 < ifdLag ? 1 : 0);
             }
-             */
+            */
+
             networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
 
             // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
+            chaseRolledbackRdfs();
+            /*
             int nextChaserRenderFrameId = chaseRolledbackRdfs();
             if (nextChaserRenderFrameId == playerRdfId) {
                 var (ok, latestPlayerRdf) = renderBuffer.GetByFrameId(playerRdfId);
@@ -402,6 +406,7 @@ public class OnlineMapController : AbstractMapController {
                     applyRoomDownsyncFrameDynamics(latestPlayerRdf, null);
                 }
             }
+            */
             NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
 
             if (shouldLockStep) {

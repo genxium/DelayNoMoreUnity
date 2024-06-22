@@ -3,6 +3,7 @@ using System.Threading;
 using shared;
 
 public class NetworkDoctor {
+    private int EXPIRY_MILLIS = 1500;
 
     private class QEle {
         public int i, j;
@@ -73,8 +74,8 @@ public class NetworkDoctor {
         immediateRollbackFrames = 0;
         lockedStepsCnt = 0;
         udpPunchedCnt = 0;
-        inputRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-0.2f) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
-        recvRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-5) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
+        inputRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-1.0f) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
+        recvRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-5.0f) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
         lastForceResyncedIfdId = 0;
         exclusivelySelfConfirmedAtLastForceResync = false;
         exclusivelySelfUnconfirmedAtLastForceResync = false;
@@ -146,7 +147,18 @@ public class NetworkDoctor {
         }
         holder.i = i;
         holder.j = j;
-        holder.t = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+        var nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds(); 
+        holder.t = nowMillis;
+
+        while (0 < sendingQ.Cnt) {
+            var st = sendingQ.GetFirst();
+            if (st.t + EXPIRY_MILLIS < nowMillis ) {
+                sendingQ.Pop();
+            } else {
+                break;
+            } 
+        }
     }
 
     public void LogInputFrameDownsync(int i, int j) {
@@ -159,7 +171,18 @@ public class NetworkDoctor {
         }
         holder.i = i;
         holder.j = j;
-        holder.t = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+        var nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds(); 
+        holder.t = nowMillis;
+
+        while (0 < inputFrameDownsyncQ.Cnt) {
+            var st = inputFrameDownsyncQ.GetFirst();
+            if (st.t + EXPIRY_MILLIS < nowMillis ) {
+                inputFrameDownsyncQ.Pop();
+            } else {
+                break;
+            }
+        }
     }
 
     public void LogPeerInputFrameUpsync(int i, int j) {
@@ -172,7 +195,18 @@ public class NetworkDoctor {
         }
         holder.i = i;
         holder.j = j;
-        holder.t = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+        var nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds(); 
+        holder.t = nowMillis;
+
+        while (0 < peerInputFrameUpsyncQ.Cnt) {
+            var st = peerInputFrameUpsyncQ.GetFirst();
+            if (st.t + EXPIRY_MILLIS < nowMillis ) {
+                peerInputFrameUpsyncQ.Pop();
+            } else {
+                break;
+            } 
+        }
     }
 
     public void LogRollbackFrames(int val) {
@@ -246,7 +280,7 @@ public class NetworkDoctor {
             ifdIdLag = 0;
         }
 
-        bool sendingFpsNormal = (sendingFps >= inputRateThreshold);
+        bool sendingFpsNormal = (sendingFps > inputRateThreshold);
         if (sendingFpsNormal) {
             bool ifdLagSignificant = (localRequiredIfdId >= minInputFrameIdFront) && localRequiredIfdId > (ifdLagTolerance + minInputFrameIdFront); // First comparison to avoid integer overflow 
 
