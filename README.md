@@ -6,8 +6,10 @@ v1.6.4 new features
 - Added `potential graphical inconsistency indicators` on `NetworkDoctorInfo` panel.
 - Enhanced jump holding mechanics for easier netcode prediction.
 - Applied jump startup for slipping and air-jump, such that `input delay = 2 frames i.e. ~32ms` has fast graphical response (i.e. startup animation) but slow collision system response (i.e. after startup frames).
-- Added support for `localExtraInputDelayFrames`.
 - Improved damaged-anim handling.
+- Added support for `localExtraInputDelayFrames`.
+    - Rule of thumb: the same `renderFrameId` MUST take the same `inputFrameId` for all peers regardless of their individual `inputDelay`s. 
+    - Therefore, if individual `inputDelay`s are different, the trick would be on `inputFrameId` generation, i.e. for each peer if its `inputDelay` suddenly goes up from `inputDelayStd=2` to `inputDelayDynamic=4`, then its generated `inputFrameId` at `renderFrameId=242` should go up from `toGenerateInputFrameIdOld = (renderFrameId >> 2) = 60` to `toGenerateInputFrameIdNew = ((renderFrameId+(inputDelayDynamic-inputDelayStd)) >> 2)=61` -- while `localRequiredInputFrameId = ((renderFrameId-inputDelayStd) >> 2)` is unchanged, hence `toGenerateInputFrameIdNew` is to be used by a later renderFrame, making a feel of "larger input-to-impact-delay". 
 
 v1.5.9 new features
 - Updated existing levels and characters.
