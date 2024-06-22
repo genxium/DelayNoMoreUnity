@@ -1,3 +1,8 @@
+# Is it possible to remove all "forceConfirmation"s if player input overwriting is unwanted?  
+Yes it's possible to remove/disable both "type#1" and "type#3" in `backend/Battle/Room.cs`. However, it's highly recommended that you reserve the backend dynamics and downsync the RoomDownsyncFrame calculated by backend to all frontends periodically -- the frontend `AbstractMapController.onRoomDownsyncFrame` can handle correction of historic render frames without issue.
+
+The root cause of the need for such periodic RoomDownsyncFrame downsync is that the physics engine uses floating point numbers, and I'm not a fan of determinisitc floating point approach (i.e. there're tradeoffs). If this project is an old style fighting game, then I can rewrite its physics to use rectilinear rectangles only, thus integer only (including snapping) -- yet I want slopes and rotations in the game :)
+
 # How to find all spots of input predictions?
 ```
 proj-root> grep -ri "31UL" --color ./frontend/Assets/Scripts/
