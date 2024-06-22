@@ -389,10 +389,20 @@ public class OnlineMapController : AbstractMapController {
                 // Will resort to lockstep instead.
                 localExtraInputDelayFrames = 0;
             } else {
-                localExtraInputDelayFrames = (1 < ifdLag ? 3 : 0);
+                localExtraInputDelayFrames = (1 < ifdLag ? 1 : 0);
             }
              */
             networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
+
+            // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
+            int nextChaserRenderFrameId = chaseRolledbackRdfs();
+            if (nextChaserRenderFrameId == playerRdfId) {
+                var (ok, latestPlayerRdf) = renderBuffer.GetByFrameId(playerRdfId);
+                if (ok && null != latestPlayerRdf) {
+                    applyRoomDownsyncFrameDynamics(latestPlayerRdf, null);
+                }
+            }
+            NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
 
             if (shouldLockStep) {
                 NetworkDoctor.Instance.LogLockedStepCnt();
@@ -400,9 +410,6 @@ public class OnlineMapController : AbstractMapController {
                 return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
             }
 
-            // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
-            chaseRolledbackRdfs();
-            NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
             if (localTimerEnded) {
                 if (!timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync && 0 < timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync) {
                     // TODO: Popup some GUI hint to tell the player that we're awaiting downsync only, as the local "playerRdfId" is monotonically increasing, there's no way to rewind and change any input from here!
