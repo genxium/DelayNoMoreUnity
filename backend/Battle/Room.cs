@@ -1477,7 +1477,7 @@ public class Room {
             */
             unconfirmedMask = allConfirmedMask;
             lastForceResyncedRdfId = renderFrameId;
-        } else if (latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance + 1)) {
+        } /*else if (latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance + 1)) {
             // Type#1 check whether there's a significantly slow ticker among players
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
             for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {
@@ -1493,7 +1493,7 @@ public class Room {
                 _logger.LogInformation(String.Format("[type#1 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, InputFrameUpsyncDelayTolerance:{6}, unconfirmedMask={7}, lastForceResyncedRdfId={8}; there's a slow ticker suspect, forcing all-confirmation", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance, unconfirmedMask, lastForceResyncedRdfId));
                 lastForceResyncedRdfId = renderFrameId;
             }
-        } else {
+        }*/ else {
             // Type#2 helps resolve the edge case when all players are disconnected temporarily
             bool shouldForceResync = false;
             foreach (var player in playersArr) {
