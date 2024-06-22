@@ -12,7 +12,7 @@ namespace backend.Battle;
 public class Room {
 
     private TimeSpan DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT = TimeSpan.FromMilliseconds(5000);
-    private int renderBufferSize = 96;
+    private bool type1ForceConfirmationEnabled = false;
     public int id;
     public int capacity;
     public int preallocNpcCapacity = DEFAULT_PREALLOC_NPC_CAPACITY;
@@ -37,7 +37,7 @@ public class Room {
     int lastForceResyncedRdfId;
     int nstDelayFrames;
 
-    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 8*BATTLE_DYNAMICS_FPS;
+    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 7*BATTLE_DYNAMICS_FPS;
 
     Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex
@@ -188,7 +188,7 @@ public class Room {
         historyRdfHolder = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity);
 
         // Preallocate battle dynamic fields other than "Collider related" ones
-        preallocateStepHolders(capacity, renderBufferSize, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
+        preallocateStepHolders(capacity, getRenderBufferSize(), preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCapacity, out justFulfilledEvtSubCnt, out justFulfilledEvtSubArr, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
 
         // "Collider related" fields Will be reset in "refreshCollider" anyway
         dynamicRectangleColliders = new Collider[0];
@@ -220,6 +220,15 @@ public class Room {
 
         joinerLock = new Mutex();
         inputBufferLock = new Mutex();
+    }
+
+    private int getRenderBufferSize() {
+        /*
+        [WARNING]
+
+        After v1.6.4, the netcode preference is changed to "freeze normal tickerw for awaiting slow tickers", therefore "type#1 forceConfirmation" can be disabled to favor smoother graphics on the "slow tickers", yet it will cost a larger "inputBuffer" on the backend capped by the interval of "type#3 forceConfirmation".
+        */
+        return (type1ForceConfirmationEnabled ? 96 : FORCE_RESYNC_INTERVAL_THRESHOLD);
     }
 
     public bool IsFull() {
@@ -1460,18 +1469,18 @@ public class Room {
                 if (!res1 || null == foo) {
                     throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.ToString()));
                 }
+                unconfirmedMask |= (allConfirmedMask ^ foo.ConfirmedList);
                 foo.ConfirmedList = allConfirmedMask;
                 onInputFrameDownsyncAllConfirmed(foo, INVALID_DEFAULT_PLAYER_ID);
             }
-            _logger.LogInformation(String.Format("[type#3 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId));
+            _logger.LogInformation(String.Format("[type#3 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}, unconfirmedMask={7}", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId, unconfirmedMask));
             /*
             [WARNING] Only "type#1" will delay "conditional graphical update" from the force-resync snapshot for non-self-unconfirmed players, both "type#2" and "type#3" might have immediate impact on the "ACTIVE NORMAL TICKER"s, e.g. abrupt & inconsistent graphical update.  
 
             However, experiments show that for type#3 "curDynamicsRenderFrameId" is NEVER TOO ADVANCED compared to "OnlineMapController.playerRdfId", possibly due to the absence of any SLOW TICKER (including disconnected) -- hence when executing "OnlineMap.onRoomDownsyncFrame", the force-resync snapshot would only get "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet", i.e. only effectively trigger "OnlineMapController.onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch) -> _handleIncorrectlyRenderedPrediction(...)" -- thus relatively smooth graphical updates. 
             */
-            unconfirmedMask = allConfirmedMask;
             lastForceResyncedRdfId = renderFrameId;
-        } else if (latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance)) {
+        } else if (type1ForceConfirmationEnabled && latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance)) {
             // Type#1 check whether there's a significantly slow ticker among players
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
             for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {

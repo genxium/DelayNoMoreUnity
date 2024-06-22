@@ -1,3 +1,10 @@
+# How to find all spots of input predictions?
+```
+proj-root> grep -ri "31UL" --color ./frontend/Assets/Scripts/
+proj-root> grep -ri "31UL" --color ./backend/
+proj-root> grep -ri "31UL" --color ./shared/
+```
+
 # Latest tag change notes
 v1.6.4 new features
 - Improved frontend lockstep handling.
