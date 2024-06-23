@@ -1248,8 +1248,7 @@ namespace shared {
 
                             Hereby we SKIP recognizing "effectively zero softPushbacks", yet a closed-loop control on frontend by "onRoomDownsyncFrame & useOthersForcedDownsyncRenderFrameDict" is required because such (suspicious) floating errors are too difficult to completely avoid.
 
-                            A similar clamping is used in "Battle_geometry.
-                            sNormsForCharacter" -- and there's an explanation for why this clamping magnitude is chosen.
+                            A similar clamping is used in "Battle_geometry.calcHardPushbacksNormsForCharacter" -- and there's an explanation for why this clamping magnitude is chosen.
                             */
                             continue;
                         }

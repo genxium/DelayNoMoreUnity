@@ -269,7 +269,9 @@ public class Room {
             playerDownsyncSessionDict[playerId] = session;
             playerSignalToCloseDict[playerId] = (signalToCloseConnOfThisPlayer, signalToCloseConnOfThisPlayerToken);
 
-            var newWatchdog = new PlayerSessionAckWatchdog(10000, signalToCloseConnOfThisPlayer, String.Format("[ RoomId={0}, PlayerId={1} ] session watchdog ticked.", id, playerId), _loggerFactory);
+            // [WARNING] If "!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled", make sure that an "extreme/malicious slow ticker" will be timed out by the watchdog before either "renderBuffer" or "inputBuffer" is drained!
+            int newWatchdogKeepAliveMillis = (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) ? (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1 : 10000;
+            var newWatchdog = new PlayerSessionAckWatchdog(newWatchdogKeepAliveMillis, signalToCloseConnOfThisPlayer, String.Format("[ RoomId={0}, PlayerId={1} ] session watchdog ticked.", id, playerId), _loggerFactory);
             newWatchdog.Stop();
             playerActiveWatchdogDict[playerId] = newWatchdog;
 

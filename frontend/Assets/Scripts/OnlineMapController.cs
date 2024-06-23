@@ -12,6 +12,7 @@ public class OnlineMapController : AbstractMapController {
     CancellationTokenSource wsCancellationTokenSource;
     CancellationToken wsCancellationToken;
     WsResp wsRespHolder;
+    public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
     bool shouldLockStep = false;
@@ -381,20 +382,22 @@ public class OnlineMapController : AbstractMapController {
             }
 
             // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
-            var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), inputFrameUpsyncDelayTolerance - 1);
-            shouldLockStep = tooFastOrNot;
+            if (useFreezingLockStep) {
+                var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), inputFrameUpsyncDelayTolerance - 1);
+                shouldLockStep = tooFastOrNot;
 
-            /*
-            if (tooFastOrNot) {
-                // Will resort to lockstep instead.
-                localExtraInputDelayFrames = 0;
-            } else {
-                // [WARNING] NOT guaranteed to have a better result than always keeping localExtraInputDelayFrames zero
-                localExtraInputDelayFrames = (1 < ifdLag ? 1 : 0);
+                /*
+                if (tooFastOrNot) {
+                    // Will resort to lockstep instead.
+                    localExtraInputDelayFrames = 0;
+                } else {
+                    // [WARNING] NOT guaranteed to have a better result than always keeping localExtraInputDelayFrames zero
+                    localExtraInputDelayFrames = (1 < ifdLag ? 1 : 0);
+                }
+                */
+
+                networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
             }
-            */
-
-            networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
 
             // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
             chaseRolledbackRdfs();
@@ -425,6 +428,24 @@ public class OnlineMapController : AbstractMapController {
                 return;
             }
             doUpdate();
+
+            if (!useFreezingLockStep) {
+                var (tooFastOrNot, ifdLag, sendingFps, srvDownsyncFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), inputFrameUpsyncDelayTolerance - 1);
+                shouldLockStep = tooFastOrNot;
+
+                /*
+                if (tooFastOrNot) {
+                    // Will resort to lockstep instead.
+                    localExtraInputDelayFrames = 0;
+                } else {
+                    // [WARNING] NOT guaranteed to have a better result than always keeping localExtraInputDelayFrames zero
+                    localExtraInputDelayFrames = (1 < ifdLag ? 1 : 0);
+                }
+                */
+
+                networkInfoPanel.SetValues(sendingFps, srvDownsyncFps, peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
+            }
+
             if (playerRdfId >= battleDurationFrames) {
                 localTimerEnded = true;
             } else {
