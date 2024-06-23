@@ -1444,7 +1444,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected virtual void onBattleStopped() {
-        if (ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState) {
+        if (ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState) {
             Debug.LogWarningFormat("@playerRdfId={0}, unable to stop battle due to invalid state transition; now battleState={1}", playerRdfId, battleState);
             return;
         }
@@ -1463,6 +1463,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         resetBattleResult(ref confirmedBattleResult);
 
         iptmgr.ResetSelf();
+
+        Debug.LogWarningFormat("onBattleStopped; now battleState={0}", battleState);
     }
 
     protected IEnumerator delayToShowSettlementPanel() {

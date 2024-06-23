@@ -169,6 +169,9 @@ namespace shared {
                 Deliberately NOT assigning to "atkedCharacterInNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
             */
             atkedCharacterInNextFrame.Hp -= trapConfig.Damage;
+            if (0 < trapConfig.Damage && atkedCharacterInNextFrame.FramesSinceLastDamaged < (DEFAULT_FRAMES_TO_SHOW_DAMAGED >> 1)) {    
+                atkedCharacterInNextFrame.FramesSinceLastDamaged = DEFAULT_FRAMES_TO_SHOW_DAMAGED;
+            }
 
             if (0 >= atkedCharacterInNextFrame.Hp) {
                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
@@ -200,7 +203,6 @@ namespace shared {
                     atkedCharacterInNextFrame.VelY = 0;
                 }
 
-                atkedCharacterInNextFrame.FramesSinceLastDamaged = DEFAULT_FRAMES_TO_SHOW_DAMAGED;
                 int oldInvincibleFrames = atkedCharacterInNextFrame.FramesInvinsible;
                 if (trapConfig.HitInvinsibleFrames > oldInvincibleFrames) {
                     atkedCharacterInNextFrame.FramesInvinsible = trapConfig.HitInvinsibleFrames;

@@ -198,11 +198,15 @@ public class OnlineMapController : AbstractMapController {
     }
 
     public override void onCharacterSelectGoAction(int speciesId) {
+        Debug.Log(String.Format("Executing OnlineMapController.onCharacterSelectGoAction with selectedSpeciesId={0}", speciesId));
+        if (ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_STOPPED != battleState) {
+            Debug.LogWarningFormat("OnlineMapController.onCharacterSelectGoAction having invalid battleState={0}, calling `cleanupNetworkSessions > base.onBattleStopped`", battleState);
+            cleanupNetworkSessions();
+            base.onBattleStopped();
+        }
         // [WARNING] Deliberately NOT declaring this method as "async" to make tests related to `<proj-root>/GOROUTINE_TO_ASYNC_TASK.md` more meaningful.
-
         battleState = ROOM_STATE_IDLE;
 
-        Debug.Log(String.Format("Executing extra goAction with selectedSpeciesId={0}", speciesId));
         WsSessionManager.Instance.SetSpeciesId(speciesId);
 
         // [WARNING] Must avoid blocking MainThread. See "GOROUTINE_TO_ASYNC_TASK.md" for more information.

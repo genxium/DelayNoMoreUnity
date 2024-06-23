@@ -8,6 +8,8 @@ public class ReadyGo : MonoBehaviour {
     public TMP_Text countdownSeconds;
     public TMP_Text countdownTicks;
 
+    private int phase = 0;
+
     // Start is called before the first frame update
     void Start() {
     }
@@ -26,6 +28,7 @@ public class ReadyGo : MonoBehaviour {
     }
 
     public void playReadyAnim(TweenCallback onStart, TweenCallback onComplete) {
+        if (0 < phase) return;
         var sequence = DOTween.Sequence();
         sequence.Append(ready.gameObject.transform.DOScale(2.5f * Vector3.one, 0.7f));
         sequence.AppendInterval(0.4f);
@@ -36,10 +39,12 @@ public class ReadyGo : MonoBehaviour {
             sequence.OnComplete(onComplete);
         }
         sequence.Play();
+        phase = 1;
     }
 
     public void playGoAnim() {
         hideReady();
+        if (1 < phase) return;
         var sequence = DOTween.Sequence();
         sequence.Append(go.gameObject.transform.DOScale(2.0f * Vector3.one, 0.5f));
         sequence.Append(go.gameObject.transform.DOScale(0.01f * Vector3.one, 0.1f));
@@ -48,11 +53,13 @@ public class ReadyGo : MonoBehaviour {
             hideGo();
         };
         sequence.Play();
+        phase = 2;
     }
 
     public void resetCountdown() {
         countdownSeconds.text = "--";
         countdownTicks.text = "--";
+        phase = 0;
     }
 
     public void setCountdown(int renderFrameId, int battleDurationFrames) {

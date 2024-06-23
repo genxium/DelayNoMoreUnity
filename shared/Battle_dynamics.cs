@@ -1644,6 +1644,9 @@ namespace shared {
                             }
                             CharacterState oldNextCharacterState = atkedCharacterInNextFrame.CharacterState;
                             atkedCharacterInNextFrame.Hp -= bulletNextFrame.Config.Damage;
+                            if (0 < bulletNextFrame.Config.Damage && atkedCharacterInNextFrame.FramesSinceLastDamaged < (DEFAULT_FRAMES_TO_SHOW_DAMAGED >> 1)) {    
+                                atkedCharacterInNextFrame.FramesSinceLastDamaged = DEFAULT_FRAMES_TO_SHOW_DAMAGED;
+                            }
                             atkedCharacterInNextFrame.FramesCapturedByInertia = 0; // Being attacked breaks movement inertia.
                             if (0 >= atkedCharacterInNextFrame.Hp) {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
@@ -1700,8 +1703,6 @@ namespace shared {
                                 if (atkedCharacterInNextFrame.FramesInvinsible < bulletNextFrame.Config.HitInvinsibleFrames) {
                                     atkedCharacterInNextFrame.FramesInvinsible = bulletNextFrame.Config.HitInvinsibleFrames;
                                 }
-
-                                atkedCharacterInNextFrame.FramesSinceLastDamaged = DEFAULT_FRAMES_TO_SHOW_DAMAGED;
 
                                 if (null != bulletConfig.BuffConfig) {
                                     BuffConfig buffConfig = bulletConfig.BuffConfig;
