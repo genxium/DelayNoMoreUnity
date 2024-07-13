@@ -14,7 +14,7 @@ proj-root> grep -ri "31UL" --color ./shared/
 ```
 
 # Latest tag change notes
-v1.6.5 new features
+v1.6.6 new features
 - Improved frontend lockstep handling.
 - Improved backend downsync nonblocking handling.
 - Added use of `chaserRenderFrameIdLowerBound`.
