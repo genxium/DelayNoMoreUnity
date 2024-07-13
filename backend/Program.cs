@@ -17,13 +17,13 @@ Log.Logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-if (builder.Environment.IsDevelopment()) {
+//if (builder.Environment.IsDevelopment()) {
     builder.Services.AddDbContext<DevEnvResourcesSqliteContext>(options => {
         // This sqlite file will be copied into executable directory upon "dotnet build" too, configured in "backend.csproj"
         var DevEnvResourcesDbPath = builder.Configuration.GetValue<string>("DevEnvResourcesDbPath");
         options.UseSqlite($"Data Source={DevEnvResourcesDbPath}"); // [WARNING] NuGet package "Microsoft.EntityFrameworkCore.Sqlite" is required to provide "DbContextOptionsBuilder.UseSqlite" method here.
     });
-}
+//}
 builder.Services.AddSingleton<IAuthTokenCache, SimpleRamAuthTokenCache>();
 builder.Services.AddSingleton<ICaptchaCache, SimpleRamCaptchaCache>();
 builder.Services.AddSingleton<IRoomManager, PriorityBasedRoomManager>();

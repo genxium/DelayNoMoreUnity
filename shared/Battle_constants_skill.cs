@@ -2026,6 +2026,7 @@ namespace shared {
                                 // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
                                 if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return NO_SKILL;
                                 var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+                                if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currSkillConfig.Hits.Count <= currCharacterDownsync.ActiveSkillHit) return NO_SKILL;
                                 var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
                                 if (null == currBulletConfig || !currBulletConfig.CancelTransit.ContainsKey(patternId)) return NO_SKILL;
 
@@ -2044,6 +2045,7 @@ namespace shared {
                                 // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
                                 if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return NO_SKILL;
                                 var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+                                if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currSkillConfig.Hits.Count <= currCharacterDownsync.ActiveSkillHit) return NO_SKILL;
                                 var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
                                 if (null == currBulletConfig || !currBulletConfig.CancelTransit.ContainsKey(patternId)) return NO_SKILL;
 
@@ -2115,6 +2117,7 @@ namespace shared {
                                     // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
                                     if (!skills.ContainsKey(currCharacterDownsync.ActiveSkillId)) return NO_SKILL;
                                     var currSkillConfig = skills[currCharacterDownsync.ActiveSkillId];
+                                    if (NO_SKILL_HIT == currCharacterDownsync.ActiveSkillHit || currSkillConfig.Hits.Count <= currCharacterDownsync.ActiveSkillHit) return NO_SKILL;
                                     var currBulletConfig = currSkillConfig.Hits[currCharacterDownsync.ActiveSkillHit];
                                     if (null == currBulletConfig || !currBulletConfig.CancelTransit.ContainsKey(patternId)) return NO_SKILL;
 

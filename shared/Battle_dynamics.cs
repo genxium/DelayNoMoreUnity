@@ -725,7 +725,7 @@ namespace shared {
                             thatCharacterInNextFrame.DirX = effDx;
                             thatCharacterInNextFrame.DirY = effDy;
                             thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                            thatCharacterInNextFrame.VelX = yfac * currCharacterDownsync.Speed;
+                            thatCharacterInNextFrame.VelY = yfac * currCharacterDownsync.Speed;
                             thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
                             // 0 == effDx && 0 == effDy
@@ -2854,14 +2854,14 @@ namespace shared {
         }
 
         protected static bool addNewBulletToNextFrame(int originatedRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, int activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, Bullet? referencePrevEmissionBullet, ILoggerBridge logger) {
-            if (activeSkillHit >= skillConfig.Hits.Count) return false;
+            if (NO_SKILL_HIT == activeSkillHit || activeSkillHit >= skillConfig.Hits.Count) return false;
             var bulletConfig = skillConfig.Hits[activeSkillHit];
             var bulletDirMagSq = bulletConfig.DirX * bulletConfig.DirX + bulletConfig.DirY * bulletConfig.DirY;
             var invBulletDirMag = InvSqrt32(bulletDirMagSq);
             var bulletSpeedXfac = xfac * invBulletDirMag * bulletConfig.DirX;
             var bulletSpeedYfac = invBulletDirMag * bulletConfig.DirY;
             int newOriginatedVirtualX = null == referencePrevEmissionBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevEmissionBullet.OriginatedVirtualGridX;
-            int newOriginatedVirtualY = null == referencePrevEmissionBullet ? currCharacterDownsync.VirtualGridY + xfac * bulletConfig.HitboxOffsetY : referencePrevEmissionBullet.OriginatedVirtualGridY;
+            int newOriginatedVirtualY = null == referencePrevEmissionBullet ? currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY : referencePrevEmissionBullet.OriginatedVirtualGridY;
             int newVirtualX = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridX + xfac * bulletConfig.HitboxOffsetX : referencePrevHitBullet.VirtualGridX;
             int newVirtualY = null == referencePrevHitBullet ? currCharacterDownsync.VirtualGridY + bulletConfig.HitboxOffsetY : referencePrevHitBullet.VirtualGridY;
             int groundWaveVelY = bulletConfig.DownSlopePrimerVelY;

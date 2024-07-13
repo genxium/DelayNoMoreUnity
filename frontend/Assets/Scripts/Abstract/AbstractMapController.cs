@@ -207,6 +207,18 @@ public abstract class AbstractMapController : MonoBehaviour {
         var (_, existingInputFrame) = inputBuffer.GetByFrameId(inputFrameId);
         var (_, previousInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId - 1);
         previousSelfInput = (null == previousInputFrameDownsync ? 0 : previousInputFrameDownsync.InputList[joinIndex - 1]);
+
+        bool selfConfirmedInExistingInputFrame = (null != existingInputFrame && 0 < (existingInputFrame.ConfirmedList & selfJoinIndexMask)); 
+        if (selfConfirmedInExistingInputFrame) {
+            /*
+            [WARNING] 
+
+            As shown in "https://github.com/genxium/DelayNoMoreUnity/blob/v1.6.5/frontend/Assets/Scripts/Abstract/AbstractMapController.cs#L1180", "playerRdfId" would NEVER be rewinded even under the most clumsy condition, i.e. "RING_BUFF_NON_CONSECUTIVE_SET == dumpRenderCacheRet" is carry-forth only (see "https://github.com/genxium/DelayNoMoreUnity/blob/v1.6.5/shared/FrameRingBuffer.cs#L80").
+
+            The only possibility that "true == selfConfirmedInExistingInputFrame" is met here would be due to "putting `getOrPrefabInputFrameUpsync(..., canConfirmSelf=true, ...) > sendInputFrameUpsyncBatch(...)` before `lockstep`" by mistake -- in that case, "playerRdfId" is stuck at the same value thus we might be overwriting already confirmed input history for self (yet backend and other peers will certainly reject the overwrite!).
+            */ 
+            return (previousSelfInput, existingInputFrame.InputList[joinIndex - 1]);
+        }
         if (
           null != existingInputFrame
           &&

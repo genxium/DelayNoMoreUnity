@@ -168,7 +168,7 @@ public class Room {
         renderFrameId = 0;
         curDynamicsRenderFrameId = 0;
         lastForceResyncedRdfId = 0;
-        frameLogEnabled = true;
+        frameLogEnabled = false; // No longer needed by default
         int durationSeconds = 60;
         battleDurationFrames = durationSeconds * BATTLE_DYNAMICS_FPS;
         estimatedMillisPerFrame = (int)Math.Ceiling(1000.0f/BATTLE_DYNAMICS_FPS); // ceiling to dilute the framerate on server 

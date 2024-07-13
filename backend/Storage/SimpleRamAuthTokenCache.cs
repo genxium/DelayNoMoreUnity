@@ -32,12 +32,12 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
     public bool GenerateNewLoginRecord(int playerId, out string? newToken, out DateTimeOffset? absoluteExpiryTime) {
         newToken = null;
         absoluteExpiryTime = null;
-        if (_environment.IsDevelopment()) {
+        //if (_environment.IsDevelopment()) {
             newToken = genToken();
             absoluteExpiryTime = (DateTimeOffset.Now + _cacheEntryOptions.SlidingExpiration);
             string newKey = (newToken + "/" + playerId.ToString()); // To avoid conflicts across different players
             inRamCache.Set(newKey, playerId, _cacheEntryOptions); 
-        }
+        //}
         return (null != newToken);
     }
 
@@ -52,7 +52,7 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
         bool res = ValidateToken(token, proposedPlayerId);
         if (!res) return (false, null);
 
-        if (_environment.IsDevelopment()) {
+        //if (_environment.IsDevelopment()) {
             using (var scope = _scopeFactory.CreateScope()) {
                 var db = scope.ServiceProvider.GetRequiredService<DevEnvResourcesSqliteContext>();
                 SqlitePlayer? testPlayer = db.Players.Where(p => p.id == proposedPlayerId).First();
@@ -60,7 +60,7 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
                     return (true, testPlayer.name);
                 }
             }
-        }
+        //}
 
         return (false, null);
     }
