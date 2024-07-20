@@ -1781,20 +1781,18 @@ namespace shared {
                                 explodedOnAnotherHarderBullet = true;
                                 break;
                             }
-                            if (bulletNextFrame.Config.Hardness == v4.Config.Hardness) {
-                                // Same hardness, whether or not "bulletNextFrame" explodes depends on a few extra factors
-                                if (bulletNextFrame.Config.RemainsUponHit && v4.Config.RemainsUponHit) {
-                                    // e.g. FireTornadoStarterBullet v.s. IcePillarStarterBullet, special annihilation
-                                    exploded = true; 
-                                    explodedOnAnotherHarderBullet = true;
-                                } else if (!bulletNextFrame.Config.RemainsUponHit && v4.Config.RemainsUponHit) {
-                                    // "v4" wouldn't explode
-                                    exploded = true; 
-                                    explodedOnAnotherHarderBullet = true;
-                                } else {
-                                    // bulletNextFrame.Config.RemainsUponHit && !v4.Config.RemainsUponHit, let "v4" play its own explosion alone
-                                    exploded = false; 
-                                }
+                            // i.e. bulletNextFrame.Config.Hardness == v4.Config.Hardness
+                            // Same hardness, whether or not "bulletNextFrame" explodes depends on a few extra factors
+                            if (bulletNextFrame.Config.RemainsUponHit && v4.Config.RemainsUponHit) {
+                                // e.g. FireTornadoStarterBullet v.s. IcePillarStarterBullet, special annihilation
+                                exploded = true; 
+                                explodedOnAnotherHarderBullet = true;
+                            } else if (!bulletNextFrame.Config.RemainsUponHit && v4.Config.RemainsUponHit) {
+                                // "v4" wouldn't explode
+                                exploded = true; 
+                                explodedOnAnotherHarderBullet = true;
+                            } else {
+                                // bulletNextFrame.Config.RemainsUponHit && !v4.Config.RemainsUponHit, let "v4" play its own explosion alone
                             }
                             break;
                         default:

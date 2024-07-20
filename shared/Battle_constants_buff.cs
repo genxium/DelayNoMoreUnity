@@ -179,7 +179,7 @@ namespace shared {
         public static DebuffConfig ShortFrozen = new DebuffConfig {
             SpeciesId = 1,
             StockType = BuffStockType.Timed,
-            Stock = 180,
+            Stock = 120,
             Type = DebuffType.FrozenPositionLocked,
             ArrIdx = DEBUFF_ARR_IDX_FROZEN
         };

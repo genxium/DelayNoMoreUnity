@@ -385,7 +385,7 @@ public class OnlineMapController : AbstractMapController {
 
             int localRequiredIfdId = ConvertToDelayedInputFrameId(playerRdfId);
             NetworkDoctor.Instance.LogLocalRequiredIfdId(localRequiredIfdId);
-            if (0 <= lastAllConfirmedInputFrameId && localRequiredIfdId - lastAllConfirmedInputFrameId > (inputFrameUpsyncDelayTolerance << 3 + inputFrameUpsyncDelayTolerance << 2)) {
+            if (0 <= lastAllConfirmedInputFrameId && localRequiredIfdId - lastAllConfirmedInputFrameId > ((inputFrameUpsyncDelayTolerance << 3) + (inputFrameUpsyncDelayTolerance << 2))) {
                 var msg = String.Format("@playerRdfId={0}, localRequiredIfdId={1}, lastAllConfirmedInputFrameId={2}, inputFrameUpsyncDelayTolerance={3}: unstable ws session detected, please try another battle :)", playerRdfId, localRequiredIfdId, lastAllConfirmedInputFrameId, inputFrameUpsyncDelayTolerance);
                 popupErrStackPanel(msg);
                 onWsSessionClosed();

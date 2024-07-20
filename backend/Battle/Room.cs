@@ -40,7 +40,7 @@ public class Room {
     int lastForceResyncedRdfId;
     int nstDelayFrames;
 
-    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 7*BATTLE_DYNAMICS_FPS;
+    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 5*BATTLE_DYNAMICS_FPS;
 
     Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex
@@ -782,10 +782,11 @@ public class Room {
                 var totalElapsedMillis = nowMillis - battleStartedAt;
                 
                 int toSleepMillis = estimatedMillisPerFrame;
+                int nextRenderFrameId = (int)((totalElapsedMillis + estimatedMillisPerFrame - 1) / estimatedMillisPerFrame); // fast ceiling
                 if (curDynamicsRenderFrameId >= battleDurationFrames) {
+                    renderFrameId = nextRenderFrameId;
                     // Do nothing, just sleep...
                 } else {
-                    int nextRenderFrameId = (int)((totalElapsedMillis + estimatedMillisPerFrame - 1) / estimatedMillisPerFrame); // fast ceiling
                     toSleepMillis = (estimatedMillisPerFrame >> 1); // Sleep half-frame time by default
                     if (nextRenderFrameId > renderFrameId) {
                         if (0 == renderFrameId) {
