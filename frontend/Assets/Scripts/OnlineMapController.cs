@@ -13,7 +13,7 @@ public class OnlineMapController : AbstractMapController {
     CancellationToken wsCancellationToken;
     WsResp wsRespHolder;
     /*
-    An example for slowDownIfdLagThreshold = 1, freezeIfdLagThresHold = 3.
+    An example for slowDownIfdLagThreshold = 1, freezeIfdLagThresHold = 3, acIfdLagThresHold = 14.
 
     playerRdf:             | 4,5,6,7 | 8,9,10,11 | 12,13,14,15 | 16,17,18,19 | 20   ...  | 100          
     requiredIfd:           | 1       | 2         | 3           | 4           | 5    ...  | 25
@@ -22,9 +22,9 @@ public class OnlineMapController : AbstractMapController {
     slowDown:              | no      | no        | yes         | yes         | yes  ...  | no
     freeze:                | no      | no        | no          | no          | yes  ...  | yes
     */
-    private int slowDownIfdLagThreshold = 2;
+    private int slowDownIfdLagThreshold = 1;
     private int freezeIfdLagThresHold = 3;
-    private int acIfdLagThresHold = 14; // "ac == all-confirmed"
+    private int acIfdLagThresHold = 8; // "ac == all-confirmed"
     public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;

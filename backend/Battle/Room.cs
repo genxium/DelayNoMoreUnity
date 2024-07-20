@@ -807,7 +807,7 @@ public class Room {
                         // Prefab and buffer backend inputFrameDownsync
                         if (backendDynamicsEnabled) {
                             doBattleMainLoopPerTickBackendDynamicsWithProperLocking(prevRenderFrameId, ref dynamicsDuration);
-                            if (curDynamicsRenderFrameId >= battleDurationFrames) {
+                            if (curDynamicsRenderFrameId+1 >= battleDurationFrames) {
                                  int oldElongatedBattleDurationFrame = elongatedBattleDurationFrames; 
                                  int proposedElongatedBattleDurationFrame = (renderFrameId + 3*BATTLE_DYNAMICS_FPS); // [WARNING] Now that CONFIRMED LAST INPUT FRAMES from all players are received, we shouldn't be awaiting too long from here on.
                                  elongatedBattleDurationFrames = oldElongatedBattleDurationFrame < proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
@@ -824,7 +824,7 @@ public class Room {
                 await Task.Delay(toSleepMillis);
             }
 
-            _logger.LogInformation("Times up, will settle `battleMainLoopActionAsync` for roomId={0} @renderFrameId={1}, elongatedBattleDurationFrames={2}", id, renderFrameId, elongatedBattleDurationFrames);
+            _logger.LogInformation("Times up, will settle `battleMainLoopActionAsync` for roomId={0} @renderFrameId={1}, curDynamicsRenderFrameId={2}, lastAllConfirmedInputFrameId={3}, elongatedBattleDurationFrames={4}", id, renderFrameId, curDynamicsRenderFrameId, lastAllConfirmedInputFrameId, elongatedBattleDurationFrames);
         } catch (Exception ex) {
             _logger.LogError(ex, "Error running battleMainLoopActionAsync for roomId={0}", id);
         } finally {

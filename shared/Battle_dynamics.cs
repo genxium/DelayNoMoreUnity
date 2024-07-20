@@ -2939,14 +2939,16 @@ namespace shared {
         }
         
         public static (bool, int) isRdfAllConfirmed(int rdfId, FrameRingBuffer<InputFrameDownsync> inputBuffer, int roomCapacity) {
-            int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
+            int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId-1);
             if (0 >= delayedInputFrameId) {
-                throw new ArgumentNullException(String.Format("rdfId={0}, delayedInputFrameId={0} is invalid when escaped!", rdfId, delayedInputFrameId));
+                return (false, delayedInputFrameId);
+                //throw new ArgumentNullException(String.Format("rdfId={0}, delayedInputFrameId={0} is invalid when checking all-confirmed!", rdfId, delayedInputFrameId));
             }
 
             var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
             if (!ok || null == delayedInputFrameDownsync) {
-                throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null when escaped!", delayedInputFrameId));
+                return (false, delayedInputFrameId);
+                //throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is invalid when checking all-confirmed!", delayedInputFrameId));
             }
             return (isAllConfirmed(delayedInputFrameDownsync.ConfirmedList, roomCapacity), delayedInputFrameId);
         }
