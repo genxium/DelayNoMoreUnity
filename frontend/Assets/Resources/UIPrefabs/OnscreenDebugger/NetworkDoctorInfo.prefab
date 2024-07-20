@@ -772,7 +772,7 @@ GameObject:
   - component: {fileID: 4604573528143394810}
   - component: {fileID: 6886675026035426730}
   m_Layer: 5
-  m_Name: SrvDownsyncFpsTitle
+  m_Name: LastAcIfdIdLagTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -826,7 +826,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'downsync fps:'
+  m_text: 'ac ifd lag:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ce1b7eb7260b7a44a8e61e93bfa7ba2, type: 2}
   m_sharedMaterial: {fileID: 6927283177508806504, guid: 1ce1b7eb7260b7a44a8e61e93bfa7ba2, type: 2}
@@ -1750,7 +1750,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -173.8594}
+  m_AnchoredPosition: {x: 50, y: -272}
   m_SizeDelta: {x: 100, y: 347.7188}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3312774845671649167
@@ -1976,8 +1976,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sendingFpsTitle: {fileID: 7066071992319061896}
   sendingFpsValue: {fileID: 4428106878579743298}
-  srvDownsyncFpsTitle: {fileID: 6886675026035426730}
-  srvDownsyncFpsValue: {fileID: 5174102858361804837}
+  acIfdIdLagTitle: {fileID: 6886675026035426730}
+  acIfdIdLagValue: {fileID: 5174102858361804837}
   peerUpsyncFpsTitle: {fileID: 2570982656191873150}
   peerUpsyncFpsValue: {fileID: 8212785927408439844}
   ifdLagTitle: {fileID: 7162943227413528358}
@@ -2138,7 +2138,7 @@ GameObject:
   - component: {fileID: 6932325544538825107}
   - component: {fileID: 5174102858361804837}
   m_Layer: 5
-  m_Name: SrvDownsyncFpsValue
+  m_Name: LastAcIfdIdLagValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

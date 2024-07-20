@@ -7,8 +7,8 @@ public class NetworkDoctorInfo: MonoBehaviour {
     public TMP_Text sendingFpsTitle;
     public TMP_Text sendingFpsValue;
 
-    public TMP_Text srvDownsyncFpsTitle;
-    public TMP_Text srvDownsyncFpsValue;
+    public TMP_Text acIfdIdLagTitle;
+    public TMP_Text acIfdIdLagValue;
 
     public TMP_Text peerUpsyncFpsTitle;
     public TMP_Text peerUpsyncFpsValue;
@@ -40,9 +40,9 @@ public class NetworkDoctorInfo: MonoBehaviour {
 
     }
 
-    public void SetValues(float sendingFps, float srvDownsyncFps, float peerUpsyncFps, int ifdLag, int stepsLocked, int rollbackFrames, long udpPunchedCnt) {
+    public void SetValues(float sendingFps, int lastAcIfdIdLag, float peerUpsyncFps, int ifdLag, int stepsLocked, int rollbackFrames, long udpPunchedCnt) {
         sendingFpsValue.text = sendingFps.ToString("0.0");
-        srvDownsyncFpsValue.text = srvDownsyncFps.ToString("0.0");
+        acIfdIdLagValue.text = lastAcIfdIdLag.ToString();
         peerUpsyncFpsValue.text = peerUpsyncFps.ToString("0.0");
         ifdLagValue.text = ifdLag.ToString();
         stepsLockedValue.text = stepsLocked.ToString();

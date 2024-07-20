@@ -26,6 +26,7 @@ public class Room {
     public int justTriggeredStoryPointId = 0; // Not used in backend
 
     public int battleDurationFrames;
+    public int elongatedBattleDurationFrames;
     public int estimatedMillisPerFrame;
 
     public string stageName;
@@ -169,8 +170,8 @@ public class Room {
         curDynamicsRenderFrameId = 0;
         lastForceResyncedRdfId = 0;
         frameLogEnabled = false; // No longer needed by default
-        int durationSeconds = 60;
-        battleDurationFrames = durationSeconds * BATTLE_DYNAMICS_FPS;
+        battleDurationFrames = 0;
+        elongatedBattleDurationFrames = 0;
         estimatedMillisPerFrame = (int)Math.Ceiling(1000.0f/BATTLE_DYNAMICS_FPS); // ceiling to dilute the framerate on server 
         stageName = "Dungeon";
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
@@ -307,8 +308,9 @@ public class Room {
         }
     }
 
-    public void OnPlayerDisconnected(int playerId) {
+    public async void OnPlayerDisconnected(int playerId) {
         // [WARNING] Unlike the Golang version, Room.OnDisconnected here is only triggered AFTER "signalToCloseConnOfThisPlayerCapture.Cancel()".
+        bool shouldDismiss = false;
         joinerLock.WaitOne();
         try {
             Player? thatPlayer;
@@ -337,7 +339,7 @@ public class Room {
 
                     players.Remove(playerId);
                     if (0 == effectivePlayerCount) {
-                        Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
+                        shouldDismiss = true;
                     }
                     _logger.LogInformation("OnPlayerDisconnected finished: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
                     break;
@@ -349,6 +351,12 @@ public class Room {
             }
         } finally {
             joinerLock.ReleaseMutex();
+        }
+
+        if (shouldDismiss) {
+            await DismissBattleAsync();
+            Interlocked.Exchange(ref state, ROOM_STATE_IDLE);
+            _roomManager.Push(calRoomScore(), this);
         }
     }
 
@@ -429,6 +437,7 @@ public class Room {
             return false;
         }
         battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
+        elongatedBattleDurationFrames = (battleDurationFrames << 1);
         bool shouldTryToStartBattle = true;
         var targetPlayerBattleState = Interlocked.Read(ref targetPlayer.BattleState);
         _logger.LogInformation("OnPlayerBattleColliderAcked-before: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
@@ -591,7 +600,7 @@ public class Room {
 
                     if (PLAYER_BATTLE_STATE_READDED_BATTLE_COLLIDER_ACKED == playerBattleState) {
                         if (backendDynamicsEnabled && shouldResync) {
-                            _logger.LogInformation(String.Format("[readded-resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
+                            //_logger.LogInformation(String.Format("[readded-resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: playerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, player.CharacterDownsync.JoinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count));
                         }
                         Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
                     }
@@ -678,7 +687,7 @@ public class Room {
         joinerLock.WaitOne();
         try {
             var nowRoomState = Interlocked.Read(ref state);
-            if (ROOM_STATE_IN_SETTLEMENT != nowRoomState) {
+            if (ROOM_STATE_IN_SETTLEMENT != nowRoomState && ROOM_STATE_WAITING != nowRoomState) {
                 return;
             }
 
@@ -711,7 +720,8 @@ public class Room {
 
             effectivePlayerCount = 0; // guaranteed to succeed at the end of "dismiss"
             participantChangeId = 0;
-            battleDurationFrames = 10 * BATTLE_DYNAMICS_FPS;
+            battleDurationFrames = 0;
+            elongatedBattleDurationFrames = 0;
 
             joinIndexRemap = new Dictionary<int, int>();
         } finally {
@@ -756,7 +766,8 @@ public class Room {
             foreach (var (_, watchdog) in playerActiveWatchdogDict) {
                 watchdog.Kick();
             }
-            while (renderFrameId <= battleDurationFrames) {
+
+            while (renderFrameId <= elongatedBattleDurationFrames) {
                 nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 var stCalculation = nowMillis;
                 nowRoomState = Interlocked.Read(ref state);
@@ -766,50 +777,54 @@ public class Room {
 
                 nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 var totalElapsedMillis = nowMillis - battleStartedAt;
-
-                int nextRenderFrameId = (int)((totalElapsedMillis + estimatedMillisPerFrame - 1) / estimatedMillisPerFrame); // fast ceiling
-
-                int toSleepMillis = (estimatedMillisPerFrame >> 1); // Sleep half-frame time by default
-
-                if (nextRenderFrameId > renderFrameId) {
-                    if (0 == renderFrameId) {
-                        var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
-                        if (!ok1 || null == startRdf) {
-                            throw new ArgumentNullException(String.Format("OnPlayerBattleColliderAcked-post-downsync: No existing startRdf for roomId={0}, roomState={1}, capacity={2}, effectivePlayerCount={3}; now renderBuffer: {4}", id, state, capacity, effectivePlayerCount, renderBuffer.toSimpleStat()));
+                
+                int toSleepMillis = estimatedMillisPerFrame;
+                if (curDynamicsRenderFrameId >= battleDurationFrames) {
+                    // Do nothing, just sleep...
+                } else {
+                    int nextRenderFrameId = (int)((totalElapsedMillis + estimatedMillisPerFrame - 1) / estimatedMillisPerFrame); // fast ceiling
+                    toSleepMillis = (estimatedMillisPerFrame >> 1); // Sleep half-frame time by default
+                    if (nextRenderFrameId > renderFrameId) {
+                        if (0 == renderFrameId) {
+                            var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
+                            if (!ok1 || null == startRdf) {
+                                throw new ArgumentNullException(String.Format("OnPlayerBattleColliderAcked-post-downsync: No existing startRdf for roomId={0}, roomState={1}, capacity={2}, effectivePlayerCount={3}; now renderBuffer: {4}", id, state, capacity, effectivePlayerCount, renderBuffer.toSimpleStat()));
+                            }
+                            var tList = new List<Task>();
+                            // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
+                            
+                            foreach (var (playerId, player) in players) {
+                                tList.Add(sendSafelyAsync(startRdf, null, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
+                            }
+                            await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
+                            _logger.LogInformation("In `battleMainLoop` for roomId={0} sent out startRdf with {1} bytes", id, startRdf.ToByteArray().Length);
                         }
-                        var tList = new List<Task>();
-                        // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
+
+                        int prevRenderFrameId = renderFrameId;
+                        renderFrameId = nextRenderFrameId;
                         
-                        foreach (var (playerId, player) in players) {
-                            tList.Add(sendSafelyAsync(startRdf, null, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
+                        ulong dynamicsDuration = 0ul;
+                        // Prefab and buffer backend inputFrameDownsync
+                        if (backendDynamicsEnabled) {
+                            doBattleMainLoopPerTickBackendDynamicsWithProperLocking(prevRenderFrameId, ref dynamicsDuration);
+                            if (curDynamicsRenderFrameId >= battleDurationFrames) {
+                                 int oldElongatedBattleDurationFrame = elongatedBattleDurationFrames; 
+                                 int proposedElongatedBattleDurationFrame = (renderFrameId + 3*BATTLE_DYNAMICS_FPS); // [WARNING] Now that CONFIRMED LAST INPUT FRAMES from all players are received, we shouldn't be awaiting too long from here on.
+                                 elongatedBattleDurationFrames = oldElongatedBattleDurationFrame < proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
+                                _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} just surpassed battleDurationFrames={2}, elongating per required: renderFrameId={3}, oldElongatedBattleDurationFrame={4}, newElongatedBattleDurationFrames={5}", id, curDynamicsRenderFrameId, battleDurationFrames, renderFrameId, oldElongatedBattleDurationFrame, elongatedBattleDurationFrames);
+                            }
                         }
-                        await Task.WhenAll(tList); // Run the async network I/O tasks in parallel
-                        _logger.LogInformation("In `battleMainLoop` for roomId={0} sent out startRdf with {1} bytes", id, startRdf.ToByteArray().Length);
-                    }
 
-                    int prevRenderFrameId = renderFrameId;
-                    renderFrameId = nextRenderFrameId;
-                    
-                    ulong dynamicsDuration = 0ul;
-                    // Prefab and buffer backend inputFrameDownsync
-                    if (backendDynamicsEnabled) {
-                        doBattleMainLoopPerTickBackendDynamicsWithProperLocking(prevRenderFrameId, ref dynamicsDuration);
+                        var elapsedInCalculation = (DateTimeOffset.Now.ToUnixTimeMilliseconds() - stCalculation);
+                        toSleepMillis = (int)(estimatedMillisPerFrame - elapsedInCalculation);
+                        if (0 > toSleepMillis) toSleepMillis = 0; 
                     }
-
-                    var elapsedInCalculation = (DateTimeOffset.Now.ToUnixTimeMilliseconds() - stCalculation);
-                    toSleepMillis = (int)(estimatedMillisPerFrame - elapsedInCalculation);
-                    if (0 > toSleepMillis) toSleepMillis = 0; 
                 }
 
                 await Task.Delay(toSleepMillis);
             }
 
-            if (!type3ForceConfirmationEnabled) {
-                _logger.LogInformation("type#3 forceConfirmation is disabled, awaiting extra time before backend settlement for roomId={0} @renderFrameId={1}", id, renderFrameId);
-                await Task.Delay(10*1000);
-            }
-
-            _logger.LogInformation("Times up, will settle `battleMainLoopActionAsync` for roomId={0} @renderFrameId={1}", id, renderFrameId);
+            _logger.LogInformation("Times up, will settle `battleMainLoopActionAsync` for roomId={0} @renderFrameId={1}, elongatedBattleDurationFrames={2}", id, renderFrameId, elongatedBattleDurationFrames);
         } catch (Exception ex) {
             _logger.LogError(ex, "Error running battleMainLoopActionAsync for roomId={0}", id);
         } finally {
@@ -888,7 +903,7 @@ public class Room {
             var clientInputFrameId = inputFrameUpsync.InputFrameId;
             if (clientInputFrameId < inputBuffer.StFrameId) {
                 // The updates to "inputBuffer.StFrameId" is monotonically increasing, thus if "clientInputFrameId < inputBuffer.StFrameId" at any moment of time, it is obsolete in the future.
-                _logger.LogInformation("Omitting obsolete inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
+                //_logger.LogInformation("Omitting obsolete inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
                 continue;
             }
             if (clientInputFrameId < player.LastConsecutiveRecvInputFrameId) {
@@ -905,7 +920,7 @@ public class Room {
             int advanceGap = (clientInputFrameId > inputBuffer.EdFrameId) ? (clientInputFrameId - inputBuffer.EdFrameId) : 0;  
             bool tooAdvanced = (0 < advanceGap && inputBuffer.StFrameId + advanceGap >= nextToUseIfdId);
             if (tooAdvanced) {
-                _logger.LogWarning("Dropping too advanced inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}; is this player cheating?", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
+                //_logger.LogWarning("Dropping too advanced inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}; is this player cheating?", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
                 continue;
             }
             // by now "clientInputFrameId <= inputBuffer.EdFrameId"
@@ -1471,9 +1486,11 @@ public class Room {
                     var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
                     downsyncToAllPlayers(inputBufferSnapshot);
                     lastForceResyncedRdfId = renderFrameId;
+                    /*
                     if (null != inputBufferSnapshot) {
                         _logger.LogInformation(String.Format("[no forceConfirmation, just resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}", inputBufferSnapshot.RefRenderFrameId, snapshotStFrameId, lastAllConfirmedInputFrameId, id, renderFrameId, curDynamicsRenderFrameId));
                     }
+                    */
                 }
             }
         } finally {

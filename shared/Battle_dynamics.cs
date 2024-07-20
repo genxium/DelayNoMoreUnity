@@ -2973,7 +2973,7 @@ namespace shared {
 
             if (MAGIC_EVTSUB_ID_NONE != configFromTiled.PublishingToEvtSubIdUponExhaust && (0 <= configFromTiled.PublishingToEvtSubIdUponExhaust && configFromTiled.PublishingToEvtSubIdUponExhaust < nextRenderFrame.EvtSubsArr.Count)) {
                 var nextExhaustEvtSub = nextRenderFrame.EvtSubsArr[configFromTiled.PublishingToEvtSubIdUponExhaust - 1];
-                logger.LogInfo(String.Format("@rdfId={0}, publishing to nextExhaustEvtSub={3} from trigger local id = {1}, publishing evtMask = {2}", rdfId, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust, nextExhaustEvtSub));
+                //logger.LogInfo(String.Format("@rdfId={0}, publishing to nextExhaustEvtSub={3} from trigger local id = {1}, publishing evtMask = {2}", rdfId, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.ConfigFromTiled.PublishingEvtMaskUponExhaust, nextExhaustEvtSub));
 
                 nextExhaustEvtSub.FulfilledEvtMask |= configFromTiled.PublishingEvtMaskUponExhaust;
                 // [WARNING] DON'T check fulfillment or update "fulfilledEvtSubscriptionSetMask" here, leave it to the next "Step(...)" and we'll be more clear on that "fulfilledEvtSubscriptionSetMask obtained during assignment" only impacts "_calcTriggerReactions" within the same "Step(...)"
