@@ -360,12 +360,6 @@ public class OnlineMapController : AbstractMapController {
     protected override int chaseRolledbackRdfs() {
         int nextChaserRenderFrameId = base.chaseRolledbackRdfs();
         if (nextChaserRenderFrameId == playerRdfId) { 
-            if (playerRdfId >= battleDurationFrames) {
-                var (rdfAllConfirmed, _) = isRdfAllConfirmed(playerRdfId, inputBuffer, roomCapacity);
-                if (rdfAllConfirmed) {
-                    timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync = true;
-                }
-            }
             NetworkDoctor.Instance.LogChasedToPlayerRdfId();
         }
         return nextChaserRenderFrameId;
@@ -423,24 +417,11 @@ public class OnlineMapController : AbstractMapController {
 
             // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
             chaseRolledbackRdfs();
-            /*
-            int nextChaserRenderFrameId = chaseRolledbackRdfs();
-            if (nextChaserRenderFrameId == playerRdfId) {
-                var (ok, latestPlayerRdf) = renderBuffer.GetByFrameId(playerRdfId);
-                if (ok && null != latestPlayerRdf) {
-                    applyRoomDownsyncFrameDynamics(latestPlayerRdf, null);
-                }
-            }
-            */
-            NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
-
-            if (shouldLockStep) {
-                NetworkDoctor.Instance.LogLockedStepCnt();
-                shouldLockStep = false;
-                return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
-            }
-
             if (localTimerEnded) {
+                var (rdfAllConfirmed, _) = isRdfAllConfirmed(playerRdfId, inputBuffer, roomCapacity);
+                if (rdfAllConfirmed) {
+                    timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync = true;
+                }
                 if (!timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync && 0 < timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync) {
                     // TODO: Popup some GUI hint to tell the player that we're awaiting downsync only, as the local "playerRdfId" is monotonically increasing, there's no way to rewind and change any input from here!
                     timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync -= 16; // hardcoded for now
@@ -449,6 +430,15 @@ public class OnlineMapController : AbstractMapController {
                 }
                 return;
             }
+
+            NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
+
+            if (shouldLockStep) {
+                NetworkDoctor.Instance.LogLockedStepCnt();
+                shouldLockStep = false;
+                return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
+            }
+
             doUpdate();
             
             {
@@ -468,7 +458,7 @@ public class OnlineMapController : AbstractMapController {
                 networkInfoPanel.SetValues(sendingFps, (localRequiredIfdId > lastAllConfirmedInputFrameId ? localRequiredIfdId - lastAllConfirmedInputFrameId : 0), peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
             }
 
-            if (playerRdfId >= battleDurationFrames) {
+            if (playerRdfId > battleDurationFrames) {
                 localTimerEnded = true;
             } else {
                 readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);    
