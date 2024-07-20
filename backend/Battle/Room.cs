@@ -27,6 +27,7 @@ public class Room {
 
     public int battleDurationFrames;
     public int elongatedBattleDurationFrames;
+    public bool elongatedBattleDurationFramesShortenedOnce;
     public int estimatedMillisPerFrame;
 
     public string stageName;
@@ -172,6 +173,7 @@ public class Room {
         frameLogEnabled = false; // No longer needed by default
         battleDurationFrames = 0;
         elongatedBattleDurationFrames = 0;
+        elongatedBattleDurationFramesShortenedOnce = false;
         estimatedMillisPerFrame = (int)Math.Ceiling(1000.0f/BATTLE_DYNAMICS_FPS); // ceiling to dilute the framerate on server 
         stageName = "Dungeon";
         maxChasingRenderFramesPerUpdate = 9; // Don't set this value too high to avoid exhausting frontend CPU within a single frame, roughly as the "turn-around frames to recover" is empirically OK                                                    
@@ -437,7 +439,7 @@ public class Room {
             return false;
         }
         battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
-        elongatedBattleDurationFrames = (battleDurationFrames << 1);
+        elongatedBattleDurationFrames = 3*(battleDurationFrames >> 1);
         bool shouldTryToStartBattle = true;
         var targetPlayerBattleState = Interlocked.Read(ref targetPlayer.BattleState);
         _logger.LogInformation("OnPlayerBattleColliderAcked-before: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
@@ -722,6 +724,7 @@ public class Room {
             participantChangeId = 0;
             battleDurationFrames = 0;
             elongatedBattleDurationFrames = 0;
+            elongatedBattleDurationFramesShortenedOnce = false;
 
             joinIndexRemap = new Dictionary<int, int>();
         } finally {
@@ -806,11 +809,17 @@ public class Room {
                         ulong dynamicsDuration = 0ul;
                         // Prefab and buffer backend inputFrameDownsync
                         if (backendDynamicsEnabled) {
+                            int oldCurDynamicsRenderFrameId = curDynamicsRenderFrameId;
                             doBattleMainLoopPerTickBackendDynamicsWithProperLocking(prevRenderFrameId, ref dynamicsDuration);
-                            if (curDynamicsRenderFrameId+1 >= battleDurationFrames) {
+                            if (oldCurDynamicsRenderFrameId < curDynamicsRenderFrameId && curDynamicsRenderFrameId+(int)(4UL << INPUT_SCALE_FRAMES) >= battleDurationFrames) {
                                  int oldElongatedBattleDurationFrame = elongatedBattleDurationFrames; 
                                  int proposedElongatedBattleDurationFrame = (renderFrameId + 3*BATTLE_DYNAMICS_FPS); // [WARNING] Now that CONFIRMED LAST INPUT FRAMES from all players are received, we shouldn't be awaiting too long from here on.
-                                 elongatedBattleDurationFrames = oldElongatedBattleDurationFrame < proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
+                                 if (false == elongatedBattleDurationFramesShortenedOnce) {
+                                     elongatedBattleDurationFrames = oldElongatedBattleDurationFrame < proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
+                                     elongatedBattleDurationFramesShortenedOnce = true;
+                                 } else {
+                                     elongatedBattleDurationFrames = oldElongatedBattleDurationFrame > proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
+                                 }
                                 _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} just surpassed battleDurationFrames={2}, elongating per required: renderFrameId={3}, oldElongatedBattleDurationFrame={4}, newElongatedBattleDurationFrames={5}", id, curDynamicsRenderFrameId, battleDurationFrames, renderFrameId, oldElongatedBattleDurationFrame, elongatedBattleDurationFrames);
                             }
                         }

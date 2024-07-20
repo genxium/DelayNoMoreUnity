@@ -22,7 +22,7 @@ public class OnlineMapController : AbstractMapController {
     slowDown:              | no      | no        | yes         | yes         | yes  ...  | no
     freeze:                | no      | no        | no          | no          | yes  ...  | yes
     */
-    private int slowDownIfdLagThreshold = 1;
+    private int slowDownIfdLagThreshold = 2;
     private int freezeIfdLagThresHold = 3;
     private int acIfdLagThresHold = 8; // "ac == all-confirmed"
     public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).

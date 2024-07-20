@@ -1465,16 +1465,29 @@ public abstract class AbstractMapController : MonoBehaviour {
         battleState = ROOM_STATE_STOPPED;
         
         // Reset the preallocated
-        Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
-        Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
-        if (frameLogEnabled) {
-            pushbackFrameLogBuffer.Clear();
+        if (null != lastIndividuallyConfirmedInputFrameId) {
+            Array.Fill<int>(lastIndividuallyConfirmedInputFrameId, -1);
         }
-        residueCollided.Clear();
-        Array.Fill<ulong>(prefabbedInputListHolder, 0);
-        resetBattleResult(ref confirmedBattleResult);
-
-        iptmgr.ResetSelf();
+        if (null != lastIndividuallyConfirmedInputList) {
+            Array.Fill<ulong>(lastIndividuallyConfirmedInputList, 0);
+        }
+        if (frameLogEnabled) {
+            if (null != pushbackFrameLogBuffer) {
+                pushbackFrameLogBuffer.Clear();
+            } 
+        }
+        if (null != residueCollided) {
+            residueCollided.Clear();
+        } 
+        if (null != prefabbedInputListHolder) {
+            Array.Fill<ulong>(prefabbedInputListHolder, 0);
+        }
+        if (null != confirmedBattleResult) {
+            resetBattleResult(ref confirmedBattleResult);
+        }
+        if (null != iptmgr) {
+            iptmgr.ResetSelf();
+        }
 
         Debug.LogWarningFormat("onBattleStopped; now battleState={0}", battleState);
     }
