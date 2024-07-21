@@ -483,7 +483,7 @@ namespace shared {
             ExplosionSfxName = "Explosion2",
             MhType = MultiHitType.FromPrevHitActual,
             MhVanishOnMeleeHit = true,
-            CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
+            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
         private static BulletConfig SlashNovaStarterBullet = new BulletConfig(SlashNovaRepeatingBullet).SetStartupFrames(18).SetHitboxOffsets((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO)).SetSpeed(SlashNovaRepeatingBullet.SpeedIfNotHit)
@@ -522,7 +522,7 @@ namespace shared {
             MhType = MultiHitType.FromPrevHitActual,
             MhVanishOnMeleeHit = false, // Makes it more powerful on ground than the SlashNova
             RemainsUponHit = true,
-            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX, 
+            CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX, 
             BuffConfig = ShortFreezer,
         };
 

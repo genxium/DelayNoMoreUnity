@@ -295,6 +295,14 @@ namespace shared {
                     continue;
                 }
 
+                if (overlapResult.OverlapMag < CLAMPABLE_COLLISION_SPACE_MAG) {
+                    /*
+                    [WARNING] 
+                    If I didn't clamp "pushbackX & pushbackY" here, there could be disagreed shape overlapping between backend and frontend, see comments around "shapeOverlappedOtherChCnt" in "Battle_dynamics". 
+                    */
+                    continue;
+                }
+
                 float normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
                 bool isAlongForwardPropagation = (0 <= bullet.VelX * (bCollider.X-aCollider.X)); // [WARNING] Character handles this (equivalently) outside of "calcHardPushbacksNormsForCharacter", but for bullets I temporarily found it more convenient handling here, there might be some room for enhancement. 
                 bool isSqueezer = (-SNAP_INTO_PLATFORM_THRESHOLD > normAlignmentWithGravity);
@@ -415,6 +423,14 @@ namespace shared {
                     continue;
                 }
 
+                if (overlapResult.OverlapMag < CLAMPABLE_COLLISION_SPACE_MAG) {
+                    /*
+                    [WARNING] 
+                    If I didn't clamp "pushbackX & pushbackY" here, there could be disagreed shape overlapping between backend and frontend, see comments around "shapeOverlappedOtherChCnt" in "Battle_dynamics". 
+                    */
+                    continue;
+                }
+
                 // Same polarity
                 if (overlapResult.OverlapMag > primaryOverlapMag) {
                     primaryOverlapIndex = retCnt;
@@ -487,6 +503,14 @@ namespace shared {
                 var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, false, ref overlapResult);
 
                 if (!overlapped) {
+                    continue;
+                }
+
+                if (overlapResult.OverlapMag < CLAMPABLE_COLLISION_SPACE_MAG) {
+                    /*
+                    [WARNING] 
+                    If I didn't clamp "pushbackX & pushbackY" here, there could be disagreed shape overlapping between backend and frontend, see comments around "shapeOverlappedOtherChCnt" in "Battle_dynamics". 
+                    */
                     continue;
                 }
 

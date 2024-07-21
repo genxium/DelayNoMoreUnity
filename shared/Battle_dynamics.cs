@@ -1580,6 +1580,14 @@ namespace shared {
                     var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, false, false, ref overlapResult);
                     if (!overlapped) continue;
 
+                    if (overlapResult.OverlapMag < CLAMPABLE_COLLISION_SPACE_MAG) {
+                        /*
+                        [WARNING] 
+                        If I didn't clamp "pushbackX & pushbackY" here, there could be disagreed shape overlapping between backend and frontend, see comments around "shapeOverlappedOtherChCnt" in "Battle_dynamics". 
+                        */
+                        continue;
+                    }
+
                     switch (bCollider.Data) {
                         case TriggerColliderAttr atkedTriggerColliderAttr:
                             var atkedTrigger = currRenderFrame.TriggersArr[atkedTriggerColliderAttr.TriggerLocalId];
