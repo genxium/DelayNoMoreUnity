@@ -1,4 +1,4 @@
-In the nonpublic version, an extra render-only position interpolation trick is used for smoother graphical experience during bad network.
+In the nonpublic version, an extra _render-only(i.e. no change to colliders) position interpolation_ trick is used for smoother graphical experience during bad network.
 
 ```c#
 public void applyRoomDownsyncFrameDynamics(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf) {
