@@ -2331,7 +2331,7 @@ namespace shared {
                 thatCharacterInNextFrame.PrevWasCrouching = isCrouching(currCharacterDownsync.CharacterState);
 
                 // Remove any active skill if not attacking
-                if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState) && Dashing != thatCharacterInNextFrame.CharacterState) {
+                if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState) && Dashing != thatCharacterInNextFrame.CharacterState && Sliding != thatCharacterInNextFrame.CharacterState) {
                     thatCharacterInNextFrame.ActiveSkillId = NO_SKILL;
                     thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
                 }
