@@ -1315,11 +1315,10 @@ namespace shared {
                     //logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));                         
                 }
 
-                /*
-                if (1 == currCharacterDownsync.JoinIndex && !landedOnGravityPushback && !currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY) {
-                    logger.LogInfo(String.Format("Rdf.Id={0}, character vx={1},vy={7} slipped with aShape={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, touchCells=\n{6}", currRenderFrame.Id, currCharacterDownsync.VirtualGridX, aShape.ToString(false), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), aCollider.TouchingCellsStaticColliderStr(), currCharacterDownsync.VirtualGridY));
+                if (!landedOnGravityPushback && !currCharacterDownsync.InAir && 0 > thatCharacterInNextFrame.VelY) {
+                    //logger.LogInfo(String.Format("Rdf.Id={0}, character vx={1},vy={7} slipped with aShape={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, touchCells=\n{6}", currRenderFrame.Id, currCharacterDownsync.VirtualGridX, aShape.ToString(false), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), aCollider.TouchingCellsStaticColliderStr(), currCharacterDownsync.VirtualGridY));
+                    thatCharacterInNextFrame.VelY = 0;
                 }
-                */
 
                 if (landedOnGravityPushback) {
                     if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
