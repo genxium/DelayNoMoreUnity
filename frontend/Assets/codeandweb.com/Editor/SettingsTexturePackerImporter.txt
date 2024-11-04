@@ -4,17 +4,38 @@ tpsheetFileNames:
 - Assets/Resources/Bullets/Bullets.tpsheet
 - Assets/Resources/Characters/Bat/Bat.tpsheet
 - Assets/Resources/Characters/BladeGirl/BladeGirl.tpsheet
+- Assets/Resources/Characters/Boar/Boar.tpsheet
 - Assets/Resources/Characters/BoarWarrior/BoarWarrior.tpsheet
+- Assets/Resources/Characters/BountyHunter/BountyHunter.tpsheet
+- Assets/Resources/Characters/Brick1/Brick1.tpsheet
+- Assets/Resources/Characters/BrightWitch/BrightWitch.tpsheet
+- Assets/Resources/Characters/DarkBeamerTower/DarkBeamerTower.tpsheet
 - Assets/Resources/Characters/DemonFireSlime/DemonFireSlime.tpsheet
+- Assets/Resources/Characters/Ekrail/Ekrail.tpsheet
 - Assets/Resources/Characters/FireBat/FireBat.tpsheet
 - Assets/Resources/Characters/FireSwordMan/FireSwordMan.tpsheet
+- Assets/Resources/Characters/FireTotem/FireTotem.tpsheet
 - Assets/Resources/Characters/Goblin/Goblin.tpsheet
+- Assets/Resources/Characters/HeavyGuardRed/HeavyGuardRed.tpsheet
+- Assets/Resources/Characters/LightGuardRed/LightGuardRed.tpsheet
+- Assets/Resources/Characters/LightSpearWoman/LightSpearWoman.tpsheet
 - Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.tpsheet
+- Assets/Resources/Characters/PinkPig/PinkPig.tpsheet
+- Assets/Resources/Characters/RiderGuardRed/RiderGuardRed.tpsheet
+- Assets/Resources/Characters/RidleyDrake/RidleyDrake.tpsheet
 - Assets/Resources/Characters/SkeleArcher/SkeleArcher.tpsheet
+- Assets/Resources/Characters/SpearWoman/SpearWoman.tpsheet
+- Assets/Resources/Characters/StoneGolem/StoneGolem.tpsheet
 - Assets/Resources/Characters/SwordMan/SwordMan.tpsheet
+- Assets/Resources/Characters/VillagerFemale1/VillagerFemale1.tpsheet
+- Assets/Resources/Characters/VillagerFemale2/VillagerFemale2.tpsheet
+- Assets/Resources/Characters/VillagerMale1/VillagerMale1.tpsheet
+- Assets/Resources/Characters/VillagerMale2/VillagerMale2.tpsheet
 - Assets/Resources/Characters/WitchGirl/WitchGirl.tpsheet
 - Assets/Resources/Doors/Door.tpsheet
+- Assets/Resources/PixelVfx/PixelPlasmaVfx.tpsheet
 - Assets/Resources/PixelVfx/PixelVfx.tpsheet
+- Assets/Resources/Traps/Machinery.tpsheet
 - Assets/Resources/Traps/Spike.tpsheet
 - Assets/Resources/Triggers/Switch/Switch.tpsheet
 - Assets/Resources/UI/Controller.tpsheet
@@ -25,17 +46,38 @@ textureFileNames:
 - Assets/Resources/Bullets/Bullets.png
 - Assets/Resources/Characters/Bat/Bat.png
 - Assets/Resources/Characters/BladeGirl/BladeGirl.png
+- Assets/Resources/Characters/Boar/Boar.png
 - Assets/Resources/Characters/BoarWarrior/BoarWarrior.png
+- Assets/Resources/Characters/BountyHunter/BountyHunter.png
+- Assets/Resources/Characters/Brick1/Brick1.png
+- Assets/Resources/Characters/BrightWitch/BrightWitch.png
+- Assets/Resources/Characters/DarkBeamerTower/DarkBeamerTower.png
 - Assets/Resources/Characters/DemonFireSlime/DemonFireSlime.png
+- Assets/Resources/Characters/Ekrail/Ekrail.png
 - Assets/Resources/Characters/FireBat/FireBat.png
 - Assets/Resources/Characters/FireSwordMan/FireSwordMan.png
+- Assets/Resources/Characters/FireTotem/FireTotem.png
 - Assets/Resources/Characters/Goblin/Goblin.png
+- Assets/Resources/Characters/HeavyGuardRed/HeavyGuardRed.png
+- Assets/Resources/Characters/LightGuardRed/LightGuardRed.png
+- Assets/Resources/Characters/LightSpearWoman/LightSpearWoman.png
 - Assets/Resources/Characters/MagSwordGirl/MagSwordGirl.png
+- Assets/Resources/Characters/PinkPig/PinkPig.png
+- Assets/Resources/Characters/RiderGuardRed/RiderGuardRed.png
+- Assets/Resources/Characters/RidleyDrake/RidleyDrake.png
 - Assets/Resources/Characters/SkeleArcher/SkeleArcher.png
+- Assets/Resources/Characters/SpearWoman/SpearWoman.png
+- Assets/Resources/Characters/StoneGolem/StoneGolem.png
 - Assets/Resources/Characters/SwordMan/SwordMan.png
+- Assets/Resources/Characters/VillagerFemale1/VillagerFemale1.png
+- Assets/Resources/Characters/VillagerFemale2/VillagerFemale2.png
+- Assets/Resources/Characters/VillagerMale1/VillagerMale1.png
+- Assets/Resources/Characters/VillagerMale2/VillagerMale2.png
 - Assets/Resources/Characters/WitchGirl/WitchGirl.png
 - Assets/Resources/Doors/Door.png
+- Assets/Resources/PixelVfx/PixelPlasmaVfx.png
 - Assets/Resources/PixelVfx/PixelVfx.png
+- Assets/Resources/Traps/Machinery.png
 - Assets/Resources/Traps/Spike.png
 - Assets/Resources/Triggers/Switch/Switch.png
 - Assets/Resources/UI/Controller.png
@@ -43,6 +85,27 @@ textureFileNames:
 - Assets/Resources/UI/ShaperCard.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 - 
 - 
 - 

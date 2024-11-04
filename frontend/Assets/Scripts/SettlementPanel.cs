@@ -20,7 +20,7 @@ public class SettlementPanel : MonoBehaviour {
         }
     }
 
-    public void PlaySettlementAnim(bool success) {
+    public virtual void PlaySettlementAnim(bool success) {
         if (success) {
             failed.gameObject.SetActive(false);
             finished.gameObject.SetActive(true);
@@ -35,6 +35,7 @@ public class SettlementPanel : MonoBehaviour {
     }
 
     public void OnBtnConfirm(InputAction.CallbackContext context) {
+        Debug.LogFormat("SettlementPanel.OnBtnConfirm with currentPanelEnabled={0}", currentPanelEnabled);
         if (!currentPanelEnabled) return;
         bool rising = context.ReadValueAsButton();
         if (rising && InputActionPhase.Performed == context.phase) {

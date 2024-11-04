@@ -1,0 +1,1729 @@
+fileFormatVersion: 2
+guid: cddbdd8028772f944abc31b6eb523cb8
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Avatar_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 451
+        width: 64
+        height: 59
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5423729}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f14af4bbdb8efc74cb02b2d24c6e9f53
+      internalID: -112304218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-0
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 284
+        width: 40
+        height: 41
+      alignment: 9
+      pivot: {x: 0.325, y: 0.487805}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56ba971448cf57649a4d2bd75c5fec14
+      internalID: 1573237741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-1
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 328
+        width: 42
+        height: 42
+      alignment: 9
+      pivot: {x: 0.333333, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5cc026326ec1e3459d5651dcb0c2a46
+      internalID: -4971936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-10
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 317
+        width: 25
+        height: 53
+      alignment: 9
+      pivot: {x: 0.48, y: 0.396226}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 339a7e974ec5e344d8593d14dae8d2d6
+      internalID: 1170702911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-11
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 150
+        width: 25
+        height: 50
+      alignment: 9
+      pivot: {x: 0.48, y: 0.42}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c5d2c33df7fbf34295d7091ec05120d
+      internalID: 2021092418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-12
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 454
+        width: 58
+        height: 56
+      alignment: 9
+      pivot: {x: 0.413793, y: 0.375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 328fe0eeefe93d34bb5fa71e624e5353
+      internalID: -1344416544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-13
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 455
+        width: 50
+        height: 55
+      alignment: 9
+      pivot: {x: 0.4, y: 0.381818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 754ddeb2d85c7b74bbf43be9f59d3e7e
+      internalID: 742909006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-14
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 269
+        width: 42
+        height: 43
+      alignment: 9
+      pivot: {x: 0.380952, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 875f5eeca7397c641a83394f99903f4c
+      internalID: 541749638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-15
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 270
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.289474, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58e3714e952c73b44b277661ca543352
+      internalID: 881521584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-16
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 349
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.340909, y: 0.488372}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12b643399252e16438e1c35216643dc9
+      internalID: 931514538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-17
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 437
+        width: 49
+        height: 41
+      alignment: 9
+      pivot: {x: 0.367347, y: 0.487805}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cfe1b3a99fa5b3940aaea9a97f1cd723
+      internalID: -151080150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-18
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 290
+        width: 42
+        height: 41
+      alignment: 9
+      pivot: {x: 0.333333, y: 0.487805}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33bb87e75627cdf4fa893762b9a00457
+      internalID: 101743162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-19
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 295
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.325, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34f95e594117eed45b62a9d8aef7685e
+      internalID: -473842928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-2
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 363
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.340909, y: 0.488372}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adf8d476ab1d8b647bcea5da35e1255d
+      internalID: 2084797408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-20
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 415
+        width: 48
+        height: 39
+      alignment: 9
+      pivot: {x: 0.354167, y: 0.487179}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a104a052ab2f0ef4498844ab0a09cce4
+      internalID: 1153997580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-21
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 368
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.340909, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e76828c78f8281640a6d729c64059948
+      internalID: 588303656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-22
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 349
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.340909, y: 0.488372}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05092b75fb23dce4ca8e003b7aa11530
+      internalID: 1369776292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-23
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 374
+        width: 46
+        height: 42
+      alignment: 9
+      pivot: {x: 0.347826, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 269d1c1696a2759498a4a93490ff6005
+      internalID: 610454895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-24
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 370
+        width: 46
+        height: 41
+      alignment: 9
+      pivot: {x: 0.347826, y: 0.487805}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a3e47e2b6011764ab1c86f2c728ed5a
+      internalID: 410430544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-25
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 323
+        width: 44
+        height: 41
+      alignment: 9
+      pivot: {x: 0.340909, y: 0.487805}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 355dfce61428ef14ba74ef127fb8cb3c
+      internalID: 1532111526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-26
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 318
+        width: 43
+        height: 42
+      alignment: 9
+      pivot: {x: 0.348837, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d82ddded7780b34cb1f19e6633d7a64
+      internalID: -1128095006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-27
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 365
+        width: 22
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60d8347a98e3c1549be52525bac54ff8
+      internalID: 1503049233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-28
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 241
+        width: 22
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66fb5a8fb3eb96f4e9ba877a2b477e99
+      internalID: -1507021839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-29
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 222
+        width: 22
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6859e44c8c4c08c4ab8ca8f9fbcb1dcc
+      internalID: -251283493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-3
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 364
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.340909, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6527a0af40c45d04f91ec21bbb6ba975
+      internalID: 759233938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-30
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 176
+        width: 22
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 829102ec959bed14e95e231920cf636d
+      internalID: 390888101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-31
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 222
+        width: 22
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8747a7978f826149955008cd40f3d76
+      internalID: 1869778254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-32
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 202
+        width: 32
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e1489342f5280044b10e73a8b37609d
+      internalID: 699324778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-33
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 316
+        width: 27
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 837096965bc19f44b9cbc2df51415bd7
+      internalID: -653374337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-34
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 223
+        width: 28
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 960a9ad8556b236489b74d3ffed684fa
+      internalID: 580071383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-35
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 189
+        width: 28
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52bc20c8efb582d4ba6cf428b87be05c
+      internalID: -1824918957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-36
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 323
+        width: 29
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a0def3e16cc6444e9ba38c3fbdc3ad8
+      internalID: -939287665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-37
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 349
+        width: 44
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbd5e5c7802dfc44990dfcad56500e71
+      internalID: -1221072212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-38
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 233
+        width: 24
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1c45fc98d9987a439ea4bd8275ac9cc
+      internalID: -272706397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-39
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 148
+        width: 25
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95a9203a1a52c734d9ec413fdde89307
+      internalID: 305581672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-4
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 329
+        width: 44
+        height: 41
+      alignment: 9
+      pivot: {x: 0.340909, y: 0.487805}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b017c001306e56441ac55543c3b58a9a
+      internalID: 182335397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-40
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 410
+        width: 58
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9434613acf1680b468cd0f179123dd10
+      internalID: -2121548530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-41
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 456
+        width: 50
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c86e8b83bcad744ba9cd8f9d3218873
+      internalID: -282733839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-42
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 341
+        width: 44
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f790bc006d26fd241b1b960315b3638b
+      internalID: -85054271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-43
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 316
+        width: 40
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63fad5ad3d9bfd24d820a329d63a3868
+      internalID: 973750745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-44
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 276
+        width: 29
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40e2da5689823db4a8dc26240e3bf8a6
+      internalID: -1395381922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-45
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 470
+        width: 61
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a577646317a437d4a96420819457df99
+      internalID: -1764966352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-46
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 388
+        width: 54
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdb6399749b024a4fbb20193380a90c5
+      internalID: 1383187671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-47
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 270
+        width: 32
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.79310346}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efd3512ee9c400446a62919e39f90b05
+      internalID: -800736459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-48
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 437
+        width: 31
+        height: 29
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.79310346}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d13fe4bd3c31abc48809a95fd247a9d7
+      internalID: -153758177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-49
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 371
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.79310346}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dec0c480f250827468c6d04e3109fdf3
+      internalID: -1188849957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-5
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 303
+        width: 42
+        height: 42
+      alignment: 9
+      pivot: {x: 0.333333, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce9e06f24f43b9140b2dc75b9f17e639
+      internalID: 2119808769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-50
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 404
+        width: 31
+        height: 29
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.79310346}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1016f66281597ae4db4c16ec35b2806b
+      internalID: 710979567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-51
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 204
+        width: 32
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.79310346}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0097e673aaef7747a8b2f7878b08359
+      internalID: -69219556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-52
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 237
+        width: 33
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8103448}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd4dc2071171c394a8698513827abe66
+      internalID: -595705180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-53
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 349
+        width: 44
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bf1f1a1675e2ca46bd9d31732cdc8b3
+      internalID: 2128815675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-54
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 411
+        width: 48
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42db547f6958eac4d9a298c7ddb1dfc2
+      internalID: 688830022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-55
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 414
+        width: 50
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ded3c9f674fb4204d9380d06c12dae16
+      internalID: -244567181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-56
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 396
+        width: 48
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49478e82a0bb8d14cb198943f1929de8
+      internalID: -1793718243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-57
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 456
+        width: 49
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 764f76792ab226f43898d54e7ee6277d
+      internalID: 346294633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-58
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 420
+        width: 48
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b46685e5276f814a8843a7985833439
+      internalID: -748906103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-59
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 458
+        width: 50
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 417fdca3f2c368041970e18765d1035d
+      internalID: -859961744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-6
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 281
+        width: 39
+        height: 43
+      alignment: 9
+      pivot: {x: 0.320513, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d422850e44751974193a4f7141210a8e
+      internalID: 380177004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-60
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 374
+        width: 48
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78d8ab20aba2f114d877cc36f0a4a38d
+      internalID: -2010957329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-61
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 335
+        width: 44
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34c7cd5dbecb8e14cb5c818b0761498c
+      internalID: 1845663696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-62
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 482
+        width: 54
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1431ac97308303444b5e2ff88016f5e5
+      internalID: -1180396846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-63
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 495
+        width: 54
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46134a0a770a18547be63d0199a1f10f
+      internalID: 285493225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-64
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 495
+        width: 54
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ad458db143f6154586c061eeb1ea7b7
+      internalID: 241753420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-65
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 432
+        width: 55
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 900edc6709422e34e81c2dba315325f6
+      internalID: 521154032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-7
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 270
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.315789, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bfb1ddf790103044b459a26aa084c8b
+      internalID: 2011098209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-8
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 284
+        width: 40
+        height: 41
+      alignment: 9
+      pivot: {x: 0.3, y: 0.512195}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17ed7c4b3bdbf3444b03795f404b48d9
+      internalID: -743286370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red-9
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 277
+        width: 43
+        height: 42
+      alignment: 9
+      pivot: {x: 0.279069, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9f3d25c7f63b7340b6128e30b964b53
+      internalID: 606912484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedRun-0
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 410
+        width: 47
+        height: 41
+      alignment: 9
+      pivot: {x: 0.393617, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1a5bc533812c0f4c9de7d8a90313b60
+      internalID: -1954370300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedRun-1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 251
+        width: 38
+        height: 40
+      alignment: 9
+      pivot: {x: 0.368421, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3231d1d1fc5a7aa4788b33a970c407b7
+      internalID: 1491012132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedRun-2
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 230
+        width: 35
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff91c6adb4de218468a941de9c16b1a2
+      internalID: -1055071473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedRun-3
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 236
+        width: 34
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91b116a1daf574e4185bf3794bf03556
+      internalID: 1078659585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedRun-4
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 470
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1ecdb99412a12e4fab0524171855624
+      internalID: 116243699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedRun-5
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 271
+        width: 39
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f558445f084eb14db15d1ae7ce8c44b
+      internalID: -1527726764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 640c909632f240b41be75abd52a92185
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Avatar_1: -112304218
+      Red-0: 1573237741
+      Red-1: -4971936
+      Red-10: 1170702911
+      Red-11: 2021092418
+      Red-12: -1344416544
+      Red-13: 742909006
+      Red-14: 541749638
+      Red-15: 881521584
+      Red-16: 931514538
+      Red-17: -151080150
+      Red-18: 101743162
+      Red-19: -473842928
+      Red-2: 2084797408
+      Red-20: 1153997580
+      Red-21: 588303656
+      Red-22: 1369776292
+      Red-23: 610454895
+      Red-24: 410430544
+      Red-25: 1532111526
+      Red-26: -1128095006
+      Red-27: 1503049233
+      Red-28: -1507021839
+      Red-29: -251283493
+      Red-3: 759233938
+      Red-30: 390888101
+      Red-31: 1869778254
+      Red-32: 699324778
+      Red-33: -653374337
+      Red-34: 580071383
+      Red-35: -1824918957
+      Red-36: -939287665
+      Red-37: -1221072212
+      Red-38: -272706397
+      Red-39: 305581672
+      Red-4: 182335397
+      Red-40: -2121548530
+      Red-41: -282733839
+      Red-42: -85054271
+      Red-43: 973750745
+      Red-44: -1395381922
+      Red-45: -1764966352
+      Red-46: 1383187671
+      Red-47: -800736459
+      Red-48: -153758177
+      Red-49: -1188849957
+      Red-5: 2119808769
+      Red-50: 710979567
+      Red-51: -69219556
+      Red-52: -595705180
+      Red-53: 2128815675
+      Red-54: 688830022
+      Red-55: -244567181
+      Red-56: -1793718243
+      Red-57: 346294633
+      Red-58: -748906103
+      Red-59: -859961744
+      Red-6: 380177004
+      Red-60: -2010957329
+      Red-61: 1845663696
+      Red-62: -1180396846
+      Red-63: 285493225
+      Red-64: 241753420
+      Red-65: 521154032
+      Red-7: 2011098209
+      Red-8: -743286370
+      Red-9: 606912484
+      RedRun-0: -1954370300
+      RedRun-1: 1491012132
+      RedRun-2: -1055071473
+      RedRun-3: 1078659585
+      RedRun-4: 116243699
+      RedRun-5: -1527726764
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

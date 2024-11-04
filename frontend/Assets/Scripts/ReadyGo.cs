@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using shared;
 
 public class ReadyGo : MonoBehaviour {
     public TMP_Text ready;
@@ -66,8 +67,8 @@ public class ReadyGo : MonoBehaviour {
         int remainingTicks = battleDurationFrames-renderFrameId;
         if (0 >= remainingTicks) remainingTicks = 0;
 
-        int remainingSecs = remainingTicks / 60;
-        int remainingTicksMod = remainingTicks - remainingSecs*60;
+        int remainingSecs = remainingTicks / Battle.BATTLE_DYNAMICS_FPS;
+        int remainingTicksMod = remainingTicks - remainingSecs*Battle.BATTLE_DYNAMICS_FPS;
 
         string remainingSecsStr = string.Format("{0:d2}", remainingSecs);
         string remainingTicksStr = string.Format("{0:d2}", remainingTicksMod);

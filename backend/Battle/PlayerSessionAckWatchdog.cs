@@ -3,36 +3,64 @@
 using System.Threading;
 
 public class PlayerSessionAckWatchdog {
-    private readonly Timer timer;
+    private Timer? timer;
     private readonly int interval; // in milliseconds
     private readonly string onTickMsg;
     private readonly ILogger _logger;
+    public delegate void OnPlayerDisconnectedCbType(int playerId);
+    private int waiveCnt;
 
-    public PlayerSessionAckWatchdog(int aInterval, CancellationTokenSource aCancellationTokenSource, string aOnTickMsg, ILoggerFactory loggerFactory) {
+    public PlayerSessionAckWatchdog(int aInterval, OnPlayerDisconnectedCbType cb, int playerId, string aOnTickMsg, ILoggerFactory loggerFactory) {
         interval = aInterval;
         onTickMsg = aOnTickMsg;
         _logger = loggerFactory.CreateLogger<PlayerSessionAckWatchdog>();
         timer = new Timer(new TimerCallback((s) => {
+            int newWaiveCnt = Interlocked.Decrement(ref waiveCnt);
+            if (0 <= newWaiveCnt) {
+                return;
+            }
             _logger.LogWarning(onTickMsg);
             if (null == s) {
                 return;
             }
-            var cancellationTokenSource = (CancellationTokenSource)s;
-            if (null == cancellationTokenSource) return;
-            if (cancellationTokenSource.IsCancellationRequested) return;
-            cancellationTokenSource.Cancel();
-        }), aCancellationTokenSource, aInterval, Timeout.Infinite);
+            var passedInCb = (OnPlayerDisconnectedCbType)s;
+            if (null == passedInCb) return;
+            passedInCb(playerId);
+        }), cb, aInterval, Timeout.Infinite);
+        waiveCnt = 0;
     }
 
     public void Stop() {
-        timer.Change(Timeout.Infinite, Timeout.Infinite);
+        if (null == timer) return;
+        try {
+            timer.Change(Timeout.Infinite, Timeout.Infinite);
+            Interlocked.Exchange(ref waiveCnt, 0);
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Exception occurred during watchdog stopping.");
+        }
+    }
+
+    public void ExplicitlyDispose() {
+        if (null == timer) return;
+        try {
+            timer.Dispose();
+            timer = null;
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Timer couldn't be disposed for more than once");
+        }
     }
 
     public void Kick() {
+        if (null == timer) return;
         timer.Change(interval, Timeout.Infinite);
+        Interlocked.Exchange(ref waiveCnt, 0);
+    }
+
+    public int incWaiveCnt() {
+        return Interlocked.Exchange(ref waiveCnt, 1);
     }
 
     ~PlayerSessionAckWatchdog() {
-        timer.Dispose();
+        ExplicitlyDispose();
     }
 }

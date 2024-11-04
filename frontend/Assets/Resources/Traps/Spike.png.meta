@@ -132,8 +132,8 @@ TextureImporter:
       name: SpikeblockSteel
       rect:
         serializedVersion: 2
-        x: 64
-        y: 96
+        x: 165
+        y: 21
         width: 64
         height: 32
       alignment: 0
@@ -153,8 +153,8 @@ TextureImporter:
       name: SpikeGroundTrap
       rect:
         serializedVersion: 2
-        x: 64
-        y: 128
+        x: 99
+        y: 29
         width: 64
         height: 32
       alignment: 0
@@ -174,8 +174,8 @@ TextureImporter:
       name: SteelspikeUp
       rect:
         serializedVersion: 2
-        x: 112
-        y: 224
+        x: 219
+        y: 95
         width: 16
         height: 32
       alignment: 0
@@ -195,8 +195,8 @@ TextureImporter:
       name: blockSteel
       rect:
         serializedVersion: 2
-        x: 0
-        y: 80
+        x: 67
+        y: 11
         width: 64
         height: 16
       alignment: 0
@@ -216,8 +216,8 @@ TextureImporter:
       name: SawBig
       rect:
         serializedVersion: 2
-        x: 0
-        y: 160
+        x: 1
+        y: 31
         width: 96
         height: 96
       alignment: 9
@@ -237,8 +237,8 @@ TextureImporter:
       name: SawSmall
       rect:
         serializedVersion: 2
-        x: 0
-        y: 96
+        x: 99
+        y: 63
         width: 64
         height: 64
       alignment: 9
@@ -258,8 +258,8 @@ TextureImporter:
       name: verticalBlockSteel
       rect:
         serializedVersion: 2
-        x: 96
-        y: 192
+        x: 183
+        y: 63
         width: 16
         height: 64
       alignment: 0
@@ -275,6 +275,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: RotaryBarrier
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 13
+        width: 64
+        height: 16
+      alignment: 9
+      pivot: {x: 0.1875, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2652e3eb21ff3b469510a8b5357f72f
+      internalID: -1301889133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verticalRotaryBarrier
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 63
+        width: 16
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 271ec9fb69c034143973ef779d74b3c7
+      internalID: -63747478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verticalRotaryBarrierLong
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 55
+        width: 16
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.16666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f70cd3c6d3103bd42a527df2a0b58857
+      internalID: -117345586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -286,6 +349,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      RotaryBarrier: -1301889133
       SawBig: -1955166845
       SawSmall: 215900741
       SpikeGroundTrap: -1249704751
@@ -293,6 +357,8 @@ TextureImporter:
       SteelspikeUp: -981407666
       blockSteel: -2034432290
       verticalBlockSteel: -1441180770
+      verticalRotaryBarrier: -63747478
+      verticalRotaryBarrierLong: -117345586
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

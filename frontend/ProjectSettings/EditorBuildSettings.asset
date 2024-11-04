@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: 4f9ea3592c0c84730984d8fa7b2bd87c
@@ -17,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OfflineMapScene.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
+  - enabled: 1
+    path: Assets/Scenes/StoryLevelSelectScene.unity
+    guid: ca07ffdea6f23bc4182785ce423f60f1
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: a6aa0e1dbbee6624b8c31797cedc57a5, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: a2d58e9315d0843f2a4bef6ff2035377, type: 2}

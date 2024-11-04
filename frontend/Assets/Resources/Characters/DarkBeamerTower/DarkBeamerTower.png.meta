@@ -1,0 +1,607 @@
+fileFormatVersion: 2
+guid: 8b8d1cab7f42e674d9f60004319e70eb
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DarkBeamerTower_0
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 195
+        width: 34
+        height: 69
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6956522}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f77a1ca57755cd74599883a801bc3c98
+      internalID: 279733565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_1
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 194
+        width: 34
+        height: 71
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6760563}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e01921d20d836de43916188a22ae2439
+      internalID: -1663051717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_10
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 343
+        width: 34
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: def5ec0e3403ae84883ff3a454f0ee8e
+      internalID: 336061959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_11
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 343
+        width: 34
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41f283bfcc34ffb4da61dc74eddc7210
+      internalID: -173436257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_12
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 339
+        width: 34
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5925926}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c442db93411585a46bf9dd477b8bd679
+      internalID: 837356209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_13
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 347
+        width: 34
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.58536583}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2372083f355aff4ab1bba2648b93157
+      internalID: -1920245635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_14
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 429
+        width: 34
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5, y: 0.57831323}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73f447a21c546b54980b73f307a055bc
+      internalID: 1917731071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_15
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 426
+        width: 34
+        height: 86
+      alignment: 9
+      pivot: {x: 0.5, y: 0.55813956}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b54a7d50c9846c0488ad095a9c562d55
+      internalID: 357721258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_16
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 423
+        width: 34
+        height: 89
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53932583}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36a3ee764daae1d4ab55ff504888f339
+      internalID: -1409211219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_17
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 423
+        width: 34
+        height: 89
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53932583}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6066c057a00eb894e843d80643e754cd
+      internalID: -2026726010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_18
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 423
+        width: 34
+        height: 89
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53932583}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5451257eb8c0e0e4bb0649d4e4a6de12
+      internalID: -929749333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_19
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 420
+        width: 38
+        height: 92
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5217391}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b08101919805e334dbffba8d8ce8f3ec
+      internalID: -2032128097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_2
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 264
+        width: 34
+        height: 79
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6075949}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4269c51df89725341958ba3ebbcccc80
+      internalID: -1316227955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 416
+        width: 44
+        height: 96
+      alignment: 9
+      pivot: {x: 0.47727272, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6a10571a341c0f45afe6279b9c38d8b
+      internalID: -765951138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_21
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 171
+        width: 34
+        height: 24
+      alignment: 9
+      pivot: {x: 0.5, y: 2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6e0690693376fa49982eadd4a4628ce
+      internalID: -477607489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_3
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 265
+        width: 34
+        height: 78
+      alignment: 9
+      pivot: {x: 0.5, y: 0.61538464}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 580025e0a3c52054b8bdfe205be70fa9
+      internalID: -1721935599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_4
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 344
+        width: 34
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.58536583}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 868addb8c76a507488fda66e1385e9cc
+      internalID: 2124019725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_5
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 265
+        width: 34
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.58536583}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34b76958fdacf7746a202b818004d8d9
+      internalID: -138177682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_6
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 341
+        width: 34
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.58536583}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f1f4bfca45a96d448fc5fdd1ad5939b
+      internalID: -646908405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 335
+        width: 34
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5925926}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0054740ade7be4345a28959d03dae2f1
+      internalID: 1387629068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_8
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 264
+        width: 34
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a4c99039a7fd3a4399fa38ab0d9e298
+      internalID: -24136631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DarkBeamerTower_9
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 185
+        width: 34
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ad2d8ad4b815e646aa326b49783b973
+      internalID: 1918587177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 39549ff6ea0e8e643a2720b04a50e082
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      DarkBeamerTower_0: 279733565
+      DarkBeamerTower_1: -1663051717
+      DarkBeamerTower_10: 336061959
+      DarkBeamerTower_11: -173436257
+      DarkBeamerTower_12: 837356209
+      DarkBeamerTower_13: -1920245635
+      DarkBeamerTower_14: 1917731071
+      DarkBeamerTower_15: 357721258
+      DarkBeamerTower_16: -1409211219
+      DarkBeamerTower_17: -2026726010
+      DarkBeamerTower_18: -929749333
+      DarkBeamerTower_19: -2032128097
+      DarkBeamerTower_2: -1316227955
+      DarkBeamerTower_20: -765951138
+      DarkBeamerTower_21: -477607489
+      DarkBeamerTower_3: -1721935599
+      DarkBeamerTower_4: 2124019725
+      DarkBeamerTower_5: -138177682
+      DarkBeamerTower_6: -646908405
+      DarkBeamerTower_7: 1387629068
+      DarkBeamerTower_8: -24136631
+      DarkBeamerTower_9: 1918587177
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

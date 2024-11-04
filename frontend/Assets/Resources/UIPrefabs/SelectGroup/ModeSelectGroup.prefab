@@ -764,6 +764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be1192cfc3b1ab5488e3da57fa38ed37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiSoundSource: {fileID: 0}
   cells:
   - {fileID: 8261715714002962563}
   - {fileID: 5729851159741745625}

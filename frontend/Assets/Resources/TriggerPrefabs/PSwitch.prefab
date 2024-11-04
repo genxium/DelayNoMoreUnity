@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2186353342994325325}
   - component: {fileID: 2186353342994325324}
   - component: {fileID: 2186353342994325327}
-  - component: {fileID: 7158876479739140621}
+  - component: {fileID: 5157681653048152739}
   m_Layer: 0
   m_Name: PSwitch
   m_TagString: Untagged
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1952305777
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -1849171988, guid: 66a5ea8c97ecc73468ae6d7749f67916, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -106,7 +106,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &7158876479739140621
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5157681653048152739
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +116,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2186353342994325362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83abe4f452812064dbeb075ac9c1491c, type: 3}
+  m_Script: {fileID: 11500000, guid: ea6d42577b80e6346a371f81fb8c9569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0

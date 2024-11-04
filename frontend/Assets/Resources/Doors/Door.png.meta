@@ -117,221 +117,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TimedDoor1-0
-      rect:
-        serializedVersion: 2
-        x: 432
-        y: 312
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5f15714b98374d3498c2da3f09e8449a
-      internalID: 1018736461
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimedDoor1-1
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 312
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6dd3f73237b8cce47aa0e0a148b4f67a
-      internalID: 1362925970
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimedDoor1-2
-      rect:
-        serializedVersion: 2
-        x: 464
-        y: 312
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b56adde2dea55674abd0ea04dbb99d63
-      internalID: -671575411
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimedDoor1-3
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 296
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fa6056e18fcd208488abd7b1f250d056
-      internalID: 713190724
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimedDoor1-4
-      rect:
-        serializedVersion: 2
-        x: 496
-        y: 296
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ecd655be0238a884bb781ca5c8fdda73
-      internalID: 184567213
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaveTimedDoor-0
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 480
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0fcc785cf3f9e4e4da84684b5398b999
-      internalID: -1894346205
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaveTimedDoor-1
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 448
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9d06d718491fb1b47b866711ee96f383
-      internalID: -343751668
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaveTimedDoor-2
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 416
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5126a996e99298c4eaae6fc5a7d2480b
-      internalID: 1305825011
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaveTimedDoor-3
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 384
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 618710b83387a9c48af1a1a249320043
-      internalID: -829934087
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaveTimedDoor-4
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 352
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 958d6d17b39eab945b9331dfee346a21
-      internalID: -80240103
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: BlueGate-0
       rect:
         serializedVersion: 2
-        x: 96
-        y: 394
+        x: 2
+        y: 281
         width: 96
         height: 54
       alignment: 9
@@ -351,8 +141,8 @@ TextureImporter:
       name: BlueGate-1
       rect:
         serializedVersion: 2
-        x: 192
-        y: 394
+        x: 102
+        y: 281
         width: 96
         height: 54
       alignment: 9
@@ -372,8 +162,8 @@ TextureImporter:
       name: BlueGate-13
       rect:
         serializedVersion: 2
-        x: 288
-        y: 394
+        x: 202
+        y: 281
         width: 96
         height: 54
       alignment: 9
@@ -393,8 +183,8 @@ TextureImporter:
       name: BlueGate-2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 448
+        x: 328
+        y: 446
         width: 96
         height: 64
       alignment: 0
@@ -411,116 +201,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EscapeDoor1-0
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 324
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b7a21d4185a0a14092bf7f554c75672
-      internalID: -1951320717
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EscapeDoor1-1
-      rect:
-        serializedVersion: 2
-        x: 496
-        y: 324
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 73a0e324f2a43024881c4879131f7aa7
-      internalID: 1856943069
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EscapeDoor1-2
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 312
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aea3645e735c9124fa0d3861b0ac415f
-      internalID: 2132350701
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EscapeDoor1-3
-      rect:
-        serializedVersion: 2
-        x: 400
-        y: 312
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 200721a7409f3f7488dc93869adfe180
-      internalID: -930131169
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EscapeDoor1-4
-      rect:
-        serializedVersion: 2
-        x: 416
-        y: 312
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 914a749c649c94741a00cc3af6bbe661
-      internalID: 1880388257
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: GrayGate-0
       rect:
         serializedVersion: 2
-        x: 384
-        y: 394
+        x: 302
+        y: 252
         width: 96
         height: 54
       alignment: 9
@@ -540,8 +225,8 @@ TextureImporter:
       name: GrayGate-1
       rect:
         serializedVersion: 2
-        x: 96
-        y: 340
+        x: 402
+        y: 252
         width: 96
         height: 54
       alignment: 9
@@ -561,8 +246,8 @@ TextureImporter:
       name: GrayGate-2
       rect:
         serializedVersion: 2
-        x: 96
-        y: 448
+        x: 328
+        y: 378
         width: 96
         height: 64
       alignment: 0
@@ -582,8 +267,8 @@ TextureImporter:
       name: GrayGate-3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 330
+        x: 2
+        y: 194
         width: 96
         height: 54
       alignment: 9
@@ -603,8 +288,8 @@ TextureImporter:
       name: GreenGate-0
       rect:
         serializedVersion: 2
-        x: 192
-        y: 340
+        x: 102
+        y: 223
         width: 96
         height: 54
       alignment: 9
@@ -624,8 +309,8 @@ TextureImporter:
       name: GreenGate-1
       rect:
         serializedVersion: 2
-        x: 288
-        y: 340
+        x: 202
+        y: 223
         width: 96
         height: 54
       alignment: 9
@@ -645,8 +330,8 @@ TextureImporter:
       name: GreenGate-2
       rect:
         serializedVersion: 2
-        x: 192
-        y: 448
+        x: 2
+        y: 339
         width: 96
         height: 64
       alignment: 0
@@ -666,8 +351,8 @@ TextureImporter:
       name: GreenGate-3
       rect:
         serializedVersion: 2
-        x: 384
-        y: 340
+        x: 302
+        y: 194
         width: 96
         height: 54
       alignment: 9
@@ -687,8 +372,8 @@ TextureImporter:
       name: OliveGate-0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 270
+        x: 402
+        y: 194
         width: 96
         height: 54
       alignment: 9
@@ -708,8 +393,8 @@ TextureImporter:
       name: OliveGate-1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 216
+        x: 102
+        y: 165
         width: 96
         height: 54
       alignment: 9
@@ -729,8 +414,8 @@ TextureImporter:
       name: OliveGate-2
       rect:
         serializedVersion: 2
-        x: 288
-        y: 448
+        x: 102
+        y: 339
         width: 96
         height: 64
       alignment: 0
@@ -750,8 +435,8 @@ TextureImporter:
       name: OliveGate-3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 162
+        x: 2
+        y: 136
         width: 96
         height: 54
       alignment: 9
@@ -771,8 +456,8 @@ TextureImporter:
       name: PinkGate-0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 108
+        x: 202
+        y: 165
         width: 96
         height: 54
       alignment: 9
@@ -792,8 +477,8 @@ TextureImporter:
       name: PinkGate-1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 54
+        x: 2
+        y: 78
         width: 96
         height: 54
       alignment: 9
@@ -813,8 +498,8 @@ TextureImporter:
       name: PinkGate-2
       rect:
         serializedVersion: 2
-        x: 384
-        y: 448
+        x: 202
+        y: 339
         width: 96
         height: 64
       alignment: 0
@@ -834,8 +519,8 @@ TextureImporter:
       name: PinkGate-3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 2
+        y: 20
         width: 96
         height: 54
       alignment: 9
@@ -855,8 +540,8 @@ TextureImporter:
       name: RedGate-0
       rect:
         serializedVersion: 2
-        x: 96
-        y: 270
+        x: 102
+        y: 107
         width: 96
         height: 54
       alignment: 9
@@ -876,8 +561,8 @@ TextureImporter:
       name: RedGate-1
       rect:
         serializedVersion: 2
-        x: 192
-        y: 286
+        x: 102
+        y: 49
         width: 96
         height: 54
       alignment: 9
@@ -897,8 +582,8 @@ TextureImporter:
       name: RedGate-2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 384
+        x: 322
+        y: 310
         width: 96
         height: 64
       alignment: 0
@@ -918,8 +603,8 @@ TextureImporter:
       name: RedGate-3
       rect:
         serializedVersion: 2
-        x: 288
-        y: 286
+        x: 202
+        y: 107
         width: 96
         height: 54
       alignment: 9
@@ -931,6 +616,468 @@ TextureImporter:
       bones: []
       spriteID: 743ddd0302389a743945c071b4e1ab0a
       internalID: 1952479415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor1-0
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 410
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 623dce7a0d1b35a4eba65ec33c8a8ea6
+      internalID: 460195195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor1-1
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 410
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9793dd8dfcea24a40beb8a56ea9fa373
+      internalID: -718626812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor1-2
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 378
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91e28380345bd09458263b6dc169e1c0
+      internalID: 1197257811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor1-3
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 378
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 777fc19f3210b4b4281bf547cca7e038
+      internalID: 1285048398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor1-4
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 374
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38e0736883e92c441aa64ce3da85ad16
+      internalID: -1517424217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor2-0
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 478
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da3a91a0937f2d74cbf80e47f88f1391
+      internalID: -1611911149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor2-1
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 478
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f7822dd4be0d0041ac54fb24ba7e079
+      internalID: -1075523180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor2-2
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 442
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c383b055054659c42b37a6fdcdc465fc
+      internalID: 2104355418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor2-3
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 442
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83fccb2ce003a4b48bae99f1b11e7659
+      internalID: -1929379531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IndiWaveDoor2-4
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 406
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6fd7a2a94196a440978f87462e4bd9a
+      internalID: 34785675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SyncWaveDoor1-1
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 346
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9b1298e13e5b1249a60d71f78d98597
+      internalID: 702505584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SyncWaveDoor1-2
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 346
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b0db49875f510b4b8b9759baeb93b53
+      internalID: -602763695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SyncWaveDoor1-3
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 346
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1487ee966f84f0942b3e8ca42e5b6e91
+      internalID: -830661621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SyncWaveDoor1-4
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 375
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43539bd630172db4788dfcb83ef863ec
+      internalID: -1522127441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SyncWaveDoor1-5
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 343
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d4ed4d0f41b31c449b6d6bd90268278
+      internalID: 1196415703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SyncWaveDoor2-0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 407
+        width: 159
+        height: 103
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eb1c7e8f0e2a924f9f24566027755f2
+      internalID: 539413012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SyncWaveDoor2-1
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 407
+        width: 159
+        height: 103
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad849e5226f81134ab7a770675d50e2b
+      internalID: -374887979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TimedWaveDoor1-0
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 311
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88aa9c721bf75594183f5b3f28fd7af1
+      internalID: -1786318538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TimedWaveDoor1-1
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 342
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: caa16b1e41cdb0e4e813c2c89d4aa68d
+      internalID: -1840177513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TimedWaveDoor1-2
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 314
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc3385101c1ed6645a909496acd051ca
+      internalID: 551088441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TimedWaveDoor1-3
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 310
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7fd8a2aa513ad04a9fe3b92e9db47e8
+      internalID: -1492120064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TimedWaveDoor1-4
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 314
+        width: 16
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c3b3f99ccd811d4ba2aef3d3141fa94
+      internalID: -1840528338
       vertices: []
       indices: 
       edges: []
@@ -950,11 +1097,6 @@ TextureImporter:
       BlueGate-1: -1369027928
       BlueGate-13: 1895726394
       BlueGate-2: -964788725
-      EscapeDoor1-0: -1951320717
-      EscapeDoor1-1: 1856943069
-      EscapeDoor1-2: 2132350701
-      EscapeDoor1-3: -930131169
-      EscapeDoor1-4: 1880388257
       GrayGate-0: -1270389655
       GrayGate-1: 1677201404
       GrayGate-2: -831601125
@@ -963,6 +1105,16 @@ TextureImporter:
       GreenGate-1: -273808825
       GreenGate-2: 1452075587
       GreenGate-3: 476456931
+      IndiWaveDoor1-0: 460195195
+      IndiWaveDoor1-1: -718626812
+      IndiWaveDoor1-2: 1197257811
+      IndiWaveDoor1-3: 1285048398
+      IndiWaveDoor1-4: -1517424217
+      IndiWaveDoor2-0: -1611911149
+      IndiWaveDoor2-1: -1075523180
+      IndiWaveDoor2-2: 2104355418
+      IndiWaveDoor2-3: -1929379531
+      IndiWaveDoor2-4: 34785675
       OliveGate-0: -889658087
       OliveGate-1: -283181272
       OliveGate-2: 1928315619
@@ -975,16 +1127,18 @@ TextureImporter:
       RedGate-1: -806079288
       RedGate-2: -1450084087
       RedGate-3: 1952479415
-      TimedDoor1-0: 1018736461
-      TimedDoor1-1: 1362925970
-      TimedDoor1-2: -671575411
-      TimedDoor1-3: 713190724
-      TimedDoor1-4: 184567213
-      WaveTimedDoor-0: -1894346205
-      WaveTimedDoor-1: -343751668
-      WaveTimedDoor-2: 1305825011
-      WaveTimedDoor-3: -829934087
-      WaveTimedDoor-4: -80240103
+      SyncWaveDoor1-1: 702505584
+      SyncWaveDoor1-2: -602763695
+      SyncWaveDoor1-3: -830661621
+      SyncWaveDoor1-4: -1522127441
+      SyncWaveDoor1-5: 1196415703
+      SyncWaveDoor2-0: 539413012
+      SyncWaveDoor2-1: -374887979
+      TimedWaveDoor1-0: -1786318538
+      TimedWaveDoor1-1: -1840177513
+      TimedWaveDoor1-2: 551088441
+      TimedWaveDoor1-3: -1492120064
+      TimedWaveDoor1-4: -1840528338
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

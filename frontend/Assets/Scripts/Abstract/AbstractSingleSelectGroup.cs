@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public abstract class AbstractSingleSelectGroup : MonoBehaviour {
+    public UISoundSource uiSoundSource;
     public delegate void PostCancelledCallbackT();
     public PostCancelledCallbackT postCancelledCallback;
 
@@ -35,5 +36,15 @@ public abstract class AbstractSingleSelectGroup : MonoBehaviour {
             cell.toggleUIInteractability(val);
         }
         currentSelectGroupEnabled = val;
+    }
+
+    public virtual void ResetCells(AbstractSingleSelectCell[] newCells) {
+        if (null != cells) {
+            foreach (var cell in cells) {
+                Destroy(cell);
+            }
+        }
+
+        cells = newCells;
     }
 }

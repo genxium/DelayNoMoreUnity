@@ -1,8 +1,13 @@
 ﻿namespace backend.Battle;
+using shared;
+
 public class PriorityBasedRoomManager : IRoomManager {
     private Mutex mux;
-    public PriorityQueue<Room, float> pq;
-    public Dictionary<int, Room> dict;
+    protected Dictionary<int, Room> deck;
+    protected KvPriorityQueue<int, Room> pq;
+    protected KvPriorityQueue<int, Room>.ValScore roomScore = (x) => {
+        return (int)Math.Ceiling(x.calRoomScore());
+    };
 
     private ILogger<PriorityBasedRoomManager> _logger;
     private ILoggerFactory _loggerFactory;
@@ -13,46 +18,66 @@ public class PriorityBasedRoomManager : IRoomManager {
         mux = new Mutex();
 
         int initialCountOfRooms = 8;
-        pq = new PriorityQueue<Room, float>(initialCountOfRooms);
-        dict = new Dictionary<int, Room>();
-
+        deck = new Dictionary<int, Room>();
+        pq = new KvPriorityQueue<int, Room>(initialCountOfRooms, roomScore);
         for (int i = 0; i < initialCountOfRooms; i++) {
             int roomCapacity = 2;
             Room r = new Room(this, _loggerFactory, i+1, roomCapacity);
-            Push(0, r);
+            Put(r);
         }
     }
 
-    public Room? GetRoom(int roomId) {
-        dict.TryGetValue(roomId, out Room? r);
-        return r;
+    public Room? Peek(int roomId) {
+        mux.WaitOne();
+        try {
+            var r = pq.Peek(roomId);
+            if (null != r) return r;
+            if (deck.ContainsKey(roomId)) {
+                return deck[roomId];
+            } else {
+                return null;
+            }
+        } finally {
+            mux.ReleaseMutex();
+        }
     }
 
     public Room? Pop() {
-        Room? r = null;
         mux.WaitOne();
         try {
-            if (0 < pq.Count) {
-                r = pq.Dequeue();
-                dict.Remove(r.id);
+            var r = pq.Pop();
+            if (null != r) {
+                deck.Add(r.id, r);
             }
+            return r;
         } finally {
             mux.ReleaseMutex();
         }
-        return r;
     }
 
-    public bool Push(float newScore, Room r) {
+    public Room? PopAny(int roomId) {
         mux.WaitOne();
         try {
-            if (!dict.ContainsKey(r.id)) {
-                dict.Add(r.id, r);
-                pq.Enqueue(r, newScore);
+            var r = pq.PopAny(roomId);
+            if (null != r) {
+                deck.Add(r.id, r);
             }
+            return r;
         } finally {
             mux.ReleaseMutex();
         }
-        return true;
+    }
+
+    public bool Put(Room r) {
+        mux.WaitOne();
+        try {
+            if (deck.ContainsKey(r.id)) {
+                deck.Remove(r.id); 
+            }
+            return pq.Put(r.id, r);
+        } finally {
+            mux.ReleaseMutex();
+        }
     }
 
     ~PriorityBasedRoomManager() {

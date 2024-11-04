@@ -47,49 +47,38 @@ namespace shared {
             });
         }
 
-        public static void UpdateRectCollider(Collider collider, float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data, ulong mask) {
+        public static void UpdateRectCollider(Collider collider, float wx, float wy, float w, float h, float topPadding, float bottomPadding, float leftPadding, float rightPadding, float spaceOffsetX, float spaceOffsetY, object data, ulong mask, bool flipX = false, bool isRotary = false, float spinAnchorX = 0f, float spinAnchorY = 0f, float cosDelta = 1f, float sinDelta = 0f) {
             var (blX, blY) = PolygonColliderCtrToBL(wx, wy, w * 0.5f, h * 0.5f, topPadding, bottomPadding, leftPadding, rightPadding, spaceOffsetX, spaceOffsetY);
 
             float effW = leftPadding + w + rightPadding;
             float effH = bottomPadding + h + topPadding;
             (collider.X, collider.Y, collider.W, collider.H) = (blX, blY, effW, effH);
-            collider.Shape.UpdateAsRectangle(0, 0, effW, effH);
-
+            float effSpinAnchorX = (!flipX ? spinAnchorX : effW - spinAnchorX);
+            if (0 == sinDelta && 0 == cosDelta) {
+                cosDelta = 1;
+            }
+            collider.Shape.UpdateAsRectangle(effW, effH, isRotary, effSpinAnchorX, spinAnchorY, cosDelta, sinDelta);
+            
+            // [WARNING] No channge to (collider.X, collider.Y, collider.W, collider.H) after rotation. 
             collider.Data = data;
             collider.Mask = mask;
         }
 
-        public static bool UpdateWaveNpcKilledEvtSub(int rdfId, ulong publishingEvtMaskUponKilled, EvtSubscription nextExhaustEvtSub, ref ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
-            if (EVTSUB_NO_DEMAND_MASK != nextExhaustEvtSub.DemandedEvtMask) {
-                //logger.LogInfo(String.Format("@rdfId={0}, publishing evtmask={1} to evtsub={2} by npc killed", rdfId, publishingEvtMaskUponKilled, nextExhaustEvtSub));
-                nextExhaustEvtSub.FulfilledEvtMask |= publishingEvtMaskUponKilled;
-                if (nextExhaustEvtSub.DemandedEvtMask == nextExhaustEvtSub.FulfilledEvtMask) {
-                    fulfilledEvtSubscriptionSetMask |= (1ul << (nextExhaustEvtSub.Id-1));
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static void AssignToEvtSubscription(int id, ulong demandedEvtMask, ulong fulfilledEvtMask, EvtSubscription dst) {
-            dst.Id = id;
-            dst.DemandedEvtMask = demandedEvtMask;
-            dst.FulfilledEvtMask = fulfilledEvtMask;
-        }
-
-        public static void AssignToBuff(int speciesId, int stock, int originatedRenderFrameId, int origChSpeciesId, Buff dst) {
+        public static void AssignToBuff(uint speciesId, int stock, int originatedRenderFrameId, uint origChSpeciesId, bool origRepelSoftPushback, bool origOmitGravity, Buff dst) {
             dst.SpeciesId = speciesId; 
             dst.Stock = stock;
             dst.OriginatedRenderFrameId = originatedRenderFrameId;
             dst.OrigChSpeciesId = origChSpeciesId;
+            dst.OrigRepelSoftPushback = origRepelSoftPushback;
+            dst.OrigOmitGravity = origOmitGravity;
         }
 
-        public static void AssignToDebuff(int speciesId, int stock, Debuff dst) {
+        public static void AssignToDebuff(uint speciesId, int stock, Debuff dst) {
             dst.SpeciesId = speciesId; 
             dst.Stock = stock;
         }
 
-        public static void AssignToInventorySlot(InventorySlotStockType stockType, int quota, int framesToRecover, int defaultQuota, int defaultFramesToRecover, int buffSpeciesId, int skillId, InventorySlot dst) {
+        public static void AssignToInventorySlot(InventorySlotStockType stockType, uint quota, int framesToRecover, uint defaultQuota, int defaultFramesToRecover, uint buffSpeciesId, uint skillId, uint skillIdAir, int gaugeCharged, int gaugeRequired, InventorySlot dst) {
             dst.StockType = stockType; 
             dst.Quota = quota; 
             dst.FramesToRecover = framesToRecover; 
@@ -97,6 +86,9 @@ namespace shared {
             dst.DefaultFramesToRecover = defaultFramesToRecover;
             dst.BuffSpeciesId = buffSpeciesId;
             dst.SkillId = skillId;
+            dst.SkillIdAir = skillIdAir;
+            dst.GaugeCharged = gaugeCharged;
+            dst.GaugeRequired = gaugeRequired;
         }
 
         public static void AssignToBulletImmuneRecord(int bulletLocalId, int remainingLifetimeRdfCount, BulletImmuneRecord dst) {
@@ -112,9 +104,37 @@ namespace shared {
             dst.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
             dst.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
             dst.Speed = chConfig.Speed;
+            dst.Hp = chConfig.Hp;
+            dst.Mp = chConfig.Mp;
+            dst.OmitGravity = chConfig.OmitGravity;
+            dst.OmitSoftPushback = chConfig.OmitSoftPushback;
+            dst.ComboHitCnt = 0;
+            dst.ComboFramesRemained = 0;
+            dst.DamageElementalAttrs = 0;
+            dst.ActiveSkillId = NO_SKILL;
+            dst.ActiveSkillHit = NO_SKILL_HIT;
+            dst.FramesSinceLastDamaged = 0;
+            dst.RemainingDef1Quota = 0;
+            dst.BtnBHoldingRdfCount = 0;
+
+            AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, false, false, dst.BuffList[0]);
+            AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, dst.DebuffList[0]);
+            dst.BulletImmuneRecords[0].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+
+            int newInventoryCnt = 0;
+            if (null != chConfig.InitInventorySlots) {
+                for (; newInventoryCnt < chConfig.InitInventorySlots.Count && newInventoryCnt < dst.Inventory.Slots.Count; newInventoryCnt++) {
+                    var initIvSlot = chConfig.InitInventorySlots[newInventoryCnt];
+                    if (InventorySlotStockType.NoneIv == initIvSlot.StockType) break;
+                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, dst.Inventory.Slots[newInventoryCnt]);
+                }
+            }
+            if (newInventoryCnt < dst.Inventory.Slots.Count) {
+                dst.Inventory.Slots[newInventoryCnt].StockType = InventorySlotStockType.NoneIv;
+            }
         }
 
-        public static void AssignToCharacterDownsync(int id, int speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int frictionVelY, int framesToRecover, int framesInChState, int activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, int beatsCnt, int beatenCnt, int mp, bool omitGravity, bool omitSoftPushback, bool repelSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool forcedCrouching, bool newBirth, int lowerPartFramesInChState, bool jumpStarted, int framesToStartJump, int framesSinceLastDamaged, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, int publishingEvtSubIdUponKilled, ulong publishingEvtMaskUponKilled, int subscriptionId, int jumpHoldingRdfCnt, int btnBHoldingRdfCount, int remainingAirJumpQuota, int remainingAirDashQuota, int killedToDropConsumableSpeciesId, int killedToDropBuffSpeciesId, RepeatedField<BulletImmuneRecord> prevBulletImmuneRecords, CharacterDownsync dst) {
+        public static void AssignToCharacterDownsync(int id, uint speciesId, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int frictionVelX, int velY, int frictionVelY, int framesToRecover, int framesInChState, uint activeSkillId, int activeSkillHit, int framesInvinsible, int speed, CharacterState characterState, int joinIndex, int hp, bool inAir, bool onWall, int onWallNormX, int onWallNormY, int framesCapturedByInertia, int bulletTeamId, int chCollisionTeamId, int revivalVirtualGridX, int revivalVirtualGridY, int revivalDirX, int revivalDirY, bool jumpTriggered, bool slipJumpTriggered, bool primarilyOnSlippableHardPushback, bool capturedByPatrolCue, int framesInPatrolCue, uint beatsCnt, uint beatenCnt, int mp, bool omitGravity, bool omitSoftPushback, bool repelSoftPushback, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool onSlope, bool onSlopeFacingDown, bool forcedCrouching, bool newBirth, bool jumpStarted, int framesToStartJump, int framesSinceLastDamaged, uint remainingDef1Quota, RepeatedField<Buff> prevBuffList, RepeatedField<Debuff> prevDebuffList, Inventory? prevInventory, bool isRdfFrameElapsing, int publishingToTriggerLocalIdUponKilled, ulong publishingEvtMaskUponKilled, int subscribesToTriggerLocalId, int jumpHoldingRdfCnt, int btnBHoldingRdfCount, uint remainingAirJumpQuota, uint remainingAirDashQuota, uint killedToDropConsumableSpeciesId, uint killedToDropBuffSpeciesId, uint killedToDropPickupSkillId, RepeatedField<BulletImmuneRecord> prevBulletImmuneRecords, uint comboHitCnt, int comboFramesRemained, uint damageElementalAttrs, int lastDamagedByJoinIndex, int lastDamagedByBulletTeamId, int activatedRdfId, ulong cachedCueCmd, CharacterDownsync dst) {
             dst.Id = id;
             dst.SpeciesId = speciesId;
             dst.VirtualGridX = virtualGridX;
@@ -164,18 +184,19 @@ namespace shared {
             dst.WaivingPatrolCueId = waivingPatrolCueId;
 
             dst.OnSlope = onSlope;
+            dst.OnSlopeFacingDown = onSlopeFacingDown;
             dst.ForcedCrouching = forcedCrouching;
             
             dst.NewBirth = newBirth;
-            dst.LowerPartFramesInChState = lowerPartFramesInChState;
 
             dst.JumpStarted = jumpStarted;
             dst.FramesToStartJump = framesToStartJump;
             dst.FramesSinceLastDamaged = framesSinceLastDamaged;
+            dst.RemainingDef1Quota = remainingDef1Quota;
 
-            dst.PublishingEvtSubIdUponKilled = publishingEvtSubIdUponKilled;
+            dst.PublishingToTriggerLocalIdUponKilled = publishingToTriggerLocalIdUponKilled;
             dst.PublishingEvtMaskUponKilled = publishingEvtMaskUponKilled;
-            dst.SubscriptionId = subscriptionId;
+            dst.SubscribesToTriggerLocalId = subscribesToTriggerLocalId;
         
             dst.JumpHoldingRdfCnt = jumpHoldingRdfCnt;
             dst.BtnBHoldingRdfCount = btnBHoldingRdfCount;
@@ -185,6 +206,13 @@ namespace shared {
 
             dst.KilledToDropConsumableSpeciesId = killedToDropConsumableSpeciesId;
             dst.KilledToDropBuffSpeciesId = killedToDropBuffSpeciesId;
+            dst.KilledToDropPickupSkillId = killedToDropPickupSkillId;
+
+            dst.LastDamagedByJoinIndex = lastDamagedByJoinIndex;
+            dst.LastDamagedByBulletTeamId = lastDamagedByBulletTeamId;
+
+            dst.ActivatedRdfId = activatedRdfId;
+            dst.CachedCueCmd = cachedCueCmd;
 
             // [WARNING] When "defaultTemplateBuffList" is passed in, it's equivalent to just TERMINATING at the very beginning.
             int newBuffCnt = 0, prevBuffI = 0; 
@@ -193,7 +221,7 @@ namespace shared {
                 if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break; 
                 var buffConfig  = buffConfigs[cand.SpeciesId];
                 if (BuffStockType.Timed == buffConfig.StockType && isRdfFrameElapsing) {
-                    int nextStock = cand.Stock - 1;
+                    var nextStock = cand.Stock - 1;
                     if (0 >= nextStock) {
                         if (noOpSet.Contains(characterState) || 0 >= framesToRecover) {
                             // [WARNING] It's very unnatural to transform back when the character is actively using a skill!
@@ -201,14 +229,14 @@ namespace shared {
                             continue;
                         }
                     }
-                    AssignToBuff(cand.SpeciesId, nextStock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, dst.BuffList[newBuffCnt]);
+                    AssignToBuff(cand.SpeciesId, nextStock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, cand.OrigRepelSoftPushback, cand.OrigOmitGravity, dst.BuffList[newBuffCnt]);
                 } else {
-                    AssignToBuff(cand.SpeciesId, cand.Stock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, dst.BuffList[newBuffCnt]);
+                    AssignToBuff(cand.SpeciesId, cand.Stock, cand.OriginatedRenderFrameId, cand.OrigChSpeciesId, cand.OrigRepelSoftPushback, cand.OrigOmitGravity, dst.BuffList[newBuffCnt]);
                 }
                 ++newBuffCnt;
             }
             if (newBuffCnt < dst.BuffList.Count) {
-                AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, dst.BuffList[newBuffCnt]);
+                AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, false, false, dst.BuffList[newBuffCnt]);
             }
 
             // [WARNING] When "defaultTemplateDebuffList" is passed in, it's equivalent to just TERMINATING at the very beginning.
@@ -221,8 +249,8 @@ namespace shared {
                 }
                 var debuffConfig = debuffConfigs[cand.SpeciesId];
                 if (BuffStockType.Timed == debuffConfig.StockType && isRdfFrameElapsing) {
-                    int nextStock = cand.Stock - 1;
-                    int nextSpeciesId = cand.SpeciesId;
+                    var nextStock = cand.Stock - 1;
+                    uint nextSpeciesId = cand.SpeciesId;
                     if (0 >= nextStock) {
                         continue;
                     }
@@ -236,35 +264,35 @@ namespace shared {
                 AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, dst.DebuffList[newDebuffCnt]);
             }
 
+            int newInventoryCnt = 0;
             if (null != prevInventory) {
-                // [WARNING] When "defaultTemplateInventory" is passed in, it's equivalent to just TERMINATING at the very beginning.
-                int newInventoryCnt = 0, prevInventoryI = 0;
+                // [WARNING] When "defaultTemplateInventory" or null is passed in, it's equivalent to just TERMINATING at the very beginning.
+                int prevInventoryI = 0;
                 while (prevInventoryI < prevInventory.Slots.Count) {
                     var cand = prevInventory.Slots[prevInventoryI++];
                     if (InventorySlotStockType.NoneIv == cand.StockType) break;
                     if (InventorySlotStockType.TimedIv == cand.StockType && isRdfFrameElapsing) {
-                        int nextFramesToRecover = cand.FramesToRecover - 1;
-                        if (0 > nextFramesToRecover) nextFramesToRecover = 0;
-                        AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, cand.SkillId, dst.Inventory.Slots[newInventoryCnt]);
+                        var nextFramesToRecover = 0 < cand.FramesToRecover ? cand.FramesToRecover - 1 : 0;
+                        AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, cand.SkillId, cand.SkillIdAir, cand.GaugeCharged, cand.GaugeRequired, dst.Inventory.Slots[newInventoryCnt]);
                     } else if (InventorySlotStockType.TimedMagazineIv == cand.StockType && isRdfFrameElapsing) {
-                        int nextFramesToRecover = cand.FramesToRecover - 1;
+                        var nextFramesToRecover = 0 < cand.FramesToRecover ? cand.FramesToRecover - 1 : 0;
                         if (0 > nextFramesToRecover) nextFramesToRecover = 0;
                         if (0 == nextFramesToRecover && 1 == cand.FramesToRecover) {
-                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, cand.SkillId, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.DefaultQuota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, cand.SkillId, cand.SkillIdAir, cand.GaugeCharged, cand.GaugeRequired, dst.Inventory.Slots[newInventoryCnt]);
                         } else {
-                            AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, cand.SkillId, dst.Inventory.Slots[newInventoryCnt]);
+                            AssignToInventorySlot(cand.StockType, cand.Quota, nextFramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, cand.SkillId, cand.SkillIdAir, cand.GaugeCharged, cand.GaugeRequired, dst.Inventory.Slots[newInventoryCnt]);
                         }
                     } else {
-                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, cand.SkillId, dst.Inventory.Slots[newInventoryCnt]);
+                        AssignToInventorySlot(cand.StockType, cand.Quota, cand.FramesToRecover, cand.DefaultQuota, cand.DefaultFramesToRecover, cand.BuffSpeciesId, cand.SkillId, cand.SkillIdAir, cand.GaugeCharged, cand.GaugeRequired, dst.Inventory.Slots[newInventoryCnt]);
                     }
                     ++newInventoryCnt;
                 }
-                if (newInventoryCnt < dst.Inventory.Slots.Count) dst.Inventory.Slots[newInventoryCnt].StockType = InventorySlotStockType.NoneIv;
             }
+            if (newInventoryCnt < dst.Inventory.Slots.Count) dst.Inventory.Slots[newInventoryCnt].StockType = InventorySlotStockType.NoneIv;
 
+            int newBulletImmuneRcdCnt = 0;
             if (null != prevBulletImmuneRecords) {
-                // [WARNING] When "defaultTemplateBulletImmuneRecords" is passed in, it's equivalent to just TERMINATING at the very beginning.
-                int newCnt = 0, prevCnt = 0;
+                int prevCnt = 0;
                 while (prevCnt < prevBulletImmuneRecords.Count) {
                     var cand = prevBulletImmuneRecords[prevCnt++];
                     if (TERMINATING_BULLET_LOCAL_ID == cand.BulletLocalId) break;
@@ -272,28 +300,30 @@ namespace shared {
                         if (0 >= cand.RemainingLifetimeRdfCount) {
                             continue;
                         }
-                        int newRemainingLifetimeRdfCount = cand.RemainingLifetimeRdfCount - 1;
-                        if (0 > newRemainingLifetimeRdfCount) newRemainingLifetimeRdfCount = 0;
-                        AssignToBulletImmuneRecord(cand.BulletLocalId, newRemainingLifetimeRdfCount, dst.BulletImmuneRecords[newCnt]);
+                        var newRemainingLifetimeRdfCount = (0 < cand.RemainingLifetimeRdfCount ? cand.RemainingLifetimeRdfCount - 1 : 0);
+                        AssignToBulletImmuneRecord(cand.BulletLocalId, newRemainingLifetimeRdfCount, dst.BulletImmuneRecords[newBulletImmuneRcdCnt]);
                     } else {
-                        AssignToBulletImmuneRecord(cand.BulletLocalId, cand.RemainingLifetimeRdfCount, dst.BulletImmuneRecords[newCnt]);
+                        AssignToBulletImmuneRecord(cand.BulletLocalId, cand.RemainingLifetimeRdfCount, dst.BulletImmuneRecords[newBulletImmuneRcdCnt]);
                     }
-                    ++newCnt;
+                    ++newBulletImmuneRcdCnt;
                 }
-                if (newCnt < dst.BulletImmuneRecords.Count) dst.BulletImmuneRecords[newCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
             }
+            // [WARNING] When "defaultTemplateBulletImmuneRecords" or null is passed in, it's equivalent to just TERMINATING at the very beginning.
+            if (newBulletImmuneRcdCnt < dst.BulletImmuneRecords.Count) dst.BulletImmuneRecords[newBulletImmuneRcdCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+
+            dst.ComboHitCnt = comboHitCnt;
+            dst.ComboFramesRemained = comboFramesRemained;
+            dst.DamageElementalAttrs = damageElementalAttrs;
         }
 
         public static Bullet NewBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState) {
             return new Bullet {
                 BlState = blState,
                 FramesInBlState = framesInBlState,
-                BattleAttr = new BulletBattleAttr {
-                    BulletLocalId = bulletLocalId,
-                    OriginatedRenderFrameId = originatedRenderFrameId,
-                    OffenderJoinIndex = offenderJoinIndex,
-                    TeamId = teamId
-                },
+                BulletLocalId = bulletLocalId,
+                OriginatedRenderFrameId = originatedRenderFrameId,
+                OffenderJoinIndex = offenderJoinIndex,
+                TeamId = teamId,
                 VirtualGridX = 0,
                 VirtualGridY = 0,
                 DirX = 0,
@@ -303,18 +333,20 @@ namespace shared {
             };
         }
 
-        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int teamId, BulletState blState, int framesInBlState, int origVx, int origVy, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, int skillId, int vertMovingTrapLocalIdUponActive, BulletConfig staticBulletConfig, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, int targetCharacterJoinIndex, Bullet dst) {
+        public static void AssignToBullet(int bulletLocalId, int originatedRenderFrameId, int offenderJoinIndex, int offenderTrapLocalId, int teamId, BulletState blState, int framesInBlState, int origVx, int origVy, int vx, int vy, int dirX, int dirY, int velX, int velY, int activeSkillHit, uint skillId, int vertMovingTrapLocalIdUponActive, int repeatQuotaLeft, int remainingHardPushbackBounceQuota, int targetCharacterJoinIndex, float spinCos, float spinSin, int damageDealed, IfaceCat explodedOnIfc, Bullet dst) {
             dst.BlState = blState;
             dst.FramesInBlState = framesInBlState;
-            dst.Config = staticBulletConfig;
 
-            dst.BattleAttr.BulletLocalId = bulletLocalId;
-            dst.BattleAttr.OriginatedRenderFrameId = originatedRenderFrameId;
-            dst.BattleAttr.OffenderJoinIndex = offenderJoinIndex;
-            dst.BattleAttr.TeamId = teamId;
-            dst.BattleAttr.ActiveSkillHit = activeSkillHit;
-            dst.BattleAttr.SkillId = skillId;
-            dst.BattleAttr.VertMovingTrapLocalIdUponActive = vertMovingTrapLocalIdUponActive;
+            dst.BulletLocalId = bulletLocalId;
+            dst.OriginatedRenderFrameId = originatedRenderFrameId;
+            dst.OffenderJoinIndex = offenderJoinIndex;
+            dst.OffenderTrapLocalId = offenderTrapLocalId;
+            dst.TeamId = teamId;
+            dst.ActiveSkillHit = activeSkillHit;
+            dst.SkillId = skillId;
+            dst.VertMovingTrapLocalIdUponActive = vertMovingTrapLocalIdUponActive;
+            dst.DamageDealed = damageDealed;
+            dst.ExplodedOnIfc = explodedOnIfc;
 
             dst.OriginatedVirtualGridX = origVx;
             dst.OriginatedVirtualGridY = origVy;
@@ -325,14 +357,16 @@ namespace shared {
             dst.VelX = velX;
             dst.VelY = velY;
 
+            dst.SpinCos = spinCos;
+            dst.SpinSin = spinSin;
+
             dst.RepeatQuotaLeft = repeatQuotaLeft;
             dst.RemainingHardPushbackBounceQuota = remainingHardPushbackBounceQuota;
             dst.TargetCharacterJoinIndex = targetCharacterJoinIndex;
         }
 
-        public static void AssignToTrap(int trapLocalId, TrapConfig config, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, bool isCompletelyStatic, bool capturedByPatrolCue, int framesInPatrolCue, bool waivingSpontaneousPatrol, int waivingPatrolCueId, bool locked, Trap dst) {
+        public static void AssignToTrap(int trapLocalId, TrapConfigFromTiled configFromTiled, TrapState trapState, int framesInTrapState, int virtualGridX, int virtualGridY, int dirX, int dirY, int velX, int velY, float spinCos, float spinSin, float angularFrameVelCos, float angularFrameVelSin, int patrolCueAngularVelFlipMark, bool isCompletelyStatic, bool capturedByPatrolCue, int framesInPatrolCue, bool waivingSpontaneousPatrol, int waivingPatrolCueId, int subscribesToTriggerLocalId, int subscribesToTriggerLocalIdAlt, Trap dst) {
             dst.TrapLocalId = trapLocalId;
-            dst.Config = config;
             dst.ConfigFromTiled = configFromTiled;
 
             // Only the fields below would change w.r.t. time
@@ -344,6 +378,11 @@ namespace shared {
             dst.DirY = dirY;
             dst.VelX = velX;
             dst.VelY = velY;
+            dst.SpinCos = spinCos;
+            dst.SpinSin = spinSin;
+            dst.AngularFrameVelCos = angularFrameVelCos;
+            dst.AngularFrameVelSin = angularFrameVelSin;
+            dst.PatrolCueAngularVelFlipMark = patrolCueAngularVelFlipMark;
             dst.IsCompletelyStatic = isCompletelyStatic;
 
             dst.CapturedByPatrolCue = capturedByPatrolCue;
@@ -351,26 +390,34 @@ namespace shared {
             dst.WaivingSpontaneousPatrol = waivingSpontaneousPatrol;
             dst.WaivingPatrolCueId = waivingPatrolCueId;
             
-            dst.Locked = locked;
+            dst.SubscribesToTriggerLocalId = subscribesToTriggerLocalId;
+            dst.SubscribesToTriggerLocalIdAlt = subscribesToTriggerLocalIdAlt;
         }
 
-        public static void AssignToTrigger(int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, int virtualGridX, int virtualGridY, bool locked, TriggerConfig config, TriggerConfigFromTiled configFromTiled, Trigger dst) {
+        public static void AssignToTrigger(int editorId, int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int offenderJoinIndex, int offenderBulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, int virtualGridX, int virtualGridY, int dirX, ulong demandedEvtMask, ulong fulfilledEvtMask, ulong waveNpcKilledEvtMaskCounter, ulong subscriberLocalIdsMask, ulong exhaustSubscriberLocalIdsMask, TriggerConfigFromTiled configFromTiled, Trigger dst) {
+            dst.EditorId = editorId;
             dst.TriggerLocalId = triggerLocalId;
             dst.FramesToFire = framesToFire;
             dst.FramesToRecover = framesToRecover;
             dst.Quota = quota;
             dst.BulletTeamId = bulletTeamId;
+            dst.OffenderJoinIndex = offenderJoinIndex;
+            dst.OffenderBulletTeamId = offenderBulletTeamId;
             dst.SubCycleQuotaLeft = subCycleQuotaLeft;
             dst.State = state;
             dst.FramesInState = framesInState;
-            dst.Config = config;
             dst.ConfigFromTiled = configFromTiled;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
-            dst.Locked = locked;
+            dst.DirX = dirX;
+            dst.DemandedEvtMask = demandedEvtMask;
+            dst.FulfilledEvtMask = fulfilledEvtMask;
+            dst.WaveNpcKilledEvtMaskCounter = waveNpcKilledEvtMaskCounter;
+            dst.SubscriberLocalIdsMask = subscriberLocalIdsMask;
+            dst.ExhaustSubscriberLocalIdsMask = exhaustSubscriberLocalIdsMask;
         }
 
-        public static void AssignToPickableConfigFromTile(int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, int recurIntervalRdfCount, int lifetimeRdfCountPerOccurrence, PickupType pkType, int stockQuotaPerOccurrence, int subscriptionId, int consumableSpeciesId, int buffSpeciesId, PickableConfigFromTiled dst) {
+        public static void AssignToPickableConfigFromTile(int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, uint recurIntervalRdfCount, uint lifetimeRdfCountPerOccurrence, PickupType pkType, uint stockQuotaPerOccurrence, int subscriptionId, uint consumableSpeciesId, uint buffSpeciesId, uint skillId, PickableConfigFromTiled dst) {
             dst.InitVirtualGridX = initVirtualGridX;
             dst.InitVirtualGridY = initVirtualGridY;
             dst.TakesGravity = takesGravity;
@@ -383,9 +430,10 @@ namespace shared {
             dst.SubscriptionId = subscriptionId;
             dst.ConsumableSpeciesId = consumableSpeciesId;
             dst.BuffSpeciesId = buffSpeciesId;
+            dst.SkillId = skillId;
         }
 
-        public static void AssignToPickable(int pickableLocalId, int virtualGridX, int virtualGridY, int velY, int remainingLifetimeRdfCount, int remainingRecurQuota, PickableState pkState, int framesInPkState, int pickedByJoinIndex, int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, int recurIntervalRdfCount, int lifetimeRdfCountPerOccurrence, PickupType pkType, int stockQuotaPerOccurrence, int subscriptionId, int consumableSpeciesId, int buffSpeciesId, Pickable dst) {
+        public static void AssignToPickable(int pickableLocalId, int virtualGridX, int virtualGridY, int velY, int remainingLifetimeRdfCount, int remainingRecurQuota, PickableState pkState, int framesInPkState, int pickedByJoinIndex, int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, uint recurIntervalRdfCount, uint lifetimeRdfCountPerOccurrence, PickupType pkType, uint stockQuotaPerOccurrence, int subscriptionId, uint consumableSpeciesId, uint buffSpeciesId, uint skillId, Pickable dst) {
             dst.PickableLocalId = pickableLocalId;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
@@ -397,14 +445,14 @@ namespace shared {
             dst.FramesInPkState = framesInPkState;
             dst.PickedByJoinIndex = pickedByJoinIndex;
 
-            AssignToPickableConfigFromTile(initVirtualGridX, initVirtualGridY, takesGravity, firstShowRdfId, initRecurQuota, recurIntervalRdfCount, lifetimeRdfCountPerOccurrence, pkType, stockQuotaPerOccurrence, subscriptionId, consumableSpeciesId, buffSpeciesId, dst.ConfigFromTiled);
+            AssignToPickableConfigFromTile(initVirtualGridX, initVirtualGridY, takesGravity, firstShowRdfId, initRecurQuota, recurIntervalRdfCount, lifetimeRdfCountPerOccurrence, pkType, stockQuotaPerOccurrence, subscriptionId, consumableSpeciesId, buffSpeciesId, skillId, dst.ConfigFromTiled);
         }
 
         public static Pickable NewPreallocatedPickable() {
             var single = new Pickable {
                 PickableLocalId = TERMINATING_PICKABLE_LOCAL_ID,
                 ConfigFromTiled = new PickableConfigFromTiled {
-                    SubscriptionId = MAGIC_EVTSUB_ID_NONE,  
+                    SubscriptionId = TERMINATING_EVTSUB_ID_INT,  
                     BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                     ConsumableSpeciesId = TERMINATING_CONSUMABLE_SPECIES_ID,
                 },
@@ -418,9 +466,10 @@ namespace shared {
         public static CharacterDownsync NewPreallocatedCharacterDownsync(int buffCapacity, int debuffCapacity, int inventoryCapacity, int bulletImmuneRecordCapacity) {
             var single = new CharacterDownsync();
             single.Id = TERMINATING_PLAYER_ID;
-            single.LowerPartFramesInChState = INVALID_FRAMES_IN_CH_STATE;
             single.KilledToDropBuffSpeciesId = TERMINATING_BUFF_SPECIES_ID;
             single.KilledToDropConsumableSpeciesId = TERMINATING_CONSUMABLE_SPECIES_ID;
+            single.LastDamagedByJoinIndex = MAGIC_JOIN_INDEX_INVALID;
+            single.LastDamagedByBulletTeamId = TERMINATING_BULLET_TEAM_ID;
             for (int i = 0; i < buffCapacity; i++) {
                 var singleBuff = new Buff();
                 singleBuff.SpeciesId = TERMINATING_BUFF_SPECIES_ID;
@@ -452,7 +501,7 @@ namespace shared {
             return single;
         }
 
-        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount, int preallocateEvtSubCount, int preallocatePickableCount) {
+        public static RoomDownsyncFrame NewPreallocatedRoomDownsyncFrame(int roomCapacity, int preallocNpcCount, int preallocBulletCount, int preallocateTrapCount, int preallocateTriggerCount, int preallocatePickableCount) {
             var ret = new RoomDownsyncFrame();
             ret.Id = TERMINATING_RENDER_FRAME_ID;
             ret.BulletLocalIdCounter = 0;
@@ -463,7 +512,7 @@ namespace shared {
             }
 
             for (int i = 0; i < preallocNpcCount; i++) {
-                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, 0, DEFAULT_PER_CHARACTER_IMMUNE_BULLET_RECORD_CAPACITY);
+                var single = NewPreallocatedCharacterDownsync(DEFAULT_PER_CHARACTER_BUFF_CAPACITY, DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY, 1, DEFAULT_PER_CHARACTER_IMMUNE_BULLET_RECORD_CAPACITY);
                 ret.NpcsArr.Add(single);
             }
 
@@ -482,16 +531,8 @@ namespace shared {
             for (int i = 0; i < preallocateTriggerCount; i++) {
                 var single = new Trigger {
                     TriggerLocalId = TERMINATING_TRIGGER_ID,  
-                    Config = new TriggerConfig {}, 
                 };
                 ret.TriggersArr.Add(single);
-            }
-
-            for (int i = 0; i < preallocateEvtSubCount; i++) {
-                var single = new EvtSubscription {
-                    Id = TERMINATING_EVTSUB_ID,  
-                };
-                ret.EvtSubsArr.Add(single);
             }
 
             for (int i = 0; i < preallocatePickableCount; i++) {
@@ -513,63 +554,213 @@ namespace shared {
             return ret;
         }
 
-        public static void AssignToRdfDeep(RoomDownsyncFrame src, RoomDownsyncFrame dst, int roomCapacity) {
+        public static void _leftShiftDeadNpcs(int rdfId, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int pickableLocalIdCounter, RepeatedField<Pickable> nextRenderFramePickables, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, HashSet<int> justDeadJoinIndices, ref int nextNpcI, ref int pickableCnt, bool forPlayerRevivalInStory, ILoggerBridge logger) {
+            isRemapNeeded = false;
+            int aliveSlotI = 0, candidateI = 0;
+            justDeadJoinIndices.Clear();
+            while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id) {
+                var candidate = nextRenderFrameNpcs[candidateI];
+                var candidateConfig = characters[candidate.SpeciesId];
+                float characterVirtualGridTop = candidate.VirtualGridY + (candidateConfig.DefaultSizeY >> 1);
+                bool hasTransformUponDeath = _hasTransformUponDeath(candidate, candidateConfig);
+                if (isNpcJustDead(candidate)) {
+                    if (forPlayerRevivalInStory || !hasTransformUponDeath) {
+                        justDeadJoinIndices.Add(candidate.JoinIndex);
+                        isRemapNeeded = true;
+                        if (!forPlayerRevivalInStory && (TERMINATING_CONSUMABLE_SPECIES_ID != candidate.KilledToDropConsumableSpeciesId || TERMINATING_BUFF_SPECIES_ID != candidate.KilledToDropBuffSpeciesId || NO_SKILL != candidate.KilledToDropPickupSkillId)) {
+                            addNewPickableToNextFrame(rdfId, candidate.VirtualGridX, candidate.VirtualGridY, MAX_INT, 0, true, MAX_UINT, MAX_UINT, (NO_SKILL == candidate.KilledToDropPickupSkillId ? PickupType.Immediate : PickupType.PutIntoInventory), 1, nextRenderFramePickables, candidate.KilledToDropConsumableSpeciesId, candidate.KilledToDropBuffSpeciesId, candidate.KilledToDropPickupSkillId, ref pickableLocalIdCounter, ref pickableCnt);
+                        }
+                    }
+                }
+
+                while (candidateI < nextRenderFrameNpcs.Count && TERMINATING_PLAYER_ID != nextRenderFrameNpcs[candidateI].Id && isNpcDeadToDisappear(nextRenderFrameNpcs[candidateI])) {
+                    candidate = nextRenderFrameNpcs[candidateI];
+                    candidateConfig = characters[candidate.SpeciesId];
+                    hasTransformUponDeath = _hasTransformUponDeath(candidate, candidateConfig);
+                    if (!forPlayerRevivalInStory && hasTransformUponDeath) {
+                        // This is an "alive" case!
+                        break;
+                    }
+                    if (!forPlayerRevivalInStory && TERMINATING_TRIGGER_ID != candidate.PublishingToTriggerLocalIdUponKilled) {
+                        var targetTriggerInNextFrame = nextRenderFrameTriggers[candidate.PublishingToTriggerLocalIdUponKilled-1];
+                        PublishNpcKilledEvt(rdfId, candidate.PublishingEvtMaskUponKilled, candidate.LastDamagedByJoinIndex, candidate.LastDamagedByBulletTeamId, targetTriggerInNextFrame, logger);
+                    }
+
+                    candidateI++;
+                }
+
+                if (candidateI >= nextRenderFrameNpcs.Count || TERMINATING_PLAYER_ID == nextRenderFrameNpcs[candidateI].Id) {
+                    break;
+                }
+
+                if (aliveSlotI != candidateI && !isRemapNeeded) {
+                    isRemapNeeded = true;
+                    joinIndexRemap.Clear();
+                }
+
+                var src = nextRenderFrameNpcs[candidateI];
+                var dst = nextRenderFrameNpcs[aliveSlotI];
+                int newJoinIndex = roomCapacity + aliveSlotI + 1;
+
+                if (isRemapNeeded) {
+                    joinIndexRemap[src.JoinIndex] = newJoinIndex;
+                }
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, newJoinIndex, src.Hp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.OnSlopeFacingDown, src.ForcedCrouching, src.NewBirth, src.JumpStarted, src.FramesToStartJump, src.FramesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, src.ComboHitCnt, src.ComboFramesRemained, src.DamageElementalAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, dst);
+                candidateI++;
+                aliveSlotI++;
+            }
+            if (aliveSlotI < nextRenderFrameNpcs.Count) {
+                nextRenderFrameNpcs[aliveSlotI].Id = TERMINATING_PLAYER_ID;
+            }
+            nextNpcI = aliveSlotI;
+        }
+
+        public static void AssignToBossSavepoint(RoomDownsyncFrame srcCurrRdf, RoomDownsyncFrame srcNextRdf, RoomDownsyncFrame dst, int roomCapacity, ILoggerBridge logger) {
+            AssignToRdfDeep(srcNextRdf, dst, roomCapacity, logger);
+        }
+
+        public static void AssignFromBossSavepoint(RoomDownsyncFrame src, RoomDownsyncFrame dst, int roomCapacity, Dictionary<int, int> joinIndexRemap, HashSet<int> justDeadJoinIndices, HashSet<uint> bossSpeciesSet, ILoggerBridge logger) {
+            int dstNpcI = 0;
+            while (dstNpcI < dst.NpcsArr.Count) {
+                var dstCh = dst.NpcsArr[dstNpcI];
+                if (TERMINATING_PLAYER_ID == dstCh.Id) break;
+                if (dstCh.ActivatedRdfId >= src.Id) {
+                    dstCh.CharacterState = CharacterState.Dying;
+                    dstCh.Hp = 0;
+                    dstCh.FramesToRecover = 0;
+                }
+                ++dstNpcI;
+            }
+            int fooPickableLocalIdCounter = 0;
+            int fooPickableCnt = 0;
+            bool isRemapNeeded = false;
+            _leftShiftDeadNpcs(dst.Id, roomCapacity, dst.NpcsArr, ref fooPickableLocalIdCounter, dst.Pickables, dst.TriggersArr, joinIndexRemap, out isRemapNeeded, justDeadJoinIndices, ref dstNpcI, ref fooPickableCnt, true, logger);
+
+            int srcNpcI = 0;
+            while (srcNpcI < src.NpcsArr.Count) {
+                var srcCh = src.NpcsArr[srcNpcI];
+                if (TERMINATING_PLAYER_ID == srcCh.Id) {
+                    break;
+                }
+                ++srcNpcI;
+                if (!bossSpeciesSet.Contains(srcCh.SpeciesId)) {
+                    continue;
+                }
+
+                bool wasDimmed = (CharacterState.Dimmed == srcCh.CharacterState);
+                CharacterState newChState = wasDimmed ? CharacterState.Idle1 : srcCh.CharacterState; 
+                var newFramesInChState = wasDimmed ? 0 : srcCh.FramesInChState; 
+                int newActivatedRdfId = wasDimmed ? src.Id : srcCh.ActivatedRdfId; 
+                int newSubscribesToTriggerLocalId = wasDimmed ? (int)TERMINATING_EVTSUB_ID_INT : srcCh.SubscribesToTriggerLocalId; 
+
+                var dstCh = dst.NpcsArr[dstNpcI];
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FrictionVelY, srcCh.FramesToRecover, newFramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, newChState, dstNpcI+1, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.OnSlopeFacingDown, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.FramesSinceLastDamaged, srcCh.RemainingDef1Quota, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingToTriggerLocalIdUponKilled, srcCh.PublishingEvtMaskUponKilled, newSubscribesToTriggerLocalId, srcCh.JumpHoldingRdfCnt, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.KilledToDropPickupSkillId, srcCh.BulletImmuneRecords, srcCh.ComboHitCnt, srcCh.ComboFramesRemained, srcCh.DamageElementalAttrs, srcCh.LastDamagedByJoinIndex, srcCh.LastDamagedByBulletTeamId, newActivatedRdfId, srcCh.CachedCueCmd, dstCh);
+                dstNpcI++;
+            }
+            // [WARNING] No need to remap bullet offender join indices because "excludePlayers" would simply remove all existing bullets
+            if (dstNpcI < dst.NpcsArr.Count) {
+                dst.NpcsArr[dstNpcI].Id = TERMINATING_PLAYER_ID;
+            }
+
+            // [WARNING] Should remove all bullets too.
+            dst.Bullets[0].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+
+            int trapCnt = 0;
+            while (trapCnt < src.TrapsArr.Count) {
+                var srcTrap = src.TrapsArr[trapCnt];
+                if (TERMINATING_TRAP_ID == srcTrap.TrapLocalId) break;
+                AssignToTrap(srcTrap.TrapLocalId, srcTrap.ConfigFromTiled, srcTrap.TrapState, srcTrap.FramesInTrapState, srcTrap.VirtualGridX, srcTrap.VirtualGridY, srcTrap.DirX, srcTrap.DirY, srcTrap.VelX, srcTrap.VelY, srcTrap.SpinCos, srcTrap.SpinSin, srcTrap.AngularFrameVelCos, srcTrap.AngularFrameVelSin, srcTrap.PatrolCueAngularVelFlipMark, srcTrap.IsCompletelyStatic, srcTrap.CapturedByPatrolCue, srcTrap.FramesInPatrolCue, srcTrap.WaivingSpontaneousPatrol, srcTrap.WaivingPatrolCueId, srcTrap.SubscribesToTriggerLocalId, srcTrap.SubscribesToTriggerLocalIdAlt, dst.TrapsArr[trapCnt]);
+                trapCnt++;
+            }
+            if (trapCnt < dst.TrapsArr.Count) {
+                dst.TrapsArr[trapCnt].TrapLocalId = TERMINATING_TRAP_ID;
+            }
+
+            int triggerCnt = 0;
+            while (triggerCnt < src.TriggersArr.Count) {
+                var srcTrigger = src.TriggersArr[triggerCnt];
+                if (TERMINATING_TRIGGER_ID == srcTrigger.TriggerLocalId) break;
+                var dstTrigger = dst.TriggersArr[triggerCnt];
+                    AssignToTrigger(srcTrigger.EditorId, srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.OffenderJoinIndex, srcTrigger.OffenderBulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.DirX, srcTrigger.DemandedEvtMask, srcTrigger.FulfilledEvtMask, srcTrigger.WaveNpcKilledEvtMaskCounter, srcTrigger.SubscriberLocalIdsMask, srcTrigger.ExhaustSubscriberLocalIdsMask, srcTrigger.ConfigFromTiled, dstTrigger);
+            
+                triggerCnt++;
+            }
+            if (triggerCnt < dst.TriggersArr.Count) {
+                dst.TriggersArr[triggerCnt].TriggerLocalId = TERMINATING_TRIGGER_ID;
+            }
+        }
+
+        public static void AssignToRdfDeep(RoomDownsyncFrame src, RoomDownsyncFrame dst, int roomCapacity, ILoggerBridge logger) {
             // [WARNING] Deliberately ignoring backend-only fields, e.g. "backendUnconfirmedMask", "shouldForceResync", or "participantChangeId". 
             dst.Id = src.Id;
-            dst.BulletLocalIdCounter = src.BulletLocalIdCounter;
-            dst.NpcLocalIdCounter = src.NpcLocalIdCounter;
 
             for (int i = 0; i < roomCapacity; i++) {
                 var srcCh = src.PlayersArr[i];
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FrictionVelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.FramesSinceLastDamaged, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHoldingRdfCnt, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.BulletImmuneRecords, dst.PlayersArr[i]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FrictionVelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.OnSlopeFacingDown, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.FramesSinceLastDamaged, srcCh.RemainingDef1Quota, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingToTriggerLocalIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscribesToTriggerLocalId, srcCh.JumpHoldingRdfCnt, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.KilledToDropPickupSkillId, srcCh.BulletImmuneRecords, srcCh.ComboHitCnt, srcCh.ComboFramesRemained, srcCh.DamageElementalAttrs, srcCh.LastDamagedByJoinIndex, srcCh.LastDamagedByBulletTeamId, srcCh.ActivatedRdfId, srcCh.CachedCueCmd, dst.PlayersArr[i]);
             }
 
             int npcCnt = 0;
             while (npcCnt < src.NpcsArr.Count) {
                 var srcCh = src.NpcsArr[npcCnt];
                 if (TERMINATING_PLAYER_ID == srcCh.Id) break;
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FrictionVelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.LowerPartFramesInChState, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.FramesSinceLastDamaged, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingEvtSubIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscriptionId, srcCh.JumpHoldingRdfCnt, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.BulletImmuneRecords, dst.NpcsArr[npcCnt]);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FrictionVelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, srcCh.JoinIndex, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.OnSlopeFacingDown, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.FramesSinceLastDamaged, srcCh.RemainingDef1Quota, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingToTriggerLocalIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscribesToTriggerLocalId, srcCh.JumpHoldingRdfCnt, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.KilledToDropPickupSkillId, srcCh.BulletImmuneRecords, srcCh.ComboHitCnt, srcCh.ComboFramesRemained, srcCh.DamageElementalAttrs, srcCh.LastDamagedByJoinIndex, srcCh.LastDamagedByBulletTeamId, srcCh.ActivatedRdfId, srcCh.CachedCueCmd, dst.NpcsArr[npcCnt]);
                 npcCnt++;
             }
-            dst.NpcsArr[npcCnt].Id = TERMINATING_PLAYER_ID;
+            if (npcCnt < dst.NpcsArr.Count) {
+                dst.NpcsArr[npcCnt].Id = TERMINATING_PLAYER_ID;
+            }
+            dst.NpcLocalIdCounter = src.NpcLocalIdCounter;
 
             int bulletCnt = 0;
             while (bulletCnt < src.Bullets.Count) {
                 var srcBullet = src.Bullets[bulletCnt];
-                if (TERMINATING_BULLET_LOCAL_ID == srcBullet.BattleAttr.BulletLocalId) break;
+                if (TERMINATING_BULLET_LOCAL_ID == srcBullet.BulletLocalId) break;
                 AssignToBullet(
-                        srcBullet.BattleAttr.BulletLocalId,
-                        srcBullet.BattleAttr.OriginatedRenderFrameId,
-                        srcBullet.BattleAttr.OffenderJoinIndex,
-                        srcBullet.BattleAttr.TeamId,
+                        srcBullet.BulletLocalId,
+                        srcBullet.OriginatedRenderFrameId,
+                        srcBullet.OffenderJoinIndex,
+                        srcBullet.OffenderTrapLocalId,
+                        srcBullet.TeamId,
                         srcBullet.BlState, srcBullet.FramesInBlState,
                         srcBullet.OriginatedVirtualGridX, srcBullet.OriginatedVirtualGridY,
                         srcBullet.VirtualGridX, srcBullet.VirtualGridY,
                         srcBullet.DirX, srcBullet.DirY,
                         srcBullet.VelX, srcBullet.VelY,
-                        srcBullet.BattleAttr.ActiveSkillHit, srcBullet.BattleAttr.SkillId, srcBullet.BattleAttr.VertMovingTrapLocalIdUponActive, srcBullet.Config, srcBullet.RepeatQuotaLeft, srcBullet.RemainingHardPushbackBounceQuota, srcBullet.TargetCharacterJoinIndex,
+                        srcBullet.ActiveSkillHit, srcBullet.SkillId, srcBullet.VertMovingTrapLocalIdUponActive, srcBullet.RepeatQuotaLeft, srcBullet.RemainingHardPushbackBounceQuota, srcBullet.TargetCharacterJoinIndex,
+                        srcBullet.SpinCos, srcBullet.SpinSin,
+                        srcBullet.DamageDealed,
+                        srcBullet.ExplodedOnIfc,
                         dst.Bullets[bulletCnt]);
                  bulletCnt++;
             }
-            dst.Bullets[bulletCnt].BattleAttr.BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+            if (bulletCnt < dst.Bullets.Count) {
+                dst.Bullets[bulletCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+            }
+            dst.BulletLocalIdCounter = src.BulletLocalIdCounter;
             
             int trapCnt = 0;
             while (trapCnt < src.TrapsArr.Count) {
                 var srcTrap = src.TrapsArr[trapCnt];
                 if (TERMINATING_TRAP_ID == srcTrap.TrapLocalId) break;
-                AssignToTrap(srcTrap.TrapLocalId, srcTrap.Config, srcTrap.ConfigFromTiled, srcTrap.TrapState, srcTrap.FramesInTrapState, srcTrap.VirtualGridX, srcTrap.VirtualGridY, srcTrap.DirX, srcTrap.DirY, srcTrap.VelX, srcTrap.VelY, srcTrap.IsCompletelyStatic, srcTrap.CapturedByPatrolCue, srcTrap.FramesInPatrolCue, srcTrap.WaivingSpontaneousPatrol, srcTrap.WaivingPatrolCueId, srcTrap.Locked, dst.TrapsArr[trapCnt]);
+                AssignToTrap(srcTrap.TrapLocalId, srcTrap.ConfigFromTiled, srcTrap.TrapState, srcTrap.FramesInTrapState, srcTrap.VirtualGridX, srcTrap.VirtualGridY, srcTrap.DirX, srcTrap.DirY, srcTrap.VelX, srcTrap.VelY, srcTrap.SpinCos, srcTrap.SpinSin, srcTrap.AngularFrameVelCos, srcTrap.AngularFrameVelSin, srcTrap.PatrolCueAngularVelFlipMark, srcTrap.IsCompletelyStatic, srcTrap.CapturedByPatrolCue, srcTrap.FramesInPatrolCue, srcTrap.WaivingSpontaneousPatrol, srcTrap.WaivingPatrolCueId, srcTrap.SubscribesToTriggerLocalId, srcTrap.SubscribesToTriggerLocalIdAlt, dst.TrapsArr[trapCnt]);
                 trapCnt++;
             }
-            dst.TrapsArr[trapCnt].TrapLocalId = TERMINATING_TRAP_ID;
+            if (trapCnt < dst.TrapsArr.Count) {
+                dst.TrapsArr[trapCnt].TrapLocalId = TERMINATING_TRAP_ID;
+            }
 
             int triggerCnt = 0;
             while (triggerCnt < src.TriggersArr.Count) {
                 var srcTrigger = src.TriggersArr[triggerCnt];
                 if (TERMINATING_TRIGGER_ID == srcTrigger.TriggerLocalId) break;
-                AssignToTrigger(srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.Locked, srcTrigger.Config, srcTrigger.ConfigFromTiled, dst.TriggersArr[triggerCnt]);
+                var dstTrigger = dst.TriggersArr[triggerCnt];
+                    AssignToTrigger(srcTrigger.EditorId, srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.OffenderJoinIndex, srcTrigger.OffenderBulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.DirX, srcTrigger.DemandedEvtMask, srcTrigger.FulfilledEvtMask, srcTrigger.WaveNpcKilledEvtMaskCounter, srcTrigger.SubscriberLocalIdsMask, srcTrigger.ExhaustSubscriberLocalIdsMask, srcTrigger.ConfigFromTiled, dstTrigger);
+            
                 triggerCnt++;
             }
-            dst.TriggersArr[triggerCnt].TriggerLocalId = TERMINATING_TRIGGER_ID;
+            if (triggerCnt < dst.TriggersArr.Count) {
+                dst.TriggersArr[triggerCnt].TriggerLocalId = TERMINATING_TRIGGER_ID;
+            }
         }
 
         public static bool EqualRdfs(RoomDownsyncFrame lhs, RoomDownsyncFrame rhs, int roomCapacity) {
@@ -595,19 +786,18 @@ namespace shared {
             while (bulletCnt < lhs.Bullets.Count) {
                 var lBullet = lhs.Bullets[bulletCnt];
                 var rBullet = rhs.Bullets[bulletCnt];
-                if (lBullet.BattleAttr.BulletLocalId != rBullet.BattleAttr.BulletLocalId) return false;
-                if (lBullet.BattleAttr.BulletLocalId == TERMINATING_BULLET_LOCAL_ID) break;
-                if (lBullet.BattleAttr.OriginatedRenderFrameId != rBullet.BattleAttr.OriginatedRenderFrameId) return false;
-                if (lBullet.BattleAttr.OffenderJoinIndex != rBullet.BattleAttr.OffenderJoinIndex) return false;
-                if (lBullet.BattleAttr.TeamId != rBullet.BattleAttr.TeamId) return false;
+                if (lBullet.BulletLocalId != rBullet.BulletLocalId) return false;
+                if (lBullet.BulletLocalId == TERMINATING_BULLET_LOCAL_ID) break;
+                if (lBullet.OriginatedRenderFrameId != rBullet.OriginatedRenderFrameId) return false;
+                if (lBullet.OffenderJoinIndex != rBullet.OffenderJoinIndex) return false;
+                if (lBullet.TeamId != rBullet.TeamId) return false;
                 if (lBullet.BlState != rBullet.BlState) return false;
                 if (lBullet.FramesInBlState != rBullet.FramesInBlState) return false;
                 if (lBullet.VirtualGridX != rBullet.VirtualGridY) return false;
                 if (lBullet.DirX != rBullet.DirX) return false;
                 if (lBullet.DirY != rBullet.DirY) return false;
-                if (lBullet.BattleAttr.ActiveSkillHit != rBullet.BattleAttr.ActiveSkillHit) return false;
-                if (lBullet.BattleAttr.SkillId != rBullet.BattleAttr.SkillId) return false;
-                if (lBullet.Config != rBullet.Config) return false;  // Should be exactly the same ptr
+                if (lBullet.ActiveSkillHit != rBullet.ActiveSkillHit) return false;
+                if (lBullet.SkillId != rBullet.SkillId) return false;
                 if (lBullet.RepeatQuotaLeft != rBullet.RepeatQuotaLeft) return false;
                  bulletCnt++;
             }
@@ -635,7 +825,6 @@ namespace shared {
                 if (lTrigger.FramesInState != rTrigger.FramesInState) return false;
                 if (lTrigger.VirtualGridX != rTrigger.VirtualGridX) return false;
                 if (lTrigger.VirtualGridY != rTrigger.VirtualGridY) return false;
-                if (lTrigger.Config != rTrigger.Config) return false; // Should be exactly the same ptr
                 if (lTrigger.ConfigFromTiled != rTrigger.ConfigFromTiled) return false; // Should be exactly the same ptr
                 triggerCnt++;
             }
@@ -648,13 +837,66 @@ namespace shared {
                 var nextChConfig = characters[cand.OrigChSpeciesId];
                 AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
             }
+            if (buffConfig.OmitGravity) {
+                thatCharacterInNextFrame.OmitGravity = cand.OrigOmitGravity;
+            }
+            if (buffConfig.RepelSoftPushback) {
+                thatCharacterInNextFrame.RepelSoftPushback = cand.OrigRepelSoftPushback;
+            }
+        }
+
+        public static void revertAllBuffsAndDebuffs(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame) {
+            int prevBuffI = 0;
+            while (prevBuffI < currCharacterDownsync.BuffList.Count) {
+                var cand = currCharacterDownsync.BuffList[prevBuffI++];
+                if (TERMINATING_BUFF_SPECIES_ID == cand.SpeciesId) break;
+                revertBuff(cand, thatCharacterInNextFrame);
+            }
+            AssignToBuff(TERMINATING_BUFF_SPECIES_ID, 0, TERMINATING_RENDER_FRAME_ID, SPECIES_NONE_CH, false, false, thatCharacterInNextFrame.BuffList[0]);
+
+            int prevDebuffI = 0;
+            while (prevDebuffI < currCharacterDownsync.DebuffList.Count) {
+                var cand = currCharacterDownsync.DebuffList[prevDebuffI++];
+                if (TERMINATING_DEBUFF_SPECIES_ID == cand.SpeciesId) break;
+                revertDebuff(cand, thatCharacterInNextFrame);
+            }
+            AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, thatCharacterInNextFrame.DebuffList[0]);
         }
 
         public static void revertDebuff(Debuff cand, CharacterDownsync thatCharacterInNextFrame) {
             // TBD
         }
 
-        public static void preallocateStepHolders(int roomCapacity, int renderBufferSize, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocEvtSubCapacity, int preallocPickableCount, out int justFulfilledEvtSubCnt, out int[] justFulfilledEvtSubArr, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
+        public static void ApplyBuffToCharacter(int rdfId, BuffConfig buffConfig, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame) {
+            uint origChSpeciesId = SPECIES_NONE_CH;
+            if (SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {
+                origChSpeciesId = currCharacterDownsync.SpeciesId;
+                var nextChConfig = characters[buffConfig.XformChSpeciesId];
+                AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
+            }
+            bool origRepelSoftPushback = currCharacterDownsync.RepelSoftPushback;
+            if (buffConfig.RepelSoftPushback) {
+                thatCharacterInNextFrame.RepelSoftPushback = buffConfig.RepelSoftPushback;
+            }
+            bool origOmitGravity = currCharacterDownsync.OmitGravity;
+            if (buffConfig.OmitGravity) {
+                thatCharacterInNextFrame.OmitGravity = buffConfig.OmitGravity;
+            }
+            // TODO: Support multi-buff simultaneously!
+            AssignToBuff(buffConfig.SpeciesId, buffConfig.Stock, rdfId, origChSpeciesId, origRepelSoftPushback, origOmitGravity, thatCharacterInNextFrame.BuffList[0]);
+        }
+
+        public static bool isBattleResultSet(BattleResult battleResult) {
+            return (TERMINATING_BULLET_TEAM_ID != battleResult.WinnerBulletTeamId);
+        }
+
+        public static void resetBattleResult(ref BattleResult battleResult) {
+            battleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
+            battleResult.WinnerBulletTeamId = TERMINATING_BULLET_TEAM_ID;
+        }
+
+
+        public static void preallocateStepHolders(int roomCapacity, int renderBufferSize, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocPickableCount, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
             /*
             [WARNING] 
 
@@ -664,12 +906,9 @@ namespace shared {
                 throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
             }
 
-            justFulfilledEvtSubCnt = 0;
-            justFulfilledEvtSubArr = new int[16]; // TODO: Remove this hardcoded capacity 
-
             renderBuffer = new FrameRingBuffer<RoomDownsyncFrame>(renderBufferSize);
             for (int i = 0; i < renderBufferSize; i++) {
-                renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocEvtSubCapacity, preallocPickableCount));
+                renderBuffer.Put(NewPreallocatedRoomDownsyncFrame(roomCapacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocPickableCount));
             }
             renderBuffer.Clear(); // Then use it by "DryPut"
 
@@ -725,16 +964,15 @@ namespace shared {
             prevDecodedInputHolder = new InputFrameDecoded();
 
             confirmedBattleResult = new BattleResult {
-                WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
+                WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT,
+                WinnerBulletTeamId = TERMINATING_BULLET_TEAM_ID
             };
         }
 
-        public static void provisionStepHolders(int roomCapacity, out int justFulfilledEvtSubCnt, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, FrameRingBuffer<InputFrameDownsync> inputBuffer, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, BattleResult confirmedBattleResult) {
+        public static void provisionStepHolders(int roomCapacity, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, FrameRingBuffer<InputFrameDownsync> inputBuffer, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, BattleResult confirmedBattleResult) {
             if (0 >= roomCapacity) {
                 throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
             }
-
-            justFulfilledEvtSubCnt = 0;
 
             renderBuffer.Clear(); // Then use it by "DryPut"
             pushbackFrameLogBuffer.Clear(); // Then use it by "DryPut"
@@ -761,7 +999,7 @@ namespace shared {
                 softPushbacks[i].Y = 0;
             }
 
-            confirmedBattleResult.WinnerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT;
+            resetBattleResult(ref confirmedBattleResult);
         }
 
         public static void clearColliders(ref CollisionSpace collisionSys, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, ref Collision collisionHolder, ref List<Collider> completelyStaticTrapColliders, ref FrameRingBuffer<Collider> residueCollided) {
@@ -809,7 +1047,7 @@ namespace shared {
             collisionHolder.ClearDeep();
         }
 
-        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerTrackingIdToTrapLocalId serializedTriggerTrackingIdToTrapLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref FrameRingBuffer<Collider> residueCollided, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerTrackingIdToTrapLocalId) {
+        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId serializedTriggerEditorIdToLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref FrameRingBuffer<Collider> residueCollided, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerEditorIdToLocalId) {
             /*
             [WARNING] 
     
@@ -820,7 +1058,7 @@ namespace shared {
 
             int cellWidth = 64;
             int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
-            collisionSys = new CollisionSpace(spaceOffsetX << 1, spaceOffsetY << 1, cellWidth, cellHeight); // spaceOffsetX, spaceOffsetY might change for each map, so not reusing memory here due to similar reason given above for "Collider"
+            collisionSys = new CollisionSpace((spaceOffsetX << 1), (spaceOffsetY << 1), cellWidth, cellHeight); // spaceOffsetX, spaceOffsetY might change for each map, so not reusing memory here due to similar reason given above for "Collider"
 
             collisionHolder = new Collision();
 
@@ -865,7 +1103,11 @@ namespace shared {
                 s.Polygon.Points.CopyTo(points, 0);
                 var trapPolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
                 var trapCollider = NewConvexPolygonCollider(trapPolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
-                trapCollider.Mask = COLLISION_TRAP_INDEX_PREFIX; // [WARNING] NOT using "s.Attr.CollisionTypeMask", see comments in "room_downsync_frame.proto > SerializedCompletelyStaticTrapCollider"  
+                if (0 < (s.Attr.CollisionTypeMask & COLLISION_REFRACTORY_INDEX_PREFIX)) {   
+                    trapCollider.Mask = s.Attr.CollisionTypeMask;   
+                } else {
+                    trapCollider.Mask = COLLISION_TRAP_INDEX_PREFIX; // [WARNING] NOT using "s.Attr.CollisionTypeMask", see comments in "room_downsync_frame.proto > SerializedCompletelyStaticTrapCollider"  
+                }
                 staticColliders[staticCollidersCnt++] = trapCollider;
                 completelyStaticTrapColliders.Add(trapCollider);
             }
@@ -876,9 +1118,9 @@ namespace shared {
                 s.Polygon.Points.CopyTo(points, 0);
                 var triggerPolygon = new ConvexPolygon(s.Polygon.AnchorX, s.Polygon.AnchorY, points);
                 var triggerCollider = NewConvexPolygonCollider(triggerPolygon, 0, 0, maxTouchingCellsCnt, s.Attr);
-                var trigger = startRdf.TriggersArr[s.Attr.TriggerLocalId];
-                var triggerConfig = trigger.Config;
-                triggerCollider.Mask = triggerConfig.TriggerMask;
+                var trigger = startRdf.TriggersArr[s.Attr.TriggerLocalId-1];
+                var triggerConfig = triggerConfigs[s.Attr.SpeciesId];
+                triggerCollider.Mask = triggerConfig.CollisionTypeMask;
                 staticColliders[staticCollidersCnt++] = triggerCollider;
             }
 
@@ -895,20 +1137,20 @@ namespace shared {
                 trapLocalIdToColliderAttrs[trapLocalId] = colliderAttrs;
             }
 
-            triggerTrackingIdToTrapLocalId = new Dictionary<int, int>();
-            foreach (var entry in serializedTriggerTrackingIdToTrapLocalId.Dict) {
-                triggerTrackingIdToTrapLocalId[entry.Key] = entry.Value; 
+            triggerEditorIdToLocalId = new Dictionary<int, int>();
+            foreach (var entry in serializedTriggerEditorIdToLocalId.Dict) {
+                triggerEditorIdToLocalId[entry.Key] = entry.Value;
             }
 
             for (int i = 0; i < staticCollidersCnt; i++) {
-                collisionSys.AddSingle(staticColliders[i]);
+                collisionSys.AddSingleToCellTail(staticColliders[i]);
             }
         }
     }
 
     public sealed partial class BulletConfig {
         
-        public BulletConfig UpsertCancelTransit(int patternId, int skillId) {
+        public BulletConfig UpsertCancelTransit(int patternId, uint skillId) {
             this.CancelTransit.Add(patternId, skillId);
             return this;
         }
@@ -925,6 +1167,26 @@ namespace shared {
 
         public BulletConfig SetStartupFrames(int val) {
             this.StartupFrames = val;
+            return this;
+        }
+
+        public BulletConfig SetStartupInvinsibleFrames(int val) {
+            this.StartupInvinsibleFrames = val;
+            return this;
+        }
+
+        public BulletConfig SetActiveFrames(int val) {
+            this.ActiveFrames = val;
+            return this;
+        }
+
+        public BulletConfig SetHitStunFrames(int val) {
+            this.HitStunFrames = val;
+            return this;
+        }
+
+        public BulletConfig SetFinishingFrames(int val) {
+            this.FinishingFrames = val;
             return this;
         }
 
@@ -950,9 +1212,10 @@ namespace shared {
             return this;
         }
 
-        public BulletConfig SetSelfLockVel(int x, int y) {
+        public BulletConfig SetSelfLockVel(int x, int y, int yWhenFlying) {
             this.SelfLockVelX = x;
             this.SelfLockVelY = y;
+            this.SelfLockVelYWhenFlying = yWhenFlying;
             return this;
         }
 
@@ -1005,6 +1268,28 @@ namespace shared {
         public bool isEmissionInducedMultiHit() {
             return (MultiHitType.FromEmission == MhType);
         }
+
+        public BulletConfig SetBlowUp(bool val) {
+            BlowUp = val;
+            return this;
+        }
+
+        public BulletConfig SetSpinAnchor(float x, float y) {
+            SpinAnchorX = x;
+            SpinAnchorY = y;
+            return this;
+        }
+
+        public BulletConfig SetAngularVel(float cosVal, float sinVal) {
+            AngularFrameVelCos = cosVal;
+            AngularFrameVelSin = sinVal;
+            return this;
+        }
+
+        public BulletConfig SetMhInheritsSpin(bool val) {
+            MhInheritsSpin = val;
+            return this;
+        }
     }
 
     public sealed partial class Skill {
@@ -1019,6 +1304,50 @@ namespace shared {
         public BuffConfig AddAssociatedDebuff(DebuffConfig val) {
             AssociatedDebuffs.Add(val.SpeciesId);
             return this;
+        }
+    }
+
+    public sealed partial class StoryPointStep {
+        public StoryPointStep(StoryPointDialogLine[] lines) {
+            this.Lines.AddRange(lines);
+        }
+        public StoryPointStep AddLine(StoryPointDialogLine line) {
+            Lines.Add(line);
+            return this;
+        }
+    }
+
+    public sealed partial class StoryPoint {
+        public StoryPoint(StoryPointStep[] steps) {
+            this.Steps.AddRange(steps);
+        }
+        public StoryPoint AddStep(StoryPointStep step) {
+            Steps.Add(step);
+            return this;
+        }
+    }
+    
+    public sealed partial class LevelStory {
+        public LevelStory(StoryPoint[] seqPoints) {
+            for (int i = 1; i < seqPoints.Length; i++) {
+                Points.Add(i, seqPoints[i-1]);
+            }
+        }
+        public LevelStory UpdatePoint(int pointId, StoryPoint point) {
+            Points.Add(pointId, point);
+            return this;
+        }
+
+    }
+    
+    public sealed partial class InputFrameDecoded {
+        public void Reset() {
+            Dx = 0;
+            Dy = 0;
+            BtnALevel = 0;
+            BtnBLevel = 0;
+            BtnCLevel = 0;
+            BtnDLevel = 0;
         }
     }
 }

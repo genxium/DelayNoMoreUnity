@@ -4,8 +4,11 @@ namespace shared {
     public class CollisionSpace {
         CollisionCell[,] Cells;
         int CellWidth, CellHeight; // Width and Height of each Cell in "world-space" / pixels / whatever
+        int SpaceWidth, SpaceHeight;
 
         public CollisionSpace(int spaceWidth, int spaceHeight, int cellWidth, int cellHeight) {
+            SpaceWidth = spaceWidth;
+            SpaceHeight = spaceHeight;
             CellWidth = cellWidth;
             CellHeight = cellHeight;
 
@@ -18,6 +21,14 @@ namespace shared {
                     Cells[y, x] = new CollisionCell(x, y);
                 }
             }
+        }
+
+        public int GetSpaceWidth() {
+            return SpaceWidth;
+        }
+
+        public int GetSpaceHeight() {
+            return SpaceHeight;
         }
 
         // WorldToSpace converts from a world position (x, y) to a position in the Space (a grid-based position).
@@ -41,13 +52,14 @@ namespace shared {
             return null;
         }
 
-        public void AddSingle(Collider collider) {
-            /*
-               [WARNING] 
+        /*
+        [WARNING] 
 
-               1. For a static collider, this "AddSingle" would only be called once, thus no cleanup for static collider is needed.
-               2. For a dynamic collider, this "AddSingle" would be called multiple times, but at the end of each "Step", we'd call "Space.RemoveSingle" to clean up for the dynamic collider.
-             */
+        1. For a static collider, this "AddSingle" would only be called once, thus no cleanup for static collider is needed.
+        2. For a dynamic collider, this "AddSingle" would be called multiple times, but at the end of each "Step", we'd call "Space.RemoveSingle" to clean up for the dynamic collider.
+        */
+        /*
+        public void AddSingle(Collider collider) {
             collider.Space = this;
             var (cx, cy, ex, ey) = collider.BoundsToSpace(0, 0);
             for (int y = cy; y <= ey; y++) {
@@ -74,6 +86,40 @@ namespace shared {
                 var (_, cell) = collider.TouchingCells.Pop();
                 if (null != cell) {
                     cell.unregister(collider);
+                }
+            }
+
+            collider.Space = null;
+        }
+        */
+
+        public void AddSingleToCellTail(Collider collider) {
+            collider.Space = this;
+            var (cx, cy, ex, ey) = collider.BoundsToSpace(0, 0);
+            for (int y = cy; y <= ey; y++) {
+                for (int x = cx; x <= ex; x++) {
+                    var c = GetCell(x, y);
+                    if (null != c) {
+                        if (collider.TouchingCells.Cnt >= collider.TouchingCells.N) {
+                            throw new ArgumentException(String.Format("collider.TouchingCells is already full! Cnt={0}, N={1}: trying to insert cell X={2}, Y={3}", collider.TouchingCells.Cnt, collider.TouchingCells.N, x, y));
+                        }
+                        c.registerToTail(collider);
+                        collider.TouchingCells.Put(c);
+                    }
+                }
+
+            }
+
+            if (null != collider.Shape) {
+                collider.Shape.SetPosition(collider.X, collider.Y);
+            }
+        }
+
+        public void RemoveSingleFromCellTail(Collider collider) {
+            while (0 < collider.TouchingCells.Cnt) {
+                var (_, cell) = collider.TouchingCells.Pop();
+                if (null != cell) {
+                    cell.unregisterFromTail(collider);
                 }
             }
 

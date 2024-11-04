@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using shared;
+using System.Collections.Generic;
 
 public class NetworkDoctor {
     private int EXPIRY_MILLIS = 1500;
@@ -253,7 +254,7 @@ public class NetworkDoctor {
         return (sendingFps, srvDownsyncFps, peerUpsyncFps);
     }
 
-    public (bool, int, float, float, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int rdfLagTolerance, int ifdLagTolerance) {
+    public (bool, int, float, float, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int rdfLagTolerance, int ifdLagTolerance, HashSet<int> disconnectedPeerJoinIndices) {
         var (sendingFps, _, peerUpsyncFps) = Stats();
         chasedToPlayerRdfIdIndicatorCountdown -= 1.0f;
         if (0 > chasedToPlayerRdfIdIndicatorCountdown) {
@@ -272,6 +273,9 @@ public class NetworkDoctor {
         for (int k = 0; k < roomCapacity; ++k) {
             if (k + 1 == selfJoinIndex) continue; // Don't count self in
             if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
+            if (disconnectedPeerJoinIndices.Contains(k + 1)) {
+                continue;
+            }
             minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];
         }
 

@@ -1,8 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
 namespace shared {
     public partial class Battle {
+        /*
+        What makes a trap a "trap not bullet or npc"?
+
+        1. It can subscribe to a trigger multiple times, e.g. a door that can open and close by triggers.
+        2. It can provide "slipJump" (either static or not).
+        3. It must have no vision, or use a Trigger to mimic one if needed. A movable vision implementation is reserved only for bullet and npc.
+        4. It's indestructible -- which is imposed by the use of a static "trapLocalIdToColliderAttrs" in "Step(...)", a design legacy not easy to change for now, i.e. "_leftDestroyedTraps" needs a remap in "trapLocalIdToColliderAttrs" to work.   
+        */
+        public static int MAGIC_FRAMES_FOR_TRAP_TO_WAIVE_PATROL_CUE = 45;
         public static TrapConfig TrapBarrier = new TrapConfig {
             SpeciesId = 1,
             SpeciesName = "TrapBarrier"
@@ -16,7 +26,6 @@ namespace shared {
             Damage = 15,
             HitStunFrames = 25,
             HitInvinsibleFrames = 120,
-            Destroyable = false,
             SpeciesName = "LinearSpike",
             Hardness = 6, 
         };
@@ -29,7 +38,6 @@ namespace shared {
             Damage = 5,
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
-            Destroyable = false,
             SpeciesName = "LinearBallSpike",
             Hardness = 6, 
         };
@@ -47,9 +55,9 @@ namespace shared {
             Damage = 8,
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
-            Destroyable = false,
             SpeciesName = "SawSmall",
             Hardness = 8, 
+            PatrolCueRequiresFullContain = true, 
         };
 
         public static TrapConfig SawBig = new TrapConfig {
@@ -60,29 +68,100 @@ namespace shared {
             Damage = 16,
             HitStunFrames = 30,
             HitInvinsibleFrames = 60,
-            Destroyable = false,
             SpeciesName = "SawBig",
             Hardness = 9, 
+            PatrolCueRequiresFullContain = true, 
         };
 
         public static TrapConfig EscapeDoor = new TrapConfig {
             SpeciesId = 7,
-            Destroyable = false,
             SpeciesName = "EscapeDoor",
         };
 
         public static TrapConfig GreenGate = new TrapConfig {
             SpeciesId = 8,
-            Destroyable = true,
+            Deactivatable = true,
             SpeciesName = "GreenGate",
-            DestroyUponTriggered = true,
+            DeactivateUponTriggered = true,
         };
 
         public static TrapConfig RedGate = new TrapConfig {
             SpeciesId = 9,
-            Destroyable = true,
+            Deactivatable = true,
             SpeciesName = "RedGate",
-            DestroyUponTriggered = true,
+            DeactivateUponTriggered = true,
+        };
+
+        public static TrapConfig Jumper1 = new TrapConfig {
+            SpeciesId = 10,
+            SpeciesName = "Jumper1",
+        };
+
+        public static TrapConfig FireBreatherLv1 = new TrapConfig {
+            SpeciesId = 11,
+            SpeciesName = "FireBreatherLv1",
+        };
+
+        public static TrapConfig LongConveyorToL = new TrapConfig {
+            SpeciesId = 12,
+            SpeciesName = "LongConveyorToL",
+            ConstFrictionVelXTop = (int)(-2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            ConstFrictionVelXBottom = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+        };
+
+        public static TrapConfig LongConveyorToR = new TrapConfig {
+            SpeciesId = 13,
+            SpeciesName = "LongConveyorToR",
+            ConstFrictionVelXTop = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            ConstFrictionVelXBottom = (int)(-2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+        };
+
+        public static TrapConfig ShortConveyorToL = new TrapConfig {
+            SpeciesId = 14,
+            SpeciesName = "ShortConveyorToL",
+            ConstFrictionVelXTop = (int)(-2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            ConstFrictionVelXBottom = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+        };
+
+        public static TrapConfig ShortConveyorToR = new TrapConfig {
+            SpeciesId = 15,
+            SpeciesName = "ShortConveyorToR",
+            ConstFrictionVelXTop = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            ConstFrictionVelXBottom = (int)(-2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+        };
+
+        public static TrapConfig RotaryBarrier = new TrapConfig {
+            SpeciesId = 16,
+            SpeciesName = "RotaryBarrier",
+            SpinAnchorX = 12.0f,
+            SpinAnchorY = 8.0f,
+            AngularFrameVelCos = (float)Math.Cos(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
+            AngularFrameVelSin = (float)Math.Sin(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
+            PatrolCueRequiresFullContain = true,
+        };
+
+        public static TrapConfig VerticalRotaryBarrier = new TrapConfig {
+            SpeciesId = 17,
+            SpeciesName = "VerticalRotaryBarrier",
+            SpinAnchorX = 8.0f,
+            SpinAnchorY = 6.0f,
+            AngularFrameVelCos = (float)Math.Cos(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
+            AngularFrameVelSin = (float)Math.Sin(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)),
+            IntrinsicSpinCos = 0,
+            IntrinsicSpinSin = 1,
+            PatrolCueRequiresFullContain = true,
+        };
+
+        public static TrapConfig VerticalRotaryBarrierLong = new TrapConfig {
+            SpeciesId = 18,
+            SpeciesName = "VerticalRotaryBarrierLong",
+            SpinAnchorX = 8.0f,
+            SpinAnchorY = 6.0f,
+            AngularFrameVelCos = (float)Math.Cos(+5f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
+            AngularFrameVelSin = (float)Math.Sin(+5f / (Math.PI * BATTLE_DYNAMICS_FPS)),
+            IntrinsicSpinCos = 0,
+            IntrinsicSpinSin = 1,
+            PatrolCueRequiresFullContain = true,
         };
 
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
@@ -96,6 +175,15 @@ namespace shared {
                     new KeyValuePair<int, TrapConfig>(SawBig.SpeciesId, SawBig),
                     new KeyValuePair<int, TrapConfig>(GreenGate.SpeciesId, GreenGate),
                     new KeyValuePair<int, TrapConfig>(RedGate.SpeciesId, RedGate),
+                    new KeyValuePair<int, TrapConfig>(Jumper1.SpeciesId, Jumper1),
+                    new KeyValuePair<int, TrapConfig>(FireBreatherLv1.SpeciesId, FireBreatherLv1),
+                    new KeyValuePair<int, TrapConfig>(LongConveyorToL.SpeciesId, LongConveyorToL),
+                    new KeyValuePair<int, TrapConfig>(LongConveyorToR.SpeciesId, LongConveyorToR),
+                    new KeyValuePair<int, TrapConfig>(ShortConveyorToL.SpeciesId, ShortConveyorToL),
+                    new KeyValuePair<int, TrapConfig>(ShortConveyorToR.SpeciesId, ShortConveyorToR),
+                    new KeyValuePair<int, TrapConfig>(RotaryBarrier.SpeciesId, RotaryBarrier),
+                    new KeyValuePair<int, TrapConfig>(VerticalRotaryBarrier.SpeciesId, VerticalRotaryBarrier),
+                    new KeyValuePair<int, TrapConfig>(VerticalRotaryBarrierLong.SpeciesId, VerticalRotaryBarrierLong),
                 }
         );
     }

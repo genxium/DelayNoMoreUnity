@@ -8,12 +8,21 @@ The root cause of the need for such periodic RoomDownsyncFrame downsync is that 
 
 # How to find all spots of input predictions?
 ```
-proj-root> grep -ri "31UL" --color ./frontend/Assets/Scripts/
-proj-root> grep -ri "31UL" --color ./backend/
-proj-root> grep -ri "31UL" --color ./shared/
+proj-root> grep -ri "shouldPredictBtnAHold" --color ./frontend/Assets/Scripts/
+proj-root> grep -ri "shouldPredictBtnAHold" --color ./backend/
+proj-root> grep -ri "shouldPredictBtnAHold" --color ./shared/
 ```
 
 # Latest tag change notes
+v2.0.0 new features
+- Drastically reduced memory and CPU usage per battle, with enhanced rollback-compatible determinism of collision system and more versatile game mechanics
+- Auto-rejoin after accidental TCP disconnection
+- Added flying NPCs and jumper trap
+- Reduced static trap memory footprint in game mechanics stepping
+- Refactored trigger mechanism for clearance and easy of configuration
+- Added render-only player position interpolation for smoother graphics during resync 
+- Added gauged inventory slot for super skills
+
 v1.6.7 new features
 - Improved frontend lockstep handling.
 - Improved backend downsync nonblocking handling.
@@ -26,42 +35,6 @@ v1.6.7 new features
     - Rule of thumb: the same `renderFrameId` MUST take the same `inputFrameId` for all peers regardless of their individual `inputDelay`s. 
     - Therefore, if individual `inputDelay`s are different, the trick would be on `inputFrameId` generation, i.e. for each peer if its `inputDelay` suddenly goes up from `inputDelayStd=2` to `inputDelayDynamic=4`, then its generated `inputFrameId` at `renderFrameId=242` should go up from `toGenerateInputFrameIdOld = (renderFrameId >> 2) = 60` to `toGenerateInputFrameIdNew = ((renderFrameId+(inputDelayDynamic-inputDelayStd)) >> 2)=61` -- while `localRequiredInputFrameId = ((renderFrameId-inputDelayStd) >> 2)` is unchanged, hence `toGenerateInputFrameIdNew` is to be used by a later renderFrame, making a feel of "larger input-to-impact-delay". 
 - Added support for "no player input overwriting" on backend and option for "useFreezingLockStep" on frontend.
-
-v1.5.9 new features
-- Updated existing levels and characters.
-- Tuned assets for DemonFireSlime.
-- Fixed fireball Y-axis inertia.
-- Accounted UDP upsyncs into `Room.inputBuffer` on `backend`.
-- Enhanced `backend` handling of `inputBufferSnapshot` serialization on both thread-safety and efficiency.
-- Fixed pickable stuck at upper platform.
-- Enhanced handling of halted ws session.
-
-v1.4.3 new features
-- Replaced MonkGirl by new character WitchGirl
-- Added new bullet type GroundWave
-- Added bullet immune memory mechanism for enhanced "RemainsUponHit" behaviour
-- Fixes for rdf history correction
-
-v1.3.8 new features
-- Added quota limited air-jump and air-dash dynamics
-- Fixes for NPC jumping.
-- Fixes for force-resync
-- Fixes for a few `cancel-and-rejoin` cases in online arena
-- Refactored UI for better login flow and inventory-btnB feature 
-- Added new NPC character SkeleArcher 
-- Added offline mode evt-triggered dialogs
-- Added hold-to-jump-further dynamics
-- Enhanced inertia handling for walking and jumping
-- Prioritized dashing
-- Reduced jumpng latency
-
-v1.2.9 new features
-- Fixed ringbuff contamination for pushback framelogging 
-- Fixed resync continuation handling on the ACTIVE NORMAL TICKER side
-- wave-based triggers (implemented by event mask subscription, configured in Tiled `EvtSub` object layer)
-- character specific inventory & buff (including xform for knifegirl, and bomb for gungirl with different inventory types)
-- backend dynamics (thus recovery reconnection & active slow ticker force resync) 
-- more rigorous deterministic game dynamics
 
 Please checkout the demo video on YouTube([basic ops](https://www.youtube.com/watch?v=gu_MfR2oWw0), [field tests](https://www.youtube.com/watch?v=le-gEMUMysM)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/1WPXsaxrkcQvZaQV0Kd75rg?pwd=vtzg), [field tests](https://pan.baidu.com/s/1WVDlJ1u40qctMFcdYuCw9g?pwd=nxa9)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
 

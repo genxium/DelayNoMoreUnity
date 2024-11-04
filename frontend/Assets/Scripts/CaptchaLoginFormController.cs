@@ -11,7 +11,7 @@ using shared;
 
 public class CaptchaLoginFormController : MonoBehaviour {
     private bool currentPanelEnabled = true;
-
+    public UISoundSource uiSoundSource;
     // UI bindings are done in the Editor, the field bindings here are used for enabling/disabling in script.
     public TMP_InputField UnameInput;
 	public TMP_InputField CaptchaInput;
@@ -23,7 +23,7 @@ public class CaptchaLoginFormController : MonoBehaviour {
     public delegate void SimpleDelegate();
     SimpleDelegate postCancelledCb = null;
 
-    public Image CancelButton;
+    public GameObject cancelBtn;
 
     public void SetOnLoginResultCallback(WsSessionManager.OnLoginResult newOnLoginResultCallback, SimpleDelegate thePostPostCancelledCb) {
         onLoginResultCallback = newOnLoginResultCallback;
@@ -47,6 +47,9 @@ public class CaptchaLoginFormController : MonoBehaviour {
     public void OnCancel() {
         ClearOnLoginResultCallback();
         gameObject.SetActive(false);
+        if (null != uiSoundSource) {
+            uiSoundSource.PlayCancel();
+        }
         if (null != postCancelledCb) {
             postCancelledCb();
         }
@@ -60,15 +63,18 @@ public class CaptchaLoginFormController : MonoBehaviour {
         GetCaptchaButton.interactable = enabled;
         LoginActionButton.interactable = enabled;
         if (enabled) {
-            CancelButton.gameObject.transform.localScale = Vector3.one;
+            cancelBtn.transform.localScale = Vector3.one;
         } else {    
-            CancelButton.gameObject.transform.localScale = Vector3.zero;
+            cancelBtn.transform.localScale = Vector3.zero;
         }
     }
 
     public void OnGetCaptchaButtonClicked() {
         string httpHost = Env.Instance.getHttpHost();
         Debug.Log(String.Format("GetCaptchaButton is clicked, httpHost={0}", httpHost));
+        if (null != uiSoundSource) {
+            uiSoundSource.PlayPositive();
+        }
         toggleUIInteractability(false);
         StartCoroutine(doRequestGetCapture(httpHost));
     }
@@ -102,6 +108,9 @@ public class CaptchaLoginFormController : MonoBehaviour {
     public void OnLoginActionButtonClicked() {
         string httpHost = Env.Instance.getHttpHost();
         Debug.Log(String.Format("LoginActionButton is clicked, httpHost={0}", httpHost));
+        if (null != uiSoundSource) {
+            uiSoundSource.PlayPositive();
+        }
         toggleUIInteractability(false);
         StartCoroutine(doSmsCaptchaLoginAction(httpHost));
     }

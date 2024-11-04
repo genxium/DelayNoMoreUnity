@@ -6,22 +6,22 @@ namespace shared {
     // [WARNING] This class is NOT thread-safe! By default it's a min-heap.
     // Reference https://github.com/genxium/DelayNoMore/blob/v1.0.15/frontend/assets/scripts/PriorityQueue.js, BUT in the C# version, "key" ALWAYS means "lookupKey" to be distinguished from "score".
     public class KvPriorityQueue<TKey, TVal>
-            where TKey : class
             where TVal : class {
 
         public delegate int ValScore(TVal s);
 
         private int TERMINATING_ID = -1;
         public FrameRingBuffer<TVal> vals; // Using "FrameRingBuffer" because we have to support all operations "access by index", "pop" & "put"!  
-        public FrameRingBuffer<TKey> keys;
 
         protected ValScore scoringFunc;
 
         protected Dictionary<TKey, int> lookupKeyToIndex;
+        protected Dictionary<int, TKey> frameIdToLookupKey; // Compared with https://github.com/genxium/DelayNoMoreUnity/blob/v1.6.7/shared/KvPriorityQueue.cs#L16, this alllows me to use integer keys
+
         public KvPriorityQueue(int n, ValScore aScoringFunc) {
             vals = new FrameRingBuffer<TVal>(n);
-            keys = new FrameRingBuffer<TKey>(n);
             lookupKeyToIndex = new Dictionary<TKey, int>(); // Here "index" refers to the "frameId" in "FrameRingBuffer<TVal> vals"
+            frameIdToLookupKey = new Dictionary<int, TKey>();
             scoringFunc = aScoringFunc;
         }
 
@@ -29,13 +29,11 @@ namespace shared {
             if (!lookupKeyToIndex.ContainsKey(lookupKey)) {
                 int i = vals.EdFrameId;
                 vals.Put(val);
-                keys.Put(lookupKey);
                 lookupKeyToIndex[lookupKey] = i;
+                frameIdToLookupKey[i] = lookupKey;
                 heapifyUp(i);
             } else {
                 int i = lookupKeyToIndex[lookupKey];
-
-                keys.SetByFrameId(lookupKey, i);
                 vals.SetByFrameId(val, i);
 
                 heapifyUp(i);
@@ -65,13 +63,15 @@ namespace shared {
             if (0 == vals.Cnt) {
                 return null;
             }
+
+            int origStFrameId = vals.StFrameId;
             if (1 == vals.Cnt) {
-                var lookupKey = keys.GetFirst();
+                var lookupKey = frameIdToLookupKey[origStFrameId];
                 if (null == lookupKey) {
                     throw new ArgumentNullException(String.Format("Couldn't find first in keys"));
                 }
                 lookupKeyToIndex.Remove(lookupKey);
-                keys.Pop();
+                frameIdToLookupKey.Remove(origStFrameId);
                 var (_, ret) = vals.Pop();
                 return ret;
             }
@@ -80,28 +80,43 @@ namespace shared {
             if (null == minVal) {
                 throw new ArgumentNullException(String.Format("Couldn't find first in vals"));
             }
-            var minKey = keys.GetFirst();
+            var minKey = frameIdToLookupKey[origStFrameId];
             if (null == minKey) {
                 throw new ArgumentNullException(String.Format("Couldn't find first in keys"));
             }
 
             lookupKeyToIndex.Remove(minKey);
+            frameIdToLookupKey.Remove(origStFrameId);
+            
+            int origEdFrameId = vals.EdFrameId;
+            var tailKey = frameIdToLookupKey[origEdFrameId - 1];
             var (_, tailVal) = vals.PopTail();
             if (null == tailVal) {
                 throw new ArgumentNullException(String.Format("Couldn't find tail in vals"));
             }
-            var (_, tailKey) = keys.PopTail();
-            if (null == tailKey) {
-                throw new ArgumentNullException(String.Format("Couldn't find tail in keys"));
-            }
-            int i = vals.StFrameId;
-            vals.SetByFrameId(tailVal, i);
-            keys.SetByFrameId(tailKey, i);
+            vals.SetByFrameId(tailVal, origStFrameId);
+            lookupKeyToIndex[tailKey] = origStFrameId;
+            frameIdToLookupKey[origStFrameId] = tailKey;
 
-            lookupKeyToIndex[tailKey] = i;
-
-            heapifyDown(i);
+            heapifyDown(origStFrameId);
             return minVal;
+        }
+
+        public TVal? Peek(TKey lookupKey) {
+            if (0 == vals.Cnt) {
+                return null;
+            }
+
+            if (!lookupKeyToIndex.ContainsKey(lookupKey)) {
+                return null;
+            }
+
+            int i = lookupKeyToIndex[lookupKey];
+            var (res1, thatVal) = vals.GetByFrameId(i);
+            if (!res1 || null == thatVal) {
+                throw new ArgumentNullException(String.Format("Couldn't find i={0} in vals", i));
+            }
+            return thatVal;
         }
 
         public TVal? PopAny(TKey lookupKey) {
@@ -118,32 +133,28 @@ namespace shared {
             }
 
             int i = lookupKeyToIndex[lookupKey];
+            var thatKey = frameIdToLookupKey[i];
             var (res1, thatVal) = vals.GetByFrameId(i);
             if (!res1 || null == thatVal) {
                 throw new ArgumentNullException(String.Format("Couldn't find i={0} in vals", i));
             }
-            var (res2, thatKey) = keys.GetByFrameId(i);
-            if (!res2 || null == thatKey) {
-                throw new ArgumentNullException(String.Format("Couldn't find i={0} in keys", i));
-            }
 
-            lookupKeyToIndex.Remove(lookupKey);
+            int origEdFrameId = vals.EdFrameId;
+            var tailKey = frameIdToLookupKey[origEdFrameId - 1];
             var (_, tailVal) = vals.PopTail();
             if (null == tailVal) {
                 throw new ArgumentNullException(String.Format("Couldn't find tail in vals"));
             }
-            var (_, tailKey) = keys.PopTail();
-            if (null == tailKey) {
-                throw new ArgumentNullException(String.Format("Couldn't find tail in keys"));
-            }
+            lookupKeyToIndex.Remove(lookupKey);
+            frameIdToLookupKey.Remove(origEdFrameId - 1);
             if (!lookupKeyToIndex.ContainsKey(tailKey)) {
                 // Edge case: the lookupKey points to exactly the tail while heap size was larger than 1
                 return thatVal;
             }
 
-            lookupKeyToIndex[tailKey] = i;
             vals.SetByFrameId(tailVal, i);
-            keys.SetByFrameId(tailKey, i);
+            lookupKeyToIndex[tailKey] = i;
+            frameIdToLookupKey[i] = tailKey;
 
             heapifyUp(i);
             heapifyDown(i);
@@ -153,8 +164,8 @@ namespace shared {
 
         public void Clear() {
             vals.Clear();
-            keys.Clear();
             lookupKeyToIndex.Clear();
+            frameIdToLookupKey.Clear();
         }
 
         private int compare(TVal lhs, TVal rhs) {
@@ -218,15 +229,9 @@ namespace shared {
         }
 
         private void swapInHolders(int a, int b) {
-            var (res1, aLookupKey) = keys.GetByFrameId(a);
-            if (!res1 || null == aLookupKey) {
-                throw new ArgumentNullException(String.Format("Couldn't find a={0} in keys", a));
-            }
-            var (res2, bLookupKey) = keys.GetByFrameId(b);
-            if (!res2 || null == bLookupKey) {
-                throw new ArgumentNullException(String.Format("Couldn't find b={0} in keys", b));
-            }
-
+            TKey aLookupKey = frameIdToLookupKey[a];
+            TKey bLookupKey = frameIdToLookupKey[b];
+           
             var (res3, aVal) = vals.GetByFrameId(a);
             if (!res3 || null == aVal) {
                 throw new ArgumentNullException(String.Format("Couldn't find a={0} in vals", a));
@@ -235,10 +240,7 @@ namespace shared {
             if (!res4 || null == bVal) {
                 throw new ArgumentNullException(String.Format("Couldn't find b={0} in vals", b));
             }
-            // swap in "keys"
-            keys.SetByFrameId(bLookupKey, a);
-            keys.SetByFrameId(aLookupKey, b);
-
+            
             // swap in "vals"
             vals.SetByFrameId(bVal, a);
             vals.SetByFrameId(aVal, b);
@@ -246,6 +248,10 @@ namespace shared {
             // swap in "lookupKeyToIndex"
             lookupKeyToIndex[aLookupKey] = b;
             lookupKeyToIndex[bLookupKey] = a;
+
+            // swap in "keys"
+            frameIdToLookupKey[a] = bLookupKey;
+            frameIdToLookupKey[b] = aLookupKey;
         }
 
         private int getParent(int i) {

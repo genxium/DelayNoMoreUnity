@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="128" tileheight="128" infinite="0" nextlayerid="15" nextobjectid="19">
+ <properties>
+  <property name="unity:convex" value="true"/>
+ </properties>
+ <tileset firstgid="1" source="Bkg.tsx"/>
+ <tileset firstgid="197" source="Autumn.tsx"/>
+ <tileset firstgid="213" source="Spring.tsx"/>
+ <tileset firstgid="229" source="Summer.tsx"/>
+ <tileset firstgid="254" source="Winter.tsx"/>
+ <tileset firstgid="270" source="Desert.tsx"/>
+ <tileset firstgid="312" source="Lava.tsx"/>
+ <tileset firstgid="337" source="Iceberg.tsx"/>
+ <tileset firstgid="362" source="HeavenLand.tsx"/>
+ <layer id="5" name="Bkg" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJwNwwdXDgAAAMDvNSQl2ZJRMjPTMNOWvbP3zEplZGVVVmZDhCJKdmRFyD9z994FBQKBYEMMtZdh9jbcPkYYaV+j7Ge0/R3gQAc52CEOdZgxDjfWEY50lKONM94xJjjWcY53ghOdZKKTneJUpzndGSY502RTTDXNWc52jnOd53zTXWCGmWaZbY655rnQfBe52CUudZnLXeFKV7naNa51nQWud4Mb3eRmt7jVbW53hzvd5W73uNd97veAhR70kIc94lGLPGaxJZZ63BOe9JRlnvaMZz3necu94EUvedkrVlhplVe95nVveNNqb3nbO971nvetsdY6631ggw99ZKOPfeJTm2z2mc9t8YUvbbXNV7b72je+9Z3v/eBHO/zkZzv94le/+d0fdvnTX3b72z/+tcd//gdJ1kkh
+  </data>
+ </layer>
+ <layer id="1" name="Autumn" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJztzccJACAUBFH778ucQ0FOC34QPDjwjssq9X4aBlawdfAIiEiH+4yCiib47xiYWIL9724b9NgMyQ==
+  </data>
+ </layer>
+ <layer id="2" name="Summer" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJzty7cNgEAQAMHvv0+857EZ08IFBEisNOGm9PdmBSUVdfBtaOnoGRgD/8TMwkpmC/w7BycXd+D9Sg+fdROc
+  </data>
+ </layer>
+ <layer id="3" name="Spring" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJztzLkNACAQA8Hrvz/+n0rYFpwQIFaa0DZ7KwePgChuEzIKKhq6+DEwsbDF7e9+B/PGDAI=
+  </data>
+ </layer>
+ <layer id="4" name="Winter" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFgwn8A+L/IAYjEDGSppcJqJ4ZiFmAmBWI2UjUzw5UzwHEnEDMBcTcJOqHAR4y9Q0EAAAy1AJZ
+  </data>
+ </layer>
+ <layer id="6" name="Desert" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJzlzkcOg1AMRVGzAUIJnQTRQgs1+98blzkT/2ksndm7kkX+62xL5AEHrqVrPfY+nggQKvuIfYwEKTJlf11O88IbhUFf0lSo0Sj6lu0HHXoMGBX9xPaLGQtWbAb/7zQHfgbt3Z3K1wTZ
+  </data>
+ </layer>
+ <layer id="7" name="Lava" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJztztkNgCAQRdGhK8UVAcEF7L8bbwMkUwAvOX93CCJ9fe0NRmQ0+t7STpixYMWGHU7xzkHjERBxIiHjUv7jpnvwoqDia9z+tzoGbQ==
+  </data>
+ </layer>
+ <layer id="8" name="Iceberg" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJztzskNwCAMBdHvEiEhZCVr/zVkWjA3JCy9m8ey1P4EkyIG87cjTcKEXNHPNAtWbNidNw72C05cuJ39w/6Lr+L3PtIPGOAHJw==
+  </data>
+ </layer>
+ <layer id="9" name="HeavenLand" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJztzDkOwCAMBVFz3RACJCC2yzM9pHDPSK/7tsjaZUQsbjg8ZjP6ybMNiHjxISErfhS2FQ0dQ3F7OmmaKrsHqQ==
+  </data>
+ </layer>
+ <objectgroup id="14" name="RegionColliders">
+  <properties>
+   <property name="unity:layer" value="UI"/>
+  </properties>
+  <object id="11" name="HeavenLand" x="1012" y="10.6667">
+   <properties>
+    <property name="regionId" value="8"/>
+   </properties>
+   <polygon points="0,0 -272,69.3333 -362.667,153.333 -358.667,205.333 -157.333,325.333 29.3333,352 250.667,292 304,198.667 288,124 226.667,53.3333"/>
+  </object>
+  <object id="12" name="Autumn" x="1280" y="365.333">
+   <properties>
+    <property name="regionId" value="1"/>
+   </properties>
+   <polygon points="0,0 308,32 330.667,66.6667 142.667,277.333 -33.3333,312 -214.667,261.333 -250.667,116"/>
+  </object>
+  <object id="13" name="Spring" x="818.667" y="396">
+   <properties>
+    <property name="regionId" value="3"/>
+   </properties>
+   <polygon points="0,0 -300,177.333 -278.667,224 -148,298.667 -60,320 122.667,312 193.333,245.333 217.333,182.667"/>
+  </object>
+  <object id="14" name="Iceberg" x="492" y="478">
+   <properties>
+    <property name="regionId" value="7"/>
+   </properties>
+   <polygon points="0,0 -388,96 -458,330 -404,466 -286,518 -194,510 32,368"/>
+  </object>
+  <object id="15" name="Winter" x="790" y="790">
+   <properties>
+    <property name="regionId" value="2"/>
+   </properties>
+   <polygon points="0,0 116,54 162,156 172,204 114,332 -104,386 -336,294 -360,194 -320,130"/>
+  </object>
+  <object id="16" name="Lava" x="1142" y="1096">
+   <properties>
+    <property name="regionId" value="5"/>
+   </properties>
+   <polygon points="0,0 294,148 302,212 244,302 174,348 -48,416 -382,362 -626,238 -628,202"/>
+  </object>
+  <object id="17" name="Summer" x="1305" y="693">
+   <properties>
+    <property name="regionId" value="4"/>
+   </properties>
+   <polygon points="0,0 -77,18 -294,167 -328,350 -277,383 -63,379 51,364 248,213 217,122"/>
+  </object>
+  <object id="18" name="Desert" x="1736" y="468">
+   <properties>
+    <property name="regionId" value="6"/>
+   </properties>
+   <polygon points="0,0 -192,86.6667 -256,170.667 -212,257.333 -141.333,349.333 -6.66667,366.667 -17.3333,405.333 -392,668 -158.667,822.667 5.33333,852 137.333,814.667 237.333,721.333 297.333,580 308,330.667 228,132 160,1.33333"/>
+  </object>
+ </objectgroup>
+</map>

@@ -1,0 +1,1421 @@
+fileFormatVersion: 2
+guid: bb06a10abb7876b43b09dd5192b874a4
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RiderRed-0
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 152
+        width: 80
+        height: 104
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4cd1a938c8e1f5498334773b596e9a4
+      internalID: -1844089103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-1
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 46
+        width: 80
+        height: 104
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1970711d0d57e284ea96d11f7c78a0dc
+      internalID: -2142740580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-10
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 364
+        width: 84
+        height: 104
+      alignment: 9
+      pivot: {x: 0.44047618, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7898f09259fc6794fb4b8f69f4a58320
+      internalID: -88052230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-11
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 807
+        width: 85
+        height: 105
+      alignment: 9
+      pivot: {x: 0.44705883, y: 0.380952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43dbd5af5bcd4794795ac914f6346338
+      internalID: -1070625747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-12
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 918
+        width: 84
+        height: 105
+      alignment: 9
+      pivot: {x: 0.44047618, y: 0.380952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4152f1d539f6eae45a1d37c9a7937e5b
+      internalID: 913486156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-13
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 258
+        width: 84
+        height: 104
+      alignment: 9
+      pivot: {x: 0.44047618, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67c5edcd3edd1dc42ada37e0767fbec8
+      internalID: -72277896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-14
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 708
+        width: 84
+        height: 103
+      alignment: 9
+      pivot: {x: 0.44047618, y: 0.38834912}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5e8107a1fd786c4b9a7d886a8f8dd69
+      internalID: -1664542947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-15
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 478
+        width: 84
+        height: 104
+      alignment: 9
+      pivot: {x: 0.44047618, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34136405b7dc75a498e5b313cd1fa0a6
+      internalID: 169010557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-16
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 149
+        width: 80
+        height: 105
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.380952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 546deceacfa497b45be1488ab55c15df
+      internalID: 1644933031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-17
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 584
+        width: 80
+        height: 106
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.3773581}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: add62f61b77df7e468db3cfb652c33fc
+      internalID: -33036831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-18
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 42
+        width: 80
+        height: 105
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.380952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a82eacc1bf1a81645a6c3903e8b5a8a0
+      internalID: 940552206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-19
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 363
+        width: 81
+        height: 105
+      alignment: 9
+      pivot: {x: 0.4691358, y: 0.380952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f234ba9c6ca3a8e46acb086003733b95
+      internalID: 1431176619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-2
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 919
+        width: 80
+        height: 104
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eb0a63e95f22b44ab7055a9a1d01753
+      internalID: 775492769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-20
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 693
+        width: 80
+        height: 106
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.3773581}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4600701e545fd8b43a6fcde2a1205927
+      internalID: 622953276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-21
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 149
+        width: 80
+        height: 105
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.380952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b56651449e37819468c982997c932b65
+      internalID: -1337336737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-22
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 813
+        width: 80
+        height: 104
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48a96e6bf9834614385c0ae61e31383a
+      internalID: 1677764317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-23
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 470
+        width: 98
+        height: 106
+      alignment: 9
+      pivot: {x: 0.52040815, y: 0.3773581}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a24a3bd561ed9e479607cc282af5eb6
+      internalID: -1276914032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-24
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 801
+        width: 94
+        height: 109
+      alignment: 9
+      pivot: {x: 0.5106383, y: 0.36697212}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d30039cdefd52c14bb5dc62578041c7f
+      internalID: 699709319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-25
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 912
+        width: 91
+        height: 111
+      alignment: 9
+      pivot: {x: 0.53846157, y: 0.36036}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c7d006f24f8212489edb629e0f374d4
+      internalID: -51263445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-26
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 914
+        width: 91
+        height: 109
+      alignment: 9
+      pivot: {x: 0.53846157, y: 0.3577978}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3acbd2495255ac94f862b14d3d01e736
+      internalID: 1158375458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-27
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 688
+        width: 95
+        height: 109
+      alignment: 9
+      pivot: {x: 0.5368421, y: 0.36697212}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3bb9b0db73582a4dbcaa84bafca56c2
+      internalID: -1686708146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-28
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 578
+        width: 97
+        height: 108
+      alignment: 9
+      pivot: {x: 0.5154639, y: 0.37037}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68dc7d14128f62d4190f175c5e9430b5
+      internalID: -238555537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-29
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 670
+        width: 101
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5049505, y: 0.49382666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07bd4fbff2695f240aa798e5ef3edb0a
+      internalID: -396363031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-3
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 256
+        width: 81
+        height: 105
+      alignment: 9
+      pivot: {x: 0.4691358, y: 0.380952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0c83e7b683bbc6458e002486c73712a
+      internalID: 1474891766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-30
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 396
+        width: 98
+        height: 83
+      alignment: 9
+      pivot: {x: 0.48979592, y: 0.48192722}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1024ee740fdfb4640a087a16f71a221a
+      internalID: 835764186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-31
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 94
+        width: 97
+        height: 84
+      alignment: 9
+      pivot: {x: 0.5051546, y: 0.47619}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da39e2e750d9e2542aece66fa4da0a17
+      internalID: -415114964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-32
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 312
+        width: 97
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5051546, y: 0.47560927}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 904a94ac351afdb40af5756136802312
+      internalID: 889277717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-33
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 624
+        width: 100
+        height: 82
+      alignment: 9
+      pivot: {x: 0.51, y: 0.48780438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd782476417fa9b4eb88a16b3faeeb7a
+      internalID: -325950194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-34
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 753
+        width: 100
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48780438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8824a221a4b9f034f81d4ba2241fb16a
+      internalID: -1108266253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-35
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 541
+        width: 110
+        height: 81
+      alignment: 9
+      pivot: {x: 0.46363637, y: 0.49382666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ef317161d59c4143a9b649f4c334fce
+      internalID: 1920193053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-36
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 9
+        width: 107
+        height: 83
+      alignment: 9
+      pivot: {x: 0.44859812, y: 0.48192722}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f723f308a83a4148aae20a08d0773a8
+      internalID: -449110752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-37
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 7
+        width: 106
+        height: 84
+      alignment: 9
+      pivot: {x: 0.46226415, y: 0.47619}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23773ba6c81c9ce4fb4ae722b6a4170f
+      internalID: -908681770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-38
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 312
+        width: 96
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5104167, y: 0.47560927}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1a47bb05fa2e47448b67b6a9b2fd9e2
+      internalID: -1598521701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-39
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 852
+        width: 100
+        height: 82
+      alignment: 9
+      pivot: {x: 0.51, y: 0.48780438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67128df217ce6a74dab63dc2162f0805
+      internalID: -2015491081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-4
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 42
+        width: 80
+        height: 105
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.380952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6892bbcc27cf71f43a8ab399580bc6b0
+      internalID: 1893281638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-40
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 941
+        width: 100
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48780438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e488e16069521a4c9e299b14ce024e9
+      internalID: 386253248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-41
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 228
+        width: 97
+        height: 82
+      alignment: 9
+      pivot: {x: 0.58762884, y: 0.48780438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e780e04f33625d44b8aec436189bc2c
+      internalID: -690745656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-42
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 180
+        width: 91
+        height: 85
+      alignment: 9
+      pivot: {x: 0.5934066, y: 0.47058776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40fc5cf443ea5ce4e88f4f14bee9ce66
+      internalID: 678829533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-43
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 93
+        width: 88
+        height: 85
+      alignment: 9
+      pivot: {x: 0.625, y: 0.47058776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 936e899e1605cd64dba7dc95c8096560
+      internalID: 2014628601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-44
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 837
+        width: 88
+        height: 89
+      alignment: 9
+      pivot: {x: 0.57954544, y: 0.44943777}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 625cf34389bb40e40be74494822b32f0
+      internalID: -198634786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-45
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 510
+        width: 84
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5119048, y: 0.38554168}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb222769f36ce2d4abbe07338d866128
+      internalID: -814927855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-46
+      rect:
+        serializedVersion: 2
+        x: 547
+        y: 858
+        width: 87
+        height: 81
+      alignment: 9
+      pivot: {x: 0.50574714, y: 0.3456785}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e98696d9438468148b7ae04a1877e6e9
+      internalID: 1360880907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-47
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 936
+        width: 96
+        height: 87
+      alignment: 9
+      pivot: {x: 0.48958334, y: 0.45976967}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b25c815edc6492b4895e2aacdfc37c8b
+      internalID: -170128377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-48
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 426
+        width: 95
+        height: 82
+      alignment: 9
+      pivot: {x: 0.4526316, y: 0.48780438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c986076202154f48b10f1454eba9501
+      internalID: 1851631479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-49
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 769
+        width: 97
+        height: 81
+      alignment: 9
+      pivot: {x: 0.4329897, y: 0.49382666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c625a7d3615e93649b5eecdac735cf57
+      internalID: 1139068899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-5
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 372
+        width: 80
+        height: 104
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 659058940ee2c6446aa04f6288bbc9ca
+      internalID: 1193696136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-50
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 481
+        width: 80
+        height: 104
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cabb9906c52bc3499a1ca8e3fec97ad
+      internalID: 1835020932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-51
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 799
+        width: 87
+        height: 111
+      alignment: 9
+      pivot: {x: 0.7126437, y: 0.36036}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8401fc58af70244d94b4a57afeaab1e
+      internalID: -2087320923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-52
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 692
+        width: 75
+        height: 107
+      alignment: 9
+      pivot: {x: 0.74666667, y: 0.3738314}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dbead913453d274aaa0af2707be4fc6
+      internalID: 1234843719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-53
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 928
+        width: 76
+        height: 95
+      alignment: 9
+      pivot: {x: 0.7631579, y: 0.42105222}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7efaa6e2a3e0a484ab7eee37e222d4ca
+      internalID: -411814299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-54
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 947
+        width: 79
+        height: 76
+      alignment: 9
+      pivot: {x: 0.75949365, y: 0.5263153}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36a4b85d17e4b104881450f034111c4f
+      internalID: 909578557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-55
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 154
+        width: 106
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5943396, y: 0.555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f633870d02f84fe42a954942af9dd3e0
+      internalID: -2088028869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-56
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 17
+        width: 106
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5943396, y: 1.7391287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67480c200d516594ba0e446ca0ecb7c7
+      internalID: 1300780115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-57
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 21
+        width: 107
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5981308, y: 2.105261}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34aa91ed5683e244b83538d0747c5766
+      internalID: -1123881958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-6
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 267
+        width: 80
+        height: 103
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.38834912}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 984ac02177527364c96185fcda7121ac
+      internalID: 726718051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-7
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 595
+        width: 80
+        height: 104
+      alignment: 9
+      pivot: {x: 0.4625, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 227b9ee5d199b584692b5a45e4b8fb2a
+      internalID: 310822983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-8
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 587
+        width: 84
+        height: 104
+      alignment: 9
+      pivot: {x: 0.44047618, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa81bb49e4623be479b23951a33b5355
+      internalID: 835574229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RiderRed-9
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 701
+        width: 84
+        height: 104
+      alignment: 9
+      pivot: {x: 0.44047618, y: 0.384615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8186ad172bc0b84aa4cf80464b41d2a
+      internalID: -1002491652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Avatar_1
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 246
+        width: 57
+        height: 64
+      alignment: 9
+      pivot: {x: 0.4385965, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a90939d360499ee4d995cee7c47f92fc
+      internalID: -1260792247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 2b557e29da7d3634a8f3e6a482b11e17
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Avatar_1: -1260792247
+      RiderRed-0: -1844089103
+      RiderRed-1: -2142740580
+      RiderRed-10: -88052230
+      RiderRed-11: -1070625747
+      RiderRed-12: 913486156
+      RiderRed-13: -72277896
+      RiderRed-14: -1664542947
+      RiderRed-15: 169010557
+      RiderRed-16: 1644933031
+      RiderRed-17: -33036831
+      RiderRed-18: 940552206
+      RiderRed-19: 1431176619
+      RiderRed-2: 775492769
+      RiderRed-20: 622953276
+      RiderRed-21: -1337336737
+      RiderRed-22: 1677764317
+      RiderRed-23: -1276914032
+      RiderRed-24: 699709319
+      RiderRed-25: -51263445
+      RiderRed-26: 1158375458
+      RiderRed-27: -1686708146
+      RiderRed-28: -238555537
+      RiderRed-29: -396363031
+      RiderRed-3: 1474891766
+      RiderRed-30: 835764186
+      RiderRed-31: -415114964
+      RiderRed-32: 889277717
+      RiderRed-33: -325950194
+      RiderRed-34: -1108266253
+      RiderRed-35: 1920193053
+      RiderRed-36: -449110752
+      RiderRed-37: -908681770
+      RiderRed-38: -1598521701
+      RiderRed-39: -2015491081
+      RiderRed-4: 1893281638
+      RiderRed-40: 386253248
+      RiderRed-41: -690745656
+      RiderRed-42: 678829533
+      RiderRed-43: 2014628601
+      RiderRed-44: -198634786
+      RiderRed-45: -814927855
+      RiderRed-46: 1360880907
+      RiderRed-47: -170128377
+      RiderRed-48: 1851631479
+      RiderRed-49: 1139068899
+      RiderRed-5: 1193696136
+      RiderRed-50: 1835020932
+      RiderRed-51: -2087320923
+      RiderRed-52: 1234843719
+      RiderRed-53: -411814299
+      RiderRed-54: 909578557
+      RiderRed-55: -2088028869
+      RiderRed-56: 1300780115
+      RiderRed-57: -1123881958
+      RiderRed-6: 726718051
+      RiderRed-7: 310822983
+      RiderRed-8: 835574229
+      RiderRed-9: -1002491652
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

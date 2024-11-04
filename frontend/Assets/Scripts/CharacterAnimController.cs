@@ -1,46 +1,60 @@
 using shared;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using UnityEngine;
 using static shared.CharacterState;
 
 public class CharacterAnimController : MonoBehaviour {
     private string MATERIAL_REF_FLASH_INTENSITY = "_FlashIntensity";
     private float DAMAGED_FLASH_INTENSITY = 0.4f;
-    
+    private static int DAMAGED_FLASH_SCALE_FRAMES = 2;
+    private static int DEFAULT_FRAMES_TO_FLASH_DAMAGED = (Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED >> DAMAGED_FLASH_SCALE_FRAMES);
+    private static int DEFAULT_FRAMES_TO_SHOW_DAMAGED_REDUCTION = (Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED - DEFAULT_FRAMES_TO_FLASH_DAMAGED);
+
+    public SpriteRenderer spr;
     private Material material;
 
     public int score;
-    public int speciesId = Battle.SPECIES_NONE_CH;
-
-    public Animator lowerPart, upperPart;
+    public uint speciesId = Battle.SPECIES_NONE_CH;
 
     public Vector3 scaleHolder = new Vector3();
     public Vector3 positionHolder = new Vector3();
 
+    private bool hasIdle1Charging = false;
+    private bool hasWalkingCharging = false;
+    private bool hasOnWallCharging = false;
+    private bool hasInAirIdleCharging = false;
+    private bool hasCrouchCharging = false;
+
+    public static ImmutableDictionary<uint, Color> ELE_DAMAGED_COLOR = ImmutableDictionary.Create<uint, Color>()
+        .Add(Battle.ELE_NONE, Color.white)
+        .Add(Battle.ELE_FIRE, new Color(191 / 255f, 5 / 255f, 0 / 255f))
+        .Add(Battle.ELE_THUNDER, new Color(191 / 255f, 171 / 255f, 43 / 255f))
+        ;
+
     protected static HashSet<CharacterState> INTERRUPT_WAIVE_SET = new HashSet<CharacterState> {
         Idle1,
         Walking,
+        InAirWalking,
         InAirIdle1NoJump,
         InAirIdle1ByJump,
         InAirIdle1ByWallJump,
         BlownUp1,
         LayDown1,
         GetUp1,
-        Dashing,
         OnWallIdle1
     };
 
     Dictionary<CharacterState, AnimationClip> lookUpTable;
-    Dictionary<string, AnimationClip> lowerLookUpTable;
 
     private Animator getMainAnimator() {
-        return (null == upperPart ? this.gameObject.GetComponent<Animator>() : upperPart);
+        return gameObject.GetComponent<Animator>();
     }
 
     private void lazyInit() {
-        if (null != lookUpTable && null != lowerLookUpTable) return;
-        var spr = GetComponent<SpriteRenderer>();
+        if (null != lookUpTable) return;
+        spr = GetComponent<SpriteRenderer>();
         material = spr.material;
 
         lookUpTable = new Dictionary<CharacterState, AnimationClip>();
@@ -48,14 +62,26 @@ public class CharacterAnimController : MonoBehaviour {
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) {
             CharacterState chState;
             Enum.TryParse(clip.name, out chState);
+            switch (chState) {
+            case Idle1Charging:
+                hasIdle1Charging = true;
+            break;
+            case WalkingAtk1Charging:
+                hasWalkingCharging = true;
+            break;
+            case OnWallAtk1Charging:
+                hasOnWallCharging = true;
+            break;
+            case InAirAtk1Charging:
+                hasInAirIdleCharging = true;
+            break;
+            case CrouchAtk1Charging:
+                hasCrouchCharging = true;
+            break;
+            default:
+            break;
+            } 
             lookUpTable[chState] = clip;
-        }
-
-        lowerLookUpTable = new Dictionary<string, AnimationClip>();
-        if (null != lowerPart) {
-            foreach (AnimationClip clip in lowerPart.runtimeAnimatorController.animationClips) {
-                lowerLookUpTable[clip.name] = clip;
-            }
         }
     }
     // Start is called before the first frame update
@@ -78,7 +104,7 @@ public class CharacterAnimController : MonoBehaviour {
             scaleHolder.Set(+1.0f, 1.0f, this.gameObject.transform.localScale.z);
             this.gameObject.transform.localScale = scaleHolder;
         }
-        if (OnWallIdle1 == newCharacterState || TurnAround == newCharacterState) {
+        if (OnWallIdle1 == newCharacterState || OnWallAtk1 == newCharacterState || TurnAround == newCharacterState) {
             if (0 < rdfCharacter.OnWallNormX) {
                 scaleHolder.Set(-1.0f, 1.0f, this.gameObject.transform.localScale.z);
                 this.gameObject.transform.localScale = scaleHolder;
@@ -89,114 +115,91 @@ public class CharacterAnimController : MonoBehaviour {
         }
 
         float flashIntensity = 0;
-        if (rdfCharacter.FramesSinceLastDamaged >= (Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED >> 1)) {
-           flashIntensity = DAMAGED_FLASH_INTENSITY*(Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED-rdfCharacter.FramesSinceLastDamaged)/ (Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED >> 1); 
+        var remainingFramesToFlash = (rdfCharacter.FramesSinceLastDamaged > DEFAULT_FRAMES_TO_SHOW_DAMAGED_REDUCTION) ? (rdfCharacter.FramesSinceLastDamaged - DEFAULT_FRAMES_TO_SHOW_DAMAGED_REDUCTION) : 0; // Such that the rate of remaining frame reduction is the same as BATTLE_DYNAMICS_FPS
+        var frameIdxToPlayDef1Atked = (Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED - rdfCharacter.FramesSinceLastDamaged);
+        if (0 > frameIdxToPlayDef1Atked) frameIdxToPlayDef1Atked = 0;
+        var midway = (DEFAULT_FRAMES_TO_FLASH_DAMAGED >> 1);
+        if (null != prevRdfCharacter && prevRdfCharacter.Hp <= rdfCharacter.Hp) {
+            flashIntensity = 0;
+        } if (remainingFramesToFlash >= midway) {
+           flashIntensity = DAMAGED_FLASH_INTENSITY*(DEFAULT_FRAMES_TO_FLASH_DAMAGED - remainingFramesToFlash) / midway; 
         } else {
-           flashIntensity = DAMAGED_FLASH_INTENSITY*rdfCharacter.FramesSinceLastDamaged/(Battle.DEFAULT_FRAMES_TO_SHOW_DAMAGED >> 1); 
+           flashIntensity = DAMAGED_FLASH_INTENSITY*remainingFramesToFlash / midway;
         }
         material.SetFloat(MATERIAL_REF_FLASH_INTENSITY, flashIntensity);
-
-        var newAnimName = newCharacterState.ToString();
-        int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
-        int targetClipIdx = 0; // We have only 1 frame anim playing at any time
-        var curClip = animator.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
-        var playingAnimName = curClip.name;
-
-        if (playingAnimName.Equals(newAnimName) && INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
-            return;
-        }
-
-        if (INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
-            animator.Play(newAnimName, targetLayer);
-            return;
-        }
-
-        var targetClip = lookUpTable[newCharacterState];
-        var frameIdxInAnim = rdfCharacter.FramesInChState;
-        float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
-        animator.Play(newAnimName, targetLayer, normalizedFromTime);
-
-    }
-
-    /*
-     [WARNING] I once considered the use of "multi-layer animation", yet failed to find well documented steps to efficiently edit and preview the layers simultaneously. If budget permits I'd advance the workflow directly into using Skeletal Animation.
-     */
-    public void updateTwoPartsCharacterAnim(CharacterDownsync rdfCharacter, CharacterState newCharacterState, CharacterDownsync prevRdfCharacter, bool forceAnimSwitch, CharacterConfig chConfig, float effectivelyInfinitelyFar) {
-        lazyInit();
-        // [WARNING] Being frozen might invoke this function with "newCharacterState != rdfCharacter.ChState"
-
-        // Update directions
-        if (0 > rdfCharacter.DirX) {
-            scaleHolder.Set(-1.0f, 1.0f, this.gameObject.transform.localScale.z);
-            this.gameObject.transform.localScale = scaleHolder;
-        } else if (0 < rdfCharacter.DirX) {
-            scaleHolder.Set(+1.0f, 1.0f, this.gameObject.transform.localScale.z);
-            this.gameObject.transform.localScale = scaleHolder;
-        }
-        if (OnWallIdle1 == newCharacterState || TurnAround == newCharacterState) {
-            if (0 < rdfCharacter.OnWallNormX) {
-                scaleHolder.Set(-1.0f, 1.0f, this.gameObject.transform.localScale.z);
-                this.gameObject.transform.localScale = scaleHolder;
-            } else {
-                scaleHolder.Set(+1.0f, 1.0f, this.gameObject.transform.localScale.z);
-                this.gameObject.transform.localScale = scaleHolder;
+        material.SetInt("_EleDamageFlash", 0);
+        material.SetColor("_FlashColor", ELE_DAMAGED_COLOR[Battle.ELE_NONE]);
+        if (0 < flashIntensity) {
+            if (Battle.ELE_FIRE == rdfCharacter.DamageElementalAttrs) {
+                material.SetInt("_EleDamageFlash", 1);
+                material.SetColor("_FlashColor", ELE_DAMAGED_COLOR[Battle.ELE_FIRE]);
+            } else if (Battle.ELE_THUNDER == rdfCharacter.DamageElementalAttrs) {
+                material.SetInt("_EleDamageFlash", 1);
+                material.SetColor("_FlashColor", ELE_DAMAGED_COLOR[Battle.ELE_THUNDER]);
             }
         }
-
-        int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
-        int targetClipIdx = 0; // We have only 1 frame anim playing at any time
-        // Hide lower part when necessary
-        if (Battle.INVALID_FRAMES_IN_CH_STATE == rdfCharacter.LowerPartFramesInChState) {
-            positionHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, lowerPart.gameObject.transform.position.z); 
-            lowerPart.gameObject.transform.localPosition = positionHolder;
-        } else {
-            positionHolder.Set(0, 0, lowerPart.gameObject.transform.position.z); 
-            lowerPart.gameObject.transform.localPosition = positionHolder;
-            var lowerNewAnimName = "WalkingLowerPart"; 
+        var effNewChState = newCharacterState;
+        if (chConfig.HasBtnBCharging && Battle.BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 <= rdfCharacter.BtnBHoldingRdfCount) {
             switch (newCharacterState) {
-            case Atk1:
-            case Atk4:
-                lowerNewAnimName = "StandingLowerPart";
+            case Idle1:
+            if (hasIdle1Charging) {
+                effNewChState = Idle1Charging;
+            }
+            break;
+            case Walking:
+            if (hasWalkingCharging) {
+                effNewChState = WalkingAtk1Charging;
+            }
+            break;
+            case InAirIdle1NoJump:
+            case InAirIdle1ByJump:
+            case InAirIdle1ByWallJump:
+            if (hasInAirIdleCharging) {
+                effNewChState = InAirAtk1Charging;
+            }
+            break;
+            case OnWallIdle1:
+            if (hasOnWallCharging) {
+                effNewChState = OnWallAtk1Charging;
+            }
+            break;
+            case CrouchIdle1:
+            if (hasCrouchCharging) {
+                effNewChState = CrouchAtk1Charging;
+            }
             break;
             default:
             break;
             }
-            var lowerFrameIdxInAnim = rdfCharacter.LowerPartFramesInChState;
-            var lowerTargetClip = lowerLookUpTable[lowerNewAnimName];
-            float lowerNormalizedFromTime = (lowerFrameIdxInAnim / (lowerTargetClip.frameRate * lowerTargetClip.length)); // TODO: Anyway to avoid using division here?
-            lowerPart.Play(lowerNewAnimName, targetLayer, lowerNormalizedFromTime);
         }
+        int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
+        int targetClipIdx = 0; // We have only 1 frame anim playing at any time
+        var curClip = animator.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
+        var playingAnimName = curClip.name;
+        if (!lookUpTable.ContainsKey(effNewChState)) {
+            throw new Exception(chConfig.SpeciesName + " does not have effNewChState = " + effNewChState);
+        }
+        var targetClip = lookUpTable[effNewChState];
 
-        var upperNewAnimName = newCharacterState.ToString();
-        var curClip = upperPart.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
-        var upperPlayingAnimName = curClip.name;
-
-        if (upperPlayingAnimName.Equals(upperNewAnimName) && INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
+        if (playingAnimName.Equals(targetClip.name) && INTERRUPT_WAIVE_SET.Contains(effNewChState)) {
             return;
         }
 
         if (INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
-            upperPart.Play(upperNewAnimName, targetLayer);
+            animator.Play(targetClip.name, targetLayer);
             return;
         }
 
-        var upperTargetClip = lookUpTable[newCharacterState];
-        var upperFrameIdxInAnim = rdfCharacter.FramesInChState;
-        float upperNormalizedFromTime = (upperFrameIdxInAnim / (upperTargetClip.frameRate * upperTargetClip.length)); // TODO: Anyway to avoid using division here?
-        upperPart.Play(upperNewAnimName, targetLayer, upperNormalizedFromTime);
+        var frameIdxInAnim = Def1Atked1 == newCharacterState ? frameIdxToPlayDef1Atked : rdfCharacter.FramesInChState;
+        float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
+        animator.Play(targetClip.name, targetLayer, normalizedFromTime);
     }
 
     public void pause(bool toPause) {
         var mainAnimator = getMainAnimator();
         if (toPause) {
-            if (null != lowerPart) {
-                lowerPart.speed = 0f;
-            }
             mainAnimator.speed = 0f;
         } else {
-            if (null != lowerPart) {
-                lowerPart.speed = 1f;
-            }
             mainAnimator.speed = 1f;
         }
     }

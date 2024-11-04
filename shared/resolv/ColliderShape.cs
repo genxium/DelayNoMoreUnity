@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace shared {
     // [WARNING] It's non-trivial to declare "Vector" as a "struct" due to the generic type constraint imposed on "RingBuffer<T>"; moreover it's also unnecessary to save heap RAM allocation this way, as shown below the "ConvexPolygon" should hold retained "Points" in heap RAM anyway, and the "ConvexPolygon instances" themselves are reused by the "Collider instances" which are also reused in battle.
@@ -32,14 +33,29 @@ namespace shared {
             s += "]";
             return s;
         }
+
+        public static void Rotate(Vector u, float cosDelta, float sinDelta, out float newX, out float newY) {
+            Rotate(u.X, u.Y, cosDelta, sinDelta, out newX, out newY);
+        }
+
+        public static void Rotate(float ux, float uy, float cosDelta, float sinDelta, out float newX, out float newY) {
+            newX = ux * cosDelta - uy * sinDelta;
+            newY = ux * sinDelta + uy * cosDelta;
+        }
     }
 
     public class ConvexPolygon {
         public FrameRingBuffer<Vector> Points;
-        public float X, Y; // The anchor position coordinates
+        public float X, Y; // The anchor position coordinates, usually but not always the bottom-left point (e.g. if rotated then it'd be the bottom-left point BEFORE rotation)
+        public float MinPtX, MaxPtX, MinPtY, MaxPtY;
         public bool Closed;
+        public bool IsRotary;
 
         public ConvexPolygon(float x, float y, float[] points) {
+            MinPtX = float.MaxValue;
+            MaxPtX = float.MinValue;
+            MinPtY = float.MaxValue;
+            MaxPtY = float.MinValue;
             int ptsCnt = (points.Length >> 1);
             int bottomMostAndLeftMostJ = 0;
             List<Vector> arrPoints = new List<Vector>(ptsCnt);
@@ -54,6 +70,7 @@ namespace shared {
                         bottomMostAndLeftMostJ = j;
                     }
                 }
+
             }
             float anchorOffsetX = arrPoints[bottomMostAndLeftMostJ].X, anchorOffsetY = arrPoints[bottomMostAndLeftMostJ].Y; // cache before sorting
             // Assuming that the first point is always (0, 0), rectify the anchor values
@@ -69,7 +86,7 @@ namespace shared {
                 }
                 if (dy1 < dy2) {
                     return -1;
-                } 
+                }
                 if (dy1 > dy2) {
                     return +1;
                 }
@@ -87,6 +104,18 @@ namespace shared {
                 arrPoints[i].X -= anchorOffsetX;
                 arrPoints[i].Y -= anchorOffsetY;
                 Points.Put(arrPoints[i]);
+                if (arrPoints[i].X < MinPtX) {
+                    MinPtX = arrPoints[i].X;
+                }
+                if (arrPoints[i].X > MaxPtX) {
+                    MaxPtX = arrPoints[i].X;
+                }
+                if (arrPoints[i].Y < MinPtY) {
+                    MinPtY = arrPoints[i].Y;
+                }
+                if (arrPoints[i].Y > MaxPtY) {
+                    MaxPtY = arrPoints[i].Y;
+                }
             }
             Closed = true;
         }
@@ -104,33 +133,54 @@ namespace shared {
             Y = y;
         }
 
-        public bool UpdateAsRectangle(float x, float y, float w, float h) {
+        public bool UpdateAsRectangle(float w, float h, bool isRotary = false, float spinAnchorX = 0f, float spinAnchorY = 0f, float cosDelta = 1f, float sinDelta = 0f) {
             // This function might look ugly but it's a fast in-place update!
             if (4 != Points.Cnt) {
                 throw new ArgumentException("ConvexPolygon not having exactly 4 vertices to form a rectangle#1!");
             }
+            this.IsRotary = isRotary;
             for (int i = 0; i < Points.Cnt; i++) {
                 Vector? thatVec = GetPointByOffset(i);
                 if (null == thatVec) {
                     throw new ArgumentException("ConvexPolygon not having exactly 4 vertices to form a rectangle#2!");
                 }
+                // Assign unrotated values
                 switch (i) {
                     case 0:
-                        thatVec.X = x;
-                        thatVec.Y = y;
+                        thatVec.X = 0;
+                        thatVec.Y = 0;
                         break;
                     case 1:
-                        thatVec.X = x + w;
-                        thatVec.Y = y;
+                        thatVec.X = w;
+                        thatVec.Y = 0;
                         break;
                     case 2:
-                        thatVec.X = x + w;
-                        thatVec.Y = y + h;
+                        thatVec.X = w;
+                        thatVec.Y = h;
                         break;
                     case 3:
-                        thatVec.X = x;
-                        thatVec.Y = y + h;
+                        thatVec.X = 0;
+                        thatVec.Y = h;
                         break;
+                }
+                // Assign rotated values
+                float dx = thatVec.X - spinAnchorX, dy = thatVec.Y - spinAnchorY;
+                float newX = 0, newY = 0;
+                Vector.Rotate(dx, dy, cosDelta, sinDelta, out newX, out newY);
+                thatVec.X = spinAnchorX + newX;
+                thatVec.Y = spinAnchorY + newY;
+
+                if (thatVec.X < MinPtX) {
+                    MinPtX = thatVec.X;
+                }
+                if (thatVec.X > MaxPtX) {
+                    MaxPtX = thatVec.X;
+                }
+                if (thatVec.Y < MinPtY) {
+                    MinPtY = thatVec.Y;
+                }
+                if (thatVec.Y > MaxPtY) {
+                    MaxPtY = thatVec.Y;
                 }
             }
             return true;
@@ -155,9 +205,9 @@ namespace shared {
                 var s = String.Format("[anchorX:{0}, anchorY:{1}; ", X, Y);
                 for (int i = Points.StFrameId; i < Points.EdFrameId; i++) {
                     var p = GetPointByOffset(i);
-                    if (null == p) throw new ArgumentNullException(String.Format("i={0} got a null point", i)); 
-                    s += String.Format("({0}, {1})", p.X, p.Y); 
-                    if (i == Points.EdFrameId-1) s += "]"; 
+                    if (null == p) throw new ArgumentNullException(String.Format("i={0} got a null point", i));
+                    s += String.Format("({0}, {1})", p.X, p.Y);
+                    if (i == Points.EdFrameId - 1) s += "]";
                     else s += ", ";
                 }
 
@@ -166,9 +216,9 @@ namespace shared {
                 var s = String.Format("[");
                 for (int i = Points.StFrameId; i < Points.EdFrameId; i++) {
                     var p = GetPointByOffset(i);
-                    if (null == p) throw new ArgumentNullException(String.Format("i={0} got a null point", i)); 
-                    s += String.Format("({0}, {1})", X+p.X, Y+p.Y); 
-                    if (i == Points.EdFrameId-1) s += "]"; 
+                    if (null == p) throw new ArgumentNullException(String.Format("i={0} got a null point", i));
+                    s += String.Format("({0}, {1})", X + p.X, Y + p.Y);
+                    if (i == Points.EdFrameId - 1) s += "]";
                     else s += ", ";
                 }
 
@@ -180,32 +230,97 @@ namespace shared {
     public struct SatResult {
         public float OverlapMag, OverlapX, OverlapY;
         public bool AContainedInB, BContainedInA;
-
         // [WARNING] Deliberately unboxed "Vector" to make the following fields primitive such that the whole "SatResult" will be easily allocated on stack.
         public float AxisX, AxisY;
+
+        public float SecondaryOverlapMag, SecondaryOverlapX, SecondaryOverlapY;
+        public bool SecondaryAContainedInB, SecondaryBContainedInA;
+        public float SecondaryAxisX, SecondaryAxisY;
+
+        public bool SideSuppressingTop;
+
+        public void resetForPushbackCalc() {
+            this.OverlapMag = 0;
+            this.OverlapX = 0;
+            this.OverlapY = 0;
+            this.AContainedInB = true;
+            this.BContainedInA = true;
+            this.AxisX = 0;
+            this.AxisY = 0;
+
+            this.SecondaryOverlapMag = 0;
+            this.SecondaryOverlapX = 0;
+            this.SecondaryOverlapY = 0;
+            this.SecondaryAContainedInB = true;
+            this.SecondaryBContainedInA = true;
+            this.SecondaryAxisX = 0;
+            this.SecondaryAxisY = 0;
+
+            this.SideSuppressingTop = false;
+        }
 
         public void reset() {
             this.OverlapMag = 0;
             this.OverlapX = 0;
-            this.OverlapY = 0;  
+            this.OverlapY = 0;
             this.AContainedInB = false;
             this.BContainedInA = false;
             this.AxisX = 0;
-            this.AxisY = 0;    
+            this.AxisY = 0;
+
+            this.SecondaryOverlapMag = 0;
+            this.SecondaryOverlapX = 0;
+            this.SecondaryOverlapY = 0;
+            this.SecondaryAContainedInB = false;
+            this.SecondaryBContainedInA = false;
+            this.SecondaryAxisX = 0;
+            this.SecondaryAxisY = 0;
+
+            this.SideSuppressingTop = false;
         }
 
         public void cloneInto(ref SatResult dist) {
             dist.OverlapMag = this.OverlapMag;
             dist.OverlapX = this.OverlapX;
-            dist.OverlapY = this.OverlapY;  
+            dist.OverlapY = this.OverlapY;
             dist.AContainedInB = this.AContainedInB;
             dist.BContainedInA = this.BContainedInA;
             dist.AxisX = this.AxisX;
-            dist.AxisY = this.AxisY;    
+            dist.AxisY = this.AxisY;
+
+            dist.SecondaryOverlapMag = this.SecondaryOverlapMag;
+            dist.SecondaryOverlapX = this.SecondaryOverlapX;
+            dist.SecondaryOverlapY = this.SecondaryOverlapY;
+            dist.SecondaryAContainedInB = this.SecondaryAContainedInB;
+            dist.SecondaryBContainedInA = this.SecondaryBContainedInA;
+            dist.SecondaryAxisX = this.SecondaryAxisX;
+            dist.SecondaryAxisY = this.SecondaryAxisY;
+
+            dist.SideSuppressingTop = this.SideSuppressingTop;
+        }
+
+        public void shiftToSecondary() {
+            this.SecondaryOverlapMag = this.OverlapMag;
+            this.SecondaryOverlapX = this.OverlapX;
+            this.SecondaryOverlapY = this.OverlapY;
+            this.SecondaryAContainedInB = this.AContainedInB;
+            this.SecondaryBContainedInA = this.BContainedInA;
+            this.SecondaryAxisX = this.AxisX;
+            this.SecondaryAxisY = this.AxisY;
+        }
+
+        public void shiftFromSecondary() {
+            this.OverlapMag = this.SecondaryOverlapMag;
+            this.OverlapX = this.SecondaryOverlapX;
+            this.OverlapY = this.SecondaryOverlapY;
+            this.AContainedInB = this.SecondaryAContainedInB;
+            this.BContainedInA = this.SecondaryBContainedInA;
+            this.AxisX = this.SecondaryAxisX;
+            this.AxisY = this.SecondaryAxisY;
         }
 
         public new string ToString() {
-            return String.Format("(Mag:{0}, OverlapX:{1}, OverlapY:{2}, AContainedInB:{3}, BContainedInA:{4})", OverlapMag, OverlapX, OverlapY, AContainedInB, BContainedInA);
+            return String.Format("(\nMag:{0}, OverlapX:{1}, OverlapY:{2}, AContainedInB:{3}, BContainedInA:{4}\nSecondaryMag:{0}, SecondaryOverlapX:{1}, SecondaryOverlapY:{2}, SecondaryAContainedInB:{3}, SecondaryBContainedInA:{4}\n)", OverlapMag, OverlapX, OverlapY, AContainedInB, BContainedInA, SecondaryOverlapMag, SecondaryOverlapX, SecondaryOverlapY, SecondaryAContainedInB, SecondaryBContainedInA);
         }
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="4" height="2" tilewidth="384" tileheight="384" infinite="0" nextlayerid="3" nextobjectid="7">
+ <tileset firstgid="1" source="AutumnLevels.tsx"/>
+ <layer id="1" name="Ground" width="4" height="2">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYAJiZiBmAWJWIGYDYnYg5gBiAAIAACU=
+  </data>
+ </layer>
+ <objectgroup id="2" name="Levels">
+  <object id="1" name="level1" x="92" y="616" width="78" height="46">
+   <properties>
+    <property name="levelId" value="1"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="2" name="level2" x="69.3333" y="264" width="78" height="46">
+   <properties>
+    <property name="levelId" value="2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="5" name="level3" x="309.003" y="340" width="78" height="46">
+   <properties>
+    <property name="levelId" value="3"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="4" name="level4" x="458" y="541.333" width="78" height="46">
+   <properties>
+    <property name="levelId" value="4"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="3" name="level5" x="633.667" y="351" width="78" height="46">
+   <properties>
+    <property name="levelId" value="5"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="6" name="level6" x="1070" y="555" width="78" height="46">
+   <properties>
+    <property name="levelId" value="6"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

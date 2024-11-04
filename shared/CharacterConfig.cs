@@ -3,7 +3,7 @@
 namespace shared {
     public struct CharacterConfig {
         // [WARNING] All fields of this class should be deemed as "initial values", and could be changed during a battle by whatever powerup/debuff :)
-        public int SpeciesId;
+        public uint SpeciesId;
         public string SpeciesName;
 
         public int Hp;
@@ -56,6 +56,9 @@ namespace shared {
         public int DyingSizeX;
         public int DyingSizeY;
 
+        public int DimmedSizeX;
+        public int DimmedSizeY;
+
         // Collision masks
         public bool AntiGravityWhenIdle;
         public int AntiGravityFramesLingering;
@@ -67,13 +70,15 @@ namespace shared {
 
         public bool HasTurnAroundAnim;
         public bool HasDimmedAnim;
+        public bool LayDownToRecoverFromDimmed;
 
         public int Hardness;
 
         public int ProactiveJumpStartupFrames;
         
-        public int DefaultAirJumpQuota;
-        public int DefaultAirDashQuota;
+        public uint DefaultAirJumpQuota;
+        public uint DefaultAirDashQuota;
+        public uint DefaultDef1Quota;
 
         public bool IsolatedAirJumpAndDashQuota; // default is false, in most cases AirJump and AirDash quotas are deduced together (but default initial quota can be different) 
 
@@ -84,5 +89,32 @@ namespace shared {
         public float SlipJumpThresHoldBelowTopFace; 
         public int SlipJumpThresHoldBelowTopFaceV;
         public int SlipJumpCharacterDropVirtual; 
+        
+        public uint TransformIntoSpeciesIdUponDeath;
+        public bool JumpHoldingToFly;
+        public bool HasDef1;
+        public bool HasDef1Atked1Anim;
+        public int DefaultDef1BrokenFramesToRecover;
+        public int Def1ActiveVfxSpeciesId;
+        public int Def1AtkedVfxSpeciesId;
+        public int Def1BrokenVfxSpeciesId;
+        public int Def1StartupFrames;
+        public float Def1DamageYield;
+
+        public bool WalkingAutoDef1;
+
+        public IfaceCat Ifc;
+        public ulong EleWeakness;
+        public ulong EleResistance;
+        public bool HasBtnBCharging;
+        public int BtnBChargedVfxSpeciesId;
+
+        public bool IsKeyCh;
+
+        public bool AllowsSameTeamSoftPushback; // For bricks
+        public int GaugeIncWhenKilled;
+        
+        public bool JumpingInsteadOfWalking;
+        public uint VisionSearchIntervalPow2Minus1;
     }
 }

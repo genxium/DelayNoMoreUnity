@@ -1,0 +1,46 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:fef67290544b4192fcc8d5b5c529d6a0:0e17befb4f287db8b2699065021fe8c8:c41de6a8e9b9aa8f42277892d992d754$
+#
+:format=40300
+:texture=Machinery.png
+:size=128x256
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+FireBreatherLv1_1;88;96;29;26; 0.5344827241379311;0.3076923076923077; 0;0;0;0
+FireBreatherLv1_2;88;96;29;26; 0.5344827241379311;0.3076923076923077; 0;0;0;0
+FireBreatherLv1_3;88;96;29;26; 0.5344827241379311;0.3076923076923077; 0;0;0;0
+FireBreatherLv1_4;88;96;29;26; 0.5344827241379311;0.3076923076923077; 0;0;0;0
+FireBreatherLv1_5;88;96;29;26; 0.5344827241379311;0.3076923076923077; 0;0;0;0
+FireBreatherLv1_6;88;96;29;26; 0.5344827241379311;0.3076923076923077; 0;0;0;0
+FireBreatherLv1_7;94;122;33;30; 0.5909090606060606;0.2666666666666667; 0;0;0;0
+FireBreatherLv1_8;47;113;41;38; 0.6707316829268293;0.21052631578947367; 0;0;0;0
+FireBreatherLv1_9;53;163;47;44; 0.7127659361702128;0.18181818181818177; 0;0;0;0
+FireBreatherLv1_10;53;207;52;49; 0.7403845961538462;0.16326530612244894; 0;0;0;0
+FireBreatherLv1_11;0;206;53;50; 0.745283;0.16000000000000003; 0;0;0;0
+Jumper-0;21;119;21;11; 0.5;0.7272727272727273; 0;0;0;0
+Jumper-1;21;109;21;10; 0.5;0.8; 0;0;0;0
+Jumper-2;0;107;21;9; 0.5;0.8888888888888888; 0;0;0;0
+Jumper-3;100;168;21;16; 0.5;0.5; 0;0;0;0
+Jumper-4;100;152;21;16; 0.5;0.5; 0;0;0;0
+Jumper-5;0;130;21;16; 0.5;0.5; 0;0;0;0
+Jumper-6;21;130;21;16; 0.5;0.5; 0;0;0;0
+Jumper-7;0;116;21;14; 0.5;0.5714285714285714; 0;0;0;0
+LongConveyorToL_1;0;194;47;12; 0.5;0.5; 0;0;0;0
+LongConveyorToL_2;0;182;47;12; 0.5;0.5; 0;0;0;0
+LongConveyorToL_3;0;170;47;12; 0.5;0.5; 0;0;0;0
+LongConveyorToR_1;0;158;47;12; 0.5;0.5; 0;0;0;0
+LongConveyorToR_2;47;151;47;12; 0.5;0.5; 0;0;0;0
+LongConveyorToR_3;0;146;47;12; 0.5;0.5; 0;0;0;0
+ShortConveyorToL_1;105;244;22;12; 0.5;0.5; 0;0;0;0
+ShortConveyorToL_2;105;232;22;12; 0.5;0.5; 0;0;0;0
+ShortConveyorToL_3;105;220;22;12; 0.5;0.5; 0;0;0;0
+ShortConveyorToR_1;105;208;22;12; 0.5;0.5; 0;0;0;0
+ShortConveyorToR_2;105;196;22;12; 0.5;0.5; 0;0;0;0
+ShortConveyorToR_3;100;184;22;12; 0.5;0.5; 0;0;0;0

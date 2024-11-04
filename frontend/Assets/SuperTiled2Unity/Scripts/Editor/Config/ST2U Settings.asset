@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff72ddc2da234e244a8e96eb44e4c03d, type: 3}
   m_Name: ST2U Settings
   m_EditorClassIdentifier: 
-  m_PixelsPerUnit: 100
-  m_EdgesPerEllipse: 32
+  m_PixelsPerUnit: 1
+  m_EdgesPerEllipse: 16
   m_AnimationFramerate: 20
   m_DefaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_MaterialMatchings:
@@ -33,6 +33,26 @@ MonoBehaviour:
     m_Material: {fileID: 2100000, guid: f227fffc8f933344cb200c7733fa09dd, type: 2}
   - m_LayerName: Background3
     m_Material: {fileID: 2100000, guid: f227fffc8f933344cb200c7733fa09dd, type: 2}
+  - m_LayerName: Autumn
+    m_Material: {fileID: 2100000, guid: 7bae642eb796f814792fd9ad224fab9b, type: 2}
+  - m_LayerName: Winter
+    m_Material: {fileID: 2100000, guid: 7bae642eb796f814792fd9ad224fab9b, type: 2}
+  - m_LayerName: Spring
+    m_Material: {fileID: 2100000, guid: 7bae642eb796f814792fd9ad224fab9b, type: 2}
+  - m_LayerName: Summer
+    m_Material: {fileID: 2100000, guid: 7bae642eb796f814792fd9ad224fab9b, type: 2}
+  - m_LayerName: Lava
+    m_Material: {fileID: 2100000, guid: 7bae642eb796f814792fd9ad224fab9b, type: 2}
+  - m_LayerName: Desert
+    m_Material: {fileID: 2100000, guid: 7bae642eb796f814792fd9ad224fab9b, type: 2}
+  - m_LayerName: Iceberg
+    m_Material: {fileID: 2100000, guid: 7bae642eb796f814792fd9ad224fab9b, type: 2}
+  - m_LayerName: HeavenLand
+    m_Material: {fileID: 2100000, guid: 7bae642eb796f814792fd9ad224fab9b, type: 2}
+  - m_LayerName: WindyGround1
+    m_Material: {fileID: 2100000, guid: 0f397db4579d50b4ca026484d78a45eb, type: 2}
+  - m_LayerName: WindyGround2
+    m_Material: {fileID: 2100000, guid: 0f397db4579d50b4ca026484d78a45eb, type: 2}
   m_ObjectTypesXml: {fileID: 0}
   m_ParseXmlError: 
   m_CollisionGeometryType: 1

@@ -1,0 +1,29 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:d81a9789cf7678be1105f554da981928:fe6f56e3b03a5bc58599e1028fee0f19:4dccc38bea1da57c855d11434e7aad73$
+#
+:format=40300
+:texture=VillagerMale2.png
+:size=128x256
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+Avatar_1;2;191;64;63; 0.5;0.5079365079365079; 0;0;0;0
+VillagerNonInteractive-2;28;145;20;42; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-6;70;166;22;41; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-10;2;147;22;40; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-14;45;56;20;40; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-18;2;102;20;41; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-22;25;11;20;41; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-26;98;212;22;42; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-30;70;211;24;43; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-34;98;166;22;42; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-38;45;100;20;41; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-42;23;56;18;42; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-46;2;55;17;43; 0.5;0.5; 0;0;0;0
+VillagerNonInteractive-50;2;9;19;42; 0.5;0.5; 0;0;0;0

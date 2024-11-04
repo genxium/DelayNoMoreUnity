@@ -1,16 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using shared;
+using System;
+using Unity.Mathematics;
 
 public class TrapAnimationController : MonoBehaviour {
 
     public int score;
-    Dictionary<string, AnimationClip> lookUpTable;
+    Dictionary<TrapState, AnimationClip> lookUpTable;
+    private Animator animator;
+    private SpriteRenderer spr;
+    private Material material;
+
     private void lazyInit() {
         if (null != lookUpTable) return;
-        lookUpTable = new Dictionary<string, AnimationClip>();
-        var animator = this.gameObject.GetComponent<Animator>();
+        lookUpTable = new Dictionary<TrapState, AnimationClip>();
+        animator = this.gameObject.GetComponent<Animator>();
+        spr = gameObject.GetComponent<SpriteRenderer>();
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) {
-            lookUpTable[clip.name] = clip;
+            TrapState trapState;
+            Enum.TryParse(clip.name, out trapState);
+            lookUpTable[trapState] = clip;
         }
     }
 
@@ -19,27 +29,25 @@ public class TrapAnimationController : MonoBehaviour {
         lazyInit();
     }
 
-    public void updateAnim(string newAnimName, int frameIdxInAnim, int immediateDirX, bool spontaneousLooping) {
+    public void updateAnim(TrapState newState, Trap currTrap, int frameIdxInAnim, int immediateDirX) {
         lazyInit();
-        var animator = gameObject.GetComponent<Animator>();
-        var spr = gameObject.GetComponent<SpriteRenderer>();
+
+        if (0 != currTrap.SpinSin && 0 != currTrap.SpinCos) {
+            // [WARNING] The anchor configured in SpriteSheet must match that of currTrap.Config.SpinAnchor!
+            spr.transform.localRotation = Quaternion.AngleAxis(math.atan2(currTrap.SpinSin, currTrap.SpinCos) * Mathf.Rad2Deg, Vector3.forward);
+        }
 
         if (0 > immediateDirX) {
             spr.flipX = true;
         } else if (0 < immediateDirX) {
-            spr.flipX = false;
+            spr.flipX = false;  
         }
 
         int targetLayer = 0; // We have only 1 layer, i.e. the baseLayer, playing at any time
         int targetClipIdx = 0; // We have only 1 frame anim playing at any time
         var curClip = animator.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
-        bool sameClipName = newAnimName.Equals(curClip.name);
-        if (spontaneousLooping && sameClipName) {
-            return;
-        }
-
-        var targetClip = lookUpTable[newAnimName];
+        var targetClip = lookUpTable[newState];
         float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
-        animator.Play(newAnimName, targetLayer, normalizedFromTime);
+        animator.Play(targetClip.name, targetLayer, normalizedFromTime);
     }
 }

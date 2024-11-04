@@ -1,24 +1,29 @@
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
-using UnityEngine;
 
-public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
-    public delegate void StoryLevelPostConfirmedCallbackT(int idx, string name);
+public class StoryLevelSelectGroup : AbstractSprOnlySingleSelectGroup {
+    public delegate void StoryLevelPostConfirmedCallbackT(int idx);
     public StoryLevelPostConfirmedCallbackT levelPostConfirmedCallback;
 
-    protected string selectedName = null;
+    public delegate void StoryLevelPostCursorMovedCallbackT(int idx);
+    public StoryLevelPostCursorMovedCallbackT levelPostCursorMovedCallback;
 
     public override void OnMoveByKeyboard(InputAction.CallbackContext context) {
         if (!currentSelectGroupEnabled) return;
         var kctrl = (KeyControl)context.control;
         if (null == kctrl || !kctrl.wasReleasedThisFrame) return;
+        int newSelectedIdx = selectedIdx;
         switch (kctrl.keyCode) {
             case Key.A:
             case Key.LeftArrow:
+                newSelectedIdx = selectedIdx - 1;
+                if (0 > newSelectedIdx || newSelectedIdx >= cells.Length) return;
                 MoveSelection(-1);
                 break;
             case Key.D:
             case Key.RightArrow:
+                newSelectedIdx = selectedIdx + 1;
+                if (0 > newSelectedIdx || newSelectedIdx >= cells.Length) return;
                 MoveSelection(+1);
                 break;
         }
@@ -29,7 +34,6 @@ public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
         bool rising = context.ReadValueAsButton();
         if (rising && InputActionPhase.Performed == context.phase) {
             Debug.Log("StoryLevelSelectGroup OnBtnConfirm");
-            toggleUIInteractability(false);
             confirmSelection();
         }
     }
@@ -39,7 +43,7 @@ public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
         bool rising = context.ReadValueAsButton();
         if (rising && InputActionPhase.Performed == context.phase) {
             toggleUIInteractability(false);
-            Debug.Log("StoryLevelSelectGroup OnBtnConfirm");
+            Debug.Log("StoryLevelSelectGroup OnBtnCancel");
             if (null != postCancelledCallback) {
                 postCancelledCallback();
             }
@@ -47,24 +51,43 @@ public class StoryLevelSelectGroup : AbstractSingleSelectGroup {
     }
 
     public override void onCellSelected(int newSelectedIdx) {
+        if (!currentSelectGroupEnabled) return;
         if (newSelectedIdx == selectedIdx) {
             confirmSelection();
         } else {
+            if (null != uiSoundSource) {
+                uiSoundSource.PlayCursor();
+            }
             cells[selectedIdx].setSelected(false);
             cells[newSelectedIdx].setSelected(true);
             selectedIdx = newSelectedIdx;
-            selectedName = cells[newSelectedIdx].name;
+            if (null != levelPostCursorMovedCallback) {
+                levelPostCursorMovedCallback(selectedIdx);
+            }
         }
     }
 
+    public void drySetSelectedIdx(int newSelectedIdx) {
+        selectedIdx = newSelectedIdx;
+    }
+
     private void confirmSelection() {
-        selectedName = cells[selectedIdx].name;
+        var targetCell = cells[selectedIdx] as StoryLevelCell;
+        if (targetCell.isLocked) {
+            Debug.LogFormat("LevelId={0} is locked, rejecting confirmation", targetCell.levelId);
+            return;
+        }
+        toggleUIInteractability(false);
         if (null != levelPostConfirmedCallback) {
-            levelPostConfirmedCallback(selectedIdx, selectedName);
+            if (null != uiSoundSource) {
+                uiSoundSource.PlayPositive();
+            }
+            levelPostConfirmedCallback(selectedIdx);
         }
     }
 
     public override void toggleUIInteractability(bool val) {
         base.toggleUIInteractability(val);
+        currentSelectGroupEnabled = val;
     }
 }

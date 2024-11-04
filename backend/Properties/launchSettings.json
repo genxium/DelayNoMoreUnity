@@ -11,7 +11,7 @@
   "profiles": {
     "http": {
       "commandName": "Project",
-      "applicationUrl": "http://+:5051",
+      "applicationUrl": "http://+:6061",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -15,6 +15,13 @@
    <property name="takesGravity" value="1"/>
   </properties>
  </tile>
+ <tile id="179">
+  <properties>
+   <property name="pickupType" value="PutIntoInventory"/>
+   <property name="skillId" value="1"/>
+   <property name="takesGravity" value="1"/>
+  </properties>
+ </tile>
  <tile id="309">
   <properties>
    <property name="consumableSpeciesId" value="4"/>

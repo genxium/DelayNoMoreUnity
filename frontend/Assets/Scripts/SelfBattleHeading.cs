@@ -16,27 +16,12 @@ public class SelfBattleHeading : MonoBehaviour {
     }
 
     public void SetCharacter(CharacterDownsync chd) {
-        var newChConfig = Battle.characters[chd.SpeciesId];
-        if (chd.SpeciesId != speciesId) {
-            speciesId = chd.SpeciesId; 
-            string speciesName = newChConfig.SpeciesName;
-            string spriteSheetPath = String.Format("Characters/{0}/{0}", speciesName, speciesName);
-            var sprites = Resources.LoadAll<Sprite>(spriteSheetPath);
-            if (null == sprites || newChConfig.UseIsolatedAvatar) {
-                var sprite = Resources.Load<Sprite>(String.Format("Characters/{0}/Avatar_1", speciesName));
-                if (null != sprite) {
-                    avatar.sprite = sprite;
-                }
-            } else {
-                foreach (Sprite sprite in sprites) {
-                    if ("Avatar_1".Equals(sprite.name)) {
-                        avatar.sprite = sprite;
-                        break;
-                    }
-                }
-            }
+        if (speciesId == chd.SpeciesId) {
+            return;
         }
-        
+        var newChConfig = Battle.characters[chd.SpeciesId];
+        AvatarUtil.SetAvatar1(avatar, newChConfig);
+
         hpBar.SetValueWithoutNotify((float)chd.Hp/ newChConfig.Hp);
         if (0 >= newChConfig.Mp) {
             mpBar.gameObject.SetActive(false);

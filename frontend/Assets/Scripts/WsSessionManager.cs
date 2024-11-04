@@ -59,7 +59,9 @@ public class WsSessionManager {
     private string uname;
     private string authToken; // cached for auto-login (TODO: link "save/load" of this value with persistent storage)
     private int playerId = Battle.TERMINATING_PLAYER_ID;
-    private int speciesId = Battle.SPECIES_NONE_CH;
+    private uint speciesId = Battle.SPECIES_NONE_CH;
+    private int roomId = Battle.ROOM_ID_NONE;
+    private bool forReentry = false;
 
     public int GetPlayerId() {
         return playerId;
@@ -86,21 +88,39 @@ public class WsSessionManager {
         playerId = thePlayerId;
     }
 
-    public void SetSpeciesId(int theSpeciesId) {
+    public void SetSpeciesId(uint theSpeciesId) {
         speciesId = theSpeciesId;
     }
 
-    public int GetSpeciesId() {
+    public uint GetSpeciesId() {
         return speciesId;
     }
 
     public string GetUname() {
         return uname;
     }
-    
+
+    public void SetRoomId(int theRoomId) {
+        roomId = theRoomId;
+    }
+
+    public int GetRoomId() {
+        return roomId;
+    }
+
+    public void SetForReentry(bool val) {
+        forReentry = val;
+    }
+
+    public bool GetForReentry() {
+        return forReentry;
+    }
+
     public void ClearCredentials() {
         SetCredentials(null, null, Battle.TERMINATING_PLAYER_ID);
         speciesId = Battle.SPECIES_NONE_CH;
+        roomId = Battle.ROOM_ID_NONE;
+        forReentry = false;
     }
 
     public bool IsPossiblyLoggedIn() {
@@ -114,7 +134,7 @@ public class WsSessionManager {
         }
         while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, cancellationToken)) { }
         recvBuffer.Clear();
-        string fullUrl = wsEndpoint + String.Format("?authToken={0}&playerId={1}&speciesId={2}", authToken, playerId, speciesId);
+        string fullUrl = wsEndpoint + String.Format("?authToken={0}&playerId={1}&speciesId={2}&roomId={3}&forReentry={4}", authToken, playerId, speciesId, roomId, forReentry);
         using (ClientWebSocket ws = new ClientWebSocket()) {
             try {
                 await ws.ConnectAsync(new Uri(fullUrl), cancellationToken);

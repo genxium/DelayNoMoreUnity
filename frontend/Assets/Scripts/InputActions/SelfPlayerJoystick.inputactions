@@ -234,6 +234,17 @@
                     "action": "BtnCancel",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "95ed84d8-a4de-4056-b930-c2c8d2187514",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BtnCancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

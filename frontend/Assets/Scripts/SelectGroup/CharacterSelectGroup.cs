@@ -1,6 +1,6 @@
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
-using UnityEngine;
+using shared;
 
 public class CharacterSelectGroup : AbstractSingleSelectGroup {
 
@@ -36,6 +36,9 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
         if (rising && InputActionPhase.Performed == context.phase) {
             Debug.Log("CharacterSelectGroup OnBtnConfirm");
             if (null != postCancelledCallback) {
+                if (null != uiSoundSource) {
+                    uiSoundSource.PlayCancel();
+                }
                 postCancelledCallback();
             }
             toggleUIInteractability(false);
@@ -46,6 +49,9 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
         if (newSelectedIdx == selectedIdx) {
             confirmSelection();
         } else {
+            if (null != uiSoundSource) {
+                uiSoundSource.PlayCursor();
+            }
             cells[selectedIdx].setSelected(false);
             cells[newSelectedIdx].setSelected(true);
             selectedIdx = newSelectedIdx;
@@ -53,20 +59,32 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
     }
 
     private void confirmSelection() {
-        int selectedSpeciesId = shared.Battle.SPECIES_NONE_CH;
+        uint selectedSpeciesId = Battle.SPECIES_NONE_CH;
         switch (selectedIdx) {
             case 0:
-                selectedSpeciesId = 0;
+                selectedSpeciesId = Battle.SPECIES_BLADEGIRL;
+                //selectedSpeciesId = Battle.SPECIES_SKELEARCHER;
                 break;
             case 1:
-                selectedSpeciesId = 2;
+                selectedSpeciesId = Battle.SPECIES_WITCHGIRL;
+                //selectedSpeciesId = Battle.SPECIES_DEMON_FIRE_SLIME;
                 break;
             case 2:
-                selectedSpeciesId = 6;
+                selectedSpeciesId = Battle.SPECIES_MAGSWORDGIRL;
+                //selectedSpeciesId = Battle.SPECIES_STONE_GOLEM;
+                break;
+            case 3:
+                selectedSpeciesId = Battle.SPECIES_BRIGHTWITCH;
+                break;
+            case 4:
+                selectedSpeciesId = Battle.SPECIES_BOUNTYHUNTER;
                 break;
         }
         if (null != postConfirmedCallback) {
-            postConfirmedCallback(selectedSpeciesId);
+            if (null != uiSoundSource) {
+                uiSoundSource.PlayPositive();
+            }
+            postConfirmedCallback((int)selectedSpeciesId);
         }
     }
 

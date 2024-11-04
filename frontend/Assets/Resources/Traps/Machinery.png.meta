@@ -1,0 +1,805 @@
+fileFormatVersion: 2
+guid: 42534ddb13b09924e988a0dc80222438
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FireBreatherLv1_1
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 96
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5344827, y: 0.30769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64d997a0443126e48a1634e8ee49a04b
+      internalID: 112122892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_10
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 207
+        width: 52
+        height: 49
+      alignment: 9
+      pivot: {x: 0.7403846, y: 0.1632653}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b8b307ced9be7c4fa21461193dd9537
+      internalID: -1921521194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 206
+        width: 53
+        height: 50
+      alignment: 9
+      pivot: {x: 0.745283, y: 0.16}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49a8b4af382894d44a7533572419dd9f
+      internalID: -823459407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_2
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 96
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5344827, y: 0.30769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c61f3213a08c04b41a3d9ef557b60f35
+      internalID: 1901275942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_3
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 96
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5344827, y: 0.30769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd80c4ed6975231409e188874844f396
+      internalID: -747332141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_4
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 96
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5344827, y: 0.30769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ed29cfea11600f489b470869378cf49
+      internalID: -370688818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_5
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 96
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5344827, y: 0.30769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ad86dde9c84309488b853278cca2700
+      internalID: 1632924060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_6
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 96
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5344827, y: 0.30769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29d9c4b850934d4459e0a88f8a608c78
+      internalID: -1688492906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_7
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 122
+        width: 33
+        height: 30
+      alignment: 9
+      pivot: {x: 0.59090906, y: 0.26666668}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4d6bf787f945ca4681faa7d5d0bf001
+      internalID: 674216410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_8
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 113
+        width: 41
+        height: 38
+      alignment: 9
+      pivot: {x: 0.67073166, y: 0.21052632}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b08f495983ad3354d99b16fe16308097
+      internalID: -2046435393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBreatherLv1_9
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 163
+        width: 47
+        height: 44
+      alignment: 9
+      pivot: {x: 0.71276593, y: 0.18181819}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59002a450cb49dc4d8947474be0e8f8f
+      internalID: 223278267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jumper-0
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 119
+        width: 21
+        height: 11
+      alignment: 9
+      pivot: {x: 0.5, y: 0.72727275}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bf8b2d731384014d8dd15dd391d9bb1
+      internalID: -790246588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jumper-1
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 109
+        width: 21
+        height: 10
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f896861ed2e82c439ec73f071e5fadd
+      internalID: -1553334357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jumper-2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 107
+        width: 21
+        height: 9
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8888889}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8d0b27cc0b223b4784aefaea5e32ecb
+      internalID: -1519411986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jumper-3
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 168
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17cc67e938bb94b4595eb4afa405074d
+      internalID: -1210812835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jumper-4
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 152
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1a2db09ee6189942afddc9a79067e88
+      internalID: -684990110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jumper-5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 130
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71ecd53d3a24aa843913cb0d8c837262
+      internalID: -1516605449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jumper-6
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 130
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b33477212258d9941b5b9860d325ebdd
+      internalID: 250710741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jumper-7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 116
+        width: 21
+        height: 14
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c95428b1106f44469d25b910c6810de
+      internalID: -1707379150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LongConveyorToL_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 194
+        width: 47
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8127f2a23fbb92b4b926d5803544fa37
+      internalID: 1595714071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LongConveyorToL_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 182
+        width: 47
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42932bd4ca41efd439213498d59d95d2
+      internalID: -612098350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LongConveyorToL_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 170
+        width: 47
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8a79b92940b1624bb007d057ae60ad3
+      internalID: 1113382968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LongConveyorToR_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 158
+        width: 47
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66fb018a267141446ad33ccfef275270
+      internalID: -335146548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LongConveyorToR_2
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 151
+        width: 47
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04048941cd137164184702737703fe73
+      internalID: -160187266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LongConveyorToR_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 146
+        width: 47
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b363a28113ff5ca47adf45059db95691
+      internalID: -944142524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShortConveyorToL_1
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 244
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f934ae0e5773f54cab18f7fb2b084fe
+      internalID: 1919202265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShortConveyorToL_2
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 232
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfdffdf1fcad31047a019000461d07b1
+      internalID: -941215231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShortConveyorToL_3
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 220
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fe0f1bc93cd4da43ae825fc8b80ce98
+      internalID: 1416420407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShortConveyorToR_1
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 208
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56855cc0152a4d2429164f8d8d334a14
+      internalID: 1895629282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShortConveyorToR_2
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 196
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9734067481911dd45bb857e030b2ecac
+      internalID: -1446558017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShortConveyorToR_3
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 184
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce876e275c1dfc344a5011c50d80469e
+      internalID: 1673492637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 566026b4b60bd1140833855fa1b39599
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      FireBreatherLv1_1: 112122892
+      FireBreatherLv1_10: -1921521194
+      FireBreatherLv1_11: -823459407
+      FireBreatherLv1_2: 1901275942
+      FireBreatherLv1_3: -747332141
+      FireBreatherLv1_4: -370688818
+      FireBreatherLv1_5: 1632924060
+      FireBreatherLv1_6: -1688492906
+      FireBreatherLv1_7: 674216410
+      FireBreatherLv1_8: -2046435393
+      FireBreatherLv1_9: 223278267
+      Jumper-0: -790246588
+      Jumper-1: -1553334357
+      Jumper-2: -1519411986
+      Jumper-3: -1210812835
+      Jumper-4: -684990110
+      Jumper-5: -1516605449
+      Jumper-6: 250710741
+      Jumper-7: -1707379150
+      LongConveyorToL_1: 1595714071
+      LongConveyorToL_2: -612098350
+      LongConveyorToL_3: 1113382968
+      LongConveyorToR_1: -335146548
+      LongConveyorToR_2: -160187266
+      LongConveyorToR_3: -944142524
+      ShortConveyorToL_1: 1919202265
+      ShortConveyorToL_2: -941215231
+      ShortConveyorToL_3: 1416420407
+      ShortConveyorToR_1: 1895629282
+      ShortConveyorToR_2: -1446558017
+      ShortConveyorToR_3: 1673492637
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

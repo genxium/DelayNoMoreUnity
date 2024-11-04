@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class AllSettings : MonoBehaviour {
@@ -8,7 +7,7 @@ public class AllSettings : MonoBehaviour {
     protected bool currentSelectPanelEnabled = false;
     public AllSettingsSelectGroup allSettingsSelectGroup;
     public delegate void SimpleDelegate();
-    public Image cancelBtn;
+    public GameObject cancelBtn;
 
     SimpleDelegate postCancelledCb = null;
 
@@ -27,11 +26,11 @@ public class AllSettings : MonoBehaviour {
         currentSelectPanelEnabled = val;
         allSettingsSelectGroup.toggleUIInteractability(val);
         if (val) {
-            cancelBtn.gameObject.transform.localScale = Vector3.one;
+            cancelBtn.transform.localScale = Vector3.one;
             bool logoutBtnShouldBeInteractable = (null != WsSessionManager.Instance.GetUname());
             allSettingsSelectGroup.toggleLogoutBtnInteractability(logoutBtnShouldBeInteractable);
         } else {
-            cancelBtn.gameObject.transform.localScale = Vector3.zero;
+            cancelBtn.transform.localScale = Vector3.zero;
         }
     }
 
@@ -57,13 +56,18 @@ public class AllSettings : MonoBehaviour {
 
     public void onLogoutClicked() {
         if (!currentSelectPanelEnabled) return;
+        toggleUIInteractability(false);
         // TODO: Actually send a "/Auth/Logout" request to clear on backend as well.
         WsSessionManager.Instance.ClearCredentials();
+        if (null != allSettingsSelectGroup.uiSoundSource) {
+            allSettingsSelectGroup.uiSoundSource.PlayNegative();
+        }
         loginStatusBarController.SetLoggedInData(null);
         allSettingsSelectGroup.toggleLogoutBtnInteractability(false);
         if (null != sameSceneLoginStatusBar) {
             sameSceneLoginStatusBar.SetLoggedInData(null);
         }
+        toggleUIInteractability(true);
     }
 
     private void Start() {
@@ -78,9 +82,5 @@ public class AllSettings : MonoBehaviour {
         if (null != sameSceneLoginStatusBar) {
             sameSceneLoginStatusBar.SetLoggedInData(WsSessionManager.Instance.GetUname());
         }
-    }
-
-    private void Update() {
-
     }
 }

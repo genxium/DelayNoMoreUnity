@@ -1,0 +1,28 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:0e80e34452a1fd0c240ddbd50193a072:78867af9c09fade130f10d5c278ce3b0:96cfbc749455b097ef21d1e6901e7315$
+#
+:format=40300
+:texture=PixelPlasmaVfx.png
+:size=128x256
+:pivotpoints=enabled
+:borders=enabled
+:alphahandling=ClearTransparentPixels
+
+HeatBeam_1;1;236;101;19; 0;0.5; 7;0;1;1
+HeatBeam_2;1;215;101;19; 0;0.5; 13;0;5;5
+HeatBeam_3;1;194;101;19; 0;0.5; 11;0;8;8
+HeatBeam_4;1;173;101;19; 0;0.5; 13;0;6;6
+HoppingBolt_1;69;80;32;7; 0;0.6428571428571428; 0;0;0;0
+HoppingBolt_2;1;79;32;8; 0;0.4375; 0;0;0;0
+HoppingBolt_3;35;79;32;8; 0;0.5625; 0;0;0;0
+HoppingBolt_4;69;72;32;6; 0;0.5833333333333333; 0;0;0;0
+HoppingBolt_5;1;71;32;6; 0;0.5833333333333333; 0;0;0;0
+WitchBeam1;1;152;101;19; 0;0.5; 7;0;1;1
+WitchBeam2;1;131;101;19; 0;0.5; 13;0;5;5
+WitchBeam3;1;110;101;19; 0;0.5; 11;0;8;8
+WitchBeam4;1;89;101;19; 0;0.5; 13;0;6;6

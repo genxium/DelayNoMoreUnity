@@ -44,10 +44,14 @@ Material:
     m_Floats:
     - _CrackOpacity: 0
     - _FlashIntensity: 0
+    - _Palette1FromRange: 0
+    - _Palette1ToFuzziness: 0
     - _Scale: 1.02
     - _Thickness: 0
     m_Colors:
-    - _Color: {r: 2.6282723, g: 2.6282723, b: 2.6282723, a: 0.99215686}
-    - _CrackColor: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 3.5089502, g: 3.5089502, b: 3.5089502, a: 0.99215686}
+    - _CrackColor: {r: 0, g: 2.572549, b: 8, a: 0}
     - _FlashColor: {r: 6.524382, g: 6.524382, b: 6.524382, a: 0.5019608}
+    - _Palette1From: {r: 1, g: 1, b: 1, a: 1}
+    - _Palette1To: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

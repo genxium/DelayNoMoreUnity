@@ -1,0 +1,37 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:e9987d6027d56fd5a74eef6666f1faa3:7a939f2f9f9e1e1733e8ed50c48a7ca3:d7b38bfbef68824585df6f39b99e399f$
+#
+:format=40300
+:texture=DarkBeamerTower.png
+:size=256x512
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+DarkBeamerTower_0;184;195;34;69; 0.5;0.6956521739130435; 0;0;0;0
+DarkBeamerTower_1;150;194;34;71; 0.5;0.676056338028169; 0;0;0;0
+DarkBeamerTower_2;116;264;34;79; 0.5;0.6075949367088608; 0;0;0;0
+DarkBeamerTower_3;150;265;34;78; 0.5;0.6153846153846154; 0;0;0;0
+DarkBeamerTower_4;184;344;34;82; 0.5;0.5853658536585367; 0;0;0;0
+DarkBeamerTower_5;218;265;34;82; 0.5;0.5853658536585367; 0;0;0;0
+DarkBeamerTower_6;82;341;34;82; 0.5;0.5853658536585367; 0;0;0;0
+DarkBeamerTower_7;0;335;34;81; 0.5;0.5925925925925926; 0;0;0;0
+DarkBeamerTower_8;184;264;34;80; 0.5;0.6; 0;0;0;0
+DarkBeamerTower_9;218;185;34;80; 0.5;0.6; 0;0;0;0
+DarkBeamerTower_10;116;343;34;80; 0.5;0.6; 0;0;0;0
+DarkBeamerTower_11;150;343;34;80; 0.5;0.6; 0;0;0;0
+DarkBeamerTower_12;44;339;34;81; 0.5;0.5925925925925926; 0;0;0;0
+DarkBeamerTower_13;218;347;34;82; 0.5;0.5853658536585367; 0;0;0;0
+DarkBeamerTower_14;218;429;34;83; 0.5;0.5783132530120482; 0;0;0;0
+DarkBeamerTower_15;184;426;34;86; 0.5;0.5581395348837209; 0;0;0;0
+DarkBeamerTower_16;82;423;34;89; 0.5;0.5393258426966292; 0;0;0;0
+DarkBeamerTower_17;116;423;34;89; 0.5;0.5393258426966292; 0;0;0;0
+DarkBeamerTower_18;150;423;34;89; 0.5;0.5393258426966292; 0;0;0;0
+DarkBeamerTower_19;44;420;38;92; 0.5;0.5217391304347826; 0;0;0;0
+DarkBeamerTower_20;0;416;44;96; 0.4772727272727273;0.5; 0;0;0;0
+DarkBeamerTower_21;184;171;34;24; 0.5;2; 0;0;0;0

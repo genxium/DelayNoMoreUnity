@@ -4,13 +4,6 @@ public class DebugLine : MonoBehaviour {
     public int score;
     public LineRenderer lineRenderer;
     // Start is called before the first frame update
-    void Start() {
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
 
     public void SetWidth(float w) {
         lineRenderer.startWidth = w;

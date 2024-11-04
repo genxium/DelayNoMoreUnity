@@ -1,0 +1,2323 @@
+fileFormatVersion: 2
+guid: e547c06adc2d90a46807715da87f5914
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 0
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FireTotemBlue_0
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 3
+        width: 14
+        height: 7
+      alignment: 9
+      pivot: {x: 0.5, y: 3.7142856}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf0eb6e73f20f7a4a8a094d361872e3b
+      internalID: 881177459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_1
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 249
+        width: 27
+        height: 19
+      alignment: 9
+      pivot: {x: 0.44444445, y: 1.4736842}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d86ff3f600fdd444b97e3207ac45f169
+      internalID: 1484193532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_10
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 66
+        width: 33
+        height: 59
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.44067797}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff2c859cab7543a48ad457a41a2c76cd
+      internalID: -2035971496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_11
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 31
+        height: 60
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.43333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92c9b4d4d1efb0b47876e0df1202f0a0
+      internalID: 387842050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_12
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 225
+        width: 33
+        height: 61
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.4262295}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fbb82ce05108ac45801bd5e477e5524
+      internalID: -1608528067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_13
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 400
+        width: 35
+        height: 55
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.47272727}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e559b8f71380734abd0e4cfc8f967c7
+      internalID: -480872724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_14
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 339
+        width: 37
+        height: 57
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45614034}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bce6c28229894e4fbcff6aec0faeb67
+      internalID: -1705297755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_15
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 230
+        width: 37
+        height: 57
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45614034}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8be77781f62760a43915f8a03158e6bf
+      internalID: 206811371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_16
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 67
+        width: 35
+        height: 58
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.44827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db95d70b9089f9645ac12442935b9ef9
+      internalID: 257191496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_17
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 7
+        width: 33
+        height: 59
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.44067797}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 660afe7d7899a6b48873963456b295cd
+      internalID: -1169483236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_18
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 452
+        width: 31
+        height: 60
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.43333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4413a93b56a2014187cdf21bcfaa576
+      internalID: -1991543079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_19
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 125
+        width: 33
+        height: 61
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.4262295}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9c46f02efb577e49b15fcae5c1dd1c0
+      internalID: 106213252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_2
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 251
+        width: 38
+        height: 34
+      alignment: 9
+      pivot: {x: 0.4473684, y: 0.85294116}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ade2e3feb524874458744d9f0d2e89af
+      internalID: -775817696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_20
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 345
+        width: 35
+        height: 55
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.47272727}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96a68d7ad925dc548a092b73f0ecb538
+      internalID: -1504643313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_21
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 455
+        width: 37
+        height: 57
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45614034}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6804522968bab6c4d8edce55ed6fbf5e
+      internalID: 251577535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_22
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 422
+        width: 37
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.59090906}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de92fb8965bd0614a8392ec9ec0117ab
+      internalID: 2033233355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 163
+        width: 35
+        height: 86
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.30232558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba59ba21b29012d428d94c5eefcc1b2c
+      internalID: 685684416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 424
+        width: 33
+        height: 88
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.29545453}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af85b06056ee5624eb45344e18b0c36e
+      internalID: 469780432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 249
+        width: 43
+        height: 87
+      alignment: 9
+      pivot: {x: 0.53488374, y: 0.29885057}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39e86d6df10bcb0489f487d07b5a335e
+      internalID: 705836711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_26
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 166
+        width: 55
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5090909, y: 0.31325302}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e90cba389b7fe7042ae4d2ec7ed77503
+      internalID: 1024934202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_27
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 339
+        width: 59
+        height: 86
+      alignment: 9
+      pivot: {x: 0.47457626, y: 0.30232558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22a5d64aafbc35942ba98d5359c3727e
+      internalID: 646556127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_28
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 408
+        width: 37
+        height: 49
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.53061223}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c7040af7b75e5047a576e256922e1ae
+      internalID: -1877047351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_29
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 422
+        width: 37
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.59090906}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfd75c1aaf8f9c241ab6372998c3f044
+      internalID: 735771815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 125
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.47727272, y: 0.6976744}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c1281c285129a543ae6ec061e7f517f
+      internalID: 730138006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 163
+        width: 35
+        height: 86
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.30232558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bea37e7b8d918484f9fa502275db70d4
+      internalID: -1445299693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_31
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 424
+        width: 33
+        height: 88
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.29545453}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46f81ff147fbcbe488c25bbea0f17cb0
+      internalID: -892144318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 249
+        width: 43
+        height: 87
+      alignment: 9
+      pivot: {x: 0.53488374, y: 0.29885057}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1dff8f22bb0ed04684fc7d30d60deaa
+      internalID: -947717275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_33
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 166
+        width: 55
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5090909, y: 0.31325302}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5a7c3b17d5f32d4e9c0e74673361ba8
+      internalID: 1471205909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_34
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 339
+        width: 59
+        height: 86
+      alignment: 9
+      pivot: {x: 0.47457626, y: 0.30232558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9badcd2464a12e445844a5827de67385
+      internalID: 139433613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_35
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 408
+        width: 37
+        height: 49
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.53061223}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 004919fca6f58814a9e9117b07b3a05b
+      internalID: 859374312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_36
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 329
+        width: 33
+        height: 46
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.5652174}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b02fbe45b573c64d80184e44a1d4e57
+      internalID: 1886863425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_37
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 376
+        width: 39
+        height: 66
+      alignment: 9
+      pivot: {x: 0.51282054, y: 0.3939394}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a0ad8940cbb7bc4883c893191eedea9
+      internalID: -236668207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_38
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 123
+        width: 39
+        height: 63
+      alignment: 9
+      pivot: {x: 0.53846157, y: 0.41269842}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9464d4bd604ce354a88550d9b2106d96
+      internalID: -1908764590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_39
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 186
+        width: 27
+        height: 39
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.71794873}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e83e5e06d84e54048a20e0336176c734
+      internalID: -1002763267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_4
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 0
+        width: 40
+        height: 49
+      alignment: 9
+      pivot: {x: 0.475, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8952fa96721013242b2b352f5458543f
+      internalID: -1016120984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_40
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 375
+        width: 35
+        height: 45
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.62222224}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c9abb8275c758f43be2da2e46785f5c
+      internalID: 432727606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_41
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 50
+        width: 42
+        height: 65
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75d74dd3bf907874996f915db9caf891
+      internalID: -698720850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_42
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 442
+        width: 45
+        height: 70
+      alignment: 9
+      pivot: {x: 0.42222223, y: 0.41428572}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5572964205c17ad4185622be732c5c0b
+      internalID: 1723176491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_43
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 268
+        width: 49
+        height: 71
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.3943662}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 641c04c2c294a0644b5f1ae003dfc2c0
+      internalID: -1267933434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_44
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4
+        width: 53
+        height: 73
+      alignment: 9
+      pivot: {x: 0.43396226, y: 0.369863}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8ec91a4ff724554eb6b4ba3fef5f082
+      internalID: -697067889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_45
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 180
+        width: 54
+        height: 69
+      alignment: 9
+      pivot: {x: 0.46296296, y: 0.2753623}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b1836afef7751048acaca8778809333
+      internalID: 74555944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_46
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 49
+        width: 55
+        height: 65
+      alignment: 9
+      pivot: {x: 0.45454547, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 732b2b191b414f94ca3a2160d41a1c83
+      internalID: -546190645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_47
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 227
+        width: 51
+        height: 59
+      alignment: 9
+      pivot: {x: 0.43137255, y: 0.10169491}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08a4f17fb5896c0458080cff0346eee4
+      internalID: -434074782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_48
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 287
+        width: 49
+        height: 52
+      alignment: 9
+      pivot: {x: 0.40816328, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f43c03334a6b3c4e9d73bb9e8c0c894
+      internalID: 711190398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_49
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 1
+        width: 38
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5, y: -0.1632653}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 779173c359be10445b6b87b2cb61a164
+      internalID: 1740806059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_5
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 419
+        width: 31
+        height: 47
+      alignment: 9
+      pivot: {x: 0.4516129, y: 0.5531915}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 173a9dede941bea4ca92e028ffefec87
+      internalID: -1741715952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_6
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 286
+        width: 53
+        height: 46
+      alignment: 9
+      pivot: {x: 0.4528302, y: 0.5869565}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5b1b856159dd3c4787c87302bfeb49c
+      internalID: 901123019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_7
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 466
+        width: 52
+        height: 46
+      alignment: 9
+      pivot: {x: 0.40384614, y: 0.5652174}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7ead4404a6a4984fb5a8b5b9c52c60c
+      internalID: -319710492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_8
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 230
+        width: 37
+        height: 57
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45614034}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 635c1bea838a59846a74a49d04f99b62
+      internalID: -2035756536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemBlue_9
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 9
+        width: 35
+        height: 58
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.44827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cb9c9b60edae7848bbc1b42a786a285
+      internalID: -102516099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_0
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 3
+        width: 14
+        height: 7
+      alignment: 9
+      pivot: {x: 0.5, y: 3.7142856}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac1e9f3cfad71064781a98b3c5bc0cd5
+      internalID: 1328886762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_1
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 249
+        width: 27
+        height: 19
+      alignment: 9
+      pivot: {x: 0.44444445, y: 1.4736842}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19c141cf8dc4b0a4399095069a832f5c
+      internalID: 1190530435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_10
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 66
+        width: 33
+        height: 59
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.44067797}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 126a7556d2273584585814f3233a5ee0
+      internalID: 343309171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_11
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 392
+        width: 31
+        height: 60
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.43333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 989a7426e2eb3e949ba4768025bb6cc4
+      internalID: -967167940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_12
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 64
+        width: 33
+        height: 61
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.4262295}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ded90c6022ce84a489d2408467642f8e
+      internalID: 762752445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_13
+      rect:
+        serializedVersion: 2
+        x: 318
+        y: 400
+        width: 35
+        height: 55
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.47272727}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afdfbd2001536674495b9011667b40db
+      internalID: 641571248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_14
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 398
+        width: 37
+        height: 57
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45614034}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67e21c347cf5bdb4da33ae6f8823d98b
+      internalID: 1665822880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_15
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 341
+        width: 37
+        height: 57
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45614034}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77ebf1caaaa02dc418bb2bc3d7c28e36
+      internalID: 1966951105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_16
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 454
+        width: 35
+        height: 58
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.44827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41c81f820d51cd94787efd52f2bb7979
+      internalID: 1033549768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_17
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 7
+        width: 33
+        height: 59
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.44067797}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66d3b29e116c97647854e14679ce04f4
+      internalID: 199263027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_18
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 332
+        width: 31
+        height: 60
+      alignment: 9
+      pivot: {x: 0.48387095, y: 0.43333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc37a3d5c41642947b327de478f24977
+      internalID: -444054724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_19
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 3
+        width: 33
+        height: 61
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.4262295}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0185e779c795182459d25388a51d6c2d
+      internalID: 1253996751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_2
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 251
+        width: 38
+        height: 34
+      alignment: 9
+      pivot: {x: 0.4473684, y: 0.85294116}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34dec62c40af9b648905ef725d657d6b
+      internalID: -1008839098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_20
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 457
+        width: 35
+        height: 55
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.47272727}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa2e1e0b0bf8f114db7b41fe3dd11b59
+      internalID: 505915704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_21
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 455
+        width: 37
+        height: 57
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45614034}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f70684cd84fda24aa3987f4aa53c94c
+      internalID: 90625341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_22
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 378
+        width: 37
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.59090906}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a0c27f62f748b1408459467c0024360
+      internalID: 689844283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 77
+        width: 35
+        height: 86
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.30232558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2d34a06d3527c34a8c4212542cc7829
+      internalID: -1357271502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 336
+        width: 33
+        height: 88
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.29545453}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 077b869c85719b44aadd741181624e9c
+      internalID: -816798494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_25
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 425
+        width: 43
+        height: 87
+      alignment: 9
+      pivot: {x: 0.53488374, y: 0.29885057}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 021a953f0adf58740a00f87d43cb0ef6
+      internalID: 323071764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_26
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 83
+        width: 55
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5090909, y: 0.31325302}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbdb8fbf85933a8438ed4ed5b357eab1
+      internalID: 374713376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_27
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 426
+        width: 59
+        height: 86
+      alignment: 9
+      pivot: {x: 0.47457626, y: 0.30232558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c04dbb8251d0a44eaf40037088e57c4
+      internalID: -248436722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_28
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 463
+        width: 37
+        height: 49
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.53061223}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 554f6285988d25b48813f5b890a5cb63
+      internalID: -1448891335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_29
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 378
+        width: 37
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.59090906}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15da7b2ae2feed74787fe367787cf083
+      internalID: 848336471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_3
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 125
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.47727272, y: 0.6976744}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89209a113bf264540bb322b7763a5f49
+      internalID: 1488859988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 77
+        width: 35
+        height: 86
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.30232558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2fa2da018955464b83ca3047035911c
+      internalID: 1623407162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_31
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 336
+        width: 33
+        height: 88
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.29545453}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1751755a74b926a4bb0c45c1415e5db0
+      internalID: -951245471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_32
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 425
+        width: 43
+        height: 87
+      alignment: 9
+      pivot: {x: 0.53488374, y: 0.29885057}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8140428aac4237e4b83d27f64c8f105d
+      internalID: 292530825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_33
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 83
+        width: 55
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5090909, y: 0.31325302}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4fad9a4c7cdba643bcc06200adaa08b
+      internalID: -413023462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_34
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 426
+        width: 59
+        height: 86
+      alignment: 9
+      pivot: {x: 0.47457626, y: 0.30232558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7ba7f27e8f316e44afb398bf5e4b217
+      internalID: 397091897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_35
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 463
+        width: 37
+        height: 49
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.53061223}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbba0b6376fcacf498a3939a391f9e3f
+      internalID: 2143702638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_36
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 305
+        width: 33
+        height: 46
+      alignment: 9
+      pivot: {x: 0.4848485, y: 0.5652174}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 744a81b85ad9b4746be65ae4fe06b145
+      internalID: -1001348289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_37
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 114
+        width: 39
+        height: 66
+      alignment: 9
+      pivot: {x: 0.51282054, y: 0.3939394}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fec4011ed9a0074db376ab50dff28ea
+      internalID: -155623213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_38
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 60
+        width: 39
+        height: 63
+      alignment: 9
+      pivot: {x: 0.53846157, y: 0.41269842}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41a8c8a89babb054483e69f2ec786731
+      internalID: 643180983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_39
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 186
+        width: 27
+        height: 39
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.71794873}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c08e9d03052d1de438b729f4f4c1d3d7
+      internalID: -1698549604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_4
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 0
+        width: 40
+        height: 49
+      alignment: 9
+      pivot: {x: 0.475, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9766ee838683b024692e4664778dbbb8
+      internalID: 422691972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_40
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 333
+        width: 35
+        height: 45
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.62222224}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de0283941e92d2c489f255b8a9cb00be
+      internalID: -1706697206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_41
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 186
+        width: 42
+        height: 65
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7faa4b3e6e3931d4e854f851db4acbbd
+      internalID: -969035162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_42
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 285
+        width: 45
+        height: 70
+      alignment: 9
+      pivot: {x: 0.42222223, y: 0.41428572}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51370530f87116341a0245fb3f1d3bdc
+      internalID: -887340152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_43
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 355
+        width: 49
+        height: 71
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.3943662}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 353c104c404b6f941b01b7240dc8c6ec
+      internalID: 1683941950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_44
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 10
+        width: 53
+        height: 73
+      alignment: 9
+      pivot: {x: 0.43396226, y: 0.369863}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a86212aa34db900449c8a95a4f1e35ec
+      internalID: -248108303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_45
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 286
+        width: 54
+        height: 69
+      alignment: 9
+      pivot: {x: 0.46296296, y: 0.2753623}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28ba67e1f7754634ead1fb3bd8f11fe5
+      internalID: -1582472370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_46
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 115
+        width: 55
+        height: 65
+      alignment: 9
+      pivot: {x: 0.45454547, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61749e8af05c0114f8166efc543bc7ef
+      internalID: 2006568943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_47
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 168
+        width: 51
+        height: 59
+      alignment: 9
+      pivot: {x: 0.43137255, y: 0.10169491}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd7103dba29b1c84d981ba732b50bdf3
+      internalID: -953094448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_48
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 289
+        width: 49
+        height: 52
+      alignment: 9
+      pivot: {x: 0.40816328, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e59ff40a25e95a14da3b1b8570ff6103
+      internalID: -131859822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_49
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 351
+        width: 38
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5, y: -0.1632653}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a973f364b88a9f46ac1dc6d9adb8c12
+      internalID: -1213611486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_5
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 372
+        width: 31
+        height: 47
+      alignment: 9
+      pivot: {x: 0.4516129, y: 0.5531915}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60b48b064ba9ff94aab50c7ec7ab52ac
+      internalID: 258984260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_6
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 466
+        width: 53
+        height: 46
+      alignment: 9
+      pivot: {x: 0.4528302, y: 0.5869565}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b626e928e8d945b4abba2a39f71014ad
+      internalID: -702075628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_7
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 420
+        width: 52
+        height: 46
+      alignment: 9
+      pivot: {x: 0.40384614, y: 0.5652174}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4585e96680ffa0d4abc649fc7d31a743
+      internalID: -1276238855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_8
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 341
+        width: 37
+        height: 57
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45614034}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12787861121090d4baa89d0769d7dc03
+      internalID: -1660693027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireTotemRed_9
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 396
+        width: 35
+        height: 58
+      alignment: 9
+      pivot: {x: 0.4857143, y: 0.44827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 083e104ae0dd27849a03952b6b75a80c
+      internalID: 845788453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 9d0256b9e05462b42abeb6b2aef3cc7c
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      FireTotemBlue_0: 881177459
+      FireTotemBlue_1: 1484193532
+      FireTotemBlue_10: -2035971496
+      FireTotemBlue_11: 387842050
+      FireTotemBlue_12: -1608528067
+      FireTotemBlue_13: -480872724
+      FireTotemBlue_14: -1705297755
+      FireTotemBlue_15: 206811371
+      FireTotemBlue_16: 257191496
+      FireTotemBlue_17: -1169483236
+      FireTotemBlue_18: -1991543079
+      FireTotemBlue_19: 106213252
+      FireTotemBlue_2: -775817696
+      FireTotemBlue_20: -1504643313
+      FireTotemBlue_21: 251577535
+      FireTotemBlue_22: 2033233355
+      FireTotemBlue_23: 685684416
+      FireTotemBlue_24: 469780432
+      FireTotemBlue_25: 705836711
+      FireTotemBlue_26: 1024934202
+      FireTotemBlue_27: 646556127
+      FireTotemBlue_28: -1877047351
+      FireTotemBlue_29: 735771815
+      FireTotemBlue_3: 730138006
+      FireTotemBlue_30: -1445299693
+      FireTotemBlue_31: -892144318
+      FireTotemBlue_32: -947717275
+      FireTotemBlue_33: 1471205909
+      FireTotemBlue_34: 139433613
+      FireTotemBlue_35: 859374312
+      FireTotemBlue_36: 1886863425
+      FireTotemBlue_37: -236668207
+      FireTotemBlue_38: -1908764590
+      FireTotemBlue_39: -1002763267
+      FireTotemBlue_4: -1016120984
+      FireTotemBlue_40: 432727606
+      FireTotemBlue_41: -698720850
+      FireTotemBlue_42: 1723176491
+      FireTotemBlue_43: -1267933434
+      FireTotemBlue_44: -697067889
+      FireTotemBlue_45: 74555944
+      FireTotemBlue_46: -546190645
+      FireTotemBlue_47: -434074782
+      FireTotemBlue_48: 711190398
+      FireTotemBlue_49: 1740806059
+      FireTotemBlue_5: -1741715952
+      FireTotemBlue_6: 901123019
+      FireTotemBlue_7: -319710492
+      FireTotemBlue_8: -2035756536
+      FireTotemBlue_9: -102516099
+      FireTotemRed_0: 1328886762
+      FireTotemRed_1: 1190530435
+      FireTotemRed_10: 343309171
+      FireTotemRed_11: -967167940
+      FireTotemRed_12: 762752445
+      FireTotemRed_13: 641571248
+      FireTotemRed_14: 1665822880
+      FireTotemRed_15: 1966951105
+      FireTotemRed_16: 1033549768
+      FireTotemRed_17: 199263027
+      FireTotemRed_18: -444054724
+      FireTotemRed_19: 1253996751
+      FireTotemRed_2: -1008839098
+      FireTotemRed_20: 505915704
+      FireTotemRed_21: 90625341
+      FireTotemRed_22: 689844283
+      FireTotemRed_23: -1357271502
+      FireTotemRed_24: -816798494
+      FireTotemRed_25: 323071764
+      FireTotemRed_26: 374713376
+      FireTotemRed_27: -248436722
+      FireTotemRed_28: -1448891335
+      FireTotemRed_29: 848336471
+      FireTotemRed_3: 1488859988
+      FireTotemRed_30: 1623407162
+      FireTotemRed_31: -951245471
+      FireTotemRed_32: 292530825
+      FireTotemRed_33: -413023462
+      FireTotemRed_34: 397091897
+      FireTotemRed_35: 2143702638
+      FireTotemRed_36: -1001348289
+      FireTotemRed_37: -155623213
+      FireTotemRed_38: 643180983
+      FireTotemRed_39: -1698549604
+      FireTotemRed_4: 422691972
+      FireTotemRed_40: -1706697206
+      FireTotemRed_41: -969035162
+      FireTotemRed_42: -887340152
+      FireTotemRed_43: 1683941950
+      FireTotemRed_44: -248108303
+      FireTotemRed_45: -1582472370
+      FireTotemRed_46: 2006568943
+      FireTotemRed_47: -953094448
+      FireTotemRed_48: -131859822
+      FireTotemRed_49: -1213611486
+      FireTotemRed_5: 258984260
+      FireTotemRed_6: -702075628
+      FireTotemRed_7: -1276238855
+      FireTotemRed_8: -1660693027
+      FireTotemRed_9: 845788453
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

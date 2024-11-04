@@ -11,9 +11,4 @@ public class SFXSource : MonoBehaviour {
     void Start() {
         audioSource = GetComponent<AudioSource>();
     }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
 }

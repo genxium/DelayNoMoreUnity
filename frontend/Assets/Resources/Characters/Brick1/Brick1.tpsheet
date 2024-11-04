@@ -1,0 +1,22 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:dccfef220f1df6c118dcd9458de70bb1:09f1f42de1da2469a323da65378a1d63:5411d377e48892da095d6cfc582609f5$
+#
+:format=40300
+:texture=Brick1.png
+:size=64x128
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+Brick1-0;48;62;16;16; 0.5;0.5; 0;0;0;0
+Brick1-1;0;56;19;19; 0.5;0.5; 0;0;0;0
+Brick1-2;27;57;21;21; 0.5;0.5; 0;0;0;0
+Brick1-3;27;78;24;23; 0.5;0.5; 0;0;0;0
+Brick1-4;0;75;27;26; 0.5;0.5; 0;0;0;0
+Brick1-5;32;101;30;27; 0.5;0.5; 0;0;0;0
+Brick1-6;0;101;32;27; 0.5;0.5; 0;0;0;0

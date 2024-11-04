@@ -24,6 +24,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.UseSqlite($"Data Source={DevEnvResourcesDbPath}"); // [WARNING] NuGet package "Microsoft.EntityFrameworkCore.Sqlite" is required to provide "DbContextOptionsBuilder.UseSqlite" method here.
     });
 //}
+
 builder.Services.AddSingleton<IAuthTokenCache, SimpleRamAuthTokenCache>();
 builder.Services.AddSingleton<ICaptchaCache, SimpleRamCaptchaCache>();
 builder.Services.AddSingleton<IRoomManager, PriorityBasedRoomManager>();

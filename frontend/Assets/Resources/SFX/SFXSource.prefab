@@ -142,4 +142,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
+  maxDistanceInWorld: 0
   audioSource: {fileID: 0}

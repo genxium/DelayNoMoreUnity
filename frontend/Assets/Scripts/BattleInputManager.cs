@@ -197,6 +197,8 @@ public class BattleInputManager : MonoBehaviour {
             btnA.gameObject.SetActive(false); // if "chConfig.UseInventoryBtnB", it'll be later enabled in MapController
             btnB.gameObject.SetActive(false);
         }
+        btnC.gameObject.SetActive(false);
+        btnD.gameObject.SetActive(false);
     }
 
     private void _triggerEdgeBtnA(bool rising) {
@@ -208,7 +210,7 @@ public class BattleInputManager : MonoBehaviour {
 
         if (enablePlatformSpecificHiding && !Application.isMobilePlatform) return; // Save some resources on animating
         if (rising) {
-            btnA.transform.DOScale(0.3f * Vector3.one, 0.5f);
+            btnA.transform.DOScale(0.3f * Vector3.one, 0.2f);
         } else {
             btnA.transform.DOScale(1.0f * Vector3.one, 0.8f);
         }
@@ -223,7 +225,7 @@ public class BattleInputManager : MonoBehaviour {
 
         if (enablePlatformSpecificHiding && !Application.isMobilePlatform) return; // Save some resources on animating
         if (rising) {
-            btnB.transform.DOScale(0.3f * Vector3.one, 0.5f);
+            btnB.transform.DOScale(0.3f * Vector3.one, 0.2f);
         } else {
             btnB.transform.DOScale(1.0f * Vector3.one, 0.8f);
         }
@@ -237,7 +239,7 @@ public class BattleInputManager : MonoBehaviour {
         }
 
         if (rising) {
-            btnC.transform.DOScale(0.3f * Vector3.one, 0.5f);
+            btnC.transform.DOScale(0.3f * Vector3.one, 0.2f);
         } else {
             btnC.transform.DOScale(1.0f * Vector3.one, 0.8f);
         }

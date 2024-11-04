@@ -47,6 +47,9 @@ TagManager:
   - name: Ground
     uniqueID: 2009823545
     locked: 0
+  - name: WindyGround
+    uniqueID: 3557918825
+    locked: 0
   - name: Trigger
     uniqueID: 2342661519
     locked: 0
@@ -59,6 +62,12 @@ TagManager:
   - name: Trap
     uniqueID: 3563880217
     locked: 0
+  - name: PlasmaBullet
+    uniqueID: 1323158213
+    locked: 0
   - name: EmittingBullet
     uniqueID: 306415997
+    locked: 0
+  - name: Foreground
+    uniqueID: 3959674337
     locked: 0

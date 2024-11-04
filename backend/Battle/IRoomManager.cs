@@ -1,7 +1,7 @@
 ﻿namespace backend.Battle;
 public interface IRoomManager {
-    bool Push(float newScore, Room room);
-    
+    Room? Peek(int roomId);
+    bool Put(Room room);
     Room? Pop();
-    Room? GetRoom(int roomId);
+    Room? PopAny(int roomId);
 }

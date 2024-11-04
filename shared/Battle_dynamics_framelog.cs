@@ -57,7 +57,9 @@ namespace shared {
 
         public static string stringifyBullet(Bullet bt) {
             if (null == bt) return "";
-            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},j:{13}", bt.BattleAttr.BulletLocalId, bt.BattleAttr.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bt.Config.HitboxSizeX, bt.Config.HitboxSizeY, bt.RepeatQuotaLeft, bt.BattleAttr.OffenderJoinIndex);
+            var (_, bulletConfig) = FindBulletConfig(bt.SkillId, bt.ActiveSkillHit);
+            if (null == bulletConfig) return "";
+            return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},j:{13}", bt.BulletLocalId, bt.OriginatedRenderFrameId, bt.VirtualGridX, bt.VirtualGridY, bt.VelX, bt.VelY, bt.DirX, bt.DirY, bt.BlState, bt.FramesInBlState, bulletConfig.HitboxSizeX, bulletConfig.HitboxSizeY, bt.RepeatQuotaLeft, bt.OffenderJoinIndex);
         }
 
         public static string stringifyRdf(RoomDownsyncFrame rdf) {
@@ -83,7 +85,7 @@ namespace shared {
             var bulletSb = new List<String>();
             for (int k = 0; k < rdf.Bullets.Count; k++) {
                 var bt = rdf.Bullets[k];
-                if (null == bt || TERMINATING_BULLET_LOCAL_ID == bt.BattleAttr.BulletLocalId) break;
+                if (null == bt || TERMINATING_BULLET_LOCAL_ID == bt.BulletLocalId) break;
                 bulletSb.Add(stringifyBullet(bt));
             }
 
@@ -179,20 +181,6 @@ namespace shared {
 
                     if (null != rdfPfl) {       
                         outputFile.Write(rdfPfl.toString() + "\n");
-                    }
-                }
-            }
-        }
-
-        public static PlayerStoryProgress? loadStoryProgress(string dirPath, string filename) {
-            const int CHUNK_SIZE = (1 << 12);
-            using (FileStream fs = new FileStream(Path.Combine(dirPath, filename), FileMode.OpenOrCreate, FileAccess.Read)) {
-                using (BinaryReader br = new BinaryReader(fs, new ASCIIEncoding())) {
-                    byte[] chunk = br.ReadBytes(CHUNK_SIZE);
-                    if (0 < chunk.Length) {
-                        return PlayerStoryProgress.Parser.ParseFrom(chunk);
-                    } else {
-                        return null;
                     }
                 }
             }

@@ -53,6 +53,32 @@ namespace shared {
             }
         }
 
+        /*
+        [WARNING]
+
+        What does "Cell.unregisterTail" achieve here?
+
+        For static colliders,
+        1. Their "Collider.TouchingCells" never change regardless of rollback
+        2. Their orders in each Cell never change, i.e. dynamic colliders are always appended and removed within each Cell.Colliders after static ones, regardless of rollback
+
+        For dynamic colliders,
+        1. When each of them is removed, the corresponding "Cell.Colliders" will change their "Ed & EdFrameId" to guarantee no contamination for next "Step(...)" use, regardless of rollback
+        2. After all dynamic colliders are removed at the end of "Step(...)", the whole CollisionSpace resumes regardless of the count or shapes of the dynamic colliders processed in current "Step(...)" -- most notably, each "Cell.Colliders,St & Ed & StFrameId & EdFrameId" wouldn't change! 
+
+        The original "cell.unregister(...)" will break order of static and dynamic colliders in cell (by "swapping st element with to-delete-target and then pop"), which could impact rollback determinism! 
+        */
+        public void registerToTail(Collider collider) {
+            if (Colliders.Cnt >= Colliders.N) {
+                throw new ArgumentException(String.Format("Cell.Colliders is already full! X={0}, Y={1}, Cnt={2}, N={3}: trying to insert collider.Shape={4}, collider.Data={5}", X, Y, Colliders.Cnt, Colliders.N, collider.Shape, collider.Data));
+            }
+            Colliders.Put(collider);
+        }
+
+        public void unregisterFromTail(Collider collider) {
+            Colliders.PopTail();
+        }
+
         public void unregisterAll() {
             while (0 < Colliders.Cnt) {
                 var (ok, collider) = Colliders.Pop();

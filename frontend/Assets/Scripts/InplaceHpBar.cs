@@ -11,11 +11,6 @@ public class InplaceHpBar : MonoBehaviour {
         updateHp(1f, 1f);
     }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     public void updateHp(float hpNewScaleX, float mpNewScaleX) {
         newScaleHolder.Set(hpNewScaleX, hpFiller.transform.localScale.y, hpFiller.transform.localScale.z);
         hpFiller.transform.localScale = newScaleHolder;

@@ -120,8 +120,8 @@ TextureImporter:
       name: Healing1
       rect:
         serializedVersion: 2
-        x: 214
-        y: 359
+        x: 207
+        y: 324
         width: 27
         height: 27
       alignment: 9
@@ -141,8 +141,8 @@ TextureImporter:
       name: Healing10
       rect:
         serializedVersion: 2
-        x: 218
-        y: 626
+        x: 539
+        y: 578
         width: 33
         height: 33
       alignment: 9
@@ -162,8 +162,8 @@ TextureImporter:
       name: Healing11
       rect:
         serializedVersion: 2
-        x: 358
-        y: 146
+        x: 670
+        y: 990
         width: 35
         height: 34
       alignment: 9
@@ -183,8 +183,8 @@ TextureImporter:
       name: Healing12
       rect:
         serializedVersion: 2
-        x: 413
-        y: 505
+        x: 542
+        y: 0
         width: 36
         height: 35
       alignment: 9
@@ -204,8 +204,8 @@ TextureImporter:
       name: Healing13
       rect:
         serializedVersion: 2
-        x: 226
-        y: 120
+        x: 634
+        y: 908
         width: 38
         height: 37
       alignment: 9
@@ -225,8 +225,8 @@ TextureImporter:
       name: Healing14
       rect:
         serializedVersion: 2
-        x: 233
-        y: 82
+        x: 601
+        y: 824
         width: 39
         height: 38
       alignment: 9
@@ -246,8 +246,8 @@ TextureImporter:
       name: Healing15
       rect:
         serializedVersion: 2
-        x: 408
-        y: 464
+        x: 594
+        y: 900
         width: 40
         height: 41
       alignment: 9
@@ -267,8 +267,8 @@ TextureImporter:
       name: Healing16
       rect:
         serializedVersion: 2
-        x: 191
-        y: 78
+        x: 593
+        y: 779
         width: 42
         height: 42
       alignment: 9
@@ -288,8 +288,8 @@ TextureImporter:
       name: Healing17
       rect:
         serializedVersion: 2
-        x: 316
-        y: 154
+        x: 544
+        y: 689
         width: 42
         height: 43
       alignment: 9
@@ -309,8 +309,8 @@ TextureImporter:
       name: Healing18
       rect:
         serializedVersion: 2
-        x: 390
-        y: 267
+        x: 499
+        y: 732
         width: 44
         height: 44
       alignment: 9
@@ -330,8 +330,8 @@ TextureImporter:
       name: Healing19
       rect:
         serializedVersion: 2
-        x: 0
-        y: 26
+        x: 615
+        y: 55
         width: 45
         height: 46
       alignment: 9
@@ -351,8 +351,8 @@ TextureImporter:
       name: Healing2
       rect:
         serializedVersion: 2
-        x: 214
-        y: 332
+        x: 234
+        y: 324
         width: 27
         height: 27
       alignment: 9
@@ -372,8 +372,8 @@ TextureImporter:
       name: Healing20
       rect:
         serializedVersion: 2
-        x: 46
-        y: 78
+        x: 261
+        y: 606
         width: 46
         height: 47
       alignment: 9
@@ -393,8 +393,8 @@ TextureImporter:
       name: Healing21
       rect:
         serializedVersion: 2
-        x: 48
-        y: 125
+        x: 558
+        y: 359
         width: 46
         height: 49
       alignment: 9
@@ -414,8 +414,8 @@ TextureImporter:
       name: Healing22
       rect:
         serializedVersion: 2
-        x: 153
-        y: 235
+        x: 532
+        y: 408
         width: 48
         height: 51
       alignment: 9
@@ -435,8 +435,8 @@ TextureImporter:
       name: Healing23
       rect:
         serializedVersion: 2
-        x: 101
-        y: 207
+        x: 267
+        y: 426
         width: 48
         height: 50
       alignment: 9
@@ -456,8 +456,8 @@ TextureImporter:
       name: Healing24
       rect:
         serializedVersion: 2
-        x: 344
-        y: 314
+        x: 519
+        y: 459
         width: 50
         height: 51
       alignment: 9
@@ -477,8 +477,8 @@ TextureImporter:
       name: Healing25
       rect:
         serializedVersion: 2
-        x: 51
-        y: 224
+        x: 496
+        y: 280
         width: 50
         height: 52
       alignment: 9
@@ -498,8 +498,8 @@ TextureImporter:
       name: Healing26
       rect:
         serializedVersion: 2
-        x: 0
-        y: 189
+        x: 542
+        y: 185
         width: 50
         height: 52
       alignment: 9
@@ -519,8 +519,8 @@ TextureImporter:
       name: Healing27
       rect:
         serializedVersion: 2
-        x: 297
-        y: 428
+        x: 457
+        y: 332
         width: 51
         height: 54
       alignment: 9
@@ -540,8 +540,8 @@ TextureImporter:
       name: Healing28
       rect:
         serializedVersion: 2
-        x: 0
-        y: 352
+        x: 427
+        y: 386
         width: 52
         height: 54
       alignment: 9
@@ -561,8 +561,8 @@ TextureImporter:
       name: Healing29
       rect:
         serializedVersion: 2
-        x: 54
-        y: 353
+        x: 415
+        y: 440
         width: 52
         height: 55
       alignment: 9
@@ -582,8 +582,8 @@ TextureImporter:
       name: Healing3
       rect:
         serializedVersion: 2
-        x: 430
-        y: 624
+        x: 276
+        y: 232
         width: 21
         height: 20
       alignment: 9
@@ -603,8 +603,8 @@ TextureImporter:
       name: Healing30
       rect:
         serializedVersion: 2
-        x: 109
-        y: 358
+        x: 384
+        y: 495
         width: 52
         height: 56
       alignment: 9
@@ -624,8 +624,8 @@ TextureImporter:
       name: Healing4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 4
+        x: 313
+        y: 236
         width: 23
         height: 22
       alignment: 9
@@ -645,8 +645,8 @@ TextureImporter:
       name: Healing5
       rect:
         serializedVersion: 2
-        x: 196
-        y: 209
+        x: 622
+        y: 288
         width: 25
         height: 23
       alignment: 9
@@ -666,8 +666,8 @@ TextureImporter:
       name: Healing6
       rect:
         serializedVersion: 2
-        x: 208
-        y: 269
+        x: 308
+        y: 327
         width: 26
         height: 25
       alignment: 9
@@ -687,8 +687,8 @@ TextureImporter:
       name: Healing7
       rect:
         serializedVersion: 2
-        x: 214
-        y: 386
+        x: 233
+        y: 608
         width: 28
         height: 27
       alignment: 9
@@ -708,8 +708,8 @@ TextureImporter:
       name: Healing8
       rect:
         serializedVersion: 2
-        x: 215
-        y: 453
+        x: 204
+        y: 606
         width: 29
         height: 29
       alignment: 9
@@ -729,8 +729,8 @@ TextureImporter:
       name: Healing9
       rect:
         serializedVersion: 2
-        x: 222
-        y: 802
+        x: 539
+        y: 516
         width: 31
         height: 31
       alignment: 9
@@ -750,8 +750,8 @@ TextureImporter:
       name: MpHealing1
       rect:
         serializedVersion: 2
-        x: 220
-        y: 725
+        x: 431
+        y: 237
         width: 32
         height: 32
       alignment: 9
@@ -771,8 +771,8 @@ TextureImporter:
       name: MpHealing10
       rect:
         serializedVersion: 2
-        x: 471
-        y: 819
+        x: 551
+        y: 982
         width: 41
         height: 42
       alignment: 9
@@ -792,8 +792,8 @@ TextureImporter:
       name: MpHealing11
       rect:
         serializedVersion: 2
-        x: 374
-        y: 180
+        x: 543
+        y: 732
         width: 42
         height: 44
       alignment: 0
@@ -813,8 +813,8 @@ TextureImporter:
       name: MpHealing12
       rect:
         serializedVersion: 2
-        x: 272
-        y: 158
+        x: 645
+        y: 146
         width: 44
         height: 46
       alignment: 0
@@ -834,8 +834,8 @@ TextureImporter:
       name: MpHealing13
       rect:
         serializedVersion: 2
-        x: 0
-        y: 99
+        x: 640
+        y: 192
         width: 46
         height: 48
       alignment: 0
@@ -855,8 +855,8 @@ TextureImporter:
       name: MpHealing14
       rect:
         serializedVersion: 2
-        x: 50
-        y: 174
+        x: 315
+        y: 426
         width: 48
         height: 50
       alignment: 0
@@ -876,8 +876,8 @@ TextureImporter:
       name: MpHealing15
       rect:
         serializedVersion: 2
-        x: 447
-        y: 351
+        x: 546
+        y: 286
         width: 50
         height: 52
       alignment: 0
@@ -897,8 +897,8 @@ TextureImporter:
       name: MpHealing16
       rect:
         serializedVersion: 2
-        x: 0
-        y: 241
+        x: 436
+        y: 496
         width: 51
         height: 55
       alignment: 9
@@ -918,8 +918,8 @@ TextureImporter:
       name: MpHealing17
       rect:
         serializedVersion: 2
-        x: 303
-        y: 482
+        x: 496
+        y: 123
         width: 53
         height: 57
       alignment: 9
@@ -939,8 +939,8 @@ TextureImporter:
       name: MpHealing18
       rect:
         serializedVersion: 2
-        x: 55
-        y: 499
+        x: 441
+        y: 269
         width: 55
         height: 58
       alignment: 9
@@ -960,8 +960,8 @@ TextureImporter:
       name: MpHealing19
       rect:
         serializedVersion: 2
-        x: 252
-        y: 660
+        x: 370
+        y: 366
         width: 57
         height: 60
       alignment: 9
@@ -981,8 +981,8 @@ TextureImporter:
       name: MpHealing2
       rect:
         serializedVersion: 2
-        x: 220
-        y: 693
+        x: 463
+        y: 237
         width: 32
         height: 32
       alignment: 9
@@ -1002,8 +1002,8 @@ TextureImporter:
       name: MpHealing20
       rect:
         serializedVersion: 2
-        x: 162
-        y: 706
+        x: 433
+        y: 962
         width: 58
         height: 62
       alignment: 9
@@ -1023,8 +1023,8 @@ TextureImporter:
       name: MpHealing21
       rect:
         serializedVersion: 2
-        x: 371
-        y: 609
+        x: 394
+        y: 692
         width: 59
         height: 63
       alignment: 9
@@ -1044,8 +1044,8 @@ TextureImporter:
       name: MpHealing22
       rect:
         serializedVersion: 2
-        x: 162
-        y: 768
+        x: 359
+        y: 859
         width: 60
         height: 65
       alignment: 9
@@ -1065,8 +1065,8 @@ TextureImporter:
       name: MpHealing23
       rect:
         serializedVersion: 2
-        x: 382
-        y: 672
+        x: 267
+        y: 540
         width: 62
         height: 66
       alignment: 9
@@ -1086,8 +1086,8 @@ TextureImporter:
       name: MpHealing24
       rect:
         serializedVersion: 2
-        x: 319
-        y: 732
+        x: 366
+        y: 100
         width: 63
         height: 68
       alignment: 9
@@ -1107,8 +1107,8 @@ TextureImporter:
       name: MpHealing25
       rect:
         serializedVersion: 2
-        x: 388
-        y: 738
+        x: 366
+        y: 168
         width: 64
         height: 69
       alignment: 9
@@ -1128,8 +1128,8 @@ TextureImporter:
       name: MpHealing26
       rect:
         serializedVersion: 2
-        x: 406
-        y: 807
+        x: 141
+        y: 0
         width: 65
         height: 70
       alignment: 9
@@ -1149,8 +1149,8 @@ TextureImporter:
       name: MpHealing27
       rect:
         serializedVersion: 2
-        x: 253
-        y: 779
+        x: 300
+        y: 165
         width: 66
         height: 71
       alignment: 9
@@ -1170,8 +1170,8 @@ TextureImporter:
       name: MpHealing28
       rect:
         serializedVersion: 2
-        x: 253
-        y: 850
+        x: 298
+        y: 88
         width: 68
         height: 72
       alignment: 9
@@ -1191,8 +1191,8 @@ TextureImporter:
       name: MpHealing29
       rect:
         serializedVersion: 2
-        x: 406
-        y: 877
+        x: 206
+        y: 11
         width: 68
         height: 73
       alignment: 9
@@ -1212,8 +1212,8 @@ TextureImporter:
       name: MpHealing3
       rect:
         serializedVersion: 2
-        x: 217
-        y: 577
+        x: 495
+        y: 237
         width: 32
         height: 32
       alignment: 9
@@ -1233,8 +1233,8 @@ TextureImporter:
       name: MpHealing30
       rect:
         serializedVersion: 2
-        x: 409
-        y: 950
+        x: 251
+        y: 352
         width: 70
         height: 74
       alignment: 9
@@ -1254,8 +1254,8 @@ TextureImporter:
       name: MpHealing4
       rect:
         serializedVersion: 2
-        x: 217
-        y: 545
+        x: 578
+        y: 657
         width: 32
         height: 32
       alignment: 9
@@ -1275,8 +1275,8 @@ TextureImporter:
       name: MpHealing5
       rect:
         serializedVersion: 2
-        x: 130
-        y: 738
+        x: 555
+        y: 612
         width: 32
         height: 33
       alignment: 9
@@ -1296,8 +1296,8 @@ TextureImporter:
       name: MpHealing6
       rect:
         serializedVersion: 2
-        x: 218
-        y: 659
+        x: 637
+        y: 874
         width: 33
         height: 34
       alignment: 9
@@ -1317,8 +1317,8 @@ TextureImporter:
       name: MpHealing7
       rect:
         serializedVersion: 2
-        x: 272
-        y: 85
+        x: 592
+        y: 101
         width: 35
         height: 36
       alignment: 9
@@ -1338,8 +1338,8 @@ TextureImporter:
       name: MpHealing8
       rect:
         serializedVersion: 2
-        x: 413
-        y: 540
+        x: 634
+        y: 986
         width: 36
         height: 38
       alignment: 0
@@ -1359,8 +1359,8 @@ TextureImporter:
       name: MpHealing9
       rect:
         serializedVersion: 2
-        x: 144
-        y: 78
+        x: 627
+        y: 101
         width: 38
         height: 40
       alignment: 0
@@ -1380,8 +1380,8 @@ TextureImporter:
       name: SmallSting1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 723
+        x: 180
+        y: 915
         width: 57
         height: 5
       alignment: 9
@@ -1401,8 +1401,8 @@ TextureImporter:
       name: SmallSting2
       rect:
         serializedVersion: 2
-        x: 356
-        y: 523
+        x: 88
+        y: 915
         width: 53
         height: 13
       alignment: 9
@@ -1422,8 +1422,8 @@ TextureImporter:
       name: SmallSting3
       rect:
         serializedVersion: 2
-        x: 416
-        y: 181
+        x: 351
+        y: 924
         width: 39
         height: 17
       alignment: 9
@@ -1443,8 +1443,8 @@ TextureImporter:
       name: SmallSting4
       rect:
         serializedVersion: 2
-        x: 216
-        y: 524
+        x: 336
+        y: 237
         width: 32
         height: 21
       alignment: 9
@@ -1464,8 +1464,8 @@ TextureImporter:
       name: SmokeNDust1_0
       rect:
         serializedVersion: 2
-        x: 217
-        y: 609
+        x: 92
+        y: 229
         width: 33
         height: 17
       alignment: 9
@@ -1485,8 +1485,8 @@ TextureImporter:
       name: SmokeNDust1_1
       rect:
         serializedVersion: 2
-        x: 234
-        y: 279
+        x: 493
+        y: 0
         width: 49
         height: 35
       alignment: 9
@@ -1506,8 +1506,8 @@ TextureImporter:
       name: SmokeNDust1_2
       rect:
         serializedVersion: 2
-        x: 149
-        y: 197
+        x: 554
+        y: 821
         width: 47
         height: 38
       alignment: 9
@@ -1527,8 +1527,8 @@ TextureImporter:
       name: SmokeNDust1_3
       rect:
         serializedVersion: 2
-        x: 234
-        y: 237
+        x: 514
+        y: 859
         width: 47
         height: 42
       alignment: 9
@@ -1548,8 +1548,8 @@ TextureImporter:
       name: SmokeNDust1_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 147
+        x: 453
+        y: 671
         width: 48
         height: 42
       alignment: 9
@@ -1569,8 +1569,8 @@ TextureImporter:
       name: SmokeNDust1_5
       rect:
         serializedVersion: 2
-        x: 341
-        y: 271
+        x: 527
+        y: 237
         width: 49
         height: 43
       alignment: 9
@@ -1590,8 +1590,8 @@ TextureImporter:
       name: SmokeNDust1_6
       rect:
         serializedVersion: 2
-        x: 374
-        y: 224
+        x: 515
+        y: 645
         width: 44
         height: 43
       alignment: 9
@@ -1611,8 +1611,8 @@ TextureImporter:
       name: SmokeNDust1_7
       rect:
         serializedVersion: 2
-        x: 330
-        y: 227
+        x: 505
+        y: 776
         width: 44
         height: 44
       alignment: 9
@@ -1632,8 +1632,8 @@ TextureImporter:
       name: SmokeNDust1_8
       rect:
         serializedVersion: 2
-        x: 264
-        y: 121
+        x: 549
+        y: 101
         width: 43
         height: 36
       alignment: 9
@@ -1653,8 +1653,8 @@ TextureImporter:
       name: MagicShieldAtked1_1
       rect:
         serializedVersion: 2
-        x: 321
-        y: 800
+        x: 261
+        y: 653
         width: 67
         height: 82
       alignment: 0
@@ -1674,8 +1674,8 @@ TextureImporter:
       name: MagicShieldAtked1_2
       rect:
         serializedVersion: 2
-        x: 88
-        y: 820
+        x: 183
+        y: 928
         width: 74
         height: 96
       alignment: 0
@@ -1695,8 +1695,8 @@ TextureImporter:
       name: MagicShieldAtked1_3
       rect:
         serializedVersion: 2
-        x: 260
-        y: 922
+        x: 0
+        y: 704
         width: 78
         height: 102
       alignment: 0
@@ -1716,8 +1716,8 @@ TextureImporter:
       name: MagicShieldAtked1_4
       rect:
         serializedVersion: 2
-        x: 175
-        y: 833
+        x: 0
+        y: 604
         width: 78
         height: 100
       alignment: 0
@@ -1737,8 +1737,8 @@ TextureImporter:
       name: MagicShieldDying_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 772
+        x: 241
+        y: 252
         width: 72
         height: 72
       alignment: 0
@@ -1758,8 +1758,8 @@ TextureImporter:
       name: MagicShieldDying_2
       rect:
         serializedVersion: 2
-        x: 175
-        y: 933
+        x: 93
+        y: 417
         width: 85
         height: 91
       alignment: 0
@@ -1779,8 +1779,8 @@ TextureImporter:
       name: MagicShieldDying_3
       rect:
         serializedVersion: 2
-        x: 88
-        y: 916
+        x: 0
+        y: 806
         width: 87
         height: 108
       alignment: 0
@@ -1821,8 +1821,8 @@ TextureImporter:
       name: MagicShieldHold1_1
       rect:
         serializedVersion: 2
-        x: 338
-        y: 882
+        x: 156
+        y: 84
         width: 68
         height: 73
       alignment: 0
@@ -1842,8 +1842,8 @@ TextureImporter:
       name: MagicShieldHold1_2
       rect:
         serializedVersion: 2
-        x: 338
-        y: 955
+        x: 344
+        y: 19
         width: 71
         height: 69
       alignment: 0
@@ -1864,7 +1864,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 844
+        y: 0
         width: 73
         height: 70
       alignment: 0
@@ -1881,1870 +1881,3067 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TornadoMoving_0
+      name: CastThunderTwins1
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 10
+        width: 56
+        height: 45
+      alignment: 9
+      pivot: {x: 0.83928573, y: 0.5777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c05ec17fdaec6546a2ba64089c4ff7d
+      internalID: 1161759870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CastThunderTwins2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 85
+        width: 74
+        height: 72
+      alignment: 9
+      pivot: {x: 0.6081081, y: 0.45833334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40542a1895c51524799c8e36581b97f9
+      internalID: -423742589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CastThunderTwins3
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 35
+        width: 84
+        height: 66
+      alignment: 9
+      pivot: {x: 0.44047618, y: 0.59090906}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2640dd5b8a2bc794f8e9503083716a71
+      internalID: 1034512089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_1
+      rect:
+        serializedVersion: 2
+        x: 596
+        y: 311
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f504271a7b7d69240bfe75eaf6e7c5f6
+      internalID: 1896224699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_10
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 615
+        width: 54
+        height: 56
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.48214287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41f8a606750e58943964d06e49d2e84a
+      internalID: 702762560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_11
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 820
+        width: 56
+        height: 59
+      alignment: 9
+      pivot: {x: 0.48214287, y: 0.4915254}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffeaa627af462dc4d827d990fa7f9ab0
+      internalID: 1228426295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_12
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 901
+        width: 60
+        height: 61
+      alignment: 9
+      pivot: {x: 0.48333332, y: 0.4918033}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8e25db65b85a78438af781a36b70a4f
+      internalID: -1906201347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_13
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 607
+        width: 61
+        height: 63
+      alignment: 9
+      pivot: {x: 0.47540984, y: 0.4920635}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1afa5f74cba7fcd4fba48d845eb93fba
+      internalID: 818881439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_14
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 755
+        width: 64
+        height: 65
+      alignment: 9
+      pivot: {x: 0.484375, y: 0.4923077}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae128ba8101daa8459c950147721a07d
+      internalID: -1703035363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_15
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 101
+        width: 67
+        height: 67
+      alignment: 9
+      pivot: {x: 0.49253732, y: 0.49253732}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 599e4f3faad5dcf49b2aaa7c4b226ce8
+      internalID: -1005680070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_16
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 258
+        width: 69
+        height: 69
+      alignment: 9
+      pivot: {x: 0.49275362, y: 0.49275362}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1ee4602eebcc29419cbb6a037efa1c8
+      internalID: 740450940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_17
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 160
+        width: 72
+        height: 72
+      alignment: 9
+      pivot: {x: 0.4861111, y: 0.4861111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acb0ffe846a9bf947860e002a7825dbf
+      internalID: -426429265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_18
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 248
+        width: 74
+        height: 75
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.49333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 626fc011a3cecbb40a91ac82a03612c2
+      internalID: 211603230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_19
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 152
+        width: 76
+        height: 77
+      alignment: 9
+      pivot: {x: 0.4868421, y: 0.4935065}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f447e6262b060ba41b691045bc71623e
+      internalID: -1761892585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_2
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 137
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0fc653694570f349af0d5c4321de0a6
+      internalID: -1672519631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 70
+        width: 78
+        height: 79
+      alignment: 9
+      pivot: {x: 0.4871795, y: 0.49367088}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 761dc52505483df4386cf3bfb9e0b682
+      internalID: 1400899943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_21
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 839
+        width: 82
+        height: 83
+      alignment: 9
+      pivot: {x: 0.4878049, y: 0.4939759}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e3f5c5a5ea60c041ab0e4c7f784364d
+      internalID: 1744629749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_22
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 735
+        width: 84
+        height: 85
+      alignment: 9
+      pivot: {x: 0.48809522, y: 0.49411765}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b213fab329bdeee4e8ad589d8dc3671a
+      internalID: -585427085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_23
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 635
+        width: 87
+        height: 87
+      alignment: 9
+      pivot: {x: 0.49425286, y: 0.49425286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c0af23ade16e4648a8baf951e43b137
+      internalID: 1231333864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_24
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 426
+        width: 89
+        height: 89
+      alignment: 9
+      pivot: {x: 0.49438202, y: 0.49438202}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52651db6dcd6d2b4d9a202289160cb6b
+      internalID: -1491085516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 229
+        width: 92
+        height: 92
+      alignment: 9
+      pivot: {x: 0.48913044, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85e457486a637604a96102f7fc2c4a1b
+      internalID: 749842915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_26
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 929
+        width: 94
+        height: 95
+      alignment: 9
+      pivot: {x: 0.4893617, y: 0.49473685}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2893d6ecdf2ec764aa3aed21196065b3
+      internalID: 581080268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_27
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 818
+        width: 95
+        height: 96
+      alignment: 9
+      pivot: {x: 0.49473685, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ed80649a6029834e98a618f325298e6
+      internalID: 2132295799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_28
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 508
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed15e2bea6b9233439053c4c7b3c81a2
+      internalID: 1898894036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_3
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 189
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd4d71917d309eb41b3463aa679d1eb9
+      internalID: -1793325001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_4
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 240
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a30dbe32322de547ae7bcef156ad2c2
+      internalID: -1879364270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_5
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 53
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17b15f80ed70e244080ac944f5d76bee
+      internalID: -734118140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_6
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 141
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01dd4064044ae7c4d9c38c16ca24b328
+      internalID: 829029189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_7
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 237
+        width: 48
+        height: 49
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.48979592}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc6dc481b65dd24458214e4cbb291bd9
+      internalID: 1772791718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_8
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 338
+        width: 50
+        height: 52
+      alignment: 9
+      pivot: {x: 0.48, y: 0.48076922}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3670af0cbb9ec2340877e3e842651e59
+      internalID: 15847480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HolyExplosion_9
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 442
+        width: 52
+        height: 54
+      alignment: 9
+      pivot: {x: 0.48076922, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f5fd567b049e654dbf4664251bfa5d2
+      internalID: 1295745330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_1
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 390
+        width: 53
+        height: 52
+      alignment: 9
+      pivot: {x: 0.509434, y: 0.48076922}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f27185ebd3d6a164598e183e88795658
+      internalID: -1848634689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_10
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 33
+        width: 68
+        height: 67
+      alignment: 9
+      pivot: {x: 0.5147059, y: 0.49253732}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a1cda2ca2c8aa3499cbbaa4ef246881
+      internalID: 21844384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_11
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 0
+        width: 68
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5147059, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c26ed98fb6757ae47bb24e52d4c08e5b
+      internalID: -792959263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_12
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 13
+        width: 70
+        height: 72
+      alignment: 9
+      pivot: {x: 0.51428574, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f652930d78701174dadace9a555c2cbf
+      internalID: 1579912816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_13
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 157
+        width: 72
+        height: 73
+      alignment: 9
+      pivot: {x: 0.5138889, y: 0.5068493}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 588948faf3e81df49bb9b7101dbf073d
+      internalID: -947932670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_14
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 351
+        width: 72
+        height: 75
+      alignment: 9
+      pivot: {x: 0.5138889, y: 0.50666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f691b302411f1944ba51846ef17e739
+      internalID: 1971050085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_15
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 246
+        width: 75
+        height: 77
+      alignment: 9
+      pivot: {x: 0.50666666, y: 0.5064935}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f83c78acc0e18c844aaba9e553ebc692
+      internalID: -1249678898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_16
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 70
+        width: 78
+        height: 79
+      alignment: 9
+      pivot: {x: 0.51282054, y: 0.5063291}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4748aaf0665200647a6142abcd17abb8
+      internalID: -1164771771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 149
+        width: 80
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5125, y: 0.5125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 112d33b94c25cea4592ebb6837cba45c
+      internalID: 2043980771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_18
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 941
+        width: 82
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5121951, y: 0.5060241}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fcef9faef92164409c8210de2c70f83
+      internalID: -772761575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_19
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 520
+        width: 84
+        height: 86
+      alignment: 9
+      pivot: {x: 0.5119048, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1943e36690b05443a4307075eb9ecc1
+      internalID: 675649183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_2
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 561
+        width: 55
+        height: 54
+      alignment: 9
+      pivot: {x: 0.5090909, y: 0.4814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 614c4f90b34f6dd499bee170a25e5dbe
+      internalID: 924982706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_20
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 722
+        width: 84
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5119048, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d69cdd534ed5cce4e8eaaab6e67721ee
+      internalID: -1067706955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_21
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 515
+        width: 87
+        height: 90
+      alignment: 9
+      pivot: {x: 0.50574714, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 795a0850fac45c24b8129eb5fb24871a
+      internalID: 1988357388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_22
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 323
+        width: 88
+        height: 91
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4945055}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2084d25c541993b4ca2d1968ccd1acfd
+      internalID: -917738561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 321
+        width: 91
+        height: 93
+      alignment: 9
+      pivot: {x: 0.50549453, y: 0.49462366}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cd79c1e47b23764eb5844c90a9a6398
+      internalID: -980360103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 414
+        width: 93
+        height: 94
+      alignment: 9
+      pivot: {x: 0.50537634, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a277aac1986962444855e808890c3651
+      internalID: 1677574071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_25
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 820
+        width: 95
+        height: 95
+      alignment: 9
+      pivot: {x: 0.50526315, y: 0.49473685}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26455b76d6853154ea54d079c8e04a39
+      internalID: -581690163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_26
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 928
+        width: 95
+        height: 96
+      alignment: 9
+      pivot: {x: 0.50526315, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e33725f952268534da7b1d5f3a0d9d57
+      internalID: -1466410719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_27
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 710
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6577f6caef39d924eb537a9d50a56afa
+      internalID: -1982968573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_28
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 614
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fabd1c2b11eaa6f4e8b49d6394204bde
+      internalID: -1793611203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_3
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 551
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.51785713, y: 0.48214287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e1cd01b0504b00418bf48518a6ef288
+      internalID: -1494150876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_4
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 179
+        width: 58
+        height: 58
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47a941e63ffbee34485f96ad991ff7a4
+      internalID: -768452230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_5
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 269
+        width: 59
+        height: 58
+      alignment: 9
+      pivot: {x: 0.5084746, y: 0.4827586}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34111ac641ac1d542b01d210dc51f7cf
+      internalID: -521676948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_6
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 964
+        width: 60
+        height: 60
+      alignment: 9
+      pivot: {x: 0.51666665, y: 0.48333332}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad02b120c16b98248a02b925c8be20fb
+      internalID: -696604662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_7
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 879
+        width: 62
+        height: 62
+      alignment: 9
+      pivot: {x: 0.516129, y: 0.48387095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f3d16b3707fe0d43b8ed488e82add88
+      internalID: 1829205148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_8
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 476
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.515625, y: 0.484375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e58a8e1b675acc14d873771026d56b07
+      internalID: 1872866747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LightCast_9
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 670
+        width: 66
+        height: 65
+      alignment: 9
+      pivot: {x: 0.5151515, y: 0.4923077}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b4d9cf1037dedf4b99520acce8729e3
+      internalID: 1206281842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_1
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 941
+        width: 22
+        height: 21
+      alignment: 9
+      pivot: {x: 0.45454547, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ec9d4898f7f36442ab47e1ec3ed7801
+      internalID: 581019246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_10
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 327
+        width: 40
+        height: 39
+      alignment: 9
+      pivot: {x: 0.475, y: 0.53846157}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3de5105411e2844f9130f4dd3036d6e
+      internalID: 275228813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_11
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 941
+        width: 42
+        height: 41
+      alignment: 9
+      pivot: {x: 0.47619048, y: 0.5365854}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 384684f0d5ee9cc47a4e1ed7cf8b2cdd
+      internalID: 1849103853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_12
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 820
+        width: 40
+        height: 39
+      alignment: 9
+      pivot: {x: 0.475, y: 0.53846157}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 886c83e963d5fc6409b6ba9e7ff23719
+      internalID: 64336425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_13
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 983
+        width: 42
+        height: 41
+      alignment: 9
+      pivot: {x: 0.47619048, y: 0.5365854}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59a0aa8b02f379e45971ee9a5dd5e923
+      internalID: -233760099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_14
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 584
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.47727272, y: 0.53488374}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2e805250e0100a4d8b022ec261c60b1
+      internalID: 982769472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_15
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 736
+        width: 43
+        height: 42
+      alignment: 9
+      pivot: {x: 0.4651163, y: 0.52380955}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07861e4a8c634fe4d9829cbca4d2c4dd
+      internalID: 1809509899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_16
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 778
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.47727272, y: 0.52380955}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e6ebe8a9593e27419f48047fd1cbf0b
+      internalID: -1469649661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_17
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 776
+        width: 45
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4888889, y: 0.52272725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8548c63bb2785af44a172c96242d6292
+      internalID: 2053570869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_18
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 713
+        width: 46
+        height: 44
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.52272725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 725148d25546f0646be4458d40362cb7
+      internalID: 1461200484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_19
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 101
+        width: 46
+        height: 45
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e61d80b7d06790c4aa90bb2f928f0fa3
+      internalID: 2146400216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_2
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 561
+        width: 24
+        height: 23
+      alignment: 9
+      pivot: {x: 0.45833334, y: 0.5652174}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e551fe17c34a0c4b99e533d2b8fb6d4
+      internalID: 1645703310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_20
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 7
+        width: 46
+        height: 46
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.5217391}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dbca8e7d0978d14ab4f7c20933b848c
+      internalID: 1142345594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_21
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 607
+        width: 47
+        height: 46
+      alignment: 9
+      pivot: {x: 0.4893617, y: 0.5217391}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c87b4171254ecd843ad0c77998d58493
+      internalID: -543659688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_22
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 56
+        width: 48
+        height: 45
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.51111114}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b34ad7ad534b8c645b18509674258117
+      internalID: 1577261772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_23
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 11
+        width: 46
+        height: 45
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.51111114}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd79c3d74effbe540b8bc184df738442
+      internalID: 18839234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_24
+      rect:
+        serializedVersion: 2
+        x: 708
+        y: 56
+        width: 46
+        height: 45
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.51111114}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8fe57dd963cbaa46adfd9612e172fb0
+      internalID: -1641173111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_25
+      rect:
+        serializedVersion: 2
+        x: 726
+        y: 11
+        width: 46
+        height: 45
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.51111114}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb2cc80012ec861489a6bd8cf9799d3b
+      internalID: -1822832423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_26
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 627
+        width: 46
+        height: 44
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.52272725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25975379aa158d3489e57c5ee8bed185
+      internalID: -211873354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_27
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 688
+        width: 43
+        height: 44
+      alignment: 9
+      pivot: {x: 0.44186047, y: 0.52272725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4c5ed5ab79719f4e9e50f704865ee8d
+      internalID: 542301280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_28
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 922
+        width: 42
+        height: 42
+      alignment: 9
+      pivot: {x: 0.45238096, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d9d9f2aed089ac45a2d4ac002a32929
+      internalID: -1013734128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_29
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 880
+        width: 21
+        height: 42
+      alignment: 9
+      pivot: {x: -0.0952381, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7e2cf947d371e04eb6b293454446b3e
+      internalID: -156951749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_3
+      rect:
+        serializedVersion: 2
+        x: 596
+        y: 286
+        width: 26
+        height: 25
+      alignment: 9
+      pivot: {x: 0.46153846, y: 0.56}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ef4a888778223c4f888cbba9a777750
+      internalID: 1407844673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_30
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 914
+        width: 3
+        height: 6
+      alignment: 9
+      pivot: {x: -2, y: -2.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7c37005b7f1f6146a7ec22e40957056
+      internalID: -1603857688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_31
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 807
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: -2, y: -6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9244a12e534b3ec4e9830abd141eec2e
+      internalID: -629508889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_32
       rect:
         serializedVersion: 2
         x: 162
-        y: 897
-        width: 11
+        y: 807
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: -2, y: -6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 125158af9485d7845bf2b033488bfda6
+      internalID: 1426667817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_4
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 324
+        width: 28
+        height: 27
+      alignment: 9
+      pivot: {x: 0.4642857, y: 0.5555556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 089aaddc870a50f45b2cebfff7a1702a
+      internalID: 1768195254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_5
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 606
+        width: 30
+        height: 29
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.55172414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4a6eea6e308c174a8489213721bbf56
+      internalID: 240543261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_6
+      rect:
+        serializedVersion: 2
+        x: 586
+        y: 705
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.46875, y: 0.5483871}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3b0c28c63501fc47a35cbea71654aca
+      internalID: -1745347684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_7
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 0
+        width: 34
+        height: 33
+      alignment: 9
+      pivot: {x: 0.47058824, y: 0.54545456}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef6e8017b3996db48a7043cc23daac91
+      internalID: -1135385489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_8
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 327
+        width: 36
+        height: 35
+      alignment: 9
+      pivot: {x: 0.4722222, y: 0.54285717}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 981d1220168cf304fb027268ce73cf84
+      internalID: -265797101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicBarrier_9
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 949
+        width: 38
+        height: 37
+      alignment: 9
+      pivot: {x: 0.47368422, y: 0.5405405}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4721816b8f400974cba405e04e9ad72d
+      internalID: 1185258868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirBurst-0
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 611
+        width: 16
+        height: 34
+      alignment: 9
+      pivot: {x: 1.5, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60daf8d357fda0845af8a53291fec016
+      internalID: 2032799243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirBurst-1
+      rect:
+        serializedVersion: 2
+        x: 594
+        y: 862
+        width: 43
+        height: 38
+      alignment: 9
+      pivot: {x: 0.55813956, y: 0.4473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d75dc05c0ca85c943a09222962188380
+      internalID: 367793416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirBurst-2
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 820
+        width: 48
+        height: 39
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9810e4c24ae17c478d5f2351a05c716
+      internalID: 1705853500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirBurst-3
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 327
+        width: 47
+        height: 39
+      alignment: 9
+      pivot: {x: 0.5106383, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47545ecb73c46cb40be203cf11c33f5a
+      internalID: -230772150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirBurst-4
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 0
+        width: 40
+        height: 33
+      alignment: 9
+      pivot: {x: 0.425, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cba8708429383a4b8a8acb38a6370de
+      internalID: -320049554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirBurst-5
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 656
+        width: 19
+        height: 33
+      alignment: 9
+      pivot: {x: 0.94736844, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3eb96b08b104f4c48b59b545e74892d2
+      internalID: 917230522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirBurst-6
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 561
+        width: 14
+        height: 23
+      alignment: 9
+      pivot: {x: 1.2857143, y: 0.4347826}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41ada4a56b266e143b02ab1fbb6ef285
+      internalID: 1871014750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-0
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 605
+        width: 22
+        height: 9
+      alignment: 9
+      pivot: {x: 0.45454547, y: 3.3333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4094443b6565b654187911f9a6d71c3d
+      internalID: 1242395861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-1
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 920
+        width: 35
         height: 8
       alignment: 9
-      pivot: {x: -0.6363636, y: 2.75}
+      pivot: {x: 0.4857143, y: 3.75}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e8c54949f6c22064b972f7c815903948
-      internalID: 1556353879
+      spriteID: 65fed104261d7ba47a1a9b6018b6818a
+      internalID: 1727478702
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TornadoMoving_1
+      name: ThunderCharging-10
       rect:
         serializedVersion: 2
-        x: 162
-        y: 905
-        width: 13
-        height: 11
+        x: 487
+        y: 510
+        width: 52
+        height: 51
       alignment: 9
-      pivot: {x: -0.3846154, y: 2}
+      pivot: {x: 0.48076922, y: 0.54901963}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e41760cd321f5704b999fdd439e3c822
-      internalID: -311784751
+      spriteID: 29c25d5fa81e00b4c9662809d4b04169
+      internalID: 295306625
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TornadoMoving_10
+      name: ThunderCharging-11
       rect:
         serializedVersion: 2
-        x: 196
-        y: 177
+        x: 344
+        y: 4
+        width: 52
+        height: 15
+      alignment: 9
+      pivot: {x: 0.48076922, y: -0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46b60176b45f89a439747de5a7604057
+      internalID: -573804358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-2
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 922
+        width: 22
+        height: 7
+      alignment: 9
+      pivot: {x: 0.45454547, y: 4.428571}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48533aabf34d9b04fad58350c5ec8522
+      internalID: -325263108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-3
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 921
         width: 24
+        height: 7
+      alignment: 9
+      pivot: {x: 0.5, y: 4.428571}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32d7ab17ad2a8ee45942b66c8e170efc
+      internalID: 280024084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-4
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 362
+        width: 49
+        height: 64
+      alignment: 9
+      pivot: {x: 0.46938777, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4488cabf65a91204c880878f1a0c4d73
+      internalID: 1077060127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-5
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 479
+        width: 53
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5283019, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9bf089377b2da64890212b30af52142
+      internalID: 154530364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-6
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 543
+        width: 55
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5272727, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f252d91a07ebf56499a1d6078799516a
+      internalID: -1783384082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-7
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 757
+        width: 54
+        height: 63
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.50793654}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e92ab7e07f76a534094720f245f25321
+      internalID: 561657245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-8
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 180
+        width: 54
+        height: 57
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.5614035}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c0568c5e3122ae4cbfc5b8cd4c3db8b
+      internalID: 1900901544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThunderCharging-9
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 426
+        width: 52
+        height: 53
+      alignment: 9
+      pivot: {x: 0.48076922, y: 0.5283019}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3be731a70e14ef498e63f37f6206b00
+      internalID: 1652500027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PistolSpark_1
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 920
+        width: 19
+        height: 8
+      alignment: 9
+      pivot: {x: -0.42105368, y: 0.625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4f7cd8647bfd7d438e8697886a4d58d
+      internalID: 1662065581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PistolSpark_2
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 4
+        width: 23
+        height: 15
+      alignment: 9
+      pivot: {x: -0.4347835, y: 0.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a2e604881fd92e47bf3cef42a22aa01
+      internalID: 1604251265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PistolSpark_3
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 230
+        width: 26
+        height: 16
+      alignment: 9
+      pivot: {x: -0.38461617, y: 0.5625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e5f0ce0daddf28459dbccf3fea3cc96
+      internalID: 226654406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BoltGrounding1
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 807
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 13.333333, y: -16.666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5498084717947c244a98db06f1ba3c4a
+      internalID: -864565989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash1_1
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 806
+        width: 14
+        height: 12
+      alignment: 9
+      pivot: {x: -0.035714287, y: -1.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fb1cca93da503a4187589636f72917e
+      internalID: -2125871735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash1_2
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 880
+        width: 12
+        height: 42
+      alignment: 9
+      pivot: {x: -0.5416667, y: 0.42857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a786b28506fe0db4b8c60e698201347f
+      internalID: -108121467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash1_3
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 547
+        width: 32
+        height: 31
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.87096775}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d01f4f3f4f466f4f846630319bd599b
+      internalID: -1246809785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash1_4
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 914
+        width: 23
+        height: 6
+      alignment: 9
+      pivot: {x: 0.8043478, y: 4.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 514385b8382b5c947b609fe0091fb7de
+      internalID: 126767785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash2_1
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 920
+        width: 21
+        height: 8
+      alignment: 9
+      pivot: {x: -0.21428572, y: -0.6875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 622b1057312cfae499537b5e0053414e
+      internalID: -383875648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash2_2
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 327
+        width: 47
+        height: 25
+      alignment: 9
+      pivot: {x: 0.30851063, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbfc792199b6b274894f613fad6696f9
+      internalID: -1707667996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash2_3
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 806
+        width: 55
+        height: 12
+      alignment: 9
+      pivot: {x: 0.46363637, y: 1.125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fefb1fb1dbbdad24fbdf0a1442c048e1
+      internalID: -12443327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash2_4
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 921
+        width: 32
+        height: 7
+      alignment: 9
+      pivot: {x: 1.015625, y: 1.9285715}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc6415d1ea0715d4e891a3164f9ce8d8
+      internalID: 640259584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash3_1
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 914
+        width: 13
+        height: 6
+      alignment: 9
+      pivot: {x: -2.3846154, y: -2.75}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 025b918749fb0da4db719d0817441d0e
+      internalID: -1241225036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash3_2
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 820
+        width: 51
+        height: 39
+      alignment: 9
+      pivot: {x: 0.13725491, y: 0.42307693}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acbf003c20ca05446bbd3ba17d07f4f6
+      internalID: -1320994391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash3_3
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 820
+        width: 55
+        height: 19
+      alignment: 9
+      pivot: {x: 0.56363636, y: 1.1315789}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a353ee5d627f9141bf71ddf8484d795
+      internalID: -1712211750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSlash3_4
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 810
+        width: 46
+        height: 8
+      alignment: 9
+      pivot: {x: 0.95652175, y: 2.8125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92fa80873aa48ed4ca8fa3dfb251a809
+      internalID: -1775814719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VThunderBoltSparse_1
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 807
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 14.833333, y: -17.666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a27d1cbfc0c3b0f49824d51a17d63caf
+      internalID: -1728329822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VThunderBoltSparse_2
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 237
+        width: 36
         height: 32
       alignment: 9
-      pivot: {x: -0.083333336, y: 0.656251}
+      pivot: {x: 0.3472222, y: -0.75}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 73b5f483a19d5894d9cf45e9e082213c
-      internalID: 110942734
+      spriteID: 7b3175fdced6e8548b32d4eab1951c06
+      internalID: 969413500
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TornadoMoving_11
+      name: VThunderBoltSparse_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 807
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 14.833333, y: -17.666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5302531ff2c401d42afef2d4e41145bb
+      internalID: 1400547226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VThunderBoltSparse_4
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 945
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.27631578, y: -0.47368422}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95c1a3f3e6c73eb44ae688d76990b995
+      internalID: -1421401895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VThunderBoltSparse_5
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 807
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 14.833333, y: -17.666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 267b1126189de7041ab6f6b89f23c2fa
+      internalID: 1637498495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VThunderBoltSparse_6
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 237
+        width: 36
+        height: 32
+      alignment: 9
+      pivot: {x: 0.3472222, y: -0.75}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3db116178827d134fbc91c999a291b1e
+      internalID: -2054710347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VThunderBoltSparse_7
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 807
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 14.833333, y: -17.666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbffbd312ba88ba43801385c8959c2a8
+      internalID: 133326458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VThunderBoltSparse_8
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 945
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.27631578, y: -0.47368422}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a885c8d1c4938aa439eadc794489c914
+      internalID: 695434725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VThunderBoltSparse_9
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 807
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 14.833333, y: -17.666666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89a9e46801743754fafcb6ec51e46d73
+      internalID: -2077839506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallingRock-0
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 232
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 424cddccf96f53c4e9960189e4471140
+      internalID: -2056205229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallingRock-1
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 232
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0914c7a5172ea6848a0d440578fed216
+      internalID: 1862474950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallingRock-10
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 232
+        width: 27
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4de0da6bb6aa3f47821502953b7d73c
+      internalID: 756390287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallingRock-2
       rect:
         serializedVersion: 2
         x: 201
         y: 232
-        width: 25
-        height: 37
-      alignment: 9
-      pivot: {x: -0.08, y: 0.6216225}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1a1d124c96dec904dac4d34fc7785db8
-      internalID: 1681376121
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_12
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 294
-        width: 26
-        height: 38
-      alignment: 9
-      pivot: {x: -0.07692308, y: 0.5789482}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b3e8b3863e1a9949b510eb44d927cc7
-      internalID: 855590096
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_13
-      rect:
-        serializedVersion: 2
-        x: 215
-        y: 413
-        width: 28
-        height: 40
-      alignment: 9
-      pivot: {x: -0.035714287, y: 0.5500008}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 99f80f10d5947a941ab9cd5511f9542a
-      internalID: -1093561004
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_14
-      rect:
-        serializedVersion: 2
-        x: 216
-        y: 482
-        width: 29
-        height: 42
-      alignment: 9
-      pivot: {x: 0, y: 0.5000008}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0457aa50936c95e40bbf85c63b2455a7
-      internalID: 952542242
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_15
-      rect:
-        serializedVersion: 2
-        x: 222
-        y: 757
-        width: 30
-        height: 45
-      alignment: 9
-      pivot: {x: 0, y: 0.4888896}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3e5e59abda38c58488b586913fa9eee6
-      internalID: -2003506735
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_16
-      rect:
-        serializedVersion: 2
-        x: 130
-        y: 771
-        width: 32
-        height: 49
-      alignment: 9
-      pivot: {x: 0.03125, y: 0.4693884}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a318500755ada6d4bac24cd137578892
-      internalID: -552156317
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_17
-      rect:
-        serializedVersion: 2
-        x: 479
-        y: 919
-        width: 33
-        height: 51
-      alignment: 9
-      pivot: {x: 0.030303031, y: 0.43137318}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8ac1be9427bc79c4aa9e52ab378b3c7d
-      internalID: 180071499
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_18
-      rect:
-        serializedVersion: 2
-        x: 479
-        y: 970
-        width: 33
-        height: 54
-      alignment: 9
-      pivot: {x: 0.030303031, y: 0.4259265}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: df843e0ca7a97d24aa12dfe9d5933d33
-      internalID: 1551740372
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_19
-      rect:
-        serializedVersion: 2
-        x: 191
-        y: 120
-        width: 35
-        height: 57
-      alignment: 9
-      pivot: {x: 0.057142857, y: 0.40350932}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 53d62642f0fbdff4eb610ce656ee267b
-      internalID: 1022921693
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_2
-      rect:
-        serializedVersion: 2
-        x: 73
-        y: 901
-        width: 15
-        height: 13
-      alignment: 9
-      pivot: {x: -0.33333334, y: 1.6923077}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 57e74c124fe84d547bca49047802cc3f
-      internalID: 1819473145
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_20
-      rect:
-        serializedVersion: 2
-        x: 474
-        y: 861
-        width: 38
-        height: 58
-      alignment: 9
-      pivot: {x: 0.10526316, y: 0.3793109}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b70e6c0f09b6d604982b8712d04539a4
-      internalID: 122349423
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_21
-      rect:
-        serializedVersion: 2
-        x: 441
-        y: 198
-        width: 42
-        height: 62
-      alignment: 9
-      pivot: {x: 0.16666667, y: 0.37096825}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a8d15176b9353e445bf26572ba3a5903
-      internalID: 1522684315
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_22
-      rect:
-        serializedVersion: 2
-        x: 447
-        y: 260
-        width: 44
-        height: 64
-      alignment: 9
-      pivot: {x: 0.18181819, y: 0.3593755}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 56348dfb51da5bc4f889b4df677f8d74
-      internalID: -1476522663
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_23
-      rect:
-        serializedVersion: 2
-        x: 219
-        y: 11
-        width: 44
-        height: 67
-      alignment: 9
-      pivot: {x: 0.18181819, y: 0.34328407}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8197eaf566b289e47bae7f0fae46f0da
-      internalID: -1211607081
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_24
-      rect:
-        serializedVersion: 2
-        x: 98
-        y: 113
-        width: 46
-        height: 68
-      alignment: 9
-      pivot: {x: 0.19565217, y: 0.32352987}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1f49906a1998cc747a256f70a548c456
-      internalID: 127195653
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_25
-      rect:
-        serializedVersion: 2
-        x: 292
-        y: 284
-        width: 49
-        height: 70
-      alignment: 9
-      pivot: {x: 0.2244898, y: 0.30000046}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5e082c60b5890d247a16354f0cacdc0c
-      internalID: -1352848687
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_26
-      rect:
-        serializedVersion: 2
-        x: 242
-        y: 314
-        width: 50
-        height: 73
-      alignment: 9
-      pivot: {x: 0.22, y: 0.2876717}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0401eaf433e17204c885ef5733b33e74
-      internalID: 828678572
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_27
-      rect:
-        serializedVersion: 2
-        x: 52
-        y: 276
-        width: 51
-        height: 77
-      alignment: 9
-      pivot: {x: 0.23529412, y: 0.2987017}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 25bca845cd6b1ae43bf9efcdcd8f9188
-      internalID: -1874933963
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_28
-      rect:
-        serializedVersion: 2
-        x: 245
-        y: 435
-        width: 52
-        height: 79
-      alignment: 9
-      pivot: {x: 0.23076923, y: 0.27848142}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 864e6510e9ed26a4ba60c285d9a74b99
-      internalID: 1141324780
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_29
-      rect:
-        serializedVersion: 2
-        x: 306
-        y: 539
-        width: 54
-        height: 76
-      alignment: 9
-      pivot: {x: 0.24074075, y: 0.2763162}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ec3bc25bb41a4244ea841be96b1fc90d
-      internalID: -1907756035
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_3
-      rect:
-        serializedVersion: 2
-        x: 72
-        y: 828
         width: 16
         height: 16
-      alignment: 9
-      pivot: {x: -0.3125, y: 1.375}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9a2981a72c0170e4981b990c7832c86a
-      internalID: 1440639485
+      spriteID: 89b0005f30b1b5244bc9f3b3be9900c6
+      internalID: -856340572
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TornadoMoving_30
+      name: FallingRock-3
       rect:
         serializedVersion: 2
-        x: 56
-        y: 557
-        width: 55
-        height: 76
-      alignment: 9
-      pivot: {x: 0.23636363, y: 0.2894741}
+        x: 217
+        y: 232
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 845a39d06ae3e4d41a663a190df3e7f1
-      internalID: -1543228549
+      spriteID: 537caa64b52a4e848956f25ae0457f16
+      internalID: 1602128316
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TornadoMoving_31
+      name: FallingRock-4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 645
-        width: 56
-        height: 78
-      alignment: 9
-      pivot: {x: 0.25, y: 0.26923117}
+        x: 233
+        y: 232
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7ec3fe801bc447448bfc7add09de9b00
-      internalID: -923280670
+      spriteID: 1a0e51d6408f58d44bcde482c1f04580
+      internalID: -1944251471
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TornadoMoving_32
+      name: FallingRock-5
       rect:
         serializedVersion: 2
-        x: 56
-        y: 633
-        width: 56
-        height: 77
-      alignment: 9
-      pivot: {x: 0.25, y: 0.28571472}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 693efaee6c608a44faf58f1d70edb7b9
-      internalID: 865155436
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_33
-      rect:
-        serializedVersion: 2
-        x: 450
-        y: 531
-        width: 58
-        height: 75
-      alignment: 9
-      pivot: {x: 0.25862068, y: 0.3066671}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7de0bf6ade5f6584e8fba20a808b6033
-      internalID: -1866656440
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_34
-      rect:
-        serializedVersion: 2
-        x: 72
-        y: 745
-        width: 58
-        height: 75
-      alignment: 9
-      pivot: {x: 0.27586207, y: 0.28000042}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d4d9a50684a3ce847a21b8365e80f001
-      internalID: -1108436505
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_35
-      rect:
-        serializedVersion: 2
-        x: 312
-        y: 654
-        width: 59
-        height: 78
-      alignment: 9
-      pivot: {x: 0.2881356, y: 0.26923117}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: de2c8bef10da07048936d3bfa01eed86
-      internalID: 589270970
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_36
-      rect:
-        serializedVersion: 2
-        x: 452
-        y: 665
-        width: 60
-        height: 78
-      alignment: 9
-      pivot: {x: 0.28333333, y: 0.2948722}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dd82e6afc19db4d4f93d6201210ffe97
-      internalID: -1655388044
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_37
-      rect:
-        serializedVersion: 2
-        x: 398
-        y: 311
-        width: 49
-        height: 79
-      alignment: 9
-      pivot: {x: 0.36734694, y: 0.27848142}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4d14d9c21e0d8fa449c0cd99250e8f4e
-      internalID: 758340003
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_38
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 576
-        width: 50
-        height: 83
-      alignment: 9
-      pivot: {x: 0.38, y: 0.27710882}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2a9de2c1a01530a4fa6e05b00be6e6f0
-      internalID: 1134495843
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_39
-      rect:
-        serializedVersion: 2
-        x: 110
-        y: 414
-        width: 52
-        height: 82
-      alignment: 9
-      pivot: {x: 0.3653846, y: 0.2804882}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a153d7087b724ff448a6e0e070cf4759
-      internalID: 37108454
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_4
-      rect:
-        serializedVersion: 2
-        x: 388
-        y: 843
-        width: 18
-        height: 19
-      alignment: 9
-      pivot: {x: -0.22222222, y: 1.2105263}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 28c9ef9249b61a3419a308dc345085da
-      internalID: 238529592
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_40
-      rect:
-        serializedVersion: 2
-        x: 162
-        y: 419
-        width: 53
-        height: 75
-      alignment: 9
-      pivot: {x: 0.3773585, y: 0.29333377}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 97a08fb3c9f9a5c408529da3ecf04776
-      internalID: 1132274159
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_41
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 505
-        width: 55
-        height: 76
-      alignment: 9
-      pivot: {x: 0.38181818, y: 0.302632}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 58a9f6ad1cd6a5e4d9c11d78e453f30c
-      internalID: 945813175
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_42
-      rect:
-        serializedVersion: 2
-        x: 162
-        y: 628
-        width: 56
-        height: 78
-      alignment: 9
-      pivot: {x: 0.39285713, y: 0.2948722}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8e3f17a58e90cde43a5af14fb74e0f52
-      internalID: -375427620
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_43
-      rect:
-        serializedVersion: 2
-        x: 348
-        y: 365
-        width: 50
-        height: 77
-      alignment: 9
-      pivot: {x: 0.44, y: 0.2987017}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0440562b5071bd24dad5737718cca3a9
-      internalID: 1850115133
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_44
-      rect:
-        serializedVersion: 2
-        x: 111
-        y: 496
-        width: 51
-        height: 80
-      alignment: 9
-      pivot: {x: 0.4509804, y: 0.2875004}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ff6de4d6be930bf42a0dba720d22b66d
-      internalID: 481424770
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_45
-      rect:
-        serializedVersion: 2
-        x: 356
-        y: 442
-        width: 52
-        height: 81
-      alignment: 9
-      pivot: {x: 0.44230768, y: 0.27160534}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5e803d4f79ba6c842bd908ce22103128
-      internalID: 722507070
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_46
-      rect:
-        serializedVersion: 2
-        x: 249
-        y: 514
-        width: 54
-        height: 76
-      alignment: 9
-      pivot: {x: 0.44444445, y: 0.2763162}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 780cb540daefdc645a5cc3be650c3653
-      internalID: -944425783
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_47
-      rect:
-        serializedVersion: 2
-        x: 251
-        y: 590
-        width: 55
-        height: 70
-      alignment: 9
-      pivot: {x: 0.45454547, y: 0.30000046}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6806f207061b52346ab9927cd58d9f17
-      internalID: -1809592851
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_48
-      rect:
-        serializedVersion: 2
-        x: 294
-        y: 354
-        width: 50
-        height: 74
-      alignment: 9
-      pivot: {x: 0.52, y: 0.31081125}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c8c93f01b97b7d3499af628e9b4a8e25
-      internalID: 1293696355
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_49
-      rect:
-        serializedVersion: 2
-        x: 91
-        y: 2
-        width: 43
-        height: 76
-      alignment: 9
-      pivot: {x: 0.627907, y: 0.302632}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6e7035bb5d51f5b4ebe5c633e6fc9ce7
-      internalID: 943352035
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_5
-      rect:
-        serializedVersion: 2
-        x: 388
-        y: 862
-        width: 18
-        height: 20
-      alignment: 9
-      pivot: {x: -0.22222222, y: 1.1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 752fa6bac1fefc2439ed4f980c036328
-      internalID: 1776932728
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_50
-      rect:
-        serializedVersion: 2
-        x: 408
-        y: 390
-        width: 39
-        height: 74
-      alignment: 9
-      pivot: {x: 0.5897436, y: 0.29729772}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fc6fd39367dcb464e918e8cc6a0f4c2a
-      internalID: -670652411
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_51
-      rect:
-        serializedVersion: 2
-        x: 471
-        y: 743
-        width: 40
-        height: 76
-      alignment: 9
-      pivot: {x: 0.575, y: 0.2894741}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 27a5497f0f4e97b47b6176283aacb3dd
-      internalID: -470138206
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_52
-      rect:
-        serializedVersion: 2
-        x: 177
-        y: 5
-        width: 42
-        height: 73
-      alignment: 9
-      pivot: {x: 0.5714286, y: 0.3013703}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e1d14faa40bed8548963c83a14f308af
-      internalID: 1509836123
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_53
-      rect:
-        serializedVersion: 2
-        x: 134
-        y: 2
-        width: 43
-        height: 76
-      alignment: 9
-      pivot: {x: 0.5813953, y: 0.2894741}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fd2bb50eb26c17445896a3a6df2f73d6
-      internalID: 131294724
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_54
-      rect:
-        serializedVersion: 2
-        x: 263
-        y: 3
-        width: 44
-        height: 79
-      alignment: 9
-      pivot: {x: 0.5681818, y: 0.29113963}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6582662a16ffc534db4fa446a10f0b4a
-      internalID: -1174923092
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_55
-      rect:
-        serializedVersion: 2
-        x: 46
-        y: 1
-        width: 45
-        height: 77
-      alignment: 9
-      pivot: {x: 0.5777778, y: 0.28571472}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c6fcfc677260e7c4b9333fe9a885d340
-      internalID: 1515103806
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_56
-      rect:
-        serializedVersion: 2
-        x: 226
-        y: 157
-        width: 46
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5652174, y: 0.2750004}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 86f0629fdd9f81a458fc25f3dcceb91d
-      internalID: -1246354359
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_57
-      rect:
-        serializedVersion: 2
-        x: 283
-        y: 204
-        width: 47
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5531915, y: 0.2875004}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8f6c23c19b98daa419c2f50b6c2e6b57
-      internalID: -631750838
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_58
-      rect:
-        serializedVersion: 2
-        x: 145
-        y: 118
-        width: 46
-        height: 79
-      alignment: 9
-      pivot: {x: 0.5869565, y: 0.27848142}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a17800dfb65ff0a47b95606d12f62a8e
-      internalID: -1560942709
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_59
-      rect:
-        serializedVersion: 2
-        x: 114
-        y: 659
-        width: 48
-        height: 79
-      alignment: 9
-      pivot: {x: 0.5833333, y: 0.27848142}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4cfe53c03b975d141bc9e52e81c89c2b
-      internalID: -1947002694
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_6
-      rect:
-        serializedVersion: 2
-        x: 452
-        y: 783
-        width: 19
-        height: 24
-      alignment: 9
-      pivot: {x: -0.21052632, y: 0.9583347}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 52b8cc7993892aa46a8434a2bc6eb5df
-      internalID: 1540230797
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_60
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 403
-        width: 50
-        height: 80
-      alignment: 9
-      pivot: {x: 0.58, y: 0.45}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a3bb4bf359f19f84ba1c0e0067b3aa16
-      internalID: -1994265434
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_61
-      rect:
-        serializedVersion: 2
-        x: 162
-        y: 344
-        width: 52
-        height: 75
-      alignment: 9
-      pivot: {x: 0.5769231, y: 0.45333335}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0c541839fce1ad743b6d4c725d9def8f
-      internalID: -1457543963
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_62
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 536
-        width: 53
-        height: 73
-      alignment: 9
-      pivot: {x: 0.5660377, y: 0.42465752}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ebc3254d848e53b4084c20a189cd72f9
-      internalID: -1339891962
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_63
-      rect:
-        serializedVersion: 2
-        x: 162
-        y: 494
-        width: 54
-        height: 69
-      alignment: 9
-      pivot: {x: 0.5740741, y: 0.42028984}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2491ba3573ca1ac4488d0948eba00801
-      internalID: -1690366953
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_64
-      rect:
-        serializedVersion: 2
-        x: 162
-        y: 563
-        width: 55
-        height: 65
-      alignment: 9
-      pivot: {x: 0.56363636, y: 0.41538462}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6a157464e094d2348a48312ae5ed9b2e
-      internalID: 251719926
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_65
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 581
-        width: 56
-        height: 64
-      alignment: 9
-      pivot: {x: 0.5714286, y: 0.375}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d93dd8b89a0ca8d4caf4fae6c821ae35
-      internalID: -844079488
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_66
-      rect:
-        serializedVersion: 2
-        x: 452
-        y: 606
-        width: 59
-        height: 59
-      alignment: 9
-      pivot: {x: 0.55932206, y: 0.37288135}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3042812310318004d8799dcd55c74564
-      internalID: -1710880942
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_67
-      rect:
-        serializedVersion: 2
-        x: 252
-        y: 720
-        width: 60
-        height: 59
-      alignment: 9
-      pivot: {x: 0.56666666, y: 0.33898306}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d9c8c982a3af88047bb40f2a05d47f98
-      internalID: 910212672
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_68
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 450
-        width: 55
-        height: 55
-      alignment: 9
-      pivot: {x: 0.5090909, y: 0.3272727}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 067323d81aad46440a9f4136376205d5
-      internalID: -56822918
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_69
-      rect:
-        serializedVersion: 2
-        x: 103
-        y: 257
-        width: 50
-        height: 56
-      alignment: 9
-      pivot: {x: 0.44, y: 0.2857143}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b84d1445140e537419e313b7d5811a37
-      internalID: 651640422
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_7
-      rect:
-        serializedVersion: 2
-        x: 430
-        y: 599
-        width: 20
-        height: 25
-      alignment: 9
-      pivot: {x: -0.2, y: 0.8800013}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 90f6dc3ce49123b4ebf53ed9ea0d4b1f
-      internalID: -170563229
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_70
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 296
-        width: 51
-        height: 56
-      alignment: 9
-      pivot: {x: 0.4509804, y: 0.25}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9f0761a72ca04de44a4752cb4a7598a8
-      internalID: 1388506935
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_71
-      rect:
-        serializedVersion: 2
-        x: 158
-        y: 286
-        width: 50
-        height: 58
-      alignment: 9
-      pivot: {x: 0.4, y: 0.20689656}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5a66be67d236daa48be96731c3c23c7d
-      internalID: 1821651368
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_72
-      rect:
-        serializedVersion: 2
-        x: 243
-        y: 387
-        width: 51
-        height: 48
-      alignment: 9
-      pivot: {x: 0.39215687, y: 0.20833333}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6651e8b3182fb9c4abc6081275862c8c
-      internalID: -841691950
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_73
-      rect:
-        serializedVersion: 2
-        x: 449
-        y: 483
-        width: 51
-        height: 48
-      alignment: 9
-      pivot: {x: 0.39215687, y: 0.16666667}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 56e9691760b26134f873c522db3b4d36
-      internalID: -17743783
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_74
-      rect:
-        serializedVersion: 2
-        x: 55
-        y: 408
-        width: 54
-        height: 47
-      alignment: 9
-      pivot: {x: 0.4074074, y: 0.12765957}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b3067e5b9e0ae2a4f9ae62387e9ff961
-      internalID: -1604930710
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_75
-      rect:
-        serializedVersion: 2
-        x: 55
-        y: 455
-        width: 55
-        height: 44
-      alignment: 9
-      pivot: {x: 0.4, y: 0.09090909}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fab559df02e30f545b09efb42cc33651
-      internalID: 247351016
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_76
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 728
-        width: 57
-        height: 44
-      alignment: 9
-      pivot: {x: 0.40350878, y: 0.045454547}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b9ebe0cf7f63b4a4388def86362cece3
-      internalID: 1469390700
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_77
-      rect:
-        serializedVersion: 2
-        x: 106
-        y: 313
-        width: 52
-        height: 45
-      alignment: 9
-      pivot: {x: 0.34615386, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ce66d404a8d98214eaf9db46c45e1042
-      internalID: -1969602980
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_78
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 406
-        width: 54
-        height: 44
-      alignment: 9
-      pivot: {x: 0.35185185, y: -0.045454547}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1e4b48407523c594398ca516639658e6
-      internalID: -694698021
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_79
-      rect:
-        serializedVersion: 2
-        x: 306
-        y: 615
-        width: 55
-        height: 39
-      alignment: 9
-      pivot: {x: 0.34545454, y: -0.102564104}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 25ef2a1a0fbbd814bb06d40c60a6ba2d
-      internalID: 860091411
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_8
-      rect:
-        serializedVersion: 2
-        x: 430
-        y: 644
-        width: 22
-        height: 28
-      alignment: 9
-      pivot: {x: -0.13636364, y: 0.7857154}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5ad9dd25c3b0f324e82eb2c6c1c5fcd3
-      internalID: 2146927703
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_80
-      rect:
-        serializedVersion: 2
-        x: 57
-        y: 710
-        width: 57
-        height: 35
-      alignment: 9
-      pivot: {x: 0.3508772, y: -0.17142858}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 70ca92287d66fd84db3eae6d338d7ce6
-      internalID: 271157278
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_81
-      rect:
-        serializedVersion: 2
-        x: 92
-        y: 78
-        width: 43
-        height: 35
-      alignment: 9
-      pivot: {x: 0.11627907, y: -0.22857143}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fc43cdcf719a6684e990c35777582d0a
-      internalID: 68337061
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_82
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 197
-        width: 44
-        height: 30
-      alignment: 9
-      pivot: {x: 0.13636364, y: -0.33333334}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 255f785db8f327148acfb7a317aab03d
-      internalID: 776613296
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_83
-      rect:
-        serializedVersion: 2
-        x: 447
-        y: 324
-        width: 45
-        height: 27
-      alignment: 9
-      pivot: {x: 0.13333334, y: -0.44444445}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f0ea6e64565606246bbfded5cb92d33b
-      internalID: -1596382012
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_84
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 72
-        width: 46
-        height: 27
-      alignment: 9
-      pivot: {x: 0.1521739, y: -0.5185185}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6f5101259fe56a341b09095694fb1fb5
-      internalID: -2060379989
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_85
-      rect:
-        serializedVersion: 2
-        x: 98
-        y: 181
-        width: 47
-        height: 26
-      alignment: 9
-      pivot: {x: 0.14893617, y: -0.61538464}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 94dbd7abdd9649d4ca581c95781a844e
-      internalID: -1613780077
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_86
-      rect:
-        serializedVersion: 2
-        x: 413
-        y: 578
-        width: 37
-        height: 21
-      alignment: 9
-      pivot: {x: 0.1891892, y: -0.85714287}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8747433bd66a3b041b310e63ae9104e8
-      internalID: -1683737046
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_87
-      rect:
-        serializedVersion: 2
-        x: 416
-        y: 160
-        width: 36
-        height: 21
-      alignment: 9
-      pivot: {x: 0.16666667, y: -0.95238096}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3f22e05cd4f872b448475cec025ea442
-      internalID: 426260862
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_88
-      rect:
-        serializedVersion: 2
-        x: 455
-        y: 180
-        width: 38
-        height: 18
-      alignment: 9
-      pivot: {x: 0.18421052, y: -1.3888888}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fdd222a03aff08b4cbf68f330bded818
-      internalID: -562566612
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TornadoMoving_9
-      rect:
-        serializedVersion: 2
-        x: 418
+        x: 297
         y: 236
-        width: 23
-        height: 31
-      alignment: 9
-      pivot: {x: -0.08695652, y: 0.7096785}
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee1fe60309bd04544b66ca5d3be13685
-      internalID: -1571539583
+      spriteID: 80591203b0f21aa4da22b37e17241c06
+      internalID: -2076930989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallingRock-6
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 229
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3845d5378b24b5448cf0f867be007e5
+      internalID: 2129380642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallingRock-7
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 820
+        width: 22
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1dd6c166268c544b9d7a221ef9c32c5
+      internalID: -1458545576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallingRock-8
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 671
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a767d16168f7fc245911edda05b80cd1
+      internalID: -1139019987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallingRock-9
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 237
+        width: 27
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9af4a49ce06b98244b9a1a1a9d682797
+      internalID: 1241026614
       vertices: []
       indices: 
       edges: []
@@ -3760,6 +4957,28 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      AirBurst-0: 2032799243
+      AirBurst-1: 367793416
+      AirBurst-2: 1705853500
+      AirBurst-3: -230772150
+      AirBurst-4: -320049554
+      AirBurst-5: 917230522
+      AirBurst-6: 1871014750
+      BoltGrounding1: -864565989
+      CastThunderTwins1: 1161759870
+      CastThunderTwins2: -423742589
+      CastThunderTwins3: 1034512089
+      FallingRock-0: -2056205229
+      FallingRock-1: 1862474950
+      FallingRock-10: 756390287
+      FallingRock-2: -856340572
+      FallingRock-3: 1602128316
+      FallingRock-4: -1944251471
+      FallingRock-5: -2076930989
+      FallingRock-6: 2129380642
+      FallingRock-7: -1458545576
+      FallingRock-8: -1139019987
+      FallingRock-9: 1241026614
       Healing1: 132494588
       Healing10: 1392055197
       Healing11: 477746404
@@ -3790,6 +5009,94 @@ TextureImporter:
       Healing7: -1479525558
       Healing8: 1447350045
       Healing9: -937211515
+      HolyExplosion_1: 1896224699
+      HolyExplosion_10: 702762560
+      HolyExplosion_11: 1228426295
+      HolyExplosion_12: -1906201347
+      HolyExplosion_13: 818881439
+      HolyExplosion_14: -1703035363
+      HolyExplosion_15: -1005680070
+      HolyExplosion_16: 740450940
+      HolyExplosion_17: -426429265
+      HolyExplosion_18: 211603230
+      HolyExplosion_19: -1761892585
+      HolyExplosion_2: -1672519631
+      HolyExplosion_20: 1400899943
+      HolyExplosion_21: 1744629749
+      HolyExplosion_22: -585427085
+      HolyExplosion_23: 1231333864
+      HolyExplosion_24: -1491085516
+      HolyExplosion_25: 749842915
+      HolyExplosion_26: 581080268
+      HolyExplosion_27: 2132295799
+      HolyExplosion_28: 1898894036
+      HolyExplosion_3: -1793325001
+      HolyExplosion_4: -1879364270
+      HolyExplosion_5: -734118140
+      HolyExplosion_6: 829029189
+      HolyExplosion_7: 1772791718
+      HolyExplosion_8: 15847480
+      HolyExplosion_9: 1295745330
+      LightCast_1: -1848634689
+      LightCast_10: 21844384
+      LightCast_11: -792959263
+      LightCast_12: 1579912816
+      LightCast_13: -947932670
+      LightCast_14: 1971050085
+      LightCast_15: -1249678898
+      LightCast_16: -1164771771
+      LightCast_17: 2043980771
+      LightCast_18: -772761575
+      LightCast_19: 675649183
+      LightCast_2: 924982706
+      LightCast_20: -1067706955
+      LightCast_21: 1988357388
+      LightCast_22: -917738561
+      LightCast_23: -980360103
+      LightCast_24: 1677574071
+      LightCast_25: -581690163
+      LightCast_26: -1466410719
+      LightCast_27: -1982968573
+      LightCast_28: -1793611203
+      LightCast_3: -1494150876
+      LightCast_4: -768452230
+      LightCast_5: -521676948
+      LightCast_6: -696604662
+      LightCast_7: 1829205148
+      LightCast_8: 1872866747
+      LightCast_9: 1206281842
+      MagicBarrier_1: 581019246
+      MagicBarrier_10: 275228813
+      MagicBarrier_11: 1849103853
+      MagicBarrier_12: 64336425
+      MagicBarrier_13: -233760099
+      MagicBarrier_14: 982769472
+      MagicBarrier_15: 1809509899
+      MagicBarrier_16: -1469649661
+      MagicBarrier_17: 2053570869
+      MagicBarrier_18: 1461200484
+      MagicBarrier_19: 2146400216
+      MagicBarrier_2: 1645703310
+      MagicBarrier_20: 1142345594
+      MagicBarrier_21: -543659688
+      MagicBarrier_22: 1577261772
+      MagicBarrier_23: 18839234
+      MagicBarrier_24: -1641173111
+      MagicBarrier_25: -1822832423
+      MagicBarrier_26: -211873354
+      MagicBarrier_27: 542301280
+      MagicBarrier_28: -1013734128
+      MagicBarrier_29: -156951749
+      MagicBarrier_3: 1407844673
+      MagicBarrier_30: -1603857688
+      MagicBarrier_31: -629508889
+      MagicBarrier_32: 1426667817
+      MagicBarrier_4: 1768195254
+      MagicBarrier_5: 240543261
+      MagicBarrier_6: -1745347684
+      MagicBarrier_7: -1135385489
+      MagicBarrier_8: -265797101
+      MagicBarrier_9: 1185258868
       MagicShieldAtked1_1: -1042585686
       MagicShieldAtked1_2: -1654443236
       MagicShieldAtked1_3: -2058186131
@@ -3831,6 +5138,21 @@ TextureImporter:
       MpHealing7: -201539635
       MpHealing8: -1339346381
       MpHealing9: 412810281
+      PistolSpark_1: 1662065581
+      PistolSpark_2: 1604251265
+      PistolSpark_3: 226654406
+      SmallSlash1_1: -2125871735
+      SmallSlash1_2: -108121467
+      SmallSlash1_3: -1246809785
+      SmallSlash1_4: 126767785
+      SmallSlash2_1: -383875648
+      SmallSlash2_2: -1707667996
+      SmallSlash2_3: -12443327
+      SmallSlash2_4: 640259584
+      SmallSlash3_1: -1241225036
+      SmallSlash3_2: -1320994391
+      SmallSlash3_3: -1712211750
+      SmallSlash3_4: -1775814719
       SmallSting1: -319092554
       SmallSting2: -1244152597
       SmallSting3: -1678561462
@@ -3844,95 +5166,27 @@ TextureImporter:
       SmokeNDust1_6: -1737145503
       SmokeNDust1_7: -407140816
       SmokeNDust1_8: -1100825607
-      TornadoMoving_0: 1556353879
-      TornadoMoving_1: -311784751
-      TornadoMoving_10: 110942734
-      TornadoMoving_11: 1681376121
-      TornadoMoving_12: 855590096
-      TornadoMoving_13: -1093561004
-      TornadoMoving_14: 952542242
-      TornadoMoving_15: -2003506735
-      TornadoMoving_16: -552156317
-      TornadoMoving_17: 180071499
-      TornadoMoving_18: 1551740372
-      TornadoMoving_19: 1022921693
-      TornadoMoving_2: 1819473145
-      TornadoMoving_20: 122349423
-      TornadoMoving_21: 1522684315
-      TornadoMoving_22: -1476522663
-      TornadoMoving_23: -1211607081
-      TornadoMoving_24: 127195653
-      TornadoMoving_25: -1352848687
-      TornadoMoving_26: 828678572
-      TornadoMoving_27: -1874933963
-      TornadoMoving_28: 1141324780
-      TornadoMoving_29: -1907756035
-      TornadoMoving_3: 1440639485
-      TornadoMoving_30: -1543228549
-      TornadoMoving_31: -923280670
-      TornadoMoving_32: 865155436
-      TornadoMoving_33: -1866656440
-      TornadoMoving_34: -1108436505
-      TornadoMoving_35: 589270970
-      TornadoMoving_36: -1655388044
-      TornadoMoving_37: 758340003
-      TornadoMoving_38: 1134495843
-      TornadoMoving_39: 37108454
-      TornadoMoving_4: 238529592
-      TornadoMoving_40: 1132274159
-      TornadoMoving_41: 945813175
-      TornadoMoving_42: -375427620
-      TornadoMoving_43: 1850115133
-      TornadoMoving_44: 481424770
-      TornadoMoving_45: 722507070
-      TornadoMoving_46: -944425783
-      TornadoMoving_47: -1809592851
-      TornadoMoving_48: 1293696355
-      TornadoMoving_49: 943352035
-      TornadoMoving_5: 1776932728
-      TornadoMoving_50: -670652411
-      TornadoMoving_51: -470138206
-      TornadoMoving_52: 1509836123
-      TornadoMoving_53: 131294724
-      TornadoMoving_54: -1174923092
-      TornadoMoving_55: 1515103806
-      TornadoMoving_56: -1246354359
-      TornadoMoving_57: -631750838
-      TornadoMoving_58: -1560942709
-      TornadoMoving_59: -1947002694
-      TornadoMoving_6: 1540230797
-      TornadoMoving_60: -1994265434
-      TornadoMoving_61: -1457543963
-      TornadoMoving_62: -1339891962
-      TornadoMoving_63: -1690366953
-      TornadoMoving_64: 251719926
-      TornadoMoving_65: -844079488
-      TornadoMoving_66: -1710880942
-      TornadoMoving_67: 910212672
-      TornadoMoving_68: -56822918
-      TornadoMoving_69: 651640422
-      TornadoMoving_7: -170563229
-      TornadoMoving_70: 1388506935
-      TornadoMoving_71: 1821651368
-      TornadoMoving_72: -841691950
-      TornadoMoving_73: -17743783
-      TornadoMoving_74: -1604930710
-      TornadoMoving_75: 247351016
-      TornadoMoving_76: 1469390700
-      TornadoMoving_77: -1969602980
-      TornadoMoving_78: -694698021
-      TornadoMoving_79: 860091411
-      TornadoMoving_8: 2146927703
-      TornadoMoving_80: 271157278
-      TornadoMoving_81: 68337061
-      TornadoMoving_82: 776613296
-      TornadoMoving_83: -1596382012
-      TornadoMoving_84: -2060379989
-      TornadoMoving_85: -1613780077
-      TornadoMoving_86: -1683737046
-      TornadoMoving_87: 426260862
-      TornadoMoving_88: -562566612
-      TornadoMoving_9: -1571539583
+      ThunderCharging-0: 1242395861
+      ThunderCharging-1: 1727478702
+      ThunderCharging-10: 295306625
+      ThunderCharging-11: -573804358
+      ThunderCharging-2: -325263108
+      ThunderCharging-3: 280024084
+      ThunderCharging-4: 1077060127
+      ThunderCharging-5: 154530364
+      ThunderCharging-6: -1783384082
+      ThunderCharging-7: 561657245
+      ThunderCharging-8: 1900901544
+      ThunderCharging-9: 1652500027
+      VThunderBoltSparse_1: -1728329822
+      VThunderBoltSparse_2: 969413500
+      VThunderBoltSparse_3: 1400547226
+      VThunderBoltSparse_4: -1421401895
+      VThunderBoltSparse_5: 1637498495
+      VThunderBoltSparse_6: -2054710347
+      VThunderBoltSparse_7: 133326458
+      VThunderBoltSparse_8: 695434725
+      VThunderBoltSparse_9: -2077839506
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

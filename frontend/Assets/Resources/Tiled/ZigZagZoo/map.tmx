@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="208" nextobjectid="604">
+ <properties>
+  <property name="MatchInOrder" value="true"/>
+  <property name="battleDurationSeconds" value="240"/>
+  <property name="levelId" value="3"/>
+  <property name="missionEvtSubId" value="6"/>
+  <property name="npcPreallocCapDict" value="15:1;16:1;4097:8;4098:2;4099:4;4100:4;4102:2;4103:1"/>
+ </properties>
+ <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
+ <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
+ <tileset firstgid="13" source="../shared_comps/forest16.tsx"/>
+ <tileset firstgid="1037" source="../doors/doors.tsx"/>
+ <tileset firstgid="1046" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
+ <tileset firstgid="1054" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
+ <tileset firstgid="1070" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
+ <tileset firstgid="1086" source="../shared_comps/tiles0.tsx"/>
+ <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
+ <tileset firstgid="1345" source="../decoration/Statics/HF_tiles.tsx"/>
+ <tileset firstgid="1970" source="../traps/machinery/traps_machinery.tsx"/>
+ <tileset firstgid="1976" source="../shared_comps/pickable.tsx"/>
+ <tileset firstgid="2408" source="../shared_comps/bkg-shrinked/dc_bkg_1.tsx"/>
+ <tileset firstgid="2540" source="../shared_comps/bkg-shrinked/dc_bkg_3.tsx"/>
+ <layer id="160" name="Background2" width="64" height="28">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1tdTFEEQwOHdQ4E7FYl7ikpOKiCogEhQkKxkFIkG/n0MpB2i8qNgqvragycfqKl5+Kp2Z3tmenrnoU0YBOnEuQgmPGff5Vh8MW6fI/FsGbGenWcuYu0c+ay/p9WYXN+uG6t17ZxI5CzPI/OKw8xvMpd0IjMPuafcx+Zj17CxcixKZK5hrjiDzF3WUc6V343aR+6l5+gYma/8zzIveS6dk66tvg/6Dl1Wn2z3SJ9D/19ZF117GSfvq1wrWx31f9Z3UN9rE/57Xl0n+RyrHPXe2e6XroeumVHr6n8eh9n30zU9s5kMgh/4iV/4jS1sYwe72EMMk3Qvfh8HOMQRjnGCP/iLIBUEIRLISbkXf4Oxm8hFHvKRRAq3cBt3UIC7KffiC1GEYpSgFGWIkMY93Ec5HjgY/xCPUIFKVKEaNahFHerRgEYH45vwGE/wFM1oQSueoQ3teI4XDsa/RAc60YVX6MZr9KAXfejHGwfj32IAg3iHIQxjBKMYwzgm8N7B+A+YxBSmMYNZzGEeC/iIT1h0MP4zlrCMFaxiDev4gq/4hu/YcDD+uvdnvv/z/Z/v/3z/5/s/3//5/s/3f77/8/2f7/98/+f7v/8Tfwo+udVU
+  </data>
+ </layer>
+ <layer id="65" name="Background1" width="64" height="28">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1uc+FmAAxuH363umRRlJVpERRUlDCYmorAYqKpSWCtkZ2bJyEq5z8Kmn5/79rm//A7gTibi4uP91J5KJxElSSOUUp0kjnQwyOZMMs83iLNmcI4dc8singPNcCLQtpIiLFFNCKWVcopwKLgfaXqGSKq5yjWquU8MNbnIr0PY2tdzhLnXco54GGrlPU6DtA5pp4SGttPGIxzyhnY5A20666OYpz3jOC3ropY+XgbaveE0/A7zhLe8YZIhh3gfafmCEj3ziM1/4yijf+M6PQNsxxpngJ5NMMc0Ms8wxH2j7iwUWWWKZ36ywyhrrbATabrLFNn/YYZc99jngL4eBtv/KT4//P/7/+P/j/4//P/7/+P/j/4//P/7/+P+P3x4B3U8uZQ==
+  </data>
+ </layer>
+ <layer id="33" name="setGround" width="64" height="28" visible="0">
+  <properties>
+   <property name="MatchInOrder" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1csJACAQQ0EP9iDYf6FWoIKSZTUvkKOfgUVbLaVRSi17mtv1UXuqgh8//vx7qoIff7Tf/f/H7+3PlF/8va47i7tfkZfmX5FIv/qsk7dW8b7Pzs44ay7+3Z1c/S53wI8/S/F7+wdtrj6h
+  </data>
+ </layer>
+ <objectgroup id="1" name="PlayerStartingPos">
+  <object id="135" name="Player1St" x="64" y="240">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="teamId" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="27" name="Decoration"/>
+ <objectgroup id="13" name="TriggerPos">
+  <object id="548" name="Victory" x="464" y="192">
+   <properties>
+    <property name="demandedEvtMask" value="7"/>
+    <property name="id" value="6"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1024"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="593" name="BossAwaker" x="592" y="144" width="432" height="32">
+   <properties>
+    <property name="id" value="5"/>
+    <property name="newRevivalX" value="608"/>
+    <property name="newRevivalY" value="176"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1025"/>
+   </properties>
+  </object>
+  <object id="594" name="FirstStageEnd" x="672" y="288">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="4"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1024"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <layer id="207" name="Ground" width="64" height="28">
+  <data encoding="base64" compression="zlib">
+   eJztmD0KwkAQhVdZS02OkKN5kijW2odgkUrtjb0eQLFVFKwUew/gCxJIkZ+N2ZkNug++SnbevE0yuxhKIULL37KoyRKsGqznqqnqua5JDDaZXuuu56qp6vmtAqydN1jPVZNKNr/Nb/O3vyaVbH6bnzu/j99GmqHqlaJmkHOPa3r/o+qVomZg73/atZXF7CqexS/k38tiDsz5+z0R3aWI9FYtVyzL4dQA+TvgxLwHFEIGcc5wUdjLNP+LIX96llIJ77F4ZHgqeDnI3gVHzWf8JMc7+X5D5ve7Su7n+79dNZ/zeXPKZH6/5JlQ/M/Ttvwm5nybejA95+HrpT2Y8Oec83mCrwf/ZA88E/5Uc14V+I7h7zmG8mfn/JSZGYDvGP5D11D+dPa2gTfqP5CC
+  </data>
+ </layer>
+ <layer id="64" name="Foreground" width="64" height="28">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztmEsOwjAMRA20XfK7BL9L9Wi5C3ALQNwBWmDHFMlVhFggZItY8ZNma3maTOKGyHEc53vagupRSTWVFAqis3TNS0FBoqYWDXodCvvnmgPUvCbuH/11fYr655r4BqFJ3D/2Z+dd1D/XRAZCm7h/z7/n3/Pv+dfO/7Yk2kVKBQ3/n/J/gOdjpFSIe80x/3GvUv5fGMl/fFb96r/Bfm6hG3SHHpCV+1+CcUU0gabQDJpDVu5/CRbwu4RW0BraVHmt/zuW5j8NtM9/niH2Cd2jMdrzH88Qpz/7t/Sfp0HuOef1tzDnacDrb2HO06B/O8iU/u0gEZ4NipKW
+  </data>
+ </layer>
+ <objectgroup id="4" name="NpcStartingPos">
+  <object id="372" name="BoarWarrior" x="592" y="400">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="speciesId" value="4102"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="600" name="Archer" x="672" y="400">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="3"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="speciesId" value="4098"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="575" name="Archer" x="528" y="272">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="3"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="speciesId" value="4098"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="584" name="BoarWarrior" x="896" y="176">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="4"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="speciesId" value="4102"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="585" name="Boar" x="832" y="192">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="2"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="speciesId" value="4103"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="586" name="FireSwordMan" x="736" y="304">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="4"/>
+    <property name="speciesId" value="16"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="TrapStartingPos">
+  <object id="515" name="SlipJumpPlatform" x="928" y="336" width="48" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="544" gid="1042" x="592" y="224" width="96" height="64">
+   <properties>
+    <property name="subscribesToId" value="4"/>
+    <property name="subscribesToIdAfterInitialFire" value="5"/>
+   </properties>
+  </object>
+  <object id="556" gid="1" x="144" y="352" width="64" height="16">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="dirY" value="0"/>
+    <property name="speed" value="7"/>
+   </properties>
+  </object>
+  <object id="574" name="StaticSpikes" x="256" y="64" width="16" height="208">
+   <properties>
+    <property name="collisionTypeMask" value="4"/>
+    <property name="providesDamage" value="1"/>
+    <property name="speciesId" value="2"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="577" x="1024" y="0" width="80" height="448">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="prohibitsWallGrabbing" value="1"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="573" x="-80" y="0" width="80" height="448">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="prohibitsWallGrabbing" value="1"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="578" name="SlipJumpPlatform" x="624" y="208" width="64" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="596" x="560" y="64" width="32" height="288">
+   <properties>
+    <property name="collisionTypeMask" value="32773"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="597" x="224" y="64" width="32" height="208">
+   <properties>
+    <property name="collisionTypeMask" value="32773"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="598" name="SlipJumpPlatform" x="480" y="288" width="80" height="16">
+   <properties>
+    <property name="collisionTypeMask" value="5"/>
+    <property name="providesHardPushback" value="1"/>
+    <property name="providesSlipJump" value="1"/>
+    <property name="speciesId" value="1"/>
+    <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="601" gid="1971" x="624" y="320" width="21" height="16"/>
+ </objectgroup>
+ <objectgroup id="2" name="Barrier">
+  <properties>
+   <property name="type" value="barrier_and_shelter"/>
+  </properties>
+  <object id="459" name="Platform" x="464" y="352" width="32" height="96">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="523" name="Ceil" x="0" y="0" width="1024" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="569" name="Floor" x="0" y="256" width="128" height="32"/>
+  <object id="579" name="Platform" x="496" y="416" width="528" height="34.6667">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="580" name="Platform" x="992" y="304" width="32" height="144">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="581" name="Platform" x="592" y="320" width="336" height="32">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="583" name="Platform" x="688" y="192" width="336" height="32">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="599" name="Floor" x="352" y="304" width="80" height="16"/>
+ </objectgroup>
+ <objectgroup id="5" name="PatrolCue">
+  <object id="496" name="Floor2R" x="560" y="272">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="498" name="Floor2L" x="480" y="272">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="566" name="ElevatorCue1" x="64" y="304" width="32" height="144">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="120"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="120"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="120"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="120"/>
+   </properties>
+  </object>
+  <object id="567" name="ElevatorCue2" x="352" y="304" width="32" height="144">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="120"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="120"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="120"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="120"/>
+   </properties>
+  </object>
+  <object id="587" name="Floor2R" x="912" y="288">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="588" name="Floor2L" x="608" y="288">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="591" name="Floor2R" x="1008" y="240">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="592" name="Floor2L" x="704" y="240">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="204" name="Pickable">
+  <object id="602" gid="2155" x="784" y="416" width="32" height="32">
+   <properties>
+    <property name="stockQuota" value="2"/>
+   </properties>
+  </object>
+  <object id="603" gid="2155" x="672" y="320" width="32" height="32">
+   <properties>
+    <property name="stockQuota" value="2"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

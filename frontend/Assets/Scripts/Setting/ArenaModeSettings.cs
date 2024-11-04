@@ -37,11 +37,17 @@ public class ArenaModeSettings : MonoBehaviour {
     }
 
     public void OnExit() {
+        if (null != arenaModeSettingsSelectGroup.uiSoundSource) {
+            arenaModeSettingsSelectGroup.uiSoundSource.PlayNegative();
+        }
         gameObject.SetActive(false);
         onExitCallback();
     }
 
     public void OnCancel() {
+        if (null != arenaModeSettingsSelectGroup.uiSoundSource) {
+            arenaModeSettingsSelectGroup.uiSoundSource.PlayCancel();
+        }
         gameObject.SetActive(false);
         onCancelCallback();
     }

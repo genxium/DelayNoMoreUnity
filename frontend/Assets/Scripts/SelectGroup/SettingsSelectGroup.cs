@@ -1,6 +1,5 @@
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
-using UnityEngine;
 
 public class SettingsSelectGroup : AbstractSingleSelectGroup {
     public delegate void SimpleDelegate();
@@ -9,6 +8,9 @@ public class SettingsSelectGroup : AbstractSingleSelectGroup {
         switch (selectedIdx) {
             case 0:
                 if (null != postConfirmedCallback) {
+                    if (null != uiSoundSource) {
+                        uiSoundSource.PlayPositive();
+                    }
                     postConfirmedCallback(0);
                 }
             break;
@@ -35,6 +37,9 @@ public class SettingsSelectGroup : AbstractSingleSelectGroup {
         if (newSelectedIdx == selectedIdx) {
             ConfirmSelection();
         } else {
+            if (null != uiSoundSource) {
+                uiSoundSource.PlayCursor();
+            }
             cells[selectedIdx].setSelected(false);
             cells[newSelectedIdx].setSelected(true);
             selectedIdx = newSelectedIdx;

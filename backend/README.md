@@ -5,3 +5,8 @@ backend> dotnet run
 ```
 
 for testing.
+
+For production packaging, use 
+```
+backend> dotnet build -c Release
+```
