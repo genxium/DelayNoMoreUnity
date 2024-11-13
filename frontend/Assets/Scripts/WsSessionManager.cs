@@ -244,8 +244,8 @@ public class WsSessionManager {
         }
     }
 
+#nullable enable
     public delegate void OnLoginResult(int retCode, string? uname, int? playerId, string? authToken);
-
     public IEnumerator doCachedAutoTokenLoginAction(string httpHost, OnLoginResult? onLoginCallback) {
         string uri = httpHost + String.Format("/Auth/Token/Login");
         WWWForm form = new WWWForm();
@@ -265,28 +265,39 @@ public class WsSessionManager {
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError("HTTP Error: " + webRequest.error);
-                    onLoginCallback(ErrCode.UnknownError, null, null, null);
+                    if (null != onLoginCallback) {
+                        onLoginCallback(ErrCode.UnknownError, null, null, null);
+                    }
                     break;
                 case UnityWebRequest.Result.Success:
                     var res = JsonConvert.DeserializeObject<JObject>(webRequest.downloadHandler.text);
                     Debug.Log(String.Format("Received: {0}", res));
-                    int retCode = res["retCode"].Value<int>();
-                    if (ErrCode.Ok == retCode) {
-                        var uname = res["uname"].Value<string>();
-                        Debug.Log(String.Format("Token/Login succeeded, uname: {1}", uname));
-                        if (null != onLoginCallback) {
-                            onLoginCallback(ErrCode.Ok, uname, playerId, authToken);
+                    if (null != res && res.ContainsKey("retCode")) {
+                        int retCode = res["retCode"].Value<int>();
+                        if (ErrCode.Ok == retCode) {
+                            var uname = res["uname"].Value<string>();
+                            Debug.Log(String.Format("Token/Login succeeded, uname: {0}", uname));
+                            if (null != onLoginCallback) {
+                                onLoginCallback(ErrCode.Ok, uname, playerId, authToken);
+                            }
+                        } else {
+                            ClearCredentials();
+                            if (null != onLoginCallback) {
+                                onLoginCallback(retCode, null, null, null);
+                            }
                         }
                     } else {
                         ClearCredentials();
                         if (null != onLoginCallback) {
-                            onLoginCallback(retCode, null, null, null);
+                            onLoginCallback(ErrCode.UnknownError, null, null, null);
                         }
                     }
+
                     break;
             }
         }
     }
+#nullable disable
 
     ~WsSessionManager() {
         if (null != senderBuffer) senderBuffer.Dispose(); 

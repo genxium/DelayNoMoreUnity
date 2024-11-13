@@ -13,6 +13,8 @@ public class StoryLevelCell : AbstractSprOnlySingleSelectCell, IPointerClickHand
     private int cachedBtnLevel = 0;
     private bool btnEdgeTriggerLock = false;
 
+    private PlayerLevelProgress cellProgress;
+
     // Start is called before the first frame update
     void Start() {
         
@@ -23,7 +25,12 @@ public class StoryLevelCell : AbstractSprOnlySingleSelectCell, IPointerClickHand
 
     }
 
+    public PlayerLevelProgress GetCellProgress() {
+        return cellProgress;
+    }
+
     public void UpdateByLevelProgress(PlayerLevelProgress progress) {
+        cellProgress = progress;
         if (null == progress) {
             gameObject.SetActive(false);
             isLocked = true;
@@ -67,5 +74,9 @@ public class StoryLevelCell : AbstractSprOnlySingleSelectCell, IPointerClickHand
          Why using physics raycast to detect click on a Sprite? Reference https://stackoverflow.com/questions/41391708/how-to-detect-click-touch-events-on-ui-and-gameobjects
          */
         _triggerEdge(true);
+    }
+
+    public bool GetIsLocked() {
+        return isLocked;
     }
 }

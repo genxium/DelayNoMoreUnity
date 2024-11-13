@@ -929,6 +929,11 @@ enum PlayerStoryModeSelectView {
     LEVEL = 2;
 }
 
+enum FinishedLvOption {
+    BOSS_ONLY = 0;
+    STORY_AND_BOSS = 1;
+}
+
 message PlayerStoryProgress {
     map<int32, PlayerRegionProgress> regionProgressDict = 1; // Including just unlocked regions with 0 progress
     map<int32, PlayerLevelProgress> levelProgressDict = 2; // Including just unlocked levels with 0 progress 

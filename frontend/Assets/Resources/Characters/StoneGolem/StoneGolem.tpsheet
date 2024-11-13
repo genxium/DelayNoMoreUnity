@@ -4,7 +4,7 @@
 # To import these sprites into your Unity project, download "TexturePackerImporter":
 # https://www.codeandweb.com/texturepacker/unity
 #
-# $TexturePacker:SmartUpdate:3479012902fcfec1d9e22e1178a1adc7:5393dfa47ee31d665d6821ad11f2bf44:9be8049e591cdd11e0099088b823c7c1$
+# $TexturePacker:SmartUpdate:138f878c628ea87c4e69ff4662da18a7:f7ec7137fe80b52c4808d024297bae47:9be8049e591cdd11e0099088b823c7c1$
 #
 :format=40300
 :texture=StoneGolem.png
@@ -13,6 +13,8 @@
 :borders=disabled
 :alphahandling=ClearTransparentPixels
 
+Avatar_1;431;296;32;32; 0.5;0.5; 0;0;0;0
+Avatar_2;431;296;32;32; 0.5;0.5; 0;0;0;0
 G-0;1;321;48;46; 0.5;0.5; 0;0;0;0
 G-1;1;321;48;46; 0.5;0.5; 0;0;0;0
 G-2;324;465;48;46; 0.5;0.5; 0;0;0;0

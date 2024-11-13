@@ -47,10 +47,6 @@ public class OfflineMapController : AbstractMapController {
         }
     }
 
-    public override void onCharacterSelectGoAction(uint speciesId) {
-        throw new NotImplementedException();
-    }
-
     // Start is called before the first frame update
     void Start() {
         debugDrawingAllocation = true;
@@ -98,8 +94,8 @@ public class OfflineMapController : AbstractMapController {
                 // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
                 uint[] speciesIdList = new uint[roomCapacity];
                 speciesIdList[selfPlayerInfo.JoinIndex - 1] = PlayerStoryProgressManager.Instance.GetCachedChSpeciesId();
-                var (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSecondsVal) = mockStartRdf(speciesIdList);
-                Debug.Log(String.Format("mockStartRdf with {0} bytes", startRdf.ToByteArray().Length));
+                var (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSecondsVal) = mockStartRdf(speciesIdList, PlayerStoryProgressManager.Instance.GetCachedFinishedLvOption());
+                Debug.LogFormat("mockStartRdf with {0} bytes", startRdf.ToByteArray().Length);
                 attachParallaxEffect();
                 battleDurationFrames = battleDurationSecondsVal * BATTLE_DYNAMICS_FPS;
                 refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId);

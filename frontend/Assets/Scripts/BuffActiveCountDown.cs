@@ -3,7 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BuffActiveCountDown : MonoBehaviour {
-    public Slider countDownMask;
+    public Image countDownMask;
+    private Vector3 newScaleHolder = new Vector3();
 
     public void updateData(Buff buff) {
         if (Battle.TERMINATING_BUFF_SPECIES_ID != buff.SpeciesId) {
@@ -11,14 +12,17 @@ public class BuffActiveCountDown : MonoBehaviour {
             if (BuffStockType.Timed == buffConfig.StockType) {
                 var remainingRdfCount = buff.Stock;
                 var totalRdfCount = buffConfig.Stock;
-                countDownMask.SetValueWithoutNotify((float)remainingRdfCount / totalRdfCount);
+                newScaleHolder.Set((float)remainingRdfCount / totalRdfCount, countDownMask.transform.localScale.y, countDownMask.transform.localScale.z);
+                countDownMask.transform.localScale = newScaleHolder;
                 countDownMask.gameObject.SetActive(true);
             } else {
-                countDownMask.SetValueWithoutNotify(0);
+                newScaleHolder.Set(0f, countDownMask.transform.localScale.y, countDownMask.transform.localScale.z);
+                countDownMask.transform.localScale = newScaleHolder;
                 countDownMask.gameObject.SetActive(false);
             }
         } else {
-            countDownMask.SetValueWithoutNotify(0);
+            newScaleHolder.Set(0f, countDownMask.transform.localScale.y, countDownMask.transform.localScale.z);
+            countDownMask.transform.localScale = newScaleHolder;
             countDownMask.gameObject.SetActive(false);
         }
     }

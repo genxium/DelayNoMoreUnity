@@ -6,15 +6,15 @@ using System;
 public class OnlineArenaCharacterSelectPanel : MonoBehaviour {
     public CharacterSelectGroup characterSelectGroup;
     public Image cancelBtn;
-    public AbstractMapController map;
+    public OnlineMapController map;
 
     // Start is called before the first frame update
     void Start() {
-        reset();
+        ResetSelf();
     }
 
     private void OnEnable() {
-        reset();
+        ResetSelf();
     }
 
     public void toggleUIInteractability(bool enabled) {
@@ -22,19 +22,19 @@ public class OnlineArenaCharacterSelectPanel : MonoBehaviour {
         cancelBtn.gameObject.SetActive(enabled);
     }
 
-    public void reset() {
+    public void ResetSelf() {
         characterSelectGroup.postCancelledCallback = OnCancelBtnClicked;
         characterSelectGroup.postConfirmedCallback = (v) => allConfirmed((uint)v);
         toggleUIInteractability(true);
     }
 
-    public void allConfirmed(uint selectedSpeciesId) {
+    public void allConfirmed(uint selectedIndex) {
         try {
             toggleUIInteractability(false);
-            map.onCharacterSelectGoAction(selectedSpeciesId);
+            map.onCharacterSelectGoAction(selectedIndex);
         } catch (Exception ex) {
             Debug.LogError(ex);
-            reset();
+            ResetSelf();
         }
     }
 

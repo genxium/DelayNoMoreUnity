@@ -423,6 +423,7 @@ namespace shared {
                 switch (triggerConfig.SpeciesId) {
                 case TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL:
                 case TRIGGER_SPECIES_NPC_AWAKER_MV:
+                case TRIGGER_SPECIES_BOSS_AWAKER_MV:
                 case TRIGGER_SPECIES_BOSS_SAVEPOINT:
                     if (mainCycleFulfilled) {
                             if (0 < currTrigger.Quota) {

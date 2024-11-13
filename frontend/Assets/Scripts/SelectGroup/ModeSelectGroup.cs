@@ -66,7 +66,7 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
         if (!PlayerStoryProgressManager.Instance.HasAnyUsedSlot()) {
             // A shortcut to start!
             PlayerStoryProgressManager.Instance.LoadFromSlot(1);
-            PlayerStoryProgressManager.Instance.SetCachedForOfflineMap(Battle.SPECIES_BLADEGIRL, StoryConstants.LEVEL_NAMES[StoryConstants.LEVEL_DELICATE_FOREST]);
+            PlayerStoryProgressManager.Instance.SetCachedForOfflineMap(Battle.SPECIES_BLADEGIRL, StoryConstants.LEVEL_NAMES[StoryConstants.LEVEL_DELICATE_FOREST], FinishedLvOption.StoryAndBoss);
             SceneManager.LoadScene("OfflineMapScene", LoadSceneMode.Single);
         } else {
             showSaveSlotSelectPanel = true;
@@ -81,13 +81,15 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
         allSettingsPanel.toggleUIInteractability(true);
     }
 
+#nullable enable
     private WsSessionManager.OnLoginResult onLoggedInPerAdhocRequirement = (int retCode, string? uname, int? playerId, string? authToken) => {
         if (ErrCode.Ok != retCode) {
-            // TODO: Popup dismissable error message prompt!
+            // TODO: Popup dismissible error message prompt!
             return;
         }
         SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
     };
+#nullable disable
 
     public void tryEnteringOnlineArena() {
         if (WsSessionManager.Instance.IsPossiblyLoggedIn()) {

@@ -146,8 +146,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected List<SuperTileLayer> windyLayers;
 
-    public abstract void onCharacterSelectGoAction(uint speciesId);
-
     public abstract void OnSettingsClicked();
 
     protected bool debugDrawingAllocation = false;
@@ -1382,7 +1380,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         spaceOffsetX = ((mapWidth * tileWidth) >> 1);
         spaceOffsetY = ((mapHeight * tileHeight) >> 1);
 
-        selfBattleHeading.reset();
+        selfBattleHeading.ResetSelf();
         readyGoPanel.resetCountdown();
         settlementPanel.gameObject.SetActive(false);
 
@@ -1817,8 +1815,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
-    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId, int) mockStartRdf(uint[] speciesIdList) {
-        Debug.LogFormat("mockStartRdf with speciesIdList={0} for selfJoinIndex={1}", ArrToString(speciesIdList), selfPlayerInfo.JoinIndex);
+    protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId, int) mockStartRdf(uint[] speciesIdList, FinishedLvOption finishedLvOption = FinishedLvOption.StoryAndBoss) {
+        Debug.LogFormat("mockStartRdf with speciesIdList={0} for selfJoinIndex={1}, finishedLvOption={2}", ArrToString(speciesIdList), selfPlayerInfo.JoinIndex, finishedLvOption);
         var serializedBarrierPolygons = new RepeatedField<SerializableConvexPolygon>();
         var serializedStaticPatrolCues = new RepeatedField<SerializedCompletelyStaticPatrolCueCollider>();
         var serializedCompletelyStaticTraps = new RepeatedField<SerializedCompletelyStaticTrapCollider>();
@@ -2229,11 +2227,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform triggerChild in child) {
                         var tileObj = triggerChild.GetComponent<SuperObject>();
                         var tileProps = triggerChild.GetComponent<SuperCustomProperties>();
-                        CustomProperty id;
+                        CustomProperty id, speciesId;
                         tileProps.TryGetCustomProperty("id", out id);
+                        tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         int editorId = id.GetValueAsInt();
                         if (serializedTriggerEditorIdToLocalId.Dict.ContainsKey(editorId)) {
                             throw new ArgumentException("You've assigned duplicated editorId=" + editorId + " for more than one trigger!");
+                        }
+                        int speciesIdVal = speciesId.GetValueAsInt(); // must have 
+                        if ((StoryPointMv.SpeciesId == speciesIdVal || StoryPointTrivial.SpeciesId == speciesIdVal) && FinishedLvOption.StoryAndBoss != finishedLvOption) {
+                            continue;
                         }
                         serializedTriggerEditorIdToLocalId.Dict.Add(editorId, triggerLocalId); 
                         triggerLocalId++;
@@ -2267,13 +2270,17 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("isBossSavepoint", out isBossSavepoint);
                         tileProps.TryGetCustomProperty("bossSpeciesIds", out bossSpeciesIds);
 
+                        int speciesIdVal = speciesId.GetValueAsInt(); // must have 
+                        if ((StoryPointMv.SpeciesId == speciesIdVal || StoryPointTrivial.SpeciesId == speciesIdVal) && FinishedLvOption.StoryAndBoss != finishedLvOption) {
+                            continue;
+                        }
+
                         int editorId = id.GetValueAsInt();
                         int targetTriggerLocalId = serializedTriggerEditorIdToLocalId.Dict[editorId];
                         int dirXVal = (null != dirX && !dirX.IsEmpty ? dirX.GetValueAsInt() : +2);
                         int initDirXVal = (null != initDirX && !initDirX.IsEmpty ? initDirX.GetValueAsInt() : 0);
                         int initDirYVal = (null != initDirY && !initDirY.IsEmpty ? initDirY.GetValueAsInt() : 0);
 
-                        int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         int bulletTeamIdVal = (null != bulletTeamId && !bulletTeamId.IsEmpty ? bulletTeamId.GetValueAsInt() : 0);
                         int delayedFramesVal = (null != delayedFrames && !delayedFrames.IsEmpty ? delayedFrames.GetValueAsInt() : 0);
                         int quotaVal = (null != quota && !quota.IsEmpty ? quota.GetValueAsInt() : 1);
@@ -3117,7 +3124,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         var chConfig = characters[currCharacterDownsync.SpeciesId];
         hpBar.score = rdfId;
-        hpBar.updateHp((float)currCharacterDownsync.Hp / chConfig.Hp, (float)currCharacterDownsync.Mp / chConfig.Mp);
+        hpBar.updateHpByValsAndCaps(currCharacterDownsync.Hp, chConfig.Hp);
         newPosHolder.Set(wx + inplaceHpBarOffset.x, wy + halfBoxCh + inplaceHpBarOffset.y, inplaceHpBarZ);
         hpBar.gameObject.transform.position = newPosHolder;
         cachedHpBars.Put(lookupKey, hpBar);
@@ -3677,6 +3684,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
+#nullable enable
     protected void setCharacterGameObjectPosByInterpolation(CharacterDownsync? prevCharacterDownsync, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, GameObject chGameObj, float newWx, float newWy) {
         float effZ = calcEffCharacterZ(currCharacterDownsync, chConfig);
         bool justDead = (null != prevCharacterDownsync && (CharacterState.Dying == prevCharacterDownsync.CharacterState || 0 >= prevCharacterDownsync.Hp));
@@ -3715,7 +3723,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             newPosHolder.Set(interpolatedWx, interpolatedWy, effZ);
         }
     }
-
+#nullable disable
     public static void RotatePoints(Vector3[] noAnchorPts, float absBoxCw, int cnt, float cosDelta, float sinDelta, float spinAnchorX, float spinAnchorY, bool spinFlipX) {
         if (0 == sinDelta && 0 == cosDelta) return;
         int bottomMostAndLeftMostJ = 0;

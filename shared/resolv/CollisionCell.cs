@@ -56,7 +56,7 @@ namespace shared {
         /*
         [WARNING]
 
-        What does "Cell.unregisterTail" achieve here?
+        What do "Cell.registerToTail & unregisterFromTail" achieve here?
 
         For static colliders,
         1. Their "Collider.TouchingCells" never change regardless of rollback

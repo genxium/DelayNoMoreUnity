@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="256" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="48" nextobjectid="600">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="256" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="48" nextobjectid="601">
  <properties>
   <property name="battleDurationSeconds" value="240"/>
   <property name="levelId" value="2"/>
@@ -633,7 +633,7 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="513" name="Floor12FlyingCueL" x="1904" y="0" width="32" height="1024">
+  <object id="513" name="Floor12FlyingCueL" x="1856" y="0" width="80" height="1024">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="4"/>

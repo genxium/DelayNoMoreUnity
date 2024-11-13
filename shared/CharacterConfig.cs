@@ -100,6 +100,8 @@ namespace shared {
         public int Def1BrokenVfxSpeciesId;
         public int Def1StartupFrames;
         public float Def1DamageYield;
+        public bool Def1DefiesEleWeaknessPenetration;
+        public bool Def1DefiesDebuff;
 
         public bool WalkingAutoDef1;
 
@@ -116,5 +118,8 @@ namespace shared {
         
         public bool JumpingInsteadOfWalking;
         public uint VisionSearchIntervalPow2Minus1;
+
+        public bool NpcNoDefaultAirWalking;
+        public bool NpcPrioritizeBulletHandling;
     }
 }

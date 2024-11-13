@@ -636,6 +636,9 @@ namespace shared {
             bool isRemapNeeded = false;
             _leftShiftDeadNpcs(dst.Id, roomCapacity, dst.NpcsArr, ref fooPickableLocalIdCounter, dst.Pickables, dst.TriggersArr, joinIndexRemap, out isRemapNeeded, justDeadJoinIndices, ref dstNpcI, ref fooPickableCnt, true, logger);
 
+            /*
+            Handling living bosses 
+            */
             int srcNpcI = 0;
             while (srcNpcI < src.NpcsArr.Count) {
                 var srcCh = src.NpcsArr[srcNpcI];
@@ -647,14 +650,15 @@ namespace shared {
                     continue;
                 }
 
-                bool wasDimmed = (CharacterState.Dimmed == srcCh.CharacterState);
-                CharacterState newChState = wasDimmed ? CharacterState.Idle1 : srcCh.CharacterState; 
-                var newFramesInChState = wasDimmed ? 0 : srcCh.FramesInChState; 
-                int newActivatedRdfId = wasDimmed ? src.Id : srcCh.ActivatedRdfId; 
-                int newSubscribesToTriggerLocalId = wasDimmed ? (int)TERMINATING_EVTSUB_ID_INT : srcCh.SubscribesToTriggerLocalId; 
-
+                // By now it's a boss NPC
+                if (TERMINATING_TRIGGER_ID == srcCh.SubscribesToTriggerLocalId) {
+                    // If it's a boss NPC without an awaker, then just keep it as-is (actually this is equal to just any other NPC)
+                    continue; 
+                }
+                
+                // By now it's a boss NPC with an awaker
                 var dstCh = dst.NpcsArr[dstNpcI];
-                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FrictionVelY, srcCh.FramesToRecover, newFramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, newChState, dstNpcI+1, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.OnSlopeFacingDown, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.FramesSinceLastDamaged, srcCh.RemainingDef1Quota, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingToTriggerLocalIdUponKilled, srcCh.PublishingEvtMaskUponKilled, newSubscribesToTriggerLocalId, srcCh.JumpHoldingRdfCnt, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.KilledToDropPickupSkillId, srcCh.BulletImmuneRecords, srcCh.ComboHitCnt, srcCh.ComboFramesRemained, srcCh.DamageElementalAttrs, srcCh.LastDamagedByJoinIndex, srcCh.LastDamagedByBulletTeamId, newActivatedRdfId, srcCh.CachedCueCmd, dstCh);
+                AssignToCharacterDownsync(srcCh.Id, srcCh.SpeciesId, srcCh.VirtualGridX, srcCh.VirtualGridY, srcCh.DirX, srcCh.DirY, srcCh.VelX, srcCh.FrictionVelX, srcCh.VelY, srcCh.FrictionVelY, srcCh.FramesToRecover, srcCh.FramesInChState, srcCh.ActiveSkillId, srcCh.ActiveSkillHit, srcCh.FramesInvinsible, srcCh.Speed, srcCh.CharacterState, dstNpcI+1, srcCh.Hp, srcCh.InAir, srcCh.OnWall, srcCh.OnWallNormX, srcCh.OnWallNormY, srcCh.FramesCapturedByInertia, srcCh.BulletTeamId, srcCh.ChCollisionTeamId, srcCh.RevivalVirtualGridX, srcCh.RevivalVirtualGridY, srcCh.RevivalDirX, srcCh.RevivalDirY, srcCh.JumpTriggered, srcCh.SlipJumpTriggered, srcCh.PrimarilyOnSlippableHardPushback, srcCh.CapturedByPatrolCue, srcCh.FramesInPatrolCue, srcCh.BeatsCnt, srcCh.BeatenCnt, srcCh.Mp, srcCh.OmitGravity, srcCh.OmitSoftPushback, srcCh.RepelSoftPushback, srcCh.WaivingSpontaneousPatrol, srcCh.WaivingPatrolCueId, srcCh.OnSlope, srcCh.OnSlopeFacingDown, srcCh.ForcedCrouching, srcCh.NewBirth, srcCh.JumpStarted, srcCh.FramesToStartJump, srcCh.FramesSinceLastDamaged, srcCh.RemainingDef1Quota, srcCh.BuffList, srcCh.DebuffList, srcCh.Inventory, false, srcCh.PublishingToTriggerLocalIdUponKilled, srcCh.PublishingEvtMaskUponKilled, srcCh.SubscribesToTriggerLocalId, srcCh.JumpHoldingRdfCnt, srcCh.BtnBHoldingRdfCount, srcCh.RemainingAirJumpQuota, srcCh.RemainingAirDashQuota, srcCh.KilledToDropConsumableSpeciesId, srcCh.KilledToDropBuffSpeciesId, srcCh.KilledToDropPickupSkillId, srcCh.BulletImmuneRecords, srcCh.ComboHitCnt, srcCh.ComboFramesRemained, srcCh.DamageElementalAttrs, srcCh.LastDamagedByJoinIndex, srcCh.LastDamagedByBulletTeamId, srcCh.ActivatedRdfId, srcCh.CachedCueCmd, dstCh);
                 dstNpcI++;
             }
             // [WARNING] No need to remap bullet offender join indices because "excludePlayers" would simply remove all existing bullets
@@ -681,7 +685,7 @@ namespace shared {
                 var srcTrigger = src.TriggersArr[triggerCnt];
                 if (TERMINATING_TRIGGER_ID == srcTrigger.TriggerLocalId) break;
                 var dstTrigger = dst.TriggersArr[triggerCnt];
-                    AssignToTrigger(srcTrigger.EditorId, srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.OffenderJoinIndex, srcTrigger.OffenderBulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.DirX, srcTrigger.DemandedEvtMask, srcTrigger.FulfilledEvtMask, srcTrigger.WaveNpcKilledEvtMaskCounter, srcTrigger.SubscriberLocalIdsMask, srcTrigger.ExhaustSubscriberLocalIdsMask, srcTrigger.ConfigFromTiled, dstTrigger);
+                AssignToTrigger(srcTrigger.EditorId, srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.OffenderJoinIndex, srcTrigger.OffenderBulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.DirX, srcTrigger.DemandedEvtMask, srcTrigger.FulfilledEvtMask, srcTrigger.WaveNpcKilledEvtMaskCounter, srcTrigger.SubscriberLocalIdsMask, srcTrigger.ExhaustSubscriberLocalIdsMask, srcTrigger.ConfigFromTiled, dstTrigger);
             
                 triggerCnt++;
             }

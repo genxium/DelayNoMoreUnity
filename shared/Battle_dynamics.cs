@@ -479,6 +479,8 @@ namespace shared {
         private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
             for (int i = 0; i < roomCapacity; i++) {
                 var currCharacterDownsync = currRenderFrame.PlayersArr[i];
+                bool effInAir = (currCharacterDownsync.InAir || inAirSet.Contains(currCharacterDownsync.CharacterState));
+
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder, logger);
@@ -534,7 +536,7 @@ namespace shared {
                 } else {
                     thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
                 }
-                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
+                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, chConfig, logger);
                 if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
                     _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, skillConfig, logger);
                 } else {
@@ -552,7 +554,7 @@ namespace shared {
             }
         }
 
-        public static void _processNextFrameJumpStartup(int currRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, ILoggerBridge logger) {
+        public static void _processNextFrameJumpStartup(int currRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, CharacterConfig chConfig, ILoggerBridge logger) {
             /*
             if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
                 logger.LogInfo("_processNextFrameJumpStartup: currRdfId=" + currRdfId + ", " + stringifyPlayer(currCharacterDownsync));
@@ -571,7 +573,7 @@ namespace shared {
                     thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
                     thatCharacterInNextFrame.VelY = 0;
                     thatCharacterInNextFrame.JumpHoldingRdfCnt = 1; // For continuity
-                } else if (currCharacterDownsync.InAir && !currCharacterDownsync.OmitGravity) {
+                } else if (currEffInAir && !currCharacterDownsync.OmitGravity) {
                     if (0 < currCharacterDownsync.RemainingAirJumpQuota) {
                         thatCharacterInNextFrame.FramesToStartJump = IN_AIR_JUMP_GRACE_PERIOD_RDF_CNT;
                         thatCharacterInNextFrame.CharacterState = InAirIdle2ByJump;
@@ -2132,7 +2134,7 @@ namespace shared {
                         dst.FramesToRecover = 0;
                     }
                 }
-                dst.ActivatedRdfId = currRenderFrame.Id + 1;
+                dst.ActivatedRdfId = currRenderFrame.Id;
             }
 
             _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFramePickables, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, pickableColliderCntOffset, colliderCnt, trapLocalIdToColliderAttrs, logger);

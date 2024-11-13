@@ -265,14 +265,17 @@ public class PlayerStoryProgressManager {
 
     private uint cachedChSpeciedId = Battle.SPECIES_NONE_CH;
     private string cachedLevelName = null;
-    public void SetCachedForOfflineMap(uint chSpeciesId, string levelName) {
+    private FinishedLvOption cachedFinishedLvOption = FinishedLvOption.BossOnly;
+    public void SetCachedForOfflineMap(uint chSpeciesId, string levelName, FinishedLvOption finishedLvOption) {
         cachedChSpeciedId = chSpeciesId;
         cachedLevelName = levelName;
+        cachedFinishedLvOption = finishedLvOption;
     }
 
     public void ResetCachedForOfflineMap() {
         cachedChSpeciedId = Battle.SPECIES_NONE_CH;
         cachedLevelName = null;
+        cachedFinishedLvOption = FinishedLvOption.BossOnly;
     }
 
     public uint GetCachedChSpeciesId() {
@@ -281,5 +284,9 @@ public class PlayerStoryProgressManager {
 
     public string GetCachedLevelName() {
         return cachedLevelName;
+    }
+
+    public FinishedLvOption GetCachedFinishedLvOption() {
+        return cachedFinishedLvOption;
     }
 }

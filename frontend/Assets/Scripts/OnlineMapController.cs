@@ -158,7 +158,10 @@ public class OnlineMapController : AbstractMapController {
                 case DOWNSYNC_MSG_ACT_BATTLE_START:
                     Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
                     var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
-                    readyGoPanel.playGoAnim();
+                    if (ROOM_STATE_IN_BATTLE > battleState) {
+                        // Making anim respect battleState to avoid wrong order of DOTWeen async execution  
+                        readyGoPanel.playGoAnim(); 
+                    }
                     bgmSource.Play();
                     onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
@@ -206,7 +209,10 @@ public class OnlineMapController : AbstractMapController {
                     networkInfoPanel.gameObject.SetActive(true);
                     playerWaitingPanel.gameObject.SetActive(false);
                     Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
-                    readyGoPanel.playReadyAnim(() => { }, null);
+                    if (ROOM_STATE_IN_BATTLE > battleState) {
+                        // Making anim respect battleState to avoid wrong order of DOTWeen async execution  
+                        readyGoPanel.playReadyAnim(() => { }, null);
+                    }
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
                     if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {
@@ -296,7 +302,7 @@ public class OnlineMapController : AbstractMapController {
                 try {
                     guiWaitToProceedTask.Wait(guiCanProceedSignal);
                 } catch (Exception guiWaitCancelledEx) {
-                    //Debug.LogWarning(String.Format("guiWaitToProceedTask was cancelled before proactive awaiting#1: thread id={0} a.k.a. the MainThread, ex={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitCancelledEx));
+                    Debug.LogFormat("guiWaitToProceedTask was cancelled before proactive awaiting#1: thread id={0} a.k.a. the MainThread, exMsg={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitCancelledEx.Message);
                 }
             }
 
@@ -315,7 +321,7 @@ public class OnlineMapController : AbstractMapController {
                 }
                 guiWaitToProceedTask.Wait();
             } catch (Exception guiWaitEx) {
-                //Debug.LogWarning(String.Format("guiWaitToProceedTask was cancelled before proactive awaiting#2: thread id={0} a.k.a. the MainThread, ex={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitEx));
+                Debug.LogFormat("guiWaitToProceedTask was cancelled before proactive awaiting#2: thread id={0} a.k.a. the MainThread, exMsg={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitEx.Message);
             } finally {
                 try {
                     guiWaitToProceedTask.Dispose();
@@ -328,8 +334,8 @@ public class OnlineMapController : AbstractMapController {
         }
     }
 
-    public override void onCharacterSelectGoAction(uint speciesId) {
-        Debug.Log(String.Format("Executing OnlineMapController.onCharacterSelectGoAction with selectedSpeciesId={0}", speciesId));
+    public void onCharacterSelectGoAction(uint speciesId) {
+        Debug.LogFormat("Executing OnlineMapController.onCharacterSelectGoAction with selectedSpeciesId={0}", speciesId);
         if (ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_STOPPED != battleState) {
             Debug.LogWarningFormat("OnlineMapController.onCharacterSelectGoAction having invalid battleState={0}, calling `base.onBattleStopped`", battleState);
             base.onBattleStopped();
@@ -472,7 +478,7 @@ public class OnlineMapController : AbstractMapController {
             Debug.LogFormat("Resetting roomId and replaying from character select.");
             roomId = ROOM_ID_NONE;
             characterSelectPanel.gameObject.SetActive(true);
-            characterSelectPanel.reset();
+            characterSelectPanel.ResetSelf();
         }
         Debug.Log("Handled onWsSessionClosed in main thread.");
     }
@@ -485,7 +491,7 @@ public class OnlineMapController : AbstractMapController {
         WsSessionManager.Instance.SetRoomId(ROOM_ID_NONE);
         cleanupNetworkSessions(false); // Make sure that all resources are properly deallocated
         characterSelectPanel.gameObject.SetActive(true);
-        characterSelectPanel.reset();
+        characterSelectPanel.ResetSelf();
     }
 
     private async Task wsSessionTaskAsync(CancellationTokenSource guiCanProceedSignalSource) {

@@ -690,7 +690,7 @@ namespace shared {
                                 var effDamage = 0;
                                 bool successfulDef1 = false;
                                 if (!shouldBeImmune) {
-                                    (effDamage, successfulDef1) = _calcEffDamage(oldNextCharacterState, victimChConfig, victimNextFrame, victimActiveSkillBuff, bulletConfig, bulletCollider, bCollider);
+                                    (effDamage, successfulDef1) = _calcEffDamage(oldNextCharacterState, victimChConfig, victimNextFrame, victimActiveSkillBuff, bulletNextFrame, bulletConfig, bulletCollider, bCollider);
                                 }
 
                                 var origVictimInNextFrameHp = victimNextFrame.Hp;
@@ -864,7 +864,7 @@ namespace shared {
 
                                     accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, offenderNextFrame);
 
-                                    if (BlownUp1 != victimNextFrame.CharacterState && Dying != victimNextFrame.CharacterState) {
+                                    if (BlownUp1 != victimNextFrame.CharacterState && Dying != victimNextFrame.CharacterState && !(successfulDef1 && victimChConfig.Def1DefiesDebuff)) {
                                         if (shouldExtendDef1Broken) {
                                             victimNextFrame.CharacterState = Def1Broken;
                                         }
@@ -1371,14 +1371,14 @@ namespace shared {
             }
         }
 
-        public static (int, bool) _calcEffDamage(CharacterState origOffenderStateNextFrame, CharacterConfig victimChConfig, CharacterDownsync victimNextFrame, BuffConfig? victimActiveSkillBuff, BulletConfig bulletConfig, Collider bulletCollider, Collider victimCollider) {
-            bool bulletInFrontOfVictim = (0 < victimNextFrame.DirX*(bulletCollider.X - victimCollider.X));
+        public static (int, bool) _calcEffDamage(CharacterState origOffenderStateNextFrame, CharacterConfig victimChConfig, CharacterDownsync victimNextFrame, BuffConfig? victimActiveSkillBuff, Bullet bulletNextFrame, BulletConfig bulletConfig, Collider bulletCollider, Collider victimCollider) {
+            bool bulletInFrontOfVictim = (0 > victimNextFrame.DirX*bulletNextFrame.DirX);
             bool successfulDef1 = (Def1 == origOffenderStateNextFrame && victimChConfig.Def1StartupFrames < victimNextFrame.FramesInChState && 0 < victimNextFrame.RemainingDef1Quota && bulletInFrontOfVictim);
             bool eleWeaknessHit = 0 < (victimChConfig.EleWeakness & bulletConfig.ElementalAttrs);
             bool eleResistanceHit = 0 < (victimChConfig.EleResistance & bulletConfig.ElementalAttrs);
             bool isWalkingAutoDef1 = (Walking == victimNextFrame.CharacterState && victimChConfig.WalkingAutoDef1);
             bool isSkillAutoDef1 = (null != victimActiveSkillBuff && victimActiveSkillBuff.AutoDef1);
-            if (eleWeaknessHit) {
+            if (eleWeaknessHit && !victimChConfig.Def1DefiesEleWeaknessPenetration) {
                 successfulDef1 = false;
             } else {
                 if (isWalkingAutoDef1 && bulletInFrontOfVictim) {

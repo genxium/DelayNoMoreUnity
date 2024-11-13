@@ -12,7 +12,8 @@ public class StoryLevelPanel : MonoBehaviour {
     public UISoundSource uiSoundSource;
     public GameObject levelCellPrefab;
     public Image cancelBtn;
-    public CharacterSelectGroup characterSelectGroup;
+    public StoryModeCharacterSelectPanel characterSelectPanel;
+    public StoryLvInfoPanel lvInfoPanel;
     public float cameraSpeed = 100;
 
     public StoryRegionPanel regionPanel;
@@ -129,9 +130,13 @@ public class StoryLevelPanel : MonoBehaviour {
             selectedLevelName = StoryConstants.LEVEL_NAMES[storyLevelCell.levelId];
             selectionPhase = 1;
             isInCameraAutoTracking = false;
-            characterSelectGroup.gameObject.SetActive(true);
+            characterSelectPanel.gameObject.SetActive(true);
             toggleUIInteractability(true);
-            Debug.LogFormat("StoryLevelSelectPanel levelPostConfirmedCallback, now selectedLevelIdx={0}, selectedLevelName={1}", selectedLevelIdx, selectedLevelName);
+            var lvProgress = storyLevelCell.GetCellProgress();
+            lvInfoPanel.refreshLvInfo(selectedLevelName, storyLevelCell.GetIsLocked(), lvProgress);
+            lvInfoPanel.toggleUIInteractability(true);
+            lvInfoPanel.gameObject.SetActive(true);
+            //Debug.LogFormat("StoryLevelSelectPanel levelPostConfirmedCallback, now selectedLevelIdx={0}, selectedLevelName={1}", selectedLevelIdx, selectedLevelName);
         };
 
         levels.levelPostCursorMovedCallback = (int selectedIdx) => {
@@ -140,7 +145,10 @@ public class StoryLevelPanel : MonoBehaviour {
             var storyLevelCell = levelCell.GetComponent<StoryLevelCell>();
             selectedLevelName = StoryConstants.LEVEL_NAMES[storyLevelCell.levelId];
             isInCameraAutoTracking = true;
-            Debug.LogFormat("StoryLevelSelectPanel levelPostCursorMovedCallback, now selectedLevelIdx={0}, selectedLevelName={1}", selectedLevelIdx, selectedLevelName);
+            var lvProgress = storyLevelCell.GetCellProgress();
+            lvInfoPanel.refreshLvInfo(selectedLevelName, storyLevelCell.GetIsLocked(), lvProgress);
+            lvInfoPanel.toggleUIInteractability(false);
+            //Debug.LogFormat("StoryLevelSelectPanel levelPostCursorMovedCallback, now selectedLevelIdx={0}, selectedLevelName={1}", selectedLevelIdx, selectedLevelName);
         };
 
         var levelProgressList = PlayerStoryProgressManager.Instance.LoadLevelsUnderCurrentRegion();
@@ -149,14 +157,20 @@ public class StoryLevelPanel : MonoBehaviour {
             var cell = levels.cells[i] as StoryLevelCell;
             cell.UpdateByLevelProgress(levelProgressList[i]);
         }
-        characterSelectGroup.gameObject.SetActive(false);
-        characterSelectGroup.postCancelledCallback = OnCancelBtnClicked;
-        characterSelectGroup.postConfirmedCallback = (v) => allConfirmed((uint)v);
+        characterSelectPanel.gameObject.SetActive(false);
+        characterSelectPanel.SetCallbacks((v) => allConfirmed((uint)v), OnCancelBtnClicked);
         var levelsUnderRegion = StoryConstants.LEVEL_UNDER_REGION[PlayerStoryProgressManager.Instance.GetCurrentRegionId()];
         if (-1 == selectedLevelIdx) {
             selectedLevelIdx = levelsUnderRegion.IndexOf(PlayerStoryProgressManager.Instance.GetCurrentLevelId());
             selectedLevelName = StoryConstants.LEVEL_NAMES[PlayerStoryProgressManager.Instance.GetCurrentLevelId()];
         }
+
+        var activeLevelCell = levels.cells[selectedLevelIdx];
+        var activeStoryLevelCell = activeLevelCell.GetComponent<StoryLevelCell>();
+        var lvProgress = activeStoryLevelCell.GetCellProgress();
+        lvInfoPanel.refreshLvInfo(selectedLevelName, activeStoryLevelCell.GetIsLocked(), lvProgress);
+        lvInfoPanel.toggleUIInteractability(false);
+        lvInfoPanel.gameObject.SetActive(true);
 
         cameraTeleport();
         selectionPhase = 0;
@@ -168,7 +182,7 @@ public class StoryLevelPanel : MonoBehaviour {
         switch (selectionPhase) {
             case 0:
                 levels.toggleUIInteractability(enabled);
-                characterSelectGroup.toggleUIInteractability(!enabled);
+                characterSelectPanel.toggleUIInteractability(!enabled);
                 cancelBtn.gameObject.SetActive(enabled);
                 if (enabled) {
                     var selectedCell = levels.cells[selectedLevelIdx] as StoryLevelCell;
@@ -178,12 +192,12 @@ public class StoryLevelPanel : MonoBehaviour {
                 break;
             case 1:
                 levels.toggleUIInteractability(!enabled);
-                characterSelectGroup.toggleUIInteractability(enabled);
+                characterSelectPanel.toggleUIInteractability(enabled);
                 cancelBtn.gameObject.SetActive(enabled);
                 break;
             case 2:
                 levels.toggleUIInteractability(false);
-                characterSelectGroup.toggleUIInteractability(false);
+                characterSelectPanel.toggleUIInteractability(false);
                 cancelBtn.gameObject.SetActive(false);
                 break;
         }
@@ -193,6 +207,9 @@ public class StoryLevelPanel : MonoBehaviour {
         if (null != uiSoundSource) {
             uiSoundSource.PlayCancel();
         }
+        if (null != lvInfoPanel) {
+            lvInfoPanel.toggleUIInteractability(false);
+        }
         Debug.Log("StoryLevelSelectPanel OnCancelBtnClicked at selectionPhase=" + selectionPhase);
         if (0 < selectionPhase) {
             ResetSelf();
@@ -201,26 +218,29 @@ public class StoryLevelPanel : MonoBehaviour {
             if (null != regionLevels) {
                 Destroy(regionLevels);
             }
+            if (null != lvInfoPanel) {
+                lvInfoPanel.gameObject.SetActive(false);
+            }
             gameObject.SetActive(false);
             PlayerStoryProgressManager.Instance.SetView(PlayerStoryModeSelectView.Region);
             regionPanel.gameObject.SetActive(true);
             regionPanel.ResetSelf();
+
         }
     }
 
     public void allConfirmed(uint selectedSpeciesId) {
         Debug.Log("StoryLevelSelectPanel allConfirmed at selectedSpeciesId=" + selectedSpeciesId + ", selectedLevelName=" + selectedLevelName);
         try {
-            characterSelectGroup.toggleUIInteractability(false);
+            characterSelectPanel.toggleUIInteractability(false);
             cancelBtn.gameObject.SetActive(false);
             selectionPhase = 2;
             toggleUIInteractability(false);
-            characterSelectGroup.postCancelledCallback = null;
-            characterSelectGroup.postConfirmedCallback = null;
+            characterSelectPanel.SetCallbacks(null, null);
             levels.postCancelledCallback = null;
             levels.levelPostConfirmedCallback = null;
 
-            PlayerStoryProgressManager.Instance.SetCachedForOfflineMap(selectedSpeciesId, selectedLevelName);
+            PlayerStoryProgressManager.Instance.SetCachedForOfflineMap(selectedSpeciesId, selectedLevelName, lvInfoPanel.getFinishedLvOption());
             SceneManager.LoadScene("OfflineMapScene", LoadSceneMode.Single);
         } catch (Exception ex) {
             Debug.LogError(ex);

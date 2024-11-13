@@ -459,11 +459,12 @@ namespace shared {
             "EAQSEwoPVGltZWRNYWdhemluZUl2EAUSFAoQR2F1Z2VkTWFnYXppbmVJdhAG",
             "EhkKFUdhdWdlZFRpbWVkTWFnYXppbmVJdhAHKjwKGVBsYXllclN0b3J5TW9k",
             "ZVNlbGVjdFZpZXcSCAoETk9ORRAAEgoKBlJFR0lPThABEgkKBUxFVkVMEAIq",
-            "MQoKUGlja3VwVHlwZRINCglJbW1lZGlhdGUQABIUChBQdXRJbnRvSW52ZW50",
-            "b3J5EAFCCaoCBnNoYXJlZGIGcHJvdG8z"));
+            "NQoQRmluaXNoZWRMdk9wdGlvbhINCglCT1NTX09OTFkQABISCg5TVE9SWV9B",
+            "TkRfQk9TUxABKjEKClBpY2t1cFR5cGUSDQoJSW1tZWRpYXRlEAASFAoQUHV0",
+            "SW50b0ludmVudG9yeRABQgmqAgZzaGFyZWRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.IfaceCat), typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.PickableState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.TriggerType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.ConsumableType), typeof(global::shared.InventorySlotStockType), typeof(global::shared.PlayerStoryModeSelectView), typeof(global::shared.PickupType), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::shared.IfaceCat), typeof(global::shared.BulletState), typeof(global::shared.CharacterState), typeof(global::shared.TrapState), typeof(global::shared.TriggerState), typeof(global::shared.PickableState), typeof(global::shared.BulletType), typeof(global::shared.MultiHitType), typeof(global::shared.SkillTriggerType), typeof(global::shared.VfxDurationType), typeof(global::shared.VfxMotionType), typeof(global::shared.TriggerType), typeof(global::shared.BuffStockType), typeof(global::shared.DebuffType), typeof(global::shared.ConsumableType), typeof(global::shared.InventorySlotStockType), typeof(global::shared.PlayerStoryModeSelectView), typeof(global::shared.FinishedLvOption), typeof(global::shared.PickupType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.CharacterDownsync), global::shared.CharacterDownsync.Parser, new[]{ "Id", "VirtualGridX", "VirtualGridY", "DirX", "DirY", "VelX", "VelY", "Speed", "SpeciesId", "JoinIndex", "FramesToRecover", "FramesCapturedByInertia", "CapturedByPatrolCue", "FramesInPatrolCue", "BeatsCnt", "BeatenCnt", "Hp", "Mp", "BtnBHoldingRdfCount", "CharacterState", "FramesInChState", "InAir", "JumpTriggered", "OnWall", "OnWallNormX", "OnWallNormY", "OmitGravity", "OmitSoftPushback", "WaivingPatrolCueId", "WaivingSpontaneousPatrol", "RevivalVirtualGridX", "RevivalVirtualGridY", "RevivalDirX", "RevivalDirY", "OnSlope", "FrictionVelX", "ForcedCrouching", "SlipJumpTriggered", "PrimarilyOnSlippableHardPushback", "PrevWasCrouching", "NewBirth", "FramesInvinsible", "JumpStarted", "FramesToStartJump", "RepelSoftPushback", "PublishingEvtMaskUponKilled", "PublishingToTriggerLocalIdUponKilled", "SubscribesToTriggerLocalId", "JumpHoldingRdfCnt", "RemainingAirJumpQuota", "RemainingAirDashQuota", "KilledToDropConsumableSpeciesId", "KilledToDropBuffSpeciesId", "KilledToDropPickupSkillId", "FrictionVelY", "FramesSinceLastDamaged", "RemainingDef1Quota", "ComboHitCnt", "ComboFramesRemained", "DamageElementalAttrs", "OnSlopeFacingDown", "LastDamagedByJoinIndex", "LastDamagedByBulletTeamId", "ActivatedRdfId", "CachedCueCmd", "ActiveSkillId", "ActiveSkillHit", "BulletTeamId", "ChCollisionTeamId", "BuffList", "DebuffList", "Inventory", "BulletImmuneRecords" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameDecoded), global::shared.InputFrameDecoded.Parser, new[]{ "Dx", "Dy", "BtnALevel", "BtnBLevel", "BtnCLevel", "BtnDLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::shared.InputFrameUpsync), global::shared.InputFrameUpsync.Parser, new[]{ "InputFrameId", "Encoded", "JoinIndex" }, null, null, null, null),
@@ -743,6 +744,11 @@ namespace shared {
     [pbr::OriginalName("NONE")] None = 0,
     [pbr::OriginalName("REGION")] Region = 1,
     [pbr::OriginalName("LEVEL")] Level = 2,
+  }
+
+  public enum FinishedLvOption {
+    [pbr::OriginalName("BOSS_ONLY")] BossOnly = 0,
+    [pbr::OriginalName("STORY_AND_BOSS")] StoryAndBoss = 1,
   }
 
   public enum PickupType {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="144" height="48" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="461">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="144" height="48" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="462">
  <properties>
   <property name="battleDurationSeconds" value="240"/>
   <property name="levelId" value="1"/>
@@ -123,7 +123,16 @@
   </object>
  </objectgroup>
  <objectgroup id="13" name="TriggerPos">
-  <object id="459" name="FirstStageSavepoint" x="1710.58" y="586.675">
+  <object id="461" name="BossAwakerTrigger" x="2000" y="336" width="48" height="368">
+   <properties>
+    <property name="id" value="13"/>
+    <property name="initDirX" value="-2"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1027"/>
+   </properties>
+  </object>
+  <object id="459" name="FirstStageSavepoint" x="1710" y="586">
    <properties>
     <property name="bossSpeciesIds" value="4110"/>
     <property name="demandedEvtMask" value="1"/>
@@ -267,7 +276,7 @@
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="static" value="1"/>
-    <property name="subscriptionId" value="10"/>
+    <property name="subscriptionId" value="13"/>
     <property name="teamId" value="2"/>
    </properties>
   </object>

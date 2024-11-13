@@ -20,6 +20,7 @@ namespace shared {
         public const int TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL = 1024;
         public const int TRIGGER_SPECIES_NPC_AWAKER_MV = 1025;
         public const int TRIGGER_SPECIES_BOSS_SAVEPOINT = 1026;
+        public const int TRIGGER_SPECIES_BOSS_AWAKER_MV = 1027;
 
         public static TriggerConfig NSwitch = new TriggerConfig {
             SpeciesId = TRIGGER_SPECIES_NSWITCH,
@@ -119,6 +120,13 @@ namespace shared {
             CollisionTypeMask = COLLISION_TRIGGER_INDEX_PREFIX
         };
 
+        public static TriggerConfig BossAwakerMv = new TriggerConfig {
+            SpeciesId = TRIGGER_SPECIES_BOSS_AWAKER_MV,
+            SpeciesName = "BossAwakerMv",
+            TriggerType = TriggerType.TtMovement,
+            CollisionTypeMask = COLLISION_TRIGGER_INDEX_PREFIX
+        };
+
         public static ImmutableDictionary<int, TriggerConfig> triggerConfigs = ImmutableDictionary.Create<int, TriggerConfig>().AddRange(
                 new[]
                 {
@@ -136,6 +144,7 @@ namespace shared {
                     new KeyValuePair<int, TriggerConfig>(VictoryTriggerTrivial.SpeciesId, VictoryTriggerTrivial),
                     new KeyValuePair<int, TriggerConfig>(NpcAwakerMv.SpeciesId, NpcAwakerMv),
                     new KeyValuePair<int, TriggerConfig>(BossSavepoint.SpeciesId, BossSavepoint),
+                    new KeyValuePair<int, TriggerConfig>(BossAwakerMv.SpeciesId, BossAwakerMv),
                 }
         );
     }

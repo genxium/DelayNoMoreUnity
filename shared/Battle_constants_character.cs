@@ -230,8 +230,10 @@ namespace shared {
                         Def1AtkedVfxSpeciesId = VfxWitchDef1Atked.SpeciesId,
                         Def1BrokenVfxSpeciesId = VfxWitchDef1Broken.SpeciesId,
                         Def1StartupFrames = 6,
-                        GaugeIncWhenKilled = 80,
                         Def1DamageYield = 0.1f,
+                        Def1DefiesEleWeaknessPenetration = true,
+                        Def1DefiesDebuff = true,
+                        GaugeIncWhenKilled = 80,
                         Ifc = IfaceCat.Flesh,
                     }),
 
@@ -663,6 +665,7 @@ namespace shared {
                         Ifc = IfaceCat.Flesh,
                         EleResistance = ELE_WIND,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                        NpcNoDefaultAirWalking = true,
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_BAT, new CharacterConfig {
@@ -688,8 +691,6 @@ namespace shared {
                         CollisionTypeMask = (COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_FLYING_CHARACTER_INDEX_PREFIX),
                         HasTurnAroundAnim = false,
                         Hardness = 4,
-                        AntiGravityWhenIdle = true,
-                        AntiGravityFramesLingering = 8*BATTLE_DYNAMICS_FPS,
                         OmitGravity = true,
                         MpRegenRate = 1,
                         RepelSoftPushback = true, // [WARNING] To avoid "bouncing landing on flying character", don't forget to set either "RepelSoftPushback" or "OmitSoftPushback" here!
@@ -965,7 +966,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_LIGHTGUARD_RED, new CharacterConfig {
                         SpeciesId = SPECIES_LIGHTGUARD_RED,
                         SpeciesName = "LightGuardRed",
-                        Hp = 100,
+                        Hp = 120,
                         LayDownFrames = 17,
                         LayDownFramesToRecover = 17,
                         GetUpInvinsibleFrames = 16,
@@ -1007,6 +1008,7 @@ namespace shared {
                         EleResistance = ELE_WIND,
                         EleWeakness = ELE_THUNDER,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                        NpcPrioritizeBulletHandling = true, 
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_HEAVYGUARD_RED, new CharacterConfig {
@@ -1055,6 +1057,7 @@ namespace shared {
                         EleResistance = ELE_WIND,
                         EleWeakness = ELE_THUNDER,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                        NpcPrioritizeBulletHandling = true, 
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_RIDERGUARD_RED, new CharacterConfig {
@@ -1309,6 +1312,7 @@ namespace shared {
                         GaugeIncWhenKilled = 100,
                         Ifc = IfaceCat.Rock,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                        IsKeyCh = true,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,
