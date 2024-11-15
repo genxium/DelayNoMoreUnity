@@ -53,13 +53,16 @@ public class OnlineMapController : AbstractMapController {
             if (ErrCode.Ok != wsRespHolder.Ret) {
                 if (ErrCode.PlayerNotAddableToRoom == wsRespHolder.Ret) {
                     var msg = String.Format("@playerRdfId={0}, received ws error PlayerNotAddableToRoom for roomId={1}", playerRdfId, roomId);
+                    Debug.LogWarning(msg);
                     popupErrStackPanel(msg);
                 } else {
                     var msg = String.Format("@playerRdfId={0}, received ws error {1}", playerRdfId, wsRespHolder);
+                    Debug.LogWarning(msg);
                     popupErrStackPanel(msg);
                 }
-                cleanupNetworkSessions(false);
-                base.onBattleStopped();
+                Debug.LogWarning("Calling onBattleStopped with remote non-OK resp @playerRdfId=" + playerRdfId);
+                onBattleStopped();
+                showCharacterSelection();
                 break;
             }
             switch (wsRespHolder.Act) {
@@ -167,12 +170,9 @@ public class OnlineMapController : AbstractMapController {
                     enableBattleInput(true);
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
-                    enableBattleInput(false);
+                    Debug.LogWarning("Calling onBattleStopped with remote act=DOWNSYNC_MSG_ACT_BATTLE_STOPPED @playerRdfId=" + playerRdfId);
+                    onBattleStopped();
                     StartCoroutine(delayToShowSettlementPanel());
-                    // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
-                    if (frameLogEnabled) {
-                        wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, pushbackFrameLogBuffer, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
-                    }
                     break;
                 case DOWNSYNC_MSG_ACT_INPUT_BATCH:
                     // Debug.Log("Handling DOWNSYNC_MSG_ACT_INPUT_BATCH in main thread.");
@@ -226,11 +226,9 @@ public class OnlineMapController : AbstractMapController {
                     readyGoPanel.hideReady();
                     readyGoPanel.hideGo();
                     onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
-                    /*
-                    if (true == WsSessionManager.Instance.GetForReentry()) {
-                        Debug.LogFormat("[AFTER REENTRY] Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
-                    }
-                    */
+                    
+                    Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
+                    
                     break;
                 default:
                     break;
@@ -337,8 +335,9 @@ public class OnlineMapController : AbstractMapController {
     public void onCharacterSelectGoAction(uint speciesId) {
         Debug.LogFormat("Executing OnlineMapController.onCharacterSelectGoAction with selectedSpeciesId={0}", speciesId);
         if (ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_STOPPED != battleState) {
-            Debug.LogWarningFormat("OnlineMapController.onCharacterSelectGoAction having invalid battleState={0}, calling `base.onBattleStopped`", battleState);
-            base.onBattleStopped();
+            Debug.LogWarningFormat("OnlineMapController.onCharacterSelectGoAction having invalid battleState={0}, calling `onBattleStopped`", battleState);
+            onBattleStopped();
+            showCharacterSelection();
         }
         // [WARNING] Deliberately NOT declaring this method as "async" to make tests related to `<proj-root>/GOROUTINE_TO_ASYNC_TASK.md` more meaningful.
         battleState = ROOM_STATE_IDLE;
@@ -369,7 +368,7 @@ public class OnlineMapController : AbstractMapController {
                 await wsSessionTaskAsync(guiCanProceedSignalSource);
                 Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
 
-                // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message to trigger "cleanupNetworkSessions" to clean up ws session resources!
+                // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message to trigger "onWsSessionClosed" to clean up ws session resources!
             }, wsCancellationToken)
             .ContinueWith(failedTask => {
                 Debug.LogWarning(String.Format("Failed to start ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
@@ -391,14 +390,16 @@ public class OnlineMapController : AbstractMapController {
                 }
             }
 
-            if (!guiCanProceedOnFailure) {
+            if (false == guiCanProceedOnFailure) {
                 Debug.Log(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
                 characterSelectPanel.gameObject.SetActive(false);
             } else {
                 var msg = String.Format("Failed to start ws session#2: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId);
+                Debug.LogWarning(msg);
                 popupErrStackPanel(msg);
                 WsSessionManager.Instance.ClearCredentials();
                 onBattleStopped();
+                showCharacterSelection();
             }
         } finally {
             try {
@@ -441,18 +442,20 @@ public class OnlineMapController : AbstractMapController {
         enableBattleInput(false);
 
         ArenaModeSettings.SimpleDelegate onExitCallback = () => {
-            enableBattleInput(false);
-            if (frameLogEnabled) {
-                wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, pushbackFrameLogBuffer, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
-            }
+            Debug.LogWarning("Calling onBattleStopped with settings>exit @playerRdfId=" + playerRdfId);
             onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
+            showCharacterSelection();
         };
         ArenaModeSettings.SimpleDelegate onCancelCallback = () => {
 
         };
         arenaModeSettings.SetCallbacks(onExitCallback, onCancelCallback);
 
-        rejoinPrompt.SetCallbacks(rejoinByWs, onBattleStopped);
+        rejoinPrompt.SetCallbacks(rejoinByWs, aExitCallback: () => {
+            Debug.LogWarning("Calling onBattleStopped with rejoinPrompt>exit @playerRdfId=" + playerRdfId);
+            onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
+            showCharacterSelection();
+        });
     }
 
     public void onWsSessionOpen() {
@@ -485,13 +488,17 @@ public class OnlineMapController : AbstractMapController {
 
     protected override void onBattleStopped() {
         base.onBattleStopped();
+        enableBattleInput(false);
         roomId = ROOM_ID_NONE;
         autoRejoinQuota = 1;
         WsSessionManager.Instance.SetForReentry(false);
         WsSessionManager.Instance.SetRoomId(ROOM_ID_NONE);
         cleanupNetworkSessions(false); // Make sure that all resources are properly deallocated
-        characterSelectPanel.gameObject.SetActive(true);
-        characterSelectPanel.ResetSelf();
+
+        // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
+        if (frameLogEnabled) {
+            wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, pushbackFrameLogBuffer, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
+        }
     }
 
     private async Task wsSessionTaskAsync(CancellationTokenSource guiCanProceedSignalSource) {
@@ -570,6 +577,8 @@ public class OnlineMapController : AbstractMapController {
                     // TODO: Popup some GUI hint to tell the player that we're awaiting downsync only, as the local "playerRdfId" is monotonically increasing, there's no way to rewind and change any input from here!
                     timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync -= 16; // hardcoded for now
                 } else {
+                    Debug.LogWarning("Calling onBattleStopped with localTimerEnded @playerRdfId=" + playerRdfId);
+                    onBattleStopped();
                     StartCoroutine(delayToShowSettlementPanel());
                 }
                 return;
@@ -598,12 +607,21 @@ public class OnlineMapController : AbstractMapController {
             } else {
                 readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
             }
+
+            bool battleResultIsSet = isBattleResultSet(confirmedBattleResult);
+            if (battleResultIsSet) {
+                Debug.LogWarning("Calling onBattleStopped with confirmedBattleResult=" + confirmedBattleResult.ToString() + " @playerRdfId=" + playerRdfId);
+                onBattleStopped();
+                StartCoroutine(delayToShowSettlementPanel());
+            }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
-            var msg = String.Format("Error during OnlineMap.Update {0}", ex);
+            var msg = String.Format("Error during OnlineMap.Update, calling onBattleStopped {0}", ex);
             popupErrStackPanel(msg);
+            Debug.LogError(msg);
             // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
             onBattleStopped();
+            showCharacterSelection();
         }
     }
 
@@ -831,15 +849,20 @@ public class OnlineMapController : AbstractMapController {
         arenaModeSettings.toggleUIInteractability(true);
     }
 
+    protected void showCharacterSelection() {
+        characterSelectPanel.gameObject.SetActive(true);
+        characterSelectPanel.ResetSelf();
+    }
+
     protected override IEnumerator delayToShowSettlementPanel() {
         var arenaSettlementPanel = settlementPanel as ArenaSettlementPanel;
-        if (ROOM_STATE_IN_BATTLE != battleState) {
+        if (ROOM_STATE_IN_BATTLE == battleState) {
             Debug.LogWarning("Why calling delayToShowSettlementPanel during active battle? playerRdfId = " + playerRdfId);
             yield return new WaitForSeconds(0);
         } else {
             battleState = ROOM_STATE_IN_SETTLEMENT;
             arenaSettlementPanel.postSettlementCallback = () => {
-                onBattleStopped();
+                showCharacterSelection();
             };
             arenaSettlementPanel.gameObject.SetActive(true);
             arenaSettlementPanel.toggleUIInteractability(true);

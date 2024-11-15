@@ -194,9 +194,9 @@ public class UdpSessionManager {
 
     public void PunchAllPeers(CancellationToken cancellationToken) {
         _ = Task.Run(async () => {
-            int c = 10;
+            int c = 8;
             while (0 <= Interlocked.Decrement(ref c)) {
-                Debug.Log(String.Format("Enqueues peerHolePuncher c={0}", c));
+                Debug.LogFormat("Enqueues peerHolePuncher c={0}");
                 senderBuffer.Add(peerHolePuncher);
                 await Task.Delay(1000 + c * 50, cancellationToken);
             }
@@ -206,9 +206,9 @@ public class UdpSessionManager {
     public void PunchBackendUdpTunnel(CancellationToken cancellationToken) {
         // Will trigger DOWNSYNC_MSG_ACT_PEER_UDP_ADDR for all players, including itself
         _ = Task.Run(async () => {
-            int c = 10;
+            int c = 5;
             while (0 <= Interlocked.Decrement(ref c)) {
-                Debug.Log(String.Format("Enqueues serverHolePuncher c={0}", c));
+                // Debug.LogFormat("Enqueues serverHolePuncher c={0}", c);
                 senderBuffer.Add(serverHolePuncher);
                 await Task.Delay(1000 + c * 50, cancellationToken);
             }

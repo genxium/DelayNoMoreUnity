@@ -1669,9 +1669,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (ok1 && null != currRdf) {
                 cameraTrack(currRdf, null, true);
             }
-
-            //Debug.LogFormat("@playerRdfId={0}, #1 confirmedBattleResult={1}, about to show settlement early!", playerRdfId, confirmedBattleResult);
-            StartCoroutine(delayToShowSettlementPanel());
             return;
         }
 

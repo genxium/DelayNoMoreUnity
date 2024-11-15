@@ -28,6 +28,15 @@ public class OfflineMapController : AbstractMapController {
         return false;
     }
 
+    protected void gobackToSelection() {
+        PlayerStoryProgressManager.Instance.ResetCachedForOfflineMap();
+        if (PlayerStoryProgressManager.Instance.HasAnyUsedSlot()) {
+            SceneManager.LoadScene("StoryLevelSelectScene", LoadSceneMode.Single);
+        } else {
+            SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
+        }
+    }
+
     protected override void onBattleStopped() {
         base.onBattleStopped();
 
@@ -38,13 +47,6 @@ public class OfflineMapController : AbstractMapController {
         isInStoryControl = false;
         isInStoryAutoplay = false;
         isInStorySettings = false;
-
-        PlayerStoryProgressManager.Instance.ResetCachedForOfflineMap();
-        if (PlayerStoryProgressManager.Instance.HasAnyUsedSlot()) {
-            SceneManager.LoadScene("StoryLevelSelectScene", LoadSceneMode.Single);
-        } else {
-            SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
-        }
     }
 
     // Start is called before the first frame update
@@ -60,6 +62,7 @@ public class OfflineMapController : AbstractMapController {
         isOnlineMode = false;
         StoryModeSettings.SimpleDelegate onExitCallback = () => {
             onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
+            gobackToSelection();
             isInStorySettings = false;
         };
         StoryModeSettings.SimpleDelegate onCancelCallback = () => {
@@ -240,23 +243,28 @@ public class OfflineMapController : AbstractMapController {
             }
             urpDrawDebug();
             if (playerRdfId >= battleDurationFrames) {
+                Debug.LogWarning("Calling onBattleStopped with localTimerEnded @playerRdfId=" + playerRdfId);
+                onBattleStopped();
                 StartCoroutine(delayToShowSettlementPanel());
             } else {
                 readyGoPanel.setCountdown(playerRdfId, battleDurationFrames);
-            }
-
-            bool battleResultIsSet = isBattleResultSet(confirmedBattleResult);
-            if (battleResultIsSet) {
-                if (StoryConstants.LEVEL_NAMES.ContainsKey(levelId)) {
-                    // TODO: Use real "score" and "finishTime"
-                    PlayerStoryProgressManager.Instance.FinishLevel(levelId, 100, 100, PlayerStoryProgressManager.Instance.GetCachedChSpeciesId(), true);
+                bool battleResultIsSet = isBattleResultSet(confirmedBattleResult);
+                if (battleResultIsSet) {
+                    if (StoryConstants.LEVEL_NAMES.ContainsKey(levelId)) {
+                        // TODO: Use real "score" and "finishTime"
+                        PlayerStoryProgressManager.Instance.FinishLevel(levelId, 100, 100, PlayerStoryProgressManager.Instance.GetCachedChSpeciesId(), true);
+                    }
+                    Debug.LogWarning("Calling onBattleStopped with confirmedBattleResult=" + confirmedBattleResult.ToString() + " @playerRdfId=" + playerRdfId);
+                    onBattleStopped();
+                    StartCoroutine(delayToShowSettlementPanel());
                 }
             }
         } catch (Exception ex) {
             var msg = String.Format("Error during OfflineMap.Update {0}", ex);
-            Debug.Log(msg);
             popupErrStackPanel(msg);
+            Debug.LogWarning(msg);
             onBattleStopped();
+            gobackToSelection();
         }
     }
 
@@ -277,7 +285,7 @@ public class OfflineMapController : AbstractMapController {
         } else {
             battleState = ROOM_STATE_IN_SETTLEMENT;
             storySettlementPanel.postSettlementCallback = () => {
-                onBattleStopped();
+                gobackToSelection();
             };
             storySettlementPanel.gameObject.SetActive(true);
             storySettlementPanel.toggleUIInteractability(true);

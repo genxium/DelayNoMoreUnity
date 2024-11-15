@@ -145,14 +145,14 @@ public class WsSessionManager {
                 recvBuffer.Enqueue(openMsg);
                 guiCanProceedSignalSource.Cancel();
                 await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
-                Debug.Log(String.Format("Both WebSocket 'Receive' and 'Send' tasks are ended."));
+                Debug.LogFormat("Both WebSocket 'Receive' and 'Send' tasks are ended.");
             } catch (OperationCanceledException ocEx) {
-                Debug.LogWarning(String.Format("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message));
+                Debug.LogWarningFormat("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message);
             } catch (Exception ex) {
-                Debug.LogWarning(String.Format("WsSession is stopped by exception; ex={0}", ex));
+                Debug.LogWarningFormat("WsSession is stopped by exception; ex={0}", ex);
                 // [WARNING] Edge case here, if by far we haven't signaled "guiCanProceedSignalSource", it means that the "characterSelectPanel" is still awaiting this signal to either proceed to battle or prompt an error message.  
                 if (!guiCanProceedSignalSource.IsCancellationRequested) {
-                    string errMsg = String.Format("ConnectWs failed before battle starts, authToken={0}, playerId={1}, please go back to LoginPage!", authToken, playerId);
+                    string errMsg = ("ConnectWs failed before battle starts, authToken=" + authToken + " playerId=" + playerId + ", please go back to LoginPage!");
                     throw new Exception(errMsg);
                 } else {
                     var exMsg = new WsResp { 
@@ -175,7 +175,7 @@ public class WsSessionManager {
                         Debug.LogErrorFormat("Error cancelling ws session token source as a safe wrapping while it was checked not cancelled by far: {0}", ex);
                     }
                 }
-                Debug.LogWarning(String.Format("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread."));
+                Debug.LogWarningFormat("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread.");
             }
         }
     }
@@ -208,11 +208,17 @@ public class WsSessionManager {
         Debug.Log(String.Format("Starts 'Receive' loop, ws.State={0}, cancellationToken.IsCancellationRequested={1}", ws.State, cancellationToken.IsCancellationRequested));
         byte[] byteBuff = new byte[Battle.FRONTEND_WS_RECV_BYTELENGTH];
         var arrSegBytes = new ArraySegment<byte>(byteBuff);
+        DateTime openedAt = DateTime.Now;
         try {
             while (WebSocketState.Open == ws.State) {
                 //Debug.Log("Ws session recv: before");
                 // FIXME: Without a "read timeout" parameter, it's unable to detect slow or halted ws session here!
                 var result = await ws.ReceiveAsync(arrSegBytes, cancellationToken);
+                
+                var openedByNow = DateTime.Now - openedAt;
+                if (30 < openedByNow.TotalSeconds) {
+                    throw new Exception("Test exception");
+                }
                 //Debug.Log("Ws session recv: after");
                 if (WebSocketMessageType.Close == result.MessageType) {
                     Debug.Log(String.Format("WsSession is asked by remote to close in 'Receive'"));
@@ -239,6 +245,9 @@ public class WsSessionManager {
             Debug.LogWarning(String.Format("WsSession is cancelled for 'Receive'; ocEx.Message={0}", ocEx.Message));
         } catch (Exception ex) {
             Debug.LogError(String.Format("WsSession is stopping for 'Receive' upon exception; ex={0}", ex));
+            if (!cancellationToken.IsCancellationRequested) {
+                cancellationTokenSource.Cancel(); // To cancel the "Send" loop
+            }
         } finally {
             Debug.LogWarning(String.Format("Ends 'Receive' loop, ws.State={0}", ws.State));
         }
