@@ -171,6 +171,7 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     Debug.LogWarning("Calling onBattleStopped with remote act=DOWNSYNC_MSG_ACT_BATTLE_STOPPED @playerRdfId=" + playerRdfId);
+                    settlementRdfId = playerRdfId;
                     onBattleStopped();
                     StartCoroutine(delayToShowSettlementPanel());
                     break;
@@ -227,7 +228,7 @@ public class OnlineMapController : AbstractMapController {
                     readyGoPanel.hideGo();
                     onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                     
-                    Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
+                    //Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
                     
                     break;
                 default:
@@ -578,6 +579,7 @@ public class OnlineMapController : AbstractMapController {
                     timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync -= 16; // hardcoded for now
                 } else {
                     Debug.LogWarning("Calling onBattleStopped with localTimerEnded @playerRdfId=" + playerRdfId);
+                    settlementRdfId = playerRdfId;
                     onBattleStopped();
                     StartCoroutine(delayToShowSettlementPanel());
                 }
@@ -611,6 +613,7 @@ public class OnlineMapController : AbstractMapController {
             bool battleResultIsSet = isBattleResultSet(confirmedBattleResult);
             if (battleResultIsSet) {
                 Debug.LogWarning("Calling onBattleStopped with confirmedBattleResult=" + confirmedBattleResult.ToString() + " @playerRdfId=" + playerRdfId);
+                settlementRdfId = playerRdfId;
                 onBattleStopped();
                 StartCoroutine(delayToShowSettlementPanel());
             }
@@ -857,7 +860,7 @@ public class OnlineMapController : AbstractMapController {
     protected override IEnumerator delayToShowSettlementPanel() {
         var arenaSettlementPanel = settlementPanel as ArenaSettlementPanel;
         if (ROOM_STATE_IN_BATTLE == battleState) {
-            Debug.LogWarning("Why calling delayToShowSettlementPanel during active battle? playerRdfId = " + playerRdfId);
+            Debug.LogWarning("Why calling delayToShowSettlementPanel during active battle? playerRdfId = " + playerRdfId + ", settlementRdfId" + settlementRdfId);
             yield return new WaitForSeconds(0);
         } else {
             battleState = ROOM_STATE_IN_SETTLEMENT;
@@ -866,9 +869,11 @@ public class OnlineMapController : AbstractMapController {
             };
             arenaSettlementPanel.gameObject.SetActive(true);
             arenaSettlementPanel.toggleUIInteractability(true);
-            var (ok, rdf) = renderBuffer.GetByFrameId(playerRdfId - 1);
+            var (ok, rdf) = renderBuffer.GetByFrameId(settlementRdfId - 1);
             if (ok && null != rdf) {
                 arenaSettlementPanel.SetCharacters(rdf.PlayersArr);
+            } else {
+                Debug.LogWarning("No character info to show for settlementRdfId=" + settlementRdfId);
             }
         }
     }

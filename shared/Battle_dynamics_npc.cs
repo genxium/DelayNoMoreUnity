@@ -215,7 +215,7 @@ namespace shared {
                     }
                     effectiveDy = 0;
                     slipJumpedOrNot = false;
-                    if (SPECIES_RIDERGUARD_RED != chConfig.SpeciesId && SPECIES_DEMON_FIRE_SLIME != chConfig.SpeciesId && !chConfig.HasDef1) {
+                    if (SPECIES_RIDERGUARD_RED != chConfig.SpeciesId && SPECIES_DEMON_FIRE_SLIME != chConfig.SpeciesId && !chConfig.HasDef1 && 0 < chConfig.JumpingInitVelY) {
                         visionReaction = OPPONENT_REACTION_JUMP_TOWARDS;
                         if (canJumpWithinInertia && !effInAir) {
                             jumpedOrNot = true;
@@ -243,7 +243,7 @@ namespace shared {
                     }
 
                 } else {
-                    // Just dont' just if it's melee incoming bullet
+                    // Just don't jump if it's melee incoming bullet
                     bool notDashing = (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState && BackDashing != currCharacterDownsync.CharacterState);
                     if (notDashing) {
                         // Because dashing often has a few invinsible startup frames.
@@ -828,8 +828,6 @@ namespace shared {
                                 break;
                             }
                         } while (false);
-                    } else {
-                        slipJumpedOrNot = false;
                     }
                 }
 

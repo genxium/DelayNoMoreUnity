@@ -208,17 +208,18 @@ public class WsSessionManager {
         Debug.Log(String.Format("Starts 'Receive' loop, ws.State={0}, cancellationToken.IsCancellationRequested={1}", ws.State, cancellationToken.IsCancellationRequested));
         byte[] byteBuff = new byte[Battle.FRONTEND_WS_RECV_BYTELENGTH];
         var arrSegBytes = new ArraySegment<byte>(byteBuff);
-        DateTime openedAt = DateTime.Now;
+        //DateTime openedAt = DateTime.Now;
         try {
             while (WebSocketState.Open == ws.State) {
                 //Debug.Log("Ws session recv: before");
                 // FIXME: Without a "read timeout" parameter, it's unable to detect slow or halted ws session here!
                 var result = await ws.ReceiveAsync(arrSegBytes, cancellationToken);
-                
+                /* 
                 var openedByNow = DateTime.Now - openedAt;
                 if (30 < openedByNow.TotalSeconds) {
                     throw new Exception("Test exception");
                 }
+                */
                 //Debug.Log("Ws session recv: after");
                 if (WebSocketMessageType.Close == result.MessageType) {
                     Debug.Log(String.Format("WsSession is asked by remote to close in 'Receive'"));

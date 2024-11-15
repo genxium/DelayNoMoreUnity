@@ -48,6 +48,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int preallocPickableCapacity = DEFAULT_PREALLOC_PICKABLE_CAPACITY;
 
     protected int playerRdfId; // After battle started, always increments monotonically (even upon reconnection)
+    protected int settlementRdfId;
     protected int lastAllConfirmedInputFrameId;
     protected int lastUpsyncInputFrameId;
     protected int inputFrameUpsyncDelayTolerance;
@@ -1347,11 +1348,15 @@ public abstract class AbstractMapController : MonoBehaviour {
         justTriggeredStoryPointId = STORY_POINT_NONE;
         justTriggeredBgmId = BGM_NO_CHANGE;
         playerRdfId = 0;
+        settlementRdfId = 0;
         chaserRenderFrameId = -1;
         chaserRenderFrameIdLowerBound = -1;
         lastAllConfirmedInputFrameId = -1;
         lastUpsyncInputFrameId = -1;
         localExtraInputDelayFrames = 0;
+        if (null != confirmedBattleResult) {
+            resetBattleResult(ref confirmedBattleResult);
+        }
 
         /*
          [WARNING]
@@ -1748,9 +1753,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         } 
         if (null != prefabbedInputListHolder) {
             Array.Fill<ulong>(prefabbedInputListHolder, 0);
-        }
-        if (null != confirmedBattleResult) {
-            resetBattleResult(ref confirmedBattleResult);
         }
         if (null != iptmgr) {
             iptmgr.ResetSelf();

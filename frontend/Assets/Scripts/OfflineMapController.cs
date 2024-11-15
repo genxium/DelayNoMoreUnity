@@ -243,6 +243,7 @@ public class OfflineMapController : AbstractMapController {
             }
             urpDrawDebug();
             if (playerRdfId >= battleDurationFrames) {
+                settlementRdfId = playerRdfId;
                 Debug.LogWarning("Calling onBattleStopped with localTimerEnded @playerRdfId=" + playerRdfId);
                 onBattleStopped();
                 StartCoroutine(delayToShowSettlementPanel());
@@ -255,6 +256,7 @@ public class OfflineMapController : AbstractMapController {
                         PlayerStoryProgressManager.Instance.FinishLevel(levelId, 100, 100, PlayerStoryProgressManager.Instance.GetCachedChSpeciesId(), true);
                     }
                     Debug.LogWarning("Calling onBattleStopped with confirmedBattleResult=" + confirmedBattleResult.ToString() + " @playerRdfId=" + playerRdfId);
+                    settlementRdfId = playerRdfId;
                     onBattleStopped();
                     StartCoroutine(delayToShowSettlementPanel());
                 }
@@ -279,7 +281,7 @@ public class OfflineMapController : AbstractMapController {
 
     protected override IEnumerator delayToShowSettlementPanel() {
         var storySettlementPanel = settlementPanel as StorySettlementPanel;
-        if (ROOM_STATE_IN_BATTLE != battleState) {
+        if (ROOM_STATE_IN_BATTLE == battleState) {
             Debug.LogWarning("Why calling delayToShowSettlementPanel during active battle? playerRdfId = " + playerRdfId);
             yield return new WaitForSeconds(0);
         } else {
@@ -289,11 +291,11 @@ public class OfflineMapController : AbstractMapController {
             };
             storySettlementPanel.gameObject.SetActive(true);
             storySettlementPanel.toggleUIInteractability(true);
-            var (ok, rdf) = renderBuffer.GetByFrameId(playerRdfId-1);
+            var (ok, rdf) = renderBuffer.GetByFrameId(settlementRdfId-1);
             if (ok && null != rdf) {
                 storySettlementPanel.SetCharacter(rdf.PlayersArr[selfPlayerInfo.JoinIndex - 1]);
             }
-            storySettlementPanel.SetTimeUsed(playerRdfId);
+            storySettlementPanel.SetTimeUsed(settlementRdfId);
             // TODO: In versus mode, should differentiate between "winnerJoinIndex == selfPlayerIndex" and otherwise
             if (isBattleResultSet(confirmedBattleResult)) {
                 storySettlementPanel.PlaySettlementAnim(true);
