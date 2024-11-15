@@ -392,6 +392,10 @@ namespace shared {
                 return retCnt;
             }
 
+            var (_, bulletConfig) = FindBulletConfig(bullet.SkillId, bullet.ActiveSkillHit);
+            if (null == bulletConfig) {
+                return 0;
+            }
             while (true) {
                 var (exists, bCollider) = collision.PopFirstContactedCollider();
 
@@ -467,10 +471,20 @@ namespace shared {
                 // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the VERTICAL edge is chosen as primary!
                 if (isWall && !primaryIsWall) {
                     if (!isAlongForwardPropagation) {
+                        /*
+                        if (BulletType.GroundWave == bulletConfig.BType) {
+                            logger.LogInfo("@rdfId= " + currRenderFrame.Id + ", groundWave bullet " + bullet.BulletLocalId + " skipping wall not along forward propagation#1. overlapResult=" + overlapResult.ToString());
+                        }
+                        */
                         continue;
                     }
                     if (primaryNonWallTop >= barrierTop /* barrierTop is wall-top now*/) {
                         // If primary non-wall is traversed before wall
+                        /*
+                        if (BulletType.GroundWave == bulletConfig.BType) {
+                            logger.LogInfo("@rdfId= " + currRenderFrame.Id + ", groundWave bullet " + bullet.BulletLocalId + " skipping wallTop=" + barrierTop + " <= primaryNonWallTop=" + primaryNonWallTop + " #1. overlapResult=" + overlapResult.ToString());
+                        }
+                        */
                         continue;
                     }
                     // Initial wall transition
@@ -492,48 +506,69 @@ namespace shared {
                     }
                 } else if (!isWall && primaryIsWall && barrierTop /* barrierTop is non-wall-top now */ < primaryWallTop) {
                     // Just skip, once the bullet is checked to collide with a wall, any parasitic non-wall collision would be ignored...
+                    /*
+                    if (BulletType.GroundWave == bulletConfig.BType) {
+                        logger.LogInfo("@rdfId= " + currRenderFrame.Id + ", groundWave bullet (primaryIsWall) " + bullet.BulletLocalId + " skipping wallTop=" + barrierTop + " < primaryWallTop=" + primaryWallTop + ". overlapResult=" + overlapResult.ToString());
+                    }
+                    */
+                    continue;
                 } else {
                     if (isWall) {
                         if (!isAlongForwardPropagation) {
+                            /*
+                            if (BulletType.GroundWave == bulletConfig.BType) {
+                                logger.LogInfo("@rdfId= " + currRenderFrame.Id + ", groundWave bullet " + bullet.BulletLocalId + " skipping wall not along forward propagation#2. overlapResult=" + overlapResult.ToString());
+                            }
+                            */
                             continue;
                         }
                         if (primaryNonWallTop >= barrierTop /* barrierTop is wall-top now*/) {
                             // If primary non-wall is traversed before wall
+                            /*
+                            if (BulletType.GroundWave == bulletConfig.BType) {
+                                logger.LogInfo("@rdfId= " + currRenderFrame.Id + ", groundWave bullet " + bullet.BulletLocalId + " skipping wallTop=" + barrierTop + " <= primaryNonWallTop=" + primaryNonWallTop + " #2. overlapResult=" + overlapResult.ToString());
+                            }
+                            */
                             continue;
                         }
                     }
+
                     // Same polarity
-                    if (overlapResult.OverlapMag > primaryOverlapMag) {
-                        primaryOverlapIndex = retCnt;
-                        primaryOverlapMag = overlapResult.OverlapMag;
-                        overlapResult.cloneInto(ref primaryOverlapResult);
+                    if (overlapResult.OverlapMag < primaryOverlapMag) {
+                        // [WARNING] Just add to "hardPushbacks[*]", don't touch primary markers
                     } else {
-                        if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                        if (overlapResult.OverlapMag > primaryOverlapMag) {
                             primaryOverlapIndex = retCnt;
                             primaryOverlapMag = overlapResult.OverlapMag;
                             overlapResult.cloneInto(ref primaryOverlapResult);
-                        }
-                    }
-                    
-                    primaryIsWall = isWall;
-                    if (isWall) {
-                        primaryWallTop = barrierTop;
-                    } else {
-                        if (0 > overlapResult.OverlapY) {
-                            primaryNonWallTop = barrierTop;
-                        }
-                    }
-
-                    if (isAnotherHardPushbackTrap) {
-                        primaryTrapColliderAttr = trapColliderAttr;
-                        if (TERMINATING_TRAP_ID != trapLocalId) {
-                            primaryTrap = currRenderFrame.TrapsArr[trapLocalId-1];
                         } else {
+                            if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                                primaryOverlapIndex = retCnt;
+                                primaryOverlapMag = overlapResult.OverlapMag;
+                                overlapResult.cloneInto(ref primaryOverlapResult);
+                            }
+                        }
+
+                        primaryIsWall = isWall;
+                        if (isWall) {
+                            primaryWallTop = barrierTop;
+                        } else {
+                            if (0 > overlapResult.OverlapY) {
+                                primaryNonWallTop = barrierTop;
+                            }
+                        }
+
+                        if (isAnotherHardPushbackTrap) {
+                            primaryTrapColliderAttr = trapColliderAttr;
+                            if (TERMINATING_TRAP_ID != trapLocalId) {
+                                primaryTrap = currRenderFrame.TrapsArr[trapLocalId - 1];
+                            } else {
+                                primaryTrap = null;
+                            }
+                        } else {
+                            primaryTrapColliderAttr = null;
                             primaryTrap = null;
                         }
-                    } else {
-                        primaryTrapColliderAttr = null;
-                        primaryTrap = null;
                     }
                 }
 

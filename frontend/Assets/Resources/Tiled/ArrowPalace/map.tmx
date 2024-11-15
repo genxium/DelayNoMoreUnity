@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="581">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="586">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -67,18 +67,18 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="562" name="BossSavepoint" x="496" y="496">
+  <object id="562" name="BossSavepoint" x="720" y="272">
    <properties>
     <property name="bossSpeciesIds" value="4101"/>
     <property name="demandedEvtMask" value="1"/>
     <property name="id" value="7"/>
     <property name="isBossSavepoint" value="1"/>
-    <property name="newRevivalX" value="300"/>
-    <property name="newRevivalY" value="300"/>
+    <property name="newRevivalX" value="720"/>
+    <property name="newRevivalY" value="288"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
     <property name="speciesId" value="1024"/>
-    <property name="subscribesToExhaustedIdList" value="1"/>
+    <property name="subscribesToIdList" value="4"/>
    </properties>
    <point/>
   </object>
@@ -92,15 +92,15 @@
    </properties>
    <point/>
   </object>
-  <object id="580" name="DoorCloser" x="32" y="416" width="960" height="64">
+  <object id="580" name="BossAwaker" x="32" y="608" width="960" height="64">
    <properties>
     <property name="id" value="5"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
-    <property name="speciesId" value="1025"/>
+    <property name="speciesId" value="1027"/>
    </properties>
   </object>
-  <object id="552" name="FirstStageEnd" x="624" y="320">
+  <object id="552" name="FirstStageEnd" x="496" y="272">
    <properties>
     <property name="demandedEvtMask" value="1"/>
     <property name="id" value="4"/>
@@ -127,7 +127,7 @@
   <object id="568" name="Floor1DoorL" gid="1044" x="64" y="256" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="3"/>
-    <property name="characterSpawnerTimeSeq" value="1:4097|3,4097|3,4097|3;2:1|3"/>
+    <property name="characterSpawnerTimeSeq" value="1:4097|3,4097|3,4097|3;2:15|3"/>
     <property name="delayedFrames" value="5"/>
     <property name="id" value="2"/>
     <property name="quota" value="2"/>
@@ -147,28 +147,27 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="561" name="Boss" x="960" y="704">
+  <object id="561" name="Boss" x="864" y="704">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="speciesId" value="4101"/>
-    <property name="subscriptionId" value="4"/>
+    <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
   </object>
   <object id="574" gid="1782" x="768" y="464" width="32" height="23">
    <properties>
-    <property name="dirX" value="0"/>
+    <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="575" gid="2147485430" x="160" y="464" width="32" height="23">
    <properties>
-    <property name="dirX" value="0"/>
+    <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
@@ -284,9 +283,6 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="409" name="SlopeL" x="82.7586" y="256">
-   <polyline points="-52.7586,112 253.241,112 0,0 -52.7586,0"/>
-  </object>
   <object id="428" name="MidPlatformR" x="544" y="352" width="480" height="64">
    <properties>
     <property name="boundary_type" value="barrier"/>
@@ -333,6 +329,9 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
+  <object id="585" name="SlopeL" x="80" y="256">
+   <polyline points="-52.7586,112 253.241,112 0,0 -52.7586,0"/>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
   <object id="496" name="Floor2R" x="976" y="352">
@@ -345,20 +344,6 @@
     <property name="frCaptureFrames" value="60"/>
     <property name="fuAct" value="4"/>
     <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="494" name="Floor2Jumper2" x="528" y="360">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="4"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="495" name="Floor2Jumper1" x="464" y="360">
-   <properties>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="20"/>
    </properties>
    <point/>
   </object>
@@ -425,6 +410,18 @@
     <property name="frCaptureFrames" value="0"/>
     <property name="fuAct" value="4"/>
     <property name="fuCaptureFrames" value="0"/>
+   </properties>
+  </object>
+  <object id="582" x="432" y="320" width="32" height="48">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+   </properties>
+  </object>
+  <object id="583" x="528" y="320" width="32" height="48">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
    </properties>
   </object>
  </objectgroup>

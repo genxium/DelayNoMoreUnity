@@ -132,7 +132,7 @@
     <property name="speciesId" value="1027"/>
    </properties>
   </object>
-  <object id="459" name="FirstStageSavepoint" x="1710" y="586">
+  <object id="459" name="FirstStageSavepoint" x="1792" y="624">
    <properties>
     <property name="bossSpeciesIds" value="4110"/>
     <property name="demandedEvtMask" value="1"/>
@@ -143,7 +143,7 @@
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
     <property name="speciesId" value="1024"/>
-    <property name="subscribesToExhaustedIdList" value="4"/>
+    <property name="subscribesToIdList" value="10"/>
    </properties>
    <point/>
   </object>

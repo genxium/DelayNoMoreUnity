@@ -156,7 +156,7 @@ namespace shared {
                 CharacterDownsync? offender = null;
                 int j = dst.OffenderJoinIndex - 1;
                 if (0 <= j && j < roomCapacity + npcCnt) {
-                    // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "BattleAttr.OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
+                    // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
                     offender = (j < roomCapacity ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
                 }
 
@@ -312,7 +312,7 @@ namespace shared {
                 if (TERMINATING_BULLET_LOCAL_ID == src.BulletLocalId) break;
                 int j = src.OffenderJoinIndex - 1;
                 if (0 > j || j >= roomCapacity + npcCnt) {
-                    // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "BattleAttr.OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
+                    // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
                     continue;
                 }
                 var offender = (j < roomCapacity ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
@@ -504,6 +504,11 @@ namespace shared {
 
                     if (0 < hardPushbackCnt) {
                         if (BulletType.GroundWave == bulletConfig.BType) {
+                            /*
+                            if (1 < hardPushbackCnt) {
+                                logger.LogInfo("@rdfId= " + currRenderFrame.Id + ", groudWave bullet " + bulletNextFrame.BulletLocalId + " got " + hardPushbackCnt + " hardPushbacks: " + Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt) + ", primaryHardOverlapIndex=" + primaryHardOverlapIndex);
+                            }
+                            */
                             effPushbacks[i].X += (primaryOverlapResult.OverlapMag - GROUNDWAVE_SNAP_INTO_PLATFORM_OVERLAP) * primaryOverlapResult.OverlapX;
                             effPushbacks[i].Y += (primaryOverlapResult.OverlapMag - GROUNDWAVE_SNAP_INTO_PLATFORM_OVERLAP) * primaryOverlapResult.OverlapY;
                             float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f); // [WARNING] "calcHardPushbacksNormsForBullet" takes wall for a higher priority than flat ground!  
@@ -1250,7 +1255,7 @@ namespace shared {
             // Explicitly specify termination of nextRenderFrameBullets
             if (bulletCnt < nextRenderFrameBullets.Count) nextRenderFrameBullets[bulletCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
 
-            if (0 < bulletConfig.SimultaneousMultiHitCnt && activeSkillHit+1 < skillConfig.Hits.Count) {
+            if (0 < bulletConfig.SimultaneousMultiHitCnt && activeSkillHit < skillConfig.Hits.Count) {
                 return addNewBulletToNextFrame(originatedRdfId, currRdf, currCharacterDownsync, thatCharacterInNextFrame, chConfig, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit+1, activeSkillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, referencePrevHitBullet, referencePrevHitBulletConfig, referencePrevEmissionBullet, targetChNextFrame, logger);
             } else {
                 return true;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="162" nextobjectid="544">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="162" nextobjectid="547">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -17,6 +17,7 @@
  <tileset firstgid="1086" source="../shared_comps/tiles0.tsx"/>
  <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
  <tileset firstgid="1345" source="../shared_comps/pickable.tsx"/>
+ <tileset firstgid="1777" source="../towers/towers.tsx"/>
  <layer id="160" name="Background2" width="64" height="70">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -64,6 +65,21 @@
   </object>
  </objectgroup>
  <objectgroup id="13" name="TriggerPos">
+  <object id="544" name="BossSavepoint" x="320" y="704">
+   <properties>
+    <property name="bossSpeciesIds" value="4096"/>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="11"/>
+    <property name="isBossSavepoint" value="1"/>
+    <property name="newRevivalX" value="304"/>
+    <property name="newRevivalY" value="672"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1024"/>
+    <property name="subscribesToIdList" value="8"/>
+   </properties>
+   <point/>
+  </object>
   <object id="534" name="Victory" x="496" y="880">
    <properties>
     <property name="demandedEvtMask" value="1"/>
@@ -74,17 +90,15 @@
    </properties>
    <point/>
   </object>
-  <object id="502" name="Floor3Entry" x="0" y="1024" width="1024" height="48">
+  <object id="502" name="BossAwaker" x="0" y="1024" width="1024" height="48">
    <properties>
     <property name="id" value="9"/>
-    <property name="newRevivalX" value="500"/>
-    <property name="newRevivalY" value="850"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
-    <property name="speciesId" value="1025"/>
+    <property name="speciesId" value="1027"/>
    </properties>
   </object>
-  <object id="533" name="Floor2End" x="496" y="608">
+  <object id="533" name="Floor2End" x="608" y="704">
    <properties>
     <property name="demandedEvtMask" value="3"/>
     <property name="id" value="8"/>
@@ -246,16 +260,14 @@
    </properties>
    <point/>
   </object>
-  <object id="500" name="DemonFireSlime" x="752" y="1072">
+  <object id="546" gid="2147485428" x="768" y="1072" width="18" height="27">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="10"/>
-    <property name="speciesId" value="4096"/>
     <property name="subscriptionId" value="9"/>
     <property name="teamId" value="3"/>
    </properties>
-   <point/>
   </object>
  </objectgroup>
  <objectgroup id="9" name="TrapStartingPos">
@@ -529,7 +541,7 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="472" name="Floor2FlyingCue" x="32" y="624" width="960" height="8">
+  <object id="472" name="Floor2FlyingCue" x="32" y="624" width="960" height="32">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="5"/>

@@ -14,6 +14,10 @@ proj-root> grep -ri "shouldPredictBtnAHold" --color ./shared/
 ```
 
 # Latest tag change notes
+v2.0.2 new features
+- Added FinishedLvOption.
+- Implemented multi-color hpbar for hp cap > 100 
+
 v2.0.0 new features
 - Drastically reduced memory and CPU usage per battle, with enhanced rollback-compatible determinism of collision system and more versatile game mechanics
 - Auto-rejoin after accidental TCP disconnection

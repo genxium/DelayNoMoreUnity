@@ -243,6 +243,8 @@ namespace shared {
         public static int DEFAULT_BLOWNUP_FRAMES_FOR_FLYING = 30;
         
         public static int DEFAULT_GAUGE_INC_BY_HIT = 5;
+
+        public static int DEFAULT_FRAMES_DELAYED_OF_BOSS_SAVEPOINT = 8;
         /*
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!

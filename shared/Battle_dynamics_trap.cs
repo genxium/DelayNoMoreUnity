@@ -424,7 +424,6 @@ namespace shared {
                 case TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL:
                 case TRIGGER_SPECIES_NPC_AWAKER_MV:
                 case TRIGGER_SPECIES_BOSS_AWAKER_MV:
-                case TRIGGER_SPECIES_BOSS_SAVEPOINT:
                     if (mainCycleFulfilled) {
                             if (0 < currTrigger.Quota) {
                                 triggerInNextFrame.State = TriggerState.TcoolingDown;
@@ -434,6 +433,7 @@ namespace shared {
                                 triggerInNextFrame.FramesToFire = MAX_INT;
                                 justTriggeredBgmId = triggerInNextFrame.ConfigFromTiled.BgmId;
                                 fulfilledTriggerSetMask |= (1UL << (triggerInNextFrame.TriggerLocalId - 1));
+                                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, logger);
                                 //logger.LogInfo(String.Format("@rdfId={0}, one-off trigger editor id = {1}, local id = {2} is fulfilled", currRenderFrame.Id, triggerInNextFrame.EditorId ,triggerInNextFrame.TriggerLocalId));
                                 if (0 != currTrigger.ConfigFromTiled.NewRevivalX || 0 != currTrigger.ConfigFromTiled.NewRevivalY) {
                                     if (0 < currTrigger.OffenderJoinIndex && currTrigger.OffenderJoinIndex <= roomCapacity) {
@@ -447,6 +447,31 @@ namespace shared {
                                     }
                                 }   
                             }
+                    }
+                break;
+                case TRIGGER_SPECIES_BOSS_SAVEPOINT:
+                    if (mainCycleFulfilled) {
+                            if (0 < currTrigger.Quota) {
+                                triggerInNextFrame.FramesToRecover = DEFAULT_FRAMES_DELAYED_OF_BOSS_SAVEPOINT;
+                                triggerInNextFrame.FramesToFire = MAX_INT;
+                                if (0 != currTrigger.ConfigFromTiled.NewRevivalX || 0 != currTrigger.ConfigFromTiled.NewRevivalY) {
+                                    if (0 < currTrigger.OffenderJoinIndex && currTrigger.OffenderJoinIndex <= roomCapacity) {
+                                        var thatCharacterInNextFrame = nextRenderFrame.PlayersArr[currTrigger.OffenderJoinIndex - 1];
+                                        thatCharacterInNextFrame.RevivalVirtualGridX = currTrigger.ConfigFromTiled.NewRevivalX;
+                                        thatCharacterInNextFrame.RevivalVirtualGridY = currTrigger.ConfigFromTiled.NewRevivalY;
+                                    } else if (1 == roomCapacity) {
+                                        var thatCharacterInNextFrame = nextRenderFrame.PlayersArr[0];
+                                        thatCharacterInNextFrame.RevivalVirtualGridX = currTrigger.ConfigFromTiled.NewRevivalX;
+                                        thatCharacterInNextFrame.RevivalVirtualGridY = currTrigger.ConfigFromTiled.NewRevivalY;
+                                    }
+                                }   
+                            }
+                    } else if (0 == currTrigger.FramesToRecover) {
+                        if (0 < currTrigger.Quota) {
+                            triggerInNextFrame.FramesToRecover = MAX_INT;
+                            triggerInNextFrame.Quota = 0;
+                            fulfilledTriggerSetMask |= (1UL << (triggerInNextFrame.TriggerLocalId - 1));
+                        }
                     }
                 break;
                 case TRIGGER_SPECIES_NSWITCH:

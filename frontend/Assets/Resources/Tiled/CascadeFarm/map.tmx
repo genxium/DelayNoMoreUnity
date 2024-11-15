@@ -82,7 +82,7 @@
     <property name="newRevivalY" value="500"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
-    <property name="speciesId" value="1025"/>
+    <property name="speciesId" value="1027"/>
    </properties>
   </object>
   <object id="552" name="FirstStageEnd" x="624" y="320">

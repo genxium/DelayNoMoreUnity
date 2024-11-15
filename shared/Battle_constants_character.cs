@@ -59,7 +59,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_BLADEGIRL, new CharacterConfig {
                         SpeciesId = SPECIES_BLADEGIRL,
                         SpeciesName = "BladeGirl",
-                        Hp = 200,
+                        Hp = 150,
                         Mp = 0,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
@@ -170,7 +170,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_WITCHGIRL, new CharacterConfig {
                         SpeciesId = SPECIES_WITCHGIRL,
                         SpeciesName = "WitchGirl",
-                        Hp = 170,
+                        Hp = 150,
                         Mp = 80*BATTLE_DYNAMICS_FPS,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
@@ -214,7 +214,7 @@ namespace shared {
                                 StockType = InventorySlotStockType.GaugedMagazineIv,
                                 Quota = 1,
                                 FramesToRecover = 0,
-                                DefaultQuota = 2,
+                                DefaultQuota = 3,
                                 GaugeRequired = 120,
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = 27, // TODO: Remove this hardcoded "skillId"!
@@ -296,7 +296,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_BRIGHTWITCH, new CharacterConfig {
                         SpeciesId = SPECIES_BRIGHTWITCH,
                         SpeciesName = "BrightWitch",
-                        Hp = 220,
+                        Hp = 150,
                         Mp = 100*BATTLE_DYNAMICS_FPS,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
@@ -342,7 +342,7 @@ namespace shared {
                                 StockType = InventorySlotStockType.GaugedMagazineIv,
                                 Quota = 1,
                                 FramesToRecover = 0,
-                                DefaultQuota = 2,
+                                DefaultQuota = 3,
                                 GaugeRequired = 120,
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = 79,
@@ -463,7 +463,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_MAGSWORDGIRL, new CharacterConfig {
                         SpeciesId = SPECIES_MAGSWORDGIRL,
                         SpeciesName = "MagSwordGirl",
-                        Hp = 180,
+                        Hp = 150,
                         Mp = 30*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 30 seconds to refill Mp from empty 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
@@ -542,7 +542,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_BOUNTYHUNTER, new CharacterConfig {
                         SpeciesId = SPECIES_BOUNTYHUNTER,
                         SpeciesName = "BountyHunter",
-                        Hp = 180,
+                        Hp = 150,
                         Mp = 30*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 30 seconds to refill Mp from empty 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
@@ -794,7 +794,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_BOARWARRIOR, new CharacterConfig {
                         SpeciesId = SPECIES_BOARWARRIOR,
                         SpeciesName = "BoarWarrior",
-                        Hp = 160,
+                        Hp = 250,
                         InAirIdleFrameIdxTurningPoint = 1,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 12,
@@ -835,7 +835,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_BOAR, new CharacterConfig {
                         SpeciesId = SPECIES_BOAR,
                         SpeciesName = "Boar",
-                        Hp = 120,
+                        Hp = 200,
                         Mp = 60*BATTLE_DYNAMICS_FPS,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
@@ -877,7 +877,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_SWORDMAN_BOSS, new CharacterConfig {
                         SpeciesId = SPECIES_SWORDMAN_BOSS,
                         SpeciesName = "SwordMan",
-                        Hp = 150,
+                        Hp = 100,
                         Mp = 10*BATTLE_DYNAMICS_FPS,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
@@ -966,7 +966,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_LIGHTGUARD_RED, new CharacterConfig {
                         SpeciesId = SPECIES_LIGHTGUARD_RED,
                         SpeciesName = "LightGuardRed",
-                        Hp = 120,
+                        Hp = 150,
                         LayDownFrames = 17,
                         LayDownFramesToRecover = 17,
                         GetUpInvinsibleFrames = 16,
@@ -1275,7 +1275,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_STONE_GOLEM, new CharacterConfig {
                         SpeciesId = SPECIES_STONE_GOLEM,
                         SpeciesName = "StoneGolem",
-                        Hp = 160,
+                        Hp = 350,
                         Mp = 1000,
                         MpRegenRate = 3,
                         Speed = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
