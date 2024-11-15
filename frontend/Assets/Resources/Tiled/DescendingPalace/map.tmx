@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="162" nextobjectid="547">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="162" nextobjectid="549">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -450,58 +450,6 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
-  <object id="504" name="Floor3R" x="976" y="1072">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="10"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="10"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="10"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="10"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="503" name="Floor3L" x="48" y="1072">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="10"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="10"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="10"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="10"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="496" name="Floor2R" x="976" y="720">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="498" name="Floor2L" x="48" y="624">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
   <object id="470" name="Floor23FlyingCueR" x="960" y="224" width="32" height="496">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
@@ -554,6 +502,30 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
+  <object id="548" name="Floo2R" x="960" y="32" width="32" height="1056">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+  </object>
+  <object id="547" name="Floo2L" x="32" y="32" width="32" height="1056">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+  </object>
   <object id="476" name="Floor1R2" x="976" y="224">
    <properties>
     <property name="fdAct" value="4"/>
@@ -593,13 +565,13 @@
    </properties>
    <point/>
   </object>
-  <object id="539" x="528" y="304" width="32" height="32">
+  <object id="539" x="528" y="304" width="32" height="48">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
    </properties>
   </object>
-  <object id="541" x="432" y="304" width="32" height="32">
+  <object id="541" x="432" y="304" width="32" height="48">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>

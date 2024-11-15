@@ -8,27 +8,34 @@ namespace shared {
             return (Atk7Charging == chState);
         }
 
+        public static bool IsBulletVanishing(Bullet bullet, BulletConfig bulletConfig) {
+            return BulletState.Vanishing == bullet.BlState;
+        }
+
         public static bool IsBulletExploding(Bullet bullet, BulletConfig bulletConfig) {
             switch (bulletConfig.BType) {
                 case BulletType.Melee:
-                    return (BulletState.Exploding == bullet.BlState && bullet.FramesInBlState < bulletConfig.ExplosionFrames);
+                    return ((BulletState.Exploding == bullet.BlState || BulletState.Vanishing == bullet.BlState) && bullet.FramesInBlState < bulletConfig.ExplosionFrames);
                 case BulletType.Fireball:
                 case BulletType.GroundWave:
                 case BulletType.MissileLinear:
-                    return (BulletState.Exploding == bullet.BlState);
+                    return (BulletState.Exploding == bullet.BlState || BulletState.Vanishing == bullet.BlState);
                 default:
                     return false;
             }
         }
 
         public static bool IsBulletActive(Bullet bullet, BulletConfig bulletConfig, int currRenderFrameId) {
-            if (BulletState.Exploding == bullet.BlState) {
+            if (BulletState.Exploding == bullet.BlState || BulletState.Vanishing == bullet.BlState) {
                 return false;
             }
             return (bullet.OriginatedRenderFrameId + bulletConfig.StartupFrames < currRenderFrameId) && (currRenderFrameId < bullet.OriginatedRenderFrameId + bulletConfig.StartupFrames + bulletConfig.ActiveFrames);
         }
 
         public static bool IsBulletJustActive(Bullet bullet, BulletConfig bulletConfig, int currRenderFrameId) {
+            if (BulletState.Exploding == bullet.BlState || BulletState.Vanishing == bullet.BlState) {
+                return false;
+            }
             // [WARNING] Practically a bullet might propagate for a few render frames before hitting its visually "VertMovingTrapLocalIdUponActive"!
             int visualBufferRdfCnt = 3;
             if (BulletState.Active == bullet.BlState) {
@@ -38,6 +45,9 @@ namespace shared {
         }
 
         public static bool IsBulletAlive(Bullet bullet, BulletConfig bulletConfig, int currRenderFrameId) {
+            if (BulletState.Vanishing == bullet.BlState) {
+                return bullet.FramesInBlState < bulletConfig.ActiveFrames + bulletConfig.ExplosionFrames;
+            }
             if (BulletState.Exploding == bullet.BlState && MultiHitType.FromEmission != bulletConfig.MhType) {
                 return bullet.FramesInBlState < bulletConfig.ExplosionFrames;
             }
@@ -1007,7 +1017,9 @@ namespace shared {
                                 if (BulletState.Exploding != bulletNextFrame.BlState || explodedOnHardPushback || explodedOnAnotherHarderBullet) {
                                     bulletNextFrame.BlState = BulletState.Exploding;
                                     bulletNextFrame.FramesInBlState = bulletConfig.ExplosionFrames + 1;
-                                    if (explodedOnHardPushback || explodedOnAnotherHarderBullet) {
+                                    if (NO_VFX_ID != bulletConfig.InplaceVanishExplosionSpeciesId) {
+                                        addNewBulletVanishingExplosionToNextFrame(currRenderFrame.Id, currRenderFrame, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, anotherHarderBulletIfc, logger);
+                                    } else if (explodedOnHardPushback || explodedOnAnotherHarderBullet) {
                                         addNewBulletExplosionToNextFrame(currRenderFrame.Id, currRenderFrame, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, null, 0, anotherHarderBulletIfc, logger);
                                     }
                                 }
@@ -1106,7 +1118,7 @@ namespace shared {
                 return false;
             }
             if (bulletCnt >= nextRenderFrameBullets.Count) {
-                logger.LogWarn("bullet overwhelming#1, currRdf=" + stringifyRdf(currRdf));
+                logger.LogWarn("bullet explosion overwhelming#1, currRdf=" + stringifyRdf(currRdf));
                 return false;
             }
             int newOriginatedVirtualX = referenceBullet.OriginatedVirtualGridX;
@@ -1136,6 +1148,47 @@ namespace shared {
                     referenceBullet.ActiveSkillHit, referenceBullet.SkillId, referenceBullet.VertMovingTrapLocalIdUponActive, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
                     referenceBullet.SpinCos, referenceBullet.SpinSin,
                     damageDealed,
+                    explodedOnIfc,
+                    nextRenderFrameBullets[bulletCnt]);
+
+            bulletLocalIdCounter++;
+            bulletCnt++;
+
+            // Explicitly specify termination of nextRenderFrameBullets
+            nextRenderFrameBullets[bulletCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
+
+            return true;
+        }
+
+        protected static bool addNewBulletVanishingExplosionToNextFrame(int originatedRdfId, RoomDownsyncFrame currRdf, BulletConfig bulletConfig, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, Bullet referenceBullet, IfaceCat explodedOnIfc, ILoggerBridge logger) {
+            if (NO_VFX_ID == bulletConfig.InplaceVanishExplosionSpeciesId) {
+                return false;
+            }
+            if (bulletCnt >= nextRenderFrameBullets.Count) {
+                logger.LogWarn("bullet vanishing overwhelming#1, currRdf=" + stringifyRdf(currRdf));
+                return false;
+            }
+            int newOriginatedVirtualX = referenceBullet.OriginatedVirtualGridX;
+            int newOriginatedVirtualY = referenceBullet.OriginatedVirtualGridY;
+            int newVirtualX = referenceBullet.VirtualGridX;
+            int newVirtualY = referenceBullet.VirtualGridY;
+
+            AssignToBullet(
+                    bulletLocalIdCounter,
+                    originatedRdfId,
+                    referenceBullet.OffenderJoinIndex,
+                    referenceBullet.OffenderTrapLocalId,
+                    referenceBullet.TeamId,
+                    BulletState.Vanishing, referenceBullet.FramesInBlState,
+                    newOriginatedVirtualX,
+                    newOriginatedVirtualY,
+                    newVirtualX,
+                    newVirtualY,
+                    referenceBullet.DirX, referenceBullet.DirY, // dir
+                    0, 0, // velocity
+                    referenceBullet.ActiveSkillHit, referenceBullet.SkillId, referenceBullet.VertMovingTrapLocalIdUponActive, bulletConfig.RepeatQuota, bulletConfig.DefaultHardPushbackBounceQuota, MAGIC_JOIN_INDEX_INVALID,
+                    referenceBullet.SpinCos, referenceBullet.SpinSin,
+                    0,
                     explodedOnIfc,
                     nextRenderFrameBullets[bulletCnt]);
 

@@ -44,42 +44,19 @@ namespace shared {
                     visionReaction = s0;
                 } else {
                     s1 = frontOpponentReachableByDragonPunch(currCharacterDownsync, effInAir, chConfig, canJumpWithinInertia, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
-                    if (OPPONENT_REACTION_JUMP_TOWARDS == s1) {
-                        jumpedOrNot = true;
-                        if (0 == jumpHoldingRdfCnt) {
-                            jumpHoldingRdfCnt = 1;
-                        }
-                        if (0 < currCharacterDownsync.JumpHoldingRdfCnt && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState)) {
-                            // [WARNING] Only proactive jumping support jump holding.
-                            jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
-                            patternId = PATTERN_HOLD_B;
-                            if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= jumpHoldingRdfCnt) {
-                                jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_2;
-                            } else if (!chConfig.JumpHoldingToFly && JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= jumpHoldingRdfCnt) {
-                                jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1;
-                            }
-                        }
-                        if (0 != oppoChColliderDx) {
-                            effectiveDx = (0 < oppoChColliderDx ? +2 : -2);
-                        }
-                        visionReaction = s1;
-                    } else if (OPPONENT_REACTION_SLIP_JUMP == s1) {
-                        jumpedOrNot = false;
-                        slipJumpedOrNot = true;
-                        visionReaction = s1;
-                    } else if (OPPONENT_REACTION_USE_DRAGONPUNCH == s1) {
+                    visionReaction = s1;
+                    if (OPPONENT_REACTION_USE_DRAGONPUNCH == s1) {
                         patternId = PATTERN_UP_B;
-                        visionReaction = s1;
                     } else {
                         s2 = frontOpponentReachableByMelee1(currCharacterDownsync, effInAir, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
+                        visionReaction = s2;
                         if (OPPONENT_REACTION_USE_MELEE == s2) {
                             patternId = PATTERN_B;
-                            visionReaction = s2;
                         } else {
                             s3 = frontOpponentReachableByFireball(currCharacterDownsync, aCollider, oppoChCollider, oppoChColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
+                            visionReaction = s3;
                             if (OPPONENT_REACTION_USE_FIREBALL == s3) {
                                 patternId = PATTERN_DOWN_B;
-                                visionReaction = s3;
                             } else {
                                 visionReaction = OPPONENT_REACTION_FOLLOW;
                             }
@@ -109,8 +86,46 @@ namespace shared {
                     }
                 }
             }
-
+            
             if (OPPONENT_REACTION_FOLLOW == visionReaction) {
+                bool shouldJumpTowardsTarget = (canJumpWithinInertia && !effInAir && (0.6f * aCollider.H < oppoChColliderDy) && (0 <= currCharacterDownsync.DirX * oppoChColliderDx));
+                bool shouldSlipJumpTowardsTarget = (canJumpWithinInertia && !effInAir && 0 > oppoChColliderDy && currCharacterDownsync.PrimarilyOnSlippableHardPushback);
+                if (0 >= chConfig.JumpingInitVelY) {
+                    shouldJumpTowardsTarget = false;
+                    shouldSlipJumpTowardsTarget = false;
+                } else if (chConfig.HasDef1) {
+                    shouldJumpTowardsTarget = false;
+                }
+                if (shouldSlipJumpTowardsTarget) {
+                    visionReaction = OPPONENT_REACTION_SLIP_JUMP;
+                } else if (shouldJumpTowardsTarget) {
+                    visionReaction = OPPONENT_REACTION_JUMP_TOWARDS;
+                }
+            }
+
+            if (OPPONENT_REACTION_JUMP_TOWARDS == visionReaction) {
+                jumpedOrNot = true;
+                if (0 == jumpHoldingRdfCnt) {
+                    jumpHoldingRdfCnt = 1;
+                }
+                if (0 < currCharacterDownsync.JumpHoldingRdfCnt && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState)) {
+                    // [warning] only proactive jumping support jump holding.
+                    jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
+                    patternId = PATTERN_HOLD_B;
+                    if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= jumpHoldingRdfCnt) {
+                        jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_2;
+                    } else if (!chConfig.JumpHoldingToFly && JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= jumpHoldingRdfCnt) {
+                        jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1;
+                    }
+                }
+                if (0 != oppoChColliderDx) {
+                    effectiveDx = (0 < oppoChColliderDx ? +2 : -2);
+                }
+            } else if (OPPONENT_REACTION_SLIP_JUMP == visionReaction) {
+                jumpedOrNot = false;
+                jumpHoldingRdfCnt = 0;
+                slipJumpedOrNot = true;
+            } else if (OPPONENT_REACTION_FOLLOW == visionReaction) {
                 if (currCharacterDownsync.OmitGravity || chConfig.OmitGravity) {
                     if (0 >= currCharacterDownsync.FramesToRecover) {
                         var magSqr = oppoChColliderDx * oppoChColliderDx + oppoChColliderDy * oppoChColliderDy;
@@ -136,14 +151,6 @@ namespace shared {
                             } else if (chConfig.DashingEnabled && (!effInAir || 0 < currCharacterDownsync.RemainingAirDashQuota)) {
                                 patternId = PATTERN_DOWN_A;
                             }
-                        }
-                    }
-
-
-                    if (canJumpWithinInertia) {
-                        if (0 > oppoChColliderDy && !effInAir && currCharacterDownsync.PrimarilyOnSlippableHardPushback) {
-                            slipJumpedOrNot = true;
-                            visionReaction = OPPONENT_REACTION_SLIP_JUMP;
                         }
                     }
                 }
@@ -253,7 +260,9 @@ namespace shared {
             if (OPPONENT_REACTION_UNKNOWN == visionReaction) {
                 if (canJumpWithinInertia) {
                     if (!effInAir && currCharacterDownsync.PrimarilyOnSlippableHardPushback) {
+                        jumpedOrNot = false;
                         slipJumpedOrNot = true;
+                        jumpHoldingRdfCnt = 0;
                         visionReaction = OPPONENT_REACTION_SLIP_JUMP;
                     }
                 }
@@ -388,8 +397,6 @@ namespace shared {
                     closeEnough = canJumpWithinInertia && !currCharacterDownsync.OmitGravity && (0.6f*aCollider.H < colliderDy) && (0 <= currCharacterDownsync.DirX*colliderDx);
                     if (closeEnough) {
                         return OPPONENT_REACTION_JUMP_TOWARDS;
-                    } else if (canJumpWithinInertia && effInAir && currCharacterDownsync.OmitGravity && colliderDy < -1.8f*(aCollider.H+bCollider.H)) {
-                        return OPPONENT_REACTION_SLIP_JUMP;
                     } else {
                         return OPPONENT_REACTION_FOLLOW;
                     }
@@ -740,6 +747,7 @@ namespace shared {
 
                     if (0 >= chConfig.JumpingInitVelY) {
                         slipJumpedOrNot = false;
+                        jumpHoldingRdfCnt = 0;
                         jumpedOrNot = false;
                     }
                     jumpHoldingRdfCnt = 0;

@@ -783,8 +783,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (!bulletConfig.BeamCollision && !bulletConfig.BeamRendering) {
                 if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) continue;
             }
-            
-            bool isExploding = IsBulletExploding(bullet, bulletConfig);
+
+            bool isVanishing = IsBulletVanishing(bullet, bulletConfig);
+            bool isExploding = IsBulletExploding(bullet, bulletConfig); // [WARNING] "isVanishing" will also yield "isExploding"
             bool isStartup = (BulletState.StartUp == bullet.BlState);
             var prevHitBulletConfig = (2 <= bullet.ActiveSkillHit ? skillConfig.Hits[bullet.ActiveSkillHit - 2] : null); // TODO: Make this compatible with simultaneous bullets after a "FromPrevHitXxx" bullet!
 
@@ -793,7 +794,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             int lookupKey = KV_PREFIX_BULLET + bullet.BulletLocalId;
             string animName = null;
 
-            int explosionSpeciesId = bulletConfig.ExplosionSpeciesId;
+            int explosionSpeciesId = isVanishing ? bulletConfig.InplaceVanishExplosionSpeciesId : bulletConfig.ExplosionSpeciesId;
             if (EXPLOSION_SPECIES_FOLLOW == explosionSpeciesId) {
                 explosionSpeciesId = bulletConfig.SpeciesId;
             }

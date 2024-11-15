@@ -27,6 +27,7 @@ enum BulletState {
     StartUp = 0;
     Active = 1;
     Exploding = 2;
+    Vanishing = 3;
 }
 
 enum CharacterState {
@@ -467,6 +468,8 @@ message BulletConfig {
     uint32 missileSearchIntervalPow2Minus1 = 88;
 
     bool useChOffsetRegardlessOfEmissionMh = 89;
+
+    int32 inplaceVanishExplosionSpeciesId = 90;
 
     uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave

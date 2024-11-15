@@ -343,11 +343,13 @@ namespace shared {
                         }
                     }
 
-                    if (isWall) {
-                        primaryWallTop = barrierTop;
-                    } else {
-                        if (0 > overlapResult.OverlapY) {
-                            primaryNonWallTop = barrierTop;
+                    if (primaryOverlapIndex == retCnt) {
+                        if (isWall) {
+                            primaryWallTop = barrierTop;
+                        } else {
+                            if (0 > overlapResult.OverlapY) {
+                                primaryNonWallTop = barrierTop;
+                            }
                         }
                     }
                 }
@@ -549,25 +551,27 @@ namespace shared {
                             }
                         }
 
-                        primaryIsWall = isWall;
-                        if (isWall) {
-                            primaryWallTop = barrierTop;
-                        } else {
-                            if (0 > overlapResult.OverlapY) {
-                                primaryNonWallTop = barrierTop;
-                            }
-                        }
-
-                        if (isAnotherHardPushbackTrap) {
-                            primaryTrapColliderAttr = trapColliderAttr;
-                            if (TERMINATING_TRAP_ID != trapLocalId) {
-                                primaryTrap = currRenderFrame.TrapsArr[trapLocalId - 1];
+                        if (primaryOverlapIndex == retCnt) {
+                            primaryIsWall = isWall;
+                            if (isWall) {
+                                primaryWallTop = barrierTop;
                             } else {
+                                if (0 > overlapResult.OverlapY) {
+                                    primaryNonWallTop = barrierTop;
+                                }
+                            }
+
+                            if (isAnotherHardPushbackTrap) {
+                                primaryTrapColliderAttr = trapColliderAttr;
+                                if (TERMINATING_TRAP_ID != trapLocalId) {
+                                    primaryTrap = currRenderFrame.TrapsArr[trapLocalId - 1];
+                                } else {
+                                    primaryTrap = null;
+                                }
+                            } else {
+                                primaryTrapColliderAttr = null;
                                 primaryTrap = null;
                             }
-                        } else {
-                            primaryTrapColliderAttr = null;
-                            primaryTrap = null;
                         }
                     }
                 }
