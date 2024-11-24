@@ -95,6 +95,9 @@ public class InventorySlot : MonoBehaviour {
         } else if (49 == slot.SkillId) {  
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[6]; // TODO: Remove this nonsense hardcoded index! 
+        } else if (58 == slot.SkillId) {
+            content.color = semiTransparent;
+            content.sprite = buffConfigSprites[7]; // TODO: Remove this nonsense hardcoded index! 
         }
 
         switch (slot.StockType) {

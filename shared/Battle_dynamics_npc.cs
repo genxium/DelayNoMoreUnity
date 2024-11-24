@@ -22,9 +22,21 @@ namespace shared {
 
         private static int NPC_DEF1_MIN_HOLDING_RDF_CNT = 90;
 
+        private static int VISION_SEARCH_RDF_RANDOMIZE_MASK = (1 << 4) + (1 << 3) + (1 << 1);
+
+        private static int OPPO_DX_OFFSET_MOD_MINUS_1 = (1 << 3) - 1;
+        private static float OPPO_DX_OFFSET = 10.0f; // In collision space
+
         private static void _handleOppoCh(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider aCollider, Collider visionCollider, bool effInAir, bool canJumpWithinInertia, Collider? oppoChCollider, CharacterDownsync? v3, ref float oppoChColliderDx, ref float oppoChColliderDy, ref int patternId, ref bool jumpedOrNot, ref bool slipJumpedOrNot, ref int jumpHoldingRdfCnt, ref int effectiveDx, ref int effectiveDy, ref int visionReaction) {
             if (null == oppoChCollider || null == v3) return;
             oppoChColliderDx = (oppoChCollider.X - aCollider.X);
+            int oppoDxOffsetRdfBase = ((currCharacterDownsync.FramesInChState + currCharacterDownsync.Id) & OPPO_DX_OFFSET_MOD_MINUS_1);
+            float oppoDxOffset = chConfig.IsKeyCh ? 0 : (OPPO_DX_OFFSET*oppoDxOffsetRdfBase)/OPPO_DX_OFFSET_MOD_MINUS_1;
+            if (0 < oppoChColliderDx) {
+                oppoChColliderDx += oppoDxOffset; 
+            } else if (0 > oppoChColliderDx) {
+                oppoChColliderDx -= oppoDxOffset; 
+            } 
             oppoChColliderDy = (oppoChCollider.Y - aCollider.Y);
 
             var oppoChConfig = characters[v3.SpeciesId];
@@ -273,7 +285,7 @@ namespace shared {
             bool notRecovered = (0 < currCharacterDownsync.FramesToRecover);
             int xfac = (0 < colliderDx ? 1 : -1);
             float boxCx, boxCy, boxCwHalf, boxChHalf;
-            bool closeEnough;
+            bool closeEnough = false;
             InventorySlot? targetSlot = null;
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_FIRESWORDMAN:
@@ -636,13 +648,11 @@ namespace shared {
 
         private static (int, bool, bool, int, int, int) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, bool effInAir, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
             if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
-                thatCharacterInNextFrame.CachedCueCmd = 0;
                 return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
             }
 
             bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
             if (interrupted) {
-                thatCharacterInNextFrame.CachedCueCmd = 0;
                 return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
             }
 
@@ -674,7 +684,18 @@ namespace shared {
                     hasCancellableCombo = (currCharacterDownsync.FramesInChState == ((activeBulletConfig.CancellableStFrame + activeBulletConfig.CancellableEdFrame) >> 1));
                 }
             }
+            bool visionSearchTickAlt = (0 == ((currCharacterDownsync.FramesInChState + currCharacterDownsync.Id) & VISION_SEARCH_RDF_RANDOMIZE_MASK));
             bool visionSearchTick = (0 == (currCharacterDownsync.FramesInChState & chConfig.VisionSearchIntervalPow2Minus1));
+            if (!chConfig.IsKeyCh) {
+                // Randomization
+                if (!visionSearchTick) {
+                    visionSearchTick = visionSearchTickAlt; 
+                } else {
+                    if (visionSearchTickAlt) {
+                        visionSearchTick = false; 
+                    }
+                }
+            }
             bool visionSearchTickWhenNonAtk = (nonAttackingSet.Contains(currCharacterDownsync.CharacterState) && visionSearchTick);
 
             bool canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia));
@@ -722,6 +743,7 @@ namespace shared {
                 if (!jumpedOrNot) {
                     jumpHoldingRdfCnt = 0;
                 }
+                thatCharacterInNextFrame.CachedCueCmd = 0; // visionReaction overrides cue cmd
                 thatCharacterInNextFrame.CapturedByPatrolCue = false;
                 thatCharacterInNextFrame.FramesInPatrolCue = 0;
                 thatCharacterInNextFrame.WaivingPatrolCueId = NO_PATROL_CUE_ID;
@@ -844,6 +866,36 @@ namespace shared {
                 }
                 */
                 if (OPPONENT_REACTION_UNKNOWN == visionReaction && false == hasPatrolCueReaction) {
+                    if (0 != currCharacterDownsync.CachedCueCmd && canJumpWithinInertia) {
+                        // [WARNING] "canJumpWithinInertia" implies "(0 == currCharacterDownsync.FramesToRecover)"
+                        thatCharacterInNextFrame.CachedCueCmd = 0;
+                        DecodeInput(currCharacterDownsync.CachedCueCmd, decodedInputHolder);
+                        effectiveDx = decodedInputHolder.Dx;
+                        effectiveDy = decodedInputHolder.Dy;
+                        slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (effInAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && 0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
+                        jumpedOrNot = !slipJumpedOrNot && (0 == currCharacterDownsync.FramesToRecover) && !effInAir && (0 < decodedInputHolder.BtnALevel);
+
+                        if (0 >= chConfig.JumpingInitVelY) {
+                            slipJumpedOrNot = false;
+                            jumpHoldingRdfCnt = 0;
+                            jumpedOrNot = false;
+                        } else if (jumpedOrNot) {
+                            if (0 == jumpHoldingRdfCnt) {
+                                jumpHoldingRdfCnt = 1;
+                            }
+                            if (0 < currCharacterDownsync.JumpHoldingRdfCnt && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState)) {
+                                // [warning] only proactive jumping support jump holding.
+                                jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
+                                patternId = PATTERN_HOLD_B;
+                                if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= jumpHoldingRdfCnt) {
+                                    jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_2;
+                                } else if (!chConfig.JumpHoldingToFly && JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= jumpHoldingRdfCnt) {
+                                    jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1;
+                                }
+                            }
+                        }
+                        return (PATTERN_ID_NO_OP, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy);
+                    }
                     if (chConfig.JumpHoldingToFly && InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
                         return (PATTERN_ID_NO_OP, false, false, currCharacterDownsync.JumpHoldingRdfCnt+1, currCharacterDownsync.DirX, currCharacterDownsync.DirY);
                     }

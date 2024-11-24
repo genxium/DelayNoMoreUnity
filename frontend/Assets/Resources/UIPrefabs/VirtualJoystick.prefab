@@ -1970,9 +1970,10 @@ MonoBehaviour:
   - {fileID: 590662967, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: -753298253, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: 623420632, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
-  - {fileID: -1054876607, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  - {fileID: 149908348, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: -1803485602, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: 351959312, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  - {fileID: -1054876607, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   inventoryBtnBSpriteBh: {fileID: 0}
   inventoryBtnBSpriteMsg: {fileID: 0}
   regularBtnBSprite: {fileID: 0}

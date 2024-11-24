@@ -314,6 +314,7 @@ enum MultiHitType {
     FromPrevHitActual = 4;
     FromPrevHitAnyway = 5;
     FromVisionSeekOrDefault = 6;
+    FromPrevHitActualOrActiveTimeUp = 7;
 }
 
 enum SkillTriggerType {

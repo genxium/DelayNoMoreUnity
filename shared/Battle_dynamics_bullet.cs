@@ -510,7 +510,7 @@ namespace shared {
                     bool beamBlockedByHardPushback = false;
                     IfaceCat anotherHarderBulletIfc = IfaceCat.Empty;
 
-                    bool potentiallyInTheMiddleOfPrevHitMhTransition = null != skillConfig && (MultiHitType.FromPrevHitAnyway == bulletConfig.MhType || MultiHitType.FromPrevHitActual == bulletConfig.MhType) && (bulletNextFrame.ActiveSkillHit < skillConfig.Hits.Count);
+                    bool potentiallyInTheMiddleOfPrevHitMhTransition = (null != skillConfig) && (MultiHitType.FromPrevHitAnyway == bulletConfig.MhType || MultiHitType.FromPrevHitActual == bulletConfig.MhType || MultiHitType.FromPrevHitActualOrActiveTimeUp == bulletConfig.MhType) && (bulletNextFrame.ActiveSkillHit < skillConfig.Hits.Count);
 
                     if (0 < hardPushbackCnt) {
                         if (BulletType.GroundWave == bulletConfig.BType) {
@@ -606,6 +606,12 @@ namespace shared {
                             if (hasReconingPushback) {
                                 _assignExplodedOnHardPushback(currRenderFrame, bulletNextFrame, effPushbacks[i], primaryOverlapResult, primaryTrapColliderAttr, offender, offenderNextFrame, ref exploded, ref explodedOnHardPushback, ref anotherHarderBulletIfc, potentiallyInTheMiddleOfPrevHitMhTransition, bulletConfig, logger);
                             }
+                        }
+                    }
+
+                    if (!exploded && MultiHitType.FromPrevHitActualOrActiveTimeUp == bulletConfig.MhType) {
+                        if (BulletState.Active == bulletNextFrame.BlState && bulletConfig.ActiveFrames <= bulletNextFrame.FramesInBlState+3) {
+                            exploded = true;
                         }
                     }
 
@@ -1445,6 +1451,13 @@ namespace shared {
                     successfulDef1 = true;
                 }
             } 
+            if (!bulletInFrontOfVictim) {
+                if (0 < victimNextFrame.DirX) {
+                    victimNextFrame.CachedCueCmd = 4;
+                } else if (0 > victimNextFrame.DirX) {
+                    victimNextFrame.CachedCueCmd = 3;
+                }
+            }
             if (successfulDef1) {
                 victimNextFrame.RemainingDef1Quota -= 1; 
                 var effStunFrames = (DEFAULT_BLOCK_STUN_FRAMES > bulletConfig.BlockStunFrames ? DEFAULT_BLOCK_STUN_FRAMES : bulletConfig.BlockStunFrames);

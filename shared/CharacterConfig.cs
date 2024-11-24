@@ -117,7 +117,8 @@ namespace shared {
         public int GaugeIncWhenKilled;
         
         public bool JumpingInsteadOfWalking;
-        public uint VisionSearchIntervalPow2Minus1;
+        public uint VisionSearchIntervalPow2Minus1U;
+        public int VisionSearchIntervalPow2Minus1;
 
         public bool NpcNoDefaultAirWalking;
         public bool NpcPrioritizeBulletHandling;

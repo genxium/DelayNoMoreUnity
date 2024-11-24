@@ -1752,77 +1752,6 @@ namespace shared {
         }
         .AddHit(WitchGirlMeleeBulletAirHit1);
 
-        public static BulletConfig touchExplosionBombStarter = new BulletConfig {
-            StartupFrames = 12,
-            StartupInvinsibleFrames = 8,
-            ActiveFrames = 800,
-            HitStunFrames = 3,
-            PushbackVelX = 0,
-            PushbackVelY = 0,
-            SelfLockVelX = 0,
-            SelfLockVelY = 0,
-            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(+6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SpeciesId = 7,
-            TakesGravity = true,
-            ExplosionSpeciesId = 1,
-            ExplosionFrames = 25,
-            Speed = (int)(5.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            DirX = +1,
-            DirY = +1,
-            RotatesAlongVelocity = true,
-            Hardness = 3,
-            TouchExplosionBombCollision = true,
-            BType = BulletType.Fireball,
-            CharacterEmitSfxName = "SlashEmitSpd1",
-            ExplosionSfxName = "Explosion2",
-            RejectsReflectionFromAnotherBullet = true,
-            MhType = MultiHitType.FromPrevHitActual,
-            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
-        };
-
-        public static BulletConfig touchExplosionBombShock = new BulletConfig {
-            StartupFrames = 6,
-            StartupInvinsibleFrames = 1,
-            ActiveFrames = 24,
-            HitStunFrames = MAX_INT,
-            BlockStunFrames = 60,
-            Damage = 45,
-            PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelX = 0,
-            SelfLockVelY = 0,
-            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(33 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(40 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SpeciesId = 17,
-            ExplosionSpeciesId = 1,
-            ExplosionFrames = 25,
-            RemainsUponHit = true,
-            DirX = 1,
-            DirY = 0,
-            Hardness = 10,
-            ElementalAttrs = ELE_FIRE,
-            BType = BulletType.Fireball,
-            ExplosionSfxName = "Explosion4",
-            RejectsReflectionFromAnotherBullet = true,
-            CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX, 
-        };
-        public static Skill touchExplosionBomb = new Skill {
-            RecoveryFrames = 21,
-            RecoveryFramesOnBlock = 21,
-            RecoveryFramesOnHit = 21,
-            TriggerType = SkillTriggerType.RisingEdge,
-            BoundChState = Atk6
-        }
-        .AddHit(touchExplosionBombStarter)
-        .AddHit(touchExplosionBombShock);
-
         public static BulletConfig bouncingTouchExplosionBombStarter = new BulletConfig {
             StartupFrames = 12,
             StartupInvinsibleFrames = 8,
@@ -1857,6 +1786,37 @@ namespace shared {
             RejectsReflectionFromAnotherBullet = true,
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX, 
         };
+
+        public static BulletConfig touchExplosionBombShock = new BulletConfig {
+            StartupFrames = 6,
+            StartupInvinsibleFrames = 1,
+            ActiveFrames = 24,
+            HitStunFrames = MAX_INT,
+            BlockStunFrames = 60,
+            Damage = 45,
+            PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = 0,
+            SelfLockVelY = 0,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(33 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(40 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 17,
+            ExplosionSpeciesId = 1,
+            ExplosionFrames = 25,
+            RemainsUponHit = true,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 10,
+            ElementalAttrs = ELE_FIRE,
+            BType = BulletType.Fireball,
+            ExplosionSfxName = "Explosion4",
+            RejectsReflectionFromAnotherBullet = true,
+            CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX, 
+        };
+
         public static Skill bouncingTouchExplosionBomb = new Skill {
             RecoveryFrames = 21,
             RecoveryFramesOnBlock = 21,
@@ -1865,6 +1825,51 @@ namespace shared {
             BoundChState = Atk6
         }
         .AddHit(bouncingTouchExplosionBombStarter)
+        .AddHit(touchExplosionBombShock);
+
+        public static BulletConfig timedBouncingBombStarter = new BulletConfig {
+            StartupFrames = 12,
+            StartupInvinsibleFrames = 8,
+            ActiveFrames = 3*BATTLE_DYNAMICS_FPS, // matching that of anim clip
+            HitStunFrames = 3,
+            PushbackVelX = 0,
+            PushbackVelY = 0,
+            SelfLockVelX = 0,
+            SelfLockVelY = 0,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(+6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(6 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 29,
+            TakesGravity = true, 
+            ExplosionSpeciesId = 1,
+            ExplosionFrames = 25,
+            RotatesAlongVelocity = true,
+            DefaultHardPushbackBounceQuota = MAX_INT,
+            HardPushbackBounceNormFactor = 0.75f,
+            HardPushbackBounceSheerFactor = 0.70f,
+            Speed = (int)(5.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = +1,
+            DirY = +1,
+            Hardness = 3,
+            TouchExplosionBombCollision = true, 
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Explosion2",
+            MhType = MultiHitType.FromPrevHitActualOrActiveTimeUp,
+            RejectsReflectionFromAnotherBullet = true,
+            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX, 
+        };
+
+        public static Skill timedBouncingBomb = new Skill {
+            RecoveryFrames = 24,
+            RecoveryFramesOnBlock = 24,
+            RecoveryFramesOnHit = 24,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk6
+        }
+        .AddHit(timedBouncingBombStarter)
         .AddHit(touchExplosionBombShock);
 
         public static BulletConfig JumperImpact1 = new BulletConfig {
@@ -4256,7 +4261,7 @@ namespace shared {
                         }.UpsertCancelTransit(PATTERN_RELEASED_B, 56).UpsertCancelTransit(PATTERN_B, 47).UpsertCancelTransit(PATTERN_DOWN_B, 47).UpsertCancelTransit(PATTERN_UP_B, 47)
                     )),
 
-                    new KeyValuePair<uint, Skill>(58, touchExplosionBomb),
+                    new KeyValuePair<uint, Skill>(58, timedBouncingBomb),
                     new KeyValuePair<uint, Skill>(59, bouncingTouchExplosionBomb),
                     new KeyValuePair<uint, Skill>(60, new Skill {
                             RecoveryFrames = 20,

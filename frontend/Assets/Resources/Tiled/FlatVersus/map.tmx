@@ -248,14 +248,14 @@
  <objectgroup id="4" name="NpcStartingPos">
   <object id="644" gid="1602" x="1488" y="160" width="32" height="23">
    <properties>
-    <property name="dirX" value="0"/>
+    <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="645" gid="2147485250" x="1008" y="160" width="32" height="23">
    <properties>
-    <property name="dirX" value="0"/>
+    <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>

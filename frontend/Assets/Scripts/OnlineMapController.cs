@@ -159,18 +159,21 @@ public class OnlineMapController : AbstractMapController {
                     disconnectedPeerJoinIndices.Add(wsRespHolder.PeerJoinIndex);
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_START:
-                    Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread.");
+                    Debug.Log("Handling DOWNSYNC_MSG_ACT_BATTLE_START in main thread with battleState=" + battleState);
                     var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
                     if (ROOM_STATE_IN_BATTLE > battleState) {
                         // Making anim respect battleState to avoid wrong order of DOTWeen async execution  
                         readyGoPanel.playGoAnim(); 
+                    } else {
+                        readyGoPanel.hideReady();
+                        readyGoPanel.hideGo();
                     }
                     bgmSource.Play();
                     onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
-                    Debug.LogWarning("Calling onBattleStopped with remote act=DOWNSYNC_MSG_ACT_BATTLE_STOPPED @playerRdfId=" + playerRdfId);
+                    Debug.LogWarning("Calling onBattleStopped with remote act=DOWNSYNC_MSG_ACT_BATTLE_STOPPED @playerRdfId=" + playerRdfId + " with battleState=" + battleState);
                     settlementRdfId = playerRdfId;
                     onBattleStopped();
                     StartCoroutine(delayToShowSettlementPanel());
@@ -209,10 +212,13 @@ public class OnlineMapController : AbstractMapController {
                     var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
                     networkInfoPanel.gameObject.SetActive(true);
                     playerWaitingPanel.gameObject.SetActive(false);
-                    Debug.Log(String.Format("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position));
+                    Debug.LogFormat("Battle ready to start with battleState={0}, teleport camera to selfPlayer dst={1}", battleState, playerGameObj.transform.position);
                     if (ROOM_STATE_IN_BATTLE > battleState) {
                         // Making anim respect battleState to avoid wrong order of DOTWeen async execution  
                         readyGoPanel.playReadyAnim(() => { }, null);
+                    } else {
+                        readyGoPanel.hideReady();
+                        readyGoPanel.hideGo();
                     }
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:

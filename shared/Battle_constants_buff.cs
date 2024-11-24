@@ -441,7 +441,7 @@ namespace shared {
                             new KeyValuePair<uint, uint>(SPECIES_BLADEGIRL, 59),
                             new KeyValuePair<uint, uint>(SPECIES_MAGSWORDGIRL, 65),
                             new KeyValuePair<uint, uint>(SPECIES_BRIGHTWITCH, 49),
-                            new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, 59),
+                            new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, 58),
                             }
                         )
                     ),
@@ -459,7 +459,7 @@ namespace shared {
                             new KeyValuePair<uint, uint>(SPECIES_BLADEGIRL, 59),
                             new KeyValuePair<uint, uint>(SPECIES_MAGSWORDGIRL, 65),
                             new KeyValuePair<uint, uint>(SPECIES_BRIGHTWITCH, NO_SKILL),
-                            new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, 59),
+                            new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, 58),
                             }
                         )
                     ),
