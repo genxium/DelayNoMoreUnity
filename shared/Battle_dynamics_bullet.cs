@@ -1021,13 +1021,13 @@ namespace shared {
                         } else if (BulletType.Fireball == bulletConfig.BType || BulletType.GroundWave == bulletConfig.BType || BulletType.MissileLinear == bulletConfig.BType) {
                             if (!bulletConfig.RemainsUponHit || explodedOnHardPushback || explodedOnAnotherHarderBullet) {
                                 if (BulletState.Exploding != bulletNextFrame.BlState || explodedOnHardPushback || explodedOnAnotherHarderBullet) {
-                                    bulletNextFrame.BlState = BulletState.Exploding;
-                                    bulletNextFrame.FramesInBlState = bulletConfig.ExplosionFrames + 1;
                                     if (NO_VFX_ID != bulletConfig.InplaceVanishExplosionSpeciesId) {
                                         addNewBulletVanishingExplosionToNextFrame(currRenderFrame.Id, currRenderFrame, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, anotherHarderBulletIfc, logger);
                                     } else if (explodedOnHardPushback || explodedOnAnotherHarderBullet) {
                                         addNewBulletExplosionToNextFrame(currRenderFrame.Id, currRenderFrame, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, null, 0, anotherHarderBulletIfc, logger);
                                     }
+                                    bulletNextFrame.BlState = BulletState.Exploding;
+                                    bulletNextFrame.FramesInBlState = bulletConfig.ExplosionFrames + 1;
                                 }
                             } else if (bulletConfig.HopperMissile) {
                                 bulletNextFrame.TargetCharacterJoinIndex = MAGIC_JOIN_INDEX_INVALID;

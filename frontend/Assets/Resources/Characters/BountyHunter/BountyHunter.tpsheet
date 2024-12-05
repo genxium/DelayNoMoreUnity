@@ -4,7 +4,7 @@
 # To import these sprites into your Unity project, download "TexturePackerImporter":
 # https://www.codeandweb.com/texturepacker/unity
 #
-# $TexturePacker:SmartUpdate:69f0b907d95c69993a514e0f0b6c415f:b08ddb78dd9e53011790fc140d43a905:71bdb8b6897b07dc5c9c7a120069679f$
+# $TexturePacker:SmartUpdate:d0c2997cf3a25600b6790db84364fb3b:b08ddb78dd9e53011790fc140d43a905:71bdb8b6897b07dc5c9c7a120069679f$
 #
 :format=40300
 :texture=BountyHunter.png
@@ -141,8 +141,8 @@ InAirIdle1ByJump_4;409;126;24;31; 0.5;0.5; 0;0;0;0
 InAirIdle1NoJump_1;182;150;28;37; 0.5;0.5; 0;0;0;0
 InAirIdle1NoJump_2;149;133;28;37; 0.5;0.5; 0;0;0;0
 InAirIdle1NoJump_3;214;136;28;37; 0.5;0.5; 0;0;0;0
-InAirIdle2ByJump_1;2;13;25;51; 0.5;0.5; 0;0;0;0
-InAirIdle2ByJump_2;114;169;31;57; 0.5;0.5; 0;0;0;0
+InAirIdle2ByJump_1;2;13;25;51; 0.52;0.69607843; 0;0;0;0
+InAirIdle2ByJump_2;114;169;31;57; 0.51612903;0.72807018; 0;0;0;0
 InAirIdle2ByJump_3;398;373;21;21; 0.5;0.5; 0;0;0;0
 InAirIdle2ByJump_4;198;2;22;20; 0.5;0.5; 0;0;0;0
 InAirIdle2ByJump_5;224;2;22;20; 0.5;0.5; 0;0;0;0

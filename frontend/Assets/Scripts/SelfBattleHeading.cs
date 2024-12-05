@@ -2,7 +2,6 @@ using UnityEngine.UI;
 using shared;
 
 public class SelfBattleHeading : AbstractHpBar {
-    private uint speciesId = Battle.SPECIES_NONE_CH;
     public Image mpFiller;
     public Image mpHolder;
 
@@ -13,7 +12,6 @@ public class SelfBattleHeading : AbstractHpBar {
     public Image avatar;
     public BuffActiveCountDown buffActiveCountDown;
     public void ResetSelf() {
-        speciesId = Battle.SPECIES_NONE_CH;
         avatar.sprite = null;
     }
 
