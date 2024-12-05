@@ -14,11 +14,9 @@ proj-root> grep -ri "shouldPredictBtnAHold" --color ./shared/
 ```
 
 # Latest tag change notes
-v2.0.3 new features
+v2.0.4 new features
 - Enhanced timed-bomb implementation.
 - Enhanced zero-back-vision NPC handling. 
-
-v2.0.2 new features
 - Added FinishedLvOption.
 - Implemented multi-color hpbar for hp cap > 100 
 
