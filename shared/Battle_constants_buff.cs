@@ -304,12 +304,27 @@ namespace shared {
             CharacterVfxSpeciesId = NO_VFX_ID, // TODO
         }.AddAssociatedDebuff(ShortFrozen);
 
-        // [WARNING] The following buff is deprecated for now.
-        public static BuffConfig XformToSuperKnifeGirl = new BuffConfig {
+        public static BuffConfig XformToLightSpearWoman = new BuffConfig {
             SpeciesId = 2,
             StockType = BuffStockType.Timed,
-            Stock = 900,
-            XformChSpeciesId = SPECIES_NONE_CH,  
+            Stock = 30 * BATTLE_DYNAMICS_FPS,
+            XformChSpeciesId = SPECIES_LIGHTSPEARWOMAN,  
+            CharacterVfxSpeciesId = NO_VFX_ID // TODO
+        };
+
+        public static BuffConfig XformToWandWitchGirl = new BuffConfig {
+            SpeciesId = 3,
+            StockType = BuffStockType.Timed,
+            Stock = 30 * BATTLE_DYNAMICS_FPS,
+            XformChSpeciesId = SPECIES_WANDWITCHGIRL,  
+            CharacterVfxSpeciesId = NO_VFX_ID // TODO
+        };
+
+        public static BuffConfig XformToFireSwordMan = new BuffConfig {
+            SpeciesId = 4,
+            StockType = BuffStockType.Timed,
+            Stock = 30 * BATTLE_DYNAMICS_FPS,
+            XformChSpeciesId = SPECIES_FIRESWORDMAN,
             CharacterVfxSpeciesId = NO_VFX_ID // TODO
         };
 
@@ -317,7 +332,9 @@ namespace shared {
                 new[]
                 {
                     new KeyValuePair<uint, BuffConfig>(ShortFreezer.SpeciesId, ShortFreezer),
-                    new KeyValuePair<uint, BuffConfig>(XformToSuperKnifeGirl.SpeciesId, XformToSuperKnifeGirl),
+                    new KeyValuePair<uint, BuffConfig>(XformToLightSpearWoman.SpeciesId, XformToLightSpearWoman),
+                    new KeyValuePair<uint, BuffConfig>(XformToWandWitchGirl.SpeciesId, XformToWandWitchGirl),
+                    new KeyValuePair<uint, BuffConfig>(XformToFireSwordMan.SpeciesId, XformToFireSwordMan),
                 }
         );
 
@@ -385,6 +402,11 @@ namespace shared {
                             new KeyValuePair<uint, uint>(SPECIES_MAGSWORDGIRL, HpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BRIGHTWITCH, HpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, HpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SPEARWOMAN, HpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_LIGHTSPEARWOMAN, HpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_WANDWITCHGIRL, HpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SWORDMAN, HpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_FIRESWORDMAN, HpRefillSmall.SpeciesId),
                             }
                         )
                     ),
@@ -398,6 +420,11 @@ namespace shared {
                             new KeyValuePair<uint, uint>(SPECIES_MAGSWORDGIRL, MpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BRIGHTWITCH, MpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, MpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SPEARWOMAN, MpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_LIGHTSPEARWOMAN, MpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_WANDWITCHGIRL, MpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SWORDMAN, MpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_FIRESWORDMAN, MpRefillSmall.SpeciesId),
                             }
                         )
                     ),
@@ -411,6 +438,11 @@ namespace shared {
                             new KeyValuePair<uint, uint>(SPECIES_MAGSWORDGIRL, HpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BRIGHTWITCH, HpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, HpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SPEARWOMAN, HpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_LIGHTSPEARWOMAN, HpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_WANDWITCHGIRL, HpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SWORDMAN, HpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_FIRESWORDMAN, HpRefillMiddle.SpeciesId),
                             }
                         )
                     ),
@@ -424,6 +456,11 @@ namespace shared {
                             new KeyValuePair<uint, uint>(SPECIES_MAGSWORDGIRL, MpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BRIGHTWITCH, MpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, MpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SPEARWOMAN, MpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_LIGHTSPEARWOMAN, MpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_WANDWITCHGIRL, MpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SWORDMAN, MpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_FIRESWORDMAN, MpRefillMiddle.SpeciesId),
                             }
                         )
                     ),

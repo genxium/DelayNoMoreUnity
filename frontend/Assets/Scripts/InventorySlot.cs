@@ -60,9 +60,11 @@ public class InventorySlot : MonoBehaviour {
     public void updateData(shared.InventorySlot slot) {
         lazyInit();
         if (shared.Battle.TERMINATING_BUFF_SPECIES_ID != slot.BuffSpeciesId) {
-            uint spriteIdx = slot.BuffSpeciesId - 1;
-            content.color = semiTransparent;
-            content.sprite = buffConfigSprites[spriteIdx];
+            var buffConfig = shared.Battle.buffConfigs[slot.BuffSpeciesId];
+            if (shared.Battle.SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {      
+                content.color = semiTransparent;
+                content.sprite = buffConfigSprites[8];
+            }
         } else if (shared.Battle.INVENTORY_BTN_B_SKILL_BH == slot.SkillId) {
             Sprite spr = inventoryBtnBSpriteBh;
             content.color = semiTransparent;
@@ -80,22 +82,19 @@ public class InventorySlot : MonoBehaviour {
         } else if (27 == slot.SkillId) {
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[2]; // TODO: Remove this nonsense hardcoded index! 
-        } else if (76 == slot.SkillId) { 
-            content.color = semiTransparent;
-            content.sprite = buffConfigSprites[6]; // TODO: Remove this nonsense hardcoded index! 
         } else if (21 == slot.SkillId) {
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[3]; // TODO: Remove this nonsense hardcoded index! 
         } else if (4 == slot.SkillId) {
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[4]; // TODO: Remove this nonsense hardcoded index! 
-        } else if (79 == slot.SkillId) {
+        } else if (35 == slot.SkillId || 79 == slot.SkillId || 116 == slot.SkillId) {
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[5]; // TODO: Remove this nonsense hardcoded index! 
-        } else if (49 == slot.SkillId) {  
+        } else if (76 == slot.SkillId || 49 == slot.SkillId) {  
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[6]; // TODO: Remove this nonsense hardcoded index! 
-        } else if (58 == slot.SkillId) {
+        } else if (58 == slot.SkillId || 81 == slot.SkillId) {
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[7]; // TODO: Remove this nonsense hardcoded index! 
         }

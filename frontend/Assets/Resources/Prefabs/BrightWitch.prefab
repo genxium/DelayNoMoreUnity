@@ -124,9 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df2366cd4abb5fd41b6e5ef3b317092f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spr: {fileID: 0}
   score: 0
-  speciesId: -1
-  lowerPart: {fileID: 0}
-  upperPart: {fileID: 0}
+  speciesId: 0
   scaleHolder: {x: 0, y: 0, z: 0}
   positionHolder: {x: 0, y: 0, z: 0}

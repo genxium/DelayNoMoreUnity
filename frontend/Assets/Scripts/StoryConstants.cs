@@ -28,11 +28,12 @@ namespace Story {
         public const int LEVEL_CASCADE_FARM = 4;
         public const int LEVEL_DESCENDING_PALACE = 5;
         public const int LEVEL_ARROW_PALACE = 6;
+        public const int LEVEL_FOX_BAY = 7;
 
-        public const int LEVEL_VILLAGE_AMORA_GATE = 7;
-        public const int LEVEL_VILLAGE_AMORA_INSIDE = 8;
-        public const int LEVEL_VILLAGE_AMORA_RESISTANCE = 9;
-        public const int LEVEL_VILLAGE_AMORA_WEREWOLF = 10;
+        public const int LEVEL_VILLAGE_AMORA_GATE = 101;
+        public const int LEVEL_VILLAGE_AMORA_INSIDE = 102;
+        public const int LEVEL_VILLAGE_AMORA_RESISTANCE = 103;
+        public const int LEVEL_VILLAGE_AMORA_WEREWOLF = 104;
 
         public const int STORY_POINT_NONE = 0;
 
@@ -51,14 +52,12 @@ namespace Story {
         public static ImmutableDictionary<int, string> LEVEL_NAMES = ImmutableDictionary.Create<int, string>().AddRange(new[]
             {
             new KeyValuePair<int, string>(LEVEL_DELICATE_FOREST, "DelicateForest"),
-            //new KeyValuePair<int, string>(LEVEL_SMALL_FOREST, "SmallForest"),
-            new KeyValuePair<int, string>(LEVEL_SMALL_FOREST, "FoxBay"),
-            //new KeyValuePair<int, string>(LEVEL_SMALL_FOREST, "CaveVersus"),
+            new KeyValuePair<int, string>(LEVEL_SMALL_FOREST, "SmallForest"),
             new KeyValuePair<int, string>(LEVEL_ZIGZAGZOO, "ZigZagZoo"),
             new KeyValuePair<int, string>(LEVEL_CASCADE_FARM, "CascadeFarm"),
-            //new KeyValuePair<int, string>(LEVEL_CASCADE_FARM, "FlatVersus"),
             new KeyValuePair<int, string>(LEVEL_DESCENDING_PALACE, "DescendingPalace"),
-            new KeyValuePair<int, string>(LEVEL_ARROW_PALACE, "ArrowPalace")
+            new KeyValuePair<int, string>(LEVEL_ARROW_PALACE, "ArrowPalace"),
+            new KeyValuePair<int, string>(LEVEL_FOX_BAY, "FoxBay"),
         });
 
         /*---------------------------------STORY, LEVEL relations---------------------------------------------------------------------------------------------------*/
@@ -221,7 +220,7 @@ namespace Story {
         /*---------------------------------REGION, LEVEL, and DEPENDENCIES---------------------------------------------------------------------------------------------------*/
         public static ImmutableDictionary<int, ImmutableArray<int>> LEVEL_UNDER_REGION = ImmutableDictionary.Create<int, ImmutableArray<int>>().AddRange(new[]
             {
-            new KeyValuePair<int, ImmutableArray<int>>(REGION_AUTUMN, ImmutableArray.Create(LEVEL_DELICATE_FOREST, LEVEL_SMALL_FOREST, LEVEL_ZIGZAGZOO, LEVEL_CASCADE_FARM, LEVEL_DESCENDING_PALACE, LEVEL_ARROW_PALACE)),
+            new KeyValuePair<int, ImmutableArray<int>>(REGION_AUTUMN, ImmutableArray.Create(LEVEL_DELICATE_FOREST, LEVEL_SMALL_FOREST, LEVEL_ZIGZAGZOO, LEVEL_CASCADE_FARM, LEVEL_DESCENDING_PALACE, LEVEL_ARROW_PALACE, LEVEL_FOX_BAY)),
             new KeyValuePair<int, ImmutableArray<int>>(REGION_WINTER, ImmutableArray.Create(LEVEL_VILLAGE_AMORA_GATE, LEVEL_VILLAGE_AMORA_INSIDE, LEVEL_VILLAGE_AMORA_RESISTANCE, LEVEL_VILLAGE_AMORA_WEREWOLF)),
             new KeyValuePair<int, ImmutableArray<int>>(REGION_SPRING, ImmutableArray.Create<int>()),
             new KeyValuePair<int, ImmutableArray<int>>(REGION_SUMMER, ImmutableArray.Create<int>()),
@@ -240,6 +239,7 @@ namespace Story {
             new KeyValuePair<int, ImmutableArray<int>>(LEVEL_CASCADE_FARM, ImmutableArray.Create(LEVEL_ZIGZAGZOO)),
             new KeyValuePair<int, ImmutableArray<int>>(LEVEL_DESCENDING_PALACE, ImmutableArray.Create(LEVEL_CASCADE_FARM)),
             new KeyValuePair<int, ImmutableArray<int>>(LEVEL_ARROW_PALACE, ImmutableArray.Create(LEVEL_DESCENDING_PALACE)),
+            new KeyValuePair<int, ImmutableArray<int>>(LEVEL_FOX_BAY, ImmutableArray.Create(LEVEL_ARROW_PALACE)),
 
             new KeyValuePair<int, ImmutableArray<int>>(LEVEL_VILLAGE_AMORA_INSIDE, ImmutableArray.Create(LEVEL_VILLAGE_AMORA_GATE)),
             new KeyValuePair<int, ImmutableArray<int>>(LEVEL_VILLAGE_AMORA_RESISTANCE, ImmutableArray.Create(LEVEL_VILLAGE_AMORA_INSIDE)),

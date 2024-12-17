@@ -79,6 +79,10 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
             case 4:
                 selectedSpeciesId = Battle.SPECIES_BOUNTYHUNTER;
                 break;
+            case 5:
+                selectedSpeciesId = Battle.SPECIES_SPEARWOMAN;
+                //selectedSpeciesId = Battle.SPECIES_SWORDMAN;
+                break;
         }
         if (null != postConfirmedCallback) {
             if (null != uiSoundSource) {

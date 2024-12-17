@@ -228,7 +228,9 @@ namespace shared {
             if (PATTERN_ID_NO_OP == patternId) {
                 if (0 < decodedInputHolder.BtnBLevel) {
                     if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
-                        if (0 > decodedInputHolder.Dy) {
+                        if (0 < decodedInputHolder.BtnCLevel) {
+                            patternId = PATTERN_INVENTORY_SLOT_BC;
+                        } else if (0 > decodedInputHolder.Dy) {
                             patternId = PATTERN_DOWN_B;
                         } else if (0 < decodedInputHolder.Dy) {
                             patternId = PATTERN_UP_B;
@@ -246,6 +248,9 @@ namespace shared {
             if (PATTERN_ID_NO_OP == patternId) {
                 if (decodedInputHolder.BtnCLevel > prevDecodedInputHolder.BtnCLevel) {
                     patternId = PATTERN_INVENTORY_SLOT_C;
+                    if (0 < decodedInputHolder.BtnBLevel) {
+                        patternId = PATTERN_INVENTORY_SLOT_BC;
+                    }
                 } else if (decodedInputHolder.BtnDLevel > prevDecodedInputHolder.BtnDLevel) {
                     patternId = PATTERN_INVENTORY_SLOT_D;
                 }
@@ -340,7 +345,7 @@ namespace shared {
             var slotLockedSkillId = NO_SKILL;
 
             int slotIdx = -1;
-            if (PATTERN_INVENTORY_SLOT_C == patternId) {
+            if (PATTERN_INVENTORY_SLOT_C == patternId || PATTERN_INVENTORY_SLOT_BC == patternId) {
                 slotIdx = 0;
             } else if (PATTERN_INVENTORY_SLOT_D == patternId) {
                 slotIdx = 1;
@@ -352,56 +357,90 @@ namespace shared {
 
             var targetSlotCurr = currCharacterDownsync.Inventory.Slots[slotIdx];
             var targetSlotNext = thatCharacterInNextFrame.Inventory.Slots[slotIdx];
-            slotLockedSkillId = (currCharacterDownsync.InAir ? targetSlotCurr.SkillIdAir : targetSlotCurr.SkillId);
-
-            if (NO_SKILL == slotLockedSkillId && TERMINATING_BUFF_SPECIES_ID == targetSlotCurr.BuffSpeciesId) {
-                return (false, NO_SKILL);
-            }
-
-            bool notRecovered = (0 < currCharacterDownsync.FramesToRecover);
-            if (notRecovered) {
-                var (currSkillConfig, currBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
-                if (null == currSkillConfig || null == currBulletConfig) return (false, NO_SKILL);
-
-                if (PATTERN_INVENTORY_SLOT_C == patternId && !currBulletConfig.CancellableByInventorySlotC) return (false, NO_SKILL);
-                if (PATTERN_INVENTORY_SLOT_D == patternId && !currBulletConfig.CancellableByInventorySlotD) return (false, NO_SKILL);
-                if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return (false, NO_SKILL);
-            }
-
-            if (InventorySlotStockType.GaugedMagazineIv == targetSlotCurr.StockType) {
-                if (0 < targetSlotCurr.Quota) {
-                    targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
-                    slotUsed = true;
+            if (PATTERN_INVENTORY_SLOT_BC == patternId) {
+                // Handle full charge skill usage 
+                if (InventorySlotStockType.GaugedMagazineIv != targetSlotCurr.StockType || targetSlotCurr.Quota != targetSlotCurr.DefaultQuota) {
+                    return (false, NO_SKILL);
                 }
-            } else if (InventorySlotStockType.QuotaIv == targetSlotCurr.StockType) {
-                if (0 < targetSlotCurr.Quota) {
-                    targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
-                    slotUsed = true;
+                slotLockedSkillId = targetSlotCurr.FullChargeSkillId;
+
+                if (NO_SKILL == slotLockedSkillId && TERMINATING_BUFF_SPECIES_ID == targetSlotCurr.FullChargeBuffSpeciesId) {
+                    return (false, NO_SKILL);
                 }
-            } else if (InventorySlotStockType.TimedIv == targetSlotCurr.StockType) {
-                if (0 == targetSlotCurr.FramesToRecover) {
-                    targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
-                    slotUsed = true;
-                }
-            } else if (InventorySlotStockType.TimedMagazineIv == targetSlotCurr.StockType) {
-                if (0 < targetSlotCurr.Quota) {
-                    targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
-                    if (0 == targetSlotNext.Quota) {
-                        targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
-                        //logger.LogInfo(String.Format("At currRdfId={0}, player joinIndex={1} starts reloading inventoryBtnB", currRdfId, currCharacterDownsync.JoinIndex));
-                    }
-                    slotUsed = true;
-                }
-            }
-    
-            if (slotUsed) {
-                if (TERMINATING_BUFF_SPECIES_ID != targetSlotCurr.BuffSpeciesId) {
-                    var buffConfig = buffConfigs[targetSlotCurr.BuffSpeciesId];
+
+                // [WARNING] Deliberately allowing full charge skills to be used in "notRecovered" cases
+                targetSlotNext.Quota = 0; 
+                slotUsed = true;
+
+                // [WARNING] Revert all debuffs
+                AssignToDebuff(TERMINATING_DEBUFF_SPECIES_ID, 0, thatCharacterInNextFrame.DebuffList[0]);
+
+                if (TERMINATING_BUFF_SPECIES_ID != targetSlotCurr.FullChargeBuffSpeciesId) {
+                    var buffConfig = buffConfigs[targetSlotCurr.FullChargeBuffSpeciesId];
                     ApplyBuffToCharacter(rdfId, buffConfig, currCharacterDownsync, thatCharacterInNextFrame);
                 }
-            }
 
-            return (slotUsed, slotLockedSkillId);
+                if (NO_SKILL != slotLockedSkillId) {
+                    var (currSkillConfig, currBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
+                    if (null == currSkillConfig || null == currBulletConfig) return (false, NO_SKILL);
+
+                    if (!currBulletConfig.CancellableByInventorySlotC) return (false, NO_SKILL);
+                    if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return (false, NO_SKILL);
+                }
+
+                return (slotUsed, slotLockedSkillId);
+            } else {
+                slotLockedSkillId = (currCharacterDownsync.InAir ? targetSlotCurr.SkillIdAir : targetSlotCurr.SkillId);
+
+                if (NO_SKILL == slotLockedSkillId && TERMINATING_BUFF_SPECIES_ID == targetSlotCurr.BuffSpeciesId) {
+                    return (false, NO_SKILL);
+                }
+
+                bool notRecovered = (0 < currCharacterDownsync.FramesToRecover);
+                if (notRecovered) {
+                    var (currSkillConfig, currBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
+                    if (null == currSkillConfig || null == currBulletConfig) return (false, NO_SKILL);
+
+                    if (PATTERN_INVENTORY_SLOT_C == patternId && !currBulletConfig.CancellableByInventorySlotC) return (false, NO_SKILL);
+                    if (PATTERN_INVENTORY_SLOT_D == patternId && !currBulletConfig.CancellableByInventorySlotD) return (false, NO_SKILL);
+                    if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return (false, NO_SKILL);
+                }
+
+                if (InventorySlotStockType.GaugedMagazineIv == targetSlotCurr.StockType) {
+                    if (0 < targetSlotCurr.Quota) {
+                        targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
+                        slotUsed = true;
+                    }
+                } else if (InventorySlotStockType.QuotaIv == targetSlotCurr.StockType) {
+                    if (0 < targetSlotCurr.Quota) {
+                        targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
+                        slotUsed = true;
+                    }
+                } else if (InventorySlotStockType.TimedIv == targetSlotCurr.StockType) {
+                    if (0 == targetSlotCurr.FramesToRecover) {
+                        targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
+                        slotUsed = true;
+                    }
+                } else if (InventorySlotStockType.TimedMagazineIv == targetSlotCurr.StockType) {
+                    if (0 < targetSlotCurr.Quota) {
+                        targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
+                        if (0 == targetSlotNext.Quota) {
+                            targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
+                            //logger.LogInfo(String.Format("At currRdfId={0}, player joinIndex={1} starts reloading inventoryBtnB", currRdfId, currCharacterDownsync.JoinIndex));
+                        }
+                        slotUsed = true;
+                    }
+                }
+        
+                if (slotUsed) {
+                    if (TERMINATING_BUFF_SPECIES_ID != targetSlotCurr.BuffSpeciesId) {
+                        var buffConfig = buffConfigs[targetSlotCurr.BuffSpeciesId];
+                        ApplyBuffToCharacter(rdfId, buffConfig, currCharacterDownsync, thatCharacterInNextFrame);
+                    }
+                }
+
+                return (slotUsed, slotLockedSkillId);
+            }
         }
 
         private static void _applyGravity(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ILoggerBridge logger) {
@@ -560,6 +599,9 @@ namespace shared {
                 logger.LogInfo("_processNextFrameJumpStartup: currRdfId=" + currRdfId + ", " + stringifyPlayer(currCharacterDownsync));
             }
             */
+            if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) {
+                return;
+            }
             if (isInJumpStartup(thatCharacterInNextFrame, chConfig)) {
                 return;
             }
@@ -594,6 +636,10 @@ namespace shared {
         }
 
         public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
+            if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) {
+                return;
+            }
+
             if (isInJumpStartup(thatCharacterInNextFrame, chConfig) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig)) {
                 return;
             }
@@ -769,6 +815,9 @@ namespace shared {
         }
 
         public static void _processInertiaFlying(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
+            if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) {
+                return;
+            }
             if (IsInBlockStun(currCharacterDownsync)) {
                 return;
             }
@@ -791,7 +840,8 @@ namespace shared {
             }
 
             if (0 == currCharacterDownsync.FramesToRecover) {
-                thatCharacterInNextFrame.CharacterState = ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) ? currCharacterDownsync.CharacterState : Walking; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to a default action
+                var defaultInAirIdleChState = chConfig.UseIdle1AsFlyingIdle ? Idle1 : Walking;
+                thatCharacterInNextFrame.CharacterState = ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) ? currCharacterDownsync.CharacterState : defaultInAirIdleChState; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to a default action
                 
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0;
@@ -933,6 +983,8 @@ namespace shared {
                 if (i < roomCapacity && 0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
                     // Revive player-controlled character from Dying
                     (newVx, newVy) = (currCharacterDownsync.RevivalVirtualGridX, currCharacterDownsync.RevivalVirtualGridY);
+                    revertAllBuffsAndDebuffs(currCharacterDownsync, thatCharacterInNextFrame);
+                    chConfig = characters[thatCharacterInNextFrame.SpeciesId];
                     thatCharacterInNextFrame.CharacterState = GetUp1; // No need to tune bounding box and offset for this case, because the revival location is fixed :)
                     thatCharacterInNextFrame.FramesInChState = 0;
                     thatCharacterInNextFrame.FramesToRecover = chConfig.GetUpFramesToRecover;
@@ -945,7 +997,6 @@ namespace shared {
                     thatCharacterInNextFrame.VelX = 0;
                     thatCharacterInNextFrame.VelY = 0;
                     thatCharacterInNextFrame.NewBirth = true;
-                    revertAllBuffsAndDebuffs(currCharacterDownsync, thatCharacterInNextFrame);
                 }
 
                 float boxCx, boxCy, boxCw, boxCh;
@@ -1173,7 +1224,7 @@ namespace shared {
                                                     newQuota += existingIvSlot.Quota;
                                                 }
                                                 // Currently only skill would be configured for "PickupType.PutIntoInventory", and only "InventorySlotStockType.QuotaIv" is supported.  
-                                                AssignToInventorySlot(InventorySlotStockType.QuotaIv, newQuota, 0, newQuota, 0, TERMINATING_BUFF_SPECIES_ID, effSkillId, effSkillIdAir, existingIvSlot.GaugeCharged, existingIvSlot.GaugeRequired, thatCharacterInNextFrame.Inventory.Slots[1]);
+                                                AssignToInventorySlot(InventorySlotStockType.QuotaIv, newQuota, 0, newQuota, 0, TERMINATING_BUFF_SPECIES_ID, effSkillId, effSkillIdAir, existingIvSlot.GaugeCharged, existingIvSlot.GaugeRequired, existingIvSlot.FullChargeSkillId, existingIvSlot.FullChargeBuffSpeciesId, thatCharacterInNextFrame.Inventory.Slots[1]);
                                             } else {
                                                 // 1 == chConfig.InitInventorySlots.Count
                                                 var existingIvSlot = currCharacterDownsync.Inventory.Slots[0];
@@ -1421,8 +1472,8 @@ namespace shared {
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 if (SPECIES_NONE_CH != chConfig.TransformIntoSpeciesIdUponDeath && 0 >= thatCharacterInNextFrame.FramesToRecover) {
                                     var nextChConfig = characters[chConfig.TransformIntoSpeciesIdUponDeath];
-                                    AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
-                                    thatCharacterInNextFrame.CharacterState = TransformingInto;
+                                    AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame, true);
+                                    thatCharacterInNextFrame.CharacterState = TransformingIntoFromDeath;
                                     thatCharacterInNextFrame.FramesToRecover = BATTLE_DYNAMICS_FPS; // Temporarily hardcoded
 
                                     revertAllBuffsAndDebuffs(currCharacterDownsync, thatCharacterInNextFrame);
@@ -1461,9 +1512,9 @@ namespace shared {
                                 if (Dying == thatCharacterInNextFrame.CharacterState) {
                                     if (SPECIES_NONE_CH != chConfig.TransformIntoSpeciesIdUponDeath && 0 >= thatCharacterInNextFrame.FramesToRecover) {
                                         var nextChConfig = characters[chConfig.TransformIntoSpeciesIdUponDeath];
-                                        AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame);
+                                        AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame, true);
                                         thatCharacterInNextFrame.Hp = nextChConfig.Hp;
-                                        thatCharacterInNextFrame.CharacterState = TransformingInto;
+                                        thatCharacterInNextFrame.CharacterState = TransformingIntoFromDeath;
                                         thatCharacterInNextFrame.FramesToRecover = BATTLE_DYNAMICS_FPS; // Temporarily hardcoded
                                     }
                                 } else if (BlownUp1 == thatCharacterInNextFrame.CharacterState) {
@@ -1665,9 +1716,9 @@ namespace shared {
                      */
                     if (!inAirSet.Contains(oldNextCharacterState)) {
                         switch (oldNextCharacterState) {
+                            case Idle1:
                             case Def1:  
                             case Def1Broken:  
-                            case Idle1:
                             case Walking:
                             case TurnAround:
                                 if (Walking == oldNextCharacterState) {
@@ -1676,6 +1727,15 @@ namespace shared {
                                         break;
                                     } else if (thatCharacterInNextFrame.OmitGravity) {
                                         thatCharacterInNextFrame.CharacterState = InAirWalking;
+                                        break;
+                                    }
+                                }
+                                if (Idle1 == oldNextCharacterState) {
+                                    var defaultInAirIdleChState = chConfig.UseIdle1AsFlyingIdle ? Idle1 : InAirWalking;
+                                    if (chConfig.OmitGravity) {
+
+                                    } else if (thatCharacterInNextFrame.OmitGravity) {
+                                        thatCharacterInNextFrame.CharacterState = defaultInAirIdleChState;
                                         break;
                                     }
                                 }

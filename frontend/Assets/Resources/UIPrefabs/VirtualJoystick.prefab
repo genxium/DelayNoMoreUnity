@@ -1186,6 +1186,8 @@ MonoBehaviour:
   - {fileID: 149908348, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: -1803485602, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: -1624332568, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  - {fileID: -1054876607, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  - {fileID: 1106039805, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   inventoryBtnBSpriteBh: {fileID: 0}
   inventoryBtnBSpriteMsg: {fileID: 0}
   regularBtnBSprite: {fileID: 0}
@@ -1974,6 +1976,7 @@ MonoBehaviour:
   - {fileID: -1803485602, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: 351959312, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   - {fileID: -1054876607, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  - {fileID: 1106039805, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   inventoryBtnBSpriteBh: {fileID: 0}
   inventoryBtnBSpriteMsg: {fileID: 0}
   regularBtnBSprite: {fileID: 0}

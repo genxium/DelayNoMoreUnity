@@ -218,7 +218,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var characterPrefab = loadCharacterPrefab(characters[speciesId]);
         GameObject newPlayerNode = Instantiate(characterPrefab, new Vector3(wx, wy, characterZ), Quaternion.identity, underlyingMap.transform);
         playerGameObjs[joinIndex - 1] = newPlayerNode;
-        playerGameObjs[joinIndex - 1].GetComponent<CharacterAnimController>().speciesId = speciesId;
+        newPlayerNode.GetComponent<CharacterAnimController>().SetSpeciesId(speciesId);
 
         if (joinIndex == selfPlayerInfo.JoinIndex) {
             selfPlayerInfo.BulletTeamId = bulletTeamId;
@@ -552,9 +552,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             var playerGameObj = playerGameObjs[k]; 
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
 
-            if (chAnimCtrl.speciesId != currCharacterDownsync.SpeciesId) {
+            if (chAnimCtrl.GetSpeciesId() != currCharacterDownsync.SpeciesId) {
                 Destroy(playerGameObjs[k]);
                 spawnPlayerNode(k + 1, chConfig.SpeciesId, wx, wy, currCharacterDownsync.BulletTeamId);
+                playerGameObj = playerGameObjs[k];
+                chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
             }
 
             setCharacterGameObjectPosByInterpolation(prevCharacterDownsync, currCharacterDownsync, chConfig, playerGameObj, wx, wy);
@@ -1808,7 +1810,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 for (int t = 0; t < chConfig.InitInventorySlots.Count; t++) {
                     var initIvSlot = chConfig.InitInventorySlots[t];
                     if (InventorySlotStockType.NoneIv == initIvSlot.StockType) break;
-                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, playerInRdf.Inventory.Slots[t]);
+                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, initIvSlot.FullChargeSkillId, initIvSlot.FullChargeBuffSpeciesId, playerInRdf.Inventory.Slots[t]);
                 }
             }
             spawnPlayerNode(playerInRdf.JoinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
@@ -2548,7 +2550,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 for (int t = 0; t < chConfig.InitInventorySlots.Count; t++) {
                     var initIvSlot = chConfig.InitInventorySlots[t];
                     if (InventorySlotStockType.NoneIv == initIvSlot.StockType) break;
-                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, playerInRdf.Inventory.Slots[t]);
+                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, initIvSlot.FullChargeSkillId, initIvSlot.FullChargeBuffSpeciesId, playerInRdf.Inventory.Slots[t]);
                 }
             }
             
@@ -2614,7 +2616,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 for (int t = 0; t < chConfig.InitInventorySlots.Count; t++) {
                     var initIvSlot = chConfig.InitInventorySlots[t];
                     if (InventorySlotStockType.NoneIv == initIvSlot.StockType) break;
-                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, npcInRdf.Inventory.Slots[t]);
+                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, initIvSlot.FullChargeSkillId, initIvSlot.FullChargeBuffSpeciesId, npcInRdf.Inventory.Slots[t]);
                 }
             }
 
@@ -2695,6 +2697,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         CustomProperty missionEvtSubIdProp;
         mapProps.TryGetCustomProperty("missionEvtSubId", out missionEvtSubIdProp);
         int missionEvtSubId = (null == missionEvtSubIdProp || missionEvtSubIdProp.IsEmpty ? TERMINATING_EVTSUB_ID_INT : missionEvtSubIdProp.GetValueAsInt());
+        if (!serializedTriggerEditorIdToLocalId.Dict.ContainsKey(missionEvtSubId)) {
+            throw new ArgumentException("missionEvtSubId = " + missionEvtSubId + " not found, please double check your map config!");
+        }
         missionTriggerLocalId = (TERMINATING_EVTSUB_ID_INT == missionEvtSubId ? TERMINATING_TRIGGER_ID : serializedTriggerEditorIdToLocalId.Dict[missionEvtSubId]);
 
         return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSecondsVal);
@@ -2839,11 +2844,13 @@ public abstract class AbstractMapController : MonoBehaviour {
                     TriggerColliderAttr? triggerColliderAttr = collider.Data as TriggerColliderAttr;
                     if (null != triggerColliderAttr) {
                         var trigger = rdf.TriggersArr[triggerColliderAttr.TriggerLocalId];
-                        var triggerConfig = triggerConfigs[trigger.ConfigFromTiled.SpeciesId];
-                        if (TriggerType.TtMovement == triggerConfig.TriggerType || TriggerType.TtAttack == triggerConfig.TriggerType) {
-                            line.SetColor(Color.magenta);
-                        } else {
-                            line.SetColor(Color.cyan);
+                        if (null != trigger.ConfigFromTiled && triggerConfigs.ContainsKey(trigger.ConfigFromTiled.SpeciesId)) {
+                            var triggerConfig = triggerConfigs[trigger.ConfigFromTiled.SpeciesId];
+                            if (TriggerType.TtMovement == triggerConfig.TriggerType || TriggerType.TtAttack == triggerConfig.TriggerType) {
+                                line.SetColor(Color.magenta);
+                            } else {
+                                line.SetColor(Color.cyan);
+                            }
                         }
                     }
                 }

@@ -1,0 +1,1025 @@
+fileFormatVersion: 2
+guid: 62f6f8b0d0572a842a1c1f78837997d0
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Atk1-0
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 394
+        width: 33
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 054c55673f2260b4a97624757614eaba
+      internalID: -1751433954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 65
+        width: 28
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abffec277873bb345ad4c508a69fe121
+      internalID: 725411118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-2
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 73
+        width: 29
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5, y: 0.64705884}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3efbb768447586b4489cba5d02c95e8b
+      internalID: -1842896985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-3
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 73
+        width: 29
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5, y: 0.64705884}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9eebb3ab4d85d5458510ce7b0963a66
+      internalID: -1104590483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-4
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 73
+        width: 29
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5, y: 0.64705884}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03498428b754fdb4f8471faeeff70cc0
+      internalID: 2092561790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-5
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 434
+        width: 31
+        height: 35
+      alignment: 9
+      pivot: {x: 0.5, y: 0.62857145}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 511cf8790e980b042bade772ff0fce70
+      internalID: 782291516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-6
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 464
+        width: 88
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.47826087}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c68f5e27ed23474eb472123f2045faf
+      internalID: -2036064458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-7
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 414
+        width: 87
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.47826087}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ccd023a54f481c408ff8b9783c7a2ac
+      internalID: 1262813517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-0
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 231
+        width: 33
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c2e44c39919e7f43ad9d3d770748b59
+      internalID: 117277958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 91
+        width: 30
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 215dff5e22b3bb94fa698590cd6c9980
+      internalID: 1774934663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-10
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 354
+        width: 50
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea021183894476e489c317bee882f070
+      internalID: -306622696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-11
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 473
+        width: 31
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d95a158ec140f1146b4e6f6dc7590f40
+      internalID: -1642733865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-2
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 373
+        width: 30
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15f09a1c36d5d5a49ac3c3895d9972fc
+      internalID: 1345403222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-3
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 332
+        width: 30
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8ffc0d22ccbaa14c92f5ecdc6c5e7fb
+      internalID: -219217615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-4
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 111
+        width: 30
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b928580d5eb50c4782fd91f18ab18a8
+      internalID: -1312699654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-5
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 105
+        width: 30
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc4a1c46b40184c4d9feeda60b327d05
+      internalID: 1516799617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-6
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 311
+        width: 36
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ab0f4fe8fbce4348bd22cd0510b1efe
+      internalID: 535774333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-7
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 247
+        width: 40
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b5b74974aed12e4d8abcf2112c109dc
+      internalID: 1451542024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-8
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 224
+        width: 40
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fb6c855b31554347bda2a140998111f
+      internalID: 763709586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk2-9
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 265
+        width: 38
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 257e0c07823dc37419d9787df488ca0b
+      internalID: -1452388160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1-0
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 191
+        width: 33
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19ec2bc2a636ff94c9fa790d3276fca4
+      internalID: -1197937976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1-1
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 184
+        width: 33
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3642b7bcd72b434d9dc39375c8522a3
+      internalID: 1869095946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1-2
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 288
+        width: 42
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efa1a46fb3eb9fa488b89dea9e47d69b
+      internalID: -1947475180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1-3
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 206
+        width: 39
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 803246b11e6ec9741892a61a281b736b
+      internalID: -558725146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Avatar_1
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 4
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92c0aca424cb91d449b99e426298a82e
+      internalID: 677776213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 329
+        width: 43
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19eac0d149583b2478961fd5703af522
+      internalID: -2044681715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-1
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 352
+        width: 35
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5086b283a0d5b2b4abac6c6c5e7457dc
+      internalID: 1555467412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-2
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 305
+        width: 37
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 183e37c94f2616f43bb9a20c6691b3ea
+      internalID: 972218872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-3
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 395
+        width: 51
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 209b724ad08d3f2449dabd28a2bb6920
+      internalID: -1082311527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle1-0
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 191
+        width: 33
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1afaf7e121e1e2479c957d4cd0f691b
+      internalID: -347569636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle1-1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 167
+        width: 33
+        height: 35
+      alignment: 9
+      pivot: {x: 0.5, y: 0.62857145}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22fd0006bb050fc4cbd260061c565bd8
+      internalID: -936051396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle1-2
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 146
+        width: 33
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5, y: 0.64705884}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 474961f639533194ea8243040bc5bcf3
+      internalID: -509691951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle1-3
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 131
+        width: 33
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d3220c2ce53767498704863d84c09c1
+      internalID: 37640064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-0
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 271
+        width: 35
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85e4017930933ea46be54eea89a24c70
+      internalID: 1290879597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 50
+        width: 27
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 050731013f5d95e4ab91d3e6a04f7296
+      internalID: 1377494291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-2
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 70
+        width: 20
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20f4599efbaa28b4dafc774edf107855
+      internalID: 73717793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-3
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 33
+        width: 26
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84f13de731849954eab9343a90a4a269
+      internalID: 1562533780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-4
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 152
+        width: 33
+        height: 35
+      alignment: 9
+      pivot: {x: 0.5, y: 0.62857145}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8342acfdce3ba841928fd19e442c662
+      internalID: 1563706706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-5
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 9
+        width: 25
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1564e02d43058ed4582ad679d0709564
+      internalID: -467976867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-6
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 9
+        width: 23
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5945946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28a8282cb94c14e409cf144622102553
+      internalID: 1941734875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-7
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 30
+        width: 26
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6111111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 394ba2ad8b255ad49ba367c94f214253
+      internalID: 37258246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: a222cd3f9c244284591cfb1c0b06d9b4
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Atk1-0: -1751433954
+      Atk1-1: 725411118
+      Atk1-2: -1842896985
+      Atk1-3: -1104590483
+      Atk1-4: 2092561790
+      Atk1-5: 782291516
+      Atk1-6: -2036064458
+      Atk1-7: 1262813517
+      Atk2-0: 117277958
+      Atk2-1: 1774934663
+      Atk2-10: -306622696
+      Atk2-11: -1642733865
+      Atk2-2: 1345403222
+      Atk2-3: -219217615
+      Atk2-4: -1312699654
+      Atk2-5: 1516799617
+      Atk2-6: 535774333
+      Atk2-7: 1451542024
+      Atk2-8: 763709586
+      Atk2-9: -1452388160
+      Atked1-0: -1197937976
+      Atked1-1: 1869095946
+      Atked1-2: -1947475180
+      Atked1-3: -558725146
+      Avatar_1: 677776213
+      Dying-0: -2044681715
+      Dying-1: 1555467412
+      Dying-2: 972218872
+      Dying-3: -1082311527
+      Idle1-0: -347569636
+      Idle1-1: -936051396
+      Idle1-2: -509691951
+      Idle1-3: 37640064
+      Walking-0: 1290879597
+      Walking-1: 1377494291
+      Walking-2: 73717793
+      Walking-3: 1562533780
+      Walking-4: 1563706706
+      Walking-5: -467976867
+      Walking-6: 1941734875
+      Walking-7: 37258246
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -122,5 +122,10 @@ namespace shared {
 
         public bool NpcNoDefaultAirWalking;
         public bool NpcPrioritizeBulletHandling;
+
+        public int TransformIntoFramesToRecover;
+        public int TransformIntoFramesInvinsible;
+
+        public bool UseIdle1AsFlyingIdle;
     }
 }

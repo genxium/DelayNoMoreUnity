@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="208" nextobjectid="604">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="208" nextobjectid="605">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -21,6 +21,7 @@
  <tileset firstgid="1976" source="../shared_comps/pickable.tsx"/>
  <tileset firstgid="2408" source="../shared_comps/bkg-shrinked/dc_bkg_1.tsx"/>
  <tileset firstgid="2540" source="../shared_comps/bkg-shrinked/dc_bkg_3.tsx"/>
+ <tileset firstgid="2660" source="../towers/towers.tsx"/>
  <layer id="160" name="Background2" width="64" height="28">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -123,18 +124,6 @@
    </properties>
    <point/>
   </object>
-  <object id="575" name="Archer" x="528" y="272">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="publishingEvtMaskUponKilled" value="1"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="speciesId" value="4098"/>
-    <property name="static" value="1"/>
-    <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
   <object id="584" name="BoarWarrior" x="896" y="176">
    <properties>
     <property name="dirX" value="-2"/>
@@ -168,6 +157,16 @@
     <property name="teamId" value="3"/>
    </properties>
    <point/>
+  </object>
+  <object id="604" gid="2147486319" x="496" y="288" width="41" height="41">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="killedToDropConsumableSpeciesId" value="3"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="static" value="1"/>
+    <property name="teamId" value="3"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup id="9" name="TrapStartingPos">

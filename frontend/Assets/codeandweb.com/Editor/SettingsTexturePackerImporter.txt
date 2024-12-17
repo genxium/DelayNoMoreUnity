@@ -6,6 +6,7 @@ tpsheetFileNames:
 - Assets/Resources/Characters/BladeGirl/BladeGirl.tpsheet
 - Assets/Resources/Characters/Boar/Boar.tpsheet
 - Assets/Resources/Characters/BoarWarrior/BoarWarrior.tpsheet
+- Assets/Resources/Characters/BomberGoblin/BomberGoblin.tpsheet
 - Assets/Resources/Characters/BountyHunter/BountyHunter.tpsheet
 - Assets/Resources/Characters/Brick1/Brick1.tpsheet
 - Assets/Resources/Characters/BrightWitch/BrightWitch.tpsheet
@@ -31,6 +32,7 @@ tpsheetFileNames:
 - Assets/Resources/Characters/VillagerFemale2/VillagerFemale2.tpsheet
 - Assets/Resources/Characters/VillagerMale1/VillagerMale1.tpsheet
 - Assets/Resources/Characters/VillagerMale2/VillagerMale2.tpsheet
+- Assets/Resources/Characters/WandWitchGirl/WandWitchGirl.tpsheet
 - Assets/Resources/Characters/WitchGirl/WitchGirl.tpsheet
 - Assets/Resources/Doors/Door.tpsheet
 - Assets/Resources/PixelVfx/PixelPlasmaVfx.tpsheet
@@ -48,6 +50,7 @@ textureFileNames:
 - Assets/Resources/Characters/BladeGirl/BladeGirl.png
 - Assets/Resources/Characters/Boar/Boar.png
 - Assets/Resources/Characters/BoarWarrior/BoarWarrior.png
+- Assets/Resources/Characters/BomberGoblin/BomberGoblin.png
 - Assets/Resources/Characters/BountyHunter/BountyHunter.png
 - Assets/Resources/Characters/Brick1/Brick1.png
 - Assets/Resources/Characters/BrightWitch/BrightWitch.png
@@ -73,6 +76,7 @@ textureFileNames:
 - Assets/Resources/Characters/VillagerFemale2/VillagerFemale2.png
 - Assets/Resources/Characters/VillagerMale1/VillagerMale1.png
 - Assets/Resources/Characters/VillagerMale2/VillagerMale2.png
+- Assets/Resources/Characters/WandWitchGirl/WandWitchGirl.png
 - Assets/Resources/Characters/WitchGirl/WitchGirl.png
 - Assets/Resources/Doors/Door.png
 - Assets/Resources/PixelVfx/PixelPlasmaVfx.png
@@ -85,6 +89,8 @@ textureFileNames:
 - Assets/Resources/UI/ShaperCard.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
+- 
 - 
 - 
 - 

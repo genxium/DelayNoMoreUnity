@@ -14,6 +14,11 @@ proj-root> grep -ri "shouldPredictBtnAHold" --color ./shared/
 ```
 
 # Latest tag change notes
+v2.0.5 new features
+- Added back transformation buff.
+- Added support for Atk+InvSlotC input pattern.
+- Added BomberGoblin and SpearWoman.
+
 v2.0.4 new features
 - Enhanced timed-bomb implementation.
 - Enhanced zero-back-vision NPC handling. 

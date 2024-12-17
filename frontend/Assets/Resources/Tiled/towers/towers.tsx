@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="towers" tilewidth="128" tileheight="111" tilecount="11" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="towers" tilewidth="128" tileheight="111" tilecount="15" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -15,6 +15,9 @@
   <image source="FireTotemRed_8.png" width="35" height="55"/>
  </tile>
  <tile id="2">
+  <properties>
+   <property name="speciesId" value="4107"/>
+  </properties>
   <image source="DarkBeamerTower_1.png" width="64" height="96"/>
  </tile>
  <tile id="3">
@@ -64,5 +67,29 @@
    <property name="speciesId" value="4110"/>
   </properties>
   <image source="RiderGuardRed.png" width="128" height="111"/>
+ </tile>
+ <tile id="11">
+  <properties>
+   <property name="speciesId" value="4098"/>
+  </properties>
+  <image source="SkeleArcher.png" width="41" height="41"/>
+ </tile>
+ <tile id="12">
+  <properties>
+   <property name="speciesId" value="4113"/>
+  </properties>
+  <image source="ArcherGuardRed.png" width="32" height="43"/>
+ </tile>
+ <tile id="13">
+  <properties>
+   <property name="speciesId" value="4097"/>
+  </properties>
+  <image source="KnifeGoblin.png" width="33" height="36"/>
+ </tile>
+ <tile id="14">
+  <properties>
+   <property name="speciesId" value="4112"/>
+  </properties>
+  <image source="BomberGoblin.png" width="40" height="37"/>
  </tile>
 </tileset>

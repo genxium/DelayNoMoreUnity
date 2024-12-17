@@ -16,7 +16,14 @@ public class CharacterAnimController : MonoBehaviour {
     private Material material;
 
     public int score;
-    public uint speciesId = Battle.SPECIES_NONE_CH;
+    private uint speciesId = Battle.SPECIES_NONE_CH;
+    public uint GetSpeciesId() {
+        return speciesId;
+    }
+
+    public void SetSpeciesId(uint val) {
+        speciesId = val;
+    }
 
     public Vector3 scaleHolder = new Vector3();
     public Vector3 positionHolder = new Vector3();
@@ -47,13 +54,18 @@ public class CharacterAnimController : MonoBehaviour {
     };
 
     Dictionary<CharacterState, AnimationClip> lookUpTable;
+    public void resetLookupTable() {
+        if (null != lookUpTable) {
+            lookUpTable.Clear();
+        }
+    }
 
     private Animator getMainAnimator() {
         return gameObject.GetComponent<Animator>();
     }
 
     private void lazyInit() {
-        if (null != lookUpTable) return;
+        if (null != lookUpTable && 0 < lookUpTable.Count) return;
         spr = GetComponent<SpriteRenderer>();
         material = spr.material;
 

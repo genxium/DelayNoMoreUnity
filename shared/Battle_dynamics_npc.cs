@@ -314,6 +314,14 @@ namespace shared {
                     if (0 >= targetSlot.Quota) return OPPONENT_REACTION_NOT_ENOUGH_MP;
 
                     return OPPONENT_REACTION_USE_SLOT_C;
+                case SPECIES_BOMBERGOBLIN:
+                    if (notRecovered) return OPPONENT_REACTION_UNKNOWN;
+                    if (effInAir) return OPPONENT_REACTION_FOLLOW;
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * (GoblinMelee1PrimerBullet.HitboxOffsetX << 1), currCharacterDownsync.VirtualGridY + GoblinMelee1PrimerBullet.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((GoblinMelee1PrimerBullet.HitboxSizeX), (GoblinMelee1PrimerBullet.HitboxSizeY >> 1));
+                    targetSlot = (currCharacterDownsync.Inventory.Slots[0]);
+                    if (0 >= targetSlot.Quota) return OPPONENT_REACTION_NOT_ENOUGH_MP;
+                    return OPPONENT_REACTION_USE_SLOT_C;
                 default:
                     return OPPONENT_REACTION_UNKNOWN;
             }
@@ -466,6 +474,7 @@ namespace shared {
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((DemonFireSlimeMelee1PrimaryBullet.HitboxSizeX >> 1), (DemonFireSlimeMelee1PrimaryBullet.HitboxSizeY >> 1));
                     break;
                 case SPECIES_GOBLIN:
+                case SPECIES_BOMBERGOBLIN:
                     if (currCharacterDownsync.Mp < GoblinMelee1PrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * GoblinMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + GoblinMelee1PrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((GoblinMelee1PrimerBullet.HitboxSizeX >> 1), (GoblinMelee1PrimerBullet.HitboxSizeY >> 1));
@@ -759,23 +768,25 @@ namespace shared {
                     jumpHoldingRdfCnt = 0;
                     slipJumpedOrNot = false;
                     hasPatrolCueReaction = true;
-                } else if (shouldBreakCurrentPatrolCueCapture && 0 != currCharacterDownsync.CachedCueCmd) {  
-                    thatCharacterInNextFrame.CachedCueCmd = 0; 
-                    DecodeInput(currCharacterDownsync.CachedCueCmd, decodedInputHolder);
-                    effectiveDx = decodedInputHolder.Dx;
-                    effectiveDy = decodedInputHolder.Dy;
-                    slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (effInAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && 0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
-                    jumpedOrNot = !slipJumpedOrNot && (0 == currCharacterDownsync.FramesToRecover) && !effInAir && (0 < decodedInputHolder.BtnALevel);
-
-                    if (0 >= chConfig.JumpingInitVelY) {
-                        slipJumpedOrNot = false;
-                        jumpHoldingRdfCnt = 0;
-                        jumpedOrNot = false;
-                    }
-                    jumpHoldingRdfCnt = 0;
-                    hasPatrolCueReaction = true;
+                } else if (shouldBreakCurrentPatrolCueCapture) {  
+                    thatCharacterInNextFrame.CachedCueCmd = 0;
                     thatCharacterInNextFrame.CapturedByPatrolCue = false;
                     thatCharacterInNextFrame.FramesInPatrolCue = DEFAULT_PATROL_CUE_WAIVING_FRAMES; // re-purposed
+                    if (0 != currCharacterDownsync.CachedCueCmd) {
+                        DecodeInput(currCharacterDownsync.CachedCueCmd, decodedInputHolder);
+                        effectiveDx = decodedInputHolder.Dx;
+                        effectiveDy = decodedInputHolder.Dy;
+                        slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (effInAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && 0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
+                        jumpedOrNot = !slipJumpedOrNot && (0 == currCharacterDownsync.FramesToRecover) && !effInAir && (0 < decodedInputHolder.BtnALevel);
+
+                        if (0 >= chConfig.JumpingInitVelY) {
+                            slipJumpedOrNot = false;
+                            jumpHoldingRdfCnt = 0;
+                            jumpedOrNot = false;
+                        }
+                        jumpHoldingRdfCnt = 0;
+                        hasPatrolCueReaction = true;
+                    }
                 } else if (shouldCheckVisionCollision) {
                     // [WARNING] The field "CharacterDownsync.FramesInPatrolCue" would also be re-purposed as "patrol cue collision waiving frames" by the logic here.
                     Collider? pCollider;
@@ -1013,7 +1024,7 @@ namespace shared {
                 for (int t = 0; t < chConfig.InitInventorySlots.Count; t++) {
                     var initIvSlot = chConfig.InitInventorySlots[t];
                     if (InventorySlotStockType.NoneIv == initIvSlot.StockType) break;
-                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, nextRenderFrameNpcs[npcCnt].Inventory.Slots[t]);
+                    AssignToInventorySlot(initIvSlot.StockType, initIvSlot.Quota, initIvSlot.FramesToRecover, initIvSlot.DefaultQuota, initIvSlot.DefaultFramesToRecover, initIvSlot.BuffSpeciesId, initIvSlot.SkillId, initIvSlot.SkillIdAir, initIvSlot.GaugeCharged, initIvSlot.GaugeRequired, initIvSlot.FullChargeSkillId, initIvSlot.FullChargeBuffSpeciesId, nextRenderFrameNpcs[npcCnt].Inventory.Slots[t]);
                 }
             }
             npcLocalIdCounter++;

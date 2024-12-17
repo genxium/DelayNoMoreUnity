@@ -55,6 +55,8 @@ enum CharacterState {
     BackDashing = 17;
     InAirWalking = 18;
 
+    TransformingIntoFromDeath = 19; // When at this state, the character has already completed transform, i.e. in new speciesId
+
     OnWallIdle1 = 128; 
 
     CrouchIdle1 = 256; 
@@ -891,6 +893,8 @@ message InventorySlot {
     uint32 skillIdAir = 8;
     int32 gaugeCharged = 9;
     int32 gaugeRequired = 10;
+    uint32 fullChargeBuffSpeciesId = 11;
+    uint32 fullChargeSkillId = 12;
 }
 
 message Inventory {

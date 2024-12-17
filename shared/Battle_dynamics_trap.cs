@@ -638,17 +638,29 @@ namespace shared {
                         trapInNextFrame.FramesInTrapState = 0;
                         if (TERMINATING_EVTSUB_ID_INT != trapInNextFrame.ConfigFromTiled.SubscribesToIdAfterInitialFire) {
                             trapInNextFrame.SubscribesToTriggerLocalId = triggerEditorIdToLocalId[trapInNextFrame.ConfigFromTiled.SubscribesToIdAfterInitialFire];
+                            if (RedGate.SpeciesId == trapInNextFrame.ConfigFromTiled.SpeciesId) {
+                                logger.LogInfo("@rdfId=" + currRenderFrame.Id + ", red gate id = " + trapInNextFrame.TrapLocalId + " fired #1");
+                            }
                         } else {
                             trapInNextFrame.SubscribesToTriggerLocalId = TERMINATING_TRIGGER_ID;
+                            if (RedGate.SpeciesId == trapInNextFrame.ConfigFromTiled.SpeciesId) {
+                                logger.LogInfo("@rdfId=" + currRenderFrame.Id + ", red gate id = " + trapInNextFrame.TrapLocalId + " fired #2");
+                            }
                         }
                     } else if (TrapState.Tdeactivated == trapInNextFrame.TrapState) {
                         trapInNextFrame.TrapState = TrapState.Tidle;
                         trapInNextFrame.FramesInTrapState = 0;
                         trapInNextFrame.SubscribesToTriggerLocalId = TERMINATING_TRIGGER_ID;
+                        if (RedGate.SpeciesId == trapInNextFrame.ConfigFromTiled.SpeciesId) {
+                            logger.LogInfo("@rdfId=" + currRenderFrame.Id + ", red gate id = " + trapInNextFrame.TrapLocalId + " fired #3");
+                        }
                     } else {
                         trapInNextFrame.TrapState = TrapState.Tdeactivated;
                         trapInNextFrame.FramesInTrapState = 0;
                         trapInNextFrame.SubscribesToTriggerLocalId = TERMINATING_TRIGGER_ID;
+                        if (RedGate.SpeciesId == trapInNextFrame.ConfigFromTiled.SpeciesId) {
+                            logger.LogInfo("@rdfId=" + currRenderFrame.Id + ", red gate id = " + trapInNextFrame.TrapLocalId + " fired #4");
+                        }
                     }
                 } else {
                     if (trapInNextFrame.CapturedByPatrolCue) {

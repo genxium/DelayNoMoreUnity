@@ -502,7 +502,7 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="548" name="Floo2R" x="960" y="32" width="32" height="1056">
+  <object id="548" name="Flool2R" x="960" y="32" width="32" height="1056">
    <properties>
     <property name="fdAct" value="4"/>
     <property name="fdCaptureFrames" value="60"/>
@@ -514,7 +514,7 @@
     <property name="fuCaptureFrames" value="60"/>
    </properties>
   </object>
-  <object id="547" name="Floo2L" x="32" y="32" width="32" height="1056">
+  <object id="547" name="Floor2L" x="32" y="32" width="32" height="1056">
    <properties>
     <property name="fdAct" value="3"/>
     <property name="fdCaptureFrames" value="60"/>
@@ -525,19 +525,6 @@
     <property name="fuAct" value="3"/>
     <property name="fuCaptureFrames" value="60"/>
    </properties>
-  </object>
-  <object id="476" name="Floor1R2" x="976" y="224">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
   </object>
   <object id="478" name="Floor1R1" x="928" y="224">
    <properties>
@@ -548,19 +535,6 @@
     <property name="frAct" value="4"/>
     <property name="frCaptureFrames" value="60"/>
     <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="481" name="Floor1L" x="48" y="320">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
     <property name="fuCaptureFrames" value="60"/>
    </properties>
    <point/>

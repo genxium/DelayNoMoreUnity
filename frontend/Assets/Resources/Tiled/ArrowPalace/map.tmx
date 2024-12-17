@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="586">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="593">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -18,7 +18,7 @@
  <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
  <tileset firstgid="1345" source="../shared_comps/pickable.tsx"/>
  <tileset firstgid="1777" source="../towers/towers.tsx"/>
- <tileset firstgid="1788" source="../traps/machinery/traps_machinery.tsx"/>
+ <tileset firstgid="1792" source="../traps/machinery/traps_machinery.tsx"/>
  <layer id="160" name="Background2" width="64" height="47">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -266,8 +266,8 @@
     <property name="subscribesToIdAfterInitialFire" value="5"/>
    </properties>
   </object>
-  <object id="578" gid="1789" x="224" y="608" width="21" height="16"/>
-  <object id="579" gid="1789" x="592" y="608" width="21" height="16"/>
+  <object id="578" gid="1793" x="224" y="608" width="21" height="16"/>
+  <object id="579" gid="1793" x="592" y="608" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -334,32 +334,6 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
-  <object id="496" name="Floor2R" x="976" y="352">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="498" name="Floor2L" x="48" y="256">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
   <object id="573" name="Floor2FlyingCue" x="32" y="688" width="960" height="32">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
@@ -424,6 +398,30 @@
     <property name="frAct" value="20"/>
    </properties>
   </object>
+  <object id="586" name="FloorL" x="32" y="32" width="32" height="240">
+   <properties>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+  </object>
+  <object id="587" name="FloorR" x="960" y="32" width="32" height="320">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="164" name="Pickable">
   <object id="556" gid="1524" x="144" y="624" width="32" height="32">
@@ -431,7 +429,32 @@
     <property name="stockQuota" value="2"/>
    </properties>
   </object>
-  <object id="557" gid="1524" x="256" y="256" width="32" height="32">
+  <object id="557" gid="1524" x="288" y="160" width="32" height="32">
+   <properties>
+    <property name="stockQuota" value="2"/>
+   </properties>
+  </object>
+  <object id="588" gid="1524" x="400" y="160" width="32" height="32">
+   <properties>
+    <property name="stockQuota" value="2"/>
+   </properties>
+  </object>
+  <object id="589" gid="1524" x="608" y="160" width="32" height="32">
+   <properties>
+    <property name="stockQuota" value="2"/>
+   </properties>
+  </object>
+  <object id="590" gid="1524" x="656" y="624" width="32" height="32">
+   <properties>
+    <property name="stockQuota" value="2"/>
+   </properties>
+  </object>
+  <object id="591" gid="1524" x="32" y="256" width="32" height="32">
+   <properties>
+    <property name="stockQuota" value="2"/>
+   </properties>
+  </object>
+  <object id="592" gid="1524" x="656" y="160" width="32" height="32">
    <properties>
     <property name="stockQuota" value="2"/>
    </properties>
