@@ -539,25 +539,25 @@
    </properties>
    <point/>
   </object>
-  <object id="539" x="528" y="304" width="32" height="48">
+  <object id="539" x="528" y="304" width="32" height="32">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
    </properties>
   </object>
-  <object id="541" x="432" y="304" width="32" height="48">
+  <object id="541" x="432" y="304" width="32" height="32">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
    </properties>
   </object>
-  <object id="542" x="432" y="704" width="32" height="48">
+  <object id="542" x="432" y="704" width="32" height="32">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
    </properties>
   </object>
-  <object id="543" x="528" y="704" width="32" height="48">
+  <object id="543" x="528" y="704" width="32" height="32">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
@@ -567,17 +567,17 @@
  <objectgroup id="161" name="Pickable">
   <object id="535" gid="1524" x="464" y="144" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="537" gid="1524" x="352" y="960" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="538" gid="1524" x="48" y="608" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
  </objectgroup>

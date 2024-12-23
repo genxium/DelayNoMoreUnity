@@ -1,23 +1,9 @@
-# Logging performance concern
-`String.Format(...)` can be a serious performance issue when used too frequently. Please remove/comment them when you notice a lag or CPU spike possibly coupled with an intense logging period (it's always recommended to profile beforehand for proof).
-
-# Is it possible to remove all "forceConfirmation"s if player input overwriting is unwanted?  
-Yes it's possible to remove/disable both "type#1" and "type#3" in `backend/Battle/Room.cs`. However, it's highly recommended that you reserve the backend dynamics and downsync the RoomDownsyncFrame calculated by backend to all frontends periodically -- the frontend `AbstractMapController.onRoomDownsyncFrame` can handle correction of historic render frames without issue.
-
-The root cause of the need for such periodic RoomDownsyncFrame downsync is that the physics engine uses floating point numbers, and I'm not a fan of determinisitc floating point approach (i.e. there're tradeoffs). If this project is an old style fighting game, then I can rewrite its physics to use rectilinear rectangles only, thus integer only (including snapping) -- yet I want slopes and rotations in the game :)
-
-# How to find all spots of input predictions?
-```
-proj-root> grep -ri "shouldPredictBtnAHold" --color ./frontend/Assets/Scripts/
-proj-root> grep -ri "shouldPredictBtnAHold" --color ./backend/
-proj-root> grep -ri "shouldPredictBtnAHold" --color ./shared/
-```
-
 # Latest tag change notes
-v2.0.5 new features
+v2.0.6 new features
 - Added back transformation buff.
 - Added support for Atk+InvSlotC input pattern.
 - Added BomberGoblin and SpearWoman.
+- Added gauge interpolation.
 
 v2.0.4 new features
 - Enhanced timed-bomb implementation.
@@ -133,6 +119,21 @@ I should've provided an example of this type of test for the alleged good perfor
 - [UpdateInputFrameInPlaceUponDynamics](https://github.com/genxium/DelayNoMoreUnity/blob/v1.2.2/frontend/Assets/Scripts/Abstract/AbstractMapController.cs#L268), and  
 - [processInertiaWalking](https://github.com/genxium/DelayNoMoreUnity/blob/v1.2.2/shared/Battle_dynamics.cs#L292)
 , but the performance by far is so nice even in unsuccessful UDP hole-punching cases, thus it's left out as a future roadmap item :) 
+
+# Logging performance concern
+`String.Format(...)` can be a serious performance issue when used too frequently. Please remove/comment them when you notice a lag or CPU spike possibly coupled with an intense logging period (it's always recommended to profile beforehand for proof).
+
+# Is it possible to remove all "forceConfirmation"s if player input overwriting is unwanted?  
+Yes it's possible to remove/disable both "type#1" and "type#3" in `backend/Battle/Room.cs`. However, it's highly recommended that you reserve the backend dynamics and downsync the RoomDownsyncFrame calculated by backend to all frontends periodically -- the frontend `AbstractMapController.onRoomDownsyncFrame` can handle correction of historic render frames without issue.
+
+The root cause of the need for such periodic RoomDownsyncFrame downsync is that the physics engine uses floating point numbers, and I'm not a fan of determinisitc floating point approach (i.e. there're tradeoffs). If this project is an old style fighting game, then I can rewrite its physics to use rectilinear rectangles only, thus integer only (including snapping) -- yet I want slopes and rotations in the game :)
+
+# How to find all spots of input predictions?
+```
+proj-root> grep -ri "shouldPredictBtnAHold" --color ./frontend/Assets/Scripts/
+proj-root> grep -ri "shouldPredictBtnAHold" --color ./backend/
+proj-root> grep -ri "shouldPredictBtnAHold" --color ./shared/
+```
 
 # FAQ
 Please refer to [FAQ.md](FAQ.md).

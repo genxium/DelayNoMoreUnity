@@ -361,13 +361,12 @@ namespace shared {
         }
         .AddHit(FireSwordManFireballPrimerBullet);
 
-        public static BulletConfig FireSwordManFireBreathBullet = new BulletConfig {
+        public static BulletConfig FireSwordManFireBreathBl1 = new BulletConfig {
             StartupFrames = 13,
-            ActiveFrames = 100,
-            HitStunFrames = 45,
-            HitInvinsibleFrames = 8,
+            ActiveFrames = 33,
+            HitStunFrames = 20,
             BlockStunFrames = 9,
-            Damage = 35,
+            Damage = 12,
             PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = 0,
             SelfLockVelX = 0,
@@ -388,8 +387,16 @@ namespace shared {
             NoExplosionOnHardPushback = true,
             CharacterEmitSfxName = "FlameEmit1",
             ExplosionSfxName = "FlameBurning1",
+            MhType = MultiHitType.FromEmission,
             CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
         };
+
+        public static BulletConfig FireSwordManFireBreathBl2 = new BulletConfig(FireSwordManFireBreathBl1)
+                                                                .SetStartupFrames(FireSwordManFireBreathBl1.StartupFrames + FireSwordManFireBreathBl1.ActiveFrames);
+
+        public static BulletConfig FireSwordManFireBreathBl3 = new BulletConfig(FireSwordManFireBreathBl2)
+                                                                .SetStartupFrames(FireSwordManFireBreathBl2.StartupFrames + FireSwordManFireBreathBl2.ActiveFrames)
+                                                                .SetMhType(MultiHitType.None);
 
         public static Skill FireSwordManFireBreathSkill = new Skill{
             RecoveryFrames = 120,
@@ -397,7 +404,11 @@ namespace shared {
                            RecoveryFramesOnHit = 120,
                            TriggerType = SkillTriggerType.RisingEdge,
                            BoundChState = Atk5
-        }.AddHit(FireSwordManFireBreathBullet);
+        }
+        .AddHit(FireSwordManFireBreathBl1)
+        .AddHit(FireSwordManFireBreathBl2)
+        .AddHit(FireSwordManFireBreathBl3)
+        ;
 
         public static BulletConfig DemonFireBreathHit = new BulletConfig {
             StartupFrames = 24,
@@ -1947,7 +1958,7 @@ namespace shared {
         public static BulletConfig goblinBombStarter = new BulletConfig {
             StartupFrames = 54,
             StartupInvinsibleFrames = 30,
-            ActiveFrames = 450, // matching that of anim clip
+            ActiveFrames = 3*BATTLE_DYNAMICS_FPS, // matching that of anim clip
             HitStunFrames = 3,
             PushbackVelX = 0,
             PushbackVelY = 0,
@@ -3725,25 +3736,26 @@ namespace shared {
             ActiveFrames = 600,
             HitStunFrames = 35,
             BlockStunFrames = 8,
-            Damage = 20,
+            Damage = 15,
             PushbackVelX = (int)(0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
             HitboxOffsetX = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SpeciesId = 19,
+            HitboxOffsetY = (int)(2 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 30,
+            ExplosionSpeciesId = 19,
             Speed = (int)(2.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             DirX = 2,
             DirY = 0,
-            Hardness = 6,
+            Hardness = 5,
             ExplosionFrames = 25,
             BType = BulletType.Fireball,
-            CharacterEmitSfxName = "PistolEmit",
-            ExplosionSfxName = "Piercing",
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Melee_Explosion1",
             ExplosionOnRockSfxName = "Explosion8",
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };

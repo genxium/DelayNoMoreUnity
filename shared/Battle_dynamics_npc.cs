@@ -292,8 +292,8 @@ namespace shared {
                     if (currCharacterDownsync.Hp > (chConfig.Hp >> 1)) return OPPONENT_REACTION_UNKNOWN;
                     if (notRecovered) return OPPONENT_REACTION_UNKNOWN;
                     if (effInAir) return OPPONENT_REACTION_FOLLOW;
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * FireSwordManFireBreathBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + FireSwordManFireBreathBullet.HitboxOffsetY);
-                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManFireBreathBullet.HitboxSizeX >> 1), (FireSwordManFireBreathBullet.HitboxSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * FireSwordManFireBreathBl1.HitboxOffsetX, currCharacterDownsync.VirtualGridY + FireSwordManFireBreathBl1.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManFireBreathBl1.HitboxSizeX >> 1), (FireSwordManFireBreathBl1.HitboxSizeY >> 1));
                     targetSlot = (currCharacterDownsync.Inventory.Slots[0]);
                     if (0 >= targetSlot.Quota) return OPPONENT_REACTION_NOT_ENOUGH_MP;
                     break;
@@ -809,22 +809,22 @@ namespace shared {
 
                         ulong toCacheCmd = 0;
                         var targetFramesInPatrolCue = 0;
-                        if (fr) {
+                        if (fr && 0 != ptrlCue.FrAct) {
                             targetFramesInPatrolCue = ptrlCue.FrCaptureFrames;
                             DecodeInput(ptrlCue.FrAct, decodedInputHolder);
                             toCacheCmd = ptrlCue.FrAct;
                             //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, ptrlCue)); 
-                        } else if (fl) {
+                        } else if (fl && 0 != ptrlCue.FlAct) {
                             targetFramesInPatrolCue = ptrlCue.FlCaptureFrames;
                             DecodeInput(ptrlCue.FlAct, decodedInputHolder);
                             toCacheCmd = ptrlCue.FlAct;
                             //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, ptrlCue));
-                        } else if (fu) {
+                        } else if (fu && 0 != ptrlCue.FuAct) {
                             targetFramesInPatrolCue = ptrlCue.FuCaptureFrames;
                             DecodeInput(ptrlCue.FuAct, decodedInputHolder);
                             toCacheCmd = ptrlCue.FuAct;
                             //logger.LogInfo(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the top", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, ptrlCue)); 
-                        } else if (fd) {
+                        } else if (fd && 0 != ptrlCue.FdAct) {
                             targetFramesInPatrolCue = ptrlCue.FdCaptureFrames;
                             DecodeInput(ptrlCue.FdAct, decodedInputHolder);
                             toCacheCmd = ptrlCue.FdAct;

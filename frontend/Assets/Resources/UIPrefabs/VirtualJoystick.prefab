@@ -171,6 +171,7 @@ MonoBehaviour:
   content: {fileID: 388711276216919262}
   contentMat: {fileID: 0}
   gauge: {fileID: 0}
+  positiveGaugeInterpolater: {fileID: 0}
   gaugeForeground: {fileID: 0}
   buffConfigSprites: []
   inventoryBtnBSpriteBh: {fileID: -141374179, guid: ac7e91a44cc221040add7ff8e6111cf8, type: 3}
@@ -504,7 +505,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3079056870525337109}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -580,7 +581,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3079056870525337109}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -615,7 +616,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 149908348, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
+  m_Sprite: {fileID: 1106039805, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1019,7 +1020,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3079056870525337109}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1064,6 +1065,82 @@ MonoBehaviour:
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2674017611905443938
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4430711393971506344}
+  - component: {fileID: 8506574859557198424}
+  - component: {fileID: 207338687846991432}
+  m_Layer: 5
+  m_Name: PositiveGaugeInterpolator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &4430711393971506344
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2674017611905443938}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3079056870525337109}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 75, y: 75}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8506574859557198424
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2674017611905443938}
+  m_CullTransparentMesh: 1
+--- !u!114 &207338687846991432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2674017611905443938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.60303205, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 0.392
+  m_FillClockwise: 0
+  m_FillOrigin: 2
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3663465933373420665
 GameObject:
   m_ObjectHideFlags: 0
@@ -1097,6 +1174,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9012352416334152464}
+  - {fileID: 4430711393971506344}
   - {fileID: 5355581702173658037}
   - {fileID: 3077197440538764258}
   - {fileID: 1400937596839567998}
@@ -1177,6 +1255,7 @@ MonoBehaviour:
   content: {fileID: 5682018450581253479}
   contentMat: {fileID: 0}
   gauge: {fileID: 6948752844333465979}
+  positiveGaugeInterpolater: {fileID: 207338687846991432}
   gaugeForeground: {fileID: 5557843587030826617}
   buffConfigSprites:
   - {fileID: 1147716476, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}
@@ -1385,7 +1464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.60303205, b: 0, a: 1}
+  m_Color: {r: 0.9748427, g: 0.7623585, b: 0.43837258, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1397,7 +1476,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.392
+  m_FillAmount: 0.609
   m_FillClockwise: 0
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
@@ -1751,7 +1830,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3079056870525337109}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1966,6 +2045,7 @@ MonoBehaviour:
   content: {fileID: 7919085598546321398}
   contentMat: {fileID: 0}
   gauge: {fileID: 0}
+  positiveGaugeInterpolater: {fileID: 0}
   gaugeForeground: {fileID: 0}
   buffConfigSprites:
   - {fileID: 1147716476, guid: ad77f696c623fe94cad87bfdbbb4b2f4, type: 3}

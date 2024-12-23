@@ -98,7 +98,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2M0uXGEAh/E3hJWYGex8VNG6iNq2F+Ar0bJS5R50cZaUpOhKk/YeuADssCLhGuq7JWm78/FMRMbGmKbknLd9fsmTzOScZE7yH2fGhCBJkiRJkiRJyrKXDSG8arj/PM5JODd59AvSH5tkv/cVbMg5yaQbZtIS+y1XsCHnJEtumIrVxhDWGu8+vsd++xVsyDnJ3j0b9vE6/WVeS4pRVV0I1XVpX4X+RjP7tbihlCrvpfHzXiop677V8/8t7dMBHdIRHdMJfacfdEpn9elco5+H5bXkQmilNnpC7fSUOqiTuugZPafuXDrX6Odheb3s0kf9NECDNJoP4S0N8fg1vaFhGklpQ5U3xS7T9IFmaJYW2e8zfeTxHM3TAn1yw0xaYZdVWru13RZt50vP1zm2QZuRbzjQxH2mKe2reHg/2eUX/c6VtqsphFBbKD0/59gFXUa+4Qz7zf6DGxZ9zYfkC918Do7ROxqnCeJY8Rxl2C777VwXir3gb7CncP34pl03lKQH4e8l8fP3EknS/8TvLvGL+buL77/4xfz+kyRJklS5K4CFUkE=
+   eJzt2MtOE3EARvF/MLIi9AI7EJXrQ8BWH0AuCQIrBH2HspgltwTFFSbwDvgAwk5YQQLPAOWmkCg7kdM0pG4sJUBmBs4vOck0M0kn+cK0NARJkiRJkiRJUpK9yofwOn/9dVwTcW107zekGyuw31QNG3JNVHDDRFplv681bMg10aobxmKtKYT1pv+f32e/Yg0bck20f82G/bzPQJX3ktKoriGEJw1x34Vuo4X9Wt1QipXP0vTzWSop6fYa+f+WinRAh3REx3RCP+gnndJZYzz36Odhda2ZEJ5RGz2nF/SS2qmDOqmLuqknE889+nlY3Rt26acBGqQhGs+G8I6GOX5LIzRKYzFtqOqm2WWGZmmO5mmJ/b7QAscf6RMt0mc3TKRv7LJG6/9st0Xb2crr75zboM2UbzjYzHOmOe67uHu/2OU3nWcq2z3NhVCfq7z+w7kL+pvyDefYb/4Bbliykg3RMl19Dk7QJL2nD8S50jVKsF322ykXSvXyN9iXKx9fteuGknQn/L0k/fy9RJL0mPjdJf387qI4+QxJP58hkiRJqsUlwcZSQQ==
   </data>
  </layer>
  <layer id="43" name="Foreground" width="113" height="48">
@@ -405,7 +405,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="581" name="SlipJumpPlatform" x="384" y="656" width="32" height="8">
+  <object id="581" name="SlipJumpPlatform" x="384" y="672" width="32" height="8">
    <properties>
     <property name="collisionTypeMask" value="5"/>
     <property name="providesHardPushback" value="1"/>
@@ -501,7 +501,7 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="555" name="FloorL" x="336" y="208" width="80" height="416">
+  <object id="555" name="FloorL" x="384" y="368" width="32" height="256">
    <properties>
     <property name="fdAct" value="3"/>
     <property name="fdCaptureFrames" value="60"/>

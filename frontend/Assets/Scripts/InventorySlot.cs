@@ -6,9 +6,12 @@ public class InventorySlot : MonoBehaviour {
     public TMP_Text quota;
     public Image cooldownMask;
     public Image content;
-    public Material contentMat;
+    private Material contentMat;
 
     public Image gauge;
+    public Image positiveGaugeInterpolater;
+    private static float gaugePercentFillPerSecond = 0.5f;
+    private float gaugeInterpolaterSpeed = gaugePercentFillPerSecond / (shared.Battle.BATTLE_DYNAMICS_FPS); // per frame
     public Image gaugeForeground;
 
     [SerializeField] 
@@ -45,6 +48,9 @@ public class InventorySlot : MonoBehaviour {
         if (val) {
             gauge.gameObject.SetActive(true);
             gaugeForeground.gameObject.SetActive(true);
+            if (null != positiveGaugeInterpolater) {
+                positiveGaugeInterpolater.gameObject.SetActive(true);
+            }
             cooldownMask.gameObject.SetActive(false);
         } else {
             if (null != gauge) {
@@ -53,7 +59,11 @@ public class InventorySlot : MonoBehaviour {
             if (null != gaugeForeground) {
                 gaugeForeground.gameObject.SetActive(false);
             }
+            if (null != positiveGaugeInterpolater) {
+                positiveGaugeInterpolater.gameObject.SetActive(false);
+            }
             cooldownMask.gameObject.SetActive(true);
+            contentMat.SetInt("_ShiningOpacity", 0);
         }
     }
 
@@ -106,12 +116,43 @@ public class InventorySlot : MonoBehaviour {
                 if (0 < slot.Quota) {
                     quota.enabled = true;
                     contentMat.SetInt("_GrayOut", 0);
+                    if (slot.Quota == slot.DefaultQuota && shared.Battle.TERMINATING_BUFF_SPECIES_ID != slot.FullChargeBuffSpeciesId) {     
+                        contentMat.SetInt("_ShiningOpacity", 1);
+                        var buffConfig = shared.Battle.buffConfigs[slot.FullChargeBuffSpeciesId];
+                        if (shared.Battle.SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {      
+                            content.sprite = buffConfigSprites[8];
+                        } else {
+                            // TODO
+                        }
+                    } else if (slot.Quota == slot.DefaultQuota && shared.Battle.NO_SKILL != slot.FullChargeSkillId) {
+                        contentMat.SetInt("_ShiningOpacity", 1);
+                        // TODO
+                    } else {    
+                        contentMat.SetInt("_ShiningOpacity", 0);
+                    }
                 } else {
                     quota.enabled = false;
                     contentMat.SetInt("_GrayOut", 1);
+                    contentMat.SetInt("_ShiningOpacity", 0);
                 }
                 quota.text = (0 < slot.Quota ? slot.Quota.ToString() : "");
-                gauge.fillAmount = (float)slot.GaugeCharged / slot.GaugeRequired;
+                var oldFillAmt = gauge.fillAmount;
+                var targetInterpolatedFillAmt = (float)slot.GaugeCharged / slot.GaugeRequired;
+                if (null != positiveGaugeInterpolater) {
+                    var oldInterpolatedFillAmt = positiveGaugeInterpolater.fillAmount;
+                    if (targetInterpolatedFillAmt > oldInterpolatedFillAmt) {
+                        var newInterpolatedFillAmt = oldInterpolatedFillAmt;
+                        if (targetInterpolatedFillAmt < oldInterpolatedFillAmt + gaugeInterpolaterSpeed) {
+                            newInterpolatedFillAmt = targetInterpolatedFillAmt;
+                        } else {
+                            newInterpolatedFillAmt = oldInterpolatedFillAmt + gaugeInterpolaterSpeed;
+                        }
+                        positiveGaugeInterpolater.fillAmount = newInterpolatedFillAmt;
+                    } else {
+                        positiveGaugeInterpolater.fillAmount = targetInterpolatedFillAmt;
+                    }
+                }
+                gauge.fillAmount = targetInterpolatedFillAmt;
                 break;
             case shared.InventorySlotStockType.QuotaIv:
                 toggleGaugeModeOn(false);

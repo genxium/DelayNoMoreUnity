@@ -132,8 +132,8 @@ TextureImporter:
       name: FireSwordMan-0
       rect:
         serializedVersion: 2
-        x: 319
-        y: 725
+        x: 201
+        y: 355
         width: 30
         height: 49
       alignment: 9
@@ -153,8 +153,8 @@ TextureImporter:
       name: FireSwordMan-1
       rect:
         serializedVersion: 2
-        x: 325
-        y: 413
+        x: 428
+        y: 268
         width: 29
         height: 48
       alignment: 9
@@ -174,8 +174,8 @@ TextureImporter:
       name: FireSwordMan-10
       rect:
         serializedVersion: 2
-        x: 144
-        y: 664
+        x: 428
+        y: 755
         width: 41
         height: 44
       alignment: 9
@@ -195,8 +195,8 @@ TextureImporter:
       name: FireSwordMan-100
       rect:
         serializedVersion: 2
-        x: 373
-        y: 293
+        x: 2
+        y: 3
         width: 22
         height: 46
       alignment: 9
@@ -216,8 +216,8 @@ TextureImporter:
       name: FireSwordMan-101
       rect:
         serializedVersion: 2
-        x: 476
-        y: 247
+        x: 2
+        y: 53
         width: 22
         height: 43
       alignment: 9
@@ -237,8 +237,8 @@ TextureImporter:
       name: FireSwordMan-102
       rect:
         serializedVersion: 2
-        x: 243
-        y: 675
+        x: 403
+        y: 340
         width: 21
         height: 51
       alignment: 9
@@ -258,8 +258,8 @@ TextureImporter:
       name: FireSwordMan-103
       rect:
         serializedVersion: 2
-        x: 488
-        y: 485
+        x: 341
+        y: 750
         width: 24
         height: 51
       alignment: 9
@@ -279,8 +279,8 @@ TextureImporter:
       name: FireSwordMan-104
       rect:
         serializedVersion: 2
-        x: 395
-        y: 271
+        x: 28
+        y: 3
         width: 22
         height: 46
       alignment: 9
@@ -300,8 +300,8 @@ TextureImporter:
       name: FireSwordMan-105
       rect:
         serializedVersion: 2
-        x: 417
-        y: 262
+        x: 28
+        y: 53
         width: 22
         height: 43
       alignment: 9
@@ -321,8 +321,8 @@ TextureImporter:
       name: FireSwordMan-106
       rect:
         serializedVersion: 2
-        x: 383
-        y: 384
+        x: 54
+        y: 339
         width: 21
         height: 51
       alignment: 9
@@ -342,8 +342,8 @@ TextureImporter:
       name: FireSwordMan-107
       rect:
         serializedVersion: 2
-        x: 404
-        y: 363
+        x: 337
+        y: 647
         width: 28
         height: 49
       alignment: 9
@@ -363,8 +363,8 @@ TextureImporter:
       name: FireSwordMan-108
       rect:
         serializedVersion: 2
-        x: 118
-        y: 765
+        x: 128
+        y: 711
         width: 52
         height: 50
       alignment: 9
@@ -384,8 +384,8 @@ TextureImporter:
       name: FireSwordMan-109
       rect:
         serializedVersion: 2
-        x: 217
-        y: 726
+        x: 420
+        y: 604
         width: 47
         height: 52
       alignment: 9
@@ -405,8 +405,8 @@ TextureImporter:
       name: FireSwordMan-11
       rect:
         serializedVersion: 2
-        x: 40
-        y: 562
+        x: 46
+        y: 494
         width: 40
         height: 45
       alignment: 9
@@ -426,8 +426,8 @@ TextureImporter:
       name: FireSwordMan-110
       rect:
         serializedVersion: 2
-        x: 405
-        y: 819
+        x: 65
+        y: 688
         width: 46
         height: 51
       alignment: 9
@@ -447,8 +447,8 @@ TextureImporter:
       name: FireSwordMan-111
       rect:
         serializedVersion: 2
-        x: 264
-        y: 721
+        x: 2
+        y: 670
         width: 46
         height: 50
       alignment: 9
@@ -468,8 +468,8 @@ TextureImporter:
       name: FireSwordMan-112
       rect:
         serializedVersion: 2
-        x: 111
-        y: 725
+        x: 115
+        y: 667
         width: 46
         height: 40
       alignment: 9
@@ -489,8 +489,8 @@ TextureImporter:
       name: FireSwordMan-113
       rect:
         serializedVersion: 2
-        x: 0
-        y: 634
+        x: 99
+        y: 570
         width: 44
         height: 39
       alignment: 9
@@ -510,8 +510,8 @@ TextureImporter:
       name: FireSwordMan-114
       rect:
         serializedVersion: 2
-        x: 349
-        y: 722
+        x: 2
+        y: 543
         width: 43
         height: 39
       alignment: 9
@@ -531,8 +531,8 @@ TextureImporter:
       name: FireSwordMan-115
       rect:
         serializedVersion: 2
-        x: 0
-        y: 419
+        x: 221
+        y: 408
         width: 34
         height: 47
       alignment: 9
@@ -552,8 +552,8 @@ TextureImporter:
       name: FireSwordMan-116
       rect:
         serializedVersion: 2
-        x: 170
-        y: 389
+        x: 483
+        y: 485
         width: 27
         height: 49
       alignment: 9
@@ -573,8 +573,8 @@ TextureImporter:
       name: FireSwordMan-117
       rect:
         serializedVersion: 2
-        x: 485
-        y: 384
+        x: 251
+        y: 816
         width: 27
         height: 50
       alignment: 9
@@ -594,8 +594,8 @@ TextureImporter:
       name: FireSwordMan-118
       rect:
         serializedVersion: 2
-        x: 184
-        y: 880
+        x: 194
+        y: 870
         width: 84
         height: 42
       alignment: 9
@@ -615,8 +615,8 @@ TextureImporter:
       name: FireSwordMan-119
       rect:
         serializedVersion: 2
-        x: 184
-        y: 922
+        x: 194
+        y: 916
         width: 84
         height: 49
       alignment: 9
@@ -636,8 +636,8 @@ TextureImporter:
       name: FireSwordMan-12
       rect:
         serializedVersion: 2
-        x: 310
-        y: 680
+        x: 471
+        y: 590
         width: 39
         height: 45
       alignment: 9
@@ -657,8 +657,8 @@ TextureImporter:
       name: FireSwordMan-120
       rect:
         serializedVersion: 2
-        x: 268
-        y: 867
+        x: 282
+        y: 857
         width: 83
         height: 50
       alignment: 9
@@ -678,8 +678,8 @@ TextureImporter:
       name: FireSwordMan-121
       rect:
         serializedVersion: 2
-        x: 95
-        y: 973
+        x: 101
+        y: 971
         width: 91
         height: 51
       alignment: 9
@@ -699,8 +699,8 @@ TextureImporter:
       name: FireSwordMan-122
       rect:
         serializedVersion: 2
-        x: 186
-        y: 971
+        x: 196
+        y: 969
         width: 90
         height: 53
       alignment: 9
@@ -720,8 +720,8 @@ TextureImporter:
       name: FireSwordMan-123
       rect:
         serializedVersion: 2
-        x: 88
-        y: 870
+        x: 94
+        y: 860
         width: 82
         height: 49
       alignment: 9
@@ -741,8 +741,8 @@ TextureImporter:
       name: FireSwordMan-124
       rect:
         serializedVersion: 2
-        x: 364
-        y: 974
+        x: 382
+        y: 972
         width: 88
         height: 50
       alignment: 9
@@ -762,8 +762,8 @@ TextureImporter:
       name: FireSwordMan-125
       rect:
         serializedVersion: 2
-        x: 276
-        y: 973
+        x: 290
+        y: 971
         width: 88
         height: 51
       alignment: 9
@@ -783,8 +783,8 @@ TextureImporter:
       name: FireSwordMan-126
       rect:
         serializedVersion: 2
-        x: 0
-        y: 915
+        x: 2
+        y: 909
         width: 88
         height: 53
       alignment: 9
@@ -804,8 +804,8 @@ TextureImporter:
       name: FireSwordMan-127
       rect:
         serializedVersion: 2
-        x: 0
-        y: 968
+        x: 2
+        y: 966
         width: 95
         height: 56
       alignment: 9
@@ -825,8 +825,8 @@ TextureImporter:
       name: FireSwordMan-128
       rect:
         serializedVersion: 2
-        x: 95
-        y: 919
+        x: 101
+        y: 913
         width: 89
         height: 54
       alignment: 9
@@ -846,8 +846,8 @@ TextureImporter:
       name: FireSwordMan-129
       rect:
         serializedVersion: 2
-        x: 276
-        y: 917
+        x: 290
+        y: 911
         width: 86
         height: 56
       alignment: 9
@@ -867,8 +867,8 @@ TextureImporter:
       name: FireSwordMan-13
       rect:
         serializedVersion: 2
-        x: 225
-        y: 631
+        x: 313
+        y: 548
         width: 39
         height: 44
       alignment: 9
@@ -888,8 +888,8 @@ TextureImporter:
       name: FireSwordMan-130
       rect:
         serializedVersion: 2
-        x: 364
-        y: 916
+        x: 382
+        y: 910
         width: 87
         height: 58
       alignment: 9
@@ -909,8 +909,8 @@ TextureImporter:
       name: FireSwordMan-131
       rect:
         serializedVersion: 2
-        x: 0
-        y: 419
+        x: 221
+        y: 408
         width: 34
         height: 47
       alignment: 9
@@ -930,8 +930,8 @@ TextureImporter:
       name: FireSwordMan-132
       rect:
         serializedVersion: 2
-        x: 319
-        y: 725
+        x: 201
+        y: 355
         width: 30
         height: 49
       alignment: 9
@@ -951,8 +951,8 @@ TextureImporter:
       name: FireSwordMan-133
       rect:
         serializedVersion: 2
-        x: 291
-        y: 403
+        x: 330
+        y: 273
         width: 29
         height: 48
       alignment: 9
@@ -972,8 +972,8 @@ TextureImporter:
       name: FireSwordMan-134
       rect:
         serializedVersion: 2
-        x: 181
-        y: 438
+        x: 363
+        y: 238
         width: 29
         height: 48
       alignment: 9
@@ -993,8 +993,8 @@ TextureImporter:
       name: FireSwordMan-135
       rect:
         serializedVersion: 2
-        x: 111
-        y: 464
+        x: 462
+        y: 277
         width: 30
         height: 47
       alignment: 9
@@ -1014,8 +1014,8 @@ TextureImporter:
       name: FireSwordMan-136
       rect:
         serializedVersion: 2
-        x: 70
-        y: 446
+        x: 235
+        y: 356
         width: 30
         height: 47
       alignment: 9
@@ -1035,8 +1035,8 @@ TextureImporter:
       name: FireSwordMan-137
       rect:
         serializedVersion: 2
-        x: 261
-        y: 440
+        x: 369
+        y: 343
         width: 30
         height: 48
       alignment: 9
@@ -1056,8 +1056,8 @@ TextureImporter:
       name: FireSwordMan-138
       rect:
         serializedVersion: 2
-        x: 141
-        y: 431
+        x: 191
+        y: 303
         width: 29
         height: 48
       alignment: 9
@@ -1077,8 +1077,8 @@ TextureImporter:
       name: FireSwordMan-139
       rect:
         serializedVersion: 2
-        x: 274
-        y: 582
+        x: 297
+        y: 286
         width: 29
         height: 49
       alignment: 9
@@ -1098,8 +1098,8 @@ TextureImporter:
       name: FireSwordMan-14
       rect:
         serializedVersion: 2
-        x: 88
-        y: 638
+        x: 97
+        y: 522
         width: 41
         height: 44
       alignment: 9
@@ -1119,8 +1119,8 @@ TextureImporter:
       name: FireSwordMan-140
       rect:
         serializedVersion: 2
-        x: 458
-        y: 312
+        x: 269
+        y: 300
         width: 24
         height: 48
       alignment: 9
@@ -1140,8 +1140,8 @@ TextureImporter:
       name: FireSwordMan-141
       rect:
         serializedVersion: 2
-        x: 238
-        y: 435
+        x: 342
+        y: 805
         width: 23
         height: 48
       alignment: 9
@@ -1161,8 +1161,8 @@ TextureImporter:
       name: FireSwordMan-142
       rect:
         serializedVersion: 2
-        x: 482
-        y: 290
+        x: 479
+        y: 103
         width: 23
         height: 48
       alignment: 9
@@ -1182,8 +1182,8 @@ TextureImporter:
       name: FireSwordMan-143
       rect:
         serializedVersion: 2
-        x: 453
-        y: 264
+        x: 444
+        y: 53
         width: 23
         height: 48
       alignment: 9
@@ -1203,8 +1203,8 @@ TextureImporter:
       name: FireSwordMan-144
       rect:
         serializedVersion: 2
-        x: 129
-        y: 382
+        x: 428
+        y: 163
         width: 27
         height: 49
       alignment: 9
@@ -1224,8 +1224,8 @@ TextureImporter:
       name: FireSwordMan-145
       rect:
         serializedVersion: 2
-        x: 196
-        y: 486
+        x: 333
+        y: 363
         width: 32
         height: 49
       alignment: 9
@@ -1245,8 +1245,8 @@ TextureImporter:
       name: FireSwordMan-146
       rect:
         serializedVersion: 2
-        x: 261
-        y: 488
+        x: 165
+        y: 366
         width: 32
         height: 45
       alignment: 9
@@ -1266,8 +1266,8 @@ TextureImporter:
       name: FireSwordMan-147
       rect:
         serializedVersion: 2
-        x: 196
-        y: 535
+        x: 84
+        y: 376
         width: 33
         height: 42
       alignment: 9
@@ -1287,8 +1287,8 @@ TextureImporter:
       name: FireSwordMan-148
       rect:
         serializedVersion: 2
-        x: 237
-        y: 836
+        x: 145
+        y: 812
         width: 31
         height: 44
       alignment: 9
@@ -1308,8 +1308,8 @@ TextureImporter:
       name: FireSwordMan-149
       rect:
         serializedVersion: 2
-        x: 378
-        y: 339
+        x: 398
+        y: 291
         width: 26
         height: 45
       alignment: 9
@@ -1329,8 +1329,8 @@ TextureImporter:
       name: FireSwordMan-15
       rect:
         serializedVersion: 2
-        x: 201
-        y: 681
+        x: 427
+        y: 706
         width: 42
         height: 45
       alignment: 9
@@ -1350,8 +1350,8 @@ TextureImporter:
       name: FireSwordMan-150
       rect:
         serializedVersion: 2
-        x: 404
-        y: 317
+        x: 340
+        y: 700
         width: 25
         height: 46
       alignment: 9
@@ -1371,8 +1371,8 @@ TextureImporter:
       name: FireSwordMan-151
       rect:
         serializedVersion: 2
-        x: 93
-        y: 367
+        x: 388
+        y: 137
         width: 27
         height: 49
       alignment: 9
@@ -1392,8 +1392,8 @@ TextureImporter:
       name: FireSwordMan-152
       rect:
         serializedVersion: 2
-        x: 210
-        y: 435
+        x: 428
+        y: 216
         width: 28
         height: 48
       alignment: 9
@@ -1413,8 +1413,8 @@ TextureImporter:
       name: FireSwordMan-153
       rect:
         serializedVersion: 2
-        x: 432
-        y: 348
+        x: 398
+        y: 242
         width: 26
         height: 45
       alignment: 9
@@ -1434,8 +1434,8 @@ TextureImporter:
       name: FireSwordMan-154
       rect:
         serializedVersion: 2
-        x: 484
-        y: 338
+        x: 450
+        y: 105
         width: 25
         height: 46
       alignment: 9
@@ -1455,8 +1455,8 @@ TextureImporter:
       name: FireSwordMan-155
       rect:
         serializedVersion: 2
-        x: 59
-        y: 349
+        x: 355
+        y: 136
         width: 27
         height: 49
       alignment: 9
@@ -1476,8 +1476,8 @@ TextureImporter:
       name: FireSwordMan-156
       rect:
         serializedVersion: 2
-        x: 261
-        y: 392
+        x: 396
+        y: 190
         width: 28
         height: 48
       alignment: 9
@@ -1497,8 +1497,8 @@ TextureImporter:
       name: FireSwordMan-157
       rect:
         serializedVersion: 2
-        x: 481
-        y: 725
+        x: 157
+        y: 313
         width: 30
         height: 49
       alignment: 9
@@ -1518,8 +1518,8 @@ TextureImporter:
       name: FireSwordMan-158
       rect:
         serializedVersion: 2
-        x: 337
-        y: 500
+        x: 259
+        y: 407
         width: 34
         height: 40
       alignment: 9
@@ -1539,8 +1539,8 @@ TextureImporter:
       name: FireSwordMan-159
       rect:
         serializedVersion: 2
-        x: 337
-        y: 461
+        x: 172
+        y: 415
         width: 34
         height: 39
       alignment: 9
@@ -1560,8 +1560,8 @@ TextureImporter:
       name: FireSwordMan-16
       rect:
         serializedVersion: 2
-        x: 240
-        y: 584
+        x: 134
+        y: 457
         width: 34
         height: 47
       alignment: 9
@@ -1581,8 +1581,8 @@ TextureImporter:
       name: FireSwordMan-160
       rect:
         serializedVersion: 2
-        x: 450
-        y: 448
+        x: 470
+        y: 445
         width: 36
         height: 36
       alignment: 9
@@ -1602,8 +1602,8 @@ TextureImporter:
       name: FireSwordMan-161
       rect:
         serializedVersion: 2
-        x: 58
-        y: 784
+        x: 369
+        y: 855
         width: 56
         height: 15
       alignment: 9
@@ -1623,8 +1623,8 @@ TextureImporter:
       name: FireSwordMan-162
       rect:
         serializedVersion: 2
-        x: 58
-        y: 773
+        x: 282
+        y: 842
         width: 56
         height: 11
       alignment: 9
@@ -1644,8 +1644,8 @@ TextureImporter:
       name: FireSwordMan-163
       rect:
         serializedVersion: 2
-        x: 0
-        y: 767
+        x: 282
+        y: 828
         width: 56
         height: 10
       alignment: 9
@@ -1665,8 +1665,8 @@ TextureImporter:
       name: FireSwordMan-17
       rect:
         serializedVersion: 2
-        x: 303
-        y: 496
+        x: 2
+        y: 394
         width: 34
         height: 46
       alignment: 9
@@ -1686,8 +1686,8 @@ TextureImporter:
       name: FireSwordMan-18
       rect:
         serializedVersion: 2
-        x: 344
-        y: 632
+        x: 182
+        y: 514
         width: 38
         height: 46
       alignment: 9
@@ -1707,8 +1707,8 @@ TextureImporter:
       name: FireSwordMan-19
       rect:
         serializedVersion: 2
-        x: 470
-        y: 624
+        x: 327
+        y: 596
         width: 38
         height: 47
       alignment: 9
@@ -1728,8 +1728,8 @@ TextureImporter:
       name: FireSwordMan-2
       rect:
         serializedVersion: 2
-        x: 100
-        y: 416
+        x: 224
+        y: 253
         width: 29
         height: 48
       alignment: 9
@@ -1749,8 +1749,8 @@ TextureImporter:
       name: FireSwordMan-20
       rect:
         serializedVersion: 2
-        x: 85
-        y: 591
+        x: 2
+        y: 492
         width: 40
         height: 47
       alignment: 9
@@ -1770,8 +1770,8 @@ TextureImporter:
       name: FireSwordMan-21
       rect:
         serializedVersion: 2
-        x: 303
-        y: 589
+        x: 224
+        y: 514
         width: 38
         height: 46
       alignment: 9
@@ -1791,8 +1791,8 @@ TextureImporter:
       name: FireSwordMan-22
       rect:
         serializedVersion: 2
-        x: 382
-        y: 596
+        x: 266
+        y: 500
         width: 38
         height: 46
       alignment: 9
@@ -1812,8 +1812,8 @@ TextureImporter:
       name: FireSwordMan-23
       rect:
         serializedVersion: 2
-        x: 240
-        y: 537
+        x: 90
+        y: 422
         width: 34
         height: 47
       alignment: 9
@@ -1833,8 +1833,8 @@ TextureImporter:
       name: FireSwordMan-24
       rect:
         serializedVersion: 2
-        x: 0
-        y: 518
+        x: 183
+        y: 564
         width: 40
         height: 45
       alignment: 9
@@ -1854,8 +1854,8 @@ TextureImporter:
       name: FireSwordMan-25
       rect:
         serializedVersion: 2
-        x: 305
-        y: 635
+        x: 227
+        y: 564
         width: 39
         height: 45
       alignment: 9
@@ -1875,8 +1875,8 @@ TextureImporter:
       name: FireSwordMan-26
       rect:
         serializedVersion: 2
-        x: 76
-        y: 493
+        x: 260
+        y: 451
         width: 35
         height: 45
       alignment: 9
@@ -1896,8 +1896,8 @@ TextureImporter:
       name: FireSwordMan-27
       rect:
         serializedVersion: 2
-        x: 441
-        y: 729
+        x: 90
+        y: 473
         width: 40
         height: 45
       alignment: 9
@@ -1917,8 +1917,8 @@ TextureImporter:
       name: FireSwordMan-28
       rect:
         serializedVersion: 2
-        x: 351
-        y: 839
+        x: 369
+        y: 722
         width: 54
         height: 45
       alignment: 9
@@ -1938,8 +1938,8 @@ TextureImporter:
       name: FireSwordMan-29
       rect:
         serializedVersion: 2
-        x: 268
-        y: 771
+        x: 282
+        y: 681
         width: 51
         height: 47
       alignment: 9
@@ -1959,8 +1959,8 @@ TextureImporter:
       name: FireSwordMan-3
       rect:
         serializedVersion: 2
-        x: 34
-        y: 408
+        x: 235
+        y: 305
         width: 30
         height: 47
       alignment: 9
@@ -1980,8 +1980,8 @@ TextureImporter:
       name: FireSwordMan-30
       rect:
         serializedVersion: 2
-        x: 351
-        y: 791
+        x: 184
+        y: 660
         width: 51
         height: 48
       alignment: 9
@@ -2001,8 +2001,8 @@ TextureImporter:
       name: FireSwordMan-31
       rect:
         serializedVersion: 2
-        x: 389
-        y: 642
+        x: 399
+        y: 501
         width: 38
         height: 47
       alignment: 9
@@ -2022,8 +2022,8 @@ TextureImporter:
       name: FireSwordMan-32
       rect:
         serializedVersion: 2
-        x: 402
-        y: 776
+        x: 128
+        y: 765
         width: 48
         height: 43
       alignment: 9
@@ -2043,8 +2043,8 @@ TextureImporter:
       name: FireSwordMan-33
       rect:
         serializedVersion: 2
-        x: 59
-        y: 799
+        x: 2
+        y: 724
         width: 59
         height: 32
       alignment: 9
@@ -2064,8 +2064,8 @@ TextureImporter:
       name: FireSwordMan-34
       rect:
         serializedVersion: 2
-        x: 0
-        y: 777
+        x: 369
+        y: 874
         width: 58
         height: 32
       alignment: 9
@@ -2085,8 +2085,8 @@ TextureImporter:
       name: FireSwordMan-35
       rect:
         serializedVersion: 2
-        x: 351
-        y: 884
+        x: 369
+        y: 771
         width: 55
         height: 32
       alignment: 9
@@ -2106,8 +2106,8 @@ TextureImporter:
       name: FireSwordMan-36
       rect:
         serializedVersion: 2
-        x: 402
-        y: 776
+        x: 128
+        y: 765
         width: 48
         height: 43
       alignment: 9
@@ -2127,8 +2127,8 @@ TextureImporter:
       name: FireSwordMan-37
       rect:
         serializedVersion: 2
-        x: 427
-        y: 601
+        x: 441
+        y: 487
         width: 38
         height: 47
       alignment: 9
@@ -2148,8 +2148,8 @@ TextureImporter:
       name: FireSwordMan-38
       rect:
         serializedVersion: 2
-        x: 341
-        y: 593
+        x: 308
+        y: 505
         width: 38
         height: 39
       alignment: 9
@@ -2169,8 +2169,8 @@ TextureImporter:
       name: FireSwordMan-39
       rect:
         serializedVersion: 2
-        x: 350
-        y: 761
+        x: 282
+        y: 647
         width: 48
         height: 30
       alignment: 9
@@ -2190,8 +2190,8 @@ TextureImporter:
       name: FireSwordMan-4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 372
+        x: 297
+        y: 339
         width: 30
         height: 47
       alignment: 9
@@ -2211,8 +2211,8 @@ TextureImporter:
       name: FireSwordMan-40
       rect:
         serializedVersion: 2
-        x: 0
-        y: 611
+        x: 232
+        y: 613
         width: 41
         height: 23
       alignment: 9
@@ -2232,8 +2232,8 @@ TextureImporter:
       name: FireSwordMan-41
       rect:
         serializedVersion: 2
-        x: 432
-        y: 700
+        x: 356
+        y: 530
         width: 39
         height: 29
       alignment: 9
@@ -2253,8 +2253,8 @@ TextureImporter:
       name: FireSwordMan-42
       rect:
         serializedVersion: 2
-        x: 457
-        y: 536
+        x: 473
+        y: 697
         width: 37
         height: 31
       alignment: 9
@@ -2274,8 +2274,8 @@ TextureImporter:
       name: FireSwordMan-43
       rect:
         serializedVersion: 2
-        x: 458
-        y: 360
+        x: 386
+        y: 100
         width: 26
         height: 33
       alignment: 9
@@ -2295,8 +2295,8 @@ TextureImporter:
       name: FireSwordMan-44
       rect:
         serializedVersion: 2
-        x: 30
-        y: 331
+        x: 459
+        y: 155
         width: 27
         height: 44
       alignment: 9
@@ -2316,8 +2316,8 @@ TextureImporter:
       name: FireSwordMan-45
       rect:
         serializedVersion: 2
-        x: 392
-        y: 689
+        x: 46
+        y: 445
         width: 40
         height: 45
       alignment: 9
@@ -2337,8 +2337,8 @@ TextureImporter:
       name: FireSwordMan-46
       rect:
         serializedVersion: 2
-        x: 264
-        y: 631
+        x: 270
+        y: 550
         width: 39
         height: 45
       alignment: 9
@@ -2358,8 +2358,8 @@ TextureImporter:
       name: FireSwordMan-47
       rect:
         serializedVersion: 2
-        x: 414
-        y: 446
+        x: 388
+        y: 395
         width: 36
         height: 45
       alignment: 9
@@ -2379,8 +2379,8 @@ TextureImporter:
       name: FireSwordMan-48
       rect:
         serializedVersion: 2
-        x: 100
-        y: 682
+        x: 2
+        y: 586
         width: 44
         height: 43
       alignment: 9
@@ -2400,8 +2400,8 @@ TextureImporter:
       name: FireSwordMan-49
       rect:
         serializedVersion: 2
-        x: 450
-        y: 774
+        x: 426
+        y: 660
         width: 43
         height: 42
       alignment: 9
@@ -2421,8 +2421,8 @@ TextureImporter:
       name: FireSwordMan-5
       rect:
         serializedVersion: 2
-        x: 151
-        y: 479
+        x: 428
+        y: 320
         width: 30
         height: 48
       alignment: 9
@@ -2442,8 +2442,8 @@ TextureImporter:
       name: FireSwordMan-50
       rect:
         serializedVersion: 2
-        x: 406
-        y: 870
+        x: 52
+        y: 638
         width: 45
         height: 46
       alignment: 9
@@ -2463,8 +2463,8 @@ TextureImporter:
       name: FireSwordMan-51
       rect:
         serializedVersion: 2
-        x: 80
-        y: 538
+        x: 308
+        y: 448
         width: 36
         height: 53
       alignment: 9
@@ -2484,8 +2484,8 @@ TextureImporter:
       name: FireSwordMan-52
       rect:
         serializedVersion: 2
-        x: 420
-        y: 545
+        x: 473
+        y: 847
         width: 37
         height: 56
       alignment: 9
@@ -2505,8 +2505,8 @@ TextureImporter:
       name: FireSwordMan-53
       rect:
         serializedVersion: 2
-        x: 320
-        y: 774
+        x: 149
+        y: 566
         width: 30
         height: 60
       alignment: 9
@@ -2526,8 +2526,8 @@ TextureImporter:
       name: FireSwordMan-54
       rect:
         serializedVersion: 2
-        x: 293
-        y: 451
+        x: 121
+        y: 351
         width: 32
         height: 45
       alignment: 9
@@ -2547,8 +2547,8 @@ TextureImporter:
       name: FireSwordMan-55
       rect:
         serializedVersion: 2
-        x: 0
-        y: 723
+        x: 369
+        y: 807
         width: 55
         height: 44
       alignment: 9
@@ -2568,8 +2568,8 @@ TextureImporter:
       name: FireSwordMan-56
       rect:
         serializedVersion: 2
-        x: 44
-        y: 651
+        x: 184
+        y: 613
         width: 44
         height: 43
       alignment: 9
@@ -2589,8 +2589,8 @@ TextureImporter:
       name: FireSwordMan-57
       rect:
         serializedVersion: 2
-        x: 429
-        y: 305
+        x: 416
+        y: 68
         width: 24
         height: 43
       alignment: 9
@@ -2610,8 +2610,8 @@ TextureImporter:
       name: FireSwordMan-58
       rect:
         serializedVersion: 2
-        x: 398
-        y: 734
+        x: 50
+        y: 543
         width: 43
         height: 42
       alignment: 9
@@ -2631,8 +2631,8 @@ TextureImporter:
       name: FireSwordMan-59
       rect:
         serializedVersion: 2
-        x: 268
-        y: 818
+        x: 184
+        y: 712
         width: 52
         height: 49
       alignment: 9
@@ -2652,8 +2652,8 @@ TextureImporter:
       name: FireSwordMan-6
       rect:
         serializedVersion: 2
-        x: 64
-        y: 398
+        x: 257
+        y: 248
         width: 29
         height: 48
       alignment: 9
@@ -2673,8 +2673,8 @@ TextureImporter:
       name: FireSwordMan-60
       rect:
         serializedVersion: 2
-        x: 56
-        y: 727
+        x: 282
+        y: 778
         width: 55
         height: 46
       alignment: 9
@@ -2694,8 +2694,8 @@ TextureImporter:
       name: FireSwordMan-61
       rect:
         serializedVersion: 2
-        x: 157
-        y: 708
+        x: 51
+        y: 589
         width: 44
         height: 45
       alignment: 9
@@ -2715,8 +2715,8 @@ TextureImporter:
       name: FireSwordMan-62
       rect:
         serializedVersion: 2
-        x: 289
-        y: 358
+        x: 356
+        y: 189
         width: 28
         height: 45
       alignment: 9
@@ -2736,8 +2736,8 @@ TextureImporter:
       name: FireSwordMan-63
       rect:
         serializedVersion: 2
-        x: 170
-        y: 753
+        x: 369
+        y: 615
         width: 47
         height: 55
       alignment: 9
@@ -2757,8 +2757,8 @@ TextureImporter:
       name: FireSwordMan-64
       rect:
         serializedVersion: 2
-        x: 452
-        y: 966
+        x: 180
+        y: 765
         width: 60
         height: 58
       alignment: 9
@@ -2778,8 +2778,8 @@ TextureImporter:
       name: FireSwordMan-65
       rect:
         serializedVersion: 2
-        x: 451
-        y: 860
+        x: 282
+        y: 732
         width: 54
         height: 42
       alignment: 9
@@ -2799,8 +2799,8 @@ TextureImporter:
       name: FireSwordMan-66
       rect:
         serializedVersion: 2
-        x: 451
-        y: 816
+        x: 369
+        y: 674
         width: 53
         height: 44
       alignment: 9
@@ -2820,8 +2820,8 @@ TextureImporter:
       name: FireSwordMan-67
       rect:
         serializedVersion: 2
-        x: 349
-        y: 678
+        x: 2
+        y: 444
         width: 40
         height: 44
       alignment: 9
@@ -2841,8 +2841,8 @@ TextureImporter:
       name: FireSwordMan-68
       rect:
         serializedVersion: 2
-        x: 0
-        y: 842
+        x: 2
+        y: 828
         width: 70
         height: 40
       alignment: 9
@@ -2862,8 +2862,8 @@ TextureImporter:
       name: FireSwordMan-69
       rect:
         serializedVersion: 2
-        x: 170
-        y: 841
+        x: 180
+        y: 827
         width: 67
         height: 39
       alignment: 9
@@ -2883,8 +2883,8 @@ TextureImporter:
       name: FireSwordMan-7
       rect:
         serializedVersion: 2
-        x: 274
-        y: 533
+        x: 365
+        y: 290
         width: 29
         height: 49
       alignment: 9
@@ -2904,8 +2904,8 @@ TextureImporter:
       name: FireSwordMan-70
       rect:
         serializedVersion: 2
-        x: 70
-        y: 831
+        x: 76
+        y: 817
         width: 65
         height: 39
       alignment: 9
@@ -2925,8 +2925,8 @@ TextureImporter:
       name: FireSwordMan-71
       rect:
         serializedVersion: 2
-        x: 0
-        y: 419
+        x: 221
+        y: 408
         width: 34
         height: 47
       alignment: 9
@@ -2946,7 +2946,7 @@ TextureImporter:
       name: FireSwordMan-72
       rect:
         serializedVersion: 2
-        x: 0
+        x: 369
         y: 563
         width: 40
         height: 48
@@ -2967,8 +2967,8 @@ TextureImporter:
       name: FireSwordMan-73
       rect:
         serializedVersion: 2
-        x: 0
-        y: 466
+        x: 348
+        y: 416
         width: 36
         height: 52
       alignment: 9
@@ -2988,8 +2988,8 @@ TextureImporter:
       name: FireSwordMan-74
       rect:
         serializedVersion: 2
-        x: 135
-        y: 815
+        x: 470
+        y: 386
         width: 35
         height: 55
       alignment: 9
@@ -3009,8 +3009,8 @@ TextureImporter:
       name: FireSwordMan-75
       rect:
         serializedVersion: 2
-        x: 161
-        y: 527
+        x: 182
+        y: 458
         width: 35
         height: 52
       alignment: 9
@@ -3030,8 +3030,8 @@ TextureImporter:
       name: FireSwordMan-76
       rect:
         serializedVersion: 2
-        x: 36
-        y: 455
+        x: 244
+        y: 758
         width: 34
         height: 54
       alignment: 9
@@ -3051,8 +3051,8 @@ TextureImporter:
       name: FireSwordMan-77
       rect:
         serializedVersion: 2
-        x: 371
-        y: 435
+        x: 128
+        y: 400
         width: 33
         height: 53
       alignment: 9
@@ -3072,8 +3072,8 @@ TextureImporter:
       name: FireSwordMan-78
       rect:
         serializedVersion: 2
-        x: 205
-        y: 577
+        x: 467
+        y: 328
         width: 35
         height: 54
       alignment: 9
@@ -3093,8 +3093,8 @@ TextureImporter:
       name: FireSwordMan-79
       rect:
         serializedVersion: 2
-        x: 185
-        y: 633
+        x: 413
+        y: 552
         width: 40
         height: 48
       alignment: 9
@@ -3114,8 +3114,8 @@ TextureImporter:
       name: FireSwordMan-8
       rect:
         serializedVersion: 2
-        x: 264
-        y: 676
+        x: 428
+        y: 803
         width: 41
         height: 45
       alignment: 9
@@ -3135,8 +3135,8 @@ TextureImporter:
       name: FireSwordMan-80
       rect:
         serializedVersion: 2
-        x: 116
-        y: 511
+        x: 221
+        y: 459
         width: 35
         height: 51
       alignment: 9
@@ -3156,8 +3156,8 @@ TextureImporter:
       name: FireSwordMan-81
       rect:
         serializedVersion: 2
-        x: 450
-        y: 393
+        x: 428
+        y: 372
         width: 35
         height: 55
       alignment: 9
@@ -3177,8 +3177,8 @@ TextureImporter:
       name: FireSwordMan-82
       rect:
         serializedVersion: 2
-        x: 416
-        y: 491
+        x: 474
+        y: 968
         width: 36
         height: 54
       alignment: 9
@@ -3198,8 +3198,8 @@ TextureImporter:
       name: FireSwordMan-83
       rect:
         serializedVersion: 2
-        x: 229
-        y: 778
+        x: 239
+        y: 640
         width: 39
         height: 58
       alignment: 9
@@ -3219,8 +3219,8 @@ TextureImporter:
       name: FireSwordMan-84
       rect:
         serializedVersion: 2
-        x: 229
-        y: 483
+        x: 297
+        y: 390
         width: 32
         height: 54
       alignment: 9
@@ -3240,8 +3240,8 @@ TextureImporter:
       name: FireSwordMan-85
       rect:
         serializedVersion: 2
-        x: 185
-        y: 633
+        x: 413
+        y: 552
         width: 40
         height: 48
       alignment: 9
@@ -3261,8 +3261,8 @@ TextureImporter:
       name: FireSwordMan-86
       rect:
         serializedVersion: 2
-        x: 317
-        y: 336
+        x: 323
+        y: 188
         width: 28
         height: 44
       alignment: 9
@@ -3282,12 +3282,12 @@ TextureImporter:
       name: FireSwordMan-87
       rect:
         serializedVersion: 2
-        x: 345
-        y: 336
+        x: 460
+        y: 203
         width: 28
         height: 33
       alignment: 9
-      pivot: {x: 0.60714287, y: 0.42424244}
+      pivot: {x: 0.607144, y: 0.42424244}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3303,12 +3303,12 @@ TextureImporter:
       name: FireSwordMan-88
       rect:
         serializedVersion: 2
-        x: 320
-        y: 834
+        x: 149
+        y: 630
         width: 31
         height: 33
       alignment: 9
-      pivot: {x: 0.6451613, y: 0.42424244}
+      pivot: {x: 0.64516234, y: 0.42424244}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3324,12 +3324,12 @@ TextureImporter:
       name: FireSwordMan-89
       rect:
         serializedVersion: 2
-        x: 30
-        y: 375
+        x: 290
+        y: 249
         width: 29
         height: 33
       alignment: 9
-      pivot: {x: 0.6206897, y: 0.42424244}
+      pivot: {x: 0.62069076, y: 0.42424244}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3345,8 +3345,8 @@ TextureImporter:
       name: FireSwordMan-9
       rect:
         serializedVersion: 2
-        x: 44
-        y: 607
+        x: 282
+        y: 599
         width: 41
         height: 44
       alignment: 9
@@ -3366,12 +3366,12 @@ TextureImporter:
       name: FireSwordMan-90
       rect:
         serializedVersion: 2
-        x: 354
-        y: 402
+        x: 323
+        y: 236
         width: 29
         height: 33
       alignment: 9
-      pivot: {x: 0.6206897, y: 0.42424244}
+      pivot: {x: 0.62069076, y: 0.42424244}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3387,12 +3387,12 @@ TextureImporter:
       name: FireSwordMan-91
       rect:
         serializedVersion: 2
-        x: 320
-        y: 380
+        x: 290
+        y: 212
         width: 29
         height: 33
       alignment: 9
-      pivot: {x: 0.6206897, y: 0.42424244}
+      pivot: {x: 0.62069076, y: 0.42424244}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3408,12 +3408,12 @@ TextureImporter:
       name: FireSwordMan-92
       rect:
         serializedVersion: 2
-        x: 349
-        y: 369
+        x: 461
+        y: 240
         width: 29
         height: 33
       alignment: 9
-      pivot: {x: 0.6206897, y: 0.42424244}
+      pivot: {x: 0.62069076, y: 0.42424244}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3429,12 +3429,12 @@ TextureImporter:
       name: FireSwordMan-93
       rect:
         serializedVersion: 2
-        x: 0
-        y: 328
+        x: 419
+        y: 115
         width: 27
         height: 44
       alignment: 9
-      pivot: {x: 0.5555556, y: 0.3181818}
+      pivot: {x: 0.5555567, y: 0.3181818}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3450,12 +3450,12 @@ TextureImporter:
       name: FireSwordMan-94
       rect:
         serializedVersion: 2
-        x: 404
-        y: 412
+        x: 331
+        y: 325
         width: 30
         height: 34
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.4117647}
+      pivot: {x: 0.5333344, y: 0.4117647}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3471,12 +3471,12 @@ TextureImporter:
       name: FireSwordMan-95
       rect:
         serializedVersion: 2
-        x: 0
-        y: 882
+        x: 2
+        y: 872
         width: 82
         height: 33
       alignment: 9
-      pivot: {x: 0.58536583, y: 0.42424244}
+      pivot: {x: 0.58536625, y: 0.42424244}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3492,8 +3492,8 @@ TextureImporter:
       name: FireSwordMan-96
       rect:
         serializedVersion: 2
-        x: 170
-        y: 808
+        x: 65
+        y: 780
         width: 59
         height: 33
       alignment: 9
@@ -3513,8 +3513,8 @@ TextureImporter:
       name: FireSwordMan-97
       rect:
         serializedVersion: 2
-        x: 0
-        y: 809
+        x: 65
+        y: 743
         width: 59
         height: 33
       alignment: 9
@@ -3534,8 +3534,8 @@ TextureImporter:
       name: FireSwordMan-98
       rect:
         serializedVersion: 2
-        x: 55
-        y: 694
+        x: 2
+        y: 633
         width: 45
         height: 33
       alignment: 9
@@ -3555,8 +3555,8 @@ TextureImporter:
       name: FireSwordMan-99
       rect:
         serializedVersion: 2
-        x: 488
-        y: 434
+        x: 269
+        y: 352
         width: 24
         height: 51
       alignment: 9
@@ -3576,12 +3576,12 @@ TextureImporter:
       name: SwordMan-128
       rect:
         serializedVersion: 2
-        x: 303
-        y: 542
+        x: 46
+        y: 394
         width: 34
         height: 47
       alignment: 9
-      pivot: {x: 0.7058824, y: 0.5319149}
+      pivot: {x: 0.28235295, y: 0.5319149}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3597,12 +3597,12 @@ TextureImporter:
       name: SwordMan-129
       rect:
         serializedVersion: 2
-        x: 129
-        y: 616
+        x: 457
+        y: 538
         width: 40
         height: 48
       alignment: 9
-      pivot: {x: 0.75, y: 0.5208333}
+      pivot: {x: 0.39, y: 0.5208333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3618,12 +3618,12 @@ TextureImporter:
       name: SwordMan-130
       rect:
         serializedVersion: 2
-        x: 378
-        y: 488
+        x: 473
+        y: 639
         width: 36
         height: 54
       alignment: 9
-      pivot: {x: 0.9444444, y: 0.5}
+      pivot: {x: 0.54444444, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3639,12 +3639,12 @@ TextureImporter:
       name: SwordMan-131
       rect:
         serializedVersion: 2
-        x: 40
-        y: 509
+        x: 390
+        y: 444
         width: 36
         height: 53
       alignment: 9
-      pivot: {x: 0.9444444, y: 0.509434}
+      pivot: {x: 0.54444444, y: 0.509434}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3660,12 +3660,12 @@ TextureImporter:
       name: SwordMan-132
       rect:
         serializedVersion: 2
-        x: 432
-        y: 648
+        x: 240
+        y: 702
         width: 38
         height: 52
       alignment: 9
-      pivot: {x: 0.94736844, y: 0.5192308}
+      pivot: {x: 0.56842107, y: 0.5192308}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3681,12 +3681,12 @@ TextureImporter:
       name: SwordMan-133
       rect:
         serializedVersion: 2
-        x: 471
-        y: 671
+        x: 431
+        y: 852
         width: 38
         height: 54
       alignment: 9
-      pivot: {x: 0.94736844, y: 0.5}
+      pivot: {x: 0.56842107, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3702,12 +3702,12 @@ TextureImporter:
       name: SwordMan-134
       rect:
         serializedVersion: 2
-        x: 169
-        y: 579
+        x: 142
+        y: 508
         width: 36
         height: 54
       alignment: 9
-      pivot: {x: 0.9444444, y: 0.5}
+      pivot: {x: 0.54444444, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3723,12 +3723,12 @@ TextureImporter:
       name: SwordMan-135
       rect:
         serializedVersion: 2
-        x: 125
-        y: 562
+        x: 350
+        y: 472
         width: 36
         height: 54
       alignment: 9
-      pivot: {x: 0.9444444, y: 0.5}
+      pivot: {x: 0.54444444, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3744,12 +3744,12 @@ TextureImporter:
       name: SwordMan-136
       rect:
         serializedVersion: 2
-        x: 341
-        y: 540
+        x: 473
+        y: 732
         width: 37
         height: 53
       alignment: 9
-      pivot: {x: 0.9189189, y: 0.509434}
+      pivot: {x: 0.5297297, y: 0.509434}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3765,12 +3765,12 @@ TextureImporter:
       name: SwordMan-137
       rect:
         serializedVersion: 2
-        x: 452
-        y: 484
+        x: 430
+        y: 431
         width: 36
         height: 52
       alignment: 9
-      pivot: {x: 0.9444444, y: 0.5192308}
+      pivot: {x: 0.54444444, y: 0.5192308}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3786,12 +3786,12 @@ TextureImporter:
       name: SwordMan-138
       rect:
         serializedVersion: 2
-        x: 379
-        y: 542
+        x: 473
+        y: 789
         width: 37
         height: 54
       alignment: 9
-      pivot: {x: 0.9189189, y: 0.5}
+      pivot: {x: 0.5297297, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3807,12 +3807,12 @@ TextureImporter:
       name: SwordMan-139
       rect:
         serializedVersion: 2
-        x: 465
-        y: 567
+        x: 473
+        y: 907
         width: 37
         height: 57
       alignment: 9
-      pivot: {x: 0.9189189, y: 0.47368422}
+      pivot: {x: 0.5297297, y: 0.47368422}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3828,12 +3828,12 @@ TextureImporter:
       name: SwordMan-140
       rect:
         serializedVersion: 2
-        x: 0
-        y: 673
+        x: 101
+        y: 613
         width: 44
         height: 50
       alignment: 9
-      pivot: {x: 0.77272725, y: 0.54}
+      pivot: {x: 0.44545454, y: 0.54}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3849,12 +3849,12 @@ TextureImporter:
       name: SwordMan-161
       rect:
         serializedVersion: 2
-        x: 337
-        y: 500
+        x: 259
+        y: 407
         width: 34
         height: 40
       alignment: 9
-      pivot: {x: 0.9411765, y: 0.625}
+      pivot: {x: 0.5176471, y: 0.625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3870,8 +3870,8 @@ TextureImporter:
       name: SwordMan-162
       rect:
         serializedVersion: 2
-        x: 337
-        y: 461
+        x: 172
+        y: 415
         width: 34
         height: 39
       alignment: 9
@@ -3891,8 +3891,8 @@ TextureImporter:
       name: SwordMan-163
       rect:
         serializedVersion: 2
-        x: 450
-        y: 448
+        x: 470
+        y: 445
         width: 36
         height: 36
       alignment: 9
@@ -3912,8 +3912,8 @@ TextureImporter:
       name: SwordMan-164
       rect:
         serializedVersion: 2
-        x: 58
-        y: 784
+        x: 369
+        y: 855
         width: 56
         height: 15
       alignment: 9
@@ -3933,8 +3933,8 @@ TextureImporter:
       name: SwordMan-165
       rect:
         serializedVersion: 2
-        x: 58
-        y: 773
+        x: 282
+        y: 842
         width: 56
         height: 11
       alignment: 9
@@ -3954,8 +3954,8 @@ TextureImporter:
       name: SwordMan-166
       rect:
         serializedVersion: 2
-        x: 0
-        y: 767
+        x: 282
+        y: 828
         width: 56
         height: 10
       alignment: 9
@@ -3975,8 +3975,8 @@ TextureImporter:
       name: Avatar_1
       rect:
         serializedVersion: 2
-        x: 451
-        y: 902
+        x: 2
+        y: 760
         width: 59
         height: 64
       alignment: 9

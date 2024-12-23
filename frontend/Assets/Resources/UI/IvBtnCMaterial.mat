@@ -47,6 +47,7 @@ Material:
     - _GrayOut: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ShiningOpacity: 0
     - _SrcBlend: 5
     - _Surface: 1
     - _ZTest: 3

@@ -31,7 +31,7 @@ public class OnlineMapController : AbstractMapController {
     */
     private int slowDownIfdLagThreshold = 2;
     private int freezeIfdLagThresHold = 3;
-    private int acIfdLagThresHold = 25; // "ac == all-confirmed"
+    private int acIfdLagThresHold = 200; // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms, 200 InputFrameDownsyncs map to 3 seconds 
     public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
@@ -562,7 +562,7 @@ public class OnlineMapController : AbstractMapController {
 
             // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
             if (useFreezingLockStep && !shouldLockStep) {
-                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), freezeIfdLagThresHold, disconnectedPeerJoinIndices);
+                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
                 shouldLockStep = (
                     tooFastOrNot

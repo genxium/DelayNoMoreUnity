@@ -216,32 +216,32 @@
  <objectgroup id="183" name="Pickable">
   <object id="594" gid="209" x="832" y="208" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="595" gid="209" x="1696" y="208" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="720" gid="209" x="720" y="368" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="745" gid="209" x="1808" y="368" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="762" gid="209" x="809" y="592" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="763" gid="209" x="1724" y="593" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
  </objectgroup>

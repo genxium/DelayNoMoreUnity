@@ -92,7 +92,7 @@
    </properties>
    <point/>
   </object>
-  <object id="580" name="BossAwaker" x="32" y="608" width="960" height="64">
+  <object id="580" name="BossAwaker" x="32" y="656" width="960" height="64">
    <properties>
     <property name="id" value="5"/>
     <property name="quota" value="1"/>
@@ -386,13 +386,13 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="582" x="432" y="320" width="32" height="48">
+  <object id="582" x="432" y="336" width="32" height="32">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
    </properties>
   </object>
-  <object id="583" x="528" y="320" width="32" height="48">
+  <object id="583" x="528" y="336" width="32" height="32">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="20"/>
