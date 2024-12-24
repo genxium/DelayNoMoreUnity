@@ -5,7 +5,7 @@
   <property name="battleDurationSeconds" value="180"/>
   <property name="levelId" value="4"/>
   <property name="missionEvtSubId" value="5"/>
-  <property name="npcPreallocCapDict" value="4104:4;16:4;4097:12;4098:6;4099:4;4100:4;4096:2;4101:2;4102:4;4103:6;4105:2;4108:8;4109:6;4106:6;4110:4;4111:2"/>
+  <property name="npcPreallocCapDict" value="4104:4;16:4;4097:8;4098:6;4099:4;4100:4;4096:2;4101:2;4102:4;4103:6;4105:2;4108:8;4109:6;4106:6;4110:4;4111:2;4112:2"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -58,14 +58,14 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="135" name="Player2St" x="1552" y="432">
+  <object id="135" name="Player2St" x="1554" y="448">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="531" name="Player1St" x="992" y="432">
+  <object id="531" name="Player1St" x="983" y="448">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
@@ -173,7 +173,7 @@
   <object id="607" name="IndiWaveDoor1-R" gid="2147483668" x="1744" y="368" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="2"/>
-    <property name="characterSpawnerTimeSeq" value="1:4097,4097,4097,4097;2:4108,4108;3:4109,4109;4:4110,4098,4098;"/>
+    <property name="characterSpawnerTimeSeq" value="1:4097,4097,4112;2:4108,4108;3:4109,4109,4112;4:4110,4098,4098;"/>
     <property name="delayedFrames" value="45"/>
     <property name="dirX" value="-2"/>
     <property name="id" value="3"/>
@@ -201,7 +201,7 @@
   <object id="606" name="IndiWaveDoor1-L" gid="20" x="784" y="368" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="1"/>
-    <property name="characterSpawnerTimeSeq" value="1:4097,4097,4097,4097;2:4108,4108;3:4109,4109;4:4110,4098,4098;"/>
+    <property name="characterSpawnerTimeSeq" value="1:4097,4097,4112;2:4108,4108;3:4109,4109,4112;4:4110,4098,4098;"/>
     <property name="delayedFrames" value="45"/>
     <property name="dirX" value="+2"/>
     <property name="id" value="1"/>
@@ -246,28 +246,28 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="644" gid="1602" x="1488" y="160" width="32" height="23">
+  <object id="644" gid="1602" x="1536" y="288" width="32" height="23">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="645" gid="2147485250" x="1008" y="160" width="32" height="23">
+  <object id="645" gid="2147485250" x="1008" y="288" width="32" height="23">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="647" gid="1601" x="1360" y="176" width="32" height="23">
+  <object id="647" gid="1601" x="1440" y="272" width="32" height="23">
    <properties>
     <property name="dirX" value="0"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="648" gid="2147485249" x="1136" y="160" width="32" height="23">
+  <object id="648" gid="2147485249" x="1088" y="304" width="32" height="23">
    <properties>
     <property name="dirX" value="0"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
@@ -567,7 +567,7 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="489" name="Floor2FlyingCue" x="640" y="96" width="1280" height="64">
+  <object id="489" name="Floor2FlyingCue" x="640" y="80" width="1280" height="64">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="2"/>
@@ -681,20 +681,6 @@
    </properties>
    <point/>
   </object>
-  <object id="724" name="Floor1Jumper4" x="1328" y="416">
-   <properties>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="725" name="Floor1Jumper3" x="1438" y="204.667">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="4"/>
-   </properties>
-   <point/>
-  </object>
   <object id="726" name="Floor1Jumper2" x="928" y="368">
    <properties>
     <property name="flAct" value="3"/>
@@ -703,27 +689,6 @@
    <point/>
   </object>
   <object id="727" name="Floor1Jumper1" x="1088" y="336">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="4"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="728" name="Floor1Jumper1" x="1200" y="416">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="4"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="730" name="Floor1Jumper2" x="984" y="337">
-   <properties>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="731" name="Floor1Jumper1" x="1573.33" y="337.667">
    <properties>
     <property name="flAct" value="19"/>
     <property name="frAct" value="4"/>
@@ -770,13 +735,6 @@
    </properties>
    <point/>
   </object>
-  <object id="740" name="Floor1Jumper2" x="1120" y="208">
-   <properties>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
-  </object>
   <object id="733" name="Floor1Jumper1" x="1096" y="480">
    <properties>
     <property name="flAct" value="19"/>
@@ -784,21 +742,7 @@
    </properties>
    <point/>
   </object>
-  <object id="734" name="Floor1Jumper2" x="992" y="481">
-   <properties>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="735" name="Floor1Jumper1" x="1560" y="480">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="4"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="736" name="Floor1Jumper2" x="1456" y="481">
+  <object id="736" name="Floor1Jumper2" x="1451" y="481">
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="20"/>
@@ -830,34 +774,6 @@
     <property name="fuAct" value="1"/>
     <property name="fuCaptureFrames" value="120"/>
    </properties>
-  </object>
-  <object id="752" name="Floor1Jumper1" x="1140" y="276.667">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="753" name="Floor1Jumper1" x="1178.67" y="277.333">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="754" name="Floor1Jumper1" x="1379.33" y="276.001">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="755" name="Floor1Jumper1" x="1418" y="276.667">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
   </object>
   <object id="757" name="Floor1Jumper2" x="1040" y="416">
    <properties>

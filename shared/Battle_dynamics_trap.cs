@@ -303,19 +303,19 @@ namespace shared {
             }
 
             int targetFramesInPatrolCue = 0;
-            if (fr && 0 != patrolCue.FrAct) {
+            if (fr) {
                 targetFramesInPatrolCue = patrolCue.FrCaptureFrames;
                 DecodeInput(patrolCue.FrAct, decodedInputHolder);
                 //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the right", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue)); 
-            } else if (fl && 0 != patrolCue.FlAct) {
+            } else if (fl) {
                 targetFramesInPatrolCue = patrolCue.FlCaptureFrames;
                 DecodeInput(patrolCue.FlAct, decodedInputHolder);
                 //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the left", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue));
-            } else if (fu && 0 != patrolCue.FuAct) {
+            } else if (fu) {
                 targetFramesInPatrolCue = patrolCue.FuCaptureFrames;
                 DecodeInput(patrolCue.FuAct, decodedInputHolder);
                 //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the top", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue)); 
-            } else if (fd && 0 != patrolCue.FdAct) {
+            } else if (fd) {
                 targetFramesInPatrolCue = patrolCue.FdCaptureFrames;
                 DecodeInput(patrolCue.FdAct, decodedInputHolder);
                 //logger.LogInfo(String.Format("Trap aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3} }} collided with bCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} from the bottom", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, patrolCue)); 

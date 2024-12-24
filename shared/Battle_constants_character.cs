@@ -1016,7 +1016,7 @@ namespace shared {
                         JumpHoldingToFly = true,
                         IsKeyCh = true,
                         Ifc = IfaceCat.Flesh,
-                        EleResistance = (ELE_FIRE | ELE_THUNDER),
+                        EleResistance = (ELE_THUNDER),
                         EleWeakness = (ELE_ICE | ELE_WATER),
                         GaugeIncWhenKilled = 100,
                     }),

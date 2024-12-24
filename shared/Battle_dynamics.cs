@@ -2195,6 +2195,7 @@ namespace shared {
                     }
                 }
                 dst.ActivatedRdfId = currRenderFrame.Id;
+                //logger.LogInfo(String.Format("@rdfId={0}, npc id={1} awaken by trigger editor id = {2}, local id = {3}", currRenderFrame.Id, dst.Id, trigger.EditorId ,trigger.TriggerLocalId));
             }
 
             _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFramePickables, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, pickableColliderCntOffset, colliderCnt, trapLocalIdToColliderAttrs, logger);
