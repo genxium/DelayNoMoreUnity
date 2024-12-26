@@ -116,13 +116,14 @@ namespace shared {
                                                                 .SetDamage(9);
 
         public static BulletConfig SwordManMelee1GroundHit3BlStopper = new BulletConfig(SwordManMelee1GroundHit3Bl)
-                                                                .SetStartupFrames(29)
+                                                                .SetStartupFrames(SwordManMelee1GroundHit3Bl.StartupFrames + SwordManMelee1GroundHit3Bl.ActiveFrames)
+                                                                .SetStartupInvinsibleFrames(2)
                                                                 .SetActiveFrames(11)
                                                                 .SetRemainsUponHit(true)
                                                                 .SetSelfLockVel(0, 0, 0) 
                                                                 .SetCancellableFrames(0, 0)
                                                                 .SetMhType(MultiHitType.None)
-                                                                .SetDamage(9);
+                                                                .SetDamage(0);
         
         public static Skill SwordManMelee1PrimerSkill = new Skill {
             RecoveryFrames = 50,
@@ -1587,7 +1588,6 @@ namespace shared {
             ExplosionSfxName = "Explosion1",
             ActiveVfxSpeciesId = VfxWaterBallCast1.SpeciesId,
             IsPixelatedActiveVfx = true,
-            RejectsReflectionFromAnotherBullet = true,
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
         };
 
@@ -1606,7 +1606,7 @@ namespace shared {
             ActiveFrames = 480,
             HitStunFrames = 16,
             BlockStunFrames = 9,
-            Damage = 15,
+            Damage = 14,
             PushbackVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = 0,
@@ -1636,7 +1636,6 @@ namespace shared {
             CancellableStFrame = 16,
             CancellableEdFrame = 40, 
             CancellableByInventorySlotC = true,
-            RejectsReflectionFromAnotherBullet = true,
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
         };
 
@@ -2221,9 +2220,9 @@ namespace shared {
         }
         .AddHit(MobileThunderBallPrimerBulletAir);
 
-        public static BulletConfig HunterDashSlashStarterBullet = new BulletConfig {
+        public static BulletConfig HunterDashSlashBl1 = new BulletConfig {
             StartupFrames = 13,
-            StartupInvinsibleFrames = 12,
+            StartupInvinsibleFrames = 13,
             ActiveFrames = 15,
             HitStunFrames = MAX_INT,
             HitInvinsibleFrames = 60,
@@ -2249,9 +2248,24 @@ namespace shared {
             BType = BulletType.Melee,
             CharacterEmitSfxName = "SlashEmitSpd3",
             ExplosionSfxName="Melee_Explosion2",
-            MhType = MultiHitType.FromPrevHitActual,
             DelaySelfVelToActive = true,
             RemainsUponHit = true,
+            MhType = MultiHitType.FromEmission, 
+            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX, 
+        };
+
+        public static BulletConfig HunterDashSlashStopper = new BulletConfig {
+            StartupFrames = (HunterDashSlashBl1.StartupFrames + HunterDashSlashBl1.ActiveFrames),
+            StartupInvinsibleFrames = 40 - (HunterDashSlashBl1.StartupFrames + HunterDashSlashBl1.ActiveFrames),
+            ActiveFrames = 40 - (HunterDashSlashBl1.StartupFrames + HunterDashSlashBl1.ActiveFrames),
+            SelfLockVelX = 0,
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            SpeciesId = 5,
+            DirX = 1,
+            DirY = 0,
+            OmitSoftPushback = true,
+            BType = BulletType.Melee,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX, 
         };
 
@@ -2265,7 +2279,8 @@ namespace shared {
                 CharacterHardnessDelta = 3,
             },
         }
-        .AddHit(HunterDashSlashStarterBullet);
+        .AddHit(HunterDashSlashBl1)
+        .AddHit(HunterDashSlashStopper);
 
         public static BulletConfig DiverImpactStarterBullet = new BulletConfig {
             StartupFrames = 10,
@@ -3619,7 +3634,7 @@ namespace shared {
             HitStunFrames = 24,
             HitInvinsibleFrames = 6,
             BlockStunFrames = 2,
-            Damage = 22,
+            Damage = 15,
             PushbackVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = 0,
             SelfLockVelX = 0,
@@ -3659,7 +3674,7 @@ namespace shared {
 
         public static BulletConfig WandWitchHeatBeamBulletHit1 = new BulletConfig {
             StartupFrames = 80,
-            StartupInvinsibleFrames = 12,
+            StartupInvinsibleFrames = 120,
             ActiveFrames = 180,
             HitStunFrames = 12,
             BlockStunFrames = 9,

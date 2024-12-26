@@ -55,7 +55,6 @@ namespace Story {
             new KeyValuePair<int, string>(LEVEL_SMALL_FOREST, "SmallForest"),
             new KeyValuePair<int, string>(LEVEL_ZIGZAGZOO, "ZigZagZoo"),
             new KeyValuePair<int, string>(LEVEL_CASCADE_FARM, "CascadeFarm"),
-            //new KeyValuePair<int, string>(LEVEL_CASCADE_FARM, "FlatVersus"),
             new KeyValuePair<int, string>(LEVEL_DESCENDING_PALACE, "DescendingPalace"),
             new KeyValuePair<int, string>(LEVEL_ARROW_PALACE, "ArrowPalace"),
             new KeyValuePair<int, string>(LEVEL_FOX_BAY, "FoxBay"),

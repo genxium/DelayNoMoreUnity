@@ -712,6 +712,9 @@ namespace shared {
                                 bool successfulDef1 = false;
                                 if (!shouldBeImmune) {
                                     (effDamage, successfulDef1) = _calcEffDamage(oldNextCharacterState, victimChConfig, victimNextFrame, victimActiveSkillBuff, bulletNextFrame, bulletConfig, bulletCollider, bCollider);
+                                    if (successfulDef1) {
+                                        explodedOnAnotherHarderBullet = true;
+                                    }
                                 }
 
                                 var origVictimInNextFrameHp = victimNextFrame.Hp;

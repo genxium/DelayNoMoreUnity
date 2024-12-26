@@ -5,9 +5,19 @@ public class SelfBattleHeading : AbstractHpBar {
     public Image mpFiller;
     public Image mpHolder;
 
+    public Image hpNegInterpolator; 
     public Image hpFiller;
+    public Image overflowHpNegInterpolator; 
     public Image overflowHpFiller;
     public Image hpHolder;
+
+    protected new static float DEFAULT_HP100_WIDTH = 128.0f;
+    protected new static float DEFAULT_HP100_HEIGHT = 18.0f;
+
+    private int currHpVal;
+
+    private static float hpSizeXFillPerSecond = 0.4f * DEFAULT_HP100_WIDTH;
+    private float hpInterpolaterSpeed = hpSizeXFillPerSecond / (Battle.BATTLE_DYNAMICS_FPS); // per frame
 
     public Image avatar;
     public BuffActiveCountDown buffActiveCountDown;
@@ -51,18 +61,22 @@ public class SelfBattleHeading : AbstractHpBar {
         newSizeHolder.Set(newOverflowFillerWidth, DEFAULT_HP100_HEIGHT);
         overflowHpFiller.rectTransform.sizeDelta = newSizeHolder;
 
+        int oldHpVal = currHpVal;
+
         if (HP_PER_SECTION >= hp) {
             int baseHpSectionIdx = 0;
             var baseColor = hpColors[baseHpSectionIdx];
 
-            float hpNewScaleX = (float)hp / HP_PER_SECTION;
-            newScaleHolder.Set(hpNewScaleX, hpFiller.transform.localScale.y, hpFiller.transform.localScale.z);
+            float hpNewSizeX = (float)hp*DEFAULT_HP100_WIDTH / HP_PER_SECTION;
+            interpolateHp(hpNegInterpolator, hpNewSizeX, oldHpVal);
 
-            hpFiller.transform.localScale = newScaleHolder;
+            newSizeHolder.Set(hpNewSizeX, DEFAULT_HP100_HEIGHT);
+            hpFiller.rectTransform.sizeDelta = newSizeHolder;
             hpFiller.color = baseColor;
 
             newSizeHolder.Set(0, DEFAULT_HP100_HEIGHT);
             overflowHpFiller.rectTransform.sizeDelta = newSizeHolder;
+            overflowHpNegInterpolator.rectTransform.sizeDelta = newSizeHolder;
         } else {
             int overwhelmedHpSectionIdx = (hp / HP_PER_SECTION);
             var overwhelmedColor = hpColors[overwhelmedHpSectionIdx];
@@ -70,16 +84,20 @@ public class SelfBattleHeading : AbstractHpBar {
             int baseHpSectionIdx = overwhelmedHpSectionIdx - 1;
             var baseColor = hpColors[baseHpSectionIdx];
 
-            newScaleHolder.Set(1.0f, hpFiller.transform.localScale.y, hpFiller.transform.localScale.z);
-            hpFiller.transform.localScale = newScaleHolder;
+            newSizeHolder.Set(DEFAULT_HP100_WIDTH, DEFAULT_HP100_HEIGHT); 
+            hpFiller.rectTransform.sizeDelta = newSizeHolder;
+            hpNegInterpolator.rectTransform.sizeDelta = newSizeHolder;
             hpFiller.color = baseColor;
 
-            int overwhelmedHp = hp - (overwhelmedHpSectionIdx * HP_PER_SECTION);
-            float overwhelmedHpNewScaleX = (float)overwhelmedHp / HP_PER_SECTION_F;
-            newScaleHolder.Set(overwhelmedHpNewScaleX, overflowHpFiller.transform.localScale.y, overflowHpFiller.transform.localScale.z);
-            overflowHpFiller.transform.localScale = newScaleHolder;
+            float hpNewSizeX = (hp - (overwhelmedHpSectionIdx * HP_PER_SECTION)) * DEFAULT_HP100_WIDTH / HP_PER_SECTION;
+            interpolateHp(overflowHpNegInterpolator, hpNewSizeX, oldHpVal);
+
+            newSizeHolder.Set(hpNewSizeX, DEFAULT_HP100_HEIGHT);
+            overflowHpFiller.rectTransform.sizeDelta = newSizeHolder;
             overflowHpFiller.color = overwhelmedColor;
         }
+
+        currHpVal = hp;
     }
 
     private void updateMpByValsAndCaps(int mp, int mpCap) {
@@ -88,5 +106,24 @@ public class SelfBattleHeading : AbstractHpBar {
         float mpNewScaleX = (float)mp / mpCap;
         newScaleHolder.Set(mpNewScaleX, mpFiller.transform.localScale.y, mpFiller.transform.localScale.z);
         mpFiller.transform.localScale = newScaleHolder;
+    }
+
+    private void interpolateHp(Image interpolator, float hpNewSizeX, int oldHpVal) {
+        var oldInterpolatedSizeX = interpolator.rectTransform.sizeDelta.x;
+        if (hpNewSizeX < oldInterpolatedSizeX) {
+            var newInterpolatedSizeX = oldInterpolatedSizeX;
+            if (hpNewSizeX > oldInterpolatedSizeX - hpInterpolaterSpeed) {
+                newSizeHolder.Set(hpNewSizeX, DEFAULT_HP100_HEIGHT);
+            } else {
+                newSizeHolder.Set(oldInterpolatedSizeX - hpInterpolaterSpeed, DEFAULT_HP100_HEIGHT);
+            }
+            interpolator.rectTransform.sizeDelta = newSizeHolder;
+        } else if (hpNewSizeX > oldInterpolatedSizeX && oldHpVal > currHpVal) {
+            newSizeHolder.Set(DEFAULT_HP100_WIDTH, DEFAULT_HP100_HEIGHT);
+            interpolator.rectTransform.sizeDelta = newSizeHolder;
+        } else {
+            newSizeHolder.Set(hpNewSizeX, DEFAULT_HP100_HEIGHT);
+            interpolator.rectTransform.sizeDelta = newSizeHolder;
+        }
     }
 }

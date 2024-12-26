@@ -1,9 +1,9 @@
 # Latest tag change notes
-v2.0.6 new features
+v2.0.7 new features
 - Added back transformation buff.
 - Added support for Atk+InvSlotC input pattern.
 - Added BomberGoblin and SpearWoman.
-- Added gauge interpolation.
+- Added self-hpbar and gauge interpolation.
 
 v2.0.4 new features
 - Enhanced timed-bomb implementation.

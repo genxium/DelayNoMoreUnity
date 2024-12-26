@@ -4,13 +4,14 @@ using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour {
     public TMP_Text quota;
+    private uint currQuotaVal = 0u;
     public Image cooldownMask;
     public Image content;
     private Material contentMat;
 
     public Image gauge;
     public Image positiveGaugeInterpolater;
-    private static float gaugePercentFillPerSecond = 0.5f;
+    private static float gaugePercentFillPerSecond = 0.4f;
     private float gaugeInterpolaterSpeed = gaugePercentFillPerSecond / (shared.Battle.BATTLE_DYNAMICS_FPS); // per frame
     public Image gaugeForeground;
 
@@ -37,6 +38,7 @@ public class InventorySlot : MonoBehaviour {
         quota.enabled = false;
         cooldownMask.fillAmount = 0;
         quota.text = "";
+        currQuotaVal = 0;
 
         content.sprite = regularBtnBSprite;
     }
@@ -135,6 +137,8 @@ public class InventorySlot : MonoBehaviour {
                     contentMat.SetInt("_GrayOut", 1);
                     contentMat.SetInt("_ShiningOpacity", 0);
                 }
+                uint oldQuotaVal = currQuotaVal;
+                currQuotaVal = slot.Quota;
                 quota.text = (0 < slot.Quota ? slot.Quota.ToString() : "");
                 var oldFillAmt = gauge.fillAmount;
                 var targetInterpolatedFillAmt = (float)slot.GaugeCharged / slot.GaugeRequired;
@@ -148,6 +152,8 @@ public class InventorySlot : MonoBehaviour {
                             newInterpolatedFillAmt = oldInterpolatedFillAmt + gaugeInterpolaterSpeed;
                         }
                         positiveGaugeInterpolater.fillAmount = newInterpolatedFillAmt;
+                    } else if (targetInterpolatedFillAmt < oldInterpolatedFillAmt && oldQuotaVal < currQuotaVal) {
+                        positiveGaugeInterpolater.fillAmount = 0;
                     } else {
                         positiveGaugeInterpolater.fillAmount = targetInterpolatedFillAmt;
                     }
@@ -158,6 +164,7 @@ public class InventorySlot : MonoBehaviour {
                 toggleGaugeModeOn(false);
                 if (0 < slot.Quota) {
                     quota.enabled = true;
+                    currQuotaVal = slot.Quota;
                     quota.text = (0 < slot.Quota ? slot.Quota.ToString() : "");
                     if (!content.enabled) content.enabled = true;
                 } else {
@@ -182,6 +189,7 @@ public class InventorySlot : MonoBehaviour {
                     quota.enabled = false;
                     contentMat.SetInt("_GrayOut", 1);
                 }
+                currQuotaVal = slot.Quota;
                 quota.text = (0 < slot.Quota ? slot.Quota.ToString() : "");
                 cooldownMask.fillAmount = (float)slot.FramesToRecover / slot.DefaultFramesToRecover;
             break;
