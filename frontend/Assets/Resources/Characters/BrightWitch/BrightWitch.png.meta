@@ -108,8 +108,8 @@ TextureImporter:
       name: Atk1_1
       rect:
         serializedVersion: 2
-        x: 270
-        y: 5
+        x: 477
+        y: 874
         width: 33
         height: 71
       alignment: 9
@@ -129,8 +129,8 @@ TextureImporter:
       name: Atk1_10
       rect:
         serializedVersion: 2
-        x: 80
-        y: 506
+        x: 45
+        y: 2
         width: 34
         height: 70
       alignment: 9
@@ -150,8 +150,8 @@ TextureImporter:
       name: Atk1_2
       rect:
         serializedVersion: 2
-        x: 76
-        y: 428
+        x: 301
+        y: 326
         width: 53
         height: 74
       alignment: 9
@@ -171,8 +171,8 @@ TextureImporter:
       name: Atk1_3
       rect:
         serializedVersion: 2
-        x: 2
-        y: 279
+        x: 189
+        y: 623
         width: 69
         height: 71
       alignment: 9
@@ -192,8 +192,8 @@ TextureImporter:
       name: Atk1_4
       rect:
         serializedVersion: 2
-        x: 193
-        y: 896
+        x: 188
+        y: 560
         width: 68
         height: 59
       alignment: 9
@@ -213,8 +213,8 @@ TextureImporter:
       name: Atk1_5
       rect:
         serializedVersion: 2
-        x: 179
-        y: 750
+        x: 68
+        y: 275
         width: 41
         height: 59
       alignment: 9
@@ -234,8 +234,8 @@ TextureImporter:
       name: Atk1_6
       rect:
         serializedVersion: 2
-        x: 408
-        y: 831
+        x: 447
+        y: 415
         width: 58
         height: 59
       alignment: 9
@@ -255,8 +255,8 @@ TextureImporter:
       name: Atk1_7
       rect:
         serializedVersion: 2
-        x: 117
-        y: 896
+        x: 401
+        y: 821
         width: 72
         height: 59
       alignment: 9
@@ -276,8 +276,8 @@ TextureImporter:
       name: Atk1_8
       rect:
         serializedVersion: 2
-        x: 74
-        y: 2
+        x: 295
+        y: 819
         width: 72
         height: 59
       alignment: 9
@@ -297,8 +297,8 @@ TextureImporter:
       name: Atk1_9
       rect:
         serializedVersion: 2
-        x: 75
-        y: 279
+        x: 319
+        y: 464
         width: 61
         height: 62
       alignment: 9
@@ -318,8 +318,8 @@ TextureImporter:
       name: Atk2_1
       rect:
         serializedVersion: 2
-        x: 270
-        y: 5
+        x: 477
+        y: 874
         width: 33
         height: 71
       alignment: 9
@@ -339,8 +339,8 @@ TextureImporter:
       name: Atk2_10
       rect:
         serializedVersion: 2
-        x: 80
-        y: 506
+        x: 45
+        y: 2
         width: 34
         height: 70
       alignment: 9
@@ -360,8 +360,8 @@ TextureImporter:
       name: Atk2_2
       rect:
         serializedVersion: 2
-        x: 76
-        y: 428
+        x: 301
+        y: 326
         width: 53
         height: 74
       alignment: 9
@@ -381,8 +381,8 @@ TextureImporter:
       name: Atk2_3
       rect:
         serializedVersion: 2
-        x: 2
-        y: 279
+        x: 189
+        y: 623
         width: 69
         height: 71
       alignment: 9
@@ -402,8 +402,8 @@ TextureImporter:
       name: Atk2_4
       rect:
         serializedVersion: 2
-        x: 193
-        y: 896
+        x: 188
+        y: 560
         width: 68
         height: 59
       alignment: 9
@@ -423,8 +423,8 @@ TextureImporter:
       name: Atk2_5
       rect:
         serializedVersion: 2
-        x: 469
-        y: 526
+        x: 2
+        y: 77
         width: 41
         height: 59
       alignment: 9
@@ -444,8 +444,8 @@ TextureImporter:
       name: Atk2_6
       rect:
         serializedVersion: 2
-        x: 270
-        y: 694
+        x: 114
+        y: 522
         width: 68
         height: 59
       alignment: 9
@@ -465,8 +465,8 @@ TextureImporter:
       name: Atk2_7
       rect:
         serializedVersion: 2
-        x: 117
-        y: 896
+        x: 401
+        y: 821
         width: 72
         height: 59
       alignment: 9
@@ -486,8 +486,8 @@ TextureImporter:
       name: Atk2_8
       rect:
         serializedVersion: 2
-        x: 74
-        y: 2
+        x: 295
+        y: 819
         width: 72
         height: 59
       alignment: 9
@@ -507,8 +507,8 @@ TextureImporter:
       name: Atk2_9
       rect:
         serializedVersion: 2
-        x: 75
-        y: 279
+        x: 319
+        y: 464
         width: 61
         height: 62
       alignment: 9
@@ -528,8 +528,8 @@ TextureImporter:
       name: Atk3L_1
       rect:
         serializedVersion: 2
-        x: 140
-        y: 279
+        x: 137
+        y: 143
         width: 42
         height: 62
       alignment: 9
@@ -549,8 +549,8 @@ TextureImporter:
       name: Atk3L_10
       rect:
         serializedVersion: 2
-        x: 224
-        y: 745
+        x: 83
+        y: 3
         width: 42
         height: 69
       alignment: 9
@@ -570,8 +570,8 @@ TextureImporter:
       name: Atk3L_2
       rect:
         serializedVersion: 2
-        x: 412
-        y: 443
+        x: 113
+        y: 279
         width: 54
         height: 58
       alignment: 9
@@ -591,8 +591,8 @@ TextureImporter:
       name: Atk3L_3
       rect:
         serializedVersion: 2
-        x: 470
-        y: 791
+        x: 69
+        y: 416
         width: 40
         height: 69
       alignment: 9
@@ -612,8 +612,8 @@ TextureImporter:
       name: Atk3L_4
       rect:
         serializedVersion: 2
-        x: 72
-        y: 135
+        x: 117
+        y: 787
         width: 70
         height: 66
       alignment: 9
@@ -633,8 +633,8 @@ TextureImporter:
       name: Atk3L_5
       rect:
         serializedVersion: 2
-        x: 265
-        y: 895
+        x: 116
+        y: 722
         width: 70
         height: 61
       alignment: 9
@@ -654,8 +654,8 @@ TextureImporter:
       name: Atk3L_6
       rect:
         serializedVersion: 2
-        x: 418
-        y: 571
+        x: 291
+        y: 261
         width: 47
         height: 61
       alignment: 9
@@ -675,8 +675,8 @@ TextureImporter:
       name: Atk3L_7
       rect:
         serializedVersion: 2
-        x: 418
-        y: 505
+        x: 2
+        y: 140
         width: 47
         height: 62
       alignment: 9
@@ -696,8 +696,8 @@ TextureImporter:
       name: Atk3L_8
       rect:
         serializedVersion: 2
-        x: 224
-        y: 606
+        x: 178
+        y: 77
         width: 42
         height: 62
       alignment: 9
@@ -717,8 +717,8 @@ TextureImporter:
       name: Atk3L_9
       rect:
         serializedVersion: 2
-        x: 224
-        y: 672
+        x: 129
+        y: 3
         width: 42
         height: 69
       alignment: 9
@@ -738,8 +738,8 @@ TextureImporter:
       name: Atked1_1
       rect:
         serializedVersion: 2
-        x: 414
-        y: 894
+        x: 176
+        y: 310
         width: 54
         height: 63
       alignment: 9
@@ -759,8 +759,8 @@ TextureImporter:
       name: Atked1_2
       rect:
         serializedVersion: 2
-        x: 148
-        y: 68
+        x: 234
+        y: 304
         width: 53
         height: 63
       alignment: 9
@@ -780,8 +780,8 @@ TextureImporter:
       name: Atked1_3
       rect:
         serializedVersion: 2
-        x: 75
-        y: 345
+        x: 460
+        y: 270
         width: 46
         height: 79
       alignment: 9
@@ -801,8 +801,8 @@ TextureImporter:
       name: Atked1_4
       rect:
         serializedVersion: 2
-        x: 217
-        y: 818
+        x: 68
+        y: 338
         width: 41
         height: 74
       alignment: 9
@@ -843,8 +843,8 @@ TextureImporter:
       name: Idle1_1
       rect:
         serializedVersion: 2
-        x: 144
-        y: 205
+        x: 436
+        y: 122
         width: 42
         height: 70
       alignment: 9
@@ -864,8 +864,8 @@ TextureImporter:
       name: Idle1_10
       rect:
         serializedVersion: 2
-        x: 300
-        y: 287
+        x: 389
+        y: 150
         width: 43
         height: 71
       alignment: 9
@@ -885,8 +885,8 @@ TextureImporter:
       name: Idle1_11
       rect:
         serializedVersion: 2
-        x: 201
-        y: 135
+        x: 409
+        y: 225
         width: 46
         height: 70
       alignment: 9
@@ -906,8 +906,8 @@ TextureImporter:
       name: Idle1_12
       rect:
         serializedVersion: 2
-        x: 251
-        y: 154
+        x: 459
+        y: 196
         width: 46
         height: 70
       alignment: 9
@@ -927,8 +927,8 @@ TextureImporter:
       name: Idle1_2
       rect:
         serializedVersion: 2
-        x: 256
-        y: 80
+        x: 370
+        y: 76
         width: 42
         height: 70
       alignment: 9
@@ -948,8 +948,8 @@ TextureImporter:
       name: Idle1_3
       rect:
         serializedVersion: 2
-        x: 181
-        y: 676
+        x: 2
+        y: 2
         width: 39
         height: 70
       alignment: 9
@@ -969,8 +969,8 @@ TextureImporter:
       name: Idle1_4
       rect:
         serializedVersion: 2
-        x: 190
-        y: 209
+        x: 224
+        y: 97
         width: 38
         height: 72
       alignment: 9
@@ -991,7 +991,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 473
-        y: 642
+        y: 478
         width: 37
         height: 72
       alignment: 9
@@ -1011,8 +1011,8 @@ TextureImporter:
       name: Idle1_6
       rect:
         serializedVersion: 2
-        x: 164
-        y: 351
+        x: 77
+        y: 823
         width: 36
         height: 73
       alignment: 9
@@ -1032,8 +1032,8 @@ TextureImporter:
       name: Idle1_7
       rect:
         serializedVersion: 2
-        x: 472
-        y: 864
+        x: 53
+        y: 87
         width: 38
         height: 74
       alignment: 9
@@ -1053,8 +1053,8 @@ TextureImporter:
       name: Idle1_8
       rect:
         serializedVersion: 2
-        x: 133
-        y: 428
+        x: 95
+        y: 87
         width: 38
         height: 74
       alignment: 9
@@ -1074,8 +1074,8 @@ TextureImporter:
       name: Idle1_9
       rect:
         serializedVersion: 2
-        x: 204
-        y: 352
+        x: 324
+        y: 141
         width: 42
         height: 72
       alignment: 9
@@ -1095,8 +1095,8 @@ TextureImporter:
       name: InAirAtk1L_1
       rect:
         serializedVersion: 2
-        x: 323
-        y: 961
+        x: 219
+        y: 828
         width: 72
         height: 61
       alignment: 9
@@ -1117,7 +1117,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 221
-        y: 960
+        y: 893
         width: 98
         height: 62
       alignment: 9
@@ -1137,7 +1137,7 @@ TextureImporter:
       name: InAirAtk1L_3
       rect:
         serializedVersion: 2
-        x: 117
+        x: 221
         y: 959
         width: 100
         height: 63
@@ -1158,8 +1158,8 @@ TextureImporter:
       name: InAirAtk1L_4
       rect:
         serializedVersion: 2
-        x: 2
-        y: 587
+        x: 429
+        y: 949
         width: 74
         height: 73
       alignment: 9
@@ -1180,7 +1180,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 262
-        y: 826
+        y: 624
         width: 69
         height: 65
       alignment: 9
@@ -1200,8 +1200,8 @@ TextureImporter:
       name: InAirAtk1L_6
       rect:
         serializedVersion: 2
-        x: 106
-        y: 823
+        x: 115
+        y: 585
         width: 69
         height: 69
       alignment: 9
@@ -1221,8 +1221,8 @@ TextureImporter:
       name: InAirAtk1L_7
       rect:
         serializedVersion: 2
-        x: 2
-        y: 49
+        x: 408
+        y: 554
         width: 68
         height: 70
       alignment: 9
@@ -1242,8 +1242,8 @@ TextureImporter:
       name: InAirAtk1R_1
       rect:
         serializedVersion: 2
-        x: 399
-        y: 961
+        x: 401
+        y: 884
         width: 72
         height: 61
       alignment: 9
@@ -1263,8 +1263,8 @@ TextureImporter:
       name: InAirAtk1R_2
       rect:
         serializedVersion: 2
-        x: 2
-        y: 664
+        x: 117
+        y: 857
         width: 98
         height: 62
       alignment: 9
@@ -1284,8 +1284,8 @@ TextureImporter:
       name: InAirAtk1R_3
       rect:
         serializedVersion: 2
-        x: 2
-        y: 730
+        x: 325
+        y: 959
         width: 100
         height: 63
       alignment: 9
@@ -1305,8 +1305,8 @@ TextureImporter:
       name: InAirAtk1R_4
       rect:
         serializedVersion: 2
-        x: 2
-        y: 510
+        x: 323
+        y: 882
         width: 74
         height: 73
       alignment: 9
@@ -1326,8 +1326,8 @@ TextureImporter:
       name: InAirAtk1R_5
       rect:
         serializedVersion: 2
-        x: 335
-        y: 826
+        x: 413
+        y: 628
         width: 69
         height: 65
       alignment: 9
@@ -1347,8 +1347,8 @@ TextureImporter:
       name: InAirAtk1R_6
       rect:
         serializedVersion: 2
-        x: 106
-        y: 750
+        x: 2
+        y: 560
         width: 69
         height: 69
       alignment: 9
@@ -1368,8 +1368,8 @@ TextureImporter:
       name: InAirAtk1R_7
       rect:
         serializedVersion: 2
-        x: 72
-        y: 205
+        x: 335
+        y: 551
         width: 68
         height: 70
       alignment: 9
@@ -1389,8 +1389,8 @@ TextureImporter:
       name: Jump_1
       rect:
         serializedVersion: 2
-        x: 339
-        y: 895
+        x: 2
+        y: 834
         width: 71
         height: 62
       alignment: 9
@@ -1410,8 +1410,8 @@ TextureImporter:
       name: Jump_13
       rect:
         serializedVersion: 2
-        x: 191
-        y: 545
+        x: 264
+        y: 693
         width: 70
         height: 57
       alignment: 9
@@ -1431,8 +1431,8 @@ TextureImporter:
       name: Jump_14
       rect:
         serializedVersion: 2
-        x: 344
-        y: 573
+        x: 190
+        y: 698
         width: 70
         height: 60
       alignment: 9
@@ -1452,8 +1452,8 @@ TextureImporter:
       name: Jump_15
       rect:
         serializedVersion: 2
-        x: 118
-        y: 555
+        x: 335
+        y: 625
         width: 69
         height: 63
       alignment: 9
@@ -1473,8 +1473,8 @@ TextureImporter:
       name: Jump_16
       rect:
         serializedVersion: 2
-        x: 270
-        y: 757
+        x: 262
+        y: 555
         width: 68
         height: 65
       alignment: 9
@@ -1494,8 +1494,8 @@ TextureImporter:
       name: Jump_2
       rect:
         serializedVersion: 2
-        x: 106
-        y: 684
+        x: 2
+        y: 768
         width: 71
         height: 62
       alignment: 9
@@ -1515,8 +1515,8 @@ TextureImporter:
       name: Jump_3
       rect:
         serializedVersion: 2
-        x: 150
-        y: 2
+        x: 191
+        y: 762
         width: 70
         height: 62
       alignment: 9
@@ -1536,8 +1536,8 @@ TextureImporter:
       name: Jump_4
       rect:
         serializedVersion: 2
-        x: 265
-        y: 500
+        x: 115
+        y: 658
         width: 70
         height: 60
       alignment: 9
@@ -1557,8 +1557,8 @@ TextureImporter:
       name: Jump_5
       rect:
         serializedVersion: 2
-        x: 344
-        y: 509
+        x: 339
+        y: 692
         width: 70
         height: 60
       alignment: 9
@@ -1578,8 +1578,8 @@ TextureImporter:
       name: Jump_6
       rect:
         serializedVersion: 2
-        x: 175
-        y: 483
+        x: 2
+        y: 498
         width: 66
         height: 58
       alignment: 9
@@ -1599,8 +1599,8 @@ TextureImporter:
       name: JumpL_10
       rect:
         serializedVersion: 2
-        x: 125
-        y: 345
+        x: 76
+        y: 656
         width: 35
         height: 79
       alignment: 9
@@ -1620,8 +1620,8 @@ TextureImporter:
       name: JumpL_11
       rect:
         serializedVersion: 2
-        x: 146
-        y: 135
+        x: 113
+        y: 209
         width: 51
         height: 66
       alignment: 9
@@ -1641,8 +1641,8 @@ TextureImporter:
       name: JumpL_12
       rect:
         serializedVersion: 2
-        x: 344
-        y: 637
+        x: 371
+        y: 756
         width: 70
         height: 61
       alignment: 9
@@ -1662,12 +1662,12 @@ TextureImporter:
       name: JumpL_7
       rect:
         serializedVersion: 2
-        x: 2
-        y: 201
-        width: 66
-        height: 74
+        x: 311
+        y: 6
+        width: 38
+        height: 66
       alignment: 9
-      pivot: {x: 0.43939394, y: 0.5608112}
+      pivot: {x: 0.5, y: 0.588608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1683,12 +1683,12 @@ TextureImporter:
       name: JumpL_8
       rect:
         serializedVersion: 2
-        x: 2
-        y: 354
-        width: 69
-        height: 74
+        x: 353
+        y: 6
+        width: 38
+        height: 66
       alignment: 9
-      pivot: {x: 0.44927537, y: 0.5608112}
+      pivot: {x: 0.5, y: 0.588608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1704,8 +1704,8 @@ TextureImporter:
       name: JumpL_9
       rect:
         serializedVersion: 2
-        x: 179
-        y: 813
+        x: 75
+        y: 489
         width: 34
         height: 79
       alignment: 9
@@ -1725,8 +1725,8 @@ TextureImporter:
       name: JumpR_10
       rect:
         serializedVersion: 2
-        x: 475
-        y: 942
+        x: 77
+        y: 739
         width: 35
         height: 80
       alignment: 9
@@ -1746,8 +1746,8 @@ TextureImporter:
       name: JumpR_11
       rect:
         serializedVersion: 2
-        x: 418
-        y: 636
+        x: 171
+        y: 239
         width: 51
         height: 67
       alignment: 9
@@ -1767,8 +1767,8 @@ TextureImporter:
       name: JumpR_12
       rect:
         serializedVersion: 2
-        x: 270
-        y: 564
+        x: 265
+        y: 754
         width: 70
         height: 61
       alignment: 9
@@ -1788,12 +1788,12 @@ TextureImporter:
       name: JumpR_7
       rect:
         serializedVersion: 2
-        x: 2
-        y: 123
-        width: 66
-        height: 74
+        x: 395
+        y: 6
+        width: 38
+        height: 66
       alignment: 9
-      pivot: {x: 0.530303, y: 0.60135144}
+      pivot: {x: 0.5, y: 0.582353}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1809,12 +1809,12 @@ TextureImporter:
       name: JumpR_8
       rect:
         serializedVersion: 2
-        x: 2
-        y: 432
-        width: 70
-        height: 74
+        x: 437
+        y: 52
+        width: 38
+        height: 66
       alignment: 9
-      pivot: {x: 0.5285714, y: 0.60135144}
+      pivot: {x: 0.5, y: 0.582353}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1830,8 +1830,8 @@ TextureImporter:
       name: JumpR_9
       rect:
         serializedVersion: 2
-        x: 80
-        y: 580
+        x: 76
+        y: 572
         width: 34
         height: 80
       alignment: 9
@@ -1851,8 +1851,8 @@ TextureImporter:
       name: LayDown1_1
       rect:
         serializedVersion: 2
-        x: 175
-        y: 428
+        x: 60
+        y: 220
         width: 49
         height: 51
       alignment: 9
@@ -1872,8 +1872,8 @@ TextureImporter:
       name: LayDown1_2
       rect:
         serializedVersion: 2
-        x: 118
-        y: 506
+        x: 2
+        y: 206
         width: 49
         height: 45
       alignment: 9
@@ -1893,8 +1893,8 @@ TextureImporter:
       name: LayDown1_3
       rect:
         serializedVersion: 2
-        x: 228
-        y: 428
+        x: 55
+        y: 165
         width: 48
         height: 51
       alignment: 9
@@ -1914,8 +1914,8 @@ TextureImporter:
       name: LayDown1_4
       rect:
         serializedVersion: 2
-        x: 457
-        y: 389
+        x: 409
+        y: 299
         width: 47
         height: 50
       alignment: 9
@@ -1935,8 +1935,8 @@ TextureImporter:
       name: LayDown1_5
       rect:
         serializedVersion: 2
-        x: 473
-        y: 589
+        x: 137
+        y: 88
         width: 37
         height: 49
       alignment: 9
@@ -1956,8 +1956,8 @@ TextureImporter:
       name: LayDown1_6
       rect:
         serializedVersion: 2
-        x: 456
-        y: 274
+        x: 367
+        y: 359
         width: 54
         height: 44
       alignment: 9
@@ -1977,8 +1977,8 @@ TextureImporter:
       name: LayDown1_7
       rect:
         serializedVersion: 2
-        x: 2
-        y: 23
+        x: 407
+        y: 528
         width: 62
         height: 22
       alignment: 9
@@ -1998,8 +1998,8 @@ TextureImporter:
       name: LayDown1_8
       rect:
         serializedVersion: 2
-        x: 2
-        y: 2
+        x: 319
+        y: 530
         width: 62
         height: 17
       alignment: 9
@@ -2019,8 +2019,8 @@ TextureImporter:
       name: WalkingL_1
       rect:
         serializedVersion: 2
-        x: 342
-        y: 764
+        x: 113
+        y: 460
         width: 62
         height: 58
       alignment: 9
@@ -2040,8 +2040,8 @@ TextureImporter:
       name: WalkingL_2
       rect:
         serializedVersion: 2
-        x: 300
-        y: 228
+        x: 2
+        y: 439
         width: 63
         height: 55
       alignment: 9
@@ -2061,8 +2061,8 @@ TextureImporter:
       name: WalkingL_3
       rect:
         serializedVersion: 2
-        x: 342
-        y: 702
+        x: 2
+        y: 377
         width: 62
         height: 58
       alignment: 9
@@ -2082,8 +2082,8 @@ TextureImporter:
       name: WalkingL_4
       rect:
         serializedVersion: 2
-        x: 301
-        y: 168
+        x: 113
+        y: 400
         width: 62
         height: 56
       alignment: 9
@@ -2103,8 +2103,8 @@ TextureImporter:
       name: WalkingL_5
       rect:
         serializedVersion: 2
-        x: 118
-        y: 622
+        x: 245
+        y: 431
         width: 59
         height: 58
       alignment: 9
@@ -2124,8 +2124,8 @@ TextureImporter:
       name: WalkingL_6
       rect:
         serializedVersion: 2
-        x: 393
-        y: 325
+        x: 113
+        y: 341
         width: 59
         height: 55
       alignment: 9
@@ -2145,8 +2145,8 @@ TextureImporter:
       name: WalkingL_7
       rect:
         serializedVersion: 2
-        x: 232
-        y: 290
+        x: 445
+        y: 759
         width: 64
         height: 58
       alignment: 0
@@ -2166,8 +2166,8 @@ TextureImporter:
       name: WalkingL_8
       rect:
         serializedVersion: 2
-        x: 367
-        y: 206
+        x: 308
+        y: 404
         width: 55
         height: 56
       alignment: 9
@@ -2187,8 +2187,8 @@ TextureImporter:
       name: WalkingLSt_1
       rect:
         serializedVersion: 2
-        x: 250
-        y: 352
+        x: 342
+        y: 217
         width: 43
         height: 72
       alignment: 9
@@ -2208,8 +2208,8 @@ TextureImporter:
       name: WalkingLSt_2
       rect:
         serializedVersion: 2
-        x: 408
-        y: 769
+        x: 384
+        y: 407
         width: 58
         height: 58
       alignment: 9
@@ -2229,8 +2229,8 @@ TextureImporter:
       name: WalkingR_1
       rect:
         serializedVersion: 2
-        x: 280
-        y: 438
+        x: 253
+        y: 493
         width: 62
         height: 58
       alignment: 9
@@ -2250,8 +2250,8 @@ TextureImporter:
       name: WalkingR_2
       rect:
         serializedVersion: 2
-        x: 390
-        y: 384
+        x: 186
+        y: 501
         width: 63
         height: 55
       alignment: 9
@@ -2271,8 +2271,8 @@ TextureImporter:
       name: WalkingR_3
       rect:
         serializedVersion: 2
-        x: 346
-        y: 447
+        x: 179
+        y: 439
         width: 62
         height: 58
       alignment: 9
@@ -2292,8 +2292,8 @@ TextureImporter:
       name: WalkingR_4
       rect:
         serializedVersion: 2
-        x: 302
-        y: 108
+        x: 2
+        y: 317
         width: 62
         height: 56
       alignment: 9
@@ -2313,8 +2313,8 @@ TextureImporter:
       name: WalkingR_5
       rect:
         serializedVersion: 2
-        x: 307
-        y: 46
+        x: 179
+        y: 377
         width: 59
         height: 58
       alignment: 9
@@ -2334,8 +2334,8 @@ TextureImporter:
       name: WalkingR_6
       rect:
         serializedVersion: 2
-        x: 393
-        y: 266
+        x: 384
+        y: 469
         width: 59
         height: 55
       alignment: 9
@@ -2355,8 +2355,8 @@ TextureImporter:
       name: WalkingR_7
       rect:
         serializedVersion: 2
-        x: 232
-        y: 228
+        x: 445
+        y: 697
         width: 64
         height: 58
       alignment: 0
@@ -2376,8 +2376,8 @@ TextureImporter:
       name: WalkingR_8
       rect:
         serializedVersion: 2
-        x: 368
-        y: 141
+        x: 242
+        y: 371
         width: 55
         height: 56
       alignment: 9
@@ -2397,8 +2397,8 @@ TextureImporter:
       name: WalkingRSt_1
       rect:
         serializedVersion: 2
-        x: 297
-        y: 362
+        x: 277
+        y: 185
         width: 43
         height: 72
       alignment: 9
@@ -2418,8 +2418,8 @@ TextureImporter:
       name: WalkingRSt_2
       rect:
         serializedVersion: 2
-        x: 408
-        y: 707
+        x: 446
+        y: 353
         width: 58
         height: 58
       alignment: 9
@@ -2439,8 +2439,8 @@ TextureImporter:
       name: Atk3R_1
       rect:
         serializedVersion: 2
-        x: 186
-        y: 285
+        x: 224
+        y: 173
         width: 42
         height: 62
       alignment: 9
@@ -2460,8 +2460,8 @@ TextureImporter:
       name: Atk3R_10
       rect:
         serializedVersion: 2
-        x: 344
-        y: 365
+        x: 175
+        y: 3
         width: 42
         height: 69
       alignment: 9
@@ -2481,8 +2481,8 @@ TextureImporter:
       name: Atk3R_2
       rect:
         serializedVersion: 2
-        x: 456
-        y: 322
+        x: 2
+        y: 255
         width: 54
         height: 58
       alignment: 9
@@ -2502,8 +2502,8 @@ TextureImporter:
       name: Atk3R_3
       rect:
         serializedVersion: 2
-        x: 470
-        y: 718
+        x: 267
+        y: 3
         width: 40
         height: 69
       alignment: 9
@@ -2523,8 +2523,8 @@ TextureImporter:
       name: Atk3R_4
       rect:
         serializedVersion: 2
-        x: 74
-        y: 65
+        x: 2
+        y: 698
         width: 70
         height: 66
       alignment: 9
@@ -2544,8 +2544,8 @@ TextureImporter:
       name: Atk3R_5
       rect:
         serializedVersion: 2
-        x: 270
-        y: 629
+        x: 2
+        y: 633
         width: 70
         height: 61
       alignment: 9
@@ -2565,8 +2565,8 @@ TextureImporter:
       name: Atk3R_6
       rect:
         serializedVersion: 2
-        x: 426
-        y: 201
+        x: 226
+        y: 239
         width: 47
         height: 61
       alignment: 9
@@ -2586,8 +2586,8 @@ TextureImporter:
       name: Atk3R_7
       rect:
         serializedVersion: 2
-        x: 205
-        y: 69
+        x: 358
+        y: 293
         width: 47
         height: 62
       alignment: 9
@@ -2607,8 +2607,8 @@ TextureImporter:
       name: Atk3R_8
       rect:
         serializedVersion: 2
-        x: 224
-        y: 3
+        x: 270
+        y: 119
         width: 42
         height: 62
       alignment: 9
@@ -2628,8 +2628,8 @@ TextureImporter:
       name: Atk3R_9
       rect:
         serializedVersion: 2
-        x: 347
-        y: 292
+        x: 221
+        y: 3
         width: 42
         height: 69
       alignment: 9
@@ -2649,8 +2649,8 @@ TextureImporter:
       name: Avatar_2
       rect:
         serializedVersion: 2
-        x: 2
-        y: 797
+        x: 117
+        y: 923
         width: 100
         height: 99
       alignment: 0

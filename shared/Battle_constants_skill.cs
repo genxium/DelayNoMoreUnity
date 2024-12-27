@@ -2220,10 +2220,11 @@ namespace shared {
         }
         .AddHit(MobileThunderBallPrimerBulletAir);
 
+        public static int HunterDashSlashTotDurationRdfCnt = 45;
         public static BulletConfig HunterDashSlashBl1 = new BulletConfig {
             StartupFrames = 13,
             StartupInvinsibleFrames = 13,
-            ActiveFrames = 15,
+            ActiveFrames = 18,
             HitStunFrames = MAX_INT,
             HitInvinsibleFrames = 60,
             BlowUp = true,
@@ -2231,7 +2232,7 @@ namespace shared {
             Damage = 36,
             PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelX = (int)(7.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = (int)(7.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelY = NO_LOCK_VEL,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
             HitboxOffsetX = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -2256,8 +2257,8 @@ namespace shared {
 
         public static BulletConfig HunterDashSlashStopper = new BulletConfig {
             StartupFrames = (HunterDashSlashBl1.StartupFrames + HunterDashSlashBl1.ActiveFrames),
-            StartupInvinsibleFrames = 40 - (HunterDashSlashBl1.StartupFrames + HunterDashSlashBl1.ActiveFrames),
-            ActiveFrames = 40 - (HunterDashSlashBl1.StartupFrames + HunterDashSlashBl1.ActiveFrames),
+            StartupInvinsibleFrames = HunterDashSlashTotDurationRdfCnt - (HunterDashSlashBl1.StartupFrames + HunterDashSlashBl1.ActiveFrames),
+            ActiveFrames = HunterDashSlashTotDurationRdfCnt - (HunterDashSlashBl1.StartupFrames + HunterDashSlashBl1.ActiveFrames),
             SelfLockVelX = 0,
             SelfLockVelY = NO_LOCK_VEL,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
@@ -2270,9 +2271,9 @@ namespace shared {
         };
 
         public static Skill HunterDashSlashSKill = new Skill {
-            RecoveryFrames = 40,
-            RecoveryFramesOnBlock = 40,
-            RecoveryFramesOnHit = 40,
+            RecoveryFrames = HunterDashSlashTotDurationRdfCnt,
+            RecoveryFramesOnBlock = HunterDashSlashTotDurationRdfCnt,
+            RecoveryFramesOnHit = HunterDashSlashTotDurationRdfCnt,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk7, 
             SelfNonStockBuff = new BuffConfig {
@@ -2913,9 +2914,10 @@ namespace shared {
         };
 
         public static Skill StoneSwordSkill = new Skill {
-            RecoveryFrames = 60,
-            RecoveryFramesOnBlock = 60,
-            RecoveryFramesOnHit = 60,
+            RecoveryFrames = 75,
+            RecoveryFramesOnBlock = 75,
+            RecoveryFramesOnHit = 75,
+            MpDelta = 500,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk1,
         }
@@ -3597,34 +3599,35 @@ namespace shared {
                     };
 
         public static BulletConfig SuperBladeHit5 = new BulletConfig {
-            StartupFrames = 43,
-                          ActiveFrames = 9,
-                          HitStunFrames = 45,
-                          BlockStunFrames = 9,
-                          Damage = 6,
-                          PushbackVelX = NO_LOCK_VEL,
-                          PushbackVelY = (int)(6.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SelfLockVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SelfLockVelY = NO_LOCK_VEL,
-                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                          HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SpeciesId = 2,
-                          ExplosionSpeciesId = 2,
-                          DirX = 1,
-                          DirY = 0,
-                          Hardness = 7,
-                          ExplosionFrames = 25,
-                          BType = BulletType.Melee,
-                          RemainsUponHit = true,
-                          OmitSoftPushback = true,
-                          ExplosionSfxName="Melee_Explosion2",
-                          MhType = MultiHitType.FromEmission,
-                          ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
-                          IsPixelatedActiveVfx = true,
-                          CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+                    StartupFrames = 43,
+                    ActiveFrames = 9,
+                    HitStunFrames = MAX_INT,
+                    BlowUp = true,
+                    BlockStunFrames = 9,
+                    Damage = 6,
+                    PushbackVelX = NO_LOCK_VEL,
+                    PushbackVelY = (int)(6.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelY = NO_LOCK_VEL,
+                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                    HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SpeciesId = 2,
+                    ExplosionSpeciesId = 2,
+                    DirX = 1,
+                    DirY = 0,
+                    Hardness = 7,
+                    ExplosionFrames = 25,
+                    BType = BulletType.Melee,
+                    RemainsUponHit = true,
+                    OmitSoftPushback = true,
+                    ExplosionSfxName="Melee_Explosion2",
+                    MhType = MultiHitType.FromEmission,
+                    ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
+                    IsPixelatedActiveVfx = true,
+                    CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
         };
 
         public static BulletConfig WandWitchGirlBasicBulletHit1 = new BulletConfig {
@@ -3927,6 +3930,65 @@ namespace shared {
             ExplosionSfxName="Melee_Explosion2",
             CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
         };
+
+        public static BulletConfig DarkTowerPrimerBl1 = new BulletConfig {
+            StartupFrames = 40,
+            ActiveFrames = 600,
+            HitStunFrames = MAX_INT,
+            BlowUp = true,
+            BlockStunFrames = 9,
+            Damage = 40,
+            PushbackVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(22f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(28*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 31,
+            Speed = (int)(3*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 1,
+            DirY = 0,
+            Hardness = 32,
+            ExplosionFrames = 30,
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName="FlameEmit1",
+            ExplosionSfxName="Explosion4",
+            RotatesAlongVelocity = true,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
+        public static Skill DarkTowerPrimerSkill = new Skill{
+            RecoveryFrames = 120,
+            RecoveryFramesOnBlock = 120,
+            RecoveryFramesOnHit = 120,
+            MpDelta = 550,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }
+        .AddHit(DarkTowerPrimerBl1);
+
+        public static BulletConfig DarkTowerUpperBl1 = new BulletConfig(DarkTowerPrimerBl1).SetDir(1, 1);
+        public static Skill DarkTowerUpperSkill = new Skill{
+            RecoveryFrames = 120,
+            RecoveryFramesOnBlock = 120,
+            RecoveryFramesOnHit = 120,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }
+        .AddHit(DarkTowerUpperBl1);
+
+        public static BulletConfig DarkTowerLowerBl1 = new BulletConfig(DarkTowerPrimerBl1).SetDir(1, -1);
+        public static Skill DarkTowerLowerSkill = new Skill{
+            RecoveryFrames = 120,
+            RecoveryFramesOnBlock = 120,
+            RecoveryFramesOnHit = 120,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }
+        .AddHit(DarkTowerLowerBl1);
 
         public static ImmutableDictionary<uint, Skill> skills = ImmutableDictionary.Create<uint, Skill>().AddRange(
                 new[]
@@ -5245,6 +5307,9 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(120, FireSwordManMelee1GroundHit2),
                     new KeyValuePair<uint, Skill>(121, FireSwordManMelee1GroundHit3),
+                    new KeyValuePair<uint, Skill>(122, DarkTowerPrimerSkill),
+                    new KeyValuePair<uint, Skill>(123, DarkTowerUpperSkill),
+                    new KeyValuePair<uint, Skill>(124, DarkTowerLowerSkill),
 
                     new KeyValuePair<uint, Skill>(255, new Skill {
                             RecoveryFrames = 20,
@@ -5283,155 +5348,6 @@ namespace shared {
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
                                 }.UpsertCancelTransit(PATTERN_B, 258).UpsertCancelTransit(PATTERN_UP_B, 258).UpsertCancelTransit(PATTERN_DOWN_B, 77)
                         )),
-
-                    new KeyValuePair<uint, Skill>(257, new Skill{
-                            RecoveryFrames = 35,
-                            RecoveryFramesOnBlock = 35,
-                            RecoveryFramesOnHit = 35,
-                            MpDelta = 0,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = InAirAtk1
-                            }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 2,
-                                ActiveFrames = 2,
-                                HitStunFrames = 12,
-                                BlockStunFrames = 9,
-                                Damage = 13,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = NO_LOCK_VEL,
-                                SelfLockVelY = NO_LOCK_VEL,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(5*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SpeciesId = 2,
-                                ExplosionFrames = 25,
-                                DirX = 1,
-                                DirY = 0,
-                                Hardness = 7,
-                                BType = BulletType.Melee,
-                                FireballEmitSfxName="SlashEmitSpd2",
-                                ExplosionSfxName="Melee_Explosion2",
-                                MhType = MultiHitType.FromEmission,
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }
-                        )
-                            .AddHit(
-                                    new BulletConfig {
-                                    StartupFrames = 4,
-                                    ActiveFrames = 3,
-                                    HitStunFrames = 12,
-                                    BlockStunFrames = 9,
-                                    Damage = 11,
-                                    PushbackVelX = NO_LOCK_VEL,
-                                    PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = NO_LOCK_VEL,
-                                    SelfLockVelY = NO_LOCK_VEL,
-                                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                    HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxOffsetY = (int)(2*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    SpeciesId = 2,
-                                    ExplosionFrames = 25,
-                                    DirX = 1,
-                                    DirY = 0,
-                                    Hardness = 7,
-                                    BType = BulletType.Melee,
-                                    FireballEmitSfxName="SlashEmitSpd2",
-                                    ExplosionSfxName="Melee_Explosion2",
-                                    MhType = MultiHitType.FromEmission,
-                                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                    }
-                        )
-                            .AddHit(
-                                    new BulletConfig {
-                                    StartupFrames = 7,
-                                    ActiveFrames = 3,
-                                    HitStunFrames = 13,
-                                    BlockStunFrames = 9,
-                                    Damage = 7,
-                                    PushbackVelX = NO_LOCK_VEL,
-                                    PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = NO_LOCK_VEL,
-                                    SelfLockVelY = NO_LOCK_VEL,
-                                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                    HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxOffsetY = (int)(3*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    SpeciesId = 2,
-                                    ExplosionFrames = 25,
-                                    DirX = 1,
-                                    DirY = 0,
-                                    Hardness = 7,
-                                    BType = BulletType.Melee,
-                                    FireballEmitSfxName="SlashEmitSpd2",
-                                    ExplosionSfxName="Melee_Explosion2",
-                                    MhType = MultiHitType.FromEmission,
-                                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                    }
-                        )
-                            .AddHit(
-                                    new BulletConfig {
-                                    StartupFrames = 10,
-                                    ActiveFrames = 3,
-                                    HitStunFrames = 13,
-                                    BlockStunFrames = 9,
-                                    Damage = 7,
-                                    PushbackVelX = NO_LOCK_VEL,
-                                    PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = NO_LOCK_VEL,
-                                    SelfLockVelY = NO_LOCK_VEL,
-                                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                    HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxOffsetY = (int)(3*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    SpeciesId = 2,
-                                    ExplosionFrames = 25,
-                                    DirX = 1,
-                                    DirY = 0,
-                                    Hardness = 7,
-                                    BType = BulletType.Melee,
-                                    FireballEmitSfxName="SlashEmitSpd2",
-                                    ExplosionSfxName="Melee_Explosion2",
-                                    MhType = MultiHitType.FromEmission,
-                                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                    }
-                        )
-                            .AddHit(
-                                    new BulletConfig {
-                                    StartupFrames = 13,
-                                    ActiveFrames = 3,
-                                    HitStunFrames = 13,
-                                    BlockStunFrames = 9,
-                                    Damage = 7,
-                                    PushbackVelX = NO_LOCK_VEL,
-                                    PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = NO_LOCK_VEL,
-                                    SelfLockVelY = NO_LOCK_VEL,
-                                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                    HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxOffsetY = (int)(3*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    SpeciesId = 2,
-                                    ExplosionFrames = 25,
-                                    DirX = 1,
-                                    DirY = 0,
-                                    Hardness = 7,
-                                    BType = BulletType.Melee,
-                                    FireballEmitSfxName="SlashEmitSpd2",
-                                    ExplosionSfxName="Melee_Explosion2",
-                                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                    }
-                        )
-                    ),
 
                     new KeyValuePair<uint, Skill>(258, new Skill{
                             RecoveryFrames = 45,
@@ -6279,6 +6195,20 @@ namespace shared {
                         case PATTERN_INVENTORY_SLOT_C:
                             if (!slotUsed) return NO_SKILL;
                             return slotLockedSkillId;
+                        default:
+                            return NO_SKILL;
+                    }
+                case SPECIES_DARKBEAMTOWER:
+                    switch (patternId) {
+                        case PATTERN_B:
+                            if (notRecovered || currCharacterDownsync.InAir) return NO_SKILL;
+                            return 122;
+                        case PATTERN_UP_B:
+                            if (notRecovered || currCharacterDownsync.InAir) return NO_SKILL;
+                            else return 123;
+                        case PATTERN_DOWN_B:
+                            if (notRecovered || currCharacterDownsync.InAir) return NO_SKILL;
+                            return 124;
                         default:
                             return NO_SKILL;
                     }

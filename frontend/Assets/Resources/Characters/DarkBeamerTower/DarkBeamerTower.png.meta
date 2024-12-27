@@ -108,12 +108,12 @@ TextureImporter:
       name: DarkBeamerTower_0
       rect:
         serializedVersion: 2
-        x: 184
-        y: 195
+        x: 200
+        y: 104
         width: 34
         height: 69
       alignment: 9
-      pivot: {x: 0.5, y: 0.6956522}
+      pivot: {x: 0.5, y: 0.44927537}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -129,12 +129,12 @@ TextureImporter:
       name: DarkBeamerTower_1
       rect:
         serializedVersion: 2
-        x: 150
-        y: 194
+        x: 200
+        y: 177
         width: 34
         height: 71
       alignment: 9
-      pivot: {x: 0.5, y: 0.6760563}
+      pivot: {x: 0.5, y: 0.43661973}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -150,12 +150,12 @@ TextureImporter:
       name: DarkBeamerTower_10
       rect:
         serializedVersion: 2
-        x: 116
-        y: 343
+        x: 166
+        y: 252
         width: 34
         height: 80
       alignment: 9
-      pivot: {x: 0.5, y: 0.6}
+      pivot: {x: 0.5, y: 0.3875}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -171,12 +171,12 @@ TextureImporter:
       name: DarkBeamerTower_11
       rect:
         serializedVersion: 2
-        x: 150
-        y: 343
+        x: 86
+        y: 251
         width: 34
         height: 80
       alignment: 9
-      pivot: {x: 0.5, y: 0.6}
+      pivot: {x: 0.5, y: 0.3875}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -192,12 +192,12 @@ TextureImporter:
       name: DarkBeamerTower_12
       rect:
         serializedVersion: 2
-        x: 44
-        y: 339
+        x: 166
+        y: 336
         width: 34
         height: 81
       alignment: 9
-      pivot: {x: 0.5, y: 0.5925926}
+      pivot: {x: 0.5, y: 0.38271606}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -213,12 +213,12 @@ TextureImporter:
       name: DarkBeamerTower_13
       rect:
         serializedVersion: 2
-        x: 218
-        y: 347
+        x: 90
+        y: 335
         width: 34
         height: 82
       alignment: 9
-      pivot: {x: 0.5, y: 0.58536583}
+      pivot: {x: 0.5, y: 0.37804878}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -234,12 +234,12 @@ TextureImporter:
       name: DarkBeamerTower_14
       rect:
         serializedVersion: 2
-        x: 218
-        y: 429
+        x: 204
+        y: 337
         width: 34
         height: 83
       alignment: 9
-      pivot: {x: 0.5, y: 0.57831323}
+      pivot: {x: 0.5, y: 0.37349397}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -255,12 +255,12 @@ TextureImporter:
       name: DarkBeamerTower_15
       rect:
         serializedVersion: 2
-        x: 184
-        y: 426
+        x: 204
+        y: 424
         width: 34
         height: 86
       alignment: 9
-      pivot: {x: 0.5, y: 0.55813956}
+      pivot: {x: 0.5, y: 0.3604651}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -276,12 +276,12 @@ TextureImporter:
       name: DarkBeamerTower_16
       rect:
         serializedVersion: 2
-        x: 82
-        y: 423
+        x: 90
+        y: 421
         width: 34
         height: 89
       alignment: 9
-      pivot: {x: 0.5, y: 0.53932583}
+      pivot: {x: 0.5, y: 0.3483146}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -297,12 +297,12 @@ TextureImporter:
       name: DarkBeamerTower_17
       rect:
         serializedVersion: 2
-        x: 116
-        y: 423
+        x: 128
+        y: 421
         width: 34
         height: 89
       alignment: 9
-      pivot: {x: 0.5, y: 0.53932583}
+      pivot: {x: 0.5, y: 0.3483146}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -318,12 +318,12 @@ TextureImporter:
       name: DarkBeamerTower_18
       rect:
         serializedVersion: 2
-        x: 150
-        y: 423
+        x: 166
+        y: 421
         width: 34
         height: 89
       alignment: 9
-      pivot: {x: 0.5, y: 0.53932583}
+      pivot: {x: 0.5, y: 0.3483146}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -339,12 +339,12 @@ TextureImporter:
       name: DarkBeamerTower_19
       rect:
         serializedVersion: 2
-        x: 44
-        y: 420
+        x: 48
+        y: 418
         width: 38
         height: 92
       alignment: 9
-      pivot: {x: 0.5, y: 0.5217391}
+      pivot: {x: 0.5, y: 0.33695653}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -360,12 +360,12 @@ TextureImporter:
       name: DarkBeamerTower_2
       rect:
         serializedVersion: 2
-        x: 116
-        y: 264
+        x: 2
+        y: 246
         width: 34
         height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.6075949}
+      pivot: {x: 0.5, y: 0.39240506}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -381,12 +381,12 @@ TextureImporter:
       name: DarkBeamerTower_20
       rect:
         serializedVersion: 2
-        x: 0
-        y: 416
-        width: 44
-        height: 96
+        x: 2
+        y: 415
+        width: 42
+        height: 95
       alignment: 9
-      pivot: {x: 0.47727272, y: 0.5}
+      pivot: {x: 0.47619048, y: 0.3263158}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -402,12 +402,12 @@ TextureImporter:
       name: DarkBeamerTower_21
       rect:
         serializedVersion: 2
-        x: 184
-        y: 171
+        x: 78
+        y: 223
         width: 34
         height: 24
       alignment: 9
-      pivot: {x: 0.5, y: 2}
+      pivot: {x: 0.5, y: 1.2916666}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -423,12 +423,12 @@ TextureImporter:
       name: DarkBeamerTower_3
       rect:
         serializedVersion: 2
-        x: 150
-        y: 265
+        x: 162
+        y: 170
         width: 34
         height: 78
       alignment: 9
-      pivot: {x: 0.5, y: 0.61538464}
+      pivot: {x: 0.5, y: 0.3974359}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -444,12 +444,12 @@ TextureImporter:
       name: DarkBeamerTower_4
       rect:
         serializedVersion: 2
-        x: 184
-        y: 344
+        x: 48
+        y: 332
         width: 34
         height: 82
       alignment: 9
-      pivot: {x: 0.5, y: 0.58536583}
+      pivot: {x: 0.5, y: 0.37804878}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -465,12 +465,12 @@ TextureImporter:
       name: DarkBeamerTower_5
       rect:
         serializedVersion: 2
-        x: 218
-        y: 265
+        x: 2
+        y: 329
         width: 34
         height: 82
       alignment: 9
-      pivot: {x: 0.5, y: 0.58536583}
+      pivot: {x: 0.5, y: 0.37804878}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -486,12 +486,12 @@ TextureImporter:
       name: DarkBeamerTower_6
       rect:
         serializedVersion: 2
-        x: 82
-        y: 341
+        x: 128
+        y: 335
         width: 34
         height: 82
       alignment: 9
-      pivot: {x: 0.5, y: 0.58536583}
+      pivot: {x: 0.5, y: 0.37804878}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -507,12 +507,12 @@ TextureImporter:
       name: DarkBeamerTower_7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 335
+        x: 204
+        y: 252
         width: 34
         height: 81
       alignment: 9
-      pivot: {x: 0.5, y: 0.5925926}
+      pivot: {x: 0.5, y: 0.38271606}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -528,12 +528,12 @@ TextureImporter:
       name: DarkBeamerTower_8
       rect:
         serializedVersion: 2
-        x: 184
-        y: 264
+        x: 124
+        y: 251
         width: 34
         height: 80
       alignment: 9
-      pivot: {x: 0.5, y: 0.6}
+      pivot: {x: 0.5, y: 0.3875}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -549,12 +549,12 @@ TextureImporter:
       name: DarkBeamerTower_9
       rect:
         serializedVersion: 2
-        x: 218
-        y: 185
+        x: 40
+        y: 248
         width: 34
         height: 80
       alignment: 9
-      pivot: {x: 0.5, y: 0.6}
+      pivot: {x: 0.5, y: 0.3875}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

@@ -25,7 +25,7 @@
  <tileset firstgid="11925" source="../shared_comps/bkg-shrinked/gh_bg_4.tsx"/>
  <tileset firstgid="13269" source="../shared_comps/bkg-shrinked/gh_bg_5.tsx"/>
  <tileset firstgid="14613" source="../towers/towers.tsx"/>
- <tileset firstgid="14624" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="14628" source="../shared_comps/CastlePrisonProps16.tsx"/>
  <layer id="45" name="Background1" width="144" height="48">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -95,7 +95,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1UdTEwEAhuGdZPQPoJyxATZ6gpFgRy/e8KSxAFYIJYm9Rv0Hnuy90LGL2P6EvRc6Fuzt4nvgEHJIZmHS8HtnnslmdtJmv8kahlJKKaWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJK/d8tshj+hSjCAszHPMzFHMzGLBTCCTPvnWUxjGzkIBd5sMGOfMyAAzNRYInQD1QRbT+b2Ie98GMPdmMXdmIHtmMbtprcj5tNVKIK1aiBB174sBGbsBlbtJ+E7B6buIs7uI1baMNNtOIGruMarprcTy2bqEM9GtCIJjSjBRdxCZdxRfsJW3GSYSxJivW3GNxfNvEHv/ELP/ED3/ENX/EFn9Fvcj/tbKIDnehCN3rQiz68xwd8xCftJyHLtxp+O2zIQy5ykI0sZCID0zHNam4/KVbDGIfxmICJmIRUpCEdkzEFU60R+oEqovnYhBce1KAaVaiEGxUoxwasN7kfF5tYjhVYiVUoQSnKsBprsBbrYrSfFAcbd8Tms0dCLWyiGU1oRAPqUYdaXMB5nMNZk/s5yCYO4TCO4CiO4ThO4CRO4TTOxGg/aWwnXfsZcn1sohc96EYXOtGBdrzDW7zBa5P7uc8mHuAhHuExnuApnuE5XuAlXg1xP0XDvPYZvD4zTvfTNib0+VHJhjE6OTrfZaS2eODal/NYAXfAFpZyvAyuEPuwcc4ep/vpD7OfArbj1H6GVfHAtffw6IUvYAslHJeiLMQ+nJwrjNP9pI4d/Dz4/0b7ia/C3S+inStoP8F78XDs1X7ipnD3i2h3QPtJqILvF7FO+0msgu8Xgf0DLYK29g==
+   eJzt1VdPUwEAhuGTNvoHUK4diANUaBkWUMEZ70w08QYBB+CALgTcVv0HXrn3YOMWcf0J9x5sHLjXje8FF6UXbQ6kC783edLTnHTlfOkxDKWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWU+r9bajF8S7AYi7AQC1CAfMzHPMxFHsy8d5rFMNJhgx0ZyEQWsjEHDuQg1xKmH6jC2n42sQ974cMe7MYu7MQObMc2bDW5nwo2UQknXHDDAy+qsAXVqEGt9hOX3WMTd3EHt3EL7biJNtzAdVzDVZP7qWMT9WhAI5rQjBa04iIu4TKuaD8hW5FgGCsTov0thvaXTfzBb/zCT/zAd3zDV3zBZwyY3E8Hm+hEF7rRg170oR/v8QEf8Un7icuyrYYvC5nIgB02pCMNszELM5FqNbefCVbDmIhJmIwkTEEypmIapmMGUqxh+oEqrFWxCS88cMMFJypRgc3YhI3YYHI/hWxiNYpQjBKswVqsw3qUogzlUdpPkoNNO6Lz2aOhVjbRgmY0oRENqEcdLuA8zuGsyf0cZBOHcBhHcBTHcBwncBKncBpnorSfFLaTqv0Mu3420Yde9KAbXehEB97hLd7gtcn93GcTD/AQj/AYT/AUz/AcL/ASr4a5n2UjvPY2Xm+P0f20jwt+fkyiYYxNjMx3Ga0tH7z2Th5dcPttoYjjYpQE2YeDczkxup+BEPvJZTt52s+IWjV47at5rEGt3xZKOS5DeZB95HOuIEb3kzx+6PPA/xvtJ7YKdb+IdIUB+wnci4djr/YTM4W6X0S6A9pPXBV4v4h22k98FXi/8O8f0O63Wg==
   </data>
  </layer>
  <layer id="43" name="Foreground" width="144" height="48">
@@ -103,7 +103,7 @@
    <property name="unity:SortingLayer" value="Foreground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt0rkNgEAMRUH3sNVsJ3QAbXD0xFEdlgiICdAKNCM9OXXwIwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaKWvEUO9LjzV1TvgPWOJmLI5W0rrb/iaNTezZXt22A/Ab5xzjwkZ
+   eJzt0kkNgEAURMHvYdTgBTPAeGJRR99QQMiQquTd+9BVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAiObpCXjP0qrWtKXevl7DaPZ85khnuvwH4DduGFsHRA==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -132,7 +132,7 @@
     <property name="speciesId" value="1027"/>
    </properties>
   </object>
-  <object id="459" name="FirstStageSavepoint" x="1792" y="624">
+  <object id="459" name="FirstStageSavepoint" x="1968" y="320">
    <properties>
     <property name="bossSpeciesIds" value="4110"/>
     <property name="demandedEvtMask" value="1"/>
@@ -157,7 +157,7 @@
     <property name="subscribesToExhaustedIdList" value="4"/>
    </properties>
   </object>
-  <object id="451" name="FirstStageEnd" x="1712" y="624">
+  <object id="451" name="FirstStageEnd" x="1920" y="320">
    <properties>
     <property name="demandedEvtMask" value="1"/>
     <property name="id" value="10"/>

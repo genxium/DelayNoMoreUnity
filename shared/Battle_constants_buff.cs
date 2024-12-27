@@ -247,6 +247,16 @@ namespace shared {
             Name = "StoneDropperStart"
         };
 
+        public static VfxConfig VfxAirJumpCircle = new VfxConfig {
+            SpeciesId = 25,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false,
+            UsePixelatedVer = true,
+            Name = "AirJumpCircle"
+        };
+
         public static ImmutableDictionary<int, VfxConfig> pixelatedVfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
              new[]
              {
@@ -274,6 +284,7 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxHoppingBolt.SpeciesId, VfxHoppingBolt),
                     new KeyValuePair<int, VfxConfig>(VfxThunderStrikeStart.SpeciesId, VfxThunderStrikeStart),
                     new KeyValuePair<int, VfxConfig>(VfxStoneDropperStart.SpeciesId, VfxStoneDropperStart),
+                    new KeyValuePair<int, VfxConfig>(VfxAirJumpCircle.SpeciesId, VfxAirJumpCircle),
              }
         );
 

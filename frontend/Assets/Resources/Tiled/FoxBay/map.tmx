@@ -813,22 +813,22 @@
  <objectgroup id="33" name="Pickable">
   <object id="468" gid="1954" x="592" y="864" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="517" gid="1954" x="2272" y="224" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="518" gid="1954" x="1840" y="752" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="579" gid="1954" x="2560" y="752" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
  </objectgroup>

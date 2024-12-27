@@ -65,7 +65,7 @@ namespace shared {
                         if (OPPONENT_REACTION_USE_MELEE == s2) {
                             patternId = PATTERN_B;
                         } else {
-                            s3 = frontOpponentReachableByFireball(currCharacterDownsync, aCollider, oppoChCollider, oppoChColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
+                            s3 = frontOpponentReachableByFireball(currCharacterDownsync, chConfig, aCollider, oppoChCollider, oppoChColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
                             visionReaction = s3;
                             if (OPPONENT_REACTION_USE_FIREBALL == s3) {
                                 patternId = PATTERN_DOWN_B;
@@ -395,6 +395,10 @@ namespace shared {
                     if (currCharacterDownsync.Mp < RisingPurpleArrowSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     closeEnough = (0 < colliderDy && absColliderDy > 0.8f * (bCollider.H-aCollider.H)); // A special case
                     break;
+                case SPECIES_DARKBEAMTOWER:
+                    if (currCharacterDownsync.Mp < RisingPurpleArrowSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
+                    closeEnough = (0 < colliderDy && absColliderDy > 1.8f * chConfig.DefaultSizeY); // A special case
+                    break;
                 case SPECIES_STONE_GOLEM:
                     if (currCharacterDownsync.Mp < StoneRollSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
                     closeEnough = (0 < colliderDy && absColliderDy > 2.2f*aCollider.H); // A special case
@@ -491,15 +495,18 @@ namespace shared {
                     break;
                 case SPECIES_SKELEARCHER:
                     if (currCharacterDownsync.Mp < PurpleArrowPrimarySkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
-                    closeEnough = (absColliderDy < 0.8f * (bCollider.H - aCollider.H)); // A special case
+                    closeEnough = (absColliderDy < 1.2f * (bCollider.H - aCollider.H)); // A special case
                     if (closeEnough) {
                         return OPPONENT_REACTION_USE_MELEE;
                     } else {
                         return OPPONENT_REACTION_FLEE;
                     }
+                case SPECIES_DARKBEAMTOWER:
+                    if (currCharacterDownsync.Mp < DarkTowerPrimerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
+                    return OPPONENT_REACTION_USE_MELEE;
                 case SPECIES_STONE_GOLEM:
                     if (currCharacterDownsync.Mp < StoneSwordSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;
-                    closeEnough = (0 < colliderDy && absColliderDy < 2.2f * aCollider.H) && (absColliderDx < 10.0f * aCollider.W); // A special case
+                    closeEnough = (0 < colliderDy && absColliderDy < 1.2f * aCollider.H) && (absColliderDx < 5.0f * aCollider.W); // A special case
                     if (closeEnough) {
                         return OPPONENT_REACTION_USE_MELEE;
                     } else {
@@ -540,7 +547,7 @@ namespace shared {
             }
         }
 
-        private static int frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop) {
+        private static int frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop) {
             // Whenever there's an opponent in vision, it's deemed already close enough for fireball
             int xfac = (0 < colliderDx ? 1 : -1);
             float boxCx, boxCy, boxCwHalf, boxChHalf;
@@ -621,6 +628,14 @@ namespace shared {
                         return OPPONENT_REACTION_USE_FIREBALL;
                     } else {
                         return OPPONENT_REACTION_FLEE;
+                    }
+                case SPECIES_DARKBEAMTOWER:
+                    if (currCharacterDownsync.Mp < DarkTowerLowerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
+                    closeEnough = (0 > colliderDy && absColliderDy > 1.8f * chConfig.DefaultSizeY); // A special case
+                    if (closeEnough) {
+                        return OPPONENT_REACTION_USE_FIREBALL;
+                    } else {
+                        return OPPONENT_REACTION_USE_MELEE;
                     }
                 default:
                     return OPPONENT_REACTION_UNKNOWN;

@@ -43,6 +43,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _CrackOpacity: 0
+    - _EleDamageFlash: 0
     - _FlashIntensity: 0
     - _Palette1FromRange: 0
     - _Palette1ToFuzziness: 0

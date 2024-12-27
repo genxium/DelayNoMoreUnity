@@ -155,6 +155,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected ILoggerBridge _loggerBridge = new LoggerBridgeImpl();
 
     public SelfBattleHeading selfBattleHeading;
+    public BossBattleHeading bossBattleHeading;
 
     public GameObject playerLightsPrefab;
     protected PlayerLights selfPlayerLights;
@@ -538,7 +539,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         float selfPlayerWx = 0f, selfPlayerWy = 0f;
-
+        
         for (int k = 0; k < roomCapacity; k++) {
             var currCharacterDownsync = rdf.PlayersArr[k];
             var prevCharacterDownsync = (null == prevRdf ? null : prevRdf.PlayersArr[k]);
@@ -629,7 +630,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             var spr = chAnimCtrl.GetComponent<SpriteRenderer>();
             var material = spr.material;
-            playCharacterDamagedVfx(rdf.Id, currCharacterDownsync, chConfig, prevCharacterDownsync, playerGameObj, wx, wy, halfBoxCh, chAnimCtrl, teamRibbonLookupKey, material);
+            playCharacterDamagedVfx(rdf.Id, currCharacterDownsync, chConfig, prevCharacterDownsync, playerGameObj, wx, wy, halfBoxCh, chAnimCtrl, teamRibbonLookupKey, material, false);
             
             playCharacterSfx(currCharacterDownsync, prevCharacterDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, chAnimCtrl, wx, wy, rdf.Id);
@@ -649,6 +650,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         currRdfNpcAnimHoldersCnt = 0;
+        bool hasActiveBoss = false;
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
             var currNpcDownsync = rdf.NpcsArr[k];
 
@@ -670,6 +672,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             int lookupKey = KV_PREFIX_NPC + currNpcDownsync.Id;
 
             ++currRdfNpcAnimHoldersCnt;
+
+            bool isActiveBoss = (null != bossBattleHeading && bossSpeciesSet.Contains(currNpcDownsync.SpeciesId) && CharacterState.Dimmed != currNpcDownsync.CharacterState);
+            if (isActiveBoss) {
+                hasActiveBoss = true;
+                bossBattleHeading.SetCharacter(currNpcDownsync);
+            }
 
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) {
                 if (isOnlineMode && chConfig.IsKeyCh && CharacterState.Dying != currNpcDownsync.CharacterState && CharacterState.Dimmed != currNpcDownsync.CharacterState) {
@@ -712,7 +720,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                     hasColorSwapByTeam = true;
                 }
 
-
                 // Add teamRibbon if same team as self, allowing characters of other teams to hide under foreground
                 if (!hasColorSwapByTeam && CharacterState.Dying != currNpcDownsync.CharacterState && selfPlayerInfo.BulletTeamId == currNpcDownsync.BulletTeamId) {
                     showTeamRibbon(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
@@ -731,10 +738,14 @@ public abstract class AbstractMapController : MonoBehaviour {
                     DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 1.5f, 0.5f))
                     .Append(DOTween.To(() => material.GetFloat(MATERIAL_REF_THICKNESS), x => material.SetFloat(MATERIAL_REF_THICKNESS, x), 0f, 0.5f));
             }
-            playCharacterDamagedVfx(rdf.Id, currNpcDownsync, chConfig, prevNpcDownsync, npcGameObj, wx, wy, halfBoxCh, npcAnimHolder, lookupKey, material);
+
+            playCharacterDamagedVfx(rdf.Id, currNpcDownsync, chConfig, prevNpcDownsync, npcGameObj, wx, wy, halfBoxCh, npcAnimHolder, lookupKey, material, isActiveBoss);
             float distanceAttenuationZ = Math.Abs(wx - selfPlayerWx) + Math.Abs(wy - selfPlayerWy);
             playCharacterSfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, npcAnimHolder, wx, wy, rdf.Id);
+        }
+        if (null != bossBattleHeading) {
+            bossBattleHeading.gameObject.SetActive(hasActiveBoss);
         }
 
         int kDynamicTrap = 0;
@@ -3137,11 +3148,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         cachedHpBars.Put(lookupKey, hpBar);
     }
 
-    public bool playCharacterDamagedVfx(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync prevCharacterDownsync, GameObject theGameObj, float wx, float wy, float halfBoxCh, CharacterAnimController chAnimCtrl, int lookupKey, Material material) {
+    public bool playCharacterDamagedVfx(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync prevCharacterDownsync, GameObject theGameObj, float wx, float wy, float halfBoxCh, CharacterAnimController chAnimCtrl, int lookupKey, Material material, bool isActiveBoss) {
         var spr = theGameObj.GetComponent<SpriteRenderer>();
         material.SetFloat("_CrackOpacity", 0f);
 
-        if (currCharacterDownsync.JoinIndex != selfPlayerInfo.JoinIndex && CharacterState.Dying != currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesSinceLastDamaged) {
+        if (!isActiveBoss && currCharacterDownsync.JoinIndex != selfPlayerInfo.JoinIndex && CharacterState.Dying != currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesSinceLastDamaged) {
             showInplaceHpBar(rdfId, currCharacterDownsync, wx, wy, halfBoxCh, inplaceHpBarZ, lookupKey);
         }
 

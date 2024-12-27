@@ -1132,7 +1132,9 @@ namespace shared {
                     */
                 } else if (thatCharacterInNextFrame.OnSlope && nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState) && 0 == thatCharacterInNextFrame.VelX) {
                     // [WARNING] Prevent down-slope sliding, might not be preferred for some game designs, disable this if you need sliding on the slope
-                    thatCharacterInNextFrame.VelY = 0;
+                    if (InAirIdle1ByJump != currCharacterDownsync.CharacterState && InAirIdle1ByWallJump != currCharacterDownsync.CharacterState && InAirIdle2ByJump != currCharacterDownsync.CharacterState) {
+                        thatCharacterInNextFrame.VelY = 0;
+                    }
                 }
 
                 if (!chConfig.OmitGravity && !currCharacterDownsync.OmitGravity) {

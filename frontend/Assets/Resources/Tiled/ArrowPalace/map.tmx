@@ -67,7 +67,7 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="562" name="BossSavepoint" x="720" y="272">
+  <object id="562" name="BossSavepoint" x="640" y="496">
    <properties>
     <property name="bossSpeciesIds" value="4101"/>
     <property name="demandedEvtMask" value="1"/>
@@ -82,7 +82,7 @@
    </properties>
    <point/>
   </object>
-  <object id="548" name="Victory" x="496" y="544">
+  <object id="548" name="Victory" x="563.5" y="495.5">
    <properties>
     <property name="demandedEvtMask" value="1"/>
     <property name="id" value="6"/>
@@ -100,7 +100,7 @@
     <property name="speciesId" value="1027"/>
    </properties>
   </object>
-  <object id="552" name="FirstStageEnd" x="496" y="272">
+  <object id="552" name="FirstStageEnd" x="496" y="496">
    <properties>
     <property name="demandedEvtMask" value="1"/>
     <property name="id" value="4"/>
@@ -137,7 +137,7 @@
     <property name="subscribesToIdList" value="1"/>
    </properties>
   </object>
-  <object id="569" name="Floor1IndiWaveGroupTrigger" x="32" y="288" width="960" height="64">
+  <object id="569" name="Floor1IndiWaveGroupTrigger" x="32" y="256" width="960" height="64">
    <properties>
     <property name="id" value="1"/>
     <property name="quota" value="2"/>
@@ -426,37 +426,37 @@
  <objectgroup id="164" name="Pickable">
   <object id="556" gid="1524" x="144" y="624" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="557" gid="1524" x="288" y="160" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="588" gid="1524" x="400" y="160" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="589" gid="1524" x="608" y="160" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="590" gid="1524" x="656" y="624" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="591" gid="1524" x="32" y="256" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="592" gid="1524" x="656" y="160" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
  </objectgroup>

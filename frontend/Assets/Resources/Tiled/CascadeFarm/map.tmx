@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="561">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="563">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -65,7 +65,7 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="548" name="Victory" x="496" y="544">
+  <object id="548" name="Victory" x="528" y="480">
    <properties>
     <property name="demandedEvtMask" value="3"/>
     <property name="id" value="6"/>
@@ -85,7 +85,7 @@
     <property name="speciesId" value="1027"/>
    </properties>
   </object>
-  <object id="552" name="FirstStageEnd" x="624" y="320">
+  <object id="552" name="FirstStageEnd" x="464" y="480">
    <properties>
     <property name="demandedEvtMask" value="3"/>
     <property name="id" value="4"/>
@@ -353,20 +353,6 @@
    </properties>
    <point/>
   </object>
-  <object id="494" name="Floor2Jumper2" x="528" y="360">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="4"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="495" name="Floor2Jumper1" x="464" y="360">
-   <properties>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="20"/>
-   </properties>
-   <point/>
-  </object>
   <object id="498" name="Floor2L" x="48" y="256">
    <properties>
     <property name="fdAct" value="3"/>
@@ -380,16 +366,28 @@
    </properties>
    <point/>
   </object>
+  <object id="561" x="432" y="336" width="32" height="32">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+   </properties>
+  </object>
+  <object id="562" x="528" y="336" width="32" height="32">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="frAct" value="20"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="164" name="Pickable">
   <object id="556" gid="1524" x="480" y="608" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
   <object id="557" gid="1524" x="256" y="256" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
  </objectgroup>

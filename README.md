@@ -1,9 +1,10 @@
 # Latest tag change notes
-v2.0.7 new features
+v2.0.8 new features
 - Added back transformation buff.
 - Added support for Atk+InvSlotC input pattern.
 - Added BomberGoblin and SpearWoman.
 - Added self-hpbar and gauge interpolation.
+- Added boss-hpbar for story mode.
 
 v2.0.4 new features
 - Enhanced timed-bomb implementation.
@@ -19,19 +20,6 @@ v2.0.0 new features
 - Refactored trigger mechanism for clearance and easy of configuration
 - Added render-only player position interpolation for smoother graphics during resync 
 - Added gauged inventory slot for super skills
-
-v1.6.7 new features
-- Improved frontend lockstep handling.
-- Improved backend downsync nonblocking handling.
-- Added use of `chaserRenderFrameIdLowerBound`.
-- Added `potential graphical inconsistency indicators` on `NetworkDoctorInfo` panel.
-- Enhanced jump holding mechanics for easier netcode prediction.
-- Applied jump startup for slipping and air-jump, such that `input delay = 2 frames i.e. ~32ms` has fast graphical response (i.e. startup animation) but slow collision system response (i.e. after startup frames).
-- Improved damaged-anim handling.
-- Added support for `localExtraInputDelayFrames`.
-    - Rule of thumb: the same `renderFrameId` MUST take the same `inputFrameId` for all peers regardless of their individual `inputDelay`s. 
-    - Therefore, if individual `inputDelay`s are different, the trick would be on `inputFrameId` generation, i.e. for each peer if its `inputDelay` suddenly goes up from `inputDelayStd=2` to `inputDelayDynamic=4`, then its generated `inputFrameId` at `renderFrameId=242` should go up from `toGenerateInputFrameIdOld = (renderFrameId >> 2) = 60` to `toGenerateInputFrameIdNew = ((renderFrameId+(inputDelayDynamic-inputDelayStd)) >> 2)=61` -- while `localRequiredInputFrameId = ((renderFrameId-inputDelayStd) >> 2)` is unchanged, hence `toGenerateInputFrameIdNew` is to be used by a later renderFrame, making a feel of "larger input-to-impact-delay". 
-- Added support for "no player input overwriting" on backend and option for "useFreezingLockStep" on frontend.
 
 Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/REeWiIwxwKs)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
 
