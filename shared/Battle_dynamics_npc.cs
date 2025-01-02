@@ -397,7 +397,7 @@ namespace shared {
                     break;
                 case SPECIES_DARKBEAMTOWER:
                     if (currCharacterDownsync.Mp < RisingPurpleArrowSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    closeEnough = (0 < colliderDy && absColliderDy > 1.8f * chConfig.DefaultSizeY); // A special case
+                    closeEnough = (0 < colliderDy && absColliderDy > 1.2f * aCollider.H); // A special case
                     break;
                 case SPECIES_STONE_GOLEM:
                     if (currCharacterDownsync.Mp < StoneRollSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
@@ -631,7 +631,7 @@ namespace shared {
                     }
                 case SPECIES_DARKBEAMTOWER:
                     if (currCharacterDownsync.Mp < DarkTowerLowerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    closeEnough = (0 > colliderDy && absColliderDy > 1.8f * chConfig.DefaultSizeY); // A special case
+                    closeEnough = (0 > colliderDy && absColliderDy > 1.2f * aCollider.H); // A special case
                     if (closeEnough) {
                         return OPPONENT_REACTION_USE_FIREBALL;
                     } else {

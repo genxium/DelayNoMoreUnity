@@ -1162,7 +1162,7 @@ public class Room {
                     bool shouldPredictBtnAHold = false;
                     if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > gapInputFrameId - lastIndividuallyConfirmedInputFrameId[i]) {
                         shouldPredictBtnAHold = true;
-                        if (2 == encodedIdx || 5 == encodedIdx || 8 == encodedIdx) {
+                        if (1 == encodedIdx || 5 == encodedIdx || 8 == encodedIdx) {
                             // Don't predict slip-jump!
                             shouldPredictBtnAHold = false;
                         }

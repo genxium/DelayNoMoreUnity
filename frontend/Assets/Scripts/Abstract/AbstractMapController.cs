@@ -307,7 +307,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 bool shouldPredictBtnBHold = false;
                 if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
                     shouldPredictBtnAHold = true;
-                    if (2 == encodedIdx || 5 == encodedIdx || 8 == encodedIdx) {
+                    if (1 == encodedIdx || 5 == encodedIdx || 8 == encodedIdx) {
                         // Don't predict slip-jump!
                         shouldPredictBtnAHold = false;
                     }

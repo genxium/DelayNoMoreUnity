@@ -303,15 +303,15 @@ namespace shared {
 
         // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.
         public static int[,] DIRECTION_DECODER = new int[,] {
-            {0, 0},
-            {0, +2},
-            {0, -2},
-            {+2, 0},
-            {-2, 0},
-            {+1, +1},
-            {-1, -1},
-            {+1, -1},
-            {-1, +1},
+            {0, 0}, // 0
+            {0, +2}, // 1
+            {0, -2}, // 2
+            {+2, 0}, // 3
+            {-2, 0}, // 4
+            {+1, +1}, // 5
+            {-1, -1}, // 6
+            {+1, -1}, // 7
+            {-1, +1}, // 8
         };
 
         public static HashSet<CharacterState> inAirSet = new HashSet<CharacterState>() {
