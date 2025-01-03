@@ -573,7 +573,7 @@ public class Room {
                 var src = selfParsedRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
                 var dst = startRdf.PlayersArr[targetPlayer.CharacterDownsync.JoinIndex - 1];
 
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.OnSlopeFacingDown, src.ForcedCrouching, src.NewBirth, src.JumpStarted, src.FramesToStartJump, src.FramesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, src.ComboHitCnt, src.ComboFramesRemained, src.DamageElementalAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, src.FramesToRecover, src.FramesInChState, src.ActiveSkillId, src.ActiveSkillHit, src.FramesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, src.InAir, src.OnWall, src.OnWallNormX, src.OnWallNormY, src.FramesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, src.PrimarilyOnSlippableHardPushback, src.CapturedByPatrolCue, src.FramesInPatrolCue, src.BeatsCnt, src.BeatenCnt, src.Mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, src.OnSlope, src.OnSlopeFacingDown, src.ForcedCrouching, src.NewBirth, src.JumpStarted, src.FramesToStartJump, src.FramesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, false, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, src.ComboHitCnt, src.ComboFramesRemained, src.DamageElementalAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, dst);
 
             }
         } finally {
@@ -1160,14 +1160,21 @@ public class Room {
                     ulong encodedIdx = (lastIndividuallyConfirmedInputList[i] & 15UL);
                     ifdHolder.InputList[i] = encodedIdx;
                     bool shouldPredictBtnAHold = false;
+                    bool shouldPredictBtnEHold = false;
                     if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > gapInputFrameId - lastIndividuallyConfirmedInputFrameId[i]) {
                         shouldPredictBtnAHold = true;
-                        if (1 == encodedIdx || 5 == encodedIdx || 8 == encodedIdx) {
+                        if (2 == encodedIdx || 6 == encodedIdx || 7 == encodedIdx) {
                             // Don't predict slip-jump!
                             shouldPredictBtnAHold = false;
                         }
                     }
+
+                    if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 256UL) && BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 > gapInputFrameId - lastIndividuallyConfirmedInputFrameId[i]) {
+                        shouldPredictBtnEHold = true;
+                    }
+
                     if (shouldPredictBtnAHold) ifdHolder.InputList[i] |= (lastIndividuallyConfirmedInputList[i] & 16UL); 
+                    if (shouldPredictBtnEHold) ifdHolder.InputList[i] |= (lastIndividuallyConfirmedInputList[i] & 256UL); 
                     /*
                     [WARNING] 
 
@@ -1699,7 +1706,8 @@ public class Room {
                 }
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
             }
-            Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadJoinIndices, out fulfilledTriggerSetMask, loggerBridge);
+            bool selfNotEnoughMp = false;
+            Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadJoinIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, loggerBridge);
             curDynamicsRenderFrameId++;
         }
     }

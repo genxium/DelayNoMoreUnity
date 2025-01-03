@@ -28,13 +28,13 @@ AnimatorStateMachine:
     m_State: {fileID: 7168749609044857168}
     m_Position: {x: 375, y: 325, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 7191156012695125900}
+    m_State: {fileID: -5839464874738985814}
     m_Position: {x: 410, y: 390, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 2453818783991476540}
+    m_State: {fileID: 8290898394504009957}
     m_Position: {x: 445, y: 455, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -7563328760493171106}
+    m_State: {fileID: 1677824920060986486}
     m_Position: {x: 480, y: 520, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
@@ -46,14 +46,14 @@ AnimatorStateMachine:
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 4427264948899882836}
---- !u!1102 &-7563328760493171106
+--- !u!1102 &-5839464874738985814
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GetUp1
+  m_Name: BlownUp1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -66,7 +66,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 3964513fe6f645342a80d6db3929e4c8, type: 2}
+  m_Motion: {fileID: 7400000, guid: 8857df1c461ebf847a6dc3a1ca0ab3ca, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -172,14 +172,14 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &2453818783991476540
+--- !u!1102 &1677824920060986486
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LayDown1
+  m_Name: GetUp1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -192,7 +192,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 15a135fee6bedd2418448581369953cb, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1492eddab65c11041a42b64f082f7a91, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -276,14 +276,14 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &7191156012695125900
+--- !u!1102 &8290898394504009957
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlownUp1
+  m_Name: LayDown1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -296,7 +296,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 0b0d6d4d0fa0ce843b3f309584e76dc4, type: 2}
+  m_Motion: {fileID: 7400000, guid: fff89ee731869b146ba6df54bc6977bd, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

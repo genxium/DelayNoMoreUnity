@@ -270,6 +270,9 @@ namespace shared {
 
         public static int DYING_FRAMES_TO_RECOVER = 100; // MUST BE SAME FOR EVERY CHARACTER FOR FAIRNESS!
 
+        public static int PARRIED_FRAMES_TO_RECOVER = 25;
+        public static int PARRIED_FRAMES_TO_START_CANCELLABLE = 4;
+
         public static uint NO_SKILL = 0;
         public static int NO_SKILL_HIT = 0;
 
@@ -417,5 +420,8 @@ namespace shared {
 
         public static int IN_AIR_DASH_GRACE_PERIOD_RDF_CNT = 3;
         public static int IN_AIR_JUMP_GRACE_PERIOD_RDF_CNT = 6;
+
+        public static int BTN_E_HOLDING_RDF_CNT_THRESHOLD_1 = (4 << INPUT_SCALE_FRAMES) - 3;  
+        public static int BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 = (int)Math.Ceiling((float)BTN_E_HOLDING_RDF_CNT_THRESHOLD_1/(1 << INPUT_SCALE_FRAMES));  
     }
 }

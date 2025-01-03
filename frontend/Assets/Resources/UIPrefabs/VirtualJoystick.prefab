@@ -36,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 357, y: -79}
-  m_SizeDelta: {x: 120, y: 120}
+  m_AnchoredPosition: {x: 355, y: -120}
+  m_SizeDelta: {x: 120, y: 108}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &143196050630596460
 CanvasRenderer:
@@ -100,7 +100,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 230, y: -43}
+  m_AnchoredPosition: {x: 230, y: -69}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &143196051110400668
@@ -169,7 +169,6 @@ MonoBehaviour:
   quota: {fileID: 4495225761723205418}
   cooldownMask: {fileID: 7380059971915718088}
   content: {fileID: 388711276216919262}
-  contentMat: {fileID: 0}
   gauge: {fileID: 0}
   positiveGaugeInterpolater: {fileID: 0}
   gaugeForeground: {fileID: 0}
@@ -295,6 +294,7 @@ RectTransform:
   - {fileID: 143196051110400657}
   - {fileID: 3079056870525337109}
   - {fileID: 2094455045741398057}
+  - {fileID: 7130107670978715421}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -320,6 +320,7 @@ MonoBehaviour:
   btnB: {fileID: 143196051110400656}
   btnC: {fileID: 3663465933373420665}
   btnD: {fileID: 9221925550786395525}
+  btnE: {fileID: 4699641696038187371}
   enablePlatformSpecificHiding: 1
   joystickImg: {fileID: 3343911075328830854}
   joystickIdle: {fileID: -97564264, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
@@ -469,6 +470,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 3b09b6b4-6a8a-4c19-95cc-8c53d2888a27
     m_ActionName: SelfPlayer/BtnCancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1943233236080968477}
+        m_TargetAssemblyTypeName: BattleInputManager, Assembly-CSharp
+        m_MethodName: OnBtnEInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 74caf1c8-40d4-4497-af46-d1999b87b2bf
+    m_ActionName: SelfPlayer/BtnE[/Keyboard/l]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: SelfPlayer
@@ -1184,7 +1201,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 357, y: 29}
+  m_AnchoredPosition: {x: 112, y: -48}
   m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &705298728585859144
@@ -1237,7 +1254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ControlPath: <Gamepad>/buttonNorth
+  m_ControlPath: <Gamepad>/rightShoulder
 --- !u!114 &478388279597389244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1253,7 +1270,6 @@ MonoBehaviour:
   quota: {fileID: 3626212355175964312}
   cooldownMask: {fileID: 7438132291021823011}
   content: {fileID: 5682018450581253479}
-  contentMat: {fileID: 0}
   gauge: {fileID: 6948752844333465979}
   positiveGaugeInterpolater: {fileID: 207338687846991432}
   gaugeForeground: {fileID: 5557843587030826617}
@@ -1481,6 +1497,66 @@ MonoBehaviour:
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4699641696038187371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7130107670978715421}
+  - component: {fileID: 6384422878287054745}
+  - component: {fileID: 7456946348306063220}
+  m_Layer: 5
+  m_Name: BtnE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7130107670978715421
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699641696038187371}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1008528146874526645}
+  m_Father: {fileID: 143196051322194466}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 383, y: -61}
+  m_SizeDelta: {x: 120, y: 90}
+  m_Pivot: {x: 0.5, y: 0}
+--- !u!222 &6384422878287054745
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699641696038187371}
+  m_CullTransparentMesh: 1
+--- !u!114 &7456946348306063220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699641696038187371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlPath: <Gamepad>/buttonNorth
 --- !u!1 &6095341919458439357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1934,6 +2010,82 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &9171909427483028216
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1008528146874526645}
+  - component: {fileID: 2510610762805964007}
+  - component: {fileID: 3116661534961070137}
+  m_Layer: 5
+  m_Name: Content
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1008528146874526645
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9171909427483028216}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7130107670978715421}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2510610762805964007
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9171909427483028216}
+  m_CullTransparentMesh: 1
+--- !u!114 &3116661534961070137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9171909427483028216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.29803923}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -1932270553, guid: 5cd5092e70430344b91ed97a53615351, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &9221925550786395525
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,7 +2195,6 @@ MonoBehaviour:
   quota: {fileID: 6638098600652998006}
   cooldownMask: {fileID: 6182611931885702427}
   content: {fileID: 7919085598546321398}
-  contentMat: {fileID: 0}
   gauge: {fileID: 0}
   positiveGaugeInterpolater: {fileID: 0}
   gaugeForeground: {fileID: 0}

@@ -60,6 +60,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "BtnE",
+                    "type": "Button",
+                    "id": "74caf1c8-40d4-4497-af46-d1999b87b2bf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "BtnCancel",
                     "type": "Button",
                     "id": "3b09b6b4-6a8a-4c19-95cc-8c53d2888a27",
@@ -183,7 +192,7 @@
                 {
                     "name": "",
                     "id": "fedee567-4daa-4790-87ab-1c2679b404ef",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -194,7 +203,7 @@
                 {
                     "name": "",
                     "id": "074486b2-3df7-4978-9c89-55e64d0733fb",
-                    "path": "<Keyboard>/l",
+                    "path": "<Keyboard>/h",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -243,6 +252,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "BtnCancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8aa7b71c-2b05-4478-be55-d9bda04385f4",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BtnE",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c5903135-4cc7-40f3-8260-a6ef28b90662",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BtnE",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

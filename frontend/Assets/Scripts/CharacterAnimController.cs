@@ -192,19 +192,32 @@ public class CharacterAnimController : MonoBehaviour {
             throw new Exception(chConfig.SpeciesName + " does not have effNewChState = " + effNewChState);
         }
         var targetClip = lookUpTable[effNewChState];
+        if (null == chConfig.LoopingChStates || !chConfig.LoopingChStates.ContainsKey(effNewChState)) {
+            if (playingAnimName.Equals(targetClip.name) && INTERRUPT_WAIVE_SET.Contains(effNewChState)) {
+                return;
+            }
 
-        if (playingAnimName.Equals(targetClip.name) && INTERRUPT_WAIVE_SET.Contains(effNewChState)) {
-            return;
+            if (INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
+                animator.Play(targetClip.name, targetLayer);
+                return;
+            }
+
+            var frameIdxInAnim = (Def1Atked1 == newCharacterState ? frameIdxToPlayDef1Atked : rdfCharacter.FramesInChState);
+            float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
+            animator.Play(targetClip.name, targetLayer, normalizedFromTime);
+        } else {
+            var totRdfCnt = (targetClip.frameRate * targetClip.length);
+            int animLoopingRdfOffset = chConfig.LoopingChStates[effNewChState];
+            var frameIdxInAnim = rdfCharacter.FramesInChState;
+            if (frameIdxInAnim > animLoopingRdfOffset) {    
+                var frameIdxInAnimFloat = animLoopingRdfOffset + ((frameIdxInAnim - animLoopingRdfOffset) % (totRdfCnt - animLoopingRdfOffset));
+                float normalizedFromTime = (frameIdxInAnimFloat / totRdfCnt); // TODO: Anyway to avoid using division here?
+                animator.Play(targetClip.name, targetLayer, normalizedFromTime);
+            } else {
+                float normalizedFromTime = (frameIdxInAnim / totRdfCnt); // TODO: Anyway to avoid using division here?
+                animator.Play(targetClip.name, targetLayer, normalizedFromTime);
+            }
         }
-
-        if (INTERRUPT_WAIVE_SET.Contains(newCharacterState)) {
-            animator.Play(targetClip.name, targetLayer);
-            return;
-        }
-
-        var frameIdxInAnim = Def1Atked1 == newCharacterState ? frameIdxToPlayDef1Atked : rdfCharacter.FramesInChState;
-        float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
-        animator.Play(targetClip.name, targetLayer, normalizedFromTime);
     }
 
     public void pause(bool toPause) {

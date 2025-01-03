@@ -203,8 +203,8 @@ namespace shared {
                         GetUpFramesToRecover = 27,
                         Speed = (int)(1.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        JumpingInitVelY = (int)(8.8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        InertiaFramesToRecover = 4,
+                        JumpingInitVelY = (int)(8.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        InertiaFramesToRecover = 6,
                         DashingEnabled = true,
                         SlidingEnabled = true,
                         OnWallEnabled = false,
@@ -259,6 +259,12 @@ namespace shared {
                         Def1DefiesDebuff = true,
                         GaugeIncWhenKilled = 80,
                         Ifc = IfaceCat.Flesh,
+                        LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
+                            new[]
+                            {
+                                new KeyValuePair<CharacterState, int>(CharacterState.Walking, 30)
+                            }
+                        )
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_FIRESWORDMAN, new CharacterConfig {
@@ -333,7 +339,7 @@ namespace shared {
                         GetUpFramesToRecover = 27,
                         Speed = (int)(2.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        JumpingInitVelY = (int)(9.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(7.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 4,
                         DashingEnabled = true,
                         SlidingEnabled = true,
@@ -651,7 +657,6 @@ namespace shared {
                         SpeciesId = SPECIES_BOUNTYHUNTER,
                         SpeciesName = "BountyHunter",
                         Hp = 150,
-                        Mp = 30*BATTLE_DYNAMICS_FPS, // e.g. if (MpRegenRate == 1), then it takes 30 seconds to refill Mp from empty 
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 16,
@@ -676,7 +681,6 @@ namespace shared {
                         LayDownSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(36.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 3,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
                         CrouchingEnabled = true,

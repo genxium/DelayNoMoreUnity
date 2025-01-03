@@ -305,12 +305,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                 prefabbedInputList[k] = encodedIdx;
                 bool shouldPredictBtnAHold = false;
                 bool shouldPredictBtnBHold = false;
+                bool shouldPredictBtnEHold = false;
                 if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
                     shouldPredictBtnAHold = true;
-                    if (1 == encodedIdx || 5 == encodedIdx || 8 == encodedIdx) {
+                    if (2 == encodedIdx || 6 == encodedIdx || 7 == encodedIdx) {
                         // Don't predict slip-jump!
                         shouldPredictBtnAHold = false;
                     }
+                } 
+                if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 256UL) && BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
+                    shouldPredictBtnEHold = true;
                 } 
                 if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 32UL)) {
                     var (_, rdf) = renderBuffer.GetByFrameId(playerRdfId);
@@ -322,6 +326,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     }
                 }
                 if (shouldPredictBtnAHold) prefabbedInputList[k] |= (lastIndividuallyConfirmedInputList[k] & 16UL); 
+                if (shouldPredictBtnEHold) prefabbedInputList[k] |= (lastIndividuallyConfirmedInputList[k] & 256UL); 
                 if (shouldPredictBtnBHold) prefabbedInputList[k] |= (lastIndividuallyConfirmedInputList[k] & 32UL); 
             } else if (null != previousInputFrameDownsync) {
                 // When "self.lastIndividuallyConfirmedInputFrameId[k] > inputFrameId", don't use it to predict a historical input!
@@ -393,9 +398,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             bool hasIncorrectlyPredictedRenderFrame = false;
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionTriggerLocalId, selfPlayerInfo.JoinIndex, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadNpcIndices, out fulfilledTriggerSetMask, _loggerBridge);
+            bool selfNotEnoughMp = false;
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionTriggerLocalId, selfPlayerInfo.JoinIndex, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadNpcIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, _loggerBridge);
             if (hasIncorrectlyPredictedRenderFrame) {
-                Debug.Log(String.Format("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i + 1));
+                Debug.LogFormat("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i + 1);
             }
 
             if (frameLogEnabled) {

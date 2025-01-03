@@ -13,15 +13,22 @@ public class BattleInputManager : MonoBehaviour {
     private int realtimeBtnALevel = 0;
     private int cachedBtnALevel = 0;
     private bool btnAEdgeTriggerLock = false;
+
     private int realtimeBtnBLevel = 0;
     private int cachedBtnBLevel = 0;
     private bool btnBEdgeTriggerLock = false;
+
     private int realtimeBtnCLevel = 0;
     private int cachedBtnCLevel = 0;
     private bool btnCEdgeTriggerLock = false;
+
     private int realtimeBtnDLevel = 0;
     private int cachedBtnDLevel = 0;
     private bool btnDEdgeTriggerLock = false;
+
+    private int realtimeBtnELevel = 0;
+    private int cachedBtnELevel = 0;
+    private bool btnEEdgeTriggerLock = false;
 
     private Vector2 joystickInitPos;
     private float joystickKeyboardMoveRadius;
@@ -31,6 +38,7 @@ public class BattleInputManager : MonoBehaviour {
     public GameObject btnB;
     public GameObject btnC;
     public GameObject btnD;
+    public GameObject btnE;
     private bool customEnabled = true;
 
     public bool enablePlatformSpecificHiding = false;
@@ -50,29 +58,32 @@ public class BattleInputManager : MonoBehaviour {
     public void OnBtnAInput(InputAction.CallbackContext context) {
         if (!customEnabled) return;
         bool rising = context.ReadValueAsButton();
-        // Debug.Log(String.Format("btnALevel is changed to {0}", btnALevel));
         _triggerEdgeBtnA(rising);
     }
 
     public void OnBtnBInput(InputAction.CallbackContext context) {
 		if (!customEnabled) return;
         bool rising = context.ReadValueAsButton();
-        // Debug.Log(String.Format("btnBLevel is changed to {0}", btnBLevel));
         _triggerEdgeBtnB(rising);
     }
 
     public void OnBtnCInput(InputAction.CallbackContext context) {
         if (!customEnabled) return;
         bool rising = context.ReadValueAsButton();
-        // Debug.Log(String.Format("btnBLevel is changed to {0}", btnBLevel));
         _triggerEdgeBtnC(rising);
     }
 
     public void OnBtnDInput(InputAction.CallbackContext context) {
         if (!customEnabled) return;
         bool rising = context.ReadValueAsButton();
-        // Debug.Log(String.Format("btnALevel is changed to {0}", btnALevel));
         _triggerEdgeBtnD(rising);
+    }
+
+    public void OnBtnEInput(InputAction.CallbackContext context) {
+        if (!customEnabled) return;
+        bool rising = context.ReadValueAsButton();
+        _triggerEdgeBtnE(rising);
+        //Debug.LogFormat("btnELevel is changed to {0}", realtimeBtnELevel);
     }
 
     public void onBtnCancelInput(InputAction.CallbackContext context) {
@@ -122,16 +133,19 @@ public class BattleInputManager : MonoBehaviour {
         int btnBLevel = (cachedBtnBLevel << 5);
         int btnCLevel = (cachedBtnCLevel << 6);
         int btnDLevel = (cachedBtnDLevel << 7);
+        int btnELevel = (cachedBtnELevel << 8);
 
         cachedBtnALevel = realtimeBtnALevel;
         cachedBtnBLevel = realtimeBtnBLevel;
         cachedBtnCLevel = realtimeBtnCLevel;
         cachedBtnDLevel = realtimeBtnDLevel;
+        cachedBtnELevel = realtimeBtnELevel;
 
         btnAEdgeTriggerLock = false;
         btnBEdgeTriggerLock = false;
         btnCEdgeTriggerLock = false;
         btnDEdgeTriggerLock = false;
+        btnEEdgeTriggerLock = false;
 
         float continuousDx = joystickX;
         float continuousDy = joystickY;
@@ -167,7 +181,7 @@ public class BattleInputManager : MonoBehaviour {
             joystickImg.sprite = joystickIdle;
             break;
         }
-        ulong ret = (ulong)(discretizedDir + btnALevel + btnBLevel + btnCLevel + btnDLevel);
+        ulong ret = (ulong)(discretizedDir + btnALevel + btnBLevel + btnCLevel + btnDLevel + btnELevel);
         return ret;
     }
 
@@ -180,22 +194,32 @@ public class BattleInputManager : MonoBehaviour {
         joystickX = 0;
         joystickY = 0;
         joystickImg.sprite = joystickIdle;
+
         realtimeBtnALevel = 0;
         cachedBtnALevel = 0;
         btnAEdgeTriggerLock = false;
+
         realtimeBtnBLevel = 0;
         cachedBtnBLevel = 0;
         btnBEdgeTriggerLock = false;
+
         realtimeBtnCLevel = 0;
         cachedBtnCLevel = 0;
         btnCEdgeTriggerLock = false;
+
         realtimeBtnDLevel = 0;
         cachedBtnDLevel = 0;
         btnDEdgeTriggerLock = false;
+
+        realtimeBtnELevel = 0;
+        cachedBtnELevel = 0;
+        btnEEdgeTriggerLock = false;
+
         if (enablePlatformSpecificHiding && !Application.isMobilePlatform) {
             joystick.gameObject.SetActive(false);
             btnA.gameObject.SetActive(false); // if "chConfig.UseInventoryBtnB", it'll be later enabled in MapController
             btnB.gameObject.SetActive(false);
+            btnE.gameObject.SetActive(false);
         }
         btnC.gameObject.SetActive(false);
         btnD.gameObject.SetActive(false);
@@ -259,10 +283,25 @@ public class BattleInputManager : MonoBehaviour {
         }
     }
 
+    private void _triggerEdgeBtnE(bool rising) {
+        realtimeBtnELevel = (rising ? 1 : 0);
+        if (!btnEEdgeTriggerLock && (1 - realtimeBtnELevel) == cachedBtnELevel) {
+            cachedBtnELevel = realtimeBtnELevel;
+            btnEEdgeTriggerLock = true;
+        }
+
+        if (rising) {
+            btnE.transform.DOScale(0.3f * Vector3.one, 0.5f);
+        } else {
+            btnE.transform.DOScale(1.0f * Vector3.one, 0.8f);
+        }
+    }
+
     public void resumeScales() {
         btnA.transform.localScale = Vector3.one;
         btnB.transform.localScale = Vector3.one;
         btnC.transform.localScale = Vector3.one;
         btnD.transform.localScale = Vector3.one;
+        btnE.transform.localScale = Vector3.one;
     }
 }

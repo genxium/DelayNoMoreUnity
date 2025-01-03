@@ -159,9 +159,9 @@ namespace shared {
                         bool veryFarAway = (0 < oppoChColliderDx ? (oppoChCollider.X > (visionCollider.X + visionThresholdPortion*visionCollider.W)) : (oppoChCollider.X < visionCollider.X + (1-visionThresholdPortion)*visionCollider.W));
                         if (notDashing && veryFarAway) {
                             if (chConfig.SlidingEnabled && !effInAir) {
-                                patternId = PATTERN_DOWN_A;
+                                patternId = PATTERN_E;
                             } else if (chConfig.DashingEnabled && (!effInAir || 0 < currCharacterDownsync.RemainingAirDashQuota)) {
-                                patternId = PATTERN_DOWN_A;
+                                patternId = PATTERN_E;
                             }
                         }
                     }
@@ -184,15 +184,15 @@ namespace shared {
                         bool notBackDashingSpecies = !(SPECIES_WITCHGIRL == currCharacterDownsync.SpeciesId || SPECIES_BRIGHTWITCH == currCharacterDownsync.SpeciesId);
                         if (notDashing && notBackDashingSpecies) {
                             if (chConfig.SlidingEnabled && !effInAir) {
-                                patternId = PATTERN_DOWN_A;
+                                patternId = PATTERN_E;
                             } else if (chConfig.DashingEnabled && (!effInAir || 0 < currCharacterDownsync.RemainingAirDashQuota)) {
-                                patternId = PATTERN_DOWN_A;
+                                patternId = PATTERN_E;
                             }
                         }
                     } else {
                         bool notBackDashing = (BackDashing != currCharacterDownsync.CharacterState);
                         if (!effInAir && notBackDashing && (SPECIES_WITCHGIRL == currCharacterDownsync.SpeciesId || SPECIES_BRIGHTWITCH == currCharacterDownsync.SpeciesId)) {
-                            patternId = PATTERN_DOWN_A;
+                            patternId = PATTERN_E;
                         }
                     }
                 }
@@ -260,9 +260,9 @@ namespace shared {
                     if (notDashing) {
                         // Because dashing often has a few invinsible startup frames.
                         if (chConfig.SlidingEnabled && !effInAir) {
-                            patternId = PATTERN_DOWN_A;
+                            patternId = PATTERN_E;
                         } else if (chConfig.DashingEnabled && (!effInAir || 0 < currCharacterDownsync.RemainingAirDashQuota)) {
-                            patternId = PATTERN_DOWN_A;
+                            patternId = PATTERN_E;
                         }
                         visionReaction = OPPONENT_REACTION_FOLLOW;
                     }
@@ -397,7 +397,7 @@ namespace shared {
                     break;
                 case SPECIES_DARKBEAMTOWER:
                     if (currCharacterDownsync.Mp < RisingPurpleArrowSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    closeEnough = (0 < colliderDy && absColliderDy > 1.2f * aCollider.H); // A special case
+                    closeEnough = (0 < colliderDy && absColliderDy > 0.8f * aCollider.H); // A special case
                     break;
                 case SPECIES_STONE_GOLEM:
                     if (currCharacterDownsync.Mp < StoneRollSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
@@ -631,7 +631,7 @@ namespace shared {
                     }
                 case SPECIES_DARKBEAMTOWER:
                     if (currCharacterDownsync.Mp < DarkTowerLowerSkill.MpDelta) return OPPONENT_REACTION_NOT_ENOUGH_MP;         
-                    closeEnough = (0 > colliderDy && absColliderDy > 1.2f * aCollider.H); // A special case
+                    closeEnough = (0 > colliderDy && absColliderDy > 0.8f * aCollider.H); // A special case
                     if (closeEnough) {
                         return OPPONENT_REACTION_USE_FIREBALL;
                     } else {
@@ -791,7 +791,7 @@ namespace shared {
                         DecodeInput(currCharacterDownsync.CachedCueCmd, decodedInputHolder);
                         effectiveDx = decodedInputHolder.Dx;
                         effectiveDy = decodedInputHolder.Dy;
-                        slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (effInAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && 0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
+                        slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (effInAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && 0 > decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
                         jumpedOrNot = !slipJumpedOrNot && (0 == currCharacterDownsync.FramesToRecover) && !effInAir && (0 < decodedInputHolder.BtnALevel);
 
                         if (0 >= chConfig.JumpingInitVelY) {
@@ -898,7 +898,7 @@ namespace shared {
                         DecodeInput(currCharacterDownsync.CachedCueCmd, decodedInputHolder);
                         effectiveDx = decodedInputHolder.Dx;
                         effectiveDy = decodedInputHolder.Dy;
-                        slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (effInAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && 0 < decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
+                        slipJumpedOrNot = (0 == currCharacterDownsync.FramesToRecover) && ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (effInAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && 0 > decodedInputHolder.Dy && 0 == decodedInputHolder.Dx) && (0 < decodedInputHolder.BtnALevel);
                         jumpedOrNot = !slipJumpedOrNot && (0 == currCharacterDownsync.FramesToRecover) && !effInAir && (0 < decodedInputHolder.BtnALevel);
 
                         if (0 >= chConfig.JumpingInitVelY) {
@@ -990,7 +990,8 @@ namespace shared {
                     }
                 }
 
-                bool usedSkill = _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, logger);
+                bool notEnoughMp = false;
+                bool usedSkill = _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, logger);
                 Skill? skillConfig = null;
                 if (usedSkill) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
@@ -1033,7 +1034,7 @@ namespace shared {
             var chConfig = characters[characterSpeciesId];
             int birthVirtualX = virtualGridX + ((chConfig.DefaultSizeX >> 2) * dirX);
             CharacterState initChState = chConfig.OmitGravity ? Walking : Idle1;
-            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, initChState, npcCnt, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, chConfig.Mp, chConfig.OmitGravity, chConfig.OmitSoftPushback, chConfig.RepelSoftPushback, isStatic, 0, false, false, false, newBirth: true, false, 0, 0, 0, defaultTemplateBuffList, defaultTemplateDebuffList, prevInventory: null, false, publishingToTriggerLocalIdUponKilled, waveNpcKilledEvtMaskCounter, subscribesToTriggerLocalId, 0, 0, chConfig.DefaultAirJumpQuota, chConfig.DefaultAirDashQuota, TERMINATING_CONSUMABLE_SPECIES_ID, TERMINATING_BUFF_SPECIES_ID, NO_SKILL, defaultTemplateBulletImmuneRecords, 0, 0, 0, MAGIC_JOIN_INDEX_INVALID, TERMINATING_BULLET_TEAM_ID, rdfId, 0, nextRenderFrameNpcs[npcCnt]); // TODO: Support killedToDropConsumable/Buff here
+            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, initChState, npcCnt, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, chConfig.Mp, chConfig.OmitGravity, chConfig.OmitSoftPushback, chConfig.RepelSoftPushback, isStatic, 0, false, false, false, newBirth: true, false, 0, 0, 0, defaultTemplateBuffList, defaultTemplateDebuffList, prevInventory: null, false, publishingToTriggerLocalIdUponKilled, waveNpcKilledEvtMaskCounter, subscribesToTriggerLocalId, jumpHoldingRdfCnt: 0, btnBHoldingRdfCount: 0, btnEHoldingRdfCount: 0, parryPrepRdfCntDown: 0, chConfig.DefaultAirJumpQuota, chConfig.DefaultAirDashQuota, TERMINATING_CONSUMABLE_SPECIES_ID, TERMINATING_BUFF_SPECIES_ID, NO_SKILL, defaultTemplateBulletImmuneRecords, 0, 0, 0, MAGIC_JOIN_INDEX_INVALID, TERMINATING_BULLET_TEAM_ID, rdfId, 0, nextRenderFrameNpcs[npcCnt]); // TODO: Support killedToDropConsumable/Buff here
 
             if (null != chConfig.InitInventorySlots) {
                 for (int t = 0; t < chConfig.InitInventorySlots.Count; t++) {

@@ -56,6 +56,10 @@ enum CharacterState {
     InAirWalking = 18;
 
     TransformingIntoFromDeath = 19; // When at this state, the character has already completed transform, i.e. in new speciesId
+    WalkStopping = 20;
+    InAirWalkStopping = 21;
+
+    Parried = 22;
 
     OnWallIdle1 = 128; 
 
@@ -209,12 +213,15 @@ message CharacterDownsync {
     int32 bulletTeamId = 70;
     int32 chCollisionTeamId = 71;
 
-    repeated Buff buffList = 72; 
-    repeated Debuff debuffList = 73; 
+    int32 btnEHoldingRdfCount = 72;
+    int32 parryPrepRdfCntDown = 73;
 
-    Inventory inventory = 74;
+    repeated Buff buffList = 74; 
+    repeated Debuff debuffList = 75; 
 
-    repeated BulletImmuneRecord bulletImmuneRecords = 75;
+    Inventory inventory = 76;
+
+    repeated BulletImmuneRecord bulletImmuneRecords = 77;
 }
 
 message InputFrameDecoded {
@@ -224,6 +231,7 @@ message InputFrameDecoded {
     int32 btnBLevel = 4;
     int32 btnCLevel = 5;
     int32 btnDLevel = 6;
+    int32 btnELevel = 7;
 }
 
 message InputFrameUpsync {
@@ -473,6 +481,9 @@ message BulletConfig {
     bool useChOffsetRegardlessOfEmissionMh = 89;
 
     int32 inplaceVanishExplosionSpeciesId = 90;
+
+    int32 animLoopingRdfOffset = 91;  
+    int32 explosionAnimLoopingRdfOffset = 92;  
 
     uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave

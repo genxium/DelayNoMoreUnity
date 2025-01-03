@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace shared {
     public struct CharacterConfig {
@@ -70,6 +71,8 @@ namespace shared {
 
         public bool HasTurnAroundAnim;
         public bool HasDimmedAnim;
+        public bool HasWalkStoppingAnim; 
+        public bool HasInAirWalkStoppingAnim; 
         public bool LayDownToRecoverFromDimmed;
 
         public int Hardness;
@@ -127,5 +130,8 @@ namespace shared {
         public int TransformIntoFramesInvinsible;
 
         public bool UseIdle1AsFlyingIdle;
+
+        public ImmutableDictionary<CharacterState, int> LoopingChStates;
+        
     }
 }

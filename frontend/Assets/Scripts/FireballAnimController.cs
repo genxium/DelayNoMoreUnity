@@ -85,12 +85,29 @@ public class FireballAnimController : MonoBehaviour {
         } else {
             material.SetFloat(MATERIAL_REF_THICKNESS, 0.25f);
         }
-
-        if (sameClipName && curClip.isLooping) {
-          return;
+    
+        int animLoopingRdfOffset = bulletConfig.AnimLoopingRdfOffset;
+        if (isActuallyExploding) {
+            animLoopingRdfOffset = bulletConfig.ExplosionAnimLoopingRdfOffset;
         }
+        
+        if (0 == animLoopingRdfOffset) {
+            if (sameClipName && curClip.isLooping) {
+              return;
+            }
 
-        float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
-        animator.Play(newAnimName, targetLayer, normalizedFromTime);
+            float normalizedFromTime = (frameIdxInAnim / (targetClip.frameRate * targetClip.length)); // TODO: Anyway to avoid using division here?
+            animator.Play(newAnimName, targetLayer, normalizedFromTime);
+        } else {
+            var totRdfCnt = (targetClip.frameRate * targetClip.length);
+            if (frameIdxInAnim > animLoopingRdfOffset) {    
+                var frameIdxInAnimFloat = animLoopingRdfOffset + ((frameIdxInAnim - animLoopingRdfOffset) % (totRdfCnt - animLoopingRdfOffset));
+                float normalizedFromTime = (frameIdxInAnimFloat / totRdfCnt); // TODO: Anyway to avoid using division here?
+                animator.Play(newAnimName, targetLayer, normalizedFromTime);
+            } else {
+                float normalizedFromTime = (frameIdxInAnim / totRdfCnt); // TODO: Anyway to avoid using division here?
+                animator.Play(newAnimName, targetLayer, normalizedFromTime);
+            }
+        }
     }
 }
