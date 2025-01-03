@@ -20,6 +20,23 @@ namespace shared {
         public const int PATTERN_UP_E = 10;
         public const int PATTERN_DOWN_E = 11;
         public const int PATTERN_HOLD_E = 12;
+        
+        public const int PATTERN_E_HOLD_B = 13;
+        public const int PATTERN_FRONT_E_HOLD_B = 14;
+        public const int PATTERN_BACK_E_HOLD_B = 15;
+        public const int PATTERN_UP_E_HOLD_B = 16;
+        public const int PATTERN_DOWN_E_HOLD_B = 17;
+        public const int PATTERN_HOLD_E_HOLD_B = 18;
+
+        public static HashSet<int> btnBHoldingPatternSet = new HashSet<int>() {
+            PATTERN_HOLD_B,
+            PATTERN_E_HOLD_B,
+            PATTERN_FRONT_E_HOLD_B,
+            PATTERN_BACK_E_HOLD_B,
+            PATTERN_UP_E_HOLD_B,
+            PATTERN_DOWN_E_HOLD_B,
+            PATTERN_HOLD_E_HOLD_B
+        };
 
         public const int PATTERN_INVENTORY_SLOT_C = 1024;
         public const int PATTERN_INVENTORY_SLOT_D = 1025;
@@ -4466,7 +4483,7 @@ namespace shared {
                                 FireballEmitSfxName="SlashEmitSpd2",
                                 ExplosionSfxName="Melee_Explosion2",
                                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX,
-                                }.UpsertCancelTransit(PATTERN_RELEASED_B, 88).UpsertCancelTransit(PATTERN_E, 28)
+                                }.UpsertCancelTransit(PATTERN_RELEASED_B, 88).UpsertCancelTransit(PATTERN_E, 28).UpsertCancelTransit(PATTERN_E_HOLD_B, 28)
                             )
                         ),
 
@@ -5466,6 +5483,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
@@ -5522,6 +5543,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (!currCharacterDownsync.InAir) {
                                 // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
@@ -5573,6 +5598,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 return 52;
@@ -5613,6 +5642,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 return 52;
@@ -5684,14 +5717,18 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_BACK_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_BACK_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (!currCharacterDownsync.InAir) {
-                                if (PATTERN_FRONT_E == patternId) {
+                                if (PATTERN_FRONT_E == patternId || PATTERN_FRONT_E_HOLD_B == patternId) {
                                     return 26;
                                 } else {
                                     return 10;
                                 }
-                            } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState && PATTERN_BACK_E != patternId) {
+                            } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState && PATTERN_BACK_E != patternId && PATTERN_BACK_E_HOLD_B != patternId) {
                                 return 26;
                             } else {
                                 return NO_SKILL;
@@ -5714,14 +5751,18 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_BACK_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_BACK_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (!currCharacterDownsync.InAir) {
-                                if (PATTERN_FRONT_E == patternId) {
+                                if (PATTERN_FRONT_E == patternId || PATTERN_FRONT_E_HOLD_B == patternId) {
                                     return 26;
                                 } else {
                                     return 10;
                                 }
-                            } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState && PATTERN_BACK_E != patternId) {
+                            } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState && PATTERN_BACK_E != patternId && PATTERN_BACK_E_HOLD_B != patternId) {
                                 return 26;
                             } else {
                                 return NO_SKILL;
@@ -5769,6 +5810,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 return 52;
@@ -5832,14 +5877,18 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_BACK_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_BACK_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (!currCharacterDownsync.InAir) {
-                                if (PATTERN_FRONT_E == patternId) {
+                                if (PATTERN_FRONT_E == patternId || PATTERN_FRONT_E_HOLD_B == patternId) {
                                     return 26;
                                 } else {
                                     return 57;
                                 }
-                            } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState && PATTERN_BACK_E != patternId) {
+                            } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState && PATTERN_BACK_E != patternId && PATTERN_BACK_E_HOLD_B != patternId) {
                                 return 26;
                             } else {
                                 return NO_SKILL;
@@ -5890,6 +5939,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (!currCharacterDownsync.InAir) {
                                 // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
@@ -5969,6 +6022,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
@@ -6076,6 +6133,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (!currCharacterDownsync.InAir) {
                                 // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
@@ -6158,6 +6219,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (!currCharacterDownsync.InAir) {
                                 return 52;
@@ -6192,6 +6257,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered || currCharacterDownsync.InAir) return NO_SKILL;
                             else return 46;
                         default:
@@ -6209,6 +6278,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered || currCharacterDownsync.InAir) return NO_SKILL;
                             else return 91;
                         default:
@@ -6226,6 +6299,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered || currCharacterDownsync.InAir) return NO_SKILL;
                             else return 93;
                         default:
@@ -6243,6 +6320,10 @@ namespace shared {
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
                         case PATTERN_FRONT_E:
+                        case PATTERN_E_HOLD_B:
+                        case PATTERN_DOWN_E_HOLD_B:
+                        case PATTERN_UP_E_HOLD_B:
+                        case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered || currCharacterDownsync.InAir) return NO_SKILL;
                             else return 96;
                         default:

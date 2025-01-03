@@ -207,26 +207,7 @@ namespace shared {
             int effFrontOrBack = (effDx*currCharacterDownsync.DirX);
             bool notDashing = (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState && BackDashing != currCharacterDownsync.CharacterState);
             var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia)) || !notDashing;
-            if (0 < decodedInputHolder.BtnELevel && (chConfig.DashingEnabled || chConfig.SlidingEnabled)) {
-                if (decodedInputHolder.BtnELevel > prevDecodedInputHolder.BtnELevel) {
-                    if (notDashing) {
-                        if (0 < effFrontOrBack) {
-                            patternId = PATTERN_FRONT_E;
-                        } else if (0 > effFrontOrBack) {
-                            patternId = PATTERN_BACK_E;
-                            effDx = 0; // [WARNING] Otherwise the character will turn around
-                        } else if (0 > decodedInputHolder.Dy) {
-                            patternId = PATTERN_DOWN_E;
-                        } else if (0 < decodedInputHolder.Dy) {
-                            patternId = PATTERN_UP_E;
-                        } else {
-                            patternId = PATTERN_E;
-                        }
-                    }
-                } else {
-                    patternId = PATTERN_HOLD_E;
-                }
-            } else if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
+            if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
                  if (canJumpWithinInertia) {
                     if ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (currCharacterDownsync.InAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && (0 > decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
                         slipJumpedOrNot = true;
@@ -266,6 +247,29 @@ namespace shared {
                     }
                 } else if (decodedInputHolder.BtnBLevel < prevDecodedInputHolder.BtnBLevel && BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.BtnBHoldingRdfCount) {
                     patternId = PATTERN_RELEASED_B;
+                }
+            }
+
+            if (PATTERN_HOLD_B == patternId || PATTERN_ID_NO_OP == patternId) {
+                if (0 < decodedInputHolder.BtnELevel && (chConfig.DashingEnabled || chConfig.SlidingEnabled)) {
+                    if (decodedInputHolder.BtnELevel > prevDecodedInputHolder.BtnELevel) {
+                        if (notDashing) {
+                            if (0 < effFrontOrBack) {
+                                patternId = (PATTERN_HOLD_B == patternId ? PATTERN_FRONT_E_HOLD_B : PATTERN_FRONT_E);
+                            } else if (0 > effFrontOrBack) {
+                                patternId = (PATTERN_HOLD_B == patternId ? PATTERN_BACK_E_HOLD_B : PATTERN_BACK_E);
+                                effDx = 0; // [WARNING] Otherwise the character will turn around
+                            } else if (0 > decodedInputHolder.Dy) {
+                                patternId = (PATTERN_HOLD_B == patternId ? PATTERN_DOWN_E_HOLD_B : PATTERN_DOWN_E);
+                            } else if (0 < decodedInputHolder.Dy) {
+                                patternId = (PATTERN_HOLD_B == patternId ? PATTERN_UP_E_HOLD_B : PATTERN_UP_E);
+                            } else {
+                                patternId = (PATTERN_HOLD_B == patternId ? PATTERN_E_HOLD_B : PATTERN_E);
+                            }
+                        }
+                    } else {
+                        patternId = (PATTERN_HOLD_B == patternId ? PATTERN_HOLD_E_HOLD_B : PATTERN_HOLD_E);
+                    }
                 }
             }
 
@@ -560,11 +564,6 @@ namespace shared {
                 bool usedSkill = _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, logger);
                 Skill? skillConfig = null;
                 if (usedSkill) {
-                    /*
-                    if (77 == thatCharacterInNextFrame.ActiveSkillId) {
-                        logger.LogInfo("_processPlayerInputs, currRdfId=" + currRenderFrame.Id + ", used DiverImpact, next VelX = " + thatCharacterInNextFrame.VelX);
-                    }
-                    */
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
                     if (Dashing != thatCharacterInNextFrame.CharacterState && BackDashing != thatCharacterInNextFrame.CharacterState && Sliding != thatCharacterInNextFrame.CharacterState) {
                         thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
@@ -591,7 +590,11 @@ namespace shared {
                     selfNotEnoughMp = true; 
                 }
 
-                if (btnBChargeableSet.Contains(currCharacterDownsync.CharacterState) && PATTERN_HOLD_B == patternId) {
+                if (
+                    btnBChargeableSet.Contains(currCharacterDownsync.CharacterState) 
+                    && 
+                    btnBHoldingPatternSet.Contains(patternId)
+                ) {
                     thatCharacterInNextFrame.BtnBHoldingRdfCount = currCharacterDownsync.BtnBHoldingRdfCount+1;
                 } else {
                     thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
@@ -1876,7 +1879,11 @@ namespace shared {
                     } else if ((WalkingAtk1 == thatCharacterInNextFrame.CharacterState && Atk1 == thatCharacterInNextFrame.CharacterState) || (WalkingAtk4 == thatCharacterInNextFrame.CharacterState && Atk4 == thatCharacterInNextFrame.CharacterState)) {
                         thatCharacterInNextFrame.FramesInChState = currCharacterDownsync.FramesInChState + 1;
                     } else {
-                        thatCharacterInNextFrame.FramesInChState = 0;
+                        bool isAtk1Transition = (Atk1 == currCharacterDownsync.CharacterState && InAirAtk1 == thatCharacterInNextFrame.CharacterState) || (InAirAtk1 == currCharacterDownsync.CharacterState && Atk1 == thatCharacterInNextFrame.CharacterState);
+                        bool isAtked1Transition = (Atked1 == currCharacterDownsync.CharacterState && InAirAtked1 == thatCharacterInNextFrame.CharacterState) || (InAirAtked1 == currCharacterDownsync.CharacterState && Atked1 == thatCharacterInNextFrame.CharacterState);  
+                        if (!isAtk1Transition && !isAtked1Transition) {
+                            thatCharacterInNextFrame.FramesInChState = 0;
+                        }
                     }
                 }
 

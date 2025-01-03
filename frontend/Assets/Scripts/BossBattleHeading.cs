@@ -10,8 +10,8 @@ public class BossBattleHeading : AbstractHpBar {
     public Image overflowHpFiller;
     public Image hpHolder;
 
-    protected new static float DEFAULT_HP100_WIDTH = 512.0f;
-    protected new static float DEFAULT_HP100_HEIGHT = 18.0f;
+    protected new static float DEFAULT_HP100_WIDTH = 480.0f;
+    protected new static float DEFAULT_HP100_HEIGHT = 12.0f;
 
     private int currHpVal;
 

@@ -378,6 +378,7 @@ namespace shared {
             Idle1,
             Walking,
             Dashing,
+            BackDashing,
             Sliding,
             InAirIdle1NoJump,
             InAirIdle1ByJump,
