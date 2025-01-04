@@ -4545,7 +4545,7 @@ namespace shared {
                                     CancellableByInventorySlotC = true,
                                     MhType = MultiHitType.FromEmission,
                                     CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                                    }.UpsertCancelTransit(PATTERN_RELEASED_B, 18)
+                                    }.UpsertCancelTransit(PATTERN_RELEASED_B, 87)
                                 )
                                 .AddHit(
                                     new BulletConfig {
@@ -4564,7 +4564,7 @@ namespace shared {
                                     CancellableEdFrame = 23,
                                     CancellableByInventorySlotC = true,
                                     CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                                    }.UpsertCancelTransit(PATTERN_RELEASED_B, 18)
+                                    }.UpsertCancelTransit(PATTERN_RELEASED_B, 87)
                                 )
                         ),
 

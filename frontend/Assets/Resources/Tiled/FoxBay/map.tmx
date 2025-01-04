@@ -532,8 +532,8 @@
   <object id="497" name="SmallSlopeR" x="1663.1" y="896">
    <polyline points="-463.105,48 96.8953,48 96.8953,0 -367.105,0"/>
   </object>
-  <object id="498" name="SmallSlopeR" x="1905.55" y="864">
-   <polyline points="-145.547,32 30.4528,32 30.4528,0 -81.5472,0"/>
+  <object id="498" name="SmallSlopeR" x="1902.78" y="864">
+   <polyline points="-158.781,48 33.2218,48 33.2218,0 -88.962,0"/>
   </object>
   <object id="500" name="SmallSlopeR" x="1904" y="752">
    <polyline points="-64,32 30.4528,32 30.4528,0 -32,0"/>
