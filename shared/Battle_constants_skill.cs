@@ -786,7 +786,7 @@ namespace shared {
             ActiveFrames = 600,
             HitStunFrames = 20,
             BlockStunFrames = 9,
-            Damage = 7,
+            Damage = 5,
             PushbackVelX = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = NO_LOCK_VEL,
@@ -815,6 +815,7 @@ namespace shared {
             ExplosionSfxName = "Explosion2",
             MhType = MultiHitType.FromPrevHitActual,
             MhVanishOnMeleeHit = true,
+            GaugeIncReductionRatio = 0.5f,
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
@@ -1754,6 +1755,7 @@ namespace shared {
             BeamCollision = true,
             SpinAnchorX = 0f,
             SpinAnchorY = 6.0f, // [WARNING] Half of "HitboxSizeY"; kindly note that "SpinAnchorX & SpinAnchorY" for non-melee bullets are constrained by the "pivot points" set on the sprites
+            GaugeIncReductionRatio = 0.3f,
             AngularFrameVelCos = (float)Math.Cos(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
             AngularFrameVelSin = (float)Math.Sin(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
             InitSpinCos = (float)Math.Cos(45f / (Math.PI * BATTLE_DYNAMICS_FPS)), 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Google.Protobuf.Collections;
 using static shared.CharacterState;
 
@@ -451,7 +452,7 @@ namespace shared {
             anotherHarderBulletIfc = IfaceCat.Rock;
         }
 
-        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, CollisionSpace collisionSys, Collision collision, Collider[] dynamicRectangleColliders, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, FrameRingBuffer<Collider> residueCollided, ref SatResult primaryOverlapResult, int iSt, int iEd, ref int bulletLocalIdCounter, ref int bulletCnt, ref ulong fulfilledEvtSubscriptionSetMask, int colliderCnt, ILoggerBridge logger) {
+        private static void _calcBulletCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, CollisionSpace collisionSys, Collision collision, Collider[] dynamicRectangleColliders, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, FrameRingBuffer<Collider> residueCollided, ref SatResult primaryOverlapResult, int iSt, int iEd, ref int bulletLocalIdCounter, ref int bulletCnt, ref ulong fulfilledEvtSubscriptionSetMask, int colliderCnt, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
             bool dummyHasLockVel = false;
             // [WARNING] Bullet collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
             // Check bullet-anything collisions
@@ -638,7 +639,8 @@ namespace shared {
                         switch (bCollider.Data) {
                             case TriggerColliderAttr atkedTriggerColliderAttr:
                                 var atkedTrigger = currRenderFrame.TriggersArr[atkedTriggerColliderAttr.TriggerLocalId-1];
-                                var triggerConfig = triggerConfigs[atkedTrigger.ConfigFromTiled.SpeciesId];
+                                var triggerConfigFromTiled = triggerEditorIdToTiledConfig[atkedTrigger.EditorId];
+                                var triggerConfig = triggerConfigs[triggerConfigFromTiled.SpeciesId];
                                 if (TriggerType.TtAttack != triggerConfig.TriggerType) continue;
                                 if (0 < atkedTrigger.FramesToRecover || 0 >= atkedTrigger.Quota) continue;
                                 if (bulletNextFrame.OffenderJoinIndex <= roomCapacity) {
@@ -767,7 +769,7 @@ namespace shared {
                                         victimNextFrame.BeatenCnt += 1;
                                     }
 
-                                    accumulateGauge(victimChConfig.GaugeIncWhenKilled, offenderNextFrame);
+                                    accumulateGauge(victimChConfig.GaugeIncWhenKilled, bulletConfig, offenderNextFrame);
                                 } else {
                                     // [WARNING] Deliberately NOT assigning to "victimNextFrame.X/Y" for avoiding the calculation of pushbacks in the current renderFrame.
                                     int victimEffHardness = victimChConfig.Hardness;
@@ -886,7 +888,7 @@ namespace shared {
                                         victimNextFrame.FramesInvinsible = bulletConfig.HitInvinsibleFrames;
                                     }
 
-                                    accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, offenderNextFrame);
+                                    accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, bulletConfig, offenderNextFrame);
 
                                     if (BlownUp1 != victimNextFrame.CharacterState && Dying != victimNextFrame.CharacterState && !(successfulDef1 && victimChConfig.Def1DefiesDebuff)) {
                                         if (shouldExtendDef1Broken) {
@@ -1498,7 +1500,7 @@ namespace shared {
             return (effDamage, successfulDef1);
         }
         
-        public static void accumulateGauge(int inc, CharacterDownsync? offenderNextFrame) {
+        public static void accumulateGauge(int rawInc, BulletConfig? bulletConfig, CharacterDownsync? offenderNextFrame) {
             if (null == offenderNextFrame) return;
             if (null == offenderNextFrame.Inventory) return;
             if (null == offenderNextFrame.Inventory.Slots) return;
@@ -1506,6 +1508,8 @@ namespace shared {
             var targetSlot = offenderNextFrame.Inventory.Slots[0];
             if (InventorySlotStockType.GaugedMagazineIv != targetSlot.StockType) return; 
             if (targetSlot.Quota >= targetSlot.DefaultQuota) return;
+            
+            int inc = (null != bulletConfig && 0 != bulletConfig.GaugeIncReductionRatio ? (int)((1f - bulletConfig.GaugeIncReductionRatio)*rawInc) : rawInc);
             targetSlot.GaugeCharged += inc;
             if (targetSlot.GaugeCharged >= targetSlot.GaugeRequired) {
                 targetSlot.Quota = targetSlot.Quota + 1;

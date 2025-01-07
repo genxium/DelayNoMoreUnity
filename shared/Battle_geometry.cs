@@ -118,9 +118,12 @@ namespace shared {
                         if (SPECIES_FIRETOTEM != currCharacterDownsync.SpeciesId && SPECIES_FIRETOTEM == v0.SpeciesId && v0.BulletTeamId != currCharacterDownsync.BulletTeamId) {
                             isBarrier = true;
                         }
+                        if (SPECIES_DARKBEAMTOWER != currCharacterDownsync.SpeciesId && SPECIES_DARKBEAMTOWER == v0.SpeciesId && v0.BulletTeamId != currCharacterDownsync.BulletTeamId) {
+                            isBarrier = true;
+                        }
                         break;
                     case Bullet v1:
-                        if (SPECIES_FIRETOTEM == currCharacterDownsync.SpeciesId || SPECIES_BRICK1 == currCharacterDownsync.SpeciesId) {
+                        if (SPECIES_FIRETOTEM == currCharacterDownsync.SpeciesId || SPECIES_BRICK1 == currCharacterDownsync.SpeciesId || SPECIES_DARKBEAMTOWER == currCharacterDownsync.SpeciesId) {
                             break;
                         }
                         (_, blConfig) = FindBulletConfig(v1.SkillId, v1.ActiveSkillHit);
@@ -618,9 +621,9 @@ namespace shared {
                         trapLocalId = v5.TrapLocalId;
                         if (TERMINATING_TRAP_ID != trapLocalId) {
                             var trap = currRenderFrame.TrapsArr[trapLocalId-1];
-                            isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdeactivated != trap.TrapState && !isVelAllowedByTrapCollider(v5, 0, pickable.VelY));
+                            isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && TrapState.Tdeactivated != trap.TrapState && !isVelAllowedByTrapCollider(v5, pickable.VelX, pickable.VelY));
                         } else {
-                            isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && !isVelAllowedByTrapCollider(v5, 0, pickable.VelY));
+                            isAnotherHardPushbackTrap = (v5.ProvidesHardPushback && !isVelAllowedByTrapCollider(v5, pickable.VelX, pickable.VelY));
                         }
                         break;
                     default:

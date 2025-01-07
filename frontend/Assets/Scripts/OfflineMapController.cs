@@ -101,16 +101,17 @@ public class OfflineMapController : AbstractMapController {
                 Debug.LogFormat("mockStartRdf with {0} bytes", startRdf.ToByteArray().Length);
                 attachParallaxEffect();
                 battleDurationFrames = battleDurationSecondsVal * BATTLE_DYNAMICS_FPS;
-                refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId);
+                refreshColliders(startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId, ref triggerEditorIdToConfigFromTiled);
                 cachedStartRdf = startRdf;
 
                 foreach (var trigger in startRdf.TriggersArr) {
                     if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId) break;
-                    if (trigger.ConfigFromTiled.IsBossSavepoint) {
+                    var configFromTiled = triggerEditorIdToConfigFromTiled[trigger.EditorId];
+                    if (configFromTiled.IsBossSavepoint) {
                         bossSavepointMask |= (1ul << trigger.TriggerLocalId);
                     }
-                    if (null != trigger.ConfigFromTiled.BossSpeciesSet) {
-                        bossSpeciesSet.UnionWith(trigger.ConfigFromTiled.BossSpeciesSet.Keys);
+                    if (null != configFromTiled.BossSpeciesSet) {
+                        bossSpeciesSet.UnionWith(configFromTiled.BossSpeciesSet.Keys);
                     }
                 }
 

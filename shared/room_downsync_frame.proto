@@ -485,6 +485,8 @@ message BulletConfig {
     int32 animLoopingRdfOffset = 91;  
     int32 explosionAnimLoopingRdfOffset = 92;  
 
+    float gaugeIncReductionRatio = 93;
+
     uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave
 
@@ -1020,6 +1022,7 @@ message SerializedTrapLocalIdToColliderAttrs {
 
 message SerializedTriggerEditorIdToLocalId {
     map<int32, int32> dict = 1;
+    map<int32, TriggerConfigFromTiled> dict2 = 2;
 }
 
 enum PickupType {
@@ -1052,16 +1055,24 @@ message Pickable {
     PickableConfigFromTiled configFromTiled = 4; 
     int32 remainingLifetimeRdfCount = 5; 
     int32 remainingRecurQuota = 6;
-    int32 velY = 7;
-    PickableState pkState = 8;    
-    int32 framesInPkState = 9;    
-    int32 pickedByJoinIndex = 10;
+    int32 velX = 7;
+    int32 velY = 8;
+    PickableState pkState = 9;    
+    int32 framesInPkState = 10;    
+    int32 pickedByJoinIndex = 11;
 }
 
 message CharacterSpawnerConfig {
     int32 cutoffRdfFrameId = 1;
     repeated uint32 speciesIdList = 2; // the k-th subcycle tick corresponds to speciesIdList[k]   
     repeated uint64 initOpList = 3;    
+}
+
+message PickableSpawnerConfig {
+    int32 cutoffRdfFrameId = 1;
+    repeated uint32 speciesIdList = 2; // the k-th subcycle tick corresponds to speciesIdList[k]   
+    repeated uint64 initOpList = 3;    
+    repeated PickupType pickupTypeList = 4;    
 }
 
 message TriggerColliderAttr {
@@ -1079,26 +1090,25 @@ message TriggerConfigFromTiled {
     int32 subCycleTriggerFrames = 6;
     int32 subCycleQuota = 7;
 
-    repeated CharacterSpawnerConfig characterSpawnerTimeSeq = 8; // MUST Be configured by increasing "cutoffRdfFrameId"!
+    int32 quotaCap = 8;
 
-    int32 quotaCap = 9;
+    repeated int32 subscribesToIdList = 9;
+    repeated int32 subscribesToExhaustedIdList = 10;
 
-    repeated int32 subscribesToIdList = 10;
-    repeated int32 subscribesToExhaustedIdList = 11;
+    int32 newRevivalX = 11; // [WARNING] In virtual grid coordinates
+    int32 newRevivalY = 12; // [WARNING] In virtual grid coordinates
+    int32 initDirX = 13;
+    int32 initDirY = 14;
 
-    int32 storyPointId = 12;
+    uint64 publishingEvtMaskUponExhausted = 15; 
 
-    int32 newRevivalX = 13; // [WARNING] In virtual grid coordinates
-    int32 newRevivalY = 14; // [WARNING] In virtual grid coordinates
-    int32 initDirX = 15;
-    int32 initDirY = 16;
+    repeated CharacterSpawnerConfig characterSpawnerTimeSeq = 16; // MUST Be configured by increasing "cutoffRdfFrameId"!
+    repeated PickableSpawnerConfig pickableSpawnerTimeSeq = 17; // MUST Be configured by increasing "cutoffRdfFrameId"!
 
-    uint64 publishingEvtMaskUponExhausted = 17; 
-
-    int32 bgmId = 18;
-
-    map<uint32, bool> bossSpeciesSet = 19;   
-    bool isBossSavepoint = 20; 
+    int32 storyPointId = 1024;
+    int32 bgmId = 1025;
+    map<uint32, bool> bossSpeciesSet = 1026;   
+    bool isBossSavepoint = 1027; 
 }
 
 message Trigger {
@@ -1110,7 +1120,6 @@ message Trigger {
     int32 bulletTeamId = 6; 
 
     int32 dirX = 7;
-    TriggerConfigFromTiled configFromTiled = 8; // static config, unchanged during battle
 
     int32 subCycleQuotaLeft = 9; // resets whenever "framesToRecover" becomes 0; for TRIGGER_MASK_BY_WAVE, this field is repurposed as the "remaining NPC count of current wave" 
 
@@ -1129,5 +1138,4 @@ message Trigger {
 
     int32 offenderJoinIndex = 19; 
     int32 offenderBulletTeamId = 20; 
-
 }

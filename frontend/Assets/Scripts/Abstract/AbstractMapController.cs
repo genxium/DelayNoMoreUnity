@@ -137,6 +137,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
     protected Dictionary<int, int> triggerEditorIdToLocalId;
+    protected Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToConfigFromTiled;
 
     protected List<shared.Collider> completelyStaticTrapColliders;
 
@@ -399,7 +400,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool hasIncorrectlyPredictedRenderFrame = false;
             bool selfNotEnoughMp = false;
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionTriggerLocalId, selfPlayerInfo.JoinIndex, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadNpcIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, triggerEditorIdToConfigFromTiled, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionTriggerLocalId, selfPlayerInfo.JoinIndex, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadNpcIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, _loggerBridge);
             if (hasIncorrectlyPredictedRenderFrame) {
                 Debug.LogFormat("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i + 1);
             }
@@ -2264,7 +2265,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform triggerChild in child) {
                         var tileObj = triggerChild.GetComponent<SuperObject>();
                         var tileProps = triggerChild.GetComponent<SuperCustomProperties>();
-                        CustomProperty id, bulletTeamId, delayedFrames, quota, recoveryFrames, speciesId, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, subscribesToIdList, subscribesToExhaustedIdList, newRevivalX, newRevivalY, storyPointId, bgmId, demandedEvtMaskProp, publishingEvtMaskUponExhausted, dirX, initDirX, initDirY, isBossSavepoint, bossSpeciesIds;
+                        CustomProperty id, bulletTeamId, delayedFrames, quota, recoveryFrames, speciesId, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, pickableSpawnerTimeSeq, subscribesToIdList, subscribesToExhaustedIdList, newRevivalX, newRevivalY, storyPointId, bgmId, demandedEvtMaskProp, publishingEvtMaskUponExhausted, dirX, initDirX, initDirY, isBossSavepoint, bossSpeciesIds;
 
                         tileProps.TryGetCustomProperty("id", out id);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
@@ -2275,6 +2276,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("subCycleTriggerFrames", out subCycleTriggerFrames);
                         tileProps.TryGetCustomProperty("subCycleQuota", out subCycleQuota);
                         tileProps.TryGetCustomProperty("characterSpawnerTimeSeq", out characterSpawnerTimeSeq);
+                        tileProps.TryGetCustomProperty("pickableSpawnerTimeSeq", out pickableSpawnerTimeSeq);
                         tileProps.TryGetCustomProperty("subscribesToIdList", out subscribesToIdList);
                         tileProps.TryGetCustomProperty("subscribesToExhaustedIdList", out subscribesToExhaustedIdList);
                         tileProps.TryGetCustomProperty("newRevivalX", out newRevivalX);
@@ -2309,6 +2311,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         int subCycleTriggerFramesVal = (null != subCycleTriggerFrames && !subCycleTriggerFrames.IsEmpty ? subCycleTriggerFrames.GetValueAsInt() : 0);
                         int subCycleQuotaVal = (null != subCycleQuota && !subCycleQuota.IsEmpty ? subCycleQuota.GetValueAsInt() : 0);
                         var characterSpawnerTimeSeqStr = (null != characterSpawnerTimeSeq && !characterSpawnerTimeSeq.IsEmpty ? characterSpawnerTimeSeq.GetValueAsString() : "");
+                        var pickableSpawnerTimeSeqStr = (null != pickableSpawnerTimeSeq && !pickableSpawnerTimeSeq.IsEmpty ? pickableSpawnerTimeSeq.GetValueAsString() : "");
                         bool isBossSavepointVal = (null != isBossSavepoint && !isBossSavepoint.IsEmpty && 1 == isBossSavepoint.GetValueAsInt()) ? true : false;
                         var bossSpeciesIdsStr = (null != bossSpeciesIds && !bossSpeciesIds.IsEmpty ? bossSpeciesIds.GetValueAsString() : "");
                         var triggerConfig = triggerConfigs[speciesIdVal];
@@ -2327,7 +2330,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             if (0 < subscribesToExhaustIdListStrParts.Length) {
                                 demandedEvtMask |= (1UL << subscribesToExhaustIdListStrParts.Length) - 1;
                             }
-                            if (EVTSUB_NO_DEMAND_MASK == demandedEvtMask && TRIGGER_SPECIES_TIMED_WAVE_DOOR_1 != triggerConfig.SpeciesId) {
+                            if (EVTSUB_NO_DEMAND_MASK == demandedEvtMask && TRIGGER_SPECIES_TIMED_WAVE_DOOR_1 != triggerConfig.SpeciesId && TRIGGER_SPECIES_TIMED_WAVE_PICKABLE_DROPPER != triggerConfig.SpeciesId) {
                                 demandedEvtMask = 1UL;
                             }
                         }
@@ -2353,26 +2356,28 @@ public abstract class AbstractMapController : MonoBehaviour {
                             FramesToFire = MAX_INT,
                             FramesToRecover = (TriggerType.TtCyclicTimed == triggerConfig.TriggerType ? delayedFramesVal : 0),
                             DirX = dirXVal,
-                            ConfigFromTiled = new TriggerConfigFromTiled {
-                                EditorId = editorId,
-                                SpeciesId = speciesIdVal,
-                                BulletTeamId = bulletTeamIdVal,
-                                DelayedFrames = delayedFramesVal,
-                                RecoveryFrames = recoveryFramesVal,
-                                SubCycleTriggerFrames = subCycleTriggerFramesVal,
-                                SubCycleQuota = subCycleQuotaVal,
-                                QuotaCap = quotaVal,
-                                NewRevivalX = newRevivalXVal, 
-                                NewRevivalY = newRevivalYVal, 
-                                StoryPointId = storyPointIdVal,
-                                PublishingEvtMaskUponExhausted = publishingEvtMaskUponExhaustedVal,
-                                BgmId = bgmIdVal,
-                                InitDirX = initDirXVal,
-                                InitDirY = initDirYVal,
-                                IsBossSavepoint = isBossSavepointVal,
-                            },
                             DemandedEvtMask = demandedEvtMask,
                         };
+
+                        var configFromTiled = new TriggerConfigFromTiled {
+                            EditorId = editorId,
+                            SpeciesId = speciesIdVal,
+                            BulletTeamId = bulletTeamIdVal,
+                            DelayedFrames = delayedFramesVal,
+                            RecoveryFrames = recoveryFramesVal,
+                            SubCycleTriggerFrames = subCycleTriggerFramesVal,
+                            SubCycleQuota = subCycleQuotaVal,
+                            QuotaCap = quotaVal,
+                            NewRevivalX = newRevivalXVal, 
+                            NewRevivalY = newRevivalYVal, 
+                            StoryPointId = storyPointIdVal,
+                            PublishingEvtMaskUponExhausted = publishingEvtMaskUponExhaustedVal,
+                            BgmId = bgmIdVal,
+                            InitDirX = initDirXVal,
+                            InitDirY = initDirYVal,
+                            IsBossSavepoint = isBossSavepointVal,
+                        };
+                        serializedTriggerEditorIdToLocalId.Dict2[editorId] = configFromTiled;
 
                         if (IndiWaveGroupTriggerTrivial.SpeciesId == triggerConfig.SpeciesId || IndiWaveGroupTriggerMv.SpeciesId == triggerConfig.SpeciesId) {
                             trigger.Quota = 1;
@@ -2383,13 +2388,13 @@ public abstract class AbstractMapController : MonoBehaviour {
                         foreach (var subscribesToIdListStrPart in subscribesToIdListStrParts) {
                             if (String.IsNullOrEmpty(subscribesToIdListStrPart)) continue;
                             var subscribesToEditorId = subscribesToIdListStrPart.ToInt();
-                            trigger.ConfigFromTiled.SubscribesToIdList.Add(subscribesToEditorId);
+                            configFromTiled.SubscribesToIdList.Add(subscribesToEditorId);
                         }
 
                         foreach (var subscribesToExhaustIdListStrPart in subscribesToExhaustIdListStrParts) {
                             if (String.IsNullOrEmpty(subscribesToExhaustIdListStrPart)) continue;
                             var subscribesToExhaustEditorId = subscribesToExhaustIdListStrPart.ToInt();
-                            trigger.ConfigFromTiled.SubscribesToExhaustedIdList.Add(subscribesToExhaustEditorId);
+                            configFromTiled.SubscribesToExhaustedIdList.Add(subscribesToExhaustEditorId);
                         }
                         string[] characterSpawnerTimeSeqStrParts = characterSpawnerTimeSeqStr.Split(';', StringSplitOptions.RemoveEmptyEntries);
                         foreach (var part in characterSpawnerTimeSeqStrParts) {
@@ -2418,13 +2423,36 @@ public abstract class AbstractMapController : MonoBehaviour {
                                     }
                                 }
                             }
-                            trigger.ConfigFromTiled.CharacterSpawnerTimeSeq.Add(chSpawnerConfig);
+                            configFromTiled.CharacterSpawnerTimeSeq.Add(chSpawnerConfig);
+                        }
+
+                        string[] pickableSpawnerTimeSeqStrParts = pickableSpawnerTimeSeqStr.Split(';', StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var part in pickableSpawnerTimeSeqStrParts) {
+                            if (String.IsNullOrEmpty(part)) continue;
+                            string[] subParts = part.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                            if (2 != subParts.Length) continue;
+                            if (String.IsNullOrEmpty(subParts[0])) continue;
+                            if (String.IsNullOrEmpty(subParts[1])) continue;
+                            int cutoffRdfFrameId = subParts[0].ToInt();
+                            var pickableSpawnerConfig = new PickableSpawnerConfig {
+                                CutoffRdfFrameId = cutoffRdfFrameId
+                            };
+                            string[] speciesIdAndTypeAndOpParts = subParts[1].Split(',', StringSplitOptions.RemoveEmptyEntries);
+                            foreach (var speciesIdAndTypeAndOpPart in speciesIdAndTypeAndOpParts) {
+                                string[] speciesIdAndTypeAndOpSplitted = speciesIdAndTypeAndOpPart.Split('|', StringSplitOptions.RemoveEmptyEntries);
+                                pickableSpawnerConfig.SpeciesIdList.Add((uint)speciesIdAndTypeAndOpSplitted[0].ToInt());
+                                pickableSpawnerConfig.InitOpList.Add(Convert.ToUInt64(speciesIdAndTypeAndOpSplitted[1]));
+                                PickupType pickupTypeVal = ("PutIntoInventory" ==  speciesIdAndTypeAndOpSplitted[2] ? PickupType.PutIntoInventory : PickupType.Immediate);
+                                pickableSpawnerConfig.PickupTypeList.Add(pickupTypeVal);
+                            }
+                            configFromTiled.PickableSpawnerTimeSeq.Add(pickableSpawnerConfig);
+                            Debug.Log("Added pickableSpawnerConfig=" + pickableSpawnerConfig);
                         }
 
                         var bossSpeciesIdsStrParts = bossSpeciesIdsStr.Split(',', StringSplitOptions.RemoveEmptyEntries);
                         foreach (var part in bossSpeciesIdsStrParts) {
                             if (String.IsNullOrEmpty(part)) continue;
-                            trigger.ConfigFromTiled.BossSpeciesSet[Convert.ToUInt32(part)] = true;
+                            configFromTiled.BossSpeciesSet[Convert.ToUInt32(part)] = true;
                         }
 
                         bool isBottomAnchor = (null != tileObj.m_SuperTile && (null != tileObj.m_SuperTile.m_Sprite || null != tileObj.m_SuperTile.m_AnimationSprites));
@@ -2681,20 +2709,22 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (trigger, wx, wy) = triggerList[i];
             startRdf.TriggersArr[i] = trigger;
             // [WARNING] "trigger.SubscriberLocalIdsMask" is initialized from "trigger.ConfigFromTiled.SubscribesToIdList", but doesn't necessarily stay the initial value during battle! 
-            var subscribesToIdList = trigger.ConfigFromTiled.SubscribesToIdList;
+
+            var triggerConfigFromTiled = serializedTriggerEditorIdToLocalId.Dict2[trigger.EditorId]; 
+            var subscribesToIdList = triggerConfigFromTiled.SubscribesToIdList;
             foreach (var subscribesToEditorId in subscribesToIdList) {
                 var subscribesToTriggerLocalId = serializedTriggerEditorIdToLocalId.Dict[subscribesToEditorId]; 
                 var (subscribesToTrigger, _, _) = triggerList[subscribesToTriggerLocalId-1];
                 subscribesToTrigger.SubscriberLocalIdsMask |= (1UL << (trigger.TriggerLocalId-1));
             }
 
-            var subscribesToExhaustIdList = trigger.ConfigFromTiled.SubscribesToExhaustedIdList;
+            var subscribesToExhaustIdList = triggerConfigFromTiled.SubscribesToExhaustedIdList;
             foreach (var subscribesToExhaustEditorId in subscribesToExhaustIdList) {
                 var subscribesToTriggerLocalId = serializedTriggerEditorIdToLocalId.Dict[subscribesToExhaustEditorId]; 
                 var (subscribesToExhaustTrigger, _, _) = triggerList[subscribesToTriggerLocalId-1];
                 subscribesToExhaustTrigger.ExhaustSubscriberLocalIdsMask |= (1UL << (trigger.TriggerLocalId - 1));
             }
-            spawnTriggerNode(trigger.TriggerLocalId, trigger.ConfigFromTiled.SpeciesId, wx, wy);
+            spawnTriggerNode(trigger.TriggerLocalId, triggerConfigFromTiled.SpeciesId, wx, wy);
         }
         // A final check on conflicting "SubscriberLocalIdsMask v.s. ExhaustSubscriberLocalIdsMask"
         for (int i = 0; i < triggerList.Count; i++) {
@@ -2861,8 +2891,9 @@ public abstract class AbstractMapController : MonoBehaviour {
                     TriggerColliderAttr? triggerColliderAttr = collider.Data as TriggerColliderAttr;
                     if (null != triggerColliderAttr) {
                         var trigger = rdf.TriggersArr[triggerColliderAttr.TriggerLocalId];
-                        if (null != trigger.ConfigFromTiled && triggerConfigs.ContainsKey(trigger.ConfigFromTiled.SpeciesId)) {
-                            var triggerConfig = triggerConfigs[trigger.ConfigFromTiled.SpeciesId];
+                        var configFromTiled = triggerEditorIdToConfigFromTiled[trigger.EditorId];
+                        if (null != configFromTiled && triggerConfigs.ContainsKey(configFromTiled.SpeciesId)) {
+                            var triggerConfig = triggerConfigs[configFromTiled.SpeciesId];
                             if (TriggerType.TtMovement == triggerConfig.TriggerType || TriggerType.TtAttack == triggerConfig.TriggerType) {
                                 line.SetColor(Color.magenta);
                             } else {
@@ -3722,7 +3753,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         float dWx = (newWx-chGameObj.transform.position.x);
         float dWy = (newWy-chGameObj.transform.position.y);
         float dis2 = dWx*dWx + dWy*dWy;
-        var (velXWorld, velYWorld) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, currCharacterDownsync.VelY + currCharacterDownsync.FrictionVelY); // Just roughly, using "currCharacterDownsync" wouldn't cause NullPointerException thus more effective, and "CharacterDownsync.VelX & VelY" is already normalized to "per frame distance"
+        var (velXWorld, velYWorld) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VelX + currCharacterDownsync.FrictionVelX, 0 < currCharacterDownsync.FrictionVelY ? currCharacterDownsync.FrictionVelY : (currCharacterDownsync.VelY + currCharacterDownsync.FrictionVelY)); // Just roughly, using "currCharacterDownsync" wouldn't cause NullPointerException thus more effective, and "CharacterDownsync.VelX & VelY" is already normalized to "per frame distance"
         var speedReachable2 = (velXWorld*velXWorld + velYWorld*velYWorld);
         var (chConfigSpeedReachable, _) = VirtualGridToPolygonColliderCtr(chConfig.Speed, 0);
         float defaultSpeedReachable2 = (chConfigSpeedReachable * chConfigSpeedReachable);
@@ -3734,7 +3765,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             // dis2 > tolerance2 >= 0
             float invMag = InvSqrt32(dis2);
             float ratio = 0;
-            if (0 < speedReachable2) {
+            if (0 < speedReachable2 && speedReachable2 > defaultSpeedReachable2) {
                 float speedReachable = speedReachable2 * InvSqrt32(speedReachable2);
                 ratio = speedReachable*invMag; 
             } else {

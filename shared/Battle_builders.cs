@@ -406,7 +406,7 @@ namespace shared {
             dst.SubscribesToTriggerLocalIdAlt = subscribesToTriggerLocalIdAlt;
         }
 
-        public static void AssignToTrigger(int editorId, int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int offenderJoinIndex, int offenderBulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, int virtualGridX, int virtualGridY, int dirX, ulong demandedEvtMask, ulong fulfilledEvtMask, ulong waveNpcKilledEvtMaskCounter, ulong subscriberLocalIdsMask, ulong exhaustSubscriberLocalIdsMask, TriggerConfigFromTiled configFromTiled, Trigger dst) {
+        public static void AssignToTrigger(int editorId, int triggerLocalId, int framesToFire, int framesToRecover, int quota, int bulletTeamId, int offenderJoinIndex, int offenderBulletTeamId, int subCycleQuotaLeft, TriggerState state, int framesInState, int virtualGridX, int virtualGridY, int dirX, ulong demandedEvtMask, ulong fulfilledEvtMask, ulong waveNpcKilledEvtMaskCounter, ulong subscriberLocalIdsMask, ulong exhaustSubscriberLocalIdsMask, Trigger dst) {
             dst.EditorId = editorId;
             dst.TriggerLocalId = triggerLocalId;
             dst.FramesToFire = framesToFire;
@@ -418,7 +418,6 @@ namespace shared {
             dst.SubCycleQuotaLeft = subCycleQuotaLeft;
             dst.State = state;
             dst.FramesInState = framesInState;
-            dst.ConfigFromTiled = configFromTiled;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
             dst.DirX = dirX;
@@ -445,10 +444,11 @@ namespace shared {
             dst.SkillId = skillId;
         }
 
-        public static void AssignToPickable(int pickableLocalId, int virtualGridX, int virtualGridY, int velY, int remainingLifetimeRdfCount, int remainingRecurQuota, PickableState pkState, int framesInPkState, int pickedByJoinIndex, int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, uint recurIntervalRdfCount, uint lifetimeRdfCountPerOccurrence, PickupType pkType, uint stockQuotaPerOccurrence, int subscriptionId, uint consumableSpeciesId, uint buffSpeciesId, uint skillId, Pickable dst) {
+        public static void AssignToPickable(int pickableLocalId, int virtualGridX, int virtualGridY, int velX, int velY, int remainingLifetimeRdfCount, int remainingRecurQuota, PickableState pkState, int framesInPkState, int pickedByJoinIndex, int initVirtualGridX, int initVirtualGridY, bool takesGravity, int firstShowRdfId, int initRecurQuota, uint recurIntervalRdfCount, uint lifetimeRdfCountPerOccurrence, PickupType pkType, uint stockQuotaPerOccurrence, int subscriptionId, uint consumableSpeciesId, uint buffSpeciesId, uint skillId, Pickable dst) {
             dst.PickableLocalId = pickableLocalId;
             dst.VirtualGridX = virtualGridX;
             dst.VirtualGridY = virtualGridY;
+            dst.VelX = velX;
             dst.VelY = velY;
             
             dst.RemainingLifetimeRdfCount = remainingLifetimeRdfCount; 
@@ -566,7 +566,7 @@ namespace shared {
             return ret;
         }
 
-        public static void _leftShiftDeadNpcs(int rdfId, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int pickableLocalIdCounter, RepeatedField<Pickable> nextRenderFramePickables, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, HashSet<int> justDeadJoinIndices, ref int nextNpcI, ref int pickableCnt, bool forPlayerRevivalInStory, ILoggerBridge logger) {
+        public static void _leftShiftDeadNpcs(int rdfId, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int pickableLocalIdCounter, RepeatedField<Pickable> nextRenderFramePickables, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, int> joinIndexRemap, out bool isRemapNeeded, HashSet<int> justDeadJoinIndices, ref int nextNpcI, ref int nextRdfPickableCnt, bool forPlayerRevivalInStory, ILoggerBridge logger) {
             isRemapNeeded = false;
             int aliveSlotI = 0, candidateI = 0;
             justDeadJoinIndices.Clear();
@@ -580,7 +580,7 @@ namespace shared {
                         justDeadJoinIndices.Add(candidate.JoinIndex);
                         isRemapNeeded = true;
                         if (!forPlayerRevivalInStory && (TERMINATING_CONSUMABLE_SPECIES_ID != candidate.KilledToDropConsumableSpeciesId || TERMINATING_BUFF_SPECIES_ID != candidate.KilledToDropBuffSpeciesId || NO_SKILL != candidate.KilledToDropPickupSkillId)) {
-                            addNewPickableToNextFrame(rdfId, candidate.VirtualGridX, candidate.VirtualGridY, MAX_INT, 0, true, MAX_UINT, MAX_UINT, (NO_SKILL == candidate.KilledToDropPickupSkillId ? PickupType.Immediate : PickupType.PutIntoInventory), 1, nextRenderFramePickables, candidate.KilledToDropConsumableSpeciesId, candidate.KilledToDropBuffSpeciesId, candidate.KilledToDropPickupSkillId, ref pickableLocalIdCounter, ref pickableCnt);
+                            addNewPickableToNextFrame(rdfId, candidate.VirtualGridX, candidate.VirtualGridY, 0, +1, MAX_INT, 0, true, MAX_UINT, MAX_UINT, (NO_SKILL == candidate.KilledToDropPickupSkillId ? PickupType.Immediate : PickupType.PutIntoInventory), 1, nextRenderFramePickables, candidate.KilledToDropConsumableSpeciesId, candidate.KilledToDropBuffSpeciesId, candidate.KilledToDropPickupSkillId, ref pickableLocalIdCounter, ref nextRdfPickableCnt);
                         }
                     }
                 }
@@ -706,7 +706,7 @@ namespace shared {
                 var srcTrigger = src.TriggersArr[triggerCnt];
                 if (TERMINATING_TRIGGER_ID == srcTrigger.TriggerLocalId) break;
                 var dstTrigger = dst.TriggersArr[triggerCnt];
-                AssignToTrigger(srcTrigger.EditorId, srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.OffenderJoinIndex, srcTrigger.OffenderBulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.DirX, srcTrigger.DemandedEvtMask, srcTrigger.FulfilledEvtMask, srcTrigger.WaveNpcKilledEvtMaskCounter, srcTrigger.SubscriberLocalIdsMask, srcTrigger.ExhaustSubscriberLocalIdsMask, srcTrigger.ConfigFromTiled, dstTrigger);
+                AssignToTrigger(srcTrigger.EditorId, srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.OffenderJoinIndex, srcTrigger.OffenderBulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.DirX, srcTrigger.DemandedEvtMask, srcTrigger.FulfilledEvtMask, srcTrigger.WaveNpcKilledEvtMaskCounter, srcTrigger.SubscriberLocalIdsMask, srcTrigger.ExhaustSubscriberLocalIdsMask, dstTrigger);
             
                 triggerCnt++;
             }
@@ -779,7 +779,7 @@ namespace shared {
                 var srcTrigger = src.TriggersArr[triggerCnt];
                 if (TERMINATING_TRIGGER_ID == srcTrigger.TriggerLocalId) break;
                 var dstTrigger = dst.TriggersArr[triggerCnt];
-                    AssignToTrigger(srcTrigger.EditorId, srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.OffenderJoinIndex, srcTrigger.OffenderBulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.DirX, srcTrigger.DemandedEvtMask, srcTrigger.FulfilledEvtMask, srcTrigger.WaveNpcKilledEvtMaskCounter, srcTrigger.SubscriberLocalIdsMask, srcTrigger.ExhaustSubscriberLocalIdsMask, srcTrigger.ConfigFromTiled, dstTrigger);
+                    AssignToTrigger(srcTrigger.EditorId, srcTrigger.TriggerLocalId, srcTrigger.FramesToFire, srcTrigger.FramesToRecover, srcTrigger.Quota, srcTrigger.BulletTeamId, srcTrigger.OffenderJoinIndex, srcTrigger.OffenderBulletTeamId, srcTrigger.SubCycleQuotaLeft, srcTrigger.State, srcTrigger.FramesInState, srcTrigger.VirtualGridX, srcTrigger.VirtualGridY, srcTrigger.DirX, srcTrigger.DemandedEvtMask, srcTrigger.FulfilledEvtMask, srcTrigger.WaveNpcKilledEvtMaskCounter, srcTrigger.SubscriberLocalIdsMask, srcTrigger.ExhaustSubscriberLocalIdsMask, dstTrigger);
             
                 triggerCnt++;
             }
@@ -850,7 +850,6 @@ namespace shared {
                 if (lTrigger.FramesInState != rTrigger.FramesInState) return false;
                 if (lTrigger.VirtualGridX != rTrigger.VirtualGridX) return false;
                 if (lTrigger.VirtualGridY != rTrigger.VirtualGridY) return false;
-                if (lTrigger.ConfigFromTiled != rTrigger.ConfigFromTiled) return false; // Should be exactly the same ptr
                 triggerCnt++;
             }
             return true;
@@ -1081,7 +1080,7 @@ namespace shared {
             collisionHolder.ClearDeep();
         }
 
-        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId serializedTriggerEditorIdToLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref FrameRingBuffer<Collider> residueCollided, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerEditorIdToLocalId) {
+        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId serializedTriggerEditorIdToLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref FrameRingBuffer<Collider> residueCollided, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerEditorIdToLocalId, ref Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToConfigFromTiled) {
             /*
             [WARNING] 
     
@@ -1174,6 +1173,10 @@ namespace shared {
             triggerEditorIdToLocalId = new Dictionary<int, int>();
             foreach (var entry in serializedTriggerEditorIdToLocalId.Dict) {
                 triggerEditorIdToLocalId[entry.Key] = entry.Value;
+            }
+            triggerEditorIdToConfigFromTiled = new Dictionary<int, TriggerConfigFromTiled>();
+            foreach (var entry in serializedTriggerEditorIdToLocalId.Dict2) {
+                triggerEditorIdToConfigFromTiled[entry.Key] = entry.Value;
             }
 
             for (int i = 0; i < staticCollidersCnt; i++) {

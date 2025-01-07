@@ -177,6 +177,7 @@ namespace shared {
                         GaugeIncWhenKilled = 50,
                         Ifc = IfaceCat.Flesh,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                        NpcPrioritizeBulletHandling = true,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.GaugedMagazineIv,
@@ -296,11 +297,18 @@ namespace shared {
                         LayDownSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(44.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenRate = 1,
+                        MpRegenRate = 2,
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
                         ProactiveJumpStartupFrames = 4,
-                        Hardness = 5,
+                        Hardness = 6,
+                        HasDef1 = true,
+                        HasDef1Atked1Anim = true,
+                        DefaultDef1Quota = 10,
+                        DefaultDef1BrokenFramesToRecover = 45,
+                        Def1StartupFrames = 4,
+                        Def1DamageYield = 0,
+                        NpcPrioritizeBulletHandling = true,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
                         SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
                         SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
@@ -323,6 +331,12 @@ namespace shared {
                             }
                         },
                         GaugeIncWhenKilled = 80,
+                        LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
+                            new[]
+                            {
+                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 20)
+                            }
+                        ),
                         Ifc = IfaceCat.Flesh,
                     }),
 
@@ -785,6 +799,7 @@ namespace shared {
                         SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                         GaugeIncWhenKilled = 80,
                         Ifc = IfaceCat.Flesh,
+                        NpcPrioritizeBulletHandling = true,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.GaugedMagazineIv,
@@ -851,6 +866,7 @@ namespace shared {
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
                         TransformIntoFramesToRecover = 78,
                         TransformIntoFramesInvinsible = 79,
+                        NpcPrioritizeBulletHandling = true,
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_SKELEARCHER, new CharacterConfig {
@@ -1159,6 +1175,7 @@ namespace shared {
                         Ifc = IfaceCat.Flesh,
                         HasDimmedAnim = true,
                         TransformIntoSpeciesIdUponDeath = SPECIES_FIRESWORDMAN,
+                        NpcPrioritizeBulletHandling = true,
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_FIRETOTEM, new CharacterConfig {

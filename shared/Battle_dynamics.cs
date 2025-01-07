@@ -287,8 +287,8 @@ namespace shared {
             return (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy);
         }
 
-        public static bool isTriggerClickableByMovement(Trigger trigger, CharacterDownsync ch, int roomCapacity) {
-            var triggerConfig = triggerConfigs[trigger.ConfigFromTiled.SpeciesId];
+        public static bool isTriggerClickableByMovement(Trigger trigger, TriggerConfigFromTiled configFromTiled, CharacterDownsync ch, int roomCapacity) {
+            var triggerConfig = triggerConfigs[configFromTiled.SpeciesId];
             if (TriggerType.TtMovement != triggerConfig.TriggerType) return false;
             if (0 < trigger.FramesToRecover || 0 >= trigger.Quota) return false;
             bool npcTriggerable = false;
@@ -1040,7 +1040,7 @@ namespace shared {
             }
         }
 
-        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, RepeatedField<Trap> nextRenderFrameTraps, ref int bulletLocalIdCounter, ref int bulletCnt, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) { // Calc pushbacks for each player (after its movement) w/o bullets
+        private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, RepeatedField<Trap> nextRenderFrameTraps, ref int bulletLocalIdCounter, ref int bulletCnt, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) { // Calc pushbacks for each player (after its movement) w/o bullets
             if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
                 currPushbackFrameLog.Reset();
                 currPushbackFrameLog.setMaxJoinIndex(roomCapacity+currNpcI);
@@ -1216,7 +1216,7 @@ namespace shared {
                         ConvexPolygon bShape = bCollider.Shape;
                         var v4 = bCollider.Data as Pickable;
                         if (null != v4 && currCharacterDownsync.JoinIndex <= roomCapacity) {
-                            if ((TERMINATING_CONSUMABLE_SPECIES_ID != v4.ConfigFromTiled.ConsumableSpeciesId || NO_SKILL != v4.ConfigFromTiled.SkillId) && PickableState.Pidle == v4.PkState && 0 < v4.RemainingLifetimeRdfCount) {
+                            if ((TERMINATING_CONSUMABLE_SPECIES_ID != v4.ConfigFromTiled.ConsumableSpeciesId || NO_SKILL != v4.ConfigFromTiled.SkillId) && PickableState.Pidle == v4.PkState && 0 < v4.RemainingLifetimeRdfCount && DEFAULT_PICKABLE_NONPICKABLE_STARTUP_FRAMES < v4.FramesInPkState) {
                                 if (PickupType.Immediate == v4.ConfigFromTiled.PickupType) {
                                     var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                                     if (clicked) {
@@ -1261,7 +1261,7 @@ namespace shared {
                                                 if (InventorySlotStockType.TimedMagazineIv == existingIvSlot.StockType) {
                                                     thatCharacterInNextFrame.Inventory.Slots[0].FramesToRecover = 1;
                                                 } else if (InventorySlotStockType.GaugedMagazineIv == existingIvSlot.StockType) {
-                                                    accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT*100, thatCharacterInNextFrame);
+                                                    accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT*50, null, thatCharacterInNextFrame);
                                                 }
                                             }
                                         }
@@ -1277,7 +1277,8 @@ namespace shared {
                         var v3 = bCollider.Data as TriggerColliderAttr;  
                         if (null != v3) {
                             var atkedTrigger = currRenderFrame.TriggersArr[v3.TriggerLocalId-1];
-                            if (!isTriggerClickableByMovement(atkedTrigger, currCharacterDownsync, roomCapacity)) continue;
+                            var triggerConfigFromTiled = triggerEditorIdToTiledConfig[atkedTrigger.EditorId];
+                            if (!isTriggerClickableByMovement(atkedTrigger, triggerConfigFromTiled, currCharacterDownsync, roomCapacity)) continue;
                             var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                             if (clicked) {
                                 // Currently only allowing "Player" to click.
@@ -2008,7 +2009,7 @@ namespace shared {
         - Make use of CPU parallelization -- better by using some libraries with sub-kernel-thread granularity(e.g. Goroutine or Greenlet equivalent) -- or GPU parallelization. It's not trivial to make an improvement because by dispatching smaller tasks to other resources other than the current kernel-thread, overhead I/O and synchronization/locking time is introduced. Moreover, we need guarantee that the dispatched smaller tasks can yield deterministic outputs regardless of processing order, e.g. that each "i" in "_calcCharacterMovementPushbacks" can be traversed earlier than another and same "effPushbacks" for the next render frame is obtained.   
         - Enable "IL2CPP" when building client application.  
         */
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, int> triggerEditorIdToLocalId, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int missionTriggerLocalId, int selfPlayerJoinIndex, Dictionary<int, int> joinIndexRemap, ref int justTriggeredStoryPointId, ref int justTriggeredBgmId, HashSet<int> justDeadJoinIndices, out ulong fulfilledTriggerSetMask, ref bool selfNotEnoughMp, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, int> triggerEditorIdToLocalId, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int missionTriggerLocalId, int selfPlayerJoinIndex, Dictionary<int, int> joinIndexRemap, ref int justTriggeredStoryPointId, ref int justTriggeredBgmId, HashSet<int> justDeadJoinIndices, out ulong fulfilledTriggerSetMask, ref bool selfNotEnoughMp, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -2146,7 +2147,7 @@ namespace shared {
                 }
                 int framesInState = src.FramesInState + 1;
                 ulong fulfilledEvtMask = src.FulfilledEvtMask;
-                AssignToTrigger(src.EditorId, src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.OffenderJoinIndex, src.OffenderBulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DemandedEvtMask, fulfilledEvtMask, src.WaveNpcKilledEvtMaskCounter, src.SubscriberLocalIdsMask, src.ExhaustSubscriberLocalIdsMask, src.ConfigFromTiled, nextRenderFrameTriggers[l]);
+                AssignToTrigger(src.EditorId, src.TriggerLocalId, framesToFire, framesToRecover, src.Quota, src.BulletTeamId, src.OffenderJoinIndex, src.OffenderBulletTeamId, src.SubCycleQuotaLeft, src.State, framesInState, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DemandedEvtMask, fulfilledEvtMask, src.WaveNpcKilledEvtMaskCounter, src.SubscriberLocalIdsMask, src.ExhaustSubscriberLocalIdsMask, nextRenderFrameTriggers[l]);
                 l++;
             }
             nextRenderFrameTriggers[l].TriggerLocalId = TERMINATING_TRIGGER_ID;
@@ -2194,12 +2195,12 @@ namespace shared {
             // ---------[WARNING] Deliberately put "_processNpcInputs" after "_moveAndInsertBulletColliders" such that NPC vision can see bullets; also deliberately put "_processNpcInputs" before "_calcCharacterMovementPushbacks" to avoid overwriting "onSlope velocities" ---------
             _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
-            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, nextRenderFrameTraps, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
+            _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, nextRenderFrameTraps, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, triggerEditorIdToTiledConfig, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collisionSys, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, residueCollided, ref primaryOverlapResult, bulletColliderCntOffset, colliderCnt, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref fulfilledTriggerSetMask, colliderCnt, logger);
+            _calcBulletCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collisionSys, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, residueCollided, ref primaryOverlapResult, bulletColliderCntOffset, colliderCnt, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref fulfilledTriggerSetMask, colliderCnt, triggerEditorIdToTiledConfig, logger);
          
             // ---------[WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled ones. --------- 
-            _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextRenderFrameTriggers, nextRenderFrameNpcs, triggerEditorIdToLocalId, decodedInputHolder, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref fulfilledTriggerSetMask, ref justTriggeredStoryPointId, ref justTriggeredBgmId, logger);
+            _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextRenderFrameTriggers, nextRenderFrameNpcs, triggerEditorIdToLocalId, triggerEditorIdToTiledConfig, decodedInputHolder, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextRenderFramePickableLocalIdCounter, ref pickableCnt, nextRenderFramePickables, ref fulfilledTriggerSetMask, ref justTriggeredStoryPointId, ref justTriggeredBgmId, logger);
 
             // ---------[WARNING] Deliberately put "_calcTrapReaction" after "_calcTriggerReactions" such that latest "fulfilledTriggerSetMask" is respected. --------- 
             _calcTrapReaction(currRenderFrame, roomCapacity, nextRenderFrameTraps, triggerEditorIdToLocalId, fulfilledTriggerSetMask, logger);
@@ -2213,11 +2214,12 @@ namespace shared {
                 var subscribedToTriggerMask = (1UL << (src.SubscribesToTriggerLocalId - 1));
                 if (0 == (fulfilledTriggerSetMask & subscribedToTriggerMask)) continue; // Subscription not fulfilled
                 var trigger = currRenderFrame.TriggersArr[src.SubscribesToTriggerLocalId-1];
+                var triggerConfigFromTiled = triggerEditorIdToTiledConfig[trigger.EditorId];
                 var dst = nextRenderFrameNpcs[i];
                 var chConfig = characters[dst.SpeciesId];
-                if (0 != trigger.ConfigFromTiled.InitDirX || 0 != trigger.ConfigFromTiled.InitDirY) {
-                    dst.DirX = trigger.ConfigFromTiled.InitDirX;
-                    dst.DirY = trigger.ConfigFromTiled.InitDirY;
+                if (0 != triggerConfigFromTiled.InitDirX || 0 != triggerConfigFromTiled.InitDirY) {
+                    dst.DirX = triggerConfigFromTiled.InitDirX;
+                    dst.DirY = triggerConfigFromTiled.InitDirY;
                 } 
                 dst.SubscribesToTriggerLocalId = TERMINATING_TRIGGER_ID;
                 if (chConfig.HasDimmedAnim) {

@@ -376,19 +376,20 @@ namespace shared {
             }
         }
 
-        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<Trigger> nextRenderFrameTriggers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Dictionary<int, int> triggerEditorIdToLocalId, InputFrameDecoded decodedInputHolder, ref int npcLocalIdCounter, ref int npcCnt, ref ulong fulfilledTriggerSetMask, ref int justTriggeredStoryPointId, ref int justTriggeredBgmId, ILoggerBridge logger) {
+        private static void _calcTriggerReactions(RoomDownsyncFrame currRenderFrame, RoomDownsyncFrame nextRenderFrame, int roomCapacity, RepeatedField<Trigger> nextRenderFrameTriggers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, Dictionary<int, int> triggerEditorIdToLocalId, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, InputFrameDecoded decodedInputHolder, ref int npcLocalIdCounter, ref int npcCnt, ref int pickableLocalIdCounter, ref int nextRdfPickableCnt, RepeatedField<Pickable> nextRenderFramePickables, ref ulong fulfilledTriggerSetMask, ref int justTriggeredStoryPointId, ref int justTriggeredBgmId, ILoggerBridge logger) {
             for (int i = 0; i < currRenderFrame.TriggersArr.Count; i++) {
                 var currTrigger = currRenderFrame.TriggersArr[i];
                 if (TERMINATING_TRIGGER_ID == currTrigger.TriggerLocalId) {
                     break;
                 }
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
-                var triggerConfig = triggerConfigs[currTrigger.ConfigFromTiled.SpeciesId];
+                var triggerConfigFromTiled = triggerEditorIdToTiledConfig[currTrigger.EditorId];
+                var triggerConfig = triggerConfigs[triggerConfigFromTiled.SpeciesId];
                 // [WARNING] The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
                 
                 bool mainCycleFulfilled = (EVTSUB_NO_DEMAND_MASK != currTrigger.DemandedEvtMask && currTrigger.DemandedEvtMask == currTrigger.FulfilledEvtMask);
 
-                if (TRIGGER_SPECIES_TIMED_WAVE_DOOR_1 == triggerConfig.SpeciesId) {
+                if (TRIGGER_SPECIES_TIMED_WAVE_DOOR_1 == triggerConfig.SpeciesId || TRIGGER_SPECIES_TIMED_WAVE_PICKABLE_DROPPER == triggerConfig.SpeciesId) {
                     if (0 >= currTrigger.FramesToRecover) {
                         if (EVTSUB_NO_DEMAND_MASK == currTrigger.DemandedEvtMask) {
                             // If the TimedWaveDoor doesn't subscribe to any other trigger, it should just tick on its own
@@ -397,7 +398,7 @@ namespace shared {
                             }
                             // The exhaust should still be triggered by NPC-killed
                         } else {
-                            if (currTrigger.ConfigFromTiled.QuotaCap > currTrigger.Quota && 0 < currTrigger.Quota) {
+                            if (triggerConfigFromTiled.QuotaCap > currTrigger.Quota && 0 < currTrigger.Quota) {
                                 // If the TimedWaveDoor subscribes to any other trigger, it should ONLY respect that for the initial firing, the rest firings should still be done by ticking on its own
                                 mainCycleFulfilled = true;
                             }
@@ -429,19 +430,19 @@ namespace shared {
                                 triggerInNextFrame.Quota = 0;
                                 triggerInNextFrame.FramesToRecover = MAX_INT;
                                 triggerInNextFrame.FramesToFire = MAX_INT;
-                                justTriggeredBgmId = triggerInNextFrame.ConfigFromTiled.BgmId;
+                                justTriggeredBgmId = triggerConfigFromTiled.BgmId;
                                 fulfilledTriggerSetMask |= (1UL << (triggerInNextFrame.TriggerLocalId - 1));
-                                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, logger);
+                                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, triggerEditorIdToTiledConfig, logger);
                                 //logger.LogInfo(String.Format("@rdfId={0}, one-off trigger editor id = {1}, local id = {2} is fulfilled", currRenderFrame.Id, triggerInNextFrame.EditorId ,triggerInNextFrame.TriggerLocalId));
-                                if (0 != currTrigger.ConfigFromTiled.NewRevivalX || 0 != currTrigger.ConfigFromTiled.NewRevivalY) {
+                                if (0 != triggerConfigFromTiled.NewRevivalX || 0 != triggerConfigFromTiled.NewRevivalY) {
                                     if (0 < currTrigger.OffenderJoinIndex && currTrigger.OffenderJoinIndex <= roomCapacity) {
                                         var thatCharacterInNextFrame = nextRenderFrame.PlayersArr[currTrigger.OffenderJoinIndex - 1];
-                                        thatCharacterInNextFrame.RevivalVirtualGridX = currTrigger.ConfigFromTiled.NewRevivalX;
-                                        thatCharacterInNextFrame.RevivalVirtualGridY = currTrigger.ConfigFromTiled.NewRevivalY;
+                                        thatCharacterInNextFrame.RevivalVirtualGridX = triggerConfigFromTiled.NewRevivalX;
+                                        thatCharacterInNextFrame.RevivalVirtualGridY = triggerConfigFromTiled.NewRevivalY;
                                     } else if (1 == roomCapacity) {
                                         var thatCharacterInNextFrame = nextRenderFrame.PlayersArr[0];
-                                        thatCharacterInNextFrame.RevivalVirtualGridX = currTrigger.ConfigFromTiled.NewRevivalX;
-                                        thatCharacterInNextFrame.RevivalVirtualGridY = currTrigger.ConfigFromTiled.NewRevivalY;
+                                        thatCharacterInNextFrame.RevivalVirtualGridX = triggerConfigFromTiled.NewRevivalX;
+                                        thatCharacterInNextFrame.RevivalVirtualGridY = triggerConfigFromTiled.NewRevivalY;
                                     }
                                 }   
                             }
@@ -452,15 +453,15 @@ namespace shared {
                             if (0 < currTrigger.Quota) {
                                 triggerInNextFrame.FramesToRecover = DEFAULT_FRAMES_DELAYED_OF_BOSS_SAVEPOINT;
                                 triggerInNextFrame.FramesToFire = MAX_INT;
-                                if (0 != currTrigger.ConfigFromTiled.NewRevivalX || 0 != currTrigger.ConfigFromTiled.NewRevivalY) {
+                                if (0 != triggerConfigFromTiled.NewRevivalX || 0 != triggerConfigFromTiled.NewRevivalY) {
                                     if (0 < currTrigger.OffenderJoinIndex && currTrigger.OffenderJoinIndex <= roomCapacity) {
                                         var thatCharacterInNextFrame = nextRenderFrame.PlayersArr[currTrigger.OffenderJoinIndex - 1];
-                                        thatCharacterInNextFrame.RevivalVirtualGridX = currTrigger.ConfigFromTiled.NewRevivalX;
-                                        thatCharacterInNextFrame.RevivalVirtualGridY = currTrigger.ConfigFromTiled.NewRevivalY;
+                                        thatCharacterInNextFrame.RevivalVirtualGridX = triggerConfigFromTiled.NewRevivalX;
+                                        thatCharacterInNextFrame.RevivalVirtualGridY = triggerConfigFromTiled.NewRevivalY;
                                     } else if (1 == roomCapacity) {
                                         var thatCharacterInNextFrame = nextRenderFrame.PlayersArr[0];
-                                        thatCharacterInNextFrame.RevivalVirtualGridX = currTrigger.ConfigFromTiled.NewRevivalX;
-                                        thatCharacterInNextFrame.RevivalVirtualGridY = currTrigger.ConfigFromTiled.NewRevivalY;
+                                        thatCharacterInNextFrame.RevivalVirtualGridX = triggerConfigFromTiled.NewRevivalX;
+                                        thatCharacterInNextFrame.RevivalVirtualGridY = triggerConfigFromTiled.NewRevivalY;
                                     }
                                 }   
                             }
@@ -480,10 +481,10 @@ namespace shared {
                             triggerInNextFrame.FramesInState = 0;
                             triggerInNextFrame.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
                             triggerInNextFrame.Quota = currTrigger.Quota - 1;
-                            triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                            triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;
+                            triggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                            triggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
                             fulfilledTriggerSetMask |= (1UL << (triggerInNextFrame.TriggerLocalId - 1));
-                            _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, logger);
+                            _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, triggerEditorIdToTiledConfig, logger);
                             //logger.LogInfo(String.Format("@rdfId={0}, switch trigger editor id = {1}, local id = {2} is fulfilled", currRenderFrame.Id, triggerInNextFrame.EditorId ,triggerInNextFrame.TriggerLocalId));
                         }
                     } else if (0 == currTrigger.FramesToRecover) {
@@ -499,39 +500,64 @@ namespace shared {
                     if (mainCycleFulfilled) {
                         if (0 < currTrigger.Quota) {
                             triggerInNextFrame.Quota = currTrigger.Quota - 1;
-                            triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                            triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;
-                            justTriggeredStoryPointId = triggerInNextFrame.ConfigFromTiled.StoryPointId;
-                            justTriggeredBgmId = triggerInNextFrame.ConfigFromTiled.BgmId;
+                            triggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                            triggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
+                            justTriggeredStoryPointId = triggerConfigFromTiled.StoryPointId;
+                            justTriggeredBgmId = triggerConfigFromTiled.BgmId;
                             fulfilledTriggerSetMask |= (1UL << (triggerInNextFrame.TriggerLocalId - 1));
                             //logger.LogInfo(String.Format("@rdfId={0}, story point trigger editor id = {1}, local id = {2} is fulfilled", currRenderFrame.Id, triggerInNextFrame.EditorId ,triggerInNextFrame.TriggerLocalId));
+                        }
+                    }
+                break;
+                case TRIGGER_SPECIES_TIMED_WAVE_PICKABLE_DROPPER:
+                    if (subCycleFulfilled) {
+                        int pickableSpawnerConfigIdx = triggerConfigFromTiled.QuotaCap - currTrigger.Quota;
+                        var pickableSpawnerConfig = lowerBoundForPickableSpawnerConfig(pickableSpawnerConfigIdx, triggerConfigFromTiled.PickableSpawnerTimeSeq, logger);
+                        fireTriggerPickableSpawning(currRenderFrame, currTrigger, triggerInNextFrame, ref pickableLocalIdCounter, ref nextRdfPickableCnt, nextRenderFramePickables, decodedInputHolder, pickableSpawnerConfig, triggerEditorIdToTiledConfig, logger);
+                    } else if (mainCycleFulfilled) {
+                        if (0 < currTrigger.Quota) {
+                            triggerInNextFrame.Quota = currTrigger.Quota - 1;
+                            triggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                            triggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
+                            triggerInNextFrame.SubCycleQuotaLeft = triggerConfigFromTiled.SubCycleQuota;
+                            fulfilledTriggerSetMask |= (1UL << (triggerInNextFrame.TriggerLocalId - 1));
+                        } else if (0 == currTrigger.Quota) {
+                            // Set to exhausted
+                            triggerInNextFrame.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
+                            triggerInNextFrame.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
+                        }
+                    } else if (0 == currTrigger.FramesToRecover) {
+                        // replenish upon mainCycle ends, but "false == mainCycleFulfilled"
+                        if (0 < currTrigger.Quota) {
+                            triggerInNextFrame.State = TriggerState.Tready;
+                            triggerInNextFrame.FramesInState = 0;
                         }
                     }
                 break;
                 case TRIGGER_SPECIES_TIMED_WAVE_DOOR_1:
                 case TRIGGER_SPECIES_INDI_WAVE_DOOR_1:
                 case TRIGGER_SPECIES_SYNC_WAVE_DOOR_1:
-                    var firstSubscribesToTriggerEditorId = (0 >= currTrigger.ConfigFromTiled.SubscribesToIdList.Count ? TERMINATING_EVTSUB_ID_INT : currTrigger.ConfigFromTiled.SubscribesToIdList[0]);
+                    var firstSubscribesToTriggerEditorId = (0 >= triggerConfigFromTiled.SubscribesToIdList.Count ? TERMINATING_EVTSUB_ID_INT : triggerConfigFromTiled.SubscribesToIdList[0]);
                     var subscribesToTriggerInNextFrame = (TERMINATING_EVTSUB_ID_INT == firstSubscribesToTriggerEditorId ? null : nextRenderFrameTriggers[triggerEditorIdToLocalId[firstSubscribesToTriggerEditorId] - 1]);
                     var npcKilledReceptionTriggerInNextFrame = ((TRIGGER_SPECIES_INDI_WAVE_DOOR_1 == triggerConfig.SpeciesId || TRIGGER_SPECIES_TIMED_WAVE_DOOR_1 == triggerConfig.SpeciesId) ? triggerInNextFrame : subscribesToTriggerInNextFrame);
 
                     if (subCycleFulfilled) {
                         // [WARNING] The information of "justFulfilled" will be lost after then just-fulfilled renderFrame, thus temporarily using "FramesToFire" to keep track of subsequent spawning
-                        int chSpawnerConfigIdx = currTrigger.ConfigFromTiled.QuotaCap - currTrigger.Quota;
-                        var chSpawnerConfig = lowerBoundForSpawnerConfig(chSpawnerConfigIdx, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq);
-                        fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerInNextFrame, decodedInputHolder, chSpawnerConfig, logger);
+                        int chSpawnerConfigIdx = triggerConfigFromTiled.QuotaCap - currTrigger.Quota;
+                        var chSpawnerConfig = lowerBoundForSpawnerConfig(chSpawnerConfigIdx, triggerConfigFromTiled.CharacterSpawnerTimeSeq);
+                        fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerInNextFrame, decodedInputHolder, chSpawnerConfig, triggerEditorIdToTiledConfig, logger);
                     } else if (mainCycleFulfilled) {
                         if (0 < currTrigger.Quota) {
                             triggerInNextFrame.Quota = currTrigger.Quota - 1;
-                            triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                            triggerInNextFrame.FramesToFire = currTrigger.ConfigFromTiled.DelayedFrames;
-                            int chSpawnerConfigIdx = currTrigger.ConfigFromTiled.QuotaCap - triggerInNextFrame.Quota;
-                            var chSpawnerConfig = lowerBoundForSpawnerConfig(chSpawnerConfigIdx, currTrigger.ConfigFromTiled.CharacterSpawnerTimeSeq);
-                            int nextWaveNpcCnt = (chSpawnerConfig.SpeciesIdList.Count < currTrigger.ConfigFromTiled.SubCycleQuota ? chSpawnerConfig.SpeciesIdList.Count : currTrigger.ConfigFromTiled.SubCycleQuota);
-                            triggerInNextFrame.SubCycleQuotaLeft = currTrigger.ConfigFromTiled.SubCycleQuota;
-                            if (TRIGGER_SPECIES_TIMED_WAVE_DOOR_1 == currTrigger.ConfigFromTiled.SpeciesId) {
+                            triggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                            triggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
+                            int chSpawnerConfigIdx = triggerConfigFromTiled.QuotaCap - triggerInNextFrame.Quota;
+                            var chSpawnerConfig = lowerBoundForSpawnerConfig(chSpawnerConfigIdx, triggerConfigFromTiled.CharacterSpawnerTimeSeq);
+                            int nextWaveNpcCnt = (chSpawnerConfig.SpeciesIdList.Count < triggerConfigFromTiled.SubCycleQuota ? chSpawnerConfig.SpeciesIdList.Count : triggerConfigFromTiled.SubCycleQuota);
+                            triggerInNextFrame.SubCycleQuotaLeft = triggerConfigFromTiled.SubCycleQuota;
+                            if (TRIGGER_SPECIES_TIMED_WAVE_DOOR_1 == triggerConfigFromTiled.SpeciesId) {
                                 // [WARNING] For exhaustion of a TimedWaveDoor, we required all spawned NPC-killed
-                                if (currTrigger.Quota == currTrigger.ConfigFromTiled.QuotaCap) {
+                                if (currTrigger.Quota == triggerConfigFromTiled.QuotaCap) {
                                     triggerInNextFrame.WaveNpcKilledEvtMaskCounter = 1UL;
                                     triggerInNextFrame.DemandedEvtMask = (1UL << nextWaveNpcCnt) - 1; 
                                     //logger.LogInfo(String.Format("@rdfId={0}, {10} editor id = {1} INITIAL mainCycleFulfilled, local id = {2}, of next frame:: demandedEvtMask = {3}, fulfilledEvtMask = {4}, waveNpcKilledEvtMaskCounter = {5}, quota = {6}, subCycleQuota = {7}, framesToRecover = {8}, framesToFire = {9}", currRenderFrame.Id, triggerInNextFrame.EditorId, triggerInNextFrame.TriggerLocalId, triggerInNextFrame.DemandedEvtMask, triggerInNextFrame.FulfilledEvtMask, triggerInNextFrame.WaveNpcKilledEvtMaskCounter, triggerInNextFrame.Quota, triggerInNextFrame.SubCycleQuotaLeft, triggerInNextFrame.FramesToRecover, triggerInNextFrame.FramesToFire, currTrigger.Config.SpeciesName));
@@ -560,7 +586,7 @@ namespace shared {
                                 // [WARNING] Whenever a single NPC wave door is subscribing to any group trigger, ignore its exhaust subscribers, i.e. exhaust subscribers should respect the group trigger instead!
                                 subscribesToTriggerInNextFrame.FulfilledEvtMask |= (1UL << (currTrigger.TriggerLocalId-1));
                             } else {
-                                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, true, logger);
+                                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, true, triggerEditorIdToTiledConfig, logger);
                             }
                         }
                     } else if (0 == currTrigger.FramesToRecover) {
@@ -576,8 +602,8 @@ namespace shared {
                     if (mainCycleFulfilled) {
                         if (0 < currTrigger.Quota) {
                             triggerInNextFrame.Quota = currTrigger.Quota - 1;
-                            triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
-                            _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, logger); 
+                            triggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                            _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, triggerEditorIdToTiledConfig, logger); 
                             // Special handling, reverse subscription and repurpose evt mask fields. 
                             triggerInNextFrame.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
                             triggerInNextFrame.DemandedEvtMask = triggerInNextFrame.SubscriberLocalIdsMask;
@@ -589,7 +615,7 @@ namespace shared {
                             //logger.LogInfo(String.Format("@rdfId={0}, {3} editor id = {1}, local id = {2} is exhausted", currRenderFrame.Id, triggerInNextFrame.EditorId ,triggerInNextFrame.TriggerLocalId, currTrigger.Config.SpeciesName));
                             triggerInNextFrame.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
                             triggerInNextFrame.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
-                            _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, true, logger);
+                            _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, true, triggerEditorIdToTiledConfig, logger);
                         }
                     }
                 break;
@@ -598,9 +624,9 @@ namespace shared {
                         if (mainCycleFulfilled) {
                             if (0 < currTrigger.Quota) {
                                 triggerInNextFrame.Quota = currTrigger.Quota - 1;
-                                triggerInNextFrame.FramesToRecover = currTrigger.ConfigFromTiled.RecoveryFrames;
+                                triggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
                                 triggerInNextFrame.WaveNpcKilledEvtMaskCounter = 1UL;
-                                int nextWaveNpcCnt = _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, true, false, logger); 
+                                int nextWaveNpcCnt = _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, true, false, triggerEditorIdToTiledConfig, logger); 
                                 triggerInNextFrame.DemandedEvtMask = (1UL << nextWaveNpcCnt) - 1;
                                 // Special handling, reverse subscription and repurpose evt mask fields. 
                                 triggerInNextFrame.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
@@ -611,7 +637,7 @@ namespace shared {
                                 //logger.LogInfo(String.Format("@rdfId={0}, {1} editor id = {2}, local id = {3} is exhausted", currRenderFrame.Id, currTrigger.Config.SpeciesName, triggerInNextFrame.EditorId, triggerInNextFrame.TriggerLocalId));
                                 triggerInNextFrame.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
                                 triggerInNextFrame.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
-                                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, true, logger);
+                                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, true, triggerEditorIdToTiledConfig, logger);
                             }
                         }
                         break;
@@ -699,6 +725,25 @@ namespace shared {
             }            
         }
 
+        private static PickableSpawnerConfig lowerBoundForPickableSpawnerConfig(int rdfId, RepeatedField<PickableSpawnerConfig> pickableSpawnerTimeSeq, ILoggerBridge logger) {
+            int l = 0, r = pickableSpawnerTimeSeq.Count;
+            //logger.LogInfo("lowerBoundForSpawnerConfig#1, l=0, r=" + r);
+            while (l < r) {
+                int m = ((l + r) >> 1);
+                var cand = pickableSpawnerTimeSeq[m]; 
+                if (cand.CutoffRdfFrameId == rdfId) {
+                    return cand; 
+                } else if (cand.CutoffRdfFrameId < rdfId) {
+                    l = m+1;
+                } else {
+                    r = m;
+                }
+            }
+            //logger.LogInfo("lowerBoundForSpawnerConfig#2, l=0, r=" + r);
+            if (l >= pickableSpawnerTimeSeq.Count) l = pickableSpawnerTimeSeq.Count-1; 
+            return pickableSpawnerTimeSeq[l]; 
+        }
+
         private static CharacterSpawnerConfig lowerBoundForSpawnerConfig(int rdfId, RepeatedField<CharacterSpawnerConfig> characterSpawnerTimeSeq) {
             int l = 0, r = characterSpawnerTimeSeq.Count;
             while (l < r) {
@@ -716,13 +761,14 @@ namespace shared {
             return characterSpawnerTimeSeq[l]; 
         }
 
-        private static void fireTriggerSpawning(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, Trigger? npcKilledReceptionTriggerInNextFrame, InputFrameDecoded decodedInputHolder, CharacterSpawnerConfig chSpawnerConfig, ILoggerBridge logger) {
+        private static void fireTriggerSpawning(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, Trigger? npcKilledReceptionTriggerInNextFrame, InputFrameDecoded decodedInputHolder, CharacterSpawnerConfig chSpawnerConfig, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
             if (0 < currTrigger.SubCycleQuotaLeft) {
                 triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1;
                 var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList;
                 var initOpList = chSpawnerConfig.InitOpList;
                 if (0 < spawnerSpeciesIdList.Count) {
-                    int idx = currTrigger.ConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
+                    var triggerConfigFromTiled = triggerEditorIdToTiledConfig[currTrigger.EditorId];
+                    int idx = triggerConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
                     if (idx < 0 || idx >= spawnerSpeciesIdList.Count) return;
                     if (idx < 0) idx = 0;
                     if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;
@@ -734,7 +780,7 @@ namespace shared {
                     if (addNewNpcToNextFrame(currRenderFrame.Id, currTrigger.VirtualGridX, currTrigger.VirtualGridY, decodedInputHolder.Dx, decodedInputHolder.Dy, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerLocalIdInNextFrame, npcKilledEvtMask, TERMINATING_TRIGGER_ID)) {
                         triggerInNextFrame.State = TriggerState.TcoolingDown;
                         triggerInNextFrame.FramesInState = 0;
-                        triggerInNextFrame.FramesToFire = triggerInNextFrame.ConfigFromTiled.SubCycleTriggerFrames;
+                        triggerInNextFrame.FramesToFire = triggerConfigFromTiled.SubCycleTriggerFrames;
                         if (null != npcKilledReceptionTriggerInNextFrame) {
                             npcKilledReceptionTriggerInNextFrame.WaveNpcKilledEvtMaskCounter <<= 1;
                         }
@@ -752,7 +798,39 @@ namespace shared {
             }
         }
 
-        private static int _notifySubscriberTriggers(int currRdfId, Trigger firingTrigger, RepeatedField<Trigger> nextRenderFrameTriggers, bool providesSyncWaveNpcCnt, bool forExhaustion, ILoggerBridge logger) {
+        private static void fireTriggerPickableSpawning(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, ref int pickableLocalIdCounter, ref int nextRdfPickableCnt, RepeatedField<Pickable> nextRenderFramePickables, InputFrameDecoded decodedInputHolder, PickableSpawnerConfig pickableSpawnerConfig, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
+            if (0 < currTrigger.SubCycleQuotaLeft) {
+                triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1;
+                var spawnerSpeciesIdList = pickableSpawnerConfig.SpeciesIdList;
+                var initOpList = pickableSpawnerConfig.InitOpList;
+                var pickupTypeList = pickableSpawnerConfig.PickupTypeList;
+                if (0 < spawnerSpeciesIdList.Count) {
+                    var triggerConfigFromTiled = triggerEditorIdToTiledConfig[currTrigger.EditorId];
+                    int idx = triggerConfigFromTiled.SubCycleQuota - triggerInNextFrame.SubCycleQuotaLeft -1;
+                    if (idx < 0 || idx >= spawnerSpeciesIdList.Count) return;
+                    if (idx < 0) idx = 0;
+                    if (idx >= spawnerSpeciesIdList.Count) idx = spawnerSpeciesIdList.Count-1;
+
+                    DecodeInput(initOpList[idx], decodedInputHolder);
+                    PickupType pkType = pickupTypeList[idx];
+
+                    uint consumableSpeciesId = (PickupType.Immediate == pkType ? spawnerSpeciesIdList[idx] : TERMINATING_CONSUMABLE_SPECIES_ID);
+                    uint buffSpeciesId = TERMINATING_BUFF_SPECIES_ID;
+                    uint skillId = (PickupType.PutIntoInventory == pkType ? spawnerSpeciesIdList[idx] : NO_SKILL);
+                    addNewPickableToNextFrame(currRenderFrame.Id, currTrigger.VirtualGridX, currTrigger.VirtualGridY, decodedInputHolder.Dx, decodedInputHolder.Dy, MAX_INT, 0, true, MAX_UINT, MAX_UINT, pkType, 1, nextRenderFramePickables, consumableSpeciesId, buffSpeciesId, skillId, ref pickableLocalIdCounter, ref nextRdfPickableCnt);
+
+                    triggerInNextFrame.State = TriggerState.TcoolingDown;
+                    triggerInNextFrame.FramesInState = 0;
+                    triggerInNextFrame.FramesToFire = triggerConfigFromTiled.SubCycleTriggerFrames;
+                }
+            } else {
+                // Wait for "FramesToRecover" to become 0
+                triggerInNextFrame.State = TriggerState.Tready;
+                triggerInNextFrame.FramesToFire = MAX_INT;
+            }
+        }
+
+        private static int _notifySubscriberTriggers(int currRdfId, Trigger firingTrigger, RepeatedField<Trigger> nextRenderFrameTriggers, bool providesSyncWaveNpcCnt, bool forExhaustion, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
             int nextWaveNpcCnt = 0;
             int subscriberTriggerLocalId = 1;
             ulong targetMask = forExhaustion ? firingTrigger.ExhaustSubscriberLocalIdsMask : firingTrigger.SubscriberLocalIdsMask;
@@ -764,9 +842,11 @@ namespace shared {
                     if (forExhaustion) {
                         subscriberTriggerInNextFrame.OffenderJoinIndex = firingTrigger.OffenderJoinIndex;
                         subscriberTriggerInNextFrame.OffenderBulletTeamId = firingTrigger.OffenderBulletTeamId;
-                        if (EVTSUB_NO_DEMAND_MASK != firingTrigger.ConfigFromTiled.PublishingEvtMaskUponExhausted) {         
-                            subscriberTriggerInNextFrame.FulfilledEvtMask |= firingTrigger.ConfigFromTiled.PublishingEvtMaskUponExhausted;
-                            //logger.LogInfo(String.Format("@rdfId={0}, {1} editor id = {2}, local id = {3} published exhausted evt mask = {4} to {5}", currRdfId, firingTrigger.Config.SpeciesName, firingTrigger.EditorId, firingTrigger.TriggerLocalId, firingTrigger.ConfigFromTiled.PublishingEvtMaskUponExhausted, subscriberTriggerInNextFrame));
+                        var firingTriggerConfigFromTiled = triggerEditorIdToTiledConfig[firingTrigger.EditorId];
+                        if (EVTSUB_NO_DEMAND_MASK != firingTriggerConfigFromTiled.PublishingEvtMaskUponExhausted) {         
+                            subscriberTriggerInNextFrame.FulfilledEvtMask |= firingTriggerConfigFromTiled.PublishingEvtMaskUponExhausted;
+                            //var firingTriggerConfig = triggerConfigs[firingTriggerConfigFromTiled.SpeciesId];
+                            //logger.LogInfo(String.Format("@rdfId={0}, {1} editor id = {2}, local id = {3} published exhausted evt mask = {4} to {5}", currRdfId, firingTriggerConfig.SpeciesName, firingTrigger.EditorId, firingTrigger.TriggerLocalId, firingTriggerConfigFromTiled.PublishingEvtMaskUponExhausted, subscriberTriggerInNextFrame));
                         } else {
                             subscriberTriggerInNextFrame.FulfilledEvtMask = subscriberTriggerInNextFrame.DemandedEvtMask;
                         }
@@ -775,9 +855,10 @@ namespace shared {
                         if (providesSyncWaveNpcCnt) {
                             if (0 < subscriberTriggerInNextFrame.Quota) {
                                 subscriberTriggerInNextFrame.FulfilledEvtMask = subscriberTriggerInNextFrame.DemandedEvtMask;
-                                int chSpawnerConfigIdx = subscriberTriggerInNextFrame.ConfigFromTiled.QuotaCap - subscriberTriggerInNextFrame.Quota + 1;
-                                var chSpawnerConfig = lowerBoundForSpawnerConfig(chSpawnerConfigIdx, subscriberTriggerInNextFrame.ConfigFromTiled.CharacterSpawnerTimeSeq);
-                                nextWaveNpcCnt += (chSpawnerConfig.SpeciesIdList.Count < subscriberTriggerInNextFrame.ConfigFromTiled.SubCycleQuota ? chSpawnerConfig.SpeciesIdList.Count : subscriberTriggerInNextFrame.ConfigFromTiled.SubCycleQuota);
+                                var subscriberTriggerConfigFromTiled = triggerEditorIdToTiledConfig[subscriberTriggerInNextFrame.EditorId];
+                                int chSpawnerConfigIdx = subscriberTriggerConfigFromTiled.QuotaCap - subscriberTriggerInNextFrame.Quota + 1;
+                                var chSpawnerConfig = lowerBoundForSpawnerConfig(chSpawnerConfigIdx, subscriberTriggerConfigFromTiled.CharacterSpawnerTimeSeq);
+                                nextWaveNpcCnt += (chSpawnerConfig.SpeciesIdList.Count < subscriberTriggerConfigFromTiled.SubCycleQuota ? chSpawnerConfig.SpeciesIdList.Count : subscriberTriggerConfigFromTiled.SubCycleQuota);
                             }
                         } else {
                             // Not checking quota, "subscriberTriggerInNextFrame" can be triggered for exhaustion 

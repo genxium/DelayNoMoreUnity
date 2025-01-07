@@ -1,11 +1,12 @@
 # Latest tag change notes
-v2.0.9 new features
+v2.1.0 new features
 - Added back transformation buff.
 - Added support for Atk+InvSlotC input pattern.
 - Added BomberGoblin and SpearWoman.
 - Added self-hpbar and gauge interpolation.
 - Added boss-hpbar for story mode.
 - Added dedicated dash button.
+- Added timed wave pickable dropper.
 
 v2.0.4 new features
 - Enhanced timed-bomb implementation.

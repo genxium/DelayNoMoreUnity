@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="42" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="770">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="42" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="771">
  <properties>
   <property name="MatchInOrder" value="true"/>
-  <property name="battleDurationSeconds" value="180"/>
+  <property name="battleDurationSeconds" value="181"/>
   <property name="levelId" value="4"/>
   <property name="missionEvtSubId" value="5"/>
   <property name="npcPreallocCapDict" value="4104:4;16:4;4097:8;4098:6;4099:4;4100:4;4096:2;4101:2;4102:4;4103:6;4105:2;4108:8;4109:6;4106:6;4110:4;4111:2;4112:2;4107:2"/>
@@ -46,7 +46,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztXEtOwzAUzEd8jkA/gjOkwBGAXY8A7LiGb8GxgCU3AFaIJWx4UVuUOqap/Z7rl3RGGjlqa+fJnkzGjZRRmWVj4oQ4YnDM7E80VIOhcUx9fLJgdg2yuJrH1RopWOe/OqbEGfGceLE8DuU5sz/RUA2GxjH1cQX9iemv0rXOf3Vclqqui5b/VQrWr++slPuforrgfxHo8j/obzv/g/5k9KfZ/xTlgpb/ce+/30WW3ZX95k/Bm4MK+S+Z/90Q+44r5hxo979UddnXxChC/oP+0uc/xzpH0V/XuUP8j3v/hf7k978C6/yv/rj3dbueTdfBNvlvXvKy0/0A9HfLnIO5cP7jrvMu/c+TLf97zVOvfv9Bcxjd/3ypVX+2/31Bf2zQHIrmP2n9TS3f6eKswW1+70Pb/+r7L8DDXHn+s/U366BLiy5thtD2vwfoj40H5fnP1/9iEv4nj134ny+16g/+Jw+X//VZf8h//QLyH/JfSiD/wf9SAvkP+S8lhpb/YhL+Jw/t/qeoLjz/EMZnjucf8L+0wP4X+9+UwP4X/pcS2vOfJv3B/+QxtP0v8l+/gPyH/JcSyH/wv5RA/kP+S4mh5b+YhP/JQ7v/XVq+E6Ibqf0I/E8eMfzPZ6/h6tt8/wH8b9jQ7n+a9Af/k8c+5D8p/cL/5BHD/7jjaNUf/E8eMfxvqPpz+d9zvs6nZfuSt78LofR4IaRzG2rN06LtrNWnfvgfz//e83W+LduPvP1dFw+KLDskPgrwlHgmNFbNI+Jxsbn+tw2f/TcfQ/M/17O4WP5XX7dFsc582ZZF+7sQho630p9EDXRuQ63JF21nrT71S7//zzUO5/mv/f9fyPNfn/4+z3/r63ZcLDghTq3jyZacNvpKjDdp6M+nz4b6DLWGajHNY1etvvVLv//UNU5TWz79pf7/g//tt//t8v7r+m2s/Af/i+N/MfTno8mm/n4BqTKFCA==
+   eJztXEtu2zAU1AdNe4T6g/QMcpIjtN35CEl32XeXHW/RY6Vd5gZJVkWX7aZPsB3IFGOZfO+ZT8oMMKBgm9QDORoNLUCzuijmxAVxxuCc2Z/oqAZH47j2+OOGxReQxd087tbIwDq/1LEkrogXxMvtcSovmP2JjmpwNI5rjxvoT0x/ja11fqnjqjZ1XfT8rzGwfmNnY9z/DNUF/1NgyP+gv+P8D/qT0Z9l/zOUC3r+x73//q2K4qYeN/9VvDlokP+y+d9Xoha+n+mN3cVn5hxY979cdfnXxEwh/2nq725E+suZ/wLrrKK/oXOn+B/3/qupPzcS/UnvfwXW+VX9ce/rfj2HroNj8t+65mWnb4r6OxWumXOwFs5/3HU+pf9Fsud/D2Xu1R8/aA7V/S+WVvXn+98f6I8NmkPR/Cetv6XnO0NcdXjM72Po+197/wV4WBvPf77+VgMMaTGkzRT6/ncL/bFxazz/xfqfJuF/8jiF/8XSqv7gf/II+d+Y9Yf8Ny4g/yH/5QTyH/wvJ5D/kP9yYmr5T5PwP3lY9z9DdeH5hzB+l3j+Af/LC+x/sf/NCex/4X85YT3/WdIf/E8eU9v/Iv+NC8h/yH85gfwH/8sJ5D/kv5yYWv7TJPxPHtb978rznRTdSO1H4H/y0PC/mL1GqG/3/Qfwv2nDuv9Z0h/8Tx5vIf9J6Rf+Jw8N/+OOY1V/8D95aPjfVPUX8r+f5T7vt+2vsv9dCqXHSyGd21Hr7jftYK0x9cP/eP73VO7zcds+l/3vhviuKooz4g8BnhM/CY3V8j3xQ3W4/scDn702H1Pzv9CzOC3/a6/bqtpnuW3rqv9dClPH2+lPogY6t6PWlZt2sNaY+qXf/xcah/P81///L+X5b0z/mOe/7XU7rzZcEJfe8eJILjt9JcZbdPQX0+dAfY5aR7W47nGo1tj6pd9/Ghqnq62Y/lL//8H/3rb/nfL+G/qtVv6D/+n4n4b+YjTZ1d9/9siGhQ==
   </data>
  </layer>
  <layer id="198" name="Ground1" width="160" height="42">
@@ -54,7 +54,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1MEJACAMA8CCS+gYOqGj2wV8F/EO8s8jJAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOButNg9U92DP63c3rQ/ivg/Kr3wfwfjugVB
+   eJzt1MEJgEAQA8AF4WrQMrQe9aP2YenuxxpWuRnIP4+QCAAAAAAAXmuL2DJ7q25Cj47c3Zm57A8AAAAAAAAAAAAAAAAAAAAAAPiYaYh7zFT3oE9Lbm+2P4r4Pyr94f8eGacHqA==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -74,6 +74,19 @@
   </object>
  </objectgroup>
  <objectgroup id="13" name="TriggerPos">
+  <object id="770" name="PickableDropper" x="1256" y="153">
+   <properties>
+    <property name="delayedFrames" value="300"/>
+    <property name="id" value="13"/>
+    <property name="pickableSpawnerTimeSeq" value="1:1|5|Immediate,2|8|Immediate;2:2|5|Immediate,1|8|Immediate;3:3|5|Immediate,4|8|Immediate;4:4|5|Immediate,3|8|Immediate;5:1|5|PutIntoInventory,1|8|PutIntoInventory"/>
+    <property name="quota" value="5"/>
+    <property name="recoveryFrames" value="1500"/>
+    <property name="speciesId" value="14"/>
+    <property name="subCycleQuota" value="2"/>
+    <property name="subCycleTriggerFrames" value="80"/>
+   </properties>
+   <point/>
+  </object>
   <object id="746" name="IndiWaveDoor3-R" gid="2147483668" x="1536" y="208" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="2"/>
@@ -263,14 +276,14 @@
   <object id="647" gid="1601" x="1440" y="256" width="32" height="23">
    <properties>
     <property name="dirX" value="0"/>
-    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="killedToDropConsumableSpeciesId" value="2"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="648" gid="2147485249" x="1088" y="256" width="32" height="23">
    <properties>
     <property name="dirX" value="0"/>
-    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="killedToDropConsumableSpeciesId" value="2"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>

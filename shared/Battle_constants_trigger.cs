@@ -17,6 +17,8 @@ namespace shared {
         public const int TRIGGER_SPECIES_TIMED_WAVE_GROUP_TRIGGER_TRIVIAL = 12;
         public const int TRIGGER_SPECIES_TIMED_WAVE_GROUP_TRIGGER_MV = 13;
 
+        public const int TRIGGER_SPECIES_TIMED_WAVE_PICKABLE_DROPPER = 14;
+
         public const int TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL = 1024;
         public const int TRIGGER_SPECIES_NPC_AWAKER_MV = 1025;
         public const int TRIGGER_SPECIES_BOSS_SAVEPOINT = 1026;
@@ -99,6 +101,13 @@ namespace shared {
             CollisionTypeMask = COLLISION_TRIGGER_INDEX_PREFIX
         };
 
+        public static TriggerConfig TimedWavePickableDropper = new TriggerConfig {
+            SpeciesId = TRIGGER_SPECIES_TIMED_WAVE_PICKABLE_DROPPER,
+            SpeciesName = "TimedWavePickableDropper",
+            TriggerType = TriggerType.TtCyclicTimed,
+            CollisionTypeMask = COLLISION_NONE_INDEX
+        };
+
         public static TriggerConfig VictoryTriggerTrivial = new TriggerConfig {
             SpeciesId = TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL,
             SpeciesName = "VictoryTriggerTrivial",
@@ -137,6 +146,7 @@ namespace shared {
                     new KeyValuePair<int, TriggerConfig>(TimedWaveDoor1.SpeciesId, TimedWaveDoor1),
                     new KeyValuePair<int, TriggerConfig>(IndiWaveDoor1.SpeciesId, IndiWaveDoor1),
                     new KeyValuePair<int, TriggerConfig>(SyncWaveDoor1.SpeciesId, SyncWaveDoor1),
+                    new KeyValuePair<int, TriggerConfig>(TimedWavePickableDropper.SpeciesId, TimedWavePickableDropper),
                     new KeyValuePair<int, TriggerConfig>(IndiWaveGroupTriggerTrivial.SpeciesId, IndiWaveGroupTriggerTrivial),
                     new KeyValuePair<int, TriggerConfig>(IndiWaveGroupTriggerMv.SpeciesId, IndiWaveGroupTriggerMv),
                     new KeyValuePair<int, TriggerConfig>(SyncWaveGroupTriggerTrivial.SpeciesId, SyncWaveGroupTriggerTrivial),

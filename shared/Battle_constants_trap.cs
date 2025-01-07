@@ -12,6 +12,13 @@ namespace shared {
         3. It must have no vision, or use a Trigger to mimic one if needed. A movable vision implementation is reserved only for bullet and npc.
         4. It's indestructible -- which is imposed by the use of a static "trapLocalIdToColliderAttrs" in "Step(...)", a design legacy not easy to change for now, i.e. "_leftDestroyedTraps" needs a remap in "trapLocalIdToColliderAttrs" to work.   
         */
+        /*
+        [WORKAROUND@2025-01-06]
+        
+        There's a proposal to enable "_leftDestroyedTraps" by replacing "trapLocalIdToColliderAttrs" with "trapSpeciesIdToColliderAttrs" -- and yes it'll work for that purpose: "destructible trap". However this workaround would also disable the capability to configure different collider boxes for different trap instances of a same "trapSpeciesId", e.g. static spike-walls and conveyors of different lengths.
+
+        By the time of writing, mocking a "destructible trap" by a "bullet" or an "npc" works well for me.
+        */
         public static int MAGIC_FRAMES_FOR_TRAP_TO_WAIVE_PATROL_CUE = 45;
         public static TrapConfig TrapBarrier = new TrapConfig {
             SpeciesId = 1,

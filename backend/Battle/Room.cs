@@ -88,6 +88,7 @@ public class Room {
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
     protected Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs;
     protected Dictionary<int, int> triggerEditorIdToLocalId;
+    protected Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToConfigFromTiled;
     protected Dictionary<int, int> joinIndexRemap;
     protected HashSet<int> justDeadJoinIndices;
     protected ulong fulfilledTriggerSetMask;
@@ -186,6 +187,7 @@ public class Room {
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         trapLocalIdToColliderAttrs = new Dictionary<int, List<TrapColliderAttr>>();
         triggerEditorIdToLocalId = new Dictionary<int, int>();
+        triggerEditorIdToConfigFromTiled = new Dictionary<int, TriggerConfigFromTiled>();
         joinIndexRemap = new Dictionary<int, int>();
         justDeadJoinIndices = new HashSet<int>();
         fulfilledTriggerSetMask = 0;
@@ -562,7 +564,7 @@ public class Room {
 
                 //_logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync details: roomId={0}, selfParsedRdf={1}, serializedBarrierPolygons={2}", id, selfParsedRdf, serializedBarrierPolygons);
 
-                refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId);
+                refreshColliders(selfParsedRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId, ref triggerEditorIdToConfigFromTiled);
 
                 _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: Initialized renderBuffer by incoming startRdf for roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}, staticCollidersCnt={6}; now renderBuffer: {7}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount, staticCollidersCnt, renderBuffer.toSimpleStat());
             } else {
@@ -1707,7 +1709,7 @@ public class Room {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
             }
             bool selfNotEnoughMp = false;
-            Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadJoinIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, loggerBridge);
+            Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, triggerEditorIdToConfigFromTiled, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadJoinIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, loggerBridge);
             curDynamicsRenderFrameId++;
         }
     }
