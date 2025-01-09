@@ -412,7 +412,7 @@
   </object>
   <object id="406" gid="201" x="1488" y="672" width="32" height="32">
    <properties>
-    <property name="stockQuota" value="2"/>
+    <property name="stockQuota" value="1"/>
    </properties>
   </object>
  </objectgroup>

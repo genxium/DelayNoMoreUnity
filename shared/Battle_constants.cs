@@ -317,16 +317,24 @@ namespace shared {
             {-1, +1}, // 8
         };
 
+        public static HashSet<CharacterState> proactiveJumpingSet = new HashSet<CharacterState>() {
+            InAirIdle1ByJump,
+            InAirIdle1ByWallJump,
+            InAirIdle2ByJump,
+        };
+
         public static HashSet<CharacterState> inAirSet = new HashSet<CharacterState>() {
             InAirIdle1NoJump,
             InAirIdle1ByJump,
             InAirIdle1ByWallJump,
+            InAirIdle2ByJump,
             InAirAtk1,
             InAirAtk2,
             InAirAtked1,
             BlownUp1,
             OnWallIdle1,
             InAirWalking,
+            InAirWalkStopping,
             Dashing // Yes dashing is an InAir state even if you dashed on the ground :)
         };
 

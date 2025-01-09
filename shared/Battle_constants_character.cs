@@ -189,6 +189,12 @@ namespace shared {
                                 SkillId = NO_SKILL, // TODO: Remove this hardcoded "skillId"!
                             }
                         },
+                        LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
+                            new[]
+                            {
+                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 20)
+                            }
+                        ),
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_WITCHGIRL, new CharacterConfig {
@@ -1176,6 +1182,12 @@ namespace shared {
                         HasDimmedAnim = true,
                         TransformIntoSpeciesIdUponDeath = SPECIES_FIRESWORDMAN,
                         NpcPrioritizeBulletHandling = true,
+                        LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
+                            new[]
+                            {
+                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 20)
+                            }
+                        ),
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_FIRETOTEM, new CharacterConfig {

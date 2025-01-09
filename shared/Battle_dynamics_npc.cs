@@ -238,6 +238,7 @@ namespace shared {
                         }
                         */
                     } else if (!effInAir && canJumpWithinInertia && chConfig.HasDef1) {
+                        effectiveDx = 0;
                         effectiveDy = +2;
                         visionReaction = OPPONENT_REACTION_DEF1;
                     } else {
@@ -252,6 +253,7 @@ namespace shared {
                     if (OPPONENT_REACTION_USE_DRAGONPUNCH == visionReaction) {
                         patternId = PATTERN_UP_B;
                     } else if (!effInAir && canJumpWithinInertia && chConfig.HasDef1) {
+                        effectiveDx = 0;
                         effectiveDy = +2;
                         visionReaction = OPPONENT_REACTION_DEF1;
                     } else {
@@ -1040,7 +1042,7 @@ namespace shared {
                 thatCharacterInNextFrame.BtnBHoldingRdfCount = (PATTERN_HOLD_B == patternId ? currCharacterDownsync.BtnBHoldingRdfCount + 1 : 0);
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, chConfig, logger);
                 if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
-                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, usedSkill, skillConfig, logger); // TODO: When breaking free from a PatrolCue, an NPC often couldn't turn around from a cliff in time, thus using "shouldIgnoreInertia" temporarily
+                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, effDx, effDy, chConfig, true, usedSkill, skillConfig, logger); // TODO: When breaking free from a PatrolCue, an NPC often couldn't turn around from a cliff in time, thus using "shouldIgnoreInertia" temporarily
                 } else {
                     _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, usedSkill, skillConfig, logger);
                     if (PATTERN_ID_UNABLE_TO_OP != patternId && chConfig.AntiGravityWhenIdle && (Walking == thatCharacterInNextFrame.CharacterState || InAirWalking == thatCharacterInNextFrame.CharacterState) && chConfig.AntiGravityFramesLingering < thatCharacterInNextFrame.FramesInChState) {

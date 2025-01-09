@@ -219,7 +219,7 @@ namespace shared {
                 }
             } else if (decodedInputHolder.BtnALevel == prevDecodedInputHolder.BtnALevel && 0 < decodedInputHolder.BtnALevel) {
                 //logger.LogInfo("@currRdfId=" + currRenderFrame.Id + ", about to hold jumping at jumpHoldingRdfCnt=" + jumpHoldingRdfCnt + ", while currCharacterDownsync.ChState=" + currCharacterDownsync.CharacterState + ", currCharacterDownsync.JumpHoldingRdfCnt = " + currCharacterDownsync.JumpHoldingRdfCnt);
-                if (0 < currCharacterDownsync.JumpHoldingRdfCnt && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState)) {
+                if (0 < currCharacterDownsync.JumpHoldingRdfCnt && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
                     // [WARNING] Only proactive jumping support jump holding.
                     jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt+1;
                     if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= jumpHoldingRdfCnt) {
@@ -601,7 +601,7 @@ namespace shared {
                 }
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, chConfig, logger);
                 if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
-                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, skillConfig, logger);
+                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, effDx, effDy, chConfig, false, usedSkill, skillConfig, logger);
                 } else {
                     _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, skillConfig, logger);
                 }
@@ -659,7 +659,25 @@ namespace shared {
             }
         }
 
-        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
+        private static void _processInertiaWalkingHandleZeroEffDx(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDy, CharacterConfig chConfig) {
+            if (proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
+                // [WARNING] In general a character is not permitted to just stop velX during proactive jumping.
+                return;
+            }
+            thatCharacterInNextFrame.VelX = 0;
+            if (0 < currCharacterDownsync.FramesToRecover || currCharacterDownsync.InAir || !chConfig.HasDef1 || 0 >= effDy) {
+                return;
+            }
+
+            thatCharacterInNextFrame.CharacterState = Def1;
+            //logger.LogInfo(String.Format("@currRdfId={0}, ch.Id={1}, thatCharacterInNextFrame turned Def1", currRdfId, currCharacterDownsync.Id));
+
+            if (Def1 == currCharacterDownsync.CharacterState) return;
+            thatCharacterInNextFrame.FramesInChState = 0;
+            thatCharacterInNextFrame.RemainingDef1Quota = chConfig.DefaultDef1Quota;
+        }
+
+        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool effInAir, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
             if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) {
                 return;
             }
@@ -720,18 +738,7 @@ namespace shared {
                         }
                     } else {
                         // 0 == effDx
-                        if (!(InAirIdle2ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState)) {
-                            // [WARNING] In general a character is not permitted to just stop velX during proactive jumping.
-                            thatCharacterInNextFrame.VelX = 0;
-                            if (0 >= currCharacterDownsync.FramesToRecover && !currCharacterDownsync.InAir && chConfig.HasDef1 && 0 < effDy) {
-                                thatCharacterInNextFrame.CharacterState = Def1;
-                                //logger.LogInfo(String.Format("@currRdfId={0}, ch.Id={1}, thatCharacterInNextFrame turned Def1", currRdfId, currCharacterDownsync.Id));
-                                if (Def1 != currCharacterDownsync.CharacterState) {
-                                    thatCharacterInNextFrame.FramesInChState = 0;
-                                    thatCharacterInNextFrame.RemainingDef1Quota = chConfig.DefaultDef1Quota;
-                                }
-                            }
-                        }
+                        _processInertiaWalkingHandleZeroEffDx(currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig);
                     }
                 } else {
                     if (alignedWithInertia || withInertiaBreakingState || currBreakingFromInertia) {
@@ -756,18 +763,7 @@ namespace shared {
                             }
                         } else {
                             // 0 == effDx
-                            if (!(InAirIdle2ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState)) {
-                                // [WARNING] In general a character is not permitted to just stop velX during proactive jumping.
-                                thatCharacterInNextFrame.VelX = 0;
-                            }
-
-                            if (0 >= currCharacterDownsync.FramesToRecover && 0 < effDy && !currCharacterDownsync.InAir && chConfig.HasDef1) {
-                                thatCharacterInNextFrame.CharacterState = Def1;
-                                if (Def1 != currCharacterDownsync.CharacterState) {
-                                    thatCharacterInNextFrame.FramesInChState = 0;
-                                    thatCharacterInNextFrame.RemainingDef1Quota = chConfig.DefaultDef1Quota;
-                                }
-                            }
+                            _processInertiaWalkingHandleZeroEffDx(currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig);
                         }
                     } else if (currFreeFromInertia) {
                         if (exactTurningAround) {
@@ -2348,7 +2344,7 @@ namespace shared {
                 return (InAirIdle1ByJump == cd.CharacterState || InAirIdle1NoJump == cd.CharacterState || InAirWalking == cd.CharacterState) && (0 < cd.FramesToStartJump);
             }
 
-            return (InAirIdle1ByJump == cd.CharacterState || InAirIdle1ByWallJump == cd.CharacterState || InAirIdle2ByJump == cd.CharacterState) && (0 < cd.FramesToStartJump);
+            return proactiveJumpingSet.Contains(cd.CharacterState) && (0 < cd.FramesToStartJump);
         }
 
         public static bool isJumpStartupJustEnded(CharacterDownsync currCd, CharacterDownsync nextCd, CharacterConfig chConfig) {
