@@ -1,5 +1,5 @@
 # Latest tag change notes
-v2.1.0 new features
+v2.1.1 new features
 - Added back transformation buff.
 - Added support for Atk+InvSlotC input pattern.
 - Added BomberGoblin and SpearWoman.
@@ -7,6 +7,7 @@ v2.1.0 new features
 - Added boss-hpbar for story mode.
 - Added dedicated dash button.
 - Added timed wave pickable dropper.
+- Refactored MP regen scheme.
 
 v2.0.4 new features
 - Enhanced timed-bomb implementation.
@@ -23,7 +24,7 @@ v2.0.0 new features
 - Added render-only player position interpolation for smoother graphics during resync 
 - Added gauged inventory slot for super skills
 
-Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/REeWiIwxwKs)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
+Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/eBVAyxxELNk)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
 
 # What's this project?
 It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a Multiplayer Platformer game demo on websocket with delayed-input Rollback Netcode inspired by GGPO -- but with the backend also rebuilt in C#.

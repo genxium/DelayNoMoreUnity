@@ -404,6 +404,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (hasIncorrectlyPredictedRenderFrame) {
                 Debug.LogFormat("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i + 1);
             }
+            
+            if (selfNotEnoughMp) {
+                selfBattleHeading.BlinkMpNotEnough();
+            }
 
             if (frameLogEnabled) {
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();

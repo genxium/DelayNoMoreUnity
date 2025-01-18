@@ -21,7 +21,8 @@ namespace shared {
 
         public int Speed;
         public int DownSlopePrimerVelY; // this value should be big enough such that smooth transition is enabled for the steepest slope, but small enough such that no character would penetrate the thinnest barrier
-        public int MpRegenRate; // an integer for mp regeneration rate PER FRAME
+        public int MpRegenPerInterval;
+        public int MpRegenInterval; // an integer of RoomDownsyncFrame count
 
         public int JumpingInitVelY;
         public int InertiaFramesToRecover;
@@ -39,7 +40,12 @@ namespace shared {
 
         public bool UseInventoryBtnB;
 
-        // Collision boxes
+        /**
+         * Collision boxes
+         * 
+         * [TODO: Dynamic Hurtboxes]
+         * If a character is to possess multiple hurtboxes that undergo affine transforms (translate, rotate, scale) during certain (CharacterState, FramesInChState), we should assign a set of "initial hurtboxes @ CharacterState" as well as a set of "transformation matrices per frame @ CharacterState" in "CharacterConfig"; in "CharacterDownsync" we should also memorize "the set of currently accumulated transformation matrices for hurtboxes @ CharacterState" for fast calculation.  
+         */
         public int VisionOffsetX;
         public int VisionOffsetY;
         public int VisionSizeX;

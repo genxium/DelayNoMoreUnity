@@ -1587,7 +1587,7 @@ namespace shared {
             ActiveFrames = 480,
             HitStunFrames = 12,
             BlockStunFrames = 9,
-            Damage = 18,
+            Damage = 15,
             PushbackVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = 0,
@@ -1621,7 +1621,7 @@ namespace shared {
             RecoveryFrames = 32,
             RecoveryFramesOnBlock = 32,
             RecoveryFramesOnHit = 32,
-            MpDelta = 320,
+            MpDelta = 300,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = InAirAtk2
         }
@@ -1632,7 +1632,7 @@ namespace shared {
             ActiveFrames = 480,
             HitStunFrames = 16,
             BlockStunFrames = 9,
-            Damage = 14,
+            Damage = 12,
             PushbackVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = 0,
@@ -1681,7 +1681,7 @@ namespace shared {
             RecoveryFrames = WaterballAirSkill.RecoveryFrames,
             RecoveryFramesOnBlock = WaterballAirSkill.RecoveryFramesOnBlock,
             RecoveryFramesOnHit = WaterballAirSkill.RecoveryFramesOnHit,
-            MpDelta = WaterballGroundSkill1.MpDelta - 10,
+            MpDelta = WaterballGroundSkill1.MpDelta,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk3
         }
@@ -1703,7 +1703,7 @@ namespace shared {
             RecoveryFrames = WaterballGroundSkill1.RecoveryFrames,
             RecoveryFramesOnBlock = WaterballGroundSkill1.RecoveryFramesOnBlock,
             RecoveryFramesOnHit = WaterballGroundSkill1.RecoveryFramesOnHit,
-            MpDelta = (WaterballAirSkill.MpDelta << 1) - 10,
+            MpDelta = 500,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk2
         }
@@ -4106,7 +4106,7 @@ namespace shared {
                         RecoveryFrames = 29,
                         RecoveryFramesOnBlock = 29,
                         RecoveryFramesOnHit = 29,
-                        MpDelta = 280,
+                        MpDelta = 200,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk3
                         }
@@ -4149,7 +4149,7 @@ namespace shared {
                         RecoveryFrames = 40,
                         RecoveryFramesOnBlock = 40,
                         RecoveryFramesOnHit = 40,
-                        MpDelta = 350,
+                        MpDelta = 300,
                         TriggerType = SkillTriggerType.RisingEdge,
                         BoundChState = Atk4
                         }
@@ -4191,7 +4191,7 @@ namespace shared {
                             RecoveryFrames = 50,
                             RecoveryFramesOnBlock = 50,
                             RecoveryFramesOnHit = 50,
-                            MpDelta = 550,
+                            MpDelta = 500,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Atk1
                             }
@@ -4202,7 +4202,6 @@ namespace shared {
                             RecoveryFrames = 15,
                             RecoveryFramesOnBlock = 15,
                             RecoveryFramesOnHit = 15,
-                            MpDelta = 60,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = BackDashing
                     }
@@ -4337,7 +4336,6 @@ namespace shared {
                             RecoveryFrames = 27,
                             RecoveryFramesOnBlock = 27,
                             RecoveryFramesOnHit = 27,
-                            MpDelta = 0,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Atk1
                             }
@@ -4376,7 +4374,6 @@ namespace shared {
                                     RecoveryFrames = 23,
                                     RecoveryFramesOnBlock = 23,
                                     RecoveryFramesOnHit = 23,
-                                    MpDelta = 0,
                                     TriggerType = SkillTriggerType.RisingEdge,
                                     BoundChState = Atk2
                                     }
@@ -4415,7 +4412,7 @@ namespace shared {
                             RecoveryFrames = 40,
                             RecoveryFramesOnBlock = 40,
                             RecoveryFramesOnHit = 40,
-                            MpDelta = 350,
+                            MpDelta = 400,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = InAirAtk1
                             }
@@ -4451,7 +4448,7 @@ namespace shared {
                             RecoveryFrames = 28,
                             RecoveryFramesOnBlock = 28,
                             RecoveryFramesOnHit = 28,
-                            MpDelta = 6*BATTLE_DYNAMICS_FPS,
+                            MpDelta = 200,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Dashing
                             }
@@ -4493,7 +4490,6 @@ namespace shared {
                                 RecoveryFrames = 14,
                                 RecoveryFramesOnBlock = 10,
                                 RecoveryFramesOnHit = 10,
-                                MpDelta = 0,
                                 TriggerType = SkillTriggerType.RisingEdge,
                                 BoundChState = Atk1
                                 }
@@ -4506,7 +4502,6 @@ namespace shared {
                                 RecoveryFrames = 14,
                                 RecoveryFramesOnBlock = 10,
                                 RecoveryFramesOnHit = 10,
-                                MpDelta = 0,
                                 TriggerType = SkillTriggerType.RisingEdge,
                                 BoundChState = InAirAtk1
                                 }
@@ -5031,7 +5026,7 @@ namespace shared {
                     RecoveryFrames = 14,
                     RecoveryFramesOnBlock = 10,
                     RecoveryFramesOnHit = 10,
-                    MpDelta = 350,
+                    MpDelta = 300,
                     TriggerType = SkillTriggerType.RisingEdge,
                     BoundChState = Atk1
                     }
@@ -5043,7 +5038,7 @@ namespace shared {
                     RecoveryFrames = 14,
                     RecoveryFramesOnBlock = 10,
                     RecoveryFramesOnHit = 10,
-                    MpDelta = 350,
+                    MpDelta = 300,
                     TriggerType = SkillTriggerType.RisingEdge,
                     BoundChState = InAirAtk1
                     }
@@ -5055,7 +5050,7 @@ namespace shared {
                     RecoveryFrames = 14,
                     RecoveryFramesOnBlock = 10,
                     RecoveryFramesOnHit = 10,
-                    MpDelta = 350,
+                    MpDelta = 300,
                     TriggerType = SkillTriggerType.RisingEdge,
                     BoundChState = CrouchAtk1
                     }

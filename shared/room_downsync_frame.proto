@@ -215,13 +215,14 @@ message CharacterDownsync {
 
     int32 btnEHoldingRdfCount = 72;
     int32 parryPrepRdfCntDown = 73;
+    int32 mpRegenRdfCountdown = 74;
 
-    repeated Buff buffList = 74; 
-    repeated Debuff debuffList = 75; 
+    repeated Buff buffList = 90; 
+    repeated Debuff debuffList = 91; 
 
-    Inventory inventory = 76;
+    Inventory inventory = 92;
 
-    repeated BulletImmuneRecord bulletImmuneRecords = 77;
+    repeated BulletImmuneRecord bulletImmuneRecords = 93;
 }
 
 message InputFrameDecoded {
