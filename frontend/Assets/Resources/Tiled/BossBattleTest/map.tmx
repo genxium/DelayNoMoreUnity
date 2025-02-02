@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="604">
+ <properties>
+  <property name="battleDurationSeconds" value="600"/>
+  <property name="levelId" value="4"/>
+  <property name="missionEvtSubId" value="6"/>
+  <property name="npcPreallocCapDict" value="4106:3;4102:1;4103:3;4097:8;4102:1;4105:1;1:2;4108:2;4109:2;4099:2;4110:1;4112:4;4098:1;4096:1;4104:1;16:1"/>
+ </properties>
+ <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
+ <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
+ <tileset firstgid="13" source="../doors/doors.tsx"/>
+ <tileset firstgid="22" source="../shared_comps/pickable.tsx"/>
+ <tileset firstgid="454" source="../shared_comps/bkg-shrinked/sky-bkg.tsx"/>
+ <tileset firstgid="470" source="../shared_comps/bkg-shrinked/mountain3-bkg.tsx"/>
+ <tileset firstgid="502" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
+ <tileset firstgid="518" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
+ <tileset firstgid="534" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
+ <tileset firstgid="542" source="../traps/machinery/traps_machinery.tsx"/>
+ <tileset firstgid="548" source="../shared_comps/AutumnHouses.tsx"/>
+ <tileset firstgid="2948" source="../decoration/Statics/HF_bd_1.tsx"/>
+ <tileset firstgid="3573" source="../shared_comps/gh_farm_v2.tsx"/>
+ <tileset firstgid="7893" source="../shared_comps/bkg-shrinked/gh_bg_1.tsx"/>
+ <tileset firstgid="9237" source="../shared_comps/bkg-shrinked/gh_bg_2.tsx"/>
+ <tileset firstgid="10581" source="../shared_comps/bkg-shrinked/gh_bg_3.tsx"/>
+ <tileset firstgid="11925" source="../shared_comps/bkg-shrinked/gh_bg_4.tsx"/>
+ <tileset firstgid="13269" source="../shared_comps/bkg-shrinked/gh_bg_5.tsx"/>
+ <tileset firstgid="14613" source="../towers/towers.tsx"/>
+ <tileset firstgid="14628" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="14733" source="../decoration/Swayable/Campfire.tsx"/>
+ <tileset firstgid="14773" source="../decoration/Swayable/CampfireWithFood.tsx"/>
+ <tileset firstgid="14813" source="../decoration/Swayable/GhWater.tsx"/>
+ <layer id="45" name="Background1" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1kOQnksABdD/xU4mtu1kENu2bds2JhMnz7Zt20bsCSe2dRZZpOplP1/V/ItTveu6t++m4yNDof0c4CCHOMwREjjKMY5zgpOc4jRnOMs5znOBi1ziMle4yjWuc4Ob3CIUFQrdRzKSk4KUpCI1aUhLOtKTgYxkIjNZiCAr2cjOJvduZgtb2cZ2drCTXexmD3vZR3zA+gctT1LfoyjFKE4JSlKK0pShLOUoTwUqUonKVKEqkUQRTQzVqE4NalKL2tShLvWoTwMa0ojGNKEpzWhOC1rSita0oS3taE8HOtKJzuQgJ7nITR7yko/8FKAghShMkQD2D1qepL7HQAYxmCEMZRjDGcFIRjGaMYxlHOOZwEQmMZkpTGUa05nBTGYxmznMZR7zWcBCFrGYJSxlGcuJZQVxrGQVq1nDWtaxng1spAtd6UZ3etCTXvSmD33pR38GBLB/0PIk9T2e4Vme43le4EVe4mVe4VVe43Xe4E3e4m3e4V3e430+4EM+4mM+4VM+43O+4Eu+4mu+4Vu+43t+4Ed+4md+4Vd+43f+4E/+4m/+4V/+434e4EEe4mEe4VEe43Ge4Eme4ukA9g9anvAewcqT1PeIZz8HOMghDnOEBI5yjOOc4CSnOM0ZznKO81zgIpe4zBWuco3r3OAmtwhF+3+TjOSkICWpSE0a0pKO9GQgI5nITBYiyEo2srPJvZvZwla2sZ0d7GQXu9nDXvYFsH/Q8iT1PYpSjOKUoCSlKE0ZylKO8lSgIpWoTBWqEkkU0cRQjerUoCa1qE0d6lKP+jSgIY1oTBOa0ozmtKAlrWhNG9rSjvZ0oCOd6EwOcpKL3OQhL/nITwEKUojCFAlg/6DlCe8RrDxJfY+BDGIwQxjKMIYzgpGMYjRjGMs4xjOBiUxiMlOYyjSmM4OZzGI2c5jLPOazgIUsYjFLWMoylhPLCuJYySpWs4a1rGM9G9hIF7rSje70oCe96E0f+tKP/gwIYP+g5Qnv8f8c4T0Sr388BznEYY7cdSZwlGMc5wQnOcVpznCWc5znAhe5xGWucJVrXOcGN7lFKMZ/j2QkJwUpSUVq0pCWdKQnAxnJRGayEEFWspGdTe7dzBa2so3t7GAnu9jNHvay707//Ry4xzskRv/wHsHaoyglKEkpSt91lqEs5ShPBSpSicpUoSqRRBFNDNWoTg1qUova1KEu9ahPAxrSiMY0oSnNaE4LWtKK1rShLe1oTwc60onO5CAnuchNHvKSj/wUoCCFKEyRO/2LUfwe75AY/cN7BGuPgQxhKMMYftc5gpGMYjRjGMs4xjOBiUxiMlOYyjSmM4OZzGI2c5jLPOazgIUsYjFLWMoylhPLCuJYySpWs4a1rGM9G9hIF7rSje70oCe96E0f+tKP/gy4038Qg+/xDonRP7xHsPa4Dcv2E08=
+  </data>
+ </layer>
+ <layer id="33" name="Background2" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAAIAXAyPwAAE=
+  </data>
+ </layer>
+ <layer id="35" name="Background3" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAAIAXAyPwAAE=
+  </data>
+ </layer>
+ <layer id="46" name="Background4" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAAIAXAyPwAAE=
+  </data>
+ </layer>
+ <layer id="47" name="Background5" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAAIAXAyPwAAE=
+  </data>
+ </layer>
+ <layer id="42" name="Ground3" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAAIAXAyPwAAE=
+  </data>
+ </layer>
+ <layer id="49" name="Ground2" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6DVMqSdjeEOSEACAAAAAAAANNr5HgAAjQ5v6QDH
+  </data>
+ </layer>
+ <layer id="20" name="Ground1" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztWUtu2zAQ1R0q2V076baAgR6gx3CSbQFdgydwmm0/R+nnJP3sHWtXNA1QdBh54PHL8GdRlAvEwINFipKG82YeNdSmrqpbwpbQETYnhFO1q9Q8bf+iOR2cEc4JL07AlinmaTlZNdOCY8MeXxAuCVcT2zTVPC0n60iMlbsLYcc14S3hpuDzp56n1C7Ji8wZqWd8/Vi5K+MHdbXE86ee51nfZyzofBS2A3RtATbIePHFaChec+sI2zeWXvF8cP3gPOF+bPM4Ya8ZktcruDfz0AEn0ie2Xx674joH0I6x9QvXD/Q3tldgA9lqXD6L1QNpg8gZw0D/4vrnyrsY/KZ73BH+FPi/j/ALrh+pfFi90mKZx9I5q2eGbDFkk7nz/1fYvq/3WiptlscaYnXiJaHUb+mxQ4vpztEeCEP+MS3hmDm0Tfya4YNLY94U5KP12C5zRK4LyFOO9xOLY/l4Nj/Md/Yn2i6fpdktY0z2l86P0PsVrh+atg8B3+tYPuSvFTaF+ED9knOS/b/q6vVwT8fbH9IrXD/Ql0PrQV5DcvBhc6UmNIQZYZ6h/XyewdGRv6XHX1jvcC6PVQ/m4ON//9n80DRT6hWuH2PVg0989PnBcazVg1r9MVY9+MTH4fsV+os1Zmj9EVsP0rvR1y/U/2NWVT8J9tgHHveN8H22b3+ic593Y3Ic/23K8bFs3N81WGNw/chdD2rXpPDJ9eTtXkODNZT2Lq+9f9k4fDUrx0fbPP6ugTUS6lCqXll/av0+DlL4pHua8/4ZhrnTfO+KBWUf5gH8beEd4T3hQ4H/j83j7xq+vaOrRC52+xJGXu/yl7wuhU+6p7nsn/Hw7uCJC7W+YC1ew7gbZYzsk208fxGA67pjnpWiVV0/dyPv4fIXcBjN50bsK7JeyfG4X4X5Iu/F43y65joX0sJtnY4Ybb1u9PjS9lY0nkJ61dVpfC52OsXAGPLtu2l7QWuHrcyx61xIC2O02VUv+7TVFeNbZX4pfMhrEq8/yA+5r4Pf/bGNuYRa7Yo77VxIC0P1sIYYbf0HageVbw==
+  </data>
+ </layer>
+ <layer id="15" name="Ground" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt0bERQEAQhtGt4a4mGqAbgmuJpijDpjLJDTPeCzfYP/giAAAAAODfhtL3/1ii5Ubru8JTa7ZY9PiMPVtserxiqhFzvd/ObHHoAQAAn3cBW9IKaQ==
+  </data>
+ </layer>
+ <layer id="43" name="Foreground" width="100" height="23">
+  <properties>
+   <property name="unity:SortingLayer" value="Foreground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAAIAXAyPwAAE=
+  </data>
+ </layer>
+ <objectgroup id="1" name="PlayerStartingPos">
+  <object id="601" name="Player1St" x="480" y="208">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="teamId" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="13" name="TriggerPos">
+  <object id="602" name="Victory" x="512" y="112">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="6"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1024"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="586" name="BossAwaker" x="1104" y="112" width="32" height="176">
+   <properties>
+    <property name="forceCtrlCmd" value="0"/>
+    <property name="forceCtrlRdfCount" value="30"/>
+    <property name="id" value="4"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1027"/>
+   </properties>
+  </object>
+  <object id="603" name="BossGuider" x="976" y="112" width="32" height="176">
+   <properties>
+    <property name="forceCtrlCmd" value="3"/>
+    <property name="forceCtrlRdfCount" value="540"/>
+    <property name="id" value="3"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1027"/>
+   </properties>
+  </object>
+  <object id="592" name="BossSavepoint" x="480" y="112">
+   <properties>
+    <property name="bossSpeciesIds" value="4104,16"/>
+    <property name="id" value="2"/>
+    <property name="isBossSavepoint" value="1"/>
+    <property name="newRevivalX" value="480.00"/>
+    <property name="newRevivalY" value="208.00"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1024"/>
+    <property name="subscribesToIdList" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="599" name="RedGateAwaker" x="784" y="192" width="32" height="80">
+   <properties>
+    <property name="id" value="1"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1027"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="NpcStartingPos">
+  <object id="587" name="SwordmanBoss" x="1296" y="272">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="speciesId" value="4104"/>
+    <property name="subscriptionId" value="4"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="TrapStartingPos">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <object id="585" gid="18" x="880" y="256" width="96" height="64">
+   <properties>
+    <property name="subscribesToId" value="1"/>
+    <property name="subscribesToIdAfterInitialFire" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="2" name="Barrier">
+  <properties>
+   <property name="type" value="barrier_and_shelter"/>
+  </properties>
+  <object id="114" x="0" y="0" width="1600" height="64">
+   <properties>
+    <property name="boundary_type" value="barrier"/>
+   </properties>
+  </object>
+  <object id="477" x="0" y="0" width="352" height="368"/>
+  <object id="483" x="584" y="0" width="64" height="168"/>
+  <object id="484" x="632" y="0" width="336" height="204"/>
+  <object id="485" x="352" y="0" width="272" height="136"/>
+  <object id="491" x="304" y="256" width="664" height="112"/>
+  <object id="493" x="928" y="288" width="672" height="80"/>
+  <object id="494" x="1392" y="0" width="208" height="368"/>
+  <object id="495" x="960" y="0" width="432" height="120"/>
+ </objectgroup>
+ <objectgroup id="28" name="Pickable"/>
+ <objectgroup id="5" name="PatrolCue">
+  <object id="571" name="FloorR" x="1360" y="112" width="32" height="176">
+   <properties>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="60"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="60"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="60"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="60"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

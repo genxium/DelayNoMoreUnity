@@ -27,9 +27,9 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
         _scopeFactory = scopeFactory;
     }
 
-    public bool GenerateNewCaptchaForUname(string uname, out string? newCaptcha, out DateTimeOffset? absoluteExpiryTime) {
+    public bool GenerateNewCaptchaForUname(string uname, out string? newCaptcha, out DateTimeOffset absoluteExpiryTime) {
         newCaptcha = null;
-        absoluteExpiryTime = null;
+        absoluteExpiryTime = DateTimeOffset.UtcNow; // Would expire immediately
         // [WARNING] This is NOT the simplest way to use SQLite, I'm just trying out the DbContext approach. For a simpler & more primitive way please refer to https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli!
         //if (_environment.IsDevelopment()) {
             // DbContext is a scoped service, see https://stackoverflow.com/questions/36332239/use-dbcontext-in-asp-net-singleton-injected-class for more information.
@@ -38,7 +38,8 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
                 SqlitePlayer? testPlayer = db.Players.Where(p => p.name == uname).First();
                 if (null != testPlayer) {
                     newCaptcha = _randGenerator.Next(10000, 99999).ToString();
-                    absoluteExpiryTime = (DateTimeOffset.Now + _cacheEntryOptions.SlidingExpiration);
+                    var slidingExpiration = _cacheEntryOptions.SlidingExpiration.GetValueOrDefault(new TimeSpan(0, 30, 0));
+                    absoluteExpiryTime = DateTimeOffset.UtcNow.AddTicks(slidingExpiration.Ticks);
                     inRamCache.Set(uname, new CaptchaCacheEntry(newCaptcha, testPlayer.id), _cacheEntryOptions);
                 }
             }

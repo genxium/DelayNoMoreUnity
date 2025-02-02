@@ -1,0 +1,194 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx": {
+            "expandedObjectLayers": [
+                1,
+                28,
+                4,
+                5,
+                2,
+                9,
+                13
+            ],
+            "scale": 1.5,
+            "selectedLayer": 11,
+            "viewCenter": {
+                "x": 900.3333333333333,
+                "y": 116
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/CascadeFarm/map.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 492.5,
+                "y": 506.5
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DelicateForest/map.tmx": {
+            "expandedObjectLayers": [
+                1
+            ],
+            "scale": 1,
+            "selectedLayer": 10,
+            "viewCenter": {
+                "x": 80,
+                "y": 608.5
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx": {
+            "scale": 0.6853571428571428,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 511.41219385096406,
+                "y": 559.5622720166755
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/SmallForest/map.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 11,
+            "viewCenter": {
+                "x": 904.3333333333333,
+                "y": 384.33333333333326
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Statics/HF_bd_1.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Swayable/Campfire.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Swayable/CampfireWithFood.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Swayable/GhWater.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/doors/doors.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/AutumnHouses.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/CastlePrisonProps16.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/colorpad-bkg.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_4.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_5.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/mountain2-bkg.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/mountain3-bkg.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/mountain4-bkg.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/sky-bkg.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/deep_cave16.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/forest16.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/gh_farm_v2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/pickable.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/tiles0.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/towers/towers.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/machinery/traps_machinery.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/spike/traps_spike.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/triggers/switch/triggers_switch.tsx": {
+            "scaleInDock": 1
+        },
+        "map.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 656,
+                "y": 626
+            }
+        }
+    },
+    "map.fixedSize": true,
+    "map.height": 100,
+    "map.lastUsedFormat": "tmx",
+    "map.orientation": 2,
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 100,
+    "openFiles": [
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx"
+    ],
+    "project": "map.tiled-project",
+    "property.type": "string",
+    "recentFiles": [
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/CascadeFarm/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/SmallForest/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DelicateForest/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx",
+        "map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/AutumnHouses.tsx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/gh_farm_v2.tsx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_1.tsx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_2.tsx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_3.tsx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_4.tsx"
+    ],
+    "tileset.embedInMap": false,
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
+    "tileset.tileSize": {
+        "height": 32,
+        "width": 64
+    },
+    "tileset.transparentColor": "#ff00ff",
+    "tileset.type": 1,
+    "tileset.useTransparentColor": false
+}

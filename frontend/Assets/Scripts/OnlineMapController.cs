@@ -143,7 +143,8 @@ public class OnlineMapController : AbstractMapController {
                     reqData.SerializedStaticTriggers.AddRange(serializedStaticTriggers);
 
                     WsSessionManager.Instance.senderBuffer.Add(reqData);
-                    Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK.");
+                    battleState = ROOM_STATE_WAITING; 
+                    Debug.Log("Sent UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK, now battleState=" + battleState);
 
                     preallocateSfxNodes();
                     preallocatePixelVfxNodes();
@@ -215,14 +216,9 @@ public class OnlineMapController : AbstractMapController {
                     var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
                     networkInfoPanel.gameObject.SetActive(true);
                     playerWaitingPanel.gameObject.SetActive(false);
+                    battleState = ROOM_STATE_PREPARE; 
                     Debug.LogFormat("Battle ready to start with battleState={0}, teleport camera to selfPlayer dst={1}", battleState, playerGameObj.transform.position);
-                    if (ROOM_STATE_IN_BATTLE > battleState) {
-                        // Making anim respect battleState to avoid wrong order of DOTWeen async execution  
-                        readyGoPanel.playReadyAnim(() => { }, null);
-                    } else {
-                        readyGoPanel.hideReady();
-                        readyGoPanel.hideGo();
-                    }
+                    readyGoPanel.playReadyAnim(() => { }, null);
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
                     if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {
@@ -441,7 +437,6 @@ public class OnlineMapController : AbstractMapController {
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
-        mainCamera = Camera.main;
         selfPlayerInfo = new CharacterDownsync();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = Battle.BATTLE_DYNAMICS_FPS;

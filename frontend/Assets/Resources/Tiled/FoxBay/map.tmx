@@ -281,16 +281,8 @@
   </object>
   <object id="535" gid="4426" x="2544" y="736" width="16" height="16"/>
   <object id="536" gid="4426" x="2544" y="752" width="16" height="16"/>
-  <object id="537" gid="4426" x="2032" y="752" width="16" height="16">
-   <properties>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="538" gid="4426" x="2032" y="736" width="16" height="16">
-   <properties>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
+  <object id="537" gid="4426" x="2032" y="752" width="16" height="16"/>
+  <object id="538" gid="4426" x="2032" y="736" width="16" height="16"/>
   <object id="539" gid="4426" x="2592" y="752" width="16" height="16"/>
   <object id="542" gid="4426" x="2592" y="736" width="16" height="16"/>
   <object id="580" name="SwordManBoss" x="2912" y="464">
@@ -306,11 +298,7 @@
   </object>
   <object id="585" gid="4426" x="2544" y="720" width="16" height="16"/>
   <object id="586" gid="4426" x="2592" y="720" width="16" height="16"/>
-  <object id="587" gid="4426" x="2032" y="719.717" width="16" height="16">
-   <properties>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
+  <object id="587" gid="4426" x="2032" y="719.717" width="16" height="16"/>
   <object id="592" name="StoneGolem" x="3760" y="704">
    <properties>
     <property name="dirX" value="-2"/>

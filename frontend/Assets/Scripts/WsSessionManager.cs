@@ -280,12 +280,12 @@ public class WsSessionManager {
                     }
                     break;
                 case UnityWebRequest.Result.Success:
-                    var res = JsonConvert.DeserializeObject<JObject>(webRequest.downloadHandler.text);
+                    var res = JsonConvert.DeserializeObject<AuthResult>(webRequest.downloadHandler.text);
                     Debug.Log(String.Format("Received: {0}", res));
-                    if (null != res && res.ContainsKey("retCode")) {
-                        int retCode = res["retCode"].Value<int>();
+                    if (null != res) {
+                        int retCode = res.RetCode;
                         if (ErrCode.Ok == retCode) {
-                            var uname = res["uname"].Value<string>();
+                            var uname = res.Uname;
                             Debug.Log(String.Format("Token/Login succeeded, uname: {0}", uname));
                             if (null != onLoginCallback) {
                                 onLoginCallback(ErrCode.Ok, uname, playerId, authToken);

@@ -1,4 +1,7 @@
 # Latest tag change notes
+v2.2.0
+- Added basic cutscene support for StoryMode. 
+
 v2.1.1 new features
 - Added back transformation buff.
 - Added support for Atk+InvSlotC input pattern.
@@ -8,21 +11,6 @@ v2.1.1 new features
 - Added dedicated dash button.
 - Added timed wave pickable dropper.
 - Refactored MP regen scheme.
-
-v2.0.4 new features
-- Enhanced timed-bomb implementation.
-- Enhanced zero-back-vision NPC handling. 
-- Added FinishedLvOption.
-- Implemented multi-color hpbar for hp cap > 100 
-
-v2.0.0 new features
-- Drastically reduced memory and CPU usage per battle, with enhanced rollback-compatible determinism of collision system and more versatile game mechanics
-- Auto-rejoin after accidental TCP disconnection
-- Added flying NPCs and jumper trap
-- Reduced static trap memory footprint in game mechanics stepping
-- Refactored trigger mechanism for clearance and easy of configuration
-- Added render-only player position interpolation for smoother graphics during resync 
-- Added gauged inventory slot for super skills
 
 Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/eBVAyxxELNk)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
 

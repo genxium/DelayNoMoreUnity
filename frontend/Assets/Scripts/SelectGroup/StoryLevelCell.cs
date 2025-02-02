@@ -69,7 +69,7 @@ public class StoryLevelCell : AbstractSprOnlySingleSelectCell, IPointerClickHand
         /*
          [WARNING] 
         
-         If this is not called, then go make sure that there's a "Physics2DRaycaster" attached to "Camera.main" with a larger than 0 interaction quota!
+         If this is not called, then go make sure that there's a "Physics2DRaycaster" attached to "GameplayCamera" with a larger than 0 interaction quota!
          
          Why using physics raycast to detect click on a Sprite? Reference https://stackoverflow.com/questions/41391708/how-to-detect-click-touch-events-on-ui-and-gameobjects
          */

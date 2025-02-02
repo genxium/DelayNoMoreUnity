@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="1">
+ <tileset firstgid="1" source="../../Tiled/shared_comps/purple_bay16.tsx"/>
+ <tileset firstgid="476" source="../../Tiled/shared_comps/bkg-shrinked/purple_bay_bkg1.tsx"/>
+ <tileset firstgid="728" source="../../Tiled/shared_comps/bkg-shrinked/purple_bay_bkg2.tsx"/>
+ <tileset firstgid="980" source="../../Tiled/shared_comps/bkg-shrinked/purple_bay_bkg4.tsx"/>
+ <tileset firstgid="1232" source="../../Tiled/shared_comps/bkg-shrinked/purple_bay_bkg3.tsx"/>
+ <layer id="2" name="Background" width="30" height="20">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzFzUXbVQUAhdH7XSSlUZDuUgnp7u5GGhGRULq7u7u7u1sFVFSUEFAmINLd3ayfcGZ3sGb7effZqFDoHP9xnv+5wEUucZkrXOUa17nBTW5xmzvc5R73ORug+YCHPOIxT3jKM57zgpe84jVveMs7QuFQKIow0fiA6OFgzUj9xrCLSSxiE4cPiUs84pOAhCQiMUn4iI9JSjI+ITkpwsGakfpNSSpSk4a0pCM9GchIJjKThaxkIzuf8hmfk4Oc5ArYzM0X5CEv+chPAQpSiMIUoSjFKE4JSlKK0pShLOUCNiP1W54KVKQSlalCVapRnRrUpBa1qUNd6lGfBjTkSxoFbEbqtzFNaEozmtOClnxFK76mNd/Qhm9pSzva04Hv+J6OAZud6EwXutKN7vSgJ73oTR/60o/+DGAggxjMEIYyLGAzUr/DGcFIRjGaMYxlHOOZwEQmMZkpTGUa05nBTGYxO2AzUr9zmMs85rOAhSxiMUtYyjKWs4KVrGI1a1jLOtazIWAzUr8b2cRmtrCVbWxnBzvZxW72sJd97OcHfuQnDnCQQwGbkfr9mV/4lcP8xu/8wRH+5C+OcozjnOBvTnKK0/zDv5wJ2HwPlqkk6g==
+  </data>
+ </layer>
+ <layer id="3" name="Background1" width="30" height="20">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMAoQoJGZgaEJiJuBuIWZfvxpQDwdiGcA8cwRwB8oNwyUvauBeA0QrwXidXTkHwDig0B8CIgP05EPAGG+g6Q=
+  </data>
+ </layer>
+ <layer id="4" name="Background2" width="30" height="20">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt00k3lgEYBuBv4R8goR8QlViQIiXDoiRTJAsUTUgLY4UMLcxTphaphEgsMv+6ro2F7Xt8C+d89znX8n7u1RMKRRJJJOc10VGhUAyxXCCOi8STQCKXos5+97KbSSRzhatcI4XrpJIWht3bbuZwh7vkco888imgMMBuuk4GN8jkJrfIIpsyyqngMZVU8YRqnlITYPe+zgOKeEgxjyihlJe84jVvaKKZFt7SyrsAu7U6ddTzjOc00MgLPtJDL318op8BBhnic4DdNp12Ouiki27e84FpZpjlC3PMs8AiS3wNsDusM8IoY4wzwSRTrLHObzbY5A9b/GWbnQC733SW+c4PfrLCL1bD8B8n+ef2Lnvsc8AhRxyHcTeS0/kPqnA6lQ==
+  </data>
+ </layer>
+ <layer id="5" name="Background3" width="30" height="20">
+  <properties>
+   <property name="unity:SortingLayer" value="Background"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt0MVWFwEcBeBB/9gBdgdgd6HYLdid2J0Y2KKAHUt9B9/Bl7C7u7v7W87GkQUyG+853+J3zszceyYI/p6LiSC4xGWucJVrXOcGN7nFbe5wl3vc5zRnOMs5znMhUYJSeea557zgJa94zRve8o73fOAjn/jMFx7wkEc85glPS7onOQiSKEd5EiRTgYpUojJVqEo1qlODr771je/84Ce/IvaEU9f79ahPAxrSiMY0oSnNaE4LWpJGOjVJIZVa1KZOxJ5w2nuuAx3pRGe60JVudKcHPelFJr3pQwataE0b2tIuYk84g9yDGcJQhjGcEYxkFNnkMJoxjGUcWfSlH/0ZwMCIPeFMdU9jOjOYySxmM4dc5jKP+SxgIYsYzwQmMonJTInYE85K9ypWs4a1rCOP9WxgI5vIZzNb2MpilrCUZSxnRcSecHa791BIEcXsZR/7OcBBDnGYIxzlGNvYzg52souCiD3/On/a8z+lm9ykoDCO3ryYeov1FpFZxv0n9B0np4x7T8b0n0/F1BtXfgNEtHp2
+  </data>
+ </layer>
+ <layer id="6" name="Background4" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGgSkjQ8NA2OtBpL37gfgAEB+kkr3RRNp7CYgvA/EVKtmbR6S9T4H4GRA/p5K99AYA2eMKtg==
+  </data>
+ </layer>
+ <layer id="9" name="Background5" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwSjABPuB+AAQH6SzvZeA+DIQX6GzvU+B+BkQP6eCWQBkYwds
+  </data>
+ </layer>
+ <layer id="1" name="Ground1" width="30" height="20">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzjkKwlAUheFbONdOONROONSK7kDRHRh0BxptUyW6hICFCxDcon/IDaSMEi3kHfh474bwzhUxMTExMfnnTDHD9ce9S6xw0/7It/dw4eGp/ZFgjx32mGOh+6Td7Ys4lsjdj+1xwhlrbHSftLMNu+WhdyvkBN8uyvvg3QyyKKCIEvI6B+cBNnJ6Pyo79p+bsKuMCqqooY4mWmijofM7Z5J00EUPfQwwwhgTDHV+53wBmSAdQQ==
+  </data>
+ </layer>
+ <layer id="8" name="Ground2" width="30" height="20">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwXAAh4D48ADYexWIrw2AvYMZAAApUAMx
+  </data>
+ </layer>
+</map>

@@ -659,7 +659,7 @@ namespace shared {
             }
         }
 
-        private static void _processInertiaWalkingHandleZeroEffDx(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDy, CharacterConfig chConfig) {
+        private static void _processInertiaWalkingHandleZeroEffDx(int currRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDy, CharacterConfig chConfig, ILoggerBridge logger) {
             if (proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
                 // [WARNING] In general a character is not permitted to just stop velX during proactive jumping.
                 return;
@@ -668,9 +668,14 @@ namespace shared {
             if (0 < currCharacterDownsync.FramesToRecover || currCharacterDownsync.InAir || !chConfig.HasDef1 || 0 >= effDy) {
                 return;
             }
+        
+            /*
+            if (SPECIES_HEAVYGUARD_RED == currCharacterDownsync.SpeciesId && Dashing == currCharacterDownsync.CharacterState) {
+                logger.LogInfo(String.Format("@currRdfId={0}, ch.Id={1}, thatCharacterInNextFrame turned Def1", currRdfId, currCharacterDownsync.Id));
+            }
+            */
 
             thatCharacterInNextFrame.CharacterState = Def1;
-            //logger.LogInfo(String.Format("@currRdfId={0}, ch.Id={1}, thatCharacterInNextFrame turned Def1", currRdfId, currCharacterDownsync.Id));
 
             if (Def1 == currCharacterDownsync.CharacterState) return;
             thatCharacterInNextFrame.FramesInChState = 0;
@@ -738,7 +743,7 @@ namespace shared {
                         }
                     } else {
                         // 0 == effDx
-                        _processInertiaWalkingHandleZeroEffDx(currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig);
+                        _processInertiaWalkingHandleZeroEffDx(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig, logger);
                     }
                 } else {
                     if (alignedWithInertia || withInertiaBreakingState || currBreakingFromInertia) {
@@ -763,7 +768,7 @@ namespace shared {
                             }
                         } else {
                             // 0 == effDx
-                            _processInertiaWalkingHandleZeroEffDx(currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig);
+                            _processInertiaWalkingHandleZeroEffDx(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig, logger);
                         }
                     } else if (currFreeFromInertia) {
                         if (exactTurningAround) {

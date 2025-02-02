@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 1719638944742763187}
   - component: {fileID: 5388102844505329812}
   m_Layer: 5
-  m_Name: AutoplayStoryNarrativeDialogBox
+  m_Name: NonctrlStoryNarrativeDialogBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1719638944742763185
 RectTransform:
   m_ObjectHideFlags: 0

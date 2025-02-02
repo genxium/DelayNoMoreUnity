@@ -95,6 +95,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected RoomDownsyncFrame latestBossSavepoint = null;
     protected HashSet<uint> bossSpeciesSet = new HashSet<uint>();
     protected ulong bossSavepointMask = 0ul;
+    protected ulong triggerForceCtrlMask = 0ul;
+    protected int remainingTriggerForceCtrlRdfCount = 0;
+    protected ulong latestTiggerForceCtrlCmd = 0u;
 
     protected long battleState;
     protected int spaceOffsetX;
@@ -163,6 +166,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected Vector2 teamRibbonOffset = new Vector2(-10f, +6f);
     protected Vector2 inplaceHpBarOffset = new Vector2(-8f, +16f);
+    protected float defaultGameplayCamZ = -10;
     protected float lineRendererZ = +5;
     protected float triggerZ = 0;
     protected float characterZ = 0;
@@ -189,7 +193,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected bool isOnlineMode;
     protected int localExtraInputDelayFrames = 0;
 
-    protected Camera mainCamera;
+    public Camera gameplayCamera;
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
         return Resources.Load(path) as GameObject;
@@ -1224,6 +1228,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         othersForcedDownsyncRenderFrameDict = new Dictionary<int, RoomDownsyncFrame>();
         missionTriggerLocalId = TERMINATING_EVTSUB_ID_INT;
         bossSavepointMask = 0u;
+        triggerForceCtrlMask = 0u;
         bossSpeciesSet.Clear();
         latestBossSavepoint = null;
     }
@@ -1348,8 +1353,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected void calcCameraCaps() {
-        int camFovW = (int)(2.0f * mainCamera.orthographicSize * mainCamera.aspect);
-        int camFovH = (int)(2.0f * mainCamera.orthographicSize);
+        int camFovW = (int)(2.0f * gameplayCamera.orthographicSize * gameplayCamera.aspect);
+        int camFovH = (int)(2.0f * gameplayCamera.orthographicSize);
         int paddingX = (camFovW >> 1);
         int paddingY = (camFovH >> 1);
         cameraCapMinX = 0 + paddingX;
@@ -1699,6 +1704,15 @@ public abstract class AbstractMapController : MonoBehaviour {
                 cameraTrack(currRdf, null, true);
             }
             return;
+        }
+
+        if (!isOnlineMode && 0 < remainingTriggerForceCtrlRdfCount) {
+            var (ok1, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
+            if (ok1 && null != delayedInputFrameDownsync) {
+                delayedInputFrameDownsync.InputList[0] = latestTiggerForceCtrlCmd;
+                delayedInputFrameDownsync.ConfirmedList = ((1u << roomCapacity) - 1);
+            }
+            --remainingTriggerForceCtrlRdfCount;
         }
 
         // Inside the following "rollbackAndChase" actually ROLLS FORWARD w.r.t. the corresponding delayedInputFrame, REGARDLESS OF whether or not "chaserRenderFrameId == playerRdfId" now. 
@@ -2269,7 +2283,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform triggerChild in child) {
                         var tileObj = triggerChild.GetComponent<SuperObject>();
                         var tileProps = triggerChild.GetComponent<SuperCustomProperties>();
-                        CustomProperty id, bulletTeamId, delayedFrames, quota, recoveryFrames, speciesId, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, pickableSpawnerTimeSeq, subscribesToIdList, subscribesToExhaustedIdList, newRevivalX, newRevivalY, storyPointId, bgmId, demandedEvtMaskProp, publishingEvtMaskUponExhausted, dirX, initDirX, initDirY, isBossSavepoint, bossSpeciesIds;
+                        CustomProperty id, bulletTeamId, delayedFrames, quota, recoveryFrames, speciesId, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, pickableSpawnerTimeSeq, subscribesToIdList, subscribesToExhaustedIdList, newRevivalX, newRevivalY, storyPointId, bgmId, demandedEvtMaskProp, publishingEvtMaskUponExhausted, dirX, initDirX, initDirY, isBossSavepoint, bossSpeciesIds, forceCtrlRdfCount, forceCtrlCmd;
 
                         tileProps.TryGetCustomProperty("id", out id);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
@@ -2294,6 +2308,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("initDirY", out initDirY);
                         tileProps.TryGetCustomProperty("isBossSavepoint", out isBossSavepoint);
                         tileProps.TryGetCustomProperty("bossSpeciesIds", out bossSpeciesIds);
+                        tileProps.TryGetCustomProperty("forceCtrlRdfCount", out forceCtrlRdfCount);
+                        tileProps.TryGetCustomProperty("forceCtrlCmd", out forceCtrlCmd);
 
                         int speciesIdVal = speciesId.GetValueAsInt(); // must have 
                         if ((StoryPointMv.SpeciesId == speciesIdVal || StoryPointTrivial.SpeciesId == speciesIdVal) && FinishedLvOption.StoryAndBoss != finishedLvOption) {
@@ -2363,6 +2379,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                             DemandedEvtMask = demandedEvtMask,
                         };
 
+                        var forceCtrlRdfCountVal = (null != forceCtrlRdfCount && !forceCtrlRdfCount.IsEmpty ? forceCtrlRdfCount.GetValueAsInt() : 0);
+                        var forceCtrlCmdVal = (null != forceCtrlCmd && !forceCtrlCmd.IsEmpty ? (ulong)forceCtrlCmd.GetValueAsInt() : 0u);
                         var configFromTiled = new TriggerConfigFromTiled {
                             EditorId = editorId,
                             SpeciesId = speciesIdVal,
@@ -2380,6 +2398,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                             InitDirX = initDirXVal,
                             InitDirY = initDirYVal,
                             IsBossSavepoint = isBossSavepointVal,
+                            ForceCtrlRdfCount = forceCtrlRdfCountVal,
+                            ForceCtrlCmd = forceCtrlCmdVal,
                         };
                         serializedTriggerEditorIdToLocalId.Dict2[editorId] = configFromTiled;
 
@@ -2801,7 +2821,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             cameraSpeedInWorld *= 500;
         }
 
-        var camOldPos = mainCamera.transform.position;
+        var camOldPos = gameplayCamera.transform.position;
         var dst = chGameObj.transform.position;
         camDiffDstHolder.Set(dst.x - camOldPos.x, dst.y - camOldPos.y);
 
@@ -2811,13 +2831,15 @@ public abstract class AbstractMapController : MonoBehaviour {
         var stepLength = Time.deltaTime * cameraSpeedInWorld;
         if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id || stepLength > camDiffMagnitude || justDead) {
             // Immediately teleport
-            newPosHolder.Set(dst.x, dst.y, camOldPos.z);
+            newPosHolder.Set(dst.x, dst.y, defaultGameplayCamZ);
         } else {
             var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
-            newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, camOldPos.z);
+            newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, defaultGameplayCamZ);
         }
         clampToMapBoundary(ref newPosHolder);
-        mainCamera.transform.position = newPosHolder;
+        gameplayCamera.transform.position = newPosHolder;
+
+        // TODO: In OfflineMap shall I move the "mainCamera" too such that the audio listener is placed correctly?
     }
 
     protected void resetLine(DebugLine line) {
@@ -2894,7 +2916,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                 } else {
                     TriggerColliderAttr? triggerColliderAttr = collider.Data as TriggerColliderAttr;
                     if (null != triggerColliderAttr) {
-                        var trigger = rdf.TriggersArr[triggerColliderAttr.TriggerLocalId];
+                        var trigger = rdf.TriggersArr[triggerColliderAttr.TriggerLocalId - 1];
+                        if (null == trigger) {
+                            continue;
+                        }
                         var configFromTiled = triggerEditorIdToConfigFromTiled[trigger.EditorId];
                         if (null != configFromTiled && triggerConfigs.ContainsKey(configFromTiled.SpeciesId)) {
                             var triggerConfig = triggerConfigs[configFromTiled.SpeciesId];
@@ -3131,7 +3156,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public bool isGameObjPositionWithinCamera(Vector3 positionHolder) {
-        var posInMainCamViewport = mainCamera.WorldToViewportPoint(positionHolder);
+        var posInMainCamViewport = gameplayCamera.WorldToViewportPoint(positionHolder);
         return (0f <= posInMainCamViewport.x && posInMainCamViewport.x <= 1f && 0f <= posInMainCamViewport.y && posInMainCamViewport.y <= 1f && 0f < posInMainCamViewport.z);
     }
 
@@ -3162,12 +3187,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             throw new ArgumentNullException(String.Format("No available teamRibbon node for lookupKey={0}", lookupKey));
         }
         newPosHolder.Set(wx, wy, inplaceHpBarZ);
-        pointInCamViewPortHolder = mainCamera.WorldToViewportPoint(newPosHolder);
+        pointInCamViewPortHolder = gameplayCamera.WorldToViewportPoint(newPosHolder);
         float xInCamViewPort, yInCamViewPort;
         keyChPointer.SetProps(currCharacterDownsync, wx, wy, pointInCamViewPortHolder, out xInCamViewPort, out yInCamViewPort);
 
         newPosHolder.Set(xInCamViewPort, yInCamViewPort, inplaceHpBarZ);
-        keyChPointer.gameObject.transform.position = mainCamera.ViewportToWorldPoint(newPosHolder);
+        keyChPointer.gameObject.transform.position = gameplayCamera.ViewportToWorldPoint(newPosHolder);
         keyChPointer.score = rdfId;
         cachedKeyChPointers.Put(lookupKey, keyChPointer);
     }
@@ -3739,7 +3764,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         foreach (SuperTileLayer layer in grid.GetComponentsInChildren<SuperTileLayer>()) {
             if (1.0f == layer.m_ParallaxX) continue;
             var parallaxEffect = layer.gameObject.AddComponent<ParallaxEffect>();
-            parallaxEffect.SetParallaxAmount(layer.m_ParallaxX, mainCamera);
+            parallaxEffect.SetParallaxAmount(layer.m_ParallaxX, gameplayCamera);
         }
     }
 

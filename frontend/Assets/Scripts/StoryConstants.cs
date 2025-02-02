@@ -1,3 +1,4 @@
+using UnityEngine.Playables;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using shared;
@@ -35,6 +36,7 @@ namespace Story {
         public const int LEVEL_VILLAGE_AMORA_RESISTANCE = 103;
         public const int LEVEL_VILLAGE_AMORA_WEREWOLF = 104;
 
+        public const int STORY_POINT_LV_INTRO = -1;
         public const int STORY_POINT_NONE = 0;
 
         public static ImmutableDictionary<int, string> REGION_NAMES = ImmutableDictionary.Create<int, string>().AddRange(new[]
@@ -55,6 +57,7 @@ namespace Story {
             new KeyValuePair<int, string>(LEVEL_SMALL_FOREST, "SmallForest"),
             new KeyValuePair<int, string>(LEVEL_ZIGZAGZOO, "ZigZagZoo"),
             new KeyValuePair<int, string>(LEVEL_CASCADE_FARM, "CascadeFarm"),
+            //new KeyValuePair<int, string>(LEVEL_CASCADE_FARM, "BossBattleTest"),
             //new KeyValuePair<int, string>(LEVEL_CASCADE_FARM, "FlatVersus"),
             new KeyValuePair<int, string>(LEVEL_DESCENDING_PALACE, "DescendingPalace"),
             new KeyValuePair<int, string>(LEVEL_ARROW_PALACE, "ArrowPalace"),
@@ -62,6 +65,11 @@ namespace Story {
         });
 
         /*---------------------------------STORY, LEVEL relations---------------------------------------------------------------------------------------------------*/
+        
+        public static StoryPoint LvIntroVillageInvasion = new StoryPoint {
+            CutsceneName = "VillageInvasion"
+        };
+
         public static StoryPoint STORY_POINT_1 = new StoryPoint(
             new StoryPointStep[] {
                 new StoryPointStep(
@@ -104,10 +112,10 @@ namespace Story {
         );
 
         public static StoryPoint STORY_POINT_2 = new StoryPoint {
-            Autoplay = true
+            Nonctrl = true
         } 
         .AddStep(new StoryPointStep {
-            AutoplayAliveRdfCount = 2 * Battle.BATTLE_DYNAMICS_FPS
+            NonctrlAliveRdfCount = 2 * Battle.BATTLE_DYNAMICS_FPS
             }
             .AddLine(
                     new StoryPointDialogLine {
@@ -119,7 +127,7 @@ namespace Story {
             )
         )
         .AddStep(new StoryPointStep {
-            AutoplayAliveRdfCount = (int)(2.5f * Battle.BATTLE_DYNAMICS_FPS)
+            NonctrlAliveRdfCount = (int)(2.5f * Battle.BATTLE_DYNAMICS_FPS)
             }
             .AddLine(
                     new StoryPointDialogLine {
@@ -181,10 +189,10 @@ namespace Story {
         );
 
         public static StoryPoint STORY_POINT_4 = new StoryPoint {
-            Autoplay = true
+            Nonctrl = true
         } 
         .AddStep(new StoryPointStep {
-            AutoplayAliveRdfCount = 2 * Battle.BATTLE_DYNAMICS_FPS
+            NonctrlAliveRdfCount = 2 * Battle.BATTLE_DYNAMICS_FPS
             }
             .AddLine(
                     new StoryPointDialogLine {
@@ -205,6 +213,7 @@ namespace Story {
         );
 
         public static LevelStory STORY_DELICATE_FOREST = new LevelStory()
+            .UpdatePoint(STORY_POINT_LV_INTRO, LvIntroVillageInvasion)
             .UpdatePoint(1, STORY_POINT_1)
             .UpdatePoint(2, STORY_POINT_2)
             .UpdatePoint(3, STORY_POINT_3)

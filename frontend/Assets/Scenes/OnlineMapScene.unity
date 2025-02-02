@@ -2334,8 +2334,10 @@ MonoBehaviour:
   linePrefab: {fileID: 2499660631804018007, guid: 3e5fd3b3183f18b46b94639947583dc6, type: 3}
   bgmSource: {fileID: 726854715}
   selfBattleHeading: {fileID: 625548113}
+  bossBattleHeading: {fileID: 0}
   playerLightsPrefab: {fileID: 5304118936468543971, guid: 004535d351f4d1b4a9826cae8e5d4c47, type: 3}
   iptmgr: {fileID: 489539464}
+  gameplayCamera: {fileID: 269705826}
   readyGoPanel: {fileID: 1439065304}
   settlementPanel: {fileID: 301519919}
   useFreezingLockStep: 1

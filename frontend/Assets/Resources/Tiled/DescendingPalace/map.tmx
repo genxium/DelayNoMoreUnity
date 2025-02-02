@@ -43,6 +43,9 @@
   </data>
  </layer>
  <layer id="159" name="Ground" width="64" height="70">
+  <properties>
+   <property name="unity:SortingLayer" value="Ground"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJztm89P1EAUxwdoj4ImeJ8/xT9l/xLoXYxXQjTpRRTRhIDij4srhHhRMBsuazCUCwZIOC0Q4OK3WSYZap1Os+3r0Hkv+aZJh03fZ/bL65vpdiEQYgFa9EQvoVc3zLrWPNE76H2G/RnkW8wzP/Mzv3gMTYQiOQ9E0nROVDEIhBwLhXwK9reB6PjKD/bkNfjHwX/mET9YJZgl2JP/+b+P878M2iuoGTMYj0pqA9okqEU2/j/E2B+DjgryTOf1SUntQD8J+ev0/+pNr1VGaV+2TsBv4/82B9f/f/3/BXPRzehrS/si3f8vwIi5SL7j+COj7Zbyw+sSnpdL4LsXihi1Pm46J+pQ3JM44vuP+x7NAVil4lbHgUf8qv6BXU6BHbUgTvuO2Zr13FBPYoLrK4E1Gh+yy/vD/4PkN87P1ai0v0O9Fcs5c/BmeB+u9fp6HmCNwNwBu6Tc+/wAfczh/4RznwnzyO6BUu495u21zBPmkN0D5f6X+9+89V9eP2zTHxd9zoWe2mb9l9cP2/THRZ9zoae28b/tmv0uBu//8f4H13/2f1v8X/ae66r/T7EuOUFOJp1WcM910f8p+xV0iVxNuq7gnuui/8EV7RPxu+j/B6EQ0xZ6GI5+LRf9Txku+p8yXPQ/ZbD/2f/sf/a//vxz4BG//vyzqN+uUnm9u4pj4lyUivrNKmXqXS+Ic2lCrvJj3fEogWz671Fk6t1t+/8qBNYumLuKvwf2TaiwcLQkwNrtafxbYO97VP/B2tnS+KtYU9+10OsN8zedDX0wP/MzP/MzP/OX5Uf/VPgujHomZ/qNTNmxKmMU/uy7MXnvwqhncqbfyJQdqzLY//b8K2O3VfZv6hgbNfj7Z35t/e9dfNP4ewHNe5euBFij3dv7f+meWCP7z00oZT3Q+H3WXzlu+S8=
   </data>

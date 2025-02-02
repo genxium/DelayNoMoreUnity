@@ -29,12 +29,13 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
         return string.Join("", Enumerable.Repeat(0, 32).Select(n => tokenAllowedChars[_randGenerator.Next(0, tokenAllowedChars.Length)]));
     }
 
-    public bool GenerateNewLoginRecord(int playerId, out string? newToken, out DateTimeOffset? absoluteExpiryTime) {
+    public bool GenerateNewLoginRecord(int playerId, out string? newToken, out DateTimeOffset absoluteExpiryTime) {
         newToken = null;
-        absoluteExpiryTime = null;
         //if (_environment.IsDevelopment()) {
             newToken = genToken();
-            absoluteExpiryTime = (DateTimeOffset.Now + _cacheEntryOptions.SlidingExpiration);
+            absoluteExpiryTime = DateTimeOffset.UtcNow;
+            var slidingExpiration = _cacheEntryOptions.SlidingExpiration.GetValueOrDefault(new TimeSpan(0, 30, 0));
+            absoluteExpiryTime = absoluteExpiryTime.AddTicks(slidingExpiration.Ticks);
             string newKey = (newToken + "/" + playerId.ToString()); // To avoid conflicts across different players
             inRamCache.Set(newKey, playerId, _cacheEntryOptions); 
         //}

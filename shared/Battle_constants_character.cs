@@ -1342,6 +1342,12 @@ namespace shared {
                         EleWeakness = ELE_THUNDER,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
                         NpcPrioritizeBulletHandling = true, 
+                        LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
+                            new[]
+                            {
+                                new KeyValuePair<CharacterState, int>(CharacterState.Dashing, 24)
+                            }
+                        )
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_RIDERGUARD_RED, new CharacterConfig {

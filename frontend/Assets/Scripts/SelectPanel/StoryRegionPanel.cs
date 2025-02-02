@@ -16,6 +16,8 @@ public class StoryRegionPanel : MonoBehaviour {
     public StoryLevelPanel levelPanel;
     public Sprite lockedSprite;
     public GameObject underlyingMapPrefab;
+    public Camera gameplayCamera;
+    public Camera cutSceneCamera;
 
     private int selectionPhase = 0;
     private int selectedRegionIdx = -1;
@@ -51,7 +53,7 @@ public class StoryRegionPanel : MonoBehaviour {
 
     public void ResetSelf() {
         Debug.Log("StoryRegionPanel reset");
-        Camera.main.orthographicSize = 384;
+        gameplayCamera.orthographicSize = 384;
         if (null != underlyingMap) {
             Destroy(underlyingMap);
         }
@@ -211,8 +213,8 @@ public class StoryRegionPanel : MonoBehaviour {
     protected Vector3 newPosHolder = new Vector3();
     protected Vector2 camDiffDstHolder = new Vector2();
     protected void calcCameraCaps() {
-        int paddingX = (int)(Camera.main.orthographicSize * Camera.main.aspect);
-        int paddingY = (int)(Camera.main.orthographicSize);
+        int paddingX = (int)(gameplayCamera.orthographicSize * gameplayCamera.aspect);
+        int paddingY = (int)(gameplayCamera.orthographicSize);
         cameraCapMinX = 0 + paddingX;
         cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
 
@@ -232,7 +234,7 @@ public class StoryRegionPanel : MonoBehaviour {
     }
 
     protected void cameraTrack() {
-        var camOldPos = Camera.main.transform.position;
+        var camOldPos = gameplayCamera.transform.position;
         var dstCell = regions.cells[selectedRegionIdx] as StoryRegionCell;
         var centerOffset = dstCell.GetCenterOffset();
         var dst = dstCell.transform.position;
@@ -248,13 +250,13 @@ public class StoryRegionPanel : MonoBehaviour {
         }
         clampToMapBoundary(ref newPosHolder);
 
-        Camera.main.transform.position = newPosHolder;
+        gameplayCamera.transform.position = newPosHolder;
     }
 
 
     protected void cameraTeleport() {
         isInCameraAutoTracking = false;
-        var camOldPos = Camera.main.transform.position;
+        var camOldPos = gameplayCamera.transform.position;
         var dstCell = regions.cells[selectedRegionIdx] as StoryRegionCell;
         var centerOffset = dstCell.GetCenterOffset();
         var dst = dstCell.transform.position;
@@ -262,7 +264,7 @@ public class StoryRegionPanel : MonoBehaviour {
         // Immediately teleport
         newPosHolder.Set(dst.x + centerOffset.x, dst.y + centerOffset.y, camOldPos.z);
         clampToMapBoundary(ref newPosHolder);
-        Camera.main.transform.position = newPosHolder;
+        gameplayCamera.transform.position = newPosHolder;
     }
 
     private bool isDragging = false;
@@ -290,7 +292,7 @@ public class StoryRegionPanel : MonoBehaviour {
         isInCameraAutoTracking = false;
         if (isDragging && context.performed) {
             var positionInWindowSpace = context.ReadValue<Vector2>();
-            var posInMainCamViewport = Camera.main.ScreenToViewportPoint(positionInWindowSpace);
+            var posInMainCamViewport = gameplayCamera.ScreenToViewportPoint(positionInWindowSpace);
             bool isWithinCamera = (0f <= posInMainCamViewport.x && posInMainCamViewport.x <= 1f && 0f <= posInMainCamViewport.y && posInMainCamViewport.y <= 1f);
             if (!isWithinCamera) {
                 //Debug.LogFormat("StoryRegionPanel: Pointer press ends by posInMainCamViewport={0}", posInMainCamViewport);
@@ -304,10 +306,10 @@ public class StoryRegionPanel : MonoBehaviour {
                     var deltaInWindowSpace = positionInWindowSpace - dragStartingPos;
                     // Debug.LogFormat("Pointer Held Down - delta in window space = {0}", deltaInWindowSpace);
                     camDiffDstHolder = deltaInWindowSpace; // TODO: convert "deltaInWindowSpace" to world space vector
-                    var camOldPos = Camera.main.transform.position;
+                    var camOldPos = gameplayCamera.transform.position;
                     newPosHolder.Set(camOldPos.x - camDiffDstHolder.x, camOldPos.y - camDiffDstHolder.y, camOldPos.z);
                     clampToMapBoundary(ref newPosHolder);
-                    Camera.main.transform.position = newPosHolder;
+                    gameplayCamera.transform.position = newPosHolder;
                     dragStartingPos = positionInWindowSpace;
                 }
             }

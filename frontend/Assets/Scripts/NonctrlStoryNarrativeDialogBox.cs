@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AutoplayStoryNarrativeDialogBox : MonoBehaviour {
+public class NonctrlStoryNarrativeDialogBox : MonoBehaviour {
     public GameObject dialogUp, dialogDown;
     public Image avatarDown, avatarUp;
     public TMP_Text textDown, textUp;
@@ -45,7 +45,7 @@ public class AutoplayStoryNarrativeDialogBox : MonoBehaviour {
         } else {
             var renderingStep = storyPoint.Steps[stepCnt];
             int elapsedRdfCount = rdf.Id - lastStepChangedAtRdfId;
-            if (elapsedRdfCount > renderingStep.AutoplayAliveRdfCount) {
+            if (elapsedRdfCount > renderingStep.NonctrlAliveRdfCount) {
                 IncrementStep(rdf.Id);
             } else {
                 return true;

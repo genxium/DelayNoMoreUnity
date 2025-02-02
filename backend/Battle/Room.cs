@@ -991,6 +991,7 @@ public class Room {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
         // Step#1, put the received "inputFrameUpsyncBatch" into "inputBuffer"
         int joinIndex = player.CharacterDownsync.JoinIndex;
+        int clientInputFrameIdEd = lastAllConfirmedInputFrameId + 1; 
         foreach (var inputFrameUpsync in inputFrameUpsyncBatch) {
             var clientInputFrameId = inputFrameUpsync.InputFrameId;
             if (clientInputFrameId < inputBuffer.StFrameId) {
@@ -1007,7 +1008,7 @@ public class Room {
                 */
                 continue;
             }
-            if (clientInputFrameId < lastAllConfirmedInputFrameId) {
+            if (clientInputFrameId <= lastAllConfirmedInputFrameId) {
                 /*
                 if (fromReentryWsSession) {
                     _logger.LogInformation("Omitting obsolete inputFrameUpsync#3: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
@@ -1020,8 +1021,8 @@ public class Room {
             int advanceGap = (clientInputFrameId > inputBuffer.EdFrameId) ? (clientInputFrameId - inputBuffer.EdFrameId) : 0;  
             bool tooAdvanced = (0 < advanceGap && inputBuffer.StFrameId + advanceGap >= nextToUseIfdId);
             if (tooAdvanced) {
-                _logger.LogWarning("Dropping too advanced inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}; is this player cheating?", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
-                continue;
+                //_logger.LogWarning("Dropping too advanced inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}; is this player cheating?", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
+                break;
             }
             // by now "clientInputFrameId <= inputBuffer.EdFrameId"
             var targetInputFrameDownsync = getOrPrefabInputFrameDownsync(clientInputFrameId);
@@ -1048,6 +1049,7 @@ public class Room {
                 // It's safe (in terms of getting an eventually correct "RenderFrameBuffer") to put the following update of "lastIndividuallyConfirmedInputList" which is ONLY used for prediction in "inputBuffer" out of "false == fromUDP" block.
                 lastIndividuallyConfirmedInputList[player.CharacterDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
             }
+            clientInputFrameIdEd = clientInputFrameId + 1; 
         }
 
         // Step#2, mark confirmation without forcing
@@ -1055,7 +1057,10 @@ public class Room {
         int inputFrameId1 = lastAllConfirmedInputFrameId + 1;
         ulong allConfirmedMask = (1UL << capacity) - 1;
 
-        for (int inputFrameId = inputFrameId1; inputFrameId < inputBuffer.EdFrameId; inputFrameId++) {
+        if (clientInputFrameIdEd > inputBuffer.EdFrameId) {
+            clientInputFrameIdEd = inputBuffer.EdFrameId;
+        }
+        for (int inputFrameId = inputFrameId1; inputFrameId < clientInputFrameIdEd; inputFrameId++) {
             // See comments for the traversal above.
             if (inputFrameId < inputBuffer.StFrameId) {
                 continue;

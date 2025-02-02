@@ -9,14 +9,19 @@ using Story;
 using Google.Protobuf;
 
 public class OfflineMapController : AbstractMapController {
+    public Camera cutsceneCamera;
+    public CutsceneManager storyControlCutsceneManager;
+    public CutsceneManager nonctrlCutsceneManager;
+
     private LevelStory currentStory = null;
     private StoryPoint justTriggeredStoryPoint = null;
 
     private bool isInStoryControl = false;
-    private bool isInStoryAutoplay = false;
+    private bool isInNonctrlStory = false;
     private bool isInStorySettings = false;
+
     public NoBranchStoryNarrativeDialogBox noBranchStoryNarrativeDialogBoxes;
-    public AutoplayStoryNarrativeDialogBox autoplayStoryNarrativeDialogBoxes;
+    public NonctrlStoryNarrativeDialogBox nonctrlStoryNarrativeDialogBoxes;
     public StoryModeSettings storyModeSettings;
     private int initSeqNo = 0;
     private RoomDownsyncFrame cachedStartRdf = null;
@@ -45,8 +50,10 @@ public class OfflineMapController : AbstractMapController {
         currentStory = null;
         justTriggeredStoryPoint = null;
         isInStoryControl = false;
-        isInStoryAutoplay = false;
+        isInNonctrlStory = false;
         isInStorySettings = false;
+        remainingTriggerForceCtrlRdfCount = 0;
+        latestTiggerForceCtrlCmd = 0;
     }
 
     // Start is called before the first frame update
@@ -58,7 +65,6 @@ public class OfflineMapController : AbstractMapController {
         Application.targetFrameRate = 60;
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
-        mainCamera = Camera.main;
         isOnlineMode = false;
         StoryModeSettings.SimpleDelegate onExitCallback = () => {
             onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
@@ -79,12 +85,16 @@ public class OfflineMapController : AbstractMapController {
     void Update() {
         try {
             if (1 == initSeqNo) {
+                gameplayCamera.transform.position = new Vector3(-effectivelyInfinitelyFar, -effectivelyInfinitelyFar, 1024);
+                cutsceneCamera.transform.position = new Vector3(-effectivelyInfinitelyFar, -effectivelyInfinitelyFar, 1024);
                 initSeqNo++;
             } else if (2 == initSeqNo) {
                 selfPlayerInfo = new CharacterDownsync();
                 roomCapacity = 1;
                 resetCurrentMatch(PlayerStoryProgressManager.Instance.GetCachedLevelName());
                 calcCameraCaps();
+                storyControlCutsceneManager.effectivelyInfinitelyFar = effectivelyInfinitelyFar;
+                nonctrlCutsceneManager.effectivelyInfinitelyFar = effectivelyInfinitelyFar;
                 preallocateBattleDynamicsHolder();
                 preallocateFrontendOnlyHolders();
                 preallocateSfxNodes();
@@ -108,20 +118,36 @@ public class OfflineMapController : AbstractMapController {
                     if (TERMINATING_TRIGGER_ID == trigger.TriggerLocalId) break;
                     var configFromTiled = triggerEditorIdToConfigFromTiled[trigger.EditorId];
                     if (configFromTiled.IsBossSavepoint) {
-                        bossSavepointMask |= (1ul << trigger.TriggerLocalId);
+                        bossSavepointMask |= (1ul << (trigger.TriggerLocalId - 1));
+                    }
+                    if (0 < configFromTiled.ForceCtrlRdfCount) {
+                        triggerForceCtrlMask |= (1ul << (trigger.TriggerLocalId - 1));
                     }
                     if (null != configFromTiled.BossSpeciesSet) {
                         bossSpeciesSet.UnionWith(configFromTiled.BossSpeciesSet.Keys);
                     }
                 }
 
-                cameraTrack(startRdf, null, false); // Move camera first, such that NPCs can be rendered in cam view
-                applyRoomDownsyncFrameDynamics(startRdf, null);
-                var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
-                Debug.LogFormat("Battle ready to start, teleport camera to selfPlayer dst={0}", playerGameObj.transform.position);
+                currentStory = StoryUtil.getStory(levelId);
+
                 initSeqNo++;
             } else if (4 == initSeqNo) {
-                Debug.LogFormat("about to play ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId);
+                if (FinishedLvOption.StoryAndBoss == PlayerStoryProgressManager.Instance.GetCachedFinishedLvOption() && StoryUtil.STORY_NONE != currentStory && currentStory.Points.ContainsKey(StoryConstants.STORY_POINT_LV_INTRO)) {
+                    var stPoint = currentStory.Points[StoryConstants.STORY_POINT_LV_INTRO]; 
+                    var cutsceneName = stPoint.CutsceneName; 
+                    if (!storyControlCutsceneManager.playOrContinue(cutsceneName)) {
+                        storyControlCutsceneManager.clear();
+                    } else {
+                        return;
+                    }
+                }
+
+                initSeqNo++;
+            } else if (5 == initSeqNo) {
+                cameraTrack(cachedStartRdf, null, false); // Move camera first, such that NPCs can be rendered in cam view
+                applyRoomDownsyncFrameDynamics(cachedStartRdf, null);
+                var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
+                Debug.LogFormat("Battle ready to start, teleport camera to selfPlayer dst={0}, thread id={1}", playerGameObj.transform.position, Thread.CurrentThread.ManagedThreadId);
                 readyGoPanel.playReadyAnim(null, () => {
                     Debug.LogFormat("played ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId);
                     initSeqNo++;
@@ -131,7 +157,7 @@ public class OfflineMapController : AbstractMapController {
                     pauseAllAnimatingCharacters(false);
                 });
                 initSeqNo++;
-            } else if (6 == initSeqNo) {
+            } else if (7 == initSeqNo) {
                 enableBattleInput(true);
                 readyGoPanel.playGoAnim();
                 bgmSource.Play();
@@ -143,25 +169,69 @@ public class OfflineMapController : AbstractMapController {
             }
 
             if (isInStoryControl) {
-                // TODO: What if dynamics should be updated during story narrative? A simple proposal is to cover all objects with a preset RenderFrame, yet there's a lot to hardcode by this approach. 
+                var cutsceneName = justTriggeredStoryPoint.CutsceneName;
                 var (ok, rdf) = renderBuffer.GetByFrameId(playerRdfId);
-                if (!ok || null == rdf || !noBranchStoryNarrativeDialogBoxes.renderStoryPoint(rdf, justTriggeredStoryPoint)) {
+                // TODO: What if dynamics should be updated during story narrative? A simple proposal is to cover all objects with a preset RenderFrame, yet there's a lot to hardcode by this approach. 
+                if (!ok || null == rdf) {
+                    nonctrlCutsceneManager.clear();
+                    storyControlCutsceneManager.clear();
                     noBranchStoryNarrativeDialogBoxes.gameObject.SetActive(false);
                     isInStoryControl = false;
                     pauseAllAnimatingCharacters(false);
                     iptmgr.resumeScales();
                     iptmgr.enable(true);
+                } else if (String.IsNullOrEmpty(cutsceneName)) {
+                    if (!noBranchStoryNarrativeDialogBoxes.isActiveAndEnabled) {
+                        noBranchStoryNarrativeDialogBoxes.gameObject.SetActive(true);
+                        noBranchStoryNarrativeDialogBoxes.init();
+                    }
+                    if (!noBranchStoryNarrativeDialogBoxes.renderStoryPoint(rdf, justTriggeredStoryPoint)) {
+                        noBranchStoryNarrativeDialogBoxes.gameObject.SetActive(false);
+                        isInStoryControl = false;
+                        pauseAllAnimatingCharacters(false);
+                        iptmgr.resumeScales();
+                        iptmgr.enable(true);
+                    } else {
+                        // No dynamics or nonctrl-narrative during "InStoryControl" -- however whether or not nonctrl-cutscenes are allowed is pending discussion
+                        nonctrlCutsceneManager.clear();
+                        nonctrlStoryNarrativeDialogBoxes.gameObject.SetActive(false);
+                        isInNonctrlStory = false;
+                        return;
+                    }
                 } else {
-                    // No dynamics during "InStoryControl".
-                    autoplayStoryNarrativeDialogBoxes.gameObject.SetActive(false);
-                    isInStoryAutoplay = false;
-                    return;
+                    pauseAllAnimatingCharacters(true);
+                    iptmgr.enable(false);
+                    if (!storyControlCutsceneManager.playOrContinue(cutsceneName)) {
+                        storyControlCutsceneManager.clear();
+                        isInStoryControl = false;
+                        pauseAllAnimatingCharacters(false);
+                        iptmgr.resumeScales();
+                        iptmgr.enable(true);
+                    } else {
+                        // No dynamics or nonctrl-narrative during "InStoryControl" -- however whether or not nonctrl-cutscenes are allowed is pending discussion
+                        nonctrlCutsceneManager.clear();
+                        nonctrlStoryNarrativeDialogBoxes.gameObject.SetActive(false);
+                        isInNonctrlStory = false;
+                        return;
+                    }
                 }
-            } else if (isInStoryAutoplay) {
+            } else if (isInNonctrlStory) {
+                var cutsceneName = justTriggeredStoryPoint.CutsceneName;
                 var (ok, rdf) = renderBuffer.GetByFrameId(playerRdfId);
-                if (!ok || null == rdf || !autoplayStoryNarrativeDialogBoxes.renderStoryPoint(rdf, justTriggeredStoryPoint)) {
-                    autoplayStoryNarrativeDialogBoxes.gameObject.SetActive(false);
-                    isInStoryAutoplay = false;
+                if (!ok || null == rdf) {
+                    nonctrlStoryNarrativeDialogBoxes.gameObject.SetActive(false);
+                    isInNonctrlStory = false;
+                } else if (String.IsNullOrEmpty(cutsceneName)) {
+                    nonctrlStoryNarrativeDialogBoxes.gameObject.SetActive(true);
+                    if (!nonctrlStoryNarrativeDialogBoxes.renderStoryPoint(rdf, justTriggeredStoryPoint)) {
+                        nonctrlStoryNarrativeDialogBoxes.gameObject.SetActive(false);
+                        isInNonctrlStory = false;
+                    }
+                } else {
+                    if (!nonctrlCutsceneManager.playOrContinue(cutsceneName)) {
+                        nonctrlCutsceneManager.clear();
+                        isInNonctrlStory = false;
+                    }
                 }
             }
 
@@ -176,31 +246,31 @@ public class OfflineMapController : AbstractMapController {
             }
             justTriggeredStoryPointId = StoryConstants.STORY_POINT_NONE;
             doUpdate();
-            if (StoryConstants.STORY_POINT_NONE != justTriggeredStoryPointId) {
-                if (null == currentStory) {
-                    currentStory = StoryUtil.getStory(levelId);
-                }
+            if (StoryConstants.STORY_POINT_NONE != justTriggeredStoryPointId && StoryUtil.STORY_NONE != currentStory) {
+
                 var oldTriggeredStoryPoint = justTriggeredStoryPoint;
                 justTriggeredStoryPoint = StoryUtil.getStoryPoint(currentStory, justTriggeredStoryPointId);
 
-                if (!justTriggeredStoryPoint.Autoplay) {
+                if (!justTriggeredStoryPoint.Nonctrl) {
                     iptmgr.enable(false);
                     // Handover control to DialogBox GUI
                     isInStoryControl = true; // Set it back to "false" in the DialogBox control!
                     pauseAllAnimatingCharacters(true);
                     Debug.LogFormat("Story control handover triggered at playerRdfId={0}", playerRdfId);
-                    noBranchStoryNarrativeDialogBoxes.gameObject.SetActive(true);
-                    noBranchStoryNarrativeDialogBoxes.init();
                     return;
                 } else {
-                    if (isInStoryAutoplay) {
-                        Debug.LogWarningFormat("Story autoplay triggered at playerRdfId={0} but we're in another autoplay story-point, please check configuration!", playerRdfId);
+                    if (isInNonctrlStory) {
+                        Debug.LogWarningFormat("NonctrlStory  triggered at playerRdfId={0} but we're in another nonctrl story-point, please check configuration!", playerRdfId);
                         justTriggeredStoryPoint = oldTriggeredStoryPoint;
                     } else {
-                        isInStoryAutoplay = true;
-                        autoplayStoryNarrativeDialogBoxes.gameObject.SetActive(true);
-                        autoplayStoryNarrativeDialogBoxes.init();
-                        Debug.LogFormat("Story autoplay triggered at playerRdfId={0}", playerRdfId);
+                        isInNonctrlStory = true;
+                        if (null != justTriggeredStoryPoint.CutsceneName) {
+                            Debug.LogFormat("NonctrlCutscene triggered at playerRdfId={0}: {1}", playerRdfId, justTriggeredStoryPoint.CutsceneName);
+                        } else {
+                            nonctrlStoryNarrativeDialogBoxes.gameObject.SetActive(true);
+                            nonctrlStoryNarrativeDialogBoxes.init();
+                            Debug.LogFormat("NonctrlStory triggered at playerRdfId={0}", playerRdfId);
+                        }
                     }
                 }
             }
@@ -213,15 +283,33 @@ public class OfflineMapController : AbstractMapController {
             if (!res2 || null == nextRdf) {
                 throw new Exception("Couldn't find a valid nextRdf");
             }
+            ulong triggeredForceCtrlMask = (fulfilledTriggerSetMask & triggerForceCtrlMask);
+            if (0 < triggeredForceCtrlMask) {
+                Debug.LogFormat("Triggered force ctrl mask={1} at post-doUpdate-playerRdfId={0}", playerRdfId, triggeredForceCtrlMask);
+                int forceCtrlTriggerLocalId = 0;
+                while (0 < triggeredForceCtrlMask) {
+                    triggeredForceCtrlMask >>= 1;
+                    ++forceCtrlTriggerLocalId;
+                }
+                if (0 < forceCtrlTriggerLocalId) {
+                    var trigger = currRdf.TriggersArr[forceCtrlTriggerLocalId-1];
+                    var triggerConfigFromTiled = triggerEditorIdToConfigFromTiled[trigger.EditorId];
+                    remainingTriggerForceCtrlRdfCount = triggerConfigFromTiled.ForceCtrlRdfCount;
+                    latestTiggerForceCtrlCmd = triggerConfigFromTiled.ForceCtrlCmd;
+                    
+                    Debug.LogFormat("Picked remainingTriggerForceCtrlRdfCount={1}, latestTiggerForceCtrlCmd={2} at post-doUpdate-playerRdfId={0}", playerRdfId, remainingTriggerForceCtrlRdfCount, latestTiggerForceCtrlCmd);
+                }
+            }
+
             ulong triggeredBossSavepointMask = (fulfilledTriggerSetMask & bossSavepointMask);
             if (0 < triggeredBossSavepointMask) {
-                Debug.LogFormat("Triggered boss savepoint at post-doUpdate-playerRdfId={0}", playerRdfId);
-                int bossSavepointTriggerLocalId = -1;
+                Debug.LogFormat("Triggered boss savepoint mask={1} at post-doUpdate-playerRdfId={0}", playerRdfId, triggeredBossSavepointMask);
+                int bossSavepointTriggerLocalId = 0;
                 while (0 < triggeredBossSavepointMask) {
                     triggeredBossSavepointMask >>= 1;
                     ++bossSavepointTriggerLocalId;
                 }
-                if (0 <= bossSavepointTriggerLocalId) {
+                if (0 < bossSavepointTriggerLocalId) {
                     if (null == latestBossSavepoint) {
                         latestBossSavepoint = new RoomDownsyncFrame(historyRdfHolder);
                     }

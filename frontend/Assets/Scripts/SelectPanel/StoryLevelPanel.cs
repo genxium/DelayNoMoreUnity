@@ -15,6 +15,8 @@ public class StoryLevelPanel : MonoBehaviour {
     public StoryModeCharacterSelectPanel characterSelectPanel;
     public StoryLvInfoPanel lvInfoPanel;
     public float cameraSpeed = 100;
+    public Camera gameplayCamera;
+    public Camera cutSceneCamera;
 
     public StoryRegionPanel regionPanel;
 
@@ -52,7 +54,7 @@ public class StoryLevelPanel : MonoBehaviour {
 
     public void ResetSelf() {
         Debug.Log("StoryLevelSelectPanel reset");
-        Camera.main.orthographicSize = 256;
+        gameplayCamera.orthographicSize = 256;
 
         if (null != regionLevels) {
             Destroy(regionLevels);
@@ -251,8 +253,8 @@ public class StoryLevelPanel : MonoBehaviour {
     protected Vector3 newPosHolder = new Vector3();
     protected Vector2 camDiffDstHolder = new Vector2();
     protected void calcCameraCaps() {
-        int paddingX = (int)(Camera.main.orthographicSize * Camera.main.aspect);
-        int paddingY = (int)(Camera.main.orthographicSize);
+        int paddingX = (int)(gameplayCamera.orthographicSize * gameplayCamera.aspect);
+        int paddingY = (int)(gameplayCamera.orthographicSize);
         cameraCapMinX = 0 + paddingX;
         cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
 
@@ -272,7 +274,7 @@ public class StoryLevelPanel : MonoBehaviour {
     }
 
     protected void cameraTrack() {
-        var camOldPos = Camera.main.transform.position;
+        var camOldPos = gameplayCamera.transform.position;
         var dst = levels.cells[selectedLevelIdx].transform.position;
         camDiffDstHolder.Set(dst.x - camOldPos.x, dst.y - camOldPos.y);
 
@@ -286,19 +288,19 @@ public class StoryLevelPanel : MonoBehaviour {
         }
         clampToMapBoundary(ref newPosHolder);
 
-        Camera.main.transform.position = newPosHolder;
+        gameplayCamera.transform.position = newPosHolder;
     }
 
 
     protected void cameraTeleport() {
         isInCameraAutoTracking = false;
-        var camOldPos = Camera.main.transform.position;
+        var camOldPos = gameplayCamera.transform.position;
         var dst = levels.cells[selectedLevelIdx].transform.position;
 
         // Immediately teleport
         newPosHolder.Set(dst.x, dst.y, camOldPos.z);
         clampToMapBoundary(ref newPosHolder);
-        Camera.main.transform.position = newPosHolder;
+        gameplayCamera.transform.position = newPosHolder;
     }
 
     private bool isDragging = false;
@@ -324,7 +326,7 @@ public class StoryLevelPanel : MonoBehaviour {
         isInCameraAutoTracking = false;
         if (isDragging && context.performed) {
             var positionInWindowSpace = context.ReadValue<Vector2>();
-            var posInMainCamViewport = Camera.main.ScreenToViewportPoint(positionInWindowSpace);
+            var posInMainCamViewport = gameplayCamera.ScreenToViewportPoint(positionInWindowSpace);
             bool isWithinCamera = (0f <= posInMainCamViewport.x && posInMainCamViewport.x <= 1f && 0f <= posInMainCamViewport.y && posInMainCamViewport.y <= 1f);
             if (!isWithinCamera) {
                 //Debug.LogFormat("StoryLevelPanel: Pointer press ends by posInMainCamViewport={0}", posInMainCamViewport);
@@ -338,10 +340,10 @@ public class StoryLevelPanel : MonoBehaviour {
                     var deltaInWindowSpace = positionInWindowSpace - dragStartingPos;
                     // Debug.LogFormat("Pointer Held Down - delta in window space = {0}", deltaInWindowSpace);
                     camDiffDstHolder = deltaInWindowSpace; // TODO: convert "deltaInWindowSpace" to world space vector
-                    var camOldPos = Camera.main.transform.position;
+                    var camOldPos = gameplayCamera.transform.position;
                     newPosHolder.Set(camOldPos.x - camDiffDstHolder.x, camOldPos.y - camDiffDstHolder.y, camOldPos.z);
                     clampToMapBoundary(ref newPosHolder);
-                    Camera.main.transform.position = newPosHolder;
+                    gameplayCamera.transform.position = newPosHolder;
                     dragStartingPos = positionInWindowSpace;
                 }
             }
