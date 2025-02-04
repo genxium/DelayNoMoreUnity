@@ -97,7 +97,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected ulong bossSavepointMask = 0ul;
     protected ulong triggerForceCtrlMask = 0ul;
     protected int remainingTriggerForceCtrlRdfCount = 0;
-    protected ulong latestTiggerForceCtrlCmd = 0u;
+    protected ulong latestTriggerForceCtrlCmd = 0u;
 
     protected long battleState;
     protected int spaceOffsetX;
@@ -1709,7 +1709,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (!isOnlineMode && 0 < remainingTriggerForceCtrlRdfCount) {
             var (ok1, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
             if (ok1 && null != delayedInputFrameDownsync) {
-                delayedInputFrameDownsync.InputList[0] = latestTiggerForceCtrlCmd;
+                delayedInputFrameDownsync.InputList[0] = latestTriggerForceCtrlCmd;
                 delayedInputFrameDownsync.ConfirmedList = ((1u << roomCapacity) - 1);
             }
             --remainingTriggerForceCtrlRdfCount;

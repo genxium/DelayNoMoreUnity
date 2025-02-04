@@ -142,6 +142,7 @@ namespace shared {
         public static BulletConfig SwordManMelee1GroundHit3BlStopper = new BulletConfig(SwordManMelee1GroundHit3Bl)
                                                                 .SetStartupFrames(SwordManMelee1GroundHit3Bl.StartupFrames + SwordManMelee1GroundHit3Bl.ActiveFrames)
                                                                 .SetStartupInvinsibleFrames(2)
+                                                                .SetHitboxOffsets(0, 0)
                                                                 .SetActiveFrames(11)
                                                                 .SetRemainsUponHit(true)
                                                                 .SetSelfLockVel(0, 0, 0) 

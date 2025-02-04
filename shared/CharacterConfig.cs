@@ -77,6 +77,7 @@ namespace shared {
 
         public bool HasTurnAroundAnim;
         public bool HasDimmedAnim;
+        public bool HasAwakingAnim;
         public bool HasWalkStoppingAnim; 
         public bool HasInAirWalkStoppingAnim; 
         public bool LayDownToRecoverFromDimmed;
@@ -134,6 +135,9 @@ namespace shared {
 
         public int TransformIntoFramesToRecover;
         public int TransformIntoFramesInvinsible;
+
+        public int AwakingFramesToRecover;
+        public int AwakingFramesInvinsible;
 
         public bool UseIdle1AsFlyingIdle;
 

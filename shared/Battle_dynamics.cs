@@ -138,7 +138,7 @@ namespace shared {
             return (Def1 == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover);
         }
 
-        private static (int, bool, bool, int, int, int) _derivePlayerOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ILoggerBridge logger) {
+        private static (int, bool, bool, int, int, int) _derivePlayerOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, bool effInAir, bool notDashing, ILoggerBridge logger) {
             // returns (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
             int delayedInputFrameIdForPrevRdf = ConvertToDelayedInputFrameId(currRenderFrame.Id - 1);
@@ -205,13 +205,12 @@ namespace shared {
 
             int patternId = PATTERN_ID_NO_OP;
             int effFrontOrBack = (effDx*currCharacterDownsync.DirX);
-            bool notDashing = (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState && BackDashing != currCharacterDownsync.CharacterState);
             var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia)) || !notDashing;
             if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
                  if (canJumpWithinInertia) {
                     if ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (currCharacterDownsync.InAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && (0 > decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
                         slipJumpedOrNot = true;
-                    } else if ((!inAirSet.Contains(currCharacterDownsync.CharacterState) || 0 < currCharacterDownsync.RemainingAirJumpQuota) && (!isCrouching(currCharacterDownsync.CharacterState, chConfig) || !notDashing)) {
+                    } else if ((!effInAir || 0 < currCharacterDownsync.RemainingAirJumpQuota) && (!isCrouching(currCharacterDownsync.CharacterState, chConfig) || !notDashing)) {
                         jumpedOrNot = true;
                     } else if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                         jumpedOrNot = true;
@@ -540,11 +539,12 @@ namespace shared {
         private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, int selfPlayerJoinIndex, ref bool selfNotEnoughMp, ILoggerBridge logger) {
             for (int i = 0; i < roomCapacity; i++) {
                 var currCharacterDownsync = currRenderFrame.PlayersArr[i];
-                bool effInAir = (currCharacterDownsync.InAir || inAirSet.Contains(currCharacterDownsync.CharacterState));
+                bool notDashing = (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState && BackDashing != currCharacterDownsync.CharacterState);
+                bool effInAir = (currCharacterDownsync.InAir || (inAirSet.Contains(currCharacterDownsync.CharacterState) && notDashing));
 
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder, effInAir, notDashing, logger);
 
                 // Prioritize use of inventory slot over skills
                 var (slotUsed, slotLockedSkillId) = _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, logger);
@@ -2234,7 +2234,11 @@ namespace shared {
                 } 
                 dst.SubscribesToTriggerLocalId = TERMINATING_TRIGGER_ID;
                 if (chConfig.HasDimmedAnim) {
-                    if (chConfig.LayDownToRecoverFromDimmed) {
+                    if (chConfig.HasAwakingAnim) {
+                        dst.CharacterState = Awaking;
+                        dst.FramesToRecover = chConfig.AwakingFramesToRecover;
+                        dst.FramesInvinsible = chConfig.AwakingFramesInvinsible;
+                    } else if (chConfig.LayDownToRecoverFromDimmed) {
                         dst.CharacterState = LayDown1;
                         dst.FramesToRecover = chConfig.LayDownFramesToRecover;
                     } else {

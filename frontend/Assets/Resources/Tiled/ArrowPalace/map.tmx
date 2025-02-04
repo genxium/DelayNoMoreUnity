@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="593">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="594">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -35,17 +35,9 @@
    eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAODfAC8AAAE=
   </data>
  </layer>
- <layer id="33" name="setGround" width="64" height="47" visible="0">
-  <properties>
-   <property name="MatchInOrder" value="true"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJztmcsKgCAQRVv4D0L0/9/ZauiBgY6TCvccuCuLPOMlgnLaZMnpihp3d3V/VZRnQP913Q3lGdB/XXejdwbvDtXmiz3VJYKI/nv9S8+rdS/5e+5Zrf89/l5WmsFof97/uu6G8gzov667oTwD+q/rbuSGb46ofDF6H7OCP/4r+quBP/74448//vjP3s148Mcff59/6/+sqLVIOP96/yM903rNH2u9cP74448/0c4JWzpH7Q==
-  </data>
- </layer>
  <layer id="163" name="Ground" width="64" height="47">
   <data encoding="base64" compression="zlib">
-   eJztms1KxDAUhTOaPoCg+zyKjzJPIt0P4lO4UBBE1K3VYZiNfxQ3imDcKCrMalTUjaeLQqbEtDGZtJp74Gya3mm/9hBukxlwxhYTJt84kywSTTkTvYSJDbDvcNaPlR/schv8C+B/jYgfrALMAuxyQPmn/FP+o3z/lH/Kv0v+11CbWvoEHvI5QFnIV/6LZ7du6Qv48gf+CWfpC8ZMnmhqj3AsM/i4UuMr/3v43X1LH8CHGoaC/RP+wJjJX5raUxw7M/i8UtPF+R9c6d0v+W3Vxfl/KWFsuYFXEvdr0fzfvfyHVBfzH1KUf8o/5Z/yX+R/ExnAs5DTiPiRdYHMi62aXtu3db17qefA91K6rt/0aVPv+h74XtpwV/nx3bEq4Sb9t4tNvXvT/t+HwZqBOSv5c7AP4dqJ458IrFmu8I/Afh3R/A/W/kjh9/FN/dekzjfE3/bdhBfxEz/xEz/xE78tP/ondqP4VlNf7klV955cxnzKhf8B5z8qftLUl3tS1b0nlzGfovw359/tzdr2nHmMuYreP/Er3//Raazw57z9/6SEFFjTq9n1v2JNrJX15zZcsN4r/DH7Gx9ne4k=
+   eJztms1KxDAUhe9o+gCC7vMoPso8iXQ/iE/hQkEQUbdWh8GNfwxuFMG4UVSY1aioG08XhUypaWNjUs09cDbtZCZfe7jcJDMQRPMJqVdBiiLRVJDsJSTXwL4lqB8rP9jVJvjnwP8SET9YJZgl2NWA88/55/xH+f45/5z/NvlfwdjU0kfwUPwClIVc5T9/dquWPocvvuGfCEqfcc/kScXYA1zLDD4sjXGV/x18766l9+D9Coac/QN+xz2TPyvGnuDaqcFnpTFdrP/gSm9/yG+rLtb/hYRosYGXkva/xfW/e/n3qS7m36c4/5x/zj/nP8//OjKAZ6GmEfEj6xKZlxs1vbZrV/XuhZ48z6VwXb/p0qbe9c3zXEK4q/xYdywruEn/3cam3r1p/+/CYM3AnBX8Y7AP4drC8U8E1mys8Y/AfhVR/Qdrf6Txu1hT/zXp9Yb5Q8/Gv5if+Zmf+Zmf+W350T/RteabgM+vOPsqn3HVqQ3/PT7/oPkxIH9x9lU+46oT5785/3Zv1l1Xk/ny+2d+bf0fnY41/rEI/58UnwJrejm7/5fviQXZfw7hnPVO44/ZX9xWab8=
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="47">
@@ -67,6 +59,16 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
+  <object id="593" name="BossGuider" x="32" y="416" width="960" height="112">
+   <properties>
+    <property name="forceCtrlCmd" value="0"/>
+    <property name="forceCtrlRdfCount" value="1800"/>
+    <property name="id" value="8"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1027"/>
+   </properties>
+  </object>
   <object id="562" name="BossSavepoint" x="640" y="496">
    <properties>
     <property name="bossSpeciesIds" value="4101"/>
@@ -92,8 +94,10 @@
    </properties>
    <point/>
   </object>
-  <object id="580" name="BossAwaker" x="32" y="656" width="960" height="64">
+  <object id="580" name="BossAwaker" x="32" y="688" width="960" height="32">
    <properties>
+    <property name="forceCtrlCmd" value="0"/>
+    <property name="forceCtrlRdfCount" value="60"/>
     <property name="id" value="5"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
@@ -147,9 +151,9 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="561" name="Boss" x="864" y="704">
+  <object id="561" name="Boss" x="614" y="720">
    <properties>
-    <property name="dirX" value="+2"/>
+    <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="speciesId" value="4101"/>
@@ -215,34 +219,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="509" name="SlipJumpPlatform" x="288" y="640" width="64" height="16">
-   <properties>
-    <property name="collisionTypeMask" value="5"/>
-    <property name="providesHardPushback" value="1"/>
-    <property name="providesSlipJump" value="1"/>
-    <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
-   </properties>
-  </object>
-  <object id="511" name="SlipJumpPlatform" x="400" y="640" width="64" height="16">
-   <properties>
-    <property name="collisionTypeMask" value="5"/>
-    <property name="providesHardPushback" value="1"/>
-    <property name="providesSlipJump" value="1"/>
-    <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
-   </properties>
-  </object>
-  <object id="513" name="SlipJumpPlatform" x="512" y="640" width="64" height="16">
-   <properties>
-    <property name="collisionTypeMask" value="5"/>
-    <property name="providesHardPushback" value="1"/>
-    <property name="providesSlipJump" value="1"/>
-    <property name="speciesId" value="1"/>
-    <property name="static" value="1"/>
-   </properties>
-  </object>
-  <object id="515" name="SlipJumpPlatform" x="624" y="640" width="64" height="16">
+  <object id="515" name="SlipJumpPlatform" x="848" y="640" width="64" height="16">
    <properties>
     <property name="collisionTypeMask" value="5"/>
     <property name="providesHardPushback" value="1"/>
@@ -263,11 +240,11 @@
   <object id="544" gid="1042" x="448" y="400" width="96" height="64">
    <properties>
     <property name="subscribesToId" value="4"/>
-    <property name="subscribesToIdAfterInitialFire" value="5"/>
+    <property name="subscribesToIdAfterInitialFire" value="8"/>
    </properties>
   </object>
   <object id="578" gid="1793" x="224" y="608" width="21" height="16"/>
-  <object id="579" gid="1793" x="592" y="608" width="21" height="16"/>
+  <object id="579" gid="1793" x="784" y="608" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -309,17 +286,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="520" name="Platform" x="352" y="608" width="48" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="521" name="Platform" x="464" y="608" width="48" height="16">
-   <properties>
-    <property name="boundary_type" value="barrier"/>
-   </properties>
-  </object>
-  <object id="522" name="Platform" x="576" y="608" width="48" height="16">
+  <object id="522" name="Platform" x="768" y="608" width="48" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -444,7 +411,7 @@
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="590" gid="1524" x="656" y="624" width="32" height="32">
+  <object id="590" gid="1524" x="864" y="624" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>

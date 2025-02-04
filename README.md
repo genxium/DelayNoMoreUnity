@@ -1,6 +1,6 @@
 # Latest tag change notes
-v2.2.0
-- Added basic cutscene support for StoryMode. 
+v2.2.1
+- Added basic cutscene support for StoryMode.
 
 v2.1.1 new features
 - Added back transformation buff.

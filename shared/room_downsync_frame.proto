@@ -68,6 +68,7 @@ enum CharacterState {
     InAirWalkStopping = 21;
 
     Parried = 22;
+    Awaking = 23;
 
     OnWallIdle1 = 128; 
 

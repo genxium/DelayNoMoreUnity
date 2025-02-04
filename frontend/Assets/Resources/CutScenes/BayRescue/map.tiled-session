@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Cutscenes/VillageInvasion/map.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -14,6 +14,33 @@
             "viewCenter": {
                 "x": 509.2592592592593,
                 "y": 172.35056839017233
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ArrowPalace/map.tmx": {
+            "expandedObjectLayers": [
+                9,
+                2,
+                5,
+                13,
+                4
+            ],
+            "scale": 1,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 217.5,
+                "y": 720.5
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx": {
+            "expandedObjectLayers": [
+                9,
+                13
+            ],
+            "scale": 2,
+            "selectedLayer": 12,
+            "viewCenter": {
+                "x": 1097.75,
+                "y": 272.25
             }
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx": {
@@ -32,7 +59,19 @@
                 "y": 550.3556720329465
             }
         },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Statics/HF_bd_1.tsx": {
+            "scaleInDock": 1
+        },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Statics/HF_tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Swayable/Campfire.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Swayable/CampfireWithFood.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Swayable/GhWater.tsx": {
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/doors/doors.tsx": {
@@ -68,6 +107,9 @@
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/mountain2-bkg.tsx": {
             "scaleInDock": 1
         },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/mountain3-bkg.tsx": {
+            "scaleInDock": 1
+        },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/mountain4-bkg.tsx": {
             "scaleInDock": 1
         },
@@ -81,6 +123,9 @@
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/purple_bay_bkg4.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/sky-bkg.tsx": {
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/deep_cave16.tsx": {
@@ -106,6 +151,7 @@
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/machinery/traps_machinery.tsx": {
+            "dynamicWrapping": true,
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/spike/traps_spike.tsx": {
@@ -118,7 +164,7 @@
             "scale": 1.878,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 253.99361022364218,
+                "x": 253.727369542066,
                 "y": 159.7444089456869
             }
         }
@@ -132,12 +178,12 @@
     "map.tileWidth": 16,
     "map.width": 100,
     "openFiles": [
-        "map.tmx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Cutscenes/VillageInvasion/map.tmx"
     ],
     "project": "map.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ArrowPalace/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx",
         "map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Cutscenes/VillageInvasion/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FoxBay/map.tmx",

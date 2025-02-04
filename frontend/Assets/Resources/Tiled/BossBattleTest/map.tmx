@@ -4,7 +4,7 @@
   <property name="battleDurationSeconds" value="600"/>
   <property name="levelId" value="4"/>
   <property name="missionEvtSubId" value="6"/>
-  <property name="npcPreallocCapDict" value="4106:3;4102:1;4103:3;4097:8;4102:1;4105:1;1:2;4108:2;4109:2;4099:2;4110:1;4112:4;4098:1;4096:1;4104:1;16:1"/>
+  <property name="npcPreallocCapDict" value="4106:3;4102:1;4103:3;4097:8;4102:1;4105:1;1:2;4108:2;4109:2;4099:2;4110:1;4112:4;4098:1;4096:1;4104:1;16:1;4101:1"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -132,7 +132,7 @@
   <object id="586" name="BossAwaker" x="1104" y="112" width="32" height="176">
    <properties>
     <property name="forceCtrlCmd" value="0"/>
-    <property name="forceCtrlRdfCount" value="30"/>
+    <property name="forceCtrlRdfCount" value="90"/>
     <property name="id" value="4"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
@@ -173,12 +173,12 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="587" name="SwordmanBoss" x="1296" y="272">
+  <object id="587" name="Boss" x="1296" y="272">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="speciesId" value="4104"/>
+    <property name="speciesId" value="4101"/>
     <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
    </properties>

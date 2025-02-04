@@ -246,7 +246,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 34623704}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 574.6484, y: -131.52011, z: -10}
+  m_LocalPosition: {x: -65535, y: -65535, z: 1024}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1152,7 +1152,7 @@ MonoBehaviour:
   m_DefaultControlScheme: 
   m_DefaultActionMap: StoryLevelSelectGroup
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1494301998}
 --- !u!114 &1141899799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1295,7 +1295,7 @@ MonoBehaviour:
   m_DefaultControlScheme: 
   m_DefaultActionMap: StoryRegionSelectGroup
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1494301998}
 --- !u!4 &1229191477
 Transform:
   m_ObjectHideFlags: 0
@@ -1548,5 +1548,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EventMask:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 32
   m_MaxRayIntersections: 1

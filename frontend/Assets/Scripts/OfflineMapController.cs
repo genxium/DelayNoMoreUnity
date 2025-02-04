@@ -53,7 +53,7 @@ public class OfflineMapController : AbstractMapController {
         isInNonctrlStory = false;
         isInStorySettings = false;
         remainingTriggerForceCtrlRdfCount = 0;
-        latestTiggerForceCtrlCmd = 0;
+        latestTriggerForceCtrlCmd = 0;
     }
 
     // Start is called before the first frame update
@@ -295,9 +295,9 @@ public class OfflineMapController : AbstractMapController {
                     var trigger = currRdf.TriggersArr[forceCtrlTriggerLocalId-1];
                     var triggerConfigFromTiled = triggerEditorIdToConfigFromTiled[trigger.EditorId];
                     remainingTriggerForceCtrlRdfCount = triggerConfigFromTiled.ForceCtrlRdfCount;
-                    latestTiggerForceCtrlCmd = triggerConfigFromTiled.ForceCtrlCmd;
+                    latestTriggerForceCtrlCmd = triggerConfigFromTiled.ForceCtrlCmd;
                     
-                    Debug.LogFormat("Picked remainingTriggerForceCtrlRdfCount={1}, latestTiggerForceCtrlCmd={2} at post-doUpdate-playerRdfId={0}", playerRdfId, remainingTriggerForceCtrlRdfCount, latestTiggerForceCtrlCmd);
+                    Debug.LogFormat("Picked remainingTriggerForceCtrlRdfCount={1}, latestTriggerForceCtrlCmd={2} at post-doUpdate-playerRdfId={0}", playerRdfId, remainingTriggerForceCtrlRdfCount, latestTriggerForceCtrlCmd);
                 }
             }
 
