@@ -189,7 +189,8 @@ public class CharacterAnimController : MonoBehaviour {
         var curClip = animator.GetCurrentAnimatorClipInfo(targetLayer)[targetClipIdx].clip;
         var playingAnimName = curClip.name;
         if (!lookUpTable.ContainsKey(effNewChState)) {
-            throw new Exception(chConfig.SpeciesName + " does not have effNewChState = " + effNewChState);
+            Debug.LogWarning(chConfig.SpeciesName + " does not have effNewChState = " + effNewChState + "@FramesInChState=" + rdfCharacter.FramesInChState);
+            return;
         }
         var targetClip = lookUpTable[effNewChState];
         if (null == chConfig.LoopingChStates || !chConfig.LoopingChStates.ContainsKey(effNewChState)) {

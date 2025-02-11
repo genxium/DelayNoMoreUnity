@@ -5,6 +5,11 @@ package shared;
 // Providing "csharp_namespace" to force generating lowercase namespace, reference https://protobuf.dev/programming-guides/proto3/#packages 
 option csharp_namespace = "shared";
 
+enum BoxInterpolationType {
+    UsePrev = 0; 
+    Interpolate = 1;
+}
+
 message AuthResult {
     int32 retCode = 1;
     string uname = 2;
@@ -69,6 +74,7 @@ enum CharacterState {
 
     Parried = 22;
     Awaking = 23;
+    GroundDodged = 24;
 
     OnWallIdle1 = 128; 
 
@@ -232,6 +238,8 @@ message CharacterDownsync {
     Inventory inventory = 92;
 
     repeated BulletImmuneRecord bulletImmuneRecords = 93;
+
+    repeated float kinematicKnobs = 94; // including both forward-kinematics and inverse-kinematics   
 }
 
 message InputFrameDecoded {
@@ -297,14 +305,6 @@ message PatrolCue {
     int32 fuCaptureFrames = 9;
 
     uint64 collisionTypeMask = 1029; // [COLLISION_NPC_PATROL_CUE_INDEX_PREFIX, COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX]
-}
-
-message VisionBox {
-    // all values are relative to (CharacterDownsync.dirX=+2, CharacterDownsync.virtualGridX, CharacterDownsync.virtualGridY) 
-    int32 bottomLeftX = 1; 
-    int32 bottomLeftY = 2; 
-    int32 width = 3; 
-    int32 height = 4; 
 }
 
 enum BulletType {

@@ -1256,11 +1256,13 @@ namespace shared {
             return (dx, dy, encodedIdx);
         }
 
-        private static void findHorizontallyClosestCharacterCollider(int rdfId, CharacterDownsync currCharacterDownsync, Collider visionCollider, Collider entityCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res1Ch, out Collider? res2, out Bullet? res2Bl, ILoggerBridge logger) {
+        private static void findHorizontallyClosestCharacterCollider(int rdfId, CharacterDownsync currCharacterDownsync, Collider visionCollider, Collider entityCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res1Ch, out Collider? res2, out Bullet? res2Bl, out Collider? res3, out CharacterDownsync? res3Ch, ILoggerBridge logger) {
             res1 = null;
             res1Ch = null;
             res2 = null;
             res2Bl = null;
+            res3 = null;
+            res3Ch = null;
 
             // [WARNING] Finding only the closest non-self character to react to for avoiding any randomness. 
             bool collided = visionCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
@@ -1268,6 +1270,9 @@ namespace shared {
 
             float minAbsColliderDx = MAX_FLOAT32;
             float minAbsColliderDy = MAX_FLOAT32;
+
+            float minAbsColliderDxForSameTeam = MAX_FLOAT32;
+            float minAbsColliderDyForSameTeam = MAX_FLOAT32;
 
             ConvexPolygon aShape = visionCollider.Shape;
             while (true) {
@@ -1279,7 +1284,7 @@ namespace shared {
                 CharacterDownsync? v3 = bCollider.Data as CharacterDownsync;
                 if (null != v3) {
                     // Only check shape collision (which is relatively expensive) if it's the targeted entity type 
-                    if (v3.JoinIndex == currCharacterDownsync.JoinIndex || v3.BulletTeamId == currCharacterDownsync.BulletTeamId) {
+                    if (v3.JoinIndex == currCharacterDownsync.JoinIndex) {
                         continue;
                     }
 
@@ -1293,22 +1298,38 @@ namespace shared {
 
                     var colliderDx = (bCollider.X - entityCollider.X);
                     var colliderDy = (bCollider.Y - entityCollider.Y);
-
                     var absColliderDx = Math.Abs(colliderDx);
-                    if (absColliderDx > minAbsColliderDx) {
-                        continue;
-                    }
-
                     var absColliderDy = Math.Abs(colliderDy);
-                    if (absColliderDx == minAbsColliderDx && absColliderDy > minAbsColliderDy) {
-                        continue;
-                    }
-                    minAbsColliderDx = absColliderDx;
-                    minAbsColliderDy = absColliderDy;
-                    res1 = bCollider;
-                    res1Ch = v3;
-                    res2 = null;
-                    res2Bl = null;
+
+                    if (v3.BulletTeamId != currCharacterDownsync.BulletTeamId) {
+                        // different teams
+                        if (absColliderDx > minAbsColliderDx) {
+                            continue;
+                        }
+
+                        if (absColliderDx == minAbsColliderDx && absColliderDy > minAbsColliderDy) {
+                            continue;
+                        }
+                        minAbsColliderDx = absColliderDx;
+                        minAbsColliderDy = absColliderDy;
+                        res1 = bCollider;
+                        res1Ch = v3;
+                        res2 = null;
+                        res2Bl = null;
+                    } else {
+                        // same team
+                        if (absColliderDx > minAbsColliderDxForSameTeam) {
+                            continue;
+                        }
+
+                        if (absColliderDx == minAbsColliderDxForSameTeam && absColliderDy > minAbsColliderDyForSameTeam) {
+                            continue;
+                        }
+                        minAbsColliderDxForSameTeam = absColliderDx;
+                        minAbsColliderDyForSameTeam = absColliderDy;
+                        res3 = bCollider;
+                        res3Ch = v3;
+                    }  
                 } else {
                     Bullet? v4 = bCollider.Data as Bullet;
                     if (null == v4) {

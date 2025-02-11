@@ -40,6 +40,12 @@ namespace shared {
 
         public bool UseInventoryBtnB;
 
+        public bool GroundDodgeEnabledByIvSlotCInBlockStun;
+        public int GroundDodgeEnabledByRdfCntFromBeginning;
+        public int GroundDodgedFramesToRecover;
+        public int GroundDodgedFramesInvinsible;
+        public int GroundDodgedSpeed; // TODO: For better flexibility, should allow "configurable list of speed keyframes", like that of "Hurtboxes"  
+
         /**
          * Collision boxes
          * 
@@ -65,6 +71,8 @@ namespace shared {
 
         public int DimmedSizeX;
         public int DimmedSizeY;
+
+        public Dictionary<CharacterState, List<(ConvexPolygon, BoxInterpolationType)>> Hurtboxes;
 
         // Collision masks
         public bool AntiGravityWhenIdle;
@@ -92,7 +100,7 @@ namespace shared {
 
         public bool IsolatedAirJumpAndDashQuota; // default is false, in most cases AirJump and AirDash quotas are deduced together (but default initial quota can be different) 
 
-        public bool UseIsolatedAvatar;
+        public int AirJumpVfxSpeciesId;
 
         public List<InventorySlot> InitInventorySlots;
 
@@ -141,7 +149,6 @@ namespace shared {
 
         public bool UseIdle1AsFlyingIdle;
 
-        public ImmutableDictionary<CharacterState, int> LoopingChStates;
-        
+        public ImmutableDictionary<CharacterState, int> LoopingChStates; 
     }
 }

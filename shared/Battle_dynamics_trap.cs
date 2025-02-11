@@ -185,8 +185,7 @@ namespace shared {
         private static void _processSingleTrapDamageOnSingleCharacter(RoomDownsyncFrame currRenderFrame, ConvexPolygon aShape, ConvexPolygon bShape, ref SatResult overlapResult, TrapColliderAttr colliderAttr, CharacterDownsync atkedCharacterInCurrFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ILoggerBridge logger) {
             // The traversal order of traps (both static & dynamic) is deterministic, thus the following assignment is deterministic regardless of the order of collision result popping.
             if (invinsibleSet.Contains(atkedCharacterInCurrFrame.CharacterState)) return;
-            int atkedJ = atkedCharacterInCurrFrame.JoinIndex - 1;
-            var atkedCharacterInNextFrame = (atkedJ < roomCapacity ? nextRenderFramePlayers[atkedJ] : nextRenderFrameNpcs[atkedJ - roomCapacity]);
+            var atkedCharacterInNextFrame = getChdFromChdArrs(atkedCharacterInCurrFrame.JoinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
             // [WARNING] As trap damage is calculated after those of bullets, don't overwrite blown-up effect!
             if (0 < atkedCharacterInCurrFrame.FramesInvinsible) return;
 

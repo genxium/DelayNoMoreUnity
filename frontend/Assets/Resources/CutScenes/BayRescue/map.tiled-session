@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -44,11 +44,11 @@
             }
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx": {
-            "scale": 0.5428571428571428,
-            "selectedLayer": 0,
+            "scale": 1.2481,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 511.1842105263158,
-                "y": 560.0000000000001
+                "x": 451.8868680394199,
+                "y": 304.062174505248
             }
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FoxBay/map.tmx": {
@@ -178,17 +178,18 @@
     "map.tileWidth": 16,
     "map.width": 100,
     "openFiles": [
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx"
     ],
     "project": "map.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ArrowPalace/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx",
         "map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Cutscenes/VillageInvasion/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FoxBay/map.tmx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/purple_bay16.tsx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx"
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/purple_bay16.tsx"
     ],
     "tileset.embedInMap": false,
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",

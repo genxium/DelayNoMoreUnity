@@ -257,6 +257,46 @@ namespace shared {
             Name = "AirJumpCircle"
         };
 
+        public static VfxConfig VfxAirJumpDust = new VfxConfig {
+            SpeciesId = 26,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = true,
+            OnBullet = false,
+            UsePixelatedVer = true,
+            Name = "AirJumpDust"
+        };
+
+        public static VfxConfig VfxSmallSlash1 = new VfxConfig {
+            SpeciesId = 27,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true,
+            UsePixelatedVer = true,
+            Name = "SmallSlash1"
+        };
+
+        public static VfxConfig VfxSmallSlash2 = new VfxConfig {
+            SpeciesId = 28,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true,
+            UsePixelatedVer = true,
+            Name = "SmallSlash2"
+        };
+
+        public static VfxConfig VfxSmallSlash3 = new VfxConfig {
+            SpeciesId = 29,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.OneOff,
+            OnCharacter = false,
+            OnBullet = true,
+            UsePixelatedVer = true,
+            Name = "SmallSlash3"
+        };
+
         public static ImmutableDictionary<int, VfxConfig> pixelatedVfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
              new[]
              {
@@ -285,6 +325,10 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxThunderStrikeStart.SpeciesId, VfxThunderStrikeStart),
                     new KeyValuePair<int, VfxConfig>(VfxStoneDropperStart.SpeciesId, VfxStoneDropperStart),
                     new KeyValuePair<int, VfxConfig>(VfxAirJumpCircle.SpeciesId, VfxAirJumpCircle),
+                    new KeyValuePair<int, VfxConfig>(VfxAirJumpDust.SpeciesId, VfxAirJumpDust),
+                    new KeyValuePair<int, VfxConfig>(VfxSmallSlash1.SpeciesId, VfxSmallSlash1),
+                    new KeyValuePair<int, VfxConfig>(VfxSmallSlash2.SpeciesId, VfxSmallSlash2),
+                    new KeyValuePair<int, VfxConfig>(VfxSmallSlash3.SpeciesId, VfxSmallSlash3),
              }
         );
 
@@ -431,7 +475,7 @@ namespace shared {
                             new KeyValuePair<uint, uint>(SPECIES_MAGSWORDGIRL, MpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BRIGHTWITCH, MpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, HpRefillSmall.SpeciesId),
-                            new KeyValuePair<uint, uint>(SPECIES_SPEARWOMAN, MpRefillSmall.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SPEARWOMAN, HpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_LIGHTSPEARWOMAN, MpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_WANDWITCHGIRL, MpRefillSmall.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_SWORDMAN, MpRefillSmall.SpeciesId),
@@ -467,7 +511,7 @@ namespace shared {
                             new KeyValuePair<uint, uint>(SPECIES_MAGSWORDGIRL, MpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BRIGHTWITCH, MpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_BOUNTYHUNTER, HpRefillMiddle.SpeciesId),
-                            new KeyValuePair<uint, uint>(SPECIES_SPEARWOMAN, MpRefillMiddle.SpeciesId),
+                            new KeyValuePair<uint, uint>(SPECIES_SPEARWOMAN, HpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_LIGHTSPEARWOMAN, MpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_WANDWITCHGIRL, MpRefillMiddle.SpeciesId),
                             new KeyValuePair<uint, uint>(SPECIES_SWORDMAN, MpRefillMiddle.SpeciesId),

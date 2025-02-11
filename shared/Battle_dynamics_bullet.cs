@@ -109,7 +109,7 @@ namespace shared {
                             // [WARNING] "HopperMissile" never spins and relies on "RotatesAlongVelocity" to mimic spin rendering!
                             if (MAGIC_JOIN_INDEX_INVALID != dstTargetChJoinIndex) {
                                 // Spin to follow target if possible
-                                var targetCh = (dstTargetChJoinIndex < roomCapacity + 1 ? currRenderFrame.PlayersArr[dstTargetChJoinIndex - 1] : currRenderFrame.NpcsArr[dstTargetChJoinIndex - 1 - roomCapacity]);
+                                var targetCh = getChdFromRdf(dstTargetChJoinIndex, roomCapacity, currRenderFrame);;
                                 if (null == targetCh || invinsibleSet.Contains(targetCh.CharacterState)) {
                                     dstTargetChJoinIndex = MAGIC_JOIN_INDEX_INVALID;
                                 } else {
@@ -165,10 +165,9 @@ namespace shared {
                     offenderTrap = nextRenderFrameTraps[dst.OffenderTrapLocalId-1];
                 }
                 CharacterDownsync? offender = null;
-                int j = dst.OffenderJoinIndex - 1;
-                if (0 <= j && j < roomCapacity + npcCnt) {
-                    // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
-                    offender = (j < roomCapacity ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
+                if (1 <= dst.OffenderJoinIndex && dst.OffenderJoinIndex <= (roomCapacity + npcCnt)) {
+                    // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds. 
+                    offender = getChdFromRdf(dst.OffenderJoinIndex, roomCapacity, currRenderFrame);
                 }
 
                 if (!IsBulletAlive(dst, srcConfig, currRenderFrame.Id)) {
@@ -265,7 +264,7 @@ namespace shared {
                                             continue;
                                         }
 
-                                        var targetChNextFrame = (dstTargetChJoinIndex < roomCapacity + 1 ? nextRenderFramePlayers[dstTargetChJoinIndex - 1] : nextRenderFrameNpcs[dstTargetChJoinIndex - 1 - roomCapacity]);
+                                        var targetChNextFrame = getChdFromChdArrs(dstTargetChJoinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
                                         if (null == targetChNextFrame) {
                                             // No next target, drop this bullet
                                             continue;
@@ -321,13 +320,12 @@ namespace shared {
             for (int i = 0; i < currRenderFrameBullets.Count; i++) {
                 var src = currRenderFrameBullets[i];
                 if (TERMINATING_BULLET_LOCAL_ID == src.BulletLocalId) break;
-                int j = src.OffenderJoinIndex - 1;
-                if (0 > j || j >= roomCapacity + npcCnt) {
+                if (1 > src.OffenderJoinIndex || src.OffenderJoinIndex > (roomCapacity + npcCnt)) {
                     // Although "nextRenderFrameNpcs" is terminated by a special "id", a bullet could reference an npc instance outside of termination by "OffenderJoinIndex" and thus get "contaminated data from reused memory" -- the rollback netcode implemented by this project only guarantees "eventual correctness" within the termination bounds of "playersArr/npcsArr/bulletsArr" while incorrect predictions could remain outside of the bounds.
                     continue;
                 }
-                var offender = (j < roomCapacity ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
-                var offenderNextFrame = (j < roomCapacity ? nextRenderFramePlayers[j] : nextRenderFrameNpcs[j - roomCapacity]);
+                var offender = getChdFromRdf(src.OffenderJoinIndex, roomCapacity, currRenderFrame);
+                var offenderNextFrame = getChdFromChdArrs(src.OffenderJoinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
 
                 bool isSameBullet = (offender.ActiveSkillId == src.SkillId && offender.ActiveSkillHit == src.ActiveSkillHit);
                 /*
@@ -469,11 +467,10 @@ namespace shared {
                 if (null == bulletConfig) {
                     continue;
                 }
-                int j = bulletNextFrame.OffenderJoinIndex - 1;
                 CharacterDownsync? offender = null, offenderNextFrame = null;
-                if (0 <= j && j < roomCapacity + npcCnt) {
-                    offender = (j < roomCapacity ? currRenderFrame.PlayersArr[j] : currRenderFrame.NpcsArr[j - roomCapacity]);
-                    offenderNextFrame = (j < roomCapacity ? nextRenderFramePlayers[j] : nextRenderFrameNpcs[j - roomCapacity]);
+                if (1 <= bulletNextFrame.OffenderJoinIndex && bulletNextFrame.OffenderJoinIndex <= (roomCapacity + npcCnt)) {
+                    offender = getChdFromRdf(bulletNextFrame.OffenderJoinIndex, roomCapacity, currRenderFrame);
+                    offenderNextFrame = getChdFromChdArrs(bulletNextFrame.OffenderJoinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
                 }
 
                 Trap? offenderTrap = null, offenderTrapNextFrame = null;
@@ -655,11 +652,27 @@ namespace shared {
                                 if (bulletNextFrame.OffenderJoinIndex == victimCurrFrame.JoinIndex) continue;
                                 if (bulletNextFrame.TeamId == victimCurrFrame.BulletTeamId) continue;
                                 if (invinsibleSet.Contains(victimCurrFrame.CharacterState)) continue;
-                                if (0 < victimCurrFrame.FramesInvinsible) continue;
                                 bool bulletProvidesEffPushback = (bulletConfig.ProvidesXHardPushback && 0 != overlapResult.OverlapX) || (bulletConfig.ProvidesYHardPushbackTop && 0 < overlapResult.OverlapY) || (bulletConfig.ProvidesYHardPushbackBottom && 0 > overlapResult.OverlapY);
                                 if (bulletProvidesEffPushback) {
                                     break;
                                 }
+    
+                                var victimChConfig = characters[victimCurrFrame.SpeciesId];
+                                CharacterDownsync victimNextFrame = getChdFromChdArrs(victimCurrFrame.JoinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
+                                /*
+                                [WARNING] Deliberately checking conditions using "victimNextFrame" instead of "victimCurrFrame" to allow more responsive graphics. 
+                                */
+                                if (victimChConfig.GroundDodgeEnabledByRdfCntFromBeginning > victimNextFrame.FramesInChState) {  
+                                    bool notDashing = isNotDashing(victimNextFrame);
+                                    bool effInAir = isEffInAir(victimNextFrame, notDashing);
+                                    if (!effInAir && !notDashing) {
+                                        transitToGroundDodgedChState(victimNextFrame, victimChConfig);
+                                        break;
+                                    }
+                                }
+
+                                if (0 < victimCurrFrame.FramesInvinsible) continue;
+
                                 int immuneRcdI = 0;
                                 bool shouldBeImmune = false;
                                 if (bulletConfig.RemainsUponHit) {
@@ -683,8 +696,6 @@ namespace shared {
                                 exploded |= explodedOnCh;
 
                                 //logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], victimCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, victimCurrFrame));
-                                int victimJ = victimCurrFrame.JoinIndex - 1;
-                                CharacterDownsync victimNextFrame = (victimJ < roomCapacity ? nextRenderFramePlayers[victimJ] : nextRenderFrameNpcs[victimJ - roomCapacity]);
 
                                 if (bulletConfig.RemainsUponHit && !shouldBeImmune) {
                                     // [WARNING] Strictly speaking, I should re-traverse "victimNextFrame.BulletImmuneRecords" to determine "nextImmuneRcdI", but whatever...
@@ -701,7 +712,6 @@ namespace shared {
 
                                     if (terminatingImmuneRcdI < victimNextFrame.BulletImmuneRecords.Count) victimNextFrame.BulletImmuneRecords[terminatingImmuneRcdI].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
                                 }
-                                var victimChConfig = characters[victimNextFrame.SpeciesId];
                                 CharacterState oldNextCharacterState = victimNextFrame.CharacterState;
 
                                 Skill? victimActiveSkill = null;
@@ -1107,7 +1117,7 @@ namespace shared {
 
                     CharacterDownsync? targetChNextFrame = null;
                     if (MAGIC_JOIN_INDEX_INVALID != targetChJoinIndex) {
-                       targetChNextFrame = (targetChJoinIndex < roomCapacity + 1 ? nextRenderFramePlayers[targetChJoinIndex - 1] : nextRenderFrameNpcs[targetChJoinIndex - 1 - roomCapacity]);
+                       targetChNextFrame = getChdFromChdArrs(targetChJoinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);;
 
                     }
                     if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, bulletNextFrame, targetChNextFrame, logger)) {

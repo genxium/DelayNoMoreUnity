@@ -85,7 +85,7 @@ public class InventorySlot : MonoBehaviour {
             Sprite spr = inventoryBtnBSpriteMsg;
             content.color = semiTransparent;
             content.sprite = spr;
-        } else if (65 == slot.SkillId) {
+        } else if (65 == slot.SkillId || 110 == slot.SkillId) {
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[0]; // TODO: Remove this nonsense hardcoded index! 
         } else if (59 == slot.SkillId) {
@@ -94,7 +94,7 @@ public class InventorySlot : MonoBehaviour {
         } else if (27 == slot.SkillId) {
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[2]; // TODO: Remove this nonsense hardcoded index! 
-        } else if (21 == slot.SkillId) {
+        } else if (21 == slot.SkillId || 125 == slot.SkillId) {
             content.color = semiTransparent;
             content.sprite = buffConfigSprites[3]; // TODO: Remove this nonsense hardcoded index! 
         } else if (4 == slot.SkillId) {

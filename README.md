@@ -1,6 +1,7 @@
 # Latest tag change notes
-v2.2.1
+v2.2.2
 - Added basic cutscene support for StoryMode.
+- Added slide-dodge (at critical timing) and defence-dodge (cost 1 slot-C).
 
 v2.1.1 new features
 - Added back transformation buff.

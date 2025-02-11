@@ -120,8 +120,8 @@ TextureImporter:
       name: Healing1
       rect:
         serializedVersion: 2
-        x: 207
-        y: 324
+        x: 244
+        y: 311
         width: 27
         height: 27
       alignment: 9
@@ -141,8 +141,8 @@ TextureImporter:
       name: Healing10
       rect:
         serializedVersion: 2
-        x: 488
-        y: 238
+        x: 720
+        y: 676
         width: 33
         height: 33
       alignment: 9
@@ -162,8 +162,8 @@ TextureImporter:
       name: Healing11
       rect:
         serializedVersion: 2
-        x: 404
-        y: 237
+        x: 704
+        y: 951
         width: 35
         height: 34
       alignment: 9
@@ -183,8 +183,8 @@ TextureImporter:
       name: Healing12
       rect:
         serializedVersion: 2
-        x: 542
-        y: 0
+        x: 694
+        y: 851
         width: 36
         height: 35
       alignment: 9
@@ -204,8 +204,8 @@ TextureImporter:
       name: Healing13
       rect:
         serializedVersion: 2
-        x: 607
-        y: 945
+        x: 656
+        y: 888
         width: 38
         height: 37
       alignment: 9
@@ -225,8 +225,8 @@ TextureImporter:
       name: Healing14
       rect:
         serializedVersion: 2
-        x: 575
-        y: 513
+        x: 689
+        y: 746
         width: 39
         height: 38
       alignment: 9
@@ -246,8 +246,8 @@ TextureImporter:
       name: Healing15
       rect:
         serializedVersion: 2
-        x: 640
-        y: 983
+        x: 610
+        y: 603
         width: 40
         height: 41
       alignment: 9
@@ -267,8 +267,8 @@ TextureImporter:
       name: Healing16
       rect:
         serializedVersion: 2
-        x: 572
-        y: 846
+        x: 675
+        y: 561
         width: 42
         height: 42
       alignment: 9
@@ -288,8 +288,8 @@ TextureImporter:
       name: Healing17
       rect:
         serializedVersion: 2
-        x: 535
-        y: 630
+        x: 627
+        y: 693
         width: 42
         height: 43
       alignment: 9
@@ -309,8 +309,8 @@ TextureImporter:
       name: Healing18
       rect:
         serializedVersion: 2
-        x: 590
-        y: 305
+        x: 654
+        y: 417
         width: 44
         height: 44
       alignment: 9
@@ -330,8 +330,8 @@ TextureImporter:
       name: Healing19
       rect:
         serializedVersion: 2
-        x: 624
-        y: 9
+        x: 568
+        y: 114
         width: 45
         height: 46
       alignment: 9
@@ -351,8 +351,8 @@ TextureImporter:
       name: Healing2
       rect:
         serializedVersion: 2
-        x: 234
-        y: 324
+        x: 273
+        y: 312
         width: 27
         height: 27
       alignment: 9
@@ -372,8 +372,8 @@ TextureImporter:
       name: Healing20
       rect:
         serializedVersion: 2
-        x: 261
-        y: 606
+        x: 598
+        y: 280
         width: 46
         height: 47
       alignment: 9
@@ -393,8 +393,8 @@ TextureImporter:
       name: Healing21
       rect:
         serializedVersion: 2
-        x: 515
-        y: 349
+        x: 557
+        y: 379
         width: 46
         height: 49
       alignment: 9
@@ -414,8 +414,8 @@ TextureImporter:
       name: Healing22
       rect:
         serializedVersion: 2
-        x: 521
-        y: 239
+        x: 575
+        y: 496
         width: 48
         height: 51
       alignment: 9
@@ -435,8 +435,8 @@ TextureImporter:
       name: Healing23
       rect:
         serializedVersion: 2
-        x: 267
-        y: 426
+        x: 428
+        y: 414
         width: 48
         height: 50
       alignment: 9
@@ -456,8 +456,8 @@ TextureImporter:
       name: Healing24
       rect:
         serializedVersion: 2
-        x: 492
-        y: 290
+        x: 532
+        y: 430
         width: 50
         height: 51
       alignment: 9
@@ -477,8 +477,8 @@ TextureImporter:
       name: Healing25
       rect:
         serializedVersion: 2
-        x: 439
-        y: 565
+        x: 523
+        y: 483
         width: 50
         height: 52
       alignment: 9
@@ -498,8 +498,8 @@ TextureImporter:
       name: Healing26
       rect:
         serializedVersion: 2
-        x: 423
-        y: 393
+        x: 507
+        y: 603
         width: 50
         height: 52
       alignment: 9
@@ -519,8 +519,8 @@ TextureImporter:
       name: Healing27
       rect:
         serializedVersion: 2
-        x: 415
-        y: 445
+        x: 476
+        y: 537
         width: 51
         height: 54
       alignment: 9
@@ -540,8 +540,8 @@ TextureImporter:
       name: Healing28
       rect:
         serializedVersion: 2
-        x: 415
-        y: 617
+        x: 469
+        y: 474
         width: 52
         height: 54
       alignment: 9
@@ -561,8 +561,8 @@ TextureImporter:
       name: Healing29
       rect:
         serializedVersion: 2
-        x: 482
-        y: 182
+        x: 110
+        y: 1
         width: 52
         height: 55
       alignment: 9
@@ -582,8 +582,8 @@ TextureImporter:
       name: Healing3
       rect:
         serializedVersion: 2
-        x: 276
-        y: 232
+        x: 373
+        y: 220
         width: 21
         height: 20
       alignment: 9
@@ -603,8 +603,8 @@ TextureImporter:
       name: Healing30
       rect:
         serializedVersion: 2
-        x: 430
-        y: 181
+        x: 583
+        y: 967
         width: 52
         height: 56
       alignment: 9
@@ -624,8 +624,8 @@ TextureImporter:
       name: Healing4
       rect:
         serializedVersion: 2
-        x: 313
-        y: 236
+        x: 438
+        y: 155
         width: 23
         height: 22
       alignment: 9
@@ -645,8 +645,8 @@ TextureImporter:
       name: Healing5
       rect:
         serializedVersion: 2
-        x: 433
-        y: 941
+        x: 313
+        y: 604
         width: 25
         height: 23
       alignment: 9
@@ -666,8 +666,8 @@ TextureImporter:
       name: Healing6
       rect:
         serializedVersion: 2
-        x: 308
-        y: 327
+        x: 302
+        y: 314
         width: 26
         height: 25
       alignment: 9
@@ -687,8 +687,8 @@ TextureImporter:
       name: Healing7
       rect:
         serializedVersion: 2
-        x: 233
-        y: 608
+        x: 184
+        y: 311
         width: 28
         height: 27
       alignment: 9
@@ -708,8 +708,8 @@ TextureImporter:
       name: Healing8
       rect:
         serializedVersion: 2
-        x: 204
-        y: 606
+        x: 362
+        y: 314
         width: 29
         height: 29
       alignment: 9
@@ -729,8 +729,8 @@ TextureImporter:
       name: Healing9
       rect:
         serializedVersion: 2
-        x: 649
-        y: 612
+        x: 506
+        y: 179
         width: 31
         height: 31
       alignment: 9
@@ -750,8 +750,8 @@ TextureImporter:
       name: MpHealing1
       rect:
         serializedVersion: 2
-        x: 603
-        y: 707
+        x: 402
+        y: 717
         width: 32
         height: 32
       alignment: 9
@@ -771,8 +771,8 @@ TextureImporter:
       name: MpHealing10
       rect:
         serializedVersion: 2
-        x: 564
-        y: 739
+        x: 718
+        y: 517
         width: 41
         height: 42
       alignment: 9
@@ -792,8 +792,8 @@ TextureImporter:
       name: MpHealing11
       rect:
         serializedVersion: 2
-        x: 639
-        y: 173
+        x: 583
+        y: 691
         width: 42
         height: 44
       alignment: 0
@@ -813,8 +813,8 @@ TextureImporter:
       name: MpHealing12
       rect:
         serializedVersion: 2
-        x: 595
-        y: 159
+        x: 589
+        y: 166
         width: 44
         height: 46
       alignment: 0
@@ -834,8 +834,8 @@ TextureImporter:
       name: MpHealing13
       rect:
         serializedVersion: 2
-        x: 578
-        y: 5
+        x: 581
+        y: 329
         width: 46
         height: 48
       alignment: 0
@@ -855,8 +855,8 @@ TextureImporter:
       name: MpHealing14
       rect:
         serializedVersion: 2
-        x: 315
-        y: 426
+        x: 498
+        y: 262
         width: 48
         height: 50
       alignment: 0
@@ -876,8 +876,8 @@ TextureImporter:
       name: MpHealing15
       rect:
         serializedVersion: 2
-        x: 465
-        y: 341
+        x: 446
+        y: 260
         width: 50
         height: 52
       alignment: 0
@@ -897,8 +897,8 @@ TextureImporter:
       name: MpHealing16
       rect:
         serializedVersion: 2
-        x: 496
-        y: 127
+        x: 393
+        y: 357
         width: 51
         height: 55
       alignment: 9
@@ -918,8 +918,8 @@ TextureImporter:
       name: MpHealing17
       rect:
         serializedVersion: 2
-        x: 370
-        y: 369
+        x: 492
+        y: 737
         width: 53
         height: 57
       alignment: 9
@@ -939,8 +939,8 @@ TextureImporter:
       name: MpHealing18
       rect:
         serializedVersion: 2
-        x: 552
-        y: 966
+        x: 476
+        y: 657
         width: 55
         height: 58
       alignment: 9
@@ -960,8 +960,8 @@ TextureImporter:
       name: MpHealing19
       rect:
         serializedVersion: 2
-        x: 477
-        y: 881
+        x: 483
+        y: 796
         width: 57
         height: 60
       alignment: 9
@@ -981,8 +981,8 @@ TextureImporter:
       name: MpHealing2
       rect:
         serializedVersion: 2
-        x: 603
-        y: 675
+        x: 408
+        y: 530
         width: 32
         height: 32
       alignment: 9
@@ -1002,8 +1002,8 @@ TextureImporter:
       name: MpHealing20
       rect:
         serializedVersion: 2
-        x: 419
-        y: 879
+        x: 409
+        y: 466
         width: 58
         height: 62
       alignment: 9
@@ -1023,8 +1023,8 @@ TextureImporter:
       name: MpHealing21
       rect:
         serializedVersion: 2
-        x: 394
-        y: 692
+        x: 351
+        y: 652
         width: 59
         height: 63
       alignment: 9
@@ -1044,8 +1044,8 @@ TextureImporter:
       name: MpHealing22
       rect:
         serializedVersion: 2
-        x: 359
-        y: 859
+        x: 507
+        y: 21
         width: 60
         height: 65
       alignment: 9
@@ -1065,8 +1065,8 @@ TextureImporter:
       name: MpHealing23
       rect:
         serializedVersion: 2
-        x: 267
-        y: 540
+        x: 382
+        y: 246
         width: 62
         height: 66
       alignment: 9
@@ -1086,8 +1086,8 @@ TextureImporter:
       name: MpHealing24
       rect:
         serializedVersion: 2
-        x: 366
-        y: 100
+        x: 274
+        y: 460
         width: 63
         height: 68
       alignment: 9
@@ -1107,8 +1107,8 @@ TextureImporter:
       name: MpHealing25
       rect:
         serializedVersion: 2
-        x: 366
-        y: 168
+        x: 274
+        y: 530
         width: 64
         height: 69
       alignment: 9
@@ -1128,8 +1128,8 @@ TextureImporter:
       name: MpHealing26
       rect:
         serializedVersion: 2
-        x: 141
-        y: 0
+        x: 371
+        y: 148
         width: 65
         height: 70
       alignment: 9
@@ -1149,8 +1149,8 @@ TextureImporter:
       name: MpHealing27
       rect:
         serializedVersion: 2
-        x: 300
-        y: 165
+        x: 256
+        y: 341
         width: 66
         height: 71
       alignment: 9
@@ -1170,8 +1170,8 @@ TextureImporter:
       name: MpHealing28
       rect:
         serializedVersion: 2
-        x: 298
-        y: 88
+        x: 237
+        y: 237
         width: 68
         height: 72
       alignment: 9
@@ -1191,8 +1191,8 @@ TextureImporter:
       name: MpHealing29
       rect:
         serializedVersion: 2
-        x: 206
-        y: 11
+        x: 154
+        y: 66
         width: 68
         height: 73
       alignment: 9
@@ -1212,8 +1212,8 @@ TextureImporter:
       name: MpHealing3
       rect:
         serializedVersion: 2
-        x: 624
-        y: 643
+        x: 442
+        y: 530
         width: 32
         height: 32
       alignment: 9
@@ -1233,8 +1233,8 @@ TextureImporter:
       name: MpHealing30
       rect:
         serializedVersion: 2
-        x: 251
-        y: 352
+        x: 95
+        y: 234
         width: 70
         height: 74
       alignment: 9
@@ -1254,8 +1254,8 @@ TextureImporter:
       name: MpHealing4
       rect:
         serializedVersion: 2
-        x: 605
-        y: 749
+        x: 755
+        y: 677
         width: 32
         height: 32
       alignment: 9
@@ -1275,8 +1275,8 @@ TextureImporter:
       name: MpHealing5
       rect:
         serializedVersion: 2
-        x: 620
-        y: 565
+        x: 719
+        y: 589
         width: 32
         height: 33
       alignment: 9
@@ -1296,8 +1296,8 @@ TextureImporter:
       name: MpHealing6
       rect:
         serializedVersion: 2
-        x: 439
-        y: 237
+        x: 712
+        y: 989
         width: 33
         height: 34
       alignment: 9
@@ -1317,8 +1317,8 @@ TextureImporter:
       name: MpHealing7
       rect:
         serializedVersion: 2
-        x: 614
-        y: 517
+        x: 675
+        y: 987
         width: 35
         height: 36
       alignment: 9
@@ -1338,8 +1338,8 @@ TextureImporter:
       name: MpHealing8
       rect:
         serializedVersion: 2
-        x: 613
-        y: 598
+        x: 637
+        y: 985
         width: 36
         height: 38
       alignment: 0
@@ -1359,8 +1359,8 @@ TextureImporter:
       name: MpHealing9
       rect:
         serializedVersion: 2
-        x: 535
-        y: 590
+        x: 547
+        y: 737
         width: 38
         height: 40
       alignment: 0
@@ -1380,8 +1380,8 @@ TextureImporter:
       name: SmallSting1
       rect:
         serializedVersion: 2
-        x: 180
-        y: 915
+        x: 134
+        y: 600
         width: 57
         height: 5
       alignment: 9
@@ -1401,8 +1401,8 @@ TextureImporter:
       name: SmallSting2
       rect:
         serializedVersion: 2
-        x: 88
-        y: 915
+        x: 195
+        y: 806
         width: 53
         height: 13
       alignment: 9
@@ -1422,8 +1422,8 @@ TextureImporter:
       name: SmallSting3
       rect:
         serializedVersion: 2
-        x: 351
-        y: 924
+        x: 268
+        y: 717
         width: 39
         height: 17
       alignment: 9
@@ -1443,8 +1443,8 @@ TextureImporter:
       name: SmallSting4
       rect:
         serializedVersion: 2
-        x: 522
-        y: 945
+        x: 463
+        y: 156
         width: 32
         height: 21
       alignment: 9
@@ -1464,8 +1464,8 @@ TextureImporter:
       name: SmokeNDust1_0
       rect:
         serializedVersion: 2
-        x: 92
-        y: 229
+        x: 309
+        y: 717
         width: 33
         height: 17
       alignment: 9
@@ -1485,8 +1485,8 @@ TextureImporter:
       name: SmokeNDust1_1
       rect:
         serializedVersion: 2
-        x: 493
-        y: 0
+        x: 559
+        y: 603
         width: 49
         height: 35
       alignment: 9
@@ -1506,8 +1506,8 @@ TextureImporter:
       name: SmokeNDust1_2
       rect:
         serializedVersion: 2
-        x: 577
-        y: 636
+        x: 645
+        y: 826
         width: 47
         height: 38
       alignment: 9
@@ -1527,8 +1527,8 @@ TextureImporter:
       name: SmokeNDust1_3
       rect:
         serializedVersion: 2
-        x: 418
-        y: 327
+        x: 653
+        y: 649
         width: 47
         height: 42
       alignment: 9
@@ -1548,8 +1548,8 @@ TextureImporter:
       name: SmokeNDust1_4
       rect:
         serializedVersion: 2
-        x: 370
-        y: 327
+        x: 481
+        y: 314
         width: 48
         height: 42
       alignment: 9
@@ -1569,8 +1569,8 @@ TextureImporter:
       name: SmokeNDust1_5
       rect:
         serializedVersion: 2
-        x: 515
-        y: 716
+        x: 592
+        y: 780
         width: 49
         height: 43
       alignment: 9
@@ -1590,8 +1590,8 @@ TextureImporter:
       name: SmokeNDust1_6
       rect:
         serializedVersion: 2
-        x: 515
-        y: 673
+        x: 629
+        y: 558
         width: 44
         height: 43
       alignment: 9
@@ -1611,8 +1611,8 @@ TextureImporter:
       name: SmokeNDust1_7
       rect:
         serializedVersion: 2
-        x: 617
-        y: 261
+        x: 677
+        y: 371
         width: 44
         height: 44
       alignment: 9
@@ -1632,8 +1632,8 @@ TextureImporter:
       name: SmokeNDust1_8
       rect:
         serializedVersion: 2
-        x: 605
-        y: 477
+        x: 600
+        y: 825
         width: 43
         height: 36
       alignment: 9
@@ -1653,8 +1653,8 @@ TextureImporter:
       name: MagicShieldAtked1_1
       rect:
         serializedVersion: 2
-        x: 261
-        y: 653
+        x: 352
+        y: 751
         width: 67
         height: 82
       alignment: 0
@@ -1674,8 +1674,8 @@ TextureImporter:
       name: MagicShieldAtked1_2
       rect:
         serializedVersion: 2
-        x: 183
-        y: 928
+        x: 188
+        y: 927
         width: 74
         height: 96
       alignment: 0
@@ -1695,8 +1695,8 @@ TextureImporter:
       name: MagicShieldAtked1_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 704
+        x: 1
+        y: 699
         width: 78
         height: 102
       alignment: 0
@@ -1716,8 +1716,8 @@ TextureImporter:
       name: MagicShieldAtked1_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 604
+        x: 1
+        y: 597
         width: 78
         height: 100
       alignment: 0
@@ -1737,8 +1737,8 @@ TextureImporter:
       name: MagicShieldDying_1
       rect:
         serializedVersion: 2
-        x: 241
-        y: 252
+        x: 300
+        y: 69
         width: 72
         height: 72
       alignment: 0
@@ -1758,8 +1758,8 @@ TextureImporter:
       name: MagicShieldDying_2
       rect:
         serializedVersion: 2
-        x: 93
-        y: 417
+        x: 96
+        y: 406
         width: 85
         height: 91
       alignment: 0
@@ -1779,8 +1779,8 @@ TextureImporter:
       name: MagicShieldDying_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 806
+        x: 1
+        y: 803
         width: 87
         height: 108
       alignment: 0
@@ -1800,8 +1800,8 @@ TextureImporter:
       name: MagicShieldDying_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 914
+        x: 1
+        y: 913
         width: 88
         height: 110
       alignment: 0
@@ -1821,8 +1821,8 @@ TextureImporter:
       name: MagicShieldHold1_1
       rect:
         serializedVersion: 2
-        x: 156
-        y: 84
+        x: 167
+        y: 235
         width: 68
         height: 73
       alignment: 0
@@ -1842,8 +1842,8 @@ TextureImporter:
       name: MagicShieldHold1_2
       rect:
         serializedVersion: 2
-        x: 344
-        y: 19
+        x: 374
+        y: 77
         width: 71
         height: 69
       alignment: 0
@@ -1863,8 +1863,8 @@ TextureImporter:
       name: MagicShieldHold1_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 307
+        y: 242
         width: 73
         height: 70
       alignment: 0
@@ -1884,8 +1884,8 @@ TextureImporter:
       name: CastThunderTwins1
       rect:
         serializedVersion: 2
-        x: 631
-        y: 114
+        x: 370
+        y: 414
         width: 56
         height: 45
       alignment: 9
@@ -1906,7 +1906,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 224
-        y: 85
+        y: 67
         width: 74
         height: 72
       alignment: 9
@@ -1926,8 +1926,8 @@ TextureImporter:
       name: CastThunderTwins3
       rect:
         serializedVersion: 2
-        x: 483
-        y: 35
+        x: 350
+        y: 1
         width: 84
         height: 66
       alignment: 9
@@ -1947,8 +1947,8 @@ TextureImporter:
       name: HolyExplosion_1
       rect:
         serializedVersion: 2
-        x: 542
-        y: 301
+        x: 584
+        y: 446
         width: 48
         height: 48
       alignment: 9
@@ -1968,8 +1968,8 @@ TextureImporter:
       name: HolyExplosion_10
       rect:
         serializedVersion: 2
-        x: 438
-        y: 271
+        x: 568
+        y: 907
         width: 54
         height: 56
       alignment: 9
@@ -1989,8 +1989,8 @@ TextureImporter:
       name: HolyExplosion_11
       rect:
         serializedVersion: 2
-        x: 458
-        y: 820
+        x: 510
+        y: 883
         width: 56
         height: 59
       alignment: 9
@@ -2010,8 +2010,8 @@ TextureImporter:
       name: HolyExplosion_12
       rect:
         serializedVersion: 2
-        x: 460
-        y: 759
+        x: 421
+        y: 776
         width: 60
         height: 61
       alignment: 9
@@ -2031,8 +2031,8 @@ TextureImporter:
       name: HolyExplosion_13
       rect:
         serializedVersion: 2
-        x: 354
-        y: 607
+        x: 164
+        y: 1
         width: 61
         height: 63
       alignment: 9
@@ -2052,8 +2052,8 @@ TextureImporter:
       name: HolyExplosion_14
       rect:
         serializedVersion: 2
-        x: 342
-        y: 755
+        x: 447
+        y: 88
         width: 64
         height: 65
       alignment: 9
@@ -2073,8 +2073,8 @@ TextureImporter:
       name: HolyExplosion_15
       rect:
         serializedVersion: 2
-        x: 429
-        y: 101
+        x: 324
+        y: 345
         width: 67
         height: 67
       alignment: 9
@@ -2094,8 +2094,8 @@ TextureImporter:
       name: HolyExplosion_16
       rect:
         serializedVersion: 2
-        x: 313
-        y: 258
+        x: 436
+        y: 6
         width: 69
         height: 69
       alignment: 9
@@ -2115,8 +2115,8 @@ TextureImporter:
       name: HolyExplosion_17
       rect:
         serializedVersion: 2
-        x: 228
-        y: 160
+        x: 227
+        y: 143
         width: 72
         height: 72
       alignment: 9
@@ -2136,8 +2136,8 @@ TextureImporter:
       name: HolyExplosion_18
       rect:
         serializedVersion: 2
-        x: 167
-        y: 248
+        x: 78
+        y: 58
         width: 74
         height: 75
       alignment: 9
@@ -2157,8 +2157,8 @@ TextureImporter:
       name: HolyExplosion_19
       rect:
         serializedVersion: 2
-        x: 80
-        y: 152
+        x: 1
+        y: 135
         width: 76
         height: 77
       alignment: 9
@@ -2178,8 +2178,8 @@ TextureImporter:
       name: HolyExplosion_2
       rect:
         serializedVersion: 2
-        x: 569
-        y: 253
+        x: 533
+        y: 687
         width: 48
         height: 48
       alignment: 9
@@ -2199,8 +2199,8 @@ TextureImporter:
       name: HolyExplosion_20
       rect:
         serializedVersion: 2
-        x: 0
-        y: 70
+        x: 368
+        y: 839
         width: 78
         height: 79
       alignment: 9
@@ -2220,8 +2220,8 @@ TextureImporter:
       name: HolyExplosion_21
       rect:
         serializedVersion: 2
-        x: 277
-        y: 839
+        x: 268
+        y: 736
         width: 82
         height: 83
       alignment: 9
@@ -2241,8 +2241,8 @@ TextureImporter:
       name: HolyExplosion_22
       rect:
         serializedVersion: 2
-        x: 258
-        y: 735
+        x: 265
+        y: 629
         width: 84
         height: 85
       alignment: 9
@@ -2262,8 +2262,8 @@ TextureImporter:
       name: HolyExplosion_23
       rect:
         serializedVersion: 2
-        x: 174
-        y: 635
+        x: 179
+        y: 716
         width: 87
         height: 87
       alignment: 9
@@ -2283,8 +2283,8 @@ TextureImporter:
       name: HolyExplosion_24
       rect:
         serializedVersion: 2
-        x: 178
-        y: 426
+        x: 183
+        y: 414
         width: 89
         height: 89
       alignment: 9
@@ -2304,8 +2304,8 @@ TextureImporter:
       name: HolyExplosion_25
       rect:
         serializedVersion: 2
-        x: 0
-        y: 229
+        x: 1
+        y: 214
         width: 92
         height: 92
       alignment: 9
@@ -2325,8 +2325,8 @@ TextureImporter:
       name: HolyExplosion_26
       rect:
         serializedVersion: 2
-        x: 257
-        y: 929
+        x: 264
+        y: 928
         width: 94
         height: 95
       alignment: 9
@@ -2346,8 +2346,8 @@ TextureImporter:
       name: HolyExplosion_27
       rect:
         serializedVersion: 2
-        x: 87
-        y: 818
+        x: 90
+        y: 815
         width: 95
         height: 96
       alignment: 9
@@ -2367,8 +2367,8 @@ TextureImporter:
       name: HolyExplosion_28
       rect:
         serializedVersion: 2
-        x: 0
-        y: 508
+        x: 1
+        y: 499
         width: 96
         height: 96
       alignment: 0
@@ -2388,8 +2388,8 @@ TextureImporter:
       name: HolyExplosion_3
       rect:
         serializedVersion: 2
-        x: 467
-        y: 647
+        x: 506
+        y: 212
         width: 48
         height: 48
       alignment: 9
@@ -2409,8 +2409,8 @@ TextureImporter:
       name: HolyExplosion_4
       rect:
         serializedVersion: 2
-        x: 547
-        y: 142
+        x: 548
+        y: 264
         width: 48
         height: 48
       alignment: 9
@@ -2430,8 +2430,8 @@ TextureImporter:
       name: HolyExplosion_5
       rect:
         serializedVersion: 2
-        x: 582
-        y: 205
+        x: 539
+        y: 162
         width: 48
         height: 48
       alignment: 9
@@ -2451,8 +2451,8 @@ TextureImporter:
       name: HolyExplosion_6
       rect:
         serializedVersion: 2
-        x: 567
-        y: 53
+        x: 556
+        y: 214
         width: 48
         height: 48
       alignment: 9
@@ -2472,8 +2472,8 @@ TextureImporter:
       name: HolyExplosion_7
       rect:
         serializedVersion: 2
-        x: 534
-        y: 190
+        x: 531
+        y: 314
         width: 48
         height: 49
       alignment: 9
@@ -2493,8 +2493,8 @@ TextureImporter:
       name: HolyExplosion_8
       rect:
         serializedVersion: 2
-        x: 466
-        y: 449
+        x: 529
+        y: 549
         width: 50
         height: 52
       alignment: 9
@@ -2514,8 +2514,8 @@ TextureImporter:
       name: HolyExplosion_9
       rect:
         serializedVersion: 2
-        x: 384
-        y: 499
+        x: 478
+        y: 418
         width: 52
         height: 54
       alignment: 9
@@ -2535,8 +2535,8 @@ TextureImporter:
       name: LightCast_1
       rect:
         serializedVersion: 2
-        x: 436
-        y: 501
+        x: 55
+        y: 2
         width: 53
         height: 52
       alignment: 9
@@ -2556,8 +2556,8 @@ TextureImporter:
       name: LightCast_10
       rect:
         serializedVersion: 2
-        x: 415
-        y: 33
+        x: 339
+        y: 461
         width: 68
         height: 67
       alignment: 9
@@ -2577,8 +2577,8 @@ TextureImporter:
       name: LightCast_11
       rect:
         serializedVersion: 2
-        x: 73
-        y: 0
+        x: 301
+        y: 148
         width: 68
         height: 70
       alignment: 9
@@ -2598,8 +2598,8 @@ TextureImporter:
       name: LightCast_12
       rect:
         serializedVersion: 2
-        x: 274
-        y: 13
+        x: 184
+        y: 340
         width: 70
         height: 72
       alignment: 9
@@ -2619,8 +2619,8 @@ TextureImporter:
       name: LightCast_13
       rect:
         serializedVersion: 2
-        x: 156
-        y: 157
+        x: 153
+        y: 141
         width: 72
         height: 73
       alignment: 9
@@ -2640,8 +2640,8 @@ TextureImporter:
       name: LightCast_14
       rect:
         serializedVersion: 2
-        x: 179
-        y: 351
+        x: 79
+        y: 137
         width: 72
         height: 75
       alignment: 9
@@ -2661,8 +2661,8 @@ TextureImporter:
       name: LightCast_15
       rect:
         serializedVersion: 2
-        x: 92
-        y: 246
+        x: 1
+        y: 56
         width: 75
         height: 77
       alignment: 9
@@ -2682,8 +2682,8 @@ TextureImporter:
       name: LightCast_16
       rect:
         serializedVersion: 2
-        x: 78
-        y: 70
+        x: 442
+        y: 944
         width: 78
         height: 79
       alignment: 9
@@ -2703,8 +2703,8 @@ TextureImporter:
       name: LightCast_17
       rect:
         serializedVersion: 2
-        x: 0
-        y: 149
+        x: 360
+        y: 943
         width: 80
         height: 80
       alignment: 9
@@ -2724,8 +2724,8 @@ TextureImporter:
       name: LightCast_18
       rect:
         serializedVersion: 2
-        x: 351
-        y: 941
+        x: 284
+        y: 835
         width: 82
         height: 83
       alignment: 9
@@ -2745,8 +2745,8 @@ TextureImporter:
       name: LightCast_19
       rect:
         serializedVersion: 2
-        x: 183
-        y: 520
+        x: 179
+        y: 628
         width: 84
         height: 86
       alignment: 9
@@ -2766,8 +2766,8 @@ TextureImporter:
       name: LightCast_2
       rect:
         serializedVersion: 2
-        x: 384
-        y: 553
+        x: 446
+        y: 358
         width: 55
         height: 54
       alignment: 9
@@ -2787,8 +2787,8 @@ TextureImporter:
       name: LightCast_20
       rect:
         serializedVersion: 2
-        x: 174
-        y: 722
+        x: 188
+        y: 510
         width: 84
         height: 88
       alignment: 9
@@ -2808,8 +2808,8 @@ TextureImporter:
       name: LightCast_21
       rect:
         serializedVersion: 2
-        x: 96
-        y: 515
+        x: 99
+        y: 505
         width: 87
         height: 90
       alignment: 9
@@ -2829,8 +2829,8 @@ TextureImporter:
       name: LightCast_22
       rect:
         serializedVersion: 2
-        x: 91
-        y: 323
+        x: 94
+        y: 310
         width: 88
         height: 91
       alignment: 9
@@ -2850,8 +2850,8 @@ TextureImporter:
       name: LightCast_23
       rect:
         serializedVersion: 2
-        x: 0
-        y: 321
+        x: 1
+        y: 308
         width: 91
         height: 93
       alignment: 9
@@ -2871,8 +2871,8 @@ TextureImporter:
       name: LightCast_24
       rect:
         serializedVersion: 2
-        x: 0
-        y: 414
+        x: 1
+        y: 403
         width: 93
         height: 94
       alignment: 9
@@ -2892,8 +2892,8 @@ TextureImporter:
       name: LightCast_25
       rect:
         serializedVersion: 2
-        x: 182
-        y: 820
+        x: 187
+        y: 821
         width: 95
         height: 95
       alignment: 9
@@ -2913,8 +2913,8 @@ TextureImporter:
       name: LightCast_26
       rect:
         serializedVersion: 2
-        x: 88
-        y: 928
+        x: 91
+        y: 927
         width: 95
         height: 96
       alignment: 9
@@ -2934,8 +2934,8 @@ TextureImporter:
       name: LightCast_27
       rect:
         serializedVersion: 2
-        x: 78
-        y: 710
+        x: 81
+        y: 705
         width: 96
         height: 96
       alignment: 0
@@ -2955,8 +2955,8 @@ TextureImporter:
       name: LightCast_28
       rect:
         serializedVersion: 2
-        x: 78
-        y: 614
+        x: 81
+        y: 607
         width: 96
         height: 96
       alignment: 0
@@ -2976,8 +2976,8 @@ TextureImporter:
       name: LightCast_3
       rect:
         serializedVersion: 2
-        x: 382
-        y: 271
+        x: 542
+        y: 825
         width: 56
         height: 56
       alignment: 9
@@ -2997,8 +2997,8 @@ TextureImporter:
       name: LightCast_4
       rect:
         serializedVersion: 2
-        x: 514
-        y: 823
+        x: 447
+        y: 593
         width: 58
         height: 58
       alignment: 9
@@ -3018,8 +3018,8 @@ TextureImporter:
       name: LightCast_5
       rect:
         serializedVersion: 2
-        x: 493
-        y: 966
+        x: 522
+        y: 965
         width: 59
         height: 58
       alignment: 9
@@ -3039,8 +3039,8 @@ TextureImporter:
       name: LightCast_6
       rect:
         serializedVersion: 2
-        x: 433
-        y: 964
+        x: 448
+        y: 858
         width: 60
         height: 60
       alignment: 9
@@ -3060,8 +3060,8 @@ TextureImporter:
       name: LightCast_7
       rect:
         serializedVersion: 2
-        x: 453
-        y: 695
+        x: 412
+        y: 653
         width: 62
         height: 62
       alignment: 9
@@ -3081,8 +3081,8 @@ TextureImporter:
       name: LightCast_8
       rect:
         serializedVersion: 2
-        x: 267
-        y: 476
+        x: 227
+        y: 1
         width: 64
         height: 64
       alignment: 9
@@ -3102,8 +3102,8 @@ TextureImporter:
       name: LightCast_9
       rect:
         serializedVersion: 2
-        x: 328
-        y: 670
+        x: 438
+        y: 179
         width: 66
         height: 65
       alignment: 9
@@ -3123,8 +3123,8 @@ TextureImporter:
       name: MagicBarrier_1
       rect:
         serializedVersion: 2
-        x: 496
-        y: 106
+        x: 378
+        y: 629
         width: 22
         height: 21
       alignment: 9
@@ -3144,8 +3144,8 @@ TextureImporter:
       name: MagicBarrier_10
       rect:
         serializedVersion: 2
-        x: 535
-        y: 512
+        x: 614
+        y: 866
         width: 40
         height: 39
       alignment: 9
@@ -3165,8 +3165,8 @@ TextureImporter:
       name: MagicBarrier_11
       rect:
         serializedVersion: 2
-        x: 547
-        y: 101
+        x: 393
+        y: 314
         width: 42
         height: 41
       alignment: 9
@@ -3186,8 +3186,8 @@ TextureImporter:
       name: MagicBarrier_12
       rect:
         serializedVersion: 2
-        x: 573
-        y: 591
+        x: 643
+        y: 784
         width: 40
         height: 39
       alignment: 9
@@ -3207,8 +3207,8 @@ TextureImporter:
       name: MagicBarrier_13
       rect:
         serializedVersion: 2
-        x: 589
-        y: 101
+        x: 437
+        y: 314
         width: 42
         height: 41
       alignment: 9
@@ -3228,8 +3228,8 @@ TextureImporter:
       name: MagicBarrier_14
       rect:
         serializedVersion: 2
-        x: 520
-        y: 780
+        x: 607
+        y: 646
         width: 44
         height: 43
       alignment: 9
@@ -3249,8 +3249,8 @@ TextureImporter:
       name: MagicBarrier_15
       rect:
         serializedVersion: 2
-        x: 564
-        y: 781
+        x: 673
+        y: 514
         width: 43
         height: 42
       alignment: 9
@@ -3270,8 +3270,8 @@ TextureImporter:
       name: MagicBarrier_16
       rect:
         serializedVersion: 2
-        x: 559
-        y: 674
+        x: 671
+        y: 695
         width: 44
         height: 42
       alignment: 9
@@ -3291,8 +3291,8 @@ TextureImporter:
       name: MagicBarrier_17
       rect:
         serializedVersion: 2
-        x: 561
-        y: 380
+        x: 634
+        y: 463
         width: 45
         height: 44
       alignment: 9
@@ -3312,8 +3312,8 @@ TextureImporter:
       name: MagicBarrier_18
       rect:
         serializedVersion: 2
-        x: 516
-        y: 468
+        x: 274
+        y: 414
         width: 46
         height: 44
       alignment: 9
@@ -3333,8 +3333,8 @@ TextureImporter:
       name: MagicBarrier_19
       rect:
         serializedVersion: 2
-        x: 669
-        y: 24
+        x: 646
+        y: 303
         width: 46
         height: 45
       alignment: 9
@@ -3354,8 +3354,8 @@ TextureImporter:
       name: MagicBarrier_2
       rect:
         serializedVersion: 2
-        x: 458
-        y: 941
+        x: 396
+        y: 221
         width: 24
         height: 23
       alignment: 9
@@ -3375,8 +3375,8 @@ TextureImporter:
       name: MagicBarrier_20
       rect:
         serializedVersion: 2
-        x: 615
-        y: 55
+        x: 629
+        y: 350
         width: 46
         height: 46
       alignment: 9
@@ -3396,8 +3396,8 @@ TextureImporter:
       name: MagicBarrier_21
       rect:
         serializedVersion: 2
-        x: 307
-        y: 607
+        x: 605
+        y: 398
         width: 47
         height: 46
       alignment: 9
@@ -3417,8 +3417,8 @@ TextureImporter:
       name: MagicBarrier_22
       rect:
         serializedVersion: 2
-        x: 661
-        y: 69
+        x: 606
+        y: 233
         width: 48
         height: 45
       alignment: 9
@@ -3438,8 +3438,8 @@ TextureImporter:
       name: MagicBarrier_23
       rect:
         serializedVersion: 2
-        x: 489
-        y: 602
+        x: 559
+        y: 640
         width: 46
         height: 45
       alignment: 9
@@ -3459,8 +3459,8 @@ TextureImporter:
       name: MagicBarrier_24
       rect:
         serializedVersion: 2
-        x: 489
-        y: 557
+        x: 581
+        y: 556
         width: 46
         height: 45
       alignment: 9
@@ -3480,8 +3480,8 @@ TextureImporter:
       name: MagicBarrier_25
       rect:
         serializedVersion: 2
-        x: 489
-        y: 512
+        x: 625
+        y: 509
         width: 46
         height: 45
       alignment: 9
@@ -3501,8 +3501,8 @@ TextureImporter:
       name: MagicBarrier_26
       rect:
         serializedVersion: 2
-        x: 525
-        y: 424
+        x: 322
+        y: 414
         width: 46
         height: 44
       alignment: 9
@@ -3522,8 +3522,8 @@ TextureImporter:
       name: MagicBarrier_27
       rect:
         serializedVersion: 2
-        x: 630
-        y: 217
+        x: 547
+        y: 779
         width: 43
         height: 44
       alignment: 9
@@ -3543,8 +3543,8 @@ TextureImporter:
       name: MagicBarrier_28
       rect:
         serializedVersion: 2
-        x: 588
-        y: 903
+        x: 681
+        y: 470
         width: 42
         height: 42
       alignment: 9
@@ -3564,8 +3564,8 @@ TextureImporter:
       name: MagicBarrier_29
       rect:
         serializedVersion: 2
-        x: 607
-        y: 982
+        x: 700
+        y: 426
         width: 21
         height: 42
       alignment: 9
@@ -3585,8 +3585,8 @@ TextureImporter:
       name: MagicBarrier_3
       rect:
         serializedVersion: 2
-        x: 496
-        y: 941
+        x: 285
+        y: 602
         width: 26
         height: 25
       alignment: 9
@@ -3606,8 +3606,8 @@ TextureImporter:
       name: MagicBarrier_30
       rect:
         serializedVersion: 2
-        x: 177
-        y: 914
+        x: 129
+        y: 599
         width: 3
         height: 6
       alignment: 9
@@ -3627,8 +3627,8 @@ TextureImporter:
       name: MagicBarrier_31
       rect:
         serializedVersion: 2
-        x: 159
-        y: 807
+        x: 169
+        y: 913
         width: 3
         height: 3
       alignment: 9
@@ -3648,8 +3648,8 @@ TextureImporter:
       name: MagicBarrier_32
       rect:
         serializedVersion: 2
-        x: 162
-        y: 807
+        x: 174
+        y: 913
         width: 3
         height: 3
       alignment: 9
@@ -3669,8 +3669,8 @@ TextureImporter:
       name: MagicBarrier_4
       rect:
         serializedVersion: 2
-        x: 179
-        y: 324
+        x: 214
+        y: 311
         width: 28
         height: 27
       alignment: 9
@@ -3690,8 +3690,8 @@ TextureImporter:
       name: MagicBarrier_5
       rect:
         serializedVersion: 2
-        x: 174
-        y: 606
+        x: 330
+        y: 314
         width: 30
         height: 29
       alignment: 9
@@ -3711,8 +3711,8 @@ TextureImporter:
       name: MagicBarrier_6
       rect:
         serializedVersion: 2
-        x: 561
-        y: 349
+        x: 340
+        y: 530
         width: 32
         height: 31
       alignment: 9
@@ -3732,8 +3732,8 @@ TextureImporter:
       name: MagicBarrier_7
       rect:
         serializedVersion: 2
-        x: 459
-        y: 0
+        x: 702
+        y: 624
         width: 34
         height: 33
       alignment: 9
@@ -3753,8 +3753,8 @@ TextureImporter:
       name: MagicBarrier_8
       rect:
         serializedVersion: 2
-        x: 334
-        y: 327
+        x: 696
+        y: 909
         width: 36
         height: 35
       alignment: 9
@@ -3774,8 +3774,8 @@ TextureImporter:
       name: MagicBarrier_9
       rect:
         serializedVersion: 2
-        x: 571
-        y: 437
+        x: 664
+        y: 946
         width: 38
         height: 37
       alignment: 9
@@ -3795,8 +3795,8 @@ TextureImporter:
       name: AirBurst-0
       rect:
         serializedVersion: 2
-        x: 472
-        y: 237
+        x: 702
+        y: 659
         width: 16
         height: 34
       alignment: 9
@@ -3816,8 +3816,8 @@ TextureImporter:
       name: AirBurst-1
       rect:
         serializedVersion: 2
-        x: 562
-        y: 474
+        x: 685
+        y: 786
         width: 43
         height: 38
       alignment: 9
@@ -3837,8 +3837,8 @@ TextureImporter:
       name: AirBurst-2
       rect:
         serializedVersion: 2
-        x: 410
-        y: 820
+        x: 652
+        y: 605
         width: 48
         height: 39
       alignment: 9
@@ -3858,8 +3858,8 @@ TextureImporter:
       name: AirBurst-3
       rect:
         serializedVersion: 2
-        x: 535
-        y: 551
+        x: 640
+        y: 739
         width: 47
         height: 39
       alignment: 9
@@ -3879,8 +3879,8 @@ TextureImporter:
       name: AirBurst-4
       rect:
         serializedVersion: 2
-        x: 419
-        y: 0
+        x: 717
+        y: 711
         width: 40
         height: 33
       alignment: 9
@@ -3900,8 +3900,8 @@ TextureImporter:
       name: AirBurst-5
       rect:
         serializedVersion: 2
-        x: 606
-        y: 404
+        x: 738
+        y: 641
         width: 19
         height: 33
       alignment: 9
@@ -3921,8 +3921,8 @@ TextureImporter:
       name: AirBurst-6
       rect:
         serializedVersion: 2
-        x: 482
-        y: 941
+        x: 422
+        y: 221
         width: 14
         height: 23
       alignment: 9
@@ -3942,8 +3942,8 @@ TextureImporter:
       name: ThunderCharging-0
       rect:
         serializedVersion: 2
-        x: 78
-        y: 605
+        x: 90
+        y: 804
         width: 22
         height: 9
       alignment: 9
@@ -3963,8 +3963,8 @@ TextureImporter:
       name: ThunderCharging-1
       rect:
         serializedVersion: 2
-        x: 141
-        y: 920
+        x: 114
+        y: 805
         width: 35
         height: 8
       alignment: 9
@@ -3984,8 +3984,8 @@ TextureImporter:
       name: ThunderCharging-10
       rect:
         serializedVersion: 2
-        x: 473
-        y: 398
+        x: 503
+        y: 365
         width: 52
         height: 51
       alignment: 9
@@ -4005,8 +4005,8 @@ TextureImporter:
       name: ThunderCharging-11
       rect:
         serializedVersion: 2
-        x: 344
-        y: 4
+        x: 231
+        y: 218
         width: 52
         height: 15
       alignment: 9
@@ -4026,8 +4026,8 @@ TextureImporter:
       name: ThunderCharging-2
       rect:
         serializedVersion: 2
-        x: 272
-        y: 922
+        x: 224
+        y: 918
         width: 22
         height: 7
       alignment: 9
@@ -4047,8 +4047,8 @@ TextureImporter:
       name: ThunderCharging-3
       rect:
         serializedVersion: 2
-        x: 248
-        y: 921
+        x: 198
+        y: 918
         width: 24
         height: 7
       alignment: 9
@@ -4068,8 +4068,8 @@ TextureImporter:
       name: ThunderCharging-4
       rect:
         serializedVersion: 2
-        x: 321
-        y: 362
+        x: 340
+        y: 563
         width: 49
         height: 64
       alignment: 9
@@ -4089,8 +4089,8 @@ TextureImporter:
       name: ThunderCharging-5
       rect:
         serializedVersion: 2
-        x: 331
-        y: 479
+        x: 513
+        y: 90
         width: 53
         height: 64
       alignment: 9
@@ -4110,8 +4110,8 @@ TextureImporter:
       name: ThunderCharging-6
       rect:
         serializedVersion: 2
-        x: 329
-        y: 543
+        x: 293
+        y: 1
         width: 55
         height: 64
       alignment: 9
@@ -4131,8 +4131,8 @@ TextureImporter:
       name: ThunderCharging-7
       rect:
         serializedVersion: 2
-        x: 406
-        y: 757
+        x: 391
+        y: 564
         width: 54
         height: 63
       alignment: 9
@@ -4152,8 +4152,8 @@ TextureImporter:
       name: ThunderCharging-8
       rect:
         serializedVersion: 2
-        x: 534
-        y: 888
+        x: 436
+        y: 717
         width: 54
         height: 57
       alignment: 9
@@ -4173,8 +4173,8 @@ TextureImporter:
       name: ThunderCharging-9
       rect:
         serializedVersion: 2
-        x: 363
-        y: 426
+        x: 1
+        y: 1
         width: 52
         height: 53
       alignment: 9
@@ -4194,8 +4194,8 @@ TextureImporter:
       name: PistolSpark_1
       rect:
         serializedVersion: 2
-        x: 197
-        y: 920
+        x: 174
+        y: 805
         width: 19
         height: 8
       alignment: 9
@@ -4215,7 +4215,7 @@ TextureImporter:
       name: PistolSpark_2
       rect:
         serializedVersion: 2
-        x: 396
+        x: 507
         y: 4
         width: 23
         height: 15
@@ -4236,8 +4236,8 @@ TextureImporter:
       name: PistolSpark_3
       rect:
         serializedVersion: 2
-        x: 143
-        y: 230
+        x: 95
+        y: 216
         width: 26
         height: 16
       alignment: 9
@@ -4257,8 +4257,8 @@ TextureImporter:
       name: BoltGrounding1
       rect:
         serializedVersion: 2
-        x: 156
-        y: 807
+        x: 164
+        y: 913
         width: 3
         height: 3
       alignment: 9
@@ -4278,8 +4278,8 @@ TextureImporter:
       name: SmallSlash1_1
       rect:
         serializedVersion: 2
-        x: 142
-        y: 806
+        x: 148
+        y: 913
         width: 14
         height: 12
       alignment: 9
@@ -4299,8 +4299,8 @@ TextureImporter:
       name: SmallSlash1_2
       rect:
         serializedVersion: 2
-        x: 628
-        y: 982
+        x: 600
+        y: 863
         width: 12
         height: 42
       alignment: 9
@@ -4320,8 +4320,8 @@ TextureImporter:
       name: SmallSlash1_3
       rect:
         serializedVersion: 2
-        x: 593
-        y: 349
+        x: 374
+        y: 530
         width: 32
         height: 31
       alignment: 9
@@ -4341,8 +4341,8 @@ TextureImporter:
       name: SmallSlash1_4
       rect:
         serializedVersion: 2
-        x: 141
-        y: 914
+        x: 248
+        y: 919
         width: 23
         height: 6
       alignment: 9
@@ -4362,8 +4362,8 @@ TextureImporter:
       name: SmallSlash2_1
       rect:
         serializedVersion: 2
-        x: 176
-        y: 920
+        x: 151
+        y: 805
         width: 21
         height: 8
       alignment: 9
@@ -4383,8 +4383,8 @@ TextureImporter:
       name: SmallSlash2_2
       rect:
         serializedVersion: 2
-        x: 261
-        y: 327
+        x: 236
+        y: 601
         width: 47
         height: 25
       alignment: 9
@@ -4404,8 +4404,8 @@ TextureImporter:
       name: SmallSlash2_3
       rect:
         serializedVersion: 2
-        x: 87
-        y: 806
+        x: 91
+        y: 913
         width: 55
         height: 12
       alignment: 9
@@ -4425,8 +4425,8 @@ TextureImporter:
       name: SmallSlash2_4
       rect:
         serializedVersion: 2
-        x: 216
-        y: 921
+        x: 164
+        y: 918
         width: 32
         height: 7
       alignment: 9
@@ -4446,8 +4446,8 @@ TextureImporter:
       name: SmallSlash3_1
       rect:
         serializedVersion: 2
-        x: 164
-        y: 914
+        x: 273
+        y: 920
         width: 13
         height: 6
       alignment: 9
@@ -4467,8 +4467,8 @@ TextureImporter:
       name: SmallSlash3_2
       rect:
         serializedVersion: 2
-        x: 359
-        y: 820
+        x: 587
+        y: 738
         width: 51
         height: 39
       alignment: 9
@@ -4488,8 +4488,8 @@ TextureImporter:
       name: SmallSlash3_3
       rect:
         serializedVersion: 2
-        x: 277
-        y: 820
+        x: 179
+        y: 607
         width: 55
         height: 19
       alignment: 9
@@ -4509,8 +4509,8 @@ TextureImporter:
       name: SmallSlash3_4
       rect:
         serializedVersion: 2
-        x: 156
-        y: 810
+        x: 81
+        y: 597
         width: 46
         height: 8
       alignment: 9
@@ -4530,8 +4530,8 @@ TextureImporter:
       name: VThunderBoltSparse_1
       rect:
         serializedVersion: 2
-        x: 156
-        y: 807
+        x: 164
+        y: 913
         width: 3
         height: 3
       alignment: 9
@@ -4551,8 +4551,8 @@ TextureImporter:
       name: VThunderBoltSparse_2
       rect:
         serializedVersion: 2
-        x: 609
-        y: 445
+        x: 364
+        y: 717
         width: 36
         height: 32
       alignment: 9
@@ -4572,8 +4572,8 @@ TextureImporter:
       name: VThunderBoltSparse_3
       rect:
         serializedVersion: 2
-        x: 156
-        y: 807
+        x: 164
+        y: 913
         width: 3
         height: 3
       alignment: 9
@@ -4593,8 +4593,8 @@ TextureImporter:
       name: VThunderBoltSparse_4
       rect:
         serializedVersion: 2
-        x: 582
-        y: 553
+        x: 624
+        y: 927
         width: 38
         height: 38
       alignment: 9
@@ -4614,8 +4614,8 @@ TextureImporter:
       name: VThunderBoltSparse_5
       rect:
         serializedVersion: 2
-        x: 156
-        y: 807
+        x: 164
+        y: 913
         width: 3
         height: 3
       alignment: 9
@@ -4635,8 +4635,8 @@ TextureImporter:
       name: VThunderBoltSparse_6
       rect:
         serializedVersion: 2
-        x: 609
-        y: 445
+        x: 364
+        y: 717
         width: 36
         height: 32
       alignment: 9
@@ -4656,8 +4656,8 @@ TextureImporter:
       name: VThunderBoltSparse_7
       rect:
         serializedVersion: 2
-        x: 156
-        y: 807
+        x: 164
+        y: 913
         width: 3
         height: 3
       alignment: 9
@@ -4677,8 +4677,8 @@ TextureImporter:
       name: VThunderBoltSparse_8
       rect:
         serializedVersion: 2
-        x: 582
-        y: 553
+        x: 624
+        y: 927
         width: 38
         height: 38
       alignment: 9
@@ -4698,8 +4698,8 @@ TextureImporter:
       name: VThunderBoltSparse_9
       rect:
         serializedVersion: 2
-        x: 156
-        y: 807
+        x: 164
+        y: 913
         width: 3
         height: 3
       alignment: 9
@@ -4719,8 +4719,8 @@ TextureImporter:
       name: FallingRock-0
       rect:
         serializedVersion: 2
-        x: 169
-        y: 232
+        x: 123
+        y: 216
         width: 16
         height: 16
       alignment: 0
@@ -4740,8 +4740,8 @@ TextureImporter:
       name: FallingRock-1
       rect:
         serializedVersion: 2
-        x: 185
-        y: 232
+        x: 141
+        y: 216
         width: 16
         height: 16
       alignment: 0
@@ -4761,8 +4761,8 @@ TextureImporter:
       name: FallingRock-10
       rect:
         serializedVersion: 2
-        x: 249
-        y: 232
+        x: 344
+        y: 220
         width: 27
         height: 20
       alignment: 0
@@ -4782,8 +4782,8 @@ TextureImporter:
       name: FallingRock-2
       rect:
         serializedVersion: 2
-        x: 201
-        y: 232
+        x: 159
+        y: 216
         width: 16
         height: 16
       alignment: 0
@@ -4803,8 +4803,8 @@ TextureImporter:
       name: FallingRock-3
       rect:
         serializedVersion: 2
-        x: 217
-        y: 232
+        x: 177
+        y: 217
         width: 16
         height: 16
       alignment: 0
@@ -4824,8 +4824,8 @@ TextureImporter:
       name: FallingRock-4
       rect:
         serializedVersion: 2
-        x: 233
-        y: 232
+        x: 195
+        y: 217
         width: 16
         height: 16
       alignment: 0
@@ -4845,8 +4845,8 @@ TextureImporter:
       name: FallingRock-5
       rect:
         serializedVersion: 2
-        x: 297
-        y: 236
+        x: 213
+        y: 217
         width: 16
         height: 16
       alignment: 0
@@ -4866,8 +4866,8 @@ TextureImporter:
       name: FallingRock-6
       rect:
         serializedVersion: 2
-        x: 125
-        y: 229
+        x: 344
+        y: 717
         width: 18
         height: 17
       alignment: 0
@@ -4887,8 +4887,8 @@ TextureImporter:
       name: FallingRock-7
       rect:
         serializedVersion: 2
-        x: 332
-        y: 820
+        x: 402
+        y: 631
         width: 22
         height: 19
       alignment: 0
@@ -4908,8 +4908,8 @@ TextureImporter:
       name: FallingRock-8
       rect:
         serializedVersion: 2
-        x: 581
-        y: 945
+        x: 351
+        y: 629
         width: 25
         height: 21
       alignment: 0
@@ -4929,8 +4929,8 @@ TextureImporter:
       name: FallingRock-9
       rect:
         serializedVersion: 2
-        x: 554
-        y: 945
+        x: 497
+        y: 156
         width: 27
         height: 21
       alignment: 0
@@ -4950,12 +4950,12 @@ TextureImporter:
       name: AirJumpCircle_1
       rect:
         serializedVersion: 2
-        x: 394
-        y: 671
+        x: 430
+        y: 920
         width: 66
         height: 21
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 2.4285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4971,12 +4971,12 @@ TextureImporter:
       name: AirJumpCircle_2
       rect:
         serializedVersion: 2
-        x: 336
-        y: 237
+        x: 360
+        y: 920
         width: 68
         height: 21
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 2.4285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4984,6 +4984,132 @@ TextureImporter:
       bones: []
       spriteID: 4aeedad6f59441d4f87f296d62e93d15
       internalID: 2118205862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirJumpDust_1
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 220
+        width: 27
+        height: 15
+      alignment: 9
+      pivot: {x: 0.4814815, y: 3.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed4e9d8697934884f841e4fc4ed8e3a3
+      internalID: 900351720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirJumpDust_2
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 220
+        width: 28
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 2.8}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8411cb9b5ad075f47bf403aaef35c9ab
+      internalID: 1960581368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirJumpDust_3
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 913
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 4.6666665, y: 13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a1bc5b2cba1c734cafb49365f19c863
+      internalID: -2147155019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirJumpDust_4
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 913
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 4.6666665, y: 13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac42618485205ca4db6703a4145247ee
+      internalID: -186691870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirJumpDust_5
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 913
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 4.6666665, y: 13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1cf2a2c73a3a144ebaad87d66737ba1
+      internalID: 1871671553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AirJumpDust_6
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 913
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 4.6666665, y: 13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b54e419aa3f8a84bafdfd4310ab1a6d
+      internalID: -863786782
       vertices: []
       indices: 
       edges: []
@@ -5008,6 +5134,12 @@ TextureImporter:
       AirBurst-6: 1871014750
       AirJumpCircle_1: 1342385696
       AirJumpCircle_2: 2118205862
+      AirJumpDust_1: 900351720
+      AirJumpDust_2: 1960581368
+      AirJumpDust_3: -2147155019
+      AirJumpDust_4: -186691870
+      AirJumpDust_5: 1871671553
+      AirJumpDust_6: -863786782
       BoltGrounding1: -864565989
       CastThunderTwins1: 1161759870
       CastThunderTwins2: -423742589

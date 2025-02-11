@@ -418,6 +418,7 @@ namespace shared {
             InAirWalking,
             OnWallIdle1,
             Sliding,
+            GroundDodged,
             CrouchIdle1,
             CrouchAtk1,
             CrouchAtked1,

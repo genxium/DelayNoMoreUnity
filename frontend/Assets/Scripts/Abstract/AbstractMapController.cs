@@ -18,6 +18,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected const int KV_PREFIX_NPC = (KV_PREFIX_PK << 1);
     protected const int KV_PREFIX_TRAP = (KV_PREFIX_NPC << 1);
     protected const int KV_PREFIX_BULLET = (KV_PREFIX_TRAP << 1);
+    protected const int KV_PREFIX_CHARACTER_SECONDARY = (KV_PREFIX_BULLET << 1);
 
     protected const int KV_PREFIX_STATIC_COLLLIDER = KV_PREFIX_BULLET; // [WARNING] There's no static bullet, so reuse this prefix value!
     protected const int KV_PREFIX_DYNAMIC_COLLLIDER_VISION = (KV_PREFIX_STATIC_COLLLIDER << 1);
@@ -3419,12 +3420,53 @@ public abstract class AbstractMapController : MonoBehaviour {
         return true;
     }
 
+    protected RoomDownsyncFrame getRdfBackthen(int rdfId) {
+        if (rdfId < renderBuffer.StFrameId) {
+            rdfId = renderBuffer.StFrameId;
+        }
+        var (_, rdfBackthen) = renderBuffer.GetByFrameId(rdfId);
+        return rdfBackthen;
+    }
+
     public bool playCharacterVfx(CharacterDownsync currCharacterDownsync, CharacterDownsync prevCharacterDownsync, CharacterConfig chConfig, CharacterAnimController chAnimCtrl, float wx, float wy, int rdfId) {
         int vfxSpeciesId = NO_VFX_ID;
         int vfxLookupKeySecondPrefix = 0;
         var framesInState = currCharacterDownsync.FramesInChState;
+        int dirX = currCharacterDownsync.DirX;
 
         chAnimCtrl.spr.transform.localRotation = Quaternion.AngleAxis(0, Vector3.forward);
+
+        if (CharacterState.InAirIdle2ByJump == currCharacterDownsync.CharacterState && NO_VFX_ID != chConfig.AirJumpVfxSpeciesId) {
+            int airJumpVfxLookupKey = KV_PREFIX_CHARACTER_SECONDARY + currCharacterDownsync.JoinIndex;
+            var pixelVfxHolder = cachedPixelVfxNodes.PopAny(airJumpVfxLookupKey);
+
+            if (null == pixelVfxHolder) {
+                pixelVfxHolder = cachedPixelVfxNodes.Pop();
+                //Debug.Log(String.Format("@rdf.Id={0}, using a new pixel-vfx node for rendering for joinIndex={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, wx, wy));
+            } else {
+                //Debug.Log(String.Format("@rdf.Id={0}, using a cached pixel-vfx node for rendering for joinIndex={1} at wpos=({2}, {3})", rdf.Id, bullet.BattleAttr.BulletLocalId, wx, wy));
+            }
+
+            if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
+                var airJumpVfxConfig = pixelatedVfxDict[chConfig.AirJumpVfxSpeciesId];
+                string airJumpVfxAnimName = airJumpVfxConfig.Name;
+                if (pixelVfxHolder.lookUpTable.ContainsKey(airJumpVfxAnimName)) {
+                    pixelVfxHolder.updateAnim(airJumpVfxAnimName, framesInState, dirX, false, rdfId);
+                    var rdfBackthen = getRdfBackthen(rdfId - currCharacterDownsync.FramesInChState);
+                    if (null != rdfBackthen) {
+                        var chdBackthen = getChdFromRdf(currCharacterDownsync.JoinIndex, roomCapacity, rdfBackthen);
+                        if (null != chdBackthen && chdBackthen.Id == currCharacterDownsync.Id) {
+                            var (cxBackthen, cyBackthen) = VirtualGridToPolygonColliderCtr(chdBackthen.VirtualGridX, chdBackthen.VirtualGridY);
+                            var (wxBackthen, wyBackthen) = CollisionSpacePositionToWorldPosition(cxBackthen, cyBackthen, spaceOffsetX, spaceOffsetY);
+                            newPosHolder.Set(wxBackthen, wyBackthen, characterZ);
+                            pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                            pixelVfxHolder.score = rdfId;
+                        }
+                    }
+                }
+                cachedPixelVfxNodes.Put(airJumpVfxLookupKey, pixelVfxHolder);
+            }
+        }
 
         if (CharacterState.Def1 == currCharacterDownsync.CharacterState || CharacterState.Def1Broken == currCharacterDownsync.CharacterState) {
             vfxLookupKeySecondPrefix = KV_PREFIX_VFX_DEF;
@@ -3461,7 +3503,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, fireballZ);
         
         int vfxLookupKey = vfxLookupKeySecondPrefix + currCharacterDownsync.JoinIndex;
-        int dirX = currCharacterDownsync.DirX;
         newPosHolder.Set(wx, wy, fireballZ);
 
         if (!isGameObjPositionWithinCamera(newPosHolder)) {
@@ -3634,7 +3675,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             return false;
         }
 
-        if (0 < vfxLookupKey) {
+        if (NO_VFX_ID != vfxLookupKey) {
             if (!bulletConfig.BeamCollision && !bulletConfig.BeamRendering) {
                 var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
                 if (null == pixelVfxHolder) {

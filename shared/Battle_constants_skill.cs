@@ -142,6 +142,7 @@ namespace shared {
         public static BulletConfig SwordManMelee1GroundHit3BlStopper = new BulletConfig(SwordManMelee1GroundHit3Bl)
                                                                 .SetStartupFrames(SwordManMelee1GroundHit3Bl.StartupFrames + SwordManMelee1GroundHit3Bl.ActiveFrames)
                                                                 .SetStartupInvinsibleFrames(2)
+                                                                .SetHitboxSizes(0, 0)
                                                                 .SetHitboxOffsets(0, 0)
                                                                 .SetActiveFrames(11)
                                                                 .SetRemainsUponHit(true)
@@ -1335,8 +1336,8 @@ namespace shared {
         .AddHit(GoblinMelee1PrimerBullet);
 
         public static BulletConfig BoarWarriorMelee1PrimerBullet = new BulletConfig {
-            StartupFrames = 40,
-            ActiveFrames = 5,
+            StartupFrames = 43,
+            ActiveFrames = 2,
             HitStunFrames = 17,
             HitInvinsibleFrames = 13,
             BlockStunFrames = 2,
@@ -3358,13 +3359,13 @@ namespace shared {
         .AddHit(ThunderBoltHopperHit)
         ;
 
-        public static BulletConfig RepPeriforationBl1 = new BulletConfig {
+        public static BulletConfig RepPerforationBl1 = new BulletConfig {
             StartupFrames = 19,
             StartupInvinsibleFrames = 2,
             ActiveFrames = 6,
             HitStunFrames = 12,
             BlockStunFrames = 8,
-            Damage = 7,
+            Damage = 4,
             PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = 0,
             SelfLockVelX = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -3388,22 +3389,81 @@ namespace shared {
             ExplosionOnRockSfxName = "Explosion8",
             CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
         };
-        public static BulletConfig RepPeriforationBl2 = new BulletConfig(RepPeriforationBl1)
+        public static BulletConfig RepPerforationBl2 = new BulletConfig(RepPerforationBl1)
                                                             .SetStartupFrames(25);
-        public static BulletConfig RepPeriforationBl3 = new BulletConfig(RepPeriforationBl1)
+        public static BulletConfig RepPerforationBl3 = new BulletConfig(RepPerforationBl1)
                                                             .SetStartupFrames(37);
-        public static BulletConfig RepPeriforationBl4 = new BulletConfig(RepPeriforationBl1)
+        public static BulletConfig RepPerforationBl4 = new BulletConfig(RepPerforationBl1)
                                                             .SetStartupFrames(43);
-        public static BulletConfig RepPeriforationBl5 = new BulletConfig(RepPeriforationBl1)
+        public static BulletConfig RepPerforationBl5 = new BulletConfig(RepPerforationBl1)
                                                             .SetStartupFrames(49);
-        public static BulletConfig RepPeriforationBl6 = new BulletConfig(RepPeriforationBl1)
+        public static BulletConfig RepPerforationBl6 = new BulletConfig(RepPerforationBl1)
                                                             .SetStartupFrames(55);
-        public static BulletConfig RepPeriforationBl7 = new BulletConfig(RepPeriforationBl1)
+        public static BulletConfig RepPerforationBl7 = new BulletConfig(RepPerforationBl1)
                                                             .SetStartupFrames(61);
-        public static BulletConfig RepPeriforationBl8 = new BulletConfig(RepPeriforationBl1)
+        public static BulletConfig RepPerforationBl8 = new BulletConfig(RepPerforationBl1)
                                                             .SetStartupFrames(67);
-        public static BulletConfig RepPeriforationBl9 = new BulletConfig(RepPeriforationBl1)
+        public static BulletConfig RepPerforationBl9 = new BulletConfig(RepPerforationBl1)
                                                             .SetStartupFrames(73)
+                                                            .SetMhType(MultiHitType.None);
+
+        public static BulletConfig LightRepPerforationBl1 = new BulletConfig {
+            StartupFrames = 12,
+            StartupInvinsibleFrames = 2,
+            ActiveFrames = 6,
+            HitStunFrames = 12,
+            BlockStunFrames = 8,
+            Damage = 6,
+            PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = 0,
+            SelfLockVelX = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 8,
+            RemainsUponHit = true,
+            MhType = MultiHitType.FromEmission,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Piercing",
+            ExplosionOnRockSfxName = "Explosion8",
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+        public static BulletConfig LightRepPerforationBl2 = new BulletConfig(LightRepPerforationBl1)
+                                                            .SetStartupFrames(18);
+        public static BulletConfig LightRepPerforationBl3 = new BulletConfig(LightRepPerforationBl1)
+                                                            .SetStartupFrames(30);
+        public static BulletConfig LightRepPerforationBl4 = new BulletConfig(LightRepPerforationBl1)
+                                                            .SetStartupFrames(36)
+                                                            .SetCancellableFrames(36, 42).UpsertCancelTransit(PATTERN_UP_B, 113)
+                                                            ;
+        public static BulletConfig LightRepPerforationBl5 = new BulletConfig(LightRepPerforationBl1)
+                                                            .SetStartupFrames(42)
+                                                            .SetCancellableFrames(42, 48).UpsertCancelTransit(PATTERN_UP_B, 113)
+                                                            ;
+        public static BulletConfig LightRepPerforationBl6 = new BulletConfig(LightRepPerforationBl1)
+                                                            .SetStartupFrames(48)
+                                                            .SetCancellableFrames(48, 54).UpsertCancelTransit(PATTERN_UP_B, 113)
+                                                            ;
+        public static BulletConfig LightRepPerforationBl7 = new BulletConfig(LightRepPerforationBl1)
+                                                            .SetStartupFrames(54)
+                                                            .SetCancellableFrames(54, 60).UpsertCancelTransit(PATTERN_UP_B, 113)
+                                                            ;
+        public static BulletConfig LightRepPerforationBl8 = new BulletConfig(LightRepPerforationBl1)
+                                                            .SetStartupFrames(60)
+                                                            .SetCancellableFrames(60, 66).UpsertCancelTransit(PATTERN_UP_B, 113)
+                                                            ;
+        public static BulletConfig LightRepPerforationBl9 = new BulletConfig(LightRepPerforationBl1)
+                                                            .SetStartupFrames(66)
+                                                            .SetCancellableFrames(66, 78).UpsertCancelTransit(PATTERN_UP_B, 113)
                                                             .SetMhType(MultiHitType.None);
 
         public static BulletConfig BasicBladeHit1 = new BulletConfig {
@@ -3774,13 +3834,14 @@ namespace shared {
 
         public static BulletConfig SpearWomanBasicFireballBl = new BulletConfig {
             StartupFrames = 34,
-            StartupInvinsibleFrames = 15,
+            StartupInvinsibleFrames = 30,
             ActiveFrames = 600,
-            HitStunFrames = 35,
+            HitStunFrames = MAX_INT,
+            HitInvinsibleFrames = 45,
             BlockStunFrames = 8,
-            Damage = 15,
-            PushbackVelX = (int)(0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = NO_LOCK_VEL,
+            Damage = 32,
+            PushbackVelX = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
@@ -3793,7 +3854,9 @@ namespace shared {
             Speed = (int)(2.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             DirX = 2,
             DirY = 0,
-            Hardness = 5,
+            Hardness = 7,
+            RemainsUponHit = true,
+            ElementalAttrs = ELE_THUNDER,
             ExplosionFrames = 25,
             BType = BulletType.Fireball,
             CharacterEmitSfxName = "SlashEmitSpd1",
@@ -3802,8 +3865,42 @@ namespace shared {
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
+        public static BulletConfig LightSpearWomanBasicFireballBl = new BulletConfig {
+            StartupFrames = 34,
+            StartupInvinsibleFrames = 15,
+            ActiveFrames = 600,
+            HitStunFrames = MAX_INT,
+            HitInvinsibleFrames = 60,
+            BlockStunFrames = 8,
+            BlowUp = true,
+            Damage = 25,
+            PushbackVelX = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(2 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 32,
+            ExplosionSpeciesId = 19,
+            Speed = (int)(4.6f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 2,
+            DirY = 0,
+            Hardness = 6,
+            RemainsUponHit = true,
+            ExplosionFrames = 25,
+            ElementalAttrs = ELE_THUNDER,
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Melee_Explosion1",
+            ExplosionOnRockSfxName = "Explosion8",
+            CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
+        };
+
         public static BulletConfig SpearWomanMeleePrimerBl = new BulletConfig {
-            StartupFrames = 14,
+            StartupFrames = 10,
             StartupInvinsibleFrames = 5,
             ActiveFrames = 16,
             HitStunFrames = 35,
@@ -3835,7 +3932,7 @@ namespace shared {
         }.UpsertCancelTransit(PATTERN_B, 106);
 
         public static BulletConfig SpearWomanAirMeleePrimerBl = new BulletConfig {
-            StartupFrames = 22,
+            StartupFrames = 16,
             StartupInvinsibleFrames = 1,
             ActiveFrames = 20,
             HitStunFrames = 35,
@@ -3864,14 +3961,16 @@ namespace shared {
         };
 
         public static BulletConfig SpearWomanDragonPunchPrimerBl = new BulletConfig {
-            StartupFrames = 24,
+            StartupFrames = 15,
             StartupInvinsibleFrames = 10,
             ActiveFrames = 25,
-            HitStunFrames = 35,
-            BlockStunFrames = 8,
+            HitStunFrames = 33,
+            BlockStunFrames = 25,
             Damage = 20,
+            CancellableStFrame = 22,
+            CancellableEdFrame = 42,
             PushbackVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = NO_LOCK_VEL,
+            PushbackVelY = (int)(-1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
@@ -3890,7 +3989,78 @@ namespace shared {
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName="Melee_Explosion2",
             CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        }.UpsertCancelTransit(PATTERN_B, 105).UpsertCancelTransit(PATTERN_DOWN_B, 105).UpsertCancelTransit(PATTERN_UP_B, 105);
+
+        public static BulletConfig LightSpearWomanDragonPunchPrimerBl = new BulletConfig {
+            StartupFrames = 13,
+            StartupInvinsibleFrames = 14,
+            ActiveFrames = 9,
+            HitStunFrames = 20,
+            BlockStunFrames = 8,
+            Damage = 7,
+            PushbackVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = 0,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 9,
+            ElementalAttrs = ELE_WIND,
+            StartupVfxSpeciesId = VfxSmallSlash1.SpeciesId,
+            ActiveVfxSpeciesId = VfxSmallSlash1.SpeciesId,
+            RemainsUponHit = true,
+            IsPixelatedActiveVfx = true,
+            ReflectFireballXIfNotHarder = true,
+            MhType = MultiHitType.FromEmission,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName = "Melee_Explosion2",
+            NoExplosionOnHardPushback = true,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
         };
+
+        public static BulletConfig LightSpearWomanDragonPunchHit2 = new BulletConfig(LightSpearWomanDragonPunchPrimerBl)
+        .SetStartupFrames(LightSpearWomanDragonPunchPrimerBl.StartupFrames+LightSpearWomanDragonPunchPrimerBl.ActiveFrames)
+        .SetStartupInvinsibleFrames(0)
+        .SetStartupVfxSpeciesId(VfxSmallSlash2.SpeciesId)
+        .SetActiveVfxSpeciesId(VfxSmallSlash2.SpeciesId);
+
+        public static BulletConfig LightSpearWomanDragonPunchHit3 = new BulletConfig(LightSpearWomanDragonPunchPrimerBl)
+        .SetStartupFrames(LightSpearWomanDragonPunchHit2.StartupFrames+LightSpearWomanDragonPunchHit2.ActiveFrames)
+        .SetStartupInvinsibleFrames(0)
+        .SetStartupVfxSpeciesId(VfxSmallSlash3.SpeciesId)
+        .SetActiveVfxSpeciesId(VfxSmallSlash3.SpeciesId);
+
+        public static BulletConfig LightSpearWomanDragonPunchHit4 = new BulletConfig(LightSpearWomanDragonPunchPrimerBl)
+        .SetStartupFrames(LightSpearWomanDragonPunchHit3.StartupFrames+LightSpearWomanDragonPunchHit3.ActiveFrames)
+        .SetStartupInvinsibleFrames(0)
+        .SetStartupVfxSpeciesId(VfxSmallSlash1.SpeciesId)
+        .SetActiveVfxSpeciesId(VfxSmallSlash1.SpeciesId);
+
+        public static BulletConfig LightSpearWomanDragonPunchHit5 = new BulletConfig(LightSpearWomanDragonPunchPrimerBl)
+        .SetStartupFrames(LightSpearWomanDragonPunchHit4.StartupFrames+LightSpearWomanDragonPunchHit4.ActiveFrames)
+        .SetStartupInvinsibleFrames(0)
+        .SetStartupVfxSpeciesId(VfxSmallSlash2.SpeciesId)
+        .SetActiveVfxSpeciesId(VfxSmallSlash2.SpeciesId);
+
+        public static BulletConfig LightSpearWomanDragonPunchEnd = new BulletConfig(LightSpearWomanDragonPunchPrimerBl)
+        .SetStartupFrames(LightSpearWomanDragonPunchHit5.StartupFrames+LightSpearWomanDragonPunchHit5.ActiveFrames)
+        .SetMhType(MultiHitType.None)
+        .SetDamage(9)
+        .SetBlowUp(true)
+        .SetPushbacks((int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
+        .SetHitStunFrames(MAX_INT)
+        .SetHitInvinsibleFrames(20)
+        .SetStartupVfxSpeciesId(VfxSmallSlash3.SpeciesId)
+        .SetActiveVfxSpeciesId(VfxSmallSlash3.SpeciesId);
 
         public static BulletConfig LightSpearWomanMeleePrimerBl = new BulletConfig {
             StartupFrames = 9,
@@ -4013,6 +4183,76 @@ namespace shared {
             BoundChState = Atk1
         }
         .AddHit(DarkTowerLowerBl1);
+
+        public static BulletConfig BasicDashingHit1 = new BulletConfig {
+            StartupFrames = 5,
+                          StartupInvinsibleFrames = 7,
+                          ActiveFrames = 4,
+                          PushbackVelX = NO_LOCK_VEL,
+                          PushbackVelY = NO_LOCK_VEL,
+                          SelfLockVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          SelfLockVelY = 0,
+                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                          DelaySelfVelToActive = true,
+                          OmitSoftPushback = true,
+                          CancellableStFrame = 5,
+                          CancellableEdFrame = 10,
+                          BType = BulletType.Melee,
+                          MhType = MultiHitType.FromEmission,
+        }; 
+
+        public static BulletConfig BasicDashingHit2 = new BulletConfig {
+            StartupFrames = BasicDashingHit1.StartupFrames+BasicDashingHit1.ActiveFrames,
+                          ActiveFrames = 13,
+                          OmitSoftPushback = true,
+                          CancellableStFrame = BasicDashingHit1.StartupFrames+BasicDashingHit1.ActiveFrames,
+                          CancellableEdFrame = 19,
+                          PushbackVelX = NO_LOCK_VEL,
+                          PushbackVelY = NO_LOCK_VEL,
+                          SelfLockVelX = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          SelfLockVelY = 0,
+                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                          BType = BulletType.Melee,
+        }; 
+
+        public static BulletConfig BasicSlidingHit1 = new BulletConfig {
+            StartupFrames = 4,
+                          StartupInvinsibleFrames = 2,
+                          ActiveFrames = 7,
+                          OmitSoftPushback = true,
+                          CancellableStFrame = 6,
+                          CancellableEdFrame = 15,
+                          CancellableByInventorySlotC = true,
+                          PushbackVelX = NO_LOCK_VEL,
+                          PushbackVelY = NO_LOCK_VEL,
+                          SelfLockVelX = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          SelfLockVelY = NO_LOCK_VEL,
+                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                          DelaySelfVelToActive = true,
+                          BType = BulletType.Melee,
+                          StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+                          ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+                          IsPixelatedActiveVfx = true,
+                          MhType = MultiHitType.FromEmission,
+        }; 
+
+        public static BulletConfig BasicSlidingHit2 = new BulletConfig {
+            StartupFrames = BasicSlidingHit1.StartupFrames+BasicSlidingHit1.ActiveFrames,
+                          ActiveFrames = 12,
+                          OmitSoftPushback = true,
+                          CancellableStFrame = BasicSlidingHit1.StartupFrames+BasicSlidingHit1.ActiveFrames,
+                          CancellableEdFrame = 40,
+                          CancellableByInventorySlotC = true,
+                          PushbackVelX = NO_LOCK_VEL,
+                          PushbackVelY = NO_LOCK_VEL,
+                          SelfLockVelX = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                          SelfLockVelY = NO_LOCK_VEL,
+                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                          BType = BulletType.Melee,
+                          StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+                          ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+                          IsPixelatedActiveVfx = true,
+        };
 
         public static ImmutableDictionary<uint, Skill> skills = ImmutableDictionary.Create<uint, Skill>().AddRange(
                 new[]
@@ -4248,17 +4488,39 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(17, FireSwordManDragonPunchPrimerSkill),
 
+                    new KeyValuePair<uint, Skill>(18, new Skill{
+                            RecoveryFrames = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2), 
+                            RecoveryFramesOnBlock = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnHit = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+                            TriggerType = SkillTriggerType.RisingEdge,
+                            BoundChState = Sliding
+                            }
+                            .AddHit(new BulletConfig(BasicSlidingHit1).UpsertCancelTransit(PATTERN_B, 105).UpsertCancelTransit(PATTERN_DOWN_B, 109).UpsertCancelTransit(PATTERN_UP_B, 109))
+                            .AddHit(new BulletConfig(BasicSlidingHit2).UpsertCancelTransit(PATTERN_B, 105).UpsertCancelTransit(PATTERN_DOWN_B, 109).UpsertCancelTransit(PATTERN_UP_B, 109))
+                    ),
+
+                    new KeyValuePair<uint, Skill>(19, new Skill{
+                            RecoveryFrames = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnBlock = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnHit = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                            TriggerType = SkillTriggerType.RisingEdge,
+                            BoundChState = Dashing
+                            }
+                            .AddHit(new BulletConfig(BasicDashingHit1).UpsertCancelTransit(PATTERN_B, 105))
+                            .AddHit(new BulletConfig(BasicDashingHit2).UpsertCancelTransit(PATTERN_B, 105))
+                    ),
+
                     new KeyValuePair<uint, Skill>(20, new Skill{
-                            RecoveryFrames = 40,
-                            RecoveryFramesOnBlock = 40,
-                            RecoveryFramesOnHit = 40,
+                            RecoveryFrames = 30,
+                            RecoveryFramesOnBlock = 30,
+                            RecoveryFramesOnHit = 30,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Sliding
                             }
                             .AddHit(
                                 new BulletConfig {
                                 StartupFrames = 4,
-                                StartupInvinsibleFrames = 8,
+                                StartupInvinsibleFrames = 2,
                                 ActiveFrames = 10,
                                 OmitSoftPushback = true,
                                 CancellableStFrame = 6,
@@ -4281,7 +4543,7 @@ namespace shared {
                             .AddHit(
                                 new BulletConfig {
                                 StartupFrames = 15,
-                                ActiveFrames = 25,
+                                ActiveFrames = 15,
                                 OmitSoftPushback = true,
                                 CancellableStFrame = 15,
                                 CancellableEdFrame = 40,
@@ -4779,93 +5041,25 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(51, HeatBeamAirSkill),
 
                     new KeyValuePair<uint, Skill>(52, new Skill{
-                            RecoveryFrames = 18,
-                            RecoveryFramesOnBlock = 18,
-                            RecoveryFramesOnHit = 18,
+                            RecoveryFrames = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnBlock = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnHit = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Dashing
                             }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 5,
-                                StartupInvinsibleFrames = 8,
-                                ActiveFrames = 4,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = 0,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                DelaySelfVelToActive = true,
-                                OmitSoftPushback = true,
-                                CancellableStFrame = 5,
-                                CancellableEdFrame = 10,
-                                BType = BulletType.Melee,
-                                MhType = MultiHitType.FromEmission,
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }
-                            )
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 10,
-                                ActiveFrames = 8,
-                                OmitSoftPushback = true,
-                                CancellableStFrame = 10,
-                                CancellableEdFrame = 19,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = 0,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                BType = BulletType.Melee,
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }
-                            )
+                            .AddHit(BasicDashingHit1)
+                            .AddHit(BasicDashingHit2)
                     ),
 
                     new KeyValuePair<uint, Skill>(53, new Skill{
-                            RecoveryFrames = 22,
-                            RecoveryFramesOnBlock = 22,
-                            RecoveryFramesOnHit = 22,
+                            RecoveryFrames = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnBlock = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnHit = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Sliding
                             }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 4,
-                                StartupInvinsibleFrames = 8,
-                                ActiveFrames = 4,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = NO_LOCK_VEL,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                DelaySelfVelToActive = true,
-                                OmitSoftPushback = true,
-                                BType = BulletType.Melee,
-                                StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                IsPixelatedActiveVfx = true,
-                                MhType = MultiHitType.FromEmission,
-                                CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                                }
-                            )
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 9,
-                                ActiveFrames = 12,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = NO_LOCK_VEL,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                OmitSoftPushback = true,
-                                BType = BulletType.Melee,
-                                StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                IsPixelatedActiveVfx = true,
-                                CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                                }
-                            )
+                            .AddHit(BasicSlidingHit1)
+                            .AddHit(BasicSlidingHit2)
                     ),
 
                     new KeyValuePair<uint, Skill>(54, WitchGirlMeleeAirSkill1),
@@ -5135,15 +5329,15 @@ namespace shared {
                                 TriggerType = SkillTriggerType.RisingEdge,
                                 BoundChState = Atk3
                                 }
-                                .AddHit(RepPeriforationBl1)
-                                .AddHit(RepPeriforationBl2)
-                                .AddHit(RepPeriforationBl3)
-                                .AddHit(RepPeriforationBl4)
-                                .AddHit(RepPeriforationBl5)
-                                .AddHit(RepPeriforationBl6)
-                                .AddHit(RepPeriforationBl7)
-                                .AddHit(RepPeriforationBl8)
-                                .AddHit(RepPeriforationBl9)
+                                .AddHit(RepPerforationBl1)
+                                .AddHit(RepPerforationBl2)
+                                .AddHit(RepPerforationBl3)
+                                .AddHit(RepPerforationBl4)
+                                .AddHit(RepPerforationBl5)
+                                .AddHit(RepPerforationBl6)
+                                .AddHit(RepPerforationBl7)
+                                .AddHit(RepPerforationBl8)
+                                .AddHit(RepPerforationBl9)
                         ),
 
                     new KeyValuePair<uint, Skill>(108, new Skill {
@@ -5156,9 +5350,9 @@ namespace shared {
                             .AddHit(SpearWomanAirMeleePrimerBl)),
 
                     new KeyValuePair<uint, Skill>(109, new Skill {
-                            RecoveryFrames = 51,
-                            RecoveryFramesOnBlock = 51,
-                            RecoveryFramesOnHit = 51,
+                            RecoveryFrames = 42,
+                            RecoveryFramesOnBlock = 42,
+                            RecoveryFramesOnHit = 42,
                             TriggerType = SkillTriggerType.RisingEdge,
                             BoundChState = Atk4
                             }
@@ -5169,8 +5363,7 @@ namespace shared {
                             RecoveryFramesOnBlock = 51,
                             RecoveryFramesOnHit = 51,
                             TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk5,
-                            MpDelta = 4*BATTLE_DYNAMICS_FPS,
+                            BoundChState = Atk5
                             }
                             .AddHit(SpearWomanBasicFireballBl)),
 
@@ -5221,7 +5414,7 @@ namespace shared {
                                     CharacterEmitSfxName = "SlashEmitSpd2",
                                     ExplosionSfxName="Melee_Explosion2",
                                     CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-                                    }.UpsertCancelTransit(PATTERN_B, 113)
+                                    }.UpsertCancelTransit(PATTERN_B, 129)
                     )),
 
                     new KeyValuePair<uint, Skill>(113, new Skill{
@@ -5229,6 +5422,7 @@ namespace shared {
                             RecoveryFramesOnBlock = 52,
                             RecoveryFramesOnHit = 52,
                             TriggerType = SkillTriggerType.RisingEdge,
+                            MpDelta = 300,
                             BoundChState = Atk3
                             }
                             .AddHit(
@@ -5329,6 +5523,70 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(122, DarkTowerPrimerSkill),
                     new KeyValuePair<uint, Skill>(123, DarkTowerUpperSkill),
                     new KeyValuePair<uint, Skill>(124, DarkTowerLowerSkill),
+
+                    new KeyValuePair<uint, Skill>(125, new Skill {
+                            RecoveryFrames = 60,
+                            RecoveryFramesOnBlock = 60,
+                            RecoveryFramesOnHit = 60,
+                            TriggerType = SkillTriggerType.RisingEdge,
+                            BoundChState = Atk4
+                            }
+                            .AddHit(LightSpearWomanDragonPunchPrimerBl)
+                            .AddHit(LightSpearWomanDragonPunchHit2)
+                            .AddHit(LightSpearWomanDragonPunchHit3)
+                            .AddHit(LightSpearWomanDragonPunchHit4)
+                            .AddHit(LightSpearWomanDragonPunchHit5)
+                            .AddHit(LightSpearWomanDragonPunchEnd)),
+
+                    new KeyValuePair<uint, Skill>(126, new Skill {
+                            RecoveryFrames = 51,
+                            RecoveryFramesOnBlock = 51,
+                            RecoveryFramesOnHit = 51,
+                            TriggerType = SkillTriggerType.RisingEdge,
+                            BoundChState = Atk5,
+                            MpDelta = 4*BATTLE_DYNAMICS_FPS,
+                            }
+                            .AddHit(LightSpearWomanBasicFireballBl)),
+
+                    new KeyValuePair<uint, Skill>(127, new Skill{
+                            RecoveryFrames = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2), 
+                            RecoveryFramesOnBlock = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnHit = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+                            TriggerType = SkillTriggerType.RisingEdge,
+                            BoundChState = Sliding
+                            }
+                            .AddHit(new BulletConfig(BasicSlidingHit1).UpsertCancelTransit(PATTERN_B, 111).UpsertCancelTransit(PATTERN_DOWN_B, 126))
+                            .AddHit(new BulletConfig(BasicSlidingHit2).UpsertCancelTransit(PATTERN_B, 111).UpsertCancelTransit(PATTERN_DOWN_B, 126))
+                    ),
+
+                    new KeyValuePair<uint, Skill>(128, new Skill{
+                            RecoveryFrames = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnBlock = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                            RecoveryFramesOnHit = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                            TriggerType = SkillTriggerType.RisingEdge,
+                            BoundChState = Dashing
+                            }
+                            .AddHit(new BulletConfig(BasicDashingHit1).UpsertCancelTransit(PATTERN_B, 111))
+                            .AddHit(new BulletConfig(BasicDashingHit2).UpsertCancelTransit(PATTERN_B, 111))
+                    ),
+
+                    new KeyValuePair<uint, Skill>(129, new Skill{
+                            RecoveryFrames = 78,
+                            RecoveryFramesOnBlock = 78,
+                            RecoveryFramesOnHit = 78,
+                            TriggerType = SkillTriggerType.RisingEdge,
+                            BoundChState = Atk6
+                            }
+                            .AddHit(LightRepPerforationBl1)
+                            .AddHit(LightRepPerforationBl2)
+                            .AddHit(LightRepPerforationBl3)
+                            .AddHit(LightRepPerforationBl4)
+                            .AddHit(LightRepPerforationBl5)
+                            .AddHit(LightRepPerforationBl6)
+                            .AddHit(LightRepPerforationBl7)
+                            .AddHit(LightRepPerforationBl8)
+                            .AddHit(LightRepPerforationBl9)
+                            ),
 
                     new KeyValuePair<uint, Skill>(255, new Skill {
                             RecoveryFrames = 20,
@@ -5581,16 +5839,28 @@ namespace shared {
                                 return currBulletConfig.CancelTransit[patternId];
                             }
                         case PATTERN_UP_B:
-                            if (!notRecovered && !currCharacterDownsync.InAir) {
-                                return 109;
-                            } else {
-                                return NO_SKILL;
-                            }
                         case PATTERN_DOWN_B:
-                            if (!notRecovered && !currCharacterDownsync.InAir) {
-                                return 110;
+                            if (!notRecovered) {
+                                if (currCharacterDownsync.InAir) {
+                                    return NO_SKILL;
+                                } else {
+                                    return 109;
+                                }
                             } else {
-                                return NO_SKILL;
+                                // [WARNING] Combo in crouching is prohibited for this character.
+                                if (Sliding != currCharacterDownsync.CharacterState && isCrouching(currCharacterDownsync.CharacterState, chConfig)) {
+                                    return NO_SKILL;
+                                }
+                                // [WARNING] Combo in air is prohibited for this character!
+                                if (currCharacterDownsync.InAir) {
+                                    return NO_SKILL;
+                                }
+                                // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
+                                var (currSkillConfig, currBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
+                                if (null == currSkillConfig || null == currBulletConfig || !currBulletConfig.CancelTransit.ContainsKey(patternId)) return NO_SKILL;
+
+                                if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return NO_SKILL;
+                                return currBulletConfig.CancelTransit[patternId];
                             }
                         case PATTERN_E:
                         case PATTERN_DOWN_E:
@@ -5602,12 +5872,15 @@ namespace shared {
                         case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
-                                return 52;
+                                return 19;
                             } else if (!currCharacterDownsync.InAir) {
-                                return 53; 
+                                return 18; 
                             } else {
                                 return NO_SKILL;
                             }
+                        case PATTERN_INVENTORY_SLOT_C:
+                            if (!slotUsed) return NO_SKILL;
+                            return slotLockedSkillId;
                         default:
                             return NO_SKILL;
                     }
@@ -5636,6 +5909,35 @@ namespace shared {
                                 if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return NO_SKILL;
                                 return currBulletConfig.CancelTransit[patternId];
                             }
+                        case PATTERN_UP_B:
+                            if (!notRecovered) {
+                                if (currCharacterDownsync.InAir) {
+                                    return NO_SKILL;
+                                } else {
+                                    return 113;
+                                }
+                            } else {
+                                // [WARNING] Combo in crouching is prohibited for this character.
+                                if (Sliding != currCharacterDownsync.CharacterState && isCrouching(currCharacterDownsync.CharacterState, chConfig)) {
+                                    return NO_SKILL;
+                                }
+                                // [WARNING] Combo in air is prohibited for this character!
+                                if (currCharacterDownsync.InAir) {
+                                    return NO_SKILL;
+                                }
+                                // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
+                                var (currSkillConfig, currBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
+                                if (null == currSkillConfig || null == currBulletConfig || !currBulletConfig.CancelTransit.ContainsKey(patternId)) return NO_SKILL;
+
+                                if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return NO_SKILL;
+                                return currBulletConfig.CancelTransit[patternId];
+                            }
+                        case PATTERN_DOWN_B:
+                            if (!notRecovered && !currCharacterDownsync.InAir) {
+                                return 126;
+                            } else {
+                                return NO_SKILL;
+                            }
                         case PATTERN_E:
                         case PATTERN_DOWN_E:
                         case PATTERN_UP_E:
@@ -5646,12 +5948,15 @@ namespace shared {
                         case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered) return NO_SKILL;
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
-                                return 52;
+                                return 128;
                             } else if (!currCharacterDownsync.InAir) {
-                                return 53; 
+                                return 127; 
                             } else {
                                 return NO_SKILL;
                             }
+                        case PATTERN_INVENTORY_SLOT_C:
+                            if (!slotUsed) return NO_SKILL;
+                            return slotLockedSkillId;
                         default:
                             return NO_SKILL;
                     }

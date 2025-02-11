@@ -129,8 +129,8 @@ TextureImporter:
       name: Atk1_2
       rect:
         serializedVersion: 2
-        x: 78
-        y: 198
+        x: 2
+        y: 178
         width: 32
         height: 35
       alignment: 0
@@ -171,8 +171,8 @@ TextureImporter:
       name: Atk2_1
       rect:
         serializedVersion: 2
-        x: 181
-        y: 111
+        x: 183
+        y: 150
         width: 28
         height: 35
       alignment: 0
@@ -192,8 +192,8 @@ TextureImporter:
       name: Atk2_2
       rect:
         serializedVersion: 2
-        x: 90
-        y: 2
+        x: 421
+        y: 97
         width: 23
         height: 33
       alignment: 0
@@ -213,8 +213,8 @@ TextureImporter:
       name: Atk2_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 39
+        x: 476
+        y: 71
         width: 23
         height: 33
       alignment: 0
@@ -339,8 +339,8 @@ TextureImporter:
       name: Atk3_4
       rect:
         serializedVersion: 2
-        x: 154
-        y: 204
+        x: 75
+        y: 161
         width: 32
         height: 32
       alignment: 0
@@ -444,8 +444,8 @@ TextureImporter:
       name: Atk6_1
       rect:
         serializedVersion: 2
-        x: 285
-        y: 33
+        x: 146
+        y: 55
         width: 26
         height: 35
       alignment: 0
@@ -465,8 +465,8 @@ TextureImporter:
       name: Atk6_10
       rect:
         serializedVersion: 2
-        x: 466
-        y: 103
+        x: 449
+        y: 101
         width: 23
         height: 34
       alignment: 0
@@ -507,8 +507,8 @@ TextureImporter:
       name: Atk6_3
       rect:
         serializedVersion: 2
-        x: 38
-        y: 191
+        x: 155
+        y: 201
         width: 32
         height: 35
       alignment: 0
@@ -528,8 +528,8 @@ TextureImporter:
       name: Atk6_4
       rect:
         serializedVersion: 2
-        x: 74
-        y: 159
+        x: 38
+        y: 151
         width: 31
         height: 35
       alignment: 0
@@ -549,8 +549,8 @@ TextureImporter:
       name: Atk6_5
       rect:
         serializedVersion: 2
-        x: 2
-        y: 205
+        x: 78
+        y: 197
         width: 32
         height: 36
       alignment: 0
@@ -654,8 +654,8 @@ TextureImporter:
       name: Atked1_1
       rect:
         serializedVersion: 2
-        x: 315
-        y: 38
+        x: 336
+        y: 137
         width: 25
         height: 35
       alignment: 0
@@ -675,8 +675,8 @@ TextureImporter:
       name: Atked1_2
       rect:
         serializedVersion: 2
-        x: 224
-        y: 177
+        x: 175
+        y: 15
         width: 24
         height: 36
       alignment: 0
@@ -696,8 +696,8 @@ TextureImporter:
       name: Atked1_3
       rect:
         serializedVersion: 2
-        x: 198
-        y: 26
+        x: 89
+        y: 5
         width: 25
         height: 38
       alignment: 0
@@ -738,8 +738,8 @@ TextureImporter:
       name: BlownUp1_1
       rect:
         serializedVersion: 2
-        x: 149
-        y: 53
+        x: 2
+        y: 2
         width: 25
         height: 39
       alignment: 0
@@ -759,8 +759,8 @@ TextureImporter:
       name: BlownUp1_2
       rect:
         serializedVersion: 2
-        x: 169
-        y: 10
+        x: 31
+        y: 2
         width: 25
         height: 39
       alignment: 0
@@ -969,8 +969,8 @@ TextureImporter:
       name: CrouchIdle1_1
       rect:
         serializedVersion: 2
-        x: 407
-        y: 199
+        x: 176
+        y: 55
         width: 26
         height: 32
       alignment: 0
@@ -990,8 +990,8 @@ TextureImporter:
       name: CrouchIdle1_2
       rect:
         serializedVersion: 2
-        x: 379
-        y: 102
+        x: 2
+        y: 45
         width: 26
         height: 28
       alignment: 0
@@ -1011,8 +1011,8 @@ TextureImporter:
       name: CrouchIdle1_3
       rect:
         serializedVersion: 2
-        x: 63
-        y: 39
+        x: 479
+        y: 213
         width: 26
         height: 29
       alignment: 0
@@ -1032,8 +1032,8 @@ TextureImporter:
       name: CrouchIdle1_4
       rect:
         serializedVersion: 2
-        x: 467
-        y: 174
+        x: 479
+        y: 180
         width: 26
         height: 29
       alignment: 0
@@ -1053,8 +1053,8 @@ TextureImporter:
       name: CrouchIdle1_5
       rect:
         serializedVersion: 2
-        x: 285
-        y: 2
+        x: 365
+        y: 138
         width: 26
         height: 27
       alignment: 0
@@ -1074,8 +1074,8 @@ TextureImporter:
       name: Dashing_1
       rect:
         serializedVersion: 2
-        x: 2
-        y: 106
+        x: 68
+        y: 87
         width: 28
         height: 29
       alignment: 0
@@ -1095,8 +1095,8 @@ TextureImporter:
       name: Dashing_2
       rect:
         serializedVersion: 2
-        x: 109
-        y: 134
+        x: 215
+        y: 141
         width: 28
         height: 31
       alignment: 0
@@ -1116,8 +1116,8 @@ TextureImporter:
       name: Dashing_3
       rect:
         serializedVersion: 2
-        x: 72
-        y: 124
+        x: 144
+        y: 127
         width: 28
         height: 31
       alignment: 0
@@ -1137,8 +1137,8 @@ TextureImporter:
       name: Dashing_4
       rect:
         serializedVersion: 2
-        x: 36
-        y: 118
+        x: 105
+        y: 111
         width: 28
         height: 31
       alignment: 0
@@ -1158,8 +1158,8 @@ TextureImporter:
       name: Dashing_5
       rect:
         serializedVersion: 2
-        x: 321
-        y: 88
+        x: 319
+        y: 29
         width: 25
         height: 35
       alignment: 0
@@ -1179,8 +1179,8 @@ TextureImporter:
       name: Dashing_6
       rect:
         serializedVersion: 2
-        x: 34
-        y: 79
+        x: 247
+        y: 130
         width: 27
         height: 35
       alignment: 0
@@ -1200,8 +1200,8 @@ TextureImporter:
       name: Dashing_7
       rect:
         serializedVersion: 2
-        x: 61
-        y: 2
+        x: 449
+        y: 139
         width: 25
         height: 33
       alignment: 0
@@ -1221,8 +1221,8 @@ TextureImporter:
       name: DpAtk2_1
       rect:
         serializedVersion: 2
-        x: 2
-        y: 68
+        x: 208
+        y: 103
         width: 27
         height: 34
       alignment: 0
@@ -1242,8 +1242,8 @@ TextureImporter:
       name: DpAtk2_2
       rect:
         serializedVersion: 2
-        x: 379
-        y: 134
+        x: 392
+        y: 170
         width: 25
         height: 34
       alignment: 0
@@ -1263,8 +1263,8 @@ TextureImporter:
       name: DpAtk2_3
       rect:
         serializedVersion: 2
-        x: 31
-        y: 2
+        x: 449
+        y: 209
         width: 26
         height: 33
       alignment: 0
@@ -1473,8 +1473,8 @@ TextureImporter:
       name: DpAtk3_7
       rect:
         serializedVersion: 2
-        x: 136
-        y: 96
+        x: 176
+        y: 91
         width: 27
         height: 33
       alignment: 0
@@ -1494,8 +1494,8 @@ TextureImporter:
       name: DpAtk3_8
       rect:
         serializedVersion: 2
-        x: 467
-        y: 141
+        x: 449
+        y: 176
         width: 26
         height: 29
       alignment: 0
@@ -1515,8 +1515,8 @@ TextureImporter:
       name: Dying_1
       rect:
         serializedVersion: 2
-        x: 100
-        y: 76
+        x: 137
+        y: 94
         width: 27
         height: 29
       alignment: 9
@@ -1536,8 +1536,8 @@ TextureImporter:
       name: Dying_2
       rect:
         serializedVersion: 2
-        x: 190
-        y: 191
+        x: 252
+        y: 169
         width: 30
         height: 22
       alignment: 9
@@ -1557,8 +1557,8 @@ TextureImporter:
       name: Dying_3
       rect:
         serializedVersion: 2
-        x: 104
-        y: 109
+        x: 34
+        y: 85
         width: 28
         height: 21
       alignment: 9
@@ -1662,8 +1662,8 @@ TextureImporter:
       name: Idle1_1
       rect:
         serializedVersion: 2
-        x: 285
-        y: 33
+        x: 146
+        y: 55
         width: 26
         height: 35
       alignment: 0
@@ -1683,8 +1683,8 @@ TextureImporter:
       name: Idle1_2
       rect:
         serializedVersion: 2
-        x: 291
-        y: 77
+        x: 259
+        y: 24
         width: 26
         height: 35
       alignment: 0
@@ -1704,8 +1704,8 @@ TextureImporter:
       name: Idle1_3
       rect:
         serializedVersion: 2
-        x: 33
-        y: 39
+        x: 66
+        y: 47
         width: 26
         height: 36
       alignment: 0
@@ -1725,8 +1725,8 @@ TextureImporter:
       name: Idle1_4
       rect:
         serializedVersion: 2
-        x: 234
-        y: 72
+        x: 146
+        y: 15
         width: 25
         height: 36
       alignment: 0
@@ -1746,8 +1746,8 @@ TextureImporter:
       name: Idle1_5
       rect:
         serializedVersion: 2
-        x: 344
-        y: 49
+        x: 324
+        y: 68
         width: 25
         height: 35
       alignment: 0
@@ -1767,8 +1767,8 @@ TextureImporter:
       name: Idle1_6
       rect:
         serializedVersion: 2
-        x: 371
-        y: 10
+        x: 348
+        y: 29
         width: 25
         height: 35
       alignment: 0
@@ -1788,8 +1788,8 @@ TextureImporter:
       name: Idle1_7
       rect:
         serializedVersion: 2
-        x: 257
-        y: 32
+        x: 203
+        y: 15
         width: 24
         height: 36
       alignment: 0
@@ -1809,8 +1809,8 @@ TextureImporter:
       name: Idle1_8
       rect:
         serializedVersion: 2
-        x: 227
-        y: 30
+        x: 34
+        y: 45
         width: 26
         height: 36
       alignment: 0
@@ -2355,8 +2355,8 @@ TextureImporter:
       name: InAirAtked1_1
       rect:
         serializedVersion: 2
-        x: 408
-        y: 161
+        x: 479
+        y: 142
         width: 25
         height: 34
       alignment: 0
@@ -2376,8 +2376,8 @@ TextureImporter:
       name: InAirAtked1_2
       rect:
         serializedVersion: 2
-        x: 263
-        y: 72
+        x: 231
+        y: 15
         width: 24
         height: 36
       alignment: 0
@@ -2397,8 +2397,8 @@ TextureImporter:
       name: InAirAtked1_3
       rect:
         serializedVersion: 2
-        x: 178
-        y: 68
+        x: 60
+        y: 2
         width: 25
         height: 39
       alignment: 0
@@ -2418,8 +2418,8 @@ TextureImporter:
       name: InAirIdle1ByJump_1
       rect:
         serializedVersion: 2
-        x: 207
-        y: 70
+        x: 225
+        y: 176
         width: 23
         height: 37
       alignment: 0
@@ -2439,8 +2439,8 @@ TextureImporter:
       name: InAirIdle1ByJump_2
       rect:
         serializedVersion: 2
-        x: 315
-        y: 3
+        x: 308
+        y: 131
         width: 24
         height: 31
       alignment: 0
@@ -2460,8 +2460,8 @@ TextureImporter:
       name: InAirIdle1ByJump_3
       rect:
         serializedVersion: 2
-        x: 343
-        y: 3
+        x: 421
+        y: 200
         width: 24
         height: 31
       alignment: 0
@@ -2481,8 +2481,8 @@ TextureImporter:
       name: InAirIdle1ByJump_4
       rect:
         serializedVersion: 2
-        x: 409
-        y: 126
+        x: 421
+        y: 165
         width: 24
         height: 31
       alignment: 0
@@ -2502,8 +2502,8 @@ TextureImporter:
       name: InAirIdle1NoJump_1
       rect:
         serializedVersion: 2
-        x: 182
-        y: 150
+        x: 73
+        y: 120
         width: 28
         height: 37
       alignment: 0
@@ -2523,8 +2523,8 @@ TextureImporter:
       name: InAirIdle1NoJump_2
       rect:
         serializedVersion: 2
-        x: 149
-        y: 133
+        x: 36
+        y: 110
         width: 28
         height: 37
       alignment: 0
@@ -2544,8 +2544,8 @@ TextureImporter:
       name: InAirIdle1NoJump_3
       rect:
         serializedVersion: 2
-        x: 214
-        y: 136
+        x: 2
+        y: 99
         width: 28
         height: 37
       alignment: 0
@@ -2565,12 +2565,12 @@ TextureImporter:
       name: InAirIdle2ByJump_1
       rect:
         serializedVersion: 2
-        x: 2
-        y: 13
-        width: 25
-        height: 51
+        x: 118
+        y: 6
+        width: 24
+        height: 37
       alignment: 9
-      pivot: {x: 0.52, y: 0.6960784}
+      pivot: {x: 0.52, y: 0.696078}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2586,12 +2586,12 @@ TextureImporter:
       name: InAirIdle2ByJump_2
       rect:
         serializedVersion: 2
-        x: 114
-        y: 169
-        width: 31
-        height: 57
+        x: 176
+        y: 128
+        width: 28
+        height: 18
       alignment: 9
-      pivot: {x: 0.516129, y: 0.7280702}
+      pivot: {x: 0.516129, y: 0.72807}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2608,7 +2608,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 398
-        y: 373
+        y: 348
         width: 21
         height: 21
       alignment: 0
@@ -2628,8 +2628,8 @@ TextureImporter:
       name: InAirIdle2ByJump_4
       rect:
         serializedVersion: 2
-        x: 198
-        y: 2
+        x: 291
+        y: 107
         width: 22
         height: 20
       alignment: 0
@@ -2649,8 +2649,8 @@ TextureImporter:
       name: InAirIdle2ByJump_5
       rect:
         serializedVersion: 2
-        x: 224
-        y: 2
+        x: 317
+        y: 107
         width: 22
         height: 20
       alignment: 0
@@ -2670,8 +2670,8 @@ TextureImporter:
       name: InAirIdle2ByJump_6
       rect:
         serializedVersion: 2
-        x: 182
-        y: 150
+        x: 73
+        y: 120
         width: 28
         height: 37
       alignment: 0
@@ -2712,8 +2712,8 @@ TextureImporter:
       name: OnWallAtk1_2
       rect:
         serializedVersion: 2
-        x: 252
-        y: 156
+        x: 150
+        y: 162
         width: 29
         height: 35
       alignment: 0
@@ -2733,8 +2733,8 @@ TextureImporter:
       name: OnWallAtk1_3
       rect:
         serializedVersion: 2
-        x: 38
-        y: 153
+        x: 2
+        y: 140
         width: 30
         height: 34
       alignment: 0
@@ -2817,8 +2817,8 @@ TextureImporter:
       name: OnWallIdle1_1
       rect:
         serializedVersion: 2
-        x: 117
-        y: 2
+        x: 395
+        y: 133
         width: 22
         height: 33
       alignment: 0
@@ -2838,8 +2838,8 @@ TextureImporter:
       name: OnWallIdle1_2
       rect:
         serializedVersion: 2
-        x: 123
-        y: 39
+        x: 448
+        y: 64
         width: 22
         height: 33
       alignment: 0
@@ -2859,8 +2859,8 @@ TextureImporter:
       name: OnWallIdle1_3
       rect:
         serializedVersion: 2
-        x: 143
-        y: 2
+        x: 382
+        y: 96
         width: 22
         height: 33
       alignment: 0
@@ -2881,9 +2881,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 2
-        y: 368
-        width: 44
-        height: 22
+        y: 217
+        width: 33
+        height: 24
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2901,10 +2901,10 @@ TextureImporter:
       name: Sliding_2
       rect:
         serializedVersion: 2
-        x: 68
-        y: 102
-        width: 28
-        height: 18
+        x: 118
+        y: 242
+        width: 33
+        height: 24
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2922,10 +2922,10 @@ TextureImporter:
       name: Sliding_3
       rect:
         serializedVersion: 2
-        x: 398
-        y: 348
-        width: 21
-        height: 21
+        x: 118
+        y: 214
+        width: 33
+        height: 24
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2943,10 +2943,10 @@ TextureImporter:
       name: Sliding_4
       rect:
         serializedVersion: 2
-        x: 213
-        y: 112
-        width: 22
-        height: 20
+        x: 421
+        y: 134
+        width: 24
+        height: 27
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2961,74 +2961,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sliding_5
-      rect:
-        serializedVersion: 2
-        x: 239
-        y: 112
-        width: 22
-        height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 09f12d4f66b965a49a4a79a27aa0eab2
-      internalID: -1420872436
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sliding_6
-      rect:
-        serializedVersion: 2
-        x: 379
-        y: 102
-        width: 26
-        height: 28
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2db805168b414844088e3f6173fc0f2e
-      internalID: 576549973
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sliding_7
-      rect:
-        serializedVersion: 2
-        x: 365
-        y: 172
-        width: 26
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ef0c848e4ddeb8f42b05aa1632a28fdf
-      internalID: 978991611
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Walking_1
       rect:
         serializedVersion: 2
-        x: 373
-        y: 63
+        x: 365
+        y: 169
         width: 23
         height: 35
       alignment: 0
@@ -3048,8 +2985,8 @@ TextureImporter:
       name: Walking_2
       rect:
         serializedVersion: 2
-        x: 265
-        y: 116
+        x: 236
+        y: 63
         width: 24
         height: 36
       alignment: 0
@@ -3069,8 +3006,8 @@ TextureImporter:
       name: Walking_3
       rect:
         serializedVersion: 2
-        x: 437
-        y: 173
+        x: 96
+        y: 47
         width: 26
         height: 30
       alignment: 0
@@ -3090,8 +3027,8 @@ TextureImporter:
       name: Walking_4
       rect:
         serializedVersion: 2
-        x: 293
-        y: 127
+        x: 264
+        y: 67
         width: 26
         height: 35
       alignment: 0
@@ -3111,8 +3048,8 @@ TextureImporter:
       name: Walking_5
       rect:
         serializedVersion: 2
-        x: 449
-        y: 207
+        x: 289
+        y: 28
         width: 26
         height: 35
       alignment: 0
@@ -3132,8 +3069,8 @@ TextureImporter:
       name: Walking_6
       rect:
         serializedVersion: 2
-        x: 479
-        y: 207
+        x: 294
+        y: 68
         width: 26
         height: 35
       alignment: 0
@@ -3153,8 +3090,8 @@ TextureImporter:
       name: Walking_7
       rect:
         serializedVersion: 2
-        x: 437
-        y: 139
+        x: 478
+        y: 108
         width: 25
         height: 30
       alignment: 0
@@ -3174,8 +3111,8 @@ TextureImporter:
       name: Walking_8
       rect:
         serializedVersion: 2
-        x: 350
-        y: 102
+        x: 353
+        y: 98
         width: 25
         height: 35
       alignment: 0
@@ -3195,8 +3132,8 @@ TextureImporter:
       name: WalkingAtk1_1
       rect:
         serializedVersion: 2
-        x: 2
-        y: 167
+        x: 114
+        y: 176
         width: 32
         height: 34
       alignment: 0
@@ -3216,8 +3153,8 @@ TextureImporter:
       name: WalkingAtk1_2
       rect:
         serializedVersion: 2
-        x: 118
-        y: 230
+        x: 39
+        y: 190
         width: 32
         height: 36
       alignment: 0
@@ -3531,8 +3468,8 @@ TextureImporter:
       name: DashSlash_1
       rect:
         serializedVersion: 2
-        x: 149
-        y: 174
+        x: 111
+        y: 146
         width: 29
         height: 26
       alignment: 9
@@ -3552,8 +3489,8 @@ TextureImporter:
       name: DashSlash_10
       rect:
         serializedVersion: 2
-        x: 326
-        y: 141
+        x: 278
+        y: 131
         width: 26
         height: 31
       alignment: 0
@@ -3573,8 +3510,8 @@ TextureImporter:
       name: DashSlash_2
       rect:
         serializedVersion: 2
-        x: 2
-        y: 139
+        x: 191
+        y: 189
         width: 30
         height: 24
       alignment: 9
@@ -3657,8 +3594,8 @@ TextureImporter:
       name: DashSlash_6
       rect:
         serializedVersion: 2
-        x: 65
-        y: 72
+        x: 100
+        y: 81
         width: 27
         height: 26
       alignment: 9
@@ -3754,6 +3691,153 @@ TextureImporter:
       bones: []
       spriteID: e5c4ca2f9d2b7144596eaa3841cf0ede
       internalID: -232780582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundDodged_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 368
+        width: 44
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a85c733223713884287bc99e1e6fde02
+      internalID: -195238229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundDodged_2
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 77
+        width: 28
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44ce6ed52fcfec748bd18224f80bc1b6
+      internalID: 937565041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundDodged_3
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 373
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2203d449297a304cbb1480c5c5817ff
+      internalID: 1852784652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundDodged_4
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 106
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81ec8a629b9647c4d99f68a81a4d0f4e
+      internalID: 1897044721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundDodged_5
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 106
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9eafc6b6af529d6408f451b0474b03fe
+      internalID: -1817565581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundDodged_6
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 45
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33171f5ee622b114ea70a366dd75d162
+      internalID: -1665992494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundDodged_7
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 55
+        width: 26
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36d177eac25947f43b4d8e29839e19b8
+      internalID: 916424916
       vertices: []
       indices: 
       edges: []
@@ -3854,6 +3938,13 @@ TextureImporter:
       Dying_5: 1490643395
       Dying_6: -1763877648
       Dying_7: 330321936
+      GroundDodged_1: -195238229
+      GroundDodged_2: 937565041
+      GroundDodged_3: 1852784652
+      GroundDodged_4: 1897044721
+      GroundDodged_5: -1817565581
+      GroundDodged_6: -1665992494
+      GroundDodged_7: 916424916
       Idle1_1: 60330360
       Idle1_2: -2056257711
       Idle1_3: -313039598
@@ -3916,9 +4007,6 @@ TextureImporter:
       Sliding_2: 818770888
       Sliding_3: 31619100
       Sliding_4: 2052324170
-      Sliding_5: -1420872436
-      Sliding_6: 576549973
-      Sliding_7: 978991611
       WalkingAtk1_1: -2009620128
       WalkingAtk1_2: 1632308875
       WalkingAtk1_3: 1487650508

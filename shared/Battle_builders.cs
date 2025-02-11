@@ -862,6 +862,9 @@ namespace shared {
             if (SPECIES_NONE_CH != buffConfig.XformChSpeciesId) {
                 var nextChConfig = characters[cand.OrigChSpeciesId];
                 AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame, false);
+                if (thatCharacterInNextFrame.Mp > nextChConfig.Mp) {
+                    thatCharacterInNextFrame.Mp = nextChConfig.Mp;
+                }
             }
             if (buffConfig.OmitGravity) {
                 thatCharacterInNextFrame.OmitGravity = cand.OrigOmitGravity;
@@ -899,6 +902,9 @@ namespace shared {
                 origChSpeciesId = currCharacterDownsync.SpeciesId;
                 var nextChConfig = characters[buffConfig.XformChSpeciesId];
                 AssignToCharacterDownsyncFromCharacterConfig(nextChConfig, thatCharacterInNextFrame, false);
+                if (0 < nextChConfig.Mp) {
+                    thatCharacterInNextFrame.Mp = nextChConfig.Mp; 
+                }
                 if (0 != nextChConfig.TransformIntoFramesToRecover) {
                     thatCharacterInNextFrame.CharacterState = CharacterState.TransformingInto; 
                     thatCharacterInNextFrame.FramesToRecover = nextChConfig.TransformIntoFramesToRecover;
@@ -1207,6 +1213,11 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetStartupVfxSpeciesId(int val) {
+            this.StartupVfxSpeciesId = val;
+            return this;
+        }
+
         public BulletConfig SetStartupFrames(int val) {
             this.StartupFrames = val;
             return this;
@@ -1224,6 +1235,11 @@ namespace shared {
 
         public BulletConfig SetHitStunFrames(int val) {
             this.HitStunFrames = val;
+            return this;
+        }
+
+        public BulletConfig SetHitInvinsibleFrames(int val) {
+            this.HitInvinsibleFrames = val;
             return this;
         }
 
@@ -1251,6 +1267,12 @@ namespace shared {
         public BulletConfig SetHitboxOffsets(int hitboxOffsetX, int hitboxOffsetY) {
             this.HitboxOffsetX = hitboxOffsetX;
             this.HitboxOffsetY = hitboxOffsetY;
+            return this;
+        }
+
+        public BulletConfig SetHitboxSizes(int hitboxSizeX, int hitboxSizeY) {
+            this.HitboxSizeX = hitboxSizeX;
+            this.HitboxSizeY = hitboxSizeY;
             return this;
         }
 

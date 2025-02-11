@@ -107,7 +107,6 @@ namespace shared {
                         SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                         DefaultAirDashQuota = 1,
                         DefaultAirJumpQuota = 1,
-                        UseIsolatedAvatar = true,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.GaugedMagazineIv,
@@ -247,7 +246,7 @@ namespace shared {
                                 FramesToRecover = 0,
                                 DefaultQuota = 3,
                                 GaugeRequired = 120,
-                                SkillId = 27, // TODO: Remove this hardcoded "skillId"!
+                                SkillId = 27,
                                 FullChargeBuffSpeciesId = XformToWandWitchGirl.SpeciesId,
                             }
                         },
@@ -469,6 +468,7 @@ namespace shared {
                         SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                         DefaultAirDashQuota = 1,
                         DefaultAirJumpQuota = 1,
+                        AirJumpVfxSpeciesId = VfxAirJumpCircle.SpeciesId,
                         HasBtnBCharging = true,
                         BtnBChargedVfxSpeciesId = VfxWaterCharged.SpeciesId,
                         InitInventorySlots = new List<InventorySlot> {
@@ -724,6 +724,11 @@ namespace shared {
                         SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                         DefaultAirDashQuota = 1,
                         DefaultAirJumpQuota = 1,
+                        AirJumpVfxSpeciesId = VfxAirJumpDust.SpeciesId,
+                        GroundDodgeEnabledByRdfCntFromBeginning = 12, 
+                        GroundDodgedFramesInvinsible = 25, 
+                        GroundDodgedFramesToRecover = 30, 
+                        GroundDodgedSpeed = (int)(4.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.GaugedMagazineIv,
@@ -763,16 +768,15 @@ namespace shared {
                         SpeciesId = SPECIES_SPEARWOMAN,
                         SpeciesName = "SpearWoman",
                         Hp = 150,
-                        Mp = 600,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 17,
                         LayDownFramesToRecover = 17,
                         GetUpInvinsibleFrames = 20,
                         GetUpFramesToRecover = 26,
-                        Speed = (int)(1.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        Speed = (int)(2.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        JumpingInitVelY = (int)(7.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 4,
                         VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -788,8 +792,6 @@ namespace shared {
                         LayDownSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeX = (int)(40.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DyingSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        MpRegenPerInterval = 100,
-                        MpRegenInterval = 50,
                         SlidingEnabled = true,
                         DashingEnabled = true,
                         DefaultAirDashQuota = 1,
@@ -810,25 +812,37 @@ namespace shared {
                         GaugeIncWhenKilled = 80,
                         Ifc = IfaceCat.Flesh,
                         NpcPrioritizeBulletHandling = true,
+                        GroundDodgeEnabledByIvSlotCInBlockStun = true,
+                        GroundDodgeEnabledByRdfCntFromBeginning = 12, 
+                        GroundDodgedFramesInvinsible = 25, 
+                        GroundDodgedFramesToRecover = 30, 
+                        GroundDodgedSpeed = (int)(4.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.GaugedMagazineIv,
                                 Quota = 0,
                                 FramesToRecover = 0,
-                                DefaultQuota = 1,
-                                GaugeRequired = 120,
-                                BuffSpeciesId = XformToLightSpearWoman.SpeciesId,
-                                SkillId = NO_SKILL, // TODO: Remove this hardcoded "skillId"!
+                                DefaultQuota = 3,
+                                GaugeRequired = 100,
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = 110, 
+                                FullChargeBuffSpeciesId = XformToLightSpearWoman.SpeciesId,
                             }
                         },
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                        LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
+                            new[]
+                            {
+                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 8)
+                            }
+                        ),
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_LIGHTSPEARWOMAN, new CharacterConfig {
                         SpeciesId = SPECIES_LIGHTSPEARWOMAN,
                         SpeciesName = "LightSpearWoman",
                         Hp = 150,
-                        Mp = 600,
+                        Mp = 1000,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,
                         LayDownFrames = 17,
@@ -837,7 +851,7 @@ namespace shared {
                         GetUpFramesToRecover = 26,
                         Speed = (int)(2.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        JumpingInitVelY = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 4,
                         VisionOffsetX = (int)(8.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -878,6 +892,28 @@ namespace shared {
                         TransformIntoFramesToRecover = 78,
                         TransformIntoFramesInvinsible = 79,
                         NpcPrioritizeBulletHandling = true,
+                        GroundDodgeEnabledByIvSlotCInBlockStun = true,
+                        GroundDodgeEnabledByRdfCntFromBeginning = 12, 
+                        GroundDodgedFramesInvinsible = 25, 
+                        GroundDodgedFramesToRecover = 30, 
+                        GroundDodgedSpeed = (int)(4.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 
+                        InitInventorySlots = new List<InventorySlot> {
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.GaugedMagazineIv,
+                                Quota = 0,
+                                FramesToRecover = 0,
+                                DefaultQuota = 1,
+                                GaugeRequired = 120,
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = 125 
+                            }
+                        },
+                        LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
+                            new[]
+                            {
+                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 8)
+                            }
+                        ),
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_SKELEARCHER, new CharacterConfig {

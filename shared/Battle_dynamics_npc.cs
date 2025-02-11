@@ -743,7 +743,16 @@ namespace shared {
 
                 Collider? oppoBlCollider;
                 Bullet? v4;
-                findHorizontallyClosestCharacterCollider(rdfId, currCharacterDownsync, visionCollider, aCollider, collision, ref overlapResult, out oppoChCollider, out v3, out oppoBlCollider, out v4, logger);
+
+                Collider? sameTeamChCollider;
+                CharacterDownsync? v5;
+
+                findHorizontallyClosestCharacterCollider(rdfId, currCharacterDownsync, visionCollider, aCollider, collision, ref overlapResult, out oppoChCollider, out v3, out oppoBlCollider, out v4, out sameTeamChCollider, out v5, logger);
+
+                if (null != v5 && v5.JoinIndex > currCharacterDownsync.JoinIndex && v5.VirtualGridX == currCharacterDownsync.VirtualGridX && v5.SpeciesId == currCharacterDownsync.SpeciesId && v5.VelX == currCharacterDownsync.VelX && v5.VelY == currCharacterDownsync.VelY) {
+                    // [WARNING] To differentiate possibly overlapping same species characters
+                    thatCharacterInNextFrame.VelX = (int)(.9f * thatCharacterInNextFrame.VelX);
+                }
 
                 float oppoChColliderDx = 0f, oppoChColliderDy = 0f;
                 float opponentBoxCx = 0, opponentBoxCy = 0, opponentBoxCw = 0, opppnentBoxCh = 0;
@@ -996,11 +1005,11 @@ namespace shared {
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = nextRenderFrameNpcs[i - roomCapacity];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                bool notDashing = (Dashing != currCharacterDownsync.CharacterState && Sliding != currCharacterDownsync.CharacterState && BackDashing != currCharacterDownsync.CharacterState);
-                bool effInAir = (currCharacterDownsync.InAir || (inAirSet.Contains(currCharacterDownsync.CharacterState) && notDashing));
+                bool notDashing = isNotDashing(currCharacterDownsync);
+                bool effInAir = isEffInAir(currCharacterDownsync, notDashing);
                 var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy) = deriveNpcOpPattern(currCharacterDownsync, effInAir, notDashing, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
 
-                var (slotUsed, slotLockedSkillId) = _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, logger);
+                var (slotUsed, slotLockedSkillId, dodgedInBlockStun) = _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, effInAir, chConfig, thatCharacterInNextFrame, logger);
 
                 thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
                 thatCharacterInNextFrame.SlipJumpTriggered |= slipJumpedOrNot;
@@ -1014,7 +1023,7 @@ namespace shared {
                 }
 
                 bool notEnoughMp = false;
-                bool usedSkill = _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, logger);
+                bool usedSkill = dodgedInBlockStun ? false : _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, logger);
                 Skill? skillConfig = null;
                 if (usedSkill) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
@@ -1105,7 +1114,8 @@ namespace shared {
 
         private static void remapBulletOffenderJoinIndex(int roomCapacity, int nextNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRdfBullets, Dictionary<int, int> joinIndexRemap, HashSet<int> justDeadJoinIndices) {
             for (int i = 0; i < roomCapacity + nextNpcI; i++) {
-                var thatCharacterInNextFrame = (i < roomCapacity ? nextRenderFramePlayers[i] : nextRenderFrameNpcs[i - roomCapacity]);
+                int joinIndex = i+1;
+                var thatCharacterInNextFrame = getChdFromChdArrs(joinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
                 int j = thatCharacterInNextFrame.LastDamagedByJoinIndex;
                 if (j >= roomCapacity) {
                     // no need to remap for players
