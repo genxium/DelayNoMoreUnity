@@ -833,7 +833,7 @@ namespace shared {
                         LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
                             new[]
                             {
-                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 8)
+                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 10)
                             }
                         ),
                     }),
@@ -911,7 +911,7 @@ namespace shared {
                         LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
                             new[]
                             {
-                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 8)
+                                new KeyValuePair<CharacterState, int>(CharacterState.Def1, 10)
                             }
                         ),
                     }),

@@ -394,6 +394,7 @@ namespace shared {
 
         private static (bool, uint, bool) _useInventorySlot(int rdfId, int patternId, CharacterDownsync currCharacterDownsync, bool effInAir, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ILoggerBridge logger) {
             bool slotUsed = false;
+            bool intendToDodgeInBlockStun = false;
             bool dodgedInBlockStun = false;
             var slotLockedSkillId = NO_SKILL;
 
@@ -411,7 +412,7 @@ namespace shared {
                        !effInAir
                       ) {
                 slotIdx = 0;
-                dodgedInBlockStun = true;
+                intendToDodgeInBlockStun = true;
             } else {
                 return (false, NO_SKILL, false);
             }
@@ -451,14 +452,14 @@ namespace shared {
 
                 return (slotUsed, slotLockedSkillId, false);
             } else {
-                slotLockedSkillId = dodgedInBlockStun ? NO_SKILL : (currCharacterDownsync.InAir ? targetSlotCurr.SkillIdAir : targetSlotCurr.SkillId);
+                slotLockedSkillId = intendToDodgeInBlockStun ? NO_SKILL : (currCharacterDownsync.InAir ? targetSlotCurr.SkillIdAir : targetSlotCurr.SkillId);
 
-                if (!dodgedInBlockStun && NO_SKILL == slotLockedSkillId && TERMINATING_BUFF_SPECIES_ID == targetSlotCurr.BuffSpeciesId) {
+                if (!intendToDodgeInBlockStun && NO_SKILL == slotLockedSkillId && TERMINATING_BUFF_SPECIES_ID == targetSlotCurr.BuffSpeciesId) {
                     return (false, NO_SKILL, false);
                 }
 
                 bool notRecovered = (0 < currCharacterDownsync.FramesToRecover);
-                if (notRecovered && !dodgedInBlockStun) {
+                if (notRecovered && !intendToDodgeInBlockStun) {
                     var (currSkillConfig, currBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
                     if (null == currSkillConfig || null == currBulletConfig) return (false, NO_SKILL, false);
 
@@ -471,16 +472,19 @@ namespace shared {
                     if (0 < targetSlotCurr.Quota) {
                         targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
                         slotUsed = true;
+                        dodgedInBlockStun = intendToDodgeInBlockStun;
                     }
                 } else if (InventorySlotStockType.QuotaIv == targetSlotCurr.StockType) {
                     if (0 < targetSlotCurr.Quota) {
                         targetSlotNext.Quota = targetSlotCurr.Quota - 1; 
                         slotUsed = true;
+                        dodgedInBlockStun = intendToDodgeInBlockStun;
                     }
                 } else if (InventorySlotStockType.TimedIv == targetSlotCurr.StockType) {
                     if (0 == targetSlotCurr.FramesToRecover) {
                         targetSlotNext.FramesToRecover = targetSlotCurr.DefaultFramesToRecover; 
                         slotUsed = true;
+                        dodgedInBlockStun = intendToDodgeInBlockStun;
                     }
                 } else if (InventorySlotStockType.TimedMagazineIv == targetSlotCurr.StockType) {
                     if (0 < targetSlotCurr.Quota) {
@@ -490,10 +494,11 @@ namespace shared {
                             //logger.LogInfo(String.Format("At currRdfId={0}, player joinIndex={1} starts reloading inventoryBtnB", currRdfId, currCharacterDownsync.JoinIndex));
                         }
                         slotUsed = true;
+                        dodgedInBlockStun = intendToDodgeInBlockStun;
                     }
                 }
         
-                if (slotUsed && !dodgedInBlockStun) {
+                if (slotUsed && !intendToDodgeInBlockStun) {
                     if (TERMINATING_BUFF_SPECIES_ID != targetSlotCurr.BuffSpeciesId) {
                         var buffConfig = buffConfigs[targetSlotCurr.BuffSpeciesId];
                         ApplyBuffToCharacter(rdfId, buffConfig, currCharacterDownsync, thatCharacterInNextFrame);
