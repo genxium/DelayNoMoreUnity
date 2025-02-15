@@ -15,8 +15,8 @@
  <tileset firstgid="462" source="../decoration/Statics/HF_tiles.tsx"/>
  <tileset firstgid="1087" source="../decoration/Statics/DW_bg_1.tsx"/>
  <tileset firstgid="1591" source="../traps/machinery/traps_machinery.tsx"/>
- <tileset firstgid="1597" source="../towers/towers.tsx"/>
- <tileset firstgid="1612" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="1598" source="../towers/towers.tsx"/>
+ <tileset firstgid="1613" source="../shared_comps/CastlePrisonProps16.tsx"/>
  <layer id="197" name="Background3" width="160" height="33" opacity="0.5" parallaxx="0.6">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -38,7 +38,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmD1SwzAQhW2H4Q6EcAlCqDkCcAugpKNI1vxdwST8XCL8tKkpCHAFCgJcgicjzwgKYsvK2EreN/Nmt2DGu6uHFCkICCGEEEIIIYQQQgghhBBCCCGEEH84joLgJKq6iv85RX1n0HnN61wUnsIgGEPPRnyxyJUusaZX0HVO7Tr0wHaB795Eaa2CmlOhBxlb5Fl8Dd31sWi8Y3YT6MOInxa50i3W9Q66z6kDh/7bK/DdhyitVVBzKvQgE4s8i1/0nz1YixCKjNiwyJWWPDrTUKs0tNCDhBZ5Fn3qu26sYHZNaNWILYtcac2jdUCt0tJCD9K0yLPoU991Y/2Pj96iYKuD2IY2oLy50qZH64BapaOFHqRdIMeMRqYPfeq7jvQxvwTqQo/wX9X11B3MaIRZCWYmmJ1UXY/v9LT3LqDY8f+yupfuGHJ5563qm5iRYFaiPNij/0rTN/w3cLxW6l66b8jlnbeqbw4M/3H/K09Xn7/JDPa/eSTWZ2+iPVh1Pb6TGP5zvf/NIwPDfwn9V5ps/+ty/8tFrPc97n9uUL/7JPq5h3D/m85A3ztE/w6suh7fSYx3v2EO/x0uz76mqkBvMu1vhsY7IM/f8hR99zuaY/8V6S17B5xZMQtC0Xe/eI79V6S3mOcvIYQQQgghhPziG4TG7Es=
+   eJztmE1OwzAQhZMUcQdKuQQF1hwBuAWwZYfUTsvPFULDzyXKz7ZrFhS4AgsKXILn4EiGBU1cV4nT90lPMwukzIwfdu0gIIQQQgghhBBCCCGEEEIIIYQQQvyhHwXBSVR2Ff9zivrOoPOK17koPIVBMIaejfhikStdYk2voOuc2nPogZ0C372J0loFNadCDzK2yLP4GrrrY9F4x+wm0IcRPy1ypVus6x10n1OHDv23X+C7D1Faq6DmVOhBJhZ5Fr/oP3uwFiEUGbFhkSsteXSmoVZpaKEHCS3yLPrUd9VYweya0KoRWxa50ppH64BapaWFHqRpkWfRp76rxvofH71FwfYmYhvagPLmSlserQNqlU0t9CDtAjlmNDJ96FPfVWSA+cVQB3qE/8qup+pgRiPMSjAzweyk7Hp8p6u9dwH1HP8vq3vpriGXd96yvokZCWYlyoNd+m9mBob/Esdrpe6lB4Zc3nnL+mZi+I/73+x09Pkbz2H/qyM9ffbG2oNl1+M7seE/1/tfHUkM/8X038xk+1+H+18uenrf4/7nBvW7T6Kfewj3v+kk+t4h+ndg2fX4Tmy8+w1z+O9oef41lQV6k2l/MzTeAXn+zk7Rd7/jGvuvSG/ZO+DcilkQir779WvsvyK99Xj+EkIIIYQQQsgvvgHmUuxR
   </data>
  </layer>
  <layer id="194" name="Ground2" width="160" height="33">
@@ -46,7 +46,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmU1OwzAQheNEFI5AmgjOQGmPAOx6BGDXPSfwLThWYckNCivEEjaMSSKljmlqe1z/dEb65LSJ3ZHz8jKuyyLLpkAFzCwpW+TP5X79+Ry4BsTxFbCE728JK5bNXP7NMcxtNvd8n8U1nd5q6XPpFw45cMiFi+Nz4I35v3+xA3Mo5jKk+xys/mT/+yL9WQNzOPC/kPRXS74zxqzHPtfrIPsfvX/tWRbu/U/1bjbV32wElRZV2jRB9r9VAPcvdlaB13+6/ucS8j98DuF/uoSqP2z/+86z7KGIm58c3/9i1l9M9d8d4DKeJm7HF3FjOQdU//mr/0h/VP+R/9lFDP6nS6j6U/mfTe30mID+7i3nILX6zyUq/ws5DqE/2wjd/wLKS7n/QWEen4z2P1L2vxiC1r92618Ku6D1L/mfzwi9/gtJf+R/+JHa+pfqv7iC6j+q/3wG1X/kfz6D6j+q/3xGavWfS8j/8CN0/1tIvmOiG6z1CPkffrjwP521hqpvl8eC/C/5CN3/QtIf+R9+HEP9h6Vf8j/8cOF/tuOEqj/yP/xw4X+p6k/lfy9sm3XbvrLhOROwxzMBfptDy9dNO5qrTv7kf3b+98622bTtBxueG+Mkz7IJ8IzABXCJNJbgFDjLd+e/2fHdf/ORmv+p9uJc+Z94bvN8G9a2RT48Z4LpeJ3+MHKA3+bQcta0o7nq5N/No0v/s9n/lf//M9n/1emvs/8rnttp3lABtXRc7Und64sxXtXTn06fHflxaDnkwvvHqlx18+/mEXP/Vx6nry2d/lj//5H/Hbf/HfL9q7rWVf1H/ufG/1zoT0eTff39Aiy0IT0=
+   eJztmU1OwzAQheNEFI5AmgjOQGmPAOx6BGDXA3AB34JjFZbcoLBCLGHDmCRS6pimtsf1T2ekT06b2B05Ly/juiyybApUwMySskX+XO7Xn8+Ba0AcXwFL+P6WsGLZzOXfHMPcZnPP91lc0+mtlj6XfuGQA4dcuDg+B96Y//sXOzCHYi5Dus/B6k/2vy/SnzUwhwP/C0l/teQ7Y8x67HO9DrL/0fvXnmXh3v9U72ZT/c1GUGlRpU0TZP9bBXD/YmcVeP2n638uIf/D5xD+p0uo+sP2v+88yx6KuPnJ8f0vZv3FVP/dAS7jaeJ2fBE3lnNA9Z+/+o/0R/Uf+Z9dxOB/uoSqP5X/2dROjwno795yDlKr/1yi8r+Q4xD6s43Q/S+gvJT7HxTm8clo/yNl/4shaP1rt/6lsAta/5L/+YzQ67+Q9Ef+hx+prX+p/osrqP6j+s9nUP1H/uczqP6j+s9npFb/uYT8Dz9C97+F5DsmusFaj5D/4YcL/9NZa6j6dnksyP+Sj9D9LyT9kf/hxzHUf1j6Jf/DDxf+ZztOqPoj/8MPF/6Xqv5U/vfCtlm37SsbnjMBezwT4Lc5tHzdtKO56uRP/mfnf+9sm03bfrDhuTFO8iybAM8IXACXSGMJToGzfHf+mx3f/Tcfqfmfai/Olf+J5zbPt2FtW+TDcyaYjtfpDyMH+G0OLWdNO5qrTv7dPLr0P5v9X/n/P5P9X53+Ovu/4rmd5g0VUEvH1Z7Uvb4Y41U9/en02ZEfh5ZDLrx/rMpVN/9uHjH3f+Vx+trS6Y/1/x/533H73yHfv6prXdV/5H9u/M+F/nQ02dffL1KXIUI=
   </data>
  </layer>
  <layer id="198" name="Ground1" width="160" height="33">
@@ -54,7 +54,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1MEJgEAQA8AF4WrQMrSe04/ah6W7XSx6M5B/HiERAAAAAAAAALV6i9gzR6tuwojO3N2Vue0PAAAAAAAAAAAAgJ9YpnjmTHUPxrTl9lb7o4j/o9IX/u8F40QHqA==
+   eJzt1MEJgEAQA8AF4WrQMrSf049ah6W7XSx6M5B/HiERAAAAAAAAALV6i9gzR6tuwojO3N2Vue0PAAAAAAAAAAAAgJ9YpnjmTHUPxrTl9lb7o4j/o9IX/u8FHnoHrg==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -249,63 +249,63 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="644" gid="1602" x="1536" y="168" width="32" height="23">
+  <object id="644" gid="1603" x="1536" y="168" width="32" height="23">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="645" gid="2147485250" x="1008" y="168" width="32" height="23">
+  <object id="645" gid="2147485251" x="1008" y="168" width="32" height="23">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="647" gid="1601" x="1440" y="168" width="32" height="23">
+  <object id="647" gid="1602" x="1440" y="168" width="32" height="23">
    <properties>
     <property name="dirX" value="0"/>
     <property name="killedToDropConsumableSpeciesId" value="2"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="648" gid="2147485249" x="1088" y="168" width="32" height="23">
+  <object id="648" gid="2147485250" x="1088" y="168" width="32" height="23">
    <properties>
     <property name="dirX" value="0"/>
     <property name="killedToDropConsumableSpeciesId" value="2"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="692" gid="1603" x="704" y="222" width="63" height="48">
+  <object id="692" gid="1604" x="704" y="222" width="63" height="48">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="subscriptionId" value="7"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="693" gid="1603" x="656" y="224" width="63" height="48">
+  <object id="693" gid="1604" x="656" y="224" width="63" height="48">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="subscriptionId" value="7"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="697" gid="2147485251" x="1792" y="222" width="63" height="48">
+  <object id="697" gid="2147485252" x="1792" y="222" width="63" height="48">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="subscriptionId" value="8"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="698" gid="2147485251" x="1840" y="222" width="63" height="48">
+  <object id="698" gid="2147485252" x="1840" y="222" width="63" height="48">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="subscriptionId" value="8"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="768" gid="1599" x="1840" y="472" width="64" height="96">
+  <object id="768" gid="1600" x="1840" y="472" width="64" height="96">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
@@ -313,7 +313,7 @@
     <property name="teamId" value="2"/>
    </properties>
   </object>
-  <object id="769" gid="1599" x="656" y="472" width="64" height="96">
+  <object id="769" gid="1600" x="656" y="472" width="64" height="96">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
@@ -375,7 +375,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="704" name="Refractory" x="1248" y="368" width="32" height="160">
+  <object id="704" name="Refractory" x="1248" y="384" width="32" height="144">
    <properties>
     <property name="collisionTypeMask" value="32773"/>
     <property name="providesHardPushback" value="1"/>
