@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx",
+    "activeFile": "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FortForest/map.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -14,6 +14,17 @@
             "viewCenter": {
                 "x": 509.2592592592593,
                 "y": 172.35056839017233
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/LevelMaps/AutumnLevels/AutumnLevels.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/LevelMaps/AutumnLevels/map.tmx": {
+            "scale": 0.8708333333333332,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 768.2296650717705,
+                "y": 383.5406698564594
             }
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ArrowPalace/map.tmx": {
@@ -43,12 +54,51 @@
                 "y": 272.25
             }
         },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/CascadeFarm/map.tmx": {
+            "expandedObjectLayers": [
+                5,
+                2,
+                13,
+                9
+            ],
+            "scale": 1.5,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 671.3333333333333,
+                "y": 358.66666666666663
+            }
+        },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx": {
             "scale": 1.2481,
             "selectedLayer": 11,
             "viewCenter": {
-                "x": 451.8868680394199,
-                "y": 304.062174505248
+                "x": 451.48625911385307,
+                "y": 303.6615655796811
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FlatVersus/map.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 10,
+            "viewCenter": {
+                "x": 1280,
+                "y": 264.3333333333333
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FortForest/map.tmx": {
+            "expandedObjectLayers": [
+                28,
+                2,
+                4,
+                13,
+                9,
+                1,
+                5
+            ],
+            "scale": 0.75,
+            "selectedLayer": 13,
+            "viewCenter": {
+                "x": 467.33333333333337,
+                "y": 774.6666666666665
             }
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FoxBay/map.tmx": {
@@ -58,6 +108,31 @@
                 "x": 559.0914763509297,
                 "y": 550.3556720329465
             }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/SmallForest/map.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 16,
+            "viewCenter": {
+                "x": 523.6666666666666,
+                "y": 460.66666666666663
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ZigZagZoo/map.tmx": {
+            "expandedObjectLayers": [
+                9
+            ],
+            "scale": 1.5,
+            "selectedLayer": 11,
+            "viewCenter": {
+                "x": 244.66666666666669,
+                "y": 189
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Statics/DW_bg_1.tsx": {
+            "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/decoration/Statics/HF_bd_1.tsx": {
             "scaleInDock": 1
@@ -87,6 +162,12 @@
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/colorpad-bkg.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/dc_bkg_1.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/dc_bkg_3.tsx": {
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/bkg-shrinked/gh_bg_1.tsx": {
@@ -145,20 +226,24 @@
             "scaleInEditor": 2.25
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/tiles0.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/towers/towers.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/machinery/traps_machinery.tsx": {
             "dynamicWrapping": true,
-            "scaleInDock": 1
+            "scaleInDock": 2.4022,
+            "scaleInEditor": 2.54
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/spike/traps_spike.tsx": {
             "scaleInDock": 1
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/triggers/switch/triggers_switch.tsx": {
-            "scaleInDock": 1
+            "dynamicWrapping": true,
+            "scaleInDock": 4.0166
         },
         "map.tmx": {
             "scale": 1.878,
@@ -169,6 +254,7 @@
             }
         }
     },
+    "last.imagePath": "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/machinery",
     "map.fixedSize": true,
     "map.height": 100,
     "map.lastUsedFormat": "tmx",
@@ -178,18 +264,23 @@
     "map.tileWidth": 16,
     "map.width": 100,
     "openFiles": [
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx"
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FortForest/map.tmx"
     ],
     "project": "map.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FortForest/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/SmallForest/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/CascadeFarm/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/LevelMaps/AutumnLevels/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ZigZagZoo/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FlatVersus/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/machinery/traps_machinery.tsx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/DescendingPalace/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ArrowPalace/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx",
         "map.tmx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Cutscenes/VillageInvasion/map.tmx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FoxBay/map.tmx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/shared_comps/purple_bay16.tsx"
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Cutscenes/VillageInvasion/map.tmx"
     ],
     "tileset.embedInMap": false,
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",

@@ -1362,7 +1362,7 @@ namespace shared {
                                 if (isValidIntersection && isValidTrapState) {
                                     var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
                                     if (clicked || overlapResult.AContainedInB || overlapResult.BContainedInA) {
-                                        if (addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapNextFrame, JumperImpact1, trapNextFrame.DirX, trapNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
+                                        if (addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapNextFrame, JumperImpact1, JumperImpact1Skill, trapNextFrame.DirX, trapNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
                                             trapNextFrame.TrapState = TrapState.Tdeactivated;
                                             trapNextFrame.FramesInTrapState = 0;
                                         }
@@ -1544,21 +1544,6 @@ namespace shared {
                         }
                         bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig) && !isInJumpStartup(thatCharacterInNextFrame, chConfig));
                         if (fallStopping) {
-                            if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
-                                if (Dashing != thatCharacterInNextFrame.CharacterState) {
-                                    thatCharacterInNextFrame.VelX = 0;
-                                }
-
-                                if (!thatCharacterInNextFrame.OnSlope) {
-                                    thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
-                                } else {
-                                    if (thatCharacterInNextFrame.OnSlopeFacingDown && !nonAttackingSet.Contains(currCharacterDownsync.CharacterState)) {
-                                        thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
-                                    } else {
-                                        thatCharacterInNextFrame.VelY = 0;
-                                    }
-                                }
-                            }
                             resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 if (SPECIES_NONE_CH != chConfig.TransformIntoSpeciesIdUponDeath && 0 >= thatCharacterInNextFrame.FramesToRecover) {
@@ -1573,7 +1558,7 @@ namespace shared {
                                 thatCharacterInNextFrame.VelY = 0;
                                 thatCharacterInNextFrame.CharacterState = LayDown1;
                                 thatCharacterInNextFrame.FramesToRecover = chConfig.LayDownFrames;
-                            } else if (InAirIdle2ByJump == thatCharacterInNextFrame.CharacterState) {
+                            } else if (inAirSet.Contains(thatCharacterInNextFrame.CharacterState) && nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState)) {
                                 thatCharacterInNextFrame.VelY = 0;
                                 if (0 != thatCharacterInNextFrame.VelX) {
                                     thatCharacterInNextFrame.CharacterState = Walking;
@@ -1582,6 +1567,21 @@ namespace shared {
                                 }
                             } else {
                                 // [WARNING] Deliberately left blank, it's well understood that there're other possibilities and they're later handled by "_processEffPushbacks", the handling here is just for helping edge cases!
+                            }
+
+                            bool nextFrameNotDashing = isNotDashing(thatCharacterInNextFrame); 
+                            if (nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState) && nextFrameNotDashing) {
+                                thatCharacterInNextFrame.VelX = 0;
+                            }
+
+                            if (!thatCharacterInNextFrame.OnSlope) {
+                                thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
+                            } else {
+                                if (thatCharacterInNextFrame.OnSlopeFacingDown && !nonAttackingSet.Contains(currCharacterDownsync.CharacterState)) {
+                                    thatCharacterInNextFrame.VelY = chConfig.DownSlopePrimerVelY;
+                                } else {
+                                    thatCharacterInNextFrame.VelY = 0;
+                                }
                             }
 
                             if (shrinkedSizeSet.Contains(currCharacterDownsync.CharacterState) && !shrinkedSizeSet.Contains(thatCharacterInNextFrame.CharacterState)) {
@@ -1804,6 +1804,9 @@ namespace shared {
                 if (SPECIES_STONE_GOLEM == currCharacterDownsync.SpeciesId && Atk2 == currCharacterDownsync.CharacterState && 40 <= currCharacterDownsync.FramesInChState) {
                     logger.LogInfo("_processEffPushbacks/begin, currRdfId=" + currRenderFrame.Id + ", VelY = " + currCharacterDownsync.VelY + ", NextVelY = " + thatCharacterInNextFrame.VelY);
                 }
+                if (InAirIdle2ByJump == currCharacterDownsync.CharacterState && InAirIdle2ByJump != thatCharacterInNextFrame.CharacterState) {
+                    logger.LogInfo("_processEffPushbacks/begin, currRdfId=" + currRenderFrame.Id + ", transitting from InAirIdle2ByJump to " + thatCharacterInNextFrame.CharacterState + ", currVelX=" + currCharacterDownsync.VelX + ", nextVelX=" + thatCharacterInNextFrame.VelX);
+                }
                 */
 
                 // Update "virtual grid position"
@@ -2020,6 +2023,9 @@ namespace shared {
                 }
                 if (SPECIES_STONE_GOLEM == currCharacterDownsync.SpeciesId && Atk2 == currCharacterDownsync.CharacterState && 40 <= currCharacterDownsync.FramesInChState) {
                     logger.LogInfo("_processEffPushbacks/end, currRdfId=" + currRenderFrame.Id + ", VelY = " + currCharacterDownsync.VelY + ", NextVelY = " + thatCharacterInNextFrame.VelY);
+                }
+                if (InAirIdle2ByJump == currCharacterDownsync.CharacterState && InAirIdle2ByJump != thatCharacterInNextFrame.CharacterState) {
+                    logger.LogInfo("_processEffPushbacks/end, currRdfId=" + currRenderFrame.Id + ", transitting from InAirIdle2ByJump to " + thatCharacterInNextFrame.CharacterState + ", currVelX=" + currCharacterDownsync.VelX + ", nextVelX=" + thatCharacterInNextFrame.VelX);
                 }
                 */
             }
@@ -2287,13 +2293,13 @@ namespace shared {
 
             _calcCharacterMovementPushbacks(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, nextRenderFrameTraps, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, triggerEditorIdToTiledConfig, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
 
-            _calcBulletCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collisionSys, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, residueCollided, ref primaryOverlapResult, bulletColliderCntOffset, colliderCnt, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref fulfilledTriggerSetMask, colliderCnt, triggerEditorIdToTiledConfig, logger);
+            _calcAllBulletsCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collisionSys, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, residueCollided, ref primaryOverlapResult, bulletColliderCntOffset, colliderCnt, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref fulfilledTriggerSetMask, colliderCnt, triggerEditorIdToTiledConfig, logger);
          
-            // ---------[WARNING] Deliberately put "_calcTriggerReactions" after "_calcBulletCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled ones. --------- 
+            // ---------[WARNING] Deliberately put "_calcTriggerReactions" after "_calcAllBulletsCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled ones. --------- 
             _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextRenderFrameTriggers, nextRenderFrameNpcs, triggerEditorIdToLocalId, triggerEditorIdToTiledConfig, decodedInputHolder, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextRenderFramePickableLocalIdCounter, ref pickableCnt, nextRenderFramePickables, ref fulfilledTriggerSetMask, ref justTriggeredStoryPointId, ref justTriggeredBgmId, logger);
 
             // ---------[WARNING] Deliberately put "_calcTrapReaction" after "_calcTriggerReactions" such that latest "fulfilledTriggerSetMask" is respected. --------- 
-            _calcTrapReaction(currRenderFrame, roomCapacity, nextRenderFrameTraps, triggerEditorIdToLocalId, fulfilledTriggerSetMask, logger);
+            _calcTrapReaction(currRenderFrame, roomCapacity, nextRenderFrameTraps, triggerEditorIdToLocalId, fulfilledTriggerSetMask, nextRenderFrameBullets, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
             // Trigger subscription-based NPC movements
             for (int i = 0; i < currNpcI; i++) {

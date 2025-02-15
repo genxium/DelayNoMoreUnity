@@ -359,8 +359,9 @@ message VfxConfig {
     VfxDurationType durationType = 3;
     bool onCharacter = 4;
     bool onBullet = 5;
-    bool usePixelatedVer = 6;
-    string name = 7;
+    bool onTrap = 6;
+    bool usePixelatedVer = 7;
+    string name = 1024;
 }
 
 message BulletConfig {
@@ -594,6 +595,9 @@ message TrapConfig {
     float intrinsicSpinCos = 20;
     float intrinsicSpinSin = 21;
 
+    bool atk1UponTriggered = 22;
+    uint32 atk1SkillId = 23;
+
     // TODO: Instead of damage, a trap should also be able to provide pushbacks like a "trampoline" in only a limited "framesToRecover", possible started by a Trigger.
 
     string speciesName = 1024;
@@ -785,6 +789,7 @@ message Skill {
     CharacterState boundChState = 6;
     CharacterState boundChStateOnHit = 7; // [WARNING] Only applicable to Melee. When transitting from "boundChState" to "boundChStateOnHit", keep "framesInChState" but "framesToRecover += (recoveryFramesOnHit - recoveryFrames)".
     int32 mpDelta = 8; // Usually used as "mp consumption"
+    uint32 id = 9;
 
     repeated BulletConfig hits = 1024; // Hits within a "Skill" are automatically triggered
     BuffConfig selfNonStockBuff = 1025;

@@ -22,7 +22,7 @@ public class StoryLevelPanel : MonoBehaviour {
 
     private int selectionPhase = 0;
     private int selectedLevelIdx = -1;
-    private string selectedLevelName = null;
+    private (string, string) selectedLevelName = (null, null);
     private StoryLevelSelectGroup levels;
     private GameObject regionLevels = null;
 
@@ -130,12 +130,13 @@ public class StoryLevelPanel : MonoBehaviour {
             var levelCell = levels.cells[selectedIdx];
             var storyLevelCell = levelCell.GetComponent<StoryLevelCell>();
             selectedLevelName = StoryConstants.LEVEL_NAMES[storyLevelCell.levelId];
+
             selectionPhase = 1;
             isInCameraAutoTracking = false;
             characterSelectPanel.gameObject.SetActive(true);
             toggleUIInteractability(true);
             var lvProgress = storyLevelCell.GetCellProgress();
-            lvInfoPanel.refreshLvInfo(selectedLevelName, storyLevelCell.GetIsLocked(), lvProgress);
+            lvInfoPanel.refreshLvInfo(selectedLevelName.Item2, storyLevelCell.GetIsLocked(), lvProgress);
             lvInfoPanel.toggleUIInteractability(true);
             lvInfoPanel.gameObject.SetActive(true);
             //Debug.LogFormat("StoryLevelSelectPanel levelPostConfirmedCallback, now selectedLevelIdx={0}, selectedLevelName={1}", selectedLevelIdx, selectedLevelName);
@@ -148,7 +149,7 @@ public class StoryLevelPanel : MonoBehaviour {
             selectedLevelName = StoryConstants.LEVEL_NAMES[storyLevelCell.levelId];
             isInCameraAutoTracking = true;
             var lvProgress = storyLevelCell.GetCellProgress();
-            lvInfoPanel.refreshLvInfo(selectedLevelName, storyLevelCell.GetIsLocked(), lvProgress);
+            lvInfoPanel.refreshLvInfo(selectedLevelName.Item2, storyLevelCell.GetIsLocked(), lvProgress);
             lvInfoPanel.toggleUIInteractability(false);
             //Debug.LogFormat("StoryLevelSelectPanel levelPostCursorMovedCallback, now selectedLevelIdx={0}, selectedLevelName={1}", selectedLevelIdx, selectedLevelName);
         };
@@ -170,7 +171,7 @@ public class StoryLevelPanel : MonoBehaviour {
         var activeLevelCell = levels.cells[selectedLevelIdx];
         var activeStoryLevelCell = activeLevelCell.GetComponent<StoryLevelCell>();
         var lvProgress = activeStoryLevelCell.GetCellProgress();
-        lvInfoPanel.refreshLvInfo(selectedLevelName, activeStoryLevelCell.GetIsLocked(), lvProgress);
+        lvInfoPanel.refreshLvInfo(selectedLevelName.Item2, activeStoryLevelCell.GetIsLocked(), lvProgress);
         lvInfoPanel.toggleUIInteractability(false);
         lvInfoPanel.gameObject.SetActive(true);
 
@@ -242,7 +243,7 @@ public class StoryLevelPanel : MonoBehaviour {
             levels.postCancelledCallback = null;
             levels.levelPostConfirmedCallback = null;
 
-            PlayerStoryProgressManager.Instance.SetCachedForOfflineMap(selectedSpeciesId, selectedLevelName, lvInfoPanel.getFinishedLvOption());
+            PlayerStoryProgressManager.Instance.SetCachedForOfflineMap(selectedSpeciesId, selectedLevelName.Item1, lvInfoPanel.getFinishedLvOption());
             SceneManager.LoadScene("OfflineMapScene", LoadSceneMode.Single);
         } catch (Exception ex) {
             Debug.LogError(ex);

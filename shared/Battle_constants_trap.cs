@@ -32,7 +32,7 @@ namespace shared {
             BlowUp = false,
             Damage = 15,
             HitStunFrames = 25,
-            HitInvinsibleFrames = 120,
+            HitInvinsibleFrames = 45,
             SpeciesName = "LinearSpike",
             Hardness = 6, 
         };
@@ -44,7 +44,7 @@ namespace shared {
             BlowUp = false,
             Damage = 5,
             HitStunFrames = 30,
-            HitInvinsibleFrames = 60,
+            HitInvinsibleFrames = 45,
             SpeciesName = "LinearBallSpike",
             Hardness = 6, 
         };
@@ -61,7 +61,7 @@ namespace shared {
             BlowUp = false,
             Damage = 8,
             HitStunFrames = 30,
-            HitInvinsibleFrames = 60,
+            HitInvinsibleFrames = 45,
             SpeciesName = "SawSmall",
             Hardness = 8, 
             PatrolCueRequiresFullContain = true, 
@@ -74,7 +74,7 @@ namespace shared {
             BlowUp = false,
             Damage = 16,
             HitStunFrames = 30,
-            HitInvinsibleFrames = 60,
+            HitInvinsibleFrames = 45,
             SpeciesName = "SawBig",
             Hardness = 9, 
             PatrolCueRequiresFullContain = true, 
@@ -102,11 +102,14 @@ namespace shared {
         public static TrapConfig Jumper1 = new TrapConfig {
             SpeciesId = 10,
             SpeciesName = "Jumper1",
+            Atk1UponTriggered = true,
+            Atk1SkillId = JumperImpact1Skill.Id,
         };
 
-        public static TrapConfig FireBreatherLv1 = new TrapConfig {
+        public static TrapConfig Fort = new TrapConfig {
             SpeciesId = 11,
-            SpeciesName = "FireBreatherLv1",
+            SpeciesName = "Fort",
+            Atk1UponTriggered = true,
         };
 
         public static TrapConfig LongConveyorToL = new TrapConfig {
@@ -171,6 +174,13 @@ namespace shared {
             PatrolCueRequiresFullContain = true,
         };
 
+        public static TrapConfig SmallBallEmitter = new TrapConfig {
+            SpeciesId = 19,
+            SpeciesName = "SmallBallEmitter",
+            Atk1UponTriggered = true,
+            Atk1SkillId = SmallBallEmitterBeamSkill.Id,
+        };
+
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
                 new[]
                 {
@@ -183,7 +193,7 @@ namespace shared {
                     new KeyValuePair<int, TrapConfig>(GreenGate.SpeciesId, GreenGate),
                     new KeyValuePair<int, TrapConfig>(RedGate.SpeciesId, RedGate),
                     new KeyValuePair<int, TrapConfig>(Jumper1.SpeciesId, Jumper1),
-                    new KeyValuePair<int, TrapConfig>(FireBreatherLv1.SpeciesId, FireBreatherLv1),
+                    new KeyValuePair<int, TrapConfig>(Fort.SpeciesId, Fort),
                     new KeyValuePair<int, TrapConfig>(LongConveyorToL.SpeciesId, LongConveyorToL),
                     new KeyValuePair<int, TrapConfig>(LongConveyorToR.SpeciesId, LongConveyorToR),
                     new KeyValuePair<int, TrapConfig>(ShortConveyorToL.SpeciesId, ShortConveyorToL),
@@ -191,6 +201,7 @@ namespace shared {
                     new KeyValuePair<int, TrapConfig>(RotaryBarrier.SpeciesId, RotaryBarrier),
                     new KeyValuePair<int, TrapConfig>(VerticalRotaryBarrier.SpeciesId, VerticalRotaryBarrier),
                     new KeyValuePair<int, TrapConfig>(VerticalRotaryBarrierLong.SpeciesId, VerticalRotaryBarrierLong),
+                    new KeyValuePair<int, TrapConfig>(SmallBallEmitter.SpeciesId, SmallBallEmitter),
                 }
         );
     }

@@ -16,8 +16,9 @@ namespace shared {
         public const int TRIGGER_SPECIES_SYNC_WAVE_GROUP_TRIGGER_MV = 11;
         public const int TRIGGER_SPECIES_TIMED_WAVE_GROUP_TRIGGER_TRIVIAL = 12;
         public const int TRIGGER_SPECIES_TIMED_WAVE_GROUP_TRIGGER_MV = 13;
-
         public const int TRIGGER_SPECIES_TIMED_WAVE_PICKABLE_DROPPER = 14;
+
+        public const int TRIGGER_SPECIES_TRAP_ATK_TRIGGER_MV = 15;
 
         public const int TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL = 1024;
         public const int TRIGGER_SPECIES_NPC_AWAKER_MV = 1025;
@@ -108,6 +109,13 @@ namespace shared {
             CollisionTypeMask = COLLISION_NONE_INDEX
         };
 
+        public static TriggerConfig TrapAtkTriggerMv = new TriggerConfig {
+            SpeciesId = TRIGGER_SPECIES_TRAP_ATK_TRIGGER_MV,
+            SpeciesName = "TrapAtkTriggerMv",
+            TriggerType = TriggerType.TtMovement,
+            CollisionTypeMask = COLLISION_TRIGGER_INDEX_PREFIX
+        };
+
         public static TriggerConfig VictoryTriggerTrivial = new TriggerConfig {
             SpeciesId = TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL,
             SpeciesName = "VictoryTriggerTrivial",
@@ -151,6 +159,7 @@ namespace shared {
                     new KeyValuePair<int, TriggerConfig>(IndiWaveGroupTriggerMv.SpeciesId, IndiWaveGroupTriggerMv),
                     new KeyValuePair<int, TriggerConfig>(SyncWaveGroupTriggerTrivial.SpeciesId, SyncWaveGroupTriggerTrivial),
                     new KeyValuePair<int, TriggerConfig>(SyncWaveGroupTriggerMv.SpeciesId, SyncWaveGroupTriggerMv),
+                    new KeyValuePair<int, TriggerConfig>(TrapAtkTriggerMv.SpeciesId, TrapAtkTriggerMv),
                     new KeyValuePair<int, TriggerConfig>(VictoryTriggerTrivial.SpeciesId, VictoryTriggerTrivial),
                     new KeyValuePair<int, TriggerConfig>(NpcAwakerMv.SpeciesId, NpcAwakerMv),
                     new KeyValuePair<int, TriggerConfig>(BossSavepoint.SpeciesId, BossSavepoint),

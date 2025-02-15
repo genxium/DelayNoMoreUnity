@@ -857,7 +857,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     if (fireballOrExplosionAnimHolder.lookUpTable.ContainsKey(animName)) {
                         fireballOrExplosionAnimHolder.updateAnim(lookupKey, animName, bullet.FramesInBlState, bullet.DirX, bulletConfig, bullet, rdf, bullet.VelX, bullet.VelY, (bullet.TeamId == selfPlayerInfo.BulletTeamId));
                         newPosHolder.Set(wx, wy, fireballOrExplosionAnimHolder.gameObject.transform.position.z);
-                        if (0 != bulletConfig.AngularFrameVelCos) {
+                        if (IsBulletRotary(bulletConfig)) {
                             // Special handling for spinned bullet positioning
                             if (bulletConfig.BeamCollision || bulletConfig.BeamRendering) {
                                 var (beamBoxCw, beamBoxCh) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX - bullet.OriginatedVirtualGridX, bulletConfig.HitboxSizeY + bulletConfig.HitboxSizeIncY * bullet.FramesInBlState);
@@ -3616,8 +3616,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public bool playBulletVfx(Bullet bullet, BulletConfig bulletConfig, bool isStartup, bool isExploding, float wx, float wy, RoomDownsyncFrame rdf) {
-        int j = bullet.OffenderJoinIndex - 1;
-        if (bulletConfig.RotateOffenderWithSpin && IsBulletActive(bullet, bulletConfig, rdf.Id) && 0 <= j && j < roomCapacity + currRdfNpcAnimHoldersCnt) {
+        bool bulletFromCharacter = (0 < bullet.OffenderJoinIndex);
+        int j = (bulletFromCharacter ? bullet.OffenderJoinIndex - 1 : bullet.OffenderTrapLocalId - 1);
+        if (bulletFromCharacter && bulletConfig.RotateOffenderWithSpin && IsBulletActive(bullet, bulletConfig, rdf.Id) && 0 <= j && j < roomCapacity + currRdfNpcAnimHoldersCnt) {
             var chAnimCtrl = (roomCapacity > j ? playerGameObjs[j].GetComponent<CharacterAnimController>() : currRdfNpcAnimHolders[j - roomCapacity]);
             if (null!= chAnimCtrl) {
                 var spr = chAnimCtrl.GetComponent<SpriteRenderer>();
@@ -3652,16 +3653,30 @@ public abstract class AbstractMapController : MonoBehaviour {
                 newPosHolder.Set(vfxWx, vfxWy, fireballZ);
             }
         } else if (vfxConfig.OnCharacter) {
-            if (0 > j || j >= roomCapacity+rdf.NpcsArr.Count) {
+            if ((0 > j || j >= roomCapacity+rdf.NpcsArr.Count)) {
                 return false;
             }
             vfxLookupKey = KV_PREFIX_VFX_CHEMIT + bullet.BulletLocalId;
-            var ch = (roomCapacity > j ? rdf.PlayersArr[j] : rdf.NpcsArr[j - roomCapacity]);
+            var ch = getChdFromRdf(bullet.OffenderJoinIndex, roomCapacity, rdf);
             if (MAGIC_JOIN_INDEX_INVALID == ch.JoinIndex || MAGIC_JOIN_INDEX_DEFAULT == ch.JoinIndex || ch.ActiveSkillId != bullet.SkillId) return false;
             framesInState = ch.FramesInChState;
             dirX = ch.DirX;
             if (VfxMotionType.Tracing == vfxConfig.MotionType) {
                 var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(ch.VirtualGridX, ch.VirtualGridY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(vfxWx, vfxWy, fireballZ);
+            } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
+                var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                newPosHolder.Set(vfxWx, vfxWy, fireballZ);
+            }
+        } else if (vfxConfig.OnTrap) {
+            vfxLookupKey = KV_PREFIX_VFX_CHEMIT + bullet.BulletLocalId;
+            var trap = rdf.TrapsArr[j];
+            framesInState = trap.FramesInTrapState;
+            dirX = trap.DirX;
+            if (VfxMotionType.Tracing == vfxConfig.MotionType) {
+                var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(trap.VirtualGridX, trap.VirtualGridY);
                 var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
                 newPosHolder.Set(vfxWx, vfxWy, fireballZ);
             } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
@@ -3728,7 +3743,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var (wx2, wy2) = CollisionSpacePositionToWorldPosition(cx2, cy2, spaceOffsetX, spaceOffsetY);
                         newPosHolder.Set(wx2, wy2, fireballZ-1);
                         plasmaVfxHolder.gameObject.transform.position = newPosHolder;
-                        if (0 != bulletConfig.AngularFrameVelCos || (bulletConfig.RotatesAlongVelocity && 0 != bullet.VelX)) {
+                        if (IsBulletRotary(bulletConfig) || (bulletConfig.RotatesAlongVelocity && 0 != bullet.VelX)) {
                             if (bulletConfig.BeamCollision) {
                                 if (spinFlipX) {
                                     /*

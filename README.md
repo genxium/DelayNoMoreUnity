@@ -1,19 +1,24 @@
 # Latest tag change notes
-v2.2.2
+v2.2.3
 - Added basic cutscene support for StoryMode.
 - Added slide-dodge (at critical timing) and defence-dodge (cost 1 slot-C).
-
-v2.1.1 new features
-- Added back transformation buff.
-- Added support for Atk+InvSlotC input pattern.
-- Added BomberGoblin and SpearWoman.
-- Added self-hpbar and gauge interpolation.
-- Added boss-hpbar for story mode.
-- Added dedicated dash button.
-- Added timed wave pickable dropper.
-- Refactored MP regen scheme.
+- Added beam emitting trap.
 
 Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/eBVAyxxELNk)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
+
+# How does it work to synchronize across multiple players?
+_(how input delay roughly works)_
+
+![input_delay_intro](./charts/InputDelayIntro.jpg)
+
+_(how rollback-and-chase in this project roughly works)_
+
+![server_clients](./charts/ServerClients.jpg)
+
+![rollback_and_chase_intro](./charts/RollbackAndChase.jpg)
+
+_(though using C# for both backend & frontend now, the idea to avoid floating err remains the same as shown below)_
+![floating_point_accumulation_err](./charts/AvoidingFloatingPointAccumulationErr.jpg)
 
 # What's this project?
 It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a Multiplayer Platformer game demo on websocket with delayed-input Rollback Netcode inspired by GGPO -- but with the backend also rebuilt in C#.
@@ -42,20 +47,6 @@ _(a typical framelog comparison from 2 peers)_
 _(where to find framelog files)_
 
 ![framelog_location](./charts/FrameLogLocations.png)
-
-# How does it work to synchronize across multiple players?
-_(how input delay roughly works)_
-
-![input_delay_intro](./charts/InputDelayIntro.jpg)
-
-_(how rollback-and-chase in this project roughly works)_
-
-![server_clients](./charts/ServerClients.jpg)
-
-![rollback_and_chase_intro](./charts/RollbackAndChase.jpg)
-
-_(though using C# for both backend & frontend now, the idea to avoid floating err remains the same as shown below)_
-![floating_point_accumulation_err](./charts/AvoidingFloatingPointAccumulationErr.jpg)
 
 # 1. Building & running
 

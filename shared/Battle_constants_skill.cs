@@ -152,6 +152,7 @@ namespace shared {
                                                                 .SetDamage(0);
         
         public static Skill SwordManMelee1PrimerSkill = new Skill {
+            Id = 5,
             RecoveryFrames = 50,
             RecoveryFramesOnBlock = 30,
             RecoveryFramesOnHit = 30,
@@ -222,16 +223,6 @@ namespace shared {
             CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
         };
 
-        public static Skill SwordManDragonPunchPrimerSkill = new Skill {
-            RecoveryFrames = 40,
-            MpDelta = 150,
-            RecoveryFramesOnBlock = 40,
-            RecoveryFramesOnHit = 40,
-            TriggerType = SkillTriggerType.RisingEdge,
-            BoundChState = Atk4
-        }
-        .AddHit(SwordManDragonPunchPrimerBullet);
-
         public static BulletConfig FireSwordManMelee1PrimerBullet = new BulletConfig(SwordManMelee1PrimerBullet)
         .SetStartupFrames(9)
         .SetActiveFrames(20)
@@ -242,11 +233,12 @@ namespace shared {
         .UpsertCancelTransit(PATTERN_B, 120);
 
         public static Skill FireSwordManMelee1PrimerSkill = new Skill{
+            Id = 16,
             RecoveryFrames = 35,
-                           RecoveryFramesOnBlock = 35,
-                           RecoveryFramesOnHit = 35,
-                           TriggerType = SkillTriggerType.RisingEdge,
-                           BoundChState = Atk1
+            RecoveryFramesOnBlock = 35,
+            RecoveryFramesOnHit = 35,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
         }
         .AddHit(FireSwordManMelee1PrimerBullet);
 
@@ -340,6 +332,7 @@ namespace shared {
         };
 
         public static Skill FireSwordManDragonPunchPrimerSkill = new Skill{
+            Id = 17,
             RecoveryFrames = 40,
             RecoveryFramesOnBlock = 40,
             RecoveryFramesOnHit = 40,
@@ -379,6 +372,7 @@ namespace shared {
         };
 
         public static Skill FireSwordManFireballSkill = new Skill {
+            Id = 13,
             RecoveryFrames = 60,
             RecoveryFramesOnBlock = 30,
             RecoveryFramesOnHit = 30,
@@ -469,8 +463,8 @@ namespace shared {
             SpinAnchorY = 6.0f, // [WARNING] Half of "HitboxSizeY"; kindly note that "SpinAnchorX & SpinAnchorY" for non-melee bullets are constrained by the "pivot points" set on the sprites
             AngularFrameVelCos = (float)Math.Cos(4f / (Math.PI * BATTLE_DYNAMICS_FPS)),
             AngularFrameVelSin = (float)Math.Sin(-4f / (Math.PI * BATTLE_DYNAMICS_FPS)),
-            InitSpinCos = (float)Math.Cos(80f / (Math.PI * BATTLE_DYNAMICS_FPS)),
-            InitSpinSin = (float)Math.Sin(80f / (Math.PI * BATTLE_DYNAMICS_FPS)),
+            InitSpinCos = (float)Math.Cos(0.135f * Math.PI),
+            InitSpinSin = (float)Math.Sin(0.135f * Math.PI),
             MhType = MultiHitType.FromEmission,
             NoExplosionOnHardPushback = true, // [WARNING] Such that it doesn't vanish on hardpushback!
             CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
@@ -531,6 +525,7 @@ namespace shared {
         };
 
         public static Skill DemonFireSlimeMelee1PrimarySkill = new Skill {
+            Id = 14,
             RecoveryFrames = 110,
             RecoveryFramesOnBlock = 110,
             RecoveryFramesOnHit = 110,
@@ -633,6 +628,7 @@ namespace shared {
         public static BulletConfig DemonFireSlimeFireballPivotBullet = FireTornadoStarterBullet;
 
         public static Skill DemonFireSlimeFireballSkill = new Skill {
+            Id = 15,
             RecoveryFrames = 120,
             RecoveryFramesOnBlock = 120,
             RecoveryFramesOnHit = 120,
@@ -1760,8 +1756,8 @@ namespace shared {
             GaugeIncReductionRatio = 0.3f,
             AngularFrameVelCos = (float)Math.Cos(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
             AngularFrameVelSin = (float)Math.Sin(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
-            InitSpinCos = (float)Math.Cos(45f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
-            InitSpinSin = (float)Math.Sin(-45f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
+            InitSpinCos = (float)Math.Cos(0.25f * Math.PI), 
+            InitSpinSin = (float)Math.Sin(-0.25f * Math.PI), 
             MhType = MultiHitType.FromPrevHitActual,
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
         };
@@ -2086,7 +2082,7 @@ namespace shared {
         };
 
         public static Skill JumperImpact1Skill = new Skill {
-
+            Id = 104
         }.AddHit(JumperImpact1);
 
         public static BulletConfig GhostHorseStarter = new BulletConfig {
@@ -3470,7 +3466,7 @@ namespace shared {
             StartupFrames = 3,
             StartupInvinsibleFrames = 1,
             ActiveFrames = 15,
-            HitStunFrames = 12,
+            HitStunFrames = 14,
             BlockStunFrames = 8,
             Damage = 10,
             PushbackVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -3501,7 +3497,7 @@ namespace shared {
             StartupFrames = 3,
             StartupInvinsibleFrames = 2,
             ActiveFrames = 14,
-            HitStunFrames = 13,
+            HitStunFrames = 15,
             BlockStunFrames = 9,
             Damage = 12,
             PushbackVelX = 0,
@@ -3531,7 +3527,7 @@ namespace shared {
             StartupFrames = 4,
             StartupInvinsibleFrames = 4,
             ActiveFrames = 17,
-            HitStunFrames = 32,
+            HitStunFrames = 34,
             BlockStunFrames = 5,
             Damage = 18,
             PushbackVelX = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -4254,227 +4250,319 @@ namespace shared {
                           IsPixelatedActiveVfx = true,
         };
 
+        public static BulletConfig SmallBallEmitterBeamHit1 = new BulletConfig {
+            StartupFrames = 30,
+            StartupInvinsibleFrames = 12,
+            ActiveFrames = MAX_INT,
+            HitStunFrames = 10,
+            HitInvinsibleFrames = 45,
+            BlockStunFrames = 9,
+            Damage = 30,
+            PushbackVelX = (int)(1.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = 0,
+            SelfLockVelY = 0,
+            SelfLockVelYWhenFlying = 0,
+            HitboxOffsetX = (int)(-2f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            BeamRendering = true,
+            BeamVisualSizeY = (int)(22*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // [WARNING] DON'T hardcode in Unity "AnimationCilp.GetComponent<SpriteRenderer>().size" or it'd cause weird rendering!
+            SpeciesId = 24,
+            ExplosionSpeciesId = 15,
+            Speed = (int)(0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeedIfNotHit = (int)(2.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 1,
+            DirY = 0,
+            Hardness = 10,
+            ExplosionFrames = 25,
+            BType = BulletType.Fireball,
+            ExplosionSfxName="Explosion4",
+            StartupVfxSpeciesId = VfxSmallBallEmitterBeam.SpeciesId,
+            ActiveVfxSpeciesId = VfxSmallBallEmitterBeam.SpeciesId,
+            IsPixelatedActiveVfx = true,
+            BeamCollision = true,
+            RemainsUponHit = true,
+            InitSpinCos = (float)Math.Cos(0.5 * Math.PI), 
+            InitSpinSin = (float)Math.Sin(0.5f * Math.PI),
+            SpinAnchorX = 0f,
+            SpinAnchorY = 5.0f,
+            CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
+        };
+
+        public static Skill SmallBallEmitterBeamSkill = new Skill{
+            Id = 130
+        }.AddHit(SmallBallEmitterBeamHit1);
+
+        public static Skill BasicBladeSkill1 = new Skill {
+            // [WARNING] The relationship between "RecoveryFrames", "StartupFrames", "HitStunFrames" and "PushbackVelX" makes sure that a MeleeBullet is counterable!
+            Id = 1,
+            RecoveryFrames = 26,
+            RecoveryFramesOnBlock = 26,
+            RecoveryFramesOnHit = 26,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }.AddHit(BasicBladeHit1);
+
+        public static Skill BasicBladeSkill2 = new Skill {
+            RecoveryFrames = 24,
+            RecoveryFramesOnBlock = 24,
+            RecoveryFramesOnHit = 24,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk2
+        }
+        .AddHit(BasicBladeHit2);
+
+        public static Skill BasicBladeSkill3 = new Skill {
+            RecoveryFrames = 39,
+            RecoveryFramesOnBlock = 39,
+            RecoveryFramesOnHit = 39,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk3
+        }
+        .AddHit(BasicBladeHit3);
+
+        public static Skill SuperBladeSkill = new Skill {
+            RecoveryFrames = 64,
+            RecoveryFramesOnBlock = 64,
+            RecoveryFramesOnHit = 64,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk4
+        }
+        .AddHit(SuperBladeHit1)
+        .AddHit(SuperBladeHit2)
+        .AddHit(SuperBladeHit3)
+        .AddHit(SuperBladeHit4)
+        .AddHit(SuperBladeHit5);
+
+        public static Skill WitchGirlMeleeSkill1 = new Skill {
+            Id = 6,
+            RecoveryFrames = 32,
+            RecoveryFramesOnBlock = 32,
+            RecoveryFramesOnHit = 32,
+            MpDelta = 200,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk2
+        }
+        .AddHit(
+            new BulletConfig {
+                StartupFrames = 13,
+                ActiveFrames = 19,
+                HitStunFrames = 27,
+                BlockStunFrames = 9,
+                Damage = 15,
+                PushbackVelX = (int)(-0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                PushbackVelY = NO_LOCK_VEL,
+                SelfLockVelX = NO_LOCK_VEL,
+                SelfLockVelY = NO_LOCK_VEL,
+                SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                HitboxOffsetX = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxOffsetY = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeX = (int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeY = (int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                CancellableStFrame = 16,
+                CancellableEdFrame = 32,
+                SpeciesId = 1,
+                ExplosionSpeciesId = 1,
+                DirX = 1,
+                DirY = 0,
+                Hardness = 5,
+                ExplosionFrames = 25,
+                BType = BulletType.Melee,
+                RemainsUponHit = true,
+                ReflectFireballXIfNotHarder = true,
+                ElementalAttrs = ELE_FIRE,
+                CharacterEmitSfxName = "FlameEmit1",
+                ExplosionSfxName = "FlameBurning1",
+                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+            }.UpsertCancelTransit(PATTERN_B, 7).UpsertCancelTransit(PATTERN_DOWN_B, 9).UpsertCancelTransit(PATTERN_UP_B, 55)
+        );
+
+        public static Skill WitchGirlMeleeSkill2 = new Skill {
+            Id = 7,
+            RecoveryFrames = 29,
+            RecoveryFramesOnBlock = 29,
+            RecoveryFramesOnHit = 29,
+            MpDelta = 200,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk3
+        }
+            .AddHit(
+                new BulletConfig {
+                    StartupFrames = 7,
+                    ActiveFrames = 22,
+                    HitStunFrames = 23,
+                    BlockStunFrames = 9,
+                    Damage = 14,
+                    PushbackVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    PushbackVelY = NO_LOCK_VEL,
+                    SelfLockVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelY = NO_LOCK_VEL,
+                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                    HitboxOffsetX = (int)(16 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxOffsetY = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeX = (int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SpeciesId = 1,
+                    ExplosionSpeciesId = 1,
+                    ExplosionFrames = 25,
+                    BType = BulletType.Melee,
+                    DirX = 1,
+                    DirY = 0,
+                    Hardness = 5,
+                    RemainsUponHit = true,
+                    ReflectFireballXIfNotHarder = true,
+                    ElementalAttrs = ELE_FIRE,
+                    CancellableStFrame = 16,
+                    CancellableEdFrame = 30,
+                    CancellableByInventorySlotC = true,
+                    CharacterEmitSfxName = "FlameEmit1",
+                    ExplosionSfxName = "FlameBurning1",
+                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                }.UpsertCancelTransit(PATTERN_B, 8).UpsertCancelTransit(PATTERN_DOWN_B, 9).UpsertCancelTransit(PATTERN_UP_B, 55)
+        );
+
+        public static Skill WitchGirlMeleeSkill3 = new Skill {
+            Id = 8,
+            RecoveryFrames = 40,
+            RecoveryFramesOnBlock = 40,
+            RecoveryFramesOnHit = 40,
+            MpDelta = 300,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk4
+        }
+                        .AddHit(
+                            new BulletConfig {
+                                StartupFrames = 12,
+                                StartupInvinsibleFrames = 8,
+                                ActiveFrames = 26,
+                                HitStunFrames = MAX_INT,
+                                HitInvinsibleFrames = 60,
+                                BlockStunFrames = 9,
+                                Damage = 13,
+                                PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                PushbackVelY = (int)(-4f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                SelfLockVelX = NO_LOCK_VEL,
+                                SelfLockVelY = NO_LOCK_VEL,
+                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                                HitboxOffsetX = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxOffsetY = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeX = (int)(36 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                HitboxSizeY = (int)(18 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                                BlowUp = true,
+                                SpeciesId = 3,
+                                ExplosionSpeciesId = 3,
+                                ExplosionFrames = 25,
+                                BType = BulletType.Melee,
+                                DirX = 1,
+                                DirY = 0,
+                                Hardness = 5,
+                                ElementalAttrs = ELE_FIRE,
+                                RemainsUponHit = true,
+                                CharacterEmitSfxName = "FlameEmit1",
+                                ExplosionSfxName = "Explosion4",
+                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                            }
+                );
+
+        public static Skill WitchGirlFireballSkill = new Skill {
+            Id = 9,
+            RecoveryFrames = 50,
+            RecoveryFramesOnBlock = 50,
+            RecoveryFramesOnHit = 50,
+            MpDelta = 500,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }
+        .AddHit(WitchGirlFireballBulletHit1);
+
+        public static Skill WitchGirlBackDashSkill = new Skill {
+            Id = 10,
+            RecoveryFrames = 15,
+            RecoveryFramesOnBlock = 15,
+            RecoveryFramesOnHit = 15,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = BackDashing
+        }
+        .AddHit(
+            new BulletConfig {
+                StartupFrames = 3,
+                StartupInvinsibleFrames = 8,
+                PushbackVelX = NO_LOCK_VEL,
+                PushbackVelY = NO_LOCK_VEL,
+                SelfLockVelX = (int)(-4f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                SelfLockVelY = 0,
+                SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                DelaySelfVelToActive = true,
+                BType = BulletType.Melee,
+                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+            }
+        );
+
+        public static Skill BladeGirlDashingSkill = new Skill {
+            Id = 11,
+            RecoveryFrames = 20,
+            RecoveryFramesOnBlock = 20,
+            RecoveryFramesOnHit = 20,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Dashing
+        }
+        .AddHit(
+            new BulletConfig(StandardAirDashHit1).UpsertCancelTransit(PATTERN_B, 255).UpsertCancelTransit(PATTERN_UP_B, 255).UpsertCancelTransit(PATTERN_DOWN_B, 77)
+        )
+        .AddHit(
+            new BulletConfig(StandardAirDashHit2).UpsertCancelTransit(PATTERN_B, 255).UpsertCancelTransit(PATTERN_UP_B, 255).UpsertCancelTransit(PATTERN_DOWN_B, 77)
+        );
+
+        public static Skill SwordManDragonPunchPrimerSkill = new Skill {
+            Id = 12,
+            RecoveryFrames = 40,
+            MpDelta = 150,
+            RecoveryFramesOnBlock = 40,
+            RecoveryFramesOnHit = 40,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk4
+        }
+        .AddHit(SwordManDragonPunchPrimerBullet);
+
+        public static Skill SpearWomanSliding = new Skill {
+            Id = 18,
+            RecoveryFrames = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+            RecoveryFramesOnBlock = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+            RecoveryFramesOnHit = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Sliding
+        }
+                            .AddHit(new BulletConfig(BasicSlidingHit1).UpsertCancelTransit(PATTERN_B, 105).UpsertCancelTransit(PATTERN_DOWN_B, 109).UpsertCancelTransit(PATTERN_UP_B, 109))
+                            .AddHit(new BulletConfig(BasicSlidingHit2).UpsertCancelTransit(PATTERN_B, 105).UpsertCancelTransit(PATTERN_DOWN_B, 109).UpsertCancelTransit(PATTERN_UP_B, 109));
+
+        public static Skill SpearWomanDashing = new Skill {
+            Id = 19,
+            RecoveryFrames = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+            RecoveryFramesOnBlock = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+            RecoveryFramesOnHit = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Dashing
+        }
+                            .AddHit(new BulletConfig(BasicDashingHit1).UpsertCancelTransit(PATTERN_B, 105))
+                            .AddHit(new BulletConfig(BasicDashingHit2).UpsertCancelTransit(PATTERN_B, 105));
+
         public static ImmutableDictionary<uint, Skill> skills = ImmutableDictionary.Create<uint, Skill>().AddRange(
                 new[]
                 {
-                new KeyValuePair<uint, Skill>(1, new Skill {
-                        // [WARNING] The relationship between "RecoveryFrames", "StartupFrames", "HitStunFrames" and "PushbackVelX" makes sure that a MeleeBullet is counterable!
-                        RecoveryFrames = 26,
-                        RecoveryFramesOnBlock = 26,
-                        RecoveryFramesOnHit = 26,
-                        TriggerType = SkillTriggerType.RisingEdge,
-                        BoundChState = Atk1
-                        }
-                        .AddHit(BasicBladeHit1)),
-
-                    new KeyValuePair<uint, Skill>(2, new Skill{
-                        RecoveryFrames = 24,
-                        RecoveryFramesOnBlock = 24,
-                        RecoveryFramesOnHit = 24,
-                        TriggerType = SkillTriggerType.RisingEdge,
-                        BoundChState = Atk2
-                        }
-                        .AddHit(BasicBladeHit2)),
-
-                    new KeyValuePair<uint, Skill>(3, new Skill{
-                        RecoveryFrames = 39,
-                        RecoveryFramesOnBlock = 39,
-                        RecoveryFramesOnHit = 39,
-                        TriggerType = SkillTriggerType.RisingEdge,
-                        BoundChState = Atk3
-                        }
-                        .AddHit(BasicBladeHit3)),
-
-                    new KeyValuePair<uint, Skill>(4, new Skill{
-                            RecoveryFrames = 64,
-                            RecoveryFramesOnBlock = 64,
-                            RecoveryFramesOnHit = 64,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk4
-                            }
-                            .AddHit(SuperBladeHit1)
-                            .AddHit(SuperBladeHit2)
-                            .AddHit(SuperBladeHit3)
-                            .AddHit(SuperBladeHit4)
-                            .AddHit(SuperBladeHit5)
-                            ),
-
+                new KeyValuePair<uint, Skill>(1, BasicBladeSkill1),
+                new KeyValuePair<uint, Skill>(2, BasicBladeSkill2),
+                new KeyValuePair<uint, Skill>(3, BasicBladeSkill3),
+                new KeyValuePair<uint, Skill>(4, SuperBladeSkill),
                 new KeyValuePair<uint, Skill>(5, SwordManMelee1PrimerSkill),
+                new KeyValuePair<uint, Skill>(6, WitchGirlMeleeSkill1),
+                new KeyValuePair<uint, Skill>(7, WitchGirlMeleeSkill2),
+                new KeyValuePair<uint, Skill>(8, WitchGirlMeleeSkill3),
+                new KeyValuePair<uint, Skill>(9, WitchGirlFireballSkill),
+                new KeyValuePair<uint, Skill>(10, WitchGirlBackDashSkill),
 
-                new KeyValuePair<uint, Skill>(6, new Skill{
-                        RecoveryFrames = 32,
-                        RecoveryFramesOnBlock = 32,
-                        RecoveryFramesOnHit = 32,
-                        MpDelta = 200,
-                        TriggerType = SkillTriggerType.RisingEdge,
-                        BoundChState = Atk2
-                        }
-                        .AddHit(
-                            new BulletConfig {
-                            StartupFrames = 13,
-                            ActiveFrames = 19,
-                            HitStunFrames = 27,
-                            BlockStunFrames = 9,
-                            Damage = 15,
-                            PushbackVelX = (int)(-0.1f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            PushbackVelY = NO_LOCK_VEL,
-                            SelfLockVelX = NO_LOCK_VEL,
-                            SelfLockVelY = NO_LOCK_VEL,
-                            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                            HitboxOffsetX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeX = (int)(18*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeY = (int)(18*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            CancellableStFrame = 16,
-                            CancellableEdFrame = 32,
-                            SpeciesId = 1,
-                            ExplosionSpeciesId = 1,
-                            DirX = 1,
-                            DirY = 0,
-                            Hardness = 5,
-                            ExplosionFrames = 25,
-                            BType = BulletType.Melee,
-                            RemainsUponHit = true,
-                            ReflectFireballXIfNotHarder = true,
-                            ElementalAttrs = ELE_FIRE,
-                            CharacterEmitSfxName = "FlameEmit1",
-                            ExplosionSfxName = "FlameBurning1",
-                            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                            }.UpsertCancelTransit(PATTERN_B, 7).UpsertCancelTransit(PATTERN_DOWN_B, 9).UpsertCancelTransit(PATTERN_UP_B, 55)
-                )),
-
-                new KeyValuePair<uint, Skill>(7, new Skill{
-                        RecoveryFrames = 29,
-                        RecoveryFramesOnBlock = 29,
-                        RecoveryFramesOnHit = 29,
-                        MpDelta = 200,
-                        TriggerType = SkillTriggerType.RisingEdge,
-                        BoundChState = Atk3
-                        }
-                        .AddHit(
-                            new BulletConfig {
-                            StartupFrames = 7,
-                            ActiveFrames = 22,
-                            HitStunFrames = 23,
-                            BlockStunFrames = 9,
-                            Damage = 14,
-                            PushbackVelX = (int)(0.1f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            PushbackVelY = NO_LOCK_VEL,
-                            SelfLockVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            SelfLockVelY = NO_LOCK_VEL,
-                            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                            HitboxOffsetX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeX = (int)(18*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            SpeciesId = 1,
-                            ExplosionSpeciesId = 1,
-                            ExplosionFrames = 25,
-                            BType = BulletType.Melee,
-                            DirX = 1,
-                            DirY = 0,
-                            Hardness = 5,
-                            RemainsUponHit = true,
-                            ReflectFireballXIfNotHarder = true,
-                            ElementalAttrs = ELE_FIRE,
-                            CancellableStFrame = 16,
-                            CancellableEdFrame = 30,
-                            CancellableByInventorySlotC = true,
-                            CharacterEmitSfxName = "FlameEmit1",
-                            ExplosionSfxName = "FlameBurning1",
-                            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                        }.UpsertCancelTransit(PATTERN_B, 8).UpsertCancelTransit(PATTERN_DOWN_B, 9).UpsertCancelTransit(PATTERN_UP_B, 55)
-                )),
-
-                new KeyValuePair<uint, Skill>(8, new Skill{
-                        RecoveryFrames = 40,
-                        RecoveryFramesOnBlock = 40,
-                        RecoveryFramesOnHit = 40,
-                        MpDelta = 300,
-                        TriggerType = SkillTriggerType.RisingEdge,
-                        BoundChState = Atk4
-                        }
-                        .AddHit(
-                            new BulletConfig {
-                            StartupFrames = 12,
-                            StartupInvinsibleFrames = 8,
-                            ActiveFrames = 26,
-                            HitStunFrames = MAX_INT,
-                            HitInvinsibleFrames = 60,
-                            BlockStunFrames = 9,
-                            Damage = 13,
-                            PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            PushbackVelY = (int)(-4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            SelfLockVelX = NO_LOCK_VEL,
-                            SelfLockVelY = NO_LOCK_VEL,
-                            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxOffsetY = (int)(4*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            HitboxSizeY = (int)(18*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                            BlowUp = true,
-                            SpeciesId = 3,
-                            ExplosionSpeciesId = 3,
-                            ExplosionFrames = 25,
-                            BType = BulletType.Melee,
-                            DirX = 1,
-                            DirY = 0,
-                            Hardness = 5,
-                            ElementalAttrs = ELE_FIRE,
-                            RemainsUponHit = true,
-                            CharacterEmitSfxName = "FlameEmit1",
-                            ExplosionSfxName = "Explosion4",
-                            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                            }
-                )),
-
-                    new KeyValuePair<uint, Skill>(9, new Skill{
-                            RecoveryFrames = 50,
-                            RecoveryFramesOnBlock = 50,
-                            RecoveryFramesOnHit = 50,
-                            MpDelta = 500,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk1
-                            }
-                            .AddHit(WitchGirlFireballBulletHit1)
-                    ),
-
-                    new KeyValuePair<uint, Skill>(10, new Skill{
-                            RecoveryFrames = 15,
-                            RecoveryFramesOnBlock = 15,
-                            RecoveryFramesOnHit = 15,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = BackDashing
-                    }
-                    .AddHit(
-                        new BulletConfig {
-                        StartupFrames = 3,
-                        StartupInvinsibleFrames = 8,
-                        PushbackVelX = NO_LOCK_VEL,
-                        PushbackVelY = NO_LOCK_VEL,
-                        SelfLockVelX = (int)(-4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        SelfLockVelY = 0,
-                        SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                        DelaySelfVelToActive = true,
-                        BType = BulletType.Melee,
-                        CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                        }
-                    )),
-
-                    new KeyValuePair<uint, Skill>(11, new Skill{
-                            RecoveryFrames = 20,
-                            RecoveryFramesOnBlock = 20,
-                            RecoveryFramesOnHit = 20,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Dashing
-                            }
-                            .AddHit(
-                                new BulletConfig(StandardAirDashHit1).UpsertCancelTransit(PATTERN_B, 255).UpsertCancelTransit(PATTERN_UP_B, 255).UpsertCancelTransit(PATTERN_DOWN_B, 77)
-                            )
-                            .AddHit(
-                                new BulletConfig(StandardAirDashHit2).UpsertCancelTransit(PATTERN_B, 255).UpsertCancelTransit(PATTERN_UP_B, 255).UpsertCancelTransit(PATTERN_DOWN_B, 77)
-                            )
-                    ),
+                    new KeyValuePair<uint, Skill>(11, BladeGirlDashingSkill),
 
                     new KeyValuePair<uint, Skill>(12, SwordManDragonPunchPrimerSkill),
 
@@ -4488,27 +4576,9 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(17, FireSwordManDragonPunchPrimerSkill),
 
-                    new KeyValuePair<uint, Skill>(18, new Skill{
-                            RecoveryFrames = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2), 
-                            RecoveryFramesOnBlock = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
-                            RecoveryFramesOnHit = (BasicSlidingHit2.StartupFrames + BasicSlidingHit2.ActiveFrames + 2),
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Sliding
-                            }
-                            .AddHit(new BulletConfig(BasicSlidingHit1).UpsertCancelTransit(PATTERN_B, 105).UpsertCancelTransit(PATTERN_DOWN_B, 109).UpsertCancelTransit(PATTERN_UP_B, 109))
-                            .AddHit(new BulletConfig(BasicSlidingHit2).UpsertCancelTransit(PATTERN_B, 105).UpsertCancelTransit(PATTERN_DOWN_B, 109).UpsertCancelTransit(PATTERN_UP_B, 109))
-                    ),
+                    new KeyValuePair<uint, Skill>(18, SpearWomanSliding),
 
-                    new KeyValuePair<uint, Skill>(19, new Skill{
-                            RecoveryFrames = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
-                            RecoveryFramesOnBlock = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
-                            RecoveryFramesOnHit = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Dashing
-                            }
-                            .AddHit(new BulletConfig(BasicDashingHit1).UpsertCancelTransit(PATTERN_B, 105))
-                            .AddHit(new BulletConfig(BasicDashingHit2).UpsertCancelTransit(PATTERN_B, 105))
-                    ),
+                    new KeyValuePair<uint, Skill>(19, SpearWomanDashing),
 
                     new KeyValuePair<uint, Skill>(20, new Skill{
                             RecoveryFrames = 30,
@@ -4993,6 +5063,7 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(45, BoarMelee1PrimerSkill),
 
                     new KeyValuePair<uint, Skill>(46, new Skill{
+                            Id = 46,
                             RecoveryFrames = 100,
                             RecoveryFramesOnBlock = 100,
                             RecoveryFramesOnHit = 100,
@@ -5587,6 +5658,8 @@ namespace shared {
                             .AddHit(LightRepPerforationBl8)
                             .AddHit(LightRepPerforationBl9)
                             ),
+
+                    new KeyValuePair<uint,Skill>(130, SmallBallEmitterBeamSkill),
 
                     new KeyValuePair<uint, Skill>(255, new Skill {
                             RecoveryFrames = 20,

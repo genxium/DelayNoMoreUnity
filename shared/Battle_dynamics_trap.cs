@@ -422,6 +422,7 @@ namespace shared {
                 case TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL:
                 case TRIGGER_SPECIES_NPC_AWAKER_MV:
                 case TRIGGER_SPECIES_BOSS_AWAKER_MV:
+                case TRIGGER_SPECIES_TRAP_ATK_TRIGGER_MV:
                     if (mainCycleFulfilled) {
                             if (0 < currTrigger.Quota) {
                                 triggerInNextFrame.State = TriggerState.TcoolingDown;
@@ -644,7 +645,7 @@ namespace shared {
             }
         }
     
-        private static void _calcTrapReaction(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, Dictionary<int, int> triggerEditorIdToLocalId, ulong fulfilledEvtSubscriptionSetMask, ILoggerBridge logger) {
+        private static void _calcTrapReaction(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<Trap> nextRenderFrameTraps, Dictionary<int, int> triggerEditorIdToLocalId, ulong fulfilledEvtSubscriptionSetMask, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
             for (int i = 0; i < nextRenderFrameTraps.Count; i++) {
                 var trapInNextFrame = nextRenderFrameTraps[i]; 
                 if (TERMINATING_TRAP_ID == trapInNextFrame.TrapLocalId) break;
@@ -657,7 +658,12 @@ namespace shared {
                 }
 
                 var trapConfig = trapConfigs[trapInNextFrame.ConfigFromTiled.SpeciesId];
-                if (trapConfig.DeactivateUponTriggered) {
+                if (trapConfig.Atk1UponTriggered && SmallBallEmitter.SpeciesId == trapConfig.SpeciesId) {
+                    if (TrapState.Tidle == trapInNextFrame.TrapState && addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapInNextFrame, SmallBallEmitterBeamHit1, SmallBallEmitterBeamSkill, trapInNextFrame.DirX, trapInNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
+                        trapInNextFrame.TrapState = TrapState.Tatk1;
+                        trapInNextFrame.FramesInTrapState = 0;
+                    }
+                } else if (trapConfig.DeactivateUponTriggered) {
                     if (TrapState.Tidle == trapInNextFrame.TrapState) {
                         trapInNextFrame.TrapState = TrapState.Tdeactivated;
                         trapInNextFrame.FramesInTrapState = 0;

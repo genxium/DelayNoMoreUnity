@@ -460,7 +460,13 @@ namespace shared {
                 }
 
                 float normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
-                bool isAlongForwardPropagation = (0 <= bullet.VelX * (bCollider.X-aCollider.X)); 
+                bool isAlongForwardPropagation = false;
+
+                if (bulletConfig.BeamCollision) {
+                    isAlongForwardPropagation = true;
+                } else {
+                    isAlongForwardPropagation = (0 <= bullet.VelX * (bCollider.X - aCollider.X));
+                }
                 bool isSqueezer = (-SNAP_INTO_PLATFORM_THRESHOLD > normAlignmentWithGravity);
                 /*
                  [WARNING] Deliberately excluding "providesSlipJump" traps for easier handling of intermittent flat terrains as well as better player intuition!

@@ -10,6 +10,8 @@ tpsheetFileNames:
 - Assets/Resources/Characters/BountyHunter/BountyHunter.tpsheet
 - Assets/Resources/Characters/Brick1/Brick1.tpsheet
 - Assets/Resources/Characters/BrightWitch/BrightWitch.tpsheet
+- Assets/Resources/Characters/BwCow/BwCow.tpsheet
+- Assets/Resources/Characters/Chick/Chick.tpsheet
 - Assets/Resources/Characters/DarkBeamerTower/DarkBeamerTower.tpsheet
 - Assets/Resources/Characters/DemonFireSlime/DemonFireSlime.tpsheet
 - Assets/Resources/Characters/Ekrail/Ekrail.tpsheet
@@ -54,6 +56,8 @@ textureFileNames:
 - Assets/Resources/Characters/BountyHunter/BountyHunter.png
 - Assets/Resources/Characters/Brick1/Brick1.png
 - Assets/Resources/Characters/BrightWitch/BrightWitch.png
+- Assets/Resources/Characters/BwCow/BwCow.png
+- Assets/Resources/Characters/Chick/Chick.png
 - Assets/Resources/Characters/DarkBeamerTower/DarkBeamerTower.png
 - Assets/Resources/Characters/DemonFireSlime/DemonFireSlime.png
 - Assets/Resources/Characters/Ekrail/Ekrail.png
@@ -89,6 +93,8 @@ textureFileNames:
 - Assets/Resources/UI/ShaperCard.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
+- 
 - 
 - 
 - 

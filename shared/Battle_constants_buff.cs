@@ -297,6 +297,17 @@ namespace shared {
             Name = "SmallSlash3"
         };
 
+        public static VfxConfig VfxSmallBallEmitterBeam = new VfxConfig {
+            SpeciesId = 30,
+            MotionType = VfxMotionType.Dropped,
+            DurationType = VfxDurationType.Repeating,
+            OnCharacter = false,
+            OnBullet = false,
+            OnTrap = true,
+            UsePixelatedVer = true,
+            Name = "HeatBeam"
+        };
+
         public static ImmutableDictionary<int, VfxConfig> pixelatedVfxDict = ImmutableDictionary.Create<int, VfxConfig>().AddRange(
              new[]
              {
@@ -329,6 +340,7 @@ namespace shared {
                     new KeyValuePair<int, VfxConfig>(VfxSmallSlash1.SpeciesId, VfxSmallSlash1),
                     new KeyValuePair<int, VfxConfig>(VfxSmallSlash2.SpeciesId, VfxSmallSlash2),
                     new KeyValuePair<int, VfxConfig>(VfxSmallSlash3.SpeciesId, VfxSmallSlash3),
+                    new KeyValuePair<int, VfxConfig>(VfxSmallBallEmitterBeam.SpeciesId, VfxSmallBallEmitterBeam),
              }
         );
 

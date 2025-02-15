@@ -66,7 +66,7 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
         if (!PlayerStoryProgressManager.Instance.HasAnyUsedSlot()) {
             // A shortcut to start!
             PlayerStoryProgressManager.Instance.LoadFromSlot(1);
-            PlayerStoryProgressManager.Instance.SetCachedForOfflineMap(Battle.SPECIES_BLADEGIRL, StoryConstants.LEVEL_NAMES[StoryConstants.LEVEL_DELICATE_FOREST], FinishedLvOption.StoryAndBoss);
+            PlayerStoryProgressManager.Instance.SetCachedForOfflineMap(Battle.SPECIES_BLADEGIRL, StoryConstants.LEVEL_NAMES[StoryConstants.LEVEL_DELICATE_FOREST].Item1, FinishedLvOption.StoryAndBoss);
             SceneManager.LoadScene("OfflineMapScene", LoadSceneMode.Single);
         } else {
             showSaveSlotSelectPanel = true;

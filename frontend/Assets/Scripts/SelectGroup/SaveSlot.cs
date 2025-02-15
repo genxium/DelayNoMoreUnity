@@ -23,7 +23,7 @@ public class SaveSlot : AbstractSingleSelectCell {
             title.text = "No data";
             timestamp.text = string.Empty;
         } else {
-            title.text = PlayerStoryModeSelectView.Region == progress.View ? StoryConstants.REGION_NAMES[progress.CursorRegionId] : StoryConstants.REGION_NAMES[progress.CursorRegionId]  + "/" + StoryConstants.LEVEL_NAMES[progress.CursorLevelId];
+            title.text = PlayerStoryModeSelectView.Region == progress.View ? StoryConstants.REGION_NAMES[progress.CursorRegionId] : StoryConstants.REGION_NAMES[progress.CursorRegionId]  + "/" + StoryConstants.LEVEL_NAMES[progress.CursorLevelId].Item2;
             timestamp.text = DateTimeOffset.FromUnixTimeMilliseconds((long)progress.SavedAtGmtMillis).LocalDateTime.ToString();
         }
     }

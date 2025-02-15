@@ -105,242 +105,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FireBreatherLv1_1
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 96
-        width: 29
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5344827, y: 0.30769232}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 64d997a0443126e48a1634e8ee49a04b
-      internalID: 112122892
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_10
-      rect:
-        serializedVersion: 2
-        x: 53
-        y: 207
-        width: 52
-        height: 49
-      alignment: 9
-      pivot: {x: 0.7403846, y: 0.1632653}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2b8b307ced9be7c4fa21461193dd9537
-      internalID: -1921521194
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_11
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 206
-        width: 53
-        height: 50
-      alignment: 9
-      pivot: {x: 0.745283, y: 0.16}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 49a8b4af382894d44a7533572419dd9f
-      internalID: -823459407
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_2
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 96
-        width: 29
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5344827, y: 0.30769232}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c61f3213a08c04b41a3d9ef557b60f35
-      internalID: 1901275942
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_3
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 96
-        width: 29
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5344827, y: 0.30769232}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dd80c4ed6975231409e188874844f396
-      internalID: -747332141
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_4
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 96
-        width: 29
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5344827, y: 0.30769232}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1ed29cfea11600f489b470869378cf49
-      internalID: -370688818
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_5
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 96
-        width: 29
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5344827, y: 0.30769232}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9ad86dde9c84309488b853278cca2700
-      internalID: 1632924060
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_6
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 96
-        width: 29
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5344827, y: 0.30769232}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 29d9c4b850934d4459e0a88f8a608c78
-      internalID: -1688492906
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_7
-      rect:
-        serializedVersion: 2
-        x: 94
-        y: 122
-        width: 33
-        height: 30
-      alignment: 9
-      pivot: {x: 0.59090906, y: 0.26666668}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e4d6bf787f945ca4681faa7d5d0bf001
-      internalID: 674216410
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_8
-      rect:
-        serializedVersion: 2
-        x: 47
-        y: 113
-        width: 41
-        height: 38
-      alignment: 9
-      pivot: {x: 0.67073166, y: 0.21052632}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b08f495983ad3354d99b16fe16308097
-      internalID: -2046435393
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FireBreatherLv1_9
-      rect:
-        serializedVersion: 2
-        x: 53
-        y: 163
-        width: 47
-        height: 44
-      alignment: 9
-      pivot: {x: 0.71276593, y: 0.18181819}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 59002a450cb49dc4d8947474be0e8f8f
-      internalID: 223278267
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Jumper-0
       rect:
         serializedVersion: 2
-        x: 21
-        y: 119
+        x: 93
+        y: 73
         width: 21
         height: 11
       alignment: 9
@@ -360,8 +129,8 @@ TextureImporter:
       name: Jumper-1
       rect:
         serializedVersion: 2
-        x: 21
-        y: 109
+        x: 93
+        y: 61
         width: 21
         height: 10
       alignment: 9
@@ -381,8 +150,8 @@ TextureImporter:
       name: Jumper-2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 107
+        x: 70
+        y: 61
         width: 21
         height: 9
       alignment: 9
@@ -402,8 +171,8 @@ TextureImporter:
       name: Jumper-3
       rect:
         serializedVersion: 2
-        x: 100
-        y: 168
+        x: 49
+        y: 88
         width: 21
         height: 16
       alignment: 0
@@ -423,8 +192,8 @@ TextureImporter:
       name: Jumper-4
       rect:
         serializedVersion: 2
-        x: 100
-        y: 152
+        x: 1
+        y: 75
         width: 21
         height: 16
       alignment: 0
@@ -444,8 +213,8 @@ TextureImporter:
       name: Jumper-5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 130
+        x: 24
+        y: 75
         width: 21
         height: 16
       alignment: 0
@@ -465,8 +234,8 @@ TextureImporter:
       name: Jumper-6
       rect:
         serializedVersion: 2
-        x: 21
-        y: 130
+        x: 47
+        y: 70
         width: 21
         height: 16
       alignment: 0
@@ -486,8 +255,8 @@ TextureImporter:
       name: Jumper-7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 116
+        x: 70
+        y: 72
         width: 21
         height: 14
       alignment: 9
@@ -507,8 +276,8 @@ TextureImporter:
       name: LongConveyorToL_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 194
+        x: 1
+        y: 191
         width: 47
         height: 12
       alignment: 0
@@ -528,8 +297,8 @@ TextureImporter:
       name: LongConveyorToL_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 182
+        x: 1
+        y: 177
         width: 47
         height: 12
       alignment: 0
@@ -549,8 +318,8 @@ TextureImporter:
       name: LongConveyorToL_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 170
+        x: 1
+        y: 163
         width: 47
         height: 12
       alignment: 0
@@ -570,8 +339,8 @@ TextureImporter:
       name: LongConveyorToR_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 158
+        x: 1
+        y: 149
         width: 47
         height: 12
       alignment: 0
@@ -591,8 +360,8 @@ TextureImporter:
       name: LongConveyorToR_2
       rect:
         serializedVersion: 2
-        x: 47
-        y: 151
+        x: 50
+        y: 146
         width: 47
         height: 12
       alignment: 0
@@ -612,8 +381,8 @@ TextureImporter:
       name: LongConveyorToR_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 146
+        x: 1
+        y: 135
         width: 47
         height: 12
       alignment: 0
@@ -633,8 +402,8 @@ TextureImporter:
       name: ShortConveyorToL_1
       rect:
         serializedVersion: 2
-        x: 105
-        y: 244
+        x: 1
+        y: 121
         width: 22
         height: 12
       alignment: 0
@@ -654,8 +423,8 @@ TextureImporter:
       name: ShortConveyorToL_2
       rect:
         serializedVersion: 2
-        x: 105
-        y: 232
+        x: 25
+        y: 121
         width: 22
         height: 12
       alignment: 0
@@ -675,8 +444,8 @@ TextureImporter:
       name: ShortConveyorToL_3
       rect:
         serializedVersion: 2
-        x: 105
-        y: 220
+        x: 1
+        y: 107
         width: 22
         height: 12
       alignment: 0
@@ -696,8 +465,8 @@ TextureImporter:
       name: ShortConveyorToR_1
       rect:
         serializedVersion: 2
-        x: 105
-        y: 208
+        x: 25
+        y: 107
         width: 22
         height: 12
       alignment: 0
@@ -717,8 +486,8 @@ TextureImporter:
       name: ShortConveyorToR_2
       rect:
         serializedVersion: 2
-        x: 105
-        y: 196
+        x: 1
+        y: 93
         width: 22
         height: 12
       alignment: 0
@@ -738,8 +507,8 @@ TextureImporter:
       name: ShortConveyorToR_3
       rect:
         serializedVersion: 2
-        x: 100
-        y: 184
+        x: 25
+        y: 93
         width: 22
         height: 12
       alignment: 0
@@ -755,6 +524,447 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_1
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 191
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16eb1e20fd591fb4cbf0ab9dc97a23e0
+      internalID: 311734178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_10
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 176
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71987c84ca5dc2441bc3dd7dac8b1fb9
+      internalID: 1716756392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_2
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 161
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83e74bbd3d795bd409bd384032246fbd
+      internalID: 1060870064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_3
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 146
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6f73a1399e6f5941a464a9d9145afec
+      internalID: -1860422557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_4
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 176
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98a921381a5be4e478c93f8093670e60
+      internalID: -112666402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_5
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 176
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 688e8d14d9f75b0418aa7c8129e91d54
+      internalID: -183151828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_6
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 176
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29ce41353cc95304886fff195ae6d16e
+      internalID: -857735204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_7
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 176
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bccd8c697e8ace249b1e652e62acf409
+      internalID: 397945179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_8
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 176
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2958137a2abf0ee409972ab4ab922f4f
+      internalID: 1881940450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallBallEmitter_9
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 176
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0a910ebd7e951a4b939f31099d5f2c3
+      internalID: 1177809511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_1
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 86
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.9137931, y: 0.96153843}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f10897c34d447a4a9616dc051fd6f71
+      internalID: 290714161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_10
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 206
+        width: 52
+        height: 49
+      alignment: 9
+      pivot: {x: 0.50961536, y: 0.5102041}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87336256d26aa654a990d8d7440587e3
+      internalID: -68706965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_11
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 205
+        width: 53
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 294b255c172fd4449ab8cee44eff9578
+      internalID: -268502246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_2
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 86
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.9137931, y: 0.96153843}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e5e694c144f9d14997e97b3153318ec
+      internalID: -1652933715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_3
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 86
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.9137931, y: 0.96153843}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ad77ccef670e49439bbd540d36a31f0
+      internalID: 1815061980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_4
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 86
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.9137931, y: 0.96153843}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3781bff780b5c7459b229be92bf9cb2
+      internalID: 1052495360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_5
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 86
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.9137931, y: 0.96153843}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6809bfe2a13d1404bb1e71df411e63a8
+      internalID: 861480167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_6
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 86
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.9137931, y: 0.96153843}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0e749f484d73814ea3d859957b6e5dd
+      internalID: 174972183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_7
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 114
+        width: 33
+        height: 30
+      alignment: 9
+      pivot: {x: 0.8030303, y: 0.8333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11a85ef4ee002a24c9cc05115f05aa7b
+      internalID: -1385551110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_8
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 106
+        width: 41
+        height: 38
+      alignment: 9
+      pivot: {x: 0.64634144, y: 0.65789473}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b94dd1dde34de6b46a232e51dac1802d
+      internalID: 847884898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fort_9
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 160
+        width: 47
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5638298, y: 0.5681818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04cfb2b88ac1f18488869d42af3b3996
+      internalID: -1497550150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -766,17 +976,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      FireBreatherLv1_1: 112122892
-      FireBreatherLv1_10: -1921521194
-      FireBreatherLv1_11: -823459407
-      FireBreatherLv1_2: 1901275942
-      FireBreatherLv1_3: -747332141
-      FireBreatherLv1_4: -370688818
-      FireBreatherLv1_5: 1632924060
-      FireBreatherLv1_6: -1688492906
-      FireBreatherLv1_7: 674216410
-      FireBreatherLv1_8: -2046435393
-      FireBreatherLv1_9: 223278267
+      Fort_1: 290714161
+      Fort_10: -68706965
+      Fort_11: -268502246
+      Fort_2: -1652933715
+      Fort_3: 1815061980
+      Fort_4: 1052495360
+      Fort_5: 861480167
+      Fort_6: 174972183
+      Fort_7: -1385551110
+      Fort_8: 847884898
+      Fort_9: -1497550150
       Jumper-0: -790246588
       Jumper-1: -1553334357
       Jumper-2: -1519411986
@@ -797,6 +1007,16 @@ TextureImporter:
       ShortConveyorToR_1: 1895629282
       ShortConveyorToR_2: -1446558017
       ShortConveyorToR_3: 1673492637
+      SmallBallEmitter_1: 311734178
+      SmallBallEmitter_10: 1716756392
+      SmallBallEmitter_2: 1060870064
+      SmallBallEmitter_3: -1860422557
+      SmallBallEmitter_4: -112666402
+      SmallBallEmitter_5: -183151828
+      SmallBallEmitter_6: -857735204
+      SmallBallEmitter_7: 397945179
+      SmallBallEmitter_8: 1881940450
+      SmallBallEmitter_9: 1177809511
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

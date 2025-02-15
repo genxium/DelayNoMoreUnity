@@ -392,6 +392,7 @@ namespace shared {
             Dashing,
             BackDashing,
             Sliding,
+            GroundDodged,
             InAirIdle1NoJump,
             InAirIdle1ByJump,
             InAirIdle1ByWallJump,

@@ -26,9 +26,9 @@ public class StoryLvInfoPanel : MonoBehaviour {
         }
     }
 
-    public void refreshLvInfo(string lvName, bool isLocked, PlayerLevelProgress lvProgress) {
+    public void refreshLvInfo(string lvDisplayName, bool isLocked, PlayerLevelProgress lvProgress) {
         if (!isLocked) {
-            title.text = lvName;
+            title.text = lvDisplayName;
         } else {
             title.text = "? ? ?";
         }
