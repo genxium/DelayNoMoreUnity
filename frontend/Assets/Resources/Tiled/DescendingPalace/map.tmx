@@ -2,7 +2,7 @@
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="162" nextobjectid="549">
  <properties>
   <property name="MatchInOrder" value="true"/>
-  <property name="battleDurationSeconds" value="240"/>
+  <property name="battleDurationSeconds" value="1600"/>
   <property name="levelId" value="5"/>
   <property name="missionEvtSubId" value="10"/>
   <property name="npcPreallocCapDict" value="15:1;16:1;4097:4;4098:2;4099:4;4100:4;4102:4;4096:1;4104:1"/>

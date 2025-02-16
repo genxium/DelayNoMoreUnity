@@ -132,6 +132,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<int, DebugLine> cachedLineRenderers;
     protected Dictionary<uint, GameObject> npcSpeciesPrefabDict;
     protected Dictionary<uint, KvPriorityQueue<int, CharacterAnimController>> cachedNpcs;
+    protected HashSet<int> usedNpcNodes;
     protected KvPriorityQueue<int, TeamRibbon> cachedTeamRibbons;
     protected KvPriorityQueue<int, InplaceHpBar> cachedHpBars;
     protected KvPriorityQueue<int, KeyChPointer> cachedKeyChPointers;
@@ -652,19 +653,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             playCharacterVfx(currCharacterDownsync, prevCharacterDownsync, chConfig, chAnimCtrl, wx, wy, rdf.Id);
         }
 
-        // Put all npcNodes to infinitely far first
-        foreach (var entry in cachedNpcs) {
-            var speciesId = entry.Key;
-            var speciesKvPq = entry.Value;
-            for (int i = speciesKvPq.vals.StFrameId; i < speciesKvPq.vals.EdFrameId; i++) {
-                var (res, npcAnimHolder) = speciesKvPq.vals.GetByFrameId(i);
-                if (!res || null == npcAnimHolder) throw new ArgumentNullException(String.Format("There's no npcAnimHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, speciesKvPq.vals.StFrameId, speciesKvPq.vals.EdFrameId));
-
-                newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, npcAnimHolder.gameObject.transform.position.z);
-                npcAnimHolder.gameObject.transform.position = newPosHolder;
-            }
-        }
-
+        // Put unused npcNodes to infinitely far first
+        usedNpcNodes.Clear();
         currRdfNpcAnimHoldersCnt = 0;
         bool hasActiveBoss = false;
         for (int k = 0; k < rdf.NpcsArr.Count; k++) {
@@ -717,11 +707,16 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             var npcGameObj = npcAnimHolder.gameObject;
             currRdfNpcAnimHolders[k] = npcAnimHolder;
-            newPosHolder.Set(wx, wy, calcEffCharacterZ(currNpcDownsync, chConfig));
+            if (npcAnimHolder.GetNpcId() == currNpcDownsync.Id) {
+                setCharacterGameObjectPosByInterpolation(prevNpcDownsync, currNpcDownsync, chConfig, npcGameObj, wx, wy);
+            } else {
+                newPosHolder.Set(wx, wy, calcEffCharacterZ(currNpcDownsync, chConfig));
+            }
             npcGameObj.transform.position = newPosHolder;
 
             npcAnimHolder.updateCharacterAnim(currNpcDownsync, currNpcDownsync.CharacterState, prevNpcDownsync, false, chConfig);
             npcAnimHolder.score = rdf.Id;
+            usedNpcNodes.Add(currNpcDownsync.Id);
             bool hasColorSwapByTeam = false;
             var spr = npcGameObj.GetComponent<SpriteRenderer>();
             var material = spr.material;
@@ -760,6 +755,21 @@ public abstract class AbstractMapController : MonoBehaviour {
             playCharacterSfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, npcAnimHolder, wx, wy, rdf.Id);
         }
+        foreach (var entry in cachedNpcs) {
+            var speciesId = entry.Key;
+            var speciesKvPq = entry.Value;
+            for (int i = speciesKvPq.vals.StFrameId; i < speciesKvPq.vals.EdFrameId; i++) {
+                var (res, npcAnimHolder) = speciesKvPq.vals.GetByFrameId(i);
+                if (!res || null == npcAnimHolder) throw new ArgumentNullException(String.Format("There's no npcAnimHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, speciesKvPq.vals.StFrameId, speciesKvPq.vals.EdFrameId));
+                if (usedNpcNodes.Contains(npcAnimHolder.GetNpcId())) {
+                    continue;
+                }
+                newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, npcAnimHolder.gameObject.transform.position.z);
+                npcAnimHolder.SetNpcId(TERMINATING_PLAYER_ID);
+                npcAnimHolder.gameObject.transform.position = newPosHolder;
+            }
+        }
+
         if (null != bossBattleHeading) {
             bossBattleHeading.gameObject.SetActive(hasActiveBoss);
         }
@@ -1177,6 +1187,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcPreallocCapDictVal[speciesId] = speciesCapacity;
         }
         npcSpeciesPrefabDict = new Dictionary<uint, GameObject>();
+        usedNpcNodes = new HashSet<int>();
         cachedNpcs = new Dictionary<uint, KvPriorityQueue<int, CharacterAnimController>>();
         foreach (var kvPair in npcPreallocCapDictVal) {
             uint speciesId = kvPair.Key;
@@ -1188,7 +1199,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 GameObject newNpcNode = Instantiate(thePrefab, new Vector3(effectivelyInfinitelyFar, effectivelyInfinitelyFar, characterZ), Quaternion.identity, underlyingMap.transform);
                 CharacterAnimController newNpcNodeController = newNpcNode.GetComponent<CharacterAnimController>();
                 newNpcNodeController.score = -1;
-
+                newNpcNodeController.SetNpcId(TERMINATING_PLAYER_ID);
                 int initLookupKey = i;
                 cachedNpcNodesOfThisSpecies.Put(initLookupKey, newNpcNodeController);
             }

@@ -25,6 +25,15 @@ public class CharacterAnimController : MonoBehaviour {
         speciesId = val;
     }
 
+    private int npcId = Battle.TERMINATING_PLAYER_ID;
+    public int GetNpcId() {
+        return npcId;
+    }
+
+    public void SetNpcId(int val) {
+        npcId = val;
+    }
+
     public Vector3 scaleHolder = new Vector3();
     public Vector3 positionHolder = new Vector3();
 
@@ -107,6 +116,7 @@ public class CharacterAnimController : MonoBehaviour {
 
         // As this function might be called after many frames of a rollback, it's possible that the playing animation was predicted, different from "prevRdfCharacter.CharacterState" but same as "newCharacterState". More granular checks are needed to determine whether we should interrupt the playing animation.  
         speciesId = chConfig.SpeciesId;
+        npcId = rdfCharacter.Id;
         var animator = getMainAnimator();
         // Update directions
         if (0 > rdfCharacter.DirX) {

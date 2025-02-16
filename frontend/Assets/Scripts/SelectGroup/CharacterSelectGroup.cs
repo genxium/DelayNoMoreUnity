@@ -63,6 +63,7 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
         switch (selectedIdx) {
             case 0:
                 selectedSpeciesId = Battle.SPECIES_BLADEGIRL;
+                //selectedSpeciesId = Battle.SPECIES_HEAVYGUARD_RED;
                 //selectedSpeciesId = Battle.SPECIES_SKELEARCHER;
                 break;
             case 1:

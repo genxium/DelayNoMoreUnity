@@ -1145,7 +1145,7 @@ namespace shared {
             AddHit(BladeGirlDragonPunchPrimerBullet);
 
         public static BulletConfig HunterDragonPunchPrimerBullet = new BulletConfig {
-            StartupFrames = 9,
+            StartupFrames = 5,
             StartupInvinsibleFrames = 2,
             ActiveFrames = 15,
             HitStunFrames = 20,
@@ -1156,7 +1156,7 @@ namespace shared {
             Damage = 7,
             PushbackVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelX = 0,
+            SelfLockVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelY = 0,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
             HitboxOffsetX = (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1167,7 +1167,7 @@ namespace shared {
             ExplosionSpeciesId = 2,
             DirX = 1,
             DirY = 0,
-            Hardness = 5,
+            Hardness = 6,
             ExplosionFrames = 25,
             BType = BulletType.Melee,
             CharacterEmitSfxName = "SlashEmitSpd3",
@@ -1176,25 +1176,25 @@ namespace shared {
         }.UpsertCancelTransit(PATTERN_UP_B, 86);
 
         public static Skill HunterDragonPunchSkill = new Skill {
-            RecoveryFrames = 35,
-            RecoveryFramesOnBlock = 35,
-            RecoveryFramesOnHit = 35,
+            RecoveryFrames = 30,
+            RecoveryFramesOnBlock = 30,
+            RecoveryFramesOnHit = 30,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk5
         }.
             AddHit(HunterDragonPunchPrimerBullet);
 
         public static BulletConfig HunterDragonPunchSecondaryBullet = new BulletConfig {
-            StartupFrames = 7,
+            StartupFrames = 5,
             StartupInvinsibleFrames = 2,
             ActiveFrames = 14,
             HitStunFrames = MAX_INT,
-            HitInvinsibleFrames = 60,
+            HitInvinsibleFrames = 45,
             BlockStunFrames = 9,
-            Damage = 8,
+            Damage = 10,
             PushbackVelX = (int)(2.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelX = (int)(1.7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = (int)(2.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelY = (int)(7.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
             HitboxOffsetX = (int)(14 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1206,7 +1206,7 @@ namespace shared {
             ExplosionSpeciesId = 2,
             DirX = 1,
             DirY = 0,
-            Hardness = 5,
+            Hardness = 7,
             ExplosionFrames = 25,
             BType = BulletType.Melee,
             CharacterEmitSfxName = "SlashEmitSpd3",
@@ -3466,7 +3466,7 @@ namespace shared {
             StartupFrames = 3,
             StartupInvinsibleFrames = 1,
             ActiveFrames = 15,
-            HitStunFrames = 14,
+            HitStunFrames = 20,
             BlockStunFrames = 8,
             Damage = 10,
             PushbackVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -3478,8 +3478,8 @@ namespace shared {
             HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            CancellableStFrame = 13,
-            CancellableEdFrame = 26,
+            CancellableStFrame = 12,
+            CancellableEdFrame = 19,
             SpeciesId = 2,
             ExplosionSpeciesId = 2,
             ExplosionFrames = 25,
@@ -3494,10 +3494,10 @@ namespace shared {
         }.UpsertCancelTransit(PATTERN_B, 2).UpsertCancelTransit(PATTERN_DOWN_B, 2);
 
         public static BulletConfig BasicBladeHit2 = new BulletConfig {
-            StartupFrames = 3,
+            StartupFrames = 5,
             StartupInvinsibleFrames = 2,
             ActiveFrames = 14,
-            HitStunFrames = 15,
+            HitStunFrames = 25,
             BlockStunFrames = 9,
             Damage = 12,
             PushbackVelX = 0,
@@ -3509,8 +3509,8 @@ namespace shared {
             HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(42*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            CancellableStFrame = 13,
-            CancellableEdFrame = 24,
+            CancellableStFrame = 12,
+            CancellableEdFrame = 20,
             SpeciesId = 2,
             ExplosionSpeciesId = 2,
             ExplosionFrames = 25,
@@ -3524,7 +3524,7 @@ namespace shared {
         }.UpsertCancelTransit(PATTERN_B, 3).UpsertCancelTransit(PATTERN_DOWN_B, 3).UpsertCancelTransit(PATTERN_UP_B, 259);
     
         public static BulletConfig BasicBladeHit3 = new BulletConfig {
-            StartupFrames = 4,
+            StartupFrames = 6,
             StartupInvinsibleFrames = 4,
             ActiveFrames = 17,
             HitStunFrames = 34,
@@ -3544,7 +3544,7 @@ namespace shared {
             ExplosionSpeciesId = 2,
             ExplosionFrames = 25,
             BType = BulletType.Melee,
-            CancellableStFrame = 12,
+            CancellableStFrame = 10,
             CancellableEdFrame = 25,
             CancellableByInventorySlotC = true,
             DirX = 1,
@@ -5662,6 +5662,7 @@ namespace shared {
                     new KeyValuePair<uint,Skill>(130, SmallBallEmitterBeamSkill),
 
                     new KeyValuePair<uint, Skill>(255, new Skill {
+                            Id = 255,
                             RecoveryFrames = 20,
                             RecoveryFramesOnBlock = 20,
                             RecoveryFramesOnHit = 20,
@@ -5700,6 +5701,7 @@ namespace shared {
                         )),
 
                     new KeyValuePair<uint, Skill>(258, new Skill{
+                            Id = 258, 
                             RecoveryFrames = 45,
                             RecoveryFramesOnBlock = 45,
                             RecoveryFramesOnHit = 45,

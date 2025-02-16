@@ -545,7 +545,7 @@ namespace shared {
                         // [WARNING] The information of "justFulfilled" will be lost after then just-fulfilled renderFrame, thus temporarily using "FramesToFire" to keep track of subsequent spawning
                         int chSpawnerConfigIdx = triggerConfigFromTiled.QuotaCap - currTrigger.Quota;
                         var chSpawnerConfig = lowerBoundForSpawnerConfig(chSpawnerConfigIdx, triggerConfigFromTiled.CharacterSpawnerTimeSeq);
-                        fireTriggerSpawning(currRenderFrame, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerInNextFrame, decodedInputHolder, chSpawnerConfig, triggerEditorIdToTiledConfig, logger);
+                        fireTriggerSpawning(currRenderFrame, roomCapacity, currTrigger, triggerInNextFrame, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerInNextFrame, decodedInputHolder, chSpawnerConfig, triggerEditorIdToTiledConfig, logger);
                     } else if (mainCycleFulfilled) {
                         if (0 < currTrigger.Quota) {
                             triggerInNextFrame.Quota = currTrigger.Quota - 1;
@@ -766,7 +766,7 @@ namespace shared {
             return characterSpawnerTimeSeq[l]; 
         }
 
-        private static void fireTriggerSpawning(RoomDownsyncFrame currRenderFrame, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, Trigger? npcKilledReceptionTriggerInNextFrame, InputFrameDecoded decodedInputHolder, CharacterSpawnerConfig chSpawnerConfig, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
+        private static void fireTriggerSpawning(RoomDownsyncFrame currRenderFrame, int roomCapacity, Trigger currTrigger, Trigger triggerInNextFrame, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, Trigger? npcKilledReceptionTriggerInNextFrame, InputFrameDecoded decodedInputHolder, CharacterSpawnerConfig chSpawnerConfig, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
             if (0 < currTrigger.SubCycleQuotaLeft) {
                 triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1;
                 var spawnerSpeciesIdList = chSpawnerConfig.SpeciesIdList;
@@ -782,7 +782,7 @@ namespace shared {
                     DecodeInput(initOpList[idx], decodedInputHolder);
                     int npcKilledReceptionTriggerLocalIdInNextFrame = (null == npcKilledReceptionTriggerInNextFrame ? TERMINATING_TRIGGER_ID : npcKilledReceptionTriggerInNextFrame.TriggerLocalId);  
                     ulong npcKilledEvtMask = null == npcKilledReceptionTriggerInNextFrame ? EVTSUB_NO_DEMAND_MASK : npcKilledReceptionTriggerInNextFrame.WaveNpcKilledEvtMaskCounter; 
-                    if (addNewNpcToNextFrame(currRenderFrame.Id, currTrigger.VirtualGridX, currTrigger.VirtualGridY, decodedInputHolder.Dx, decodedInputHolder.Dy, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerLocalIdInNextFrame, npcKilledEvtMask, TERMINATING_TRIGGER_ID)) {
+                    if (addNewNpcToNextFrame(currRenderFrame.Id, roomCapacity, currTrigger.VirtualGridX, currTrigger.VirtualGridY, decodedInputHolder.Dx, decodedInputHolder.Dy, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerLocalIdInNextFrame, npcKilledEvtMask, TERMINATING_TRIGGER_ID)) {
                         triggerInNextFrame.State = TriggerState.TcoolingDown;
                         triggerInNextFrame.FramesInState = 0;
                         triggerInNextFrame.FramesToFire = triggerConfigFromTiled.SubCycleTriggerFrames;

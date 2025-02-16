@@ -940,6 +940,11 @@ namespace shared {
                                                 victimNextFrame.OmitGravity = false;
                                             }
                                         }
+                                        /*
+                                        if (SPECIES_HEAVYGUARD_RED == victimNextFrame.SpeciesId && null != offender) {
+                                            logger.LogInfo(String.Format("@rdfId={0}, offender.FramesInChState={1}, HeavyGuardRed id={2} next FramesToRecover becomes {3}", currRenderFrame.Id, offender.FramesInChState, victimNextFrame.Id, victimNextFrame.FramesToRecover));
+                                        }
+                                        */
                                     }
                                 }
 

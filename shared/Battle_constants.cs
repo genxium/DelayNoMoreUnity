@@ -364,6 +364,7 @@ namespace shared {
             Dashing,
             BackDashing,
             Sliding,
+            GroundDodged, 
             InAirIdle1NoJump,
             InAirIdle1ByJump,
             InAirIdle1ByWallJump,
@@ -373,7 +374,6 @@ namespace shared {
             OnWallIdle1,
             CrouchIdle1,
             GetUp1,
-
             Def1, 
             Def1Atked1,
             Def1Broken,
@@ -382,7 +382,10 @@ namespace shared {
             CrouchAtked1,
             BlownUp1,
             LayDown1,
-            Dying
+            Dying,
+            Dimmed, 
+            TransformingInto,
+            Awaking
         };
 
         public static HashSet<CharacterState> btnBChargeableSet = new HashSet<CharacterState>() {

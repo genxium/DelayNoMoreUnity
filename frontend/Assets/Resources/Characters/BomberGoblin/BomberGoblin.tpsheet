@@ -4,7 +4,7 @@
 # To import these sprites into your Unity project, download "TexturePackerImporter":
 # https://www.codeandweb.com/texturepacker/unity
 #
-# $TexturePacker:SmartUpdate:08f0b13722a4cdecd265b8d6fa678125:0fd4464a2600b270acda08facd7d3c64:f77ec6f1b1bfc0c8cf2c2df06ab3e1cd$
+# $TexturePacker:SmartUpdate:f99a5e5c6e557fff606b0c6c6e12c121:0fd4464a2600b270acda08facd7d3c64:f77ec6f1b1bfc0c8cf2c2df06ab3e1cd$
 #
 :format=40300
 :texture=BomberGoblin.png
@@ -49,8 +49,8 @@ Idle1-3;2;131;33;32; 0.5;0.6875; 0;0;0;0
 Walking-0;90;271;35;36; 0.5;0.611111; 0;0;0;0
 Walking-1;2;50;27;37; 0.5;0.594595; 0;0;0;0
 Walking-2;106;70;20;37; 0.5;0.594595; 0;0;0;0
-Walking-3;68;33;26;36; 0.5;0.611111; 0;0;0;0
+Walking-3;68;33;26;36; 0.5;0.66666656; 0;0;0;0
 Walking-4;82;152;33;35; 0.5;0.628571; 0;0;0;0
 Walking-5;2;9;25;37; 0.5;0.594595; 0;0;0;0
 Walking-6;31;9;23;37; 0.5;0.594595; 0;0;0;0
-Walking-7;98;30;26;36; 0.5;0.611111; 0;0;0;0
+Walking-7;98;30;26;36; 0.5;0.66666667; 0;0;0;0

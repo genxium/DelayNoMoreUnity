@@ -84,11 +84,11 @@ It's always non-trivial to mock fluctuating network behaviours, and in this game
 - `b)` the initial character choices of all players, and
 - `c)` received `RoomDownsyncFrame`s, `InputDownsyncFrame`s (from websocket) and `InputUpsyncFrame`s (from UDP peers) at EXACTLY THE SAME TIMINGS for different runs of different algorithms in test.
 
-The first two, i.e. `a)` & `b)` are easy to mock and `c)` is possible by mocking [OnlineMapController.pollAndHandleWsRecvBuffer](https://github.com/genxium/DelayNoMoreUnity/blob/v1.2.2/frontend/Assets/Scripts/OnlineMapController.cs#L225) and [OnlineMapController.pollAndHandleUdpRecvBuffer](https://github.com/genxium/DelayNoMoreUnity/blob/v1.2.2/frontend/Assets/Scripts/OnlineMapController.cs#L226).
+The first two, i.e. `a)` & `b)` are easy to mock and `c)` is possible by mocking [OnlineMapController.pollAndHandleWsRecvBuffer](https://github.com/genxium/DelayNoMoreUnity/blob/v2.2.3/frontend/Assets/Scripts/OnlineMapController.cs#L53) and [OnlineMapController.pollAndHandleUdpRecvBuffer](https://github.com/genxium/DelayNoMoreUnity/blob/v2.2.3/frontend/Assets/Scripts/OnlineMapController.cs#L245).
 
 I should've provided an example of this type of test for the alleged good performance of my algorithm, especially for
-- [UpdateInputFrameInPlaceUponDynamics](https://github.com/genxium/DelayNoMoreUnity/blob/v1.2.2/frontend/Assets/Scripts/Abstract/AbstractMapController.cs#L268), and  
-- [processInertiaWalking](https://github.com/genxium/DelayNoMoreUnity/blob/v1.2.2/shared/Battle_dynamics.cs#L292)
+- `shared/Battle_dynamics#UpdateInputFrameInPlaceUponDynamics`, and  
+- `shared/Battle_dynamics#processInertiaWalking`
 , but the performance by far is so nice even in unsuccessful UDP hole-punching cases, thus it's left out as a future roadmap item :) 
 
 # Logging performance concern
