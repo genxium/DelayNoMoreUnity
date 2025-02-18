@@ -1,0 +1,50 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:aa92988b7cbf1f4d696ec3c3a077cdb4:edd031a63d5c0dcbd59ec25c690d88b7:af07a270991875b2434fad93268b7c38$
+#
+:format=40300
+:texture=ArcherGuardRed.png
+:size=256x256
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+ArcherGuardRed_0;143;163;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_1;177;163;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_2;79;20;32;42; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_3;153;118;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_4;147;19;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_5;187;118;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_6;1;117;47;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_7;57;210;50;45; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_8;1;69;43;46; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_9;1;20;42;47; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_10;109;208;41;47; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_11;152;208;40;47; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_12;194;208;40;47; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_13;1;162;52;46; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_14;1;210;54;45; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_15;211;163;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_16;46;67;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_17;45;22;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_18;85;109;32;42; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_19;80;64;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_20;114;64;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_21;113;19;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_22;148;74;32;42; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_23;182;74;32;42; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_24;143;163;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_25;221;119;32;42; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_26;108;165;33;41; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_27;181;30;32;42; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_28;147;19;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_29;119;118;32;43; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_30;216;75;32;41; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_31;50;112;33;39; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_32;55;170;51;38; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_33;55;153;51;15; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_34;1;2;51;16; 0.5;0.5; 0;0;0;0

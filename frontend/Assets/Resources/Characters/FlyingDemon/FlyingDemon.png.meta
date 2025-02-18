@@ -1,0 +1,695 @@
+fileFormatVersion: 2
+guid: ece8eeb3bf9d1b042b570189b903af08
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Atk1-0
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 189
+        width: 64
+        height: 66
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.50757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b45cb8adfc7e1e489eb024d26d6fd61
+      internalID: 2012803227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-1
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 5
+        width: 63
+        height: 68
+      alignment: 9
+      pivot: {x: 0.53174603, y: 0.49264705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3f59a432f08e204987a878e32250130
+      internalID: 737091584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-2
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 50
+        width: 62
+        height: 67
+      alignment: 9
+      pivot: {x: 0.5403226, y: 0.48507464}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1d57d07ccb345e4ba2759b007598fa5
+      internalID: -1281651803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-3
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 192
+        width: 78
+        height: 63
+      alignment: 9
+      pivot: {x: 0.50641024, y: 0.53174603}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8571b69b92d970c4ba5d3bcf14a29008
+      internalID: -1787556865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-4
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 190
+        width: 64
+        height: 65
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce44c037c20442d469021e3421dea409
+      internalID: -866590372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-5
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 3
+        width: 68
+        height: 62
+      alignment: 9
+      pivot: {x: 0.49264705, y: 0.4919355}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 729bb62a8c269b946bf66ba6b60fbd88
+      internalID: -838935994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-6
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 126
+        width: 67
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5080645}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af6c510e3677e1d4fa841815dc4db342
+      internalID: 190403271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atk1-7
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 128
+        width: 78
+        height: 62
+      alignment: 9
+      pivot: {x: 0.50641024, y: 0.5241935}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb681d10637e60847a7ff5da82971d61
+      internalID: -1271326014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1-0
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 2
+        width: 64
+        height: 66
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.50757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dcbe28476205b147bdf591a3062eb2f
+      internalID: 720441011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1-1
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 1
+        width: 63
+        height: 62
+      alignment: 9
+      pivot: {x: 0.53174603, y: 0.44354838}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc15d0bd7318f324dbf096f5f4f1cb9d
+      internalID: -543995602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1-2
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 1
+        width: 63
+        height: 62
+      alignment: 9
+      pivot: {x: 0.53174603, y: 0.44354838}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 964b576b53ab784489c368151ffbb325
+      internalID: -1649385367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Atked1-3
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 119
+        width: 63
+        height: 68
+      alignment: 9
+      pivot: {x: 0.53174603, y: 0.49264705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f6683013566fd54eb9b617df5b71066
+      internalID: 1768437090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-0
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 189
+        width: 68
+        height: 66
+      alignment: 9
+      pivot: {x: 0.5367647, y: 0.50757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c568450b472648c43b9f6eed35e4e27c
+      internalID: -1528278244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-1
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 75
+        width: 60
+        height: 54
+      alignment: 9
+      pivot: {x: 0.64166665, y: 0.6203704}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9174f2651061b254eabc6a7e7411a169
+      internalID: 715831765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-2
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 133
+        width: 60
+        height: 54
+      alignment: 9
+      pivot: {x: 0.64166665, y: 0.6203704}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd80b7381a78d784d96abaeea3c49f3c
+      internalID: -1219332133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-3
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 70
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.64166665, y: 0.6160714}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64adfcdaf06db1b48a3394e17a4d353a
+      internalID: 754405958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-4
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 131
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.64166665, y: 0.6160714}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c069a490ee4e364fb1cfbd23a766bb5
+      internalID: -1876116829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying-5
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 69
+        width: 60
+        height: 57
+      alignment: 9
+      pivot: {x: 0.64166665, y: 0.6052632}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5751b501916c59419895614d4480a0d
+      internalID: 446372595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 67
+        width: 79
+        height: 59
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5169492}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea5122f60adc26a479592a16fd1beead
+      internalID: 211520266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-1
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 127
+        width: 63
+        height: 65
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fde9ed06ea74abf4a9702eab83f8ce84
+      internalID: -301219105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-2
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 195
+        width: 68
+        height: 60
+      alignment: 9
+      pivot: {x: 0.49264705, y: 0.49166667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c752fea0103f751479e89a46bad7d8e9
+      internalID: -948924083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-3
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 128
+        width: 67
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99183a843bacee54d9349ded05eb556d
+      internalID: 1227458647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 6
+        width: 78
+        height: 59
+      alignment: 9
+      pivot: {x: 0.50641024, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5797e8f63f850b14981fb7ad88d897a1
+      internalID: 57903871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-1
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 189
+        width: 64
+        height: 66
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.50757575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f975290c749746647b61b5b9e48326a2
+      internalID: 1247930393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-2
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 194
+        width: 68
+        height: 61
+      alignment: 9
+      pivot: {x: 0.49264705, y: 0.48360655}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72dfa3f98288b6e48bed1a27bd1ebc1d
+      internalID: 981070744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walking-3
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 65
+        width: 67
+        height: 60
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49166667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a89eb02db03e304c8264544b81d2898
+      internalID: 1971091495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 72bba919496db4a49a49749c942d1276
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Atk1-0: 2012803227
+      Atk1-1: 737091584
+      Atk1-2: -1281651803
+      Atk1-3: -1787556865
+      Atk1-4: -866590372
+      Atk1-5: -838935994
+      Atk1-6: 190403271
+      Atk1-7: -1271326014
+      Atked1-0: 720441011
+      Atked1-1: -543995602
+      Atked1-2: -1649385367
+      Atked1-3: 1768437090
+      Dying-0: -1528278244
+      Dying-1: 715831765
+      Dying-2: -1219332133
+      Dying-3: 754405958
+      Dying-4: -1876116829
+      Dying-5: 446372595
+      Idle-0: 211520266
+      Idle-1: -301219105
+      Idle-2: -948924083
+      Idle-3: 1227458647
+      Walking-0: 57903871
+      Walking-1: 1247930393
+      Walking-2: 981070744
+      Walking-3: 1971091495
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

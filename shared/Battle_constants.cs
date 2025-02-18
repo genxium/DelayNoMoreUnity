@@ -431,16 +431,16 @@ namespace shared {
         public static int BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 = BATTLE_DYNAMICS_FPS + (BATTLE_DYNAMICS_FPS >> 1);
         public static int BTN_B_HOLDING_RDF_CNT_THRESHOLD_1 = (BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 >> 1);
 
-        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_1 = (4 << INPUT_SCALE_FRAMES) - 3;  
+        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_1 = (BATTLE_DYNAMICS_FPS >> 2) - 2;  
         public static int JUMP_HOLDING_IFD_CNT_THRESHOLD_1 = (int)Math.Ceiling((float)JUMP_HOLDING_RDF_CNT_THRESHOLD_1/(1 << INPUT_SCALE_FRAMES));  
 
-        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_2 = (8 << INPUT_SCALE_FRAMES) - 3;  
+        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_2 = (BATTLE_DYNAMICS_FPS >> 1) + 2;  
         public static int JUMP_HOLDING_IFD_CNT_THRESHOLD_2 = (int)Math.Ceiling((float)JUMP_HOLDING_RDF_CNT_THRESHOLD_2/(1 << INPUT_SCALE_FRAMES));  
 
         public static int IN_AIR_DASH_GRACE_PERIOD_RDF_CNT = 3;
         public static int IN_AIR_JUMP_GRACE_PERIOD_RDF_CNT = 6;
 
-        public static int BTN_E_HOLDING_RDF_CNT_THRESHOLD_1 = (4 << INPUT_SCALE_FRAMES) - 3;  
+        public static int BTN_E_HOLDING_RDF_CNT_THRESHOLD_1 = JUMP_HOLDING_RDF_CNT_THRESHOLD_1;  
         public static int BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 = (int)Math.Ceiling((float)BTN_E_HOLDING_RDF_CNT_THRESHOLD_1/(1 << INPUT_SCALE_FRAMES));  
     }
 }

@@ -2,6 +2,8 @@ version: 2
 tpsheetFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
 - Assets/Resources/Bullets/Bullets.tpsheet
+- Assets/Resources/Characters/Angel/Angel.tpsheet
+- Assets/Resources/Characters/ArcherGuardRed/ArcherGuardRed.tpsheet
 - Assets/Resources/Characters/Bat/Bat.tpsheet
 - Assets/Resources/Characters/BladeGirl/BladeGirl.tpsheet
 - Assets/Resources/Characters/Boar/Boar.tpsheet
@@ -18,6 +20,8 @@ tpsheetFileNames:
 - Assets/Resources/Characters/FireBat/FireBat.tpsheet
 - Assets/Resources/Characters/FireSwordMan/FireSwordMan.tpsheet
 - Assets/Resources/Characters/FireTotem/FireTotem.tpsheet
+- Assets/Resources/Characters/FlyingDemon/FlyingDemon.tpsheet
+- Assets/Resources/Characters/GhWizardManRed/GhWizardManRed.tpsheet
 - Assets/Resources/Characters/Goblin/Goblin.tpsheet
 - Assets/Resources/Characters/HeavyGuardRed/HeavyGuardRed.tpsheet
 - Assets/Resources/Characters/LightGuardRed/LightGuardRed.tpsheet
@@ -29,6 +33,7 @@ tpsheetFileNames:
 - Assets/Resources/Characters/SkeleArcher/SkeleArcher.tpsheet
 - Assets/Resources/Characters/SpearWoman/SpearWoman.tpsheet
 - Assets/Resources/Characters/StoneGolem/StoneGolem.tpsheet
+- Assets/Resources/Characters/Succubus/Succubus.tpsheet
 - Assets/Resources/Characters/SwordMan/SwordMan.tpsheet
 - Assets/Resources/Characters/VillagerFemale1/VillagerFemale1.tpsheet
 - Assets/Resources/Characters/VillagerFemale2/VillagerFemale2.tpsheet
@@ -48,6 +53,8 @@ tpsheetFileNames:
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 - Assets/Resources/Bullets/Bullets.png
+- Assets/Resources/Characters/Angel/Angel.png
+- Assets/Resources/Characters/ArcherGuardRed/ArcherGuardRed.png
 - Assets/Resources/Characters/Bat/Bat.png
 - Assets/Resources/Characters/BladeGirl/BladeGirl.png
 - Assets/Resources/Characters/Boar/Boar.png
@@ -64,6 +71,8 @@ textureFileNames:
 - Assets/Resources/Characters/FireBat/FireBat.png
 - Assets/Resources/Characters/FireSwordMan/FireSwordMan.png
 - Assets/Resources/Characters/FireTotem/FireTotem.png
+- Assets/Resources/Characters/FlyingDemon/FlyingDemon.png
+- Assets/Resources/Characters/GhWizardManRed/GhWizardManRed.png
 - Assets/Resources/Characters/Goblin/Goblin.png
 - Assets/Resources/Characters/HeavyGuardRed/HeavyGuardRed.png
 - Assets/Resources/Characters/LightGuardRed/LightGuardRed.png
@@ -75,6 +84,7 @@ textureFileNames:
 - Assets/Resources/Characters/SkeleArcher/SkeleArcher.png
 - Assets/Resources/Characters/SpearWoman/SpearWoman.png
 - Assets/Resources/Characters/StoneGolem/StoneGolem.png
+- Assets/Resources/Characters/Succubus/Succubus.png
 - Assets/Resources/Characters/SwordMan/SwordMan.png
 - Assets/Resources/Characters/VillagerFemale1/VillagerFemale1.png
 - Assets/Resources/Characters/VillagerFemale2/VillagerFemale2.png
@@ -93,6 +103,11 @@ textureFileNames:
 - Assets/Resources/UI/ShaperCard.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
+- 
+- 
+- 
+- 
 - 
 - 
 - 

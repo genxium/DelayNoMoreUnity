@@ -3465,7 +3465,7 @@ namespace shared {
         public static BulletConfig BasicBladeHit1 = new BulletConfig {
             StartupFrames = 3,
             StartupInvinsibleFrames = 1,
-            ActiveFrames = 15,
+            ActiveFrames = 18,
             HitStunFrames = 20,
             BlockStunFrames = 8,
             Damage = 10,
@@ -3478,7 +3478,7 @@ namespace shared {
             HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            CancellableStFrame = 12,
+            CancellableStFrame = 8,
             CancellableEdFrame = 19,
             SpeciesId = 2,
             ExplosionSpeciesId = 2,

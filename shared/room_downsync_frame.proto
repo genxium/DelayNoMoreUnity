@@ -929,6 +929,11 @@ message Inventory {
     repeated InventorySlot slots = 1;
 }
 
+message BattleEquipment {
+    // Unlike "InventorySlot", "BattleEquipment" has no varying state during a battle
+    uint32 speciesId = 1;
+}
+
 message PlayerSettings {
     int32 soundVolume = 1;
 }
@@ -1125,6 +1130,8 @@ message TriggerConfigFromTiled {
 
     int32 forceCtrlRdfCount = 18;
     uint64 forceCtrlCmd = 19;
+
+    bool reloadCollidersInNewPhase = 20; // When set to "true", will (a.) remove all NPCs activated before current rdfId (b.) remove all traps/pickables/barriers whose collision boxes not fully contained in this trigger's box
 
     int32 storyPointId = 1024;
     int32 bgmId = 1025;
