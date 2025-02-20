@@ -69,7 +69,7 @@ namespace shared {
 
             Collider? bCollider;
             CharacterDownsync? v3;
-            findHorizontallyClosestCharacterCollider(src, visionCollider, collision, ref overlapResult, out bCollider, out v3);
+            findHorizontallyClosestCharacterCollider(src, visionCollider, collision, ref overlapResult, out bCollider, out v3, logger);
 
             if (null != bCollider && null != v3) {
                 dst.TargetCharacterJoinIndex = v3.JoinIndex;
@@ -670,7 +670,7 @@ namespace shared {
                     var defenderShape = bCollider.Shape;
 
                     // [WARNING] Because bullets and traps are potentially rotary, if not both "aShape" and "bShape" are rectilinear we have to check axes of both to determine whether they overlapped!
-                    var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, false, false, ref overlapResult);
+                    var (overlapped, _, _) = calcPushbacks(0, 0, bulletShape, defenderShape, false, false, ref overlapResult, logger);
                     bool mutualContains = (overlapResult.AContainedInB || overlapResult.BContainedInA);
                     if (!overlapped && !mutualContains) continue;
 

@@ -2986,7 +2986,7 @@ namespace shared {
         };
 
         public static BulletConfig StoneRollHit2 = new BulletConfig {
-            StartupFrames = 340,
+            StartupFrames = StoneRollHit1.StartupFrames+StoneRollHit1.ActiveFrames,
             ActiveFrames = 1,
             SelfLockVelX = 0,
             SelfLockVelY = 0,

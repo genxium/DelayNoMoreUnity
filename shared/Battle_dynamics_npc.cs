@@ -838,7 +838,7 @@ namespace shared {
                     Collider? pCollider;
                     PatrolCue? ptrlCue;
                     decodedInputHolder.Reset();
-                    findHorizontallyClosestPatrolCueCollider(currCharacterDownsync, aCollider, collision, ref overlapResult, out pCollider, out ptrlCue); 
+                    findHorizontallyClosestPatrolCueCollider(currCharacterDownsync, aCollider, collision, ref overlapResult, out pCollider, out ptrlCue, logger);
 
                     if (null != pCollider && null != ptrlCue) {
                         // By now we're sure that it should react to the PatrolCue

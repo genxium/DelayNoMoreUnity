@@ -6,54 +6,61 @@ using shared;
 public class ReadyGo : MonoBehaviour {
     public TMP_Text ready;
     public TMP_Text go;
+
+    private Sequence readyBoundSequence;
+    private Sequence goBoundSequence;
+
     public TMP_Text countdownSeconds;
     public TMP_Text countdownTicks;
 
     private int phase = 0;
 
-    // Start is called before the first frame update
-    void Start() {
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     public void hideReady() {
+        if (null != readyBoundSequence && readyBoundSequence.IsPlaying()) {
+             readyBoundSequence.Kill();
+        }
         ready.gameObject.transform.localScale = Vector3.zero;
     }
 
     public void hideGo() {
+        if (null != goBoundSequence && goBoundSequence.IsPlaying()) {
+            goBoundSequence.Kill();
+        }
         go.gameObject.transform.localScale = Vector3.zero;
     }
 
     public void playReadyAnim(TweenCallback onStart, TweenCallback onComplete) {
         if (0 < phase) return;
-        var sequence = DOTween.Sequence();
-        sequence.Append(ready.gameObject.transform.DOScale(2.5f * Vector3.one, 0.7f));
-        sequence.AppendInterval(0.4f);
+        if (null != readyBoundSequence && readyBoundSequence.IsPlaying()) {
+            readyBoundSequence.Kill();
+        }
+        readyBoundSequence = DOTween.Sequence();
+        readyBoundSequence.Append(ready.gameObject.transform.DOScale(2.5f * Vector3.one, 0.7f));
+        readyBoundSequence.AppendInterval(0.4f);
         if (null != onStart) {
-            sequence.OnStart(onStart);
+            readyBoundSequence.OnStart(onStart);
         }
         if (null != onComplete) {
-            sequence.OnComplete(onComplete);
+            readyBoundSequence.OnComplete(onComplete);
         }
-        sequence.Play();
+        readyBoundSequence.Play();
         phase = 1;
     }
 
     public void playGoAnim() {
         hideReady();
         if (1 < phase) return;
-        var sequence = DOTween.Sequence();
-        sequence.Append(go.gameObject.transform.DOScale(2.0f * Vector3.one, 0.5f));
-        sequence.Append(go.gameObject.transform.DOScale(0.01f * Vector3.one, 0.1f));
-        sequence.onComplete = () => {
+        if (goBoundSequence != null && goBoundSequence.IsPlaying()) {
+            goBoundSequence.Kill();
+        }
+        goBoundSequence = DOTween.Sequence();
+        goBoundSequence.Append(go.gameObject.transform.DOScale(2.0f * Vector3.one, 0.5f));
+        goBoundSequence.Append(go.gameObject.transform.DOScale(0.01f * Vector3.one, 0.1f));
+        goBoundSequence.onComplete = () => {
             if (null == go) return;
             hideGo();
         };
-        sequence.Play();
+        goBoundSequence.Play();
         phase = 2;
     }
 

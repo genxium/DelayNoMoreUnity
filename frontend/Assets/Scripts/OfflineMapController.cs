@@ -160,6 +160,9 @@ public class OfflineMapController : AbstractMapController {
             } else if (7 == initSeqNo) {
                 enableBattleInput(true);
                 readyGoPanel.playGoAnim();
+                if (null != toast) {
+                    toast.showAdvice("Defeat all enemies");
+                }
                 bgmSource.Play();
                 initSeqNo++;
             }

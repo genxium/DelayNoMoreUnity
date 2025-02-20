@@ -41,13 +41,13 @@ namespace shared {
             }
         }
 
-        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool prefersAOnBShapeTopEdges, bool isForCharacterPushback, ref SatResult overlapResult) {
+        public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool prefersAOnBShapeTopEdges, bool isForCharacterPushback, ref SatResult overlapResult, ILoggerBridge logger, bool forceLogging = false) {
             float origX = a.X, origY = a.Y;
             try {
                 a.SetPosition(origX + oldDx, origY + oldDy);
                 overlapResult.resetForPushbackCalc();
 
-                bool overlapped = isPolygonPairOverlapped(a, b, prefersAOnBShapeTopEdges, isForCharacterPushback, ref overlapResult);
+                bool overlapped = isPolygonPairOverlapped(a, b, prefersAOnBShapeTopEdges, isForCharacterPushback, ref overlapResult, logger, forceLogging);
                 if (true == overlapped) {
                     float pushbackX = overlapResult.OverlapMag * overlapResult.OverlapX;
                     float pushbackY = overlapResult.OverlapMag * overlapResult.OverlapY;
@@ -176,11 +176,17 @@ namespace shared {
                     residueCollided.Put(bCollider);
                     continue;
                 }
-
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult);
+
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult, logger);
 
                 if (!overlapped) {
+                    /*
+                    if (0 < overlapResult.OverlapMag && isBarrier && !onTrap && 1 == currCharacterDownsync.JoinIndex && !currCharacterDownsync.InAir && currCharacterDownsync.OnSlope && 0 > currCharacterDownsync.VelX && bShape.GetPointByOffset(1).X != bShape.GetPointByOffset(2).X) {
+                        logger.LogInfo(String.Format("NOTOVERLAP: rdfId={0}, collided with non-trap barrier {1}, now reconstructing the trace", currRenderFrame.Id, bShape.ToString(false), overlapResult.ToString(), currCharacterDownsync.VelX, currCharacterDownsync.VelY));
+                        (_, _, _) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult, logger, true);
+                    }
+                    */
                     continue;
                 }
 
@@ -445,7 +451,7 @@ namespace shared {
                     continue;
                 }
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, false, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, false, ref overlapResult, logger);
 
                 if (!overlapped) {
                     continue;
@@ -642,7 +648,7 @@ namespace shared {
                     continue;
                 }
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, false, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, true, false, ref overlapResult, logger);
 
                 if (!overlapped) {
                     continue;
@@ -732,7 +738,7 @@ namespace shared {
                     continue;
                 }
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, false, true, ref overlapResult);
+                var (overlapped, pushbackX, pushbackY) = calcPushbacks(0, 0, aShape, bShape, false, true, ref overlapResult, logger);
 
                 if (!overlapped) {
                     continue;
@@ -843,7 +849,7 @@ namespace shared {
 
         private static float TOO_FAR_FOR_PUSHBACK_MAGNITUDE = 64.0f; // Roughly the height of a character
 
-        public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, bool prefersAOnBShapeTopEdges, bool isForCharacterPushback, ref SatResult result) {
+        public static bool isPolygonPairOverlapped(ConvexPolygon a, ConvexPolygon b, bool prefersAOnBShapeTopEdges, bool isForCharacterPushback, ref SatResult result, ILoggerBridge logger, bool forceLogging = false) {
             int aCnt = a.Points.Cnt;
             int bCnt = b.Points.Cnt;
             // Single point case
@@ -874,7 +880,7 @@ namespace shared {
                     float invSqrtForAxis = InvSqrt32(dx * dx + dy * dy);
                     dx *= invSqrtForAxis;
                     dy *= invSqrtForAxis;
-                    if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
+                    if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result, logger, forceLogging)) {
                         return false;
                     }
                     if (result.OverlapMag < TOO_FAR_FOR_PUSHBACK_MAGNITUDE) {
@@ -910,7 +916,7 @@ namespace shared {
                     dy *= invSqrtForAxis;
                     
                     if (isForCharacterPushback || (onlyOnBShapeEdges && prefersAOnBShapeTopEdges)) {
-                        if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref tmpResultHolder)) {
+                        if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref tmpResultHolder, logger, forceLogging)) {
                             return false;
                         }
                         // Overlapped if only axis projection separation were required
@@ -920,7 +926,7 @@ namespace shared {
                         }
                     } else {
                         // Just regular usage -- always pick the last overlapping result 
-                        if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result)) {
+                        if (isPolygonPairSeparatedByDir(a, b, dx, dy, ref result, logger, forceLogging)) {
                             return false;
                         }
                         // Overlapped if only axis projection separation were required
@@ -947,7 +953,7 @@ namespace shared {
             return (isForCharacterPushback || (onlyOnBShapeEdges && prefersAOnBShapeTopEdges)) ? foundNonOverwhelmingOverlap : true;
         }
 
-        public static bool isPolygonPairSeparatedByDir(ConvexPolygon a, ConvexPolygon b, float axisX, float axisY, ref SatResult result) {
+        public static bool isPolygonPairSeparatedByDir(ConvexPolygon a, ConvexPolygon b, float axisX, float axisY, ref SatResult result, ILoggerBridge logger, bool forceLogging = false) {
             /*
 				[WARNING] This function is deliberately made private, it shouldn't be used alone (i.e. not along the norms of a polygon), otherwise the pushbacks calculated would be meaningless.
 
@@ -964,6 +970,9 @@ namespace shared {
 				e = (-2.98, 1.49).Unit()
 			*/
             roundToRectilinearDir(ref axisX, ref axisY);
+            if (forceLogging) {
+                logger.LogInfo(String.Format("Checking isPolygonPairSeparatedByDir for axis=({2}, {3}, aShape={0}, bShape={1})", a.ToString(false), b.ToString(false), axisX, axisY));
+            }
             float aStart = MAX_FLOAT32;
             float aEnd = -MAX_FLOAT32;
             float bStart = MAX_FLOAT32;
@@ -982,6 +991,9 @@ namespace shared {
                 if (aEnd < dot) {
                     aEnd = dot;
                 }
+                if (forceLogging) {
+                    logger.LogInfo(String.Format("\tchecking isPolygonPairSeparatedByDir for aShape.p=({0}, {1}), dot={2}, updated aStart={3}, aEnd={4}", (p.X+a.X), (p.Y + a.Y), dot, aStart, aEnd));
+                }
             }
 
             for (int i = 0; i < b.Points.Cnt; i++) {
@@ -998,12 +1010,18 @@ namespace shared {
                 if (bEnd < dot) {
                     bEnd = dot;
                 }
+                if (forceLogging) {
+                    logger.LogInfo(String.Format("\tchecking isPolygonPairSeparatedByDir for bShape.p=({0}, {1}), dot={2}, updated bStart={3}, bEnd={4}", (p.X + b.X), (p.Y + b.Y), dot, bStart, bEnd));
+                }
             }
 
             if (aStart > bEnd || aEnd < bStart) {
                 // Separated by unit vector (axisX, axisY)
                 result.AContainedInB = false;
                 result.BContainedInA = false;
+                if (forceLogging) {
+                    logger.LogInfo(String.Format("Returning isPolygonPairSeparatedByDir aStart={0}, aEnd={1}, bStart={2}, bEnd={3}", aStart, aEnd, bStart, bEnd));
+                }
                 return true;
             }
 
@@ -1297,7 +1315,7 @@ namespace shared {
                     if (Dimmed == v3.CharacterState || invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
 
                     ConvexPolygon bShape = bCollider.Shape;
-                    var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
+                    var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
                     if (!overlapped && !overlapResult.BContainedInA) {
                         continue;
                     }
@@ -1359,7 +1377,7 @@ namespace shared {
                     }
 
                     ConvexPolygon bShape = bCollider.Shape;
-                    var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
+                    var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
                     if (!overlapped && !overlapResult.BContainedInA) {
                         continue;
                     }
@@ -1383,7 +1401,7 @@ namespace shared {
             }
         }
 
-        private static void findHorizontallyClosestCharacterCollider(Bullet blWithVision, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res2) {
+        private static void findHorizontallyClosestCharacterCollider(Bullet blWithVision, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res2, ILoggerBridge logger) {
             res1 = null;
             res2 = null;
 
@@ -1434,7 +1452,7 @@ namespace shared {
                 }
 
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
+                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
                 if (!overlapped) {
                     continue;
                 }
@@ -1459,7 +1477,7 @@ namespace shared {
             }
         }
 
-        private static void findHorizontallyClosestPatrolCueCollider(CharacterDownsync currCharacterDownsync, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out PatrolCue? res2) {
+        private static void findHorizontallyClosestPatrolCueCollider(CharacterDownsync currCharacterDownsync, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out PatrolCue? res2, ILoggerBridge logger) {
             res1 = null;
             res2 = null;
 
@@ -1484,7 +1502,7 @@ namespace shared {
                 }
 
                 ConvexPolygon bShape = bCollider.Shape;
-                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
+                var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
                 if (!overlapped) {
                     continue;
                 }

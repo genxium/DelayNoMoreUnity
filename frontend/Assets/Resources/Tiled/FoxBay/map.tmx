@@ -325,7 +325,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="476" name="SlippperySide1" x="400" y="0" width="80" height="1024">
+  <object id="476" name="SlippperySide1" x="336" y="16" width="80" height="1024">
    <properties>
     <property name="collisionTypeMask" value="5"/>
     <property name="prohibitsWallGrabbing" value="1"/>
@@ -489,8 +489,8 @@
   <properties>
    <property name="type" value="barrier_and_shelter"/>
   </properties>
-  <object id="474" name="SlopeL" x="417.612" y="800">
-   <polyline points="-81.6124,80 206.388,80 47.6279,0 -81.6124,0"/>
+  <object id="474" name="SlopeL" x="417" y="800">
+   <polyline points="-81.6124,80 206.388,80 47,0 -81.6124,0"/>
   </object>
   <object id="475" name="Ground" x="368" y="864" width="288" height="160">
    <properties>
@@ -606,7 +606,7 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="510" name="Floor12FlyingCueL" x="384" y="0" width="96" height="1024">
+  <object id="510" name="Floor12FlyingCueL" x="320" y="0" width="96" height="1024">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="3"/>

@@ -1,8 +1,9 @@
 # Latest tag change notes
-v2.2.3
+v2.2.4
 - Added basic cutscene support for StoryMode.
 - Added slide-dodge (at critical timing) and defence-dodge (cost 1 slot-C).
 - Added beam emitting trap.
+- Added toast UI component.
 
 Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://m.youtube.com/watch?v=KOWm4zlZJZ0&t=6s&pp=2AEGkAIB)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
 

@@ -71,6 +71,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected GameObject errStackLogPanelObj;
     protected GameObject underlyingMap;
     public Canvas canvas;
+    public Toast toast;
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
@@ -132,7 +133,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<int, DebugLine> cachedLineRenderers;
     protected Dictionary<uint, GameObject> npcSpeciesPrefabDict;
     protected Dictionary<uint, KvPriorityQueue<int, CharacterAnimController>> cachedNpcs;
-    protected HashSet<int> usedNpcNodes;
+    protected HashSet<(int, uint)> usedNpcNodes;
     protected KvPriorityQueue<int, TeamRibbon> cachedTeamRibbons;
     protected KvPriorityQueue<int, InplaceHpBar> cachedHpBars;
     protected KvPriorityQueue<int, KeyChPointer> cachedKeyChPointers;
@@ -716,7 +717,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             npcAnimHolder.updateCharacterAnim(currNpcDownsync, currNpcDownsync.CharacterState, prevNpcDownsync, false, chConfig);
             npcAnimHolder.score = rdf.Id;
-            usedNpcNodes.Add(currNpcDownsync.Id);
+            usedNpcNodes.Add((currNpcDownsync.Id, currNpcDownsync.SpeciesId));
             bool hasColorSwapByTeam = false;
             var spr = npcGameObj.GetComponent<SpriteRenderer>();
             var material = spr.material;
@@ -761,7 +762,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             for (int i = speciesKvPq.vals.StFrameId; i < speciesKvPq.vals.EdFrameId; i++) {
                 var (res, npcAnimHolder) = speciesKvPq.vals.GetByFrameId(i);
                 if (!res || null == npcAnimHolder) throw new ArgumentNullException(String.Format("There's no npcAnimHolder for i={0}, while StFrameId={1}, EdFrameId={2}", i, speciesKvPq.vals.StFrameId, speciesKvPq.vals.EdFrameId));
-                if (usedNpcNodes.Contains(npcAnimHolder.GetNpcId())) {
+                if (usedNpcNodes.Contains((npcAnimHolder.GetNpcId(), npcAnimHolder.GetSpeciesId()))) {
                     continue;
                 }
                 newPosHolder.Set(effectivelyInfinitelyFar, effectivelyInfinitelyFar, npcAnimHolder.gameObject.transform.position.z);
@@ -1187,7 +1188,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcPreallocCapDictVal[speciesId] = speciesCapacity;
         }
         npcSpeciesPrefabDict = new Dictionary<uint, GameObject>();
-        usedNpcNodes = new HashSet<int>();
+        usedNpcNodes = new HashSet<(int, uint)>();
         cachedNpcs = new Dictionary<uint, KvPriorityQueue<int, CharacterAnimController>>();
         foreach (var kvPair in npcPreallocCapDictVal) {
             uint speciesId = kvPair.Key;

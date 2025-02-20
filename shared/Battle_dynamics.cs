@@ -1117,6 +1117,263 @@ namespace shared {
             }
         }
 
+        private static void _handleSingleChResidualPushbacks(RoomDownsyncFrame currRenderFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, int roomCapacity, Collider aCollider, ConvexPolygon aShape, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, Vector[] hardPushbackNormsOfSingleCh, int hardPushbackCnt, int primaryHardOverlapIndex, bool repelSoftPushback, Vector[] softPushbacks, ref int softPushbacksCnt, ref int primarySoftOverlapIndex, ref float primarySoftPushbackX, ref float primarySoftPushbackY, bool softPushbackEnabled, FrameRingBuffer<Collider> residueCollided, ref int bulletLocalIdCounter, ref int bulletCnt, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector effPushback, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ref float normAlignmentWithGravity, ref bool landedOnGravityPushback, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) {
+            if (Dying == currCharacterDownsync.CharacterState) return;
+            bool shouldOmitSoftPushbackForSelf = (repelSoftPushback || chOmittingSoftPushback(currCharacterDownsync));
+            int totOtherChCnt = 0, cellOverlappedOtherChCnt = 0, shapeOverlappedOtherChCnt = 0;
+            int origResidueCollidedSt = residueCollided.StFrameId, origResidueCollidedEd = residueCollided.EdFrameId; 
+            float primarySoftOverlapMagSquared = float.MinValue; 
+            /*
+               if (1 == currCharacterDownsync.JoinIndex) {
+               logger.LogInfo(String.Format("Has {0} residueCollided with chState={3}, vy={4}: hardPushbackNormsOfSingleCh={1}, effPushback={2}, primaryOverlapResult={5}", residueCollided.Cnt, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+               }
+             */
+            while (true) {
+                var (ok3, bCollider) = residueCollided.Pop();
+                if (false == ok3 || null == bCollider) {
+                    break;
+                }
+                ConvexPolygon bShape = bCollider.Shape;
+                var v4 = bCollider.Data as Pickable;
+                if (null != v4 && currCharacterDownsync.JoinIndex <= roomCapacity) {
+                    if ((TERMINATING_CONSUMABLE_SPECIES_ID != v4.ConfigFromTiled.ConsumableSpeciesId || NO_SKILL != v4.ConfigFromTiled.SkillId) && PickableState.Pidle == v4.PkState && 0 < v4.RemainingLifetimeRdfCount && DEFAULT_PICKABLE_NONPICKABLE_STARTUP_FRAMES < v4.FramesInPkState) {
+                        if (PickupType.Immediate == v4.ConfigFromTiled.PickupType) {
+                            var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            if (clicked) {
+                                uint effConsumableId = v4.ConfigFromTiled.ConsumableSpeciesId;
+                                if (pickableConsumableIdMapper.ContainsKey(v4.ConfigFromTiled.ConsumableSpeciesId) && pickableConsumableIdMapper[v4.ConfigFromTiled.ConsumableSpeciesId].ContainsKey(currCharacterDownsync.SpeciesId)) {
+                                    effConsumableId = pickableConsumableIdMapper[v4.ConfigFromTiled.ConsumableSpeciesId][currCharacterDownsync.SpeciesId];
+                                }
+                                var consumableConfig = consumableConfigs[effConsumableId];
+                                if (HpRefillSmall.SpeciesId == effConsumableId || HpRefillMiddle.SpeciesId == effConsumableId) {  
+                                    thatCharacterInNextFrame.Hp += consumableConfig.RefillDelta;
+                                    if (thatCharacterInNextFrame.Hp > chConfig.Hp) {
+                                        thatCharacterInNextFrame.Hp = chConfig.Hp;
+                                    }
+                                } else if (MpRefillSmall.SpeciesId == effConsumableId || MpRefillMiddle.SpeciesId == effConsumableId) {
+                                    thatCharacterInNextFrame.Mp += consumableConfig.RefillDelta;
+                                    if (thatCharacterInNextFrame.Mp > chConfig.Mp) {
+                                        thatCharacterInNextFrame.Mp = chConfig.Mp;
+                                    }
+                                }
+                                v4.PkState = PickableState.Pconsumed;
+                                v4.FramesInPkState = 0;
+                                v4.RemainingLifetimeRdfCount = DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES; // [WARNING] Prohibit concurrent pick-up, the character with smaller join index will win in case of a tie.
+                                v4.PickedByJoinIndex = currCharacterDownsync.JoinIndex;
+                            }
+                        } else if (PickupType.PutIntoInventory == v4.ConfigFromTiled.PickupType && null != chConfig.InitInventorySlots && 0 < chConfig.InitInventorySlots.Count) {
+                            var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            if (clicked) {
+                                if (NO_SKILL != v4.ConfigFromTiled.SkillId) {
+                                    if (2 <= chConfig.InitInventorySlots.Count && InventorySlotStockType.PocketIv == chConfig.InitInventorySlots[1].StockType) {
+                                        uint newQuota = v4.ConfigFromTiled.StockQuotaPerOccurrence;
+                                        uint effSkillId = pickableSkillIdMapper[v4.ConfigFromTiled.SkillId][currCharacterDownsync.SpeciesId];
+                                        uint effSkillIdAir = pickableSkillIdAirMapper[v4.ConfigFromTiled.SkillId][currCharacterDownsync.SpeciesId];
+                                        var existingIvSlot = currCharacterDownsync.Inventory.Slots[1];
+                                        if (InventorySlotStockType.QuotaIv == existingIvSlot.StockType && existingIvSlot.SkillId == effSkillId) {
+                                            newQuota += existingIvSlot.Quota;
+                                        }
+                                        // Currently only skill would be configured for "PickupType.PutIntoInventory", and only "InventorySlotStockType.QuotaIv" is supported.  
+                                        AssignToInventorySlot(InventorySlotStockType.QuotaIv, newQuota, 0, newQuota, 0, TERMINATING_BUFF_SPECIES_ID, effSkillId, effSkillIdAir, existingIvSlot.GaugeCharged, existingIvSlot.GaugeRequired, existingIvSlot.FullChargeSkillId, existingIvSlot.FullChargeBuffSpeciesId, thatCharacterInNextFrame.Inventory.Slots[1]);
+                                    } else {
+                                        // 1 == chConfig.InitInventorySlots.Count
+                                        var existingIvSlot = currCharacterDownsync.Inventory.Slots[0];
+                                        if (InventorySlotStockType.TimedMagazineIv == existingIvSlot.StockType) {
+                                            thatCharacterInNextFrame.Inventory.Slots[0].FramesToRecover = 1;
+                                        } else if (InventorySlotStockType.GaugedMagazineIv == existingIvSlot.StockType) {
+                                            accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT*50, null, thatCharacterInNextFrame);
+                                        }
+                                    }
+                                }
+                                v4.PkState = PickableState.Pconsumed;
+                                v4.FramesInPkState = 0;
+                                v4.RemainingLifetimeRdfCount = DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES; // [WARNING] Prohibit concurrent pick-up, the character with smaller join index will win in case of a tie.
+                                v4.PickedByJoinIndex = currCharacterDownsync.JoinIndex;
+                            }
+                        }
+                    }
+                    continue;
+                }
+                var v3 = bCollider.Data as TriggerColliderAttr;  
+                if (null != v3) {
+                    var atkedTrigger = currRenderFrame.TriggersArr[v3.TriggerLocalId-1];
+                    var triggerConfigFromTiled = triggerEditorIdToTiledConfig[atkedTrigger.EditorId];
+                    if (!isTriggerClickableByMovement(atkedTrigger, triggerConfigFromTiled, currCharacterDownsync, roomCapacity)) continue;
+                    var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                    if (clicked) {
+                        // Currently only allowing "Player" to click.
+                        var atkedTriggerInNextFrame = nextRenderFrameTriggers[v3.TriggerLocalId-1];
+                        atkedTriggerInNextFrame.FulfilledEvtMask = atkedTriggerInNextFrame.DemandedEvtMask; // then fired in "_calcTriggerReactions"
+                        atkedTriggerInNextFrame.OffenderJoinIndex = currCharacterDownsync.JoinIndex;
+                        atkedTriggerInNextFrame.OffenderBulletTeamId = currCharacterDownsync.BulletTeamId;
+                    }
+                    continue;
+                }
+                var v2 = bCollider.Data as TrapColliderAttr;
+                if (null != v2) {
+                    if (Jumper1.SpeciesId == v2.SpeciesId) {
+                        float characterBottom = aCollider.Y;
+                        float trapTop = bCollider.Y + bCollider.H;
+                        float trapBottom = bCollider.Y;
+                        bool isValidIntersection = (!isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig) && !isInJumpStartup(currCharacterDownsync, chConfig) && !isInJumpStartup(thatCharacterInNextFrame, chConfig)  && currCharacterDownsync.InAir && 0 > currCharacterDownsync.VelY && characterBottom > trapBottom && characterBottom < trapTop);
+                        var trapNextFrame = nextRenderFrameTraps[v2.TrapLocalId-1];
+                        var effFramesToRecover = (JumperImpact1.StartupFrames+JumperImpact1.ActiveFrames);
+                        bool isValidTrapState = (TrapState.Tidle == trapNextFrame.TrapState || (effFramesToRecover < trapNextFrame.FramesInTrapState));
+                        if (isValidIntersection && isValidTrapState) {
+                            var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            if (clicked || overlapResult.AContainedInB || overlapResult.BContainedInA) {
+                                if (addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapNextFrame, JumperImpact1, JumperImpact1Skill, trapNextFrame.DirX, trapNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
+                                    trapNextFrame.TrapState = TrapState.Tdeactivated;
+                                    trapNextFrame.FramesInTrapState = 0;
+                                }
+                            }
+                        }
+                    } else if (v2.ProvidesEscape && currCharacterDownsync.JoinIndex <= roomCapacity) {
+                        var (escaped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                        // Currently only allowing "Player" to win.
+                        if (escaped) {
+                            if (1 == roomCapacity) {
+                                confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
+                                confirmedBattleResult.WinnerBulletTeamId = currCharacterDownsync.BulletTeamId;
+                                continue;
+                            } 
+                            var (rdfAllConfirmed, delayedInputFrameId) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity); 
+                            if (rdfAllConfirmed) {
+                                confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
+                                confirmedBattleResult.WinnerBulletTeamId = currCharacterDownsync.BulletTeamId;
+                                continue;
+                            } else {
+                                // [WARNING] This cached information could be created by a CORRECTLY PREDICTED "delayedInputFrameDownsync", thus we need a rollback from there on to finally consolidate the result later!
+                                unconfirmedBattleResults[delayedInputFrameId] = confirmedBattleResult; // The "value" here is actually not useful, it's just stuffed here for type-correctness :)
+                                continue;
+                            }
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+                var v1 = bCollider.Data as CharacterDownsync;
+                if (null == v1) {
+                    continue;
+                } 
+                if (softPushbackEnabled && !shouldOmitSoftPushbackForSelf) {
+                    ++totOtherChCnt;
+                    if (Dying == v1.CharacterState) {
+                        continue;
+                    }
+                    if (chOmittingSoftPushback(v1)) {
+                        continue;
+                    }
+
+                    if (currCharacterDownsync.ChCollisionTeamId == v1.ChCollisionTeamId) {
+                        continue;
+                    }
+
+                    cellOverlappedOtherChCnt++;
+
+                    var (overlapped, softPushbackX, softPushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult, logger);
+                    if (!overlapped) {
+                        continue;
+                    }
+
+                    // [WARNING] Due to yet unknown reason, the resultant order of "hardPushbackNormsOfSingleCh" could be random for different characters in the same battle (maybe due to rollback not recovering the existing StaticCollider-TouchingCell information which could've been swapped by "TouchingCell.unregister(...)", please generate FrameLog and see the PushbackFrameLog part for details), the following traversal processing MUST BE ORDER-INSENSITIVE for softPushbackX & softPushbackY!
+                    float softPushbackXReduction = 0f, softPushbackYReduction = 0f; 
+                    for (int k = 0; k < hardPushbackCnt; k++) {
+                        Vector hardPushbackNorm = hardPushbackNormsOfSingleCh[k];
+                        float projectedMagnitude = softPushbackX * hardPushbackNorm.X + softPushbackY * hardPushbackNorm.Y;
+                        if (0 > projectedMagnitude || (thatCharacterInNextFrame.OnSlope && k == primaryHardOverlapIndex)) {
+                            // [WARNING] We don't want a softPushback to push an on-slope character either "into" or "outof" the slope!
+                            softPushbackXReduction += projectedMagnitude * hardPushbackNorm.X; 
+                            softPushbackYReduction += projectedMagnitude * hardPushbackNorm.Y; 
+                        }
+                    }
+
+                    softPushbackX -= softPushbackXReduction;
+                    softPushbackY -= softPushbackYReduction;
+
+
+                    if (!currCharacterDownsync.InAir) {
+                        // [WARNING] An "InAir Character" shouldn't be able to push an "OnGround Character" horizontally -- reducing some unnecessary bouncing.
+                        softPushbackX = 0;
+                    }
+
+                    var magSquared = (softPushbackX * softPushbackX + softPushbackY * softPushbackY);
+
+                    if (magSquared < CLAMPABLE_COLLISION_SPACE_MAG_SQUARED) {
+                        /*
+                           [WARNING] 
+
+                           Clamp to zero if it does not contribute to at least 1 virtual grid step by rounding. 
+
+                           In field test, the backend (.net 7.0) and frontend (.net 2.1/4.0) might disagree on whether or not 2 colliders have overlapped by shape check (due to possibly different treatment of floating errors -- no direct evidence can be provided but from pushbackFrameLogs it's most suspicious), and if one party doesn't recognize any softPushback while the other does, the latter would proceed with "processPrimaryAndImpactEffPushback", resulting in different SNAP_INTO_CHARACTER_OVERLAP usage, thus different RoomDownsyncFrame!   
+
+                           Hereby we SKIP recognizing "effectively zero softPushbacks", yet a closed-loop control on frontend by "onRoomDownsyncFrame & useOthersForcedDownsyncRenderFrameDict" is required because such (suspicious) floating errors are too difficult to completely avoid.
+
+                           A similar clamping is used in "Battle_geometry.calcHardPushbacksNormsForCharacter" -- and there's an explanation for why this clamping magnitude is chosen.
+                         */
+                        continue;
+                    }
+
+                    normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
+                    if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
+                        /*
+                           if (                
+                           Atk1         == v1.CharacterState ||
+                           Atk2         == v1.CharacterState ||
+                           Atk3         == v1.CharacterState ||
+                           Atk4         == v1.CharacterState ||
+                           Atk5         == v1.CharacterState ||
+                           InAirAtk1    == v1.CharacterState || 
+                           WalkingAtk1  == v1.CharacterState ||
+                           WalkingAtk4  == v1.CharacterState ||
+                           OnWallAtk1   == v1.CharacterState 
+                           ) {
+                        // [WARNING] Prohibit landing on attacking characters.
+                        continue;
+                        } else {
+                        landedOnGravityPushback = true;
+                        }
+                         */
+                        if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
+                            // [WARNING] Flying character doesn't land on softPushbacks even if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithAntiGravity)!
+                            landedOnGravityPushback = true;
+                            if (0 < v1.FrictionVelY && thatCharacterInNextFrame.FrictionVelY < v1.FrictionVelY) {
+                                thatCharacterInNextFrame.FrictionVelY = v1.FrictionVelY;
+                            }
+                        }
+                    }
+
+                    shapeOverlappedOtherChCnt++;
+
+                    if (primarySoftOverlapMagSquared < magSquared) {
+                        primarySoftOverlapMagSquared = magSquared;
+                        primarySoftPushbackX = softPushbackX;
+                        primarySoftPushbackY = softPushbackY;
+                        primarySoftOverlapIndex = softPushbacksCnt;
+                    } else if ((softPushbackX < primarySoftPushbackX) || (softPushbackX == primarySoftPushbackX && softPushbackY < primarySoftPushbackY)) {
+                        primarySoftOverlapMagSquared = magSquared;
+                        primarySoftPushbackX = softPushbackX;
+                        primarySoftPushbackY = softPushbackY;
+                        primarySoftOverlapIndex = softPushbacksCnt;
+                    }
+
+                    // [WARNING] Don't skip here even if both "softPushbackX" and "softPushbackY" are zero, because we'd like to record them in "pushbackFrameLog"
+                    softPushbacks[softPushbacksCnt].X = softPushbackX;
+                    softPushbacks[softPushbacksCnt].Y = softPushbackY;
+                    softPushbacksCnt++;
+                }
+            }
+
+            if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
+                currPushbackFrameLog.setSoftPushbacksByJoinIndex(currCharacterDownsync.JoinIndex, primarySoftOverlapIndex, softPushbacks /* [WARNING] by now "softPushbacks" is not yet normalized */, softPushbacksCnt, totOtherChCnt, cellOverlappedOtherChCnt, shapeOverlappedOtherChCnt, origResidueCollidedSt, origResidueCollidedEd);
+            }
+            // logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushback.ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
+
+            processPrimaryAndImpactEffPushback(effPushback, softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP, true);
+
+            //logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushback.ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));                         
+        }
+
         private static void _calcCharacterMovementPushbacks(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, RepeatedField<Trap> nextRenderFrameTraps, ref int bulletLocalIdCounter, ref int bulletCnt, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, int iSt, int iEd, FrameRingBuffer<Collider> residueCollided, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, RdfPushbackFrameLog? currPushbackFrameLog, bool pushbackFrameLogEnabled, ILoggerBridge logger) { // Calc pushbacks for each player (after its movement) w/o bullets
             if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
                 currPushbackFrameLog.Reset();
@@ -1136,24 +1393,26 @@ namespace shared {
                 Trap? primaryTrap;
                 TrapColliderAttr? primaryTrapColliderAttr;
                 Bullet? primaryBlHardPushbackProvider;
-                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, chConfig, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsArr[i], collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, out primaryTrapColliderAttr, out primaryBlHardPushbackProvider, residueCollided, logger);
+                var hardPushbackNormsOfSingleCh = hardPushbackNormsArr[i];
+                var effPushback = effPushbacks[i];
+                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, chConfig, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsOfSingleCh, collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, out primaryTrapColliderAttr, out primaryBlHardPushbackProvider, residueCollided, logger);
 
                 if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
                     currPushbackFrameLog.ResetJoinIndex(currCharacterDownsync.JoinIndex);
                     currPushbackFrameLog.setTouchingCellsByJoinIndex(currCharacterDownsync.JoinIndex, aCollider);
-                    currPushbackFrameLog.setHardPushbacksByJoinIndex(currCharacterDownsync.JoinIndex, primaryHardOverlapIndex, hardPushbackNormsArr[i] /* [WARNING] by now "hardPushbackNormsArr[i]" is not yet normalized */, hardPushbackCnt);
+                    currPushbackFrameLog.setHardPushbacksByJoinIndex(currCharacterDownsync.JoinIndex, primaryHardOverlapIndex, hardPushbackNormsOfSingleCh /* [WARNING] by now "hardPushbackNormsOfSingleCh" is not yet normalized */, hardPushbackCnt);
                 }
 
                 if (0 < hardPushbackCnt) {
                     /*
                     if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("Rdf.Id={6}, before processing hardpushbacks with chState={3}, vx={7}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
+                       logger.LogInfo(String.Format("Rdf.Id={6}, before processing hardpushbacks with chState={3}, vx={7}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
                     }
                     */
-                    processPrimaryAndImpactEffPushback(effPushbacks[i], hardPushbackNormsArr[i], hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
+                    processPrimaryAndImpactEffPushback(effPushback, hardPushbackNormsOfSingleCh, hardPushbackCnt, primaryHardOverlapIndex, SNAP_INTO_PLATFORM_OVERLAP, false);
                     /*
                     if (2 <= hardPushbackCnt && 1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("Rdf.Id={6}, after processing hardpushbacks with chState={3}, vx={7}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
+                       logger.LogInfo(String.Format("Rdf.Id={6}, after processing hardpushbacks with chState={3}, vx={7}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), currRenderFrame.Id, currCharacterDownsync.VirtualGridX));
                     }
                     */
                 }
@@ -1249,7 +1508,7 @@ namespace shared {
                         }
                         /*
                            if (1 == currCharacterDownsync.JoinIndex) {
-                           logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                           logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
                            }
                          */
                     }
@@ -1262,7 +1521,7 @@ namespace shared {
                         }
                         /*
                            if (1 == currCharacterDownsync.JoinIndex) {
-                           logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
+                           logger.LogInfo(String.Format("Landed with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString()));
                            }
                          */
                     }
@@ -1276,267 +1535,14 @@ namespace shared {
                     }
                 }
     
-                bool shouldOmitSoftPushbackForSelf = (repelSoftPushback || chOmittingSoftPushback(currCharacterDownsync));
-                if (Dying != currCharacterDownsync.CharacterState) {
-                    int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
-                    int totOtherChCnt = 0, cellOverlappedOtherChCnt = 0, shapeOverlappedOtherChCnt = 0;
-                    int origResidueCollidedSt = residueCollided.StFrameId, origResidueCollidedEd = residueCollided.EdFrameId; 
-                    float primarySoftOverlapMagSquared = float.MinValue, primarySoftPushbackX = float.MinValue, primarySoftPushbackY = float.MinValue;
-                    /*
-                       if (1 == currCharacterDownsync.JoinIndex) {
-                       logger.LogInfo(String.Format("Has {6} residueCollided with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}, primaryOverlapResult={5}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, primaryOverlapResult.ToString(), residueCollided.Cnt));
-                       }
-                     */
-                    while (true) {
-                        var (ok3, bCollider) = residueCollided.Pop();
-                        if (false == ok3 || null == bCollider) {
-                            break;
-                        }
-                        ConvexPolygon bShape = bCollider.Shape;
-                        var v4 = bCollider.Data as Pickable;
-                        if (null != v4 && currCharacterDownsync.JoinIndex <= roomCapacity) {
-                            if ((TERMINATING_CONSUMABLE_SPECIES_ID != v4.ConfigFromTiled.ConsumableSpeciesId || NO_SKILL != v4.ConfigFromTiled.SkillId) && PickableState.Pidle == v4.PkState && 0 < v4.RemainingLifetimeRdfCount && DEFAULT_PICKABLE_NONPICKABLE_STARTUP_FRAMES < v4.FramesInPkState) {
-                                if (PickupType.Immediate == v4.ConfigFromTiled.PickupType) {
-                                    var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
-                                    if (clicked) {
-                                        uint effConsumableId = v4.ConfigFromTiled.ConsumableSpeciesId;
-                                        if (pickableConsumableIdMapper.ContainsKey(v4.ConfigFromTiled.ConsumableSpeciesId) && pickableConsumableIdMapper[v4.ConfigFromTiled.ConsumableSpeciesId].ContainsKey(currCharacterDownsync.SpeciesId)) {
-                                            effConsumableId = pickableConsumableIdMapper[v4.ConfigFromTiled.ConsumableSpeciesId][currCharacterDownsync.SpeciesId];
-                                        }
-                                        var consumableConfig = consumableConfigs[effConsumableId];
-                                        if (HpRefillSmall.SpeciesId == effConsumableId || HpRefillMiddle.SpeciesId == effConsumableId) {  
-                                            thatCharacterInNextFrame.Hp += consumableConfig.RefillDelta;
-                                            if (thatCharacterInNextFrame.Hp > chConfig.Hp) {
-                                                thatCharacterInNextFrame.Hp = chConfig.Hp;
-                                            }
-                                        } else if (MpRefillSmall.SpeciesId == effConsumableId || MpRefillMiddle.SpeciesId == effConsumableId) {
-                                            thatCharacterInNextFrame.Mp += consumableConfig.RefillDelta;
-                                            if (thatCharacterInNextFrame.Mp > chConfig.Mp) {
-                                                thatCharacterInNextFrame.Mp = chConfig.Mp;
-                                            }
-                                        }
-                                        v4.PkState = PickableState.Pconsumed;
-                                        v4.FramesInPkState = 0;
-                                        v4.RemainingLifetimeRdfCount = DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES; // [WARNING] Prohibit concurrent pick-up, the character with smaller join index will win in case of a tie.
-                                        v4.PickedByJoinIndex = currCharacterDownsync.JoinIndex;
-                                    }
-                                } else if (PickupType.PutIntoInventory == v4.ConfigFromTiled.PickupType && null != chConfig.InitInventorySlots && 0 < chConfig.InitInventorySlots.Count) {
-                                    var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
-                                    if (clicked) {
-                                        if (NO_SKILL != v4.ConfigFromTiled.SkillId) {
-                                            if (2 <= chConfig.InitInventorySlots.Count && InventorySlotStockType.PocketIv == chConfig.InitInventorySlots[1].StockType) {
-                                                uint newQuota = v4.ConfigFromTiled.StockQuotaPerOccurrence;
-                                                uint effSkillId = pickableSkillIdMapper[v4.ConfigFromTiled.SkillId][currCharacterDownsync.SpeciesId];
-                                                uint effSkillIdAir = pickableSkillIdAirMapper[v4.ConfigFromTiled.SkillId][currCharacterDownsync.SpeciesId];
-                                                var existingIvSlot = currCharacterDownsync.Inventory.Slots[1];
-                                                if (InventorySlotStockType.QuotaIv == existingIvSlot.StockType && existingIvSlot.SkillId == effSkillId) {
-                                                    newQuota += existingIvSlot.Quota;
-                                                }
-                                                // Currently only skill would be configured for "PickupType.PutIntoInventory", and only "InventorySlotStockType.QuotaIv" is supported.  
-                                                AssignToInventorySlot(InventorySlotStockType.QuotaIv, newQuota, 0, newQuota, 0, TERMINATING_BUFF_SPECIES_ID, effSkillId, effSkillIdAir, existingIvSlot.GaugeCharged, existingIvSlot.GaugeRequired, existingIvSlot.FullChargeSkillId, existingIvSlot.FullChargeBuffSpeciesId, thatCharacterInNextFrame.Inventory.Slots[1]);
-                                            } else {
-                                                // 1 == chConfig.InitInventorySlots.Count
-                                                var existingIvSlot = currCharacterDownsync.Inventory.Slots[0];
-                                                if (InventorySlotStockType.TimedMagazineIv == existingIvSlot.StockType) {
-                                                    thatCharacterInNextFrame.Inventory.Slots[0].FramesToRecover = 1;
-                                                } else if (InventorySlotStockType.GaugedMagazineIv == existingIvSlot.StockType) {
-                                                    accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT*50, null, thatCharacterInNextFrame);
-                                                }
-                                            }
-                                        }
-                                        v4.PkState = PickableState.Pconsumed;
-                                        v4.FramesInPkState = 0;
-                                        v4.RemainingLifetimeRdfCount = DEFAULT_PICKABLE_CONSUMED_ANIM_FRAMES; // [WARNING] Prohibit concurrent pick-up, the character with smaller join index will win in case of a tie.
-                                        v4.PickedByJoinIndex = currCharacterDownsync.JoinIndex;
-                                    }
-                                }
-                            }
-                            continue;
-                        }
-                        var v3 = bCollider.Data as TriggerColliderAttr;  
-                        if (null != v3) {
-                            var atkedTrigger = currRenderFrame.TriggersArr[v3.TriggerLocalId-1];
-                            var triggerConfigFromTiled = triggerEditorIdToTiledConfig[atkedTrigger.EditorId];
-                            if (!isTriggerClickableByMovement(atkedTrigger, triggerConfigFromTiled, currCharacterDownsync, roomCapacity)) continue;
-                            var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
-                            if (clicked) {
-                                // Currently only allowing "Player" to click.
-                                var atkedTriggerInNextFrame = nextRenderFrameTriggers[v3.TriggerLocalId-1];
-                                atkedTriggerInNextFrame.FulfilledEvtMask = atkedTriggerInNextFrame.DemandedEvtMask; // then fired in "_calcTriggerReactions"
-                                atkedTriggerInNextFrame.OffenderJoinIndex = currCharacterDownsync.JoinIndex;
-                                atkedTriggerInNextFrame.OffenderBulletTeamId = currCharacterDownsync.BulletTeamId;
-                            }
-                            continue;
-                        }
-                        var v2 = bCollider.Data as TrapColliderAttr;
-                        if (null != v2) {
-                            if (Jumper1.SpeciesId == v2.SpeciesId) {
-                                float characterBottom = aCollider.Y;
-                                float trapTop = bCollider.Y + bCollider.H;
-                                float trapBottom = bCollider.Y;
-                                bool isValidIntersection = (!isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig) && !isInJumpStartup(currCharacterDownsync, chConfig) && !isInJumpStartup(thatCharacterInNextFrame, chConfig)  && currCharacterDownsync.InAir && 0 > currCharacterDownsync.VelY && characterBottom > trapBottom && characterBottom < trapTop);
-                                var trapNextFrame = nextRenderFrameTraps[v2.TrapLocalId-1];
-                                var effFramesToRecover = (JumperImpact1.StartupFrames+JumperImpact1.ActiveFrames);
-                                bool isValidTrapState = (TrapState.Tidle == trapNextFrame.TrapState || (effFramesToRecover < trapNextFrame.FramesInTrapState));
-                                if (isValidIntersection && isValidTrapState) {
-                                    var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
-                                    if (clicked || overlapResult.AContainedInB || overlapResult.BContainedInA) {
-                                        if (addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapNextFrame, JumperImpact1, JumperImpact1Skill, trapNextFrame.DirX, trapNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
-                                            trapNextFrame.TrapState = TrapState.Tdeactivated;
-                                            trapNextFrame.FramesInTrapState = 0;
-                                        }
-                                    }
-                                }
-                            } else if (v2.ProvidesEscape && currCharacterDownsync.JoinIndex <= roomCapacity) {
-                                var (escaped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult);
-                                // Currently only allowing "Player" to win.
-                                if (escaped) {
-                                    if (1 == roomCapacity) {
-                                        confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
-                                        confirmedBattleResult.WinnerBulletTeamId = currCharacterDownsync.BulletTeamId;
-                                        continue;
-                                    } 
-                                    var (rdfAllConfirmed, delayedInputFrameId) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity); 
-                                    if (rdfAllConfirmed) {
-                                        confirmedBattleResult.WinnerJoinIndex = currCharacterDownsync.JoinIndex;
-                                        confirmedBattleResult.WinnerBulletTeamId = currCharacterDownsync.BulletTeamId;
-                                        continue;
-                                    } else {
-                                        // [WARNING] This cached information could be created by a CORRECTLY PREDICTED "delayedInputFrameDownsync", thus we need a rollback from there on to finally consolidate the result later!
-                                        unconfirmedBattleResults[delayedInputFrameId] = confirmedBattleResult; // The "value" here is actually not useful, it's just stuffed here for type-correctness :)
-                                        continue;
-                                    }
-                                }
-                            } else {
-                                continue;
-                            }
-                        }
-                        var v1 = bCollider.Data as CharacterDownsync;
-                        if (null == v1) {
-                            continue;
-                        } 
-                        if (softPushbackEnabled && !shouldOmitSoftPushbackForSelf) {
-                            ++totOtherChCnt;
-                            if (Dying == v1.CharacterState) {
-                                continue;
-                            }
-                            if (chOmittingSoftPushback(v1)) {
-                                continue;
-                            }
-
-                            if (currCharacterDownsync.ChCollisionTeamId == v1.ChCollisionTeamId) {
-                                continue;
-                            }
-
-                            cellOverlappedOtherChCnt++;
-
-                            var (overlapped, softPushbackX, softPushbackY) = calcPushbacks(0, 0, aShape, bShape, true, true, ref overlapResult);
-                            if (!overlapped) {
-                                continue;
-                            }
-
-                            // [WARNING] Due to yet unknown reason, the resultant order of "hardPushbackNormsArr[i]" could be random for different characters in the same battle (maybe due to rollback not recovering the existing StaticCollider-TouchingCell information which could've been swapped by "TouchingCell.unregister(...)", please generate FrameLog and see the PushbackFrameLog part for details), the following traversal processing MUST BE ORDER-INSENSITIVE for softPushbackX & softPushbackY!
-                            float softPushbackXReduction = 0f, softPushbackYReduction = 0f; 
-                            for (int k = 0; k < hardPushbackCnt; k++) {
-                                Vector hardPushbackNorm = hardPushbackNormsArr[i][k];
-                                float projectedMagnitude = softPushbackX * hardPushbackNorm.X + softPushbackY * hardPushbackNorm.Y;
-                                if (0 > projectedMagnitude || (thatCharacterInNextFrame.OnSlope && k == primaryHardOverlapIndex)) {
-                                    // [WARNING] We don't want a softPushback to push an on-slope character either "into" or "outof" the slope!
-                                    softPushbackXReduction += projectedMagnitude * hardPushbackNorm.X; 
-                                    softPushbackYReduction += projectedMagnitude * hardPushbackNorm.Y; 
-                                }
-                            }
-
-                            softPushbackX -= softPushbackXReduction;
-                            softPushbackY -= softPushbackYReduction;
-
-                            
-                            if (!currCharacterDownsync.InAir) {
-                                // [WARNING] An "InAir Character" shouldn't be able to push an "OnGround Character" horizontally -- reducing some unnecessary bouncing.
-                                softPushbackX = 0;
-                            }
-
-                            var magSquared = (softPushbackX * softPushbackX + softPushbackY * softPushbackY);
-
-                            if (magSquared < CLAMPABLE_COLLISION_SPACE_MAG_SQUARED) {
-                                /*
-                                [WARNING] 
-
-                                Clamp to zero if it does not contribute to at least 1 virtual grid step by rounding. 
-
-                                In field test, the backend (.net 7.0) and frontend (.net 2.1/4.0) might disagree on whether or not 2 colliders have overlapped by shape check (due to possibly different treatment of floating errors -- no direct evidence can be provided but from pushbackFrameLogs it's most suspicious), and if one party doesn't recognize any softPushback while the other does, the latter would proceed with "processPrimaryAndImpactEffPushback", resulting in different SNAP_INTO_CHARACTER_OVERLAP usage, thus different RoomDownsyncFrame!   
-
-                                Hereby we SKIP recognizing "effectively zero softPushbacks", yet a closed-loop control on frontend by "onRoomDownsyncFrame & useOthersForcedDownsyncRenderFrameDict" is required because such (suspicious) floating errors are too difficult to completely avoid.
-
-                                A similar clamping is used in "Battle_geometry.calcHardPushbacksNormsForCharacter" -- and there's an explanation for why this clamping magnitude is chosen.
-                                */
-                                continue;
-                            }
-
-                            normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
-                            if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithGravity) {
-                                /*
-                                if (                
-                                    Atk1         == v1.CharacterState ||
-                                    Atk2         == v1.CharacterState ||
-                                    Atk3         == v1.CharacterState ||
-                                    Atk4         == v1.CharacterState ||
-                                    Atk5         == v1.CharacterState ||
-                                    InAirAtk1    == v1.CharacterState || 
-                                    WalkingAtk1  == v1.CharacterState ||
-                                    WalkingAtk4  == v1.CharacterState ||
-                                    OnWallAtk1   == v1.CharacterState 
-                                ) {
-                                    // [WARNING] Prohibit landing on attacking characters.
-                                    continue;
-                                } else {
-                                    landedOnGravityPushback = true;
-                                }
-                                */
-                                if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
-                                    // [WARNING] Flying character doesn't land on softPushbacks even if (SNAP_INTO_PLATFORM_THRESHOLD < normAlignmentWithAntiGravity)!
-                                    landedOnGravityPushback = true;
-                                    if (0 < v1.FrictionVelY && thatCharacterInNextFrame.FrictionVelY < v1.FrictionVelY) {
-                                        thatCharacterInNextFrame.FrictionVelY = v1.FrictionVelY;
-                                    }
-                                }
-                            }
-
-                            shapeOverlappedOtherChCnt++;
-
-                            if (primarySoftOverlapMagSquared < magSquared) {
-                                primarySoftOverlapMagSquared = magSquared;
-                                primarySoftPushbackX = softPushbackX;
-                                primarySoftPushbackY = softPushbackY;
-                                primarySoftOverlapIndex = softPushbacksCnt;
-                            } else if ((softPushbackX < primarySoftPushbackX) || (softPushbackX == primarySoftPushbackX && softPushbackY < primarySoftPushbackY)) {
-                                primarySoftOverlapMagSquared = magSquared;
-                                primarySoftPushbackX = softPushbackX;
-                                primarySoftPushbackY = softPushbackY;
-                                primarySoftOverlapIndex = softPushbacksCnt;
-                            }
-
-                            // [WARNING] Don't skip here even if both "softPushbackX" and "softPushbackY" are zero, because we'd like to record them in "pushbackFrameLog"
-                            softPushbacks[softPushbacksCnt].X = softPushbackX;
-                            softPushbacks[softPushbacksCnt].Y = softPushbackY;
-                            softPushbacksCnt++;
-                        }
-                    }
-
-                    if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
-                        currPushbackFrameLog.setSoftPushbacksByJoinIndex(currCharacterDownsync.JoinIndex, primarySoftOverlapIndex, softPushbacks /* [WARNING] by now "softPushbacks" is not yet normalized */, softPushbacksCnt, totOtherChCnt, cellOverlappedOtherChCnt, shapeOverlappedOtherChCnt, origResidueCollidedSt, origResidueCollidedEd);
-                    }
-                    // logger.LogInfo(String.Format("Before processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));
-
-                    processPrimaryAndImpactEffPushback(effPushbacks[i], softPushbacks, softPushbacksCnt, primarySoftOverlapIndex, SNAP_INTO_CHARACTER_OVERLAP, true);
-
-                    //logger.LogInfo(String.Format("After processing softPushbacks: effPushback={0}, softPushbacks={1}, primarySoftOverlapIndex={2}", effPushbacks[i].ToString(), Vector.VectorArrToString(softPushbacks, softPushbacksCnt), primarySoftOverlapIndex));                         
-                }
+                int softPushbacksCnt = 0, primarySoftOverlapIndex = -1;
+                float primarySoftPushbackX = float.MinValue, primarySoftPushbackY = float.MinValue;
+                _handleSingleChResidualPushbacks(currRenderFrame, inputBuffer, roomCapacity, aCollider, aShape, currCharacterDownsync, thatCharacterInNextFrame, chConfig, hardPushbackNormsOfSingleCh, hardPushbackCnt, primaryHardOverlapIndex, repelSoftPushback, softPushbacks, ref softPushbacksCnt, ref primarySoftOverlapIndex, ref primarySoftPushbackX, ref primarySoftPushbackY, softPushbackEnabled, residueCollided, ref bulletLocalIdCounter, ref bulletCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushback, nextRenderFrameBullets, nextRenderFrameTraps, nextRenderFrameTriggers, trapLocalIdToColliderAttrs, triggerEditorIdToTiledConfig, ref normAlignmentWithGravity, ref landedOnGravityPushback, unconfirmedBattleResults, ref confirmedBattleResult, currPushbackFrameLog, pushbackFrameLogEnabled, logger);
 
                 if (!landedOnGravityPushback && !currCharacterDownsync.InAir) {
                     /*
-                    if (SPECIES_SKELEARCHER == currCharacterDownsync.SpeciesId && 1 == currCharacterDownsync.Id) {
-                        logger.LogInfo(String.Format("Rdf.Id={0}, character vx={1},vy={2} slipped with aShape={3}: hardPushbackNormsArr[i:{4}]={5}, effPushback={6}, touchCells=\n{7}", currRenderFrame.Id, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, aShape.ToString(false), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), aCollider.TouchingCellsStaticColliderStr()));
+                    if (1 == currCharacterDownsync.JoinIndex) {
+                        logger.LogInfo(String.Format("Rdf.Id={0}, character vx={1},vy={2} slipped with aShape={3}: hardPushbackNormsOfSingleCh={4}, effPushback={5}, touchCells=\n{6}", currRenderFrame.Id, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, aShape.ToString(false), Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), aCollider.TouchingCellsStaticColliderStr()));
                     }
                     */
                     if (0 > thatCharacterInNextFrame.VelY) {
@@ -1605,11 +1611,11 @@ namespace shared {
                                 int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
                                 var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
                                 var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                                effPushbacks[i].Y -= halfColliderChDiff;
+                                effPushback.Y -= halfColliderChDiff;
                                     
                                 /*
                                 if (1 == currCharacterDownsync.JoinIndex) {
-                                    logger.LogInfo(String.Format("rdf.Id={0}, Fall stopped with chState={1}, virtualGridY={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, halfColliderChDiff={6}", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), halfColliderChDiff));
+                                    logger.LogInfo(String.Format("rdf.Id={0}, Fall stopped with chState={1}, virtualGridY={2}: hardPushbackNormsArr[i:{3}]={4}, effPushback={5}, halfColliderChDiff={6}", currRenderFrame.Id, currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), halfColliderChDiff));
                                 }
                                 */
                             }
@@ -1642,7 +1648,7 @@ namespace shared {
                                         int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
                                         var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.LayDownSizeY + extraSafeGapToPreventBouncing)) >> 1);
                                         var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                                        effPushbacks[i].Y -= halfColliderChDiff;
+                                        effPushback.Y -= halfColliderChDiff;
                                     }
                                 } else if (0 >= thatCharacterInNextFrame.VelY && !thatCharacterInNextFrame.OnSlope) {
                                     // [WARNING] Covers 2 situations:
@@ -1653,7 +1659,7 @@ namespace shared {
                             }
                             /*
                                if (1 == currCharacterDownsync.JoinIndex) {
-                               logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                               logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
                                }
                              */
                         }
@@ -1675,10 +1681,10 @@ namespace shared {
                                 int extraSafeGapToPreventBouncing = (chConfig.DefaultSizeY >> 2);
                                 var halfColliderVhDiff = ((chConfig.DefaultSizeY - (chConfig.ShrinkedSizeY + extraSafeGapToPreventBouncing)) >> 1);
                                 var (_, halfColliderChDiff) = VirtualGridToPolygonColliderCtr(0, halfColliderVhDiff);
-                                effPushbacks[i].Y -= halfColliderChDiff;
+                                effPushback.Y -= halfColliderChDiff;
                                 /*
                                 if (1 == currCharacterDownsync.JoinIndex) {
-                                    logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
+                                    logger.LogInfo(String.Format("Rdf.Id={6}, Fall stopped with chState={3}, vy={4}, halfColliderChDiff={5}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY, halfColliderChDiff, currRenderFrame.Id));
                                 }
                                 */
                             }
@@ -1693,7 +1699,7 @@ namespace shared {
                             }
                             /*
                                if (1 == currCharacterDownsync.JoinIndex) {
-                               logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt), effPushbacks[i].ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
+                               logger.LogInfo(String.Format("Landed without fallstopping with chState={3}, vy={4}: hardPushbackNormsArr[i:{0}]={1}, effPushback={2}", i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt), effPushback.ToString(), currCharacterDownsync.CharacterState, currCharacterDownsync.VirtualGridY));
                                }
                              */
                         }
@@ -1709,7 +1715,7 @@ namespace shared {
                     thatCharacterInNextFrame.OnWallNormY = 0;
                     /*
                     if (0 < thatCharacterInNextFrame.VelX && currCharacterDownsync.OnWall && 1 == currCharacterDownsync.JoinIndex) {
-                        logger.LogInfo(String.Format("Rdf.Id={0}, dropped from OnWall with currChState={1}, primaryOverlapResult={2}: hardPushbackNormsArr[i:{3}]={4}", currRenderFrame.Id, currCharacterDownsync.CharacterState, primaryOverlapResult.ToString(), i, Vector.VectorArrToString(hardPushbackNormsArr[i], hardPushbackCnt)));
+                        logger.LogInfo(String.Format("Rdf.Id={0}, dropped from OnWall with currChState={1}, primaryOverlapResult={2}: hardPushbackNormsArr[i:{3}]={4}", currRenderFrame.Id, currCharacterDownsync.CharacterState, primaryOverlapResult.ToString(), i, Vector.VectorArrToString(hardPushbackNormsOfSingleCh, hardPushbackCnt)));
                     }
                     */
                 } else if (chConfig.OnWallEnabled && (null == primaryTrapColliderAttr || (null != primaryTrapColliderAttr && !primaryTrapColliderAttr.ProhibitsWallGrabbing))) {
