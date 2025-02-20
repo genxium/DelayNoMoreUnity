@@ -205,9 +205,9 @@ namespace shared {
             bool slipJumpedOrNot = false;
             var jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt;
             if (chConfig.JumpHoldingToFly) {
-                jumpHoldingRdfCnt = (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.JumpHoldingRdfCnt ? JUMP_HOLDING_RDF_CNT_THRESHOLD_2 : 0);
+                jumpHoldingRdfCnt = ((!currCharacterDownsync.OmitGravity && JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.JumpHoldingRdfCnt) ? JUMP_HOLDING_RDF_CNT_THRESHOLD_2 : 0);
             } else {        
-                jumpHoldingRdfCnt = (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt ? JUMP_HOLDING_RDF_CNT_THRESHOLD_1 : 0);
+                jumpHoldingRdfCnt = ((!currCharacterDownsync.OmitGravity && JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt) ? JUMP_HOLDING_RDF_CNT_THRESHOLD_1 : 0);
             }
             int joinIndex = currCharacterDownsync.JoinIndex;
 
@@ -607,7 +607,9 @@ namespace shared {
         
                 if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 > currCharacterDownsync.JumpHoldingRdfCnt && JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= thatCharacterInNextFrame.JumpHoldingRdfCnt && !thatCharacterInNextFrame.OmitGravity && chConfig.JumpHoldingToFly) {
                     thatCharacterInNextFrame.OmitGravity = true;
-                    if (0 >= thatCharacterInNextFrame.VelY) {       
+                    thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+                    thatCharacterInNextFrame.FlyingRdfCountdown = chConfig.FlyingQuotaRdfCnt;
+                    if (0 >= thatCharacterInNextFrame.VelY) { 
                         thatCharacterInNextFrame.VelY = 0;
                     }
                 }
@@ -1076,6 +1078,7 @@ namespace shared {
                         if (currCharacterDownsync.OmitGravity && !chConfig.OmitGravity && chConfig.JumpHoldingToFly) {
                             thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
                             thatCharacterInNextFrame.OmitGravity = false;
+                            thatCharacterInNextFrame.FlyingRdfCountdown = 0;
                         }
                     } else {
                         thatCharacterInNextFrame.VelY = chConfig.JumpingInitVelY + jumpAssistFrictionVelY;
@@ -1083,6 +1086,9 @@ namespace shared {
                     }
 
                     resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
+                } else if (!chConfig.OmitGravity && chConfig.JumpHoldingToFly && currCharacterDownsync.OmitGravity && 0 >= currCharacterDownsync.FlyingRdfCountdown) {
+                    thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
+                    thatCharacterInNextFrame.OmitGravity = false;
                 }
 
                 if (i < roomCapacity && 0 >= thatCharacterInNextFrame.Hp && 0 == thatCharacterInNextFrame.FramesToRecover) {
@@ -1292,7 +1298,7 @@ namespace shared {
                     softPushbackY -= softPushbackYReduction;
 
 
-                    if (!currCharacterDownsync.InAir) {
+                    if (v1.InAir && !currCharacterDownsync.InAir) {
                         // [WARNING] An "InAir Character" shouldn't be able to push an "OnGround Character" horizontally -- reducing some unnecessary bouncing.
                         softPushbackX = 0;
                     }
@@ -2206,8 +2212,9 @@ namespace shared {
                     comboFramesRemained = 0;
                     comboHitCnt = 0;
                 } 
+                var flyingRdfCountdown = (MAX_INT == chConfig.FlyingQuotaRdfCnt ? MAX_INT : (0 < src.FlyingRdfCountdown ? src.FlyingRdfCountdown-1 : 0));
                 var dst = nextRenderFramePlayers[i];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, dst);
                 _resetVelocityOnRecovered(src, dst);
             }
 
@@ -2241,8 +2248,9 @@ namespace shared {
                     comboFramesRemained = 0;
                     comboHitCnt = 0;
                 }
+                var flyingRdfCountdown = (MAX_INT == chConfig.FlyingQuotaRdfCnt ? MAX_INT : (0 < src.FlyingRdfCountdown ? src.FlyingRdfCountdown-1 : 0));
                 var dst = nextRenderFrameNpcs[currNpcI];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, dst);
                 _resetVelocityOnRecovered(src, dst);
                 currNpcI++;
             }

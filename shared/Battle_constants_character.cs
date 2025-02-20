@@ -408,6 +408,7 @@ namespace shared {
                         TransformIntoFramesToRecover = 78,
                         TransformIntoFramesInvinsible = 79,
                         JumpHoldingToFly = true,
+                        FlyingQuotaRdfCnt = MAX_INT,
                         EleResistance = (ELE_FIRE | ELE_ICE),
                         UseIdle1AsFlyingIdle = true,
                         InitInventorySlots = new List<InventorySlot> {
@@ -1088,6 +1089,7 @@ namespace shared {
                         DefaultAirJumpQuota = 0,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
                         JumpHoldingToFly = true,
+                        FlyingQuotaRdfCnt = MAX_INT,
                         IsKeyCh = true,
                         Ifc = IfaceCat.Flesh,
                         EleResistance = (ELE_THUNDER),

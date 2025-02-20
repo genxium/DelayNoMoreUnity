@@ -120,6 +120,7 @@ namespace shared {
         public float Def1DamageYield;
         public bool Def1DefiesEleWeaknessPenetration;
         public bool Def1DefiesDebuff;
+        public int FlyingQuotaRdfCnt;
 
         public bool WalkingAutoDef1;
 

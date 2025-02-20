@@ -6,7 +6,7 @@ public class Toast : MonoBehaviour {
     public Image advice;
     public TMP_Text adviceText;
     private bool intendToHideAdvice = true;
-    private static float secondsInCycle = 0f, upwardCycleSeconds = 0.5f, keepCycleSeconds = 3.5f, downwardCycleSeconds = 1.5f;
+    private static float secondsInCycle = 0f, upwardCycleSeconds = 0.5f, keepCycleSeconds = 2.5f, downwardCycleSeconds = 2.5f;
     private static float keepCycleSecondsPrefix = upwardCycleSeconds+keepCycleSeconds, downwardCycleSecondsPrefix = upwardCycleSeconds+keepCycleSeconds+downwardCycleSeconds;
     private static float upwardCycleSecondsInv = 1f / upwardCycleSeconds, downwardCycleSecondsInv = 1f / downwardCycleSeconds;
     public void hideAdvice() {
@@ -59,6 +59,9 @@ public class Toast : MonoBehaviour {
         if (null == text) return;
         if (null == advice) return;
         if (null == adviceText) return;
+        if (false == intendToHideAdvice) {
+            return;
+        }
         Debug.Log("showAdvice: " + text);
         intendToHideAdvice = false;
         adviceText.text = text;

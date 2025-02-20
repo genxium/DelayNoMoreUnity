@@ -3232,7 +3232,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         material.SetFloat("_CrackOpacity", 0f);
 
         if (!isActiveBoss && currCharacterDownsync.JoinIndex != selfPlayerInfo.JoinIndex && CharacterState.Dying != currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesSinceLastDamaged) {
-            showInplaceHpBar(rdfId, currCharacterDownsync, wx, wy, halfBoxCh, inplaceHpBarZ, lookupKey);
+            showInplaceHpBar(rdfId, currCharacterDownsync, wx, wy, halfBoxCh, inplaceHpBarZ, lookupKey); 
+            if (null != toast && isOnlineMode && Battle.SPECIES_DARKBEAMTOWER == currCharacterDownsync.SpeciesId && currCharacterDownsync.BulletTeamId == selfPlayerInfo.BulletTeamId) {
+                toast.showAdvice("Main tower under attack!"); 
+            } 
         }
 
         if (null != currCharacterDownsync.DebuffList) {
