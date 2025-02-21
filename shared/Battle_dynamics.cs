@@ -1282,6 +1282,9 @@ namespace shared {
                         continue;
                     }
 
+                    softPushbackX *= .5f;
+                    softPushbackY *= .5f;
+
                     // [WARNING] Due to yet unknown reason, the resultant order of "hardPushbackNormsOfSingleCh" could be random for different characters in the same battle (maybe due to rollback not recovering the existing StaticCollider-TouchingCell information which could've been swapped by "TouchingCell.unregister(...)", please generate FrameLog and see the PushbackFrameLog part for details), the following traversal processing MUST BE ORDER-INSENSITIVE for softPushbackX & softPushbackY!
                     float softPushbackXReduction = 0f, softPushbackYReduction = 0f; 
                     for (int k = 0; k < hardPushbackCnt; k++) {
@@ -2118,6 +2121,15 @@ namespace shared {
                         var (effPushbackVx, effPushbackVy) = PolygonColliderCtrToVirtualGridPos(effPushbacks[i].X, effPushbacks[i].Y);
                         bulletNextFrame.VirtualGridX -= effPushbackVx;
                         bulletNextFrame.VirtualGridY -= effPushbackVy;
+                        if (0 < bulletNextFrame.DirX) {
+                            if (bulletNextFrame.VirtualGridX < bulletNextFrame.OriginatedVirtualGridX) {
+                                bulletNextFrame.VirtualGridX = bulletNextFrame.OriginatedVirtualGridX;
+                            }
+                        } else if (0 > bulletNextFrame.DirX) {
+                            if (bulletNextFrame.VirtualGridX > bulletNextFrame.OriginatedVirtualGridX) {
+                                bulletNextFrame.VirtualGridX = bulletNextFrame.OriginatedVirtualGridX;
+                            }
+                        }
                     }
                 }
             }

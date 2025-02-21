@@ -214,7 +214,7 @@ namespace shared {
         public static int DEFAULT_PREALLOC_NPC_CAPACITY = 24; // 1 serialized "CharacterDownsync" is around 112 bytes per experiment, (7465 - 7017)/(28-24) 
         public static int DEFAULT_PREALLOC_BULLET_CAPACITY = 48; // 1 serialized "Bullet" is around 18.5 bytes per experiment, (7465 - 7317)/(56 - 48)
         public static int DEFAULT_PREALLOC_TRAP_CAPACITY = 12;
-        public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 14;
+        public static int DEFAULT_PREALLOC_TRIGGER_CAPACITY = 15;
         public static int DEFAULT_PREALLOC_PICKABLE_CAPACITY = 32;
         public static int DEFAULT_PER_CHARACTER_BUFF_CAPACITY = 1;
         public static int DEFAULT_PER_CHARACTER_DEBUFF_CAPACITY = 1;

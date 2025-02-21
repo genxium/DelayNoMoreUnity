@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="775">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="785">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -74,6 +74,14 @@
   </object>
  </objectgroup>
  <objectgroup id="13" name="TriggerPos">
+  <object id="784" name="LaserAwaker" x="1136" y="240" width="288" height="128">
+   <properties>
+    <property name="id" value="14"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="15"/>
+   </properties>
+  </object>
   <object id="770" name="PickableDropper" x="1272" y="206">
    <properties>
     <property name="delayedFrames" value="300"/>
@@ -406,13 +414,6 @@
   </object>
   <object id="722" gid="1594" x="1152" y="256" width="47" height="12"/>
   <object id="723" gid="1593" x="1360" y="256" width="47" height="12"/>
-  <object id="756" gid="2" x="1240" y="176" width="64" height="32">
-   <properties>
-    <property name="dirX" value="0"/>
-    <property name="dirY" value="-2"/>
-    <property name="speed" value="7"/>
-   </properties>
-  </object>
   <object id="759" name="Membrane1" x="640" y="288" width="56" height="112">
    <properties>
     <property name="boundary_type" value="barrier"/>
@@ -449,6 +450,25 @@
     <property name="providesSlipJump" value="1"/>
     <property name="speciesId" value="1"/>
     <property name="static" value="1"/>
+   </properties>
+  </object>
+  <object id="781" gid="1597" x="1244" y="256" width="22" height="13">
+   <properties>
+    <property name="dirX" value="2"/>
+    <property name="subscribesToId" value="14"/>
+   </properties>
+  </object>
+  <object id="782" gid="1597" x="1304" y="256" width="22" height="13">
+   <properties>
+    <property name="dirX" value="2"/>
+    <property name="subscribesToId" value="14"/>
+   </properties>
+  </object>
+  <object id="783" gid="1" x="1244" y="176" width="64" height="16">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="dirY" value="0"/>
+    <property name="speed" value="7"/>
    </properties>
   </object>
  </objectgroup>
@@ -632,32 +652,6 @@
    </properties>
    <point/>
   </object>
-  <object id="748" name="ElevatorCue1" x="1224" y="112" width="96" height="32">
-   <properties>
-    <property name="collisionTypeMask" value="1024"/>
-    <property name="fdAct" value="2"/>
-    <property name="fdCaptureFrames" value="120"/>
-    <property name="flAct" value="2"/>
-    <property name="flCaptureFrames" value="120"/>
-    <property name="frAct" value="2"/>
-    <property name="frCaptureFrames" value="120"/>
-    <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="120"/>
-   </properties>
-  </object>
-  <object id="749" name="ElevatorCue2" x="1224" y="272" width="96" height="16">
-   <properties>
-    <property name="collisionTypeMask" value="1024"/>
-    <property name="fdAct" value="1"/>
-    <property name="fdCaptureFrames" value="120"/>
-    <property name="flAct" value="1"/>
-    <property name="flCaptureFrames" value="120"/>
-    <property name="frAct" value="1"/>
-    <property name="frCaptureFrames" value="120"/>
-    <property name="fuAct" value="1"/>
-    <property name="fuCaptureFrames" value="120"/>
-   </properties>
-  </object>
   <object id="757" name="Floor1Jumper2" x="1008" y="320">
    <properties>
     <property name="flAct" value="3"/>
@@ -709,6 +703,32 @@
     <property name="frCaptureFrames" value="0"/>
     <property name="fuAct" value="8"/>
     <property name="fuCaptureFrames" value="0"/>
+   </properties>
+  </object>
+  <object id="779" name="ElevatorCue1" x="1132" y="128" width="32" height="144">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="120"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="120"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="120"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="120"/>
+   </properties>
+  </object>
+  <object id="780" name="ElevatorCue2" x="1396" y="128" width="32" height="144">
+   <properties>
+    <property name="collisionTypeMask" value="1024"/>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="120"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="120"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="120"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="120"/>
    </properties>
   </object>
  </objectgroup>

@@ -65,6 +65,7 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
                 selectedSpeciesId = Battle.SPECIES_BLADEGIRL;
                 //selectedSpeciesId = Battle.SPECIES_HEAVYGUARD_RED;
                 //selectedSpeciesId = Battle.SPECIES_SKELEARCHER;
+                //selectedSpeciesId = Battle.SPECIES_RIDLEYDRAKE;
                 break;
             case 1:
                 selectedSpeciesId = Battle.SPECIES_WITCHGIRL;

@@ -1380,9 +1380,9 @@ namespace shared {
             SelfLockVelX = 0,
             SelfLockVelY = 0,
             SelfLockVelYWhenFlying = 0,
-            HitboxOffsetX = (int)(30f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetX = (int)(18f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(20*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             BeamVisualSizeY = (int)(22*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // [WARNING] DON'T hardcode in Unity "AnimationCilp.GetComponent<SpriteRenderer>().size" or it'd cause weird rendering!
             SpeciesId = 24,
