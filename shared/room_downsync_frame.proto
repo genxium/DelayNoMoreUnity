@@ -827,6 +827,14 @@ message DebuffConfig {
     int32 stock = 3;
     DebuffType type = 4;
     int32 arrIdx = 5;
+    int32 impactPerInterval = 6;
+    int32 impactInterval = 7;
+    int32 frictionVelX = 8;
+    int32 frictionVelY = 9;
+
+    // "Acc" here means "acceleration"
+    int32 frictionAccX = 10;
+    int32 frictionAccY = 11;
 }
 
 message BuffConfig {

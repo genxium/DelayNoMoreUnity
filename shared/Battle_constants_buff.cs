@@ -345,20 +345,29 @@ namespace shared {
         );
 
         // debuffConfigs
-        public const int DEBUFF_ARR_IDX_FROZEN = 0; // Used to access "characterDownsync.DebuffList" to quickly detect conflicting debuffs 
+        public const int DEBUFF_ARR_IDX_ELEMENTAL = 0; // Used to access "characterDownsync.DebuffList" to quickly detect conflicting debuffs 
 
         public static DebuffConfig ShortFrozen = new DebuffConfig {
             SpeciesId = 1,
             StockType = BuffStockType.Timed,
-            Stock = 120,
+            Stock = 2*BATTLE_DYNAMICS_FPS,
             Type = DebuffType.FrozenPositionLocked,
-            ArrIdx = DEBUFF_ARR_IDX_FROZEN
+            ArrIdx = DEBUFF_ARR_IDX_ELEMENTAL
+        };
+
+        public static DebuffConfig ShortParalyzed = new DebuffConfig {
+            SpeciesId = 2,
+            StockType = BuffStockType.Timed,
+            Stock = 5*BATTLE_DYNAMICS_FPS,
+            Type = DebuffType.PositionLockedOnly,
+            ArrIdx = DEBUFF_ARR_IDX_ELEMENTAL
         };
 
         public static ImmutableDictionary<uint, DebuffConfig> debuffConfigs = ImmutableDictionary.Create<uint, DebuffConfig>().AddRange(
                 new[]
                 {
-                    new KeyValuePair<uint, DebuffConfig>(ShortFrozen.SpeciesId, ShortFrozen)
+                    new KeyValuePair<uint, DebuffConfig>(ShortFrozen.SpeciesId, ShortFrozen),
+                    new KeyValuePair<uint, DebuffConfig>(ShortParalyzed.SpeciesId, ShortParalyzed),
                 }
         );
 
@@ -395,6 +404,14 @@ namespace shared {
             CharacterVfxSpeciesId = NO_VFX_ID // TODO
         };
 
+        public static BuffConfig ShortParalyzer = new BuffConfig {
+            SpeciesId = 5,
+            StockType = BuffStockType.Timed,
+            Stock = 480,
+            XformChSpeciesId = SPECIES_NONE_CH,
+            CharacterVfxSpeciesId = NO_VFX_ID, // TODO
+        }.AddAssociatedDebuff(ShortParalyzed);
+
         public static ImmutableDictionary<uint, BuffConfig> buffConfigs = ImmutableDictionary.Create<uint, BuffConfig>().AddRange(
                 new[]
                 {
@@ -402,6 +419,7 @@ namespace shared {
                     new KeyValuePair<uint, BuffConfig>(XformToLightSpearWoman.SpeciesId, XformToLightSpearWoman),
                     new KeyValuePair<uint, BuffConfig>(XformToWandWitchGirl.SpeciesId, XformToWandWitchGirl),
                     new KeyValuePair<uint, BuffConfig>(XformToFireSwordMan.SpeciesId, XformToFireSwordMan),
+                    new KeyValuePair<uint, BuffConfig>(ShortParalyzer.SpeciesId, ShortParalyzer),
                 }
         );
 

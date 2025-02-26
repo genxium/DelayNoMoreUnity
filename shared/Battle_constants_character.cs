@@ -761,7 +761,7 @@ namespace shared {
                         GaugeIncWhenKilled = 80,
                         HasBtnBCharging = true,
                         Ifc = IfaceCat.Flesh,
-                        BtnBChargedVfxSpeciesId = VfxThunderCharged.SpeciesId,
+                        BtnBChargedVfxSpeciesId = VfxLightCharged.SpeciesId,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
                     }),
 

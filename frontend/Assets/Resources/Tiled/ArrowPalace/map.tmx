@@ -301,7 +301,7 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
-  <object id="573" name="Floor2FlyingCue" x="32" y="688" width="960" height="32">
+  <object id="573" name="Floor2FlyingCue" x="64" y="688" width="896" height="32">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="5"/>
@@ -314,7 +314,7 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="570" name="Floor2FlyingCue" x="32" y="416" width="960" height="16">
+  <object id="570" name="Floor2FlyingCue" x="64" y="416" width="896" height="16">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="2"/>

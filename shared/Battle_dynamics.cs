@@ -403,7 +403,7 @@ namespace shared {
                 slotIdx = 0;
             } else if (PATTERN_INVENTORY_SLOT_D == patternId) {
                 slotIdx = 1;
-            } else if (chConfig.UseInventoryBtnB && (PATTERN_B == patternId || PATTERN_DOWN_B == patternId)) {
+            } else if (chConfig.UseInventoryBtnB && (PATTERN_B == patternId || PATTERN_DOWN_B == patternId || PATTERN_RELEASED_B == patternId)) {
                 slotIdx = 2;
             } else if (IsInBlockStun(currCharacterDownsync)     
                        &&
@@ -576,6 +576,7 @@ namespace shared {
                             return true;
                         }
                         break;
+                    // [WARNING] PositionLockedOnly (e.g. paralyzed) doesn't stop inputs from propagating!
                 }
             }
             return false;
@@ -661,13 +662,15 @@ namespace shared {
                 } else {
                     thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
                 }
-                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, chConfig, logger);
+                var existingDebuff = currCharacterDownsync.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+                bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, chConfig, isParalyzed, logger);
                 if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
-                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, effDx, effDy, chConfig, false, usedSkill, skillConfig, logger);
+                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, effDx, effDy, chConfig, false, usedSkill, skillConfig, isParalyzed, logger);
                 } else {
-                    _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, skillConfig, logger);
+                    _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, skillConfig, isParalyzed, logger);
                 }
-                _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
+                _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, logger);
             }
         }
         
@@ -679,7 +682,7 @@ namespace shared {
             }
         }
 
-        public static void _processNextFrameJumpStartup(int currRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, CharacterConfig chConfig, ILoggerBridge logger) {
+        public static void _processNextFrameJumpStartup(int currRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, CharacterConfig chConfig, bool isParalyzed, ILoggerBridge logger) {
             /*
             if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
                 logger.LogInfo("_processNextFrameJumpStartup: currRdfId=" + currRdfId + ", " + stringifyPlayer(currCharacterDownsync));
@@ -688,6 +691,11 @@ namespace shared {
             if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) {
                 return;
             }
+    
+            if (isParalyzed) {
+                return;
+            }
+
             if (isInJumpStartup(thatCharacterInNextFrame, chConfig)) {
                 return;
             }
@@ -721,13 +729,13 @@ namespace shared {
             }
         }
 
-        private static void _processInertiaWalkingHandleZeroEffDx(int currRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDy, CharacterConfig chConfig, bool recoveredFromAirAtk, ILoggerBridge logger) {
+        private static void _processInertiaWalkingHandleZeroEffDx(int currRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDy, CharacterConfig chConfig, bool recoveredFromAirAtk, bool isParalyzed, ILoggerBridge logger) {
             if (proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
                 // [WARNING] In general a character is not permitted to just stop velX during proactive jumping.
                 return;
             }
 
-            if (recoveredFromAirAtk) {
+            if (!isParalyzed && recoveredFromAirAtk) {
                 // [WARNING] This is to help "_processEffPushbacks" correct "0 != VelX but Idle1" case.
                 thatCharacterInNextFrame.VelX = currCharacterDownsync.VelX;
             } else {
@@ -737,47 +745,44 @@ namespace shared {
             if (0 < currCharacterDownsync.FramesToRecover || currCharacterDownsync.InAir || !chConfig.HasDef1 || 0 >= effDy) {
                 return;
             }
-        
+
             /*
-            if (SPECIES_HEAVYGUARD_RED == currCharacterDownsync.SpeciesId && Dashing == currCharacterDownsync.CharacterState) {
-                logger.LogInfo(String.Format("@currRdfId={0}, ch.Id={1}, thatCharacterInNextFrame turned Def1", currRdfId, currCharacterDownsync.Id));
-            }
-            */
+               if (SPECIES_HEAVYGUARD_RED == currCharacterDownsync.SpeciesId && Dashing == currCharacterDownsync.CharacterState) {
+               logger.LogInfo(String.Format("@currRdfId={0}, ch.Id={1}, thatCharacterInNextFrame turned Def1", currRdfId, currCharacterDownsync.Id));
+               }
+             */
             thatCharacterInNextFrame.CharacterState = Def1;
+            if (Def1 == currCharacterDownsync.CharacterState) return; 
+            thatCharacterInNextFrame.FramesInChState = 0; 
+            thatCharacterInNextFrame.RemainingDef1Quota = chConfig.DefaultDef1Quota; 
+            /*  
+            if (SPECIES_HEAVYGUARD_RED == currCharacterDownsync.SpeciesId) { 
+                logger.LogInfo(String.Format("@rdfId={0}, HeavyGuardRed id={1} starts defending", currRdfId, currCharacterDownsync.Id)); 
+            } 
+            */ 
+        } 
+
+        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, bool isParalyzed, ILoggerBridge logger) { 
+            if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) { 
+                return; 
+            } 
+
+            if (isInJumpStartup(thatCharacterInNextFrame, chConfig) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig)) { 
+                return; 
+            } 
             
-            if (Def1 == currCharacterDownsync.CharacterState) return;
-            thatCharacterInNextFrame.FramesInChState = 0;
-            thatCharacterInNextFrame.RemainingDef1Quota = chConfig.DefaultDef1Quota;
-
-            /*
-            if (SPECIES_HEAVYGUARD_RED == currCharacterDownsync.SpeciesId) {
-                logger.LogInfo(String.Format("@rdfId={0}, HeavyGuardRed id={1} starts defending", currRdfId, currCharacterDownsync.Id));
-            }
-            */
-        }
-
-        public static void _processInertiaWalking(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
-            if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) {
-                return;
-            }
-
-            if (isInJumpStartup(thatCharacterInNextFrame, chConfig) || isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig)) {
-                return;
-            }
-
-            if (IsInBlockStun(currCharacterDownsync)) {
-                return;
-            }
-
-            bool currFreeFromInertia = (0 == currCharacterDownsync.FramesCapturedByInertia);
-            bool currBreakingFromInertia = (1 == currCharacterDownsync.FramesCapturedByInertia);
+            if (IsInBlockStun(currCharacterDownsync)) { 
+                return; 
+            } 
+            
+            bool currFreeFromInertia = (0 == currCharacterDownsync.FramesCapturedByInertia); bool currBreakingFromInertia = (1 == currCharacterDownsync.FramesCapturedByInertia);
             /* 
-            [WARNING] 
-            Special cases for turn-around inertia handling:
-            1. if "true == thatCharacterInNextFrame.JumpTriggered", then we've already met the criterions of "canJumpWithinInertia" in "_derivePlayerOpPattern";
-            2. if "InAirIdle1ByJump || InAirIdle2ByJump || InAirIdle1NoJump", turn-around should still be bound by inertia just like that of ground movements; 
-            3. if "InAirIdle1ByWallJump", turn-around is NOT bound by inertia because in most cases characters couldn't perform wall-jump and even if it could, "WallJumpingFramesToRecover+ProactiveJumpStartupFrames" already dominates most of the time.
-            */
+               [WARNING] 
+               Special cases for turn-around inertia handling:
+               1. if "true == thatCharacterInNextFrame.JumpTriggered", then we've already met the criterions of "canJumpWithinInertia" in "_derivePlayerOpPattern";
+               2. if "InAirIdle1ByJump || InAirIdle2ByJump || InAirIdle1NoJump", turn-around should still be bound by inertia just like that of ground movements; 
+               3. if "InAirIdle1ByWallJump", turn-around is NOT bound by inertia because in most cases characters couldn't perform wall-jump and even if it could, "WallJumpingFramesToRecover+ProactiveJumpStartupFrames" already dominates most of the time.
+             */
             bool withInertiaBreakingState = (thatCharacterInNextFrame.JumpTriggered || (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState));
             bool alignedWithInertia = true;
             bool exactTurningAround = false;
@@ -808,9 +813,9 @@ namespace shared {
                         thatCharacterInNextFrame.DirY = effDy;
                         if (!isStaticCrouching(currCharacterDownsync.CharacterState)) {
                             if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
-                                thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
+                                thatCharacterInNextFrame.VelX = isParalyzed ? 0 : xfac * chConfig.WallJumpingInitVelX;
                             } else {
-                                thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                                thatCharacterInNextFrame.VelX = isParalyzed ? 0 : xfac * currCharacterDownsync.Speed;
                             }
                             if (!isOldNextChStateInAirIdle2ByJump) {
                                 thatCharacterInNextFrame.CharacterState = Walking;
@@ -818,7 +823,7 @@ namespace shared {
                         }
                     } else {
                         // 0 == effDx
-                        _processInertiaWalkingHandleZeroEffDx(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig, recoveredFromAirAtk, logger);
+                        _processInertiaWalkingHandleZeroEffDx(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig, recoveredFromAirAtk, isParalyzed, logger);
                     }
                 } else {
                     if (alignedWithInertia || withInertiaBreakingState || currBreakingFromInertia) {
@@ -833,9 +838,9 @@ namespace shared {
                             thatCharacterInNextFrame.DirY = effDy;
                             if (!isStaticCrouching(currCharacterDownsync.CharacterState)) {
                                 if (InAirIdle1ByWallJump == currCharacterDownsync.CharacterState) {
-                                    thatCharacterInNextFrame.VelX = xfac * chConfig.WallJumpingInitVelX;
+                                    thatCharacterInNextFrame.VelX = isParalyzed ? 0 : xfac * chConfig.WallJumpingInitVelX;
                                 } else {
-                                    thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
+                                    thatCharacterInNextFrame.VelX = isParalyzed ? 0 : xfac * currCharacterDownsync.Speed;
                                 }
                                 if (!isOldNextChStateInAirIdle2ByJump) {
                                     thatCharacterInNextFrame.CharacterState = Walking;
@@ -843,7 +848,7 @@ namespace shared {
                             }
                         } else {
                             // 0 == effDx
-                            _processInertiaWalkingHandleZeroEffDx(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig, recoveredFromAirAtk, logger);
+                            _processInertiaWalkingHandleZeroEffDx(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig, recoveredFromAirAtk, isParalyzed, logger);
                         }
                     } else if (currFreeFromInertia) {
                         if (exactTurningAround) {
@@ -908,13 +913,13 @@ namespace shared {
             }
 
             /*
-            if (77 == thatCharacterInNextFrame.ActiveSkillId) {
-                logger.LogInfo("_processInertiaWalking/end, currRdfId=" + rdfId  + ", used DiverImpact, next VelX = " + thatCharacterInNextFrame.VelX);
-            }
-            */
+               if (77 == thatCharacterInNextFrame.ActiveSkillId) {
+               logger.LogInfo("_processInertiaWalking/end, currRdfId=" + rdfId  + ", used DiverImpact, next VelX = " + thatCharacterInNextFrame.VelX);
+               }
+             */
         }
 
-        public static void _processInertiaFlying(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, ILoggerBridge logger) {
+        public static void _processInertiaFlying(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, bool isParalyzed, ILoggerBridge logger) {
             if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) {
                 return;
             }
@@ -950,8 +955,8 @@ namespace shared {
                         thatCharacterInNextFrame.DirY = (0 == effDy ? currCharacterDownsync.DirY : (0 > effDy ? -1 : +1));
                         int xfac = 0 == effDx ? 0 : 0 > effDx ? -1 : +1;
                         int yfac = 0 == effDy ? 0 : 0 > effDy ? -1 : +1;
-                        thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                        thatCharacterInNextFrame.VelY = yfac * currCharacterDownsync.Speed;
+                        thatCharacterInNextFrame.VelX = isParalyzed ? 0 : xfac * currCharacterDownsync.Speed;
+                        thatCharacterInNextFrame.VelY = isParalyzed ? 0 : yfac * currCharacterDownsync.Speed;
                         thatCharacterInNextFrame.CharacterState = Walking;
                     } else {
                         // 0 == effDx && 0 == effDy
@@ -975,8 +980,8 @@ namespace shared {
                             thatCharacterInNextFrame.DirY = (0 == effDy ? currCharacterDownsync.DirY : (0 > effDy ? -1 : +1));
                             int xfac = 0 == effDx ? 0 : 0 > effDx ? -1 : +1;
                             int yfac = 0 == effDy ? 0 : 0 > effDy ? -1 : +1;
-                            thatCharacterInNextFrame.VelX = xfac * currCharacterDownsync.Speed;
-                            thatCharacterInNextFrame.VelY = yfac * currCharacterDownsync.Speed;
+                            thatCharacterInNextFrame.VelX = isParalyzed ? 0 : xfac * currCharacterDownsync.Speed;
+                            thatCharacterInNextFrame.VelY = isParalyzed ? 0 : yfac * currCharacterDownsync.Speed;
                             thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
                             // 0 == effDx && 0 == effDy

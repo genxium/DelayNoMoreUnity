@@ -32,7 +32,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected const int KV_PREFIX_VFX = (KV_PREFIX_BULLET << 1);
     protected const int KV_PREFIX_VFX_DEF = (KV_PREFIX_VFX << 1);
     protected const int KV_PREFIX_VFX_CHARGE = (KV_PREFIX_VFX_DEF << 1);
-    protected const int KV_PREFIX_VFX_CHEMIT = (KV_PREFIX_VFX_CHARGE << 1);
+    protected const int KV_PREFIX_VFX_CH_EMIT = (KV_PREFIX_VFX_CHARGE << 1);
+    protected const int KV_PREFIX_VFX_CH_ELE_DEBUFF = (KV_PREFIX_VFX_CH_EMIT << 1);
 
     protected int levelId = LEVEL_NONE;
     protected int justTriggeredStoryPointId = STORY_POINT_NONE;
@@ -3254,6 +3255,32 @@ public abstract class AbstractMapController : MonoBehaviour {
                             chAnimCtrl.updateCharacterAnim(currCharacterDownsync, overwriteChState, prevCharacterDownsync, false, chConfig);
                         }
                         break;
+                    case DebuffType.PositionLockedOnly:
+                        if (0 < debuff.Stock) {
+                            int vfxSpeciesId = VfxThunderCharged.SpeciesId;
+                            if (!pixelatedVfxDict.ContainsKey(vfxSpeciesId)) return false;
+                          
+                            var vfxConfig = pixelatedVfxDict[vfxSpeciesId];
+                            var vfxAnimName = vfxConfig.Name;
+                            int vfxLookupKey = KV_PREFIX_VFX_CH_ELE_DEBUFF + currCharacterDownsync.JoinIndex;
+                            newPosHolder.Set(wx, wy, fireballZ);
+
+                            if (0 < vfxLookupKey) {
+                                var pixelVfxHolder = cachedPixelVfxNodes.PopAny(vfxLookupKey);
+                                if (null == pixelVfxHolder) {
+                                    pixelVfxHolder = cachedPixelVfxNodes.Pop();
+                                }
+                                if (null != pixelVfxHolder && null != pixelVfxHolder.lookUpTable) {
+                                    if (pixelVfxHolder.lookUpTable.ContainsKey(vfxAnimName)) {
+                                        pixelVfxHolder.updateAnim(vfxAnimName, debuff.Stock, currCharacterDownsync.DirX, false, rdfId);
+                                        pixelVfxHolder.gameObject.transform.position = newPosHolder;
+                                    }
+                                    pixelVfxHolder.score = rdfId;
+                                    cachedPixelVfxNodes.Put(vfxLookupKey, pixelVfxHolder);
+                                }
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -3671,7 +3698,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if ((0 > j || j >= roomCapacity+rdf.NpcsArr.Count)) {
                 return false;
             }
-            vfxLookupKey = KV_PREFIX_VFX_CHEMIT + bullet.BulletLocalId;
+            vfxLookupKey = KV_PREFIX_VFX_CH_EMIT + bullet.BulletLocalId;
             var ch = getChdFromRdf(bullet.OffenderJoinIndex, roomCapacity, rdf);
             if (MAGIC_JOIN_INDEX_INVALID == ch.JoinIndex || MAGIC_JOIN_INDEX_DEFAULT == ch.JoinIndex || ch.ActiveSkillId != bullet.SkillId) return false;
             framesInState = ch.FramesInChState;
@@ -3686,7 +3713,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 newPosHolder.Set(vfxWx, vfxWy, fireballZ);
             }
         } else if (vfxConfig.OnTrap) {
-            vfxLookupKey = KV_PREFIX_VFX_CHEMIT + bullet.BulletLocalId;
+            vfxLookupKey = KV_PREFIX_VFX_CH_EMIT + bullet.BulletLocalId;
             var trap = rdf.TrapsArr[j];
             framesInState = trap.FramesInTrapState;
             dirX = trap.DirX;

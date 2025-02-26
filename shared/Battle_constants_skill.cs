@@ -53,6 +53,78 @@ namespace shared {
         public const float ELE_WEAKNESS_DEFAULT_YIELD = 1.5f;
         public const float ELE_RESISTANCE_DEFAULT_YIELD = 0.5f;
 
+        public static uint BladeGirlGroundSlash1Id = 1, BladeGirlGroundSlash2Id = 2, BladeGirlGroundSlash3Id = 3, BladeGirlGroundSuperSlashId = 4, BladeGirlDashingId = 11, BladeGirlDiverImpactId = 77, BladeGirlSlidingSlashId = 84, BladeGirlCrouchSlashId = 94, BladeGirlAirSlash1Id = 134, BladeGirlAirSlash2Id = 135, BladeGirlDragonPunchId = 136; // For easier cancellation config
+
+        public static BulletConfig BasicDashingHit1 = new BulletConfig {
+            StartupFrames = 5,
+            StartupInvinsibleFrames = 7,
+            ActiveFrames = 4,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = 0,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            DelaySelfVelToActive = true,
+            OmitSoftPushback = true,
+            CancellableStFrame = 5,
+            CancellableEdFrame = 10,
+            BType = BulletType.Melee,
+            MhType = MultiHitType.FromEmission,
+        };
+
+        public static BulletConfig BasicDashingHit2 = new BulletConfig {
+            StartupFrames = BasicDashingHit1.StartupFrames + BasicDashingHit1.ActiveFrames,
+            ActiveFrames = 13,
+            OmitSoftPushback = true,
+            CancellableStFrame = BasicDashingHit1.StartupFrames + BasicDashingHit1.ActiveFrames,
+            CancellableEdFrame = 19,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = (int)(4.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = 0,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            BType = BulletType.Melee,
+        };
+
+        public static BulletConfig BasicSlidingHit1 = new BulletConfig {
+            StartupFrames = 4,
+            StartupInvinsibleFrames = 2,
+            ActiveFrames = 7,
+            OmitSoftPushback = true,
+            CancellableStFrame = 6,
+            CancellableEdFrame = 15,
+            CancellableByInventorySlotC = true,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            DelaySelfVelToActive = true,
+            BType = BulletType.Melee,
+            StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+            ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+            IsPixelatedActiveVfx = true,
+            MhType = MultiHitType.FromEmission,
+        };
+
+        public static BulletConfig BasicSlidingHit2 = new BulletConfig {
+            StartupFrames = BasicSlidingHit1.StartupFrames + BasicSlidingHit1.ActiveFrames,
+            ActiveFrames = 12,
+            OmitSoftPushback = true,
+            CancellableStFrame = BasicSlidingHit1.StartupFrames + BasicSlidingHit1.ActiveFrames,
+            CancellableEdFrame = 40,
+            CancellableByInventorySlotC = true,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            BType = BulletType.Melee,
+            StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+            ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
+            IsPixelatedActiveVfx = true,
+        };
+
         public static BulletConfig BatMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 2,
             ActiveFrames = 5,
@@ -81,6 +153,7 @@ namespace shared {
         };
 
         public static Skill BatMelee1PrimerSkill = new Skill {
+            Id = 260,
             RecoveryFrames = 60,
             RecoveryFramesOnBlock = 60,
             RecoveryFramesOnHit = 60,
@@ -483,6 +556,7 @@ namespace shared {
                                                               .SetStartupFrames(DemonFireBreathHitRepeating2.StartupFrames + DemonFireBreathHitRepeating2.ActiveFrames);
 
         public static Skill DemonFireBreathSkill = new Skill {
+            Id = 82,
             RecoveryFrames = DemonFireBreathHitRepeating3.StartupFrames + DemonFireBreathHitRepeating3.ActiveFrames + DemonFireBreathHitRepeating3.FinishingFrames,
             RecoveryFramesOnBlock = DemonFireBreathHitRepeating3.StartupFrames + DemonFireBreathHitRepeating3.ActiveFrames + DemonFireBreathHitRepeating3.FinishingFrames,
             RecoveryFramesOnHit = DemonFireBreathHitRepeating3.StartupFrames + DemonFireBreathHitRepeating3.ActiveFrames + DemonFireBreathHitRepeating3.FinishingFrames,
@@ -706,6 +780,10 @@ namespace shared {
                                                                 .SetAllowsWalking(true) 
                                                                 .SetAllowsCrouching(true);
 
+        private static BulletConfig MagicPistolBulletCrouch = new BulletConfig(MagicPistolBulletAir)
+                                                                .SetHitboxOffsets((int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(2 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
+                                                                .SetSelfLockVel(0, 0, 0);
+
         private static BulletConfig MagicCannonBulletAir = new BulletConfig {
             StartupFrames = 2,
             ActiveFrames = 120,
@@ -778,6 +856,10 @@ namespace shared {
                                                                 .SetHitboxOffsets((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                                                                 .SetAllowsWalking(true) 
                                                                 .SetAllowsCrouching(true);
+
+        private static BulletConfig BasicPistolBulletCrouch = new BulletConfig(BasicGunBulletAir)
+                                                                .SetHitboxOffsets((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
+                                                                .SetSelfLockVel(0, 0, 0);
 
         private static BulletConfig SlashNovaRepeatingBullet = new BulletConfig {
             StartupFrames = 10,
@@ -1135,7 +1217,8 @@ namespace shared {
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
-        public static Skill BladeGirlDragonPunchSkill = new Skill {
+        public static Skill BladeGirlDragonPunch = new Skill {
+            Id = BladeGirlDragonPunchId,
             RecoveryFrames = 26,
             RecoveryFramesOnBlock = 26,
             RecoveryFramesOnHit = 26,
@@ -1154,7 +1237,7 @@ namespace shared {
             CancellableByInventorySlotC = true,
             BlockStunFrames = 9,
             Damage = 7,
-            PushbackVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelX = (int)(-0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelY = 0,
@@ -1167,6 +1250,7 @@ namespace shared {
             ExplosionSpeciesId = 2,
             DirX = 1,
             DirY = 0,
+            OmitSoftPushback = true,
             Hardness = 6,
             ExplosionFrames = 25,
             BType = BulletType.Melee,
@@ -1175,7 +1259,8 @@ namespace shared {
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         }.UpsertCancelTransit(PATTERN_UP_B, 86);
 
-        public static Skill HunterDragonPunchSkill = new Skill {
+        public static Skill HunterDragonPunch = new Skill {
+            Id = 73,
             RecoveryFrames = 30,
             RecoveryFramesOnBlock = 30,
             RecoveryFramesOnHit = 30,
@@ -1194,8 +1279,8 @@ namespace shared {
             Damage = 10,
             PushbackVelX = (int)(2.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = (int)(3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelX = (int)(2.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelY = (int)(7.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = (int)(2.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = (int)(6.7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
             HitboxOffsetX = (int)(14 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1217,6 +1302,7 @@ namespace shared {
         };
 
         public static Skill HunterDragonPunchSecondarySkill = new Skill {
+            Id = 86,
             RecoveryFrames = 38,
             RecoveryFramesOnBlock = 38,
             RecoveryFramesOnHit = 38,
@@ -1224,6 +1310,139 @@ namespace shared {
             BoundChState = Atk8
         }.
             AddHit(HunterDragonPunchSecondaryBullet);
+        
+        public static Skill MagicPistolGround = new Skill {
+            Id = 29,
+               RecoveryFrames = 14,
+               RecoveryFramesOnBlock = 10,
+               RecoveryFramesOnHit = 10,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = Atk1
+        }
+            .AddHit(MagicPistolBulletGround);
+        
+        public static Skill MagicPistolAir = new Skill {
+            Id = 30,
+                RecoveryFrames = 14,
+                RecoveryFramesOnBlock = 10,
+                RecoveryFramesOnHit = 10,
+                TriggerType = SkillTriggerType.RisingEdge,
+                BoundChState = InAirAtk1
+        }
+            .AddHit(MagicPistolBulletAir);
+
+        public static Skill MagicPistolCrouch = new Skill{
+            Id = 34, 
+            RecoveryFrames = 14,
+            RecoveryFramesOnBlock = 10,
+            RecoveryFramesOnHit = 10,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = CrouchAtk1
+        }
+            .AddHit(MagicPistolBulletCrouch);
+
+        public static Skill MagicCannonGround = new Skill{
+            Id = 87, 
+            RecoveryFrames = 14,
+            RecoveryFramesOnBlock = 10,
+            RecoveryFramesOnHit = 10,
+            MpDelta = 300,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }
+        .AddHit(MagicCannonBulletGround);
+
+        public static Skill MagicCannonAir = new Skill{
+            Id = 88,
+               RecoveryFrames = 14,
+               RecoveryFramesOnBlock = 10,
+               RecoveryFramesOnHit = 10,
+               MpDelta = 300,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = InAirAtk1
+        }
+        .AddHit(MagicCannonBulletAir);
+    
+        public static Skill MagicCannonCrouch = new Skill{
+            Id = 89,
+               RecoveryFrames = 14,
+               RecoveryFramesOnBlock = 10,
+               RecoveryFramesOnHit = 10,
+               MpDelta = 300,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = CrouchAtk1
+        }
+        .AddHit(MagicCannonBulletAir);
+
+        public static Skill MagSwordGirlSliding = new Skill {
+            Id = 33,
+            RecoveryFrames = 22,
+            RecoveryFramesOnBlock = 22,
+            RecoveryFramesOnHit = 22,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Sliding
+        }
+            .AddHit(
+                new BulletConfig(BasicSlidingHit1)
+                .UpsertCancelTransit(PATTERN_B, MagicPistolGround.Id)
+                .UpsertCancelTransit(PATTERN_UP_B, MagicPistolGround.Id)
+                .UpsertCancelTransit(PATTERN_DOWN_B, MagicPistolCrouch.Id)
+                .UpsertCancelTransit(PATTERN_RELEASED_B, MagicCannonGround.Id)
+            )
+            .AddHit(
+                new BulletConfig(BasicSlidingHit2)
+                .UpsertCancelTransit(PATTERN_B, MagicPistolGround.Id)
+                .UpsertCancelTransit(PATTERN_UP_B, MagicPistolGround.Id)
+                .UpsertCancelTransit(PATTERN_DOWN_B, MagicPistolCrouch.Id)
+                .UpsertCancelTransit(PATTERN_RELEASED_B, MagicCannonGround.Id)
+            );
+
+        public static uint MagSwordGirlAirSlashId = 28;
+        public static Skill MagSwordGirlAirSlash = new Skill {
+            Id = MagSwordGirlAirSlashId,
+            RecoveryFrames = 28,
+            RecoveryFramesOnBlock = 28,
+            RecoveryFramesOnHit = 28,
+            MpDelta = 200,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Dashing
+        }
+            .AddHit(
+                new BulletConfig {
+                    StartupFrames = 5,
+                    StartupInvinsibleFrames = 9,
+                    ActiveFrames = 23,
+                    HitStunFrames = 12,
+                    BlockStunFrames = 9,
+                    Damage = 13,
+                    PushbackVelX = NO_LOCK_VEL,
+                    PushbackVelY = NO_LOCK_VEL,
+                    SelfLockVelX = (int)(7.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelY = (int)(-0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                    CancellableStFrame = 7,
+                    CancellableEdFrame = 28,
+                    CancellableByInventorySlotC = true,
+                    HitboxOffsetX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxOffsetY = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeX = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeY = (int)(32 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SpeciesId = 2,
+                    ExplosionFrames = 25,
+                    DirX = 1,
+                    DirY = 0,
+                    Hardness = 5,
+                    BType = BulletType.Melee,
+                    FireballEmitSfxName = "SlashEmitSpd2",
+                    ExplosionSfxName = "Melee_Explosion2",
+                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX,
+                }
+                .UpsertCancelTransit(PATTERN_B, MagicPistolAir.Id)
+                .UpsertCancelTransit(PATTERN_UP_B, MagicPistolAir.Id)
+                .UpsertCancelTransit(PATTERN_DOWN_B, MagicPistolAir.Id)
+                .UpsertCancelTransit(PATTERN_RELEASED_B, MagicCannonAir.Id)
+                .UpsertCancelTransit(PATTERN_E, MagSwordGirlAirSlashId).UpsertCancelTransit(PATTERN_E_HOLD_B, MagSwordGirlAirSlashId)
+            );
 
         public static BulletConfig HunterAirSlashBullet = new BulletConfig {
             StartupFrames = 5,
@@ -1252,7 +1471,8 @@ namespace shared {
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
         
-        public static Skill HunterAirSlashSkill = new Skill {
+        public static Skill HunterAirSlash = new Skill {
+            Id = 74,
             RecoveryFrames = 20,
             RecoveryFramesOnBlock = 20,
             RecoveryFramesOnHit = 20,
@@ -1572,6 +1792,7 @@ namespace shared {
         };
 
         public static Skill BoarMelee1PrimerSkill = new Skill {
+            Id = 45,
             RecoveryFrames = 70,
             RecoveryFramesOnBlock = 70,
             RecoveryFramesOnHit = 70,
@@ -1579,6 +1800,48 @@ namespace shared {
             BoundChState = Atk1
         }
         .AddHit(BoarMelee1PrimerBullet);
+
+        public static Skill BoarDashing = new Skill{
+            Id = 46,
+               RecoveryFrames = 100,
+               RecoveryFramesOnBlock = 100,
+               RecoveryFramesOnHit = 100,
+               MpDelta = 7*BATTLE_DYNAMICS_FPS,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = Dashing
+        }
+        .AddHit(
+                new BulletConfig {
+                    StartupFrames = 50,
+                    StartupInvinsibleFrames = 12,
+                    ActiveFrames = 50,
+                    HitStunFrames = MAX_INT,
+                    HitInvinsibleFrames = 60,
+                    BlockStunFrames = 9,
+                    Damage = 15,
+                    PushbackVelX = NO_LOCK_VEL,
+                    PushbackVelY = (int)(6.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelX = (int)(5.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelY = NO_LOCK_VEL,
+                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                    HitboxOffsetX = (int)(20*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeY = (int)(28*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    DelaySelfVelToActive = true,
+                    BlowUp = true,
+                    SpeciesId = 3,
+                    ExplosionFrames = 25,
+                    DirX = 1,
+                    DirY = 0,
+                    Hardness = 7,
+                    OmitSoftPushback = true,
+                    BType = BulletType.Melee,
+                    FireballEmitSfxName="SlashEmitSpd2",
+                    ExplosionSfxName="Melee_Explosion2",
+                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX,
+                }
+        );
 
         public static BulletConfig WaterballBulletAirHit1 = new BulletConfig {
             StartupFrames = 10,
@@ -2200,12 +2463,14 @@ namespace shared {
             ExplosionSfxName = "Melee_Explosion1",
             ActiveVfxSpeciesId = VfxCastThunderTwins.SpeciesId,
             IsPixelatedActiveVfx = true,
-            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX,
+            BuffConfig = ShortParalyzer,
         };
 
         public static BulletConfig MobileThunderBallPrimerBulletAir = new BulletConfig(MobileThunderBallPrimerBullet).SetAllowsWalking(false).SetSelfLockVel(0, 0, NO_LOCK_VEL);
 
-        public static Skill MobileThunderBallPrimerSkill = new Skill {
+        public static Skill MobileThunderBallPrimer = new Skill {
+            Id = 66,
             RecoveryFrames = 32,
             RecoveryFramesOnBlock = 32,
             RecoveryFramesOnHit = 32,
@@ -2214,7 +2479,8 @@ namespace shared {
         }
         .AddHit(MobileThunderBallPrimerBullet);
 
-        public static Skill MobileThunderBallPrimerSkillAir = new Skill {
+        public static Skill MobileThunderBallPrimerAir = new Skill {
+            Id = 67,
             RecoveryFrames = 32,
             RecoveryFramesOnBlock = 32,
             RecoveryFramesOnHit = 32,
@@ -2223,7 +2489,8 @@ namespace shared {
         }
         .AddHit(MobileThunderBallPrimerBulletAir);
 
-        public static Skill MobileThunderBallPrimerSkillCrouch = new Skill {
+        public static Skill MobileThunderBallPrimerCrouch = new Skill {
+            Id = 69, 
             RecoveryFrames = 32,
             RecoveryFramesOnBlock = 32,
             RecoveryFramesOnHit = 32,
@@ -2232,7 +2499,8 @@ namespace shared {
         }
         .AddHit(MobileThunderBallPrimerBullet);
 
-        public static Skill MobileThunderBallPrimerSkillWall = new Skill {
+        public static Skill MobileThunderBallPrimerWall = new Skill {
+            Id = 70,
             RecoveryFrames = 32,
             RecoveryFramesOnBlock = 32,
             RecoveryFramesOnHit = 32,
@@ -2292,6 +2560,7 @@ namespace shared {
         };
 
         public static Skill HunterDashSlashSKill = new Skill {
+            Id = 76, 
             RecoveryFrames = HunterDashSlashTotDurationRdfCnt,
             RecoveryFramesOnBlock = HunterDashSlashTotDurationRdfCnt,
             RecoveryFramesOnHit = HunterDashSlashTotDurationRdfCnt,
@@ -2368,7 +2637,8 @@ namespace shared {
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX,
         };
 
-        public static Skill DiverImpactSkill = new Skill {
+        public static Skill BladeGirlDiverImpact = new Skill {
+            Id = 77,
             RecoveryFrames = DiverImpactStarterBullet.StartupFrames + DiverImpactStarterBullet.ActiveFrames + DiverImpactStarterBullet.FinishingFrames,
             RecoveryFramesOnBlock = DiverImpactStarterBullet.StartupFrames + DiverImpactStarterBullet.ActiveFrames + DiverImpactStarterBullet.FinishingFrames,
             RecoveryFramesOnHit = DiverImpactStarterBullet.StartupFrames + DiverImpactStarterBullet.ActiveFrames + DiverImpactStarterBullet.FinishingFrames,
@@ -2510,7 +2780,8 @@ namespace shared {
         .SetDir(-2, 0)
         .SetSimultaneousMultiHitCnt(1u);
 
-        public static Skill DemonDiverImpactSkill = new Skill {
+        public static Skill DemonDiverImpact = new Skill {
+            Id = 83,
             RecoveryFrames = (DemonDiverImpactStarterBullet.StartupFrames + DemonDiverImpactStarterBullet.ActiveFrames + DemonDiverImpactStarterBullet.FinishingFrames),
             RecoveryFramesOnBlock = (DemonDiverImpactStarterBullet.StartupFrames + DemonDiverImpactStarterBullet.ActiveFrames + DemonDiverImpactStarterBullet.FinishingFrames),
             RecoveryFramesOnHit = (DemonDiverImpactStarterBullet.StartupFrames + DemonDiverImpactStarterBullet.ActiveFrames + DemonDiverImpactStarterBullet.FinishingFrames),
@@ -2525,7 +2796,358 @@ namespace shared {
         .AddHit(DemonDiverImpactShockBullet)
         .AddHit(DemonDiverImpactShockBulletRevX);
 
-        public static BulletConfig BladeGirlDashSlashBullet = new BulletConfig {
+        public static uint HunterPistolWallId = 68, HunterPistolId = 71, HunterPistolAirId = 72, HunterDashingId = 78, HunterSlidingId = 132, HunterPistolCrouchId = 133, HunterDragonPunchId = 73, MobileThunderBallPrimerId = 66;
+
+        public static BulletConfig BasicBladeHit1 = new BulletConfig {
+            StartupFrames = 3,
+            StartupInvinsibleFrames = 1,
+            ActiveFrames = 18,
+            HitStunFrames = 20,
+            BlockStunFrames = 8,
+            Damage = 10,
+            PushbackVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            CancellableStFrame = 8,
+            CancellableEdFrame = 19,
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            ReflectFireballXIfNotHarder = true,
+            CharacterEmitSfxName = "SlashEmitSpd1",
+            ExplosionSfxName="Melee_Explosion2",
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        }.UpsertCancelTransit(PATTERN_B, BladeGirlGroundSlash2Id).UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlGroundSlash2Id);
+
+        public static BulletConfig BasicBladeHit2 = new BulletConfig {
+            StartupFrames = 5,
+            StartupInvinsibleFrames = 2,
+            ActiveFrames = 14,
+            HitStunFrames = 25,
+            BlockStunFrames = 9,
+            Damage = 12,
+            PushbackVelX = 0,
+            PushbackVelY = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(42*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            CancellableStFrame = 12,
+            CancellableEdFrame = 20,
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 6,
+            CharacterEmitSfxName = "SlashEmitSpd2",
+            ExplosionSfxName="Melee_Explosion2",
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        }.UpsertCancelTransit(PATTERN_B, BladeGirlGroundSlash3Id).UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlGroundSlash3Id).UpsertCancelTransit(PATTERN_UP_B, BladeGirlDragonPunchId);
+    
+        public static BulletConfig BasicBladeHit3 = new BulletConfig {
+            StartupFrames = 6,
+            StartupInvinsibleFrames = 4,
+            ActiveFrames = 17,
+            HitStunFrames = 34,
+            BlockStunFrames = 5,
+            Damage = 18,
+            PushbackVelX = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = (int)(-1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(40*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(6*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            BlowUp = false,
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            CancellableStFrame = 10,
+            CancellableEdFrame = 25,
+            CancellableByInventorySlotC = true,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 7,
+            ReflectFireballXIfNotHarder = true,
+            RemainsUponHit = true,
+            CharacterEmitSfxName = "SlashEmitSpd3",
+            ExplosionSfxName="Melee_Explosion2",
+            MhType = MultiHitType.FromEmission,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
+        public static BulletConfig BasicAirBladeHit1 = new BulletConfig {
+            StartupFrames = 5,
+            ActiveFrames = 14,
+            HitStunFrames = 15,
+            BlockStunFrames = 9,
+            Damage = 13,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            ReflectFireballXIfNotHarder = true,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 5,
+            CancellableStFrame = 13,
+            CancellableEdFrame = 21,
+            CharacterEmitSfxName="SlashEmitSpd1",
+            ExplosionSfxName="Melee_Explosion2",
+            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+        };
+
+        public static BulletConfig BasicAirBladeHit2 = new BulletConfig {
+            StartupFrames = 9,
+            StartupInvinsibleFrames = 4,
+            ActiveFrames = 20,
+            HitStunFrames = 15,
+            BlockStunFrames = 5,
+            FinishingFrames = 15,
+            Damage = 10,
+            PushbackVelX = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            ReflectFireballXIfNotHarder = true,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 6,
+            CharacterEmitSfxName = "SlashEmitSpd3",
+            ExplosionSfxName="Melee_Explosion2",
+            CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+        };
+
+        public static Skill BladeGirlGroundSlash1 = new Skill {
+            // [WARNING] The relationship between "RecoveryFrames", "StartupFrames", "HitStunFrames" and "PushbackVelX" makes sure that a MeleeBullet is counterable!
+            Id = BladeGirlGroundSlash1Id,
+            RecoveryFrames = 26,
+            RecoveryFramesOnBlock = 26,
+            RecoveryFramesOnHit = 26,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }.AddHit(BasicBladeHit1);
+
+        public static Skill BladeGirlGroundSlash2 = new Skill {
+            Id = BladeGirlGroundSlash2Id,
+            RecoveryFrames = 24,
+            RecoveryFramesOnBlock = 24,
+            RecoveryFramesOnHit = 24,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk2
+        }
+        .AddHit(BasicBladeHit2);
+
+        public static Skill BladeGirlGroundSlash3 = new Skill {
+            Id = BladeGirlGroundSlash3Id,
+            RecoveryFrames = 39,
+            RecoveryFramesOnBlock = 39,
+            RecoveryFramesOnHit = 39,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk3
+        }
+        .AddHit(BasicBladeHit3);
+
+        public static BulletConfig SuperBladeHit1 = new BulletConfig {
+            StartupFrames = 5,
+            StartupInvinsibleFrames = 25,
+            ActiveFrames = 11,
+            HitStunFrames = 30,
+            BlockStunFrames = 9,
+            Damage = 18,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            BlowUp = false,
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 7,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            CharacterEmitSfxName="SlashEmitSpd3",
+            ExplosionSfxName="Melee_Explosion2",
+            MhType = MultiHitType.FromEmission,
+            ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
+            IsPixelatedActiveVfx = true,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
+        public static BulletConfig SuperBladeHit2 = new BulletConfig {
+            StartupFrames = 16,
+            ActiveFrames = 9,
+            HitStunFrames = 30,
+            BlockStunFrames = 9,
+            Damage = 15,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = (int)(2.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 7,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            ExplosionSfxName="Melee_Explosion2",
+            MhType = MultiHitType.FromEmission,
+            ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
+            IsPixelatedActiveVfx = true,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
+        public static BulletConfig SuperBladeHit3 = new BulletConfig {
+            StartupFrames = 25,
+            ActiveFrames = 9,
+            HitStunFrames = 30,
+            BlockStunFrames = 9,
+            Damage = 10,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = (int)(2.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 7,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            ExplosionSfxName="Melee_Explosion2",
+            MhType = MultiHitType.FromEmission,
+            ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
+            IsPixelatedActiveVfx = true,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
+        public static BulletConfig SuperBladeHit4 = new BulletConfig {
+            StartupFrames = 34,
+            ActiveFrames = 9,
+            HitStunFrames = 30,
+            BlockStunFrames = 9,
+            Damage = 6,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = (int)(3.2f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 7,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            ExplosionSfxName="Melee_Explosion2",
+            MhType = MultiHitType.FromEmission,
+            ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
+            IsPixelatedActiveVfx = true,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
+        public static BulletConfig SuperBladeHit5 = new BulletConfig {
+            StartupFrames = 43,
+            ActiveFrames = 9,
+            HitStunFrames = MAX_INT,
+            BlowUp = true,
+            BlockStunFrames = 9,
+            Damage = 6,
+            PushbackVelX = NO_LOCK_VEL,
+            PushbackVelY = (int)(6.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 2,
+            ExplosionSpeciesId = 2,
+            DirX = 1,
+            DirY = 0,
+            Hardness = 7,
+            ExplosionFrames = 25,
+            BType = BulletType.Melee,
+            RemainsUponHit = true,
+            OmitSoftPushback = true,
+            ExplosionSfxName="Melee_Explosion2",
+            MhType = MultiHitType.FromEmission,
+            ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
+            IsPixelatedActiveVfx = true,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
+        public static Skill BladeGirlGroundSuperSlash = new Skill {
+            Id = BladeGirlGroundSuperSlashId,
+            RecoveryFrames = 64,
+            RecoveryFramesOnBlock = 64,
+            RecoveryFramesOnHit = 64,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk4
+        }
+        .AddHit(SuperBladeHit1)
+        .AddHit(SuperBladeHit2)
+        .AddHit(SuperBladeHit3)
+        .AddHit(SuperBladeHit4)
+        .AddHit(SuperBladeHit5);
+
+        public static BulletConfig BladeGirlSlidingSlashBullet = new BulletConfig {
                 StartupFrames = 5,
                 StartupInvinsibleFrames = 4,
                 ActiveFrames = 15,
@@ -2556,18 +3178,19 @@ namespace shared {
                 CancellableEdFrame = 22,
                 CancellableByInventorySlotC = true,
                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-            }.UpsertCancelTransit(PATTERN_B, 1).UpsertCancelTransit(PATTERN_DOWN_B, 1).UpsertCancelTransit(PATTERN_UP_B, 259);
+            }.UpsertCancelTransit(PATTERN_B, BladeGirlGroundSlash1Id).UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlCrouchSlashId).UpsertCancelTransit(PATTERN_UP_B, BladeGirlDragonPunchId);
 
-        public static Skill BladeGirlDashSlashSkill = new Skill {
+        public static Skill BladeGirlSlidingSlashSkill = new Skill {
+            Id = BladeGirlSlidingSlashId,
             RecoveryFrames = 21,
             RecoveryFramesOnBlock = 21,
             RecoveryFramesOnHit = 21,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk8, 
         }
-        .AddHit(BladeGirlDashSlashBullet);
+        .AddHit(BladeGirlSlidingSlashBullet);
 
-        public static BulletConfig BladeGirlCrouchHitBullet = new BulletConfig {
+        public static BulletConfig BladeGirlCrouchSlashHit1 = new BulletConfig {
                 StartupFrames = 3,
                 StartupInvinsibleFrames = 1,
                 ActiveFrames = 15,
@@ -2595,16 +3218,17 @@ namespace shared {
                 CharacterEmitSfxName = "SlashEmitSpd1",
                 ExplosionSfxName="Melee_Explosion2",
                 CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-        }.UpsertCancelTransit(PATTERN_B, 1).UpsertCancelTransit(PATTERN_DOWN_B, 1).UpsertCancelTransit(PATTERN_UP_B, 259);
+        }.UpsertCancelTransit(PATTERN_B, BladeGirlGroundSlash1Id).UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlCrouchSlashId).UpsertCancelTransit(PATTERN_UP_B, BladeGirlDragonPunchId);
 
-        public static Skill BladeGirlCrouchHitSkill = new Skill {
+        public static Skill BladeGirlCrouchSlash = new Skill {
+                Id = BladeGirlCrouchSlashId,
                 RecoveryFrames = 26,
                 RecoveryFramesOnBlock = 26,
                 RecoveryFramesOnHit = 26,
                 TriggerType = SkillTriggerType.RisingEdge,
                 BoundChState = CrouchAtk1
         }
-        .AddHit(BladeGirlCrouchHitBullet);
+        .AddHit(BladeGirlCrouchSlashHit1);
 
         public static BulletConfig DroppingFireballHit1 = new BulletConfig {
             StartupFrames = 4,
@@ -2639,6 +3263,7 @@ namespace shared {
         };
 
         public static Skill DroppingFireballSkill = new Skill {
+            Id = 85,
             RecoveryFrames = 15,
             RecoveryFramesOnBlock = 15,
             RecoveryFramesOnHit = 15,
@@ -3298,6 +3923,7 @@ namespace shared {
             ExplosionSfxName = "Melee_Explosion1",
             MhType = MultiHitType.FromPrevHitActual,
             CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX,
+            BuffConfig = ShortParalyzer,
         };
 
         public static BulletConfig ThunderBoltHopperHit = new BulletConfig {
@@ -3336,6 +3962,7 @@ namespace shared {
             VisionOffsetY = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             VisionSizeX = (int)(300 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             VisionSizeY = (int)(300 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            BuffConfig = ShortParalyzer,
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName = "Melee_Explosion1",
             ActiveVfxSpeciesId = VfxHoppingBolt.SpeciesId,
@@ -3462,253 +4089,28 @@ namespace shared {
                                                             .SetCancellableFrames(66, 78).UpsertCancelTransit(PATTERN_UP_B, 113)
                                                             .SetMhType(MultiHitType.None);
 
-        public static BulletConfig BasicBladeHit1 = new BulletConfig {
-            StartupFrames = 3,
-            StartupInvinsibleFrames = 1,
-            ActiveFrames = 18,
-            HitStunFrames = 20,
-            BlockStunFrames = 8,
-            Damage = 10,
-            PushbackVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = NO_LOCK_VEL,
-            SelfLockVelX = NO_LOCK_VEL,
-            SelfLockVelY = NO_LOCK_VEL,
-            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            CancellableStFrame = 8,
-            CancellableEdFrame = 19,
-            SpeciesId = 2,
-            ExplosionSpeciesId = 2,
-            ExplosionFrames = 25,
-            BType = BulletType.Melee,
-            DirX = 1,
-            DirY = 0,
-            Hardness = 5,
-            ReflectFireballXIfNotHarder = true,
-            CharacterEmitSfxName = "SlashEmitSpd1",
-            ExplosionSfxName="Melee_Explosion2",
-            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-        }.UpsertCancelTransit(PATTERN_B, 2).UpsertCancelTransit(PATTERN_DOWN_B, 2);
-
-        public static BulletConfig BasicBladeHit2 = new BulletConfig {
-            StartupFrames = 5,
-            StartupInvinsibleFrames = 2,
-            ActiveFrames = 14,
-            HitStunFrames = 25,
-            BlockStunFrames = 9,
-            Damage = 12,
-            PushbackVelX = 0,
-            PushbackVelY = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelY = NO_LOCK_VEL,
-            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(42*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            CancellableStFrame = 12,
-            CancellableEdFrame = 20,
-            SpeciesId = 2,
-            ExplosionSpeciesId = 2,
-            ExplosionFrames = 25,
-            BType = BulletType.Melee,
-            DirX = 1,
-            DirY = 0,
-            Hardness = 6,
-            CharacterEmitSfxName = "SlashEmitSpd2",
-            ExplosionSfxName="Melee_Explosion2",
-            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-        }.UpsertCancelTransit(PATTERN_B, 3).UpsertCancelTransit(PATTERN_DOWN_B, 3).UpsertCancelTransit(PATTERN_UP_B, 259);
+        public static BulletConfig BladeGirlAirSlash1Hit1 = new BulletConfig(BasicAirBladeHit1)
+                                                            .UpsertCancelTransit(PATTERN_B, BladeGirlAirSlash2Id)    
+                                                            .UpsertCancelTransit(PATTERN_UP_B, BladeGirlAirSlash2Id)
+                                                            .UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlDiverImpactId);
+        
+        public static Skill BladeGirlAirSlash1 = new Skill {
+               Id = BladeGirlAirSlash1Id,
+               RecoveryFrames = 20,
+               RecoveryFramesOnBlock = 20,
+               RecoveryFramesOnHit = 20,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = InAirAtk1
+        }.AddHit(BladeGirlAirSlash1Hit1);
     
-        public static BulletConfig BasicBladeHit3 = new BulletConfig {
-            StartupFrames = 6,
-            StartupInvinsibleFrames = 4,
-            ActiveFrames = 17,
-            HitStunFrames = 34,
-            BlockStunFrames = 5,
-            Damage = 18,
-            PushbackVelX = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = (int)(-1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelX = NO_LOCK_VEL,
-            SelfLockVelY = NO_LOCK_VEL,
-            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(40*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(6*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            BlowUp = false,
-            SpeciesId = 2,
-            ExplosionSpeciesId = 2,
-            ExplosionFrames = 25,
-            BType = BulletType.Melee,
-            CancellableStFrame = 10,
-            CancellableEdFrame = 25,
-            CancellableByInventorySlotC = true,
-            DirX = 1,
-            DirY = 0,
-            Hardness = 7,
-            ReflectFireballXIfNotHarder = true,
-            RemainsUponHit = true,
-            CharacterEmitSfxName = "SlashEmitSpd3",
-            ExplosionSfxName="Melee_Explosion2",
-            MhType = MultiHitType.FromEmission,
-            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-        };
-
-        public static BulletConfig SuperBladeHit1 = new BulletConfig {
-            StartupFrames = 5,
-            StartupInvinsibleFrames = 25,
-            ActiveFrames = 11,
-            HitStunFrames = 30,
-            BlockStunFrames = 9,
-            Damage = 18,
-            PushbackVelX = NO_LOCK_VEL,
-            PushbackVelY = NO_LOCK_VEL,
-            SelfLockVelX = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SelfLockVelY = NO_LOCK_VEL,
-            SelfLockVelYWhenFlying = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            BlowUp = false,
-            SpeciesId = 2,
-            ExplosionSpeciesId = 2,
-            DirX = 1,
-            DirY = 0,
-            Hardness = 7,
-            ExplosionFrames = 25,
-            BType = BulletType.Melee,
-            CharacterEmitSfxName="SlashEmitSpd3",
-            ExplosionSfxName="Melee_Explosion2",
-            MhType = MultiHitType.FromEmission,
-            ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
-            IsPixelatedActiveVfx = true,
-            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-        };
-
-
-        public static BulletConfig SuperBladeHit2 = new BulletConfig {
-            StartupFrames = 16,
-                          ActiveFrames = 9,
-                          HitStunFrames = 30,
-                          BlockStunFrames = 9,
-                          Damage = 15,
-                          PushbackVelX = NO_LOCK_VEL,
-                          PushbackVelY = NO_LOCK_VEL,
-                          SelfLockVelX = (int)(2.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SelfLockVelY = NO_LOCK_VEL,
-                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                          HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SpeciesId = 2,
-                          ExplosionSpeciesId = 2,
-                          DirX = 1,
-                          DirY = 0,
-                          Hardness = 7,
-                          ExplosionFrames = 25,
-                          BType = BulletType.Melee,
-                          ExplosionSfxName="Melee_Explosion2",
-                          MhType = MultiHitType.FromEmission,
-                          ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
-                          IsPixelatedActiveVfx = true,
-                          CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-        };
-
-        public static BulletConfig SuperBladeHit3 = new BulletConfig {
-            StartupFrames = 25,
-                          ActiveFrames = 9,
-                          HitStunFrames = 30,
-                          BlockStunFrames = 9,
-                          Damage = 10,
-                          PushbackVelX = NO_LOCK_VEL,
-                          PushbackVelY = NO_LOCK_VEL,
-                          SelfLockVelX = (int)(2.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SelfLockVelY = NO_LOCK_VEL,
-                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                          HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SpeciesId = 2,
-                          ExplosionSpeciesId = 2,
-                          DirX = 1,
-                          DirY = 0,
-                          Hardness = 7,
-                          ExplosionFrames = 25,
-                          BType = BulletType.Melee,
-                          ExplosionSfxName="Melee_Explosion2",
-                          MhType = MultiHitType.FromEmission,
-                          ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
-                          IsPixelatedActiveVfx = true,
-                          CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-        };
-
-        public static BulletConfig SuperBladeHit4 = new BulletConfig {
-                    StartupFrames = 34,
-                    ActiveFrames = 9,
-                    HitStunFrames = 30,
-                    BlockStunFrames = 9,
-                    Damage = 6,
-                    PushbackVelX = NO_LOCK_VEL,
-                    PushbackVelY = NO_LOCK_VEL,
-                    SelfLockVelX = (int)(3.2f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    SelfLockVelY = NO_LOCK_VEL,
-                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                    HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    SpeciesId = 2,
-                    ExplosionSpeciesId = 2,
-                    DirX = 1,
-                    DirY = 0,
-                    Hardness = 7,
-                    ExplosionFrames = 25,
-                    BType = BulletType.Melee,
-                    ExplosionSfxName="Melee_Explosion2",
-                    MhType = MultiHitType.FromEmission,
-                    ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
-                    IsPixelatedActiveVfx = true,
-                    CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-                    };
-
-        public static BulletConfig SuperBladeHit5 = new BulletConfig {
-                    StartupFrames = 43,
-                    ActiveFrames = 9,
-                    HitStunFrames = MAX_INT,
-                    BlowUp = true,
-                    BlockStunFrames = 9,
-                    Damage = 6,
-                    PushbackVelX = NO_LOCK_VEL,
-                    PushbackVelY = (int)(6.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    SelfLockVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    SelfLockVelY = NO_LOCK_VEL,
-                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                    HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                    SpeciesId = 2,
-                    ExplosionSpeciesId = 2,
-                    DirX = 1,
-                    DirY = 0,
-                    Hardness = 7,
-                    ExplosionFrames = 25,
-                    BType = BulletType.Melee,
-                    RemainsUponHit = true,
-                    OmitSoftPushback = true,
-                    ExplosionSfxName="Melee_Explosion2",
-                    MhType = MultiHitType.FromEmission,
-                    ActiveVfxSpeciesId = VfxSmallSting.SpeciesId,
-                    IsPixelatedActiveVfx = true,
-                    CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
-        };
+        public static Skill BladeGirlAirSlash2 = new Skill{
+               Id = BladeGirlAirSlash2Id, 
+               RecoveryFrames = 45,
+               RecoveryFramesOnBlock = 45,
+               RecoveryFramesOnHit = 45,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = InAirAtk2
+        }.AddHit(BasicAirBladeHit2);
 
         public static BulletConfig WandWitchGirlBasicBulletHit1 = new BulletConfig {
             StartupFrames = 15,
@@ -4180,76 +4582,6 @@ namespace shared {
         }
         .AddHit(DarkTowerLowerBl1);
 
-        public static BulletConfig BasicDashingHit1 = new BulletConfig {
-            StartupFrames = 5,
-                          StartupInvinsibleFrames = 7,
-                          ActiveFrames = 4,
-                          PushbackVelX = NO_LOCK_VEL,
-                          PushbackVelY = NO_LOCK_VEL,
-                          SelfLockVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SelfLockVelY = 0,
-                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                          DelaySelfVelToActive = true,
-                          OmitSoftPushback = true,
-                          CancellableStFrame = 5,
-                          CancellableEdFrame = 10,
-                          BType = BulletType.Melee,
-                          MhType = MultiHitType.FromEmission,
-        }; 
-
-        public static BulletConfig BasicDashingHit2 = new BulletConfig {
-            StartupFrames = BasicDashingHit1.StartupFrames+BasicDashingHit1.ActiveFrames,
-                          ActiveFrames = 13,
-                          OmitSoftPushback = true,
-                          CancellableStFrame = BasicDashingHit1.StartupFrames+BasicDashingHit1.ActiveFrames,
-                          CancellableEdFrame = 19,
-                          PushbackVelX = NO_LOCK_VEL,
-                          PushbackVelY = NO_LOCK_VEL,
-                          SelfLockVelX = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SelfLockVelY = 0,
-                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                          BType = BulletType.Melee,
-        }; 
-
-        public static BulletConfig BasicSlidingHit1 = new BulletConfig {
-            StartupFrames = 4,
-                          StartupInvinsibleFrames = 2,
-                          ActiveFrames = 7,
-                          OmitSoftPushback = true,
-                          CancellableStFrame = 6,
-                          CancellableEdFrame = 15,
-                          CancellableByInventorySlotC = true,
-                          PushbackVelX = NO_LOCK_VEL,
-                          PushbackVelY = NO_LOCK_VEL,
-                          SelfLockVelX = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SelfLockVelY = NO_LOCK_VEL,
-                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                          DelaySelfVelToActive = true,
-                          BType = BulletType.Melee,
-                          StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                          ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                          IsPixelatedActiveVfx = true,
-                          MhType = MultiHitType.FromEmission,
-        }; 
-
-        public static BulletConfig BasicSlidingHit2 = new BulletConfig {
-            StartupFrames = BasicSlidingHit1.StartupFrames+BasicSlidingHit1.ActiveFrames,
-                          ActiveFrames = 12,
-                          OmitSoftPushback = true,
-                          CancellableStFrame = BasicSlidingHit1.StartupFrames+BasicSlidingHit1.ActiveFrames,
-                          CancellableEdFrame = 40,
-                          CancellableByInventorySlotC = true,
-                          PushbackVelX = NO_LOCK_VEL,
-                          PushbackVelY = NO_LOCK_VEL,
-                          SelfLockVelX = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                          SelfLockVelY = NO_LOCK_VEL,
-                          SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                          BType = BulletType.Melee,
-                          StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                          ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                          IsPixelatedActiveVfx = true,
-        };
-
         public static BulletConfig SmallBallEmitterBeamHit1 = new BulletConfig {
             StartupFrames = 30,
             StartupInvinsibleFrames = 12,
@@ -4275,7 +4607,7 @@ namespace shared {
             SpeedIfNotHit = (int)(2.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             DirX = 1,
             DirY = 0,
-            Hardness = 10,
+            Hardness = 999,
             ExplosionFrames = 25,
             BType = BulletType.Fireball,
             ExplosionSfxName="Explosion4",
@@ -4294,47 +4626,6 @@ namespace shared {
         public static Skill SmallBallEmitterBeamSkill = new Skill{
             Id = 130
         }.AddHit(SmallBallEmitterBeamHit1);
-
-        public static Skill BasicBladeSkill1 = new Skill {
-            // [WARNING] The relationship between "RecoveryFrames", "StartupFrames", "HitStunFrames" and "PushbackVelX" makes sure that a MeleeBullet is counterable!
-            Id = 1,
-            RecoveryFrames = 26,
-            RecoveryFramesOnBlock = 26,
-            RecoveryFramesOnHit = 26,
-            TriggerType = SkillTriggerType.RisingEdge,
-            BoundChState = Atk1
-        }.AddHit(BasicBladeHit1);
-
-        public static Skill BasicBladeSkill2 = new Skill {
-            RecoveryFrames = 24,
-            RecoveryFramesOnBlock = 24,
-            RecoveryFramesOnHit = 24,
-            TriggerType = SkillTriggerType.RisingEdge,
-            BoundChState = Atk2
-        }
-        .AddHit(BasicBladeHit2);
-
-        public static Skill BasicBladeSkill3 = new Skill {
-            RecoveryFrames = 39,
-            RecoveryFramesOnBlock = 39,
-            RecoveryFramesOnHit = 39,
-            TriggerType = SkillTriggerType.RisingEdge,
-            BoundChState = Atk3
-        }
-        .AddHit(BasicBladeHit3);
-
-        public static Skill SuperBladeSkill = new Skill {
-            RecoveryFrames = 64,
-            RecoveryFramesOnBlock = 64,
-            RecoveryFramesOnHit = 64,
-            TriggerType = SkillTriggerType.RisingEdge,
-            BoundChState = Atk4
-        }
-        .AddHit(SuperBladeHit1)
-        .AddHit(SuperBladeHit2)
-        .AddHit(SuperBladeHit3)
-        .AddHit(SuperBladeHit4)
-        .AddHit(SuperBladeHit5);
 
         public static Skill WitchGirlMeleeSkill1 = new Skill {
             Id = 6,
@@ -4500,8 +4791,8 @@ namespace shared {
             }
         );
 
-        public static Skill BladeGirlDashingSkill = new Skill {
-            Id = 11,
+        public static Skill BladeGirlDashing = new Skill {
+            Id = BladeGirlDashingId,
             RecoveryFrames = 20,
             RecoveryFramesOnBlock = 20,
             RecoveryFramesOnHit = 20,
@@ -4509,10 +4800,10 @@ namespace shared {
             BoundChState = Dashing
         }
         .AddHit(
-            new BulletConfig(StandardAirDashHit1).UpsertCancelTransit(PATTERN_B, 255).UpsertCancelTransit(PATTERN_UP_B, 255).UpsertCancelTransit(PATTERN_DOWN_B, 77)
+            new BulletConfig(StandardAirDashHit1).UpsertCancelTransit(PATTERN_B, BladeGirlAirSlash1.Id).UpsertCancelTransit(PATTERN_UP_B, BladeGirlAirSlash1.Id).UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlDiverImpact.Id)
         )
         .AddHit(
-            new BulletConfig(StandardAirDashHit2).UpsertCancelTransit(PATTERN_B, 255).UpsertCancelTransit(PATTERN_UP_B, 255).UpsertCancelTransit(PATTERN_DOWN_B, 77)
+            new BulletConfig(StandardAirDashHit2).UpsertCancelTransit(PATTERN_B, BladeGirlAirSlash1.Id).UpsertCancelTransit(PATTERN_UP_B, BladeGirlAirSlash1.Id).UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlDiverImpact.Id)
         );
 
         public static Skill SwordManDragonPunchPrimerSkill = new Skill {
@@ -4545,16 +4836,153 @@ namespace shared {
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Dashing
         }
-                            .AddHit(new BulletConfig(BasicDashingHit1).UpsertCancelTransit(PATTERN_B, 105))
-                            .AddHit(new BulletConfig(BasicDashingHit2).UpsertCancelTransit(PATTERN_B, 105));
+            .AddHit(new BulletConfig(BasicDashingHit1).UpsertCancelTransit(PATTERN_B, 105))
+            .AddHit(new BulletConfig(BasicDashingHit2).UpsertCancelTransit(PATTERN_B, 105));
+
+        public static Skill HunterBackDashing = new Skill {
+            Id = 131,
+            RecoveryFrames = 15,
+            RecoveryFramesOnBlock = 15,
+            RecoveryFramesOnHit = 15,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = BackDashing
+        }
+        .AddHit(
+            new BulletConfig {
+                StartupFrames = 3,
+                StartupInvinsibleFrames = 8,
+                PushbackVelX = NO_LOCK_VEL,
+                PushbackVelY = NO_LOCK_VEL,
+                SelfLockVelX = (int)(-4f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                SelfLockVelY = 0,
+                SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                DelaySelfVelToActive = true,
+                BType = BulletType.Melee,
+                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+            }
+        );
+
+        public static BulletConfig BladeGirlSlidingHit1 = new BulletConfig(BasicSlidingHit1)
+                                                              .SetActiveFrames(10)
+                                                              .SetSelfLockVel((int)(4.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL)
+                                                              .SetCollisionTypeMask(COLLISION_CHARACTER_INDEX_PREFIX)
+                                                              .UpsertCancelTransit(PATTERN_B, BladeGirlSlidingSlashSkill.Id)
+                                                              .UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlSlidingSlashSkill.Id)
+                                                              .UpsertCancelTransit(PATTERN_UP_B, BladeGirlDragonPunch.Id);
+                                                            
+        
+        public static BulletConfig BladeGirlSlidingHit2 = new BulletConfig(BasicSlidingHit2)
+                                                            .SetStartupFrames(BladeGirlSlidingHit1.StartupFrames+BladeGirlSlidingHit1.ActiveFrames) 
+                                                            .SetCancellableFrames(BladeGirlSlidingHit1.StartupFrames+BladeGirlSlidingHit1.ActiveFrames, 40)
+                                                            .SetOmitSoftPushback(true)
+                                                            .SetCollisionTypeMask(COLLISION_CHARACTER_INDEX_PREFIX)
+                                                            .UpsertCancelTransit(PATTERN_B, BladeGirlSlidingSlashSkill.Id)
+                                                            .UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlSlidingSlashSkill.Id)
+                                                            .UpsertCancelTransit(PATTERN_UP_B, BladeGirlDragonPunch.Id);
+
+        public static Skill BladeGirlSliding = new Skill{
+            Id = 20,
+               RecoveryFrames = 30,
+               RecoveryFramesOnBlock = 30,
+               RecoveryFramesOnHit = 30,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = Sliding
+        }
+        .AddHit(BladeGirlSlidingHit1)
+        .AddHit(BladeGirlSlidingHit2);
+
+        public static BulletConfig HunterSlidingHit1 = new BulletConfig(BasicSlidingHit1)
+                                                              .SetActiveFrames(10)
+                                                              .SetSelfLockVel((int)(4.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), NO_LOCK_VEL, NO_LOCK_VEL)
+                                                              .SetCollisionTypeMask(COLLISION_CHARACTER_INDEX_PREFIX)
+                                                              .UpsertCancelTransit(PATTERN_B, HunterPistolId)
+                                                              .UpsertCancelTransit(PATTERN_DOWN_B, HunterPistolCrouchId)
+                                                              .UpsertCancelTransit(PATTERN_UP_B, HunterDragonPunchId)
+                                                              .UpsertCancelTransit(PATTERN_RELEASED_B, MobileThunderBallPrimerId);
+                                                            
+        
+        public static BulletConfig HunterSlidingHit2 = new BulletConfig(BasicSlidingHit2)
+                                                            .SetStartupFrames(BladeGirlSlidingHit1.StartupFrames+BladeGirlSlidingHit1.ActiveFrames) 
+                                                            .SetCancellableFrames(BladeGirlSlidingHit1.StartupFrames+BladeGirlSlidingHit1.ActiveFrames, 40)
+                                                            .SetOmitSoftPushback(true)
+                                                            .SetCollisionTypeMask(COLLISION_CHARACTER_INDEX_PREFIX)
+                                                            .UpsertCancelTransit(PATTERN_B, HunterPistolId)
+                                                            .UpsertCancelTransit(PATTERN_DOWN_B, HunterPistolCrouchId)
+                                                            .UpsertCancelTransit(PATTERN_UP_B, HunterDragonPunchId)
+                                                            .UpsertCancelTransit(PATTERN_RELEASED_B, MobileThunderBallPrimerId);
+
+        public static Skill HunterSliding = new Skill {
+            Id = HunterSlidingId,
+               RecoveryFrames = 30,
+               RecoveryFramesOnBlock = 30,
+               RecoveryFramesOnHit = 30,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = Sliding
+        }
+        .AddHit(HunterSlidingHit1)
+        .AddHit(HunterSlidingHit2);
+
+        public static Skill HunterPistolWall = new Skill{
+             Id = HunterPistolWallId,
+               RecoveryFrames = 12,
+               RecoveryFramesOnBlock = 10,
+               RecoveryFramesOnHit = 10,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = OnWallAtk1
+        }.AddHit(BasicGunBulletAir);
+
+        public static Skill HunterPistol = new Skill{
+            Id = HunterPistolId,
+               RecoveryFrames = 14,
+               RecoveryFramesOnBlock = 10,
+               RecoveryFramesOnHit = 10,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = Atk1
+        }
+        .AddHit(BasicGunBulletGround);
+        
+        public static Skill HunterPistolAir = new Skill{
+            Id = HunterPistolAirId,
+               RecoveryFrames = 13,
+               RecoveryFramesOnBlock = 10,
+               RecoveryFramesOnHit = 10,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = InAirAtk1
+        }
+        .AddHit(BasicGunBulletAir);
+
+        public static Skill HunterPistolCrouch = new Skill{
+            Id = HunterPistolCrouchId,
+               RecoveryFrames = 14,
+               RecoveryFramesOnBlock = 10,
+               RecoveryFramesOnHit = 10,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = CrouchAtk1
+        }
+        .AddHit(BasicPistolBulletCrouch);
+
+        public static Skill HunterDashing = new Skill {
+            Id = HunterDashingId,
+                RecoveryFrames = 18,
+                RecoveryFramesOnBlock = 18,
+                RecoveryFramesOnHit = 18,
+                TriggerType = SkillTriggerType.RisingEdge,
+                BoundChState = Dashing
+        }
+        .AddHit(
+            new BulletConfig(BasicDashingHit1).UpsertCancelTransit(PATTERN_UP_B, HunterAirSlash.Id).UpsertCancelTransit(PATTERN_B, HunterPistolAir.Id).UpsertCancelTransit(PATTERN_DOWN_B, HunterPistolAir.Id).UpsertCancelTransit(PATTERN_RELEASED_B, MobileThunderBallPrimerAir.Id)
+        )
+        .AddHit(
+            new BulletConfig(BasicDashingHit2).UpsertCancelTransit(PATTERN_UP_B, HunterAirSlash.Id).UpsertCancelTransit(PATTERN_B, HunterPistolAir.Id).UpsertCancelTransit(PATTERN_DOWN_B, HunterPistolAir.Id).UpsertCancelTransit(PATTERN_RELEASED_B, MobileThunderBallPrimerAir.Id)
+        );
 
         public static ImmutableDictionary<uint, Skill> skills = ImmutableDictionary.Create<uint, Skill>().AddRange(
                 new[]
                 {
-                new KeyValuePair<uint, Skill>(1, BasicBladeSkill1),
-                new KeyValuePair<uint, Skill>(2, BasicBladeSkill2),
-                new KeyValuePair<uint, Skill>(3, BasicBladeSkill3),
-                new KeyValuePair<uint, Skill>(4, SuperBladeSkill),
+                new KeyValuePair<uint, Skill>(BladeGirlGroundSlash1.Id, BladeGirlGroundSlash1),
+                new KeyValuePair<uint, Skill>(BladeGirlGroundSlash2.Id, BladeGirlGroundSlash2),
+                new KeyValuePair<uint, Skill>(BladeGirlGroundSlash3.Id, BladeGirlGroundSlash3),
+                new KeyValuePair<uint, Skill>(BladeGirlGroundSuperSlash.Id, BladeGirlGroundSuperSlash),
                 new KeyValuePair<uint, Skill>(5, SwordManMelee1PrimerSkill),
                 new KeyValuePair<uint, Skill>(6, WitchGirlMeleeSkill1),
                 new KeyValuePair<uint, Skill>(7, WitchGirlMeleeSkill2),
@@ -4562,7 +4990,7 @@ namespace shared {
                 new KeyValuePair<uint, Skill>(9, WitchGirlFireballSkill),
                 new KeyValuePair<uint, Skill>(10, WitchGirlBackDashSkill),
 
-                    new KeyValuePair<uint, Skill>(11, BladeGirlDashingSkill),
+                    new KeyValuePair<uint, Skill>(BladeGirlDashing.Id, BladeGirlDashing),
 
                     new KeyValuePair<uint, Skill>(12, SwordManDragonPunchPrimerSkill),
 
@@ -4580,57 +5008,7 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(19, SpearWomanDashing),
 
-                    new KeyValuePair<uint, Skill>(20, new Skill{
-                            RecoveryFrames = 30,
-                            RecoveryFramesOnBlock = 30,
-                            RecoveryFramesOnHit = 30,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Sliding
-                            }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 4,
-                                StartupInvinsibleFrames = 2,
-                                ActiveFrames = 10,
-                                OmitSoftPushback = true,
-                                CancellableStFrame = 6,
-                                CancellableEdFrame = 15,
-                                CancellableByInventorySlotC = true,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(4.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = NO_LOCK_VEL,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                DelaySelfVelToActive = true,
-                                BType = BulletType.Melee,
-                                StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                IsPixelatedActiveVfx = true,
-                                MhType = MultiHitType.FromEmission,
-                                CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                                }.UpsertCancelTransit(PATTERN_B, 84).UpsertCancelTransit(PATTERN_DOWN_B, 84).UpsertCancelTransit(PATTERN_UP_B, 259)
-                            )
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 15,
-                                ActiveFrames = 15,
-                                OmitSoftPushback = true,
-                                CancellableStFrame = 15,
-                                CancellableEdFrame = 40,
-                                CancellableByInventorySlotC = true,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(3.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = NO_LOCK_VEL,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                BType = BulletType.Melee,
-                                StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                IsPixelatedActiveVfx = true,
-                                CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                                }.UpsertCancelTransit(PATTERN_B, 84).UpsertCancelTransit(PATTERN_DOWN_B, 84).UpsertCancelTransit(PATTERN_UP_B, 259)
-                            )
-                    ),
+                    new KeyValuePair<uint, Skill>(20, BladeGirlSliding),
 
                     new KeyValuePair<uint, Skill>(21, new Skill{
                             RecoveryFrames = 30,
@@ -4776,164 +5154,14 @@ namespace shared {
                     )),
 
                     new KeyValuePair<uint, Skill>(27, IcePillarSkill),
+                    new KeyValuePair<uint, Skill>(MagSwordGirlAirSlash.Id, MagSwordGirlAirSlash),
+                    new KeyValuePair<uint, Skill>(MagicPistolGround.Id, MagicPistolGround),
+                    new KeyValuePair<uint, Skill>(MagicPistolAir.Id, MagicPistolAir),
+                    new KeyValuePair<uint, Skill>(31, PurpleArrowPrimarySkill),
 
-                    new KeyValuePair<uint, Skill>(28, new Skill{
-                            RecoveryFrames = 28,
-                            RecoveryFramesOnBlock = 28,
-                            RecoveryFramesOnHit = 28,
-                            MpDelta = 200,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Dashing
-                            }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 5,
-                                StartupInvinsibleFrames = 9,
-                                ActiveFrames = 23,
-                                HitStunFrames = 12,
-                                BlockStunFrames = 9,
-                                Damage = 13,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(7.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = (int)(-0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                CancellableStFrame = 7,
-                                CancellableEdFrame = 28,
-                                CancellableByInventorySlotC = true,
-                                HitboxOffsetX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SpeciesId = 2,
-                                ExplosionFrames = 25,
-                                DirX = 1,
-                                DirY = 0,
-                                Hardness = 5,
-                                BType = BulletType.Melee,
-                                MhType = MultiHitType.FromEmission,
-                                FireballEmitSfxName="SlashEmitSpd2",
-                                ExplosionSfxName="Melee_Explosion2",
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX,
-                                }.UpsertCancelTransit(PATTERN_RELEASED_B, 88).UpsertCancelTransit(PATTERN_E, 28).UpsertCancelTransit(PATTERN_E_HOLD_B, 28)
-                            )
-                        ),
-
-                        new KeyValuePair<uint, Skill>(29, new Skill{
-                                RecoveryFrames = 14,
-                                RecoveryFramesOnBlock = 10,
-                                RecoveryFramesOnHit = 10,
-                                TriggerType = SkillTriggerType.RisingEdge,
-                                BoundChState = Atk1
-                                }
-                                .AddHit(
-                                    MagicPistolBulletGround
-                                    )
-                                ),
-
-                        new KeyValuePair<uint, Skill>(30, new Skill{
-                                RecoveryFrames = 14,
-                                RecoveryFramesOnBlock = 10,
-                                RecoveryFramesOnHit = 10,
-                                TriggerType = SkillTriggerType.RisingEdge,
-                                BoundChState = InAirAtk1
-                                }
-                                .AddHit(
-                                    MagicPistolBulletAir
-                                    )
-                                ),
-
-                        new KeyValuePair<uint, Skill>(31, PurpleArrowPrimarySkill),
-
-                        new KeyValuePair<uint, Skill>(32, FallingPurpleArrowSkill),
-
-                        new KeyValuePair<uint, Skill>(33, new Skill{
-                                RecoveryFrames = 22,
-                                RecoveryFramesOnBlock = 22,
-                                RecoveryFramesOnHit = 22,
-                                TriggerType = SkillTriggerType.RisingEdge,
-                                BoundChState = Sliding
-                                }
-                                .AddHit(
-                                    new BulletConfig {
-                                    StartupFrames = 4,
-                                    StartupInvinsibleFrames = 8,
-                                    ActiveFrames = 14,
-                                    PushbackVelX = NO_LOCK_VEL,
-                                    PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = (int)(4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    SelfLockVelY = NO_LOCK_VEL,
-                                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                    DelaySelfVelToActive = true,
-                                    OmitSoftPushback = true,
-                                    BType = BulletType.Melee,
-                                    StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                    ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                    IsPixelatedActiveVfx = true,
-                                    CancellableStFrame = 6,
-                                    CancellableEdFrame = 19,
-                                    CancellableByInventorySlotC = true,
-                                    MhType = MultiHitType.FromEmission,
-                                    CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                                    }.UpsertCancelTransit(PATTERN_RELEASED_B, 87)
-                                )
-                                .AddHit(
-                                    new BulletConfig {
-                                    StartupFrames = 19,
-                                    ActiveFrames = 3,
-                                    PushbackVelX = NO_LOCK_VEL,
-                                    PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = 0,
-                                    SelfLockVelY = NO_LOCK_VEL,
-                                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                    BType = BulletType.Melee,
-                                    StartupVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                    ActiveVfxSpeciesId = VfxSmokeNDust1.SpeciesId,
-                                    IsPixelatedActiveVfx = true,
-                                    CancellableStFrame = 19,
-                                    CancellableEdFrame = 23,
-                                    CancellableByInventorySlotC = true,
-                                    CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
-                                    }.UpsertCancelTransit(PATTERN_RELEASED_B, 87)
-                                )
-                        ),
-
-                        new KeyValuePair<uint, Skill>(34, new Skill {
-                                RecoveryFrames = 28,
-                                RecoveryFramesOnBlock = 28,
-                                RecoveryFramesOnHit = 28,
-                                TriggerType = SkillTriggerType.RisingEdge,
-                                BoundChState = InAirAtk2
-                                }
-                                .AddHit(
-                                    new BulletConfig {
-                                    StartupFrames = 6,
-                                    ActiveFrames = 16,
-                                    HitStunFrames = 24,
-                                    BlockStunFrames = 9,
-                                    Damage = 13,
-                                    PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    PushbackVelY = NO_LOCK_VEL,
-                                    SelfLockVelX = NO_LOCK_VEL,
-                                    SelfLockVelY = NO_LOCK_VEL,
-                                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                    HitboxOffsetX = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxOffsetY = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                    SpeciesId = 1,
-                                    ExplosionSpeciesId = 1,
-                                    ExplosionFrames = 25,
-                                    BType = BulletType.Melee,
-                                    DirX = 1,
-                                    DirY = 0,
-                                    Hardness = 5,
-                                    RemainsUponHit = true,
-                                    CharacterEmitSfxName = "FlameEmit1",
-                                    ExplosionSfxName = "FlameBurning1",
-                                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                    }
-                        )),
+                    new KeyValuePair<uint, Skill>(32, FallingPurpleArrowSkill),
+                    new KeyValuePair<uint, Skill>(MagicPistolCrouch.Id, MagicPistolCrouch),
+                    new KeyValuePair<uint, Skill>(MagSwordGirlSliding.Id, MagSwordGirlSliding),
 
                     new KeyValuePair<uint, Skill>(35, HeatBeamSkill),
 
@@ -5060,50 +5288,9 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(44, FireSwordManMelee1PrimerSkillAir),
 
-                    new KeyValuePair<uint, Skill>(45, BoarMelee1PrimerSkill),
+                    new KeyValuePair<uint, Skill>(BoarMelee1PrimerSkill.Id, BoarMelee1PrimerSkill),
 
-                    new KeyValuePair<uint, Skill>(46, new Skill{
-                            Id = 46,
-                            RecoveryFrames = 100,
-                            RecoveryFramesOnBlock = 100,
-                            RecoveryFramesOnHit = 100,
-                            MpDelta = 7*BATTLE_DYNAMICS_FPS,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Dashing
-                            }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 50,
-                                StartupInvinsibleFrames = 12,
-                                ActiveFrames = 20,
-                                HitStunFrames = MAX_INT,
-                                HitInvinsibleFrames = 60,
-                                BlockStunFrames = 9,
-                                Damage = 15,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = (int)(6.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelX = (int)(5.8f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = 0,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(20*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(28*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                DelaySelfVelToActive = true,
-                                BlowUp = true,
-                                SpeciesId = 3,
-                                ExplosionFrames = 25,
-                                DirX = 1,
-                                DirY = 0,
-                                Hardness = 7,
-                                OmitSoftPushback = true,
-                                BType = BulletType.Melee,
-                                FireballEmitSfxName="SlashEmitSpd2",
-                                ExplosionSfxName="Melee_Explosion2",
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX,
-                                }
-                            )
-                        ),
+                    new KeyValuePair<uint, Skill>(BoarDashing.Id, BoarDashing),
 
                     new KeyValuePair<uint, Skill>(47, WaterballGroundSkill1),
                     new KeyValuePair<uint, Skill>(48, WaterballGroundSkill2),
@@ -5220,116 +5407,39 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(63, RisingWaterballPair),
                     new KeyValuePair<uint, Skill>(64, FallingWaterballPair),
                     new KeyValuePair<uint, Skill>(65, GhostHorseSkill),
-                    new KeyValuePair<uint, Skill>(66, MobileThunderBallPrimerSkill),
-                    new KeyValuePair<uint, Skill>(67, MobileThunderBallPrimerSkillAir),
-                    new KeyValuePair<uint, Skill>(68, new Skill{
-                            RecoveryFrames = 12,
-                            RecoveryFramesOnBlock = 10,
-                            RecoveryFramesOnHit = 10,
-                            MpDelta = 0,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = OnWallAtk1
-                            }
-                            .AddHit(
-                                BasicGunBulletAir
-                                )
-                            ),
-                    new KeyValuePair<uint, Skill>(69, MobileThunderBallPrimerSkillCrouch),
-                    new KeyValuePair<uint, Skill>(70, MobileThunderBallPrimerSkillWall),
+                    new KeyValuePair<uint, Skill>(MobileThunderBallPrimer.Id, MobileThunderBallPrimer),
+                    new KeyValuePair<uint, Skill>(MobileThunderBallPrimerAir.Id, MobileThunderBallPrimerAir),
+                    new KeyValuePair<uint, Skill>(HunterPistolWall.Id, HunterPistolWall),
+                    new KeyValuePair<uint, Skill>(MobileThunderBallPrimerCrouch.Id, MobileThunderBallPrimerCrouch),
+                    new KeyValuePair<uint, Skill>(MobileThunderBallPrimerWall.Id, MobileThunderBallPrimerWall),
 
-                    new KeyValuePair<uint, Skill>(71, new Skill{
-                            RecoveryFrames = 14,
-                            RecoveryFramesOnBlock = 10,
-                            RecoveryFramesOnHit = 10,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk1
-                            }
-                            .AddHit(
-                                BasicGunBulletGround
-                                )
-                            ),
+                    new KeyValuePair<uint, Skill>(HunterPistol.Id, HunterPistol),
 
-                    new KeyValuePair<uint, Skill>(72, new Skill{
-                            RecoveryFrames = 13,
-                            RecoveryFramesOnBlock = 10,
-                            RecoveryFramesOnHit = 10,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = InAirAtk1
-                            }
-                            .AddHit(
-                                BasicGunBulletAir
-                                )
-                            ),
+                    new KeyValuePair<uint, Skill>(HunterPistolAir.Id, HunterPistolAir),
 
-                    new KeyValuePair<uint, Skill>(73, HunterDragonPunchSkill),
-                    new KeyValuePair<uint, Skill>(74, HunterAirSlashSkill),
-                    new KeyValuePair<uint, Skill>(76, HunterDashSlashSKill),
-                    new KeyValuePair<uint, Skill>(77, DiverImpactSkill),
-                    new KeyValuePair<uint, Skill>(78, new Skill{
-                            RecoveryFrames = 18,
-                            RecoveryFramesOnBlock = 18,
-                            RecoveryFramesOnHit = 18,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Dashing
-                            }
-                            .AddHit(
-                                new BulletConfig(StandardAirDashHit1).UpsertCancelTransit(PATTERN_B, 1).UpsertCancelTransit(PATTERN_DOWN_B, 1)
-                            )
-                            .AddHit(
-                                new BulletConfig(StandardAirDashHit2).UpsertCancelTransit(PATTERN_B, 1).UpsertCancelTransit(PATTERN_DOWN_B, 1)
-                            )
-                    ),
+                    new KeyValuePair<uint, Skill>(HunterDragonPunch.Id, HunterDragonPunch),
+                    new KeyValuePair<uint, Skill>(HunterAirSlash.Id, HunterAirSlash),
+                    new KeyValuePair<uint, Skill>(HunterDashSlashSKill.Id, HunterDashSlashSKill),
+                    new KeyValuePair<uint, Skill>(BladeGirlDiverImpact.Id, BladeGirlDiverImpact),
+                    new KeyValuePair<uint, Skill>(HunterDashing.Id, HunterDashing),
 
                     new KeyValuePair<uint, Skill>(79, SpinLightBeamSkill),
                     new KeyValuePair<uint, Skill>(80, SpinLightBeamAirSkill),
                     new KeyValuePair<uint, Skill>(81, FireSwordManFireBreathSkill),
-                    new KeyValuePair<uint, Skill>(82, DemonFireBreathSkill),
-                    new KeyValuePair<uint, Skill>(83, DemonDiverImpactSkill),
-                    new KeyValuePair<uint, Skill>(84, BladeGirlDashSlashSkill),
+                    new KeyValuePair<uint, Skill>(DemonFireBreathSkill.Id, DemonFireBreathSkill),
+                    new KeyValuePair<uint, Skill>(DemonDiverImpact.Id, DemonDiverImpact),
+                    new KeyValuePair<uint, Skill>(BladeGirlSlidingSlashSkill.Id, BladeGirlSlidingSlashSkill),
                     new KeyValuePair<uint, Skill>(85, DroppingFireballSkill),
-                    new KeyValuePair<uint, Skill>(86, HunterDragonPunchSecondarySkill),
-                    new KeyValuePair<uint, Skill>(87, new Skill{
-                    RecoveryFrames = 14,
-                    RecoveryFramesOnBlock = 10,
-                    RecoveryFramesOnHit = 10,
-                    MpDelta = 300,
-                    TriggerType = SkillTriggerType.RisingEdge,
-                    BoundChState = Atk1
-                    }
-                    .AddHit(
-                        MagicCannonBulletGround
-                        )
-                    ),
-                    new KeyValuePair<uint, Skill>(88, new Skill{
-                    RecoveryFrames = 14,
-                    RecoveryFramesOnBlock = 10,
-                    RecoveryFramesOnHit = 10,
-                    MpDelta = 300,
-                    TriggerType = SkillTriggerType.RisingEdge,
-                    BoundChState = InAirAtk1
-                    }
-                    .AddHit(
-                        MagicCannonBulletAir
-                        )
-                    ),
-                    new KeyValuePair<uint, Skill>(89, new Skill{
-                    RecoveryFrames = 14,
-                    RecoveryFramesOnBlock = 10,
-                    RecoveryFramesOnHit = 10,
-                    MpDelta = 300,
-                    TriggerType = SkillTriggerType.RisingEdge,
-                    BoundChState = CrouchAtk1
-                    }
-                    .AddHit(
-                        MagicCannonBulletAir
-                        )
-                    ),
+                    new KeyValuePair<uint, Skill>(HunterDragonPunchSecondarySkill.Id, HunterDragonPunchSecondarySkill),
+                    new KeyValuePair<uint, Skill>(MagicCannonGround.Id, MagicCannonGround),
+                    new KeyValuePair<uint, Skill>(MagicCannonAir.Id, MagicCannonAir),
+                    new KeyValuePair<uint, Skill>(MagicCannonCrouch.Id, MagicCannonCrouch),
 
                     new KeyValuePair<uint, Skill>(90, HeavyGuardMelee1PrimerSkill),
                     new KeyValuePair<uint, Skill>(91, HeavyGuardDashSkill),
                     new KeyValuePair<uint, Skill>(92, LightGuardMelee1PrimerSkill),
                     new KeyValuePair<uint, Skill>(93, LightGuardDashSkill),
-                    new KeyValuePair<uint, Skill>(94, BladeGirlCrouchHitSkill),
+                    new KeyValuePair<uint, Skill>(BladeGirlCrouchSlash.Id, BladeGirlCrouchSlash),
 
                     new KeyValuePair<uint, Skill>(95, RiderGuardMelee1PrimerSkill),
                     new KeyValuePair<uint, Skill>(96, RiderGuardDashSkill),
@@ -5659,89 +5769,14 @@ namespace shared {
                             .AddHit(LightRepPerforationBl9)
                             ),
 
-                    new KeyValuePair<uint,Skill>(130, SmallBallEmitterBeamSkill),
-
-                    new KeyValuePair<uint, Skill>(255, new Skill {
-                            Id = 255,
-                            RecoveryFrames = 20,
-                            RecoveryFramesOnBlock = 20,
-                            RecoveryFramesOnHit = 20,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = InAirAtk1
-                            }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 5,
-                                ActiveFrames = 14,
-                                HitStunFrames = 15,
-                                BlockStunFrames = 9,
-                                Damage = 13,
-                                PushbackVelX = NO_LOCK_VEL,
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = NO_LOCK_VEL,
-                                SelfLockVelY = NO_LOCK_VEL,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SpeciesId = 2,
-                                ExplosionFrames = 25,
-                                BType = BulletType.Melee,
-                                ReflectFireballXIfNotHarder = true,
-                                DirX = 1,
-                                DirY = 0,
-                                Hardness = 5,
-                                CancellableStFrame = 13,
-                                CancellableEdFrame = 21,
-                                CharacterEmitSfxName="SlashEmitSpd1",
-                                ExplosionSfxName="Melee_Explosion2",
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }.UpsertCancelTransit(PATTERN_B, 258).UpsertCancelTransit(PATTERN_UP_B, 258).UpsertCancelTransit(PATTERN_DOWN_B, 77)
-                        )),
-
-                    new KeyValuePair<uint, Skill>(258, new Skill{
-                            Id = 258, 
-                            RecoveryFrames = 45,
-                            RecoveryFramesOnBlock = 45,
-                            RecoveryFramesOnHit = 45,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = InAirAtk2
-                            }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 9,
-                                StartupInvinsibleFrames = 4,
-                                ActiveFrames = 20,
-                                HitStunFrames = 15,
-                                BlockStunFrames = 5,
-                                FinishingFrames = 15,
-                                Damage = 10,
-                                PushbackVelX = (int)(2.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelX = (int)(1.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(24*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SpeciesId = 2,
-                                ExplosionFrames = 25,
-                                BType = BulletType.Melee,
-                                ReflectFireballXIfNotHarder = true,
-                                DirX = 1,
-                                DirY = 0,
-                                Hardness = 6,
-                                CharacterEmitSfxName = "SlashEmitSpd3",
-                                ExplosionSfxName="Melee_Explosion2",
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }
-                )
-                    ),
-
-                new KeyValuePair<uint, Skill>(259, BladeGirlDragonPunchSkill),
-                new KeyValuePair<uint, Skill>(260, BatMelee1PrimerSkill),
+                    new KeyValuePair<uint,Skill>(SmallBallEmitterBeamSkill.Id, SmallBallEmitterBeamSkill),
+                    new KeyValuePair<uint,Skill>(HunterBackDashing.Id, HunterBackDashing),
+                    new KeyValuePair<uint,Skill>(HunterSliding.Id, HunterSliding),
+                    new KeyValuePair<uint, Skill>(HunterPistolCrouch.Id, HunterPistolCrouch),
+                    new KeyValuePair<uint, Skill>(BladeGirlAirSlash1.Id, BladeGirlAirSlash1),
+                    new KeyValuePair<uint, Skill>(BladeGirlAirSlash2.Id, BladeGirlAirSlash2),
+                    new KeyValuePair<uint, Skill>(BladeGirlDragonPunch.Id, BladeGirlDragonPunch),
+                    new KeyValuePair<uint, Skill>(BatMelee1PrimerSkill.Id, BatMelee1PrimerSkill),
                 }
         );
         
@@ -5768,9 +5803,9 @@ namespace shared {
                                 if (currCharacterDownsync.InAir) {
                                     if (OnWallIdle1 != currCharacterDownsync.CharacterState) {
                                         if (PATTERN_DOWN_B == patternId && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
-                                            return 77;
+                                            return BladeGirlDiverImpact.Id;
                                         } else {
-                                            return 255; // A fallback to "InAirAtk1"
+                                            return BladeGirlAirSlash1.Id; // A fallback to "InAirAtk1"
                                         }
                                     } else {
                                         return 60; // A fallback to "OnWallAtk1"
@@ -5798,9 +5833,9 @@ namespace shared {
                         case PATTERN_UP_B: // Including "PATTERN_DOWN_B" here as a "no-skill fallback" if attack button is pressed
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
-                                    return 255; // A fallback to "InAirAtk1" 
+                                    return BladeGirlAirSlash1.Id; // A fallback to "InAirAtk1" 
                                 } else {
-                                    return 259;
+                                    return BladeGirlDragonPunch.Id;
                                 }
                             } else {
                                 // [WARNING] Combo in air is possible for this character!
@@ -5822,10 +5857,10 @@ namespace shared {
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                                 // Air-dash is allowed for this speciesId
-                                return 11;
+                                return BladeGirlDashing.Id;
                             } else if (!currCharacterDownsync.InAir) {
                                 // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
-                                return 20; 
+                                return BladeGirlSliding.Id; 
                             } else {
                                 return NO_SKILL;
                             }
@@ -6283,14 +6318,15 @@ namespace shared {
                 case SPECIES_MAGSWORDGIRL:
                     switch (patternId) {
                         case PATTERN_RELEASED_B:
+                            if (!slotUsed) return NO_SKILL;
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
-                                    return 88;
+                                    return MagicCannonAir.Id;
                                 } else {
                                     if (isCrouching(currCharacterDownsync.CharacterState, chConfig)) {
-                                        return 89;
+                                        return MagicCannonCrouch.Id;
                                     } else {
-                                        return 87;
+                                        return MagicCannonGround.Id;
                                     }
                                 }
                             } else {
@@ -6304,14 +6340,24 @@ namespace shared {
                         case PATTERN_B:
                         case PATTERN_UP_B:
                         case PATTERN_DOWN_B:
-                            if (!notRecovered && slotUsed) {
+                            if (!slotUsed) return NO_SKILL;
+                            if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
-                                    return 30;
+                                    return MagicPistolAir.Id;
                                 } else {
-                                    return 29;
+                                    if (isCrouching(currCharacterDownsync.CharacterState, chConfig) || PATTERN_DOWN_B == patternId) {
+                                        return MagicPistolCrouch.Id;
+                                    } else {
+                                        return MagicPistolGround.Id;
+                                    }
                                 }
                             } else {
-                                return NO_SKILL;
+                                // [WARNING] Combo in air is possible for this character!
+                                // Now that "0 < FramesToRecover", we're only able to fire any skill if it's a cancellation
+                                var (currSkillConfig, currBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
+                                if (null == currSkillConfig || null == currBulletConfig || !currBulletConfig.CancelTransit.ContainsKey(patternId)) return NO_SKILL;
+                                if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return NO_SKILL;
+                                return currBulletConfig.CancelTransit[patternId];
                             }
                         case PATTERN_E:
                         case PATTERN_DOWN_E:
@@ -6324,7 +6370,7 @@ namespace shared {
                             if (notRecovered) return NO_SKILL;
                             if (!currCharacterDownsync.InAir) {
                                 // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
-                                return 33;
+                                return MagSwordGirlSliding.Id;
                             } else if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                                 // Air-dash is allowed for this speciesId
@@ -6344,18 +6390,19 @@ namespace shared {
                 case SPECIES_BOUNTYHUNTER:
                     switch (patternId) {
                         case PATTERN_RELEASED_B:
+                            if (!slotUsed) return NO_SKILL;
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
-                                        return 70;
+                                        return MobileThunderBallPrimerWall.Id;
                                     } else {
-                                        return 67;
+                                        return MobileThunderBallPrimerAir.Id;
                                     }
                                 } else {
                                     if (isCrouching(currCharacterDownsync.CharacterState, chConfig)) {
-                                        return 69;
+                                        return MobileThunderBallPrimerCrouch.Id;
                                     } else {
-                                        return 66;
+                                        return MobileThunderBallPrimer.Id;
                                     }
                                 }
                             } else {
@@ -6369,9 +6416,9 @@ namespace shared {
                         case PATTERN_UP_B: // Including "PATTERN_DOWN_B" here as a "no-skill fallback" if attack button is pressed
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
-                                    return 74; // A fallback to "InAirAtk2" 
+                                    return HunterAirSlash.Id; 
                                 } else {
-                                    return 73;
+                                    return HunterDragonPunch.Id;
                                 }
                             } else {
                                 // [WARNING] Combo in air is possible for this character!
@@ -6383,18 +6430,26 @@ namespace shared {
                             }
                         case PATTERN_B:
                         case PATTERN_DOWN_B:
-                            if (!notRecovered && slotUsed) {
+                            if (!slotUsed) return NO_SKILL;
+                            if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     if (OnWallIdle1 != currCharacterDownsync.CharacterState) {
-                                        return 72; // A fallback to "InAirAtk1"
+                                        return HunterPistolAir.Id;
                                     } else {
-                                        return 68; // A fallback to "OnWallAtk1"
+                                        return HunterPistolWall.Id;
                                     }
                                 } else {
-                                    return 71;
+                                    if (isCrouching(currCharacterDownsync.CharacterState, chConfig) || PATTERN_DOWN_B == patternId) {
+                                        return HunterPistolCrouch.Id;
+                                    } else {
+                                        return HunterPistol.Id;
+                                    }
                                 }
                             } else {
-                                return NO_SKILL;
+                                var (currSkillConfig, currBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
+                                if (null == currSkillConfig || null == currBulletConfig || !currBulletConfig.CancelTransit.ContainsKey(patternId)) return NO_SKILL;
+                                if (!(currBulletConfig.CancellableStFrame <= currCharacterDownsync.FramesInChState && currCharacterDownsync.FramesInChState < currBulletConfig.CancellableEdFrame)) return NO_SKILL;
+                                return currBulletConfig.CancelTransit[patternId];
                             }
                         case PATTERN_E:
                         case PATTERN_DOWN_E:
@@ -6408,10 +6463,14 @@ namespace shared {
                             if (currCharacterDownsync.InAir && 0 < currCharacterDownsync.RemainingAirDashQuota && IN_AIR_DASH_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
                                 // Dashing is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
                                 // Air-dash is allowed for this speciesId
-                                return 78;
+                                return HunterDashing.Id;
                             } else if (!currCharacterDownsync.InAir) {
                                 // Sliding is already constrained by "FramesToRecover & CapturedByInertia" in "deriveOpPattern"
-                                return 20; 
+                                if (PATTERN_FRONT_E == patternId || PATTERN_FRONT_E_HOLD_B == patternId) {
+                                    return HunterSliding.Id; 
+                                } else {
+                                    return HunterBackDashing.Id;
+                                }
                             } else {
                                 return NO_SKILL;
                             }
@@ -6531,7 +6590,7 @@ namespace shared {
                         case PATTERN_DOWN_B:
                         case PATTERN_UP_B:
                             if (!notRecovered) {
-                                return 260;
+                                return BatMelee1PrimerSkill.Id;
                             } else {
                                 return NO_SKILL;
                             }
@@ -6543,7 +6602,7 @@ namespace shared {
                         case PATTERN_B:
                         case PATTERN_UP_B:
                             if (!notRecovered) {
-                                return 260;
+                                return BatMelee1PrimerSkill.Id;
                             } else {
                                 return NO_SKILL;
                             }
@@ -6627,7 +6686,7 @@ namespace shared {
                     switch (patternId) {
                         case PATTERN_B:
                             if (!notRecovered) {
-                                return 45;
+                                return BoarMelee1PrimerSkill.Id;
                             } else {
                                 return NO_SKILL;
                             }
@@ -6640,7 +6699,7 @@ namespace shared {
                         case PATTERN_UP_E_HOLD_B:
                         case PATTERN_FRONT_E_HOLD_B:
                             if (notRecovered || currCharacterDownsync.InAir) return NO_SKILL;
-                            else return 46;
+                            else return BoarDashing.Id;
                         default:
                             return NO_SKILL;
                     }

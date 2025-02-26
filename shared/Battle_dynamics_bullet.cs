@@ -713,9 +713,11 @@ namespace shared {
                              */
                             if (victimChConfig.GroundDodgeEnabledByRdfCntFromBeginning > victimNextFrame.FramesInChState) {  
                                 bool notDashing = isNotDashing(victimNextFrame);
+                                bool dashing = !notDashing;
                                 bool effInAir = isEffInAir(victimNextFrame, notDashing);
-                                if (!effInAir && !notDashing) {
+                                if (!effInAir && dashing) {
                                     transitToGroundDodgedChState(victimNextFrame, victimChConfig);
+                                    accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, null, victimNextFrame);
                                     break;
                                 }
                             }
@@ -774,6 +776,7 @@ namespace shared {
                             if (!shouldBeImmune) {
                                 (effDamage, successfulDef1) = _calcEffDamage(oldNextCharacterState, victimChConfig, victimNextFrame, victimActiveSkillBuff, bulletNextFrame, bulletConfig, bulletCollider, bCollider);
                                 if (successfulDef1) {
+                                    accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, null, victimNextFrame);
                                     explodedOnAnotherHarderBullet = true;
                                 }
                             }
@@ -908,15 +911,16 @@ namespace shared {
                                 // [WARNING] Gravity omitting characters shouldn't take a "blow up".
                                 bool shouldOmitStun = (victimChConfig.OmitGravity || (0 >= bulletConfig.HitStunFrames) || shouldOmitHitPushback);
                                 var oldFramesToRecover = victimNextFrame.FramesToRecover;
-                                var existingDebuff = victimNextFrame.DebuffList[DEBUFF_ARR_IDX_FROZEN];
+                                var existingDebuff = victimNextFrame.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
                                 bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == debuffConfigs[existingDebuff.SpeciesId].Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
-                                bool shouldExtendDef1Broken = (!isFrozen && Def1Broken == oldNextCharacterState && bulletConfig.HitStunFrames <= oldFramesToRecover);
+                                bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+                                bool shouldExtendDef1Broken = (!isFrozen && !isParalyzed && Def1Broken == oldNextCharacterState && bulletConfig.HitStunFrames <= oldFramesToRecover);
                                 if (false == shouldOmitStun) {
                                     resetJumpStartupOrHolding(victimNextFrame, true);
                                     CharacterState newNextCharacterState = Atked1;
-                                    if (!isFrozen && bulletConfig.BlowUp) {
+                                    if (!isFrozen && !isParalyzed && bulletConfig.BlowUp) {
                                         newNextCharacterState = BlownUp1;
-                                    } else if (isFrozen || BlownUp1 != oldNextCharacterState) {
+                                    } else if (isFrozen || isParalyzed || BlownUp1 != oldNextCharacterState) {
                                         if (isCrouching(oldNextCharacterState, victimChConfig)) {
                                             newNextCharacterState = CrouchAtked1;
                                         }
@@ -965,11 +969,10 @@ namespace shared {
                                             for (int q = 0; q < buffConfig.AssociatedDebuffs.Count; q++) {
                                                 DebuffConfig associatedDebuffConfig = debuffConfigs[buffConfig.AssociatedDebuffs[q]];
                                                 if (null == associatedDebuffConfig || TERMINATING_BUFF_SPECIES_ID == associatedDebuffConfig.SpeciesId) break;
+                                                int debuffArrIdx = associatedDebuffConfig.ArrIdx;
                                                 switch (associatedDebuffConfig.Type) {
                                                     case DebuffType.FrozenPositionLocked:
-                                                        if (BulletType.Melee == bulletConfig.BType) break; // Forbid melee attacks to use freezing buff, otherwise it'd be too unbalanced. 
-                                                                                                           // Overwrite existing debuff for now
-                                                        int debuffArrIdx = associatedDebuffConfig.ArrIdx;
+                                                        // Overwrite existing debuff for now
                                                         AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, victimNextFrame.DebuffList[debuffArrIdx]);
                                                         // The following transition is deterministic because we checked "victimNextFrame.DebuffList" before transiting into BlownUp1.
                                                         if (isCrouching(victimNextFrame.CharacterState, victimChConfig)) {
@@ -985,6 +988,17 @@ namespace shared {
                                                                 break;
                                                         }
                                                         break;
+                                                    case DebuffType.PositionLockedOnly:
+                                                        // Overwrite existing debuff for now
+                                                        AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, victimNextFrame.DebuffList[debuffArrIdx]);
+                                                        if (isCrouching(victimNextFrame.CharacterState, victimChConfig)) {
+                                                            victimNextFrame.CharacterState = CrouchAtked1;
+                                                        } else {
+                                                            victimNextFrame.CharacterState = Atked1;
+                                                        }
+                                                        victimNextFrame.VelX = 0;
+                                                        resetJumpStartupOrHolding(victimNextFrame, true);
+                                                        break;
                                                 }
                                             }
                                         }
@@ -999,11 +1013,11 @@ namespace shared {
                                             for (int q = 0; q < buffConfig.AssociatedDebuffs.Count; q++) {
                                                 DebuffConfig associatedDebuffConfig = debuffConfigs[buffConfig.AssociatedDebuffs[q]];
                                                 if (null == associatedDebuffConfig || TERMINATING_BUFF_SPECIES_ID == associatedDebuffConfig.SpeciesId) break;
+                                                int debuffArrIdx = associatedDebuffConfig.ArrIdx;
                                                 switch (associatedDebuffConfig.Type) {
                                                     case DebuffType.FrozenPositionLocked:
-                                                        if (BulletType.Melee == bulletConfig.BType) break; // Forbid melee attacks to use freezing buff, otherwise it'd be too unbalanced. 
-                                                                                                           // Overwrite existing debuff for now
-                                                        int debuffArrIdx = associatedDebuffConfig.ArrIdx;
+                                                        if (BulletType.Melee == bulletConfig.BType) break; // Forbid melee attacks to use freezing buff while in offender-scope, otherwise it'd be too unbalanced. 
+                                                        // Overwrite existing debuff for now
                                                         AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, victimNextFrame.DebuffList[debuffArrIdx]);
                                                         // The following transition is deterministic because we checked "victimNextFrame.DebuffList" before transiting into BlownUp1.
                                                         if (isCrouching(victimNextFrame.CharacterState, victimChConfig)) {
@@ -1018,6 +1032,17 @@ namespace shared {
                                                                 victimNextFrame.FramesToRecover = associatedDebuffConfig.Stock;
                                                                 break;
                                                         }
+                                                        break;
+                                                    case DebuffType.PositionLockedOnly:
+                                                        // Overwrite existing debuff for now
+                                                        AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, victimNextFrame.DebuffList[debuffArrIdx]);
+                                                        if (isCrouching(victimNextFrame.CharacterState, victimChConfig)) {
+                                                            victimNextFrame.CharacterState = CrouchAtked1;
+                                                        } else {
+                                                            victimNextFrame.CharacterState = Atked1;
+                                                        }
+                                                        victimNextFrame.VelX = 0;
+                                                        resetJumpStartupOrHolding(victimNextFrame, true);
                                                         break;
                                                 }
                                             }
@@ -1074,6 +1099,11 @@ namespace shared {
                 }
                 if (bulletConfig.MhNotTriggerOnHardPushbackHit && !explodedOnAnotherHarderBullet && !explodedOnCh) {
                     inTheMiddleOfPrevHitMhTransition = false;
+                }
+
+                // [WARNING] The following check-and-assignment is used for correction of complicated cases for "TouchExplosionBombCollision".
+                if (exploded && bulletConfig.TouchExplosionBombCollision) {
+                    inTheMiddleOfPrevHitMhTransition = true;
                 }
 
                 if (exploded) {
@@ -1462,7 +1492,7 @@ namespace shared {
             (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bulletConfig.VisionSizeX, bulletConfig.VisionSizeY);
         }
 
-        public static void _processDelayedBulletSelfVel(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, ILoggerBridge logger) {
+        public static void _processDelayedBulletSelfVel(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, bool isParalyzed, ILoggerBridge logger) {
             var (skill, bulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
             if (null == skill || null == bulletConfig) {
                 return;
@@ -1472,6 +1502,9 @@ namespace shared {
                 return;
             }
             if (currCharacterDownsync.FramesInChState != bulletConfig.StartupFrames) {
+                return;
+            }
+            if (isParalyzed) {
                 return;
             }
             int xfac = (0 < currCharacterDownsync.DirX ? 1 : -1);

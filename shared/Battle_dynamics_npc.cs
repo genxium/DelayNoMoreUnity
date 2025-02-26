@@ -87,8 +87,11 @@ namespace shared {
             }
             
             if (OPPONENT_REACTION_FOLLOW == visionReaction) {
-                bool shouldJumpTowardsTarget = (canJumpWithinInertia && !effInAir && (0.6f * aCollider.H < oppoChColliderDy) && (0 <= currCharacterDownsync.DirX * oppoChColliderDx));
+                bool opponentAboveMe = (0.6f * aCollider.H < oppoChColliderDy);
+                bool shouldJumpTowardsTarget = (canJumpWithinInertia && !effInAir && opponentAboveMe && (0 <= currCharacterDownsync.DirX * oppoChColliderDx));
+                shouldJumpTowardsTarget |= (opponentAboveMe && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState) && effInAir && chConfig.JumpHoldingToFly);
                 bool shouldSlipJumpTowardsTarget = (canJumpWithinInertia && !effInAir && 0 > oppoChColliderDy && currCharacterDownsync.PrimarilyOnSlippableHardPushback);
+                shouldSlipJumpTowardsTarget = (!chConfig.OmitGravity && chConfig.JumpHoldingToFly && currCharacterDownsync.OmitGravity && !opponentAboveMe && !opponentBehindMe);
                 if (0 >= chConfig.JumpingInitVelY) {
                     shouldJumpTowardsTarget = false;
                     shouldSlipJumpTowardsTarget = false;
@@ -107,7 +110,7 @@ namespace shared {
                 if (0 == jumpHoldingRdfCnt) {
                     jumpHoldingRdfCnt = 1;
                 }
-                if (0 < currCharacterDownsync.JumpHoldingRdfCnt && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState)) {
+                if (0 < currCharacterDownsync.JumpHoldingRdfCnt && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
                     // [warning] only proactive jumping support jump holding.
                     jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
                     patternId = PATTERN_HOLD_B;
@@ -220,7 +223,7 @@ namespace shared {
                         if (0 == jumpHoldingRdfCnt) {
                             jumpHoldingRdfCnt = 1;
                         }
-                        if (0 < currCharacterDownsync.JumpHoldingRdfCnt && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState)) {
+                        if (0 < currCharacterDownsync.JumpHoldingRdfCnt && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
                             // [WARNING] Only proactive jumping support jump holding.
                             jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
                             patternId = PATTERN_HOLD_B;
@@ -404,7 +407,7 @@ namespace shared {
                     closeEnough = (0 < colliderDy && absColliderDy > 2.2f*aCollider.H); // A special case
                     break;
                 case SPECIES_DEMON_FIRE_SLIME:
-                    if (currCharacterDownsync.Mp < DemonDiverImpactSkill.MpDelta) {
+                    if (currCharacterDownsync.Mp < DemonDiverImpact.MpDelta) {
                         return OPPONENT_REACTION_NOT_ENOUGH_MP;
                     }
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * DemonDiverImpactPreJumpBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + (chConfig.DefaultSizeY >> 1) + DemonDiverImpactPreJumpBullet.HitboxOffsetY);
@@ -940,7 +943,7 @@ namespace shared {
                             if (0 == jumpHoldingRdfCnt) {
                                 jumpHoldingRdfCnt = 1;
                             }
-                            if (0 < currCharacterDownsync.JumpHoldingRdfCnt && (InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState)) {
+                            if (0 < currCharacterDownsync.JumpHoldingRdfCnt && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
                                 // [warning] only proactive jumping support jump holding.
                                 jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt + 1;
                                 patternId = PATTERN_HOLD_B;
@@ -1047,18 +1050,20 @@ namespace shared {
                 }
 
                 thatCharacterInNextFrame.BtnBHoldingRdfCount = (PATTERN_HOLD_B == patternId ? currCharacterDownsync.BtnBHoldingRdfCount + 1 : 0);
-                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, chConfig, logger);
+                var existingDebuff = currCharacterDownsync.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+                bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, chConfig, isParalyzed, logger);
                 if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
-                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, effDx, effDy, chConfig, true, usedSkill, skillConfig, logger); // TODO: When breaking free from a PatrolCue, an NPC often couldn't turn around from a cliff in time, thus using "shouldIgnoreInertia" temporarily
+                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, effDx, effDy, chConfig, true, usedSkill, skillConfig, isParalyzed, logger); // TODO: When breaking free from a PatrolCue, an NPC often couldn't turn around from a cliff in time, thus using "shouldIgnoreInertia" temporarily
                 } else {
-                    _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, usedSkill, skillConfig, logger);
+                    _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, usedSkill, skillConfig, isParalyzed, logger);
                     if (PATTERN_ID_UNABLE_TO_OP != patternId && chConfig.AntiGravityWhenIdle && (Walking == thatCharacterInNextFrame.CharacterState || InAirWalking == thatCharacterInNextFrame.CharacterState) && chConfig.AntiGravityFramesLingering < thatCharacterInNextFrame.FramesInChState) {
                         thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
                         thatCharacterInNextFrame.FramesInChState = 0;
                         thatCharacterInNextFrame.VelX = 0;
                     }
                 }
-                _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, logger);
+                _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, logger);
             }
         }
 

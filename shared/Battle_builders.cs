@@ -1321,6 +1321,16 @@ namespace shared {
             return this;
         }
 
+        public BulletConfig SetCollisionTypeMask(ulong val) {
+            CollisionTypeMask = val;
+            return this;
+        }
+
+        public BulletConfig SetOmitSoftPushback(bool val) {
+            OmitSoftPushback = val;
+            return this;
+        }
+
         public BulletConfig SetRemainsUponHit(bool val) {
             RemainsUponHit = val; 
             return this;

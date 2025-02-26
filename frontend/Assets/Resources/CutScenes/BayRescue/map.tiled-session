@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FlatVersus/map.tmx",
+    "activeFile": "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest2/map.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -36,9 +36,9 @@
                 4
             ],
             "scale": 1,
-            "selectedLayer": 7,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 217.5,
+                "x": 1042,
                 "y": 720.5
             }
         },
@@ -52,6 +52,14 @@
             "viewCenter": {
                 "x": 1097.75,
                 "y": 272.25
+            }
+        },
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest2/map.tmx": {
+            "scale": 1,
+            "selectedLayer": 10,
+            "viewCenter": {
+                "x": -148,
+                "y": 94.5
             }
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/CascadeFarm/map.tmx": {
@@ -87,14 +95,14 @@
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FlatVersus/map.tmx": {
             "expandedObjectLayers": [
                 13,
-                5,
-                9
+                9,
+                5
             ],
             "scale": 1.8328,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 1280.0087298123092,
-                "y": 304.1793976429507
+                "x": 1280.8271497162812,
+                "y": 450.94936708860763
             }
         },
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FortForest/map.tmx": {
@@ -278,11 +286,13 @@
     "map.tileWidth": 16,
     "map.width": 100,
     "openFiles": [
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FlatVersus/map.tmx"
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest2/map.tmx"
     ],
     "project": "map.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest2/map.tmx",
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ArrowPalace/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FlatVersus/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FortForest/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/FoxBay/map.tmx",
@@ -292,9 +302,7 @@
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/CascadeFarm/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/LevelMaps/AutumnLevels/map.tmx",
         "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ZigZagZoo/map.tmx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/machinery/traps_machinery.tsx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/ArrowPalace/map.tmx",
-        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/BossBattleTest/map.tmx"
+        "C:/Users/yflu/MonsterInsight/frontend/Assets/Resources/Tiled/traps/machinery/traps_machinery.tsx"
     ],
     "tileset.embedInMap": false,
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",

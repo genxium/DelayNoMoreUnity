@@ -62,8 +62,9 @@ namespace Story {
             //new KeyValuePair<int, (string, string)>(LEVEL_CASCADE_FARM, ("FlatVersus", "FlatVersus")),
             new KeyValuePair<int, (string, string)>(LEVEL_DESCENDING_PALACE, ("DescendingPalace", "Slime's camp")),
             new KeyValuePair<int, (string, string)>(LEVEL_ARROW_PALACE, ("ArrowPalace", "Drake's camp")),
-            new KeyValuePair<int, (string, string)>(LEVEL_FOX_BAY, ("FoxBay", "Quine - the stone shop")),
-            new KeyValuePair<int, (string, string)>(LEVEL_FORT_FOREST, ("FortForest", "Quine - exiling passage")),
+            //new KeyValuePair<int, (string, string)>(LEVEL_ARROW_PALACE, ("BossBattleTest2", "BossBattleTest2")),
+            new KeyValuePair<int, (string, string)>(LEVEL_FOX_BAY, ("FoxBay", "The stone shop")),
+            new KeyValuePair<int, (string, string)>(LEVEL_FORT_FOREST, ("FortForest", "Exiling passage")),
         });
 
         /*---------------------------------STORY, LEVEL relations---------------------------------------------------------------------------------------------------*/

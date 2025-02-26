@@ -465,6 +465,11 @@ namespace shared {
                     continue;
                 }
 
+                if (providesSlipJump && 0 <= overlapResult.OverlapY) {
+                    // Even for GroundWave this skipping condition holds true.
+                    continue;
+                }
+
                 float normAlignmentWithGravity = (overlapResult.OverlapY * -1f);
                 bool isAlongForwardPropagation = false;
 
@@ -1312,7 +1317,7 @@ namespace shared {
                         continue;
                     }
 
-                    if (Dimmed == v3.CharacterState || invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
+                    if (TERMINATING_TRIGGER_ID != currCharacterDownsync.SubscribesToTriggerLocalId || Dimmed == v3.CharacterState || invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
 
                     ConvexPolygon bShape = bCollider.Shape;
                     var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
