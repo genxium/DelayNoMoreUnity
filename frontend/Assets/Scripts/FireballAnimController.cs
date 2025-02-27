@@ -13,7 +13,10 @@ If a default rotation is needed, edit it in external animation editor!
  */
 public class FireballAnimController : MonoBehaviour {
     private string MATERIAL_REF_THICKNESS = "_Thickness";
-    private float MAX_DAMAGE_DEALED_INDICATOR_H = 15f;
+    private float MAX_DAMAGE_DEALED_INDICATOR_H = 20f;
+
+    private static Color DAMAGE_FONT_COLOR = new Color(0xDB / 255f, 0x0E / 255f, 0x37 / 255f); 
+    private static Color HP_HEAL_FONT_COLOR = new Color(0x00 / 255f, 0xFF / 255f, 0x00 / 255f); 
 
     private Vector3 positionHolder = Vector3.zero;
     public int lookupKey;
@@ -48,7 +51,15 @@ public class FireballAnimController : MonoBehaviour {
             damageDealedIndicator.gameObject.SetActive(true);
             positionHolder.Set(damageDealedIndicator.gameObject.transform.localPosition.x, bullet.FramesInBlState < MAX_DAMAGE_DEALED_INDICATOR_H ? bullet.FramesInBlState : MAX_DAMAGE_DEALED_INDICATOR_H, damageDealedIndicator.gameObject.transform.localPosition.z);
             damageDealedIndicator.gameObject.transform.localPosition = positionHolder;
-            damageDealedIndicator.text = 0 < bullet.DamageDealed ? bullet.DamageDealed.ToString() : "";
+            if (0 < bullet.DamageDealed) {
+                damageDealedIndicator.text =  ("-" + bullet.DamageDealed.ToString());
+                damageDealedIndicator.color = DAMAGE_FONT_COLOR;
+            } else if (0 > bullet.DamageDealed) {
+                damageDealedIndicator.text =  ("+" + (-bullet.DamageDealed).ToString());
+                damageDealedIndicator.color = HP_HEAL_FONT_COLOR;
+            } else {
+                damageDealedIndicator.text =  "";
+            }
         }
         lookupKey = lookupK;
         var animator = gameObject.GetComponent<Animator>();

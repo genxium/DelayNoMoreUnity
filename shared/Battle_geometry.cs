@@ -1300,8 +1300,8 @@ namespace shared {
             float minAbsColliderDx = MAX_FLOAT32;
             float minAbsColliderDy = MAX_FLOAT32;
 
-            float minAbsColliderDxForSameTeam = MAX_FLOAT32;
-            float minAbsColliderDyForSameTeam = MAX_FLOAT32;
+            float minAbsColliderDxForAlly = MAX_FLOAT32;
+            float minAbsColliderDyForAlly = MAX_FLOAT32;
 
             ConvexPolygon aShape = visionCollider.Shape;
             while (true) {
@@ -1347,15 +1347,15 @@ namespace shared {
                         res2Bl = null;
                     } else {
                         // same team
-                        if (absColliderDx > minAbsColliderDxForSameTeam) {
+                        if (absColliderDx > minAbsColliderDxForAlly) {
                             continue;
                         }
 
-                        if (absColliderDx == minAbsColliderDxForSameTeam && absColliderDy > minAbsColliderDyForSameTeam) {
+                        if (absColliderDx == minAbsColliderDxForAlly && absColliderDy > minAbsColliderDyForAlly) {
                             continue;
                         }
-                        minAbsColliderDxForSameTeam = absColliderDx;
-                        minAbsColliderDyForSameTeam = absColliderDy;
+                        minAbsColliderDxForAlly = absColliderDx;
+                        minAbsColliderDyForAlly = absColliderDy;
                         res3 = bCollider;
                         res3Ch = v3;
                     }  
@@ -1406,9 +1406,11 @@ namespace shared {
             }
         }
 
-        private static void findHorizontallyClosestCharacterCollider(Bullet blWithVision, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res2, ILoggerBridge logger) {
+        private static void findHorizontallyClosestCharacterColliderForBlWithVision(Bullet blWithVision, bool isAllyTargetingBl, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res1Ch, out Collider? res3, out CharacterDownsync? res3Ch, ILoggerBridge logger) {
             res1 = null;
-            res2 = null;
+            res1Ch = null;
+            res3 = null;
+            res3Ch = null;
 
             // [WARNING] Finding only the closest non-self character to react to for avoiding any randomness. 
             bool collided = aCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
@@ -1416,6 +1418,9 @@ namespace shared {
 
             float minAbsColliderDx = MAX_FLOAT32;
             float minAbsColliderDy = MAX_FLOAT32;
+
+            float minAbsColliderDxForAlly = MAX_FLOAT32;
+            float minAbsColliderDyForAlly = MAX_FLOAT32;
 
             ConvexPolygon aShape = aCollider.Shape;
             while (true) {
@@ -1430,11 +1435,11 @@ namespace shared {
                     continue;
                 }
 
-                if (v3.JoinIndex == blWithVision.OffenderJoinIndex || v3.BulletTeamId == blWithVision.TeamId) {
+                if (v3.JoinIndex == blWithVision.OffenderJoinIndex) {
                     continue;
                 }
 
-                if (invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
+                if (!isAllyTargetingBl && (invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible)) continue; // Enemy is invinsible, nothing can be done
 
                 var (_, bulletConfig) = FindBulletConfig(blWithVision.SkillId, blWithVision.ActiveSkillHit);
                 if (null == bulletConfig) continue;
@@ -1462,23 +1467,37 @@ namespace shared {
                     continue;
                 }
 
-                // By now we're sure that it should react to the PatrolCue
-                var colliderDx = (aCollider.X - bCollider.X);
-
+                var colliderDx = (bCollider.X - aCollider.X);
+                var colliderDy = (bCollider.Y - aCollider.Y);
                 var absColliderDx = Math.Abs(colliderDx);
-                if (absColliderDx > minAbsColliderDx) {
-                    continue;
-                }
-
-                var colliderDy = (aCollider.Y - bCollider.Y);
                 var absColliderDy = Math.Abs(colliderDy);
-                if (absColliderDx == minAbsColliderDx && absColliderDy > minAbsColliderDy) {
-                    continue;
-                }
-                minAbsColliderDx = absColliderDx;
-                minAbsColliderDy = absColliderDy;
-                res1 = bCollider;
-                res2 = v3;
+                if (v3.BulletTeamId != blWithVision.TeamId) {
+                    // different teams
+                    if (absColliderDx > minAbsColliderDx) {
+                        continue;
+                    }
+
+                    if (absColliderDx == minAbsColliderDx && absColliderDy > minAbsColliderDy) {
+                        continue;
+                    }
+                    minAbsColliderDx = absColliderDx;
+                    minAbsColliderDy = absColliderDy;
+                    res1 = bCollider;
+                    res1Ch = v3;
+                } else {
+                    // same team
+                    if (absColliderDx > minAbsColliderDxForAlly) {
+                        continue;
+                    }
+
+                    if (absColliderDx == minAbsColliderDxForAlly && absColliderDy > minAbsColliderDyForAlly) {
+                        continue;
+                    }
+                    minAbsColliderDxForAlly = absColliderDx;
+                    minAbsColliderDyForAlly = absColliderDy;
+                    res3 = bCollider;
+                    res3Ch = v3;
+                }  
             }
         }
 

@@ -174,7 +174,7 @@ public class SelfBattleHeading : AbstractHpBar {
 
     private void interpolateHp(Image interpolator, float hpNewSizeX, int oldHpVal) {
         var oldInterpolatedSizeX = interpolator.rectTransform.sizeDelta.x;
-        if (hpNewSizeX < oldInterpolatedSizeX) {
+        if (oldHpVal > currHpVal && hpNewSizeX < oldInterpolatedSizeX) {
             var newInterpolatedSizeX = oldInterpolatedSizeX;
             if (hpNewSizeX > oldInterpolatedSizeX - hpInterpolaterSpeed) {
                 newSizeHolder.Set(hpNewSizeX, DEFAULT_HP100_HEIGHT);
@@ -182,7 +182,7 @@ public class SelfBattleHeading : AbstractHpBar {
                 newSizeHolder.Set(oldInterpolatedSizeX - hpInterpolaterSpeed, DEFAULT_HP100_HEIGHT);
             }
             interpolator.rectTransform.sizeDelta = newSizeHolder;
-        } else if (hpNewSizeX > oldInterpolatedSizeX && oldHpVal > currHpVal) {
+        } else if (oldHpVal > currHpVal && hpNewSizeX > oldInterpolatedSizeX) {
             newSizeHolder.Set(DEFAULT_HP100_WIDTH, DEFAULT_HP100_HEIGHT);
             interpolator.rectTransform.sizeDelta = newSizeHolder;
         } else {

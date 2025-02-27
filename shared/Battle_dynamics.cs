@@ -337,7 +337,7 @@ namespace shared {
             return true;
         }
 
-        private static bool _useSkill(int effDx, int effDy, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed, uint slotLockedSkillId, ref bool notEnoughMp, ILoggerBridge logger) {
+        private static bool _useSkill(int effDx, int effDy, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed, uint slotLockedSkillId, ref bool notEnoughMp, bool isParalyzed, ILoggerBridge logger) {
             if (PATTERN_ID_NO_OP == patternId || PATTERN_ID_UNABLE_TO_OP == patternId) {
                 return false;
             }
@@ -357,7 +357,7 @@ namespace shared {
             if (skillConfig.MpDelta > currCharacterDownsync.Mp) {
                 notEnoughMp = true;
                 return false;
-            } 
+            }
 
             thatCharacterInNextFrame.Mp -= skillConfig.MpDelta;
             if (0 >= thatCharacterInNextFrame.Mp) {
@@ -374,12 +374,16 @@ namespace shared {
             int activeSkillHit = 1;
             var pivotBulletConfig = skillConfig.Hits[activeSkillHit-1];
             for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt + 1; i++) {
-                if (!addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, currCharacterDownsync, thatCharacterInNextFrame, chConfig, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, null, null, null, logger)) break;
+                if (!addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, null, null, null, logger)) break;
                 thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
                 activeSkillHit++;
             }
 
             if (false == hasLockVel && false == currCharacterDownsync.InAir && !pivotBulletConfig.AllowsWalking) {
+                thatCharacterInNextFrame.VelX = 0;
+            }
+
+            if (isParalyzed) {
                 thatCharacterInNextFrame.VelX = 0;
             }
 
@@ -618,8 +622,10 @@ namespace shared {
                 if (dodgedInBlockStun) {
                     transitToGroundDodgedChState(thatCharacterInNextFrame, chConfig);
                 }
+                var existingDebuff = currCharacterDownsync.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+                bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
                 bool notEnoughMp = false;
-                bool usedSkill = dodgedInBlockStun ? false : _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, logger);
+                bool usedSkill = dodgedInBlockStun ? false : _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, isParalyzed, logger);
                 Skill? skillConfig = null;
                 if (usedSkill) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
@@ -662,8 +668,7 @@ namespace shared {
                 } else {
                     thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
                 }
-                var existingDebuff = currCharacterDownsync.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
-                bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+                
                 _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, chConfig, isParalyzed, logger);
                 if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
                     _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, effDx, effDy, chConfig, false, usedSkill, skillConfig, isParalyzed, logger);
@@ -1506,9 +1511,9 @@ namespace shared {
                         logger.LogInfo(String.Format("Rdf.id={0} AFTER, chState={1}, velX={2}, velY={3}, virtualGridX={4}, virtualGridY={5}: going down", currRenderFrame.Id, currCharacterDownsync.CharacterState, thatCharacterInNextFrame.VelX, thatCharacterInNextFrame.VelY, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY));
                     }
                     */
-                } else if (thatCharacterInNextFrame.OnSlope && nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState) && 0 == thatCharacterInNextFrame.VelX) {
+                } else if ((!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) && thatCharacterInNextFrame.OnSlope && nonAttackingSet.Contains(thatCharacterInNextFrame.CharacterState) && 0 == thatCharacterInNextFrame.VelX) {
                     // [WARNING] Prevent down-slope sliding, might not be preferred for some game designs, disable this if you need sliding on the slope
-                    if (InAirIdle1ByJump != currCharacterDownsync.CharacterState && InAirIdle1ByWallJump != currCharacterDownsync.CharacterState && InAirIdle2ByJump != currCharacterDownsync.CharacterState) {
+                    if (!proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
                         thatCharacterInNextFrame.VelY = 0;
                     }
                 }

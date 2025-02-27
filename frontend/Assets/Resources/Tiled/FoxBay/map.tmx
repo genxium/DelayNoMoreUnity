@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="256" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="48" nextobjectid="602">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="256" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="48" nextobjectid="604">
  <properties>
   <property name="battleDurationSeconds" value="1800"/>
   <property name="levelId" value="7"/>
   <property name="missionEvtSubId" value="8"/>
-  <property name="npcPreallocCapDict" value="4101:1;4100:2;4099:4;4098:4;4102:2;4103:2;4106:10;4104:3;16:3;4111:1"/>
+  <property name="npcPreallocCapDict" value="4101:1;4100:2;4099:4;4098:4;4102:2;4103:2;4106:10;4104:3;16:3;4111:1;18:1"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -307,6 +307,14 @@
     <property name="speciesId" value="4111"/>
     <property name="static" value="1"/>
     <property name="subscriptionId" value="9"/>
+    <property name="teamId" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="603" name="Angel" x="1456" y="832">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="speciesId" value="18"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -697,19 +705,6 @@
    </properties>
    <point/>
   </object>
-  <object id="531" name="Floor3L" x="1184" y="944">
-   <properties>
-    <property name="fdAct" value="19"/>
-    <property name="fdCaptureFrames" value="10"/>
-    <property name="flAct" value="19"/>
-    <property name="flCaptureFrames" value="10"/>
-    <property name="frAct" value="19"/>
-    <property name="frCaptureFrames" value="10"/>
-    <property name="fuAct" value="19"/>
-    <property name="fuCaptureFrames" value="10"/>
-   </properties>
-   <point/>
-  </object>
   <object id="532" name="Floor3R" x="1920" y="864">
    <properties>
     <property name="fdAct" value="4"/>
@@ -796,6 +791,18 @@
     <property name="fuCaptureFrames" value="10"/>
    </properties>
    <point/>
+  </object>
+  <object id="602" name="CastleEntryCue" x="1152" y="672" width="32" height="272">
+   <properties>
+    <property name="fdAct" value="19"/>
+    <property name="fdCaptureFrames" value="10"/>
+    <property name="flAct" value="19"/>
+    <property name="flCaptureFrames" value="10"/>
+    <property name="frAct" value="19"/>
+    <property name="frCaptureFrames" value="10"/>
+    <property name="fuAct" value="19"/>
+    <property name="fuCaptureFrames" value="10"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup id="33" name="Pickable">

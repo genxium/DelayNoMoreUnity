@@ -69,12 +69,24 @@ namespace shared {
 
             Collider? bCollider;
             CharacterDownsync? v3;
-            findHorizontallyClosestCharacterCollider(src, visionCollider, collision, ref overlapResult, out bCollider, out v3, logger);
 
-            if (null != bCollider && null != v3) {
-                dst.TargetCharacterJoinIndex = v3.JoinIndex;
+            Collider? sameTeamChCollider;
+            CharacterDownsync? v5;
+            bool isAllyTargetingBl = (0 > srcConfig.Damage);
+            findHorizontallyClosestCharacterColliderForBlWithVision(src, isAllyTargetingBl, visionCollider, collision, ref overlapResult, out bCollider, out v3, out sameTeamChCollider, out v5, logger);
+
+            if (isAllyTargetingBl) {
+                if (null != sameTeamChCollider && null != v5) {
+                    dst.TargetCharacterJoinIndex = v5.JoinIndex;
+                } else {
+                    dst.TargetCharacterJoinIndex = MAGIC_JOIN_INDEX_INVALID;
+                }
             } else {
-                dst.TargetCharacterJoinIndex = MAGIC_JOIN_INDEX_INVALID;
+                if (null != bCollider && null != v3) {
+                    dst.TargetCharacterJoinIndex = v3.JoinIndex;
+                } else {
+                    dst.TargetCharacterJoinIndex = MAGIC_JOIN_INDEX_INVALID;
+                }
             }
 
             collisionSys.RemoveSingleFromCellTail(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
@@ -365,7 +377,9 @@ namespace shared {
                     // [WARNING] Different from Fireball, multihit of Melee would add a new "Bullet" to "nextRenderFrameBullets" for convenience of handling explosion! The bullet "dst" could also be exploding by reaching here!
                     // No need to worry about Mp consumption here, it was already paid at the first "offenderNextFrame.ActiveSkillHit" in "_useSkill"
                     int xfac = (0 < offenderNextFrame.DirX ? 1 : -1);
-                    if (addNewBulletToNextFrame(src.OriginatedRenderFrameId, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], xfac, skillConfig, nextRenderFrameBullets, offender.ActiveSkillHit + 1, src.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, (srcConfig.BeamCollision ? src : null), (srcConfig.BeamCollision ? srcConfig : null), src, null, logger)) {
+                    var existingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+                    bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+                    if (addNewBulletToNextFrame(src.OriginatedRenderFrameId, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, offender.ActiveSkillHit + 1, src.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, (srcConfig.BeamCollision ? src : null), (srcConfig.BeamCollision ? srcConfig : null), src, null, logger)) {
                         var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
                         offenderNextFrame.ActiveSkillHit = targetNewBullet.ActiveSkillHit;
                         var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit);
@@ -464,7 +478,7 @@ namespace shared {
         }
 
         private static bool _deriveFromVisionSingleBullet(RoomDownsyncFrame currRenderFrame, int roomCapacity, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, int xfac, Bullet bulletNextFrame, BulletConfig bulletConfig, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool dummyHasLockVel, CharacterDownsync? offender, CharacterDownsync? offenderNextFrame, Skill? skillConfig, ILoggerBridge logger) {
-            if (null == offender || null == offenderNextFrame || null == skillConfig || bulletNextFrame.ActiveSkillHit+1 >= skillConfig.Hits.Count) {
+            if (null == offender || null == offenderNextFrame || null == skillConfig || bulletNextFrame.ActiveSkillHit+1 > skillConfig.Hits.Count) {
                 return false;
             }
             int targetChJoinIndex = bulletNextFrame.TargetCharacterJoinIndex;
@@ -476,9 +490,11 @@ namespace shared {
             CharacterDownsync? targetChNextFrame = null;
             if (MAGIC_JOIN_INDEX_INVALID != targetChJoinIndex) {
                targetChNextFrame = getChdFromChdArrs(targetChJoinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);;
-
             }
-            bool res = addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, bulletNextFrame, targetChNextFrame, logger); 
+            var existingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+            bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+
+            bool res = addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, bulletNextFrame, targetChNextFrame, logger); 
             if (!res) return false;
             var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
             var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit);
@@ -698,11 +714,13 @@ namespace shared {
                             break;
                         case CharacterDownsync victimCurrFrame:
                             if (TERMINATING_TRIGGER_ID != victimCurrFrame.SubscribesToTriggerLocalId) continue; // Skip if evtsub-triggered but but triggered yet
-                            if (bulletNextFrame.OffenderJoinIndex == victimCurrFrame.JoinIndex) continue;
-                            if (bulletNextFrame.TeamId == victimCurrFrame.BulletTeamId) continue;
-                            if (invinsibleSet.Contains(victimCurrFrame.CharacterState)) continue;
-                            bool bulletProvidesEffPushback = (bulletConfig.ProvidesXHardPushback && 0 != overlapResult.OverlapX) || (bulletConfig.ProvidesYHardPushbackTop && 0 < overlapResult.OverlapY) || (bulletConfig.ProvidesYHardPushbackBottom && 0 > overlapResult.OverlapY);
-                            if (bulletProvidesEffPushback) {
+                            bool isAllyTargetingBl = (0 > bulletConfig.Damage);
+                            if (!isAllyTargetingBl && bulletNextFrame.OffenderJoinIndex == victimCurrFrame.JoinIndex) continue;
+                            if (!isAllyTargetingBl && bulletNextFrame.TeamId == victimCurrFrame.BulletTeamId) continue;
+                            if (isAllyTargetingBl && bulletNextFrame.TeamId != victimCurrFrame.BulletTeamId) continue;
+                            if (!isAllyTargetingBl && invinsibleSet.Contains(victimCurrFrame.CharacterState)) continue;
+                            bool bulletProvidesHardPushbackOnly = (bulletConfig.ProvidesXHardPushback && 0 != overlapResult.OverlapX) || (bulletConfig.ProvidesYHardPushbackTop && 0 < overlapResult.OverlapY) || (bulletConfig.ProvidesYHardPushbackBottom && 0 > overlapResult.OverlapY);
+                            if (bulletProvidesHardPushbackOnly) {
                                 break;
                             }
 
@@ -711,7 +729,7 @@ namespace shared {
                             /*
                                [WARNING] Deliberately checking conditions using "victimNextFrame" instead of "victimCurrFrame" to allow more responsive graphics. 
                              */
-                            if (victimChConfig.GroundDodgeEnabledByRdfCntFromBeginning > victimNextFrame.FramesInChState) {  
+                            if (!isAllyTargetingBl && victimChConfig.GroundDodgeEnabledByRdfCntFromBeginning > victimNextFrame.FramesInChState) {  
                                 bool notDashing = isNotDashing(victimNextFrame);
                                 bool dashing = !notDashing;
                                 bool effInAir = isEffInAir(victimNextFrame, notDashing);
@@ -722,7 +740,7 @@ namespace shared {
                                 }
                             }
 
-                            if (0 < victimCurrFrame.FramesInvinsible) continue;
+                            if (!isAllyTargetingBl && 0 < victimCurrFrame.FramesInvinsible) continue;
 
                             int immuneRcdI = 0;
                             bool shouldBeImmune = false;
@@ -774,7 +792,7 @@ namespace shared {
                             var effDamage = 0;
                             bool successfulDef1 = false;
                             if (!shouldBeImmune) {
-                                (effDamage, successfulDef1) = _calcEffDamage(oldNextCharacterState, victimChConfig, victimNextFrame, victimActiveSkillBuff, bulletNextFrame, bulletConfig, bulletCollider, bCollider);
+                                (effDamage, successfulDef1) = _calcEffDamage(oldNextCharacterState, victimChConfig, victimNextFrame, victimActiveSkillBuff, bulletNextFrame, bulletConfig, isAllyTargetingBl, bulletCollider, bCollider);
                                 if (successfulDef1) {
                                     accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, null, victimNextFrame);
                                     explodedOnAnotherHarderBullet = true;
@@ -783,6 +801,9 @@ namespace shared {
 
                             var origVictimInNextFrameHp = victimNextFrame.Hp;
                             victimNextFrame.Hp -= effDamage;
+                            if (victimNextFrame.Hp >= victimChConfig.Hp) {
+                                victimNextFrame.Hp = victimChConfig.Hp;
+                            }
                             if (0 >= hardPushbackCnt && bulletConfig.BeamCollision && 0 != overlapResult.OverlapX) {
                                 // [WARNING] In this case, "exploded = true" hence beam velocity will recover after victim death.
                                 effPushbacks[i].X += (overlapResult.OverlapMag) * overlapResult.OverlapX;
@@ -802,6 +823,8 @@ namespace shared {
                                     bulletNextFrame.DamageDealed = effDamage;
                                     victimNextFrame.FramesSinceLastDamaged = DEFAULT_FRAMES_TO_SHOW_DAMAGED;
                                     victimNextFrame.FramesCapturedByInertia = 0; // Being attacked breaks movement inertia.
+                                } else if (isAllyTargetingBl) {
+                                    bulletNextFrame.DamageDealed = effDamage;
                                 }
 
                                 if (0 != effDamage) {
@@ -812,6 +835,10 @@ namespace shared {
                                        }
                                      */
                                 }
+                            }
+                            if (isAllyTargetingBl) {
+                                // No need to handle stuns
+                                break;
                             }
                             if (0 >= victimNextFrame.Hp) {
                                 // [WARNING] We don't have "dying in air" animation for now, and for better graphical recognition, play the same dying animation even in air
@@ -945,10 +972,10 @@ namespace shared {
                                             }
                                         }
                                         /*
-                                        if (SPECIES_HEAVYGUARD_RED == victimNextFrame.SpeciesId && null != offender) {
-                                            logger.LogInfo(String.Format("@rdfId={0}, offender.FramesInChState={1}, HeavyGuardRed id={2} next FramesToRecover becomes {3}", currRenderFrame.Id, offender.FramesInChState, victimNextFrame.Id, victimNextFrame.FramesToRecover));
-                                        }
-                                        */
+                                           if (SPECIES_HEAVYGUARD_RED == victimNextFrame.SpeciesId && null != offender) {
+                                           logger.LogInfo(String.Format("@rdfId={0}, offender.FramesInChState={1}, HeavyGuardRed id={2} next FramesToRecover becomes {3}", currRenderFrame.Id, offender.FramesInChState, victimNextFrame.Id, victimNextFrame.FramesToRecover));
+                                           }
+                                         */
                                     }
                                 }
 
@@ -1017,7 +1044,7 @@ namespace shared {
                                                 switch (associatedDebuffConfig.Type) {
                                                     case DebuffType.FrozenPositionLocked:
                                                         if (BulletType.Melee == bulletConfig.BType) break; // Forbid melee attacks to use freezing buff while in offender-scope, otherwise it'd be too unbalanced. 
-                                                        // Overwrite existing debuff for now
+                                                                                                           // Overwrite existing debuff for now
                                                         AssignToDebuff(associatedDebuffConfig.SpeciesId, associatedDebuffConfig.Stock, victimNextFrame.DebuffList[debuffArrIdx]);
                                                         // The following transition is deterministic because we checked "victimNextFrame.DebuffList" before transiting into BlownUp1.
                                                         if (isCrouching(victimNextFrame.CharacterState, victimChConfig)) {
@@ -1141,13 +1168,15 @@ namespace shared {
                                 bulletNextFrame.FramesInBlState = bulletConfig.ExplosionFrames + 1;
                             }
                         }
-                    } else { 
+                    } else {
                         // Nothing to do
                     }
 
                     if (inTheMiddleOfPrevHitMhTransition) {
                         if (null != offender && null != offenderNextFrame && null != skillConfig) {
-                            if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, (bulletConfig.BeamCollision ? bulletNextFrame : null), null, logger)) {
+                            var existingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+                            bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+                            if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, (bulletConfig.BeamCollision ? bulletNextFrame : null), null, logger)) {
                                 var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
                                 var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit); 
                                 if (null != newBlConfig) {
@@ -1283,7 +1312,7 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewBulletToNextFrame(int originatedRdfId, RoomDownsyncFrame currRdf, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, uint activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, BulletConfig? referencePrevHitBulletConfig, Bullet? referencePrevEmissionBullet, CharacterDownsync? targetChNextFrame, ILoggerBridge logger) {
+        protected static bool addNewBulletToNextFrame(int originatedRdfId, RoomDownsyncFrame currRdf, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, bool isParalyzed, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, uint activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, BulletConfig? referencePrevHitBulletConfig, Bullet? referencePrevEmissionBullet, CharacterDownsync? targetChNextFrame, ILoggerBridge logger) {
             if (NO_SKILL_HIT == activeSkillHit || activeSkillHit > skillConfig.Hits.Count) return false;
             if (bulletCnt >= nextRenderFrameBullets.Count) {
                 logger.LogWarn("bullet overwhelming#1, currRdf=" + stringifyRdf(currRdf));
@@ -1366,7 +1395,7 @@ namespace shared {
             bulletCnt++;
 
             // [WARNING] This part locks velocity by the last bullet in the simultaneous array
-            if (!bulletConfig.DelaySelfVelToActive) {
+            if (!bulletConfig.DelaySelfVelToActive && !isParalyzed) {
                 if (NO_LOCK_VEL != bulletConfig.SelfLockVelX) {
                     hasLockVel = true;
                     thatCharacterInNextFrame.VelX = xfac * bulletConfig.SelfLockVelX;
@@ -1391,7 +1420,7 @@ namespace shared {
             if (bulletCnt < nextRenderFrameBullets.Count) nextRenderFrameBullets[bulletCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
 
             if (0 < bulletConfig.SimultaneousMultiHitCnt && activeSkillHit < skillConfig.Hits.Count) {
-                return addNewBulletToNextFrame(originatedRdfId, currRdf, currCharacterDownsync, thatCharacterInNextFrame, chConfig, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit+1, activeSkillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, referencePrevHitBullet, referencePrevHitBulletConfig, referencePrevEmissionBullet, targetChNextFrame, logger);
+                return addNewBulletToNextFrame(originatedRdfId, currRdf, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit+1, activeSkillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, referencePrevHitBullet, referencePrevHitBulletConfig, referencePrevEmissionBullet, targetChNextFrame, logger);
             } else {
                 return true;
             }
@@ -1518,7 +1547,14 @@ namespace shared {
             }
         }
 
-        public static (int, bool) _calcEffDamage(CharacterState origOffenderStateNextFrame, CharacterConfig victimChConfig, CharacterDownsync victimNextFrame, BuffConfig? victimActiveSkillBuff, Bullet bulletNextFrame, BulletConfig bulletConfig, Collider bulletCollider, Collider victimCollider) {
+        public static (int, bool) _calcEffDamage(CharacterState origOffenderStateNextFrame, CharacterConfig victimChConfig, CharacterDownsync victimNextFrame, BuffConfig? victimActiveSkillBuff, Bullet bulletNextFrame, BulletConfig bulletConfig, bool isAllyTargetingBl, Collider bulletCollider, Collider victimCollider) {
+            if (isAllyTargetingBl) {
+                if (Dying == victimNextFrame.CharacterState) {
+                    return (0, false);
+                } else {
+                    return (bulletConfig.Damage, false);
+                }
+            }
             bool bulletInFrontOfVictim = (0 > victimNextFrame.DirX*bulletNextFrame.DirX);
             bool successfulDef1 = (Def1 == origOffenderStateNextFrame && victimChConfig.Def1StartupFrames < victimNextFrame.FramesInChState && 0 < victimNextFrame.RemainingDef1Quota && bulletInFrontOfVictim);
             bool eleWeaknessHit = 0 < (victimChConfig.EleWeakness & bulletConfig.ElementalAttrs);

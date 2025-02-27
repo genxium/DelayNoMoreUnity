@@ -21,6 +21,8 @@ namespace shared {
         public const uint SPECIES_FIRESWORDMAN = 16;
         public const uint SPECIES_WANDWITCHGIRL = 17;
 
+        public const uint SPECIES_ANGEL = 18;
+
         public const uint SPECIES_DEMON_FIRE_SLIME = 4096;
         public const uint SPECIES_GOBLIN = 4097;
         public const uint SPECIES_SKELEARCHER = 4098;
@@ -1154,7 +1156,6 @@ namespace shared {
                         DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         JumpingInitVelY = (int)(5.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 4,
-                        DashingEnabled = true,
                         VisionOffsetX = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeX = (int)(200.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1738,6 +1739,72 @@ namespace shared {
                         RepelSoftPushback = true,
                         Ifc = IfaceCat.Rock,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                    }),
+
+                    new KeyValuePair<uint, CharacterConfig>(SPECIES_ANGEL, new CharacterConfig {
+                        SpeciesId = SPECIES_ANGEL,
+                        SpeciesName = "Angel",
+                        Hp = 250,
+                        Mp = 3000,
+                        InAirIdleFrameIdxTurningPoint = 11,
+                        InAirIdleFrameIdxTurnedCycle = 1,
+                        LayDownFrames = 17,
+                        LayDownFramesToRecover = 17,
+                        GetUpInvinsibleFrames = 17,
+                        GetUpFramesToRecover = 17,
+                        Speed = (int)(1.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        MaxAscendingVelY = (int)(1.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DownSlopePrimerVelY = (int)(-0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpingInitVelY = (int)(8.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        JumpHoldingToFly = true,
+                        FlyingQuotaRdfCnt = MAX_INT,
+                        EleResistance = (ELE_FIRE | ELE_ICE | ELE_WATER | ELE_THUNDER | ELE_ROCK),
+                        InertiaFramesToRecover = 4,
+                        VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(24f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(160.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(80.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSearchIntervalPow2Minus1U = (1u << 3) - 1,
+                        VisionSearchIntervalPow2Minus1 = (int)((1u << 3) - 1),
+                        DefaultSizeX = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), // [WARNING] Being too "wide" can make "CrouchIdle1" bouncing on slopes!
+                        DefaultSizeY = (int)(32.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeX = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        ShrinkedSizeY = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeX = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        LayDownSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeX = (int)(50.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DyingSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        DashingEnabled = true,
+                        DefaultAirDashQuota = MAX_UINT,
+                        MpRegenPerInterval = 200,
+                        MpRegenInterval = 30,
+                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        ProactiveJumpStartupFrames = 6,
+                        NpcPrioritizeAllyHealing = true,
+                        Hardness = 6, // Thus when hit by MagicPistolBullet she needs FramesToRecover!
+                        MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
+                        SlipJumpThresHoldBelowTopFace = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE,
+                        SlipJumpThresHoldBelowTopFaceV = SLIP_JUMP_THRESHOLD_BELOW_TOP_FACE_VIRTUAL,
+                        SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
+                        TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                        HasDef1Atked1Anim = true,
+                        Def1StartupFrames = 4,
+                        Def1DamageYield = 0f,
+                        Def1DefiesEleWeaknessPenetration = true,
+                        Def1DefiesDebuff = true,
+                        GaugeIncWhenKilled = 80,
+                        Ifc = IfaceCat.Flesh,
+                        InitInventorySlots = new List<InventorySlot> {
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.TimedMagazineIv,
+                                Quota = 1,
+                                FramesToRecover = 0,
+                                DefaultQuota = 1,
+                                DefaultFramesToRecover = 7*BATTLE_DYNAMICS_FPS,
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = 138 // TODO: Remove this hardcoded "skillId"!
+                            }
+                        },
                     }),
             });
     }

@@ -5,7 +5,7 @@
   <property name="battleDurationSeconds" value="240"/>
   <property name="levelId" value="4"/>
   <property name="missionEvtSubId" value="5"/>
-  <property name="npcPreallocCapDict" value="4104:4;16:4;4097:8;4098:6;4099:4;4100:4;4096:2;4101:2;4102:4;4103:6;4105:2;4108:8;4109:6;4106:6;4110:4;4111:2;4112:2;4107:2"/>
+  <property name="npcPreallocCapDict" value="4104:4;16:4;4097:8;4098:6;4099:4;4100:4;4096:2;4101:2;4102:4;4103:6;4105:2;4108:8;4109:6;4106:6;4110:4;4111:2;4112:2;4107:2;18:4"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -98,7 +98,7 @@
   <object id="746" name="IndiWaveDoor3-R" gid="2147483668" x="1552" y="224" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="2"/>
-    <property name="characterSpawnerTimeSeq" value="1:4098,4100;2:4102;3:4104;4:4110;"/>
+    <property name="characterSpawnerTimeSeq" value="1:4098,4100;2:4102;3:4104;4:18;"/>
     <property name="delayedFrames" value="90"/>
     <property name="dirX" value="-2"/>
     <property name="id" value="12"/>
@@ -112,7 +112,7 @@
   <object id="710" name="IndiWaveDoor3-L" gid="20" x="1008" y="224" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="1"/>
-    <property name="characterSpawnerTimeSeq" value="1:4098,4100;2:4102;3:4104;4:4110;"/>
+    <property name="characterSpawnerTimeSeq" value="1:4098,4100;2:4102;3:4104;4:18;"/>
     <property name="delayedFrames" value="90"/>
     <property name="dirX" value="+2"/>
     <property name="id" value="11"/>
@@ -180,7 +180,7 @@
   <object id="686" name="IndiWaveDoor2-R" gid="2147483668" x="1760" y="448" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="2"/>
-    <property name="characterSpawnerTimeSeq" value="1:4096;2:4101;3:4111;4:4110,4101;5:4096,4111;"/>
+    <property name="characterSpawnerTimeSeq" value="1:4096;2:4101;3:4111;4:4110,4101;5:4096,18;"/>
     <property name="delayedFrames" value="30"/>
     <property name="dirX" value="-2"/>
     <property name="id" value="4"/>
@@ -208,7 +208,7 @@
   <object id="685" name="IndiWaveDoor2-L" gid="20" x="784" y="448" width="16" height="32">
    <properties>
     <property name="bulletTeamId" value="1"/>
-    <property name="characterSpawnerTimeSeq" value="1:4096;2:4101;3:4111;4:4110,4101;5:4096,4111;"/>
+    <property name="characterSpawnerTimeSeq" value="1:4096;2:4101;3:4111;4:4110,4101;5:4096,18;"/>
     <property name="delayedFrames" value="30"/>
     <property name="dirX" value="+2"/>
     <property name="id" value="2"/>

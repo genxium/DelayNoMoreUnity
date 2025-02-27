@@ -74,6 +74,7 @@ public class CharacterSelectGroup : AbstractSingleSelectGroup {
             case 2:
                 selectedSpeciesId = Battle.SPECIES_MAGSWORDGIRL;
                 //selectedSpeciesId = Battle.SPECIES_STONE_GOLEM;
+                //selectedSpeciesId = Battle.SPECIES_ANGEL;
                 break;
             case 3:
                 selectedSpeciesId = Battle.SPECIES_BRIGHTWITCH;
