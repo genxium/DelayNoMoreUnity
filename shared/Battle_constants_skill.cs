@@ -5107,7 +5107,7 @@ namespace shared {
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = (int)(-2.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelY = 0,
-            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = 0,
             DelaySelfVelToActive = true,
             BType = BulletType.Melee,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
@@ -5130,7 +5130,7 @@ namespace shared {
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = (int)(3.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelY = 0,
-            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = 0,
             DelaySelfVelToActive = true,
             BType = BulletType.Melee,
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
