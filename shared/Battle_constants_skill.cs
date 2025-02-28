@@ -1002,7 +1002,7 @@ namespace shared {
             MhVanishOnMeleeHit = false, // Makes it more powerful on ground than the SlashNova
             RemainsUponHit = true,
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX, 
-            BuffConfig = ShortFreezer,
+            BuffConfig = LongFreezer,
         };
 
         private static BulletConfig IcePillarRepeatingBullet = new BulletConfig {
@@ -2316,7 +2316,7 @@ namespace shared {
             HitboxSizeX = (int)(33 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(40 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 17,
-            ExplosionSpeciesId = 15,
+            ExplosionSpeciesId = 7,
             ExplosionFrames = 31,
             InplaceVanishExplosionSpeciesId = 27,
             RemainsUponHit = true,
@@ -3911,7 +3911,7 @@ namespace shared {
         };
 
         public static BulletConfig ThunderBoltStrikerHit = new BulletConfig {
-            StartupFrames = 60, // [WARNING] Different from the calculation of "DiverImpactStarterBullet" which is `Melee`, this "StartupFrames" is all accounted in "StartupVfxSpeciesId" because the animation clip of any `Fireball` only begins with active state! 
+            StartupFrames = 40, // [WARNING] Different from the calculation of "DiverImpactStarterBullet" which is `Melee`, this "StartupFrames" is all accounted in "StartupVfxSpeciesId" because the animation clip of any `Fireball` only begins with active state! 
             StartupInvinsibleFrames = 40,
             ActiveFrames = 54,
             HitStunFrames = 60,
@@ -3945,7 +3945,7 @@ namespace shared {
             ExplosionSfxName = "Melee_Explosion1",
             MhType = MultiHitType.FromPrevHitActual,
             CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX,
-            BuffConfig = ShortParalyzer,
+            BuffConfig = LongParalyzer,
         };
 
         public static BulletConfig ThunderBoltHopperHit = new BulletConfig {
@@ -3984,12 +3984,12 @@ namespace shared {
             VisionOffsetY = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             VisionSizeX = (int)(300 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             VisionSizeY = (int)(300 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            BuffConfig = ShortParalyzer,
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName = "Melee_Explosion1",
             ActiveVfxSpeciesId = VfxHoppingBolt.SpeciesId,
             IsPixelatedActiveVfx = true,
             CollisionTypeMask = COLLISION_FIREBALL_INDEX_PREFIX,
+            BuffConfig = LongParalyzer,
         };
 
         public static Skill ThunderBoltSkill = new Skill {
@@ -4153,7 +4153,8 @@ namespace shared {
             HitboxSizeY = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             Speed = (int)(2.2 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             RotatesAlongVelocity = true,
-            SpeciesId = 14,
+            SpeciesId = 33,
+            ExplosionSpeciesId = 13,
             ExplosionFrames = 25,
             BType = BulletType.MissileLinear,
             MissileSearchIntervalPow2Minus1 = (1u << 3) - 1u,
@@ -4169,10 +4170,10 @@ namespace shared {
             VisionSizeY = (int)(120 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName = "Melee_Explosion1",
-            ActiveVfxSpeciesId = VfxCastThunderTwins.SpeciesId,
             IsPixelatedActiveVfx = true,
             SimultaneousMultiHitCnt = 1,
-            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX,
+            BuffConfig = ShortFreezer,
         };
 
         public static BulletConfig WandWitchGirlBasicBulletHit2 = new BulletConfig(WandWitchGirlBasicBulletHit1)

@@ -358,6 +358,22 @@ namespace shared {
         public static DebuffConfig ShortParalyzed = new DebuffConfig {
             SpeciesId = 2,
             StockType = BuffStockType.Timed,
+            Stock = 3*BATTLE_DYNAMICS_FPS,
+            Type = DebuffType.PositionLockedOnly,
+            ArrIdx = DEBUFF_ARR_IDX_ELEMENTAL
+        };
+
+        public static DebuffConfig LongFrozen = new DebuffConfig {
+            SpeciesId = 3,
+            StockType = BuffStockType.Timed,
+            Stock = (int)(3.5f*BATTLE_DYNAMICS_FPS),
+            Type = DebuffType.FrozenPositionLocked,
+            ArrIdx = DEBUFF_ARR_IDX_ELEMENTAL
+        };
+
+        public static DebuffConfig LongParalyzed = new DebuffConfig {
+            SpeciesId = 4,
+            StockType = BuffStockType.Timed,
             Stock = 5*BATTLE_DYNAMICS_FPS,
             Type = DebuffType.PositionLockedOnly,
             ArrIdx = DEBUFF_ARR_IDX_ELEMENTAL
@@ -368,6 +384,8 @@ namespace shared {
                 {
                     new KeyValuePair<uint, DebuffConfig>(ShortFrozen.SpeciesId, ShortFrozen),
                     new KeyValuePair<uint, DebuffConfig>(ShortParalyzed.SpeciesId, ShortParalyzed),
+                    new KeyValuePair<uint, DebuffConfig>(LongFrozen.SpeciesId, LongFrozen),
+                    new KeyValuePair<uint, DebuffConfig>(LongParalyzed.SpeciesId, LongParalyzed),
                 }
         );
 
@@ -412,6 +430,22 @@ namespace shared {
             CharacterVfxSpeciesId = NO_VFX_ID, // TODO
         }.AddAssociatedDebuff(ShortParalyzed);
 
+        public static BuffConfig LongFreezer = new BuffConfig {
+            SpeciesId = 6,
+            StockType = BuffStockType.Timed,
+            Stock = 480,
+            XformChSpeciesId = SPECIES_NONE_CH,
+            CharacterVfxSpeciesId = NO_VFX_ID, // TODO
+        }.AddAssociatedDebuff(LongFrozen);
+
+        public static BuffConfig LongParalyzer = new BuffConfig {
+            SpeciesId = 7,
+            StockType = BuffStockType.Timed,
+            Stock = 480,
+            XformChSpeciesId = SPECIES_NONE_CH,
+            CharacterVfxSpeciesId = NO_VFX_ID, // TODO
+        }.AddAssociatedDebuff(LongParalyzed);
+
         public static ImmutableDictionary<uint, BuffConfig> buffConfigs = ImmutableDictionary.Create<uint, BuffConfig>().AddRange(
                 new[]
                 {
@@ -420,6 +454,8 @@ namespace shared {
                     new KeyValuePair<uint, BuffConfig>(XformToWandWitchGirl.SpeciesId, XformToWandWitchGirl),
                     new KeyValuePair<uint, BuffConfig>(XformToFireSwordMan.SpeciesId, XformToFireSwordMan),
                     new KeyValuePair<uint, BuffConfig>(ShortParalyzer.SpeciesId, ShortParalyzer),
+                    new KeyValuePair<uint, BuffConfig>(LongFreezer.SpeciesId, LongFreezer),
+                    new KeyValuePair<uint, BuffConfig>(LongParalyzer.SpeciesId, LongParalyzer),
                 }
         );
 

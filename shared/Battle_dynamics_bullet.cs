@@ -726,6 +726,9 @@ namespace shared {
 
                             var victimChConfig = characters[victimCurrFrame.SpeciesId];
                             CharacterDownsync victimNextFrame = getChdFromChdArrs(victimCurrFrame.JoinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
+                            var victimExistingDebuff = victimNextFrame.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+                            bool victimIsParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != victimExistingDebuff.SpeciesId && 0 < victimExistingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[victimExistingDebuff.SpeciesId].Type);
+                            bool victimIsFrozen = (TERMINATING_DEBUFF_SPECIES_ID != victimExistingDebuff.SpeciesId && 0 < victimExistingDebuff.Stock && DebuffType.FrozenPositionLocked == debuffConfigs[victimExistingDebuff.SpeciesId].Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
                             /*
                                [WARNING] Deliberately checking conditions using "victimNextFrame" instead of "victimCurrFrame" to allow more responsive graphics. 
                              */
@@ -734,7 +737,7 @@ namespace shared {
                                 bool dashing = !notDashing;
                                 bool effInAir = isEffInAir(victimNextFrame, notDashing);
                                 if (!effInAir && dashing) {
-                                    transitToGroundDodgedChState(victimNextFrame, victimChConfig);
+                                    transitToGroundDodgedChState(victimNextFrame, victimChConfig, victimIsParalyzed);
                                     accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, null, victimNextFrame);
                                     break;
                                 }
@@ -938,16 +941,14 @@ namespace shared {
                                 // [WARNING] Gravity omitting characters shouldn't take a "blow up".
                                 bool shouldOmitStun = (victimChConfig.OmitGravity || (0 >= bulletConfig.HitStunFrames) || shouldOmitHitPushback);
                                 var oldFramesToRecover = victimNextFrame.FramesToRecover;
-                                var existingDebuff = victimNextFrame.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
-                                bool isFrozen = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.FrozenPositionLocked == debuffConfigs[existingDebuff.SpeciesId].Type); // [WARNING] It's important to check against TERMINATING_DEBUFF_SPECIES_ID such that we're safe from array reuse contamination
-                                bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
-                                bool shouldExtendDef1Broken = (!isFrozen && !isParalyzed && Def1Broken == oldNextCharacterState && bulletConfig.HitStunFrames <= oldFramesToRecover);
+                                bool shouldExtendDef1Broken = (!victimIsFrozen && !victimIsParalyzed && Def1Broken == oldNextCharacterState && bulletConfig.HitStunFrames <= oldFramesToRecover);
                                 if (false == shouldOmitStun) {
                                     resetJumpStartupOrHolding(victimNextFrame, true);
                                     CharacterState newNextCharacterState = Atked1;
-                                    if (!isFrozen && !isParalyzed && bulletConfig.BlowUp) {
+                                    if (!victimIsFrozen && bulletConfig.BlowUp) {
+                                        // [WARNING] Deliberately allowing "victimIsParalyzed" to be blown up!
                                         newNextCharacterState = BlownUp1;
-                                    } else if (isFrozen || isParalyzed || BlownUp1 != oldNextCharacterState) {
+                                    } else if (victimIsFrozen || BlownUp1 != oldNextCharacterState) {
                                         if (isCrouching(oldNextCharacterState, victimChConfig)) {
                                             newNextCharacterState = CrouchAtked1;
                                         }
@@ -1025,6 +1026,7 @@ namespace shared {
                                                         }
                                                         victimNextFrame.VelX = 0;
                                                         resetJumpStartupOrHolding(victimNextFrame, true);
+                                                        // [WARNING] Don't change "victimNextFrame.FramesToRecover" for paralyzer!
                                                         break;
                                                 }
                                             }
@@ -1174,9 +1176,9 @@ namespace shared {
 
                     if (inTheMiddleOfPrevHitMhTransition) {
                         if (null != offender && null != offenderNextFrame && null != skillConfig) {
-                            var existingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
-                            bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
-                            if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, (bulletConfig.BeamCollision ? bulletNextFrame : null), null, logger)) {
+                            var offenderExistingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+                            bool offenderIsParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != offenderExistingDebuff.SpeciesId && 0 < offenderExistingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[offenderExistingDebuff.SpeciesId].Type);
+                            if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], offenderIsParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, (bulletConfig.BeamCollision ? bulletNextFrame : null), null, logger)) {
                                 var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
                                 var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit); 
                                 if (null != newBlConfig) {

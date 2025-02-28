@@ -1744,7 +1744,7 @@ namespace shared {
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_ANGEL, new CharacterConfig {
                         SpeciesId = SPECIES_ANGEL,
                         SpeciesName = "Angel",
-                        Hp = 250,
+                        Hp = 150,
                         Mp = 3000,
                         InAirIdleFrameIdxTurningPoint = 11,
                         InAirIdleFrameIdxTurnedCycle = 1,

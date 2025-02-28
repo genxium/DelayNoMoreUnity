@@ -5,16 +5,28 @@ using Google.Protobuf.Collections;
 
 namespace shared {
     public partial class Battle {
-        private static void transitToGroundDodgedChState(CharacterDownsync chdNextFrame, CharacterConfig chConfig) {
+        private static void transitToGroundDodgedChState(CharacterDownsync chdNextFrame, CharacterConfig chConfig, bool isParalyzed) {
+            CharacterState oldNextChState = chdNextFrame.CharacterState; 
             chdNextFrame.CharacterState = GroundDodged;
             chdNextFrame.FramesInChState = 0;
             chdNextFrame.FramesToRecover = chConfig.GroundDodgedFramesToRecover;
             chdNextFrame.FramesInvinsible = chConfig.GroundDodgedFramesInvinsible;
             chdNextFrame.FramesCapturedByInertia = 0;
+            chdNextFrame.ActiveSkillId = NO_SKILL;
+            chdNextFrame.ActiveSkillHit = NO_SKILL_HIT;
             if (0 == chdNextFrame.VelX) {
                 var effSpeed = (0 >= chConfig.GroundDodgedSpeed ? chConfig.Speed : chConfig.GroundDodgedSpeed);                
-                chdNextFrame.VelX = (0 < chdNextFrame.DirX ? effSpeed : -effSpeed);
+                if (BackDashing == oldNextChState) {
+                    chdNextFrame.VelX = (0 > chdNextFrame.DirX ? effSpeed : -effSpeed);
+                } else {
+                    chdNextFrame.VelX = (0 < chdNextFrame.DirX ? effSpeed : -effSpeed);
+                }
             }
+
+            if (isParalyzed) {
+                chdNextFrame.VelX = 0;
+            }
+
             resetJumpStartupOrHolding(chdNextFrame, true);
         }
 
@@ -619,11 +631,12 @@ namespace shared {
                     }
                 }
 
-                if (dodgedInBlockStun) {
-                    transitToGroundDodgedChState(thatCharacterInNextFrame, chConfig);
-                }
                 var existingDebuff = currCharacterDownsync.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
                 bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+                if (dodgedInBlockStun) {
+                    transitToGroundDodgedChState(thatCharacterInNextFrame, chConfig, isParalyzed);
+                }
+
                 bool notEnoughMp = false;
                 bool usedSkill = dodgedInBlockStun ? false : _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, isParalyzed, logger);
                 Skill? skillConfig = null;
