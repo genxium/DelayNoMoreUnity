@@ -751,9 +751,9 @@ namespace shared {
                             },
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,
-                                Quota = 12,
+                                Quota = 18,
                                 FramesToRecover = 0,
-                                DefaultQuota = 12,
+                                DefaultQuota = 18,
                                 DefaultFramesToRecover = 25,
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = INVENTORY_BTN_B_SKILL_BH,
@@ -765,6 +765,14 @@ namespace shared {
                         Ifc = IfaceCat.Flesh,
                         BtnBChargedVfxSpeciesId = VfxLightCharged.SpeciesId,
                         TransformIntoSpeciesIdUponDeath = SPECIES_NONE_CH,
+                        LoopingChStates = ImmutableDictionary.Create<CharacterState, int>().AddRange(
+                            new[]
+                            {
+                                new KeyValuePair<CharacterState, int>(CharacterState.InAirIdle1ByJump, 23),
+                                new KeyValuePair<CharacterState, int>(CharacterState.InAirIdle1ByWallJump, 25),
+                                new KeyValuePair<CharacterState, int>(CharacterState.InAirIdle2ByJump, 31)
+                            }
+                        ),
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_SPEARWOMAN, new CharacterConfig {
@@ -1097,6 +1105,18 @@ namespace shared {
                         EleResistance = (ELE_THUNDER),
                         EleWeakness = (ELE_ICE | ELE_WATER),
                         GaugeIncWhenKilled = 100,
+                        InitInventorySlots = new List<InventorySlot> {
+                            new InventorySlot {
+                                StockType = InventorySlotStockType.TimedMagazineIv,
+                                Quota = 1,
+                                FramesToRecover = 0,
+                                DefaultQuota = 1,
+                                DefaultFramesToRecover = (int)(8.5f*BATTLE_DYNAMICS_FPS),
+                                BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
+                                SkillId = 35, // TODO: Remove this hardcoded "skillId"!
+                                SkillIdAir = 51,
+                            }
+                        },
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_BOARWARRIOR, new CharacterConfig {
@@ -1778,7 +1798,7 @@ namespace shared {
                         DefaultAirDashQuota = MAX_UINT,
                         MpRegenPerInterval = 200,
                         MpRegenInterval = 30,
-                        CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
+                        CollisionTypeMask = (COLLISION_CHARACTER_INDEX_PREFIX | COLLISION_FLYING_CHARACTER_INDEX_PREFIX),
                         ProactiveJumpStartupFrames = 6,
                         NpcPrioritizeAllyHealing = true,
                         Hardness = 6, // Thus when hit by MagicPistolBullet she needs FramesToRecover!

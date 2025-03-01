@@ -1655,10 +1655,10 @@ namespace shared {
                                                               .SetMhType(MultiHitType.None);
 
         public static Skill HeatBeamSkill = new Skill{
+            Id = 35, 
             RecoveryFrames = 160,
             RecoveryFramesOnBlock = 160,
             RecoveryFramesOnHit = 160,
-            MpDelta = 720,
             TriggerType = SkillTriggerType.RisingEdge,
             SelfNonStockBuff = new BuffConfig {
                 OmitGravity = true,
@@ -1684,17 +1684,17 @@ namespace shared {
         ;
 
         public static Skill HeatBeamAirSkill = new Skill{
+            Id = 51, 
             RecoveryFrames = 160,
             RecoveryFramesOnBlock = 160,
             RecoveryFramesOnHit = 160,
-            MpDelta = 720,
             TriggerType = SkillTriggerType.RisingEdge,
             SelfNonStockBuff = new BuffConfig {
                 OmitGravity = true,
                 RepelSoftPushback = true,
                 CharacterHardnessDelta = 3,
             },
-            BoundChState = InAirAtk1
+            BoundChState = InAirAtk6
         }
         .AddHit(HeatBeamBulletHit1)
         .AddHit(HeatBeamBulletRepeatingHit)
@@ -2039,10 +2039,10 @@ namespace shared {
             SpinAnchorX = 0f,
             SpinAnchorY = 6.0f, // [WARNING] Half of "HitboxSizeY"; kindly note that "SpinAnchorX & SpinAnchorY" for non-melee bullets are constrained by the "pivot points" set on the sprites
             GaugeIncReductionRatio = 0.3f,
-            AngularFrameVelCos = (float)Math.Cos(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
-            AngularFrameVelSin = (float)Math.Sin(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
-            InitSpinCos = (float)Math.Cos(0.25f * Math.PI), 
-            InitSpinSin = (float)Math.Sin(-0.25f * Math.PI), 
+            AngularFrameVelCos = (float)Math.Cos(+0.9f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
+            AngularFrameVelSin = (float)Math.Sin(+0.9f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
+            InitSpinCos = (float)Math.Cos(0.15f * Math.PI), 
+            InitSpinSin = (float)Math.Sin(-0.15f * Math.PI), 
             MhType = MultiHitType.FromPrevHitActual,
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
         };
@@ -2172,7 +2172,7 @@ namespace shared {
             ExplosionSpeciesId = 1,
             ExplosionFrames = 25,
             RotatesAlongVelocity = true,
-            DefaultHardPushbackBounceQuota = 5,
+            DefaultHardPushbackBounceQuota = 10,
             HardPushbackBounceNormFactor = 0.98f,
             HardPushbackBounceSheerFactor = 0.95f,
             Speed = (int)(6.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -2315,10 +2315,10 @@ namespace shared {
             HitboxOffsetY = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(33 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(40 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            SpeciesId = 17,
-            ExplosionSpeciesId = 7,
-            ExplosionFrames = 31,
-            InplaceVanishExplosionSpeciesId = 27,
+            SpeciesId = 34,
+            ExplosionSpeciesId = 15,
+            ExplosionFrames = 35,
+            InplaceVanishExplosionSpeciesId = 7,
             RemainsUponHit = true,
             DirX = 1,
             DirY = 0,
@@ -2341,6 +2341,7 @@ namespace shared {
         .AddHit(touchExplosionBombShock);
 
         public static Skill goblinBomb = new Skill {
+            Id = 117,
             RecoveryFrames = 72,
             RecoveryFramesOnBlock = 72,
             RecoveryFramesOnHit = 72,
@@ -3595,7 +3596,7 @@ namespace shared {
         public static BulletConfig StoneRollHit1 = new BulletConfig {
             StartupFrames = 40,
             FinishingFrames = 40,
-            ActiveFrames = 260,
+            ActiveFrames = 300,
             HitStunFrames = 25,
             BlockStunFrames = 9,
             Damage = 18,
@@ -5147,6 +5148,56 @@ namespace shared {
             BoundChState = Dashing
         }.AddHit(AngelDashingHit1);
 
+        public static BulletConfig DrakePrimerFireballBl1 = new BulletConfig {
+            StartupFrames = 35,
+            ActiveFrames = 600,
+            HitStunFrames = MAX_INT,
+            BlowUp = true,
+            BlockStunFrames = 9,
+            Damage = 32,
+            PushbackVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = 0,
+            SelfLockVelY = 0,
+            SelfLockVelYWhenFlying = 0,
+            HitboxOffsetX = (int)(4f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(28 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(24 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            SpeciesId = 31,
+            Speed = (int)(3 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = 1,
+            DirY = 0,
+            Hardness = 32,
+            ExplosionFrames = 30,
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName = "FlameEmit1",
+            ExplosionSfxName = "Explosion4",
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX
+        };
+
+        public static Skill DrakePrimerFireball = new Skill {
+            Id = 141,
+            RecoveryFrames = 60,
+            RecoveryFramesOnBlock = 60,
+            RecoveryFramesOnHit = 60,
+            MpDelta = 550,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }
+        .AddHit(DrakePrimerFireballBl1);
+
+        public static Skill DrakePrimerAirFireball = new Skill {
+            Id = 142,
+            RecoveryFrames = 60,
+            RecoveryFramesOnBlock = 60,
+            RecoveryFramesOnHit = 60,
+            MpDelta = 550,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = InAirAtk1
+        }
+        .AddHit(DrakePrimerFireballBl1);
+
         public static ImmutableDictionary<uint, Skill> skills = ImmutableDictionary.Create<uint, Skill>().AddRange(
                 new[]
                 {
@@ -5334,7 +5385,7 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(MagicPistolCrouch.Id, MagicPistolCrouch),
                     new KeyValuePair<uint, Skill>(MagSwordGirlSliding.Id, MagSwordGirlSliding),
 
-                    new KeyValuePair<uint, Skill>(35, HeatBeamSkill),
+                    new KeyValuePair<uint, Skill>(HeatBeamSkill.Id, HeatBeamSkill),
 
                     new KeyValuePair<uint, Skill>(36, WaterballAirSkill),
 
@@ -5467,7 +5518,7 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(48, WaterballGroundSkill2),
                     new KeyValuePair<uint, Skill>(49, ThunderBoltSkill),
 
-                    new KeyValuePair<uint, Skill>(51, HeatBeamAirSkill),
+                    new KeyValuePair<uint, Skill>(HeatBeamAirSkill.Id, HeatBeamAirSkill),
 
                     new KeyValuePair<uint, Skill>(BasicDashing.Id, BasicDashing),
 
@@ -5859,7 +5910,7 @@ namespace shared {
                     ),
 
                     new KeyValuePair<uint, Skill>(116, WandWitchHeatBeamSkill),
-                    new KeyValuePair<uint, Skill>(117, goblinBomb),
+                    new KeyValuePair<uint, Skill>(goblinBomb.Id, goblinBomb),
                     new KeyValuePair<uint, Skill>(118, SwordManMelee1GroundHit2),
                     new KeyValuePair<uint, Skill>(119, SwordManMelee1GroundHit3),
 
@@ -5949,6 +6000,8 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(AngelBasicAtk.Id, AngelBasicAtk),
                     new KeyValuePair<uint, Skill>(AngelBackDashing.Id, AngelBackDashing),
                     new KeyValuePair<uint, Skill>(AngelDashing.Id, AngelDashing),
+                    new KeyValuePair<uint, Skill>(DrakePrimerFireball.Id, DrakePrimerFireball),
+                    new KeyValuePair<uint, Skill>(DrakePrimerAirFireball.Id, DrakePrimerAirFireball),
                 }
         );
         
@@ -6790,14 +6843,11 @@ namespace shared {
                 case SPECIES_RIDLEYDRAKE:
                     switch (patternId) {
                         case PATTERN_DOWN_B:
-                            if (!notRecovered) {
-                                if (!currCharacterDownsync.InAir) {
-                                    return 35; 
-                                } else {
-                                    return 51; 
-                                }
+                            if (notRecovered) return NO_SKILL;
+                            if (currCharacterDownsync.InAir) {
+                                return DrakePrimerAirFireball.Id;
                             } else {
-                                return NO_SKILL;
+                                return DrakePrimerFireball.Id;
                             }
                         case PATTERN_B:
                         case PATTERN_UP_B:
@@ -6840,6 +6890,9 @@ namespace shared {
                             } else {
                                 return NO_SKILL;
                             }
+                        case PATTERN_INVENTORY_SLOT_C:
+                            if (!slotUsed) return NO_SKILL;
+                            return slotLockedSkillId;
                         default:
                             return NO_SKILL;
                     }

@@ -330,6 +330,7 @@ namespace shared {
             InAirIdle2ByJump,
             InAirAtk1,
             InAirAtk2,
+            InAirAtk6,
             InAirAtked1,
             BlownUp1,
             OnWallIdle1,
@@ -346,7 +347,8 @@ namespace shared {
             LayDown1,
 			// [WARNING] During the invinsible frames of GET_UP1, the player is allowed to take any action
 			Dying,
-            Dimmed
+            Dimmed,
+            Awaking,
         };
 
         public static HashSet<CharacterState> invinsibleSet = new HashSet<CharacterState>() {
@@ -405,7 +407,6 @@ namespace shared {
             OnWallIdle1,
             CrouchIdle1,
             GetUp1,
-
             Atk7Charging,
         };
 
@@ -418,6 +419,7 @@ namespace shared {
             InAirIdle1ByWallJump,
             InAirAtk1,
             InAirAtk2,
+            InAirAtk6,
             InAirAtked1,
             InAirWalking,
             OnWallIdle1,

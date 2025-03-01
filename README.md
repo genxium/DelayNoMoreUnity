@@ -6,7 +6,7 @@ v2.2.5
 - Added toast UI component.
 - Added new debuff "paralyzed".
 
-Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://m.youtube.com/watch?v=KOWm4zlZJZ0&t=6s&pp=2AEGkAIB)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
+Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/ohQ19axGBOo)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
 
 # How does it work to synchronize across multiple players?
 _(how input delay roughly works)_

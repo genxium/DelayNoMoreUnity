@@ -103,6 +103,8 @@ enum CharacterState {
     WalkingAtk1 = 2050;
     WalkingAtk4 = 2051;
 
+    InAirAtk6 = 2052;
+
     OnWallAtk1 = 3072; 
 
     Idle1_Charging = 3073;
