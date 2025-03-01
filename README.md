@@ -4,7 +4,7 @@ v2.2.5
 - Added slide-dodge (at critical timing) and defence-dodge (cost 1 slot-C).
 - Added beam emitting trap.
 - Added toast UI component.
-- Added new debuff "paralyzed".
+- Added new debuff `paralyzed`.
 
 Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/ohQ19axGBOo)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
 

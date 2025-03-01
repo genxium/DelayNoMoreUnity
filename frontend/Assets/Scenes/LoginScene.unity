@@ -476,8 +476,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Delay No More
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7c19b80519245204b86ad1aa10e36dae, type: 2}
-  m_sharedMaterial: {fileID: 6435873069278579779, guid: 7c19b80519245204b86ad1aa10e36dae, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 22ec749ac4e6cbf4590f685f7aa616d5, type: 2}
+  m_sharedMaterial: {fileID: -3007950227398781443, guid: 22ec749ac4e6cbf4590f685f7aa616d5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

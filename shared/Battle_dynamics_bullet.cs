@@ -737,7 +737,7 @@ namespace shared {
                                 bool dashing = !notDashing;
                                 bool effInAir = isEffInAir(victimNextFrame, notDashing);
                                 if (!effInAir && dashing) {
-                                    // [WARNING] If at a certain "rdfId", multiple "bullets" are hitting a same "victimNextFrame" who can dodge the first of these "bullets" during the current traversal in "_calcAllBulletsCollisions", then it can certainly dodge all the other "bullets" too according to the simple criteria here --  hence there's no traversal concern needed.  
+                                    // [WARNING] If at a certain "rdfId", multiple "bullets" are hitting a same "victimNextFrame" who can dodge the first of these "bullets" during the current traversal in "_calcAllBulletsCollisions", then it can certainly dodge all the other "bullets" too according to the simple criteria here --  hence there's no "traversal order concern" needed.  
                                     transitToGroundDodgedChState(victimNextFrame, victimChConfig, victimIsParalyzed);
                                     accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, null, victimNextFrame);
                                     break;
