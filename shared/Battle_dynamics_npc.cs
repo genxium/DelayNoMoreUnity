@@ -1048,7 +1048,7 @@ namespace shared {
                     allyBoxBottom = allyBoxCy - 0.5f * allyBoxCh;
                     allyBoxTop = allyBoxCy + 0.5f * allyBoxCh;
 
-                    if (v5.JoinIndex > currCharacterDownsync.JoinIndex && Math.Abs(v5.VirtualGridX - currCharacterDownsync.VirtualGridX) < (v5.Speed >> 3) && v5.SpeciesId == currCharacterDownsync.SpeciesId && v5.VelX == currCharacterDownsync.VelX && v5.VelY == currCharacterDownsync.VelY) {
+                    if (v5.JoinIndex > currCharacterDownsync.JoinIndex && Math.Abs(v5.VirtualGridX - currCharacterDownsync.VirtualGridX) < v5.Speed && v5.SpeciesId == currCharacterDownsync.SpeciesId && v5.VelX == currCharacterDownsync.VelX && v5.VelY == currCharacterDownsync.VelY) {
                         // [WARNING] To differentiate possibly overlapping same species characters
                         slowDownToAvoidOverlap = true;
                     }

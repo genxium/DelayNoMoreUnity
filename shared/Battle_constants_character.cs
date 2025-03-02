@@ -82,7 +82,7 @@ namespace shared {
                         CrouchingEnabled = true,
                         CrouchingAtkEnabled = true, // It's actually weird to have "false == CrouchingAtkEnabled && true == CrouchingEnabled", but flexibility provided anyway
                         WallJumpingFramesToRecover = 8,
-                        WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallJumpingInitVelX = (int)(2.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetX = (int)(8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -713,7 +713,7 @@ namespace shared {
                         CrouchingAtkEnabled = true,
                         OnWallEnabled = true,
                         WallJumpingFramesToRecover = 8,
-                        WallJumpingInitVelX = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        WallJumpingInitVelX = (int)(2.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         WallJumpingInitVelY =  (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         WallSlidingVelY = (int)(-1 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         DashingEnabled = true,
@@ -1671,7 +1671,8 @@ namespace shared {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.TimedMagazineIv,
                                 Quota = 1,
-                                FramesToRecover = 360,
+                                FramesToRecover = 0,
+                                DefaultFramesToRecover = (int)(8.5f*BATTLE_DYNAMICS_FPS),
                                 DefaultQuota = 1,
                                 BuffSpeciesId = TERMINATING_BUFF_SPECIES_ID,
                                 SkillId = 102, // TODO: Remove this hardcoded "skillId"!

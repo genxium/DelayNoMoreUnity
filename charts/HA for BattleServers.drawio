@@ -1,0 +1,508 @@
+<mxfile host="Electron" modified="2025-03-02T08:46:47.192Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.1 Chrome/112.0.5615.204 Electron/24.6.1 Safari/537.36" etag="ougL-OeoPyzbV5pSHm2j" version="21.6.1" type="device">
+  <diagram name="Page-1" id="5iIqgAUmKxpYmu3vzR3b">
+    <mxGraphModel dx="2853" dy="1171" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-10" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" source="poTXgNf3XXM8OrF3A4n6-13" target="poTXgNf3XXM8OrF3A4n6-9" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="160" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="300" y="160" />
+              <mxPoint x="300" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-11" value="loads the follows into RAM&amp;nbsp;from &quot;auth_server_%d.conf&quot;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;&lt;i&gt;- &quot;battle_server_endpoints&quot;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;&lt;/span&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;- &quot;self_id&quot;&lt;/span&gt;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="310" y="90" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-12" value="generates the follows into filesys&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;&lt;i&gt;- &quot;auth1_pubkey&quot;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;&lt;/span&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;- &quot;auth1_prikey&quot;&lt;/span&gt;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="310" y="190" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-14" value="BattleServer#1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlEntity;size=30;" parent="1" vertex="1">
+          <mxGeometry x="980" y="40" width="120" height="1990" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-15" value="BattleServer#2" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlEntity;size=30;" parent="1" vertex="1">
+          <mxGeometry x="1345" y="40" width="120" height="2570" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-20" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="624.5" y="310.5" as="sourcePoint" />
+            <mxPoint x="1039.5" y="310.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-22" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sends &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#0000ff&quot;&gt;&quot;auth1_pubkey&quot;&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; to &lt;/span&gt;&lt;font style=&quot;background-color: initial;&quot; color=&quot;#0000ff&quot;&gt;&lt;b&gt;&quot;sftp://battleServerEndpoint#1/fixed/path&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="213" y="308" width="266" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-23" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="204.99666666666675" y="385.17000000000013" as="sourcePoint" />
+            <mxPoint x="1404.5" y="385.1700000000001" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-24" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sends &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#0000ff&quot;&gt;&quot;auth1_pubkey&quot;&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; to &lt;/span&gt;&lt;font style=&quot;background-color: initial;&quot; color=&quot;#0000ff&quot;&gt;&lt;b&gt;&quot;sftp://battleServerEndpoint#2/fixed/path&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="214" y="355.17" width="266" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-25" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-4" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="268" y="70" as="sourcePoint" />
+            <mxPoint x="700" y="370" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="300" y="70" />
+              <mxPoint x="300" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-26" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" source="poTXgNf3XXM8OrF3A4n6-29" target="poTXgNf3XXM8OrF3A4n6-31" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="150" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="720" y="150" />
+              <mxPoint x="720" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-27" value="loads the follows into RAM&amp;nbsp;from &quot;auth_server_%d.conf&quot;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;&lt;i&gt;- &quot;battle_server_endpoints&quot;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;&lt;/span&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;- &quot;self_id&quot;&lt;/span&gt;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="730" y="80" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-28" value="generates the follows into filesys&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;&lt;i&gt;- &quot;auth2_pubkey&quot;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;&lt;/span&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;- &quot;auth2_prikey&quot;&lt;/span&gt;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="730" y="180" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-29" value="AuthServer#2" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlBoundary;size=40;align=center;" parent="1" vertex="1">
+          <mxGeometry x="560" y="40" width="130" height="2370" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-30" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="620" y="110" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-31" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="620" y="220" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-32" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sends &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#0000ff&quot;&gt;&quot;auth2_pubkey&quot;&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; to &lt;/span&gt;&lt;font style=&quot;background-color: initial;&quot; color=&quot;#0000ff&quot;&gt;&lt;b&gt;&quot;sftp://battleServerEndpoint#1/fixed/path&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="727" y="273" width="266" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-33" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sends &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#0000ff&quot;&gt;&quot;auth2_pubkey&quot;&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; to &lt;/span&gt;&lt;font style=&quot;background-color: initial;&quot; color=&quot;#0000ff&quot;&gt;&lt;b&gt;&quot;sftp://battleServerEndpoint#2/fixed/path&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="740" y="396" width="266" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-35" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="626" y="432" as="sourcePoint" />
+            <mxPoint x="1404.5" y="432" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-36" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="205.99666666666675" y="348.0000000000001" as="sourcePoint" />
+            <mxPoint x="1039.5" y="348" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-38" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.041;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="60" as="sourcePoint" />
+            <mxPoint x="630" y="130" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="720" y="60" />
+              <mxPoint x="720" y="130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-39" value="Steam TIcket&amp;nbsp;&lt;br&gt;Producer" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-206" y="30" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-41" value="" style="endArrow=none;html=1;strokeWidth=1;rounded=0;entryX=0.55;entryY=0.95;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" parent="1" target="poTXgNf3XXM8OrF3A4n6-39" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-136" y="750" as="sourcePoint" />
+            <mxPoint x="504" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-43" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlActor;" parent="1" vertex="1">
+          <mxGeometry x="-19" y="320" width="20" height="2190" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-44" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="poTXgNf3XXM8OrF3A4n6-43" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="530" y="610" as="sourcePoint" />
+            <mxPoint x="-140" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-45" value="&lt;div style=&quot;text-align: left;&quot;&gt;login&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-106" y="530" width="76" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-46" value="GameFrontend#1032" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-30" y="290" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-47" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-138" y="581" as="sourcePoint" />
+            <mxPoint x="-9.499999999999545" y="581" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-48" value="&lt;div style=&quot;text-align: left; font-size: 11px;&quot;&gt;returns &lt;b style=&quot;font-size: 11px;&quot;&gt;&lt;font color=&quot;#ff6666&quot; style=&quot;font-size: 11px;&quot;&gt;&quot;sessionTicket&quot;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="-137" y="562" width="137" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-13" value="AuthServer#1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlBoundary;size=40;align=center;" parent="1" vertex="1">
+          <mxGeometry x="140" y="50" width="130" height="2450" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-57" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="poTXgNf3XXM8OrF3A4n6-13" target="poTXgNf3XXM8OrF3A4n6-58" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="65" y="790" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="120" y="790" />
+              <mxPoint x="120" y="880" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-58" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="poTXgNf3XXM8OrF3A4n6-13" vertex="1">
+          <mxGeometry x="60" y="860" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-99" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="poTXgNf3XXM8OrF3A4n6-13" vertex="1">
+          <mxGeometry x="-155" y="592" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-100" value="randomly selects &lt;br&gt;&lt;b&gt;&lt;font color=&quot;#ff8000&quot;&gt;&quot;authServerEndpoint#1&quot;&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="poTXgNf3XXM8OrF3A4n6-13" vertex="1">
+          <mxGeometry x="-89" y="558" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-49" value="Steam TIcket&amp;nbsp;&lt;br&gt;Verifier" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="460" y="600" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-50" value="" style="endArrow=none;html=1;strokeWidth=1;rounded=0;entryX=0.55;entryY=0.95;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" parent="1" target="poTXgNf3XXM8OrF3A4n6-49" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="530" y="2410" as="sourcePoint" />
+            <mxPoint x="1170" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-51" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.45;exitY=0.349;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-8.25" y="695.0000000000002" as="sourcePoint" />
+            <mxPoint x="206.25" y="695.0000000000002" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-52" value="&lt;div style=&quot;text-align: left;&quot;&gt;joins with &lt;b&gt;&lt;font color=&quot;#ff6666&quot;&gt;&quot;sessionTicket&quot;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="10" y="675" width="160" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-53" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="poTXgNf3XXM8OrF3A4n6-13" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="240.00483870967733" y="730" as="sourcePoint" />
+            <mxPoint x="530" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-54" value="&lt;div style=&quot;text-align: left;&quot;&gt;verifies &lt;font color=&quot;#ff6666&quot;&gt;&lt;b&gt;&quot;sessionTicket&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="290" y="706" width="160" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-55" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-13" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="528" y="780" as="sourcePoint" />
+            <mxPoint x="260" y="780" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-56" value="&lt;div style=&quot;text-align: left;&quot;&gt;true with &lt;b style=&quot;&quot;&gt;&lt;font color=&quot;#660033&quot;&gt;&quot;steamOpenId&quot;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="290" y="756" width="160" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-4" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="200" y="120" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-9" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="200" y="230" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-59" value="randomly selects &lt;br&gt;&lt;b&gt;&lt;font color=&quot;#0000ff&quot;&gt;&quot;battleServerEndpoint#2&quot;&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="270" y="870" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-60" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-61" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="205" y="1000" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="260" y="1000" />
+              <mxPoint x="260" y="1090" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-61" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="200" y="1070" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-62" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-66" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1040" y="140" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="1135" y="140" />
+              <mxPoint x="1135" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-63" value="loads the follows into RAM&amp;nbsp;from &quot;battle_server_%d.conf&quot;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;- &quot;auth_server_endpoints&quot;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;&lt;/span&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;- &quot;self_id&quot;&lt;/span&gt;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1145" y="70" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-64" value="generates the follows into filesys&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;- &quot;bat1_pubkey&quot;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;&lt;/span&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;- &quot;bat1_prikey&quot;&lt;/span&gt;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1145" y="170" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-65" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="1035" y="100" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-66" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="1035" y="210" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-67" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1100" y="55" as="sourcePoint" />
+            <mxPoint x="1045" y="120" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1135" y="55" />
+              <mxPoint x="1135" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-68" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1039.5" y="488" as="sourcePoint" />
+            <mxPoint x="204.5" y="488" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-69" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sends &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;&quot;bat1_pubkey&quot;&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; to &lt;/span&gt;&lt;font color=&quot;#ff8000&quot; style=&quot;background-color: initial;&quot;&gt;&lt;b style=&quot;&quot;&gt;&quot;sftp://authServerEndpoint#1/fixed/path&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="730" y="455" width="266" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-70" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1039.5" y="582" as="sourcePoint" />
+            <mxPoint x="624.5" y="582" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-71" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sends &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;&quot;bat1_pubkey&quot;&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; to &lt;/span&gt;&lt;font color=&quot;#ff8000&quot; style=&quot;background-color: initial;&quot;&gt;&lt;b style=&quot;&quot;&gt;&quot;sftp://authServerEndpoint#2/fixed/path&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="733" y="549" width="266" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-72" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1404.5" y="537" as="sourcePoint" />
+            <mxPoint x="204.5" y="537" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-73" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sends &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;&quot;bat2_pubkey&quot;&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; to &lt;/span&gt;&lt;font color=&quot;#ff8000&quot; style=&quot;background-color: initial;&quot;&gt;&lt;b style=&quot;&quot;&gt;&quot;sftp://authServerEndpoint#1/fixed/path&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1120" y="500" width="266" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-74" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1404.4999999999995" y="634.0000000000002" as="sourcePoint" />
+            <mxPoint x="624.666666666667" y="634.0000000000002" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-75" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sends &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;&quot;bat2_pubkey&quot;&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; to &lt;/span&gt;&lt;font color=&quot;#ff8000&quot; style=&quot;background-color: initial;&quot;&gt;&lt;b style=&quot;&quot;&gt;&quot;sftp://authServerEndpoint#2/fixed/path&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1120" y="597" width="266" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-76" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-80" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1405" y="139" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="1500" y="139" />
+              <mxPoint x="1500" y="229" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-77" value="loads the follows into RAM&amp;nbsp;from &quot;battle_server_%d.conf&quot;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;- &quot;auth_server_endpoints&quot;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;&lt;/span&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;- &quot;self_id&quot;&lt;/span&gt;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1510" y="69" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-78" value="generates the follows into filesys&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;- &quot;bat2_pubkey&quot;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;&lt;/span&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;font-size: 13px; background-color: rgb(255, 255, 255);&quot;&gt;- &quot;bat2_prikey&quot;&lt;/span&gt;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1510" y="169" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-79" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="1400" y="99" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-80" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="1400" y="209" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-81" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1465" y="54" as="sourcePoint" />
+            <mxPoint x="1410" y="119" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1500" y="54" />
+              <mxPoint x="1500" y="119" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-82" value="generates &lt;font color=&quot;#ff0000&quot;&gt;&lt;b&gt;authToken&lt;/b&gt;&lt;/font&gt;=&lt;br&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;encrypt({&lt;/span&gt;&lt;font color=&quot;#660033&quot;&gt;&lt;b&gt;steamOpenId&lt;/b&gt;&lt;/font&gt;, expiresAt: ..., fromAuthServerId: 1, toBattleServerId: 2},&amp;nbsp;&lt;font color=&quot;#ff8000&quot;&gt;&lt;b&gt;bat2_pubkey&lt;/b&gt;&lt;/font&gt;)&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sign(encrypted, &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#0000ff&quot;&gt;auth1_prikey&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;)&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="264.5" y="1030" width="261" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-83" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="204.50000000000045" y="1169.9999999999998" as="sourcePoint" />
+            <mxPoint x="-9.369565217391482" y="1169.9999999999998" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-84" value="&lt;div style=&quot;text-align: left; font-size: 12px;&quot;&gt;returns&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: left; font-size: 12px;&quot;&gt;{&lt;span style=&quot;background-color: initial; font-size: 12px;&quot;&gt;&lt;font color=&quot;#ff0000&quot; style=&quot;font-size: 12px;&quot;&gt;&lt;b style=&quot;font-size: 12px;&quot;&gt;authToken&lt;/b&gt;&lt;/font&gt;, &lt;b style=&quot;font-size: 12px;&quot;&gt;&lt;font color=&quot;#0000ff&quot; style=&quot;font-size: 12px;&quot;&gt;battleServerEndpoint#2&lt;/font&gt;&lt;/b&gt;}&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="-11" y="1139" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-85" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.45;exitY=0.349;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-15" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-8.25" y="1270.0000000000002" as="sourcePoint" />
+            <mxPoint x="206.25" y="1270.0000000000002" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-86" value="&lt;div style=&quot;text-align: left;&quot;&gt;joins &lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;ws://battleServerEndpoint#2&lt;/b&gt;&lt;/font&gt;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;with &lt;b style=&quot;&quot;&gt;&lt;font color=&quot;#ff0000&quot;&gt;authToken&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-42" y="1242" width="270" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-87" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-88" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1404" y="1270" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="1459" y="1270" />
+              <mxPoint x="1459" y="1360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-88" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="1399" y="1342" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-89" value="&lt;ul&gt;&lt;li style=&quot;border-color: var(--border-color);&quot;&gt;decrypts&amp;nbsp;&lt;b style=&quot;border-color: var(--border-color);&quot;&gt;&lt;font style=&quot;border-color: var(--border-color);&quot; color=&quot;#ff0000&quot;&gt;authToken.content&lt;/font&gt;&lt;/b&gt;&amp;nbsp;(with&amp;nbsp;&lt;font style=&quot;border-color: var(--border-color);&quot; color=&quot;#ff8000&quot;&gt;&lt;b style=&quot;border-color: var(--border-color);&quot;&gt;bat2_prikey&lt;/b&gt;&lt;/font&gt;) and&amp;nbsp;verifies&amp;nbsp;&lt;b style=&quot;border-color: var(--border-color);&quot;&gt;&lt;font style=&quot;border-color: var(--border-color);&quot; color=&quot;#ff0000&quot;&gt;authToken.sig&amp;nbsp;&lt;/font&gt;&lt;/b&gt;(with&amp;nbsp;&lt;font style=&quot;border-color: var(--border-color); background-color: initial;&quot; color=&quot;#0000ff&quot;&gt;&lt;b style=&quot;border-color: var(--border-color);&quot;&gt;auth2_pubkey&lt;/b&gt;&lt;/font&gt;&lt;span style=&quot;border-color: var(--border-color); background-color: initial;&quot;&gt;)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;verifies expiry value&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;randomly selects&amp;nbsp;&lt;/span&gt;&lt;b&gt;&lt;font color=&quot;#009900&quot;&gt;&quot;roomId=42&quot;&lt;/font&gt;&lt;/b&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1440" y="1262" width="390" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-90" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="poTXgNf3XXM8OrF3A4n6-15" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="202.87000000000046" y="1409.9999999999998" as="sourcePoint" />
+            <mxPoint x="-10.999565217391483" y="1409.9999999999998" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-91" value="&lt;div style=&quot;text-align: left; font-size: 12px;&quot;&gt;accepts connection and returns &lt;b&gt;&lt;font color=&quot;#009900&quot;&gt;roomId=42&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1160" y="1380" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-92" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;loads the follows into RAM&amp;nbsp;from &quot;frontend.conf&quot;&lt;br style=&quot;border-color: var(--border-color); background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot; color=&quot;#ff8000&quot;&gt;- &quot;auth_server_endpoints&quot;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;&lt;/span&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot; color=&quot;#ff8000&quot;&gt;&lt;br style=&quot;border-color: var(--border-color); background-color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;- &quot;self_id&quot;&lt;/span&gt;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="30" y="396" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-94" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-43" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-10" y="380" as="sourcePoint" />
+            <mxPoint x="10" y="470" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="25" y="380" />
+              <mxPoint x="25" y="460" />
+              <mxPoint x="10" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-95" value="" style="html=1;shape=mxgraph.electrical.electro-mechanical.switchDisconnector;aspect=fixed;elSwitchState=off;fontColor=#FF0000;fillColor=#FF0000;strokeColor=#FF0000;strokeWidth=4;" parent="1" vertex="1">
+          <mxGeometry x="-41" y="1610" width="75" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-96" value="Disconnects during battle in &lt;b&gt;&lt;font color=&quot;#009900&quot;&gt;roomId=42&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1598" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-98" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" source="poTXgNf3XXM8OrF3A4n6-43" target="poTXgNf3XXM8OrF3A4n6-99" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-10" y="572" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="45" y="600" />
+              <mxPoint x="45" y="662" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-107" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="-13" y="1699" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-108" value="randomly selects &lt;br&gt;&lt;b&gt;&lt;font color=&quot;#ff8000&quot;&gt;&quot;authServerEndpoint#2&quot;&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="53" y="1665" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-109" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-107" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-8" y="1657" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="47" y="1657" />
+              <mxPoint x="47" y="1719" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-110" value="&lt;div style=&quot;text-align: left;&quot;&gt;joins with &lt;font style=&quot;font-weight: bold;&quot; color=&quot;#ff6666&quot;&gt;&quot;sessionTicket&quot;&lt;/font&gt;,&amp;nbsp;&lt;font color=&quot;#009900&quot;&gt;&lt;b&gt;roomId=42&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="10" y="1748" width="160" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-113" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="530" y="1865" as="sourcePoint" />
+            <mxPoint x="624.5" y="1865.0000000000005" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-114" value="&lt;div style=&quot;text-align: left;&quot;&gt;true with &quot;steamOpenId&quot;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="540" y="1870" width="130" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-115" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="624.5" y="1809" as="sourcePoint" />
+            <mxPoint x="530" y="1809" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-116" value="&lt;div style=&quot;text-align: left;&quot;&gt;verifies &lt;font color=&quot;#ff6666&quot;&gt;&lt;b&gt;&quot;sessionTicket&quot;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="532" y="1817" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-117" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="poTXgNf3XXM8OrF3A4n6-43" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="0.002857142856882433" y="1774.0000000000005" as="sourcePoint" />
+            <mxPoint x="626" y="1774.0000000000005" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-125" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-126" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="626" y="1901" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="681" y="1901" />
+              <mxPoint x="681" y="1991" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-126" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="621" y="1971" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-127" value="based on &lt;font color=&quot;#009900&quot;&gt;&lt;b&gt;roomId=42&lt;/b&gt;&lt;/font&gt; selects &lt;br&gt;&lt;b&gt;&lt;font color=&quot;#0000ff&quot;&gt;&quot;battleServerEndpoint#2&quot;&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="691" y="1931" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-128" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-129" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="626" y="2061" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="681" y="2061" />
+              <mxPoint x="681" y="2151" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-129" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="621" y="2131" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-130" value="generates &lt;font color=&quot;#ff0000&quot;&gt;&lt;b&gt;authToken&lt;/b&gt;&lt;/font&gt;=&lt;br&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;encrypt({&lt;/span&gt;&lt;font color=&quot;#660033&quot;&gt;&lt;b&gt;steamOpenId&lt;/b&gt;&lt;/font&gt;, expiresAt: ..., fromAuthServerId: 2, toBattleServerId: 2},&amp;nbsp;&lt;font color=&quot;#ff8000&quot;&gt;&lt;b&gt;bat2_pubkey&lt;/b&gt;&lt;/font&gt;)&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;sign(encrypted, &lt;/span&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;font color=&quot;#0000ff&quot;&gt;auth2_prikey&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;)&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="685.5" y="2091" width="261" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-131" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.45;exitY=0.349;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-8.25" y="2267" as="sourcePoint" />
+            <mxPoint x="1405" y="2267" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-132" value="&lt;div style=&quot;text-align: left;&quot;&gt;joins &lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;ws://battleServerEndpoint#2&lt;/b&gt;&lt;/font&gt;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;with &lt;b style=&quot;color: rgb(255, 0, 0);&quot;&gt;authToken&lt;/b&gt;, &lt;b style=&quot;&quot;&gt;&lt;font color=&quot;#009900&quot;&gt;roomId=42&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-42" y="2239" width="270" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-133" value="" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" parent="1" target="poTXgNf3XXM8OrF3A4n6-134" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1404" y="2268" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="1459" y="2268" />
+              <mxPoint x="1459" y="2358" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-134" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="1399" y="2340" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-135" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1405" y="2388" as="sourcePoint" />
+            <mxPoint x="-10.999565217391478" y="2388" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-136" value="&lt;div style=&quot;text-align: left; font-size: 12px;&quot;&gt;accepts connection and returns &quot;ResyncBattleFullFrame&quot;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1160" y="2358" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-138" value="&lt;div style=&quot;text-align: left; font-size: 12px;&quot;&gt;returns&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: left; font-size: 12px;&quot;&gt;{&lt;span style=&quot;background-color: initial; font-size: 12px;&quot;&gt;&lt;font color=&quot;#ff0000&quot; style=&quot;font-size: 12px;&quot;&gt;&lt;b style=&quot;font-size: 12px;&quot;&gt;authToken&lt;/b&gt;&lt;/font&gt;, &lt;b style=&quot;font-size: 12px;&quot;&gt;&lt;font color=&quot;#0000ff&quot; style=&quot;font-size: 12px;&quot;&gt;battleServerEndpoint#2&lt;/font&gt;&lt;/b&gt;}&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="264.5" y="2180" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-139" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="624.86" y="2210.0000000000005" as="sourcePoint" />
+            <mxPoint x="-10.997142857143118" y="2210.0000000000005" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poTXgNf3XXM8OrF3A4n6-140" value="&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;decrypts &lt;b&gt;&lt;font color=&quot;#ff0000&quot;&gt;authToken.content&lt;/font&gt;&lt;/b&gt;&amp;nbsp;(with &lt;font color=&quot;#ff8000&quot;&gt;&lt;b&gt;bat2_prikey&lt;/b&gt;&lt;/font&gt;) and&amp;nbsp;&lt;/span&gt;verifies&amp;nbsp;&lt;b style=&quot;border-color: var(--border-color);&quot;&gt;&lt;font style=&quot;border-color: var(--border-color);&quot; color=&quot;#ff0000&quot;&gt;authToken.sig&amp;nbsp;&lt;/font&gt;&lt;/b&gt;(with &lt;font style=&quot;background-color: initial;&quot; color=&quot;#0000ff&quot;&gt;&lt;b&gt;auth2_pubkey&lt;/b&gt;&lt;/font&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;verifies expiry value&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;selects room with&amp;nbsp;&lt;/span&gt;&lt;b style=&quot;color: rgb(0, 153, 0);&quot;&gt;&quot;roomId=42&quot;&lt;/b&gt;, &lt;b&gt;&lt;font color=&quot;#660033&quot;&gt;&quot;steamOpenId&quot;&lt;/font&gt;&lt;/b&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1446" y="2259" width="335" height="110" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

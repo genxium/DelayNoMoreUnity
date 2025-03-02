@@ -358,28 +358,36 @@ namespace shared {
                     logger.LogInfo("_insertFromEmissionDerivedBullets/before, currRdfId=" + currRenderFrame.Id + ", used DiverImpact, next VelX = " + offenderNextFrame.VelX);
                 }
                 */
-                if (!isSameBullet) {
-                    continue;
-                }
-
+                
                 var (skillConfig, srcConfig) = FindBulletConfig(src.SkillId, src.ActiveSkillHit);
                 if (null == skillConfig || null == srcConfig) {
                     continue;
                 }
-                if (MultiHitType.FromEmission != srcConfig.MhType || offender.ActiveSkillHit + 1 > skillConfig.Hits.Count) {
+
+                bool isExploding = IsBulletExploding(src, srcConfig);
+                if (isExploding) {
                     continue;
                 }
-                bool justEndedMeleeCurrentHit = (BulletType.Melee == srcConfig.BType && src.OriginatedRenderFrameId + srcConfig.StartupFrames + srcConfig.ActiveFrames == currRenderFrame.Id);
 
-                bool nonMeleeJustBecameActive = BulletType.Melee != srcConfig.BType && IsBulletJustActive(src, srcConfig, currRenderFrame.Id);
+                if ((MultiHitType.FromEmission != srcConfig.MhType && MultiHitType.FromEmissionJustActive != srcConfig.MhType) || src.ActiveSkillHit + 1 > skillConfig.Hits.Count) {
+                    continue;
+                }
 
-                if (justEndedMeleeCurrentHit || nonMeleeJustBecameActive) {
+                if (!isSameBullet && (BulletType.Melee == srcConfig.BType || MultiHitType.FromEmissionJustActive == srcConfig.MhType)) {
+                    continue;
+                }
+
+                bool justEndedCurrentHit = (MultiHitType.FromEmission == srcConfig.MhType && (src.OriginatedRenderFrameId + srcConfig.StartupFrames + srcConfig.ActiveFrames == currRenderFrame.Id));
+
+                bool justBecameActive = (MultiHitType.FromEmissionJustActive == srcConfig.MhType && IsBulletJustActive(src, srcConfig, currRenderFrame.Id));
+
+                if (justEndedCurrentHit || justBecameActive) {
                     // [WARNING] Different from Fireball, multihit of Melee would add a new "Bullet" to "nextRenderFrameBullets" for convenience of handling explosion! The bullet "dst" could also be exploding by reaching here!
                     // No need to worry about Mp consumption here, it was already paid at the first "offenderNextFrame.ActiveSkillHit" in "_useSkill"
                     int xfac = (0 < offenderNextFrame.DirX ? 1 : -1);
                     var existingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
                     bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
-                    if (addNewBulletToNextFrame(src.OriginatedRenderFrameId, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, offender.ActiveSkillHit + 1, src.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, (srcConfig.BeamCollision ? src : null), (srcConfig.BeamCollision ? srcConfig : null), src, null, logger)) {
+                    if (addNewBulletToNextFrame(src.OriginatedRenderFrameId, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, src.ActiveSkillHit + 1, src.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, (srcConfig.BeamCollision ? src : null), (srcConfig.BeamCollision ? srcConfig : null), src, null, src.OffenderJoinIndex, src.TeamId, logger)) {
                         var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
                         offenderNextFrame.ActiveSkillHit = targetNewBullet.ActiveSkillHit;
                         var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit);
@@ -403,7 +411,7 @@ namespace shared {
             }
         }
 
-        private static bool _calcBulletBounceOrExplosionOnHardPushback(int rdfId, Bullet bulletNextFrame, BulletConfig bulletConfig, Vector effPushback, in SatResult primaryOverlapResult, TrapColliderAttr? primaryTrapColliderAttr, CharacterDownsync? offender, CharacterDownsync? offenderNextFrame, ILoggerBridge logger) {
+        private static bool _calcBulletBounceOrExplosionOnHardPushback(int rdfId, Bullet bulletNextFrame, BulletConfig bulletConfig, Vector effPushback, in SatResult primaryOverlapResult, TrapColliderAttr? primaryTrapColliderAttr, CharacterDownsync? offender, CharacterDownsync? offenderNextFrame, bool isMeleeBouncer, ILoggerBridge logger) {
             if (BulletType.Melee != bulletConfig.BType && BulletType.Fireball != bulletConfig.BType && BulletType.MissileLinear != bulletConfig.BType) {
                 throw new ArgumentNullException(String.Format("This method shouldn't be called on a bullet without Melee/Fireball/MissileLinear type! bulletNextFrame={0}, bulletConfig={1}", bulletNextFrame, bulletConfig));
             }
@@ -411,7 +419,6 @@ namespace shared {
                 // [WARNING] HopperMissile seeks next (VelX, VelY) right after explosion!
                 return true;
             }
-            bool isMeleeBouncer = (BulletType.Melee == bulletConfig.BType && null != offender && null != offenderNextFrame);
             if (!isMeleeBouncer) {
                 effPushback.X += primaryOverlapResult.OverlapMag * primaryOverlapResult.OverlapX;
                 effPushback.Y += primaryOverlapResult.OverlapMag * primaryOverlapResult.OverlapY;
@@ -433,18 +440,24 @@ namespace shared {
             # NewVel = VelocityParallelWithSlope*SheerFactor + (-VelocityPerpendicularIntoSlope*NormFactor) 
             */
 
-            float newNormVelXApprox = bulletConfig.HardPushbackBounceNormFactor * (-primaryOverlapResult.OverlapX * projectedVel);
-            float newNormVelYApprox = bulletConfig.HardPushbackBounceNormFactor * (-primaryOverlapResult.OverlapY * projectedVel);
-            float newSheerVelXApprox = bulletConfig.HardPushbackBounceSheerFactor * (origVelX - primaryOverlapResult.OverlapX * projectedVel);
-            float newSheerVelYApprox = bulletConfig.HardPushbackBounceSheerFactor * (origVelY - primaryOverlapResult.OverlapY * projectedVel);
+            float projectedVelX = primaryOverlapResult.OverlapX * projectedVel, projectedVelY = primaryOverlapResult.OverlapY * projectedVel;
+            float newNormVelXApprox = bulletConfig.HardPushbackBounceNormFactor * (-projectedVelX);
+            float newNormVelYApprox = bulletConfig.HardPushbackBounceNormFactor * (-projectedVelY);
+            float newSheerVelXApprox = bulletConfig.HardPushbackBounceSheerFactor * (origVelX - projectedVelX);
+            float newSheerVelYApprox = bulletConfig.HardPushbackBounceSheerFactor * (origVelY - projectedVelY);
 
             float newVelXApprox = newNormVelXApprox + newSheerVelXApprox;
+            float newVelYApprox = newNormVelYApprox + newSheerVelYApprox;
             if (isMeleeBouncer && null != offenderNextFrame) {
-                offenderNextFrame.VelX = 0 > newVelXApprox ? (int)Math.Floor(newVelXApprox) : (int)Math.Ceiling(newVelXApprox);
-                offenderNextFrame.VelY = (int)Math.Floor(newNormVelYApprox + newSheerVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
+                int newOffenderVelX = 0 > newVelXApprox ? (int)Math.Floor(newVelXApprox) : (int)Math.Ceiling(newVelXApprox);
+                int newOffenderVelY = 0 > newVelYApprox ? (int)Math.Floor(newVelYApprox) : (int)Math.Ceiling(newVelYApprox); 
+                offenderNextFrame.VelX = newOffenderVelX;
+                offenderNextFrame.VelY = newOffenderVelY;
+                // logger.LogInfo("@rdfId=" + rdfId + ", meleeBounce for offender.JoinIndex=" + offenderNextFrame.JoinIndex + ", (newOffenderVelX=" + offenderNextFrame.VelX + ", newOffenderVelY=" + offenderNextFrame.VelY + "), #1:newVelMag=" + (offenderNextFrame.VelX * offenderNextFrame.VelX + offenderNextFrame.VelY * offenderNextFrame.VelY));
+
             } else {
                 bulletNextFrame.VelX = 0 > newVelXApprox ? (int)Math.Floor(newVelXApprox) : (int)Math.Ceiling(newVelXApprox);
-                bulletNextFrame.VelY = (int)Math.Floor(newNormVelYApprox + newSheerVelYApprox); // "VelY" here is < 0, take the floor to get a larger absolute value!
+                bulletNextFrame.VelY = 0 > newVelYApprox ? (int)Math.Floor(newVelYApprox) : (int)Math.Ceiling(newVelYApprox);
             }
 
             if (null != primaryTrapColliderAttr) {
@@ -465,9 +478,10 @@ namespace shared {
         }
 
         private static void _assignExplodedOnHardPushback(RoomDownsyncFrame currRenderFrame, Bullet bulletNextFrame, Vector effPushback, SatResult primaryOverlapResult, TrapColliderAttr? primaryTrapColliderAttr, CharacterDownsync? offender, CharacterDownsync? offenderNextFrame, ref bool exploded, ref bool explodedOnHardPushback, ref IfaceCat anotherHarderBulletIfc, bool potentiallyInTheMiddleOfPrevHitMhTransition, BulletConfig bulletConfig, ILoggerBridge logger) {
-            if (bulletConfig.NoExplosionOnHardPushback) return;
+            bool isMeleeBouncer = (BulletType.Melee == bulletConfig.BType && null != offender && null != offenderNextFrame);
+            if (bulletConfig.NoExplosionOnHardPushback && !isMeleeBouncer) return;
             if (0 < bulletConfig.DefaultHardPushbackBounceQuota) {
-                exploded = _calcBulletBounceOrExplosionOnHardPushback(currRenderFrame.Id, bulletNextFrame, bulletConfig, effPushback, primaryOverlapResult, primaryTrapColliderAttr, offender, offenderNextFrame, logger);
+                exploded = _calcBulletBounceOrExplosionOnHardPushback(currRenderFrame.Id, bulletNextFrame, bulletConfig, effPushback, primaryOverlapResult, primaryTrapColliderAttr, offender, offenderNextFrame, isMeleeBouncer, logger);
             } else {
                 exploded = true;
             }
@@ -494,7 +508,7 @@ namespace shared {
             var existingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
             bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
 
-            bool res = addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, bulletNextFrame, targetChNextFrame, logger); 
+            bool res = addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, bulletNextFrame, targetChNextFrame, bulletNextFrame.OffenderJoinIndex, bulletNextFrame.TeamId, logger); 
             if (!res) return false;
             var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
             var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit);
@@ -1131,9 +1145,11 @@ namespace shared {
                     inTheMiddleOfPrevHitMhTransition = false;
                 }
 
+                //bool fromTouchExplosion = false;
                 // [WARNING] The following check-and-assignment is used for correction of complicated cases for "TouchExplosionBombCollision".
                 if (exploded && bulletConfig.TouchExplosionBombCollision) {
                     inTheMiddleOfPrevHitMhTransition = true;
+                    //fromTouchExplosion = true;
                 }
 
                 if (exploded) {
@@ -1179,8 +1195,14 @@ namespace shared {
                         if (null != offender && null != offenderNextFrame && null != skillConfig) {
                             var offenderExistingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
                             bool offenderIsParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != offenderExistingDebuff.SpeciesId && 0 < offenderExistingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[offenderExistingDebuff.SpeciesId].Type);
-                            if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], offenderIsParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, (bulletConfig.BeamCollision ? bulletNextFrame : null), null, logger)) {
+                            if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], offenderIsParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, (bulletConfig.BeamCollision ? bulletNextFrame : null), null, bulletNextFrame.OffenderJoinIndex, bulletNextFrame.TeamId, logger)) {
+
                                 var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
+                                /*
+                                if (fromTouchExplosion) {
+                                    logger.LogInfo("@rdfId=" + currRenderFrame.Id + ", touch explosion of bulletLocalId=" + bulletNextFrame.BulletLocalId + " generates targetNewBullet.LocalId=" + targetNewBullet.BulletLocalId);
+                                }
+                                */
                                 var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit); 
                                 if (null != newBlConfig) {
                                     if (newBlConfig.HopperMissile) {
@@ -1315,7 +1337,7 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewBulletToNextFrame(int originatedRdfId, RoomDownsyncFrame currRdf, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, bool isParalyzed, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, uint activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, BulletConfig? referencePrevHitBulletConfig, Bullet? referencePrevEmissionBullet, CharacterDownsync? targetChNextFrame, ILoggerBridge logger) {
+        protected static bool addNewBulletToNextFrame(int originatedRdfId, RoomDownsyncFrame currRdf, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, bool isParalyzed, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, uint activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, BulletConfig? referencePrevHitBulletConfig, Bullet? referencePrevEmissionBullet, CharacterDownsync? targetChNextFrame, int offenderJoinIndex, int bulletTeamId, ILoggerBridge logger) {
             if (NO_SKILL_HIT == activeSkillHit || activeSkillHit > skillConfig.Hits.Count) return false;
             if (bulletCnt >= nextRenderFrameBullets.Count) {
                 logger.LogWarn("bullet overwhelming#1, currRdf=" + stringifyRdf(currRdf));
@@ -1375,13 +1397,35 @@ namespace shared {
                 dstSpinSin = 0 < xfac ? bulletConfig.InitSpinSin : -bulletConfig.InitSpinSin;
             }
 
+            var initBlState = BulletState.StartUp;
+            int initFramesInBlState = 0;
+            if (bulletConfig.MhInheritsFramesInBlState) {
+                if (null != referencePrevEmissionBullet) {
+                    initBlState = referencePrevEmissionBullet.BlState;
+                    initFramesInBlState = referencePrevEmissionBullet.FramesInBlState + 1;
+                    //logger.LogInfo("@rdfId=" + currRdf.Id + ", new bulletLocalId=" + bulletLocalIdCounter+ ", #1initFramesInBlState=" + initFramesInBlState + " from referencePrevEmissionBullet.LocalId=" + referencePrevEmissionBullet.BulletLocalId);
+                    newVirtualX = referencePrevEmissionBullet.VirtualGridX;
+                    newVirtualY = referencePrevEmissionBullet.VirtualGridY;
+                    newOriginatedVirtualX = newVirtualX;
+                    newOriginatedVirtualY = newVirtualY;
+                } else if (null != referencePrevHitBullet && null != referencePrevHitBulletConfig) {
+                    initBlState = referencePrevHitBullet.BlState;
+                    initFramesInBlState = referencePrevHitBullet.FramesInBlState + 1;
+                    //logger.LogInfo("@rdfId=" + currRdf.Id + ", new bulletLocalId=" + bulletLocalIdCounter + ", #2initFramesInBlState=" + initFramesInBlState + " from referencePrevHitBullet.LocalId=" + referencePrevHitBullet.BulletLocalId);
+                    newVirtualX = referencePrevHitBullet.VirtualGridX;
+                    newVirtualY = referencePrevHitBullet.VirtualGridY;
+                    newOriginatedVirtualX = newVirtualX;
+                    newOriginatedVirtualY = newVirtualY;
+                }             
+            }
+
             AssignToBullet(
                     bulletLocalIdCounter,
                     originatedRdfId,
-                    currCharacterDownsync.JoinIndex,
+                    offenderJoinIndex,
                     TERMINATING_TRAP_ID,
-                    currCharacterDownsync.BulletTeamId,
-                    BulletState.StartUp, 0,
+                    bulletTeamId,
+                    initBlState, initFramesInBlState,
                     newOriginatedVirtualX,
                     newOriginatedVirtualY,
                     newVirtualX,
@@ -1423,7 +1467,7 @@ namespace shared {
             if (bulletCnt < nextRenderFrameBullets.Count) nextRenderFrameBullets[bulletCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
 
             if (0 < bulletConfig.SimultaneousMultiHitCnt && activeSkillHit < skillConfig.Hits.Count) {
-                return addNewBulletToNextFrame(originatedRdfId, currRdf, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit+1, activeSkillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, referencePrevHitBullet, referencePrevHitBulletConfig, referencePrevEmissionBullet, targetChNextFrame, logger);
+                return addNewBulletToNextFrame(originatedRdfId, currRdf, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit+1, activeSkillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, referencePrevHitBullet, referencePrevHitBulletConfig, referencePrevEmissionBullet, targetChNextFrame, offenderJoinIndex, bulletTeamId, logger);
             } else {
                 return true;
             }

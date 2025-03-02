@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="594">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="599">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1800"/>
@@ -37,7 +37,7 @@
  </layer>
  <layer id="163" name="Ground" width="64" height="47">
   <data encoding="base64" compression="zlib">
-   eJztms1KxDAUhe9o+gCC7vMoPso8iXQ/iE/hQkEQUbdWh8GNfwxuFMG4UVSY1aioG08XhUypaWNjUs09cDbtZCZfe7jcJDMQRPMJqVdBiiLRVJDsJSTXwL4lqB8rP9jVJvjnwP8SET9YJZgl2NWA88/55/xH+f45/5z/NvlfwdjU0kfwUPwClIVc5T9/dquWPocvvuGfCEqfcc/kScXYA1zLDD4sjXGV/x18766l9+D9Coac/QN+xz2TPyvGnuDaqcFnpTFdrP/gSm9/yG+rLtb/hYRosYGXkva/xfW/e/n3qS7m36c4/5x/zj/nP8//OjKAZ6GmEfEj6xKZlxs1vbZrV/XuhZ48z6VwXb/p0qbe9c3zXEK4q/xYdywruEn/3cam3r1p/+/CYM3AnBX8Y7AP4drC8U8E1mys8Y/AfhVR/Qdrf6Txu1hT/zXp9Yb5Q8/Gv5if+Zmf+Zmf+W350T/RteabgM+vOPsqn3HVqQ3/PT7/oPkxIH9x9lU+46oT5785/3Zv1l1Xk/ny+2d+bf0fnY41/rEI/58UnwJrejm7/5fviQXZfw7hnPVO44/ZX9xWab8=
+   eJztms1KxDAURu9o+gCC7vMoPso8iXQ/iE/hQkEQUbdWh8GNfxQ3imDcKCrMalTUjV9gCpmhpu00ph1zL5xNSyY57Ue4KdMTRIsRqXdBigKpkSDZiUhuwH1HUDdUf7irbfgvwP8tIH+4SjhLuKse55/zz/kP8v1z/jn/dfK/hrFxRU5AX/yBVIVylX/97NYrcgmufvEfCopfcc/GMGfsEa4lFo6nxrjK/x5+d78iB+Awx0G7f4FP3LPxnTP2DNfOLVxMjWnj/g+v+H5G/6rVxv1/KSJaLsFKVH8u3v/bl3+f1cb8+yzOP+ef88/51/nfRAbwLNQoIH9kXSLzcqug13ZNXu+e1YvntWQU9ZsusfWuH57X0gRt9ce5Y1WBMv13HWy9e9n+3wVwTeCcZP4p3PugcOP4JwXXJDX8B3C/CWj/h2t3YPi7OFPPW5n7Dfs3vRr/xf7sz/7sz/7sP6s/+ii6HXPn+RnWnduF/yPGPY159uxfd27Ofzn/3c4k81Bl1szvn/2N839wdWr4p6L5/6T4LLjG15Pf//Q3sUa+PzeBdn0w/EPmB1jpal0=
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="47">
@@ -166,6 +166,7 @@
    <properties>
     <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
+    <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -173,6 +174,7 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
+    <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -180,6 +182,7 @@
    <properties>
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -187,6 +190,7 @@
    <properties>
     <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -210,7 +214,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="507" name="SlipJumpPlatform" x="144" y="640" width="64" height="16">
+  <object id="507" name="SlipJumpPlatform" x="128" y="640" width="64" height="16">
    <properties>
     <property name="collisionTypeMask" value="5"/>
     <property name="providesHardPushback" value="1"/>
@@ -243,8 +247,8 @@
     <property name="subscribesToIdAfterInitialFire" value="8"/>
    </properties>
   </object>
-  <object id="578" gid="1793" x="224" y="608" width="21" height="16"/>
-  <object id="579" gid="1793" x="784" y="608" width="21" height="16"/>
+  <object id="578" gid="1793" x="240" y="608" width="21" height="16"/>
+  <object id="579" gid="1793" x="780" y="608" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -281,12 +285,12 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="519" name="Platform" x="208" y="608" width="80" height="16">
+  <object id="519" name="Platform" x="240" y="608" width="64" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="522" name="Platform" x="768" y="608" width="48" height="16">
+  <object id="522" name="Platform" x="736" y="608" width="64" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -340,7 +344,7 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="572" name="Floor12FlyingCueR" x="960" y="416" width="32" height="304">
+  <object id="572" name="Floor12FlyingCueR" x="704" y="608" width="32" height="32">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
     <property name="fdAct" value="4"/>
@@ -387,6 +391,32 @@
     <property name="frCaptureFrames" value="60"/>
     <property name="fuAct" value="4"/>
     <property name="fuCaptureFrames" value="60"/>
+   </properties>
+  </object>
+  <object id="597" name="Floor12FlyingCueR" x="949.987" y="407.763" width="32" height="304">
+   <properties>
+    <property name="collisionTypeMask" value="16384"/>
+    <property name="fdAct" value="4"/>
+    <property name="fdCaptureFrames" value="0"/>
+    <property name="flAct" value="4"/>
+    <property name="flCaptureFrames" value="0"/>
+    <property name="frAct" value="4"/>
+    <property name="frCaptureFrames" value="0"/>
+    <property name="fuAct" value="4"/>
+    <property name="fuCaptureFrames" value="0"/>
+   </properties>
+  </object>
+  <object id="598" name="Floor12FlyingCueL" x="304" y="608" width="32" height="32">
+   <properties>
+    <property name="collisionTypeMask" value="16384"/>
+    <property name="fdAct" value="3"/>
+    <property name="fdCaptureFrames" value="0"/>
+    <property name="flAct" value="3"/>
+    <property name="flCaptureFrames" value="0"/>
+    <property name="frAct" value="3"/>
+    <property name="frCaptureFrames" value="0"/>
+    <property name="fuAct" value="3"/>
+    <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
  </objectgroup>

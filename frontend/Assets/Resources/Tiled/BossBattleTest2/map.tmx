@@ -37,7 +37,7 @@
  </layer>
  <layer id="163" name="Ground" width="64" height="26">
   <data encoding="base64" compression="zlib">
-   eJzt2EEKgkAUBuAnzRwgqL1H6Sgdpcu0aNcNMkLaVAtpUwTZpqigVRTRpt9AeC60JJwJ5/3w74R5n+Kg01dEnqb4qigmR3JT5Dc0+QPYzwZ7UfkznQzPkvZhsM8C/93wLDb6r/6tok6MtjRRlW3rfH+z4rV5YQ1gDlJ/BPsE/bhx1CSwBhHzh7CvHNr/Ye2GzF/0XtY1fL8Rv+1pzEf84he/+MUv/rJ+fD/RmnVj8f6NsHaAjkvO8It/j+sPrEeL/hnWnqMLg/46pIx/6GX77/lmXnn+4mf//85lyvyRep+JOBNYe8vs+V9yJmbl/NlGE+uO+V3uC1O4nDw=
+   eJzt2MEKgkAQBuCRdh8gqLuP0qP0KL1Mh249ghDSfelSBG2XooROUUSXxlAYD5pgzoo7A/9Rdj5XF525Agg02LsCC57UQ0E40BAu0J4w5qbKe7oy95LnxZh3hf/J3IuLdNV/UDCxmJEGaDNjXe4ftrw2DVojNEe536B9hfl5cPSk0BoZ4o/RvvXo/EfrNCb+qveyr0XPG/G77oa/xC9+8Ytf/OJv4sdvKdhl2TPex6br/st/wmvPWS6M/qbryvNf378Miul61elX9l/85P/fu1oTv1HfmYg3hdbZpjj/S2diTubPLpJaj8Tvcz6olJza
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="26">
@@ -113,8 +113,8 @@
    </properties>
   </object>
   <object id="544" gid="1042" x="448" y="64" width="96" height="64"/>
-  <object id="578" gid="1793" x="224" y="272" width="21" height="16"/>
-  <object id="579" gid="1793" x="784" y="272" width="21" height="16"/>
+  <object id="578" gid="1793" x="256" y="272" width="21" height="16"/>
+  <object id="579" gid="1793" x="780" y="272" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -133,12 +133,12 @@
   <object id="456" name="SideL" x="-16" y="0" width="48" height="416"/>
   <object id="457" name="SideR" x="992" y="16" width="48" height="400"/>
   <object id="458" name="Floor" x="0" y="384" width="1024" height="32"/>
-  <object id="519" name="Platform" x="208" y="272" width="80" height="16">
+  <object id="519" name="Platform" x="256" y="272" width="64" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="522" name="Platform" x="768" y="272" width="48" height="16">
+  <object id="522" name="Platform" x="736" y="272" width="64" height="16">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>

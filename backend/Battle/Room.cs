@@ -43,7 +43,7 @@ public class Room {
     int lastForceResyncedRdfId;
     int nstDelayFrames;
 
-    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 7*BATTLE_DYNAMICS_FPS;
+    private int FORCE_RESYNC_INTERVAL_THRESHOLD = 5*BATTLE_DYNAMICS_FPS;
 
     Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex

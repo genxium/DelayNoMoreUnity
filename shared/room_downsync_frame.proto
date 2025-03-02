@@ -339,6 +339,7 @@ enum MultiHitType {
     FromPrevHitAnyway = 5;
     FromVisionSeekOrDefault = 6;
     FromPrevHitActualOrActiveTimeUp = 7;
+    FromEmissionJustActive = 8;
 }
 
 enum SkillTriggerType {
@@ -501,6 +502,7 @@ message BulletConfig {
     int32 explosionAnimLoopingRdfOffset = 92;  
 
     float gaugeIncReductionRatio = 93;
+    bool mhInheritsFramesInBlState = 94;
 
     uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave
