@@ -6,7 +6,7 @@ v2.2.5
 - Added toast UI component.
 - Added new debuff `paralyzed`.
 
-Please checkout the demo videos on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/ohQ19axGBOo)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)).
+Please checkout the demo videos on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/iOgqfatRcn8)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)).
 
 _(demos between 4g mobile-hotspot PC v.s. WiFi PC via internet while UDP peer-to-peer holepunch failed, all using input delay = 2 frames i.e. ~32ms)_
 
