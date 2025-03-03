@@ -6,7 +6,11 @@ v2.2.5
 - Added toast UI component.
 - Added new debuff `paralyzed`.
 
-Please checkout the demo video on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/ohQ19axGBOo)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)) (network setup was _4g Android v.s. Wifi PC via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms_).
+Please checkout the demo videos on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/ohQ19axGBOo)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)).
+
+_(demos between 4g mobile-hotspot PC v.s. WiFi PC via internet while UDP peer-to-peer holepunch failed, all using input delay = 2 frames i.e. ~32ms)_
+
+![latest_demo](./charts/DLLMU_v2.2.5_spedup.gif)
 
 # How does it work to synchronize across multiple players?
 _(how input delay roughly works)_
@@ -24,14 +28,6 @@ _(though using C# for both backend & frontend now, the idea to avoid floating er
 
 # What's this project?
 It's a Unity version of [DelayNoMore](https://github.com/genxium/DelayNoMore), a Multiplayer Platformer game demo on websocket with delayed-input Rollback Netcode inspired by GGPO -- but with the backend also rebuilt in C#.
-
-_(battle between 4g Android v.s. Wifi Android via internet while UDP peer-to-peer holepunch failed, input delay = 2 frames i.e. ~32ms, the following GIF is converted from [this video](https://pan.baidu.com/s/1-VymVEIIFZ0W_9Uw5518Lw?pwd=l58c), please also checkout [these older version videos](https://pan.baidu.com/s/1Egq_vI7C9ANgiHO3vBGxcA?pwd=2m87), [this dedicated slope dynamics video](https://pan.baidu.com/s/1ANH2nlcT09mHFJcuvDPZlA?pwd=ycuk) and [this dedicated multi-enemy-head-walk video](https://pan.baidu.com/s/1A1u3d4G943FLmdOFAblTJw?pwd=gez7))_
-
-![basic_ops](./charts/Merged_all_spedup.gif)
-
-_(demo for freezer buff since v1.2.7, [original video here](https://pan.baidu.com/s/183s9_xt4gmlTXsdIOQCyDw?pwd=ayr6))_
-
-![freezer_buff](./charts/Freezer_demo_deepcut_spedup.gif)
 
 # Notable Features (by far, would add more in the future)
 - Automatic correction for "slow ticker", especially "active slow ticker" which is well-known to be a headache for input synchronization
