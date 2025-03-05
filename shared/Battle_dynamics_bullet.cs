@@ -156,7 +156,6 @@ namespace shared {
                 var dstTargetChJoinIndex = src.TargetCharacterJoinIndex;
 
                 // [WARNING] Handle spinning of velocities first!
-                
                 if (IsBulletActive(src, srcConfig, currRenderFrame.Id)) {
                     handleBulletVelSpinning(currRenderFrame, roomCapacity, srcConfig, dstTargetChJoinIndex, spinFlipX, src, ref dstVelX, ref dstVelY, ref dstSpinCos, ref dstSpinSin);
                 }

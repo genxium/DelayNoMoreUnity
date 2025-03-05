@@ -4973,8 +4973,8 @@ namespace shared {
                                                             
         
         public static BulletConfig HunterSlidingHit2 = new BulletConfig(BasicSlidingHit2)
-                                                            .SetStartupFrames(BladeGirlSlidingHit1.StartupFrames+BladeGirlSlidingHit1.ActiveFrames) 
-                                                            .SetCancellableFrames(BladeGirlSlidingHit1.StartupFrames+BladeGirlSlidingHit1.ActiveFrames, 40)
+                                                            .SetStartupFrames(HunterSlidingHit1.StartupFrames+HunterSlidingHit1.ActiveFrames) 
+                                                            .SetCancellableFrames(HunterSlidingHit1.StartupFrames+HunterSlidingHit1.ActiveFrames, 40)
                                                             .SetOmitSoftPushback(true)
                                                             .SetCollisionTypeMask(COLLISION_CHARACTER_INDEX_PREFIX)
                                                             .UpsertCancelTransit(PATTERN_B, HunterPistolId)

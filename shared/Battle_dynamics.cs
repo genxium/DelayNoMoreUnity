@@ -1290,7 +1290,8 @@ namespace shared {
                     if (Dying == v1.CharacterState) {
                         continue;
                     }
-                    if (chOmittingSoftPushback(v1, skillConfig, bulletConfig)) {
+                    var (v1SkillConfig, v1BulletConfig) = FindBulletConfig(v1.ActiveSkillId, v1.ActiveSkillHit);
+                    if (chOmittingSoftPushback(v1, v1SkillConfig, v1BulletConfig)) {
                         continue;
                     }
 
@@ -1411,6 +1412,7 @@ namespace shared {
                 currPushbackFrameLog.Reset();
                 currPushbackFrameLog.setMaxJoinIndex(roomCapacity+currNpcI);
             }
+            int currRenderFrameId = currRenderFrame.Id;
             int primaryHardOverlapIndex;
             for (int i = iSt; i < iEd; i++) {
                 primaryOverlapResult.reset();
@@ -1420,6 +1422,9 @@ namespace shared {
                 var thatCharacterInNextFrame = getChdFromChdArrs(joinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
 
                 var (skillConfig, bulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
+                if (null != skillConfig && null != bulletConfig && HunterSlidingId == skillConfig.Id && HunterSlidingHit1.StartupFrames < currCharacterDownsync.FramesInChState) {
+                    logger.LogInfo(String.Format("rdfId={0}, using hunter sliding skill at ch.FramesInChState={1}", currRenderFrameId, currCharacterDownsync.FramesInChState));  
+                }
                 bool activeBlIsMeleeBouncer = (null != bulletConfig && BulletType.Melee == bulletConfig.BType && 0 < bulletConfig.DefaultHardPushbackBounceQuota);
 
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
@@ -1495,7 +1500,6 @@ namespace shared {
                         thatCharacterInNextFrame.FrictionVelY = 0;
                     }
                 }
-
 
                 bool landedOnGravityPushback = false;
                 float normAlignmentWithGravity = (primaryOverlapResult.OverlapY * -1f);
