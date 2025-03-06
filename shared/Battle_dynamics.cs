@@ -1422,9 +1422,11 @@ namespace shared {
                 var thatCharacterInNextFrame = getChdFromChdArrs(joinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
 
                 var (skillConfig, bulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
+                /*
                 if (null != skillConfig && null != bulletConfig && HunterSlidingId == skillConfig.Id && HunterSlidingHit1.StartupFrames < currCharacterDownsync.FramesInChState) {
                     logger.LogInfo(String.Format("rdfId={0}, using hunter sliding skill at ch.FramesInChState={1}", currRenderFrameId, currCharacterDownsync.FramesInChState));  
                 }
+                */
                 bool activeBlIsMeleeBouncer = (null != bulletConfig && BulletType.Melee == bulletConfig.BType && 0 < bulletConfig.DefaultHardPushbackBounceQuota);
 
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
