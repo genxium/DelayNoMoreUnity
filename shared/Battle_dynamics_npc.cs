@@ -1454,8 +1454,8 @@ namespace shared {
                 int joinIndex = i+1;
                 var thatCharacterInNextFrame = getChdFromChdArrs(joinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
                 int j = thatCharacterInNextFrame.LastDamagedByJoinIndex;
-                if (j >= roomCapacity) {
-                    // no need to remap for players
+                if (j > roomCapacity) {
+                    // no need to check remap for players
                     if (justDeadJoinIndices.Contains(j)) {
                         thatCharacterInNextFrame.LastDamagedByJoinIndex = MAGIC_JOIN_INDEX_INVALID;
                     } else if (joinIndexRemap.ContainsKey(j)) {
@@ -1468,8 +1468,8 @@ namespace shared {
                 var src = nextRdfBullets[i];
                 if (TERMINATING_BULLET_LOCAL_ID == src.BulletLocalId) break;
                 int j = src.OffenderJoinIndex;
-                if (j >= roomCapacity) {
-                    // no need to remap for players
+                if (j > roomCapacity) {
+                    // no need to check remap for players
                     if (justDeadJoinIndices.Contains(j)) {
                         src.OffenderJoinIndex = MAGIC_JOIN_INDEX_INVALID;
                     } else if (joinIndexRemap.ContainsKey(j)) {
@@ -1477,7 +1477,7 @@ namespace shared {
                     }
                 }
                 int k = src.TargetCharacterJoinIndex;
-                if (k >= roomCapacity) {    
+                if (k > roomCapacity) {    
                     // no need to remap for players
                     if (justDeadJoinIndices.Contains(k)) {
                         src.TargetCharacterJoinIndex = MAGIC_JOIN_INDEX_INVALID;
