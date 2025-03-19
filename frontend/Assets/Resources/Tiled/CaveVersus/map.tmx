@@ -173,9 +173,9 @@
   <object id="372" name="SkeleArcher" x="176" y="656">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="speciesId" value="4098"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -183,9 +183,9 @@
   <object id="373" name="SkeleArcher" x="1120" y="640">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="speciesId" value="4098"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -237,9 +237,9 @@
   <object id="571" name="BoarWarrior" x="240" y="672">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropPickupSkillId" value="1"/>
     <property name="speciesId" value="4102"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -247,9 +247,9 @@
   <object id="572" name="BoarWarrior" x="1072" y="672">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropPickupSkillId" value="1"/>
     <property name="speciesId" value="4102"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>

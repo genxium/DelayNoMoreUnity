@@ -14,7 +14,7 @@ namespace shared {
         private static int TARGET_CH_REACTION_NOT_ENOUGH_MP = 6;
         private static int TARGET_CH_REACTION_FLEE = 7;
         private static int TARGET_CH_REACTION_DEF1 = 8;
-        // private static int TARGET_CH_REACTION_USE_SLOT_D = 9;
+        private static int TARGET_CH_REACTION_STOP = 9;
 
         private static int TARGET_CH_REACTION_JUMP_TOWARDS = 10;
         //private static int TARGET_CH_REACTION_USE_DASHING = 11;
@@ -26,6 +26,8 @@ namespace shared {
 
         private static int OPPO_DX_OFFSET_MOD_MINUS_1 = (1 << 3) - 1;
         private static float OPPO_DX_OFFSET = 10.0f; // In collision space
+    
+        private static float FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD = 32.0f;
 
         private static void _handleAllyCh(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider aCollider, Collider visionCollider, bool effInAir, bool notDashing, bool canJumpWithinInertia, CharacterDownsync v5, CharacterConfig allyConfig, Collider? allyChCollider, float allyChColliderDx, float allyChColliderDy, float allyBoxLeft, float allyBoxRight, float allyBoxBottom, float allyBoxTop, ref int patternId, ref bool jumpedOrNot, ref bool slipJumpedOrNot, ref int jumpHoldingRdfCnt, ref int effectiveDx, ref int effectiveDy, ref int visionReaction) {
             if (null == allyChCollider || null == v5) return;
@@ -152,8 +154,23 @@ namespace shared {
             }
         }
 
-        private static void _handleOppoCh(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider aCollider, Collider visionCollider, bool effInAir, bool notDashing, bool canJumpWithinInertia, Collider? oppoChCollider, CharacterDownsync? v3, float oppoChColliderDx, float oppoChColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop, ref int patternId, ref bool jumpedOrNot, ref bool slipJumpedOrNot, ref int jumpHoldingRdfCnt, ref int effectiveDx, ref int effectiveDy, ref int visionReaction) {
-            if (null == oppoChCollider || null == v3) return;
+        private static void _handleOppoCh(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, Collider aCollider, Collider visionCollider, bool effInAir, bool notDashing, bool canJumpWithinInertia, Collider? oppoChCollider, CharacterDownsync? v3, float oppoChColliderDx, float oppoChColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop, ref int patternId, ref bool jumpedOrNot, ref bool slipJumpedOrNot, ref int jumpHoldingRdfCnt, ref int effectiveDx, ref int effectiveDy, ref int visionReaction) {
+            if (null == oppoChCollider || null == v3) {
+                switch (currCharacterDownsync.GoalAsNpc) {
+                    case NpcGoal.NhuntThenIdle:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Nidle;
+                        break;
+                    case NpcGoal.NhuntThenPatrol:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Npatrol;
+                        break;
+                    case NpcGoal.NhuntThenFollowAlly:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.NfollowAlly;
+                        break;
+                    default:
+                        break;
+                }
+                return;
+            }
 
             float absColliderDx = Math.Abs(oppoChColliderDx), absColliderDy = Math.Abs(oppoChColliderDy);
 
@@ -167,7 +184,7 @@ namespace shared {
                     patternId = PATTERN_INVENTORY_SLOT_C;
                     visionReaction = s0;
                 } else {
-                    s1 = frontOpponentReachableByDragonPunch(currCharacterDownsync, effInAir, chConfig, canJumpWithinInertia, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
+                    s1 = frontOpponentReachableByDragonPunch(currCharacterDownsync, effInAir, chConfig, canJumpWithinInertia, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, false); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
                     visionReaction = s1;
                     if (TARGET_CH_REACTION_USE_DRAGONPUNCH == s1) {
                         patternId = PATTERN_UP_B;
@@ -222,7 +239,10 @@ namespace shared {
                     shouldSlipJumpTowardsTarget = false;
                 } else if (chConfig.HasDef1) {
                     shouldJumpTowardsTarget = false;
+                } else if (chConfig.NpcNotHuntingInAirOppoCh) {
+                    shouldJumpTowardsTarget = false;
                 }
+
                 if (shouldSlipJumpTowardsTarget) {
                     visionReaction = TARGET_CH_REACTION_SLIP_JUMP;
                 } else if (shouldJumpTowardsTarget) {
@@ -324,6 +344,23 @@ namespace shared {
                     }
                 }
             }
+
+            if (TARGET_CH_REACTION_UNKNOWN != visionReaction) {
+                switch (currCharacterDownsync.GoalAsNpc) {
+                    case NpcGoal.Nidle:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.NhuntThenIdle;
+                        break;
+                    case NpcGoal.Npatrol:
+                    case NpcGoal.NidleIfGoHuntingThenPatrol:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.NhuntThenPatrol;
+                        break;
+                    case NpcGoal.NfollowAlly:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.NhuntThenFollowAlly;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         private static void _handleOppoBl(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider aCollider, Collider visionCollider, bool effInAir, bool notDashing, bool canJumpWithinInertia, Collider? oppoChCollider, CharacterDownsync? v3, float oppoChColliderDx, float oppoChColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop, Collider? oppoBlCollider, Bullet? v4, ref int patternId, ref bool jumpedOrNot, ref bool slipJumpedOrNot, ref int jumpHoldingRdfCnt, ref int effectiveDx, ref int effectiveDy, ref int visionReaction) {
@@ -388,7 +425,7 @@ namespace shared {
                 } else {
                     if (null != v3 && null != oppoChCollider && (SPECIES_SWORDMAN == chConfig.SpeciesId || SPECIES_SWORDMAN_BOSS == chConfig.SpeciesId || SPECIES_FIRESWORDMAN == chConfig.SpeciesId) && !effInAir && canJumpWithinInertia) {
                         float absColliderDx = Math.Abs(oppoChColliderDx), absColliderDy = Math.Abs(oppoChColliderDy);
-                        visionReaction = frontOpponentReachableByDragonPunch(currCharacterDownsync, effInAir, chConfig, canJumpWithinInertia, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
+                        visionReaction = frontOpponentReachableByDragonPunch(currCharacterDownsync, effInAir, chConfig, canJumpWithinInertia, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, true); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
                     }
                     if (TARGET_CH_REACTION_USE_DRAGONPUNCH == visionReaction) {
                         patternId = PATTERN_UP_B;
@@ -588,7 +625,7 @@ namespace shared {
             }
         }
 
-        private static int frontOpponentReachableByDragonPunch(CharacterDownsync currCharacterDownsync, bool effInAir, CharacterConfig chConfig, bool canJumpWithinInertia, Collider aCollider, Collider bCollider, float colliderDx, float absColliderDx, float colliderDy, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop) {
+        private static int frontOpponentReachableByDragonPunch(CharacterDownsync currCharacterDownsync, bool effInAir, CharacterConfig chConfig, bool canJumpWithinInertia, Collider aCollider, Collider bCollider, float colliderDx, float absColliderDx, float colliderDy, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop, bool forBlHandling) {
             int xfac = (0 < colliderDx ? 1 : -1);
             float boxCx, boxCy, boxCwHalf, boxChHalf;
             bool closeEnough = false;
@@ -598,7 +635,11 @@ namespace shared {
                     if (currCharacterDownsync.Mp < SwordManDragonPunchPrimerSkill.MpDelta) {
                         bool closeEnoughAlt = canJumpWithinInertia && !effInAir && (0.6f * aCollider.H < colliderDy) && (0 <= currCharacterDownsync.DirX * colliderDx);
                         if (closeEnoughAlt) {
-                            return TARGET_CH_REACTION_JUMP_TOWARDS;
+                            if (forBlHandling) {
+                                return TARGET_CH_REACTION_DEF1;
+                            } else {
+                                return TARGET_CH_REACTION_JUMP_TOWARDS;
+                            }
                         } else {
                             return TARGET_CH_REACTION_NOT_ENOUGH_MP;
                         }
@@ -618,7 +659,11 @@ namespace shared {
                     if (currCharacterDownsync.Mp < FireSwordManDragonPunchPrimerSkill.MpDelta) {
                         bool closeEnoughAlt = canJumpWithinInertia && !effInAir && (0.6f * aCollider.H < colliderDy) && (0 <= currCharacterDownsync.DirX * colliderDx);
                         if (closeEnoughAlt) {
-                            return TARGET_CH_REACTION_JUMP_TOWARDS;
+                            if (forBlHandling) {
+                                return TARGET_CH_REACTION_DEF1;
+                            } else {
+                                return TARGET_CH_REACTION_JUMP_TOWARDS;
+                            }
                         } else {
                             return TARGET_CH_REACTION_NOT_ENOUGH_MP;
                         }
@@ -662,17 +707,13 @@ namespace shared {
                 case SPECIES_RIDLEYDRAKE:
                     closeEnough = canJumpWithinInertia && !currCharacterDownsync.OmitGravity && (0.6f*aCollider.H < colliderDy) && (0 <= currCharacterDownsync.DirX*colliderDx);
                     if (closeEnough) {
+                        // Deliberately ignores "forBlHandling"
                         return TARGET_CH_REACTION_JUMP_TOWARDS;
                     } else {
                         return TARGET_CH_REACTION_FOLLOW;
                     }
                 case SPECIES_BOAR:
-                    closeEnough = canJumpWithinInertia && (0.6f*aCollider.H < colliderDy) && (0 <= currCharacterDownsync.DirX*colliderDx);
-                    if (closeEnough) {
-                        return TARGET_CH_REACTION_JUMP_TOWARDS;
-                    } else {
-                        return TARGET_CH_REACTION_FOLLOW;
-                    }
+                    return TARGET_CH_REACTION_FOLLOW;
                 default:
                     return TARGET_CH_REACTION_UNKNOWN;
             }
@@ -945,7 +986,7 @@ namespace shared {
             return (0 >= currCharacterDownsync.Hp && DYING_FRAMES_TO_RECOVER == currCharacterDownsync.FramesToRecover);
         }
 
-        private static (int, bool, bool, int, int, int, bool) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, bool effInAir, bool notDashing, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
+        private static (int, bool, bool, int, int, int, bool) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, bool effInAir, bool notDashing, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, InputFrameDecoded decodedInputHolder, ILoggerBridge logger) {
             if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
                 return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0, false);
             }
@@ -1005,6 +1046,19 @@ namespace shared {
                 canJumpWithinInertia = false;
             }
 
+            Collider? oppoChCollider = null;
+            CharacterDownsync? v3 = null;
+
+            Collider? oppoBlCollider = null;
+            Bullet? v4 = null;
+
+            Collider? allyChCollider = null;
+            CharacterDownsync? v5 = null;
+
+            Collider? mvBlockerCollider = null;
+            TrapColliderAttr? v6 = null;
+
+            Collider? standingOnCollider = null;
             bool shouldCheckVisionCollision = (0 < chConfig.VisionSizeX && 0 < chConfig.VisionSizeY && (visionSearchTickWhenNonAtk || hasCancellableCombo));
             if (shouldCheckVisionCollision) {
                 float visionCx, visionCy, visionCw, visionCh;
@@ -1014,16 +1068,7 @@ namespace shared {
                 UpdateRectCollider(visionCollider, visionCx, visionCy, visionCw, visionCh, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, SNAP_INTO_PLATFORM_OVERLAP, 0, 0, currCharacterDownsync, COLLISION_VISION_INDEX_PREFIX);
                 collisionSys.AddSingleToCellTail(visionCollider);
 
-                Collider? oppoChCollider;
-                CharacterDownsync? v3;
-
-                Collider? oppoBlCollider;
-                Bullet? v4;
-
-                Collider? allyChCollider;
-                CharacterDownsync? v5;
-
-                findHorizontallyClosestCharacterCollider(rdfId, currCharacterDownsync, visionCollider, aCollider, collision, ref overlapResult, out oppoChCollider, out v3, out oppoBlCollider, out v4, out allyChCollider, out v5, logger);
+                findHorizontallyClosestCharacterCollider(rdfId, currRenderFrame, currCharacterDownsync, chConfig, visionCollider, aCollider, collision, ref overlapResult, ref primaryOverlapResult, out oppoChCollider, out v3, out oppoBlCollider, out v4, out allyChCollider, out v5, out mvBlockerCollider, out v6, out standingOnCollider, logger);
 
                 collisionSys.RemoveSingleFromCellTail(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
 
@@ -1076,7 +1121,6 @@ namespace shared {
                     opponentBoxBottom = opponentBoxCy - 0.5f * opponentBoxCh;
                     opponentBoxTop = opponentBoxCy + 0.5f * opponentBoxCh;
                 }
-
                 if (chConfig.NpcPrioritizeBulletHandling) {
                     _handleOppoBl(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, oppoBlCollider, v4, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction);
                     if (TARGET_CH_REACTION_UNKNOWN == visionReaction) {
@@ -1084,10 +1128,10 @@ namespace shared {
                             var allyChConfig = characters[v5.SpeciesId];
                             _handleAllyCh(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, v5, allyChConfig, allyChCollider, allyChColliderDx, allyChColliderDy, allyBoxLeft, allyBoxRight, allyBoxBottom, allyBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction);
                             if (TARGET_CH_REACTION_UNKNOWN == visionReaction || TARGET_CH_REACTION_NOT_ENOUGH_MP == visionReaction) {
-                                _handleOppoCh(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
+                                _handleOppoCh(currCharacterDownsync, thatCharacterInNextFrame, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
                             }
                         } else {
-                            _handleOppoCh(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
+                            _handleOppoCh(currCharacterDownsync, thatCharacterInNextFrame, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
                         }
                     }
                 } else if (chConfig.NpcPrioritizeAllyHealing && null != v5) {
@@ -1097,17 +1141,17 @@ namespace shared {
                         if (chConfig.NpcPrioritizeBulletHandling) {
                             _handleOppoBl(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, oppoBlCollider, v4, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction);
                             if (TARGET_CH_REACTION_UNKNOWN == visionReaction) {
-                                _handleOppoCh(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
+                                _handleOppoCh(currCharacterDownsync, thatCharacterInNextFrame, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
                             }
                         } else {
-                            _handleOppoCh(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
+                            _handleOppoCh(currCharacterDownsync, thatCharacterInNextFrame, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
                             if (TARGET_CH_REACTION_UNKNOWN == visionReaction || TARGET_CH_REACTION_NOT_ENOUGH_MP == visionReaction) {
                                 _handleOppoBl(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, oppoBlCollider, v4, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction);
                             }
                         }
                     }
                 } else {
-                    _handleOppoCh(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
+                    _handleOppoCh(currCharacterDownsync, thatCharacterInNextFrame, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction); 
                     if (TARGET_CH_REACTION_UNKNOWN == visionReaction || TARGET_CH_REACTION_NOT_ENOUGH_MP == visionReaction) {
                         _handleOppoBl(currCharacterDownsync, chConfig, aCollider, visionCollider, effInAir, notDashing, canJumpWithinInertia, oppoChCollider, v3, oppoChColliderDx, oppoChColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, oppoBlCollider, v4, ref patternId, ref jumpedOrNot, ref slipJumpedOrNot, ref jumpHoldingRdfCnt, ref effectiveDx, ref effectiveDy, ref visionReaction);
                     }
@@ -1275,7 +1319,26 @@ namespace shared {
                             }
                         }
                         return (PATTERN_ID_NO_OP, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy, slowDownToAvoidOverlap);
+                    } else if (null != mvBlockerCollider) {
+                        float aBoxLeft = aCollider.X;     
+                        float aBoxRight = aCollider.X+aCollider.W;
+                        float aBoxBottom = aCollider.Y;
+                        float aBoxTop = aCollider.Y+aCollider.H;
+                        visionReaction = deriveReactionForMvBlocker(rdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, canJumpWithinInertia, aCollider, aBoxLeft, aBoxRight, aBoxBottom, aBoxTop, mvBlockerCollider, standingOnCollider, primaryOverlapResult, logger);
+                        if (TARGET_CH_REACTION_JUMP_TOWARDS == visionReaction) {
+                            return (PATTERN_DOWN_A, true, false, currCharacterDownsync.JumpHoldingRdfCnt + 1, currCharacterDownsync.DirX, currCharacterDownsync.DirY, slowDownToAvoidOverlap);
+                        } else if (TARGET_CH_REACTION_FLEE == visionReaction) {
+                            return (PATTERN_ID_NO_OP, false, false, 0, -currCharacterDownsync.DirX, currCharacterDownsync.DirY, slowDownToAvoidOverlap);
+                        } else if (TARGET_CH_REACTION_STOP == visionReaction) {
+                            switch (currCharacterDownsync.GoalAsNpc) {
+                                case NpcGoal.Npatrol:
+                                    thatCharacterInNextFrame.GoalAsNpc = NpcGoal.NidleIfGoHuntingThenPatrol;
+                                    break;
+                            }
+                            return (PATTERN_ID_NO_OP, false, false, 0, 0, 0, slowDownToAvoidOverlap);
+                        }
                     }
+
                     if (chConfig.JumpHoldingToFly && InAirIdle1ByJump == currCharacterDownsync.CharacterState) {
                         return (PATTERN_ID_NO_OP, false, false, currCharacterDownsync.JumpHoldingRdfCnt+1, currCharacterDownsync.DirX, currCharacterDownsync.DirY, slowDownToAvoidOverlap);
                     }
@@ -1288,9 +1351,9 @@ namespace shared {
                     bool possiblyWalking = (Walking == currCharacterDownsync.CharacterState || InAirWalking == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState || InAirIdle1ByJump == currCharacterDownsync.CharacterState || InAirIdle1ByWallJump == currCharacterDownsync.CharacterState || InAirIdle2ByJump == currCharacterDownsync.CharacterState); // Including walking equivalents in air
                     bool inPatrolCueCtrl = (false == currCharacterDownsync.CapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue);
                     bool possiblyCrouching = isCrouching(currCharacterDownsync.CharacterState, chConfig);
-                    if (currCharacterDownsync.WaivingSpontaneousPatrol) {
+                    if (NpcGoal.Npatrol != currCharacterDownsync.GoalAsNpc) {
                         if (possiblyWalking && !visionSearchTick) {
-                            // [WARNING] Such that for "currCharacterDownsync.WaivingSpontaneousPatrol" it doesn't have to execute vision reaction again to trace the same opponent.
+                            // [WARNING] Such that for "NpcGoal.Patrol" it doesn't have to execute vision reaction again to trace the same opponent.
                             if (effInAir && chConfig.NpcNoDefaultAirWalking && !inPatrolCueCtrl) {
                                 effectiveDx = 0;
                             }
@@ -1313,7 +1376,7 @@ namespace shared {
                                 return (PATTERN_ID_NO_OP, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, 0, currCharacterDownsync.DirY, slowDownToAvoidOverlap);
                             } else {
                                 return (PATTERN_ID_NO_OP, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, currCharacterDownsync.DirX, currCharacterDownsync.DirY, slowDownToAvoidOverlap);
-                            } 
+                            }
                         }
                     }
                 }
@@ -1322,7 +1385,7 @@ namespace shared {
             return (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy, slowDownToAvoidOverlap);
         }
 
-        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, int colliderCnt, Collision collision, CollisionSpace collisionSys, ref SatResult overlapResult, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
+        private static void _processNpcInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Bullet> nextRenderFrameBullets, Collider[] dynamicRectangleColliders, int colliderCnt, Collision collision, CollisionSpace collisionSys, ref SatResult overlapResult, ref SatResult primaryOverlapResult, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, ILoggerBridge logger) {
             for (int i = roomCapacity; i < roomCapacity + npcCnt; i++) {
                 var currCharacterDownsync = currRenderFrame.NpcsArr[i - roomCapacity];
                 if (TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
@@ -1330,7 +1393,7 @@ namespace shared {
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 bool notDashing = isNotDashing(currCharacterDownsync);
                 bool effInAir = isEffInAir(currCharacterDownsync, notDashing);
-                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy, slowDownToAvoidOverlap) = deriveNpcOpPattern(currCharacterDownsync, effInAir, notDashing, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, decodedInputHolder, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy, slowDownToAvoidOverlap) = deriveNpcOpPattern(currCharacterDownsync, effInAir, notDashing, currRenderFrame, roomCapacity, chConfig, thatCharacterInNextFrame, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, ref primaryOverlapResult, decodedInputHolder, logger);
 
                 var (slotUsed, slotLockedSkillId, dodgedInBlockStun) = _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, effInAir, chConfig, thatCharacterInNextFrame, logger);
 
@@ -1398,12 +1461,12 @@ namespace shared {
             }
         }
 
-        protected static bool addNewNpcToNextFrame(int rdfId, int roomCapacity, int virtualGridX, int virtualGridY, int dirX, int dirY, uint characterSpeciesId, int teamId, bool isStatic, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, int publishingToTriggerLocalIdUponKilled, ulong waveNpcKilledEvtMaskCounter, int subscribesToTriggerLocalId) {
+        protected static bool addNewNpcToNextFrame(int rdfId, int roomCapacity, int virtualGridX, int virtualGridY, int dirX, int dirY, uint characterSpeciesId, int teamId, NpcGoal initGoal, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, ref int npcLocalIdCounter, ref int npcCnt, int publishingToTriggerLocalIdUponKilled, ulong waveNpcKilledEvtMaskCounter, int subscribesToTriggerLocalId) {
             var chConfig = characters[characterSpeciesId];
             int birthVirtualX = virtualGridX + ((chConfig.DefaultSizeX >> 2) * dirX);
             CharacterState initChState = chConfig.OmitGravity ? Walking : Idle1;
             int joinIndex = roomCapacity + npcCnt + 1;
-            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, initChState, joinIndex, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, chConfig.Mp, chConfig.OmitGravity, chConfig.OmitSoftPushback, chConfig.RepelSoftPushback, isStatic, 0, false, false, false, newBirth: true, false, 0, 0, 0, defaultTemplateBuffList, defaultTemplateDebuffList, prevInventory: null, false, publishingToTriggerLocalIdUponKilled, waveNpcKilledEvtMaskCounter, subscribesToTriggerLocalId, jumpHoldingRdfCnt: 0, btnBHoldingRdfCount: 0, btnEHoldingRdfCount: 0, parryPrepRdfCntDown: 0, chConfig.DefaultAirJumpQuota, chConfig.DefaultAirDashQuota, TERMINATING_CONSUMABLE_SPECIES_ID, TERMINATING_BUFF_SPECIES_ID, NO_SKILL, defaultTemplateBulletImmuneRecords, 0, 0, 0, MAGIC_JOIN_INDEX_INVALID, TERMINATING_BULLET_TEAM_ID, rdfId, 0, chConfig.MpRegenInterval, 0, nextRenderFrameNpcs[npcCnt]); // TODO: Support killedToDropConsumable/Buff here
+            AssignToCharacterDownsync(npcLocalIdCounter, characterSpeciesId, birthVirtualX, virtualGridY, dirX, dirY, 0, 0, 0, 0, 0, 0, NO_SKILL, NO_SKILL_HIT, 0, chConfig.Speed, initChState, joinIndex, chConfig.Hp, true, false, 0, 0, 0, teamId, teamId, birthVirtualX, virtualGridY, dirX, dirY, false, false, false, false, 0, 0, 0, chConfig.Mp, chConfig.OmitGravity, chConfig.OmitSoftPushback, chConfig.RepelSoftPushback, initGoal, 0, false, false, false, newBirth: true, false, 0, 0, 0, defaultTemplateBuffList, defaultTemplateDebuffList, prevInventory: null, false, publishingToTriggerLocalIdUponKilled, waveNpcKilledEvtMaskCounter, subscribesToTriggerLocalId, jumpHoldingRdfCnt: 0, btnBHoldingRdfCount: 0, btnEHoldingRdfCount: 0, parryPrepRdfCntDown: 0, chConfig.DefaultAirJumpQuota, chConfig.DefaultAirDashQuota, TERMINATING_CONSUMABLE_SPECIES_ID, TERMINATING_BUFF_SPECIES_ID, NO_SKILL, defaultTemplateBulletImmuneRecords, 0, 0, 0, MAGIC_JOIN_INDEX_INVALID, TERMINATING_BULLET_TEAM_ID, rdfId, 0, chConfig.MpRegenInterval, 0, MAGIC_JOIN_INDEX_INVALID, nextRenderFrameNpcs[npcCnt]); // TODO: Support killedToDropConsumable/Buff here
 
             if (null != chConfig.InitInventorySlots) {
                 for (int t = 0; t < chConfig.InitInventorySlots.Count; t++) {
@@ -1462,6 +1525,15 @@ namespace shared {
                         thatCharacterInNextFrame.LastDamagedByJoinIndex = joinIndexRemap[j];
                     }
                 }
+                int k = thatCharacterInNextFrame.LockingOnJoinIndex;
+                if (k > roomCapacity) {
+                    // no need to remap for players
+                    if (justDeadJoinIndices.Contains(k)) {
+                        thatCharacterInNextFrame.LockingOnJoinIndex = MAGIC_JOIN_INDEX_INVALID;
+                    } else if (joinIndexRemap.ContainsKey(k)) {
+                        thatCharacterInNextFrame.LockingOnJoinIndex = joinIndexRemap[k];
+                    }
+                }
             }
 
             for (int i = 0; i < nextRdfBullets.Count; i++) {
@@ -1477,7 +1549,7 @@ namespace shared {
                     }
                 }
                 int k = src.TargetCharacterJoinIndex;
-                if (k > roomCapacity) {    
+                if (k > roomCapacity) {
                     // no need to remap for players
                     if (justDeadJoinIndices.Contains(k)) {
                         src.TargetCharacterJoinIndex = MAGIC_JOIN_INDEX_INVALID;
@@ -1486,6 +1558,121 @@ namespace shared {
                     }
                 }
             }
+        }
+        
+        public static int deriveReactionForMvBlocker(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, bool canJumpWithinInertia, Collider aCollider, float aBoxLeft, float aBoxRight, float aBoxBottom, float aBoxTop, Collider mvBlockerCollider, Collider? standingOnCollider, SatResult primaryOverlapResult, ILoggerBridge logger) {
+            //logger.LogInfo($"@rdfId={rdfId}, currCharacterDownsync.Id={currCharacterDownsync.Id}, canJumpWithinInertia={canJumpWithinInertia}, aBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop}) checking mvBlockerCollider={mvBlockerCollider.Shape.ToString(true)}");
+            
+            float mvBlockerColliderLeft = mvBlockerCollider.X;
+            float mvBlockerColliderRight = mvBlockerCollider.X + mvBlockerCollider.W;
+            float mvBlockerColliderBottom = mvBlockerCollider.Y;
+            float mvBlockerColliderTop = mvBlockerCollider.Y + mvBlockerCollider.H;
+
+            bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
+            bool temptingToMove = (NpcGoal.Npatrol == currCharacterDownsync.GoalAsNpc && (canJumpWithinInertia || isCharacterFlying));
+
+            bool hasBlockerInXForward = (0 < currCharacterDownsync.DirX && (0 < currCharacterDownsync.VelX || temptingToMove) && mvBlockerColliderLeft >= aBoxRight && mvBlockerColliderRight > aBoxRight) || (0 > currCharacterDownsync.DirX && (0 > currCharacterDownsync.VelX || temptingToMove) && mvBlockerColliderRight <= aBoxLeft && mvBlockerColliderLeft < aBoxLeft);
+
+            bool hasBlockerInYForward = (0 < currCharacterDownsync.DirY && (0 < currCharacterDownsync.VelY || temptingToMove) && mvBlockerColliderBottom >= aBoxTop) || (0 > currCharacterDownsync.DirY && (0 > currCharacterDownsync.VelY || temptingToMove) && mvBlockerColliderTop <= aBoxBottom);
+
+            hasBlockerInXForward &= (mvBlockerCollider != standingOnCollider);
+            hasBlockerInYForward &= (mvBlockerCollider != standingOnCollider);
+
+            if (!isCharacterFlying) {
+                if (hasBlockerInXForward) {
+                    if (0 < currCharacterDownsync.VelX * primaryOverlapResult.OverlapX && 0 > primaryOverlapResult.OverlapY) {
+                        // Potentially a slope, by now "0 != primaryOverlapResult.OverlapX" 
+                        // [REMINDER] The direction (SatResult.OverlapX, SatResult.OverlapY) points perpendicularly into the slope, thus the slope value is (-OverlapX/OverlapY)!
+                        bool notSteep = (0 < primaryOverlapResult.OverlapX && primaryOverlapResult.OverlapX <= -0.8f*primaryOverlapResult.OverlapY)
+                                        ||
+                                        (0 > primaryOverlapResult.OverlapX && (-primaryOverlapResult.OverlapX) <= -0.8f*primaryOverlapResult.OverlapY);
+                        if (notSteep) {
+                            // not steep, just keep walking
+                            return TARGET_CH_REACTION_UNKNOWN;
+                        }
+
+                        /*
+                        if (SPECIES_GOBLIN == currCharacterDownsync.SpeciesId && 0 > currCharacterDownsync.VelX && !notSteep) {
+                            logger.LogInfo($"@rdfId={rdfId}, currCharacterDownsync.Id={currCharacterDownsync.Id}, canJumpWithinInertia={canJumpWithinInertia}, aBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop}) checking slope={mvBlockerCollider.Shape.ToString(true)}, primaryOverlapResult={primaryOverlapResult.ToString()}");
+                        }
+                        */
+                    }
+                    float diffCxApprox = 0f;
+                    if (0 < currCharacterDownsync.DirX) {
+                        diffCxApprox = (mvBlockerColliderLeft - aBoxRight);
+                    } else if (0 > currCharacterDownsync.DirX) {
+                        diffCxApprox = (aBoxLeft - mvBlockerColliderRight);
+                    }
+                    if (mvBlockerColliderTop > aBoxBottom + SNAP_INTO_PLATFORM_OVERLAP) {
+                        float diffCyApprox = (mvBlockerColliderTop - aBoxTop);
+                        if (canJumpWithinInertia) {
+                            int jumpableDiffVirtualGridYApprox = (chConfig.JumpingInitVelY*chConfig.JumpingInitVelY)/(-GRAVITY_Y); 
+                            int jumpableDiffVirtualGridXBase = 0 < diffCyApprox ? (chConfig.Speed*chConfig.JumpingInitVelY)/(-GRAVITY_Y) : (chConfig.Speed * (chConfig.JumpingInitVelY << 1)) / (-GRAVITY_Y);
+                            int jumpableDiffVirtualGridXApprox = jumpableDiffVirtualGridXBase; 
+                            var (jumpableDiffCxApprox, jumpableDiffCyApprox) = VirtualGridToPolygonColliderCtr(jumpableDiffVirtualGridXApprox, jumpableDiffVirtualGridYApprox); 
+                            bool heightDiffJumpableApprox = (jumpableDiffCyApprox >= diffCyApprox);
+                            bool widthDiffJumpableApprox = (jumpableDiffCxApprox >= diffCxApprox);
+                            if (heightDiffJumpableApprox && widthDiffJumpableApprox) {
+                                //logger.LogInfo($"\t@rdfId={rdfId}, jumping NPC to higher\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
+                                return TARGET_CH_REACTION_JUMP_TOWARDS;
+                            } else if (0 < diffCyApprox && FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > diffCxApprox) {
+                                //logger.LogInfo($"\t@rdfId={rdfId}, currCharacterDownsync.Id={currCharacterDownsync.Id}, canJumpWithinInertia={canJumpWithinInertia}, aBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop}) checking mvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop}), deciding to flee with jumpableDiffCyApprox={jumpableDiffCyApprox} v.s. diffCyApprox={diffCyApprox}, jumpableDiffCxApprox={jumpableDiffCxApprox} v.s. diffCxApprox={diffCxApprox}");
+                                return TARGET_CH_REACTION_FLEE;
+                            }
+                        }
+                    } else {
+                        // Otherwise "mvBlockerCollider" sits lower than "currCharacterDownsync", a next but lower platform in the direction of movement, might still need jumping but the estimated dx movable by jumping is longer in this case
+                        float diffCyApprox = (aBoxTop - mvBlockerColliderTop);
+                        if (canJumpWithinInertia) {
+                            int jumpableDiffVirtualGridXBase = (chConfig.Speed * (chConfig.JumpingInitVelY << 2)) / (-GRAVITY_Y);
+                            int jumpableDiffVirtualGridXApprox = jumpableDiffVirtualGridXBase + (jumpableDiffVirtualGridXBase >> 2);
+                            var (jumpableDiffCxApprox, _) = VirtualGridToPolygonColliderCtr(jumpableDiffVirtualGridXApprox, 0);
+                            bool widthDiffJumpableApprox = (jumpableDiffCxApprox >= diffCxApprox);
+                            if (widthDiffJumpableApprox) {
+                                //logger.LogInfo($"\t@rdfId={rdfId}, jumping NPC to lower\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
+
+                                return TARGET_CH_REACTION_JUMP_TOWARDS;
+                            } else {
+                                return TARGET_CH_REACTION_UNKNOWN;
+                            }
+                        }
+                    }
+                } else {
+                    // !hasBlockerInXForward, in this case moving forward might fall into death
+                    bool currBlockCanStillHoldMe = (null != standingOnCollider && 0 < currCharacterDownsync.DirX && standingOnCollider.X+standingOnCollider.W >= aBoxRight+currCharacterDownsync.VelX) || (null != standingOnCollider && 0 > currCharacterDownsync.DirX && standingOnCollider.X <= aBoxLeft+currCharacterDownsync.VelX);
+                    if (!currBlockCanStillHoldMe && !currCharacterDownsync.InAir) {
+                        //logger.LogInfo($"\t@rdfId={rdfId}, stopping NPC\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, inAir:{currCharacterDownsync.InAir}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, inAir: {thatCharacterInNextFrame.InAir}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
+                        return TARGET_CH_REACTION_STOP;
+                    }
+                }
+            } else {
+                // A flying character
+                if (
+                    (hasBlockerInXForward && mvBlockerColliderTop >= aBoxTop && mvBlockerColliderBottom <= aBoxBottom)
+                    || 
+                    (hasBlockerInYForward && mvBlockerColliderLeft <= aBoxLeft && mvBlockerColliderRight >= aBoxRight)
+                    ) {
+                    float diffCxApprox = 0f;
+                    if (0 < currCharacterDownsync.DirX) {
+                        diffCxApprox = (mvBlockerColliderLeft - aBoxRight);
+                    } else if (0 > currCharacterDownsync.DirX) {
+                        diffCxApprox = (aBoxLeft - mvBlockerColliderRight);
+                    }
+
+                    float diffCyApprox = 0f;
+                    if (0 < currCharacterDownsync.DirY) {
+                        diffCyApprox = (mvBlockerColliderBottom - aBoxTop);
+                    } else if (0 > currCharacterDownsync.DirY) {
+                        diffCyApprox = (aBoxBottom - mvBlockerColliderTop);
+                    }
+
+                    if (FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD*FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > (diffCxApprox*diffCxApprox+diffCyApprox*diffCyApprox)) {
+                        return TARGET_CH_REACTION_FLEE;
+                    }
+                }
+            }
+
+            return TARGET_CH_REACTION_UNKNOWN; 
         }
     }
 }

@@ -234,9 +234,9 @@
   <object id="494" name="SkeleArcher" x="1440" y="448">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="speciesId" value="4098"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -264,9 +264,9 @@
   <object id="525" name="SkeleArcher" x="1660" y="683">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="speciesId" value="4098"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -288,10 +288,10 @@
   <object id="580" name="SwordManBoss" x="2912" y="464">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="7"/>
     <property name="speciesId" value="4104"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -302,10 +302,10 @@
   <object id="592" name="StoneGolem" x="3760" y="704">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="8"/>
     <property name="speciesId" value="4111"/>
-    <property name="static" value="1"/>
     <property name="subscriptionId" value="9"/>
     <property name="teamId" value="3"/>
    </properties>

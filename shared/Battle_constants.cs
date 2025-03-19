@@ -187,7 +187,6 @@ namespace shared {
             COLLISION_TRAP_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX | COLLISION_REFRACTORY_INDEX_PREFIX | COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX,
             COLLISION_TRAP_INDEX_PREFIX | COLLISION_BARRIER_FREE_INDEX_PREFIX | COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX,
             COLLISION_TRAP_INDEX_PREFIX | COLLISION_BARRIER_FREE_INDEX_PREFIX | COLLISION_REFRACTORY_INDEX_PREFIX | COLLISION_TRAP_PATROL_CUE_INDEX_PREFIX,
-            COLLISION_TRAP_INDEX_PREFIX | COLLISION_VISION_INDEX_PREFIX,
             
             // Vision
             COLLISION_VISION_INDEX_PREFIX | COLLISION_CHARACTER_INDEX_PREFIX, 
@@ -197,6 +196,9 @@ namespace shared {
             COLLISION_VISION_INDEX_PREFIX | COLLISION_B_FIREBALL_INDEX_PREFIX, 
             COLLISION_VISION_INDEX_PREFIX | COLLISION_M_FIREBALL_INDEX_PREFIX,
             COLLISION_VISION_INDEX_PREFIX | COLLISION_B_M_FIREBALL_INDEX_PREFIX,
+            COLLISION_VISION_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
+            COLLISION_VISION_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX,
+            COLLISION_VISION_INDEX_PREFIX | COLLISION_TRAP_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
         
             // Pickable
             COLLISION_PICKABLE_INDEX_PREFIX | COLLISION_BARRIER_INDEX_PREFIX,
@@ -362,6 +364,7 @@ namespace shared {
         public static HashSet<CharacterState> nonAttackingSet = new HashSet<CharacterState>() {
             Idle1,
             Walking,
+            BackWalking, 
             WalkStopping,
             Dashing,
             BackDashing,
@@ -393,6 +396,7 @@ namespace shared {
         public static HashSet<CharacterState> btnBChargeableSet = new HashSet<CharacterState>() {
             Idle1,
             Walking,
+            BackWalking,
             WalkStopping,
             Dashing,
             BackDashing,

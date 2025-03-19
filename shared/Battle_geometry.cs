@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using static shared.CharacterState;
 
 namespace shared {
@@ -39,6 +38,23 @@ namespace shared {
                     normX = 1f;
                 }
             }
+        }
+
+        public static (float, float) calcForwardDiffOfBoundaries(int xfac, int yfac, float aColliderLeft, float aColliderRight, float aColliderTop, float aColliderBottom, float bColliderLeft, float bColliderRight, float bColliderTop, float bColliderBottom) {
+            float dx = 0f, dy = 0f;
+            if (0 < xfac) {
+                dx = bColliderLeft - aColliderRight; 
+            } else if (0 > xfac) {
+                dx = bColliderRight - aColliderLeft; 
+            }
+
+            if (0 < yfac) {
+                dy = bColliderBottom - aColliderTop; 
+            } else if (0 > yfac) {
+                dy = bColliderTop - aColliderBottom; 
+            }
+
+            return (dx, dy);
         }
 
         public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool prefersAOnBShapeTopEdges, bool isForCharacterPushback, ref SatResult overlapResult, ILoggerBridge logger, bool forceLogging = false) {
@@ -164,7 +180,7 @@ namespace shared {
                     case TriggerColliderAttr v5:
                         break;
                     default:
-                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
+                        // By default it's a regular barrier
                         isBarrier = true;
                         break;
                 }
@@ -438,7 +454,7 @@ namespace shared {
                         }
                         break;
                     default:
-                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
+                        // By default it's a regular barrier
                         isAnActualBarrier = true;
                         break;
                 }
@@ -492,7 +508,7 @@ namespace shared {
                 float barrierTop = bCollider.Y + bCollider.H;
                 // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the VERTICAL edge is chosen as primary!
                 if (isWall && !primaryIsWall) {
-                    if (!isAlongForwardPropagation) {
+                    if (!isAlongForwardPropagation && BulletType.GroundWave == bulletConfig.BType) {
                         /*
                         if (BulletType.GroundWave == bulletConfig.BType) {
                             logger.LogInfo("@rdfId= " + currRenderFrame.Id + ", groundWave bullet " + bullet.BulletLocalId + " skipping wall not along forward propagation#1. overlapResult=" + overlapResult.ToString());
@@ -536,7 +552,7 @@ namespace shared {
                     continue;
                 } else {
                     if (isWall) {
-                        if (!isAlongForwardPropagation) {
+                        if (!isAlongForwardPropagation && BulletType.GroundWave == bulletConfig.BType) {
                             /*
                             if (BulletType.GroundWave == bulletConfig.BType) {
                                 logger.LogInfo("@rdfId= " + currRenderFrame.Id + ", groundWave bullet " + bullet.BulletLocalId + " skipping wall not along forward propagation#2. overlapResult=" + overlapResult.ToString());
@@ -644,7 +660,7 @@ namespace shared {
                         }
                         break;
                     default:
-                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
+                        // By default it's a regular barrier                        
                         isAnActualBarrier = true;
                         break;
                 }
@@ -730,7 +746,7 @@ namespace shared {
                         }
                         break;
                     default:
-                        // By default it's a regular barrier, even if data is nil, note that Golang syntax of switch-case is kind of confusing, this "default" condition is met only if "!*CharacterDownsync && !*Bullet".
+                        // By default it's a regular barrier
                         isAnActualBarrier = true;
                         break;
                 }
@@ -1285,13 +1301,16 @@ namespace shared {
             return (dx, dy, encodedIdx);
         }
 
-        private static void findHorizontallyClosestCharacterCollider(int rdfId, CharacterDownsync currCharacterDownsync, Collider visionCollider, Collider entityCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res1Ch, out Collider? res2, out Bullet? res2Bl, out Collider? res3, out CharacterDownsync? res3Ch, ILoggerBridge logger) {
+        private static void findHorizontallyClosestCharacterCollider(int rdfId, RoomDownsyncFrame currRenderFrame, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider visionCollider, Collider entityCollider, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out Collider? res1, out CharacterDownsync? res1Ch, out Collider? res2, out Bullet? res2Bl, out Collider? res3, out CharacterDownsync? res3Ch, out Collider? res4, out TrapColliderAttr? res4Tpc, out Collider? standingOnCollider, ILoggerBridge logger) {
             res1 = null;
             res1Ch = null;
             res2 = null;
             res2Bl = null;
             res3 = null;
             res3Ch = null;
+            res4 = null;
+            res4Tpc = null;
+            standingOnCollider = null;
 
             // [WARNING] Finding only the closest non-self character to react to for avoiding any randomness. 
             bool collided = visionCollider.CheckAllWithHolder(0, 0, collision, COLLIDABLE_PAIRS);
@@ -1303,6 +1322,9 @@ namespace shared {
             float minAbsColliderDxForAlly = MAX_FLOAT32;
             float minAbsColliderDyForAlly = MAX_FLOAT32;
 
+            float minAbsColliderDxForMvBlocker = MAX_FLOAT32;
+            float minAbsColliderDyForMvBlocker = MAX_FLOAT32;
+
             ConvexPolygon aShape = visionCollider.Shape;
             while (true) {
                 var (ok3, bCollider) = collision.PopFirstContactedCollider();
@@ -1310,98 +1332,202 @@ namespace shared {
                     break;
                 }
 
-                CharacterDownsync? v3 = bCollider.Data as CharacterDownsync;
-                if (null != v3) {
-                    // Only check shape collision (which is relatively expensive) if it's the targeted entity type 
-                    if (v3.JoinIndex == currCharacterDownsync.JoinIndex) {
-                        continue;
-                    }
+                float aColliderLeft = entityCollider.X, aColliderRight = entityCollider.X+entityCollider.W, aColliderTop = entityCollider.Y+entityCollider.H, aColliderBottom = entityCollider.Y;
+                float bColliderLeft = bCollider.X, bColliderRight = bCollider.X+bCollider.W, bColliderTop = bCollider.Y+bCollider.H, bColliderBottom = bCollider.Y;
+                
+                switch (bCollider.Data) {
+                    case PatrolCue v0:
+                    case TriggerColliderAttr v1:
+                    case Pickable v2:
+                        break;
+                    case CharacterDownsync v3:
+                        {
+                            // Only check shape collision (which is relatively expensive) if it's the targeted entity type 
+                            if (v3.JoinIndex == currCharacterDownsync.JoinIndex) {
+                                continue;
+                            }
 
-                    if (TERMINATING_TRIGGER_ID != currCharacterDownsync.SubscribesToTriggerLocalId || Dimmed == v3.CharacterState || invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
+                            if (TERMINATING_TRIGGER_ID != currCharacterDownsync.SubscribesToTriggerLocalId || Dimmed == v3.CharacterState || invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
 
-                    ConvexPolygon bShape = bCollider.Shape;
-                    var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
-                    if (!overlapped && !overlapResult.BContainedInA) {
-                        continue;
-                    }
+                            ConvexPolygon bShape = bCollider.Shape;
+                            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            if (!overlapped && !overlapResult.BContainedInA) {
+                                continue;
+                            }
 
-                    var colliderDx = (bCollider.X - entityCollider.X);
-                    var colliderDy = (bCollider.Y - entityCollider.Y);
-                    var absColliderDx = Math.Abs(colliderDx);
-                    var absColliderDy = Math.Abs(colliderDy);
+                            var colliderDx = (bCollider.X - entityCollider.X);
+                            var colliderDy = (bCollider.Y - entityCollider.Y);
+                            var absColliderDx = Math.Abs(colliderDx);
+                            var absColliderDy = Math.Abs(colliderDy);
 
-                    if (v3.BulletTeamId != currCharacterDownsync.BulletTeamId) {
-                        // different teams
-                        if (absColliderDx > minAbsColliderDx) {
-                            continue;
+                            if (v3.BulletTeamId != currCharacterDownsync.BulletTeamId) {
+                                // different teams
+                                if (absColliderDx > minAbsColliderDx) {
+                                    continue;
+                                }
+
+                                if (absColliderDx == minAbsColliderDx && absColliderDy > minAbsColliderDy) {
+                                    continue;
+                                }
+                                minAbsColliderDx = absColliderDx;
+                                minAbsColliderDy = absColliderDy;
+                                res1 = bCollider;
+                                res1Ch = v3;
+                                res2 = null;
+                                res2Bl = null;
+                            } else {
+                                // same team
+                                if (absColliderDx > minAbsColliderDxForAlly) {
+                                    continue;
+                                }
+
+                                if (absColliderDx == minAbsColliderDxForAlly && absColliderDy > minAbsColliderDyForAlly) {
+                                    continue;
+                                }
+                                minAbsColliderDxForAlly = absColliderDx;
+                                minAbsColliderDyForAlly = absColliderDy;
+                                res3 = bCollider;
+                                res3Ch = v3;
+                            }  
                         }
+                        break;
+                    case Bullet v4:
+                        {
+                            if (v4.TeamId == currCharacterDownsync.BulletTeamId) {
+                                continue;
+                            }
 
-                        if (absColliderDx == minAbsColliderDx && absColliderDy > minAbsColliderDy) {
-                            continue;
+                            var (_, bulletConfig) = FindBulletConfig(v4.SkillId, v4.ActiveSkillHit);
+                            if (null == bulletConfig || (0 >= bulletConfig.Damage && null == bulletConfig.BuffConfig)) continue; // v4 is not offensive
+                            var colliderDx = (bCollider.X - entityCollider.X);
+                            var colliderDy = (bCollider.Y - entityCollider.Y);
+                            if (0 <= v4.DirX*colliderDx) {
+                                /*
+                                if (Def1 == currCharacterDownsync.CharacterState) {
+                                    logger.LogInfo(String.Format("@rdfId={0}, ch.Id={1}, dirX={2}, ch.VirtualX={3}, ch.VirtualY={4} evaluating bullet localId={5}, v4.VirtualX={6}, v4.VirtualY={7}, colliderDx={8}, colliderDy={9}; bullet is not offensive", rdfId, currCharacterDownsync.Id, currCharacterDownsync.DirX, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, v4.BulletLocalId, v4.VirtualGridX, v4.VirtualGridY, colliderDx, colliderDy));
+                                }
+                                */
+                                continue; // v4 is not offensive
+                            }
+
+                            ConvexPolygon bShape = bCollider.Shape;
+                            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            if (!overlapped && !overlapResult.BContainedInA) {
+                                continue;
+                            }
+
+                            var absColliderDx = Math.Abs(colliderDx);
+                            if (absColliderDx > minAbsColliderDx) {
+                                continue;
+                            }
+
+                            var absColliderDy = Math.Abs(colliderDy);
+                            if (absColliderDx == minAbsColliderDx && absColliderDy > minAbsColliderDy) {
+                                continue;
+                            }
+                            minAbsColliderDx = absColliderDx;
+                            minAbsColliderDy = absColliderDy;
+                            res1 = null;
+                            res1Ch = null;
+                            res2 = bCollider;
+                            res2Bl = v4;
                         }
-                        minAbsColliderDx = absColliderDx;
-                        minAbsColliderDy = absColliderDy;
-                        res1 = bCollider;
-                        res1Ch = v3;
-                        res2 = null;
-                        res2Bl = null;
-                    } else {
-                        // same team
-                        if (absColliderDx > minAbsColliderDxForAlly) {
-                            continue;
+                        break;
+                    case TrapColliderAttr v5:
+                        {
+                            bool isAnotherHardPushbackTrap = false;
+                            bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
+                            if (TERMINATING_TRAP_ID != v5.TrapLocalId) {
+                                var trap = currRenderFrame.TrapsArr[v5.TrapLocalId-1];
+                                isAnotherHardPushbackTrap = ((!v5.ProvidesSlipJump || !isCharacterFlying) && v5.ProvidesHardPushback && TrapState.Tdeactivated != trap.TrapState && !isVelAllowedByTrapCollider(v5, trap.VelX, trap.VelY));
+                            } else {
+                                isAnotherHardPushbackTrap = ((!v5.ProvidesSlipJump || !isCharacterFlying) && v5.ProvidesHardPushback);
+                            }
+
+                            if (!isAnotherHardPushbackTrap) continue;
+
+                            ConvexPolygon bShape = bCollider.Shape;
+                            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            if (!overlapped) {
+                                continue;
+                            }
+
+                            bool isStandingCandidate = !chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && 0 > overlapResult.OverlapY && (0 == overlapResult.OverlapX || currCharacterDownsync.OnSlope) && (bColliderLeft < aColliderRight && bColliderRight > aColliderLeft);
+                            if (isStandingCandidate) {
+                                if (null == standingOnCollider) {
+                                    standingOnCollider = bCollider;
+                                } else {
+                                    if (0 < currCharacterDownsync.VelX && bColliderLeft >= standingOnCollider.X + standingOnCollider.W) {
+                                        standingOnCollider = bCollider;
+                                    } else if (0 > currCharacterDownsync.VelX && bColliderRight <= standingOnCollider.X) {
+                                        standingOnCollider = bCollider;
+                                    }
+                                }
+                            }
+
+                            var (colliderDx, colliderDy) = calcForwardDiffOfBoundaries(currCharacterDownsync.VelX, currCharacterDownsync.VelY, aColliderLeft, aColliderRight, aColliderTop, aColliderBottom, bColliderLeft, bColliderRight, bColliderTop, bColliderBottom);
+                            
+                            bool isAlongForwardMv = (0 < currCharacterDownsync.VelX * colliderDx) || (0 < currCharacterDownsync.VelY * colliderDy);
+
+                            var absColliderDx = Math.Abs(colliderDx);
+                            var absColliderDy = Math.Abs(colliderDy);
+
+                            if (absColliderDx > minAbsColliderDxForMvBlocker) {
+                                continue;
+                            }
+
+                            if (absColliderDx == minAbsColliderDyForMvBlocker && absColliderDy > minAbsColliderDyForMvBlocker) {
+                                continue;
+                            }
+                            overlapResult.cloneInto(ref primaryOverlapResult);
+                            minAbsColliderDxForMvBlocker = absColliderDx;
+                            minAbsColliderDyForMvBlocker = absColliderDy;
+                            res4 = bCollider;
+                            res4Tpc = v5;
                         }
+                        break;
+                    default:
+                        {
+                            ConvexPolygon bShape = bCollider.Shape;
+                            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            if (!overlapped) {
+                                continue;
+                            }
 
-                        if (absColliderDx == minAbsColliderDxForAlly && absColliderDy > minAbsColliderDyForAlly) {
-                            continue;
+                            bool isStandingCandidate = !chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && 0 > overlapResult.OverlapY && (0 == overlapResult.OverlapX || currCharacterDownsync.OnSlope) && (bColliderLeft < aColliderRight && bColliderRight > aColliderLeft);
+                            if (isStandingCandidate) {
+                                if (null == standingOnCollider) {
+                                    standingOnCollider = bCollider;
+                                } else {
+                                    if (0 < currCharacterDownsync.VelX && bColliderLeft >= standingOnCollider.X+standingOnCollider.W) {
+                                        standingOnCollider = bCollider;
+                                    } else if (0 > currCharacterDownsync.VelX && bColliderRight <= standingOnCollider.X) {
+                                        standingOnCollider = bCollider;
+                                    }
+                                }
+                            }
+
+                            var (colliderDx, colliderDy) = calcForwardDiffOfBoundaries(currCharacterDownsync.VelX, currCharacterDownsync.VelY, aColliderLeft, aColliderRight, aColliderTop, aColliderBottom, bColliderLeft, bColliderRight, bColliderTop, bColliderBottom);
+                            
+                            bool isAlongForwardMv = (0 < currCharacterDownsync.VelX * colliderDx) || (0 < currCharacterDownsync.VelY * colliderDy);  
+                            
+                            var absColliderDx = Math.Abs(colliderDx);
+                            var absColliderDy = Math.Abs(colliderDy);
+
+                            if (absColliderDx > minAbsColliderDxForMvBlocker) {
+                                continue;
+                            }
+
+                            if (absColliderDx == minAbsColliderDyForMvBlocker && absColliderDy > minAbsColliderDyForMvBlocker) {
+                                continue;
+                            }
+                            overlapResult.cloneInto(ref primaryOverlapResult);
+                            minAbsColliderDxForMvBlocker = absColliderDx;
+                            minAbsColliderDyForMvBlocker = absColliderDy;
+                            res4 = bCollider;
+                            res4Tpc = null;
                         }
-                        minAbsColliderDxForAlly = absColliderDx;
-                        minAbsColliderDyForAlly = absColliderDy;
-                        res3 = bCollider;
-                        res3Ch = v3;
-                    }  
-                } else {
-                    Bullet? v4 = bCollider.Data as Bullet;
-                    if (null == v4) {
-                        continue;
-                    }
-                    if (v4.TeamId == currCharacterDownsync.BulletTeamId) {
-                        continue;
-                    }
-
-                    var (_, bulletConfig) = FindBulletConfig(v4.SkillId, v4.ActiveSkillHit);
-                    if (null == bulletConfig || (0 >= bulletConfig.Damage && null == bulletConfig.BuffConfig)) continue; // v4 is not offensive
-                    var colliderDx = (bCollider.X - entityCollider.X);
-                    var colliderDy = (bCollider.Y - entityCollider.Y);
-                    if (0 <= v4.DirX*colliderDx) {
-                        /*
-                        if (Def1 == currCharacterDownsync.CharacterState) {
-                            logger.LogInfo(String.Format("@rdfId={0}, ch.Id={1}, dirX={2}, ch.VirtualX={3}, ch.VirtualY={4} evaluating bullet localId={5}, v4.VirtualX={6}, v4.VirtualY={7}, colliderDx={8}, colliderDy={9}; bullet is not offensive", rdfId, currCharacterDownsync.Id, currCharacterDownsync.DirX, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, v4.BulletLocalId, v4.VirtualGridX, v4.VirtualGridY, colliderDx, colliderDy));
-                        }
-                        */
-                        continue; // v4 is not offensive
-                    }
-
-                    ConvexPolygon bShape = bCollider.Shape;
-                    var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
-                    if (!overlapped && !overlapResult.BContainedInA) {
-                        continue;
-                    }
-
-                    var absColliderDx = Math.Abs(colliderDx);
-                    if (absColliderDx > minAbsColliderDx) {
-                        continue;
-                    }
-
-                    var absColliderDy = Math.Abs(colliderDy);
-                    if (absColliderDx == minAbsColliderDx && absColliderDy > minAbsColliderDy) {
-                        continue;
-                    }
-                    minAbsColliderDx = absColliderDx;
-                    minAbsColliderDy = absColliderDy;
-                    res1 = null;
-                    res1Ch = null;
-                    res2 = bCollider;
-                    res2Bl = v4;
+                        break;
                 }
             }
         }

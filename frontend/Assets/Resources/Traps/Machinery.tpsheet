@@ -4,7 +4,7 @@
 # To import these sprites into your Unity project, download "TexturePackerImporter":
 # https://www.codeandweb.com/texturepacker/unity
 #
-# $TexturePacker:SmartUpdate:67ecc667d757511128d556569343f9c4:7a2a3c30a6498bd20ef718195d8cb14b:c41de6a8e9b9aa8f42277892d992d754$
+# $TexturePacker:SmartUpdate:6cf3bc5d6280bab0fd45518a1091e017:7a2a3c30a6498bd20ef718195d8cb14b:c41de6a8e9b9aa8f42277892d992d754$
 #
 :format=40300
 :texture=Machinery.png
@@ -44,13 +44,13 @@ ShortConveyorToL_3;1;107;22;12; 0.5;0.5; 0;0;0;0
 ShortConveyorToR_1;25;107;22;12; 0.5;0.5; 0;0;0;0
 ShortConveyorToR_2;1;93;22;12; 0.5;0.5; 0;0;0;0
 ShortConveyorToR_3;25;93;22;12; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_1;105;191;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_2;105;161;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_3;105;146;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_4;105;176;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_5;105;176;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_6;105;176;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_7;105;176;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_8;105;176;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_9;105;176;22;13; 0.5;0.5; 0;0;0;0
-SmallBallEmitter_10;105;176;22;13; 0.5;0.5; 0;0;0;0
+SmallBallEmitter_1;105;191;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_2;105;161;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_3;105;146;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_4;105;176;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_5;105;176;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_6;105;176;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_7;105;176;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_8;105;176;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_9;105;176;22;13; 0;0; 0;0;0;0
+SmallBallEmitter_10;105;176;22;13; 0;0; 0;0;0;0

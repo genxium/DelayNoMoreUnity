@@ -182,73 +182,73 @@
   <object id="468" gid="14628" x="1376" y="576" width="40" height="37">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="506" gid="2147498275" x="816" y="704" width="33" height="36">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="507" gid="2147498275" x="848" y="704" width="33" height="36">
    <properties>
     <property name="dirX" value="-2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="508" gid="2147498276" x="1040" y="704" width="40" height="37">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="509" gid="2147498276" x="1492" y="575.5" width="40" height="37">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="510" gid="14628" x="704" y="432" width="40" height="37">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="513" gid="2147498273" x="1424" y="624" width="41" height="41">
    <properties>
     <property name="dirX" value="-2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="518" gid="14620" x="784" y="432" width="63" height="48">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="521" gid="14619" x="640" y="208" width="32" height="23">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
   <object id="522" gid="14619" x="720" y="208" width="32" height="23">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>

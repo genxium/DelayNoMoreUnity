@@ -142,6 +142,7 @@ namespace shared {
         public bool NpcNoDefaultAirWalking;
         public bool NpcPrioritizeBulletHandling;
         public bool NpcPrioritizeAllyHealing;
+        public bool NpcNotHuntingInAirOppoCh;
 
         public int TransformIntoFramesToRecover;
         public int TransformIntoFramesInvinsible;

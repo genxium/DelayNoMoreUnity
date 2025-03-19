@@ -659,7 +659,7 @@ namespace shared {
 
                 var trapConfig = trapConfigs[trapInNextFrame.ConfigFromTiled.SpeciesId];
                 if (trapConfig.Atk1UponTriggered && SmallBallEmitter.SpeciesId == trapConfig.SpeciesId) {
-                    if (TrapState.Tidle == trapInNextFrame.TrapState && addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapInNextFrame, SmallBallEmitterBeamHit1, SmallBallEmitterBeamSkill, trapInNextFrame.DirX, trapInNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
+                    if (TrapState.Tidle == trapInNextFrame.TrapState && addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapInNextFrame, trapConfig, SmallBallEmitterBeamHit1, SmallBallEmitterBeamSkill, trapInNextFrame.DirX, trapInNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
                         trapInNextFrame.TrapState = TrapState.Tatk1;
                         trapInNextFrame.FramesInTrapState = 0;
                     }
@@ -782,7 +782,7 @@ namespace shared {
                     DecodeInput(initOpList[idx], decodedInputHolder);
                     int npcKilledReceptionTriggerLocalIdInNextFrame = (null == npcKilledReceptionTriggerInNextFrame ? TERMINATING_TRIGGER_ID : npcKilledReceptionTriggerInNextFrame.TriggerLocalId);  
                     ulong npcKilledEvtMask = null == npcKilledReceptionTriggerInNextFrame ? EVTSUB_NO_DEMAND_MASK : npcKilledReceptionTriggerInNextFrame.WaveNpcKilledEvtMaskCounter; 
-                    if (addNewNpcToNextFrame(currRenderFrame.Id, roomCapacity, currTrigger.VirtualGridX, currTrigger.VirtualGridY, decodedInputHolder.Dx, decodedInputHolder.Dy, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, false, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerLocalIdInNextFrame, npcKilledEvtMask, TERMINATING_TRIGGER_ID)) {
+                    if (addNewNpcToNextFrame(currRenderFrame.Id, roomCapacity, currTrigger.VirtualGridX, currTrigger.VirtualGridY, decodedInputHolder.Dx, decodedInputHolder.Dy, spawnerSpeciesIdList[idx], currTrigger.BulletTeamId, NpcGoal.Npatrol, nextRenderFrameNpcs, ref npcLocalIdCounter, ref npcCnt, npcKilledReceptionTriggerLocalIdInNextFrame, npcKilledEvtMask, TERMINATING_TRIGGER_ID)) {
                         triggerInNextFrame.State = TriggerState.TcoolingDown;
                         triggerInNextFrame.FramesInState = 0;
                         triggerInNextFrame.FramesToFire = triggerConfigFromTiled.SubCycleTriggerFrames;

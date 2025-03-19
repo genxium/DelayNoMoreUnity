@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="208" nextobjectid="605">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="208" nextobjectid="612">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1800"/>
@@ -87,10 +87,18 @@
    </properties>
    <point/>
   </object>
+  <object id="608" name="LaserAwaker" x="80" y="64" width="352" height="240">
+   <properties>
+    <property name="id" value="1"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="15"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer id="207" name="Ground" width="64" height="28">
   <data encoding="base64" compression="zlib">
-   eJztmD0KwkAQhVdZS02OkKN5kijW2odgkUrtjb0eQLFVFKwUew/gCxJIkZ+N2ZkNug++SnbevE0yuxhKIULL37KoyRKsGqznqqnqua5JDDaZXuuu56qp6vmtAqydN1jPVZNKNr/Nb/O3vyaVbH6bnzu/j99GmqHqlaJmkHOPa3r/o+qVomZg73/atZXF7CqexS/k38tiDsz5+z0R3aWI9FYtVyzL4dQA+TvgxLwHFEIGcc5wUdjLNP+LIX96llIJ77F4ZHgqeDnI3gVHzWf8JMc7+X5D5ve7Su7n+79dNZ/zeXPKZH6/5JlQ/M/Ttvwm5nybejA95+HrpT2Y8Oec83mCrwf/ZA88E/5Uc14V+I7h7zmG8mfn/JSZGYDvGP5D11D+dPa2gTfqP5CC
+   eJztmL9OAkEQxlezpzaIjf0+mk+ChFr7C7GgUnuxhwfAGDoIRCuNEawsEBu/jW6c4u7Y83YGIjvJL1tcdr799s/s5tpaqXZka7ksyRW4rtBfKqev5k1JuuCWjLVsf6mcvpp/jRR9Lyr0l8rJFdF/9B/9b35Oroj+o39p/w18Ow0M11g5cqYZ77iq7z+usXLkTOP7L3j0dD79FWvxH/wPdD53wv5rieo8adUJm7U4uroYyTiE/x0wEp4DjoAHNSZMPObS+X8X8O/uUq7APlbPhBcPrTq874L7wHd8K0Pbnl/7r+EVzMD8hzfhPU/j6Pv8P04D3/NZdcr5X4AP0i4F5qBRsCYc/3lW+bckiVJ7YB98MvtfR53PG8OCzIFb/4OEV3vddR66xo3BrruF+j8W8i9R57MCugb6dg6M8033P/f556rzvkC3CX1TJ/6XpB0y+6d1/kyYcwDdJvRPMA5D1921D/r3TuTYC672bgJf70KzEg==
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="28">
@@ -105,9 +113,9 @@
   <object id="372" name="BoarWarrior" x="592" y="400">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="speciesId" value="4102"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -115,11 +123,11 @@
   <object id="600" name="Archer" x="672" y="400">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="speciesId" value="4098"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -127,10 +135,10 @@
   <object id="584" name="BoarWarrior" x="896" y="176">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="publishingEvtMaskUponKilled" value="4"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="speciesId" value="4102"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -138,10 +146,10 @@
   <object id="585" name="Boar" x="832" y="192">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="publishingEvtMaskUponKilled" value="2"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="speciesId" value="4103"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -149,11 +157,11 @@
   <object id="586" name="FireSwordMan" x="736" y="304">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="4"/>
     <property name="speciesId" value="16"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -161,15 +169,27 @@
   <object id="604" gid="2147486320" x="496" y="288" width="41" height="41">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="9" name="TrapStartingPos">
+  <object id="610" gid="1976" x="128" y="432" width="22" height="13" rotation="45">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="subscribesToId" value="1"/>
+   </properties>
+  </object>
+  <object id="606" gid="1976" x="80" y="336" width="22" height="13" rotation="90">
+   <properties>
+    <property name="dirX" value="+2"/>
+    <property name="subscribesToId" value="1"/>
+   </properties>
+  </object>
   <object id="515" name="SlipJumpPlatform" x="928" y="336" width="48" height="16">
    <properties>
     <property name="collisionTypeMask" value="5"/>
@@ -318,7 +338,7 @@
    </properties>
    <point/>
   </object>
-  <object id="566" name="ElevatorCue1" x="64" y="304" width="32" height="144">
+  <object id="566" name="ElevatorCue1" x="96" y="304" width="32" height="144">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
     <property name="fdAct" value="3"/>

@@ -1878,7 +1878,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         var playerStartingCposList = new List<(Vector, int, int)>();
-        var npcsStartingCposList = new List<(Vector, int, int, uint, int, bool, int, ulong, int, uint, uint, uint)>();
+        var npcsStartingCposList = new List<(Vector, int, int, uint, int, NpcGoal, int, ulong, int, uint, uint, uint)>();
         var trapList = new List<Trap>();
         var triggerList = new List<(Trigger, float, float)>();
         var pickableList = new List<(Pickable, float, float)>();
@@ -1984,12 +1984,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                             (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                         }
                         
-                        CustomProperty dirX, dirY, speciesId, teamId, isStatic, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId;
+                        CustomProperty dirX, dirY, speciesId, teamId, initGoal, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId;
                         tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("teamId", out teamId);
-                        tileProps.TryGetCustomProperty("static", out isStatic);
+                        tileProps.TryGetCustomProperty("initGoal", out initGoal);
                         tileProps.TryGetCustomProperty("publishingEvtSubIdUponKilled", out publishingEvtSubIdUponKilled);
                         tileProps.TryGetCustomProperty("publishingEvtMaskUponKilled", out publishingEvtMaskUponKilled);
                         tileProps.TryGetCustomProperty("subscriptionId", out subscriptionId);
@@ -2002,13 +2002,19 @@ public abstract class AbstractMapController : MonoBehaviour {
                             (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X + 0.5f*tileObj.m_Width, tileObj.m_Y - 0.5f*tileObj.m_Height, spaceOffsetX, spaceOffsetY);
                         }
 
+                        NpcGoal initGoalVal = NpcGoal.Npatrol;
+                        if (null != initGoal && !initGoal.IsEmpty) {
+                            var initGoalStr = initGoal.GetValueAsString();
+                            Enum.TryParse(initGoalStr, out initGoalVal);
+                        }
+
                         npcsStartingCposList.Add((
                                                     new Vector(cx, cy),
                                                     null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt(),
                                                     null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt(),
                                                     speciesIdVal,
                                                     null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt(),
-                                                    null == isStatic || isStatic.IsEmpty ? false : (1 == isStatic.GetValueAsInt()),
+                                                    initGoalVal,
                                                     null == publishingEvtSubIdUponKilled || publishingEvtSubIdUponKilled.IsEmpty ? TERMINATING_EVTSUB_ID_INT : publishingEvtSubIdUponKilled.GetValueAsInt(),
                                                     null == publishingEvtMaskUponKilled || publishingEvtMaskUponKilled.IsEmpty ? 0ul : (ulong)publishingEvtMaskUponKilled.GetValueAsInt(),
                                                     null == subscriptionId || subscriptionId.IsEmpty ? TERMINATING_EVTSUB_ID_INT : subscriptionId.GetValueAsInt(),
@@ -2645,7 +2651,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int npcLocalId = 1;
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var (cpos, dirX, dirY, characterSpeciesId, teamId, isStatic, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId) = npcsStartingCposList[i];
+            var (cpos, dirX, dirY, characterSpeciesId, teamId, initGoal, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId) = npcsStartingCposList[i];
             if (TERMINATING_EVTSUB_ID_INT != publishingEvtSubIdUponKilledVal && !serializedTriggerEditorIdToLocalId.Dict.ContainsKey(publishingEvtSubIdUponKilledVal)) {
                 throw new ArgumentException(String.Format("Preset NPC with speciesId={0}, teamId={1} is set to publish to an non-existent trigger editor id={2}", characterSpeciesId, teamId, publishingEvtSubIdUponKilledVal));
             }
@@ -2681,7 +2687,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             npcInRdf.SpeciesId = characterSpeciesId;
             npcInRdf.BulletTeamId = teamId;
             npcInRdf.ChCollisionTeamId = teamId;
-            npcInRdf.WaivingSpontaneousPatrol = isStatic;
+            npcInRdf.GoalAsNpc = initGoal;
             npcInRdf.OmitGravity = chConfig.OmitGravity;
             npcInRdf.OmitSoftPushback = chConfig.OmitSoftPushback;
             npcInRdf.RepelSoftPushback = chConfig.RepelSoftPushback;

@@ -138,6 +138,10 @@ namespace shared {
             if (4 != Points.Cnt) {
                 throw new ArgumentException("ConvexPolygon not having exactly 4 vertices to form a rectangle#1!");
             }
+            MinPtX = float.MaxValue;
+            MaxPtX = float.MinValue;
+            MinPtY = float.MaxValue;
+            MaxPtY = float.MinValue;
             this.IsRotary = isRotary;
             for (int i = 0; i < Points.Cnt; i++) {
                 Vector? thatVec = GetPointByOffset(i);

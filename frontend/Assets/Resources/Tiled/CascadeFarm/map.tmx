@@ -44,7 +44,7 @@
  </layer>
  <layer id="163" name="Ground" width="64" height="47">
   <data encoding="base64" compression="zlib">
-   eJztms1Kw0AUhW918gCC7udRfJQ+iWRfxKdwoSCIqFujpXTjH8GNIjhuFBW6qoq68WQxMA3TiUMmiXTugbPJ5LbzJaeXSaYDQbSckPoQpCgSTQXJXkJyC+x7gvqx8oNd7YJ/CfzvEfGDVYJZgl0NOP+cf85/lPef88/5r5P/DdSmnj6Dh6IBKA+Fyn9x7TY9fQVfz+GfCErfMObyxFJ7gmOZw6elmlD5P8DnHnr6CD62MBTs3/AXxlz+sdSe49iFw5elGu7/3P+5/3P+Of+cf84/5z/m/G8jA7gWahoRP7IukXm5U7HWDm3b2l3rteW5aFett0PatnbX+mx5Ll34v/I/CFpX8GpC1KTXkvn8Kw1/t2mwZmDONH8O9iFc2TgWRGDNcoN/BPbbiPo/WPsjg9/1u1xUmf2G+bueTftifuZnfuZnfub35cf6ie4M31vq9Z5Uee+pzlhI1eF/wvnPhl8s9XpPqrz3VGcspDj/f+ff783a95wmxuqK7z/zG8//0Wls8Oei+/+ktCmwpjez7/+Kd2KdvH/uwgXro8Efs38BELturw==
+   eJztms1Kw0AUhW918gCC7udRfJQ+iWRfxKdwoSCIqFujpXTjH8WNIjhuFBW6qoq68WQRmMYxNUx+1DkXvk0nt82XnA7TTHtKZD4S86LESCA1UaI7keg1uG8p6YbqD3ezCf85+D8H5A9XDWcNd9Nj/pl/5j/I+8/8M/8++V9Bb1ySI9BXNUiVqKryn1671ZKcgfNv/MdK4ieMFTF29B7gtaSAw1xPVfnfwfvulmQP7DscUvd38IaxIj4cvcd47aSA01wP53/O/5z/mX/mn/ln/pn/kPO/jgzgWphJQP7Iukbm9caMtXYduNbvjy2cR8as9XbVuNbvry2cR1v8Rv8bJcsGLEYidbMUffVfaOBzbeCawDnJ/Edw7wPvieWPFFyTkeU/gPtlQPM/XLsDy9/1nfzvZc859G/7bJov+tOf/vSnP/3L+mP9JFcW147+bE8qv/fkM1Zl+fjf4fh7iwdHf7Ynld978hmrspj/n/tvd6Ype0wdY77F+09/6/d/cDW0/Eeq/f+kNFlwjS+mn/+lz8RaewbdNKnrreUfMp8atHSz
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="47">
@@ -138,11 +138,11 @@
   <object id="372" name="SkeleArcher" x="201.333" y="301.333">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="4"/>
     <property name="speciesId" value="4098"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -158,7 +158,7 @@
    </properties>
    <point/>
   </object>
-  <object id="542" name="Boar1" x="754.667" y="681.333">
+  <object id="542" name="Boar1" x="784" y="688">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
@@ -276,8 +276,8 @@
   <object id="451" name="SmallSlopeR" x="689.585" y="160">
    <polyline points="-145.993,32 30.4152,32 30.4152,0 -129.585,0"/>
   </object>
-  <object id="456" name="SideL" x="-16" y="0" width="48" height="752"/>
-  <object id="457" name="SideR" x="992" y="0" width="48" height="752"/>
+  <object id="456" name="SideL" x="-112" y="0" width="144" height="752"/>
+  <object id="457" name="SideR" x="992" y="0" width="128" height="752"/>
   <object id="458" name="Floor" x="0" y="720" width="1024" height="32"/>
   <object id="459" name="Platform" x="240" y="160" width="240" height="32">
    <properties>
@@ -337,48 +337,10 @@
    </properties>
    <point/>
   </object>
-  <object id="496" name="Floor2R" x="976" y="352">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="498" name="Floor2L" x="48" y="256">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
   <object id="561" x="704" y="144" width="32" height="32">
    <properties>
     <property name="flAct" value="3"/>
     <property name="frAct" value="4"/>
-   </properties>
-  </object>
-  <object id="562" x="528" y="336" width="32" height="32">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-  </object>
-  <object id="566" x="437.333" y="329.333" width="32" height="32">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
    </properties>
   </object>
   <object id="567" x="544" y="144" width="32" height="32">

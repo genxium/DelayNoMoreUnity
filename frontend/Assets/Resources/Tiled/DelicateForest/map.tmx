@@ -273,9 +273,9 @@
   <object id="448" gid="2147498272" x="2080" y="704" width="128" height="111">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="static" value="1"/>
     <property name="subscriptionId" value="13"/>
     <property name="teamId" value="2"/>
    </properties>
@@ -283,7 +283,7 @@
   <object id="452" gid="14622" x="512" y="608" width="40" height="41">
    <properties>
     <property name="dirX" value="+2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="subscriptionId" value="2"/>
     <property name="teamId" value="2"/>
    </properties>
@@ -291,7 +291,7 @@
   <object id="453" gid="2147498270" x="544" y="608" width="40" height="41">
    <properties>
     <property name="dirX" value="-2"/>
-    <property name="static" value="1"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="subscriptionId" value="2"/>
     <property name="teamId" value="2"/>
    </properties>
@@ -417,19 +417,6 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
-  <object id="345" x="240" y="672">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="8"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="20"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="20"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="8"/>
-   </properties>
-   <point/>
-  </object>
   <object id="371" x="1104" y="672">
    <properties>
     <property name="fdAct" value="3"/>
@@ -440,15 +427,6 @@
     <property name="frCaptureFrames" value="20"/>
     <property name="fuAct" value="3"/>
     <property name="fuCaptureFrames" value="8"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="377" x="596" y="606.667">
-   <properties>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
    </properties>
    <point/>
   </object>
@@ -491,15 +469,6 @@
    </properties>
    <point/>
   </object>
-  <object id="417" x="222" y="602">
-   <properties>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
   <object id="426" name="RotaryBarrierCue2" x="1856" y="666" width="7" height="7">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
@@ -517,15 +486,6 @@
     <property name="frAct" value="0"/>
     <property name="frCaptureFrames" value="65535"/>
    </properties>
-  </object>
-  <object id="440" x="480" y="672">
-   <properties>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-   </properties>
-   <point/>
   </object>
   <object id="456" x="1887.18" y="702.406">
    <properties>

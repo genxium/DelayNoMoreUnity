@@ -1251,7 +1251,7 @@ namespace shared {
                         if (isValidIntersection && isValidTrapState) {
                             var (clicked, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
                             if (clicked || overlapResult.AContainedInB || overlapResult.BContainedInA) {
-                                if (addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapNextFrame, JumperImpact1, JumperImpact1Skill, trapNextFrame.DirX, trapNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
+                                if (addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapNextFrame, Jumper1, JumperImpact1, JumperImpact1Skill, trapNextFrame.DirX, trapNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
                                     trapNextFrame.TrapState = TrapState.Tdeactivated;
                                     trapNextFrame.FramesInTrapState = 0;
                                 }
@@ -1879,10 +1879,9 @@ namespace shared {
                 (thatCharacterInNextFrame.VirtualGridX, thatCharacterInNextFrame.VirtualGridY) = PolygonColliderBLToVirtualGridPos(aCollider.X - effPushbacks[i].X, aCollider.Y - effPushbacks[i].Y, aCollider.W * 0.5f, aCollider.H * 0.5f, 0, 0, 0, 0, 0, 0);
                 // Update "CharacterState"
                 CharacterState oldNextCharacterState = thatCharacterInNextFrame.CharacterState;
-                Skill? activeSkill = null;
+                var (activeSkill, activeBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
                 BuffConfig? activeSkillBuff = null;
-                if (NO_SKILL != currCharacterDownsync.ActiveSkillId) {
-                    activeSkill = skills[currCharacterDownsync.ActiveSkillId];
+                if (null != activeSkill) {
                     activeSkillBuff = activeSkill.SelfNonStockBuff;
                 }
 
@@ -1970,8 +1969,7 @@ namespace shared {
                                 break;
                             case InAirAtk1:
                             case InAirAtk2:
-                                var (skillConfig, bulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
-                                if (null != bulletConfig && bulletConfig.RemainsUponHit) {
+                                if (null != activeBulletConfig && activeBulletConfig.RemainsUponHit) {
                                     thatCharacterInNextFrame.FramesToRecover = currCharacterDownsync.FramesToRecover - 1;
                                 }
                                 break;
@@ -2090,6 +2088,21 @@ namespace shared {
                     } else if (Walking == thatCharacterInNextFrame.CharacterState && 0 == thatCharacterInNextFrame.VelX) {
                         thatCharacterInNextFrame.CharacterState = Idle1;
                     }
+                }
+
+                if (!currCharacterDownsync.InAir && null != activeSkill && activeSkill.BoundChState == thatCharacterInNextFrame.CharacterState && null != activeBulletConfig && activeBulletConfig.GroundImpactMeleeCollision) {
+                    // [WARNING] The "bulletCollider" for "activeBulletConfig" in this case might've been annihilated, we should end this bullet regardless of landing on character or hardPushback.
+                    int origFramesInActiveState = (thatCharacterInNextFrame.FramesInChState - activeBulletConfig.StartupFrames); // correct even for "DemonDiverImpactPreJumpBullet -> DemonDiverImpactStarterBullet" sequence
+                    var shiftedRdfCnt = (activeBulletConfig.ActiveFrames - origFramesInActiveState);
+                    if (0 < shiftedRdfCnt) {
+                        thatCharacterInNextFrame.FramesInChState += shiftedRdfCnt;
+                        thatCharacterInNextFrame.FramesToRecover -= shiftedRdfCnt;
+                    }
+                    if (0 > origFramesInActiveState) {
+                        thatCharacterInNextFrame.ActiveSkillId = NO_SKILL;
+                        thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
+                    }
+                    // [WARNING] Leave velocity handling to other code snippets.
                 }
                 
                 /*
@@ -2261,7 +2274,7 @@ namespace shared {
                 } 
                 var flyingRdfCountdown = (MAX_INT == chConfig.FlyingQuotaRdfCnt ? MAX_INT : (0 < src.FlyingRdfCountdown ? src.FlyingRdfCountdown-1 : 0));
                 var dst = nextRenderFramePlayers[i];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.GoalAsNpc, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, src.LockingOnJoinIndex, dst);
                 _resetVelocityOnRecovered(src, dst);
             }
 
@@ -2297,7 +2310,7 @@ namespace shared {
                 }
                 var flyingRdfCountdown = (MAX_INT == chConfig.FlyingQuotaRdfCnt ? MAX_INT : (0 < src.FlyingRdfCountdown ? src.FlyingRdfCountdown-1 : 0));
                 var dst = nextRenderFrameNpcs[currNpcI];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.WaivingSpontaneousPatrol, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.GoalAsNpc, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, src.LockingOnJoinIndex, dst);
                 _resetVelocityOnRecovered(src, dst);
                 currNpcI++;
             }
@@ -2375,7 +2388,7 @@ namespace shared {
             _moveAndInsertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, effPushbacks, ref overlapResult, collision, logger);
 
             // ---------[WARNING] Deliberately put "_processNpcInputs" after "_moveAndInsertBulletColliders" such that NPC vision can see bullets; also deliberately put "_processNpcInputs" before "_calcAllCharactersCollisions" to avoid overwriting "onSlope velocities" ---------
-            _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
+            _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, ref primaryOverlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
             _calcAllCharactersCollisions(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, nextRenderFrameTraps, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, triggerEditorIdToTiledConfig, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
 

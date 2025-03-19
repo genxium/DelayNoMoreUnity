@@ -75,6 +75,7 @@ enum CharacterState {
     Parried = 22;
     Awaking = 23;
     GroundDodged = 24;
+    BackWalking = 25;
 
     OnWallIdle1 = 128; 
 
@@ -112,6 +113,16 @@ enum CharacterState {
     InAirAtk1_Charging = 3075;
     OnWallAtk1_Charging = 3076;
     CrouchAtk1_Charging = 3077;
+}
+
+enum NpcGoal {
+    NIdle = 0;
+    NFollowAlly = 1;
+    NPatrol = 2;
+    NHuntThenIdle = 3;
+    NHuntThenPatrol = 4;
+    NHuntThenFollowAlly = 5;
+    NIdleIfGoHuntingThenPatrol = 6;
 }
 
 enum TrapState {
@@ -172,7 +183,7 @@ message CharacterDownsync {
     bool omitSoftPushback = 30;
 
     int32 waivingPatrolCueId = 31;
-    bool waivingSpontaneousPatrol = 32;
+    NpcGoal goalAsNpc = 32;
 
     int32 revivalVirtualGridX = 33;
     int32 revivalVirtualGridY = 34;
@@ -235,6 +246,7 @@ message CharacterDownsync {
     int32 mpRegenRdfCountdown = 74;
 
     int32 flyingRdfCountdown = 75;
+    int32 lockingOnJoinIndex = 76;
 
     repeated Buff buffList = 90; 
     repeated Debuff debuffList = 91; 
@@ -503,7 +515,8 @@ message BulletConfig {
 
     float gaugeIncReductionRatio = 93;
     bool mhInheritsFramesInBlState = 94;
-
+    uint32 guardBreakerExtraHitCnt = 95;
+    
     uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave
 
@@ -603,6 +616,8 @@ message TrapConfig {
 
     bool atk1UponTriggered = 22;
     uint32 atk1SkillId = 23;
+
+    bool isRotary = 24;
 
     // TODO: Instead of damage, a trap should also be able to provide pushbacks like a "trampoline" in only a limited "framesToRecover", possible started by a Trigger.
 

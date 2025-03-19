@@ -145,6 +145,7 @@ namespace shared {
             SpeciesName = "RotaryBarrier",
             SpinAnchorX = 12.0f,
             SpinAnchorY = 8.0f,
+            IsRotary = true,
             AngularFrameVelCos = (float)Math.Cos(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
             AngularFrameVelSin = (float)Math.Sin(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
             PatrolCueRequiresFullContain = true,
@@ -155,6 +156,7 @@ namespace shared {
             SpeciesName = "VerticalRotaryBarrier",
             SpinAnchorX = 8.0f,
             SpinAnchorY = 6.0f,
+            IsRotary = true,
             AngularFrameVelCos = (float)Math.Cos(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
             AngularFrameVelSin = (float)Math.Sin(+1f / (Math.PI * BATTLE_DYNAMICS_FPS)),
             IntrinsicSpinCos = 0,
@@ -167,6 +169,7 @@ namespace shared {
             SpeciesName = "VerticalRotaryBarrierLong",
             SpinAnchorX = 8.0f,
             SpinAnchorY = 6.0f,
+            IsRotary = true,
             AngularFrameVelCos = (float)Math.Cos(+6f / (Math.PI * BATTLE_DYNAMICS_FPS)), 
             AngularFrameVelSin = (float)Math.Sin(+6f / (Math.PI * BATTLE_DYNAMICS_FPS)),
             IntrinsicSpinCos = 0,
@@ -178,6 +181,9 @@ namespace shared {
             SpeciesId = 19,
             SpeciesName = "SmallBallEmitter",
             Atk1UponTriggered = true,
+            SpinAnchorX = 0.0f,
+            SpinAnchorY = 0.0f,
+            IsRotary = true,
             Atk1SkillId = SmallBallEmitterBeamSkill.Id,
         };
 
