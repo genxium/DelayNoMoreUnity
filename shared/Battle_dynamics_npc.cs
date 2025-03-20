@@ -162,7 +162,6 @@ namespace shared {
                         thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Nidle;
                         break;
                     case NpcGoal.NhuntThenPatrol:
-                    case NpcGoal.NidleIfGoHuntingThenPatrol:
                         thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Npatrol;
                         break;
                     case NpcGoal.NhuntThenFollowAlly:
@@ -369,7 +368,6 @@ namespace shared {
                         thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Nidle;
                         break;
                     case NpcGoal.NhuntThenPatrol:
-                    case NpcGoal.NidleIfGoHuntingThenPatrol:
                         thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Npatrol;
                         break;
                     case NpcGoal.NhuntThenFollowAlly:
@@ -1610,14 +1608,19 @@ namespace shared {
             float mvBlockerColliderTop = mvBlockerCollider.Y + mvBlockerCollider.H;
 
             bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
-            bool temptingToMove = (NpcGoal.Npatrol == currCharacterDownsync.GoalAsNpc && (canJumpWithinInertia || isCharacterFlying));
+            bool temptingToMove = (NpcGoal.Npatrol == currCharacterDownsync.GoalAsNpc || NpcGoal.NhuntThenIdle == currCharacterDownsync.GoalAsNpc || NpcGoal.NhuntThenPatrol == currCharacterDownsync.GoalAsNpc || NpcGoal.NhuntThenFollowAlly == currCharacterDownsync.GoalAsNpc) && (canJumpWithinInertia || isCharacterFlying);
 
-             bool hasBlockerInXForward = (0 < currCharacterDownsync.DirX && (0 < currCharacterDownsync.VelX || temptingToMove) && mvBlockerColliderLeft+STANDING_COLLIDER_CHECK_EPS >= aBoxRight && mvBlockerColliderRight > aBoxRight) || (0 > currCharacterDownsync.DirX && (0 > currCharacterDownsync.VelX || temptingToMove) && mvBlockerColliderRight <= aBoxLeft+ STANDING_COLLIDER_CHECK_EPS && mvBlockerColliderLeft < aBoxLeft);
+            bool holdableForRight = mvBlockerColliderRight > aBoxRight;
+            bool holdableForLeft = mvBlockerColliderLeft > aBoxLeft;
+            bool strictlyToTheRight = mvBlockerColliderLeft+STANDING_COLLIDER_CHECK_EPS >= aBoxRight;
+            bool strictlyToTheLeft = mvBlockerColliderRight <= aBoxLeft+ STANDING_COLLIDER_CHECK_EPS; 
+             bool hasBlockerInXForward = (0 < currCharacterDownsync.DirX && (0 < currCharacterDownsync.VelX || temptingToMove) && strictlyToTheRight) || (0 > currCharacterDownsync.DirX && (0 > currCharacterDownsync.VelX || temptingToMove) && strictlyToTheLeft);
 
-            bool hasBlockerInYForward = (0 < currCharacterDownsync.DirY && (0 < currCharacterDownsync.VelY || temptingToMove) && mvBlockerColliderBottom >= aBoxTop) || (0 > currCharacterDownsync.DirY && (0 > currCharacterDownsync.VelY || temptingToMove) && mvBlockerColliderTop <= aBoxBottom);
+            bool strictlyDown = mvBlockerColliderTop <= aBoxBottom + STANDING_COLLIDER_CHECK_EPS;
+            bool strictlyUp = mvBlockerColliderBottom >= aBoxTop; 
+            bool hasBlockerInYForward = (0 < currCharacterDownsync.DirY && (0 < currCharacterDownsync.VelY || temptingToMove) && strictlyUp) || (0 > currCharacterDownsync.DirY && (0 > currCharacterDownsync.VelY || temptingToMove) && strictlyDown);
 
             hasBlockerInXForward &= (mvBlockerCollider != standingOnCollider) && (mvBlockerColliderBottom <= aBoxTop || mvBlockerColliderTop >= aBoxBottom+SNAP_INTO_PLATFORM_OVERLAP);
-
             hasBlockerInYForward &= (mvBlockerCollider != standingOnCollider);
 
             if (!isCharacterFlying) {
@@ -1696,7 +1699,12 @@ namespace shared {
                             effVelX = 0;
                             break;
                         case NpcGoal.NidleIfGoHuntingThenPatrol:
-                            effVelX = 0;
+                            if (NPC_FLEE_GRACE_PERIOD_RDF_CNT >= currCharacterDownsync.FramesInChState) {
+                                /*
+                                 [WARNING] "NidleIfGoHuntingThenPatrol" is still tempting to patrol, so just give it a grace period before switching reaction to "TARGET_CH_REACTION_WALK_ALONG". Moreover, even given a temptation to resume patroling (i.e. 0 != effVelX), it'll still require passing "currBlockCanStillHoldMe" check to actually allow the transition, e.g. a Boar standing on the edge of a short hovering platform with "NidleIfGoHuntingThenPatrol" is unlikely to transit, but a SwordMan accidentally stopped at the beginning of a long platform is likely to transit.  
+                                */
+                                effVelX = 0;
+                            }
                             break;
                         default:
                             break;
@@ -1715,7 +1723,11 @@ namespace shared {
                             logger.LogInfo($"\t@rdfId={rdfId}, stopping NPC\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, inAir:{currCharacterDownsync.InAir}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, inAir: {thatCharacterInNextFrame.InAir}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
                         }
                         */
-                        return TARGET_CH_REACTION_STOP;
+                        if (holdableForRight && holdableForLeft && strictlyDown && NPC_FLEE_GRACE_PERIOD_RDF_CNT < currCharacterDownsync.FramesInChState) {
+                            return TARGET_CH_REACTION_WALK_ALONG;
+                        } else {
+                            return TARGET_CH_REACTION_STOP;
+                        } 
                     }
                 }
             } else {
