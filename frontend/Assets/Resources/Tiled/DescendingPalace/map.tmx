@@ -31,7 +31,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAAAAAHgYRgAAAQ==
+   eJzt0bENwjAURVEXzgZhH0bzaNmE9JHoLRp+5yKRiCIHBJwj3caVn50SAAAAAAAAAAAAAPAtltyne/70kmNq7tuRd4qzsrS6/cmeeu9/1WNjf5yV2nr7nf59/y2n6xyNQ0pndxnW++OsjK3T7xBbp9g81Y2/AAAAAAD4FU/p7NRT
   </data>
  </layer>
  <layer id="33" name="setGround" width="64" height="70" visible="0">
@@ -47,7 +47,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztm89P1EAUxwdoj4ImeJ8/xT9l/xLoXYxXQjTpRRTRhIDij4srhHhRMBsuazCUCwZIOC0Q4OK3WSYZap1Os+3r0Hkv+aZJh03fZ/bL65vpdiEQYgFa9EQvoVc3zLrWPNE76H2G/RnkW8wzP/Mzv3gMTYQiOQ9E0nROVDEIhBwLhXwK9reB6PjKD/bkNfjHwX/mET9YJZgl2JP/+b+P878M2iuoGTMYj0pqA9okqEU2/j/E2B+DjgryTOf1SUntQD8J+ev0/+pNr1VGaV+2TsBv4/82B9f/f/3/BXPRzehrS/si3f8vwIi5SL7j+COj7Zbyw+sSnpdL4LsXihi1Pm46J+pQ3JM44vuP+x7NAVil4lbHgUf8qv6BXU6BHbUgTvuO2Zr13FBPYoLrK4E1Gh+yy/vD/4PkN87P1ai0v0O9Fcs5c/BmeB+u9fp6HmCNwNwBu6Tc+/wAfczh/4RznwnzyO6BUu495u21zBPmkN0D5f6X+9+89V9eP2zTHxd9zoWe2mb9l9cP2/THRZ9zoae28b/tmv0uBu//8f4H13/2f1v8X/ae66r/T7EuOUFOJp1WcM910f8p+xV0iVxNuq7gnuui/8EV7RPxu+j/B6EQ0xZ6GI5+LRf9Txku+p8yXPQ/ZbD/2f/sf/a//vxz4BG//vyzqN+uUnm9u4pj4lyUivrNKmXqXS+Ic2lCrvJj3fEogWz671Fk6t1t+/8qBNYumLuKvwf2TaiwcLQkwNrtafxbYO97VP/B2tnS+KtYU9+10OsN8zedDX0wP/MzP/MzP/OX5Uf/VPgujHomZ/qNTNmxKmMU/uy7MXnvwqhncqbfyJQdqzLY//b8K2O3VfZv6hgbNfj7Z35t/e9dfNP4ewHNe5euBFij3dv7f+meWCP7z00oZT3Q+H3WXzlu+S8=
+   eJztm8tKw0AUhseaLL2B7udRfJQ+iWav4lZEIRvvCuJdN1ZLceON4qaiGDeKCK6qom78Qw2MMaYTmkynmXPgJ5AxZL7p78mZSWbaYmwamjdEC9DiD7OoTUO0BW2H2Gcg02KK+Imf+NkY1G0z781iXrv7pCrqFuNdNuOTYF+zWNFUfrB7y+AvgP/VIH6wcjBzsHv/+b+G89cxummSM0bQ7iTUMVRWkItk/P+AtscYPTXppz+uEwl1AV0q5M/S/xs/tVYS+XXZjgJ+Gf/nOSj///X/IcaiFNJRTusi0f9zYMRYeKc4noV0nlN+eJ3D83wJfD02c5Hr3Xb3SXUE3L044vd3awaNAVh5wB0c6wbxB/kP7LwP7MgFrl93jGas2Zh84iq4fyCwOoUGO+9v/B94tzg/nqH8+g75lq1EjMFq4zmc6f3FfoDVAXMR7Fzl2ucutBfBv49zBwr7EV4DVbn2GLXWMqWwD+E1UKp/qf6Nmv9F1cMy9XGz63SoqWXmf1H1sEx93Ow6HWpqGf/Lztk7MWj9j9Y/KP+T//Pi/6TPXF39/4J5yTP6FKeXFJ65OvrfZ/+EPtDXOH2l8MzV0f/gcu4U8evo/wGbsUEJDdmt30tH/6sMHf2vMnT0v8og/5P/yf/kf/H9Z90gfvH9JwUFhbnhz6mqFhsuQ+3ui6oAawnMpWBOWQF7zaD8D9ZiReBPY07dafGe8ppCpwXxEz/xEz/xEz/xJ7s2vDcmai9M8E4u7huZpG1pRiv84b0xUXthgndycd/IJG1LM8j/8vzrXb+V9G+yaGs16PcnfmH+b1ycCPxVS82+S10CrM6VwH8HeVb8dyd5ks96L/CbrG8gkkPJ
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="70">
@@ -147,7 +147,7 @@
     <property name="speciesId" value="9"/>
    </properties>
   </object>
-  <object id="531" name="Floor1End" x="624" y="96">
+  <object id="531" name="Floor1End" x="480" y="48">
    <properties>
     <property name="demandedEvtMask" value="3"/>
     <property name="id" value="4"/>
@@ -198,11 +198,11 @@
   <object id="372" name="SkeleArcher" x="184" y="640">
    <properties>
     <property name="dirX" value="+2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="8"/>
     <property name="speciesId" value="4098"/>
-    <property name="static" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -210,6 +210,7 @@
   <object id="373" name="SkeleArcher" x="864" y="208">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="4"/>
@@ -236,20 +237,20 @@
    </properties>
    <point/>
   </object>
-  <object id="441" name="FireBat" x="752" y="688">
+  <object id="441" name="FireBat" x="704" y="144">
    <properties>
     <property name="dirX" value="0"/>
     <property name="speciesId" value="4100"/>
-    <property name="subscriptionId" value="4"/>
+    <property name="subscriptionId" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
   </object>
-  <object id="444" name="FireBat" x="224" y="480">
+  <object id="444" name="FireBat" x="304" y="112">
    <properties>
     <property name="dirX" value="0"/>
     <property name="speciesId" value="4100"/>
-    <property name="subscriptionId" value="4"/>
+    <property name="subscriptionId" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
    <point/>
@@ -529,16 +530,12 @@
     <property name="fuCaptureFrames" value="60"/>
    </properties>
   </object>
-  <object id="478" name="Floor1R1" x="928" y="224">
+  <object id="478" name="Floor1R1" x="560" y="528">
    <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
+    <property name="fdAct" value="20"/>
+    <property name="flAct" value="20"/>
+    <property name="frAct" value="20"/>
+    <property name="fuAct" value="20"/>
    </properties>
    <point/>
   </object>

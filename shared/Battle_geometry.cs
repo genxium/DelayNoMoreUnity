@@ -1452,7 +1452,10 @@ namespace shared {
                                 continue;
                             }
 
-                            bool isStandingCandidate = !chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && 0 > overlapResult.OverlapY && (0 == overlapResult.OverlapX || currCharacterDownsync.OnSlope) && (bColliderLeft < aColliderRight && bColliderRight > aColliderLeft);
+                            bool bottomEpsMatch = (0 == overlapResult.OverlapX) && (bColliderTop < aColliderTop) && (bColliderTop < aColliderBottom + STANDING_COLLIDER_CHECK_EPS + CLAMPABLE_COLLISION_SPACE_MAG) && (bColliderTop + SNAP_INTO_PLATFORM_OVERLAP + CLAMPABLE_COLLISION_SPACE_MAG >= aColliderBottom + STANDING_COLLIDER_CHECK_EPS);
+                            bottomEpsMatch |= (0 != overlapResult.OverlapX && currCharacterDownsync.OnSlope); // [WARNING] The above condition doesn't work for slope
+                            bottomEpsMatch &= (0 > overlapResult.OverlapY);
+                            bool isStandingCandidate = !chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && (bColliderTop < aColliderTop && bColliderBottom < aColliderBottom) && bottomEpsMatch && (bColliderLeft + SNAP_INTO_PLATFORM_OVERLAP < aColliderRight && bColliderRight > aColliderLeft + SNAP_INTO_PLATFORM_OVERLAP);
                             if (isStandingCandidate) {
                                 if (null == standingOnCollider) {
                                     standingOnCollider = bCollider;
@@ -1494,7 +1497,10 @@ namespace shared {
                                 continue;
                             }
 
-                            bool isStandingCandidate = !chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && 0 > overlapResult.OverlapY && (0 == overlapResult.OverlapX || currCharacterDownsync.OnSlope) && (bColliderLeft < aColliderRight && bColliderRight > aColliderLeft);
+                            bool bottomEpsMatch = (0 == overlapResult.OverlapX) && (bColliderTop < aColliderTop) && (bColliderTop < aColliderBottom + STANDING_COLLIDER_CHECK_EPS + CLAMPABLE_COLLISION_SPACE_MAG) && (bColliderTop + SNAP_INTO_PLATFORM_OVERLAP + CLAMPABLE_COLLISION_SPACE_MAG >= aColliderBottom + STANDING_COLLIDER_CHECK_EPS);
+                            bottomEpsMatch |= ((0 != overlapResult.OverlapX || 0 != overlapResult.SecondaryOverlapX) && currCharacterDownsync.OnSlope); // [WARNING] The above condition doesn't work for slope
+                            bottomEpsMatch &= (0 > overlapResult.OverlapY);
+                            bool isStandingCandidate = !chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && (bColliderBottom < aColliderBottom) && bottomEpsMatch && (bColliderLeft+SNAP_INTO_PLATFORM_OVERLAP < aColliderRight && bColliderRight > aColliderLeft+SNAP_INTO_PLATFORM_OVERLAP);
                             if (isStandingCandidate) {
                                 if (null == standingOnCollider) {
                                     standingOnCollider = bCollider;

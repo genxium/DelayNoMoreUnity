@@ -256,6 +256,7 @@ namespace shared {
         public static int SP_ATK_LOOKUP_FRAMES = 5;
         public static float SNAP_INTO_PLATFORM_OVERLAP = 0.1f;
         public static int SNAP_INTO_PLATFORM_OVERLAP_VIRTUAL_GRID = (int)(SNAP_INTO_PLATFORM_OVERLAP* COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static float STANDING_COLLIDER_CHECK_EPS = 10f*SNAP_INTO_PLATFORM_OVERLAP;
 
         public static float GROUNDWAVE_SNAP_INTO_PLATFORM_OVERLAP = 0.8f;
         public static float SIDE_PUSHBACK_REPEL_THRESHOLD = 6.0f;
@@ -448,5 +449,7 @@ namespace shared {
 
         public static int BTN_E_HOLDING_RDF_CNT_THRESHOLD_1 = JUMP_HOLDING_RDF_CNT_THRESHOLD_1;  
         public static int BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 = JUMP_HOLDING_IFD_CNT_THRESHOLD_1;  
+
+        public static int NPC_FLEE_GRACE_PERIOD_RDF_CNT = 8;
     }
 }

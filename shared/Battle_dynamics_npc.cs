@@ -19,6 +19,7 @@ namespace shared {
         private static int TARGET_CH_REACTION_JUMP_TOWARDS = 10;
         //private static int TARGET_CH_REACTION_USE_DASHING = 11;
         private static int TARGET_CH_REACTION_SLIP_JUMP = 12;
+        private static int TARGET_CH_REACTION_WALK_ALONG = 13;
 
         private static int NPC_DEF1_MIN_HOLDING_RDF_CNT = 90;
 
@@ -161,6 +162,7 @@ namespace shared {
                         thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Nidle;
                         break;
                     case NpcGoal.NhuntThenPatrol:
+                    case NpcGoal.NidleIfGoHuntingThenPatrol:
                         thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Npatrol;
                         break;
                     case NpcGoal.NhuntThenFollowAlly:
@@ -229,7 +231,7 @@ namespace shared {
             }
             
             if (TARGET_CH_REACTION_FOLLOW == visionReaction) {
-                bool opponentAboveMe = (0.6f * aCollider.H < oppoChColliderDy);
+                bool opponentAboveMe = 0 < oppoChColliderDy && (oppoChCollider.H < (1.67f*oppoChColliderDy+aCollider.H)); // i.e. "0.6f * (oppoChCollider.H - aCollider.H) < oppoChColliderDy"
                 bool shouldJumpTowardsTarget = (canJumpWithinInertia && !effInAir && opponentAboveMe && (0 <= currCharacterDownsync.DirX * oppoChColliderDx));
                 shouldJumpTowardsTarget |= (opponentAboveMe && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState) && effInAir && chConfig.JumpHoldingToFly);
                 bool shouldSlipJumpTowardsTarget = (canJumpWithinInertia && !effInAir && 0 > oppoChColliderDy && currCharacterDownsync.PrimarilyOnSlippableHardPushback);
@@ -237,10 +239,11 @@ namespace shared {
                 if (0 >= chConfig.JumpingInitVelY) {
                     shouldJumpTowardsTarget = false;
                     shouldSlipJumpTowardsTarget = false;
-                } else if (chConfig.HasDef1) {
-                    shouldJumpTowardsTarget = false;
-                } else if (chConfig.NpcNotHuntingInAirOppoCh) {
-                    shouldJumpTowardsTarget = false;
+                } else if (chConfig.HasDef1 || chConfig.NpcNotHuntingInAirOppoCh) {
+                    if (shouldJumpTowardsTarget) {
+                        shouldJumpTowardsTarget = false;
+                        visionReaction = TARGET_CH_REACTION_UNKNOWN; // [WARNING] Leave decision to "deriveReactionForMvBlocker"!
+                    }
                 }
 
                 if (shouldSlipJumpTowardsTarget) {
@@ -356,6 +359,21 @@ namespace shared {
                         break;
                     case NpcGoal.NfollowAlly:
                         thatCharacterInNextFrame.GoalAsNpc = NpcGoal.NhuntThenFollowAlly;
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                switch (currCharacterDownsync.GoalAsNpc) {
+                    case NpcGoal.NhuntThenIdle:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Nidle;
+                        break;
+                    case NpcGoal.NhuntThenPatrol:
+                    case NpcGoal.NidleIfGoHuntingThenPatrol:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Npatrol;
+                        break;
+                    case NpcGoal.NhuntThenFollowAlly:
+                        thatCharacterInNextFrame.GoalAsNpc = NpcGoal.NfollowAlly;
                         break;
                     default:
                         break;
@@ -1060,6 +1078,9 @@ namespace shared {
 
             Collider? standingOnCollider = null;
             bool shouldCheckVisionCollision = (0 < chConfig.VisionSizeX && 0 < chConfig.VisionSizeY && (visionSearchTickWhenNonAtk || hasCancellableCombo));
+            if (chConfig.AntiGravityWhenIdle && currCharacterDownsync.InAir && InAirIdle1NoJump == currCharacterDownsync.CharacterState) {
+                shouldCheckVisionCollision = false;
+            }
             if (shouldCheckVisionCollision) {
                 float visionCx, visionCy, visionCw, visionCh;
                 calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
@@ -1290,7 +1311,7 @@ namespace shared {
                 }
                 */
                 if (TARGET_CH_REACTION_UNKNOWN == visionReaction && false == hasPatrolCueReaction) {
-                    if (0 != currCharacterDownsync.CachedCueCmd && canJumpWithinInertia) {
+                    if (0 != currCharacterDownsync.CachedCueCmd && (canJumpWithinInertia || (0 >= currCharacterDownsync.FramesToRecover && (currCharacterDownsync.OmitGravity || chConfig.OmitGravity)))) {
                         // [WARNING] "canJumpWithinInertia" implies "(0 == currCharacterDownsync.FramesToRecover)"
                         thatCharacterInNextFrame.CachedCueCmd = 0;
                         DecodeInput(currCharacterDownsync.CachedCueCmd, decodedInputHolder);
@@ -1325,16 +1346,36 @@ namespace shared {
                         float aBoxBottom = aCollider.Y;
                         float aBoxTop = aCollider.Y+aCollider.H;
                         visionReaction = deriveReactionForMvBlocker(rdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, canJumpWithinInertia, aCollider, aBoxLeft, aBoxRight, aBoxBottom, aBoxTop, mvBlockerCollider, standingOnCollider, primaryOverlapResult, logger);
-                        if (TARGET_CH_REACTION_JUMP_TOWARDS == visionReaction) {
+                        if (TARGET_CH_REACTION_WALK_ALONG == visionReaction) {
+                            switch (currCharacterDownsync.GoalAsNpc) {
+                                case NpcGoal.NidleIfGoHuntingThenPatrol:
+                                    thatCharacterInNextFrame.GoalAsNpc = NpcGoal.Npatrol;
+                                    break;
+                            }
+                            return (PATTERN_ID_NO_OP, false, false, 0, currCharacterDownsync.DirX, currCharacterDownsync.DirY, slowDownToAvoidOverlap);
+                        } else if (TARGET_CH_REACTION_JUMP_TOWARDS == visionReaction) {
                             return (PATTERN_DOWN_A, true, false, currCharacterDownsync.JumpHoldingRdfCnt + 1, currCharacterDownsync.DirX, currCharacterDownsync.DirY, slowDownToAvoidOverlap);
                         } else if (TARGET_CH_REACTION_FLEE == visionReaction) {
-                            return (PATTERN_ID_NO_OP, false, false, 0, -currCharacterDownsync.DirX, currCharacterDownsync.DirY, slowDownToAvoidOverlap);
+                            effectiveDx = -currCharacterDownsync.DirX;
+                            effectiveDy = -currCharacterDownsync.DirY;
                         } else if (TARGET_CH_REACTION_STOP == visionReaction) {
                             switch (currCharacterDownsync.GoalAsNpc) {
                                 case NpcGoal.Npatrol:
                                     thatCharacterInNextFrame.GoalAsNpc = NpcGoal.NidleIfGoHuntingThenPatrol;
                                     break;
                             }
+                            return (PATTERN_ID_NO_OP, false, false, 0, 0, 0, slowDownToAvoidOverlap);
+                        }
+                    }
+
+                    if (TARGET_CH_REACTION_FLEE == visionReaction && (PATTERN_ID_NO_OP == patternId || PATTERN_ID_UNABLE_TO_OP == patternId)) {
+                        var (_, _, discretizedDir) = Battle.DiscretizeDirection(effectiveDx, effectiveDy);
+                        ulong oldCachedCueCmd = thatCharacterInNextFrame.CachedCueCmd;
+                        ulong newCachedCueCmd = (ulong)discretizedDir;
+                        if (oldCachedCueCmd != newCachedCueCmd) {
+                            thatCharacterInNextFrame.CachedCueCmd = newCachedCueCmd;
+                            thatCharacterInNextFrame.FramesToRecover = NPC_FLEE_GRACE_PERIOD_RDF_CNT;
+                            //logger.LogInfo($"\t@rdfId={rdfId}, delayed to flee\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, cachedCueCmd:{thatCharacterInNextFrame.CachedCueCmd}, FramesToRecover:{thatCharacterInNextFrame.FramesToRecover}, goal:{thatCharacterInNextFrame.GoalAsNpc})");
                             return (PATTERN_ID_NO_OP, false, false, 0, 0, 0, slowDownToAvoidOverlap);
                         }
                     }
@@ -1441,7 +1482,7 @@ namespace shared {
                     _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effInAir, effDx, effDy, chConfig, true, usedSkill, skillConfig, isParalyzed, logger); // TODO: When breaking free from a PatrolCue, an NPC often couldn't turn around from a cliff in time, thus using "shouldIgnoreInertia" temporarily
                     if (0 != thatCharacterInNextFrame.VelX && slowDownToAvoidOverlap) {
                         //logger.LogInfo(String.Format("@rdfId={0}, slowing down walking npc id={1}", currRenderFrame.Id, currCharacterDownsync.Id));
-                        thatCharacterInNextFrame.VelX >>= 1;
+                        thatCharacterInNextFrame.VelX >>= 2;
                     }
                 } else {
                     _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, true, usedSkill, skillConfig, isParalyzed, logger);
@@ -1452,8 +1493,8 @@ namespace shared {
                     } else {
                         if ((0 != thatCharacterInNextFrame.VelX || 0 != thatCharacterInNextFrame.VelY) && slowDownToAvoidOverlap) {
                             //logger.LogInfo(String.Format("@rdfId={0}, slowing down flying npc id={1}", currRenderFrame.Id, currCharacterDownsync.Id));
-                            thatCharacterInNextFrame.VelX >>= 1;
-                            thatCharacterInNextFrame.VelY >>= 1;
+                            thatCharacterInNextFrame.VelX >>= 2;
+                            thatCharacterInNextFrame.VelY >>= 2;
                         }
                     }
                 }
@@ -1571,11 +1612,12 @@ namespace shared {
             bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
             bool temptingToMove = (NpcGoal.Npatrol == currCharacterDownsync.GoalAsNpc && (canJumpWithinInertia || isCharacterFlying));
 
-            bool hasBlockerInXForward = (0 < currCharacterDownsync.DirX && (0 < currCharacterDownsync.VelX || temptingToMove) && mvBlockerColliderLeft >= aBoxRight && mvBlockerColliderRight > aBoxRight) || (0 > currCharacterDownsync.DirX && (0 > currCharacterDownsync.VelX || temptingToMove) && mvBlockerColliderRight <= aBoxLeft && mvBlockerColliderLeft < aBoxLeft);
+             bool hasBlockerInXForward = (0 < currCharacterDownsync.DirX && (0 < currCharacterDownsync.VelX || temptingToMove) && mvBlockerColliderLeft+STANDING_COLLIDER_CHECK_EPS >= aBoxRight && mvBlockerColliderRight > aBoxRight) || (0 > currCharacterDownsync.DirX && (0 > currCharacterDownsync.VelX || temptingToMove) && mvBlockerColliderRight <= aBoxLeft+ STANDING_COLLIDER_CHECK_EPS && mvBlockerColliderLeft < aBoxLeft);
 
             bool hasBlockerInYForward = (0 < currCharacterDownsync.DirY && (0 < currCharacterDownsync.VelY || temptingToMove) && mvBlockerColliderBottom >= aBoxTop) || (0 > currCharacterDownsync.DirY && (0 > currCharacterDownsync.VelY || temptingToMove) && mvBlockerColliderTop <= aBoxBottom);
 
-            hasBlockerInXForward &= (mvBlockerCollider != standingOnCollider);
+            hasBlockerInXForward &= (mvBlockerCollider != standingOnCollider) && (mvBlockerColliderBottom <= aBoxTop || mvBlockerColliderTop >= aBoxBottom+SNAP_INTO_PLATFORM_OVERLAP);
+
             hasBlockerInYForward &= (mvBlockerCollider != standingOnCollider);
 
             if (!isCharacterFlying) {
@@ -1616,8 +1658,17 @@ namespace shared {
                                 //logger.LogInfo($"\t@rdfId={rdfId}, jumping NPC to higher\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
                                 return TARGET_CH_REACTION_JUMP_TOWARDS;
                             } else if (0 < diffCyApprox && FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > diffCxApprox) {
-                                //logger.LogInfo($"\t@rdfId={rdfId}, currCharacterDownsync.Id={currCharacterDownsync.Id}, canJumpWithinInertia={canJumpWithinInertia}, aBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop}) checking mvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop}), deciding to flee with jumpableDiffCyApprox={jumpableDiffCyApprox} v.s. diffCyApprox={diffCyApprox}, jumpableDiffCxApprox={jumpableDiffCxApprox} v.s. diffCxApprox={diffCxApprox}");
-                                return TARGET_CH_REACTION_FLEE;
+                                switch (mvBlockerCollider.Data) {
+                                    case TrapColliderAttr tpc:
+                                        if (tpc.ProvidesSlipJump) {
+                                            return TARGET_CH_REACTION_UNKNOWN;
+                                        } else {
+                                            return TARGET_CH_REACTION_FLEE;
+                                        }
+                                    default:
+                                        //logger.LogInfo($"\t@rdfId={rdfId}, currCharacterDownsync.Id={currCharacterDownsync.Id}, canJumpWithinInertia={canJumpWithinInertia}, aBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop}) checking mvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop}), deciding to flee with jumpableDiffCyApprox={jumpableDiffCyApprox} v.s. diffCyApprox={diffCyApprox}, jumpableDiffCxApprox={jumpableDiffCxApprox} v.s. diffCxApprox={diffCxApprox}");
+                                        return TARGET_CH_REACTION_FLEE;
+                                }
                             }
                         }
                     } else {
@@ -1639,19 +1690,37 @@ namespace shared {
                     }
                 } else {
                     // !hasBlockerInXForward, in this case moving forward might fall into death
-                    bool currBlockCanStillHoldMe = (null != standingOnCollider && 0 < currCharacterDownsync.DirX && standingOnCollider.X+standingOnCollider.W >= aBoxRight+currCharacterDownsync.VelX) || (null != standingOnCollider && 0 > currCharacterDownsync.DirX && standingOnCollider.X <= aBoxLeft+currCharacterDownsync.VelX);
-                    if (!currBlockCanStillHoldMe && !currCharacterDownsync.InAir) {
-                        //logger.LogInfo($"\t@rdfId={rdfId}, stopping NPC\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, inAir:{currCharacterDownsync.InAir}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, inAir: {thatCharacterInNextFrame.InAir}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
+                    int effVelX = (0 != currCharacterDownsync.VelX ? currCharacterDownsync.VelX : (0 < currCharacterDownsync.DirX ? currCharacterDownsync.Speed : -currCharacterDownsync.Speed)); 
+                    switch (currCharacterDownsync.GoalAsNpc) {
+                        case NpcGoal.Nidle:
+                            effVelX = 0;
+                            break;
+                        case NpcGoal.NidleIfGoHuntingThenPatrol:
+                            effVelX = 0;
+                            break;
+                        default:
+                            break;
+                    }
+                    bool currBlockCanStillHoldMe = (null != standingOnCollider) && ((0 < currCharacterDownsync.DirX && standingOnCollider.X+standingOnCollider.W >= aBoxRight+effVelX) || (0 > currCharacterDownsync.DirX && standingOnCollider.X <= aBoxLeft+effVelX));
+                    if (currBlockCanStillHoldMe && 0 != effVelX) {
+                        /*
+                        if (SPECIES_BOARWARRIOR == currCharacterDownsync.SpeciesId) {
+                            logger.LogInfo($"\t@rdfId={rdfId}, walking along NPC\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, inAir:{currCharacterDownsync.InAir}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, inAir: {thatCharacterInNextFrame.InAir}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
+                        }
+                        */
+                        return TARGET_CH_REACTION_WALK_ALONG;
+                    } else if (!currBlockCanStillHoldMe && !currCharacterDownsync.InAir) {
+                        /*
+                        if (SPECIES_BOARWARRIOR == currCharacterDownsync.SpeciesId) {
+                            logger.LogInfo($"\t@rdfId={rdfId}, stopping NPC\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, inAir:{currCharacterDownsync.InAir}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, inAir: {thatCharacterInNextFrame.InAir}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
+                        }
+                        */
                         return TARGET_CH_REACTION_STOP;
                     }
                 }
             } else {
                 // A flying character
-                if (
-                    (hasBlockerInXForward && mvBlockerColliderTop >= aBoxTop && mvBlockerColliderBottom <= aBoxBottom)
-                    || 
-                    (hasBlockerInYForward && mvBlockerColliderLeft <= aBoxLeft && mvBlockerColliderRight >= aBoxRight)
-                    ) {
+                if (hasBlockerInXForward && mvBlockerColliderTop >= aBoxBottom && mvBlockerColliderBottom <= aBoxTop) {
                     float diffCxApprox = 0f;
                     if (0 < currCharacterDownsync.DirX) {
                         diffCxApprox = (mvBlockerColliderLeft - aBoxRight);
@@ -1659,6 +1728,11 @@ namespace shared {
                         diffCxApprox = (aBoxLeft - mvBlockerColliderRight);
                     }
 
+                    if (FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD * FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > (diffCxApprox * diffCxApprox)) {
+                        return TARGET_CH_REACTION_FLEE;
+                    }
+                } else if (hasBlockerInYForward && mvBlockerColliderLeft <= aBoxRight && mvBlockerColliderRight >= aBoxLeft) {
+                    
                     float diffCyApprox = 0f;
                     if (0 < currCharacterDownsync.DirY) {
                         diffCyApprox = (mvBlockerColliderBottom - aBoxTop);
@@ -1666,7 +1740,7 @@ namespace shared {
                         diffCyApprox = (aBoxBottom - mvBlockerColliderTop);
                     }
 
-                    if (FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD*FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > (diffCxApprox*diffCxApprox+diffCyApprox*diffCyApprox)) {
+                    if (FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD*FLEE_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > (diffCyApprox*diffCyApprox)) {
                         return TARGET_CH_REACTION_FLEE;
                     }
                 }

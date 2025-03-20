@@ -937,6 +937,14 @@ namespace shared {
              */
         }
 
+        private static void _processInertiaFlyingHandleZeroEffDxAndDy(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, bool isParalyzed, ILoggerBridge logger) {
+                thatCharacterInNextFrame.VelX = 0;
+                if (!chConfig.AntiGravityWhenIdle || InAirIdle1NoJump != currCharacterDownsync.CharacterState) {
+                    thatCharacterInNextFrame.VelY = 0;
+                    thatCharacterInNextFrame.DirY = 0;
+                }
+        }
+
         public static void _processInertiaFlying(int rdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, int effDx, int effDy, CharacterConfig chConfig, bool shouldIgnoreInertia, bool usedSkill, Skill? skillConfig, bool isParalyzed, ILoggerBridge logger) {
             if ((TransformingInto == currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesToRecover) || (TransformingInto == thatCharacterInNextFrame.CharacterState && 0 < thatCharacterInNextFrame.FramesToRecover)) {
                 return;
@@ -978,13 +986,7 @@ namespace shared {
                         thatCharacterInNextFrame.CharacterState = Walking;
                     } else {
                         // 0 == effDx && 0 == effDy
-                        thatCharacterInNextFrame.VelX = 0;
-                        if (chConfig.AntiGravityWhenIdle) {
-                            thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
-                        } else {
-                            thatCharacterInNextFrame.VelY = 0;
-                            thatCharacterInNextFrame.DirY = 0;
-                        }
+                        _processInertiaFlyingHandleZeroEffDxAndDy(rdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, logger);
                     }
                 } else {
                     if (alignedWithInertia || withInertiaBreakingState || currBreakingFromInertia) {
@@ -1003,13 +1005,7 @@ namespace shared {
                             thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
                             // 0 == effDx && 0 == effDy
-                            thatCharacterInNextFrame.VelX = 0;
-                            if (chConfig.AntiGravityWhenIdle) {
-                                thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
-                            } else {
-                                thatCharacterInNextFrame.VelY = 0;
-                                thatCharacterInNextFrame.DirY = 0;
-                            }
+                            _processInertiaFlyingHandleZeroEffDxAndDy(rdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, logger);
                         }
                     } else if (currFreeFromInertia) {
                         if (exactTurningAround) {
@@ -2103,8 +2099,32 @@ namespace shared {
                         thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
                     }
                     // [WARNING] Leave velocity handling to other code snippets.
+                } else if (currCharacterDownsync.OnWall && null != activeSkill && activeSkill.BoundChState == thatCharacterInNextFrame.CharacterState && null != activeBulletConfig && activeBulletConfig.WallImpactMeleeCollision) {
+                    // [WARNING] The "bulletCollider" for "activeBulletConfig" in this case might've been annihilated, we should end this bullet regardless of landing on character or hardPushback.
+                    int origFramesInActiveState = (thatCharacterInNextFrame.FramesInChState - activeBulletConfig.StartupFrames); // correct even for "DemonDiverImpactPreJumpBullet -> DemonDiverImpactStarterBullet" sequence
+                    var shiftedRdfCnt = (activeBulletConfig.ActiveFrames - origFramesInActiveState);
+                    if (0 < shiftedRdfCnt) {
+                        thatCharacterInNextFrame.FramesInChState += shiftedRdfCnt;
+                        thatCharacterInNextFrame.FramesToRecover -= shiftedRdfCnt;
+                    }
+                    if (0 > origFramesInActiveState) {
+                        thatCharacterInNextFrame.ActiveSkillId = NO_SKILL;
+                        thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
+                    }
+                    // [WARNING] Leave velocity handling to other code snippets.
+                } else if (null != activeSkill && activeSkill.BoundChState == thatCharacterInNextFrame.CharacterState && null != activeBulletConfig && MultiHitType.FromEmission == activeBulletConfig.MhType && currCharacterDownsync.FramesInChState > activeBulletConfig.StartupFrames+activeBulletConfig.ActiveFrames+activeBulletConfig.FinishingFrames) {
+                    int origFramesInActiveState = (thatCharacterInNextFrame.FramesInChState - activeBulletConfig.StartupFrames); // correct even for "DemonDiverImpactPreJumpBullet -> DemonDiverImpactStarterBullet" sequence
+                    var shiftedRdfCnt = (activeBulletConfig.ActiveFrames - origFramesInActiveState);
+                    if (0 < shiftedRdfCnt) {
+                        thatCharacterInNextFrame.FramesInChState += shiftedRdfCnt;
+                        thatCharacterInNextFrame.FramesToRecover -= shiftedRdfCnt;
+                    }
+                    if (0 > origFramesInActiveState) {
+                        thatCharacterInNextFrame.ActiveSkillId = NO_SKILL;
+                        thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
+                    }
                 }
-                
+
                 /*
                 if (77 == thatCharacterInNextFrame.ActiveSkillId) {
                     logger.LogInfo("_processEffPushbacks/end, currRdfId=" + currRenderFrame.Id + ", used DiverImpact, next VelX = " + thatCharacterInNextFrame.VelX);
