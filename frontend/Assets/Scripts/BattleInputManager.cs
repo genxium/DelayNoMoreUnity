@@ -129,11 +129,11 @@ public class BattleInputManager : MonoBehaviour {
     }
 
     public ulong GetEncodedInput() {
-        int btnALevel = (cachedBtnALevel << 4);
-        int btnBLevel = (cachedBtnBLevel << 5);
-        int btnCLevel = (cachedBtnCLevel << 6);
-        int btnDLevel = (cachedBtnDLevel << 7);
-        int btnELevel = (cachedBtnELevel << 8);
+        int btnALevel = cachedBtnALevel;
+        int btnBLevel = cachedBtnBLevel;
+        int btnCLevel = cachedBtnCLevel;
+        int btnDLevel = cachedBtnDLevel;
+        int btnELevel = cachedBtnELevel;
 
         cachedBtnALevel = realtimeBtnALevel;
         cachedBtnBLevel = realtimeBtnBLevel;
@@ -149,7 +149,7 @@ public class BattleInputManager : MonoBehaviour {
 
         float continuousDx = joystickX;
         float continuousDy = joystickY;
-        var (_, _, discretizedDir) = Battle.DiscretizeDirection(continuousDx, continuousDy, joystickMoveEps);
+        var (dx, dy, discretizedDir) = Battle.DiscretizeDirection(continuousDx, continuousDy, joystickMoveEps);
         // "GetEncodedInput" gets called by "AbstractMapController.doUpdate()", thus a proper spot to update UI
         // TODO: Add sprites on skewed directions.
         switch (discretizedDir) {
@@ -181,7 +181,7 @@ public class BattleInputManager : MonoBehaviour {
             joystickImg.sprite = joystickIdle;
             break;
         }
-        ulong ret = (ulong)(discretizedDir + btnALevel + btnBLevel + btnCLevel + btnDLevel + btnELevel);
+        ulong ret = Battle.EncodeInput(dx, dy, btnALevel, btnBLevel, btnCLevel, btnDLevel, btnELevel);
         return ret;
     }
 

@@ -38,9 +38,53 @@ namespace shared {
             PATTERN_HOLD_E_HOLD_B
         };
 
+        public static HashSet<int> btnBActivatePatternSet = new HashSet<int>() {
+            PATTERN_B,
+            PATTERN_UP_B,
+            PATTERN_DOWN_B,
+        };
+
+        public static HashSet<int> btnEHoldingPatternSet = new HashSet<int>() {
+            PATTERN_HOLD_E,
+            PATTERN_HOLD_E_HOLD_B,
+        };
+
+        public static HashSet<int> btnEActivatePatternSet = new HashSet<int>() {
+            PATTERN_E,
+            PATTERN_FRONT_E,
+            PATTERN_BACK_E,
+            PATTERN_UP_E,
+            PATTERN_DOWN_E,
+            
+            PATTERN_E_HOLD_B,
+            PATTERN_FRONT_E_HOLD_B,
+            PATTERN_BACK_E_HOLD_B,
+            PATTERN_UP_E_HOLD_B,
+            PATTERN_DOWN_E_HOLD_B,
+        };
+
         public const int PATTERN_INVENTORY_SLOT_C = 1024;
         public const int PATTERN_INVENTORY_SLOT_D = 1025;
         public const int PATTERN_INVENTORY_SLOT_BC = 1026;
+
+        public const int PATTERN_HOLD_INVENTORY_SLOT_C = 1027;
+        public const int PATTERN_HOLD_INVENTORY_SLOT_D = 1028;
+
+        public static HashSet<int> btnCHoldingPatternSet = new HashSet<int>() {
+            PATTERN_HOLD_INVENTORY_SLOT_C,
+        };
+
+        public static HashSet<int> btnCActivatePatternSet = new HashSet<int>() {
+            PATTERN_INVENTORY_SLOT_C,
+        };
+
+        public static HashSet<int> btnDHoldingPatternSet = new HashSet<int>() {
+            PATTERN_HOLD_INVENTORY_SLOT_D,
+        };
+
+        public static HashSet<int> btnDActivatePatternSet = new HashSet<int>() {
+            PATTERN_INVENTORY_SLOT_D,
+        };
 
         public const uint ELE_NONE = 0;
         public const uint ELE_FIRE = 1;
@@ -889,7 +933,7 @@ namespace shared {
 
         private static BulletConfig SlashNovaRepeatingBullet = new BulletConfig {
             StartupFrames = 10,
-            ActiveFrames = 600,
+            ActiveFrames = 4*BATTLE_DYNAMICS_FPS,
             HitStunFrames = 20,
             BlockStunFrames = 9,
             Damage = 4,
@@ -1266,8 +1310,8 @@ namespace shared {
             CancellableByInventorySlotC = true,
             BlockStunFrames = 9,
             Damage = 12,
-            PushbackVelX = (int)(-0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            PushbackVelY = (int)(0.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelX = (int)(0.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SelfLockVelY = 0,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
@@ -1694,7 +1738,7 @@ namespace shared {
         .AddHit(HeatBeamBulletEnderHit)
         ;
 
-        public static Skill HeatBeamAirSkill = new Skill{
+        public static Skill HeatBeamAir = new Skill{
             Id = 51, 
             RecoveryFrames = 160,
             RecoveryFramesOnBlock = 160,
@@ -1723,6 +1767,46 @@ namespace shared {
         .AddHit(HeatBeamBulletEnderHit)
         ;
 
+        public static Skill RidleyMelee2 = new Skill{
+            Id = 39,
+               RecoveryFrames = 40,
+               RecoveryFramesOnBlock = 40,
+               RecoveryFramesOnHit = 40,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = Atk3
+        }
+        .AddHit(
+                new BulletConfig {
+                StartupFrames = 7,
+                ActiveFrames = 22,
+                HitStunFrames = 23,
+                BlockStunFrames = 9,
+                Damage = 22,
+                PushbackVelX = (int)(0.1f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                PushbackVelY = NO_LOCK_VEL,
+                SelfLockVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                SelfLockVelY = NO_LOCK_VEL,
+                SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                HitboxOffsetX = (int)(15*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxOffsetY = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                SpeciesId = 1,
+                ExplosionSpeciesId = 1,
+                ExplosionFrames = 25,
+                BType = BulletType.Melee,
+                DirX = 1,
+                DirY = 0,
+                Hardness = 5,
+                RemainsUponHit = true,
+                CancellableStFrame = 16,
+                CancellableEdFrame = 36,
+                CharacterEmitSfxName = "SlashEmitSpd2",
+                ExplosionSfxName = "Melee_Explosion2",
+                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                }.UpsertCancelTransit(PATTERN_B, 40)
+        );
+
         public static BulletConfig RidleyMeleeBulletAirHit1 = new BulletConfig {
             StartupFrames = 6,
             ActiveFrames = 14,
@@ -1749,7 +1833,8 @@ namespace shared {
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
-        public static Skill RidleyMeleeAirSkill1 = new Skill {
+        public static Skill RidleyMeleeAir1 = new Skill {
+            Id = 37,
             RecoveryFrames = 35,
             RecoveryFramesOnBlock = 35,
             RecoveryFramesOnHit = 35,
@@ -1786,9 +1871,10 @@ namespace shared {
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName = "Melee_Explosion2",
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-        }.UpsertCancelTransit(PATTERN_B, 39);
+        }.UpsertCancelTransit(PATTERN_B, RidleyMelee2.Id);
 
-        public static Skill RidleyMeleeSkill1 = new Skill{
+        public static Skill RidleyMelee1 = new Skill{
+            Id = 38,
             RecoveryFrames = 35,
             RecoveryFramesOnBlock = 35,
             RecoveryFramesOnHit = 35,
@@ -1911,7 +1997,8 @@ namespace shared {
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
         };
 
-        public static Skill WaterballAirSkill = new Skill{
+        public static Skill WaterballAir = new Skill{
+            Id = 36,
             RecoveryFrames = 32,
             RecoveryFramesOnBlock = 32,
             RecoveryFramesOnHit = 32,
@@ -1959,11 +2046,12 @@ namespace shared {
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX,
         };
 
-        public static Skill WaterballGroundSkill1 = new Skill{
-            RecoveryFrames = WaterballAirSkill.RecoveryFrames + 10,
-            RecoveryFramesOnBlock = WaterballAirSkill.RecoveryFramesOnBlock + 10,
-            RecoveryFramesOnHit = WaterballAirSkill.RecoveryFramesOnHit + 10,
-            MpDelta = WaterballAirSkill.MpDelta,
+        public static Skill WaterballGround1 = new Skill{
+            Id = 47, 
+            RecoveryFrames = WaterballAir.RecoveryFrames + 10,
+            RecoveryFramesOnBlock = WaterballAir.RecoveryFramesOnBlock + 10,
+            RecoveryFramesOnHit = WaterballAir.RecoveryFramesOnHit + 10,
+            MpDelta = WaterballAir.MpDelta,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk2
         }
@@ -1971,11 +2059,12 @@ namespace shared {
 
         public static BulletConfig StandardWaterballBulletGroundHit2 = new BulletConfig(StandardWaterballBulletGroundHit1).SetStartupFrames(11).SetHitboxOffsets((int)(12f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-3f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
 
-        public static Skill WaterballGroundSkill2 = new Skill{
-            RecoveryFrames = WaterballAirSkill.RecoveryFrames,
-            RecoveryFramesOnBlock = WaterballAirSkill.RecoveryFramesOnBlock,
-            RecoveryFramesOnHit = WaterballAirSkill.RecoveryFramesOnHit,
-            MpDelta = WaterballGroundSkill1.MpDelta,
+        public static Skill WaterballGround2 = new Skill{
+            Id = 48, 
+            RecoveryFrames = WaterballAir.RecoveryFrames,
+            RecoveryFramesOnBlock = WaterballAir.RecoveryFramesOnBlock,
+            RecoveryFramesOnHit = WaterballAir.RecoveryFramesOnHit,
+            MpDelta = WaterballGround1.MpDelta,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk3
         }
@@ -1994,9 +2083,10 @@ namespace shared {
             .SetHitboxOffsets((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(-8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO));
 
         public static Skill RisingWaterballPair = new Skill {
-            RecoveryFrames = WaterballGroundSkill1.RecoveryFrames,
-            RecoveryFramesOnBlock = WaterballGroundSkill1.RecoveryFramesOnBlock,
-            RecoveryFramesOnHit = WaterballGroundSkill1.RecoveryFramesOnHit,
+            Id = 63,
+            RecoveryFrames = WaterballGround1.RecoveryFrames,
+            RecoveryFramesOnBlock = WaterballGround1.RecoveryFramesOnBlock,
+            RecoveryFramesOnHit = WaterballGround1.RecoveryFramesOnHit,
             MpDelta = 500,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk2
@@ -2005,9 +2095,10 @@ namespace shared {
         .AddHit(TriWaterballBulletGroundHit2);
 
         public static Skill FallingWaterballPair = new Skill {
-            RecoveryFrames = WaterballGroundSkill1.RecoveryFrames,
-            RecoveryFramesOnBlock = WaterballGroundSkill1.RecoveryFramesOnBlock,
-            RecoveryFramesOnHit = WaterballGroundSkill1.RecoveryFramesOnHit,
+            Id = 64, 
+            RecoveryFrames = WaterballGround1.RecoveryFrames,
+            RecoveryFramesOnBlock = WaterballGround1.RecoveryFramesOnBlock,
+            RecoveryFramesOnHit = WaterballGround1.RecoveryFramesOnHit,
             MpDelta = RisingWaterballPair.MpDelta,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk3
@@ -2490,6 +2581,7 @@ namespace shared {
         };
 
         public static Skill GhostHorseSkill = new Skill {
+            Id = 65, 
             RecoveryFrames = 21,
             RecoveryFramesOnBlock = 21,
             RecoveryFramesOnHit = 21,
@@ -4056,7 +4148,8 @@ namespace shared {
             BuffConfig = LongParalyzer,
         };
 
-        public static Skill ThunderBoltSkill = new Skill {
+        public static Skill ThunderBolt = new Skill {
+            Id = 49, 
             RecoveryFrames = 75,
             RecoveryFramesOnBlock = 75,
             RecoveryFramesOnHit = 75,
@@ -5536,50 +5629,13 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(HeatBeamSkill.Id, HeatBeamSkill),
 
-                    new KeyValuePair<uint, Skill>(36, WaterballAirSkill),
+                    new KeyValuePair<uint, Skill>(WaterballAir.Id, WaterballAir),
 
-                    new KeyValuePair<uint, Skill>(37, RidleyMeleeAirSkill1),
+                    new KeyValuePair<uint, Skill>(RidleyMeleeAir1.Id, RidleyMeleeAir1),
 
-                    new KeyValuePair<uint, Skill>(38, RidleyMeleeSkill1),
+                    new KeyValuePair<uint, Skill>(RidleyMelee1.Id, RidleyMelee1),
 
-                    new KeyValuePair<uint, Skill>(39, new Skill{
-                            RecoveryFrames = 40,
-                            RecoveryFramesOnBlock = 40,
-                            RecoveryFramesOnHit = 40,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk3
-                            }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 7,
-                                ActiveFrames = 22,
-                                HitStunFrames = 23,
-                                BlockStunFrames = 9,
-                                Damage = 22,
-                                PushbackVelX = (int)(0.1f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = NO_LOCK_VEL,
-                                SelfLockVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = NO_LOCK_VEL,
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(15*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SpeciesId = 1,
-                                ExplosionSpeciesId = 1,
-                                ExplosionFrames = 25,
-                                BType = BulletType.Melee,
-                                DirX = 1,
-                                DirY = 0,
-                                Hardness = 5,
-                                RemainsUponHit = true,
-                                CancellableStFrame = 16,
-                                CancellableEdFrame = 36,
-                                CharacterEmitSfxName = "SlashEmitSpd2",
-                                ExplosionSfxName = "Melee_Explosion2",
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                            }.UpsertCancelTransit(PATTERN_B, 40)
-                )),
+                    new KeyValuePair<uint, Skill>(RidleyMelee2.Id, RidleyMelee2),
 
                     new KeyValuePair<uint, Skill>(40, new Skill{
                             RecoveryFrames = 50,
@@ -5653,8 +5709,6 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(41, BoarWarriorMelee1PrimerSkill),
 
-                    new KeyValuePair<uint, Skill>(42, RidleyMeleeAirSkill1),
-
                     new KeyValuePair<uint, Skill>(43, SwordManMelee1PrimerSkillAir),
 
                     new KeyValuePair<uint, Skill>(44, FireSwordManMelee1PrimerSkillAir),
@@ -5663,11 +5717,11 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(BoarImpact.Id, BoarImpact),
 
-                    new KeyValuePair<uint, Skill>(47, WaterballGroundSkill1),
-                    new KeyValuePair<uint, Skill>(48, WaterballGroundSkill2),
-                    new KeyValuePair<uint, Skill>(49, ThunderBoltSkill),
+                    new KeyValuePair<uint, Skill>(WaterballGround1.Id, WaterballGround1),
+                    new KeyValuePair<uint, Skill>(WaterballGround2.Id, WaterballGround2),
+                    new KeyValuePair<uint, Skill>(ThunderBolt.Id, ThunderBolt),
 
-                    new KeyValuePair<uint, Skill>(HeatBeamAirSkill.Id, HeatBeamAirSkill),
+                    new KeyValuePair<uint, Skill>(HeatBeamAir.Id, HeatBeamAir),
 
                     new KeyValuePair<uint, Skill>(BasicDashing.Id, BasicDashing),
 
@@ -5760,9 +5814,9 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(61, RisingPurpleArrowSkill),
                     new KeyValuePair<uint, Skill>(62, PurpleArrowRainSkill),
-                    new KeyValuePair<uint, Skill>(63, RisingWaterballPair),
-                    new KeyValuePair<uint, Skill>(64, FallingWaterballPair),
-                    new KeyValuePair<uint, Skill>(65, GhostHorseSkill),
+                    new KeyValuePair<uint, Skill>(RisingWaterballPair.Id, RisingWaterballPair),
+                    new KeyValuePair<uint, Skill>(FallingWaterballPair.Id, FallingWaterballPair),
+                    new KeyValuePair<uint, Skill>(GhostHorseSkill.Id, GhostHorseSkill),
                     new KeyValuePair<uint, Skill>(MobileThunderBallPrimer.Id, MobileThunderBallPrimer),
                     new KeyValuePair<uint, Skill>(MobileThunderBallPrimerAir.Id, MobileThunderBallPrimerAir),
                     new KeyValuePair<uint, Skill>(HunterPistolWall.Id, HunterPistolWall),
@@ -6641,19 +6695,19 @@ namespace shared {
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     if (PATTERN_UP_B == patternId) {
-                                        return 63;
+                                        return RisingWaterballPair.Id;
                                     } else if (PATTERN_DOWN_B == patternId) {
-                                        return 64;
+                                        return FallingWaterballPair.Id;
                                     } else {
                                         return 36; // fallback
                                     }
                                 } else {
                                     if (PATTERN_UP_B == patternId) {
-                                        return 63;
+                                        return RisingWaterballPair.Id;
                                     } else if (PATTERN_DOWN_B == patternId) {
-                                        return 64;
+                                        return FallingWaterballPair.Id;
                                     } else {
-                                        return 47; // fallback
+                                        return WaterballGround1.Id; // fallback
 
                                     }
                                 }
@@ -7008,13 +7062,9 @@ namespace shared {
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     // A fallback to "InAirAtk2"
-                                    if (currCharacterDownsync.OmitGravity) {
-                                        return 42;
-                                    } else {    
-                                        return 37; 
-                                    }
+                                    return RidleyMeleeAir1.Id; 
                                 } else {
-                                    return 38;
+                                    return RidleyMelee1.Id;
                                 }
                             } else {
                                 if (currCharacterDownsync.InAir) {

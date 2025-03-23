@@ -272,7 +272,7 @@ namespace shared {
                             {
                                 new KeyValuePair<CharacterState, int>(CharacterState.Walking, 30)
                             }
-                        )
+                        ),
                     }),
 
                     new KeyValuePair<uint, CharacterConfig>(SPECIES_FIRESWORDMAN, new CharacterConfig {
@@ -573,9 +573,9 @@ namespace shared {
                         JumpingInitVelY = (int)(7.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 4,
                         VisionOffsetX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(3.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeX = (int)(124.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(90.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(96.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSearchIntervalPow2Minus1U = (1u << 3) - 1,
                         VisionSearchIntervalPow2Minus1 = (int)((1u << 3) - 1),
                         DefaultSizeX = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1139,7 +1139,7 @@ namespace shared {
                         VisionOffsetX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionOffsetY = (int)(-5.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeX = (int)(180.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(95.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(108.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSearchIntervalPow2Minus1U = (1u << 3) - 1,
                         VisionSearchIntervalPow2Minus1 = (int)((1u << 3) - 1),
                         DefaultSizeX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),

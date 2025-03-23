@@ -40,21 +40,25 @@ namespace shared {
             }
         }
 
-        public static (float, float) calcForwardDiffOfBoundaries(int xfac, int yfac, float aColliderLeft, float aColliderRight, float aColliderTop, float aColliderBottom, float bColliderLeft, float bColliderRight, float bColliderTop, float bColliderBottom) {
-            float dx = 0f, dy = 0f;
+        public static (float, float, float, float) calcForwardDiffOfBoundaries(int xfac, int yfac, float aColliderLeft, float aColliderRight, float aColliderTop, float aColliderBottom, float bColliderLeft, float bColliderRight, float bColliderTop, float bColliderBottom) {
+            float dx = 0f, dy = 0f, dxFar = 0, dyFar = 0;
             if (0 < xfac) {
-                dx = bColliderLeft - aColliderRight; 
+                dx = bColliderLeft - aColliderRight;
+                dxFar = bColliderRight - aColliderRight;
             } else if (0 > xfac) {
-                dx = bColliderRight - aColliderLeft; 
+                dx = bColliderRight - aColliderLeft;
+                dxFar = bColliderLeft - aColliderLeft;
             }
 
             if (0 < yfac) {
-                dy = bColliderBottom - aColliderTop; 
+                dy = bColliderBottom - aColliderTop;
+                dyFar = bColliderTop - aColliderTop;
             } else if (0 > yfac) {
-                dy = bColliderTop - aColliderBottom; 
+                dy = bColliderTop - aColliderBottom;
+                dyFar = bColliderBottom - aColliderBottom;
             }
 
-            return (dx, dy);
+            return (dx, dy, dxFar, dyFar);
         }
 
         public static (bool, float, float) calcPushbacks(float oldDx, float oldDy, ConvexPolygon a, ConvexPolygon b, bool prefersAOnBShapeTopEdges, bool isForCharacterPushback, ref SatResult overlapResult, ILoggerBridge logger, bool forceLogging = false) {
@@ -1197,7 +1201,68 @@ namespace shared {
             return (collisionSpaceX, -spaceOffsetY - spaceOffsetY + collisionSpaceY);
         }
 
-        // [WARNING] "continuousDx", "continuousDy" and "eps" are already scaled into [0, 1]
+        // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.
+        public static int[,] DIRECTION_DECODER = new int[,] {
+            {0, 0}, // 0
+            {0, +2}, // 1
+            {0, -2}, // 2
+            {+2, 0}, // 3
+            {-2, 0}, // 4
+            {+1, +1}, // 5
+            {-1, -1}, // 6
+            {+1, -1}, // 7
+            {-1, +1}, // 8
+        };
+
+        public static bool DecodeInput(ulong encodedInput, InputFrameDecoded holder) {
+            int encodedDirection = (int)(encodedInput & 15);
+            int btnALevel = (int)((encodedInput >> 4) & 1);
+            int btnBLevel = (int)((encodedInput >> 5) & 1);
+            int btnCLevel = (int)((encodedInput >> 6) & 1);
+            int btnDLevel = (int)((encodedInput >> 7) & 1);
+            int btnELevel = (int)((encodedInput >> 8) & 1);
+
+            holder.Dx = DIRECTION_DECODER[encodedDirection, 0];
+            holder.Dy = DIRECTION_DECODER[encodedDirection, 1];
+            holder.BtnALevel = btnALevel;
+            holder.BtnBLevel = btnBLevel;
+            holder.BtnCLevel = btnCLevel;
+            holder.BtnDLevel = btnDLevel;
+            holder.BtnELevel = btnELevel;
+            return true;
+        }
+
+        public static ulong EncodeInput(InputFrameDecoded ifd) {
+            return EncodeInput(ifd.Dx, ifd.Dy, ifd.BtnALevel, ifd.BtnBLevel, ifd.BtnCLevel, ifd.BtnDLevel, ifd.BtnELevel);
+        }
+
+        public static ulong EncodeInput(int dx, int dy, int btnALevel, int btnBLevel, int btnCLevel, int btnDLevel, int btnELevel) {
+            int encodedBtnALevel = (btnALevel << 4);
+            int encodedBtnBLevel = (btnBLevel << 5);
+            int encodedBtnCLevel = (btnCLevel << 6);
+            int encodedBtnDLevel = (btnDLevel << 7);
+            int encodedBtnELevel = (btnELevel << 8);
+            int discretizedDir = EncodeDirection(dx, dy);
+            return (ulong)(discretizedDir + encodedBtnALevel + encodedBtnBLevel + encodedBtnCLevel + encodedBtnDLevel + encodedBtnELevel);
+        }
+
+        public static int EncodeDirection(int dx, int dy) {
+            if (0 == dx && 0 == dy) return 0;
+            if (0 == dx) {  
+                if (0 < dy) return 1; // up
+                else return 2; // down
+            }   
+            if (0 < dx) {
+                if (0 == dy) return 3; // right
+                if (0 < dy) return 5;
+                else return 7;
+            }
+            // 0 > dx
+            if (0 == dy) return 4; // left
+            if (0 < dy) return 8;
+            else return 6;
+        }
+
         public static (int, int, int) DiscretizeDirection(float continuousDx, float continuousDy, float eps = 0.1f, bool mustHaveNonZeroX = false) {
             int dx = 0, dy = 0, encodedIdx = 0;
             float absContinuousDx = Math.Abs(continuousDx);
@@ -1301,7 +1366,7 @@ namespace shared {
             return (dx, dy, encodedIdx);
         }
 
-        private static void findHorizontallyClosestCharacterCollider(int rdfId, RoomDownsyncFrame currRenderFrame, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider visionCollider, Collider entityCollider, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out Collider? res1, out CharacterDownsync? res1Ch, out Collider? res2, out Bullet? res2Bl, out Collider? res3, out CharacterDownsync? res3Ch, out Collider? res4, out TrapColliderAttr? res4Tpc, out Collider? standingOnCollider, ILoggerBridge logger) {
+        private static void findHorizontallyClosestCharacterCollider(int rdfId, RoomDownsyncFrame currRenderFrame, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, bool isCharacterFlying, Collider visionCollider, Collider entityCollider, Collision collision, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, out Collider? res1, out CharacterDownsync? res1Ch, out Collider? res2, out Bullet? res2Bl, out Collider? res3, out CharacterDownsync? res3Ch, out Collider? res4, out TrapColliderAttr? res4Tpc, out Collider? standingOnCollider, ILoggerBridge logger) {
             res1 = null;
             res1Ch = null;
             res2 = null;
@@ -1325,14 +1390,14 @@ namespace shared {
             float minAbsColliderDxForMvBlocker = MAX_FLOAT32;
             float minAbsColliderDyForMvBlocker = MAX_FLOAT32;
 
-            ConvexPolygon aShape = visionCollider.Shape;
+            ConvexPolygon visionShape = visionCollider.Shape;
             while (true) {
                 var (ok3, bCollider) = collision.PopFirstContactedCollider();
                 if (false == ok3 || null == bCollider) {
                     break;
                 }
 
-                float aColliderLeft = entityCollider.X, aColliderRight = entityCollider.X+entityCollider.W, aColliderTop = entityCollider.Y+entityCollider.H, aColliderBottom = entityCollider.Y;
+                float entityColliderLeft = entityCollider.X, entityColliderRight = entityCollider.X+entityCollider.W, entityColliderTop = entityCollider.Y+entityCollider.H, entityColliderBottom = entityCollider.Y;
                 float bColliderLeft = bCollider.X, bColliderRight = bCollider.X+bCollider.W, bColliderTop = bCollider.Y+bCollider.H, bColliderBottom = bCollider.Y;
                 
                 switch (bCollider.Data) {
@@ -1350,7 +1415,7 @@ namespace shared {
                             if (TERMINATING_TRIGGER_ID != currCharacterDownsync.SubscribesToTriggerLocalId || Dimmed == v3.CharacterState || invinsibleSet.Contains(v3.CharacterState) || 0 < v3.FramesInvinsible) continue; // Target is invinsible, nothing can be done
 
                             ConvexPolygon bShape = bCollider.Shape;
-                            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            var (overlapped, _, _) = calcPushbacks(0, 0, visionShape, bShape, false, false, ref overlapResult, logger);
                             if (!overlapped && !overlapResult.BContainedInA) {
                                 continue;
                             }
@@ -1411,7 +1476,7 @@ namespace shared {
                             }
 
                             ConvexPolygon bShape = bCollider.Shape;
-                            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
+                            var (overlapped, _, _) = calcPushbacks(0, 0, visionShape, bShape, false, false, ref overlapResult, logger);
                             if (!overlapped && !overlapResult.BContainedInA) {
                                 continue;
                             }
@@ -1434,108 +1499,80 @@ namespace shared {
                         }
                         break;
                     case TrapColliderAttr v5:
-                        {
-                            bool isAnotherHardPushbackTrap = false;
-                            bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
-                            if (TERMINATING_TRAP_ID != v5.TrapLocalId) {
-                                var trap = currRenderFrame.TrapsArr[v5.TrapLocalId-1];
-                                isAnotherHardPushbackTrap = ((!v5.ProvidesSlipJump || !isCharacterFlying) && v5.ProvidesHardPushback && TrapState.Tdeactivated != trap.TrapState && !isVelAllowedByTrapCollider(v5, trap.VelX, trap.VelY));
-                            } else {
-                                isAnotherHardPushbackTrap = ((!v5.ProvidesSlipJump || !isCharacterFlying) && v5.ProvidesHardPushback);
-                            }
-
-                            if (!isAnotherHardPushbackTrap) continue;
-
-                            ConvexPolygon bShape = bCollider.Shape;
-                            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
-                            if (!overlapped) {
-                                continue;
-                            }
-
-                            bool bottomEpsMatch = (0 == overlapResult.OverlapX) && (bColliderTop < aColliderTop) && (bColliderTop < aColliderBottom + STANDING_COLLIDER_CHECK_EPS + CLAMPABLE_COLLISION_SPACE_MAG) && (bColliderTop + SNAP_INTO_PLATFORM_OVERLAP + CLAMPABLE_COLLISION_SPACE_MAG >= aColliderBottom + STANDING_COLLIDER_CHECK_EPS);
-                            bottomEpsMatch |= (0 != overlapResult.OverlapX && currCharacterDownsync.OnSlope); // [WARNING] The above condition doesn't work for slope
-                            bottomEpsMatch &= (0 > overlapResult.OverlapY);
-                            bool isStandingCandidate = !chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && (bColliderTop < aColliderTop && bColliderBottom < aColliderBottom) && bottomEpsMatch && (bColliderLeft + SNAP_INTO_PLATFORM_OVERLAP < aColliderRight && bColliderRight > aColliderLeft + SNAP_INTO_PLATFORM_OVERLAP);
-                            if (isStandingCandidate) {
-                                if (null == standingOnCollider) {
-                                    standingOnCollider = bCollider;
-                                } else {
-                                    if (0 < currCharacterDownsync.VelX && bColliderLeft >= standingOnCollider.X + standingOnCollider.W) {
-                                        standingOnCollider = bCollider;
-                                    } else if (0 > currCharacterDownsync.VelX && bColliderRight <= standingOnCollider.X) {
-                                        standingOnCollider = bCollider;
-                                    }
-                                }
-                            }
-
-                            var (colliderDx, colliderDy) = calcForwardDiffOfBoundaries(currCharacterDownsync.VelX, currCharacterDownsync.VelY, aColliderLeft, aColliderRight, aColliderTop, aColliderBottom, bColliderLeft, bColliderRight, bColliderTop, bColliderBottom);
-                            
-                            bool isAlongForwardMv = (0 < currCharacterDownsync.VelX * colliderDx) || (0 < currCharacterDownsync.VelY * colliderDy);
-
-                            var absColliderDx = Math.Abs(colliderDx);
-                            var absColliderDy = Math.Abs(colliderDy);
-
-                            if (absColliderDx > minAbsColliderDxForMvBlocker) {
-                                continue;
-                            }
-
-                            if (absColliderDx == minAbsColliderDyForMvBlocker && absColliderDy > minAbsColliderDyForMvBlocker) {
-                                continue;
-                            }
-                            overlapResult.cloneInto(ref primaryOverlapResult);
-                            minAbsColliderDxForMvBlocker = absColliderDx;
-                            minAbsColliderDyForMvBlocker = absColliderDy;
-                            res4 = bCollider;
-                            res4Tpc = v5;
+                        bool isAnotherHardPushbackTrap = false;
+                        if (TERMINATING_TRAP_ID != v5.TrapLocalId) {
+                            var trap = currRenderFrame.TrapsArr[v5.TrapLocalId-1];
+                            isAnotherHardPushbackTrap = ((!v5.ProvidesSlipJump || !isCharacterFlying) && v5.ProvidesHardPushback && TrapState.Tdeactivated != trap.TrapState && !isVelAllowedByTrapCollider(v5, trap.VelX, trap.VelY));
+                        } else {
+                            isAnotherHardPushbackTrap = ((!v5.ProvidesSlipJump || !isCharacterFlying) && v5.ProvidesHardPushback);
                         }
+
+                        if (!isAnotherHardPushbackTrap) {
+                            continue;
+                        }
+                        _updateStandingColliderAndMvBlockerCollider(rdfId, currCharacterDownsync, chConfig, entityCollider, visionShape, entityColliderTop, entityColliderBottom, entityColliderLeft, entityColliderRight, bCollider, bColliderTop, bColliderBottom, bColliderLeft, bColliderRight, v5, ref overlapResult, ref mvBlockerOverlapResult, ref minAbsColliderDxForMvBlocker, ref minAbsColliderDyForMvBlocker, ref res4, ref res4Tpc, ref standingOnCollider, logger);
                         break;
                     default:
-                        {
-                            ConvexPolygon bShape = bCollider.Shape;
-                            var (overlapped, _, _) = calcPushbacks(0, 0, aShape, bShape, false, false, ref overlapResult, logger);
-                            if (!overlapped) {
-                                continue;
-                            }
-
-                            bool bottomEpsMatch = (0 == overlapResult.OverlapX) && (bColliderTop < aColliderTop) && (bColliderTop < aColliderBottom + STANDING_COLLIDER_CHECK_EPS + CLAMPABLE_COLLISION_SPACE_MAG) && (bColliderTop + SNAP_INTO_PLATFORM_OVERLAP + CLAMPABLE_COLLISION_SPACE_MAG >= aColliderBottom + STANDING_COLLIDER_CHECK_EPS);
-                            bottomEpsMatch |= ((0 != overlapResult.OverlapX || 0 != overlapResult.SecondaryOverlapX) && currCharacterDownsync.OnSlope); // [WARNING] The above condition doesn't work for slope
-                            bottomEpsMatch &= (0 > overlapResult.OverlapY);
-                            bool isStandingCandidate = !chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && (bColliderBottom < aColliderBottom) && bottomEpsMatch && (bColliderLeft+SNAP_INTO_PLATFORM_OVERLAP < aColliderRight && bColliderRight > aColliderLeft+SNAP_INTO_PLATFORM_OVERLAP);
-                            if (isStandingCandidate) {
-                                if (null == standingOnCollider) {
-                                    standingOnCollider = bCollider;
-                                } else {
-                                    if (0 < currCharacterDownsync.VelX && bColliderLeft >= standingOnCollider.X+standingOnCollider.W) {
-                                        standingOnCollider = bCollider;
-                                    } else if (0 > currCharacterDownsync.VelX && bColliderRight <= standingOnCollider.X) {
-                                        standingOnCollider = bCollider;
-                                    }
-                                }
-                            }
-
-                            var (colliderDx, colliderDy) = calcForwardDiffOfBoundaries(currCharacterDownsync.VelX, currCharacterDownsync.VelY, aColliderLeft, aColliderRight, aColliderTop, aColliderBottom, bColliderLeft, bColliderRight, bColliderTop, bColliderBottom);
-                            
-                            bool isAlongForwardMv = (0 < currCharacterDownsync.VelX * colliderDx) || (0 < currCharacterDownsync.VelY * colliderDy);  
-                            
-                            var absColliderDx = Math.Abs(colliderDx);
-                            var absColliderDy = Math.Abs(colliderDy);
-
-                            if (absColliderDx > minAbsColliderDxForMvBlocker) {
-                                continue;
-                            }
-
-                            if (absColliderDx == minAbsColliderDyForMvBlocker && absColliderDy > minAbsColliderDyForMvBlocker) {
-                                continue;
-                            }
-                            overlapResult.cloneInto(ref primaryOverlapResult);
-                            minAbsColliderDxForMvBlocker = absColliderDx;
-                            minAbsColliderDyForMvBlocker = absColliderDy;
-                            res4 = bCollider;
-                            res4Tpc = null;
-                        }
+                        _updateStandingColliderAndMvBlockerCollider(rdfId, currCharacterDownsync, chConfig, entityCollider, visionShape, entityColliderTop, entityColliderBottom, entityColliderLeft, entityColliderRight, bCollider, bColliderTop, bColliderBottom, bColliderLeft, bColliderRight, null, ref overlapResult, ref mvBlockerOverlapResult, ref minAbsColliderDxForMvBlocker, ref minAbsColliderDyForMvBlocker, ref res4, ref res4Tpc, ref standingOnCollider, logger);
                         break;
                 }
             }
+        }
+
+        private static bool _updateStandingColliderAndMvBlockerCollider(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider entityCollider, ConvexPolygon visionShape, float entityColliderTop, float entityColliderBottom, float entityColliderLeft, float entityColliderRight, Collider bCollider, float bColliderTop, float bColliderBottom, float bColliderLeft, float bColliderRight, TrapColliderAttr? v5, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, ref float minAbsColliderDxForMvBlocker, ref float minAbsColliderDyForMvBlocker, ref Collider? res4, ref TrapColliderAttr? res4Tpc, ref Collider? standingOnCollider, ILoggerBridge logger) {
+            ConvexPolygon entityShape = entityCollider.Shape;
+            ConvexPolygon bShape = bCollider.Shape;
+            bool potentiallyStandingOnCollider = (!chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && (bColliderLeft + SNAP_INTO_PLATFORM_OVERLAP < entityColliderRight && bColliderRight > entityColliderLeft + SNAP_INTO_PLATFORM_OVERLAP));
+            // TODO: It's quite a waste to re-calculate "entityOverlapped" as we already have "calcHardPushbacksForCharacter", should find a way to reuse the results.
+            if (potentiallyStandingOnCollider) {
+                var (entityOverlapped, _, _) = calcPushbacks(0, 0, entityShape, bShape, false, false, ref overlapResult, logger);
+                bool isStandingCandidate = (entityOverlapped && 0 > overlapResult.OverlapY);
+                if (isStandingCandidate) {
+                    if (null == standingOnCollider) {
+                        standingOnCollider = bCollider;
+                        return true;
+                    } else {
+                        // Handle temptation to step onto a "next standing collider".
+                        if (0 < currCharacterDownsync.VelX && bColliderLeft >= standingOnCollider.X + standingOnCollider.W) {
+                            standingOnCollider = bCollider;
+                            return true;
+                        } else if (0 > currCharacterDownsync.VelX && bColliderRight <= standingOnCollider.X) {
+                            standingOnCollider = bCollider;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            var (overlapped, _, _) = calcPushbacks(0, 0, visionShape, bShape, false, false, ref overlapResult, logger);
+            if (!overlapped) {
+                return false;
+            }
+
+            int effDx = (0 == currCharacterDownsync.VelX ? currCharacterDownsync.DirX : currCharacterDownsync.VelX), effDy = (0 == currCharacterDownsync.VelY ? currCharacterDownsync.DirY : currCharacterDownsync.VelY);
+            var (colliderDx, colliderDy, dxFar, dyFar) = calcForwardDiffOfBoundaries(effDx, effDy, entityColliderLeft, entityColliderRight, entityColliderTop, entityColliderBottom, bColliderLeft, bColliderRight, bColliderTop, bColliderBottom);
+            
+            bool isAlongForwardMv = (0 < effDx * dxFar) || (0 < effDy * dyFar);
+            if (!isAlongForwardMv) {
+                return false;
+            }
+           
+            var absColliderDx = Math.Abs(colliderDx);
+            var absColliderDy = Math.Abs(colliderDy);
+
+            if (absColliderDx > minAbsColliderDxForMvBlocker) {
+                return false;
+            }
+
+            if (absColliderDx == minAbsColliderDyForMvBlocker && absColliderDy > minAbsColliderDyForMvBlocker) {
+                return false;
+            }
+            overlapResult.cloneInto(ref mvBlockerOverlapResult);
+            minAbsColliderDxForMvBlocker = absColliderDx;
+            minAbsColliderDyForMvBlocker = absColliderDy;
+            res4 = bCollider;
+            res4Tpc = v5;
+            return true;
         }
 
         private static void findHorizontallyClosestCharacterColliderForBlWithVision(Bullet blWithVision, bool isAllyTargetingBl, Collider aCollider, Collision collision, ref SatResult overlapResult, out Collider? res1, out CharacterDownsync? res1Ch, out Collider? res3, out CharacterDownsync? res3Ch, ILoggerBridge logger) {

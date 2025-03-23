@@ -241,12 +241,14 @@ message CharacterDownsync {
     int32 bulletTeamId = 70;
     int32 chCollisionTeamId = 71;
 
-    int32 btnEHoldingRdfCount = 72;
-    int32 parryPrepRdfCntDown = 73;
-    int32 mpRegenRdfCountdown = 74;
+    int32 btnCHoldingRdfCount = 72;
+    int32 btnDHoldingRdfCount = 73;
+    int32 btnEHoldingRdfCount = 74;
+    int32 parryPrepRdfCntDown = 75;
+    int32 mpRegenRdfCountdown = 76;
 
-    int32 flyingRdfCountdown = 75;
-    int32 lockingOnJoinIndex = 76;
+    int32 flyingRdfCountdown = 77;
+    int32 lockingOnJoinIndex = 78;
 
     repeated Buff buffList = 90; 
     repeated Debuff debuffList = 91; 

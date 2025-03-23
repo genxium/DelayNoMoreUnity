@@ -29,10 +29,10 @@ public class TrapAnimationController : MonoBehaviour {
         lazyInit();
     }
 
-    public void updateAnim(TrapState newState, Trap currTrap, int frameIdxInAnim, int immediateDirX) {
+    public void updateAnim(TrapState newState, Trap currTrap, TrapConfig trapConfig, int frameIdxInAnim, int immediateDirX) {
         lazyInit();
 
-        if (0 != currTrap.SpinSin && 0 != currTrap.SpinCos) {
+        if (trapConfig.IsRotary) {
             // [WARNING] The anchor configured in SpriteSheet must match that of currTrap.Config.SpinAnchor!
             spr.transform.localRotation = Quaternion.AngleAxis(math.atan2(currTrap.SpinSin, currTrap.SpinCos) * Mathf.Rad2Deg, Vector3.forward);
         }

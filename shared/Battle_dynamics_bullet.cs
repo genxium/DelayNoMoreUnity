@@ -386,7 +386,7 @@ namespace shared {
                     int xfac = (0 < offenderNextFrame.DirX ? 1 : -1);
                     var existingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
                     bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
-                    if (addNewBulletToNextFrame(src.OriginatedRenderFrameId, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, src.ActiveSkillHit + 1, src.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, (srcConfig.BeamCollision ? src : null), (srcConfig.BeamCollision ? srcConfig : null), src, null, src.OffenderJoinIndex, src.TeamId, logger)) {
+                    if (addNewBulletToNextFrame(src.OriginatedRenderFrameId, currRenderFrame.Id, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, src.ActiveSkillHit + 1, src.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, (srcConfig.BeamCollision ? src : null), (srcConfig.BeamCollision ? srcConfig : null), src, null, src.OffenderJoinIndex, src.TeamId, logger)) {
                         var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
                         offenderNextFrame.ActiveSkillHit = targetNewBullet.ActiveSkillHit;
                         var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit);
@@ -507,7 +507,7 @@ namespace shared {
             var existingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
             bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
 
-            bool res = addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, bulletNextFrame, targetChNextFrame, bulletNextFrame.OffenderJoinIndex, bulletNextFrame.TeamId, logger); 
+            bool res = addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame.Id, offender, offenderNextFrame, characters[offender.SpeciesId], isParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, bulletNextFrame, targetChNextFrame, bulletNextFrame.OffenderJoinIndex, bulletNextFrame.TeamId, logger); 
             if (!res) return false;
             var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
             var (_, newBlConfig) = FindBulletConfig(targetNewBullet.SkillId, targetNewBullet.ActiveSkillHit);
@@ -831,7 +831,7 @@ namespace shared {
                             }
 
                             if (0 != effDamage) {
-                                addNewBulletExplosionToNextFrame(currRenderFrame.Id, currRenderFrame, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, victimNextFrame, effDamage, victimChConfig.Ifc, logger);
+                                addNewBulletExplosionToNextFrame(currRenderFrame.Id, currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, victimNextFrame, effDamage, victimChConfig.Ifc, logger);
                                 everAddedExplosion = true;
                                 /*
                                    if (2 == victimNextFrame.BulletTeamId && SPECIES_RIDERGUARD_RED == victimNextFrame.SpeciesId) {
@@ -1162,9 +1162,9 @@ namespace shared {
                     if (!bulletConfig.RemainsUponHit || explodedOnHardPushback || explodedOnAnotherHarderBullet) {
                         if (BulletState.Exploding != bulletNextFrame.BlState || explodedOnHardPushback || explodedOnAnotherHarderBullet) {
                             if (NO_VFX_ID != bulletConfig.InplaceVanishExplosionSpeciesId) {
-                                addNewBulletVanishingExplosionToNextFrame(currRenderFrame.Id, currRenderFrame, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, anotherHarderBulletIfc, logger);
+                                addNewBulletVanishingExplosionToNextFrame(currRenderFrame.Id, currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, anotherHarderBulletIfc, logger);
                             } else if ((explodedOnHardPushback || explodedOnAnotherHarderBullet) && !everAddedExplosion) {
-                                addNewBulletExplosionToNextFrame(currRenderFrame.Id, currRenderFrame, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, null, 0, anotherHarderBulletIfc, logger);
+                                addNewBulletExplosionToNextFrame(currRenderFrame.Id, currRenderFrame.Id, bulletConfig, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, bulletNextFrame, null, 0, anotherHarderBulletIfc, logger);
                             }
                             bulletNextFrame.BlState = BulletState.Exploding;
                             bulletNextFrame.FramesInBlState = bulletConfig.ExplosionFrames + 1;
@@ -1190,7 +1190,7 @@ namespace shared {
                     if (null != offender && null != offenderNextFrame && null != skillConfig) {
                         var offenderExistingDebuff = offender.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
                         bool offenderIsParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != offenderExistingDebuff.SpeciesId && 0 < offenderExistingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[offenderExistingDebuff.SpeciesId].Type);
-                        if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, offender, offenderNextFrame, characters[offender.SpeciesId], offenderIsParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, (bulletConfig.BeamCollision ? bulletNextFrame : null), null, bulletNextFrame.OffenderJoinIndex, bulletNextFrame.TeamId, logger)) {
+                        if (addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame.Id, offender, offenderNextFrame, characters[offender.SpeciesId], offenderIsParalyzed, xfac, skillConfig, nextRenderFrameBullets, bulletNextFrame.ActiveSkillHit + 1, bulletNextFrame.SkillId, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletNextFrame, bulletConfig, (bulletConfig.BeamCollision ? bulletNextFrame : null), null, bulletNextFrame.OffenderJoinIndex, bulletNextFrame.TeamId, logger)) {
 
                             var targetNewBullet = nextRenderFrameBullets[bulletCnt - 1];
                             /*
@@ -1266,13 +1266,13 @@ namespace shared {
             }
         }
 
-        protected static bool addNewBulletExplosionToNextFrame(int originatedRdfId, RoomDownsyncFrame currRdf, BulletConfig bulletConfig, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, Bullet referenceBullet, CharacterDownsync? referenceVictim, int damageDealed, IfaceCat explodedOnIfc, ILoggerBridge logger) {
+        protected static bool addNewBulletExplosionToNextFrame(int originatedRdfId, int currRdfId, BulletConfig bulletConfig, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, Bullet referenceBullet, CharacterDownsync? referenceVictim, int damageDealed, IfaceCat explodedOnIfc, ILoggerBridge logger) {
             //logger.LogInfo($"At rdfId={currRdf.Id} adding bullet explosion for referenceBullet.Id={referenceBullet.BulletLocalId}");
             if (BulletType.GroundWave == bulletConfig.BType && NO_VFX_ID == bulletConfig.ExplosionSpeciesId && NO_VFX_ID == bulletConfig.ExplosionVfxSpeciesId) {
                 return false;
             }
             if (bulletCnt >= nextRenderFrameBullets.Count) {
-                logger.LogWarn("bullet explosion overwhelming#1, currRdf=" + stringifyRdf(currRdf));
+                logger.LogWarn("bullet explosion overwhelming#1, currRdfId=" + currRdfId);
                 return false;
             }
             int newOriginatedVirtualX = referenceBullet.OriginatedVirtualGridX;
@@ -1314,12 +1314,12 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewBulletVanishingExplosionToNextFrame(int originatedRdfId, RoomDownsyncFrame currRdf, BulletConfig bulletConfig, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, Bullet referenceBullet, IfaceCat explodedOnIfc, ILoggerBridge logger) {
+        protected static bool addNewBulletVanishingExplosionToNextFrame(int originatedRdfId, int currRdfId, BulletConfig bulletConfig, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, Bullet referenceBullet, IfaceCat explodedOnIfc, ILoggerBridge logger) {
             if (NO_VFX_ID == bulletConfig.InplaceVanishExplosionSpeciesId) {
                 return false;
             }
             if (bulletCnt >= nextRenderFrameBullets.Count) {
-                logger.LogWarn("bullet vanishing overwhelming#1, currRdf=" + stringifyRdf(currRdf));
+                logger.LogWarn("bullet vanishing overwhelming#1, currRdfId=" + currRdfId);
                 return false;
             }
             int newOriginatedVirtualX = referenceBullet.OriginatedVirtualGridX;
@@ -1355,10 +1355,10 @@ namespace shared {
             return true;
         }
 
-        protected static bool addNewBulletToNextFrame(int originatedRdfId, RoomDownsyncFrame currRdf, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, bool isParalyzed, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, uint activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, BulletConfig? referencePrevHitBulletConfig, Bullet? referencePrevEmissionBullet, CharacterDownsync? targetChNextFrame, int offenderJoinIndex, int bulletTeamId, ILoggerBridge logger) {
+        protected static bool addNewBulletToNextFrame(int originatedRdfId, int currRdfId, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, CharacterConfig chConfig, bool isParalyzed, int xfac, Skill skillConfig, RepeatedField<Bullet> nextRenderFrameBullets, int activeSkillHit, uint activeSkillId, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool hasLockVel, Bullet? referencePrevHitBullet, BulletConfig? referencePrevHitBulletConfig, Bullet? referencePrevEmissionBullet, CharacterDownsync? targetChNextFrame, int offenderJoinIndex, int bulletTeamId, ILoggerBridge logger) {
             if (NO_SKILL_HIT == activeSkillHit || activeSkillHit > skillConfig.Hits.Count) return false;
             if (bulletCnt >= nextRenderFrameBullets.Count) {
-                logger.LogWarn("bullet overwhelming#1, currRdf=" + stringifyRdf(currRdf));
+                logger.LogWarn("bullet overwhelming#1, currRdfId=" + currRdfId);
                 return false;
             }
             var bulletConfig = skillConfig.Hits[activeSkillHit-1];
@@ -1485,7 +1485,7 @@ namespace shared {
             if (bulletCnt < nextRenderFrameBullets.Count) nextRenderFrameBullets[bulletCnt].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
 
             if (0 < bulletConfig.SimultaneousMultiHitCnt && activeSkillHit < skillConfig.Hits.Count) {
-                return addNewBulletToNextFrame(originatedRdfId, currRdf, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit+1, activeSkillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, referencePrevHitBullet, referencePrevHitBulletConfig, referencePrevEmissionBullet, targetChNextFrame, offenderJoinIndex, bulletTeamId, logger);
+                return addNewBulletToNextFrame(originatedRdfId, currRdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit+1, activeSkillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, referencePrevHitBullet, referencePrevHitBulletConfig, referencePrevEmissionBullet, targetChNextFrame, offenderJoinIndex, bulletTeamId, logger);
             } else {
                 return true;
             }
@@ -1664,10 +1664,13 @@ namespace shared {
                 }
             } 
             if (!bulletInFrontOfVictim) {
-                if (0 < victimNextFrame.DirX) {
-                    victimNextFrame.CachedCueCmd = 4;
-                } else if (0 > victimNextFrame.DirX) {
-                    victimNextFrame.CachedCueCmd = 3;
+                victimNextFrame.CachedCueCmd = EncodeInput(-victimNextFrame.DirX, -victimNextFrame.DirY, 0, 0, 0, 0, 0);
+                switch (victimNextFrame.GoalAsNpc) {
+                    case NpcGoal.Nidle:
+                    case NpcGoal.NidleIfGoHuntingThenPatrol:
+                        // To avoid "CachedCueCmd" got overwritten
+                        victimNextFrame.GoalAsNpc = NpcGoal.NhuntThenIdle;
+                        break;
                 }
             }
             if (successfulDef1) {
@@ -1689,6 +1692,7 @@ namespace shared {
                     // [WARNING] "isSkillAutoDef1" is rare and relatively more difficult to handle broken, so skipping it for now.
                     victimNextFrame.CharacterState = Def1Broken;
                     victimNextFrame.FramesToRecover = victimChConfig.DefaultDef1BrokenFramesToRecover;
+                    victimNextFrame.FramesInvinsible >>= 1;
                     victimNextFrame.RemainingDef1Quota = 0;
                 }
             }

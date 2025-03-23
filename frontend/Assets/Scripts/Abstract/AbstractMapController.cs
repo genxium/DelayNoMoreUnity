@@ -305,6 +305,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         Array.Fill<ulong>(prefabbedInputList, 0);
         for (int k = 0; k < roomCapacity; ++k) {
+            /**
+            TODO: If "inArenaPracticeMode", call "deriveNpcOpPattern(...)" here for other players! 
+            */
             if (null != existingInputFrame) {
                 // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here, we just have to assign "prefabbedInputList[(joinIndex-1)]" specifically and copy all others
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
@@ -785,7 +788,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var dynamicTrapObj = dynamicTrapGameObjs[kDynamicTrap];
             // [WARNING] When placing a trap tile object in Tiled editor, the anchor is ALWAYS (0.5, 0.5) -- and in our "Virtual Grid Coordinates" we also use (0.5, 0.5) anchor ubiquitously. Therefore to achieve a "what you see is what you get effect", the compensation is done here, i.e. only at rendering.
             var trapConfig = trapConfigs[currTrap.ConfigFromTiled.SpeciesId];
-            if (0 == trapConfig.SpinAnchorX && 0 == trapConfig.SpinAnchorY) {
+            if (!trapConfig.IsRotary) {
                 newPosHolder.Set(wx, wy, dynamicTrapObj.transform.position.z);
             } else {
                 var (anchorCompensateWx, anchorCompensateWy) = (trapConfig.SpinAnchorX - 0.5f * currTrap.ConfigFromTiled.BoxCw, trapConfig.SpinAnchorY - 0.5f * currTrap.ConfigFromTiled.BoxCh);
@@ -794,7 +797,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             dynamicTrapObj.transform.position = newPosHolder;
             var animCtrl = dynamicTrapObj.GetComponent<TrapAnimationController>();
-            animCtrl.updateAnim(currTrap.TrapState, currTrap, currTrap.FramesInTrapState, currTrap.DirX);
+            animCtrl.updateAnim(currTrap.TrapState, currTrap, trapConfig, currTrap.FramesInTrapState, currTrap.DirX);
             kDynamicTrap++;
         }
 
@@ -2207,6 +2210,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
                             var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                             var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
+                            float spinCos = 1f, spinSin = 0f;
+                            float zAngleDegs = trapChild.localEulerAngles.z;
+                            spinCos = (float)Math.Cos(Mathf.Deg2Rad*zAngleDegs);
+                            spinSin = (float)Math.Sin(Mathf.Deg2Rad*zAngleDegs);
                             Trap trap = new Trap {
                                 TrapLocalId = trapLocalId,
                                 ConfigFromTiled = trapConfigFromTiled,
@@ -2216,6 +2223,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 DirY = dirYVal,
                                 VelX = trapVelX,
                                 VelY = trapVelY,
+                                SpinCos = spinCos,
+                                SpinSin = spinSin,
                                 IsCompletelyStatic = false,
                             };
                             if (null != tileObj.m_SuperTile && null != tileObj.m_SuperTile.m_CollisionObjects) {
@@ -2736,8 +2745,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             
             if (0 != trapConfig.AngularFrameVelCos || 0 != trapConfig.AngularFrameVelSin) {
-                trap.SpinCos = 1;
-                trap.SpinSin = 0;
                 if (!trap.ConfigFromTiled.InitNoAngularVel) {
                     trap.AngularFrameVelCos = trapConfig.AngularFrameVelCos;
                     trap.AngularFrameVelSin = trapConfig.AngularFrameVelSin;

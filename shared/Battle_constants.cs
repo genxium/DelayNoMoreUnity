@@ -307,19 +307,6 @@ namespace shared {
         public static int FRONTEND_WS_RECV_BYTELENGTH = 8196; // Expirically enough and not too big to have a graphic smoothness impact when receiving
         public static int BACKEND_WS_RECV_BYTELENGTH = (FRONTEND_WS_RECV_BYTELENGTH + (FRONTEND_WS_RECV_BYTELENGTH >> 1)); // Slightly larger than FRONTEND_WS_RECV_BYTELENGTH because it has to receive some initial collider information
 
-        // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.
-        public static int[,] DIRECTION_DECODER = new int[,] {
-            {0, 0}, // 0
-            {0, +2}, // 1
-            {0, -2}, // 2
-            {+2, 0}, // 3
-            {-2, 0}, // 4
-            {+1, +1}, // 5
-            {-1, -1}, // 6
-            {+1, -1}, // 7
-            {-1, +1}, // 8
-        };
-
         public static HashSet<CharacterState> proactiveJumpingSet = new HashSet<CharacterState>() {
             InAirIdle1ByJump,
             InAirIdle1ByWallJump,
@@ -392,27 +379,6 @@ namespace shared {
             Dimmed, 
             TransformingInto,
             Awaking
-        };
-
-        public static HashSet<CharacterState> btnBChargeableSet = new HashSet<CharacterState>() {
-            Idle1,
-            Walking,
-            BackWalking,
-            WalkStopping,
-            Dashing,
-            BackDashing,
-            Sliding,
-            GroundDodged,
-            InAirIdle1NoJump,
-            InAirIdle1ByJump,
-            InAirIdle1ByWallJump,
-            InAirIdle2ByJump,
-            InAirWalking,
-            InAirWalkStopping,
-            OnWallIdle1,
-            CrouchIdle1,
-            GetUp1,
-            Atk7Charging,
         };
 
         public static HashSet<CharacterState> shrinkedSizeSet = new HashSet<CharacterState>() {

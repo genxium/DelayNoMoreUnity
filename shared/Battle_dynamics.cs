@@ -27,7 +27,7 @@ namespace shared {
                 chdNextFrame.VelX = 0;
             }
 
-            resetJumpStartupOrHolding(chdNextFrame, true);
+            resetJumpStartupOrHolding(chdNextFrame, false);
         }
 
         public static bool ShouldGenerateInputFrameUpsync(int renderFrameId) {
@@ -65,24 +65,6 @@ namespace shared {
             return ((inputFrameId << INPUT_SCALE_FRAMES) + INPUT_DELAY_FRAMES + (1 << INPUT_SCALE_FRAMES) - 1);
         }
         // "renderFrameId" <-> "to use inputFrameId" with fixed "(standard) INPUT_DELAY_FRAMES" ends
-
-        public static bool DecodeInput(ulong encodedInput, InputFrameDecoded holder) {
-            int encodedDirection = (int)(encodedInput & 15);
-            int btnALevel = (int)((encodedInput >> 4) & 1);
-            int btnBLevel = (int)((encodedInput >> 5) & 1);
-            int btnCLevel = (int)((encodedInput >> 6) & 1);
-            int btnDLevel = (int)((encodedInput >> 7) & 1);
-            int btnELevel = (int)((encodedInput >> 8) & 1);
-
-            holder.Dx = DIRECTION_DECODER[encodedDirection, 0];
-            holder.Dy = DIRECTION_DECODER[encodedDirection, 1];
-            holder.BtnALevel = btnALevel;
-            holder.BtnBLevel = btnBLevel;
-            holder.BtnCLevel = btnCLevel;
-            holder.BtnDLevel = btnDLevel;
-            holder.BtnELevel = btnELevel;
-            return true;
-        }
 
         public static bool EqualInputLists(RepeatedField<ulong> lhs, RepeatedField<ulong> rhs) {
             if (null == lhs || null == rhs) return false;
@@ -181,38 +163,7 @@ namespace shared {
             }
         }
 
-        private static (int, bool, bool, int, int, int) _derivePlayerOpPattern(CharacterDownsync currCharacterDownsync, RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, bool currEffInAir, bool notDashing, ILoggerBridge logger) {
-            // returns (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy)
-            int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrame.Id);
-            int delayedInputFrameIdForPrevRdf = ConvertToDelayedInputFrameId(currRenderFrame.Id - 1);
-
-            if (0 >= delayedInputFrameId) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
-            }
-
-            if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
-            }
-
-            bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
-            if (interrupted) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
-            }
-
-            var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
-            if (!ok || null == delayedInputFrameDownsync) {
-                throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null!", delayedInputFrameId));
-            }
-            var delayedInputList = delayedInputFrameDownsync.InputList;
-
-            RepeatedField<ulong>? delayedInputListForPrevRdf = null;
-            if (0 < delayedInputFrameIdForPrevRdf) {
-                var (_, delayedInputFrameDownsyncForPrevRdf) = inputBuffer.GetByFrameId(delayedInputFrameIdForPrevRdf);
-                if (null != delayedInputFrameDownsyncForPrevRdf) {
-                    delayedInputListForPrevRdf = delayedInputFrameDownsyncForPrevRdf.InputList;
-                }
-            }
-
+        private static (int, bool, bool, int, int, int) _deriveCharacterOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, InputFrameDecoded decodedInputHolder, CharacterConfig chConfig, bool currEffInAir, bool notDashing, ILoggerBridge logger) {
             bool jumpedOrNot = false;
             bool slipJumpedOrNot = false;
             var jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt;
@@ -221,15 +172,7 @@ namespace shared {
             } else {        
                 jumpHoldingRdfCnt = ((!currCharacterDownsync.OmitGravity && JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt) ? JUMP_HOLDING_RDF_CNT_THRESHOLD_1 : 0);
             }
-            int joinIndex = currCharacterDownsync.JoinIndex;
-
-            DecodeInput(delayedInputList[joinIndex - 1], decodedInputHolder);
-
             int effDx = 0, effDy = 0;
-
-            if (null != delayedInputListForPrevRdf) {
-                DecodeInput(delayedInputListForPrevRdf[joinIndex - 1], prevDecodedInputHolder);
-            }
 
             // Jumping is partially allowed within "CapturedByInertia", but moving is only allowed when "0 == FramesToRecover" (constrained later in "Step")
             if (0 >= currCharacterDownsync.FramesToRecover) {
@@ -249,20 +192,20 @@ namespace shared {
             int patternId = PATTERN_ID_NO_OP;
             int effFrontOrBack = (decodedInputHolder.Dx*currCharacterDownsync.DirX); // [WARNING] Deliberately using "decodedInputHolder.Dx" instead of "effDx (which could be 0 in block stun)" here!
             var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia)) || !notDashing;
-            if (decodedInputHolder.BtnALevel > prevDecodedInputHolder.BtnALevel) {
-                 if (canJumpWithinInertia) {
+            if (0 < decodedInputHolder.BtnALevel) {
+                if (0 >= currCharacterDownsync.JumpHoldingRdfCnt && canJumpWithinInertia) {
                     if ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (currCharacterDownsync.InAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && (0 > decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
                         slipJumpedOrNot = true;
+                        jumpHoldingRdfCnt = 0;
                     } else if ((!currEffInAir || 0 < currCharacterDownsync.RemainingAirJumpQuota) && (!isCrouching(currCharacterDownsync.CharacterState, chConfig) || !notDashing)) {
                         jumpedOrNot = true;
+                        jumpHoldingRdfCnt = 1;
                     } else if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                         jumpedOrNot = true;
+                        jumpHoldingRdfCnt = 1;
                     }
-                }
-            } else if (decodedInputHolder.BtnALevel == prevDecodedInputHolder.BtnALevel && 0 < decodedInputHolder.BtnALevel) {
-                //logger.LogInfo("@currRdfId=" + currRenderFrame.Id + ", about to hold jumping at jumpHoldingRdfCnt=" + jumpHoldingRdfCnt + ", while currCharacterDownsync.ChState=" + currCharacterDownsync.CharacterState + ", currCharacterDownsync.JumpHoldingRdfCnt = " + currCharacterDownsync.JumpHoldingRdfCnt);
-                if (0 < currCharacterDownsync.JumpHoldingRdfCnt && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
-                    // [WARNING] Only proactive jumping support jump holding.
+                } else {
+                    //logger.LogInfo("@currRdfId=" + currRenderFrame.Id + ", about to hold jumping at jumpHoldingRdfCnt=" + jumpHoldingRdfCnt + ", while currCharacterDownsync.ChState=" + currCharacterDownsync.CharacterState + ", currCharacterDownsync.JumpHoldingRdfCnt = " + currCharacterDownsync.JumpHoldingRdfCnt);
                     jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt+1;
                     if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= jumpHoldingRdfCnt) {
                         jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_2;
@@ -270,11 +213,13 @@ namespace shared {
                         jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1;
                     }
                 }
+            } else {
+                jumpHoldingRdfCnt = 0;
             }
-                
+
             if (PATTERN_ID_NO_OP == patternId) {
                 if (0 < decodedInputHolder.BtnBLevel) {
-                    if (decodedInputHolder.BtnBLevel > prevDecodedInputHolder.BtnBLevel) {
+                    if (0 >= currCharacterDownsync.BtnBHoldingRdfCount) {
                         if (0 < decodedInputHolder.BtnCLevel) {
                             patternId = PATTERN_INVENTORY_SLOT_BC;
                         } else if (0 > decodedInputHolder.Dy) {
@@ -287,14 +232,17 @@ namespace shared {
                     } else {
                         patternId = PATTERN_HOLD_B;
                     }
-                } else if (decodedInputHolder.BtnBLevel < prevDecodedInputHolder.BtnBLevel && BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.BtnBHoldingRdfCount) {
-                    patternId = PATTERN_RELEASED_B;
+                } else {
+                    // 0 >= decodedInputHolder.BtnBLevel
+                    if (BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.BtnBHoldingRdfCount) {
+                        patternId = PATTERN_RELEASED_B;
+                    }
                 }
             }
 
             if (PATTERN_HOLD_B == patternId || PATTERN_ID_NO_OP == patternId) {
                 if (0 < decodedInputHolder.BtnELevel && (chConfig.DashingEnabled || chConfig.SlidingEnabled)) {
-                    if (decodedInputHolder.BtnELevel > prevDecodedInputHolder.BtnELevel) {
+                    if (0 >= currCharacterDownsync.BtnEHoldingRdfCount) {
                         if (notDashing) {
                             if (0 < effFrontOrBack) {
                                 patternId = (PATTERN_HOLD_B == patternId ? PATTERN_FRONT_E_HOLD_B : PATTERN_FRONT_E);
@@ -316,17 +264,44 @@ namespace shared {
             }
 
             if (PATTERN_ID_NO_OP == patternId) {
-                if (decodedInputHolder.BtnCLevel > prevDecodedInputHolder.BtnCLevel) {
+                if (0 < decodedInputHolder.BtnCLevel && 0 >= currCharacterDownsync.BtnCHoldingRdfCount) {
                     patternId = PATTERN_INVENTORY_SLOT_C;
                     if (0 < decodedInputHolder.BtnBLevel) {
                         patternId = PATTERN_INVENTORY_SLOT_BC;
                     }
-                } else if (decodedInputHolder.BtnDLevel > prevDecodedInputHolder.BtnDLevel) {
+                } else if (0 < decodedInputHolder.BtnDLevel && 0 >= currCharacterDownsync.BtnDHoldingRdfCount) {
                     patternId = PATTERN_INVENTORY_SLOT_D;
                 }
             }
 
             return (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy);
+        }
+
+        private static (int, bool, bool, int, int, int) _derivePlayerOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, bool currEffInAir, bool notDashing, ILoggerBridge logger) {
+            // returns (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy)
+            int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
+
+            if (0 >= delayedInputFrameId) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
+            }
+
+            if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
+            }
+
+            bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
+            if (interrupted) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
+            }
+
+            var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
+            if (!ok || null == delayedInputFrameDownsync) {
+                throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null!", delayedInputFrameId));
+            }
+            var delayedInputList = delayedInputFrameDownsync.InputList;
+            DecodeInput(delayedInputList[currCharacterDownsync.JoinIndex - 1], decodedInputHolder);
+
+            return _deriveCharacterOpPattern(rdfId, currCharacterDownsync, decodedInputHolder, chConfig, currEffInAir, notDashing, logger);
         }
 
         public static bool isTriggerClickableByMovement(Trigger trigger, TriggerConfigFromTiled configFromTiled, CharacterDownsync ch, int roomCapacity) {
@@ -349,7 +324,7 @@ namespace shared {
             return true;
         }
 
-        private static bool _useSkill(int effDx, int effDy, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RoomDownsyncFrame currRenderFrame, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed, uint slotLockedSkillId, ref bool notEnoughMp, bool isParalyzed, ILoggerBridge logger) {
+        private static bool _useSkill(int rdfId, int effDx, int effDy, int patternId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, ref int bulletLocalIdCounter, ref int bulletCnt, RepeatedField<Bullet> nextRenderFrameBullets, bool slotUsed, uint slotLockedSkillId, ref bool notEnoughMp, bool isParalyzed, ILoggerBridge logger) {
             if (PATTERN_ID_NO_OP == patternId || PATTERN_ID_UNABLE_TO_OP == patternId) {
                 return false;
             }
@@ -386,7 +361,7 @@ namespace shared {
             int activeSkillHit = 1;
             var pivotBulletConfig = skillConfig.Hits[activeSkillHit-1];
             for (int i = 0; i < pivotBulletConfig.SimultaneousMultiHitCnt + 1; i++) {
-                if (!addNewBulletToNextFrame(currRenderFrame.Id, currRenderFrame, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, null, null, null, currCharacterDownsync.JoinIndex, currCharacterDownsync.BulletTeamId, logger)) break;
+                if (!addNewBulletToNextFrame(rdfId, rdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, xfac, skillConfig, nextRenderFrameBullets, activeSkillHit, skillId, ref bulletLocalIdCounter, ref bulletCnt, ref hasLockVel, null, null, null, null, currCharacterDownsync.JoinIndex, currCharacterDownsync.BulletTeamId, logger)) break;
                 thatCharacterInNextFrame.ActiveSkillHit = activeSkillHit;
                 activeSkillHit++;
             }
@@ -606,89 +581,144 @@ namespace shared {
             return (chd.InAir || (inAirSet.Contains(chd.CharacterState) && notDashing));
         }
         
-        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, int selfPlayerJoinIndex, ref bool selfNotEnoughMp, ILoggerBridge logger) {
+        private static void _processSingleCharacterInput(int rdfId, int patternId, bool jumpedOrNot, bool slipJumpedOrNot, int jumpHoldingRdfCnt, int effDx, int effDy, bool slowDownToAvoidOverlap, CharacterDownsync currCharacterDownsync, bool currEffInAir, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, bool shouldIgnoreInertia, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, int selfPlayerJoinIndex, ref bool selfNotEnoughMp, ILoggerBridge logger) {
+            // Prioritize use of inventory slot over skills
+            var (slotUsed, slotLockedSkillId, dodgedInBlockStun) = _useInventorySlot(rdfId, patternId, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, logger);
+
+            thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
+            thatCharacterInNextFrame.SlipJumpTriggered |= slipJumpedOrNot;
+            thatCharacterInNextFrame.JumpHoldingRdfCnt = jumpHoldingRdfCnt;
+    
+            if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 > currCharacterDownsync.JumpHoldingRdfCnt && JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= thatCharacterInNextFrame.JumpHoldingRdfCnt && !thatCharacterInNextFrame.OmitGravity && chConfig.JumpHoldingToFly) {
+                thatCharacterInNextFrame.OmitGravity = true;
+                thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+                thatCharacterInNextFrame.FlyingRdfCountdown = chConfig.FlyingQuotaRdfCnt;
+                if (0 >= thatCharacterInNextFrame.VelY) { 
+                    thatCharacterInNextFrame.VelY = 0;
+                }
+            }
+
+            var existingDebuff = currCharacterDownsync.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
+            bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
+            if (dodgedInBlockStun) {
+                transitToGroundDodgedChState(thatCharacterInNextFrame, chConfig, isParalyzed);
+            }
+
+            bool notEnoughMp = false;
+            bool usedSkill = dodgedInBlockStun ? false : _useSkill(rdfId, effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, isParalyzed, logger);
+            Skill? skillConfig = null;
+
+            if (
+                    (null != chConfig.BtnBNonchargeableChStates && chConfig.BtnBNonchargeableChStates.Contains(thatCharacterInNextFrame.CharacterState))
+                    || 
+                    (!btnBHoldingPatternSet.Contains(patternId) && !btnBActivatePatternSet.Contains(patternId)) 
+               ) {
+                thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
+            } else {
+                thatCharacterInNextFrame.BtnBHoldingRdfCount = currCharacterDownsync.BtnBHoldingRdfCount+1;
+                if (thatCharacterInNextFrame.BtnBHoldingRdfCount > MAX_INT) {
+                    thatCharacterInNextFrame.BtnBHoldingRdfCount = MAX_INT;
+                }
+            }
+
+            if (
+                    (null != chConfig.BtnCNonchargeableChStates && chConfig.BtnCNonchargeableChStates.Contains(thatCharacterInNextFrame.CharacterState))
+                    || 
+                    (!btnCHoldingPatternSet.Contains(patternId) && !btnCActivatePatternSet.Contains(patternId)) 
+               ) {
+                thatCharacterInNextFrame.BtnCHoldingRdfCount = 0;
+            } else {
+                thatCharacterInNextFrame.BtnCHoldingRdfCount = currCharacterDownsync.BtnCHoldingRdfCount+1;
+                if (thatCharacterInNextFrame.BtnCHoldingRdfCount > MAX_INT) {
+                    thatCharacterInNextFrame.BtnCHoldingRdfCount = MAX_INT;
+                }
+            }
+
+            if (
+                    (null != chConfig.BtnDNonchargeableChStates && chConfig.BtnDNonchargeableChStates.Contains(thatCharacterInNextFrame.CharacterState))
+                    || 
+                    (!btnDHoldingPatternSet.Contains(patternId) && !btnDActivatePatternSet.Contains(patternId)) 
+               ) {
+                thatCharacterInNextFrame.BtnDHoldingRdfCount = 0;
+            } else {
+                thatCharacterInNextFrame.BtnDHoldingRdfCount = currCharacterDownsync.BtnDHoldingRdfCount+1;
+                if (thatCharacterInNextFrame.BtnDHoldingRdfCount > MAX_INT) {
+                    thatCharacterInNextFrame.BtnDHoldingRdfCount = MAX_INT;
+                }
+            }
+
+            if (
+                    (null != chConfig.BtnENonchargeableChStates && chConfig.BtnENonchargeableChStates.Contains(thatCharacterInNextFrame.CharacterState))
+                    || 
+                    (!btnEHoldingPatternSet.Contains(patternId) && !btnEActivatePatternSet.Contains(patternId)) 
+               ) {
+                thatCharacterInNextFrame.BtnEHoldingRdfCount = 0;
+            } else {
+                thatCharacterInNextFrame.BtnEHoldingRdfCount = currCharacterDownsync.BtnEHoldingRdfCount+1;
+                if (thatCharacterInNextFrame.BtnEHoldingRdfCount > MAX_INT) {
+                    thatCharacterInNextFrame.BtnEHoldingRdfCount = MAX_INT;
+                }
+            }
+
+            if (usedSkill) {
+                thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
+                thatCharacterInNextFrame.CachedCueCmd = 0; // The use of a skill should clear "CachedCueCmd"
+                resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
+                skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
+                /*
+                if (2 == thatCharacterInNextFrame.ActiveSkillId) {
+                    logger.LogInfo(String.Format("@rdfId={0}, used skillId=2 when FramesInChState={1}", currRenderFrame.Id, currCharacterDownsync.FramesInChState));
+                }
+                */
+                if (Dashing == skillConfig.BoundChState && currCharacterDownsync.InAir) {              
+                    if (!currCharacterDownsync.OmitGravity && 0 < thatCharacterInNextFrame.RemainingAirDashQuota) {
+                        thatCharacterInNextFrame.RemainingAirDashQuota  -= 1;
+                        if (!chConfig.IsolatedAirJumpAndDashQuota && 0 < thatCharacterInNextFrame.RemainingAirJumpQuota) {
+                            thatCharacterInNextFrame.RemainingAirJumpQuota -= 1;
+                        }
+                    }
+                }
+                if (isCrouching(currCharacterDownsync.CharacterState, chConfig) && Atk1 == thatCharacterInNextFrame.CharacterState) {
+                    if (chConfig.CrouchingAtkEnabled) {
+                        thatCharacterInNextFrame.CharacterState = CrouchAtk1;
+                    }
+                }
+                if (!skillConfig.Hits[0].AllowsWalking) {
+                    return; // Don't allow movement if skill is used
+                }
+            } else if (notEnoughMp && selfPlayerJoinIndex == currCharacterDownsync.JoinIndex) {
+                selfNotEnoughMp = true; 
+            }
+
+            _processNextFrameJumpStartup(rdfId, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, chConfig, isParalyzed, logger);
+            if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
+                _processInertiaWalking(rdfId, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, effDx, effDy, chConfig, shouldIgnoreInertia, usedSkill, skillConfig, isParalyzed, logger);
+            } else {
+                _processInertiaFlying(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, shouldIgnoreInertia, usedSkill, skillConfig, isParalyzed, logger);
+            }
+            _processDelayedBulletSelfVel(rdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, logger);
+
+            if (PATTERN_ID_UNABLE_TO_OP != patternId && chConfig.AntiGravityWhenIdle && (Walking == thatCharacterInNextFrame.CharacterState || InAirWalking == thatCharacterInNextFrame.CharacterState) && chConfig.AntiGravityFramesLingering < thatCharacterInNextFrame.FramesInChState) {
+                thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
+                thatCharacterInNextFrame.FramesInChState = 0;
+                thatCharacterInNextFrame.VelX = 0;
+            } else if (slowDownToAvoidOverlap) {
+                thatCharacterInNextFrame.VelX >>= 2;
+                thatCharacterInNextFrame.VelY >>= 2;
+            }
+        }
+        
+        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, int selfPlayerJoinIndex, ref bool selfNotEnoughMp, ILoggerBridge logger) {
+            int rdfId = currRenderFrame.Id;
             for (int i = 0; i < roomCapacity; i++) {
                 var currCharacterDownsync = currRenderFrame.PlayersArr[i];
                 bool notDashing = isNotDashing(currCharacterDownsync);
                 bool currEffInAir = isEffInAir(currCharacterDownsync, notDashing);
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy) = _derivePlayerOpPattern(currCharacterDownsync, currRenderFrame, chConfig, inputBuffer, decodedInputHolder, prevDecodedInputHolder, currEffInAir, notDashing, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy) = _derivePlayerOpPattern(rdfId, currCharacterDownsync, chConfig, inputBuffer, decodedInputHolder, currEffInAir, notDashing, logger);
 
-                // Prioritize use of inventory slot over skills
-                var (slotUsed, slotLockedSkillId, dodgedInBlockStun) = _useInventorySlot(currRenderFrame.Id, patternId, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, logger);
-
-                thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
-                thatCharacterInNextFrame.SlipJumpTriggered |= slipJumpedOrNot;
-                thatCharacterInNextFrame.JumpHoldingRdfCnt = jumpHoldingRdfCnt;
-        
-                if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 > currCharacterDownsync.JumpHoldingRdfCnt && JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= thatCharacterInNextFrame.JumpHoldingRdfCnt && !thatCharacterInNextFrame.OmitGravity && chConfig.JumpHoldingToFly) {
-                    thatCharacterInNextFrame.OmitGravity = true;
-                    thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
-                    thatCharacterInNextFrame.FlyingRdfCountdown = chConfig.FlyingQuotaRdfCnt;
-                    if (0 >= thatCharacterInNextFrame.VelY) { 
-                        thatCharacterInNextFrame.VelY = 0;
-                    }
-                }
-
-                var existingDebuff = currCharacterDownsync.DebuffList[DEBUFF_ARR_IDX_ELEMENTAL];
-                bool isParalyzed = (TERMINATING_DEBUFF_SPECIES_ID != existingDebuff.SpeciesId && 0 < existingDebuff.Stock && DebuffType.PositionLockedOnly == debuffConfigs[existingDebuff.SpeciesId].Type);
-                if (dodgedInBlockStun) {
-                    transitToGroundDodgedChState(thatCharacterInNextFrame, chConfig, isParalyzed);
-                }
-
-                bool notEnoughMp = false;
-                bool usedSkill = dodgedInBlockStun ? false : _useSkill(effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, currRenderFrame, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, isParalyzed, logger);
-                Skill? skillConfig = null;
-                if (usedSkill) {
-                    thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
-                    if (Dashing != thatCharacterInNextFrame.CharacterState && BackDashing != thatCharacterInNextFrame.CharacterState && Sliding != thatCharacterInNextFrame.CharacterState) {
-                        thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
-                    }
-                    resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
-                    skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
-                    /*
-                    if (2 == thatCharacterInNextFrame.ActiveSkillId) {
-                        logger.LogInfo(String.Format("@rdfId={0}, used skillId=2 when FramesInChState={1}", currRenderFrame.Id, currCharacterDownsync.FramesInChState));
-                    }
-                    */
-                    if (Dashing == skillConfig.BoundChState && currCharacterDownsync.InAir) {              
-                        if (!currCharacterDownsync.OmitGravity && 0 < thatCharacterInNextFrame.RemainingAirDashQuota) {
-                            thatCharacterInNextFrame.RemainingAirDashQuota  -= 1;
-                            if (!chConfig.IsolatedAirJumpAndDashQuota && 0 < thatCharacterInNextFrame.RemainingAirJumpQuota) {
-                                thatCharacterInNextFrame.RemainingAirJumpQuota -= 1;
-                            }
-                        }
-                    }
-                    if (isCrouching(currCharacterDownsync.CharacterState, chConfig) && Atk1 == thatCharacterInNextFrame.CharacterState) {
-                        if (chConfig.CrouchingAtkEnabled) {
-                            thatCharacterInNextFrame.CharacterState = CrouchAtk1;
-                        }
-                    }
-                    if (!skillConfig.Hits[0].AllowsWalking) {
-                        continue; // Don't allow movement if skill is used
-                    }
-                } else if (notEnoughMp && selfPlayerJoinIndex == currCharacterDownsync.JoinIndex) {
-                    selfNotEnoughMp = true; 
-                }
-
-                if (
-                    btnBChargeableSet.Contains(currCharacterDownsync.CharacterState) 
-                    && 
-                    btnBHoldingPatternSet.Contains(patternId)
-                ) {
-                    thatCharacterInNextFrame.BtnBHoldingRdfCount = currCharacterDownsync.BtnBHoldingRdfCount+1;
-                } else {
-                    thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
-                }
-                
-                _processNextFrameJumpStartup(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, chConfig, isParalyzed, logger);
-                if (!currCharacterDownsync.OmitGravity && !chConfig.OmitGravity) {
-                    _processInertiaWalking(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, effDx, effDy, chConfig, false, usedSkill, skillConfig, isParalyzed, logger);
-                } else {
-                    _processInertiaFlying(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, effDx, effDy, chConfig, false, usedSkill, skillConfig, isParalyzed, logger);
-                }
-                _processDelayedBulletSelfVel(currRenderFrame.Id, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, logger);
+                _processSingleCharacterInput(rdfId, patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy, false, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, false, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             }
         }
         
@@ -1614,7 +1644,7 @@ namespace shared {
                         }
                         bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig) && !isInJumpStartup(thatCharacterInNextFrame, chConfig));
                         if (fallStopping) {
-                            resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
+                            resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 thatCharacterInNextFrame.VelX = 0;
                                 thatCharacterInNextFrame.VelY = 0;
@@ -1708,7 +1738,7 @@ namespace shared {
                         if (fallStopping) {
                             thatCharacterInNextFrame.VelX = 0;
                             thatCharacterInNextFrame.VelY = 0;
-                            resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
+                            resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 // No update needed for Dying
                             } else {
@@ -1784,6 +1814,7 @@ namespace shared {
                                 bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
                                 if (!isInJumpStartup(thatCharacterInNextFrame, chConfig) && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig) && (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState)) {
                                     thatCharacterInNextFrame.CharacterState = OnWallIdle1;
+                                    resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
                                 }
                                 break;
                         }
@@ -2088,6 +2119,7 @@ namespace shared {
 
                 if (!currCharacterDownsync.InAir && null != activeSkill && activeSkill.BoundChState == thatCharacterInNextFrame.CharacterState && null != activeBulletConfig && activeBulletConfig.GroundImpactMeleeCollision) {
                     // [WARNING] The "bulletCollider" for "activeBulletConfig" in this case might've been annihilated, we should end this bullet regardless of landing on character or hardPushback.
+                    //logger.LogInfo($"_processEffPushbacks/end, currRdfId={currRenderFrame.Id}, clearing obsolete GroundImpactMeleeCollision state for currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, aSid: {currCharacterDownsync.ActiveSkillId}, aSht: {currCharacterDownsync.ActiveSkillHit}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState})");
                     int origFramesInActiveState = (thatCharacterInNextFrame.FramesInChState - activeBulletConfig.StartupFrames); // correct even for "DemonDiverImpactPreJumpBullet -> DemonDiverImpactStarterBullet" sequence
                     var shiftedRdfCnt = (activeBulletConfig.ActiveFrames - origFramesInActiveState);
                     if (0 < shiftedRdfCnt) {
@@ -2100,6 +2132,7 @@ namespace shared {
                     }
                     // [WARNING] Leave velocity handling to other code snippets.
                 } else if (currCharacterDownsync.OnWall && null != activeSkill && activeSkill.BoundChState == thatCharacterInNextFrame.CharacterState && null != activeBulletConfig && activeBulletConfig.WallImpactMeleeCollision) {
+                    //logger.LogInfo($"_processEffPushbacks/end, currRdfId={currRenderFrame.Id}, clearing obsolete WallImpactMeleeCollision state for currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, aSid: {currCharacterDownsync.ActiveSkillId}, aSht: {currCharacterDownsync.ActiveSkillHit}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState})");
                     // [WARNING] The "bulletCollider" for "activeBulletConfig" in this case might've been annihilated, we should end this bullet regardless of landing on character or hardPushback.
                     int origFramesInActiveState = (thatCharacterInNextFrame.FramesInChState - activeBulletConfig.StartupFrames); // correct even for "DemonDiverImpactPreJumpBullet -> DemonDiverImpactStarterBullet" sequence
                     var shiftedRdfCnt = (activeBulletConfig.ActiveFrames - origFramesInActiveState);
@@ -2112,7 +2145,8 @@ namespace shared {
                         thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
                     }
                     // [WARNING] Leave velocity handling to other code snippets.
-                } else if (null != activeSkill && activeSkill.BoundChState == thatCharacterInNextFrame.CharacterState && null != activeBulletConfig && MultiHitType.FromEmission == activeBulletConfig.MhType && currCharacterDownsync.FramesInChState > activeBulletConfig.StartupFrames+activeBulletConfig.ActiveFrames+activeBulletConfig.FinishingFrames) {
+                } else if (null != activeSkill && activeSkill.BoundChState == thatCharacterInNextFrame.CharacterState && null != activeBulletConfig && (MultiHitType.FromEmission == activeBulletConfig.MhType || MultiHitType.FromEmissionJustActive == activeBulletConfig.MhType) && currCharacterDownsync.FramesInChState > activeBulletConfig.StartupFrames+activeBulletConfig.ActiveFrames+activeBulletConfig.FinishingFrames) {
+                    //logger.LogInfo($"_processEffPushbacks/end, currRdfId={currRenderFrame.Id}, clearing obsolete FromEmission state for currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, aSid: {currCharacterDownsync.ActiveSkillId}, aSht: {currCharacterDownsync.ActiveSkillHit}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState}), mhType: {activeBulletConfig.MhType}");
                     int origFramesInActiveState = (thatCharacterInNextFrame.FramesInChState - activeBulletConfig.StartupFrames); // correct even for "DemonDiverImpactPreJumpBullet -> DemonDiverImpactStarterBullet" sequence
                     var shiftedRdfCnt = (activeBulletConfig.ActiveFrames - origFramesInActiveState);
                     if (0 < shiftedRdfCnt) {
@@ -2122,6 +2156,12 @@ namespace shared {
                     if (0 > origFramesInActiveState) {
                         thatCharacterInNextFrame.ActiveSkillId = NO_SKILL;
                         thatCharacterInNextFrame.ActiveSkillHit = NO_SKILL_HIT;
+                    }
+                } 
+
+                if (Def1 == thatCharacterInNextFrame.CharacterState || Def1Atked1 == thatCharacterInNextFrame.CharacterState || Def1Broken == thatCharacterInNextFrame.CharacterState) {
+                    if (0 != thatCharacterInNextFrame.VelX) {
+                        thatCharacterInNextFrame.VelX = 0;
                     }
                 }
 
@@ -2212,7 +2252,7 @@ namespace shared {
         - Make use of CPU parallelization -- better by using some libraries with sub-kernel-thread granularity(e.g. Goroutine or Greenlet equivalent) -- or GPU parallelization. It's not trivial to make an improvement because by dispatching smaller tasks to other resources other than the current kernel-thread, overhead I/O and synchronization/locking time is introduced. Moreover, we need guarantee that the dispatched smaller tasks can yield deterministic outputs regardless of processing order, e.g. that each "i" in "_calcAllCharactersCollisions" can be traversed earlier than another and same "effPushbacks" for the next render frame is obtained.   
         - Enable "IL2CPP" when building client application.  
         */
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded prevDecodedInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, int> triggerEditorIdToLocalId, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int missionTriggerLocalId, int selfPlayerJoinIndex, Dictionary<int, int> joinIndexRemap, ref int justTriggeredStoryPointId, ref int justTriggeredBgmId, HashSet<int> justDeadJoinIndices, out ulong fulfilledTriggerSetMask, ref bool selfNotEnoughMp, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded tempInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, int> triggerEditorIdToLocalId, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int missionTriggerLocalId, int selfPlayerJoinIndex, Dictionary<int, int> joinIndexRemap, ref int justTriggeredStoryPointId, ref int justTriggeredBgmId, HashSet<int> justDeadJoinIndices, out ulong fulfilledTriggerSetMask, ref bool selfNotEnoughMp, ILoggerBridge logger) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -2294,7 +2334,7 @@ namespace shared {
                 } 
                 var flyingRdfCountdown = (MAX_INT == chConfig.FlyingQuotaRdfCnt ? MAX_INT : (0 < src.FlyingRdfCountdown ? src.FlyingRdfCountdown-1 : 0));
                 var dst = nextRenderFramePlayers[i];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.GoalAsNpc, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, src.LockingOnJoinIndex, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.GoalAsNpc, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnCHoldingRdfCount, src.BtnDHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, src.LockingOnJoinIndex, dst);
                 _resetVelocityOnRecovered(src, dst);
             }
 
@@ -2330,7 +2370,7 @@ namespace shared {
                 }
                 var flyingRdfCountdown = (MAX_INT == chConfig.FlyingQuotaRdfCnt ? MAX_INT : (0 < src.FlyingRdfCountdown ? src.FlyingRdfCountdown-1 : 0));
                 var dst = nextRenderFrameNpcs[currNpcI];
-                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.GoalAsNpc, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, src.LockingOnJoinIndex, dst);
+                AssignToCharacterDownsync(src.Id, src.SpeciesId, src.VirtualGridX, src.VirtualGridY, src.DirX, src.DirY, src.VelX, src.FrictionVelX, src.VelY, src.FrictionVelY, framesToRecover, framesInChState, src.ActiveSkillId, src.ActiveSkillHit, framesInvinsible, src.Speed, src.CharacterState, src.JoinIndex, src.Hp, true, false, src.OnWallNormX, src.OnWallNormY, framesCapturedByInertia, src.BulletTeamId, src.ChCollisionTeamId, src.RevivalVirtualGridX, src.RevivalVirtualGridY, src.RevivalDirX, src.RevivalDirY, src.JumpTriggered, src.SlipJumpTriggered, false, src.CapturedByPatrolCue, framesInPatrolCue, src.BeatsCnt, src.BeatenCnt, mp, src.OmitGravity, src.OmitSoftPushback, src.RepelSoftPushback, src.GoalAsNpc, src.WaivingPatrolCueId, false, false, false, false, false, framesToStartJump, framesSinceLastDamaged, src.RemainingDef1Quota, src.BuffList, src.DebuffList, src.Inventory, true, src.PublishingToTriggerLocalIdUponKilled, src.PublishingEvtMaskUponKilled, src.SubscribesToTriggerLocalId, src.JumpHoldingRdfCnt, src.BtnBHoldingRdfCount, src.BtnCHoldingRdfCount, src.BtnDHoldingRdfCount, src.BtnEHoldingRdfCount, src.ParryPrepRdfCntDown, src.RemainingAirJumpQuota, src.RemainingAirDashQuota, src.KilledToDropConsumableSpeciesId, src.KilledToDropBuffSpeciesId, src.KilledToDropPickupSkillId, src.BulletImmuneRecords, comboHitCnt, comboFramesRemained, damageEleAttrs, src.LastDamagedByJoinIndex, src.LastDamagedByBulletTeamId, src.ActivatedRdfId, src.CachedCueCmd, mpRegenRdfCountdown, flyingRdfCountdown, src.LockingOnJoinIndex, dst);
                 _resetVelocityOnRecovered(src, dst);
                 currNpcI++;
             }
@@ -2386,7 +2426,7 @@ namespace shared {
                5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
              */
             int colliderCnt = 0, bulletCnt = 0, pickableCnt = 0;
-            _processPlayerInputs(currRenderFrame, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, prevDecodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
+            _processPlayerInputs(currRenderFrame, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity + currNpcI, logger);
             
             int trapColliderCntOffset = colliderCnt;
@@ -2408,7 +2448,7 @@ namespace shared {
             _moveAndInsertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, effPushbacks, ref overlapResult, collision, logger);
 
             // ---------[WARNING] Deliberately put "_processNpcInputs" after "_moveAndInsertBulletColliders" such that NPC vision can see bullets; also deliberately put "_processNpcInputs" before "_calcAllCharactersCollisions" to avoid overwriting "onSlope velocities" ---------
-            _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, ref primaryOverlapResult, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
+            _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, mvBlockerOverlapResult: ref primaryOverlapResult, decodedInputHolder, tempInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
             _calcAllCharactersCollisions(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, nextRenderFrameTraps, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, triggerEditorIdToTiledConfig, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
 

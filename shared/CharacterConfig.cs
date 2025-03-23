@@ -153,5 +153,9 @@ namespace shared {
         public bool UseIdle1AsFlyingIdle;
 
         public ImmutableDictionary<CharacterState, int> LoopingChStates; 
+        public HashSet<CharacterState> BtnBNonchargeableChStates; // e.g. If "Atk1" is in "BtnBNonchargeableChStates", then holding "BtnB" will automatically keep firing "Atk1" (respecting its CancellableSt/EdFrames and RecoveryFrames); otherwise holding "BtnB" will start charging after the first fire 
+        public HashSet<CharacterState> BtnCNonchargeableChStates; 
+        public HashSet<CharacterState> BtnDNonchargeableChStates; 
+        public HashSet<CharacterState> BtnENonchargeableChStates; 
     }
 }

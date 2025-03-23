@@ -524,58 +524,6 @@
    </properties>
    <point/>
   </object>
-  <object id="470" name="Floor12FlyingCueR" x="1840" y="128" width="80" height="320">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="469" name="Floor12FlyingCueL" x="640" y="144" width="80" height="304">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="489" name="Floor2FlyingCue" x="640" y="80" width="1280" height="64">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="2"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="7"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="6"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="472" name="Floor2FlyingCue" x="848" y="416" width="864" height="32">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="5"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="5"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="8"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="8"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
   <object id="615" name="RotaryBarrierCue2R" x="1732" y="178" width="12" height="16">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
@@ -666,19 +614,6 @@
    </properties>
    <point/>
   </object>
-  <object id="767" name="Floor12FlyingCueR2" x="1648" y="96" width="80" height="352">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="1"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
   <object id="766" name="Floor12FlyingCueL2" x="832" y="96" width="80" height="352">
    <properties>
     <property name="collisionTypeMask" value="16384"/>
@@ -689,19 +624,6 @@
     <property name="frAct" value="3"/>
     <property name="frCaptureFrames" value="0"/>
     <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="774" name="Floor2FlyingCue" x="784" y="336" width="992" height="32">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="5"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="5"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="8"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="8"/>
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
